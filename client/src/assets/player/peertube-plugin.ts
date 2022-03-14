@@ -1,3 +1,4 @@
+import debug from 'debug'
 import videojs from 'video.js'
 import { timeToInt } from '@shared/core-utils'
 import {
@@ -10,9 +11,8 @@ import {
   saveVolumeInStore
 } from './peertube-player-local-storage'
 import { PeerTubePluginOptions, UserWatching, VideoJSCaption } from './peertube-videojs-typings'
+import { SettingsButton } from './settings/settings-menu-button'
 import { isMobile } from './utils'
-import { SettingsButton } from './videojs-components/settings-menu-button'
-import debug from 'debug'
 
 const logger = debug('peertube:player:peertube')
 
