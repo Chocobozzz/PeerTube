@@ -1,7 +1,7 @@
-import { buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
 import { Component, Input, OnInit } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
+import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { buildVideoEmbedLink, decorateVideoLink } from '@shared/core-utils'
 import { Video } from '@shared/models'
 

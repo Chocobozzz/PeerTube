@@ -1,6 +1,6 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { forkJoin, map, Observable, of, Subscription, switchMap } from 'rxjs'
-import { isP2PEnabled } from 'src/assets/player/utils'
+import { VideoJsPlayer } from 'video.js'
 import { PlatformLocation } from '@angular/common'
 import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -24,6 +24,7 @@ import { Video, VideoCaptionService, VideoDetails, VideoService } from '@app/sha
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
+import { isP2PEnabled } from '@root-helpers/video'
 import { timeToInt } from '@shared/core-utils'
 import {
   HTMLServerConfig,
@@ -58,7 +59,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoWatchPlaylist', { static: true }) videoWatchPlaylist: VideoWatchPlaylistComponent
   @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
 
-  player: any
+  player: VideoJsPlayer
   playerElement: HTMLVideoElement
   playerPlaceholderImgSrc: string
   theaterEnabled = false
@@ -418,8 +419,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.zone.runOutsideAngular(async () => {
       this.player = await PeertubePlayerManager.initialize(playerMode, playerOptions, player => this.player = player)
 
-      this.player.on('customError', ({ err }: { err: any }) => {
-        this.zone.run(() => this.handleGlobalError(err))
+      this.player.on('customError', (_e, data: any) => {
+        this.zone.run(() => this.handleGlobalError(data.err))
       })
 
       this.player.on('timeupdate', () => {
@@ -458,7 +459,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         suspended: () => {
           return (
-            !isXPercentInViewport(this.player.el(), 80) ||
+            !isXPercentInViewport(this.player.el() as HTMLElement, 80) ||
             !document.getElementById('content').contains(document.activeElement)
           )
         }

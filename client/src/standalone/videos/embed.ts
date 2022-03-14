@@ -1,6 +1,6 @@
 import './embed.scss'
-import '../../assets/player/dock/peertube-dock-component'
-import '../../assets/player/dock/peertube-dock-plugin'
+import '../../assets/player/shared/dock/peertube-dock-component'
+import '../../assets/player/shared/dock/peertube-dock-plugin'
 import videojs from 'video.js'
 import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
 import {
@@ -17,15 +17,14 @@ import {
   VideoPlaylistElement,
   VideoStreamingPlaylistType
 } from '../../../../shared/models'
-import { P2PMediaLoaderOptions, PeertubePlayerManagerOptions, PlayerMode } from '../../assets/player'
-import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
+import { P2PMediaLoaderOptions, PeertubePlayerManagerOptions, PlayerMode, VideoJSCaption } from '../../assets/player'
 import { TranslationsManager } from '../../assets/player/translations-manager'
-import { isP2PEnabled } from '../../assets/player/utils'
 import { getBoolOrDefault } from '../../root-helpers/local-storage-utils'
 import { peertubeLocalStorage } from '../../root-helpers/peertube-web-storage'
 import { PluginsManager } from '../../root-helpers/plugins-manager'
 import { UserLocalStorageKeys, UserTokens } from '../../root-helpers/users'
 import { objectToUrlEncoded } from '../../root-helpers/utils'
+import { isP2PEnabled } from '../../root-helpers/video'
 import { RegisterClientHelpers } from '../../types/register-client-option.model'
 import { PeerTubeEmbedApi } from './embed-api'
 

@@ -1,6 +1,6 @@
 import { truncate } from 'lodash-es'
 import { UploadState, UploadxOptions, UploadxService } from 'ngx-uploadx'
-import { isIOS } from 'src/assets/player/utils'
+import { isIOS } from '@root-helpers/web-browser'
 import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
