@@ -226,6 +226,9 @@ export class ConfigCommand extends AbstractCommand {
         videos: {
           miniature: {
             preferAuthorDisplayName: false
+          },
+          upload: {
+            maxChunkSize: 0
           }
         },
         menu: {

@@ -58,6 +58,9 @@ describe('Test config API validators', function () {
       videos: {
         miniature: {
           preferAuthorDisplayName: false
+        },
+        upload: {
+          maxChunkSize: 0
         }
       },
       menu: {

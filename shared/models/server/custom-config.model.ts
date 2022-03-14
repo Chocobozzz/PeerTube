@@ -57,6 +57,9 @@ export interface CustomConfig {
       miniature: {
         preferAuthorDisplayName: boolean
       }
+      upload: {
+        maxChunkSize: number
+      }
     }
 
     menu: {

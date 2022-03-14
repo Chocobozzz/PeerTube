@@ -41,6 +41,9 @@ export interface ServerConfig {
         displayAuthorAvatar: boolean
         preferAuthorDisplayName: boolean
       }
+      upload: {
+        maxChunkSize: number
+      }
     }
 
     menu: {
