@@ -482,7 +482,7 @@
       </trans-unit>
       <trans-unit id="4493457595110310369" datatype="html">
         <source>Simple</source>
-        <target state="translated">Đơn giản</target>
+        <target state="translated">Thu gọn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">142</context></context-group>
       </trans-unit>
       <trans-unit id="1006562256968398209" datatype="html">
@@ -5487,7 +5487,7 @@
       </trans-unit>
       <trans-unit id="1405600824334286337" datatype="html">
         <source>More filters</source>
-        <target state="translated">Nhiều bộ lọc hơn</target>
+        <target state="translated">Bộ lọc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">20</context>
