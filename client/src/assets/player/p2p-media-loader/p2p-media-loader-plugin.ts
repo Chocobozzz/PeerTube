@@ -111,9 +111,7 @@ class P2pMediaLoaderPlugin extends Plugin {
   private initializePlugin () {
     initHlsJsPlayer(this.hlsjs)
 
-    // FIXME: typings
-    const options = (this.player.tech(true).options_ as any)
-    this.p2pEngine = options.hlsjsConfig.loader.getEngine()
+    this.p2pEngine = this.options.loader.getEngine()
 
     this.p2pEngine.on(Events.SegmentError, (segment: Segment, err) => {
       console.error('Segment error.', segment, err)

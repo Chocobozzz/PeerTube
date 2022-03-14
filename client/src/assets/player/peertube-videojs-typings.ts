@@ -1,11 +1,12 @@
 import { HlsConfig, Level } from 'hls.js'
 import videojs from 'video.js'
+import { Engine } from '@peertube/p2p-media-loader-hlsjs'
 import { VideoFile, VideoPlaylist, VideoPlaylistElement } from '@shared/models'
 import { PeerTubeDockPluginOptions } from './dock/peertube-dock-plugin'
+import { PlayerMode } from './manager-options/manager-options.model'
 import { Html5Hlsjs } from './p2p-media-loader/hls-plugin'
 import { P2pMediaLoaderPlugin } from './p2p-media-loader/p2p-media-loader-plugin'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
-import { PlayerMode } from './peertube-player-options-builder'
 import { PeerTubePlugin } from './peertube-plugin'
 import { PeerTubeResolutionsPlugin } from './peertube-resolutions-plugin'
 import { PlaylistPlugin } from './playlist/playlist-plugin'
@@ -154,6 +155,12 @@ type P2PMediaLoaderPluginOptions = {
   src: string
 
   startTime: number | string
+
+  loader: P2PMediaLoader
+}
+
+export type P2PMediaLoader = {
+  getEngine(): Engine
 }
 
 type VideoJSPluginOptions = {

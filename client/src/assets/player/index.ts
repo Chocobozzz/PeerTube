@@ -1,2 +1,2 @@
 export * from './peertube-player-manager'
-export * from './peertube-player-options-builder'
+export * from './manager-options/manager-options.model'

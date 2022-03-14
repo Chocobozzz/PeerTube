@@ -24,7 +24,7 @@ const registerSourceHandler = function (vjs: typeof videojs) {
   const html5 = vjs.getTech('Html5')
 
   if (!html5) {
-    console.error('Not supported version if video.js')
+    console.error('No Hml5 tech found in videojs')
     return
   }
 

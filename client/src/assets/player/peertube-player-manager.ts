@@ -10,22 +10,23 @@ import './control-bar/next-previous-video-button'
 import './control-bar/p2p-info-button'
 import './control-bar/peertube-link-button'
 import './control-bar/peertube-load-progress-bar'
-import './control-bar/resolution-menu-button'
-import './control-bar/resolution-menu-item'
-import './control-bar/settings-dialog'
-import './control-bar/settings-menu-button'
-import './control-bar/settings-menu-item'
-import './control-bar/settings-panel'
-import './control-bar/settings-panel-child'
 import './control-bar/theater-button'
+import './settings/resolution-menu-button'
+import './settings/resolution-menu-item'
+import './settings/settings-dialog'
+import './settings/settings-menu-button'
+import './settings/settings-menu-item'
+import './settings/settings-panel'
+import './settings/settings-panel-child'
 import './playlist/playlist-plugin'
 import './mobile/peertube-mobile-plugin'
 import './mobile/peertube-mobile-buttons'
 import './hotkeys/peertube-hotkeys-plugin'
 import videojs from 'video.js'
 import { PluginsManager } from '@root-helpers/plugins-manager'
+import { ManagerOptionsBuilder } from './manager-options/manager-options-builder'
+import { CommonOptions, PeertubePlayerManagerOptions, PlayerMode } from './manager-options/manager-options.model'
 import { saveAverageBandwidth } from './peertube-player-local-storage'
-import { CommonOptions, PeertubePlayerManagerOptions, PeertubePlayerOptionsBuilder, PlayerMode } from './peertube-player-options-builder'
 import { PlayerNetworkInfo } from './peertube-videojs-typings'
 import { TranslationsManager } from './translations-manager'
 import { isMobile } from './utils'
@@ -75,7 +76,7 @@ export class PeertubePlayerManager {
   }
 
   private static async buildPlayer (mode: PlayerMode, options: PeertubePlayerManagerOptions): Promise<videojs.Player> {
-    const videojsOptionsBuilder = new PeertubePlayerOptionsBuilder(mode, options, this.p2pMediaLoaderModule)
+    const videojsOptionsBuilder = new ManagerOptionsBuilder(mode, options, this.p2pMediaLoaderModule)
 
     const videojsOptions = await this.pluginsManager.runHook(
       'filter:internal.player.videojs.options.result',
@@ -198,7 +199,7 @@ export class PeertubePlayerManager {
     return newVideoElement
   }
 
-  private static addContextMenu (optionsBuilder: PeertubePlayerOptionsBuilder, player: videojs.Player, commonOptions: CommonOptions) {
+  private static addContextMenu (optionsBuilder: ManagerOptionsBuilder, player: videojs.Player, commonOptions: CommonOptions) {
     const options = optionsBuilder.getContextMenuOptions(player, commonOptions)
 
     player.contextmenuUI(options)
