@@ -5591,7 +5591,7 @@
       </trans-unit>
       <trans-unit id="1744425032255703211" datatype="html">
         <source>VOD &amp; Live videos</source>
-        <target state="translated">VOD &amp; Live videos</target>
+        <target state="translated">Tất cả</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">99</context>
@@ -6154,7 +6154,7 @@
       </trans-unit>
       <trans-unit id="403587185492002456" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 lượt đăng ký} other {<x id="INTERPOLATION"/> lượt đăng ký}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 người đăng ký} other {<x id="INTERPOLATION"/> người đăng ký}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">26</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">34</context></context-group>
@@ -6836,12 +6836,12 @@
       </trans-unit>
       <trans-unit id="9221735175659318025" datatype="html">
         <source>1 subscriber</source>
-        <target state="translated">1 lượt đăng ký</target>
+        <target state="translated">1 người đăng ký</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="4097331874769079975" datatype="html">
         <source><x id="PH"/> subscribers</source>
-        <target state="translated"><x id="PH"/> lượt đăng ký</target>
+        <target state="translated"><x id="PH"/> người đăng ký</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
       <trans-unit id="1035838766454786107" datatype="html">
@@ -7271,7 +7271,7 @@
       </trans-unit>
       <trans-unit id="3459358413436264734" datatype="html">
         <source>Your instance subscriptions</source>
-        <target state="translated">Những lượt đăng ký máy chủ của bạn</target>
+        <target state="translated">Những người đăng ký theo dõi máy chủ của bạn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">3</context>
