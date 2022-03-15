@@ -131,6 +131,30 @@ describe('Test video transcoding', function () {
       }
     })
 
+    it('Should validate the video files', async function () {
+      this.timeout(160_000)
+      const attributes = {
+        name: 'video to validated',
+        fixture: 'video_short1.webm',
+        waitTranscoding: true
+      }
+      await servers[1].videos.upload({ attributes })
+      await waitJobs(servers)
+
+      const { data: videos } = await servers[1].videos.list()
+      const video = videos.find(v => v.name === attributes.name)
+      const videoDetails = await servers[1].videos.get({ id: video.id })
+
+      const { data: validateJobs } = await servers[1].jobs.list({ jobType: 'validate-video-file' })
+      const jobs = validateJobs.filter(j => j.data.videoUUID === video.uuid)
+
+      const hlsJobs = jobs.filter(j => j.data.type === 'hls')
+      expect(hlsJobs).to.have.lengthOf(videoDetails.streamingPlaylists[0].files.length)
+
+      const webtorrentJobs = jobs.filter(j => j.data.type === 'webtorrent')
+      expect(webtorrentJobs).to.have.lengthOf(videoDetails.files.length)
+    })
+
     it('Should wait for transcoding before publishing the video', async function () {
       this.timeout(160_000)
 
