@@ -2,6 +2,7 @@ import { Subject, Subscription } from 'rxjs'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { AuthService, Notifier, ServerService, UserService } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { capitalizeFirstLetter } from '@root-helpers/string'
 import { HTMLServerConfig, User, UserUpdateMe } from '@shared/models'
 
 @Component({
@@ -16,6 +17,8 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
   @Input() userInformationLoaded: Subject<any>
 
   formValuesWatcher: Subscription
+
+  defaultThemeLabel = $localize`Light/Orange`
 
   private serverConfig: HTMLServerConfig
 
@@ -55,6 +58,18 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
 
   ngOnDestroy () {
     this.formValuesWatcher?.unsubscribe()
+  }
+
+  getDefaultThemeLabel () {
+    const theme = this.serverConfig.theme.default
+
+    if (theme === 'default') return this.defaultThemeLabel
+
+    return theme
+  }
+
+  capitalizeFirstLetter (str: string) {
+    return capitalizeFirstLetter(str)
   }
 
   updateInterfaceSettings () {
