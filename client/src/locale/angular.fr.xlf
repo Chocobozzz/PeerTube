@@ -10931,7 +10931,7 @@
       </trans-unit>
       <trans-unit id="7257048945916143687" datatype="html">
         <source>For more information, please visit <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target>Pour plus d'information, visitez <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target>Pour plus d’information, visitez <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">19,20</context>
@@ -11003,7 +11003,7 @@
       </trans-unit>
       <trans-unit id="6314880288843792309" datatype="html">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
-        <target state="translated">La principale menace pour votre vie privée induite par BitTorrent réside dans le stockage de votre IP par l'instance du traqueur de BitTorrent tant que vous téléchargez ou regardez une vidéo.</target>
+        <target state="translated">La principale menace pour votre vie privée induite par BitTorrent réside dans le stockage de votre IP par l’instance du traqueur de BitTorrent tant que vous téléchargez ou regardez une vidéo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">81,83</context>
@@ -11019,7 +11019,7 @@
       </trans-unit>
       <trans-unit id="1411398404280870617" datatype="html">
         <source>In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video. In practice, this is much more difficult because:</source>
-        <target state="translated">En théorie, une personne ayant suffisamment de compétences techniques pourrait créer un script qui suit quelle IP télécharge quelle vidéo. En pratique, c'est beaucoup plus difficile car :</target>
+        <target state="translated">En théorie, une personne ayant suffisamment de compétences techniques pourrait créer un script qui suit quelle IP télécharge quelle vidéo. En pratique, c’est beaucoup plus difficile car :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">88,90</context>
@@ -11027,7 +11027,7 @@
       </trans-unit>
       <trans-unit id="6870500454322981404" datatype="html">
         <source>An HTTP request has to be sent on each tracker for each video to spy. If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)</source>
-        <target state="translated">Une requête HTTP doit être envoyée sur chaque tracker pour chaque vidéo à espionner. Si nous voulons espionner toutes les vidéos de PeerTube, nous devons envoyer autant de requêtes qu'il y a de vidéos (donc potentiellement un grand nombre)</target>
+        <target state="translated">Une requête HTTP doit être envoyée sur chaque tracker pour chaque vidéo à espionner. Si nous voulons espionner toutes les vidéos de PeerTube, nous devons envoyer autant de requêtes qu’il y a de vidéos (donc potentiellement un grand nombre)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">94,96</context>
@@ -11035,7 +11035,7 @@
       </trans-unit>
       <trans-unit id="4042605201005159699" datatype="html">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
-        <target state="translated">Pour chaque requête, le traqueur retourne une liste aléatoire et limitée de pairs. Par exemple, s'il y a 1000 pairs, et 20 pairs par réponse, il faudra au moins 50 requêtes pour connaître la liste complète des pairs</target>
+        <target state="translated">Pour chaque requête, le traqueur retourne une liste aléatoire et limitée de pairs. Par exemple, s’il y a 1000 pairs, et 20 pairs par réponse, il faudra au moins 50 requêtes pour connaître la liste complète des pairs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">99,102</context>
@@ -11051,7 +11051,7 @@
       </trans-unit>
       <trans-unit id="4100327951517495019" datatype="html">
         <source>If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video</source>
-        <target state="translated">Si une adresse IP est stockée dans le tracker, cela ne signifie pas que la personne derrière l'IP (si cette personne existe) a regardé la vidéo</target>
+        <target state="translated">Si une adresse IP est stockée dans le tracker, cela ne signifie pas que la personne derrière l’IP (si cette personne existe) a regardé la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">109,111</context>
@@ -11067,7 +11067,7 @@
       </trans-unit>
       <trans-unit id="1120376809358109718" datatype="html">
         <source>Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information </source>
-        <target state="translated">Les pairs du Web ne sont pas accessibles publiquement : parce que nous utilisons le transport websocket, ce protocole est différent d'un tracker BitTorrent classique. Quand vous êtes dans un navigateur, vous envoyez un signal contenant votre adresse IP au tracker qui va choisir aléatoirement d'autres pairs à qui transmettre l'information. Voir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>ce document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> pour plus d'information </target>
+        <target state="translated">Les pairs du Web ne sont pas accessibles publiquement : parce que nous utilisons le transport websocket, ce protocole est différent d’un tracker BitTorrent classique. Quand vous êtes dans un navigateur, vous envoyez un signal contenant votre adresse IP au tracker qui va choisir aléatoirement d’autres pairs à qui transmettre l’information. Voir <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>ce document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> pour plus d’information </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">118,122</context>
@@ -11099,7 +11099,7 @@
       </trans-unit>
       <trans-unit id="2676074687792256808" datatype="html">
         <source>What can I do to limit the exposure of my IP address?</source>
-        <target state="translated">Que puis-je faire pour limiter l'exposition de mon adresse IP ?</target>
+        <target state="translated">Que puis-je faire pour limiter l’exposition de mon adresse IP ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">138</context>
@@ -11187,7 +11187,7 @@
       </trans-unit>
       <trans-unit id="6613567056718289931" datatype="html">
         <source>Contact <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrator</source>
-        <target>Contacter l'administrateur de <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target>Contacter l’administrateur de <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -11259,7 +11259,7 @@
       </trans-unit>
       <trans-unit id="8253752633925167769" datatype="html">
         <source>Contact administrator</source>
-        <target state="translated">Contact de l'administrateur</target>
+        <target state="translated">Contact de l’administrateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">7</context>
@@ -11391,7 +11391,7 @@
       </trans-unit>
       <trans-unit id="7128556172318221342" datatype="html">
         <source>This instance is not following any other.</source>
-        <target state="translated">Cette instance n'en suit aucune.</target>
+        <target state="translated">Cette instance n’en suit aucune autre.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">18</context>
@@ -11679,7 +11679,7 @@
       </trans-unit>
       <trans-unit id="6284468333579755406" datatype="html">
         <source>Edit custom configuration</source>
-        <target state="translated">Modifier la configuration de l'instance</target>
+        <target state="translated">Modifier la configuration de l’instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">26</context>
@@ -11767,7 +11767,7 @@
       </trans-unit>
       <trans-unit id="677619204556459328" datatype="html">
         <source>Like this video</source>
-        <target state="translated">J'aime cette vidéo</target>
+        <target state="translated">J’aime cette vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">132</context>
@@ -11775,7 +11775,7 @@
       </trans-unit>
       <trans-unit id="1979134407801821102" datatype="html">
         <source>Dislike this video</source>
-        <target state="translated">Je n'aime pas cette vidéo</target>
+        <target state="translated">Je n’aime pas cette vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">133</context>
@@ -11799,7 +11799,7 @@
       </trans-unit>
       <trans-unit id="961774488937452220" datatype="html">
         <source>This video is not available on this instance. Do you want to be redirected on the origin instance: &lt;a href="<x id="PH" equiv-text="originUrl"/>"&gt;<x id="PH_1" equiv-text="originUrl"/>&lt;/a&gt;?</source>
-        <target>Cette vidéo n'est pas disponible sur cette instance. Voulez-vous être redirigé vers l'instance d'origine : &lt;a href="<x id="PH" equiv-text="originUrl"/>"&gt;<x id="PH_1" equiv-text="originUrl"/>&lt;/a&gt; ?</target>
+        <target>Cette vidéo n’est pas disponible sur cette instance. Voulez-vous être redirigé vers l’instance d'origine : &lt;a href="<x id="PH" equiv-text="originUrl"/>"&gt;<x id="PH_1" equiv-text="originUrl"/>&lt;/a&gt; ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">415</context>
@@ -11959,7 +11959,7 @@
       </trans-unit>
       <trans-unit id="2339204341436174769" datatype="html">
         <source>The video is being imported, it will be available when the import is finished.</source>
-        <target state="translated">La vidéo est en cours d'importation, elle sera disponible lorsque l'importation sera terminée.</target>
+        <target state="translated">La vidéo est en cours d’importation, elle sera disponible lorsque l’importation sera terminée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -11967,7 +11967,7 @@
       </trans-unit>
       <trans-unit id="2743194385952623857" datatype="html">
         <source>The video is being transcoded, it may not work properly.</source>
-        <target state="translated">La vidéo est en cours de transcodage, il est possible qu'elle ne fonctionne pas correctement.</target>
+        <target state="translated">La vidéo est en cours de transcodage, il est possible qu’elle ne fonctionne pas correctement.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">25,26</context>
@@ -11983,7 +11983,7 @@
       </trans-unit>
       <trans-unit id="6937615021170545681" datatype="html">
         <source>This live has not started yet.</source>
-        <target state="translated">Ce direct n'a pas encore démarré.</target>
+        <target state="translated">Ce direct n’a pas encore démarré.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">33,34</context>
@@ -12107,7 +12107,7 @@
       </trans-unit>
       <trans-unit id="57bfd54c230fc20caff1f0b321ad42be3bf859a6" datatype="html">
         <source>Origin instance</source>
-        <target state="translated">Instance d'origine</target>
+        <target state="translated">Instance d’origine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">231</context>
@@ -12131,7 +12131,7 @@
       </trans-unit>
       <trans-unit id="2935783216050341269" datatype="html">
         <source>the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.</source>
-        <target state="translated">le système de partage utilisé pour cette vidéo implique que certaines informations techniques à propos de votre système (telle que votre adresse IP publique) soient envoyées à d'autres pairs.</target>
+        <target state="translated">le système de partage utilisé pour cette vidéo implique que certaines informations techniques à propos de votre système (telle que votre adresse IP publique) soient envoyées à d’autres pairs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">301,302</context>
@@ -12139,7 +12139,7 @@
       </trans-unit>
       <trans-unit id="4512155674928869984" datatype="html">
         <source>Get more information</source>
-        <target state="translated">Obtenir plus d'informations</target>
+        <target state="translated">Obtenir plus d’informations</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">304</context>
@@ -12155,7 +12155,7 @@
       </trans-unit>
       <trans-unit id="764164089183618119" datatype="html">
         <source>You have unsaved changes! If you leave, your changes will be lost.</source>
-        <target state="translated">Vous n'avez pas sauvegardé vos modifications ! Si vous quittez la page, vous les perdrez.</target>
+        <target state="translated">Vous n’avez pas sauvegardé vos modifications ! Si vous quittez la page, vous les perdrez.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -12203,7 +12203,7 @@
       </trans-unit>
       <trans-unit id="2587226585711833549" datatype="html">
         <source>Read instance rules for help</source>
-        <target state="translated">Lire les règles de l'instance pour obtenir de l'aide</target>
+        <target state="translated">Lire les règles de l’instance pour obtenir de l’aide</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">4</context>
@@ -12219,7 +12219,7 @@
       </trans-unit>
       <trans-unit id="2993949426196989262" datatype="html">
         <source>We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> user to publish your videos, since it's the super-admin account of your instance. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/> Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> to upload your videos. </source>
-        <target>Nous vous recommandons de ne pas publier de vidéo en tant qu'utilisateur <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/>, il s'agît du compte super-administrateur de votre instance. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/>, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>créez plutôt un compte<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> dédié pour téléverser vos vidéos. </target>
+        <target>Nous vous recommandons de ne pas publier de vidéo en tant qu’utilisateur <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/>, il s’agit du compte super-administrateur de votre instance. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;     "/>, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>créez plutôt un compte<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> dédié pour téléverser vos vidéos. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">11,14</context>
@@ -12475,7 +12475,7 @@
       </trans-unit>
       <trans-unit id="3691787517663044217" datatype="html">
         <source>The deletion will be sent to remote instances so they can reflect the change.</source>
-        <target state="translated">La suppression sera envoyée aux instances distantes afin qu'elles puissent répliquer le changement.</target>
+        <target state="translated">La suppression sera envoyée aux instances distantes afin qu’elles puissent répliquer le changement.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.ts</context>
           <context context-type="linenumber">171</context>
@@ -12483,7 +12483,7 @@
       </trans-unit>
       <trans-unit id="7321800851971795962" datatype="html">
         <source>It is a remote comment, so the deletion will only be effective on your instance.</source>
-        <target state="translated">Il s'agit d'un commentaire distant, donc la suppression ne sera effective que sur votre instance.</target>
+        <target state="translated">Il s’agit d’un commentaire distant, donc la suppression ne sera effective que sur votre instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.ts</context>
           <context context-type="linenumber">173</context>
@@ -12643,7 +12643,7 @@
       </trans-unit>
       <trans-unit id="6173286379208830044" datatype="html">
         <source>Paste magnet URI</source>
-        <target state="translated">Copier l'URL magnet</target>
+        <target state="translated">Copier l’URL magnet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">16</context>
@@ -12651,7 +12651,7 @@
       </trans-unit>
       <trans-unit id="6276792241563504067" datatype="html">
         <source>You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
-        <target state="translated">Vous pouvez importer n'importe quel fichier torrent qui pointe vers un fichier multimédia. Vous devez vous assurer que vous disposez des droits de diffusion sur le contenu vers lequel il pointe, sinon cela pourrait vous causer des problèmes juridiques ainsi qu'à votre instance.</target>
+        <target state="translated">Vous pouvez importer n’importe quel fichier torrent qui pointe vers un fichier multimédia. Vous devez vous assurer que vous disposez des droits de diffusion sur le contenu vers lequel il pointe, sinon cela pourrait vous causer des problèmes juridiques ainsi qu’à votre instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">20,22</context>
@@ -12659,7 +12659,7 @@
       </trans-unit>
       <trans-unit id="460353452916242022" datatype="html">
         <source>Sorry, but something went wrong</source>
-        <target state="translated">Désolé, mais quelque chose s'est mal passé</target>
+        <target state="translated">Désolé, mais quelque chose s’est mal passé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">51</context>
@@ -12759,7 +12759,7 @@
       </trans-unit>
       <trans-unit id="1219739004043110649" datatype="html">
         <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
-        <target state="translated">Votre vidéo n'est pas encore téléversée ; êtes-vous sûr de vouloir quitter cette page ?</target>
+        <target state="translated">Votre vidéo n’est pas encore téléversée ; êtes-vous sûr de vouloir quitter cette page ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -12827,7 +12827,7 @@
       </trans-unit>
       <trans-unit id="6148369758871787018" datatype="html">
         <source>Video background image</source>
-        <target state="translated">Image d'arrière-plan de la vidéo</target>
+        <target state="translated">Image d’arrière-plan de la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">29</context>
@@ -12835,7 +12835,7 @@
       </trans-unit>
       <trans-unit id="7099631707196015765" datatype="html">
         <source>Image that will be merged with your audio file. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;           "/> The chosen image will be definitive and cannot be modified. </source>
-        <target>Image qui sera intégrée à votre ficher audio. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;           "/> L'image choisie sera définitive et ne pourra pas être modifiée. </target>
+        <target>Image qui sera intégrée à votre ficher audio. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;           "/> L’image choisie sera définitive et ne pourra pas être modifiée. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">32,35</context>
@@ -12876,7 +12876,7 @@
       </trans-unit>
       <trans-unit id="3768339632235914548" datatype="html">
         <source>Publish will be available when upload is finished</source>
-        <target state="translated">Vous pourrez publier cette vidéo lorsque l'envoi sera terminé</target>
+        <target state="translated">Vous pourrez publier cette vidéo lorsque l’envoi sera terminé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">92</context>
@@ -13000,7 +13000,7 @@
       </trans-unit>
       <trans-unit id="1944582937285351613" datatype="html">
         <source>Your instance has no mirrored videos.</source>
-        <target state="translated">Votre instance n'a aucune vidéo dupliquée.</target>
+        <target state="translated">Votre instance n’a aucune vidéo dupliquée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">82</context>
@@ -13016,7 +13016,7 @@
       </trans-unit>
       <trans-unit id="7595922272001217567" datatype="html">
         <source>No redundancy strategy is enabled on your instance.</source>
-        <target state="translated">Aucune stratégie de redondance n'est activée sur votre instance.</target>
+        <target state="translated">Aucune stratégie de redondance n’est activée sur votre instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">96,97</context>
@@ -13478,7 +13478,7 @@
       </trans-unit>
       <trans-unit id="2830831449226931729" datatype="html">
         <source>Instance languages</source>
-        <target state="translated">Langues de l'instance</target>
+        <target state="translated">Langues de l’instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">185</context>
@@ -13494,7 +13494,7 @@
       </trans-unit>
       <trans-unit id="1435317307066082710" datatype="html">
         <source>Hide the video until a specific date</source>
-        <target state="translated">Masquer la vidéo jusqu'à une date précise</target>
+        <target state="translated">Masquer la vidéo jusqu’à une date précise</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">198</context>
@@ -13670,7 +13670,7 @@
       </trans-unit>
       <trans-unit id="6297019164970912850" datatype="html">
         <source>You can stream multiple times in a permanent live. The URL for your viewers won't change but you cannot save replays of your lives</source>
-        <target state="translated">Vous pouvez diffuser plusieurs fois dans un direct permanent. L'URL de vos spectateurs ne changera pas, mais vous ne pouvez pas enregistrer les rediffusions de vos lives</target>
+        <target state="translated">Vous pouvez diffuser plusieurs fois dans un direct permanent. L’URL de vos spectateurs ne changera pas, mais vous ne pouvez pas enregistrer les rediffusions de vos lives</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">236</context>
@@ -13678,7 +13678,7 @@
       </trans-unit>
       <trans-unit id="3272292170221289235" datatype="html">
         <source>This is a permanent live</source>
-        <target state="translated">C'est un direct permanent</target>
+        <target state="translated">C’est un direct permanent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">232</context>
@@ -13742,7 +13742,7 @@
       </trans-unit>
       <trans-unit id="1952020204339597057" datatype="html">
         <source>Short text to tell people how they can support you (membership platform...).</source>
-        <target state="translated">Un court texte pour dire aux gens comment ils peuvent vous soutenir (plateforme d'adhésion…).</target>
+        <target state="translated">Un court texte pour dire aux gens comment ils peuvent vous soutenir (plateforme d’adhésion…).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">280,281</context>
@@ -13750,7 +13750,7 @@
       </trans-unit>
       <trans-unit id="50985514722149155" datatype="html">
         <source>This is the date when the content was originally published (e.g. the release date for a film)</source>
-        <target state="translated">Il s'agit de la date à laquelle le contenu a été publié à l'origine (par exemple, la date de sortie d'un film)</target>
+        <target state="translated">Il s’agit de la date à laquelle le contenu a été publié à l’origine (par exemple, la date de sortie d’un film)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">300,301</context>
@@ -13942,7 +13942,7 @@
       </trans-unit>
       <trans-unit id="8390860433951751429" datatype="html">
         <source>No blocked video found matching current filters.</source>
-        <target state="translated">Aucune vidéo bloquée correspondant aux filtres actuels n'a été trouvée.</target>
+        <target state="translated">Aucune vidéo bloquée correspondant aux filtres actuels n’a été trouvée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">124</context>
@@ -13974,7 +13974,7 @@
       </trans-unit>
       <trans-unit id="9178360613965745088" datatype="html">
         <source>Last hour</source>
-        <target state="translated">L'heure passée</target>
+        <target state="translated">L’heure écoulée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -14206,7 +14206,7 @@
       </trans-unit>
       <trans-unit id="3203902538239082422" datatype="html">
         <source>You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</source>
-        <target state="translated">Vous avez activé l'inscription : nous avons automatiquement activé la case à cocher « Bloquer automatiquement les nouvelles vidéos » de la section « Vidéos » immédiatement en dessous.</target>
+        <target state="translated">Vous avez activé l’inscription : nous avons automatiquement activé la case à cocher « Bloquer automatiquement les nouvelles vidéos » de la section « Vidéos » immédiatement en dessous.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">473</context>
@@ -14222,7 +14222,7 @@
       </trans-unit>
       <trans-unit id="3070ae34708ac4b19ac0a2fdc2c0b82871754c7a" datatype="html">
         <source>Instance information</source>
-        <target state="translated">Informations sur l'instance</target>
+        <target state="translated">Informations sur l’instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">7</context>
@@ -14278,7 +14278,7 @@
       </trans-unit>
       <trans-unit id="7794655859478571096" datatype="html">
         <source>Main instance categories</source>
-        <target state="translated">Catégories de l'instance principale</target>
+        <target state="translated">Catégories de l’instance principale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">48</context>
