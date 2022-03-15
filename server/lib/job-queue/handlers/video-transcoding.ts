@@ -142,9 +142,11 @@ async function handleWebTorrentMergeAudioJob (job: Job, payload: MergeAudioTrans
 async function handleWebTorrentOptimizeJob (job: Job, payload: OptimizeTranscodingPayload, video: MVideoFullLight, user: MUserId) {
   logger.info('Handling optimize transcoding job for %s.', video.uuid, lTags(video.uuid))
 
-  const { transcodeType } = await optimizeOriginalVideofile(video, video.getMaxQualityFile(), job)
+  const { transcodeType, videoFile } = await optimizeOriginalVideofile(video, video.getMaxQualityFile(), job)
 
   logger.info('Optimize transcoding job for %s ended.', video.uuid, lTags(video.uuid))
+
+  await addVideoValidateJob(video, videoFile.resolution, 'webtorrent', payload.isNewVideo)
 
   await onVideoFirstWebTorrentTranscoding(video, payload, transcodeType, user)
 }
