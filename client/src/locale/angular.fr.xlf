@@ -14326,7 +14326,7 @@
       </trans-unit>
       <trans-unit id="5056489767203690328" datatype="html">
         <source>Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</source>
-        <target state="translated">Qui modère l'instance ? Quelle politique est appliquée à propos des vidéos NSFW ? À propos des vidéos politiques ? etc</target>
+        <target state="translated">Qui modère l’instance ? Quelle politique est appliquée à propos des vidéos NSFW ? À propos des vidéos politiques ? etc.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">145</context>
