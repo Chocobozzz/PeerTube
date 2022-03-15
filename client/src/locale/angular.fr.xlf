@@ -2957,7 +2957,7 @@
       </trans-unit>
       <trans-unit id="09ee94b4e53e53026dbd591978aaa92901a8b67e" datatype="html">
         <source>We couldn't find any ressource tied to the URL <x id="INTERPOLATION" equiv-text="e URL {{ pathn"/> you were looking for. </source>
-        <target>Nous n'avons trouvé aucune ressource liée à l’URL <x id="INTERPOLATION" equiv-text="e URL {{ pathn"/> que vous cherchiez. </target>
+        <target>Nous n’avons trouvé aucune ressource liée à l’URL <x id="INTERPOLATION" equiv-text="e URL {{ pathn"/> que vous cherchiez. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -2990,7 +2990,7 @@
       </trans-unit>
       <trans-unit id="3209594685692897380" datatype="html">
         <source>You may have typed the address or URL incorrectly</source>
-        <target>Vous avez peut-être mal saisi l'adresse ou l’URL</target>
+        <target>Vous avez peut-être mal saisi l’adresse ou l’URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">16</context>
@@ -5734,7 +5734,7 @@
       </trans-unit>
       <trans-unit id="5177154708872200221" datatype="html">
         <source>You don't have any subscription yet.</source>
-        <target state="translated">Vous n’avez pas encore d'abonnement.</target>
+        <target state="translated">Vous n’avez pas encore d’abonnement.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-subscriptions/my-subscriptions.component.html</context>
           <context context-type="linenumber">18</context>
@@ -7026,7 +7026,7 @@
       </trans-unit>
       <trans-unit id="5908032061347078472" datatype="html">
         <source>Use origin instance URL</source>
-        <target state="translated">Utiliser l’URL d'origine de l’instance</target>
+        <target state="translated">Utiliser l’URL d’origine de l’instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">180</context>
@@ -8110,7 +8110,7 @@
       </trans-unit>
       <trans-unit id="658727060940996385" datatype="html">
         <source>Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?</source>
-        <target state="translated">Le renouvellement du jeton empêchera les clients précédemment configurés de récupérer le flux tant qu'ils n’auront pas utilisé le nouveau jeton. Poursuivre ?</target>
+        <target state="translated">Le renouvellement du jeton empêchera les clients précédemment configurés de récupérer le flux tant qu’ils n’auront pas utilisé le nouveau jeton. Poursuivre ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -8990,7 +8990,7 @@
       </trans-unit>
       <trans-unit id="6854100952145697527" datatype="html">
         <source>Display name cannot be more than 120 characters long.</source>
-        <target state="translated">Le nom d'affichage ne peut pas faire plus de 120 caractères.</target>
+        <target state="translated">Le nom d’affichage ne peut pas faire plus de 120 caractères.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -9022,7 +9022,7 @@
       </trans-unit>
       <trans-unit id="7365924714339585574" datatype="html">
         <source>The username is required.</source>
-        <target state="translated">Le nom d'utilisateur est requis.</target>
+        <target state="translated">Le nom d’utilisateur est requis.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -9038,7 +9038,7 @@
       </trans-unit>
       <trans-unit id="5179099584732142331" datatype="html">
         <source>Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="translated">Êtes-vous sûr de vouloir supprimer votre compte ? Cela supprimera toutes vos données, y compris vos chaînes, vidéos et commentaires. Le contenu mis en cache par d'autres serveurs et tiers peut prendre plus de temps avant de répercuter ces suppressions.</target>
+        <target state="translated">Êtes-vous sûr de vouloir supprimer votre compte ? Cela supprimera toutes vos données, y compris vos chaînes, vidéos et commentaires. Le contenu mis en cache par d’autres serveurs et tiers peut prendre plus de temps avant de répercuter ces suppressions.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">22</context>
@@ -9046,7 +9046,7 @@
       </trans-unit>
       <trans-unit id="6897292459203320054" datatype="html">
         <source>Type your username to confirm</source>
-        <target state="translated">Tapez votre nom d'utilisateur pour confirmer</target>
+        <target state="translated">Tapez votre nom d’utilisateur pour confirmer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">23</context>
@@ -9078,7 +9078,7 @@
       </trans-unit>
       <trans-unit id="8173902679178787744" datatype="html">
         <source>Once you delete your account, there is no going back. You will be asked to confirm this action.</source>
-        <target state="translated">Une fois votre compte supprimé, aucun retour en arrière n'est possible. Il vous sera demandé de confirmer cette action.</target>
+        <target state="translated">Une fois votre compte supprimé, aucun retour en arrière n’est possible. Il vous sera demandé de confirmer cette action.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context>
           <context context-type="linenumber">2</context>
@@ -9214,7 +9214,7 @@
       </trans-unit>
       <trans-unit id="5315689532659759332" datatype="html">
         <source>Someone mentioned you in video comments</source>
-        <target state="translated">Quelqu'un vous a mentionné dans les commentaires d'une vidéo</target>
+        <target state="translated">Quelqu’un vous a mentionné dans les commentaires d’une vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -9238,7 +9238,7 @@
       </trans-unit>
       <trans-unit id="900099988467638766" datatype="html">
         <source>An abuse report received a new message</source>
-        <target state="translated">Un signalement d'abus a reçu un nouveau message</target>
+        <target state="translated">Un signalement d’abus a reçu un nouveau message</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -9246,7 +9246,7 @@
       </trans-unit>
       <trans-unit id="2326816287669585542" datatype="html">
         <source>One of your abuse reports has been accepted or rejected by moderators</source>
-        <target state="translated">Un de vos rapports d'abus a été accepté ou rejeté par les modérateurs</target>
+        <target state="translated">Un de vos rapports d’abus a été accepté ou rejeté par les modérateurs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -9334,7 +9334,7 @@
       </trans-unit>
       <trans-unit id="7590784934397800835" datatype="html">
         <source>Edit a video</source>
-        <target state="translated">Mise à jour d'une vidéo</target>
+        <target state="translated">Mise à jour d’une vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context>
           <context context-type="linenumber">108</context>
@@ -9350,7 +9350,7 @@
       </trans-unit>
       <trans-unit id="4361762785337785037" datatype="html">
         <source>Copy feed URL</source>
-        <target state="translated">Copier l'URL du flux</target>
+        <target state="translated">Copier l’URL du flux</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/video-user-subscriptions.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -9502,7 +9502,7 @@
       </trans-unit>
       <trans-unit id="2601639465696257054" datatype="html">
         <source>This <x id="INTERPOLATION" equiv-text="his {{ pluginTypeLabe"/> does not have settings. </source>
-        <target state="translated">Ce <x id="INTERPOLATION" equiv-text="his {{ pluginTypeLabe"/> n'a pas de paramètres. </target>
+        <target state="translated">Ce <x id="INTERPOLATION" equiv-text="his {{ pluginTypeLabe"/> n’a pas de paramètres. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context>
           <context context-type="linenumber">16,18</context>
@@ -9510,7 +9510,7 @@
       </trans-unit>
       <trans-unit id="3150704904301058778" datatype="html">
         <source>The plugin index is not available. Please retry later.</source>
-        <target state="translated">La liste des plugins n'est pas disponible. Veuillez réessayer plus tard.</target>
+        <target state="translated">La liste des plugins n’est pas disponible. Veuillez réessayer plus tard.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">100</context>
@@ -9518,7 +9518,7 @@
       </trans-unit>
       <trans-unit id="1387301493234848481" datatype="html">
         <source>Please only install plugins or themes you trust, since they can execute any code on your instance.</source>
-        <target state="translated">Veuillez n'installer que des plugins ou des thèmes en lesquels vous avez confiance, car ils peuvent exécuter n'importe quel code sur votre instance.</target>
+        <target state="translated">Veuillez n’installer que des plugins ou des thèmes en lesquels vous avez confiance, car ils peuvent exécuter n’importe quel code sur votre instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">126</context>
@@ -9550,7 +9550,7 @@
       </trans-unit>
       <trans-unit id="2006841089844688970" datatype="html">
         <source>To load your new installed plugins or themes, refresh the page.</source>
-        <target state="translated">Pour charger vos nouveaux thèmes ou modules d'extension installés, rafraîchissez la page.</target>
+        <target state="translated">Pour charger vos nouveaux thèmes ou modules d’extension installés, rafraîchissez la page.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -9582,7 +9582,7 @@
       </trans-unit>
       <trans-unit id="7002061007877950198" datatype="html">
         <source>Plugin homepage (new window)</source>
-        <target state="translated">Page d'accueil du module d'extension (nouvelle fenêtre)</target>
+        <target state="translated">Page d'accueil du module d’extension (nouvelle fenêtre)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">40</context>
@@ -9598,7 +9598,7 @@
       </trans-unit>
       <trans-unit id="8952758850096973746" datatype="html">
         <source>Plugin npm package (new window)</source>
-        <target state="translated">Paquet npm de l'extension (nouvelle fenêtre)</target>
+        <target state="translated">Paquet npm de l’extension (nouvelle fenêtre)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">44</context>
@@ -9606,7 +9606,7 @@
       </trans-unit>
       <trans-unit id="212615365039028546" datatype="html">
         <source>You don't have plugins installed yet.</source>
-        <target state="translated">Vous n'avez aucun plugin installé pour le moment.</target>
+        <target state="translated">Vous n’avez aucun plugin installé pour le moment.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -9614,7 +9614,7 @@
       </trans-unit>
       <trans-unit id="1710094819987243777" datatype="html">
         <source>You don't have themes installed yet.</source>
-        <target state="translated">Vous n'avez aucun thème installé pour le moment.</target>
+        <target state="translated">Vous n’avez aucun thème installé pour le moment.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">92</context>
@@ -9918,7 +9918,7 @@
       </trans-unit>
       <trans-unit id="8014491157078444256" datatype="html">
         <source>Server <x id="PH" equiv-text="host"/> muted by the instance.</source>
-        <target state="translated">Serveur <x id="PH" equiv-text="host"/> mis en sourdine par l'instance.</target>
+        <target state="translated">Serveur <x id="PH" equiv-text="host"/> mis en sourdine par l’instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">441</context>
@@ -10034,7 +10034,7 @@
       </trans-unit>
       <trans-unit id="4619188387782427495" datatype="html">
         <source>More information</source>
-        <target state="translated">Plus d'informations</target>
+        <target state="translated">Plus d’informations</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">52</context>
@@ -10419,7 +10419,7 @@
       </trans-unit>
       <trans-unit id="1109780973109145433" datatype="html">
         <source>Report reason must be at least 2 characters long.</source>
-        <target state="translated">La raison du signalement doit être composée d'au moins 2 caractères.</target>
+        <target state="translated">La raison du signalement doit être composée d’au moins 2 caractères.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -10459,7 +10459,7 @@
       </trans-unit>
       <trans-unit id="8835075531528610034" datatype="html">
         <source>Abuse message is required.</source>
-        <target state="translated">Un message d'abus est nécessaire.</target>
+        <target state="translated">Un message d’abus est nécessaire.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">25</context>
@@ -10467,7 +10467,7 @@
       </trans-unit>
       <trans-unit id="9034042966936514516" datatype="html">
         <source>Abuse message must be at least 2 characters long.</source>
-        <target state="translated">Le message d'abus doit comporter au moins 2 caractères.</target>
+        <target state="translated">Le message d’abus doit comporter au moins 2 caractères.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">26</context>
@@ -10475,7 +10475,7 @@
       </trans-unit>
       <trans-unit id="7989186574443390119" datatype="html">
         <source>Abuse message cannot be more than 3000 characters long.</source>
-        <target state="translated">Le message d'abus ne peut pas comporter plus de 3000 caractères.</target>
+        <target state="translated">Le message d’abus ne peut pas comporter plus de 3000 caractères.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">27</context>
@@ -10531,7 +10531,7 @@
       </trans-unit>
       <trans-unit id="3935234189109112926" datatype="html">
         <source>You are not following <x id="PH" equiv-text="follow.following.host"/> anymore.</source>
-        <target>Vous n'êtes plus abonné à <x id="PH" equiv-text="follow.following.host"/>.</target>
+        <target>Vous n’êtes plus abonné à <x id="PH" equiv-text="follow.following.host"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">64</context>
@@ -10627,7 +10627,7 @@
       </trans-unit>
       <trans-unit id="7274241885665071790" datatype="html">
         <source>Your instance is not following anyone.</source>
-        <target state="translated">Votre instance n'en suit aucune autre.</target>
+        <target state="translated">Votre instance n’en suit aucune autre.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">75</context>
@@ -10635,7 +10635,7 @@
       </trans-unit>
       <trans-unit id="4917252294930256268" datatype="html">
         <source>It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.</source>
-        <target state="translated">Il semblerait que votre serveur n'utilise par le protocole HTTPS. Vous devez activer TLS sur votre serveur pour pouvoir en suivre d'autres.</target>
+        <target state="translated">Il semblerait que votre serveur n’utilise par le protocole HTTPS. Vous devez activer TLS sur votre serveur pour pouvoir en suivre d’autres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">85,86</context>
@@ -10643,7 +10643,7 @@
       </trans-unit>
       <trans-unit id="3371601176452094961" datatype="html">
         <source>Instance <x id="PH" equiv-text="host"/> unmuted by your instance.</source>
-        <target state="translated">Le son de l'instance <x id="PH" equiv-text="host"/> a été rétabli par l'instance.</target>
+        <target state="translated">Le son de l’instance <x id="PH" equiv-text="host"/> a été rétabli par l’instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -10651,7 +10651,7 @@
       </trans-unit>
       <trans-unit id="3096398988891996621" datatype="html">
         <source>Instance <x id="PH" equiv-text="domain"/> muted by your instance.</source>
-        <target state="translated">L'instance <x id="PH" equiv-text="domain"/> a été mise en sourdine par votre instance.</target>
+        <target state="translated">L’instance <x id="PH" equiv-text="domain"/> a été mise en sourdine par votre instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">69</context>
@@ -10667,7 +10667,7 @@
       </trans-unit>
       <trans-unit id="2740793005745065895" datatype="html">
         <source><x id="PH" equiv-text="host"/> is not valid</source>
-        <target><x id="PH" equiv-text="host"/> n'est pas valide</target>
+        <target><x id="PH" equiv-text="host"/> n’est pas valide</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/batch-domains-validators.ts</context>
           <context context-type="linenumber">19</context>
@@ -10867,7 +10867,7 @@
       </trans-unit>
       <trans-unit id="4117663541503607703" datatype="html">
         <source>Add a message to communicate with the moderation team</source>
-        <target state="translated">Ajouter un message pour communiquer avec l'équipe de modération</target>
+        <target state="translated">Ajouter un message pour communiquer avec l’équipe de modération</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.ts</context>
           <context context-type="linenumber">103</context>
@@ -10891,7 +10891,7 @@
       </trans-unit>
       <trans-unit id="7417592908147948728" datatype="html">
         <source>Messages with the moderation team</source>
-        <target state="translated">Messages avec l'équipe de modération</target>
+        <target state="translated">Messages avec l’équipe de modération</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context>
           <context context-type="linenumber">5</context>
@@ -10899,7 +10899,7 @@
       </trans-unit>
       <trans-unit id="1684858568733486744" datatype="html">
         <source>No messages for now.</source>
-        <target state="translated">Aucun message pour l'instant.</target>
+        <target state="translated">Aucun message pour l’instant.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context>
           <context context-type="linenumber">28,29</context>
@@ -15750,7 +15750,7 @@
       </trans-unit>
       <trans-unit id="4086135983283545219" datatype="html">
         <source>If you remove these users, you will not be able to create others with the same username!</source>
-        <target state="translated">Si vous supprimez ces utilisateurs, vous ne pourrez plus en créer de nouveaux avec les mêmes noms !</target>
+        <target state="translated">Si vous supprimez ces utilisateurs, vous ne pourrez plus en créer de nouveaux avec les mêmes noms !</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">193</context>
