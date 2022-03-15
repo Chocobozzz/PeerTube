@@ -145,7 +145,7 @@ describe('Test video transcoding', function () {
       const video = videos.find(v => v.name === attributes.name)
       const videoDetails = await servers[1].videos.get({ id: video.id })
 
-      const { data: validateJobs } = await servers[1].jobs.list({ jobType: 'validate-video-file' })
+      const { data: validateJobs } = await servers[1].jobs.list({ jobType: 'video-validate' })
       const jobs = validateJobs.filter(j => j.data.videoUUID === video.uuid)
 
       const hlsJobs = jobs.filter(j => j.data.type === 'hls')

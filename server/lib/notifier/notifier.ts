@@ -32,7 +32,7 @@ import {
   RegistrationForModerators,
   UnblacklistForOwner
 } from './shared'
-import { VideoValidationFailed } from './shared/video-publication/video-validation-failed'
+import { VideoValidateFailed } from './shared/video-publication/video-validate-failed'
 
 class Notifier {
 
@@ -55,7 +55,7 @@ class Notifier {
     newAbuseMessage: [ NewAbuseMessageForReporter, NewAbuseMessageForModerators ],
     newPeertubeVersion: [ NewPeerTubeVersionForAdmins ],
     newPluginVersion: [ NewPluginVersionForAdmins ],
-    videoValidationFailed: [ VideoValidationFailed ]
+    videoValidateFailed: [ VideoValidateFailed ]
   }
 
   private static instance: Notifier
@@ -93,11 +93,11 @@ class Notifier {
       })
   }
 
-  notifyOnVideoValidationFailed (video: MVideoFullLight): void {
-    const models = this.notificationModels.videoValidationFailed
+  notifyOnVideoValidateFailed (video: MVideoFullLight): void {
+    const models = this.notificationModels.videoValidateFailed
 
     this.sendNotifications(models, video)
-      .catch(err => logger.error('Cannot notify of video validation failed.', video.url, { err }))
+      .catch(err => logger.error('Cannot notify of video validate failed.', video.url, { err }))
   }
 
   notifyOnNewComment (comment: MCommentOwnerVideo): void {

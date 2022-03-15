@@ -154,10 +154,10 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-live-ending': 1,
   'video-edition': 1,
   'move-to-object-storage': 3,
-  'validate-video-file': 1
+  'video-validate': 1
 }
 // Excluded keys are jobs that can be configured by admins
-const JOB_CONCURRENCY: { [id in Exclude<JobType, 'validate-video-file' | 'video-transcoding' | 'video-import'>]: number } = {
+const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-validate' | 'video-transcoding' | 'video-import'>]: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-unicast': 10,
   'activitypub-http-fetcher': 3,
@@ -190,7 +190,7 @@ const JOB_TTL: { [id in JobType]: number } = {
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
   'move-to-object-storage': 1000 * 60 * 60 * 3, // 3 hours,
-  'validate-video-file': 1000 * 3600 * 48 // 2 days, transcoding could be long
+  'video-validate': 1000 * 3600 * 48 // 2 days, transcoding could be long
 }
 const REPEAT_JOBS: { [ id in JobType ]?: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views-stats': {

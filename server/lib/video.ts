@@ -125,7 +125,7 @@ async function addVideoValidateJob (video: MVideoUUID, resolution: VideoResoluti
   await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingValidateVideo')
 
   const dataInput: VideoValidatePayload = { isNewVideo, resolution, type, videoUUID: video.uuid }
-  return JobQueue.Instance.createJobWithPromise({ type: 'validate-video-file', payload: dataInput })
+  return JobQueue.Instance.createJobWithPromise({ type: 'video-validate', payload: dataInput })
 }
 
 async function addMoveToObjectStorageJob (video: MVideoUUID, isNewVideo = true) {

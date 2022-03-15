@@ -59,7 +59,7 @@ type CreateJobArgument =
   { type: 'delete-resumable-upload-meta-file', payload: DeleteResumableUploadMetaFilePayload } |
   { type: 'video-edition', payload: VideoEditionPayload } |
   { type: 'move-to-object-storage', payload: MoveObjectStoragePayload } |
-  { type: 'validate-video-file', payload: ValidateVideoFilePayload }
+  { type: 'video-validate', payload: ValidateVideoFilePayload }
 
 export type CreateJobOptions = {
   delay?: number
@@ -83,7 +83,7 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'video-redundancy': processVideoRedundancy,
   'move-to-object-storage': processMoveToObjectStorage,
   'video-edition': processVideoEdition,
-  'validate-video-file': processVideoValidate
+  'video-validate': processVideoValidate
 }
 
 const jobTypes: JobType[] = [
@@ -103,7 +103,7 @@ const jobTypes: JobType[] = [
   'video-live-ending',
   'move-to-object-storage',
   'video-edition',
-  'validate-video-file'
+  'video-validate'
 ]
 
 class JobQueue {
@@ -298,7 +298,7 @@ class JobQueue {
   }
 
   private getJobConcurrency (jobType: JobType) {
-    if ([ 'video-transcoding', 'validate-video-file' ].includes(jobType)) return CONFIG.TRANSCODING.CONCURRENCY
+    if ([ 'video-transcoding', 'video-validate' ].includes(jobType)) return CONFIG.TRANSCODING.CONCURRENCY
     if (jobType === 'video-import') return CONFIG.IMPORT.VIDEOS.CONCURRENCY
 
     return JOB_CONCURRENCY[jobType]

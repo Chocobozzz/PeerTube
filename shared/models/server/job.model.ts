@@ -23,7 +23,7 @@ export type JobType =
   | 'actor-keys'
   | 'move-to-object-storage'
   | 'video-edition'
-  | 'validate-video-file'
+  | 'video-validate'
 
 export interface Job {
   id: number

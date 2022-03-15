@@ -5,7 +5,7 @@ import { MUserWithNotificationSetting, MVideoAccountLight, UserNotificationModel
 import { UserNotificationType, VideoState } from '@shared/models'
 import { AbstractNotification } from '../common/abstract-notification'
 
-export class VideoValidationFailed extends AbstractNotification <MVideoAccountLight> {
+export class VideoValidateFailed extends AbstractNotification <MVideoAccountLight> {
   private user: MUserWithNotificationSetting
 
   async prepare () {

@@ -57,9 +57,9 @@ async function processVideoValidate (job: Job) {
     )
     await VideoJobInfoModel.decrease(video.uuid, 'pendingValidateVideo')
     await moveToFailedTranscodingState(video)
-    Notifier.Instance.notifyOnVideoValidationFailed(video)
+    Notifier.Instance.notifyOnVideoValidateFailed(video)
 
-    for (const type of [ 'validate-video-file', 'video-transcode' ] as JobType[]) {
+    for (const type of [ 'video-validate', 'video-transcode' ] as JobType[]) {
       const remainingJobs = await JobQueue.Instance.getJobs(type, [ 'active', 'delayed', 'waiting' ])
 
       logger.debug('Marking remaining %d %s jobs as failed', remainingJobs.length, type)
