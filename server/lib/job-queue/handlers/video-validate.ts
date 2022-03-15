@@ -63,7 +63,7 @@ async function processVideoValidate (job: Job) {
 
     logger.debug('Removing remaining %d validate-video-file jobs', remainingJobs.length)
 
-    for (const job of remainingJobs) {
+    for (const job of remainingJobs.filter(j => j.data.videoUUID === payload.videoUUID)) {
       await job.remove()
     }
   }
