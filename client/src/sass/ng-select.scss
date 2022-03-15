@@ -27,6 +27,11 @@ $ng-select-value-font-size: 15px;
     }
   }
 
+  .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+    color: pvar(--mainForegroundColor);
+    background-color: pvar(--mainBackgroundColor);
+  }
+
   .ng-select-container {
     background-color: pvar(--inputBackgroundColor);
   }

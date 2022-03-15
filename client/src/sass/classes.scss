@@ -28,3 +28,7 @@
 .peertube-radio-container {
   @include peertube-radio-container;
 }
+
+.muted {
+  color: pvar(--greyForegroundColor) !important;
+}

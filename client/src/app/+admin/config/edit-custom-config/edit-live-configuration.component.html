@@ -50,7 +50,7 @@
 
               <div class="form-group" [ngClass]="getDisabledLiveClass()">
                 <label i18n for="liveMaxInstanceLives">
-                  Max simultaneous lives created on your instance <span class="text-muted">(-1 for "unlimited")</span>
+                  Max simultaneous lives created on your instance <span class="muted">(-1 for "unlimited")</span>
                 </label>
 
                 <div class="number-with-unit">
@@ -63,7 +63,7 @@
 
               <div class="form-group" [ngClass]="getDisabledLiveClass()">
                 <label i18n for="liveMaxUserLives">
-                  Max simultaneous lives created per user <span class="text-muted">(-1 for "unlimited")</span>
+                  Max simultaneous lives created per user <span class="muted">(-1 for "unlimited")</span>
                 </label>
 
                 <div class="number-with-unit">
@@ -139,7 +139,7 @@
           <div class="form-group" [ngClass]="getDisabledLiveTranscodingClass()">
             <label i18n for="liveTranscodingThreads">Live transcoding threads</label>
 
-            <span class="text-muted ml-1">
+            <span class="muted ml-1">
               <ng-container *ngIf="getTotalTranscodingThreads().atMost" i18n>
                 will claim at most {{ getTotalTranscodingThreads().value }} {{ getTotalTranscodingThreads().unit }} with VOD transcoding
               </ng-container>
@@ -160,7 +160,7 @@
 
           <div class="form-group mt-4" [ngClass]="getDisabledLiveTranscodingClass()">
             <label i18n for="liveTranscodingProfile">Live transcoding profile</label>
-            <span class="text-muted ml-1" i18n>new live transcoding profiles can be added by PeerTube plugins</span>
+            <span class="muted ml-1" i18n>new live transcoding profiles can be added by PeerTube plugins</span>
 
             <my-select-options
               id="liveTranscodingProfile"

@@ -18,7 +18,9 @@ $grey-button-outline-color: scale-color($grey-foreground-color, $alpha: -95%);
 $main-color: hsl(24, 90%, 50%);
 $main-color-lighter: lighten($main-color, 10%);
 $main-color-lightest: lighten($main-color, 40%);
+
 $main-hover-color: lighten($main-color, 5%);
+$main-background-hover-color: #e9ecef;
 
 $secondary-color: hsl(187, 77%, 34%);
 
@@ -109,6 +111,7 @@ $variables: (
   --mainColorLightest: var(--mainColorLightest),
 
   --mainHoverColor: var(--mainHoverColor),
+  --mainBackgroundHoverColor: var(--mainBackgroundHoverColor),
 
   --mainBackgroundColor: var(--mainBackgroundColor),
   --mainForegroundColor: var(--mainForegroundColor),
@@ -117,6 +120,7 @@ $variables: (
 
   --greyForegroundColor: var(--greyForegroundColor),
   --greyBackgroundColor: var(--greyBackgroundColor),
+  --greySecondaryBackgroundColor: var(--greySecondaryBackgroundColor),
 
   --menuBackgroundColor: var(--menuBackgroundColor),
   --menuForegroundColor: var(--menuForegroundColor),

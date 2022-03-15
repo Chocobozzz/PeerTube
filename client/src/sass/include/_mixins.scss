@@ -124,8 +124,8 @@
 @mixin peertube-textarea ($width, $height) {
   @include peertube-input-text($width);
 
-  color: pvar(--textareaForegroundColor);
-  background-color: pvar(--textareaBackgroundColor);
+  color: pvar(--textareaForegroundColor) !important;
+  background-color: pvar(--textareaBackgroundColor) !important;
   height: $height;
   padding: 5px 15px;
   font-size: 15px;
@@ -207,7 +207,7 @@
 @mixin grey-button {
   @include button-focus($grey-button-outline-color);
 
-  background-color: $grey-background-color;
+  background-color: pvar(--greyBackgroundColor);
   color: pvar(--greyForegroundColor);
 
   &:hover,
@@ -216,7 +216,7 @@
   &[disabled],
   &.disabled {
     color: pvar(--greyForegroundColor);
-    background-color: $grey-background-hover-color;
+    background-color: pvar(--greySecondaryBackgroundColor);
   }
 
   &[disabled],
