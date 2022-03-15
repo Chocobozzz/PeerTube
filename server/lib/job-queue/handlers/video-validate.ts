@@ -64,7 +64,7 @@ async function processVideoValidate (job: Job) {
     logger.debug('Removing remaining %d validate-video-file jobs', remainingJobs.length)
 
     for (const job of remainingJobs.filter(j => j.data.videoUUID === payload.videoUUID)) {
-      await job.remove()
+      await job.moveToFailed({ message: `Cancelling due to validation failed for resolution ${payload.resolution}` })
     }
   }
 }
