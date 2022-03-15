@@ -73,10 +73,10 @@ function getRemoteObjectOrDie (
 ): { url: string, username: string, password: string } {
   const options = program.opts()
 
-  function exitIfNoOptions (options: string[], errorPrefix: string = '') {
+  function exitIfNoOptions (optionNames: string[], errorPrefix: string = '') {
     let exit = false
 
-    for (const key of options) {
+    for (const key of optionNames) {
       if (!options[key]) {
         if (exit === false && errorPrefix) console.error(errorPrefix)
 
