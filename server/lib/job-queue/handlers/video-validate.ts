@@ -2,7 +2,7 @@ import { Job } from 'bull'
 import { checkValidity } from '@server/helpers/ffmpeg/ffmpeg-validate'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { VideoModel } from '@server/models/video/video'
-import { VideoStreamingPlaylistType, VideoValidatePayload } from '@shared/models'
+import { JobType, VideoStreamingPlaylistType, VideoValidatePayload } from '@shared/models'
 import { moveToFailedTranscodingState, moveToNextState } from '@server/lib/video-state'
 import { Notifier } from '@server/lib/notifier'
 import { getHLSDirectory } from '@server/lib/paths'
@@ -59,12 +59,14 @@ async function processVideoValidate (job: Job) {
     await moveToFailedTranscodingState(video)
     Notifier.Instance.notifyOnVideoValidationFailed(video)
 
-    const remainingJobs = await JobQueue.Instance.getJobs('validate-video-file', [ 'active', 'delayed', 'waiting' ])
+    for (const type of [ 'validate-video-file', 'video-transcode' ] as JobType[]) {
+      const remainingJobs = await JobQueue.Instance.getJobs(type, [ 'active', 'delayed', 'waiting' ])
 
-    logger.debug('Removing remaining %d validate-video-file jobs', remainingJobs.length)
+      logger.debug('Marking remaining %d %s jobs as failed', remainingJobs.length, type)
 
-    for (const job of remainingJobs.filter(j => j.data.videoUUID === payload.videoUUID)) {
-      await job.moveToFailed({ message: `Cancelling due to validation failed for resolution ${payload.resolution}` })
+      for (const job of remainingJobs.filter(j => j.data.videoUUID === payload.videoUUID)) {
+        await job.moveToFailed({ message: `Cancelling due to validation failed for resolution ${payload.resolution}` })
+      }
     }
   }
 }
