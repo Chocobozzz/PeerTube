@@ -138,6 +138,9 @@ object_storage:
 
   region: 'us-east-1'
 
+  # Set this ACL on each uploaded object
+  upload_acl: 'public-read'
+
   credentials:
     # You can also use AWS_ACCESS_KEY_ID env variable
     access_key_id: ''

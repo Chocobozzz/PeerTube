@@ -6,10 +6,12 @@ import {
   CompletedPart,
   CompleteMultipartUploadCommand,
   CreateMultipartUploadCommand,
+  CreateMultipartUploadCommandInput,
   DeleteObjectCommand,
   GetObjectCommand,
   ListObjectsV2Command,
   PutObjectCommand,
+  PutObjectCommandInput,
   UploadPartCommand
 } from '@aws-sdk/client-s3'
 import { pipelinePromise } from '@server/helpers/core-utils'
@@ -143,12 +145,17 @@ async function objectStoragePut (options: {
 }) {
   const { objectStorageKey, content, bucketInfo } = options
 
-  const command = new PutObjectCommand({
+  const input: PutObjectCommandInput = {
     Bucket: bucketInfo.BUCKET_NAME,
     Key: buildKey(objectStorageKey, bucketInfo),
-    Body: content,
-    ACL: 'public-read'
-  })
+    Body: content
+  }
+
+  if (CONFIG.OBJECT_STORAGE.UPLOAD_ACL) {
+    input.ACL = CONFIG.OBJECT_STORAGE.UPLOAD_ACL
+  }
+
+  const command = new PutObjectCommand(input)
 
   await getClient().send(command)
 
@@ -167,11 +174,16 @@ async function multiPartUpload (options: {
 
   const statResult = await stat(inputPath)
 
-  const createMultipartCommand = new CreateMultipartUploadCommand({
+  const input: CreateMultipartUploadCommandInput = {
     Bucket: bucketInfo.BUCKET_NAME,
-    Key: key,
-    ACL: 'public-read'
-  })
+    Key: buildKey(objectStorageKey, bucketInfo)
+  }
+
+  if (CONFIG.OBJECT_STORAGE.UPLOAD_ACL) {
+    input.ACL = CONFIG.OBJECT_STORAGE.UPLOAD_ACL
+  }
+
+  const createMultipartCommand = new CreateMultipartUploadCommand(input)
   const createResponse = await s3Client.send(createMultipartCommand)
 
   const fd = await open(inputPath, 'r')
