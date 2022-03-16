@@ -1683,6 +1683,24 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return peertubeTruncate(this.description, { length: maxLength })
   }
 
+  getAllFiles () {
+    let files: MVideoFile[] = []
+
+    if (Array.isArray(this.VideoFiles)) {
+      files = files.concat(this.VideoFiles)
+    }
+
+    if (Array.isArray(this.VideoStreamingPlaylists)) {
+      for (const p of this.VideoStreamingPlaylists) {
+        if (Array.isArray(p.VideoFiles)) {
+          files = files.concat(p.VideoFiles)
+        }
+      }
+    }
+
+    return files
+  }
+
   probeMaxQualityFile () {
     const file = this.getMaxQualityFile()
     const videoOrPlaylist = file.getVideoOrStreamingPlaylist()

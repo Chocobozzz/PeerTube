@@ -12,6 +12,7 @@ import {
   EmailPayload,
   JobState,
   JobType,
+  ManageVideoTorrentPayload,
   MoveObjectStoragePayload,
   RefreshPayload,
   VideoEditionPayload,
@@ -31,6 +32,7 @@ import { processActivityPubHttpUnicast } from './handlers/activitypub-http-unica
 import { refreshAPObject } from './handlers/activitypub-refresher'
 import { processActorKeys } from './handlers/actor-keys'
 import { processEmail } from './handlers/email'
+import { processManageVideoTorrent } from './handlers/manage-video-torrent'
 import { processMoveToObjectStorage } from './handlers/move-to-object-storage'
 import { processVideoEdition } from './handlers/video-edition'
 import { processVideoFileImport } from './handlers/video-file-import'
@@ -56,6 +58,7 @@ type CreateJobArgument =
   { type: 'video-redundancy', payload: VideoRedundancyPayload } |
   { type: 'delete-resumable-upload-meta-file', payload: DeleteResumableUploadMetaFilePayload } |
   { type: 'video-edition', payload: VideoEditionPayload } |
+  { type: 'manage-video-torrent', payload: ManageVideoTorrentPayload } |
   { type: 'move-to-object-storage', payload: MoveObjectStoragePayload }
 
 export type CreateJobOptions = {
@@ -79,6 +82,7 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'actor-keys': processActorKeys,
   'video-redundancy': processVideoRedundancy,
   'move-to-object-storage': processMoveToObjectStorage,
+  'manage-video-torrent': processManageVideoTorrent,
   'video-edition': processVideoEdition
 }
 
@@ -98,6 +102,7 @@ const jobTypes: JobType[] = [
   'actor-keys',
   'video-live-ending',
   'move-to-object-storage',
+  'manage-video-torrent',
   'video-edition'
 ]
 
@@ -185,7 +190,7 @@ class JobQueue {
   }
 
   createJobWithPromise (obj: CreateJobArgument, options: CreateJobOptions = {}) {
-    const queue = this.queues[obj.type]
+    const queue: Queue = this.queues[obj.type]
     if (queue === undefined) {
       logger.error('Unknown queue %s: cannot create job.', obj.type)
       return

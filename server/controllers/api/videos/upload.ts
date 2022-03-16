@@ -2,8 +2,8 @@ import express from 'express'
 import { move } from 'fs-extra'
 import { basename } from 'path'
 import { getResumableUploadPath } from '@server/helpers/upload'
-import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
+import { JobQueue } from '@server/lib/job-queue'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { Redis } from '@server/lib/redis'
 import { uploadx } from '@server/lib/uploadx'
@@ -17,10 +17,10 @@ import {
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { buildNextVideoState } from '@server/lib/video-state'
 import { openapiOperationDoc } from '@server/middlewares/doc'
-import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
+import { MVideoFile, MVideoFullLight } from '@server/types/models'
 import { getLowercaseExtension } from '@shared/core-utils'
 import { isAudioFile, uuidToShort } from '@shared/extra-utils'
-import { HttpStatusCode, VideoCreate, VideoResolution, VideoState } from '@shared/models'
+import { HttpStatusCode, ManageVideoTorrentPayload, VideoCreate, VideoResolution, VideoState } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { createReqFiles } from '../../../helpers/express-utils'
@@ -209,17 +209,22 @@ async function addVideo (options: {
   // Channel has a new content, set as updated
   await videoCreated.VideoChannel.setAsUpdated()
 
-  createTorrentFederate(video, videoFile)
-    .then(() => {
-      if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-        return addMoveToObjectStorageJob(video)
+  createTorrentFederate(videoCreated, videoFile)
+    .catch(err => {
+      logger.error('Cannot create torrent or federate video for %s.', videoCreated.uuid, { err, ...lTags(videoCreated.uuid) })
+
+      return videoCreated
+    }).then(refreshedVideo => {
+      if (!refreshedVideo) return
+
+      if (refreshedVideo.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
+        return addMoveToObjectStorageJob(refreshedVideo)
       }
 
-      if (video.state === VideoState.TO_TRANSCODE) {
-        return addOptimizeOrMergeAudioJob(videoCreated, videoFile, user)
+      if (refreshedVideo.state === VideoState.TO_TRANSCODE) {
+        return addOptimizeOrMergeAudioJob(refreshedVideo, videoFile, user)
       }
-    })
-    .catch(err => logger.error('Cannot add optimize/merge audio job for %s.', videoCreated.uuid, { err, ...lTags(videoCreated.uuid) }))
+    }).catch(err => logger.error('Cannot add optimize/merge audio job for %s.', videoCreated.uuid, { err, ...lTags(videoCreated.uuid) }))
 
   Hooks.runAction('action:api.video.uploaded', { video: videoCreated, req, res })
 
@@ -254,36 +259,23 @@ async function buildNewFile (videoPhysicalFile: express.VideoUploadFile) {
   return videoFile
 }
 
-async function createTorrentAndSetInfoHashAsync (video: MVideo, fileArg: MVideoFile) {
-  await createTorrentAndSetInfoHash(video, fileArg)
+async function createTorrentFederate (video: MVideoFullLight, videoFile: MVideoFile) {
+  const payload: ManageVideoTorrentPayload = { videoId: video.id, videoFileId: videoFile.id, action: 'create' }
 
-  // Refresh videoFile because the createTorrentAndSetInfoHash could be long
-  const refreshedFile = await VideoFileModel.loadWithVideo(fileArg.id)
-  // File does not exist anymore, remove the generated torrent
-  if (!refreshedFile) return fileArg.removeTorrent()
+  const job = await JobQueue.Instance.createJobWithPromise({ type: 'manage-video-torrent', payload })
+  await job.finished()
 
-  refreshedFile.infoHash = fileArg.infoHash
-  refreshedFile.torrentFilename = fileArg.torrentFilename
+  const refreshedVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.id)
+  if (!refreshedVideo) return
 
-  return refreshedFile.save()
-}
+  // Only federate and notify after the torrent creation
+  Notifier.Instance.notifyOnNewVideoIfNeeded(refreshedVideo)
 
-function createTorrentFederate (video: MVideoFullLight, videoFile: MVideoFile) {
-  // Create the torrent file in async way because it could be long
-  return createTorrentAndSetInfoHashAsync(video, videoFile)
-    .catch(err => logger.error('Cannot create torrent file for video %s', video.url, { err, ...lTags(video.uuid) }))
-    .then(() => VideoModel.loadAndPopulateAccountAndServerAndTags(video.id))
-    .then(refreshedVideo => {
-      if (!refreshedVideo) return
+  await retryTransactionWrapper(() => {
+    return sequelizeTypescript.transaction(t => federateVideoIfNeeded(refreshedVideo, true, t))
+  })
 
-      // Only federate and notify after the torrent creation
-      Notifier.Instance.notifyOnNewVideoIfNeeded(refreshedVideo)
-
-      return retryTransactionWrapper(() => {
-        return sequelizeTypescript.transaction(t => federateVideoIfNeeded(refreshedVideo, true, t))
-      })
-    })
-    .catch(err => logger.error('Cannot federate or notify video creation %s', video.url, { err, ...lTags(video.uuid) }))
+  return refreshedVideo
 }
 
 async function deleteUploadResumableCache (req: express.Request, res: express.Response, next: express.NextFunction) {
