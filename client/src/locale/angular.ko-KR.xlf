@@ -518,7 +518,7 @@
       </trans-unit>
       <trans-unit id="1781854282711822539" datatype="html">
         <source>Mute to also hide videos/comments</source>
-        <target state="new">Mute to also hide videos/comments</target>
+        <target state="translated">침묵으로 설정하여 영상과 댓글도 숨기기</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">27</context>
@@ -543,7 +543,7 @@
       </trans-unit>
       <trans-unit id="8343217707114977013" datatype="html">
         <source>The contact form is not enabled on this instance.</source>
-        <target state="new">The contact form is not enabled on this instance.</target>
+        <target state="translated">이 인스턴스에서는 연락용 입력란 기능이 활성화되어 있지 않습니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">56</context>
@@ -551,9 +551,7 @@
       </trans-unit>
       <trans-unit id="5108124319304980502" datatype="html">
         <source>Report video "<x id="INTERPOLATION"/>"</source>
-        <target state="new">Report video "
-          <x id="INTERPOLATION" equiv-text="{{ video.name }}"/>"
-        </target>
+        <target state="translated">" <x id="INTERPOLATION" equiv-text="{{ video.name }}"/>" 영상 신고</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="5471125870639393916" datatype="html">
@@ -565,7 +563,7 @@
       </trans-unit>
       <trans-unit id="2466846716878254816" datatype="html">
         <source>Element <x id="PH" equiv-text="param"/> not found</source>
-        <target state="new">Element <x id="PH" equiv-text="param"/> not found</target>
+        <target state="translated">구성요소 <x id="PH" equiv-text="param"/> 를 찾을 수 없음</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-search/find-in-bulk.service.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="7539427273132299890">
