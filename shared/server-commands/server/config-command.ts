@@ -227,8 +227,8 @@ export class ConfigCommand extends AbstractCommand {
           miniature: {
             preferAuthorDisplayName: false
           },
-          upload: {
-            maxChunkSize: 0
+          resumableUpload: {
+            maxChunkSize: null
           }
         },
         menu: {

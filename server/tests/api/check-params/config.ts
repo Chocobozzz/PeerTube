@@ -59,8 +59,8 @@ describe('Test config API validators', function () {
         miniature: {
           preferAuthorDisplayName: false
         },
-        upload: {
-          maxChunkSize: 0
+        resumableUpload: {
+          maxChunkSize: null
         }
       },
       menu: {

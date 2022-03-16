@@ -44,7 +44,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.services.twitter.whitelisted).to.be.false
 
   expect(data.client.videos.miniature.preferAuthorDisplayName).to.be.false
-  expect(data.client.videos.upload.maxChunkSize).to.equal(0)
+  expect(data.client.videos.resumableUpload.maxChunkSize).to.equal(0)
   expect(data.client.menu.login.redirectOnSingleExternalAuth).to.be.false
 
   expect(data.cache.previews.size).to.equal(1)
@@ -264,8 +264,8 @@ const newCustomConfig: CustomConfig = {
       miniature: {
         preferAuthorDisplayName: true
       },
-      upload: {
-        maxChunkSize: 0
+      resumableUpload: {
+        maxChunkSize: null
       }
     },
     menu: {

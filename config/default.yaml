@@ -631,10 +631,10 @@ client:
       # By default PeerTube client displays author username
       prefer_author_display_name: false
       display_author_avatar: false
-    upload:
-      # Max size, given in bytes, of upload chunks
-      # If not set it will be calculated based on network speed
-      max_chunk_size: 0
+    resumable_upload:
+      # Max size of upload chunks, e.g. '90MB'
+      # If null, it will be calculated based on network speed
+      max_chunk_size: null
 
   menu:
     login:

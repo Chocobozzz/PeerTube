@@ -57,7 +57,7 @@ export interface CustomConfig {
       miniature: {
         preferAuthorDisplayName: boolean
       }
-      upload: {
+      resumableUpload: {
         maxChunkSize: number
       }
     }

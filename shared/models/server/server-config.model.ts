@@ -41,7 +41,7 @@ export interface ServerConfig {
         displayAuthorAvatar: boolean
         preferAuthorDisplayName: boolean
       }
-      upload: {
+      resumableUpload: {
         maxChunkSize: number
       }
     }
