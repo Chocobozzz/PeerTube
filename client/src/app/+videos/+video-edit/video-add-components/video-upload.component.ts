@@ -282,7 +282,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
     this.resumableUploadService.handleFiles(file, {
       ...this.uploadxOptions,
-      metadata
+      metadata,
+      maxChunkSize: this.serverConfig.client.videos.resumableUpload.maxChunkSize
     })
 
     this.isUploadingVideo = true

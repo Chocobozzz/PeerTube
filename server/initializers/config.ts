@@ -64,6 +64,9 @@ const CONFIG = {
       MINIATURE: {
         get PREFER_AUTHOR_DISPLAY_NAME () { return config.get<boolean>('client.videos.miniature.prefer_author_display_name') },
         get DISPLAY_AUTHOR_AVATAR () { return config.get<boolean>('client.videos.miniature.display_author_avatar') }
+      },
+      RESUMABLE_UPLOAD: {
+        get MAX_CHUNK_SIZE () { return parseBytes(config.get<number>('client.videos.resumable_upload.max_chunk_size') || 0) }
       }
     },
     MENU: {

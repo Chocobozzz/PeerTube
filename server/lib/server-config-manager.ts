@@ -48,6 +48,9 @@ class ServerConfigManager {
           miniature: {
             displayAuthorAvatar: CONFIG.CLIENT.VIDEOS.MINIATURE.DISPLAY_AUTHOR_AVATAR,
             preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME
+          },
+          resumableUpload: {
+            maxChunkSize: CONFIG.CLIENT.VIDEOS.RESUMABLE_UPLOAD.MAX_CHUNK_SIZE
           }
         },
         menu: {
