@@ -171,9 +171,6 @@ function customConfig (): CustomConfig {
       videos: {
         miniature: {
           preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME
-        },
-        resumableUpload: {
-          maxChunkSize: CONFIG.CLIENT.VIDEOS.RESUMABLE_UPLOAD.MAX_CHUNK_SIZE
         }
       },
       menu: {
