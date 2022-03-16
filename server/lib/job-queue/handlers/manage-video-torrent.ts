@@ -28,6 +28,8 @@ async function doCreateAction (payload: ManageVideoTorrentPayload & { action: 'c
     loadFileOrLog(payload.videoFileId)
   ])
 
+  if (!video || !file) return
+
   await createTorrentAndSetInfoHash(video, file)
 
   // Refresh videoFile because the createTorrentAndSetInfoHash could be long
@@ -47,6 +49,8 @@ async function doUpdateMetadataAction (payload: ManageVideoTorrentPayload & { ac
     loadStreamingPlaylistOrLog(payload.streamingPlaylistId),
     loadFileOrLog(payload.videoFileId)
   ])
+
+  if ((!video && !streamingPlaylist) || !file) return
 
   await updateTorrentMetadata(video || streamingPlaylist, file)
 

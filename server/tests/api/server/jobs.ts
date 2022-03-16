@@ -12,6 +12,7 @@ import {
   waitJobs
 } from '@shared/server-commands'
 import { wait } from '@shared/core-utils'
+import { uuid } from 'short-uuid'
 
 const expect = chai.expect
 
@@ -95,14 +96,16 @@ describe('Test jobs', function () {
   it('Should pause the job queue', async function () {
     this.timeout(120000)
 
-    await servers[1].jobs.pauseJobQueue()
+    const { uuid } = await servers[1].videos.upload({ attributes: { name: 'video2' } })
+    await waitJobs(servers)
 
-    await servers[1].videos.upload({ attributes: { name: 'video2' } })
+    await servers[1].jobs.pauseJobQueue()
+    await servers[1].videos.runTranscoding({ videoId: uuid, transcodingType: 'hls' })
 
     await wait(5000)
 
     const body = await servers[1].jobs.list({ state: 'waiting', jobType: 'video-transcoding' })
-    expect(body.data).to.have.lengthOf(1)
+    expect(body.data).to.have.lengthOf(4)
   })
 
   it('Should resume the job queue', async function () {
