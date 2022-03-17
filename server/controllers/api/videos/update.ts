@@ -1,12 +1,12 @@
 import express from 'express'
 import { Transaction } from 'sequelize/types'
-import { updateTorrentMetadata } from '@server/helpers/webtorrent'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share'
+import { JobQueue } from '@server/lib/job-queue'
 import { buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { FilteredModelAttributes } from '@server/types'
 import { MVideoFullLight } from '@server/types/models'
-import { HttpStatusCode, VideoUpdate } from '@shared/models'
+import { HttpStatusCode, ManageVideoTorrentPayload, VideoUpdate } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
 import { createReqFiles } from '../../../helpers/express-utils'
@@ -139,15 +139,13 @@ async function updateVideo (req: express.Request, res: express.Response) {
       return { videoInstanceUpdated, isNewVideo }
     })
 
-    if (videoInstanceUpdated.isLive !== true && videoInfoToUpdate.name) {
-      await updateTorrentsMetadata(videoInstanceUpdated)
-    }
+    const refreshedVideo = await updateTorrentsMetadataIfNeeded(videoInstanceUpdated, videoInfoToUpdate)
 
-    await sequelizeTypescript.transaction(t => federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t))
+    await sequelizeTypescript.transaction(t => federateVideoIfNeeded(refreshedVideo, isNewVideo, t))
 
-    if (wasConfidentialVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(videoInstanceUpdated)
+    if (wasConfidentialVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(refreshedVideo)
 
-    Hooks.runAction('action:api.video.updated', { video: videoInstanceUpdated, body: req.body, req, res })
+    Hooks.runAction('action:api.video.updated', { video: refreshedVideo, body: req.body, req, res })
   } catch (err) {
     // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed
@@ -194,19 +192,25 @@ function updateSchedule (videoInstance: MVideoFullLight, videoInfoToUpdate: Vide
   }
 }
 
-async function updateTorrentsMetadata (video: MVideoFullLight) {
-  for (const file of (video.VideoFiles || [])) {
-    await updateTorrentMetadata(video, file)
+async function updateTorrentsMetadataIfNeeded (video: MVideoFullLight, videoInfoToUpdate: VideoUpdate) {
+  if (video.isLive || !videoInfoToUpdate.name) return video
 
-    await file.save()
+  for (const file of (video.VideoFiles || [])) {
+    const payload: ManageVideoTorrentPayload = { action: 'update-metadata', videoId: video.id, videoFileId: file.id }
+
+    const job = await JobQueue.Instance.createJobWithPromise({ type: 'manage-video-torrent', payload })
+    await job.finished()
   }
 
   const hls = video.getHLSPlaylist()
-  if (!hls) return
 
-  for (const file of (hls.VideoFiles || [])) {
-    await updateTorrentMetadata(hls, file)
+  for (const file of (hls?.VideoFiles || [])) {
+    const payload: ManageVideoTorrentPayload = { action: 'update-metadata', streamingPlaylistId: hls.id, videoFileId: file.id }
 
-    await file.save()
+    const job = await JobQueue.Instance.createJobWithPromise({ type: 'manage-video-torrent', payload })
+    await job.finished()
   }
+
+  // Refresh video since files have changed
+  return VideoModel.loadAndPopulateAccountAndServerAndTags(video.id)
 }

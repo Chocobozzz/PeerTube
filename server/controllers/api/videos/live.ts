@@ -1,4 +1,5 @@
 import express from 'express'
+import { exists } from '@server/helpers/custom-validators/misc'
 import { createReqFiles } from '@server/helpers/express-utils'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
@@ -9,7 +10,7 @@ import { videoLiveAddValidator, videoLiveGetValidator, videoLiveUpdateValidator 
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { MVideoDetails, MVideoFullLight } from '@server/types/models'
 import { buildUUID, uuidToShort } from '@shared/extra-utils'
-import { HttpStatusCode, LiveVideoCreate, LiveVideoUpdate, VideoState } from '@shared/models'
+import { HttpStatusCode, LiveVideoCreate, LiveVideoLatencyMode, LiveVideoUpdate, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { updateVideoMiniatureFromExisting } from '../../../lib/thumbnail'
@@ -60,8 +61,9 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
   const videoLive = res.locals.videoLive
 
-  videoLive.saveReplay = body.saveReplay || false
-  videoLive.permanentLive = body.permanentLive || false
+  if (exists(body.saveReplay)) videoLive.saveReplay = body.saveReplay
+  if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
+  if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode
 
   video.VideoLive = await videoLive.save()
 
@@ -87,6 +89,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
   const videoLive = new VideoLiveModel()
   videoLive.saveReplay = videoInfo.saveReplay || false
   videoLive.permanentLive = videoInfo.permanentLive || false
+  videoLive.latencyMode = videoInfo.latencyMode || LiveVideoLatencyMode.DEFAULT
   videoLive.streamKey = buildUUID()
 
   const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({

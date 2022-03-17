@@ -1,6 +1,6 @@
 import { forkJoin } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { SelectChannelItem } from 'src/types/select-options-item.model'
+import { SelectChannelItem, SelectOptionsItem } from 'src/types/select-options-item.model'
 import { ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
 import { HooksService, PluginService, ServerService } from '@app/core'
@@ -26,6 +26,7 @@ import { PluginInfo } from '@root-helpers/plugins-manager'
 import {
   HTMLServerConfig,
   LiveVideo,
+  LiveVideoLatencyMode,
   RegisterClientFormFieldOptions,
   RegisterClientVideoFieldOptions,
   VideoConstant,
@@ -78,6 +79,23 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   videoCategories: VideoConstant<number>[] = []
   videoLicences: VideoConstant<number>[] = []
   videoLanguages: VideoLanguages[] = []
+  latencyModes: SelectOptionsItem[] = [
+    {
+      id: LiveVideoLatencyMode.SMALL_LATENCY,
+      label: $localize`Small latency`,
+      description: $localize`Reduce latency to ~15s disabling P2P`
+    },
+    {
+      id: LiveVideoLatencyMode.DEFAULT,
+      label: $localize`Default`,
+      description: $localize`Average latency of 30s`
+    },
+    {
+      id: LiveVideoLatencyMode.HIGH_LATENCY,
+      label: $localize`High latency`,
+      description: $localize`Average latency of 60s increasing P2P ratio`
+    }
+  ]
 
   pluginDataFormGroup: FormGroup
 
@@ -141,6 +159,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       originallyPublishedAt: VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR,
       liveStreamKey: null,
       permanentLive: null,
+      latencyMode: null,
       saveReplay: null
     }
 
@@ -271,6 +290,10 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   isPermanentLiveEnabled () {
     return this.form.value['permanentLive'] === true
+  }
+
+  isLatencyModeEnabled () {
+    return this.serverConfig.live.latencySetting.enabled
   }
 
   isPluginFieldHidden (pluginField: PluginField) {

@@ -1,5 +1,6 @@
 export * from './live-video-create.model'
 export * from './live-video-event-payload.model'
 export * from './live-video-event.type'
+export * from './live-video-latency-mode.enum'
 export * from './live-video-update.model'
 export * from './live-video.model'

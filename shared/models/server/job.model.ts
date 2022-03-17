@@ -21,6 +21,7 @@ export type JobType =
   | 'video-redundancy'
   | 'video-live-ending'
   | 'actor-keys'
+  | 'manage-video-torrent'
   | 'move-to-object-storage'
   | 'video-edition'
   | 'video-validate'
@@ -97,6 +98,20 @@ export type VideoImportPayload = VideoImportYoutubeDLPayload | VideoImportTorren
 export type VideoRedundancyPayload = {
   videoId: number
 }
+
+export type ManageVideoTorrentPayload =
+  {
+    action: 'create'
+    videoId: number
+    videoFileId: number
+  } | {
+    action: 'update-metadata'
+
+    videoId?: number
+    streamingPlaylistId?: number
+
+    videoFileId: number
+  }
 
 // Video transcoding payloads
 

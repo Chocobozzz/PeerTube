@@ -4,9 +4,9 @@ import { dirname, join } from 'path'
 import { decacheModule } from '@server/helpers/decache'
 import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
 import { BroadcastMessageLevel } from '@shared/models/server'
+import { buildPath, root } from '../../shared/core-utils'
 import { VideoPrivacy, VideosRedundancyStrategy } from '../../shared/models'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
-import { buildPath, root } from '../../shared/core-utils'
 import { parseBytes, parseDurationToMs } from '../helpers/core-utils'
 
 // Use a variable to reload the configuration if we need
@@ -64,6 +64,9 @@ const CONFIG = {
       MINIATURE: {
         get PREFER_AUTHOR_DISPLAY_NAME () { return config.get<boolean>('client.videos.miniature.prefer_author_display_name') },
         get DISPLAY_AUTHOR_AVATAR () { return config.get<boolean>('client.videos.miniature.display_author_avatar') }
+      },
+      RESUMABLE_UPLOAD: {
+        get MAX_CHUNK_SIZE () { return parseBytes(config.get<number>('client.videos.resumable_upload.max_chunk_size') || 0) }
       }
     },
     MENU: {
@@ -111,6 +114,7 @@ const CONFIG = {
     MAX_UPLOAD_PART: bytes.parse(config.get<string>('object_storage.max_upload_part')),
     ENDPOINT: config.get<string>('object_storage.endpoint'),
     REGION: config.get<string>('object_storage.region'),
+    UPLOAD_ACL: config.get<string>('object_storage.upload_acl'),
     CREDENTIALS: {
       ACCESS_KEY_ID: config.get<string>('object_storage.credentials.access_key_id'),
       SECRET_ACCESS_KEY: config.get<string>('object_storage.credentials.secret_access_key')
@@ -295,6 +299,10 @@ const CONFIG = {
     get MAX_USER_LIVES () { return config.get<number>('live.max_user_lives') },
 
     get ALLOW_REPLAY () { return config.get<boolean>('live.allow_replay') },
+
+    LATENCY_SETTING: {
+      get ENABLED () { return config.get<boolean>('live.latency_setting.enabled') }
+    },
 
     RTMP: {
       get ENABLED () { return config.get<boolean>('live.rtmp.enabled') },

@@ -48,6 +48,9 @@ class ServerConfigManager {
           miniature: {
             displayAuthorAvatar: CONFIG.CLIENT.VIDEOS.MINIATURE.DISPLAY_AUTHOR_AVATAR,
             preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME
+          },
+          resumableUpload: {
+            maxChunkSize: CONFIG.CLIENT.VIDEOS.RESUMABLE_UPLOAD.MAX_CHUNK_SIZE
           }
         },
         menu: {
@@ -137,6 +140,10 @@ class ServerConfigManager {
         enabled: CONFIG.LIVE.ENABLED,
 
         allowReplay: CONFIG.LIVE.ALLOW_REPLAY,
+        latencySetting: {
+          enabled: CONFIG.LIVE.LATENCY_SETTING.ENABLED
+        },
+
         maxDuration: CONFIG.LIVE.MAX_DURATION,
         maxInstanceLives: CONFIG.LIVE.MAX_INSTANCE_LIVES,
         maxUserLives: CONFIG.LIVE.MAX_USER_LIVES,

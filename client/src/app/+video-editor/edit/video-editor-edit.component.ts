@@ -117,7 +117,7 @@ export class VideoEditorEditComponent extends FormReactive implements OnInit {
 
     return tasks.map(t => {
       if (t.name === 'add-intro') {
-        return $localize`"${this.getFilename(t.options.file)}" will be added at the beggining of the video`
+        return $localize`"${this.getFilename(t.options.file)}" will be added at the beginning of the video`
       }
 
       if (t.name === 'add-outro') {

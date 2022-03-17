@@ -67,7 +67,11 @@ const videosEditorAddEditionValidator = [
     if (!await doesVideoExist(req.params.videoId, res)) return cleanUpReqFiles(req)
 
     const video = res.locals.videoAll
-    if (video.state === VideoState.TO_TRANSCODE || video.state === VideoState.TO_EDIT) {
+    if (
+      video.state === VideoState.TO_TRANSCODE ||
+      video.state === VideoState.TO_EDIT ||
+      video.state === VideoState.TO_VALIDATE_VIDEO_FILES
+    ) {
       res.fail({
         status: HttpStatusCode.CONFLICT_409,
         message: 'Cannot edit video that is already waiting for transcoding/edition'

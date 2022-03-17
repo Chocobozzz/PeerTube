@@ -5,9 +5,10 @@ import { createServer as createServerTLS, Server as ServerTLS } from 'tls'
 import {
   computeLowerResolutionsToTranscode,
   ffprobePromise,
+  getLiveSegmentTime,
   getVideoStreamBitrate,
-  getVideoStreamFPS,
-  getVideoStreamDimensionsInfo
+  getVideoStreamDimensionsInfo,
+  getVideoStreamFPS
 } from '@server/helpers/ffmpeg'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
@@ -353,7 +354,7 @@ class LiveManager {
           .catch(err => logger.error('Cannot federate live video %s.', video.url, { err, ...localLTags }))
 
         PeerTubeSocket.Instance.sendVideoLiveNewState(video)
-      }, VIDEO_LIVE.SEGMENT_TIME_SECONDS * 1000 * VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION)
+      }, getLiveSegmentTime(live.latencyMode) * 1000 * VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION)
     } catch (err) {
       logger.error('Cannot save/federate live video %d.', videoId, { err, ...localLTags })
     }

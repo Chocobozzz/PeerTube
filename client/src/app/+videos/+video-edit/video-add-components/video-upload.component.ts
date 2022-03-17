@@ -1,6 +1,6 @@
 import { truncate } from 'lodash-es'
 import { UploadState, UploadxOptions, UploadxService } from 'ngx-uploadx'
-import { isIOS } from 'src/assets/player/utils'
+import { isIOS } from '@root-helpers/web-browser'
 import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
@@ -50,9 +50,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   // So that it can be accessed in the template
   protected readonly BASE_VIDEO_UPLOAD_URL = VideoService.BASE_VIDEO_URL + '/upload-resumable'
 
-  private uploadxOptions: UploadxOptions
   private isUpdatingVideo = false
   private fileToUpload: File
+
+  private alreadyRefreshedToken = false
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -68,26 +69,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     private resumableUploadService: UploadxService
   ) {
     super()
-
-    // FIXME: https://github.com/Chocobozzz/PeerTube/issues/4382#issuecomment-915854167
-    const chunkSize = isIOS()
-      ? 0
-      : undefined // Auto chunk size
-
-    this.uploadxOptions = {
-      endpoint: this.BASE_VIDEO_UPLOAD_URL,
-      multiple: false,
-      token: this.authService.getAccessToken(),
-      uploaderClass: UploaderXFormData,
-      chunkSize,
-      retryConfig: {
-        maxAttempts: 30, // maximum attempts for 503 codes, otherwise set to 6, see below
-        maxDelay: 120_000, // 2 min
-        shouldRetry: (code: number, attempts: number) => {
-          return code === HttpStatusCode.SERVICE_UNAVAILABLE_503 || ((code < 400 || code > 500) && attempts < 6)
-        }
-      }
-    }
   }
 
   get videoExtensions () {
@@ -135,6 +116,12 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   onUploadVideoOngoing (state: UploadState) {
     switch (state.status) {
       case 'error': {
+        if (!this.alreadyRefreshedToken && state.response.status === HttpStatusCode.UNAUTHORIZED_401) {
+          this.alreadyRefreshedToken = true
+
+          return this.refereshTokenAndRetryUpload()
+        }
+
         const error = state.response?.error || 'Unknow error'
 
         this.handleUploadError({
@@ -281,7 +268,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     }
 
     this.resumableUploadService.handleFiles(file, {
-      ...this.uploadxOptions,
+      ...this.getUploadxOptions(),
+
       metadata
     })
 
@@ -376,5 +364,37 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     }
 
     return name
+  }
+
+  private refereshTokenAndRetryUpload () {
+    this.authService.refreshAccessToken()
+      .subscribe(() => this.retryUpload())
+  }
+
+  private getUploadxOptions (): UploadxOptions {
+    // FIXME: https://github.com/Chocobozzz/PeerTube/issues/4382#issuecomment-915854167
+    const chunkSize = isIOS()
+      ? 0
+      : undefined // Auto chunk size
+
+    return {
+      endpoint: this.BASE_VIDEO_UPLOAD_URL,
+      multiple: false,
+
+      maxChunkSize: this.serverConfig.client.videos.resumableUpload.maxChunkSize,
+      chunkSize,
+
+      token: this.authService.getAccessToken(),
+
+      uploaderClass: UploaderXFormData,
+
+      retryConfig: {
+        maxAttempts: 30, // maximum attempts for 503 codes, otherwise set to 6, see below
+        maxDelay: 120_000, // 2 min
+        shouldRetry: (code: number, attempts: number) => {
+          return code === HttpStatusCode.SERVICE_UNAVAILABLE_503 || ((code < 400 || code > 500) && attempts < 6)
+        }
+      }
+    }
   }
 }

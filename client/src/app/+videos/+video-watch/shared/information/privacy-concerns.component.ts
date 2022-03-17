@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { ServerService, User, UserService } from '@app/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
+import { isP2PEnabled } from '@root-helpers/video'
 import { HTMLServerConfig, Video } from '@shared/models'
-import { isP2PEnabled } from '../../../../../assets/player/utils'
 
 @Component({
   selector: 'my-privacy-concerns',

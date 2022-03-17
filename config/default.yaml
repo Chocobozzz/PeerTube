@@ -138,6 +138,9 @@ object_storage:
 
   region: 'us-east-1'
 
+  # Set this ACL on each uploaded object
+  upload_acl: 'public-read'
+
   credentials:
     # You can also use AWS_ACCESS_KEY_ID env variable
     access_key_id: ''
@@ -392,6 +395,12 @@ live:
   # /!\ transcoding.enabled (and not live.transcoding.enabled) has to be true to create a replay
   allow_replay: true
 
+  # Allow your users to change latency settings (small latency/default/high latency)
+  # Small latency live streams cannot use P2P
+  # High latency live streams can increase P2P ratio
+  latency_setting:
+    enabled: true
+
   # Your firewall should accept traffic from this port in TCP if you enable live
   rtmp:
     enabled: true
@@ -625,6 +634,10 @@ client:
       # By default PeerTube client displays author username
       prefer_author_display_name: false
       display_author_avatar: false
+    resumable_upload:
+      # Max size of upload chunks, e.g. '90MB'
+      # If null, it will be calculated based on network speed
+      max_chunk_size: null
 
   menu:
     login:

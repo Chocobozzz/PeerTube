@@ -50,6 +50,10 @@ function getContextData (type: ContextType) {
           '@type': 'sc:Boolean',
           '@id': 'pt:permanentLive'
         },
+        latencyMode: {
+          '@type': 'sc:Number',
+          '@id': 'pt:latencyMode'
+        },
 
         Infohash: 'pt:Infohash',
         Playlist: 'pt:Playlist',

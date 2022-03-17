@@ -1,6 +1,6 @@
-import { buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
 import { Component, ElementRef, Input, OnInit } from '@angular/core'
+import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { buildPlaylistEmbedLink, buildVideoEmbedLink } from '@shared/core-utils'
 import { CustomMarkupComponent } from './shared'
 

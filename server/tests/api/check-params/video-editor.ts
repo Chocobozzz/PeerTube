@@ -122,9 +122,10 @@ describe('Test video editor API validator', function () {
       })
 
       it('Should fail with an already in transcoding state video', async function () {
-        await server.jobs.pauseJobQueue()
-
         const { uuid } = await server.videos.quickUpload({ name: 'transcoded video' })
+
+        await server.jobs.pauseJobQueue()
+        await server.videos.runTranscoding({ videoId: uuid, transcodingType: 'hls' })
 
         await command.createEditionTasks({
           videoId: uuid,

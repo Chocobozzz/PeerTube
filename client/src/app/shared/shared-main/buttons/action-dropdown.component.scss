@@ -60,7 +60,6 @@
   .dropdown-item {
     display: flex;
     cursor: pointer;
-    color: #000 !important;
 
     &.with-icon {
       @include dropdown-with-icon-item;

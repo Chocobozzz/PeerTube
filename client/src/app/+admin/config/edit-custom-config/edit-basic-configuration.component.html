@@ -186,7 +186,7 @@
 
                 <div *ngIf="formErrors.signup.limit" class="form-error">{{ formErrors.signup.limit }}</div>
 
-                <small i18n *ngIf="hasUnlimitedSignup()" class="text-muted">Signup won't be limited to a fixed number of users.</small>
+                <small i18n *ngIf="hasUnlimitedSignup()" class="muted">Signup won't be limited to a fixed number of users.</small>
               </div>
 
               <div [ngClass]="getDisabledSignupClass()" class="mt-3">
@@ -253,7 +253,7 @@
 
           <div class="form-group mt-4">
             <label i18n for="importConcurrency">Import jobs concurrency</label>
-            <span i18n class="text-muted ml-1">allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</span>
+            <span i18n class="muted ml-1">allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</span>
 
             <div class="number-with-unit">
               <input type="number" name="importConcurrency" formControlName="concurrency" />

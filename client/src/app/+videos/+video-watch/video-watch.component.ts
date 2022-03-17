@@ -1,6 +1,6 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
-import { forkJoin, Subscription } from 'rxjs'
-import { isP2PEnabled } from 'src/assets/player/utils'
+import { forkJoin, map, Observable, of, Subscription, switchMap } from 'rxjs'
+import { VideoJsPlayer } from 'video.js'
 import { PlatformLocation } from '@angular/common'
 import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -22,11 +22,14 @@ import { HooksService } from '@app/core/plugins/hooks.service'
 import { isXPercentInViewport, scrollToTop } from '@app/helpers'
 import { Video, VideoCaptionService, VideoDetails, VideoService } from '@app/shared/shared-main'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
+import { LiveVideoService } from '@app/shared/shared-video-live'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
+import { isP2PEnabled } from '@root-helpers/video'
 import { timeToInt } from '@shared/core-utils'
 import {
   HTMLServerConfig,
   HttpStatusCode,
+  LiveVideo,
   PeerTubeProblemDocument,
   ServerErrorCode,
   VideoCaption,
@@ -56,13 +59,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoWatchPlaylist', { static: true }) videoWatchPlaylist: VideoWatchPlaylistComponent
   @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
 
-  player: any
+  player: VideoJsPlayer
   playerElement: HTMLVideoElement
   playerPlaceholderImgSrc: string
   theaterEnabled = false
 
   video: VideoDetails = null
   videoCaptions: VideoCaption[] = []
+  liveVideo: LiveVideo
 
   playlistPosition: number
   playlist: VideoPlaylist = null
@@ -89,6 +93,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private router: Router,
     private videoService: VideoService,
     private playlistService: VideoPlaylistService,
+    private liveVideoService: LiveVideoService,
     private confirmService: ConfirmService,
     private metaService: MetaService,
     private authService: AuthService,
@@ -239,12 +244,21 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       'filter:api.video-watch.video.get.result'
     )
 
+    const videoAndLiveObs: Observable<{ video: VideoDetails, live?: LiveVideo }> = videoObs.pipe(
+      switchMap(video => {
+        if (!video.isLive) return of({ video })
+
+        return this.liveVideoService.getVideoLive(video.uuid)
+          .pipe(map(live => ({ live, video })))
+      })
+    )
+
     forkJoin([
-      videoObs,
+      videoAndLiveObs,
       this.videoCaptionService.listCaptions(videoId),
       this.userService.getAnonymousOrLoggedUser()
     ]).subscribe({
-      next: ([ video, captionsResult, loggedInOrAnonymousUser ]) => {
+      next: ([ { video, live }, captionsResult, loggedInOrAnonymousUser ]) => {
         const queryParams = this.route.snapshot.queryParams
 
         const urlOptions = {
@@ -261,7 +275,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           peertubeLink: false
         }
 
-        this.onVideoFetched({ video, videoCaptions: captionsResult.data, loggedInOrAnonymousUser, urlOptions })
+        this.onVideoFetched({ video, live, videoCaptions: captionsResult.data, loggedInOrAnonymousUser, urlOptions })
             .catch(err => this.handleGlobalError(err))
       },
 
@@ -330,16 +344,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private async onVideoFetched (options: {
     video: VideoDetails
+    live: LiveVideo
     videoCaptions: VideoCaption[]
     urlOptions: URLOptions
     loggedInOrAnonymousUser: User
   }) {
-    const { video, videoCaptions, urlOptions, loggedInOrAnonymousUser } = options
+    const { video, live, videoCaptions, urlOptions, loggedInOrAnonymousUser } = options
 
     this.subscribeToLiveEventsIfNeeded(this.video, video)
 
     this.video = video
     this.videoCaptions = videoCaptions
+    this.liveVideo = live
 
     // Re init attributes
     this.playerPlaceholderImgSrc = undefined
@@ -387,6 +403,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const params = {
       video: this.video,
       videoCaptions: this.videoCaptions,
+      liveVideo: this.liveVideo,
       urlOptions,
       loggedInOrAnonymousUser,
       user: this.user
@@ -402,8 +419,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.zone.runOutsideAngular(async () => {
       this.player = await PeertubePlayerManager.initialize(playerMode, playerOptions, player => this.player = player)
 
-      this.player.on('customError', ({ err }: { err: any }) => {
-        this.zone.run(() => this.handleGlobalError(err))
+      this.player.on('customError', (_e, data: any) => {
+        this.zone.run(() => this.handleGlobalError(data.err))
       })
 
       this.player.on('timeupdate', () => {
@@ -442,7 +459,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         suspended: () => {
           return (
-            !isXPercentInViewport(this.player.el(), 80) ||
+            !isXPercentInViewport(this.player.el() as HTMLElement, 80) ||
             !document.getElementById('content').contains(document.activeElement)
           )
         }
@@ -532,12 +549,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private buildPlayerManagerOptions (params: {
     video: VideoDetails
+    liveVideo: LiveVideo
     videoCaptions: VideoCaption[]
     urlOptions: CustomizationOptions & { playerMode: PlayerMode }
     loggedInOrAnonymousUser: User
     user?: AuthUser
   }) {
-    const { video, videoCaptions, urlOptions, loggedInOrAnonymousUser, user } = params
+    const { video, liveVideo, videoCaptions, urlOptions, loggedInOrAnonymousUser, user } = params
 
     const getStartTime = () => {
       const byUrl = urlOptions.startTime !== undefined
@@ -561,6 +579,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       language: c.language.id,
       src: environment.apiUrl + c.captionPath
     }))
+
+    const liveOptions = video.isLive
+      ? { latencyMode: liveVideo.latencyMode }
+      : undefined
 
     const options: PeertubePlayerManagerOptions = {
       common: {
@@ -597,6 +619,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         embedTitle: video.name,
 
         isLive: video.isLive,
+        liveOptions,
 
         language: this.localeId,
 

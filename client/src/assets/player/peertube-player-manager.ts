@@ -1,34 +1,34 @@
 import '@peertube/videojs-contextmenu'
-import './upnext/end-card'
-import './upnext/upnext-plugin'
-import './stats/stats-card'
-import './stats/stats-plugin'
-import './bezels/bezels-plugin'
-import './peertube-plugin'
-import './peertube-resolutions-plugin'
-import './videojs-components/next-previous-video-button'
-import './videojs-components/p2p-info-button'
-import './videojs-components/peertube-link-button'
-import './videojs-components/peertube-load-progress-bar'
-import './videojs-components/resolution-menu-button'
-import './videojs-components/resolution-menu-item'
-import './videojs-components/settings-dialog'
-import './videojs-components/settings-menu-button'
-import './videojs-components/settings-menu-item'
-import './videojs-components/settings-panel'
-import './videojs-components/settings-panel-child'
-import './videojs-components/theater-button'
-import './playlist/playlist-plugin'
-import './mobile/peertube-mobile-plugin'
-import './mobile/peertube-mobile-buttons'
-import './hotkeys/peertube-hotkeys-plugin'
+import './shared/upnext/end-card'
+import './shared/upnext/upnext-plugin'
+import './shared/stats/stats-card'
+import './shared/stats/stats-plugin'
+import './shared/bezels/bezels-plugin'
+import './shared/peertube/peertube-plugin'
+import './shared/resolutions/peertube-resolutions-plugin'
+import './shared/control-bar/next-previous-video-button'
+import './shared/control-bar/p2p-info-button'
+import './shared/control-bar/peertube-link-button'
+import './shared/control-bar/peertube-load-progress-bar'
+import './shared/control-bar/theater-button'
+import './shared/settings/resolution-menu-button'
+import './shared/settings/resolution-menu-item'
+import './shared/settings/settings-dialog'
+import './shared/settings/settings-menu-button'
+import './shared/settings/settings-menu-item'
+import './shared/settings/settings-panel'
+import './shared/settings/settings-panel-child'
+import './shared/playlist/playlist-plugin'
+import './shared/mobile/peertube-mobile-plugin'
+import './shared/mobile/peertube-mobile-buttons'
+import './shared/hotkeys/peertube-hotkeys-plugin'
 import videojs from 'video.js'
 import { PluginsManager } from '@root-helpers/plugins-manager'
+import { isMobile } from '@root-helpers/web-browser'
 import { saveAverageBandwidth } from './peertube-player-local-storage'
-import { CommonOptions, PeertubePlayerManagerOptions, PeertubePlayerOptionsBuilder, PlayerMode } from './peertube-player-options-builder'
-import { PlayerNetworkInfo } from './peertube-videojs-typings'
+import { ManagerOptionsBuilder } from './shared/manager-options'
 import { TranslationsManager } from './translations-manager'
-import { isMobile } from './utils'
+import { CommonOptions, PeertubePlayerManagerOptions, PlayerMode, PlayerNetworkInfo } from './types'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 (videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
@@ -59,11 +59,11 @@ export class PeertubePlayerManager {
     this.onPlayerChange = onPlayerChange
     this.playerElementClassName = options.common.playerElement.className
 
-    if (mode === 'webtorrent') await import('./webtorrent/webtorrent-plugin')
+    if (mode === 'webtorrent') await import('./shared/webtorrent/webtorrent-plugin')
     if (mode === 'p2p-media-loader') {
       const [ p2pMediaLoaderModule ] = await Promise.all([
         import('@peertube/p2p-media-loader-hlsjs'),
-        import('./p2p-media-loader/p2p-media-loader-plugin')
+        import('./shared/p2p-media-loader/p2p-media-loader-plugin')
       ])
 
       this.p2pMediaLoaderModule = p2pMediaLoaderModule
@@ -75,7 +75,7 @@ export class PeertubePlayerManager {
   }
 
   private static async buildPlayer (mode: PlayerMode, options: PeertubePlayerManagerOptions): Promise<videojs.Player> {
-    const videojsOptionsBuilder = new PeertubePlayerOptionsBuilder(mode, options, this.p2pMediaLoaderModule)
+    const videojsOptionsBuilder = new ManagerOptionsBuilder(mode, options, this.p2pMediaLoaderModule)
 
     const videojsOptions = await this.pluginsManager.runHook(
       'filter:internal.player.videojs.options.result',
@@ -173,7 +173,7 @@ export class PeertubePlayerManager {
 
     this.rebuildAndUpdateVideoElement(currentPlayer, options.common)
 
-    await import('./webtorrent/webtorrent-plugin')
+    await import('./shared/webtorrent/webtorrent-plugin')
 
     const newPlayer = await this.buildPlayer('webtorrent', options)
     this.onPlayerChange(newPlayer)
@@ -198,7 +198,7 @@ export class PeertubePlayerManager {
     return newVideoElement
   }
 
-  private static addContextMenu (optionsBuilder: PeertubePlayerOptionsBuilder, player: videojs.Player, commonOptions: CommonOptions) {
+  private static addContextMenu (optionsBuilder: ManagerOptionsBuilder, player: videojs.Player, commonOptions: CommonOptions) {
     const options = optionsBuilder.getContextMenuOptions(player, commonOptions)
 
     player.contextmenuUI(options)
