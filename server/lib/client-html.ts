@@ -12,7 +12,6 @@ import { HTMLServerConfig } from '@shared/models'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/core-utils/i18n/i18n'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '../../shared/models/videos'
-import { isTestInstance } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
 import { CONFIG } from '../initializers/config'
 import {
@@ -231,7 +230,7 @@ class ClientHtml {
   static async getEmbedHTML () {
     const path = ClientHtml.getEmbedPath()
 
-    if (!isTestInstance() && ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
+    if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
 
     const buffer = await readFile(path)
     const serverConfig = await ServerConfigManager.Instance.getHTMLServerConfig()
@@ -303,7 +302,7 @@ class ClientHtml {
 
   private static async getIndexHTML (req: express.Request, res: express.Response, paramLang?: string) {
     const path = ClientHtml.getIndexPath(req, res, paramLang)
-    if (!isTestInstance() && ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
+    if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
 
     const buffer = await readFile(path)
     const serverConfig = await ServerConfigManager.Instance.getHTMLServerConfig()
