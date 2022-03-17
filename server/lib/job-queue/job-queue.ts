@@ -274,7 +274,6 @@ class JobQueue {
 
   async getJobs (queue: JobType, states: JobState[]) {
     return this.queues[queue].getJobs(states)
-    .then(jobs => jobs.filter(job => job.finishedOn === undefined))
   }
 
   async removeOldJobs () {
