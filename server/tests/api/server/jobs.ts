@@ -3,6 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { dateIsValid } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
 import {
   cleanupTests,
   createMultipleServers,
@@ -11,8 +12,6 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
-import { wait } from '@shared/core-utils'
-import { uuid } from 'short-uuid'
 
 const expect = chai.expect
 

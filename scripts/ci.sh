@@ -50,8 +50,8 @@ elif [ "$1" = "client" ]; then
     helperFiles=$(findTestFiles ./dist/server/tests/helpers)
     libFiles=$(findTestFiles ./dist/server/tests/lib)
     miscFiles="./dist/server/tests/client.js ./dist/server/tests/misc-endpoints.js"
-    # Not in plugin task, it needs an index.html
-    pluginFiles="./dist/server/tests/plugins/html-injection.js"
+    # Not in their own task, they need an index.html
+    pluginFiles="./dist/server/tests/plugins/html-injection.js ./dist/server/tests/api/server/plugins.js"
 
     MOCHA_PARALLEL=true runTest "$1" 2 $feedsFiles $helperFiles $miscFiles $pluginFiles $libFiles
 elif [ "$1" = "cli-plugin" ]; then
@@ -75,7 +75,7 @@ elif [ "$1" = "api-2" ]; then
     npm run build:server
 
     liveFiles=$(findTestFiles ./dist/server/tests/api/live)
-    serverFiles=$(findTestFiles ./dist/server/tests/api/server)
+    serverFiles=$(findTestFiles ./dist/server/tests/api/server plugins.js)
     usersFiles=$(findTestFiles ./dist/server/tests/api/users)
 
     MOCHA_PARALLEL=true runTest "$1" 3 $liveFiles $serverFiles $usersFiles
