@@ -7,7 +7,7 @@ import { PeerTubeServer } from './server'
 async function waitJobs (serversArg: PeerTubeServer[] | PeerTubeServer, skipDelayed = false) {
   const pendingJobWait = process.env.NODE_PENDING_JOB_WAIT
     ? parseInt(process.env.NODE_PENDING_JOB_WAIT, 10)
-    : 250
+    : 650
 
   let servers: PeerTubeServer[]
 
