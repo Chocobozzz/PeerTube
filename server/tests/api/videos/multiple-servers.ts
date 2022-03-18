@@ -606,8 +606,8 @@ describe('Test multiple servers', function () {
 
         for (const baseVideo of baseVideos) {
           const sameVideo = data.find(video => video.name === baseVideo.name)
-          expect(baseVideo.likes).to.equal(sameVideo.likes)
-          expect(baseVideo.dislikes).to.equal(sameVideo.dislikes)
+          expect(baseVideo.likes).to.equal(sameVideo.likes, `Likes of ${sameVideo.uuid} do not correspond`)
+          expect(baseVideo.dislikes).to.equal(sameVideo.dislikes, `Dislikes of ${sameVideo.uuid} do not correspond`)
         }
       }
     })

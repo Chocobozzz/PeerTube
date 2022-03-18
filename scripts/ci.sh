@@ -8,6 +8,7 @@ if [ $# -eq 0 ]; then
 fi
 
 retries=3
+speedFactor="${2:-1}"
 
 runTest () {
     jobname=$1
@@ -53,7 +54,7 @@ elif [ "$1" = "client" ]; then
     # Not in their own task, they need an index.html
     pluginFiles="./dist/server/tests/plugins/html-injection.js ./dist/server/tests/api/server/plugins.js"
 
-    MOCHA_PARALLEL=true runTest "$1" 2 $feedsFiles $helperFiles $miscFiles $pluginFiles $libFiles
+    MOCHA_PARALLEL=true runTest "$1" $((2*$speedFactor)) $feedsFiles $helperFiles $miscFiles $pluginFiles $libFiles
 elif [ "$1" = "cli-plugin" ]; then
     npm run build:server
     npm run setup:cli
@@ -61,7 +62,7 @@ elif [ "$1" = "cli-plugin" ]; then
     pluginsFiles=$(findTestFiles ./dist/server/tests/plugins html-injection.js)
     cliFiles=$(findTestFiles ./dist/server/tests/cli)
 
-    MOCHA_PARALLEL=true runTest "$1" 2 $pluginsFiles
+    MOCHA_PARALLEL=true runTest "$1" $((2*$speedFactor)) $pluginsFiles
     runTest "$1" 1 $cliFiles
 elif [ "$1" = "api-1" ]; then
     npm run build:server
@@ -70,7 +71,7 @@ elif [ "$1" = "api-1" ]; then
     notificationsFiles=$(findTestFiles ./dist/server/tests/api/notifications)
     searchFiles=$(findTestFiles ./dist/server/tests/api/search)
 
-    MOCHA_PARALLEL=true runTest "$1" 3 $notificationsFiles $searchFiles $checkParamFiles
+    MOCHA_PARALLEL=true runTest "$1" $((3*$speedFactor)) $notificationsFiles $searchFiles $checkParamFiles
 elif [ "$1" = "api-2" ]; then
     npm run build:server
 
@@ -78,13 +79,13 @@ elif [ "$1" = "api-2" ]; then
     serverFiles=$(findTestFiles ./dist/server/tests/api/server plugins.js)
     usersFiles=$(findTestFiles ./dist/server/tests/api/users)
 
-    MOCHA_PARALLEL=true runTest "$1" 3 $liveFiles $serverFiles $usersFiles
+    MOCHA_PARALLEL=true runTest "$1" $((3*$speedFactor)) $liveFiles $serverFiles $usersFiles
 elif [ "$1" = "api-3" ]; then
     npm run build:server
 
     videosFiles=$(findTestFiles ./dist/server/tests/api/videos)
 
-    MOCHA_PARALLEL=true runTest "$1" 3 $videosFiles
+    MOCHA_PARALLEL=true runTest "$1" $((3*$speedFactor)) $videosFiles
 elif [ "$1" = "api-4" ]; then
     npm run build:server
 
@@ -93,13 +94,13 @@ elif [ "$1" = "api-4" ]; then
     objectStorageFiles=$(findTestFiles ./dist/server/tests/api/object-storage)
     activitypubFiles=$(findTestFiles ./dist/server/tests/api/activitypub)
 
-    MOCHA_PARALLEL=true runTest "$1" 2 $moderationFiles $redundancyFiles $activitypubFiles $objectStorageFiles
+    MOCHA_PARALLEL=true runTest "$1" $((2*$speedFactor)) $moderationFiles $redundancyFiles $activitypubFiles $objectStorageFiles
 elif [ "$1" = "api-5" ]; then
     npm run build:server
 
     transcodingFiles=$(findTestFiles ./dist/server/tests/api/transcoding)
 
-    MOCHA_PARALLEL=true runTest "$1" 2 $transcodingFiles
+    MOCHA_PARALLEL=true runTest "$1" $((2*$speedFactor)) $transcodingFiles
 elif [ "$1" = "external-plugins" ]; then
     npm run build:server
 

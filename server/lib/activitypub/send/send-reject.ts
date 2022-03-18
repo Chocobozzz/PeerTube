@@ -1,9 +1,9 @@
-import { ActivityFollow, ActivityReject } from '../../../../shared/models/activitypub'
+import { ActivityFollow, ActivityReject } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { MActor } from '../../../types/models'
 import { getLocalActorFollowRejectActivityPubUrl } from '../url'
 import { buildFollowActivity } from './send-follow'
-import { unicastTo } from './utils'
+import { unicastTo } from './shared/send-utils'
 
 function sendReject (followUrl: string, follower: MActor, following: MActor) {
   if (!follower.serverId) { // This should never happen

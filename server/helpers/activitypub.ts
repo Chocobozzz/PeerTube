@@ -154,7 +154,9 @@ async function activityPubCollectionPagination (
       id: baseUrl,
       type: 'OrderedCollectionPage',
       totalItems: result.total,
-      first: baseUrl + '?page=1'
+      first: result.data.length === 0
+        ? undefined
+        : baseUrl + '?page=1'
     }
   }
 

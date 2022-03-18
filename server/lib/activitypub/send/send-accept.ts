@@ -1,9 +1,9 @@
-import { ActivityAccept, ActivityFollow } from '../../../../shared/models/activitypub'
+import { ActivityAccept, ActivityFollow } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { MActor, MActorFollowActors } from '../../../types/models'
 import { getLocalActorFollowAcceptActivityPubUrl } from '../url'
 import { buildFollowActivity } from './send-follow'
-import { unicastTo } from './utils'
+import { unicastTo } from './shared/send-utils'
 
 function sendAccept (actorFollow: MActorFollowActors) {
   const follower = actorFollow.ActorFollower

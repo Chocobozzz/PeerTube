@@ -16,7 +16,7 @@ import {
   MChannelActor,
   MCommentOwnerVideo
 } from '../../../types/models'
-import { forwardVideoRelatedActivity } from '../send/utils'
+import { forwardVideoRelatedActivity } from '../send/shared/send-utils'
 
 async function processDeleteActivity (options: APProcessorOptions<ActivityDelete>) {
   const { activity, byActor } = options

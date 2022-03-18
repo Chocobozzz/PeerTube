@@ -9,7 +9,7 @@ import { MActorSignature, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFile
 import { Notifier } from '../../notifier'
 import { createOrUpdateCacheFile } from '../cache-file'
 import { createOrUpdateVideoPlaylist } from '../playlists'
-import { forwardVideoRelatedActivity } from '../send/utils'
+import { forwardVideoRelatedActivity } from '../send/shared/send-utils'
 import { resolveThread } from '../video-comments'
 import { getOrCreateAPVideo } from '../videos'
 
@@ -55,7 +55,7 @@ export {
 async function processCreateVideo (activity: ActivityCreate, notify: boolean) {
   const videoToCreateData = activity.object as VideoObject
 
-  const syncParam = { likes: false, dislikes: false, shares: false, comments: false, thumbnail: true, refreshVideo: false }
+  const syncParam = { rates: false, shares: false, comments: false, thumbnail: true, refreshVideo: false }
   const { video, created } = await getOrCreateAPVideo({ videoObject: videoToCreateData, syncParam })
 
   if (created && notify) Notifier.Instance.notifyOnNewVideoIfNeeded(video)

@@ -1402,7 +1402,21 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     })
   }
 
-  static updateRatesOf (videoId: number, type: VideoRateType, t: Transaction) {
+  static updateRatesOf (videoId: number, type: VideoRateType, count: number, t: Transaction) {
+    const field = type === 'like'
+      ? 'likes'
+      : 'dislikes'
+
+    const rawQuery = `UPDATE "video" SET "${field}" = :count WHERE "video"."id" = :videoId`
+
+    return AccountVideoRateModel.sequelize.query(rawQuery, {
+      transaction: t,
+      replacements: { videoId, rateType: type, count },
+      type: QueryTypes.UPDATE
+    })
+  }
+
+  static syncLocalRates (videoId: number, type: VideoRateType, t: Transaction) {
     const field = type === 'like'
       ? 'likes'
       : 'dislikes'

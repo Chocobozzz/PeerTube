@@ -87,7 +87,7 @@ async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
 
   // Maybe it's a reply to a video?
   // If yes, it's done: we resolved all the thread
-  const syncParam = { likes: true, dislikes: true, shares: true, comments: false, thumbnail: true, refreshVideo: false }
+  const syncParam = { rates: true, shares: true, comments: false, thumbnail: true, refreshVideo: false }
   const { video } = await getOrCreateAPVideo({ videoObject: url, syncParam })
 
   if (video.isOwned() && !video.hasPrivacyForFederation()) {

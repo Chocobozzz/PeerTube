@@ -66,11 +66,13 @@ activityPubClientRouter.get('/accounts?/:name/playlists',
 )
 activityPubClientRouter.get('/accounts?/:name/likes/:videoId',
   executeIfActivityPub,
+  cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
   asyncMiddleware(getAccountVideoRateValidatorFactory('like')),
   getAccountVideoRateFactory('like')
 )
 activityPubClientRouter.get('/accounts?/:name/dislikes/:videoId',
   executeIfActivityPub,
+  cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
   asyncMiddleware(getAccountVideoRateValidatorFactory('dislike')),
   getAccountVideoRateFactory('dislike')
 )

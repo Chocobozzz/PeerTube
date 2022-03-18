@@ -12,7 +12,7 @@ import { AttributesOnly } from '@shared/typescript-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers/constants'
 import { ActorModel } from '../actor/actor'
-import { buildLocalAccountIdsIn, getSort, throwIfNotValid } from '../utils'
+import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from './account'
@@ -247,28 +247,6 @@ export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountV
       AccountVideoRateModel.count(query),
       AccountVideoRateModel.findAll<MAccountVideoRateAccountUrl>(query)
     ]).then(([ total, data ]) => ({ total, data }))
-  }
-
-  static cleanOldRatesOf (videoId: number, type: VideoRateType, beforeUpdatedAt: Date) {
-    return AccountVideoRateModel.sequelize.transaction(async t => {
-      const query = {
-        where: {
-          updatedAt: {
-            [Op.lt]: beforeUpdatedAt
-          },
-          videoId,
-          type,
-          accountId: {
-            [Op.notIn]: buildLocalAccountIdsIn()
-          }
-        },
-        transaction: t
-      }
-
-      await AccountVideoRateModel.destroy(query)
-
-      return VideoModel.updateRatesOf(videoId, type, t)
-    })
   }
 
   toFormattedJSON (this: MAccountVideoRateFormattable): AccountVideoRate {

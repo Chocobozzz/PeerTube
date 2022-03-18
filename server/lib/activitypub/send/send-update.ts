@@ -1,14 +1,10 @@
 import { Transaction } from 'sequelize'
-import { ActivityAudience, ActivityUpdate } from '../../../../shared/models/activitypub'
-import { VideoPrivacy } from '../../../../shared/models/videos'
+import { getServerActor } from '@server/models/application/application'
+import { ActivityAudience, ActivityUpdate, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
+import { logger } from '../../../helpers/logger'
 import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
 import { VideoShareModel } from '../../../models/video/video-share'
-import { getUpdateActivityPubUrl } from '../url'
-import { broadcastToFollowers, sendVideoRelatedActivity } from './utils'
-import { audiencify, getActorsInvolvedInVideo, getAudience } from '../audience'
-import { logger } from '../../../helpers/logger'
-import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import {
   MAccountDefault,
   MActor,
@@ -19,7 +15,10 @@ import {
   MVideoPlaylistFull,
   MVideoRedundancyVideo
 } from '../../../types/models'
-import { getServerActor } from '@server/models/application/application'
+import { audiencify, getAudience } from '../audience'
+import { getUpdateActivityPubUrl } from '../url'
+import { getActorsInvolvedInVideo } from './shared'
+import { broadcastToFollowers, sendVideoRelatedActivity } from './shared/send-utils'
 
 async function sendUpdateVideo (videoArg: MVideoAPWithoutCaption, t: Transaction, overrodeByActor?: MActor) {
   const video = videoArg as MVideoAP

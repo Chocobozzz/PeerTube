@@ -1,20 +1,20 @@
+import { runInReadCommittedTransaction } from '@server/helpers/database-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
+import { doJSONRequest } from '@server/helpers/requests'
 import { JobQueue } from '@server/lib/job-queue'
-import { AccountVideoRateModel } from '@server/models/account/account-video-rate'
+import { VideoModel } from '@server/models/video/video'
 import { VideoCommentModel } from '@server/models/video/video-comment'
 import { VideoShareModel } from '@server/models/video/video-share'
 import { MVideo } from '@server/types/models'
-import { ActivitypubHttpFetcherPayload, VideoObject } from '@shared/models'
+import { ActivitypubHttpFetcherPayload, ActivityPubOrderedCollection, VideoObject } from '@shared/models'
 import { crawlCollectionPage } from '../../crawl'
 import { addVideoShares } from '../../share'
 import { addVideoComments } from '../../video-comments'
-import { createRates } from '../../video-rates'
 
 const lTags = loggerTagsFactory('ap', 'video')
 
 type SyncParam = {
-  likes: boolean
-  dislikes: boolean
+  rates: boolean
   shares: boolean
   comments: boolean
   thumbnail: boolean
@@ -24,45 +24,57 @@ type SyncParam = {
 async function syncVideoExternalAttributes (video: MVideo, fetchedVideo: VideoObject, syncParam: SyncParam) {
   logger.info('Adding likes/dislikes/shares/comments of video %s.', video.uuid)
 
-  await syncRates('like', video, fetchedVideo, syncParam.likes)
-  await syncRates('dislike', video, fetchedVideo, syncParam.dislikes)
+  const ratePromise = updateVideoRates(video, fetchedVideo)
+  if (syncParam.rates) await ratePromise
 
   await syncShares(video, fetchedVideo, syncParam.shares)
 
   await syncComments(video, fetchedVideo, syncParam.comments)
 }
 
+async function updateVideoRates (video: MVideo, fetchedVideo: VideoObject) {
+  const [ likes, dislikes ] = await Promise.all([
+    getRatesCount('like', video, fetchedVideo),
+    getRatesCount('dislike', video, fetchedVideo)
+  ])
+
+  return runInReadCommittedTransaction(async t => {
+    await VideoModel.updateRatesOf(video.id, 'like', likes, t)
+    await VideoModel.updateRatesOf(video.id, 'dislike', dislikes, t)
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   SyncParam,
-  syncVideoExternalAttributes
+  syncVideoExternalAttributes,
+  updateVideoRates
 }
 
 // ---------------------------------------------------------------------------
 
-function createJob (payload: ActivitypubHttpFetcherPayload) {
-  return JobQueue.Instance.createJobWithPromise({ type: 'activitypub-http-fetcher', payload })
-}
-
-function syncRates (type: 'like' | 'dislike', video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {
+async function getRatesCount (type: 'like' | 'dislike', video: MVideo, fetchedVideo: VideoObject) {
   const uri = type === 'like'
     ? fetchedVideo.likes
     : fetchedVideo.dislikes
 
-  if (!isSync) {
-    const jobType = type === 'like'
-      ? 'video-likes'
-      : 'video-dislikes'
+  logger.info('Sync %s of video %s', type, video.url)
+  const options = { activityPub: true }
 
-    return createJob({ uri, videoId: video.id, type: jobType })
+  const response = await doJSONRequest<ActivityPubOrderedCollection<any>>(uri, options)
+  const totalItems = response.body.totalItems
+
+  if (isNaN(totalItems)) {
+    logger.error('Cannot sync %s of video %s, totalItems is not a number', type, video.url, { body: response.body })
+    return
   }
 
-  const handler = items => createRates(items, video, type)
-  const cleaner = crawlStartDate => AccountVideoRateModel.cleanOldRatesOf(video.id, type, crawlStartDate)
+  return totalItems
+}
 
-  return crawlCollectionPage<string>(uri, handler, cleaner)
-    .catch(err => logger.error('Cannot add rate of video %s.', video.uuid, { err, rootUrl: uri, ...lTags(video.uuid, video.url) }))
+function createJob (payload: ActivitypubHttpFetcherPayload) {
+  return JobQueue.Instance.createJobWithPromise({ type: 'activitypub-http-fetcher', payload })
 }
 
 function syncShares (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {

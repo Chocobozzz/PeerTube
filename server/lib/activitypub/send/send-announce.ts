@@ -1,10 +1,11 @@
 import { Transaction } from 'sequelize'
-import { ActivityAnnounce, ActivityAudience } from '../../../../shared/models/activitypub'
-import { broadcastToFollowers } from './utils'
-import { audiencify, getActorsInvolvedInVideo, getAudience, getAudienceFromFollowersOf } from '../audience'
+import { ActivityAnnounce, ActivityAudience } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { MActorLight, MVideo } from '../../../types/models'
 import { MVideoShare } from '../../../types/models/video'
+import { audiencify, getAudience } from '../audience'
+import { getActorsInvolvedInVideo, getAudienceFromFollowersOf } from './shared'
+import { broadcastToFollowers } from './shared/send-utils'
 
 async function buildAnnounceWithVideoAudience (
   byActor: MActorLight,

@@ -1,15 +1,15 @@
 import { Transaction } from 'sequelize'
 import { ActorFollowHealthCache } from '@server/lib/actor-follow-health-cache'
 import { getServerActor } from '@server/models/application/application'
+import { Activity, ActivityAudience } from '@shared/models'
 import { ContextType } from '@shared/models/activitypub/context'
-import { Activity, ActivityAudience } from '../../../../shared/models/activitypub'
-import { afterCommitIfTransaction } from '../../../helpers/database-utils'
-import { logger } from '../../../helpers/logger'
-import { ActorModel } from '../../../models/actor/actor'
-import { ActorFollowModel } from '../../../models/actor/actor-follow'
-import { MActor, MActorId, MActorLight, MActorWithInboxes, MVideoAccountLight, MVideoId, MVideoImmutable } from '../../../types/models'
-import { JobQueue } from '../../job-queue'
-import { getActorsInvolvedInVideo, getAudienceFromFollowersOf, getRemoteVideoAudience } from '../audience'
+import { afterCommitIfTransaction } from '../../../../helpers/database-utils'
+import { logger } from '../../../../helpers/logger'
+import { ActorModel } from '../../../../models/actor/actor'
+import { ActorFollowModel } from '../../../../models/actor/actor-follow'
+import { MActor, MActorId, MActorLight, MActorWithInboxes, MVideoAccountLight, MVideoId, MVideoImmutable } from '../../../../types/models'
+import { JobQueue } from '../../../job-queue'
+import { getActorsInvolvedInVideo, getAudienceFromFollowersOf, getOriginVideoAudience } from './audience-utils'
 
 async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAudience) => Activity, options: {
   byActor: MActorLight
@@ -23,16 +23,7 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
 
   // Send to origin
   if (video.isOwned() === false) {
-    let accountActor: MActorLight = (video as MVideoAccountLight).VideoChannel?.Account?.Actor
-
-    if (!accountActor) accountActor = await ActorModel.loadAccountActorByVideoId(video.id, transaction)
-
-    const audience = getRemoteVideoAudience(accountActor, actorsInvolvedInVideo)
-    const activity = activityBuilder(audience)
-
-    return afterCommitIfTransaction(transaction, () => {
-      return unicastTo(activity, byActor, accountActor.getSharedInbox(), contextType)
-    })
+    return sendVideoActivityToOrigin(activityBuilder, options)
   }
 
   // Send to followers
@@ -43,6 +34,30 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
 
   return broadcastToFollowers(activity, byActor, actorsInvolvedInVideo, transaction, actorsException, contextType)
 }
+
+async function sendVideoActivityToOrigin (activityBuilder: (audience: ActivityAudience) => Activity, options: {
+  byActor: MActorLight
+  video: MVideoImmutable | MVideoAccountLight
+  actorsInvolvedInVideo?: MActorLight[]
+  transaction?: Transaction
+  contextType?: ContextType
+}) {
+  const { byActor, video, actorsInvolvedInVideo, transaction, contextType } = options
+
+  if (video.isOwned()) throw new Error('Cannot send activity to owned video origin ' + video.url)
+
+  let accountActor: MActorLight = (video as MVideoAccountLight).VideoChannel?.Account?.Actor
+  if (!accountActor) accountActor = await ActorModel.loadAccountActorByVideoId(video.id, transaction)
+
+  const audience = getOriginVideoAudience(accountActor, actorsInvolvedInVideo)
+  const activity = activityBuilder(audience)
+
+  return afterCommitIfTransaction(transaction, () => {
+    return unicastTo(activity, byActor, accountActor.getSharedInbox(), contextType)
+  })
+}
+
+// ---------------------------------------------------------------------------
 
 async function forwardVideoRelatedActivity (
   activity: Activity,
@@ -91,6 +106,8 @@ async function forwardActivity (
   }
   return afterCommitIfTransaction(t, () => JobQueue.Instance.createJob({ type: 'activitypub-http-broadcast', payload }))
 }
+
+// ---------------------------------------------------------------------------
 
 async function broadcastToFollowers (
   data: any,
@@ -177,6 +194,7 @@ export {
   unicastTo,
   forwardActivity,
   broadcastToActors,
+  sendVideoActivityToOrigin,
   forwardVideoRelatedActivity,
   sendVideoRelatedActivity
 }

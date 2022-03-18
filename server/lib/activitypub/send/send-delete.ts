@@ -1,15 +1,16 @@
 import { Transaction } from 'sequelize'
 import { getServerActor } from '@server/models/application/application'
-import { ActivityAudience, ActivityDelete } from '../../../../shared/models/activitypub'
+import { ActivityAudience, ActivityDelete } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/actor/actor'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { MActorUrl } from '../../../types/models'
 import { MCommentOwnerVideo, MVideoAccountLight, MVideoPlaylistFullSummary } from '../../../types/models/video'
-import { audiencify, getActorsInvolvedInVideo, getVideoCommentAudience } from '../audience'
+import { audiencify } from '../audience'
 import { getDeleteActivityPubUrl } from '../url'
-import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
+import { getActorsInvolvedInVideo, getVideoCommentAudience } from './shared'
+import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './shared/send-utils'
 
 async function sendDeleteVideo (video: MVideoAccountLight, transaction: Transaction) {
   logger.info('Creating job to broadcast delete of video %s.', video.url)
