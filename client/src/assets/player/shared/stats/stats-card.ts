@@ -22,14 +22,14 @@ interface PlayerNetworkInfo {
   downloadedFromPeers?: string
 }
 
+interface InfoElement {
+  root: HTMLElement
+  value: HTMLElement
+}
+
 const Component = videojs.getComponent('Component')
 class StatsCard extends Component {
   options_: StatsCardOptions
-
-  container: HTMLDivElement
-
-  list: HTMLDivElement
-  closeButton: HTMLElement
 
   updateInterval: any
 
@@ -40,18 +40,50 @@ class StatsCard extends Component {
   intervalMs = 300
   playerNetworkInfo: PlayerNetworkInfo = {}
 
+  private containerEl: HTMLDivElement
+  private infoListEl: HTMLDivElement
+
+  private playerMode: InfoElement
+  private p2p: InfoElement
+  private uuid: InfoElement
+  private viewport: InfoElement
+  private resolution: InfoElement
+  private volume: InfoElement
+  private codecs: InfoElement
+  private color: InfoElement
+  private connection: InfoElement
+
+  private network: InfoElement
+  private transferred: InfoElement
+  private download: InfoElement
+
+  private bufferProgress: InfoElement
+  private bufferState: InfoElement
+
+  private liveLatency: InfoElement
+
   createEl () {
-    const container = super.createEl('div', {
-      className: 'vjs-stats-content',
-      innerHTML: this.getMainTemplate()
+    this.containerEl = videojs.dom.createEl('div', {
+      className: 'vjs-stats-content'
     }) as HTMLDivElement
-    this.container = container
-    this.container.style.display = 'none'
+    this.containerEl.style.display = 'none'
 
-    this.closeButton = this.container.getElementsByClassName('vjs-stats-close')[0] as HTMLElement
-    this.closeButton.onclick = () => this.hide()
+    this.infoListEl = videojs.dom.createEl('div', {
+      className: 'vjs-stats-list'
+    }) as HTMLDivElement
 
-    this.list = this.container.getElementsByClassName('vjs-stats-list')[0] as HTMLDivElement
+    const closeButton = videojs.dom.createEl('button', {
+      className: 'vjs-stats-close',
+      tabindex: '0',
+      title: 'Close stats',
+      innerText: '[x]'
+    }, { 'aria-label': 'Close stats' }) as HTMLElement
+    closeButton.onclick = () => this.hide()
+
+    this.containerEl.appendChild(closeButton)
+    this.containerEl.appendChild(this.infoListEl)
+
+    this.populateInfoBlocks()
 
     this.player_.on('p2pInfo', (event: any, data: EventPlayerNetworkInfo) => {
       if (!data) return // HTTP fallback
@@ -74,7 +106,7 @@ class StatsCard extends Component {
       }
     })
 
-    return container
+    return this.containerEl
   }
 
   toggle () {
@@ -83,14 +115,15 @@ class StatsCard extends Component {
   }
 
   show () {
-    this.container.style.display = 'block'
+    this.containerEl.style.display = 'block'
+
     this.updateInterval = setInterval(async () => {
       try {
         const options = this.mode === 'p2p-media-loader'
           ? this.buildHLSOptions()
           : await this.buildWebTorrentOptions() // Default
 
-        this.list.innerHTML = this.getListTemplate(options)
+        this.populateInfoValues(options)
       } catch (err) {
         console.error('Cannot update stats.', err)
         clearInterval(this.updateInterval)
@@ -100,7 +133,7 @@ class StatsCard extends Component {
 
   hide () {
     clearInterval(this.updateInterval)
-    this.container.style.display = 'none'
+    this.containerEl.style.display = 'none'
   }
 
   private buildHLSOptions () {
@@ -169,7 +202,44 @@ class StatsCard extends Component {
     }
   }
 
-  private getListTemplate (options: {
+  private populateInfoBlocks () {
+    this.playerMode = this.buildInfoRow(this.player().localize('Player mode'))
+    this.p2p = this.buildInfoRow(this.player().localize('P2P'))
+    this.uuid = this.buildInfoRow(this.player().localize('Video UUID'))
+    this.viewport = this.buildInfoRow(this.player().localize('Viewport / Frames'))
+    this.resolution = this.buildInfoRow(this.player().localize('Resolution'))
+    this.volume = this.buildInfoRow(this.player().localize('Volume'))
+    this.codecs = this.buildInfoRow(this.player().localize('Codecs'))
+    this.color = this.buildInfoRow(this.player().localize('Color'))
+    this.connection = this.buildInfoRow(this.player().localize('Connection Speed'))
+
+    this.network = this.buildInfoRow(this.player().localize('Network Activity'))
+    this.transferred = this.buildInfoRow(this.player().localize('Total Transfered'))
+    this.download = this.buildInfoRow(this.player().localize('Download Breakdown'))
+
+    this.bufferProgress = this.buildInfoRow(this.player().localize('Buffer Progress'))
+    this.bufferState = this.buildInfoRow(this.player().localize('Buffer State'))
+
+    this.liveLatency = this.buildInfoRow(this.player().localize('Live Latency'))
+
+    this.infoListEl.appendChild(this.playerMode.root)
+    this.infoListEl.appendChild(this.p2p.root)
+    this.infoListEl.appendChild(this.uuid.root)
+    this.infoListEl.appendChild(this.viewport.root)
+    this.infoListEl.appendChild(this.resolution.root)
+    this.infoListEl.appendChild(this.volume.root)
+    this.infoListEl.appendChild(this.codecs.root)
+    this.infoListEl.appendChild(this.color.root)
+    this.infoListEl.appendChild(this.connection.root)
+    this.infoListEl.appendChild(this.network.root)
+    this.infoListEl.appendChild(this.transferred.root)
+    this.infoListEl.appendChild(this.download.root)
+    this.infoListEl.appendChild(this.bufferProgress.root)
+    this.infoListEl.appendChild(this.bufferState.root)
+    this.infoListEl.appendChild(this.liveLatency.root)
+  }
+
+  private populateInfoValues (options: {
     playerNetworkInfo: PlayerNetworkInfo
     progress: number
     codecs: string
@@ -208,45 +278,50 @@ class StatsCard extends Component {
       ? `${(progress * 100).toFixed(1)}% (${(progress * duration).toFixed(1)}s)`
       : undefined
 
-    return `
-      ${this.buildElement(player.localize('Player mode'), this.mode || 'HTTP')}
-      ${this.buildElement(player.localize('P2P'), player.localize(this.options_.p2pEnabled ? 'enabled' : 'disabled'))}
+    this.setInfoValue(this.playerMode, this.mode || 'HTTP')
+    this.setInfoValue(this.p2p, player.localize(this.options_.p2pEnabled ? 'enabled' : 'disabled'))
+    this.setInfoValue(this.uuid, this.options_.videoUUID)
 
-      ${this.buildElement(player.localize('Video UUID'), this.options_.videoUUID)}
+    this.setInfoValue(this.viewport, frames)
+    this.setInfoValue(this.resolution, resolution)
+    this.setInfoValue(this.volume, volume)
+    this.setInfoValue(this.codecs, codecs)
+    this.setInfoValue(this.color, colorSpace)
+    this.setInfoValue(this.connection, playerNetworkInfo.averageBandwidth)
 
-      ${this.buildElement(player.localize('Viewport / Frames'), frames)}
+    this.setInfoValue(this.network, networkActivity)
+    this.setInfoValue(this.transferred, totalTransferred)
+    this.setInfoValue(this.download, downloadBreakdown)
 
-      ${this.buildElement(player.localize('Resolution'), resolution)}
+    this.setInfoValue(this.bufferProgress, bufferProgress)
+    this.setInfoValue(this.bufferState, buffer)
 
-      ${this.buildElement(player.localize('Volume'), volume)}
-
-      ${this.buildElement(player.localize('Codecs'), codecs)}
-      ${this.buildElement(player.localize('Color'), colorSpace)}
-
-      ${this.buildElement(player.localize('Connection Speed'), playerNetworkInfo.averageBandwidth)}
-
-      ${this.buildElement(player.localize('Network Activity'), networkActivity)}
-      ${this.buildElement(player.localize('Total Transfered'), totalTransferred)}
-      ${this.buildElement(player.localize('Download Breakdown'), downloadBreakdown)}
-
-      ${this.buildElement(player.localize('Buffer Progress'), bufferProgress)}
-      ${this.buildElement(player.localize('Buffer State'), buffer)}
-
-      ${this.buildElement(player.localize('Live Latency'), latency)}
-    `
+    this.setInfoValue(this.liveLatency, latency)
   }
 
-  private getMainTemplate () {
-    return `
-      <button class="vjs-stats-close" tabindex=0 aria-label="Close stats" title="Close stats">[x]</button>
-      <div class="vjs-stats-list"></div>
-    `
+  private setInfoValue (el: InfoElement, value: string) {
+    if (!value) {
+      el.root.style.display = 'none'
+      return
+    }
+
+    el.root.style.display = 'block'
+
+    if (el.value.innerHTML === value) return
+    el.value.innerHTML = value
   }
 
-  private buildElement (label: string, value?: string) {
-    if (!value) return ''
+  private buildInfoRow (labelText: string, valueHTML?: string) {
+    const root = videojs.dom.createEl('div') as HTMLElement
+    root.style.display = 'none'
 
-    return `<div><div>${label}</div><span>${value}</span></div>`
+    const label = videojs.dom.createEl('div', { innerText: labelText }) as HTMLElement
+    const value = videojs.dom.createEl('span', { innerHTML: valueHTML }) as HTMLElement
+
+    root.appendChild(label)
+    root.appendChild(value)
+
+    return { root, value }
   }
 
   private timeRangesToString (r: videojs.TimeRange) {
