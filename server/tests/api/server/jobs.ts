@@ -12,7 +12,6 @@ import {
   waitJobs
 } from '@shared/server-commands'
 import { wait } from '@shared/core-utils'
-import { uuid } from 'short-uuid'
 
 const expect = chai.expect
 
