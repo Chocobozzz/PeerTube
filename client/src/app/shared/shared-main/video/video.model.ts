@@ -228,6 +228,12 @@ export class Video implements VideoServerModel {
     return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.UPDATE_ANY_VIDEO))
   }
 
+  isEditableBy (user: AuthUser, videoEditorEnabled: boolean) {
+    return videoEditorEnabled &&
+      this.state?.id === VideoState.PUBLISHED &&
+      this.isUpdatableBy(user)
+  }
+
   canRemoveFiles (user: AuthUser) {
     return this.isLocal &&
       user.hasRight(UserRight.MANAGE_VIDEO_FILES) &&
