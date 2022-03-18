@@ -29,6 +29,7 @@ import {
 } from '../paths'
 import { VideoPathManager } from '../video-path-manager'
 import { VideoTranscodingProfilesManager } from './default-transcoding-profiles'
+import { validateVideoFile } from '@server/helpers/ffmpeg/ffmpeg-validate'
 
 /**
  *
@@ -66,7 +67,7 @@ function optimizeOriginalVideofile (video: MVideoFullLight, inputVideoFile: MVid
     }
 
     // Could be very long!
-    await transcodeVOD(transcodeOptions)
+    await transcodeVODAndValidate(transcodeOptions)
 
     // Important to do this before getVideoFilename() to take in account the new filename
     inputVideoFile.extname = newExtname
@@ -128,7 +129,7 @@ function transcodeNewWebTorrentResolution (video: MVideoFullLight, resolution: V
         job
       }
 
-    await transcodeVOD(transcodeOptions)
+    await transcodeVODAndValidate(transcodeOptions)
 
     return onWebTorrentVideoFileTranscoding(video, newVideoFile, videoTranscodedPath, videoOutputPath)
   })
@@ -165,7 +166,7 @@ function mergeAudioVideofile (video: MVideoFullLight, resolution: VideoResolutio
     }
 
     try {
-      await transcodeVOD(transcodeOptions)
+      await transcodeVODAndValidate(transcodeOptions)
 
       await remove(audioInputPath)
       await remove(tmpPreviewPath)
@@ -239,6 +240,14 @@ export {
 
 // ---------------------------------------------------------------------------
 
+async function transcodeVODAndValidate (transcodeOptions: TranscodeVODOptions) {
+  await transcodeVOD(transcodeOptions)
+  await validateVideoFile({
+    job: transcodeOptions.job,
+    path: transcodeOptions.outputPath
+  })
+}
+
 async function onWebTorrentVideoFileTranscoding (
   video: MVideoFullLight,
   videoFile: MVideoFile,
@@ -306,7 +315,7 @@ async function generateHlsPlaylistCommon (options: {
     job
   }
 
-  await transcodeVOD(transcodeOptions)
+  await transcodeVODAndValidate(transcodeOptions)
 
   // Create or update the playlist
   const playlist = await VideoStreamingPlaylistModel.loadOrGenerate(video)
