@@ -502,7 +502,7 @@ describe('Test live', function () {
     })
 
     it('Should enable transcoding with some resolutions and correctly save them', async function () {
-      this.timeout(400_000)
+      this.timeout(800_000)
 
       const resolutions = [ 240, 360, 720 ]
 

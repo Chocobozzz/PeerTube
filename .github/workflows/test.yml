@@ -44,7 +44,7 @@ jobs:
     env:
       PGUSER: peertube
       PGHOST: localhost
-      NODE_PENDING_JOB_WAIT: 250
+      NODE_PENDING_JOB_WAIT: 450
       ENABLE_OBJECT_STORAGE_TESTS: true
 
     steps:
