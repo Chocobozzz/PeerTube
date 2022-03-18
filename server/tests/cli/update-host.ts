@@ -32,6 +32,7 @@ describe('Test update host scripts', function () {
     // Upload two videos for our needs
     const { uuid: video1UUID } = await server.videos.upload()
     await server.videos.upload()
+    await waitJobs(server)
 
     // Create a user
     await server.users.create({ username: 'toto', password: 'coucou' })
