@@ -1122,13 +1122,13 @@
       </trans-unit>
       <trans-unit id="8981309282078866700" datatype="html">
         <source><x id="PH"/>min</source>
-        <target state="translated"><x id="PH"/>phút</target>
+        <target state="translated"><x id="PH"/> phút</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">16</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="350798057497677761" datatype="html">
         <source><x id="PH"/>sec</source>
-        <target state="translated"><x id="PH"/>giây</target>
+        <target state="translated"><x id="PH"/> giây</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="1908285951500318953">
@@ -2391,7 +2391,7 @@
       </trans-unit>
       <trans-unit id="5121874940679887597" datatype="html">
         <source>Copy channel handle</source>
-        <target state="translated">Chép handle kênh</target>
+        <target state="translated">Chép địa chỉ kênh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="2486917589932345430" datatype="html">
@@ -2411,7 +2411,7 @@
       </trans-unit>
       <trans-unit id="50985514722149155" datatype="html">
         <source>This is the date when the content was originally published (e.g. the release date for a film)</source>
-        <target state="translated">Đây là ngày mà nội dung được đăng tải đầu tiên nhất (ví dụ ngày phát hành của một bộ phim)</target>
+        <target state="translated">Đây là ngày mà lần đầu tiên nội dung được giới thiệu (ví dụ ngày phát hành của một bộ phim)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">350</context></context-group>
       </trans-unit>
       <trans-unit id="1669378369440073270" datatype="html">
@@ -3026,7 +3026,7 @@
       </trans-unit>
       <trans-unit id="5139892963394684487" datatype="html">
         <source>Originally published</source>
-        <target state="translated">Ngày đăng</target>
+        <target state="translated">Công chiếu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="6402393085909200998" datatype="html">
@@ -3141,7 +3141,7 @@
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> and others </source>
-        <target state="translated">Xem <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> từ <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> và những cái khác </target>
+        <target state="translated">Xem <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> từ <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> và những người khác </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="4036338619293319383" datatype="html">
@@ -4872,7 +4872,7 @@
       </trans-unit>
       <trans-unit id="3442084803796199253" datatype="html">
         <source>Allow users to do remote URI/handle search</source>
-        <target state="translated">Cho phép người dùng URI từ xa/handle tìm kiếm</target>
+        <target state="translated">Cho phép người dùng URI từ xa/thực hiện tìm kiếm</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">348</context></context-group>
       </trans-unit>
       <trans-unit id="2258148539285928012" datatype="html">
@@ -7367,7 +7367,7 @@
       </trans-unit>
       <trans-unit id="8440128775129354214" datatype="html">
         <source>Privacy</source>
-        <target state="translated">Chế độ</target>
+        <target state="translated">Phân phối</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">57</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">57</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">112</context></context-group>
@@ -9397,12 +9397,12 @@
       </trans-unit>
       <trans-unit id="544279804045883862" datatype="html">
         <source>Handle is required.</source>
-        <target state="translated">Yêu cầu Handle.</target>
+        <target state="translated">Yêu cầu phải có địa chỉ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="2805037637775107078" datatype="html">
         <source>Handle must be valid (eg. chocobozzz@example.com).</source>
-        <target state="translated">Handle phải sử dụng được (eg. chocobozzz@example.com).</target>
+        <target state="translated">Địa chỉ phải sử dụng được (eg. chocobozzz@example.com).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="4968369344159400023" datatype="html">
@@ -9739,7 +9739,7 @@
       </trans-unit>
       <trans-unit id="6198895122092095739" datatype="html">
         <source>Privacy is required.</source>
-        <target state="translated">Yêu cầu chế độ đăng.</target>
+        <target state="translated">Yêu cầu kiểu phân phối.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="1276238402004616037" datatype="html">
