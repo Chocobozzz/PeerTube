@@ -344,6 +344,11 @@ my-actor-avatar {
 
 .dropdown-menu {
   width: calc(100% + 40px);
+
+  // Prevent weird display issue on firefox when global style is not loaded yet
+  &:not(.show) {
+    display: none;
+  }
 }
 
 .dropdown-item {

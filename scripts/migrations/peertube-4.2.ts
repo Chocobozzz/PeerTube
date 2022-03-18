@@ -59,6 +59,7 @@ async function run () {
 
     for (const videoChannel of account.VideoChannels) {
       try {
+        await fillAvatarSizeIfNeeded(videoChannel)
         await generateSmallerAvatarIfNeeded(videoChannel)
       } catch (err) {
         console.error(`Cannot process channel avatar ${videoChannel.name}`, err)

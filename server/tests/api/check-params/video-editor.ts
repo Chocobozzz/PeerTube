@@ -122,7 +122,10 @@ describe('Test video editor API validator', function () {
       })
 
       it('Should fail with an already in transcoding state video', async function () {
+        this.timeout(30000)
+
         const { uuid } = await server.videos.quickUpload({ name: 'transcoded video' })
+        await waitJobs([ server ])
 
         await waitJobs(server)
         await server.jobs.pauseJobQueue()

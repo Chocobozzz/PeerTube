@@ -46,13 +46,14 @@ export class HLSOptionsBuilder {
         if (file.fps >= 50) label += file.fps
 
         return label
-      },
-      html5: {
-        hlsjsConfig: this.getHLSJSOptions(loader)
       }
     }
 
-    return { p2pMediaLoader, hlsjs }
+    const html5 = {
+      hlsjsConfig: this.getHLSJSOptions(loader)
+    }
+
+    return { p2pMediaLoader, hlsjs, html5 }
   }
 
   // ---------------------------------------------------------------------------
@@ -73,7 +74,6 @@ export class HLSOptionsBuilder {
 
     return {
       loader: {
-
         trackerAnnounce,
         rtcConfig: getRtcConfig(),
 

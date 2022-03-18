@@ -34,7 +34,7 @@ async function processActivityPubCleaner (_job: Job) {
       if (result?.status === 'deleted') {
         const { videoId, type } = result.data
 
-        await VideoModel.updateRatesOf(videoId, type, undefined)
+        await VideoModel.syncLocalRates(videoId, type, undefined)
       }
     }, { concurrency: AP_CLEANER.CONCURRENCY })
   }

@@ -1,11 +1,8 @@
 import { Transaction } from 'sequelize'
-import { ActivityAudience, ActivityCreate } from '../../../../shared/models/activitypub'
-import { VideoPrivacy } from '../../../../shared/models/videos'
-import { VideoCommentModel } from '../../../models/video/video-comment'
-import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
-import { audiencify, getActorsInvolvedInVideo, getAudience, getAudienceFromFollowersOf, getVideoCommentAudience } from '../audience'
+import { getServerActor } from '@server/models/application/application'
+import { ActivityAudience, ActivityCreate, ContextType, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
-import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
+import { VideoCommentModel } from '../../../models/video/video-comment'
 import {
   MActorLight,
   MCommentOwnerVideo,
@@ -15,8 +12,16 @@ import {
   MVideoRedundancyFileVideo,
   MVideoRedundancyStreamingPlaylistVideo
 } from '../../../types/models'
-import { getServerActor } from '@server/models/application/application'
-import { ContextType } from '@shared/models/activitypub/context'
+import { audiencify, getAudience } from '../audience'
+import {
+  broadcastToActors,
+  broadcastToFollowers,
+  getActorsInvolvedInVideo,
+  getAudienceFromFollowersOf,
+  getVideoCommentAudience,
+  sendVideoRelatedActivity,
+  unicastTo
+} from './shared'
 
 const lTags = loggerTagsFactory('ap', 'create')
 

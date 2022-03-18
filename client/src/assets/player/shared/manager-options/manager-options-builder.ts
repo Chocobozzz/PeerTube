@@ -2,7 +2,7 @@ import videojs from 'video.js'
 import { copyToClipboard } from '@root-helpers/utils'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { isIOS, isSafari } from '@root-helpers/web-browser'
-import { buildVideoLink, decorateVideoLink } from '@shared/core-utils'
+import { buildVideoLink, decorateVideoLink, pick } from '@shared/core-utils'
 import { isDefaultLocale } from '@shared/core-utils/i18n'
 import { VideoJSPluginOptions } from '../../types'
 import { CommonOptions, PeertubePlayerManagerOptions, PlayerMode } from '../../types/manager-options'
@@ -49,8 +49,10 @@ export class ManagerOptionsBuilder {
 
     if (this.mode === 'p2p-media-loader') {
       const hlsOptionsBuilder = new HLSOptionsBuilder(this.options, this.p2pMediaLoaderModule)
+      const options = hlsOptionsBuilder.getPluginOptions()
 
-      Object.assign(plugins, hlsOptionsBuilder.getPluginOptions())
+      Object.assign(plugins, pick(options, [ 'hlsjs', 'p2pMediaLoader' ]))
+      Object.assign(html5, options.html5)
     } else if (this.mode === 'webtorrent') {
       const webtorrentOptionsBuilder = new WebTorrentOptionsBuilder(this.options, this.getAutoPlayValue(autoplay, alreadyPlayed))
 

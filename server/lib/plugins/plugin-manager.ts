@@ -277,6 +277,8 @@ export class PluginManager implements ServerHook {
       logger.info('Regenerating registered plugin CSS to global file.')
       await this.regeneratePluginGlobalCSS()
     }
+
+    ClientHtml.invalidCache()
   }
 
   // ###################### Installation ######################
@@ -419,6 +421,8 @@ export class PluginManager implements ServerHook {
     }
 
     await this.addTranslations(plugin, npmName, packageJSON.translations)
+
+    ClientHtml.invalidCache()
   }
 
   private async registerPlugin (plugin: PluginModel, pluginPath: string, packageJSON: PluginPackageJSON) {
@@ -473,8 +477,6 @@ export class PluginManager implements ServerHook {
   // ###################### CSS ######################
 
   private resetCSSGlobalFile () {
-    ClientHtml.invalidCache()
-
     return outputFile(PLUGIN_GLOBAL_CSS_PATH, '')
   }
 
@@ -482,8 +484,6 @@ export class PluginManager implements ServerHook {
     for (const cssPath of cssRelativePaths) {
       await this.concatFiles(join(pluginPath, cssPath), PLUGIN_GLOBAL_CSS_PATH)
     }
-
-    ClientHtml.invalidCache()
   }
 
   private concatFiles (input: string, output: string) {

@@ -123,6 +123,21 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
+  async getIndexHTMLConfig (options: OverrideCommandOptions = {}) {
+    const text = await this.getRequestText({
+      ...options,
+
+      path: '/',
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+
+    const match = text.match('<script type="application/javascript">window.PeerTubeServerConfig = (".+?")</script>')
+
+    // We parse the string twice, first to extract the string and then to extract the JSON
+    return JSON.parse(JSON.parse(match[1])) as ServerConfig
+  }
+
   getAbout (options: OverrideCommandOptions = {}) {
     const path = '/api/v1/config/about'
 

@@ -2,7 +2,7 @@ import { VideoViews } from '@server/lib/video-views'
 import { ActivityView } from '../../../../shared/models/activitypub'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
-import { forwardVideoRelatedActivity } from '../send/utils'
+import { forwardVideoRelatedActivity } from '../send/shared/send-utils'
 import { getOrCreateAPVideo } from '../videos'
 
 async function processViewActivity (options: APProcessorOptions<ActivityView>) {

@@ -1,10 +1,10 @@
 import { Transaction } from 'sequelize'
-import { ActivityAudience, ActivityFlag } from '../../../../shared/models/activitypub'
+import { ActivityAudience, ActivityFlag } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { MAbuseAP, MAccountLight, MActor } from '../../../types/models'
 import { audiencify, getAudience } from '../audience'
 import { getLocalAbuseActivityPubUrl } from '../url'
-import { unicastTo } from './utils'
+import { unicastTo } from './shared/send-utils'
 
 function sendAbuse (byActor: MActor, abuse: MAbuseAP, flaggedAccount: MAccountLight, t: Transaction) {
   if (!flaggedAccount.Actor.serverId) return // Local user

@@ -1,10 +1,10 @@
 import { Transaction } from 'sequelize'
-import { getVideoDislikeActivityPubUrlByLocalActor } from '../url'
+import { ActivityAudience, ActivityDislike } from '@shared/models'
 import { logger } from '../../../helpers/logger'
-import { ActivityAudience, ActivityDislike } from '../../../../shared/models/activitypub'
-import { sendVideoRelatedActivity } from './utils'
-import { audiencify, getAudience } from '../audience'
 import { MActor, MActorAudience, MVideoAccountLight, MVideoUrl } from '../../../types/models'
+import { audiencify, getAudience } from '../audience'
+import { getVideoDislikeActivityPubUrlByLocalActor } from '../url'
+import { sendVideoActivityToOrigin } from './shared/send-utils'
 
 function sendDislike (byActor: MActor, video: MVideoAccountLight, t: Transaction) {
   logger.info('Creating job to dislike %s.', video.url)
@@ -15,7 +15,7 @@ function sendDislike (byActor: MActor, video: MVideoAccountLight, t: Transaction
     return buildDislikeActivity(url, byActor, video, audience)
   }
 
-  return sendVideoRelatedActivity(activityBuilder, { byActor, video, transaction: t })
+  return sendVideoActivityToOrigin(activityBuilder, { byActor, video, transaction: t })
 }
 
 function buildDislikeActivity (url: string, byActor: MActorAudience, video: MVideoUrl, audience?: ActivityAudience): ActivityDislike {

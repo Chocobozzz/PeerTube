@@ -54,7 +54,7 @@ export type ActivitypubFollowPayload = {
   assertIsChannel?: boolean
 }
 
-export type FetchType = 'activity' | 'video-likes' | 'video-dislikes' | 'video-shares' | 'video-comments' | 'account-playlists'
+export type FetchType = 'activity' | 'video-shares' | 'video-comments' | 'account-playlists'
 export type ActivitypubHttpFetcherPayload = {
   uri: string
   type: FetchType

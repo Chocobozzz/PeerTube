@@ -1,12 +1,12 @@
 import { Transaction } from 'sequelize'
 import { VideoViews } from '@server/lib/video-views'
 import { MActorAudience, MVideoImmutable, MVideoUrl } from '@server/types/models'
-import { ActivityAudience, ActivityView } from '../../../../shared/models/activitypub'
+import { ActivityAudience, ActivityView } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/actor/actor'
 import { audiencify, getAudience } from '../audience'
 import { getLocalVideoViewActivityPubUrl } from '../url'
-import { sendVideoRelatedActivity } from './utils'
+import { sendVideoRelatedActivity } from './shared/send-utils'
 
 async function sendView (byActor: ActorModel, video: MVideoImmutable, t: Transaction) {
   logger.info('Creating job to send view of %s.', video.url)

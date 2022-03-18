@@ -7,7 +7,7 @@ import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { MActor, MChannelAccountLight, MChannelId, MVideoAccountLightBlacklistAllFiles, MVideoFullLight } from '@server/types/models'
 import { VideoObject, VideoPrivacy } from '@shared/models'
-import { APVideoAbstractBuilder, getVideoAttributesFromObject } from './shared'
+import { APVideoAbstractBuilder, getVideoAttributesFromObject, updateVideoRates } from './shared'
 
 export class APVideoUpdater extends APVideoAbstractBuilder {
   private readonly wasPrivateVideo: boolean
@@ -73,6 +73,8 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
         isNew: false,
         transaction: undefined
       })
+
+      await updateVideoRates(videoUpdated, this.videoObject)
 
       // Notify our users?
       if (this.wasPrivateVideo || this.wasUnlistedVideo) {

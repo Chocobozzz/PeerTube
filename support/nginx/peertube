@@ -85,7 +85,7 @@ server {
     try_files /dev/null @api;
   }
 
-  location = /api/v1/videos/upload {
+  location ~ ^/api/v1/videos/(upload|([^/]+/editor/edit))$ {
     limit_except POST HEAD { deny all; }
 
     # This is the maximum upload size, which roughly matches the maximum size of a video file.
