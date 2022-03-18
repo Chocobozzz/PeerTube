@@ -435,7 +435,7 @@
       </trans-unit>
       <trans-unit id="2193037168694505715" datatype="html">
         <source>Short text to tell people how they can support the channel (membership platform...).&lt;br /&gt;&lt;br /&gt; When a video is uploaded in this channel, the video support field will be automatically filled by this text.</source>
-        <target state="translated">Nói cho thành viên biết cách họ có thể bảo trợ kênh (nền tảng chuyển tiền...).&lt;br /&gt;&lt;br /&gt; Khi một video được tải lên kênh, phần hỗ trợ video sẽ hiển thị văn bản này.</target>
+        <target state="translated">Nói cho người dùng biết cách họ có thể bảo trợ kênh (nền tảng chuyển tiền...).&lt;br /&gt;&lt;br /&gt; Khi một video được tải lên kênh, phần hỗ trợ video sẽ hiển thị văn bản này.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">67,68</context>
@@ -938,7 +938,7 @@
       </trans-unit>
       <trans-unit id="5851173629316588976" datatype="html">
         <source>By users on this instance</source>
-        <target state="translated">Theo thành viên trên máy chủ này</target>
+        <target state="translated">Theo người dùng trên máy chủ này</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">4</context>
@@ -951,7 +951,7 @@
       </trans-unit>
       <trans-unit id="1670306451865226564" datatype="html">
         <source>users</source>
-        <target state="translated">thành viên</target>
+        <target state="translated">người dùng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="5178138591256693636" datatype="html">
@@ -1340,7 +1340,7 @@
       </trans-unit>
       <trans-unit id="199127249622290422" datatype="html">
         <source>Upload or import videos, parse logs, prune storage directories, reset user password...</source>
-        <target state="translated">Tải lên hoặc nhập video từ nguồn khác, parse logs, prune storage directories, reset mật khẩu thành viên...</target>
+        <target state="translated">Tải lên hoặc nhập video từ nguồn khác, parse logs, prune storage directories, reset mật khẩu người dùng...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="249453844439446209" datatype="html">
@@ -1390,7 +1390,7 @@
       </trans-unit>
       <trans-unit id="5329436244765769292" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="translated">Nếu bạn cho phép đăng ký, hãy đề ra <x id="START_TAG_STRONG"/>quy tắc kiểm duyệt<x id="CLOSE_TAG_STRONG"/> và <x id="START_TAG_STRONG"/>điều khoản dịch vụ<x id="CLOSE_TAG_STRONG"/> cũng như thể loại, ngôn ngữ và cách bạn kiểm duyệt. Bằng cách này, bạn sẽ giúp thành viên đăng ký được <x id="START_TAG_STRONG"/>phê duyệt<x id="CLOSE_TAG_STRONG"/> trên máy chủ PeerTube. </target>
+        <target state="translated">Nếu bạn cho phép đăng ký, hãy đề ra <x id="START_TAG_STRONG"/>quy tắc kiểm duyệt<x id="CLOSE_TAG_STRONG"/> và <x id="START_TAG_STRONG"/>điều khoản dịch vụ<x id="CLOSE_TAG_STRONG"/> cũng như thể loại, ngôn ngữ và cách bạn kiểm duyệt. Bằng cách này, bạn sẽ giúp người dùng đăng ký được <x id="START_TAG_STRONG"/>phê duyệt<x id="CLOSE_TAG_STRONG"/> trên máy chủ PeerTube. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="5704345824323933019" datatype="html">
@@ -1415,7 +1415,7 @@
       </trans-unit>
       <trans-unit id="8901933019590352016" datatype="html">
         <source>You enabled user registration on your instance but did not configure the following fields:</source>
-        <target state="translated">Bạn đã cho phép đăng ký thành viên trên máy chủ nhưng chưa cấu hình những mục sau:</target>
+        <target state="translated">Bạn đã cho phép đăng ký người dùng trên máy chủ nhưng chưa cấu hình những mục sau:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="8948444690892731948" datatype="html">
@@ -1684,7 +1684,7 @@
       </trans-unit>
       <trans-unit id="7239874680342223476" datatype="html">
         <source>Help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> by:</source>
-        <target state="translated">Giúp kiểm duyệt viên và các thành viên khác biết <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>bạn là ai<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> bằng cách:</target>
+        <target state="translated">Giúp kiểm duyệt viên và những người dùng khác biết <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>bạn là ai<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> bằng cách:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="5856432243446401016" datatype="html">
@@ -1844,18 +1844,18 @@
       </trans-unit>
       <trans-unit id="6462732349450217281" datatype="html">
         <source>Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</source>
-        <target state="translated">Xác định xem bạn có thể giải quyết bất kỳ nội dung nào ở xa hay không hoặc trường hợp này chỉ cho phép làm như vậy đối với các trường hợp sau đó.</target>
+        <target state="translated">Liệu bạn có thể xử lý bất kỳ nội dung nào ở ngoài, hay là máy chủ này chỉ cho phép làm vậy với những máy chủ đã liên hợp.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="3710530516408401495" datatype="html">
         <source>will list the matching channel</source>
-        <target state="translated">sẽ liệt kê những kênh trùng khớp</target>
+        <target state="translated">hiện những kênh trùng khớp</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">50</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="6913541939335935215" datatype="html">
         <source>will list the matching video</source>
-        <target state="translated">sẽ liệt kê những video trùng khớp</target>
+        <target state="translated">hiện những video trùng khớp</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="8854094932942190741">
@@ -3628,7 +3628,7 @@
       </trans-unit>
       <trans-unit id="6124612368324200166" datatype="html">
         <source>Banned users</source>
-        <target state="translated">Thành viên đã vô hiệu hóa</target>
+        <target state="translated">Người dùng đã vô hiệu hóa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="5642198289374753866" datatype="html">
@@ -4638,7 +4638,7 @@
       </trans-unit>
       <trans-unit id="5862227717871131052" datatype="html">
         <source>Prefer author display name in video miniature</source>
-        <target state="translated">Ưu tiên tên hiển thị của thành viên trong hình thu nhỏ video</target>
+        <target state="translated">Ưu tiên tên hiển thị của người dùng trong hình thu nhỏ video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">66</context>
@@ -4646,7 +4646,7 @@
       </trans-unit>
       <trans-unit id="5444889468197427724" datatype="html">
         <source>Redirect users on single external auth when users click on the login button in menu</source>
-        <target state="translated">Chuyển hướng khi thành viên nhấn vào nút đăng nhập trên menu</target>
+        <target state="translated">Chuyển hướng khi người dùng nhấn vào nút đăng nhập trên menu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">77</context>
@@ -5058,7 +5058,7 @@
       </trans-unit>
       <trans-unit id="8583623894789865917" datatype="html">
         <source>Allow your users to change live latency</source>
-        <target state="translated">Cho phép thành viên tăng độ trễ trực tiếp</target>
+        <target state="translated">Cho phép người dùng tăng độ trễ trực tiếp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">42</context>
@@ -5172,7 +5172,7 @@
       </trans-unit>
       <trans-unit id="5698272164915890247" datatype="html">
         <source>Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</source>
-        <target state="translated">Cho phép thành viên tải lên định dạng video khác mp4, ogv và webm (ví dụ như avi, mov, mkv etc).</target>
+        <target state="translated">Cho phép người dùng tải lên định dạng video khác mp4, ogv và webm (ví dụ như avi, mov, mkv etc).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">54</context>
@@ -5291,7 +5291,7 @@
       </trans-unit>
       <trans-unit id="4078329985026583770" datatype="html">
         <source>Allows your users to edit their video (cut, add intro/outro, add a watermark etc)</source>
-        <target state="translated">Cho phép thành viên sửa video của họ (cắt, thêm intro/outro, thêm watermark etc)</target>
+        <target state="translated">Cho phép người dùng sửa video của họ (cắt, thêm intro/outro, thêm watermark etc)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">199,201</context>
@@ -6023,7 +6023,7 @@
       </trans-unit>
       <trans-unit id="8844610145426272276" datatype="html">
         <source>To help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, don't forget to <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot;&gt;"/>set up your account profile<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> by adding an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="translated">Để giúp quản trị viên và những thành viên khác biết <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>bạn là ai<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, đừng quên <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot;&gt;"/>thiết lập trang hồ sơ của bạn<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> bằng cách bổ sung <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ảnh đại diện<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> và <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>mô tả<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">Để giúp quản trị viên và những người dùng khác biết <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>bạn là ai<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, đừng quên <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot;&gt;"/>thiết lập trang hồ sơ của bạn<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> bằng cách bổ sung <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ảnh đại diện<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> và <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>mô tả<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="3030338154442300172" datatype="html">
@@ -6429,7 +6429,7 @@
       </trans-unit>
       <trans-unit id="442017645619017020" datatype="html">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server, but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What follows applies only if you want to keep using the P2P mode of PeerTube.</source>
-        <target state="translated">PeerTube mặc định sử dụng giao thức BitTorrent chia sẻ băng thông giữa các thành viên, nhằm giảm thiểu áp lực lên server. Nhưng chúng tôi để bạn tự do chuyển sang kiểu truyền tải video trực tiếp từ server. Những điều sau đây chỉ áp dụng nếu bạn sử dụng chế độ P2P của PeerTube.</target>
+        <target state="translated">PeerTube mặc định sử dụng giao thức BitTorrent chia sẻ băng thông giữa các người dùng, nhằm giảm thiểu áp lực lên server. Nhưng chúng tôi cho phép bạn tự do chuyển sang kiểu truyền video trực tiếp từ server. Những điều sau đây chỉ áp dụng nếu bạn sử dụng chế độ P2P của PeerTube.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="6314880288843792309" datatype="html">
@@ -7961,7 +7961,7 @@
       </trans-unit>
       <trans-unit id="4086135983283545219" datatype="html">
         <source>If you remove these users, you will not be able to create others with the same username!</source>
-        <target state="translated">Nếu bạn xóa những thành viên đó, tên thành viên sẽ không còn sử dụng được nữa!</target>
+        <target state="translated">Nếu bạn xóa những người dùng đó, tên người dùng sẽ không còn sử dụng được nữa!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">208</context></context-group>
       </trans-unit>
       <trans-unit id="7166936623843420016" datatype="html">
@@ -8152,7 +8152,7 @@
       </trans-unit>
       <trans-unit id="3268838889659873892" datatype="html">
         <source>A new user registered on your instance</source>
-        <target state="translated">Một thành viên vừa đăng ký máy chủ của bạn</target>
+        <target state="translated">Một người dùng vừa đăng ký máy chủ của bạn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="7373104725413001009" datatype="html">
@@ -9331,12 +9331,12 @@
       </trans-unit>
       <trans-unit id="5614457087254770778" datatype="html">
         <source>Max user lives is required.</source>
-        <target state="translated">Yêu cầu số lượng thành viên livestream tối đa.</target>
+        <target state="translated">Yêu cầu số lượng người dùng livestream tối đa.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="2779726697233311712" datatype="html">
         <source>Max user lives should be greater or equal to -1.</source>
-        <target state="translated">Số lượng thành viên livestream phải lớn hơn hoặc bằng -1.</target>
+        <target state="translated">Số lượng người dùng livestream phải lớn hơn hoặc bằng -1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="351272950792130803" datatype="html">
@@ -9542,7 +9542,7 @@
       </trans-unit>
       <trans-unit id="4796798537475457493" datatype="html">
         <source>User role is required.</source>
-        <target state="translated">Yêu cầu chức vụ thành viên.</target>
+        <target state="translated">Yêu cầu chức vụ người dùng.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="2761226139624435788">
@@ -9674,7 +9674,7 @@
       </trans-unit>
       <trans-unit id="7365924714339585574" datatype="html">
         <source>The username is required.</source>
-        <target state="translated">Yêu cầu tên thành viên.</target>
+        <target state="translated">Yêu cầu tên người dùng.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="3954099618513992825" datatype="html">
@@ -10462,7 +10462,7 @@
       </trans-unit>
       <trans-unit id="3896582359861826661" datatype="html">
         <source>User <x id="PH"/> email set as verified</source>
-        <target state="translated">Email thành viên <x id="PH"/> đã được xác thực</target>
+        <target state="translated">Email người dùng <x id="PH"/> đã được xác thực</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="8150022485860412528">
@@ -10481,7 +10481,7 @@
       </trans-unit>
       <trans-unit id="2558977494773636050" datatype="html">
         <source>Account <x id="PH"/> muted by the instance.</source>
-        <target state="translated">Thành viên <x id="PH"/> đã bị ẩn bởi máy chủ.</target>
+        <target state="translated">Người dùng <x id="PH"/> đã bị ẩn bởi máy chủ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">434</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">190</context></context-group>
       </trans-unit>
@@ -10527,7 +10527,7 @@
       </trans-unit>
       <trans-unit id="6315346579373254461" datatype="html">
         <source>Delete account comments</source>
-        <target state="translated">Xóa bình luận của thành viên</target>
+        <target state="translated">Xóa bình luận của người dùng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">244</context></context-group>
       </trans-unit>
       <trans-unit id="8559170154828316298" datatype="html">
@@ -10562,7 +10562,7 @@
       </trans-unit>
       <trans-unit id="3508163549683020253" datatype="html">
         <source>Allow the user to login and create videos/comments again</source>
-        <target state="translated">Cho phép thành viên đăng nhập và đăng video/bình luận trở lại</target>
+        <target state="translated">Cho phép người dùng đăng nhập và đăng video/bình luận trở lại</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">357</context></context-group>
       </trans-unit>
       <trans-unit id="1888272455383898478">
@@ -10625,12 +10625,12 @@
       </trans-unit>
       <trans-unit id="7675070596643104983" datatype="html">
         <source>Show this user's content to the users of this instance again.</source>
-        <target state="translated">Hiện lại nội dung của người này đến thành viên máy chủ.</target>
+        <target state="translated">Hiện lại nội dung của người này trên máy chủ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">380</context></context-group>
       </trans-unit>
       <trans-unit id="525915681688649453" datatype="html">
         <source>Hide any content from that instance from you, your instance and its users.</source>
-        <target state="translated">Ẩn bất cứ nội dung nào từ máy chủ đó đến máy chủ của bạn và thành viên.</target>
+        <target state="translated">Ẩn mọi nội dung từ máy chủ đó đến máy chủ của bạn và người dùng.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">392</context></context-group>
       </trans-unit>
       <trans-unit id="5325628963747139770">
@@ -10640,7 +10640,7 @@
       </trans-unit>
       <trans-unit id="758471033841077314" datatype="html">
         <source>Show back content from that instance for you, your instance and its users.</source>
-        <target state="translated">Hiện lại nội dung từ máy chủ đó đến bạn, máy chủ của bạn và thành viên.</target>
+        <target state="translated">Hiện lại nội dung từ máy chủ đó đến máy chủ của bạn và người dùng.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">398</context></context-group>
       </trans-unit>
       <trans-unit id="3785095284194008197" datatype="html">
