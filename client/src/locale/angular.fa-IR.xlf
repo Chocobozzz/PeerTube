@@ -5847,12 +5847,12 @@
       </trans-unit>
       <trans-unit id="9131836378905533756" datatype="html">
         <source>Created by <x id="INTERPOLATION"/></source>
-        <target state="translated">ایجاد شده توسط &lt;x id = "interpolation" equiv-text = "{{videochannel.ownerby}} /&gt;</target>
+        <target state="translated">ایجاد شده توسط <x id="INTERPOLATION"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="228548407872312756" datatype="html">
         <source>Owner account page</source>
-        <target state="translated">صفحه حساب مالک</target>
+        <target state="translated">صفحه مالک حساب</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="4781078006040259916" datatype="html">
@@ -5862,7 +5862,7 @@
       </trans-unit>
       <trans-unit id="989169929300254768" datatype="html">
         <source>Delete from history</source>
-        <target state="translated">حذف از تاریخ</target>
+        <target state="translated">حذف از تاریخچه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">36</context>
@@ -5882,7 +5882,7 @@
       </trans-unit>
       <trans-unit id="5511928240200239994" datatype="html">
         <source>Some of your channels are not fully set up. Make them welcoming and explicit about what you publish by adding a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>banner<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</source>
-        <target state="translated">برخی از کانال های شما به طور کامل تنظیم نشده اند. آنها را با استفاده از اضافه کردن &lt;x id = "START_TAG_STRONG" STARTPE = "x-strong" equiv-text = "&amp; lt؛ قوی و gt؛" /&gt; بنر &lt;x id = "CLOSE_TAG_STRONG" cuty_tag_strong " -strong "equiv-text =" &amp; lt؛ / strong &amp; gt؛ "/&gt;، &lt;x id =" sTART_TAG_STRONG "ctype =" x-strong "Equiv-text =" &amp; lt؛ قوی و gt؛ "/&gt; avatar &lt;x id =" CLOSE_TAG_STRONG "ctype =" x-strong "equiv-text =" &amp; lt؛ / strong &amp; gt؛ "/&gt; و &lt;x id =" start_tag_strong "ctype =" x-strong "Equiv-text =" &amp; lt؛ قوی و gt؛ "/&gt; شرح &lt;x id = "CLOSE_TAG_STRONG" ctype = "x-strong" equiv-text = "&amp; lt؛ / strong &amp; gt؛" /&gt;.</target>
+        <target state="translated">بعضی از کانالهای شما به صورت کامل نصب و تنظیم نشده اند . آنها را با اضافه کردن این موارد خوشایندتر و حرفه ای تر کنید  <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>بنر<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, یک<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>آواتار<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> و یک <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>توضیحات<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/channels-setup-message.component.html</context>
           <context context-type="linenumber">5</context>
@@ -5890,7 +5890,7 @@
       </trans-unit>
       <trans-unit id="5339945526545410198" datatype="html">
         <source>Set up my channels</source>
-        <target state="translated">کانال های من را تنظیم کنید</target>
+        <target state="translated">کانال های من را تنظیم کن</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/channels-setup-message.component.html</context>
           <context context-type="linenumber">6</context>
@@ -5898,22 +5898,22 @@
       </trans-unit>
       <trans-unit id="2726946550255780479" datatype="html">
         <source><x id="START_TAG_MY_GLOBAL_ICON"/><x id="CLOSE_TAG_MY_GLOBAL_ICON"/> Notification preferences </source>
-        <target state="translated">&lt;x id = "start_tag_my-global-icon" ctype = "x-my-global-icon" equiv-text = "&amp; lt؛ my-global-icon &amp; gt؛" /&gt; &lt;x id = "close_tag_my-global-icon" ctype " = "x-my-global-icon" equiv-text = "&amp; lt؛ / my-global-icon &amp; gt؛" /&gt; تنظیمات اطلاع رسانی</target>
+        <target state="translated"><x id="START_TAG_MY_GLOBAL_ICON"/><x id="CLOSE_TAG_MY_GLOBAL_ICON"/> تنظیمات اعلان </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="2317673285989169654" datatype="html">
         <source>Newest first</source>
-        <target state="translated">جدیدترین</target>
+        <target state="translated">جدیدترین ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="751740263472313326" datatype="html">
         <source>Unread first</source>
-        <target state="translated">ابتدا خوانده نشده</target>
+        <target state="translated">خوانده نشده ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="7679199047720825365" datatype="html">
         <source>All read</source>
-        <target state="translated">همه خواندن</target>
+        <target state="translated">همه خوانده شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="9167786874272926575" datatype="html">
@@ -5972,12 +5972,12 @@
       </trans-unit>
       <trans-unit id="2427149618141327033" datatype="html">
         <source>Browse videos on PeerTube to add them in your playlist.</source>
-        <target state="translated">مرور فیلم ها در Peertube برای اضافه کردن آنها را در لیست پخش خود را.</target>
+        <target state="translated">فیلم ها در Peertube را برای اضافه کردن آنها  در لیست پخش خود مرور کنید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="8901774330683812267" datatype="html">
         <source>See the <x id="START_LINK"/>documentation<x id="CLOSE_LINK"/> for more information. </source>
-        <target state="translated">&lt;x id = "START_LINK" CTYPE = "xa" equiv-text = "&amp; lt؛ a &amp; gt؛" /&gt; مستندات &lt;x id = "close_link" ctype = "xa" equiv-text = "&amp; lt؛ / a &amp; gt؛" /&gt; برای اطلاعات بیشتر.</target>
+        <target state="translated">نگاه کنید به  <x id="START_LINK"/>مستندات<x id="CLOSE_LINK"/> برای کسب اطلاعات بیشتر. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="5904811038805050477" datatype="html">
@@ -5987,7 +5987,7 @@
       </trans-unit>
       <trans-unit id="3461985498881453026" datatype="html">
         <source>If you need help to use PeerTube, you can have a look at the <x id="START_LINK"/>documentation<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">اگر شما نیاز به کمک به استفاده از Peertube دارید، می توانید نگاهی به &lt;x id = "START_LINK" CTYPE = "xa" equiv-text = "&amp; lt؛ a &amp; gt؛" /&gt; مستندات &lt;x id = "close_link" ctype = " xa "equiv-text =" &amp; lt؛ / a &amp; gt؛ "/&gt;.</target>
+        <target state="translated">اگر برای استفاده از PEERTUBE به کمک نیاز دارید ، می توانید نگاهی به این مستندات بیاندازید <x id="START_LINK"/>   "    " <x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="8844610145426272276" datatype="html">
