@@ -6388,47 +6388,47 @@
       </trans-unit>
       <trans-unit id="6886584917624458638" datatype="html">
         <source>Want to help to improve PeerTube? You can translate the web interface, give your feedback or directly contribute to the code!</source>
-        <target state="translated">آیا می خواهید به بهبود Peertube کمک کنید؟ شما می توانید رابط وب را ترجمه کنید، بازخورد خود را به شما ارائه دهید یا به طور مستقیم به کد کمک کنید!</target>
+        <target state="translated">آیا می خواهید به بهبود Peertube کمک کنید؟ شما می توانید رابط وب را ترجمه کنید، بازخورد خود را ارائه دهید یا به طور مستقیم به کدنویسی کمک کنید!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="185970110822844952" datatype="html">
         <source>P2P &amp; Privacy</source>
-        <target state="translated">P2P &amp; AMP؛ حریم خصدی</target>
+        <target state="translated">P2P &amp; حریم خصوصی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="442017645619017020" datatype="html">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server, but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What follows applies only if you want to keep using the P2P mode of PeerTube.</source>
-        <target state="translated">Peertube از پروتکل BitTorrent برای به اشتراک گذاشتن پهنای باند بین کاربران به طور پیش فرض برای کمک به پایین آوردن بار در سرور استفاده می کند، اما در نهایت شما را انتخاب می کند تا به طور منظم به طور منظم از سرور ویدیو تغییر کند. چه چیزی به شرح زیر اعمال می شود، فقط اگر می خواهید از حالت P2P Peertube استفاده کنید.</target>
+        <target state="translated">Peertube از پروتکل BitTorrent برای به اشتراک گذاشتن پهنای باند بین کاربران به طور پیش فرض برای کمک به پایین آوردن بار در سرور استفاده می کند، اما در نهایت شما انتخاب می کنید که آیا می خواهید به حالت عادی استریم کردن برگردید یا خیر. این حالت  فقط اگر خواستید از حالت P2P Peertube استفاده کنید امکانپذیر است .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="6314880288843792309" datatype="html">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
-        <target state="translated">تهدید اصلی به حریم خصوصی شما ناشی از BitTorrent در آدرس IP شما در Tracker BitTorrent به عنوان تا زمانی که شما دانلود یا تماشای ویدیو را ذخیره کنید، ذخیره می شود.</target>
+        <target state="translated">تهدید اصلی برای حریم خصوصی شما ناشی ازبکار گرفتن  BitTorrent ، ذخیره شدن  آدرس IP شما در Tracker BitTorrent  تا زمانی که شما دانلود یا تماشای ویدیو را انجام می دهید ، می باشد .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="6868048887248005916" datatype="html">
         <source>What are the consequences?</source>
-        <target state="translated">عواقب آن چیست؟</target>
+        <target state="translated">نتایج آن چیست؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="1411398404280870617" datatype="html">
         <source>In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video. In practice, this is much more difficult because:</source>
-        <target state="translated">در تئوری، کسی که مهارت های فنی کافی دارد می تواند یک اسکریپت ایجاد کند که کدام IP را دانلود می کند که کدام ویدیو را دانلود می کند. در عمل، این بسیار سخت تر است زیرا:</target>
+        <target state="translated">در تئوری، کسی که مهارت های فنی کافی دارد می تواند یک اسکریپت ایجاد کند که کدام IP  ویدیو را دانلود می کند. در عمل، این بسیار سخت  است زیرا:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="6870500454322981404" datatype="html">
         <source>An HTTP request has to be sent on each tracker for each video to spy. If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)</source>
-        <target state="translated">یک درخواست HTTP باید بر روی هر ردیاب برای هر ویدئو به جاسوسی ارسال شود. اگر ما می خواهیم تمام فیلم های Peertube را جاسوسی کنیم، ما باید به عنوان بسیاری از درخواست ها ارسال کنیم، زیرا فیلم ها وجود دارد (به طور بالقوه زیاد)</target>
+        <target state="translated">برای ردیابی کامل یک درخواست HTTP باید بر روی هر ردیاب برای هر ویدئو  ارسال شود. اگر ما  بخواهیم تمام فیلم های Peertube را ردیابی کنیم،  باید  درخواست های زیادی به تعداد کل فیلم ها ارسال کنیم. (به طور بالقوه زیاد)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="4042605201005159699" datatype="html">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
-        <target state="translated">برای هر درخواست ارسال شده، ردیاب همسالان تصادفی را با تعداد محدودی باز می گرداند. به عنوان مثال، اگر 1000 همتای در Swarm وجود داشته باشد و ردیاب تنها 20 همکار را برای هر درخواست ارسال می کند، باید حداقل 50 درخواست ارسال شده برای دانستن هر همکار در Swarm وجود داشته باشد</target>
+        <target state="translated">برای هر درخواست ارسال شده، ردیاب موارد مشابه تصادفی را با تعداد محدودی باز می گرداند. به عنوان مثال، اگر 1000 همتا در Swarm وجود داشته باشد و ردیاب تنها 20 مورد را برای هر درخواست ارسال می کند، باید حداقل 50 درخواست ارسال شده برای دانستن هر همکار در Swarm وجود داشته باشد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="8817667841110447397" datatype="html">
         <source>Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour</source>
-        <target state="translated">این درخواست ها باید به طور مرتب ارسال شوند تا بدانند چه کسی شروع به تماشای ویدیو می کند. این نوع رفتار را تشخیص می دهد</target>
+        <target state="translated">این درخواست ها باید به طور مرتب ارسال شوند تا بدانیم چه کسی شروع به تماشای ویدیو می کند. با این روش ، تشخیص آسان است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="4100327951517495019" datatype="html">
@@ -6458,7 +6458,7 @@
       </trans-unit>
       <trans-unit id="6213340208914097303" datatype="html">
         <source>The threats to privacy with YouTube are different from PeerTube's. In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you. Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).</source>
-        <target state="translated">تهدید به حفظ حریم خصوصی با یوتیوب از Peertube متفاوت است. در مورد یوتیوب، پلتفرم مقدار زیادی از اطلاعات شخصی شما را جمع آوری می کند (نه تنها IP شما) برای تجزیه و تحلیل آنها و پیگیری شما. علاوه بر این، یوتیوب متعلق به گوگل / الفبای، یک شرکت است که شما را در بسیاری از وب سایت ها (از طریق AdSense یا Google Analytics) ردیابی می کند.</target>
+        <target state="translated">تهدیدهای مرتبط با حفظ حریم خصوصی در یوتیوب از Peertube متفاوت است. در مورد یوتیوب، پلتفرم مقدار زیادی از اطلاعات شخصی شما را جمع آوری می کند (نه تنها IP شما) برای تجزیه و تحلیل آنها و پیگیری شما. علاوه بر این، یوتیوب متعلق به گوگل / الفابت که یک شرکت است و  شما را در بسیاری از وب سایت ها (از طریق AdSense یا Google Analytics) ردیابی می کند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
       <trans-unit id="2676074687792256808" datatype="html">
@@ -6468,7 +6468,7 @@
       </trans-unit>
       <trans-unit id="8804946818315976118" datatype="html">
         <source>Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more. PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser. Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.</source>
-        <target state="translated">آدرس IP شما عمومی است بنابراین هر بار که شما با یک وب سایت مشورت می کنید، تعدادی از بازیگران (علاوه بر وب سایت نهایی) دیدن IP خود را در سیاهههای مربوط به خود وجود دارد: ISP / روترها / ردیاب ها / CDN و بیشتر. Peertube در مورد آن شفاف است: ما به شما هشدار می دهیم که اگر میخواهید IP خصوصی خود را حفظ کنید، باید از یک مرورگر VPN یا Tor استفاده کنید. فکر کردن که از بین بردن P2P از Peertube به شما اجازه می دهد ناشناس به معنای آن نیست.</target>
+        <target state="translated">آدرس IP شما عمومی است بنابراین هر بار که شما به یک وب سایت مراجعه می کنید، تعدادی از بازیگران میانی (علاوه بر وب سایت نهایی) دیدن IP خود را در سیاهه های مربوط به خود وجود دارد: ISP / روترها / ردیاب ها / CDN و بیشتر. Peertube در مورد آن شفاف است: ما به شما هشدار می دهیم که اگر میخواهید IP خصوصی خود را حفظ کنید، باید از یک مرورگر VPN یا Tor استفاده کنید. فکر نکنید که از بین بردن P2P از Peertube به شما اجازه می دهد ناشناس بمانید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">138</context></context-group>
       </trans-unit>
       <trans-unit id="401806741040118292" datatype="html">
@@ -6478,12 +6478,12 @@
       </trans-unit>
       <trans-unit id="7404776804526394585" datatype="html">
         <source>PeerTube wants to deliver the best countermeasures possible, to give you more choice and render attacks less likely. Here is what we put in place so far:</source>
-        <target state="translated">Peertube می خواهد بهترین اقدامات متقابل را ارائه دهد تا شما را انتخاب کند و به احتمال زیاد به شما کمک کند. در اینجا چیزی است که ما تا کنون قرار داده ایم:</target>
+        <target state="translated">Peertube می خواهد بهترین اقدامات متقابل را ارائه دهد تا به شما  انتخاب های بیشتری بدهد و به احتمال زیاد به شما کمک کند. در اینجا چیزی است که ما تا کنون قرار داده ایم:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">147</context></context-group>
       </trans-unit>
       <trans-unit id="8635362984201852982" datatype="html">
         <source>We set a limit to the number of peers sent by the tracker</source>
-        <target state="translated">ما محدودیتی را برای تعداد همسالان ارسال شده توسط ردیاب تعیین می کنیم</target>
+        <target state="translated">ما محدودیتی را برای تعداد موارد مشابه ارسال شده توسط ردیاب تعیین می کنیم</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">153</context></context-group>
       </trans-unit>
       <trans-unit id="8903417899533541365" datatype="html">
@@ -6493,7 +6493,7 @@
       </trans-unit>
       <trans-unit id="2470460396724373169" datatype="html">
         <source>Allow instance admins to disable P2P from the administration interface</source>
-        <target state="translated">اجازه دادن به مدیران نمونه برای غیر فعال کردن P2P از رابط مدیریت</target>
+        <target state="translated">اجازه دادن به مدیران کانال برای غیر فعال کردن P2P از رابط مدیریت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">155</context></context-group>
       </trans-unit>
       <trans-unit id="5991790391344625653" datatype="html">
@@ -6503,12 +6503,12 @@
       </trans-unit>
       <trans-unit id="3857357852909495917" datatype="html">
         <source>This instance does not have instances followers.</source>
-        <target state="translated">این نمونه شامل موارد زیر نیست.</target>
+        <target state="translated">این کانال دنبال کننده ندارد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="8438752523256358076" datatype="html">
         <source>Show full list</source>
-        <target state="translated">نمایش کامل</target>
+        <target state="translated">نمایش لیست کامل</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">12</context>
@@ -6520,12 +6520,12 @@
       </trans-unit>
       <trans-unit id="7128556172318221342" datatype="html">
         <source>This instance is not following any other.</source>
-        <target state="translated">این نمونه به دنبال دیگری نیست.</target>
+        <target state="translated">این کانال به دنبال دیگری نیست.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
         <source>About this instance</source>
-        <target state="translated">درباره این مثال</target>
+        <target state="translated">درباره این کانال</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-routing.module.ts</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="8773846522957677259" datatype="html">
@@ -6535,7 +6535,7 @@
       </trans-unit>
       <trans-unit id="1812900507515561988" datatype="html">
         <source>About this instance's network</source>
-        <target state="translated">درباره این شبکه نمونه</target>
+        <target state="translated">درباره این شبکه این کانال</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-routing.module.ts</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="892073694820881630" datatype="html">
@@ -6545,7 +6545,7 @@
       </trans-unit>
       <trans-unit id="4807161697338135032" datatype="html">
         <source>Contact the administrator(s)<x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;modal-subtitle&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="translated">پاسخ با مدیر (ها) &lt;x id = "start_paragraph" ctype = "xp" equiv-text = "&amp; lt؛ p class = &amp; quot؛ modal-subtitle &amp; quot؛ &amp; gt؛" /&gt; &lt;x id = "interpolation" equiv-text = "{{standancename}}" /&gt; &lt;x id = "close_paragraph" ctype = "xp" equiv-text = "&amp; lt؛ / p &amp; gt؛" /&gt;</target>
+        <target state="translated">تماس با مدیر(ان)<x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;modal-subtitle&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6570,32 +6570,32 @@
       </trans-unit>
       <trans-unit id="220345070199640496" datatype="html">
         <source>PeerTube is creating your account...</source>
-        <target state="translated">Peertube ایجاد حساب کاربری شما ...</target>
+        <target state="translated">Peertube در حال ایجاد حساب کاربری شما ...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="397098723873502323" datatype="html">
         <source>Done</source>
-        <target state="translated">انجام شده</target>
+        <target state="translated">‌‌‌‌‌‌‌انجام شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="6294302495409052693" datatype="html">
         <source>Who are we?</source>
-        <target state="translated">ما که هستیم؟</target>
+        <target state="translated">ما چه کسی هستیم؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="1445137115016841401" datatype="html">
         <source>How long do we plan to maintain this instance?</source>
-        <target state="translated">چقدر طول می کشد تا این مثال را حفظ کنیم؟</target>
+        <target state="translated">ما برای چه مدتی جهت نگهداری این کانال برنامه ریزی کرده ایم ؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="2975856643479054118" datatype="html">
         <source>How will we finance this instance?</source>
-        <target state="translated">چگونه ما این مثال را تامین می کنیم؟</target>
+        <target state="translated">چگونه ما این کانال را تامین مالی می کنیم؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="2573967459337636542" datatype="html">
         <source>Administrators &amp; Sustainability</source>
-        <target state="translated">مدیران و آمپر؛ پایداری</target>
+        <target state="translated">مدیران &amp; پایداری</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">15</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
@@ -6606,17 +6606,17 @@
       </trans-unit>
       <trans-unit id="4665274432258993920" datatype="html">
         <source>A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.<x id="LINE_BREAK"/> For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology. </source>
-        <target state="translated">یک کانال یک نهاد است که در آن ویدیوهای خود را آپلود می کنید. ایجاد چندین از آنها به شما کمک می کند تا محتوای خود را سازماندهی کنید و جدا کنید. &lt;x id = "line_break" ctype = "lb" equiv-text = "&amp; lt؛ br / &amp; gt؛" /&gt; به عنوان مثال، شما می توانید یک کانال برای انتشار کنسرت های پیانو خود و کانال دیگری که در آن شما را منتشر کرده اید، تصمیم بگیرید فیلم ها در مورد محیط زیست صحبت می کنند.</target>
+        <target state="translated">یک کانال یک نهاد است که در آن ویدیوهای خود را آپلود می کنید. ایجاد چندین از آنها به شما کمک می کند تا محتوای خود را سازماندهی کنید و جدا کنید. <x id="LINE_BREAK"/> به عنوان مثال، شما می توانید یک کانال برای انتشار کنسرت های پیانو خود و کانال دیگری که در آن شما درباره اکولوژی بحث می کنید  منتشر کنید. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="2254156021453506528" datatype="html">
         <source>Other users can decide to subscribe any channel they want, to be notified when you publish a new video.</source>
-        <target state="translated">سایر کاربران می توانند تصمیم بگیرند که هر کانال که می خواهند به اشتراک بگذارند، زمانی که شما یک ویدیو جدید منتشر می کنید مطلع شوید.</target>
+        <target state="translated">سایر کاربران می توانند تصمیم بگیرند که در کانالی که می خواهند مشترک شوندو زمانی که شما یک ویدیو جدید منتشر می کنید مطلع شوند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="8583412279916132438" datatype="html">
         <source>Channel display name</source>
-        <target state="translated">نام صفحه نمایش کانال</target>
+        <target state="translated">نام کانال که نمایش داده می شود</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="6980413875907286634" datatype="html">
@@ -6639,7 +6639,7 @@
       </trans-unit>
       <trans-unit id="7981235640417633362" datatype="html">
         <source>The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="translated">نام کانال یک شناسه منحصر به فرد از کانال شما در این و تمام موارد دیگر است. این به عنوان یک آدرس ایمیل منحصر به فرد است، که باعث می شود دیگران برای دیگران ارتباط برقرار کنند.</target>
+        <target state="translated">نام کانال یک شناسه منحصر به فرد از کانال شما در این و تمام موارد دیگر است. این نام مانند یک آدرس ایمیل منحصر به فرد است، که باعث می شود دیگران با آن ارتباط برقرار کنند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="5203776997447520497" datatype="html">
@@ -6649,7 +6649,7 @@
       </trans-unit>
       <trans-unit id="7440807341905682986" datatype="html">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of this instance </source>
-        <target state="translated">من حداقل &lt;x id = "interpolation" equiv-text = "{{immayage}}" /&gt; سالها و موافقت با &lt;x id = "START_LINK" CTYPE = "xa" equiv-text = "&amp; lt؛ a class = &amp; quot؛ اصطلاحات-لنگر &amp; quot؛ (کلیک کنید) = &amp; quot؛ ontermsclick ($ event) &amp; quot؛ href = '#' &amp; gt؛ "/&gt; شرایط &lt;x id =" close_link "ctype =" xa "equiv-text =" &amp; lt ؛ / a &amp; gt؛ "/&gt; &lt;x id =" start_tag_ng_container "ctype =" x-ng_container "equiv-text =" &amp; lt؛ ng-container * ngif = &amp; quot؛ hascodeofconduct &amp; quot؛ &amp; gt؛ "/&gt; و به &lt;x id = "START_LINK_1" Equiv-text = "&amp; lt؛ a (کلیک کنید) = &amp; quot؛ oncodeofconductClick ($ event) &amp; quot؛ href = '#' &amp; gt؛" /&gt; کد رفتار &lt;x id = "close_link" ctype = "xa" equiv -Text = "&amp; lt؛ / a &amp; gt؛" /&gt; &lt;x id = "close_tag_ng_container" ctype = "x-ng_container" equiv-text = "&amp; lt؛ / ng-container &amp; gt؛" /&gt; این مثال</target>
+        <target state="translated">اینجانب حداقل  <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/>ساله بوده و موافقت خود را با موارد متعاقب اعلامی دارم  <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>قوانین <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> و همچنین <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>شرایط استفاده<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> این سایت </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-terms.component.html</context>
           <context context-type="linenumber">5,10</context>
@@ -6657,12 +6657,12 @@
       </trans-unit>
       <trans-unit id="7326471570669373149" datatype="html">
         <source>The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="translated">نام کاربری یک شناسه منحصر به فرد از حساب شما در این و تمام موارد دیگر است. این به عنوان یک آدرس ایمیل منحصر به فرد است، که باعث می شود دیگران برای دیگران ارتباط برقرار کنند.</target>
+        <target state="translated">نام کاربری یک شناسه منحصر به فرد از حساب شما در این کانال و تمام موارد دیگر سایت است. این شناسه مشابه یک آدرس ایمیل منحصر به فرد است، که باعث می شود دیگران بتوانند از آن طریق ارتباط برقرار کنند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="2770947245861951784" datatype="html">
         <source>Signup is not enabled on this instance.</source>
-        <target state="translated">ثبت نام در این مورد فعال نیست.</target>
+        <target state="translated">ثبت نام در این مورد سایت نیست.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">4</context>
@@ -6670,7 +6670,7 @@
       </trans-unit>
       <trans-unit id="198278273748445199" datatype="html">
         <source>Video uploads are disabled on this instance, hence your account won't be able to upload videos.</source>
-        <target state="translated">آپلود ویدئو بر روی این مثال غیرفعال می شود، از این رو حساب شما قادر نخواهد بود فیلم ها را آپلود کند.</target>
+        <target state="translated">آپلود ویدئو بر روی این سایت غیرفعال می شود، از این رو حساب شما قادر نخواهد بود فیلم ها را آپلود کند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="3301086086650990787" datatype="html">
@@ -6698,7 +6698,7 @@
       </trans-unit>
       <trans-unit id="819067926858619041" datatype="html">
         <source>Account videos</source>
-        <target state="translated">فیلم های حسابداری</target>
+        <target state="translated">فیلم های حساب</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="4605517634011438234" datatype="html">
@@ -6716,7 +6716,7 @@
       </trans-unit>
       <trans-unit id="807777065817324789" datatype="html">
         <source>Display all videos (private, unlisted or not yet published)</source>
-        <target state="translated">نمایش تمام فیلم ها (خصوصی، غیرقانونی یا هنوز منتشر نشده است)</target>
+        <target state="translated">نمایش تمام فیلم ها (شامل خصوصی یا هنوز منتشر نشده)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="784681343382270982" datatype="html">
@@ -6776,7 +6776,7 @@
       </trans-unit>
       <trans-unit id="4856575356061361269" datatype="html">
         <source><x id="PH"/> direct account followers </source>
-        <target state="translated"><x id="PH"/> پیروان حساب مستقیم </target>
+        <target state="translated"><x id="PH"/> دنبال کنندگان  مستقیم حساب </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">153</context></context-group>
       </trans-unit>
       <trans-unit id="6250999352462648289" datatype="html">
@@ -6794,7 +6794,7 @@
       </trans-unit>
       <trans-unit id="1504521795586863905" datatype="html">
         <source>VIDEOS</source>
-        <target state="translated">فیلم های</target>
+        <target state="translated">فیلم ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">83</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">245</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">81</context></context-group>
@@ -6812,7 +6812,7 @@
       </trans-unit>
       <trans-unit id="4097331874769079975" datatype="html">
         <source><x id="PH"/> subscribers</source>
-        <target state="translated"><x id="PH"/> مشترکین</target>
+        <target state="translated"><x id="PH"/> مشترک</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
       <trans-unit id="1035838766454786107" datatype="html">
@@ -6822,7 +6822,7 @@
       </trans-unit>
       <trans-unit id="8011855989482474311" datatype="html">
         <source>A &lt;code&gt;.mp4&lt;/code&gt; that keeps the original audio track, with no video</source>
-        <target state="translated">A &amp; Lt؛ Code &amp; GT؛ .MP4 &amp; Lt؛ / Code &amp; GT؛ که آهنگ صوتی اصلی را نگه می دارد، بدون هیچ ویدئویی</target>
+        <target state="translated">یک &lt;کد&gt;.mp4&lt;/کد&gt; که صرفا صدا را بدون تصویر نگه می دارد .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="7756250490108954499" datatype="html">
@@ -6875,7 +6875,7 @@
       </trans-unit>
       <trans-unit id="3642770981085338761" datatype="html">
         <source>Followers of your instance</source>
-        <target state="translated">پیروان نمونه شما</target>
+        <target state="translated">کاربران سایت شما</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6929,7 +6929,7 @@
       </trans-unit>
       <trans-unit id="2384409178337534505" datatype="html">
         <source>Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully.</source>
-        <target state="translated">فرآیند آپلود فیلم ها به طوری که آنها در یک فرم ثابت هستند که هر دستگاه می تواند بازی کند. اگر چه هزینه ای در منابع، این بخش مهمی از Peertube است، به طوری که دقت کنید.</target>
+        <target state="translated">فرآیند آپلود فیلم ها به طوری که آنها در یک فرم ثابت هستند که هر دستگاهی می تواندبا آن کار کند. با توجه به هزینه بر بودن منابع و تجهیزات ، می بایست در تنظیمات مربوطه دقت کرد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="1618463615802675111" datatype="html">
@@ -6939,12 +6939,12 @@
       </trans-unit>
       <trans-unit id="593234948551881507" datatype="html">
         <source>thread</source>
-        <target state="translated">نخ</target>
+        <target state="translated">موضوع</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="709846045064893539" datatype="html">
         <source>Updating instance configuration from the web interface is disabled by the system administrator.</source>
-        <target state="translated">به روز رسانی پیکربندی نمونه از رابط وب توسط مدیر سیستم غیر فعال شده است.</target>
+        <target state="translated">به روز رسانی پیکربندی سایت از رابط وب توسط مدیر سیستم غیر فعال شده است.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -6974,7 +6974,7 @@
       </trans-unit>
       <trans-unit id="6920964195632624609" datatype="html">
         <source>INSTANCE HOMEPAGE</source>
-        <target state="translated">صفحه اصلی نمونه</target>
+        <target state="translated">صفحه اصلی سایت</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-homepage.component.html</context>
           <context context-type="linenumber">7</context>
@@ -6982,7 +6982,7 @@
       </trans-unit>
       <trans-unit id="3203902538239082422" datatype="html">
         <source>You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</source>
-        <target state="translated">شما ثبت نام را فعال کرده اید: ما به طور خودکار "بلوک های جدید بلوک ها را به طور خودکار" کادر انتخاب بخش "فیلم ها" را فقط در زیر فعال کردیم.</target>
+        <target state="translated">شما ثبت نام را فعال کرده اید: ما به طور خودکار "بلاک کردن خودکار ویدئوهای جدید" در کادر زیر  بخش "فیلم ها"  فعال کردیم.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="6284468333579755406" datatype="html">
@@ -6992,7 +6992,7 @@
       </trans-unit>
       <trans-unit id="6549061957433635758" datatype="html">
         <source>Process domains</source>
-        <target state="translated">دامنه فرآیند</target>
+        <target state="translated">دامنه های فعالیت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/batch-domains-modal.component.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="1909009883731319373" datatype="html">
@@ -7026,7 +7026,7 @@
       </trans-unit>
       <trans-unit id="1469559036084108672" datatype="html">
         <source>Hosts entered contain duplicates.</source>
-        <target state="translated">میزبان وارد شده شامل تکراری است.</target>
+        <target state="translated">میزبان وارد شده شامل موارد تکراری است.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">94</context>
@@ -7034,7 +7034,7 @@
       </trans-unit>
       <trans-unit id="5991533283446904296" datatype="html">
         <source>Hosts or handles are invalid.</source>
-        <target state="translated">میزبان یا دستگیره نامعتبر است</target>
+        <target state="translated">میزبان  نامعتبر است</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">102</context>
@@ -7042,7 +7042,7 @@
       </trans-unit>
       <trans-unit id="6759198394434886237" datatype="html">
         <source>Hosts or handles contain duplicates.</source>
-        <target state="translated">میزبان یا دستگیره شامل تکراری است.</target>
+        <target state="translated">میزبان  شامل موارد تکراری است.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">103</context>
@@ -7060,7 +7060,7 @@
       </trans-unit>
       <trans-unit id="5504952199515017930" datatype="html">
         <source>None - no upload possible</source>
-        <target state="translated">هیچ کدام - بدون آپلود امکان پذیر نیست</target>
+        <target state="translated">هیچ کدام - هیچ آپلودی امکان پذیر نیست</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context><context context-type="linenumber">23</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
@@ -7148,12 +7148,12 @@
       </trans-unit>
       <trans-unit id="2520968456492632777" datatype="html">
         <source><x id="PH"/> accepted in instance followers </source>
-        <target state="translated"><x id="PH"/> پذیرفته شده به عنوان مثال پیروان </target>
+        <target state="translated"><x id="PH"/> به عنوان کاربر سایت پذیرفته شده است. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="450530533730658004" datatype="html">
         <source>Do you really want to reject this follower?</source>
-        <target state="translated">آیا واقعا میخواهید این پیرو را رد کنید؟</target>
+        <target state="translated">آیا واقعا میخواهید این کاربر را رد کنید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="7378878529334768232" datatype="html">
@@ -7163,12 +7163,12 @@
       </trans-unit>
       <trans-unit id="2040902819815401278" datatype="html">
         <source><x id="PH"/> rejected from instance followers </source>
-        <target state="translated"><x id="PH"/> از پیروان نمونه رد شد </target>
+        <target state="translated"><x id="PH"/> از کاربران سایت رد شد </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="3620117223790525725" datatype="html">
         <source>Do you really want to delete this follower?</source>
-        <target state="translated">آیا واقعا میخواهید این پیرو را حذف کنید؟</target>
+        <target state="translated">آیا واقعا میخواهید این دنبال کننده را حذف کنید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="7022070615528435141" datatype="html">
@@ -7202,7 +7202,7 @@
       </trans-unit>
       <trans-unit id="2452034338905853167" datatype="html">
         <source><x id="PH"/> removed from instance followers </source>
-        <target state="translated"><x id="PH"/> حذف از طرفداران نمونه </target>
+        <target state="translated"><x id="PH"/> حذف از دنبال کنندگان سایت </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="6018246591673612412" datatype="html">
@@ -7223,7 +7223,7 @@
       </trans-unit>
       <trans-unit id="3596798855644241001" datatype="html">
         <source>1 host (without "http://"), account handle or channel handle per line</source>
-        <target state="translated">1 میزبان (بدون "http: //")، دسته حساب یا دستگیره کانال در هر خط</target>
+        <target state="translated">1 میزبان (بدون "http: //")، دسته حساب یا عنوان کانال در هر خط</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">11</context>
@@ -7242,7 +7242,7 @@
       </trans-unit>
       <trans-unit id="3459358413436264734" datatype="html">
         <source>Your instance subscriptions</source>
-        <target state="translated">اشتراک های خود را</target>
+        <target state="translated">اشتراک های سایت شما</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -7255,7 +7255,7 @@
       </trans-unit>
       <trans-unit id="9160510009013134726" datatype="html">
         <source>Unfollow</source>
-        <target state="translated">پیروی کردن</target>
+        <target state="translated">دنبال کردن</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="3935234189109112926" datatype="html">
@@ -7273,12 +7273,12 @@
       </trans-unit>
       <trans-unit id="2593763089859685916" datatype="html">
         <source>enabled</source>
-        <target state="translated">فعال شدن</target>
+        <target state="translated">فعال شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="8444272719785117681" datatype="html">
         <source>disabled</source>
-        <target state="translated">معلول</target>
+        <target state="translated">غیر فعال شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="135214224090612796" datatype="html">
@@ -7298,22 +7298,22 @@
       </trans-unit>
       <trans-unit id="6537102123107780785" datatype="html">
         <source>Video redundancies removed!</source>
-        <target state="translated">فیلمبرداری های ویدئویی حذف شده است!</target>
+        <target state="translated">افزونگی های ویدئویی حذف شده است!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context><context context-type="linenumber">156</context></context-group>
       </trans-unit>
       <trans-unit id="8639315630141911544" datatype="html">
         <source>Account <x id="PH"/> unmuted by your instance.</source>
-        <target state="translated">حساب کاربری <x id="PH"/> توسط مثال خود را غیر فعال کنید.</target>
+        <target state="translated">حساب کاربری <x id="PH"/> در سایت خود  غیر فعال کنید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="3371601176452094961" datatype="html">
         <source>Instance <x id="PH"/> unmuted by your instance.</source>
-        <target state="translated">مثال <x id="PH"/> توسط مثال خود را غیر فعال کنید.</target>
+        <target state="translated">سایت <x id="PH"/> را توسط سایت خود  غیر فعال کنید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="3096398988891996621" datatype="html">
         <source>Instance <x id="PH"/> muted by your instance.</source>
-        <target state="translated">مثال <x id="PH"/> توسط نمونه شما خاموش است.</target>
+        <target state="translated">سایت <x id="PH"/> توسط سایت شما بی صدا شده است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="2393853062458645999" datatype="html">
