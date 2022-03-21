@@ -419,7 +419,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
       }
     }
 
-    return VideoChannelModel.count(query)
+    return VideoChannelModel.unscoped().count(query)
   }
 
   static async getStats () {
