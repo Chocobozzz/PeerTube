@@ -2078,7 +2078,7 @@ paths:
           in: query
           required: true
           description: |
-            Created session id to proceed with. If you didn't send chunks in the last 12 hours, it is
+            Created session id to proceed with. If you didn't send chunks in the last hour, it is
             not valid anymore and you need to initialize a new upload.
           schema:
             type: string
@@ -2101,9 +2101,6 @@ paths:
           required: true
           description: |
             Size of the chunk that the request is sending.
-
-            The chunk size __must be a multiple of 256 KB__, and unlike [Google Resumable](https://developers.google.com/youtube/v3/guides/using_resumable_upload_protocol)
-            doesn't mandate for chunks to have the same size throughout the upload sequence.
 
             Remember that larger chunks are more efficient. PeerTube's web client uses chunks varying from
             1048576 bytes (~1MB) and increases or reduces size depending on connection health.
