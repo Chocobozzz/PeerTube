@@ -7906,23 +7906,23 @@
       </trans-unit>
       <trans-unit id="3403978719736970622" datatype="html">
         <source>You cannot ban root.</source>
-        <target state="translated">شما نمیتوانید ریشه را ممنوع کنید</target>
+        <target state="translated">شما نمیتوانید root را ممنوع کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">173</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="4884272193574287483" datatype="html">
         <source>Do you really want to unban <x id="PH"/> users?</source>
-        <target state="translated">آیا واقعا میخواهید <x id="PH"/> کاربران را بخواهید؟</target>
+        <target state="translated">آیا واقعا میخواهیدکاربران  <x id="PH"/> را آزاد سازی کنید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">186</context></context-group>
       </trans-unit>
       <trans-unit id="8712248120167780385" datatype="html">
         <source><x id="PH"/> users unbanned. </source>
-        <target state="translated"><x id="PH"/> کاربران غیر فعال شده اند. </target>
+        <target state="translated">کاربران<x id="PH"/>  آزاد شده اند. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">192</context></context-group>
       </trans-unit>
       <trans-unit id="5325873477837320044" datatype="html">
         <source>You cannot delete root.</source>
-        <target state="translated">شما نمیتوانید ریشه را حذف کنید.</target>
+        <target state="translated">شما نمیتوانید root را حذف کنید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">203</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
@@ -7933,34 +7933,34 @@
       </trans-unit>
       <trans-unit id="7166936623843420016" datatype="html">
         <source><x id="PH"/> users deleted. </source>
-        <target state="translated"><x id="PH"/> کاربران حذف شده اند. </target>
+        <target state="translated">کاربران <x id="PH"/> حذف شده اند. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">215</context></context-group>
       </trans-unit>
       <trans-unit id="8360664597512051242" datatype="html">
         <source><x id="PH"/> users email set as verified. </source>
-        <target state="translated"><x id="PH"/> کاربران ایمیل به عنوان تایید شده تنظیم شده است. </target>
+        <target state="translated">کاربران <x id="PH"/>  به عنوان تایید شده از بابت ایمیل  تنظیم شده اند. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">227</context></context-group>
       </trans-unit>
       <trans-unit id="7390990800435887351" datatype="html">
         <source>Account <x id="PH"/> unmuted.</source>
-        <target state="translated">حساب کاربری <x id="PH"/> ناخوشایند.</target>
+        <target state="translated">حساب کاربری <x id="PH"/> غیر خاموش شود.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.ts</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">148</context></context-group>
       </trans-unit>
       <trans-unit id="7246356397085094208" datatype="html">
         <source>Instance <x id="PH"/> unmuted.</source>
-        <target state="translated">مثال <x id="PH"/> ناخوشایند.</target>
+        <target state="translated">سایت  <x id="PH"/> غیرخاموش شده است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">45</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">176</context></context-group>
       </trans-unit>
       <trans-unit id="5551551295632950210" datatype="html">
         <source>Videos history is enabled</source>
-        <target state="translated">فیلم تاریخچه فعال است</target>
+        <target state="translated">تاریخچه فیلم  فعال است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="9136227503281311926" datatype="html">
         <source>Videos history is disabled</source>
-        <target state="translated">فیلم تاریخچه غیر فعال است</target>
+        <target state="translated">تاریخچه فیلم  غیر فعال است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="8966726118414892732" datatype="html">
@@ -7986,12 +7986,12 @@
       </trans-unit>
       <trans-unit id="3656932706364053858" datatype="html">
         <source>Track watch history</source>
-        <target state="translated">پیگیری تاریخچه ساعت</target>
+        <target state="translated">پیگیری تاریخچه</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="778524577866863576" datatype="html">
         <source><x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;delete&quot; aria-hidden=&quot;true&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/> Clear all history </source>
-        <target state="translated">&lt;x id = "start_tag_my_global_icon" ctype = "x-my_global_icon" equiv-text = "&amp; lt؛ my-global-icon iConname = &amp; quot؛ aria-hidden = &amp; quot؛ true &amp; quot؛" /&gt; &lt;x id = " close_tag_my_global_icon "ctype =" x-my_global_icon "equiv-text =" &amp; lt؛ / my-global-icon &amp; gt؛ "/&gt; پاک کردن تمام تاریخ</target>
+        <target state="translated"><x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;delete&quot; aria-hidden=&quot;true&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/> پاک کردن تمام سوابق </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">17,19</context>
@@ -8004,7 +8004,7 @@
       </trans-unit>
       <trans-unit id="6012072687166259654" datatype="html">
         <source>Please check your emails to verify your new email.</source>
-        <target state="translated">لطفا ایمیل های خود را بررسی کنید تا ایمیل جدید خود را بررسی کنید.</target>
+        <target state="translated">لطفا ایمیل های خود را بررسی کنید تا ایمیل جدید خود را جهت اعتبارسنجی تایید کنید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="6585766371605707311" datatype="html">
@@ -8014,7 +8014,7 @@
       </trans-unit>
       <trans-unit id="8553059323353586765" datatype="html">
         <source>Your current email is <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. It is never shown to the public. </source>
-        <target state="translated">ایمیل فعلی شما &lt;x id = "START_TAG_SPAN" ctype = "x-span" equiv-text = "&amp; lt؛ span class = &amp; quot؛ ایمیل &amp; quot؛" /&gt; &lt;x id = "interpolation" equiv-text = "{ {user.email}} "/&gt; &lt;x id =" CLOSE_TAG_SPAN "ctype =" x-span "equiv-text =" &amp; lt؛ / span &amp; gt؛ "/&gt;. هرگز به مردم نشان داده نشده است.</target>
+        <target state="translated">ایمیل فعلی شما <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. این ایمیل هرگز به صورت عمومی نمایش داده نخواهد شد. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="853586874765134886" datatype="html">
@@ -8025,7 +8025,7 @@
       </trans-unit>
       <trans-unit id="6159571046971090595" datatype="html">
         <source>Password updated.</source>
-        <target state="translated">پسورد آپدیت شد.</target>
+        <target state="translated">رمز عبور بروزرسانی شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="6897292459203320054" datatype="html">
@@ -8041,7 +8041,7 @@
       </trans-unit>
       <trans-unit id="577064441120663273" datatype="html">
         <source>Are you sure you want to delete your account?</source>
-        <target state="translated">آیا مطمئن هستید که می خواهید اکانت خود را حذف کنید؟</target>
+        <target state="translated">آیا مطمئن هستید که می خواهید حساب خود را حذف کنید؟</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">22</context>
@@ -8049,7 +8049,7 @@
       </trans-unit>
       <trans-unit id="2740531699780274491" datatype="html">
         <source>This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</source>
-        <target state="translated">با این کار تمام داده‌های شما، از جمله کانال‌ها، ویدیوها، نظرات حذف می‌شود و نمی‌توانید کاربر دیگری در این نمونه با "<x id="PH" equiv-text="this.user.username"/>" ایجاد کنید. نام کاربری.</target>
+        <target state="translated">با این کار تمام داده‌های شما، از جمله کانال‌ها، ویدیوها، نظرات حذف می‌شود و نمی‌توانید کاربر دیگری در این سایت بانام کاربری  "<x id="PH" equiv-text="this.user.username"/>" ایجاد کنید.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -8057,7 +8057,7 @@
       </trans-unit>
       <trans-unit id="5422897685524094185" datatype="html">
         <source>Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="translated">محتوای ذخیره شده توسط سرورهای دیگر و سایر اشخاص ثالث ممکن است مدت زمان بیشتری حذف شود.</target>
+        <target state="translated">محتوای ذخیره شده توسط سرورهای دیگر و سایر اشخاص ثالث ممکن است در مدت زمان بیشتری حذف شود.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -8070,7 +8070,7 @@
       </trans-unit>
       <trans-unit id="3902597758945766483" datatype="html">
         <source>Your account is deleted.</source>
-        <target state="translated">حساب شما حذف می شود</target>
+        <target state="translated">حساب شما حذف شد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="4776289814033837037" datatype="html">
@@ -8081,7 +8081,7 @@
       </trans-unit>
       <trans-unit id="77907918814566205" datatype="html">
         <source>New video from your subscriptions</source>
-        <target state="translated">ویدیو جدید از اشتراک شما</target>
+        <target state="translated">ویدیو جدید از کانالهایی که شما در آن مشترک هستید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="4343589211916204486" datatype="html">
@@ -8096,7 +8096,7 @@
       </trans-unit>
       <trans-unit id="5618790697446401830" datatype="html">
         <source>An automatically blocked video is awaiting review</source>
-        <target state="translated">یک ویدیو به طور خودکار مسدود شده در انتظار بررسی است</target>
+        <target state="translated">یک ویدیو به طور خودکار مسدود شده و در انتظار بررسی است</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">35</context>
@@ -8104,47 +8104,47 @@
       </trans-unit>
       <trans-unit id="5671547068905553663" datatype="html">
         <source>One of your video is blocked/unblocked</source>
-        <target state="translated">یکی از ویدیوهای شما مسدود شده / unblocked</target>
+        <target state="translated">یکی از ویدیوهای شما مسدود شده / غیر مسدود شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="1158912204255103651" datatype="html">
         <source>Video published (after transcoding/scheduled update)</source>
-        <target state="translated">ویدئو منتشر شده (پس از transcoding / برنامه ریزی شده به روز رسانی)</target>
+        <target state="translated">ویدئو منتشر شد (پس از transcoding / به روز رسانی برنامه ریزی شده )</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3809414664640924954" datatype="html">
         <source>Video import finished</source>
-        <target state="translated">واردات ویدئو به پایان رسید</target>
+        <target state="translated">واردکردن ویدئو به پایان رسید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="3268838889659873892" datatype="html">
         <source>A new user registered on your instance</source>
-        <target state="translated">یک کاربر جدید ثبت شده در مورد شما</target>
+        <target state="translated">یک کاربر جدید  در سایت شماثبت نام کرد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="7373104725413001009" datatype="html">
         <source>You or your channel(s) has a new follower</source>
-        <target state="translated">شما یا کانال (ها) شما یک پیرو جدید دارد</target>
+        <target state="translated">کانال (ها) ی شما یک دنبال کننده جدید دارد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="5315689532659759332" datatype="html">
         <source>Someone mentioned you in video comments</source>
-        <target state="translated">کسی به شما در نظرات ویدئو اشاره کرد</target>
+        <target state="translated">فردی از شما  در نظرات ویدئو نام برد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="2018794201569157817" datatype="html">
         <source>Your instance has a new follower</source>
-        <target state="translated">نمونه شما یک پیرو جدید دارد</target>
+        <target state="translated">سایت شما یک دنبال کننده جدید دارد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="773085434165307906" datatype="html">
         <source>Your instance automatically followed another instance</source>
-        <target state="translated">مثال شما به طور خودکار نمونه دیگری را دنبال کرد</target>
+        <target state="translated">سایت شما به طور خودکار سایت دیگری را دنبال کرد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="900099988467638766" datatype="html">
         <source>An abuse report received a new message</source>
-        <target state="translated">گزارش سوء استفاده یک پیام جدید دریافت کرد</target>
+        <target state="translated">گزارشات سوء استفاده ، یک پیام جدید دریافت کرد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="2326816287669585542" datatype="html">
@@ -8162,7 +8162,7 @@
       </trans-unit>
       <trans-unit id="2560339336098442670" datatype="html">
         <source>One of your plugin/theme has a new available version</source>
-        <target state="translated">یکی از پلاگین / تم شما یک نسخه جدید موجود دارد</target>
+        <target state="translated">یکی از پلاگین / تم شما یک نسخه جدید  دارد</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -8186,7 +8186,7 @@
       </trans-unit>
       <trans-unit id="5095562193296630034" datatype="html">
         <source>Preferences saved</source>
-        <target state="translated">ترجیحات ذخیره شده</target>
+        <target state="translated">تنظیمات ذخیره شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="4967231969832964676" datatype="html">
@@ -8196,7 +8196,7 @@
       </trans-unit>
       <trans-unit id="6721822899525405039" datatype="html">
         <source>People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </source>
-        <target state="translated">مردم می توانند با استفاده از @ &lt;x id = "interpolation" equiv-text = "با استفاده از {{user.user id =" interpolation _1 "equiv-text =" me}} @ {{{{{{{{{{{{{{{{{</target>
+        <target state="translated">دیگران می توانند شما را با استفاده از  @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> پیدا کنند . </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -8210,7 +8210,7 @@
       </trans-unit>
       <trans-unit id="8920809083620698740" datatype="html">
         <source>avatar</source>
-        <target state="translated">نماد آواتار</target>
+        <target state="translated">آواتار</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-update.component.ts</context><context context-type="linenumber">119</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
@@ -8227,7 +8227,7 @@
       </trans-unit>
       <trans-unit id="3761504852202418603" datatype="html">
         <source>Too many languages are enabled. Please enable them all or stay below 20 enabled languages.</source>
-        <target state="translated">بیش از حد بسیاری از زبان ها فعال هستند لطفا همه آنها را فعال کنید یا زیر 20 زبان فعال باقی بمانید.</target>
+        <target state="translated">تعداد زبان های فعال بسیار زیاد است . لطفا همه آنها را فعال کنید یا زیر 20 زبان فعال باقی بگذارید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="3960396487495291449" datatype="html">
@@ -8237,7 +8237,7 @@
       </trans-unit>
       <trans-unit id="3326446048041727269" datatype="html">
         <source>Display/Video settings updated.</source>
-        <target state="translated">تنظیمات نمایش / ویدئو به روز شده است.</target>
+        <target state="translated">تنظیمات صفحه نمایش / ویدئو به روز شده است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
       <trans-unit id="1137937154872046253" datatype="html">
@@ -8247,7 +8247,7 @@
       </trans-unit>
       <trans-unit id="8723777130353305761" datatype="html">
         <source>This name already exists on this instance.</source>
-        <target state="translated">این نام در این مورد وجود دارد.</target>
+        <target state="translated">این نام در این سایت وجود دارد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-create.component.ts</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="7589345916094713536" datatype="html">
@@ -8277,12 +8277,12 @@
       </trans-unit>
       <trans-unit id="6450826648284332649" datatype="html">
         <source>Views for the day</source>
-        <target state="translated">نمایش برای روز</target>
+        <target state="translated">بازدیدهای روزانه</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="7440637814928143808" datatype="html">
         <source>My followers</source>
-        <target state="translated">پیروان من</target>
+        <target state="translated">دنبال کنندگان من</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">4</context>
@@ -8294,7 +8294,7 @@
       </trans-unit>
       <trans-unit id="2521678336272309407" datatype="html">
         <source>No follower found.</source>
-        <target state="translated">هیچ دنباله ای یافت نشد</target>
+        <target state="translated">هیچ دنبال کننده ای یافت نشد</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">13</context>
@@ -8302,7 +8302,7 @@
       </trans-unit>
       <trans-unit id="5294742063044966238" datatype="html">
         <source>Follower page</source>
-        <target state="translated">صفحه پیرو</target>
+        <target state="translated">صفحه دنبال کنندگان</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">20</context>
@@ -8318,7 +8318,7 @@
       </trans-unit>
       <trans-unit id="7940720844854710428" datatype="html">
         <source>Is following your channel <x id="INTERPOLATION" equiv-text="{{ follow.following.name }}"/></source>
-        <target state="translated">کانال شما &lt;x id = "interpolation" equiv-text = "{{follow.following.name}} /&gt; دنبال می شود</target>
+        <target state="translated">کانالهای شما را دنبال  <x id="INTERPOLATION" equiv-text="{{ follow.following.name }}"/>می کند</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">27</context>
@@ -8402,7 +8402,7 @@
       </trans-unit>
       <trans-unit id="5851560788527570644" datatype="html">
         <source>Notifications</source>
-        <target state="translated">اطلاعیه</target>
+        <target state="translated">اطلاعیه ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">1</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">108</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">55</context></context-group>
@@ -8464,7 +8464,7 @@
       </trans-unit>
       <trans-unit id="2027805873922338635" datatype="html">
         <source>Do you really want to delete <x id="PH"/>? </source>
-        <target state="translated">آیا واقعا میخواهید &lt;x id = "pH" را حذف کنید /&gt;؟</target>
+        <target state="translated">آیا واقعا می خواهید  <x id="PH"/>را حذف کنید? </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">126</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context><context context-type="linenumber">34</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">177</context></context-group>
@@ -8527,7 +8527,7 @@
       </trans-unit>
       <trans-unit id="1991904494976135035" datatype="html">
         <source>My abuse reports</source>
-        <target state="translated">سوء استفاده من گزارش می دهد</target>
+        <target state="translated">"گزارشات سوء استفاده" من ، گزارش می دهد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">117</context></context-group>
       </trans-unit>
       <trans-unit id="5752861278140673787" datatype="html">
@@ -8549,7 +8549,7 @@
       </trans-unit>
       <trans-unit id="8936704404804793618" datatype="html">
         <source>Videos</source>
-        <target state="translated">فیلم های</target>
+        <target state="translated">فیلم ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-videos/account-videos.component.ts</context><context context-type="linenumber">17</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">49</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">3</context></context-group>
@@ -8578,17 +8578,17 @@
       </trans-unit>
       <trans-unit id="4243591013849340688" datatype="html">
         <source>Exit maximized editor</source>
-        <target state="translated">خروج از ویرایشگر حداکثر</target>
+        <target state="translated">خروج از حالت حداکثر ویرایشگر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="6537885755702623401" datatype="html">
         <source>Now please check your emails to verify your account and complete signup.</source>
-        <target state="translated">در حال حاضر لطفا ایمیل های خود را بررسی کنید تا حساب کاربری خود را تأیید کنید و ثبت نام کامل کنید.</target>
+        <target state="translated">در حال حاضر لطفا ایمیل های خود را بررسی کنید تا حساب کاربری  را تأیید  و ثبت نام را کامل کنید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
       <trans-unit id="2847376451647729886" datatype="html">
         <source>You are now logged in as <x id="PH"/>!</source>
-        <target state="translated">شما در حال حاضر به عنوان <x id="PH"/> وارد سیستم شوید!</target>
+        <target state="translated">شما در حال حاضر به عنوان <x id="PH"/> وارد سیستم شدید!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="2687679787442328897" datatype="html">
@@ -8663,7 +8663,7 @@
       </trans-unit>
       <trans-unit id="5030063045826839645" datatype="html">
         <source>Concatenate a file at the beginning of the video.</source>
-        <target state="translated">یک فایل را در ابتدای ویدیو به هم بچسبانید.</target>
+        <target state="translated">یک فایل را در ابتدای ویدیو  بچسبانید.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">26</context>
@@ -8687,7 +8687,7 @@
       </trans-unit>
       <trans-unit id="2832051749922509643" datatype="html">
         <source>Concatenate a file at the end of the video.</source>
-        <target state="translated">یک فایل را در انتهای ویدیو به هم بچسبانید.</target>
+        <target state="translated">یک فایل را در انتهای ویدیو  بچسبانید.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">40</context>
@@ -8759,7 +8759,7 @@
       </trans-unit>
       <trans-unit id="3858880927114551513" datatype="html">
         <source>The current video will be overwritten by this edited video and &lt;strong&gt;you won't be able to recover it&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</source>
-        <target state="translated">ویدیوی فعلی توسط این ویدیوی ویرایش شده بازنویسی می‌شود و &lt;strong&gt;نمی‌توانید آن را بازیابی کنید&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</target>
+        <target state="translated">ویدئوی فعلی با ویدئوی ویرایش شده جایگزین خواهد شد &lt;strong&gt;و شما قادر به بازیابی آن نخواهید بود .&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -8767,7 +8767,7 @@
       </trans-unit>
       <trans-unit id="4876327655498234453" datatype="html">
         <source>As a reminder, the following tasks will be executed: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</source>
-        <target state="translated">به عنوان یادآوری، وظایف زیر اجرا خواهند شد: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
+        <target state="translated">برای یادآوری :وظایف روبرو انجام خواهد شد : &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -8785,12 +8785,12 @@
       </trans-unit>
       <trans-unit id="5409372033656550095" datatype="html">
         <source>Go to the discover videos page</source>
-        <target state="translated">به صفحه کشف فیلم بروید</target>
+        <target state="translated">به صفحه جستجوی فیلم بروید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">284</context></context-group>
       </trans-unit>
       <trans-unit id="4278050445961255445" datatype="html">
         <source>Go to the trending videos page</source>
-        <target state="translated">به صفحه فیلم های Trending بروید</target>
+        <target state="translated">به صفحه فیلم های داغ ( Trending) بروید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">289</context></context-group>
       </trans-unit>
       <trans-unit id="3242234958443825475" datatype="html">
