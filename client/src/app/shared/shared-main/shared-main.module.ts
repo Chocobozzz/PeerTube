@@ -21,6 +21,7 @@ import { AccountService } from './account'
 import {
   AutofocusDirective,
   BytesPipe,
+  DeferLoadingDirective,
   DurationFormatterPipe,
   FromNowPipe,
   InfiniteScrollerDirective,
@@ -80,6 +81,7 @@ import { VideoChannelService } from './video-channel'
     BytesPipe,
     DurationFormatterPipe,
     AutofocusDirective,
+    DeferLoadingDirective,
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
@@ -139,6 +141,7 @@ import { VideoChannelService } from './video-channel'
     NumberFormatterPipe,
     DurationFormatterPipe,
     AutofocusDirective,
+    DeferLoadingDirective,
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
