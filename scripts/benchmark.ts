@@ -201,12 +201,12 @@ function runBenchmark (options: {
   headers?: { [ id: string ]: string }
   expecter: Function
 }) {
-  const { method, path, body, expecter, headers } = options
+  const { method = 'GET', path, body, expecter, headers } = options
 
   return new Promise((res, rej) => {
     autocannon({
       url: server.url + path,
-      method,
+      method: method,
       body,
       connections: 20,
       headers,
