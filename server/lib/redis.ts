@@ -1,4 +1,4 @@
-import { createClient, RedisClientOptions, RedisModules } from 'redis'
+import { createClient, RedisClientOptions, RedisModules, RedisScripts } from 'redis'
 import { exists } from '@server/helpers/custom-validators/misc'
 import { sha256 } from '@shared/extra-utils'
 import { logger } from '../helpers/logger'
@@ -18,7 +18,7 @@ import {
 
 // Only used for typings
 // TODO: remove when https://github.com/microsoft/TypeScript/issues/37181 is fixed
-const redisClientWrapperForType = () => createClient<{}>()
+const redisClientWrapperForType = () => createClient<{}, RedisScripts>()
 
 class Redis {
 

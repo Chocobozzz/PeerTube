@@ -1,3 +1,4 @@
+import { FindOptions } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { isAbuseMessageValid } from '@server/helpers/custom-validators/abuses'
 import { MAbuseMessage, MAbuseMessageFormattable } from '@server/types/models'
@@ -6,7 +7,6 @@ import { AttributesOnly } from '@shared/typescript-utils'
 import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account'
 import { getSort, throwIfNotValid } from '../utils'
 import { AbuseModel } from './abuse'
-import { FindOptions } from 'sequelize/dist'
 
 @Table({
   tableName: 'abuseMessage',
