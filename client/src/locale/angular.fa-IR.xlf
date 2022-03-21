@@ -8805,7 +8805,7 @@
       </trans-unit>
       <trans-unit id="8009065619559214982" datatype="html">
         <source>Go to the videos upload page</source>
-        <target state="translated">برو به صفحه آپلود فیلم</target>
+        <target state="translated">به صفحه آپلود فیلم بروید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">304</context></context-group>
       </trans-unit>
       <trans-unit id="3779524668013120370" datatype="html">
@@ -8820,7 +8820,7 @@
       </trans-unit>
       <trans-unit id="7836683738999600376" datatype="html">
         <source>Go to my imports</source>
-        <target state="translated">به واردات من بروید</target>
+        <target state="translated">به فیلم های بارگذاری شده من بروید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="7511292153332773503" datatype="html">
@@ -8830,12 +8830,12 @@
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
         <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.text"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target state="translated">نای توانید عائاد مشوررارا رسا براگزیان كند: <x id="PH"/>. پاسخ دهید حاصال كي پيكربندی پرتوب</target>
+        <target state="translated">نمی توان مجوزهای OAuthرا بازیابی کرد: <x id="PH" equiv-text="err.text"/>. مطمئن شوید سرور را به صورت مناسب تنظیم کرده ایدخصوصا قسمت "وب سرور" .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="375263728166936544" datatype="html">
         <source>You need to reconnect.</source>
-        <target state="translated">شما نیاز به اتصال مجدد دارید</target>
+        <target state="translated">نیاز به اتصال مجدد دارید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">221</context></context-group>
       </trans-unit>
       <trans-unit id="2206638022166154361" datatype="html">
@@ -8845,7 +8845,7 @@
       </trans-unit>
       <trans-unit id="3608407683173066091" datatype="html">
         <source>My history</source>
-        <target state="translated">تاریخ من</target>
+        <target state="translated">تاریخچه من</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/menu/menu.service.ts</context>
           <context context-type="linenumber">98</context>
@@ -8861,7 +8861,7 @@
       </trans-unit>
       <trans-unit id="232050922346936574" datatype="html">
         <source>Trending</source>
-        <target state="translated">طیف</target>
+        <target state="translated">ویدئوهای داغ(Trending)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">201</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">131</context></context-group>
       </trans-unit>
@@ -8953,7 +8953,7 @@
       </trans-unit>
       <trans-unit id="7473676707373218484" datatype="html">
         <source>Older</source>
-        <target state="translated">مسن تر</target>
+        <target state="translated">قدیمی تر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="5036991421517255667" datatype="html">
@@ -8993,7 +8993,7 @@
       </trans-unit>
       <trans-unit id="8487565500496466433" datatype="html">
         <source>Short (&lt; 4 min)</source>
-        <target state="translated">کوتاه (&amp; lt؛ 4 دقیقه)</target>
+        <target state="translated">کوتاه(&lt; 4 دقیقه)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="3642535017283477339" datatype="html">
@@ -9003,7 +9003,7 @@
       </trans-unit>
       <trans-unit id="6613870447286561244" datatype="html">
         <source>Long (&gt; 10 min)</source>
-        <target state="translated">طولانی (&amp; gt؛ 10 دقیقه)</target>
+        <target state="translated">طولانی(&gt; 10 دقیقه)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="1787083504545967" datatype="html">
@@ -9018,12 +9018,12 @@
       </trans-unit>
       <trans-unit id="2123659921722214537" datatype="html">
         <source>Views</source>
-        <target state="translated">نمایش</target>
+        <target state="translated">بازدیدها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="3208627574396957172" datatype="html">
         <source>Search index is unavailable. Retrying with instance results instead.</source>
-        <target state="translated">فهرست جستجو در دسترس نیست دوباره با نتایج نمونه بازنگری می شود.</target>
+        <target state="translated">فهرست جستجو در دسترس نیست دوباره با نتایج سایت بازنگری می شود.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.ts</context><context context-type="linenumber">159</context></context-group>
       </trans-unit>
       <trans-unit id="307702206382241469" datatype="html">
@@ -9065,7 +9065,7 @@
       </trans-unit>
       <trans-unit id="5891040073345002614" datatype="html">
         <source><x id="PH"/> years ago </source>
-        <target state="translated"><x id="PH"/> سال های پیش </target>
+        <target state="translated"><x id="PH"/> سال  پیش </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="8392321423487952834" datatype="html">
@@ -9082,7 +9082,7 @@
       </trans-unit>
       <trans-unit id="9022576335789205254" datatype="html">
         <source><x id="PH"/> months ago </source>
-        <target state="translated"><x id="PH"/> ماه ها پیش </target>
+        <target state="translated"><x id="PH"/> ماه  پیش </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="6874778750344205852" datatype="html">
@@ -9099,7 +9099,7 @@
       </trans-unit>
       <trans-unit id="6473426250245763193" datatype="html">
         <source><x id="PH"/> weeks ago </source>
-        <target state="translated"><x id="PH"/> هفته ها پیش </target>
+        <target state="translated"><x id="PH"/> هفته پیش </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="6538455390369999912" datatype="html">
@@ -9112,7 +9112,7 @@
       </trans-unit>
       <trans-unit id="5186107770140555014" datatype="html">
         <source><x id="PH"/> days ago </source>
-        <target state="translated"><x id="PH"/> روزهای پیش </target>
+        <target state="translated"><x id="PH"/> روز پیش </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="3927517496763161987" datatype="html">
@@ -9148,12 +9148,12 @@
       </trans-unit>
       <trans-unit id="2222108104954671970" datatype="html">
         <source><x id="PH"/> sec </source>
-        <target state="translated"><x id="PH"/> sec </target>
+        <target state="translated"><x id="PH"/> ثانیه </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="6499699285816188400" datatype="html">
         <source>Abuse reports</source>
-        <target state="translated">گزارش سوء استفاده</target>
+        <target state="translated">گزارشات سوء استفاده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="4930506384627295710" datatype="html">
@@ -9171,7 +9171,7 @@
       </trans-unit>
       <trans-unit id="7784486624424057376" datatype="html">
         <source>Instance name is required.</source>
-        <target state="translated">نام نمونه مورد نیاز است</target>
+        <target state="translated">نام سایت مورد نیاز است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="3281212084219111058" datatype="html">
@@ -9186,32 +9186,32 @@
       </trans-unit>
       <trans-unit id="8198703669620791633" datatype="html">
         <source>Previews cache size is required.</source>
-        <target state="translated">پیش نمایش اندازه حافظه پنهان مورد نیاز است.</target>
+        <target state="translated">اندازه حافظه پنهان پیش نمایش  مورد نیاز است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="3971192070835972256" datatype="html">
         <source>Previews cache size must be greater than 1.</source>
-        <target state="translated">پیش نمایش اندازه حافظه پنهان باید بیشتر از 1 باشد.</target>
+        <target state="translated">اندازه حافظه پنهان پیش نمایش  باید بیشتر از 1 باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="2903453036126968504" datatype="html">
         <source>Previews cache size must be a number.</source>
-        <target state="translated">پیش نمایش اندازه حافظه پنهان باید یک عدد باشد.</target>
+        <target state="translated">اندازه حافظه پنهان پیش نمایش  باید یک عدد باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="6941976540222684735" datatype="html">
         <source>Captions cache size is required.</source>
-        <target state="translated">اندازه کشوری Cache مورد نیاز است.</target>
+        <target state="translated">اندازه حافظه پنهان برای عنوان ها مورد نیاز است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="780869536819343075" datatype="html">
         <source>Captions cache size must be greater than 1.</source>
-        <target state="translated">اندازه حافظه پنهان باید بیشتر از 1 باشد.</target>
+        <target state="translated">اندازه حافظه پنهان برای عنوان ها باید بیشتر از 1 باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="2498218540197718478" datatype="html">
         <source>Captions cache size must be a number.</source>
-        <target state="translated">اندازه حافظه پنهان باید یک عدد باشد.</target>
+        <target state="translated">اندازه حافظه پنهان برای عناوین باید یک عدد باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="818392297325723982" datatype="html">
@@ -9221,7 +9221,7 @@
       </trans-unit>
       <trans-unit id="5630311719329022718" datatype="html">
         <source>Signup limit must be greater than 1. Use -1 to disable it.</source>
-        <target state="translated">محدودیت ثبت نام باید بیش از 1. استفاده از -1 برای غیر فعال کردن آن.</target>
+        <target state="translated">محدودیت ثبت نام باید بیش از 1باشد .برای غیر فعال کردن آن  از -1 استفاده کنید .</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">47</context>
@@ -9278,32 +9278,32 @@
       </trans-unit>
       <trans-unit id="8185661254949728718" datatype="html">
         <source>Max live duration is required.</source>
-        <target state="translated">حداکثر مدت زمان زنده لازم است</target>
+        <target state="translated">حداکثر مدت زمان برای ویدئو های پخش زنده لازم است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="8892863662898651766" datatype="html">
         <source>Max live duration should be greater or equal to -1.</source>
-        <target state="translated">حداکثر طول عمر باید بیشتر یا برابر با -1 باشد.</target>
+        <target state="translated">حداکثر مدت زمان  ویدئو های پخش زنده باید بیشتر یا برابر با -1 باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="8196240396863235661" datatype="html">
         <source>Max instance lives is required.</source>
-        <target state="translated">حداکثر نمونه مورد نیاز است.</target>
+        <target state="translated">حداکثر تعداد پخش زنده برای سایت مورد نیاز است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="913683464711184925" datatype="html">
         <source>Max instance lives should be greater or equal to -1.</source>
-        <target state="translated">حداکثر عمر نمونه باید بیشتر یا برابر با -1 باشد.</target>
+        <target state="translated">حداکثر مدت زمان ویدئو های پخش زنده سایت باید بیشتر یا برابر با -1 باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="5614457087254770778" datatype="html">
         <source>Max user lives is required.</source>
-        <target state="translated">حداکثر زندگی کاربر مورد نیاز است</target>
+        <target state="translated">حداکثر ویدئو های پخش زنده کاربر مورد نیاز است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="2779726697233311712" datatype="html">
         <source>Max user lives should be greater or equal to -1.</source>
-        <target state="translated">حداکثر کاربر کاربر باید بیشتر یا برابر با -1 باشد.</target>
+        <target state="translated">حداکثر ویدئو های پخش زنده کاربر باید بیشتر یا برابر با -1 باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="351272950792130803" datatype="html">
@@ -9342,7 +9342,7 @@
       </trans-unit>
       <trans-unit id="75589896034107743" datatype="html">
         <source>Index URL should be a URL</source>
-        <target state="translated">URL فهرست باید یک URL باشد</target>
+        <target state="translated">URL فهرست باید یک نشانی صحیح باشد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="3964961007325702684" datatype="html">
@@ -9358,7 +9358,7 @@
       </trans-unit>
       <trans-unit id="4591482207344282590" datatype="html">
         <source>Email must be valid.</source>
-        <target state="translated">ای میل باید معتبر باشد.</target>
+        <target state="translated">ایمیل باید معتبر باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">8</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
@@ -9447,7 +9447,7 @@
       </trans-unit>
       <trans-unit id="5621067256208426608" datatype="html">
         <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="translated">نام کاربری باید حروف الفبا کوچک باشد؛ نقاط و برجسته ها مجاز هستند.</target>
+        <target state="translated">نام کاربری بایداز حروف الفبا کوچک باشد؛ نقاط و برجسته ها مجاز هستند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6288154707582132676" datatype="html">
@@ -9528,7 +9528,7 @@
       </trans-unit>
       <trans-unit id="1814372869868173571" datatype="html">
         <source>You must agree with the instance terms in order to register on it.</source>
-        <target state="translated">شما باید با شرایط نمونه موافقت کنید تا آن را ثبت کنید.</target>
+        <target state="translated">شما باید با شرایط سایت موافقت کنید تا آن را ثبت کنید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="7803960725351649605" datatype="html">
@@ -9543,7 +9543,7 @@
       </trans-unit>
       <trans-unit id="6632896893630378443" datatype="html">
         <source>Display name is required.</source>
-        <target state="translated">نام نمایش مورد نیاز است</target>
+        <target state="translated">نام جهت نمایش مورد نیاز است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">155</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">12</context></context-group>
@@ -9578,17 +9578,17 @@
       </trans-unit>
       <trans-unit id="8779567454442277762" datatype="html">
         <source>Moderation comment is required.</source>
-        <target state="translated">نظر سنجی مورد نیاز است.</target>
+        <target state="translated">دلیل اصلاح یا نظارتی مورد نیاز است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="8954765410376245909" datatype="html">
         <source>Moderation comment must be at least 2 characters long.</source>
-        <target state="translated">نظر Moderation باید حداقل 2 کاراکتر داشته باشد.</target>
+        <target state="translated">نظر اصلاحی یا نظارتی باید حداقل 2 کاراکتر داشته باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6316804467108244906" datatype="html">
         <source>Moderation comment cannot be more than 3000 characters long.</source>
-        <target state="translated">نظر سنجی نمی تواند بیش از 3000 کاراکتر باشد.</target>
+        <target state="translated">نظر اصلاحی یا نظارتی نمی تواند بیش از 3000 کاراکتر باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8835075531528610034" datatype="html">
@@ -9613,22 +9613,22 @@
       </trans-unit>
       <trans-unit id="9191505323045740697" datatype="html">
         <source>Block reason must be at least 2 characters long.</source>
-        <target state="translated">دلیل بلوک باید حداقل 2 کاراکتر داشته باشد.</target>
+        <target state="translated">دلیل بلاک باید حداقل 2 کاراکتر داشته باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="8581623418602419755" datatype="html">
         <source>Block reason cannot be more than 300 characters long.</source>
-        <target state="translated">دلیل بلوک نمی تواند بیش از 300 کاراکتر باشد.</target>
+        <target state="translated">دلیل بلاک نمی تواند بیش از 300 کاراکتر باشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="1099619384694370156" datatype="html">
         <source>Video caption language is required.</source>
-        <target state="translated">زبان عنوان ویدئویی مورد نیاز است.</target>
+        <target state="translated">زبان عنوان ویدئو مورد نیاز است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="3438639650276868976" datatype="html">
         <source>Video caption file is required.</source>
-        <target state="translated">فایل عنوان ویدئویی مورد نیاز است.</target>
+        <target state="translated">فایل عنوان ویدئو مورد نیاز است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="9145435275110757909" datatype="html">
