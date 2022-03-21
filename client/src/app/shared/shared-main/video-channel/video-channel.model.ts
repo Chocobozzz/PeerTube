@@ -33,7 +33,9 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   }
 
   static GET_ACTOR_BANNER_URL (channel: ServerVideoChannel) {
-    if (!channel) return ''
+    if (!channel || channel.banners.length === 0) {
+      return ''
+    }
 
     const banner = channel.banners[0]
     if (!banner) return ''
@@ -57,7 +59,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     this.description = hash.description
     this.support = hash.support
 
-    this.banners = hash.banners
+    this.banners = hash.banners || []
 
     this.isLocal = hash.isLocal
 
