@@ -938,7 +938,7 @@
       </trans-unit>
       <trans-unit id="5851173629316588976" datatype="html">
         <source>By users on this instance</source>
-        <target state="translated">Theo người dùng trên máy chủ này</target>
+        <target state="translated">Máy chủ này</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">4</context>
@@ -990,7 +990,7 @@
       </trans-unit>
       <trans-unit id="6827125739942610231" datatype="html">
         <source>In this instance federation</source>
-        <target state="translated">trong liên hợp của máy chủ này</target>
+        <target state="translated">Liên hợp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">58</context>
@@ -6702,7 +6702,7 @@
       </trans-unit>
       <trans-unit id="1097932116708163073" datatype="html">
         <source>This website is powered by PeerTube</source>
-        <target state="translated">Vận hành bởi PeerTube</target>
+        <target state="translated">Vận hành nhờ PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">2,4</context>
