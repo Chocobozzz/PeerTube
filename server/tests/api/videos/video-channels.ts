@@ -325,6 +325,24 @@ describe('Test video channels', function () {
     }
   })
 
+  it('Should still correctly list channels', async function () {
+    {
+      const body = await servers[0].channels.list({ start: 1, count: 1, sort: 'createdAt' })
+
+      expect(body.total).to.equal(3)
+      expect(body.data).to.have.lengthOf(1)
+      expect(body.data[0].name).to.equal('second_video_channel')
+    }
+
+    {
+      const body = await servers[0].channels.listByAccount({ accountName, start: 1, count: 1, sort: 'createdAt' })
+
+      expect(body.total).to.equal(2)
+      expect(body.data).to.have.lengthOf(1)
+      expect(body.data[0].name).to.equal('second_video_channel')
+    }
+  })
+
   it('Should delete the video channel avatar', async function () {
     this.timeout(15000)
     await servers[0].channels.deleteImage({ channelName: 'second_video_channel', type: 'avatar' })
