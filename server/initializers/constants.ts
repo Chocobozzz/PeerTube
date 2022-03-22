@@ -152,7 +152,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'activitypub-refresher': 1,
   'video-redundancy': 1,
   'video-live-ending': 1,
-  'video-edition': 1,
+  'video-studio-edition': 1,
   'manage-video-torrent': 1,
   'move-to-object-storage': 3
 }
@@ -170,7 +170,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'activitypub-refresher': 1,
   'video-redundancy': 1,
   'video-live-ending': 10,
-  'video-edition': 1,
+  'video-studio-edition': 1,
   'manage-video-torrent': 1,
   'move-to-object-storage': 1
 }
@@ -182,7 +182,7 @@ const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-cleaner': 1000 * 3600, // 1 hour
   'video-file-import': 1000 * 3600, // 1 hour
   'video-transcoding': 1000 * 3600 * 48, // 2 days, transcoding could be long
-  'video-edition': 1000 * 3600 * 10, // 10 hours
+  'video-studio-edition': 1000 * 3600 * 10, // 10 hours
   'video-import': 1000 * 3600 * 2, // 2 hours
   'email': 60000 * 10, // 10 minutes
   'actor-keys': 60000 * 20, // 20 minutes
@@ -358,7 +358,7 @@ const CONSTRAINTS_FIELDS = {
   COMMONS: {
     URL: { min: 5, max: 2000 } // Length
   },
-  VIDEO_EDITOR: {
+  VIDEO_STUDIO: {
     TASKS: { min: 1, max: 10 }, // Number of tasks
     CUT_TIME: { min: 0 } // Value
   }

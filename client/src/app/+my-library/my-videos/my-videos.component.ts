@@ -205,9 +205,9 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   private buildActions () {
     this.videoActions = [
       {
-        label: $localize`Editor`,
-        linkBuilder: ({ video }) => [ '/video-editor/edit', video.uuid ],
-        isDisplayed: ({ video }) => video.isEditableBy(this.authService.getUser(), this.serverService.getHTMLConfig().videoEditor.enabled),
+        label: $localize`Studio`,
+        linkBuilder: ({ video }) => [ '/studio/edit', video.uuid ],
+        isDisplayed: ({ video }) => video.isEditableBy(this.authService.getUser(), this.serverService.getHTMLConfig().videoStudio.enabled),
         iconName: 'film'
       },
       {

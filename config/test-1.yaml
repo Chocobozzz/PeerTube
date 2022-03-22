@@ -37,7 +37,7 @@ signup:
 transcoding:
   enabled: false
 
-video_editor:
+video_studio:
   enabled: false
 
 live:

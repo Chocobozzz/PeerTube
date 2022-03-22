@@ -47,7 +47,7 @@ function getAllNotificationsSettings (): UserNotificationSetting {
     abuseStateChange: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     autoInstanceFollowing: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newPeerTubeVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    myVideoEditionFinished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    myVideoStudioEditionFinished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newPluginVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
   }
 }
@@ -110,13 +110,13 @@ async function checkVideoIsPublished (options: CheckerBaseParams & {
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
-async function checkVideoEditionIsFinished (options: CheckerBaseParams & {
+async function checkVideoStudioEditionIsFinished (options: CheckerBaseParams & {
   videoName: string
   shortUUID: string
   checkType: CheckerType
 }) {
   const { videoName, shortUUID } = options
-  const notificationType = UserNotificationType.MY_VIDEO_EDITION_FINISHED
+  const notificationType = UserNotificationType.MY_VIDEO_STUDIO_EDITION_FINISHED
 
   function notificationChecker (notification: UserNotification, checkType: CheckerType) {
     if (checkType === 'presence') {
@@ -685,7 +685,7 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
   await setDefaultChannelAvatar(servers)
   await setDefaultAccountAvatar(servers)
 
-  await servers[1].config.enableEditor()
+  await servers[1].config.enableStudio()
 
   if (serversCount > 1) {
     await doubleFollow(servers[0], servers[1])
@@ -756,7 +756,7 @@ export {
   checkNewAccountAbuseForModerators,
   checkNewPeerTubeVersion,
   checkNewPluginVersion,
-  checkVideoEditionIsFinished
+  checkVideoStudioEditionIsFinished
 }
 
 // ---------------------------------------------------------------------------

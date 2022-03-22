@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { expectStartWith, getAllFiles } from '@server/tests/shared'
 import { areObjectStorageTestsDisabled } from '@shared/core-utils'
-import { VideoEditorTask } from '@shared/models'
+import { VideoStudioTask } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -10,11 +10,11 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  VideoEditorCommand,
+  VideoStudioCommand,
   waitJobs
 } from '@shared/server-commands'
 
-describe('Test video editor', function () {
+describe('Test video studio', function () {
   let servers: PeerTubeServer[] = []
   let videoUUID: string
 
@@ -39,8 +39,8 @@ describe('Test video editor', function () {
     await waitJobs(servers)
   }
 
-  async function createTasks (tasks: VideoEditorTask[]) {
-    await servers[0].videoEditor.createEditionTasks({ videoId: videoUUID, tasks })
+  async function createTasks (tasks: VideoStudioTask[]) {
+    await servers[0].videoStudio.createEditionTasks({ videoId: videoUUID, tasks })
     await waitJobs(servers)
   }
 
@@ -56,7 +56,7 @@ describe('Test video editor', function () {
 
     await servers[0].config.enableMinimumTranscoding()
 
-    await servers[0].config.enableEditor()
+    await servers[0].config.enableStudio()
   })
 
   describe('Cutting', function () {
@@ -276,7 +276,7 @@ describe('Test video editor', function () {
       this.timeout(240_000)
       await renewVideo()
 
-      await createTasks(VideoEditorCommand.getComplexTask())
+      await createTasks(VideoStudioCommand.getComplexTask())
 
       for (const server of servers) {
         await checkDuration(server, 9)
@@ -303,7 +303,7 @@ describe('Test video editor', function () {
       this.timeout(240_000)
       await renewVideo()
 
-      await createTasks(VideoEditorCommand.getComplexTask())
+      await createTasks(VideoStudioCommand.getComplexTask())
 
       for (const server of servers) {
         const video = await server.videos.get({ id: videoUUID })
@@ -333,7 +333,7 @@ describe('Test video editor', function () {
       const video = await servers[0].videos.get({ id: videoUUID })
       const oldFileUrls = getAllFiles(video).map(f => f.fileUrl)
 
-      await createTasks(VideoEditorCommand.getComplexTask())
+      await createTasks(VideoStudioCommand.getComplexTask())
 
       for (const server of servers) {
         const video = await server.videos.get({ id: videoUUID })

@@ -35,7 +35,7 @@ import { VideoModel } from '../../../models/video/video'
 import { blacklistRouter } from './blacklist'
 import { videoCaptionsRouter } from './captions'
 import { videoCommentRouter } from './comment'
-import { editorRouter } from './editor'
+import { studioRouter } from './studio'
 import { filesRouter } from './files'
 import { videoImportsRouter } from './import'
 import { liveRouter } from './live'
@@ -52,7 +52,7 @@ const videosRouter = express.Router()
 videosRouter.use('/', blacklistRouter)
 videosRouter.use('/', rateVideoRouter)
 videosRouter.use('/', videoCommentRouter)
-videosRouter.use('/', editorRouter)
+videosRouter.use('/', studioRouter)
 videosRouter.use('/', videoCaptionsRouter)
 videosRouter.use('/', videoImportsRouter)
 videosRouter.use('/', ownershipVideoRouter)

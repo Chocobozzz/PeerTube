@@ -15,11 +15,11 @@ import {
   ManageVideoTorrentPayload,
   MoveObjectStoragePayload,
   RefreshPayload,
-  VideoEditionPayload,
   VideoFileImportPayload,
   VideoImportPayload,
   VideoLiveEndingPayload,
   VideoRedundancyPayload,
+  VideoStudioEditionPayload,
   VideoTranscodingPayload
 } from '../../../shared/models'
 import { logger } from '../../helpers/logger'
@@ -34,10 +34,10 @@ import { processActorKeys } from './handlers/actor-keys'
 import { processEmail } from './handlers/email'
 import { processManageVideoTorrent } from './handlers/manage-video-torrent'
 import { processMoveToObjectStorage } from './handlers/move-to-object-storage'
-import { processVideoEdition } from './handlers/video-edition'
 import { processVideoFileImport } from './handlers/video-file-import'
 import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
+import { processVideoStudioEdition } from './handlers/video-studio-edition'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViewsStats } from './handlers/video-views-stats'
 
@@ -57,7 +57,7 @@ type CreateJobArgument =
   { type: 'actor-keys', payload: ActorKeysPayload } |
   { type: 'video-redundancy', payload: VideoRedundancyPayload } |
   { type: 'delete-resumable-upload-meta-file', payload: DeleteResumableUploadMetaFilePayload } |
-  { type: 'video-edition', payload: VideoEditionPayload } |
+  { type: 'video-studio-edition', payload: VideoStudioEditionPayload } |
   { type: 'manage-video-torrent', payload: ManageVideoTorrentPayload } |
   { type: 'move-to-object-storage', payload: MoveObjectStoragePayload }
 
@@ -83,7 +83,7 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'video-redundancy': processVideoRedundancy,
   'move-to-object-storage': processMoveToObjectStorage,
   'manage-video-torrent': processManageVideoTorrent,
-  'video-edition': processVideoEdition
+  'video-studio-edition': processVideoStudioEdition
 }
 
 const jobTypes: JobType[] = [
@@ -103,7 +103,7 @@ const jobTypes: JobType[] = [
   'video-live-ending',
   'move-to-object-storage',
   'manage-video-torrent',
-  'video-edition'
+  'video-studio-edition'
 ]
 
 class JobQueue {

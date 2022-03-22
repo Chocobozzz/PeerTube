@@ -228,7 +228,7 @@ export class UserNotification implements UserNotificationServer {
           this.pluginQueryParams.pluginType = this.plugin.type + ''
           break
 
-        case UserNotificationType.MY_VIDEO_EDITION_FINISHED:
+        case UserNotificationType.MY_VIDEO_STUDIO_EDITION_FINISHED:
           this.videoUrl = this.buildVideoUrl(this.video)
           break
       }

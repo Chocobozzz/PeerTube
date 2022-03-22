@@ -4,19 +4,19 @@ import { Injectable } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import { VideoService } from '@app/shared/shared-main'
-import { VideoEditorCreateEdition, VideoEditorTask } from '@shared/models'
+import { VideoStudioCreateEdition, VideoStudioTask } from '@shared/models'
 
 @Injectable()
-export class VideoEditorService {
+export class VideoStudioService {
 
   constructor (
     private authHttp: HttpClient,
     private restExtractor: RestExtractor
   ) {}
 
-  editVideo (videoId: number | string, tasks: VideoEditorTask[]) {
-    const url = VideoService.BASE_VIDEO_URL + '/' + videoId + '/editor/edit'
-    const body: VideoEditorCreateEdition = {
+  editVideo (videoId: number | string, tasks: VideoStudioTask[]) {
+    const url = VideoService.BASE_VIDEO_URL + '/' + videoId + '/studio/edit'
+    const body: VideoStudioCreateEdition = {
       tasks
     }
 

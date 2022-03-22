@@ -175,7 +175,7 @@ export interface ServerConfig {
     }
   }
 
-  videoEditor: {
+  videoStudio: {
     enabled: boolean
   }
 

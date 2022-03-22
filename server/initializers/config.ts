@@ -335,8 +335,8 @@ const CONFIG = {
       }
     }
   },
-  VIDEO_EDITOR: {
-    get ENABLED () { return config.get<boolean>('video_editor.enabled') }
+  VIDEO_STUDIO: {
+    get ENABLED () { return config.get<boolean>('video_studio.enabled') }
   },
   IMPORT: {
     VIDEOS: {

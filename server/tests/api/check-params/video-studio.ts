@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { HttpStatusCode, VideoEditorTask } from '@shared/models'
+import { HttpStatusCode, VideoStudioTask } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
   PeerTubeServer,
   setAccessTokensToServers,
-  VideoEditorCommand,
+  VideoStudioCommand,
   waitJobs
 } from '@shared/server-commands'
 
-describe('Test video editor API validator', function () {
+describe('Test video studio API validator', function () {
   let server: PeerTubeServer
-  let command: VideoEditorCommand
+  let command: VideoStudioCommand
   let userAccessToken: string
   let videoUUID: string
 
@@ -32,7 +32,7 @@ describe('Test video editor API validator', function () {
     const { uuid } = await server.videos.quickUpload({ name: 'video' })
     videoUUID = uuid
 
-    command = server.videoEditor
+    command = server.videoStudio
 
     await waitJobs([ server ])
   })
@@ -41,10 +41,10 @@ describe('Test video editor API validator', function () {
 
     describe('Config settings', function () {
 
-      it('Should fail if editor is disabled', async function () {
+      it('Should fail if studio is disabled', async function () {
         await server.config.updateExistingSubConfig({
           newConfig: {
-            videoEditor: {
+            videoStudio: {
               enabled: false
             }
           }
@@ -52,15 +52,15 @@ describe('Test video editor API validator', function () {
 
         await command.createEditionTasks({
           videoId: videoUUID,
-          tasks: VideoEditorCommand.getComplexTask(),
+          tasks: VideoStudioCommand.getComplexTask(),
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       })
 
-      it('Should fail to enable editor if transcoding is disabled', async function () {
+      it('Should fail to enable studio if transcoding is disabled', async function () {
         await server.config.updateExistingSubConfig({
           newConfig: {
-            videoEditor: {
+            videoStudio: {
               enabled: true
             },
             transcoding: {
@@ -71,10 +71,10 @@ describe('Test video editor API validator', function () {
         })
       })
 
-      it('Should succeed to enable video editor', async function () {
+      it('Should succeed to enable video studio', async function () {
         await server.config.updateExistingSubConfig({
           newConfig: {
-            videoEditor: {
+            videoStudio: {
               enabled: true
             },
             transcoding: {
@@ -91,7 +91,7 @@ describe('Test video editor API validator', function () {
         await command.createEditionTasks({
           token: null,
           videoId: videoUUID,
-          tasks: VideoEditorCommand.getComplexTask(),
+          tasks: VideoStudioCommand.getComplexTask(),
           expectedStatus: HttpStatusCode.UNAUTHORIZED_401
         })
       })
@@ -100,7 +100,7 @@ describe('Test video editor API validator', function () {
         await command.createEditionTasks({
           token: userAccessToken,
           videoId: videoUUID,
-          tasks: VideoEditorCommand.getComplexTask(),
+          tasks: VideoStudioCommand.getComplexTask(),
           expectedStatus: HttpStatusCode.FORBIDDEN_403
         })
       })
@@ -108,7 +108,7 @@ describe('Test video editor API validator', function () {
       it('Should fail with an invalid video', async function () {
         await command.createEditionTasks({
           videoId: 'tintin',
-          tasks: VideoEditorCommand.getComplexTask(),
+          tasks: VideoStudioCommand.getComplexTask(),
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       })
@@ -116,7 +116,7 @@ describe('Test video editor API validator', function () {
       it('Should fail with an unknown video', async function () {
         await command.createEditionTasks({
           videoId: 42,
-          tasks: VideoEditorCommand.getComplexTask(),
+          tasks: VideoStudioCommand.getComplexTask(),
           expectedStatus: HttpStatusCode.NOT_FOUND_404
         })
       })
@@ -132,7 +132,7 @@ describe('Test video editor API validator', function () {
 
         await command.createEditionTasks({
           videoId: uuid,
-          tasks: VideoEditorCommand.getComplexTask(),
+          tasks: VideoStudioCommand.getComplexTask(),
           expectedStatus: HttpStatusCode.CONFLICT_409
         })
 
@@ -171,7 +171,7 @@ describe('Test video editor API validator', function () {
       })
 
       it('Should fail with too many tasks', async function () {
-        const tasks: VideoEditorTask[] = []
+        const tasks: VideoStudioTask[] = []
 
         for (let i = 0; i < 110; i++) {
           tasks.push({
@@ -194,7 +194,7 @@ describe('Test video editor API validator', function () {
 
         await command.createEditionTasks({
           videoId: videoUUID,
-          tasks: VideoEditorCommand.getComplexTask(),
+          tasks: VideoStudioCommand.getComplexTask(),
           expectedStatus: HttpStatusCode.NO_CONTENT_204
         })
       })
@@ -204,7 +204,7 @@ describe('Test video editor API validator', function () {
 
         await command.createEditionTasks({
           videoId: videoUUID,
-          tasks: VideoEditorCommand.getComplexTask(),
+          tasks: VideoStudioCommand.getComplexTask(),
           expectedStatus: HttpStatusCode.CONFLICT_409
         })
 

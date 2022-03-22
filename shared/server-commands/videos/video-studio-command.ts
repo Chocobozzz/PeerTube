@@ -1,9 +1,9 @@
-import { HttpStatusCode, VideoEditorTask } from '@shared/models'
+import { HttpStatusCode, VideoStudioTask } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
-export class VideoEditorCommand extends AbstractCommand {
+export class VideoStudioCommand extends AbstractCommand {
 
-  static getComplexTask (): VideoEditorTask[] {
+  static getComplexTask (): VideoStudioTask[] {
     return [
       // Total duration: 2
       {
@@ -41,9 +41,9 @@ export class VideoEditorCommand extends AbstractCommand {
 
   createEditionTasks (options: OverrideCommandOptions & {
     videoId: number | string
-    tasks: VideoEditorTask[]
+    tasks: VideoStudioTask[]
   }) {
-    const path = '/api/v1/videos/' + options.videoId + '/editor/edit'
+    const path = '/api/v1/videos/' + options.videoId + '/studio/edit'
     const attaches: { [id: string]: any } = {}
 
     for (let i = 0; i < options.tasks.length; i++) {

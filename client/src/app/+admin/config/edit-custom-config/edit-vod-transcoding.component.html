@@ -193,9 +193,9 @@
     </div>
   </div>
 
-  <div class="form-row mt-2"> <!-- video editor grid -->
+  <div class="form-row mt-2"> <!-- video studio grid -->
     <div class="form-group col-12 col-lg-4 col-xl-3">
-      <div i18n class="inner-form-title">VIDEO EDITOR</div>
+      <div i18n class="inner-form-title">VIDEO STUDIO</div>
       <div i18n class="inner-form-description">
         Allows your users to edit their video (cut, add intro/outro, add a watermark etc)
       </div>
@@ -203,14 +203,14 @@
 
     <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
 
-      <ng-container formGroupName="videoEditor">
+      <ng-container formGroupName="videoStudio">
         <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
           <my-peertube-checkbox
-            inputName="videoEditorEnabled" formControlName="enabled"
-            i18n-labelText labelText="Enable video editor"
+            inputName="videoStudioEnabled" formControlName="enabled"
+            i18n-labelText labelText="Enable video studio"
           >
             <ng-container ngProjectAs="description" *ngIf="!isTranscodingEnabled()">
-              <span i18n>⚠️ You need to enable transcoding first to enable video editor</span>
+              <span i18n>⚠️ You need to enable transcoding first to enable video studio</span>
             </ng-container>
           </my-peertube-checkbox>
         </div>

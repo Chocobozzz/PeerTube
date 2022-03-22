@@ -57,7 +57,7 @@ const customConfigUpdateValidator = [
   body('transcoding.webtorrent.enabled').isBoolean().withMessage('Should have a valid webtorrent transcoding enabled boolean'),
   body('transcoding.hls.enabled').isBoolean().withMessage('Should have a valid hls transcoding enabled boolean'),
 
-  body('videoEditor.enabled').isBoolean().withMessage('Should have a valid video editor enabled boolean'),
+  body('videoStudio.enabled').isBoolean().withMessage('Should have a valid video studio enabled boolean'),
 
   body('import.videos.concurrency').isInt({ min: 0 }).withMessage('Should have a valid import concurrency number'),
   body('import.videos.http.enabled').isBoolean().withMessage('Should have a valid import video http enabled boolean'),
@@ -106,7 +106,7 @@ const customConfigUpdateValidator = [
     if (!checkInvalidConfigIfEmailDisabled(req.body, res)) return
     if (!checkInvalidTranscodingConfig(req.body, res)) return
     if (!checkInvalidLiveConfig(req.body, res)) return
-    if (!checkInvalidVideoEditorConfig(req.body, res)) return
+    if (!checkInvalidVideoStudioConfig(req.body, res)) return
 
     return next()
   }
@@ -163,11 +163,11 @@ function checkInvalidLiveConfig (customConfig: CustomConfig, res: express.Respon
   return true
 }
 
-function checkInvalidVideoEditorConfig (customConfig: CustomConfig, res: express.Response) {
-  if (customConfig.videoEditor.enabled === false) return true
+function checkInvalidVideoStudioConfig (customConfig: CustomConfig, res: express.Response) {
+  if (customConfig.videoStudio.enabled === false) return true
 
-  if (customConfig.videoEditor.enabled === true && customConfig.transcoding.enabled === false) {
-    res.fail({ message: 'You cannot enable video editor if transcoding is not enabled' })
+  if (customConfig.videoStudio.enabled === true && customConfig.transcoding.enabled === false) {
+    res.fail({ message: 'You cannot enable video studio if transcoding is not enabled' })
     return false
   }
 

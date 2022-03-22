@@ -7,7 +7,7 @@ import {
   checkMyVideoImportIsFinished,
   checkNewActorFollow,
   checkNewVideoFromSubscription,
-  checkVideoEditionIsFinished,
+  checkVideoStudioEditionIsFinished,
   checkVideoIsPublished,
   FIXTURE_URLS,
   MockSmtpServer,
@@ -16,7 +16,7 @@ import {
 } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
-import { UserNotification, UserNotificationType, VideoEditorTask, VideoPrivacy } from '@shared/models'
+import { UserNotification, UserNotificationType, VideoStudioTask, VideoPrivacy } from '@shared/models'
 import { cleanupTests, PeerTubeServer, waitJobs } from '@shared/server-commands'
 
 const expect = chai.expect
@@ -323,7 +323,7 @@ describe('Test user notifications', function () {
     })
   })
 
-  describe('Video editor', function () {
+  describe('Video studio', function () {
     let baseParams: CheckerBaseParams
 
     before(() => {
@@ -335,7 +335,7 @@ describe('Test user notifications', function () {
       }
     })
 
-    it('Should send a notification after editor edition', async function () {
+    it('Should send a notification after studio edition', async function () {
       this.timeout(240000)
 
       const { name, shortUUID, id } = await uploadRandomVideoOnServers(servers, 2, { waitTranscoding: true })
@@ -343,7 +343,7 @@ describe('Test user notifications', function () {
       await waitJobs(servers)
       await checkVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
 
-      const tasks: VideoEditorTask[] = [
+      const tasks: VideoStudioTask[] = [
         {
           name: 'cut',
           options: {
@@ -352,10 +352,10 @@ describe('Test user notifications', function () {
           }
         }
       ]
-      await servers[1].videoEditor.createEditionTasks({ videoId: id, tasks })
+      await servers[1].videoStudio.createEditionTasks({ videoId: id, tasks })
       await waitJobs(servers)
 
-      await checkVideoEditionIsFinished({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
+      await checkVideoStudioEditionIsFinished({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
     })
   })
 

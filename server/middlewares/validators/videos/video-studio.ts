@@ -2,31 +2,31 @@ import express from 'express'
 import { body, param } from 'express-validator'
 import { isIdOrUUIDValid } from '@server/helpers/custom-validators/misc'
 import {
-  isEditorCutTaskValid,
-  isEditorTaskAddIntroOutroValid,
-  isEditorTaskAddWatermarkValid,
-  isValidEditorTasksArray
-} from '@server/helpers/custom-validators/video-editor'
+  isStudioCutTaskValid,
+  isStudioTaskAddIntroOutroValid,
+  isStudioTaskAddWatermarkValid,
+  isValidStudioTasksArray
+} from '@server/helpers/custom-validators/video-studio'
 import { cleanUpReqFiles } from '@server/helpers/express-utils'
 import { CONFIG } from '@server/initializers/config'
-import { approximateIntroOutroAdditionalSize, getTaskFile } from '@server/lib/video-editor'
+import { approximateIntroOutroAdditionalSize, getTaskFile } from '@server/lib/video-studio'
 import { isAudioFile } from '@shared/extra-utils'
-import { HttpStatusCode, UserRight, VideoEditorCreateEdition, VideoEditorTask, VideoState } from '@shared/models'
+import { HttpStatusCode, UserRight, VideoState, VideoStudioCreateEdition, VideoStudioTask } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors, checkUserCanManageVideo, checkUserQuota, doesVideoExist } from '../shared'
 
-const videosEditorAddEditionValidator = [
+const videoStudioAddEditionValidator = [
   param('videoId').custom(isIdOrUUIDValid).withMessage('Should have a valid video id/uuid'),
 
-  body('tasks').custom(isValidEditorTasksArray).withMessage('Should have a valid array of tasks'),
+  body('tasks').custom(isValidStudioTasksArray).withMessage('Should have a valid array of tasks'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videosEditorAddEditionValidator parameters.', { parameters: req.params, body: req.body, files: req.files })
+    logger.debug('Checking videoStudioAddEditionValidator parameters.', { parameters: req.params, body: req.body, files: req.files })
 
-    if (CONFIG.VIDEO_EDITOR.ENABLED !== true) {
+    if (CONFIG.VIDEO_STUDIO.ENABLED !== true) {
       res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Video editor is disabled on this instance'
+        message: 'Video studio is disabled on this instance'
       })
 
       return cleanUpReqFiles(req)
@@ -34,7 +34,7 @@ const videosEditorAddEditionValidator = [
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
-    const body: VideoEditorCreateEdition = req.body
+    const body: VideoStudioCreateEdition = req.body
     const files = req.files as Express.Multer.File[]
 
     for (let i = 0; i < body.tasks.length; i++) {
@@ -90,21 +90,21 @@ const videosEditorAddEditionValidator = [
 // ---------------------------------------------------------------------------
 
 export {
-  videosEditorAddEditionValidator
+  videoStudioAddEditionValidator
 }
 
 // ---------------------------------------------------------------------------
 
 const taskCheckers: {
-  [id in VideoEditorTask['name']]: (task: VideoEditorTask, indice?: number, files?: Express.Multer.File[]) => boolean
+  [id in VideoStudioTask['name']]: (task: VideoStudioTask, indice?: number, files?: Express.Multer.File[]) => boolean
 } = {
-  'cut': isEditorCutTaskValid,
-  'add-intro': isEditorTaskAddIntroOutroValid,
-  'add-outro': isEditorTaskAddIntroOutroValid,
-  'add-watermark': isEditorTaskAddWatermarkValid
+  'cut': isStudioCutTaskValid,
+  'add-intro': isStudioTaskAddIntroOutroValid,
+  'add-outro': isStudioTaskAddIntroOutroValid,
+  'add-watermark': isStudioTaskAddWatermarkValid
 }
 
-function checkTask (req: express.Request, task: VideoEditorTask, indice?: number) {
+function checkTask (req: express.Request, task: VideoStudioTask, indice?: number) {
   const checker = taskCheckers[task.name]
   if (!checker) return false
 

@@ -6,7 +6,7 @@ import { MUserDefault, MUserWithNotificationSetting, MVideoFullLight, UserNotifi
 import { UserNotificationType } from '@shared/models'
 import { AbstractNotification } from '../common/abstract-notification'
 
-export class EditionFinishedForOwner extends AbstractNotification <MVideoFullLight> {
+export class StudioEditionFinishedForOwner extends AbstractNotification <MVideoFullLight> {
   private user: MUserDefault
 
   async prepare () {
@@ -14,11 +14,11 @@ export class EditionFinishedForOwner extends AbstractNotification <MVideoFullLig
   }
 
   log () {
-    logger.info('Notifying user %s its video edition %s is finished.', this.user.username, this.payload.url)
+    logger.info('Notifying user %s its video studio edition %s is finished.', this.user.username, this.payload.url)
   }
 
   getSetting (user: MUserWithNotificationSetting) {
-    return user.NotificationSetting.myVideoEditionFinished
+    return user.NotificationSetting.myVideoStudioEditionFinished
   }
 
   getTargetUsers () {
@@ -29,7 +29,7 @@ export class EditionFinishedForOwner extends AbstractNotification <MVideoFullLig
 
   async createNotification (user: MUserWithNotificationSetting) {
     const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
-      type: UserNotificationType.MY_VIDEO_EDITION_FINISHED,
+      type: UserNotificationType.MY_VIDEO_STUDIO_EDITION_FINISHED,
       userId: user.id,
       videoId: this.payload.id
     })

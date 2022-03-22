@@ -1,6 +1,6 @@
-import { MVideoFullLight } from "@server/types/models"
-import { getVideoStreamDuration } from "@shared/extra-utils"
-import { VideoEditorTask } from "@shared/models"
+import { MVideoFullLight } from '@server/types/models'
+import { getVideoStreamDuration } from '@shared/extra-utils'
+import { VideoStudioTask } from '@shared/models'
 
 function buildTaskFileFieldname (indice: number, fieldName = 'file') {
   return `tasks[${indice}][options][${fieldName}]`
@@ -10,7 +10,7 @@ function getTaskFile (files: Express.Multer.File[], indice: number, fieldName = 
   return files.find(f => f.fieldname === buildTaskFileFieldname(indice, fieldName))
 }
 
-async function approximateIntroOutroAdditionalSize (video: MVideoFullLight, tasks: VideoEditorTask[], fileFinder: (i: number) => string) {
+async function approximateIntroOutroAdditionalSize (video: MVideoFullLight, tasks: VideoStudioTask[], fileFinder: (i: number) => string) {
   let additionalDuration = 0
 
   for (let i = 0; i < tasks.length; i++) {

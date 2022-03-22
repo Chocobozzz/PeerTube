@@ -2,26 +2,26 @@ import express from 'express'
 import { createAnyReqFiles } from '@server/helpers/express-utils'
 import { MIMETYPES } from '@server/initializers/constants'
 import { JobQueue } from '@server/lib/job-queue'
-import { buildTaskFileFieldname, getTaskFile } from '@server/lib/video-editor'
+import { buildTaskFileFieldname, getTaskFile } from '@server/lib/video-studio'
 import {
   HttpStatusCode,
-  VideoEditionTaskPayload,
-  VideoEditorCreateEdition,
-  VideoEditorTask,
-  VideoEditorTaskCut,
-  VideoEditorTaskIntro,
-  VideoEditorTaskOutro,
-  VideoEditorTaskWatermark,
-  VideoState
+  VideoState,
+  VideoStudioCreateEdition,
+  VideoStudioTask,
+  VideoStudioTaskCut,
+  VideoStudioTaskIntro,
+  VideoStudioTaskOutro,
+  VideoStudioTaskPayload,
+  VideoStudioTaskWatermark
 } from '@shared/models'
-import { asyncMiddleware, authenticate, videosEditorAddEditionValidator } from '../../../middlewares'
+import { asyncMiddleware, authenticate, videoStudioAddEditionValidator } from '../../../middlewares'
 
-const editorRouter = express.Router()
+const studioRouter = express.Router()
 
 const tasksFiles = createAnyReqFiles(
   MIMETYPES.VIDEO.MIMETYPE_EXT,
   (req: express.Request, file: Express.Multer.File, cb: (err: Error, result?: boolean) => void) => {
-    const body = req.body as VideoEditorCreateEdition
+    const body = req.body as VideoStudioCreateEdition
 
     // Fetch array element
     const matches = file.fieldname.match(/tasks\[(\d+)\]/)
@@ -43,24 +43,24 @@ const tasksFiles = createAnyReqFiles(
   }
 )
 
-editorRouter.post('/:videoId/editor/edit',
+studioRouter.post('/:videoId/studio/edit',
   authenticate,
   tasksFiles,
-  asyncMiddleware(videosEditorAddEditionValidator),
+  asyncMiddleware(videoStudioAddEditionValidator),
   asyncMiddleware(createEditionTasks)
 )
 
 // ---------------------------------------------------------------------------
 
 export {
-  editorRouter
+  studioRouter
 }
 
 // ---------------------------------------------------------------------------
 
 async function createEditionTasks (req: express.Request, res: express.Response) {
   const files = req.files as Express.Multer.File[]
-  const body = req.body as VideoEditorCreateEdition
+  const body = req.body as VideoStudioCreateEdition
   const video = res.locals.videoAll
 
   video.state = VideoState.TO_EDIT
@@ -71,13 +71,13 @@ async function createEditionTasks (req: express.Request, res: express.Response) 
     tasks: body.tasks.map((t, i) => buildTaskPayload(t, i, files))
   }
 
-  JobQueue.Instance.createJob({ type: 'video-edition', payload })
+  JobQueue.Instance.createJob({ type: 'video-studio-edition', payload })
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 const taskPayloadBuilders: {
-  [id in VideoEditorTask['name']]: (task: VideoEditorTask, indice?: number, files?: Express.Multer.File[]) => VideoEditionTaskPayload
+  [id in VideoStudioTask['name']]: (task: VideoStudioTask, indice?: number, files?: Express.Multer.File[]) => VideoStudioTaskPayload
 } = {
   'add-intro': buildIntroOutroTask,
   'add-outro': buildIntroOutroTask,
@@ -85,11 +85,11 @@ const taskPayloadBuilders: {
   'add-watermark': buildWatermarkTask
 }
 
-function buildTaskPayload (task: VideoEditorTask, indice: number, files: Express.Multer.File[]): VideoEditionTaskPayload {
+function buildTaskPayload (task: VideoStudioTask, indice: number, files: Express.Multer.File[]): VideoStudioTaskPayload {
   return taskPayloadBuilders[task.name](task, indice, files)
 }
 
-function buildIntroOutroTask (task: VideoEditorTaskIntro | VideoEditorTaskOutro, indice: number, files: Express.Multer.File[]) {
+function buildIntroOutroTask (task: VideoStudioTaskIntro | VideoStudioTaskOutro, indice: number, files: Express.Multer.File[]) {
   return {
     name: task.name,
     options: {
@@ -98,7 +98,7 @@ function buildIntroOutroTask (task: VideoEditorTaskIntro | VideoEditorTaskOutro,
   }
 }
 
-function buildCutTask (task: VideoEditorTaskCut) {
+function buildCutTask (task: VideoStudioTaskCut) {
   return {
     name: task.name,
     options: {
@@ -108,7 +108,7 @@ function buildCutTask (task: VideoEditorTaskCut) {
   }
 }
 
-function buildWatermarkTask (task: VideoEditorTaskWatermark, indice: number, files: Express.Multer.File[]) {
+function buildWatermarkTask (task: VideoStudioTaskWatermark, indice: number, files: Express.Multer.File[]) {
   return {
     name: task.name,
     options: {

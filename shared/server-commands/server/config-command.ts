@@ -60,7 +60,7 @@ export class ConfigCommand extends AbstractCommand {
         transcoding: {
           enabled: false
         },
-        videoEditor: {
+        videoStudio: {
           enabled: false
         }
       }
@@ -111,10 +111,10 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
-  enableEditor () {
+  enableStudio () {
     return this.updateExistingSubConfig({
       newConfig: {
-        videoEditor: {
+        videoStudio: {
           enabled: true
         }
       }
@@ -339,7 +339,7 @@ export class ConfigCommand extends AbstractCommand {
           }
         }
       },
-      videoEditor: {
+      videoStudio: {
         enabled: false
       },
       import: {

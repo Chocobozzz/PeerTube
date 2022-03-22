@@ -14,11 +14,11 @@ async function up (utils: {
       defaultValue: null,
       allowNull: true
     }
-    await utils.queryInterface.addColumn('userNotificationSetting', 'myVideoEditionFinished', data, { transaction })
+    await utils.queryInterface.addColumn('userNotificationSetting', 'myVideoStudioEditionFinished', data, { transaction })
   }
 
   {
-    const query = 'UPDATE "userNotificationSetting" SET "myVideoEditionFinished" = 1'
+    const query = 'UPDATE "userNotificationSetting" SET "myVideoStudioEditionFinished" = 1'
     await utils.sequelize.query(query, { transaction })
   }
 
@@ -28,7 +28,7 @@ async function up (utils: {
       defaultValue: null,
       allowNull: false
     }
-    await utils.queryInterface.changeColumn('userNotificationSetting', 'myVideoEditionFinished', data, { transaction })
+    await utils.queryInterface.changeColumn('userNotificationSetting', 'myVideoStudioEditionFinished', data, { transaction })
   }
 }
 

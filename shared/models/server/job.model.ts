@@ -1,6 +1,6 @@
 import { ContextType } from '../activitypub/context'
 import { VideoState } from '../videos'
-import { VideoEditorTaskCut } from '../videos/editor'
+import { VideoStudioTaskCut } from '../videos/studio'
 import { VideoResolution } from '../videos/file/video-resolution.enum'
 import { SendEmailOptions } from './emailer.model'
 
@@ -23,7 +23,7 @@ export type JobType =
   | 'actor-keys'
   | 'manage-video-torrent'
   | 'move-to-object-storage'
-  | 'video-edition'
+  | 'video-studio-edition'
 
 export interface Job {
   id: number
@@ -117,9 +117,6 @@ export type ManageVideoTorrentPayload =
 interface BaseTranscodingPayload {
   videoUUID: string
   isNewVideo?: boolean
-
-  // Custom notification when the task is finished
-  notification?: 'default' | 'video-edition'
 }
 
 export interface HLSTranscodingPayload extends BaseTranscodingPayload {
@@ -178,9 +175,9 @@ export interface MoveObjectStoragePayload {
   previousVideoState: VideoState
 }
 
-export type VideoEditorTaskCutPayload = VideoEditorTaskCut
+export type VideoStudioTaskCutPayload = VideoStudioTaskCut
 
-export type VideoEditorTaskIntroPayload = {
+export type VideoStudioTaskIntroPayload = {
   name: 'add-intro'
 
   options: {
@@ -188,7 +185,7 @@ export type VideoEditorTaskIntroPayload = {
   }
 }
 
-export type VideoEditorTaskOutroPayload = {
+export type VideoStudioTaskOutroPayload = {
   name: 'add-outro'
 
   options: {
@@ -196,7 +193,7 @@ export type VideoEditorTaskOutroPayload = {
   }
 }
 
-export type VideoEditorTaskWatermarkPayload = {
+export type VideoStudioTaskWatermarkPayload = {
   name: 'add-watermark'
 
   options: {
@@ -204,13 +201,13 @@ export type VideoEditorTaskWatermarkPayload = {
   }
 }
 
-export type VideoEditionTaskPayload =
-  VideoEditorTaskCutPayload |
-  VideoEditorTaskIntroPayload |
-  VideoEditorTaskOutroPayload |
-  VideoEditorTaskWatermarkPayload
+export type VideoStudioTaskPayload =
+  VideoStudioTaskCutPayload |
+  VideoStudioTaskIntroPayload |
+  VideoStudioTaskOutroPayload |
+  VideoStudioTaskWatermarkPayload
 
-export interface VideoEditionPayload {
+export interface VideoStudioEditionPayload {
   videoUUID: string
-  tasks: VideoEditionTaskPayload[]
+  tasks: VideoStudioTaskPayload[]
 }

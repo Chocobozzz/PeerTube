@@ -2,18 +2,18 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, Notifier, ServerService } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { Video, VideoDetails } from '@app/shared/shared-main'
+import { VideoDetails } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { secondsToTime } from '@shared/core-utils'
-import { VideoEditorTask, VideoEditorTaskCut } from '@shared/models'
-import { VideoEditorService } from '../shared'
+import { VideoStudioTask, VideoStudioTaskCut } from '@shared/models'
+import { VideoStudioService } from '../shared'
 
 @Component({
-  selector: 'my-video-editor-edit',
-  templateUrl: './video-editor-edit.component.html',
-  styleUrls: [ './video-editor-edit.component.scss' ]
+  selector: 'my-video-studio-edit',
+  templateUrl: './video-studio-edit.component.html',
+  styleUrls: [ './video-studio-edit.component.scss' ]
 })
-export class VideoEditorEditComponent extends FormReactive implements OnInit {
+export class VideoStudioEditComponent extends FormReactive implements OnInit {
   isRunningEdition = false
 
   video: VideoDetails
@@ -24,7 +24,7 @@ export class VideoEditorEditComponent extends FormReactive implements OnInit {
     private notifier: Notifier,
     private router: Router,
     private route: ActivatedRoute,
-    private videoEditorService: VideoEditorService,
+    private videoStudioService: VideoStudioService,
     private loadingBar: LoadingBarService,
     private confirmService: ConfirmService
   ) {
@@ -84,11 +84,13 @@ export class VideoEditorEditComponent extends FormReactive implements OnInit {
 
     this.loadingBar.useRef().start()
 
-    return this.videoEditorService.editVideo(this.video.uuid, tasks)
+    return this.videoStudioService.editVideo(this.video.uuid, tasks)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Video updated.`)
-          this.router.navigateByUrl(Video.buildWatchUrl(this.video))
+          this.notifier.success($localize`Edition tasks created.`)
+
+          // Don't redirect to old video version watch page that could be confusing for users
+          this.router.navigateByUrl('/my-library/videos')
         },
 
         error: err => {
@@ -153,13 +155,13 @@ export class VideoEditorEditComponent extends FormReactive implements OnInit {
   }
 
   private buildTasks () {
-    const tasks: VideoEditorTask[] = []
+    const tasks: VideoStudioTask[] = []
     const value = this.form.value
 
     const cut = value['cut']
     if (cut['start'] !== 0 || cut['end'] !== this.video.duration) {
 
-      const options: VideoEditorTaskCut['options'] = {}
+      const options: VideoStudioTaskCut['options'] = {}
       if (cut['start'] !== 0) options.start = cut['start']
       if (cut['end'] !== this.video.duration) options.end = cut['end']
 

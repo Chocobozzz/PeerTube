@@ -147,7 +147,7 @@ export interface CustomConfig {
     }
   }
 
-  videoEditor: {
+  videoStudio: {
     enabled: boolean
   }
 

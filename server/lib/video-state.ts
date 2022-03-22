@@ -135,7 +135,7 @@ async function moveToPublishedState (options: {
   await federateVideoIfNeeded(video, isNewVideo, transaction)
 
   if (previousState === VideoState.TO_EDIT) {
-    Notifier.Instance.notifyOfFinishedVideoEdition(video)
+    Notifier.Instance.notifyOfFinishedVideoStudioEdition(video)
     return
   }
 

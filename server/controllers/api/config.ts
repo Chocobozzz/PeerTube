@@ -259,8 +259,8 @@ function customConfig (): CustomConfig {
         }
       }
     },
-    videoEditor: {
-      enabled: CONFIG.VIDEO_EDITOR.ENABLED
+    videoStudio: {
+      enabled: CONFIG.VIDEO_STUDIO.ENABLED
     },
     import: {
       videos: {

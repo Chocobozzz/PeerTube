@@ -144,8 +144,8 @@ const routes: Routes = [
   },
 
   {
-    path: 'video-editor',
-    loadChildren: () => import('./+video-editor/video-editor.module').then(m => m.VideoEditorModule),
+    path: 'studio',
+    loadChildren: () => import('./+video-studio/video-studio.module').then(m => m.VideoStudioModule),
     canActivateChild: [ MetaGuard ]
   },
 

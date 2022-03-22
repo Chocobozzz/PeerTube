@@ -9,8 +9,8 @@ import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { addOptimizeOrMergeAudioJob } from '@server/lib/video'
-import { approximateIntroOutroAdditionalSize } from '@server/lib/video-editor'
 import { VideoPathManager } from '@server/lib/video-path-manager'
+import { approximateIntroOutroAdditionalSize } from '@server/lib/video-studio'
 import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
@@ -26,23 +26,23 @@ import {
   getVideoStreamFPS
 } from '@shared/extra-utils'
 import {
-  VideoEditionPayload,
-  VideoEditionTaskPayload,
-  VideoEditorTask,
-  VideoEditorTaskCutPayload,
-  VideoEditorTaskIntroPayload,
-  VideoEditorTaskOutroPayload,
-  VideoEditorTaskWatermarkPayload
+  VideoStudioEditionPayload,
+  VideoStudioTaskPayload,
+  VideoStudioTaskCutPayload,
+  VideoStudioTaskIntroPayload,
+  VideoStudioTaskOutroPayload,
+  VideoStudioTaskWatermarkPayload,
+  VideoStudioTask
 } from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 
 const lTagsBase = loggerTagsFactory('video-edition')
 
-async function processVideoEdition (job: Job) {
-  const payload = job.data as VideoEditionPayload
+async function processVideoStudioEdition (job: Job) {
+  const payload = job.data as VideoStudioEditionPayload
   const lTags = lTagsBase(payload.videoUUID)
 
-  logger.info('Process video edition of %s in job %d.', payload.videoUUID, job.id, lTags)
+  logger.info('Process video studio edition of %s in job %d.', payload.videoUUID, job.id, lTags)
 
   const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(payload.videoUUID)
 
@@ -106,12 +106,12 @@ async function processVideoEdition (job: Job) {
 // ---------------------------------------------------------------------------
 
 export {
-  processVideoEdition
+  processVideoStudioEdition
 }
 
 // ---------------------------------------------------------------------------
 
-type TaskProcessorOptions <T extends VideoEditionTaskPayload = VideoEditionTaskPayload> = {
+type TaskProcessorOptions <T extends VideoStudioTaskPayload = VideoStudioTaskPayload> = {
   inputPath: string
   outputPath: string
   video: MVideo
@@ -119,7 +119,7 @@ type TaskProcessorOptions <T extends VideoEditionTaskPayload = VideoEditionTaskP
   lTags: { tags: string[] }
 }
 
-const taskProcessors: { [id in VideoEditorTask['name']]: (options: TaskProcessorOptions) => Promise<any> } = {
+const taskProcessors: { [id in VideoStudioTask['name']]: (options: TaskProcessorOptions) => Promise<any> } = {
   'add-intro': processAddIntroOutro,
   'add-outro': processAddIntroOutro,
   'cut': processCut,
@@ -137,7 +137,7 @@ async function processTask (options: TaskProcessorOptions) {
   return processor(options)
 }
 
-function processAddIntroOutro (options: TaskProcessorOptions<VideoEditorTaskIntroPayload | VideoEditorTaskOutroPayload>) {
+function processAddIntroOutro (options: TaskProcessorOptions<VideoStudioTaskIntroPayload | VideoStudioTaskOutroPayload>) {
   const { task } = options
 
   return addIntroOutro({
@@ -153,7 +153,7 @@ function processAddIntroOutro (options: TaskProcessorOptions<VideoEditorTaskIntr
   })
 }
 
-function processCut (options: TaskProcessorOptions<VideoEditorTaskCutPayload>) {
+function processCut (options: TaskProcessorOptions<VideoStudioTaskCutPayload>) {
   const { task } = options
 
   return cutVideo({
@@ -164,7 +164,7 @@ function processCut (options: TaskProcessorOptions<VideoEditorTaskCutPayload>) {
   })
 }
 
-function processAddWatermark (options: TaskProcessorOptions<VideoEditorTaskWatermarkPayload>) {
+function processAddWatermark (options: TaskProcessorOptions<VideoStudioTaskWatermarkPayload>) {
   const { task } = options
 
   return addWatermark({
@@ -212,10 +212,10 @@ async function removeAllFiles (video: MVideoWithAllFiles, webTorrentFileExceptio
   }
 }
 
-async function checkUserQuotaOrThrow (video: MVideoFullLight, payload: VideoEditionPayload) {
+async function checkUserQuotaOrThrow (video: MVideoFullLight, payload: VideoStudioEditionPayload) {
   const user = await UserModel.loadByVideoId(video.id)
 
-  const filePathFinder = (i: number) => (payload.tasks[i] as VideoEditorTaskIntroPayload | VideoEditorTaskOutroPayload).options.file
+  const filePathFinder = (i: number) => (payload.tasks[i] as VideoStudioTaskIntroPayload | VideoStudioTaskOutroPayload).options.file
 
   const additionalBytes = await approximateIntroOutroAdditionalSize(video, payload.tasks, filePathFinder)
   if (await isAbleToUploadVideo(user.id, additionalBytes) === false) {
