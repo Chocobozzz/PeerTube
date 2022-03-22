@@ -9919,7 +9919,7 @@
       </trans-unit>
       <trans-unit id="1391351050292665308" datatype="html">
         <source>Sun</source>
-        <target state="translated">آفتاب</target>
+        <target state="translated">یکشنبه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">20</context>
@@ -9929,7 +9929,7 @@
       </trans-unit>
       <trans-unit id="7037142944838911104" datatype="html">
         <source>Mon</source>
-        <target state="translated">مهتاب</target>
+        <target state="translated">دوشنبه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">21</context>
@@ -9939,7 +9939,7 @@
       </trans-unit>
       <trans-unit id="4051951828654963549" datatype="html">
         <source>Tue</source>
-        <target state="translated">طوفان</target>
+        <target state="translated">سه شنبه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">22</context>
@@ -9949,7 +9949,7 @@
       </trans-unit>
       <trans-unit id="5265738215297391426" datatype="html">
         <source>Wed</source>
-        <target state="translated">هر چیزی</target>
+        <target state="translated">چهارشنبه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">23</context>
@@ -9959,7 +9959,7 @@
       </trans-unit>
       <trans-unit id="1370330981433231150" datatype="html">
         <source>Thu</source>
-        <target state="translated">تور</target>
+        <target state="translated">پنج شنبه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">24</context>
@@ -9969,7 +9969,7 @@
       </trans-unit>
       <trans-unit id="8713535243933137493" datatype="html">
         <source>Fri</source>
-        <target state="translated">جامه</target>
+        <target state="translated">جمعه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">25</context>
@@ -9979,7 +9979,7 @@
       </trans-unit>
       <trans-unit id="3547824477629753314" datatype="html">
         <source>Sat</source>
-        <target state="translated">نشسته</target>
+        <target state="translated">شنبه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">26</context>
@@ -9989,7 +9989,7 @@
       </trans-unit>
       <trans-unit id="6115403217651453591" datatype="html">
         <source>Su</source>
-        <target state="translated">سو</target>
+        <target state="translated">یکشنبه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -9999,7 +9999,7 @@
       </trans-unit>
       <trans-unit id="3797918310510782582" datatype="html">
         <source>Mo</source>
-        <target state="translated">مورچه</target>
+        <target state="translated">دوشنبه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">31</context>
@@ -10009,7 +10009,7 @@
       </trans-unit>
       <trans-unit id="8011371911136291436" datatype="html">
         <source>Tu</source>
-        <target state="translated">توو</target>
+        <target state="translated">سه شنبه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">32</context>
@@ -10019,7 +10019,7 @@
       </trans-unit>
       <trans-unit id="1673380870543456256" datatype="html">
         <source>We</source>
-        <target state="translated">ما</target>
+        <target state="translated">چهارشنبه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">33</context>
@@ -10029,7 +10029,7 @@
       </trans-unit>
       <trans-unit id="8502005439670299526" datatype="html">
         <source>Th</source>
-        <target state="translated">هر</target>
+        <target state="translated">پنج شنبه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">34</context>
@@ -10039,7 +10039,7 @@
       </trans-unit>
       <trans-unit id="2800261787799336637" datatype="html">
         <source>Fr</source>
-        <target state="translated">جوهر</target>
+        <target state="translated">جمعه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">35</context>
@@ -10049,7 +10049,7 @@
       </trans-unit>
       <trans-unit id="2045915324506422459" datatype="html">
         <source>Sa</source>
-        <target state="translated">sa</target>
+        <target state="translated">شنبه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">36</context>
@@ -10129,7 +10129,7 @@
       </trans-unit>
       <trans-unit id="2980544278361296608" datatype="html">
         <source>Feb</source>
-        <target state="translated">فور</target>
+        <target state="translated">فوریه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">56</context>
@@ -10139,7 +10139,7 @@
       </trans-unit>
       <trans-unit id="3124926955462217092" datatype="html">
         <source>Mar</source>
-        <target state="translated">مار</target>
+        <target state="translated">مارچ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">57</context>
@@ -10149,7 +10149,7 @@
       </trans-unit>
       <trans-unit id="9658641661863772" datatype="html">
         <source>Apr</source>
-        <target state="translated">apr</target>
+        <target state="translated">آپریل</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">58</context>
@@ -10159,7 +10159,7 @@
       </trans-unit>
       <trans-unit id="502512326533496869" datatype="html">
         <source>May</source>
-        <target state="translated">ممکن است</target>
+        <target state="translated">مِی</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">59</context>
@@ -10169,7 +10169,7 @@
       </trans-unit>
       <trans-unit id="3044090977322782161" datatype="html">
         <source>Jun</source>
-        <target state="translated">جون</target>
+        <target state="translated">ژوئن</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">60</context>
@@ -10179,7 +10179,7 @@
       </trans-unit>
       <trans-unit id="8066434078267346927" datatype="html">
         <source>Jul</source>
-        <target state="translated">ژوئیه</target>
+        <target state="translated">جولای</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">61</context>
@@ -10199,7 +10199,7 @@
       </trans-unit>
       <trans-unit id="5865190625753625986" datatype="html">
         <source>Sep</source>
-        <target state="translated">سپردار</target>
+        <target state="translated">سپتامبر</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">63</context>
@@ -10250,7 +10250,7 @@
       </trans-unit>
       <trans-unit id="2830831449226931729" datatype="html">
         <source>Instance languages</source>
-        <target state="translated">زبان نمونه</target>
+        <target state="translated">زبان سایت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">212</context></context-group>
       </trans-unit>
       <trans-unit id="40119547597591062" datatype="html">
@@ -10287,7 +10287,7 @@
       </trans-unit>
       <trans-unit id="6028521920505655348" datatype="html">
         <source><x id="PH"/> of full HD videos </source>
-        <target state="translated"><x id="PH"/> از فیلم های کامل HD </target>
+        <target state="translated"><x id="PH"/> از فیلم های تمامHD </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="117588083391484998" datatype="html">
@@ -10297,7 +10297,7 @@
       </trans-unit>
       <trans-unit id="6636555695556123073" datatype="html">
         <source><x id="PH"/> of average quality videos </source>
-        <target state="translated"><x id="PH"/> از فیلم های متوسط کیفیت </target>
+        <target state="translated"><x id="PH"/> از فیلم های با کیفیت متوسط </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
@@ -10373,17 +10373,17 @@
       </trans-unit>
       <trans-unit id="8269144351796756896" datatype="html">
         <source>Do you really want to unban <x id="PH"/>?</source>
-        <target state="translated">آیا واقعا میخواهید <x id="PH"/>؟</target>
+        <target state="translated">آیا واقعا میخواهید <x id="PH"/>رفع ممنوعیت کنید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="1794219875546376069" datatype="html">
         <source>User <x id="PH"/> unbanned.</source>
-        <target state="translated">کاربر <x id="PH"/> غیر فعال شده است.</target>
+        <target state="translated">کاربر <x id="PH"/> رفع ممنوعیت شده است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="9208009623124569456" datatype="html">
         <source>If you remove user <x id="PH" equiv-text="user.username"/>, you won't be able to create another with the same username!</source>
-        <target state="translated">اگر کاربر را حذف کنید <x id="PH" equiv-text="user.username"/>، شما قادر به ایجاد یک کاربر دیگر با همان نام کاربری نخواهید بود!</target>
+        <target state="translated">اگر کاربر  <x id="PH" equiv-text="user.username"/>را حذف کنید، شما قادر به ایجاد یک کاربر دیگر با همان نام کاربری نخواهید بود!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="6307826440781941134" datatype="html">
@@ -10399,7 +10399,7 @@
       </trans-unit>
       <trans-unit id="3896582359861826661" datatype="html">
         <source>User <x id="PH"/> email set as verified</source>
-        <target state="translated">کاربر <x id="PH"/> ایمیل مجموعه به عنوان تایید شده است</target>
+        <target state="translated">ایمیل کاربر <x id="PH"/> به عنوان تایید شده است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="8150022485860412528" datatype="html">
@@ -10410,13 +10410,13 @@
       </trans-unit>
       <trans-unit id="1598375456114200087" datatype="html">
         <source>Instance <x id="PH"/> muted. </source>
-        <target state="translated">مثال <x id="PH"/> خاموش است. </target>
+        <target state="translated">سایت  <x id="PH"/> خاموش است. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">68</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="2558977494773636050" datatype="html">
         <source>Account <x id="PH"/> muted by the instance.</source>
-        <target state="translated">حساب <x id="PH"/> خاموش شده توسط مثال.</target>
+        <target state="translated">حساب <x id="PH"/>  توسط سایت خاموش شده است .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">434</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">190</context></context-group>
       </trans-unit>
@@ -10427,22 +10427,22 @@
       </trans-unit>
       <trans-unit id="8014491157078444256" datatype="html">
         <source>Server <x id="PH"/> muted by the instance.</source>
-        <target state="translated">سرور <x id="PH"/> توسط مثال خاموش شده است.</target>
+        <target state="translated">سرور <x id="PH"/> توسط سایت خاموش شده است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">446</context></context-group>
       </trans-unit>
       <trans-unit id="2044813052587776285" datatype="html">
         <source>Add a message to communicate with the reporter</source>
-        <target state="translated">یک پیام برای برقراری ارتباط با خبرنگار اضافه کنید</target>
+        <target state="translated">یک پیام برای برقراری ارتباط با گزارشگر اضافه کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.ts</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="4117663541503607703" datatype="html">
         <source>Add a message to communicate with the moderation team</source>
-        <target state="translated">یک پیام برای برقراری ارتباط با تیم اعتدال اضافه کنید</target>
+        <target state="translated">یک پیام برای برقراری ارتباط با تیم مدیریت اضافه کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="3085641638748358969" datatype="html">
         <source>Account <x id="PH"/> unmuted by the instance.</source>
-        <target state="translated">حساب کاربری <x id="PH"/> ناامید شده توسط مثال.</target>
+        <target state="translated">حساب کاربری <x id="PH"/> توسط سایت از خاموشی خارج  شده است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">204</context></context-group>
       </trans-unit>
       <trans-unit id="4991892477258601737" datatype="html">
