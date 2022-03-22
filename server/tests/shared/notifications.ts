@@ -685,7 +685,7 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
   await setDefaultChannelAvatar(servers)
   await setDefaultAccountAvatar(servers)
 
-  await servers[1].config.enableStudio()
+  if (servers[1]) await servers[1].config.enableStudio()
 
   if (serversCount > 1) {
     await doubleFollow(servers[0], servers[1])
