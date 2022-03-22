@@ -1,5 +1,5 @@
 <div class="root">
-  <div class="button-file" [ngClass]="{ 'with-icon': !!icon }">
+  <div class="button-file" [ngClass]="{ 'with-icon': !!icon }" [ngbTooltip]="buttonTooltip">
     <my-global-icon *ngIf="icon" [iconName]="icon"></my-global-icon>
 
     <span>{{ inputLabel }}</span>
@@ -12,4 +12,8 @@
   </div>
 
   <div class="filename" *ngIf="displayFilename === true && filename">{{ filename }}</div>
+
+  <button *ngIf="displayReset && filename" i18n class="reset-button" (click)="reset()">
+    Reset
+  </button>
 </div>

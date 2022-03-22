@@ -28,8 +28,8 @@
         <div class="form-group">
           <my-reactive-file
             formControlName="file" inputName="addIntroFile" i18n-inputLabel inputLabel="Select the intro video file"
-            [extensions]="videoExtensions" [displayFilename]="true"
-            [ngbTooltip]="getIntroOutroTooltip()"
+            [extensions]="videoExtensions" [displayFilename]="true" [displayReset]="true"
+            [buttonTooltip]="getIntroOutroTooltip()"
           ></my-reactive-file>
         </div>
       </div>
@@ -42,8 +42,8 @@
         <div class="form-group">
           <my-reactive-file
             formControlName="file" inputName="addOutroFile" i18n-inputLabel inputLabel="Select the outro video file"
-            [extensions]="videoExtensions" [displayFilename]="true"
-            [ngbTooltip]="getIntroOutroTooltip()"
+            [extensions]="videoExtensions" [displayFilename]="true" [displayReset]="true"
+            [buttonTooltip]="getIntroOutroTooltip()"
           ></my-reactive-file>
         </div>
       </div>
@@ -56,8 +56,8 @@
         <div class="form-group">
           <my-reactive-file
             formControlName="file" inputName="addWatermarkFile" i18n-inputLabel inputLabel="Select watermark image file"
-            [extensions]="imageExtensions" [displayFilename]="true"
-            [ngbTooltip]="getWatermarkTooltip()"
+            [extensions]="imageExtensions" [displayFilename]="true" [displayReset]="true"
+            [buttonTooltip]="getWatermarkTooltip()"
           ></my-reactive-file>
         </div>
       </div>
