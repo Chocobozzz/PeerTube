@@ -1,4 +1,5 @@
 import { ContextType } from '../activitypub/context'
+import { VideoState } from '../videos'
 import { VideoEditorTaskCut } from '../videos/editor'
 import { VideoResolution } from '../videos/file/video-resolution.enum'
 import { SendEmailOptions } from './emailer.model'
@@ -116,6 +117,9 @@ export type ManageVideoTorrentPayload =
 interface BaseTranscodingPayload {
   videoUUID: string
   isNewVideo?: boolean
+
+  // Custom notification when the task is finished
+  notification?: 'default' | 'video-edition'
 }
 
 export interface HLSTranscodingPayload extends BaseTranscodingPayload {
@@ -171,6 +175,7 @@ export interface DeleteResumableUploadMetaFilePayload {
 export interface MoveObjectStoragePayload {
   videoUUID: string
   isNewVideo: boolean
+  previousVideoState: VideoState
 }
 
 export type VideoEditorTaskCutPayload = VideoEditorTaskCut

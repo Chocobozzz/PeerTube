@@ -111,6 +111,16 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
+  enableEditor () {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        videoEditor: {
+          enabled: true
+        }
+      }
+    })
+  }
+
   getConfig (options: OverrideCommandOptions = {}) {
     const path = '/api/v1/config'
 

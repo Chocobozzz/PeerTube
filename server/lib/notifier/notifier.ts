@@ -12,6 +12,7 @@ import {
   AbuseStateChangeForReporter,
   AutoFollowForInstance,
   CommentMention,
+  EditionFinishedForOwner,
   FollowForInstance,
   FollowForUser,
   ImportFinishedForOwner,
@@ -53,7 +54,8 @@ class Notifier {
     abuseStateChange: [ AbuseStateChangeForReporter ],
     newAbuseMessage: [ NewAbuseMessageForReporter, NewAbuseMessageForModerators ],
     newPeertubeVersion: [ NewPeerTubeVersionForAdmins ],
-    newPluginVersion: [ NewPluginVersionForAdmins ]
+    newPluginVersion: [ NewPluginVersionForAdmins ],
+    videoEditionFinished: [ EditionFinishedForOwner ]
   }
 
   private static instance: Notifier
@@ -196,6 +198,13 @@ class Notifier {
 
     this.sendNotifications(models, plugin)
       .catch(err => logger.error('Cannot notify on new plugin version %s.', plugin.name, { err }))
+  }
+
+  notifyOfFinishedVideoEdition (video: MVideoFullLight) {
+    const models = this.notificationModels.videoEditionFinished
+
+    this.sendNotifications(models, video)
+      .catch(err => logger.error('Cannot notify on finished edition %s.', video.url, { err }))
   }
 
   private async notify <T> (object: AbstractNotification<T>) {

@@ -168,7 +168,7 @@ async function onHlsPlaylistGeneration (video: MVideoFullLight, user: MUser, pay
   }
 
   await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
-  await retryTransactionWrapper(moveToNextState, video, payload.isNewVideo)
+  await retryTransactionWrapper(moveToNextState, { video, isNewVideo: payload.isNewVideo })
 }
 
 async function onVideoFirstWebTorrentTranscoding (
@@ -210,7 +210,7 @@ async function onVideoFirstWebTorrentTranscoding (
 
   // Move to next state if there are no other resolutions to generate
   if (!hasHls && !hasNewResolutions) {
-    await retryTransactionWrapper(moveToNextState, videoDatabase, payload.isNewVideo)
+    await retryTransactionWrapper(moveToNextState, { video: videoDatabase, isNewVideo: payload.isNewVideo })
   }
 }
 
@@ -225,7 +225,7 @@ async function onNewWebTorrentFileResolution (
 
   await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
 
-  await retryTransactionWrapper(moveToNextState, video, payload.isNewVideo)
+  await retryTransactionWrapper(moveToNextState, { video, isNewVideo: payload.isNewVideo })
 }
 
 // ---------------------------------------------------------------------------

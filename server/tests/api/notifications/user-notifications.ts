@@ -7,6 +7,7 @@ import {
   checkMyVideoImportIsFinished,
   checkNewActorFollow,
   checkNewVideoFromSubscription,
+  checkVideoEditionIsFinished,
   checkVideoIsPublished,
   FIXTURE_URLS,
   MockSmtpServer,
@@ -15,7 +16,7 @@ import {
 } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
-import { UserNotification, UserNotificationType, VideoPrivacy } from '@shared/models'
+import { UserNotification, UserNotificationType, VideoEditorTask, VideoPrivacy } from '@shared/models'
 import { cleanupTests, PeerTubeServer, waitJobs } from '@shared/server-commands'
 
 const expect = chai.expect
@@ -23,10 +24,12 @@ const expect = chai.expect
 describe('Test user notifications', function () {
   let servers: PeerTubeServer[] = []
   let userAccessToken: string
+
   let userNotifications: UserNotification[] = []
   let adminNotifications: UserNotification[] = []
   let adminNotificationsServer2: UserNotification[] = []
   let emails: object[] = []
+
   let channelId: number
 
   before(async function () {
@@ -317,6 +320,42 @@ describe('Test user notifications', function () {
 
       await wait(6000)
       await checkVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'absence' })
+    })
+  })
+
+  describe('Video editor', function () {
+    let baseParams: CheckerBaseParams
+
+    before(() => {
+      baseParams = {
+        server: servers[1],
+        emails,
+        socketNotifications: adminNotificationsServer2,
+        token: servers[1].accessToken
+      }
+    })
+
+    it('Should send a notification after editor edition', async function () {
+      this.timeout(240000)
+
+      const { name, shortUUID, id } = await uploadRandomVideoOnServers(servers, 2, { waitTranscoding: true })
+
+      await waitJobs(servers)
+      await checkVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
+
+      const tasks: VideoEditorTask[] = [
+        {
+          name: 'cut',
+          options: {
+            start: 0,
+            end: 1
+          }
+        }
+      ]
+      await servers[1].videoEditor.createEditionTasks({ videoId: id, tasks })
+      await waitJobs(servers)
+
+      await checkVideoEditionIsFinished({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
     })
   })
 

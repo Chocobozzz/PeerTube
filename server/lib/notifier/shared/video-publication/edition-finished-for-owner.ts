@@ -6,19 +6,19 @@ import { MUserDefault, MUserWithNotificationSetting, MVideoFullLight, UserNotifi
 import { UserNotificationType } from '@shared/models'
 import { AbstractNotification } from '../common/abstract-notification'
 
-export abstract class AbstractOwnedVideoPublication extends AbstractNotification <MVideoFullLight> {
-  protected user: MUserDefault
+export class EditionFinishedForOwner extends AbstractNotification <MVideoFullLight> {
+  private user: MUserDefault
 
   async prepare () {
     this.user = await UserModel.loadByVideoId(this.payload.id)
   }
 
   log () {
-    logger.info('Notifying user %s of the publication of its video %s.', this.user.username, this.payload.url)
+    logger.info('Notifying user %s its video edition %s is finished.', this.user.username, this.payload.url)
   }
 
   getSetting (user: MUserWithNotificationSetting) {
-    return user.NotificationSetting.myVideoPublished
+    return user.NotificationSetting.myVideoEditionFinished
   }
 
   getTargetUsers () {
@@ -29,7 +29,7 @@ export abstract class AbstractOwnedVideoPublication extends AbstractNotification
 
   async createNotification (user: MUserWithNotificationSetting) {
     const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
-      type: UserNotificationType.MY_VIDEO_PUBLISHED,
+      type: UserNotificationType.MY_VIDEO_EDITION_FINISHED,
       userId: user.id,
       videoId: this.payload.id
     })
@@ -43,10 +43,10 @@ export abstract class AbstractOwnedVideoPublication extends AbstractNotification
 
     return {
       to,
-      subject: `Your video ${this.payload.name} has been published`,
-      text: `Your video "${this.payload.name}" has been published.`,
+      subject: `Edition of your video ${this.payload.name} has finished`,
+      text: `Edition of your video ${this.payload.name} has finished.`,
       locals: {
-        title: 'Your video is live',
+        title: 'Video edition has finished',
         action: {
           text: 'View video',
           url: videoUrl

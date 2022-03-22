@@ -8,10 +8,9 @@ import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles'
 import { isAbleToUploadVideo } from '@server/lib/user'
-import { addMoveToObjectStorageJob, addOptimizeOrMergeAudioJob } from '@server/lib/video'
+import { addOptimizeOrMergeAudioJob } from '@server/lib/video'
 import { approximateIntroOutroAdditionalSize } from '@server/lib/video-editor'
 import { VideoPathManager } from '@server/lib/video-path-manager'
-import { buildNextVideoState } from '@server/lib/video-state'
 import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
@@ -33,8 +32,7 @@ import {
   VideoEditorTaskCutPayload,
   VideoEditorTaskIntroPayload,
   VideoEditorTaskOutroPayload,
-  VideoEditorTaskWatermarkPayload,
-  VideoState
+  VideoEditorTaskWatermarkPayload
 } from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 
@@ -42,14 +40,15 @@ const lTagsBase = loggerTagsFactory('video-edition')
 
 async function processVideoEdition (job: Job) {
   const payload = job.data as VideoEditionPayload
+  const lTags = lTagsBase(payload.videoUUID)
 
-  logger.info('Process video edition of %s in job %d.', payload.videoUUID, job.id)
+  logger.info('Process video edition of %s in job %d.', payload.videoUUID, job.id, lTags)
 
   const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(payload.videoUUID)
 
   // No video, maybe deleted?
   if (!video) {
-    logger.info('Can\'t process job %d, video does not exist.', job.id, lTagsBase(payload.videoUUID))
+    logger.info('Can\'t process job %d, video does not exist.', job.id, lTags)
     return undefined
   }
 
@@ -69,7 +68,8 @@ async function processVideoEdition (job: Job) {
         inputPath: tmpInputFilePath ?? originalFilePath,
         video,
         outputPath,
-        task
+        task,
+        lTags
       })
 
       if (tmpInputFilePath) await remove(tmpInputFilePath)
@@ -81,7 +81,7 @@ async function processVideoEdition (job: Job) {
     return outputPath
   })
 
-  logger.info('Video edition ended for video %s.', video.uuid)
+  logger.info('Video edition ended for video %s.', video.uuid, lTags)
 
   const newFile = await buildNewFile(video, editionResultPath)
 
@@ -94,19 +94,13 @@ async function processVideoEdition (job: Job) {
 
   await newFile.save()
 
-  video.state = buildNextVideoState()
   video.duration = await getVideoStreamDuration(outputPath)
   await video.save()
 
   await federateVideoIfNeeded(video, false, undefined)
 
-  if (video.state === VideoState.TO_TRANSCODE) {
-    const user = await UserModel.loadByVideoId(video.id)
-
-    await addOptimizeOrMergeAudioJob(video, newFile, user, false)
-  } else if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-    await addMoveToObjectStorageJob(video, false)
-  }
+  const user = await UserModel.loadByVideoId(video.id)
+  await addOptimizeOrMergeAudioJob({ video, videoFile: newFile, user, isNewVideo: false })
 }
 
 // ---------------------------------------------------------------------------
@@ -122,6 +116,7 @@ type TaskProcessorOptions <T extends VideoEditionTaskPayload = VideoEditionTaskP
   outputPath: string
   video: MVideo
   task: T
+  lTags: { tags: string[] }
 }
 
 const taskProcessors: { [id in VideoEditorTask['name']]: (options: TaskProcessorOptions) => Promise<any> } = {
@@ -134,7 +129,7 @@ const taskProcessors: { [id in VideoEditorTask['name']]: (options: TaskProcessor
 async function processTask (options: TaskProcessorOptions) {
   const { video, task } = options
 
-  logger.info('Processing %s task for video %s.', task.name, video.uuid, { task })
+  logger.info('Processing %s task for video %s.', task.name, video.uuid, { task, ...options.lTags })
 
   const processor = taskProcessors[options.task.name]
   if (!process) throw new Error('Unknown task ' + task.name)

@@ -175,6 +175,15 @@ export class UserNotificationSettingModel extends Model<Partial<AttributesOnly<U
   @Column
   newPluginVersion: UserNotificationSettingValue
 
+  @AllowNull(false)
+  @Default(null)
+  @Is(
+    'UserNotificationSettingMyVideoEditionFinished',
+    value => throwIfNotValid(value, isUserNotificationSettingValid, 'myVideoEditionFinished')
+  )
+  @Column
+  myVideoEditionFinished: UserNotificationSettingValue
+
   @ForeignKey(() => UserModel)
   @Column
   userId: number
@@ -216,6 +225,7 @@ export class UserNotificationSettingModel extends Model<Partial<AttributesOnly<U
       abuseNewMessage: this.abuseNewMessage,
       abuseStateChange: this.abuseStateChange,
       newPeerTubeVersion: this.newPeerTubeVersion,
+      myVideoEditionFinished: this.myVideoEditionFinished,
       newPluginVersion: this.newPluginVersion
     }
   }

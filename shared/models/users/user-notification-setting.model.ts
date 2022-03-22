@@ -27,4 +27,6 @@ export interface UserNotificationSetting {
 
   newPeerTubeVersion: UserNotificationSettingValue
   newPluginVersion: UserNotificationSettingValue
+
+  myVideoEditionFinished: UserNotificationSettingValue
 }

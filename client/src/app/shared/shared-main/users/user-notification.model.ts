@@ -227,6 +227,10 @@ export class UserNotification implements UserNotificationServer {
           this.pluginUrl = `/admin/plugins/list-installed`
           this.pluginQueryParams.pluginType = this.plugin.type + ''
           break
+
+        case UserNotificationType.MY_VIDEO_EDITION_FINISHED:
+          this.videoUrl = this.buildVideoUrl(this.video)
+          break
       }
     } catch (err) {
       this.type = null

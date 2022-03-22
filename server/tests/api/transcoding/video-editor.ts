@@ -56,13 +56,7 @@ describe('Test video editor', function () {
 
     await servers[0].config.enableMinimumTranscoding()
 
-    await servers[0].config.updateExistingSubConfig({
-      newConfig: {
-        videoEditor: {
-          enabled: true
-        }
-      }
-    })
+    await servers[0].config.enableEditor()
   })
 
   describe('Cutting', function () {

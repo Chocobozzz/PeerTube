@@ -218,11 +218,11 @@ async function addVideo (options: {
       if (!refreshedVideo) return
 
       if (refreshedVideo.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-        return addMoveToObjectStorageJob(refreshedVideo)
+        return addMoveToObjectStorageJob({ video: refreshedVideo, previousVideoState: undefined })
       }
 
       if (refreshedVideo.state === VideoState.TO_TRANSCODE) {
-        return addOptimizeOrMergeAudioJob(refreshedVideo, videoFile, user)
+        return addOptimizeOrMergeAudioJob({ video: refreshedVideo, videoFile, user })
       }
     }).catch(err => logger.error('Cannot add optimize/merge audio job for %s.', videoCreated.uuid, { err, ...lTags(videoCreated.uuid) }))
 

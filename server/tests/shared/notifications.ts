@@ -47,6 +47,7 @@ function getAllNotificationsSettings (): UserNotificationSetting {
     abuseStateChange: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     autoInstanceFollowing: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newPeerTubeVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    myVideoEditionFinished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newPluginVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
   }
 }
@@ -104,6 +105,34 @@ async function checkVideoIsPublished (options: CheckerBaseParams & {
   function emailNotificationFinder (email: object) {
     const text: string = email['text']
     return text.includes(shortUUID) && text.includes('Your video')
+  }
+
+  await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
+}
+
+async function checkVideoEditionIsFinished (options: CheckerBaseParams & {
+  videoName: string
+  shortUUID: string
+  checkType: CheckerType
+}) {
+  const { videoName, shortUUID } = options
+  const notificationType = UserNotificationType.MY_VIDEO_EDITION_FINISHED
+
+  function notificationChecker (notification: UserNotification, checkType: CheckerType) {
+    if (checkType === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      checkVideo(notification.video, videoName, shortUUID)
+      checkActor(notification.video.channel)
+    } else {
+      expect(notification.video).to.satisfy(v => v === undefined || v.name !== videoName)
+    }
+  }
+
+  function emailNotificationFinder (email: object) {
+    const text: string = email['text']
+    return text.includes(shortUUID) && text.includes('Edition of your video')
   }
 
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
@@ -656,6 +685,8 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
   await setDefaultChannelAvatar(servers)
   await setDefaultAccountAvatar(servers)
 
+  await servers[1].config.enableEditor()
+
   if (serversCount > 1) {
     await doubleFollow(servers[0], servers[1])
   }
@@ -724,7 +755,8 @@ export {
   checkNewCommentAbuseForModerators,
   checkNewAccountAbuseForModerators,
   checkNewPeerTubeVersion,
-  checkNewPluginVersion
+  checkNewPluginVersion,
+  checkVideoEditionIsFinished
 }
 
 // ---------------------------------------------------------------------------

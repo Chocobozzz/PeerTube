@@ -30,7 +30,9 @@ export const enum UserNotificationType {
   ABUSE_NEW_MESSAGE = 16,
 
   NEW_PLUGIN_VERSION = 17,
-  NEW_PEERTUBE_VERSION = 18
+  NEW_PEERTUBE_VERSION = 18,
+
+  MY_VIDEO_EDITION_FINISHED = 19
 }
 
 export interface VideoInfo {

@@ -28,7 +28,7 @@ async function processVideoFileImport (job: Job) {
   await updateVideoFile(video, payload.filePath)
 
   if (CONFIG.OBJECT_STORAGE.ENABLED) {
-    await addMoveToObjectStorageJob(video)
+    await addMoveToObjectStorageJob({ video, previousVideoState: video.state })
   } else {
     await federateVideoIfNeeded(video, false)
   }

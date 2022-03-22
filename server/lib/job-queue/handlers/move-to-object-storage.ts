@@ -11,7 +11,7 @@ import { moveToFailedMoveToObjectStorageState, moveToNextState } from '@server/l
 import { VideoModel } from '@server/models/video/video'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoWithAllFiles } from '@server/types/models'
-import { MoveObjectStoragePayload, VideoStorage } from '@shared/models'
+import { MoveObjectStoragePayload, VideoState, VideoStorage } from '@shared/models'
 
 const lTagsBase = loggerTagsFactory('move-object-storage')
 
@@ -45,7 +45,7 @@ export async function processMoveToObjectStorage (job: Job) {
     if (pendingMove === 0) {
       logger.info('Running cleanup after moving files to object storage (video %s in job %d)', video.uuid, job.id, lTags)
 
-      await doAfterLastJob(video, payload.isNewVideo)
+      await doAfterLastJob({ video, previousVideoState: payload.previousVideoState, isNewVideo: payload.isNewVideo })
     }
   } catch (err) {
     logger.error('Cannot move video %s to object storage.', video.url, { err, ...lTags })
@@ -91,7 +91,13 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
   }
 }
 
-async function doAfterLastJob (video: MVideoWithAllFiles, isNewVideo: boolean) {
+async function doAfterLastJob (options: {
+  video: MVideoWithAllFiles
+  previousVideoState: VideoState
+  isNewVideo: boolean
+}) {
+  const { video, previousVideoState, isNewVideo } = options
+
   for (const playlist of video.VideoStreamingPlaylists) {
     if (playlist.storage === VideoStorage.OBJECT_STORAGE) continue
 
@@ -115,7 +121,7 @@ async function doAfterLastJob (video: MVideoWithAllFiles, isNewVideo: boolean) {
     await remove(getHLSDirectory(video))
   }
 
-  await moveToNextState(video, isNewVideo)
+  await moveToNextState({ video, previousVideoState, isNewVideo })
 }
 
 async function onFileMoved (options: {
