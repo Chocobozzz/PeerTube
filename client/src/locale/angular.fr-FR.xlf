@@ -119,12 +119,12 @@
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="nd so on.    *"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="nd so on.    *"/></target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/progressbar/progressbar.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.HH" datatype="html">
         <source>HH</source>
-        <target state="new">HH</target>
+        <target state="translated">HH</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.hours" datatype="html">
@@ -134,7 +134,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.MM" datatype="html">
         <source>MM</source>
-        <target state="new">MM</target>
+        <target state="translated">MM</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.minutes" datatype="html">
@@ -164,7 +164,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.SS" datatype="html">
         <source>SS</source>
-        <target state="new">SS</target>
+        <target state="translated">SS</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">283</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.seconds" datatype="html">
@@ -190,7 +190,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
         <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
+        <target state="translated"><x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">295</context>
@@ -198,7 +198,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM" datatype="html">
         <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
+        <target state="translated"><x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">295</context>
@@ -992,7 +992,7 @@
       </trans-unit>
       <trans-unit id="6827125739942610231" datatype="html">
         <source>In this instance federation</source>
-        <target state="needs-translation">Dans la fédération de cette instance</target>
+        <target state="translated">Dans la fédération de cette instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">58</context>
@@ -1612,7 +1612,7 @@
       </trans-unit>
       <trans-unit id="2095604754338363597" datatype="html">
         <source>⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</source>
-        <target state="new">⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</target>
+        <target state="translated">⚠️ Si activé, nous recommandons d'utiliser <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>un proxy HTTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> afin d'éviter l'accès à des URL privées par votre serveur PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">272</context>
@@ -2044,7 +2044,7 @@
       </trans-unit>
       <trans-unit id="480001148850006323" datatype="html">
         <source>Edit caption</source>
-        <target state="new">Edit caption</target>
+        <target state="translated">Éditer le sous-titre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">5</context>
@@ -2052,7 +2052,7 @@
       </trans-unit>
       <trans-unit id="6838559377527923778" datatype="html">
         <source>Caption</source>
-        <target state="new">Caption</target>
+        <target state="translated">Sous-titre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">10</context>
@@ -2060,7 +2060,7 @@
       </trans-unit>
       <trans-unit id="1989971680596153649" datatype="html">
         <source>Edit this caption</source>
-        <target state="new">Edit this caption</target>
+        <target state="translated">Éditer ce sous-titre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">31</context>
@@ -2301,7 +2301,7 @@
       </trans-unit>
       <trans-unit id="8541869921865486762" datatype="html">
         <source>Will be edited on update</source>
-        <target state="new">Will be edited on update</target>
+        <target state="translated">Sera édité à la mise à jour</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">204</context>
@@ -2309,7 +2309,7 @@
       </trans-unit>
       <trans-unit id="4013233634947488312" datatype="html">
         <source>Cancel edition</source>
-        <target state="new">Cancel edition</target>
+        <target state="translated">Annuler l'édition</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">206</context>
@@ -2344,7 +2344,7 @@
       </trans-unit>
       <trans-unit id="1966495339378120213" datatype="html">
         <source>Latency mode</source>
-        <target state="new">Latency mode</target>
+        <target state="translated">Mode de latence</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">294</context>
@@ -2418,7 +2418,7 @@
       </trans-unit>
       <trans-unit id="54931094224146544" datatype="html">
         <source>Small latency</source>
-        <target state="new">Small latency</target>
+        <target state="translated">Latence réduite</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -2426,7 +2426,7 @@
       </trans-unit>
       <trans-unit id="668281328725856861" datatype="html">
         <source>Reduce latency to ~15s disabling P2P</source>
-        <target state="new">Reduce latency to ~15s disabling P2P</target>
+        <target state="translated">Réduit la latence à ~15s en désactivant le P2P</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -2434,7 +2434,7 @@
       </trans-unit>
       <trans-unit id="5607669932062416162" datatype="html">
         <source>Default</source>
-        <target state="new">Default</target>
+        <target state="translated">Défaut</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">90</context>
@@ -2442,7 +2442,7 @@
       </trans-unit>
       <trans-unit id="4299493457408757206" datatype="html">
         <source>Average latency of 30s</source>
-        <target state="new">Average latency of 30s</target>
+        <target state="translated">Latence moyenne de 30s</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -2450,7 +2450,7 @@
       </trans-unit>
       <trans-unit id="3378360148342029710" datatype="html">
         <source>High latency</source>
-        <target state="new">High latency</target>
+        <target state="translated">Latence importante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -2458,7 +2458,7 @@
       </trans-unit>
       <trans-unit id="369497609327288447" datatype="html">
         <source>Average latency of 60s increasing P2P ratio</source>
-        <target state="new">Average latency of 60s increasing P2P ratio</target>
+        <target state="translated">Latence moyenne de 60s augmentant le ratio P2P</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">96</context>
@@ -2887,7 +2887,7 @@
       </trans-unit>
       <trans-unit id="7482217084177855485" datatype="html">
         <source>P2P</source>
-        <target state="new">P2P</target>
+        <target state="translated">P2P</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">222</context>
@@ -3075,8 +3075,7 @@
       </trans-unit>
       <trans-unit id="1353168089968436742" datatype="html">
         <source>The video is being edited, it may not work properly.</source>
-        <target state="new"> The video is being edited, it may not work properly.
-</target>
+        <target state="translated">Cette vidéo est en cours d'édition, elle peut ne pas fonctionner correctement.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">17,19</context>
@@ -3124,7 +3123,7 @@
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> and others </source>
-        <target state="needs-translation">Voir <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 réponse} other {{{ comment.totalReplies }} réponses}}"/> de <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> et autres </target>
+        <target state="translated">Voir <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 réponse} other {{{ comment.totalReplies }} réponses}}"/> de <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> et autres </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="4036338619293319383" datatype="html">
@@ -3136,7 +3135,7 @@
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target state="needs-translation">Voir <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 réponse} other {{{ comment.totalReplies }} réponses}}"/> de <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
+        <target state="translated">Voir <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 réponse} other {{{ comment.totalReplies }} réponses}}"/> de <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="5535545444690528619" datatype="html">
@@ -3709,7 +3708,7 @@
       </trans-unit>
       <trans-unit id="4824046935922837124" datatype="html">
         <source>Used (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</source>
-        <target state="new">Used (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</target>
+        <target state="translated">Utilisé (<x id="PH" equiv-text="this.bytesToHuman(stats.totalUsed)"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -3717,7 +3716,7 @@
       </trans-unit>
       <trans-unit id="5874809640561431793" datatype="html">
         <source>Available (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</source>
-        <target state="new">Available (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</target>
+        <target state="translated">Disponible (<x id="PH" equiv-text="this.bytesToHuman(totalAvailable)"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">105</context>
@@ -4268,7 +4267,7 @@
       </trans-unit>
       <trans-unit id="3204306399736151644" datatype="html">
         <source>Comments list</source>
-        <target state="new">Comments list</target>
+        <target state="translated">Liste des commentaires</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment.routes.ts</context>
           <context context-type="linenumber">24</context>
@@ -4755,7 +4754,7 @@
       </trans-unit>
       <trans-unit id="3807699453257291879" datatype="html">
         <source>Comments</source>
-        <target state="new">Comments</target>
+        <target state="translated">Commentaires</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -4836,7 +4835,7 @@
       </trans-unit>
       <trans-unit id="6801844913630625451" datatype="html">
         <source>⚠️ We don't recommend to enable this feature if you don't trust your users</source>
-        <target state="new">⚠️ We don't recommend to enable this feature if you don't trust your users</target>
+        <target state="translated">⚠️ Nous ne recommandons pas d'activer cette fonctionnalité si vous n'avez pas une totale confiance en vos utilisateurs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">283</context>
@@ -5060,7 +5059,7 @@
       </trans-unit>
       <trans-unit id="8583623894789865917" datatype="html">
         <source>Allow your users to change live latency</source>
-        <target state="new">Allow your users to change live latency</target>
+        <target state="translated">Permet à vos utilisateur de changer la latence de leur direct</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">42</context>
@@ -5068,7 +5067,7 @@
       </trans-unit>
       <trans-unit id="6422195560028891534" datatype="html">
         <source>Small latency disables P2P and high latency can increase P2P ratio</source>
-        <target state="new"> Small latency disables P2P and high latency can increase P2P ratio </target>
+        <target state="translated">Une latence réduire désactive le P2P et la latence importante peut augmenter le ratio P2P</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">44,46</context>
@@ -5285,7 +5284,7 @@
       </trans-unit>
       <trans-unit id="5216455244039448125" datatype="html">
         <source>VIDEO EDITOR</source>
-        <target state="new">VIDEO EDITOR</target>
+        <target state="translated">ÉDITEUR VIDÉO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">198</context>
@@ -5293,7 +5292,7 @@
       </trans-unit>
       <trans-unit id="4078329985026583770" datatype="html">
         <source>Allows your users to edit their video (cut, add intro/outro, add a watermark etc)</source>
-        <target state="new"> Allows your users to edit their video (cut, add intro/outro, add a watermark etc) </target>
+        <target state="translated">Permet à vos utilisateurs d'éditer leur vidéo (couper, ajouter une intro/outro, ajouter un logo etc)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">199,201</context>
@@ -5301,7 +5300,7 @@
       </trans-unit>
       <trans-unit id="6675276142886460097" datatype="html">
         <source>Enable video editor</source>
-        <target state="new">Enable video editor</target>
+        <target state="translated">Activer l'éditeur de vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">210</context>
@@ -5309,7 +5308,7 @@
       </trans-unit>
       <trans-unit id="1618687984822075464" datatype="html">
         <source>⚠️ You need to enable transcoding first to enable video editor</source>
-        <target state="new">⚠️ You need to enable transcoding first to enable video editor</target>
+        <target state="translated">⚠️ Vous devez d'abord activer le transcoding afin d'activer l'éditeur de vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">213</context>
@@ -5389,7 +5388,7 @@
       </trans-unit>
       <trans-unit id="5464209657969421100" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="translated">Écrivez directement du code CSS. Exemple :<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color: red; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Ajoutez au début du code <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt; "/> pour forcer le style. Exemple : <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt; "/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text=" {{ '{' }"/> color : red ; <x id="INTERPOLATION_1" equiv-text=" {{ '}' }"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated">Écrivez directement du code CSS. Exemple : <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Préfixez avec <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> pour surcharger les styles. Exemple : <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="283725429207896837" datatype="html">
@@ -5885,7 +5884,7 @@
       </trans-unit>
       <trans-unit id="989169929300254768" datatype="html">
         <source>Delete from history</source>
-        <target state="new">Delete from history</target>
+        <target state="translated">Supprimer de l'historique</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">36</context>
@@ -7320,7 +7319,7 @@
       </trans-unit>
       <trans-unit id="397182597341363053" datatype="html">
         <source>Redundancy</source>
-        <target state="new">Redundancy</target>
+        <target state="translated">Redondance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/follows.routes.ts</context>
           <context context-type="linenumber">48</context>
@@ -8056,7 +8055,7 @@
       </trans-unit>
       <trans-unit id="778524577866863576" datatype="html">
         <source><x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;delete&quot; aria-hidden=&quot;true&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/> Clear all history </source>
-        <target state="new"><x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;delete&quot; aria-hidden=&quot;true&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/> Clear all history </target>
+        <target state="translated"><x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;delete&quot; aria-hidden=&quot;true&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/> Supprimer tout l'historique </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">17,19</context>
@@ -8114,7 +8113,7 @@
       </trans-unit>
       <trans-unit id="2740531699780274491" datatype="html">
         <source>This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</source>
-        <target state="new">This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</target>
+        <target state="translated">Cela détruira toutes vos données, dont les chaînes, vidéos, commentaires et vous ne pourrez pas créer un autre utilisateur sur cette instance avec l'identifiant <x id="PH" equiv-text="this.user.username"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -8122,7 +8121,7 @@
       </trans-unit>
       <trans-unit id="5422897685524094185" datatype="html">
         <source>Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="new">Content cached by other servers and other third-parties might make longer to be deleted.</target>
+        <target state="translated">Le contenu caché par d'autres serveurs et d'autres entités externes peut prendre plus de temps à être supprimé.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -8547,7 +8546,7 @@
       </trans-unit>
       <trans-unit id="3742657416068781599" datatype="html">
         <source>Editor</source>
-        <target state="new">Editor</target>
+        <target state="translated">Éditeur</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">208</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">340</context></context-group>
       </trans-unit>
@@ -8678,7 +8677,7 @@
       </trans-unit>
       <trans-unit id="3862497674553063473" datatype="html">
         <source>Edit <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></source>
-        <target state="new">Edit <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></target>
+        <target state="translated">Modifier <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">2</context>
@@ -8686,7 +8685,7 @@
       </trans-unit>
       <trans-unit id="5470809226184152498" datatype="html">
         <source>CUT VIDEO</source>
-        <target state="new">CUT VIDEO</target>
+        <target state="translated">COUPER LA VIDÉO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">8</context>
@@ -8694,7 +8693,7 @@
       </trans-unit>
       <trans-unit id="5639348768609905535" datatype="html">
         <source>Set a new start/end.</source>
-        <target state="new">Set a new start/end.</target>
+        <target state="translated">Modifier le début/fin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">10</context>
@@ -8702,7 +8701,7 @@
       </trans-unit>
       <trans-unit id="783359429228696335" datatype="html">
         <source>New start</source>
-        <target state="new">New start</target>
+        <target state="translated">Nouveau début</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">13</context>
@@ -8710,7 +8709,7 @@
       </trans-unit>
       <trans-unit id="8910806821370505981" datatype="html">
         <source>New end</source>
-        <target state="new">New end</target>
+        <target state="translated">Nouvelle fin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">18</context>
@@ -8718,7 +8717,7 @@
       </trans-unit>
       <trans-unit id="2502254344085150809" datatype="html">
         <source>ADD INTRO</source>
-        <target state="new">ADD INTRO</target>
+        <target state="translated">AJOUTER UNE INTRO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">24</context>
@@ -8726,7 +8725,7 @@
       </trans-unit>
       <trans-unit id="5030063045826839645" datatype="html">
         <source>Concatenate a file at the beginning of the video.</source>
-        <target state="new">Concatenate a file at the beginning of the video.</target>
+        <target state="translated">Concatène un fichier au début de la vidéo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">26</context>
@@ -8734,7 +8733,7 @@
       </trans-unit>
       <trans-unit id="4798642303989337390" datatype="html">
         <source>Select the intro video file</source>
-        <target state="new">Select the intro video file</target>
+        <target state="translated">Sélectionner un fichier vidéo d'intro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">30</context>
@@ -8742,7 +8741,7 @@
       </trans-unit>
       <trans-unit id="7698413240170540435" datatype="html">
         <source>ADD OUTRO</source>
-        <target state="new">ADD OUTRO</target>
+        <target state="translated">AJOUTER UNE OUTRO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">38</context>
@@ -8750,7 +8749,7 @@
       </trans-unit>
       <trans-unit id="2832051749922509643" datatype="html">
         <source>Concatenate a file at the end of the video.</source>
-        <target state="new">Concatenate a file at the end of the video.</target>
+        <target state="translated">Concatène un fichier à la fin de la vidéo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">40</context>
@@ -8758,7 +8757,7 @@
       </trans-unit>
       <trans-unit id="4368653199478595315" datatype="html">
         <source>Select the outro video file</source>
-        <target state="new">Select the outro video file</target>
+        <target state="translated">Sélectionner le fichier vidéo d'outro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">44</context>
@@ -8766,7 +8765,7 @@
       </trans-unit>
       <trans-unit id="3463158361655332380" datatype="html">
         <source>ADD WATERMARK</source>
-        <target state="new">ADD WATERMARK</target>
+        <target state="translated">AJOUTER UN FILIGRANE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">52</context>
@@ -8774,7 +8773,7 @@
       </trans-unit>
       <trans-unit id="4472450670859114703" datatype="html">
         <source>Add a watermark image to the video.</source>
-        <target state="new">Add a watermark image to the video.</target>
+        <target state="translated">Ajoute un filigrane/logo à la vidéo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">54</context>
@@ -8782,7 +8781,7 @@
       </trans-unit>
       <trans-unit id="155510305759087510" datatype="html">
         <source>Select watermark image file</source>
-        <target state="new">Select watermark image file</target>
+        <target state="translated">Sélectionner le fichier filigrane</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">58</context>
@@ -8790,7 +8789,7 @@
       </trans-unit>
       <trans-unit id="3926035808219061063" datatype="html">
         <source>Run video edition</source>
-        <target state="new">Run video edition</target>
+        <target state="translated">Lancer l'édition de la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">66</context>
@@ -8798,7 +8797,7 @@
       </trans-unit>
       <trans-unit id="1514792472513458403" datatype="html">
         <source>Video before edition</source>
-        <target state="new">Video before edition</target>
+        <target state="translated">Vidéo avant édition</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">75</context>
@@ -8806,7 +8805,7 @@
       </trans-unit>
       <trans-unit id="1109043661443571733" datatype="html">
         <source>Edition tasks:</source>
-        <target state="new">Edition tasks:</target>
+        <target state="translated">Tâches d'édition :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.html</context>
           <context context-type="linenumber">80</context>
@@ -8814,7 +8813,7 @@
       </trans-unit>
       <trans-unit id="3541115907775840269" datatype="html">
         <source>Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</source>
-        <target state="new">Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</target>
+        <target state="translated">Êtes-vous sûr de vouloir éditer "<x id="PH" equiv-text="this.video.name"/>" ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">72</context>
@@ -8822,7 +8821,7 @@
       </trans-unit>
       <trans-unit id="3858880927114551513" datatype="html">
         <source>The current video will be overwritten by this edited video and &lt;strong&gt;you won't be able to recover it&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</source>
-        <target state="new">The current video will be overwritten by this edited video and &lt;strong&gt;you won't be able to recover it&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</target>
+        <target state="translated">La vidéo actuelle sera remplacée par cette nouvelle vidéo et &lt;strong&gt;vous ne pourrez pas la récupérer&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -8830,7 +8829,7 @@
       </trans-unit>
       <trans-unit id="4876327655498234453" datatype="html">
         <source>As a reminder, the following tasks will be executed: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</source>
-        <target state="new">As a reminder, the following tasks will be executed: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
+        <target state="translated">Pour rappel, les tâches suivantes seront exécutées : &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -9708,7 +9707,7 @@
       </trans-unit>
       <trans-unit id="9145435275110757909" datatype="html">
         <source>Caption content is required.</source>
-        <target state="new">Caption content is required.</target>
+        <target state="translated">Le contenu du sous-titre est requis.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">21</context>
@@ -10458,7 +10457,7 @@
       </trans-unit>
       <trans-unit id="3160979325245958752" datatype="html">
         <source>Ban <x id="PH" equiv-text="this.usersToBan.length"/> users</source>
-        <target state="new">Ban <x id="PH" equiv-text="this.usersToBan.length"/> users</target>
+        <target state="translated">Bannir <x id="PH" equiv-text="this.usersToBan.length"/> utilisateurs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -10466,7 +10465,7 @@
       </trans-unit>
       <trans-unit id="8088707210191809175" datatype="html">
         <source>Ban "<x id="PH" equiv-text="this.usersToBan.username"/>"</source>
-        <target state="new">Ban "<x id="PH" equiv-text="this.usersToBan.username"/>"</target>
+        <target state="translated">Bannir "<x id="PH" equiv-text="this.usersToBan.username"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">84</context>
@@ -11211,7 +11210,7 @@
       </trans-unit>
       <trans-unit id="6963802198225789806" datatype="html">
         <source>To edit</source>
-        <target state="new">To edit</target>
+        <target state="translated">À éditer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">199</context>
@@ -11257,7 +11256,7 @@
       </trans-unit>
       <trans-unit id="5629495543088475111" datatype="html">
         <source>Instance default theme (<x id="INTERPOLATION" equiv-text="{{ getDefaultThemeLabel() }}"/>)</source>
-        <target state="new">Instance default theme (<x id="INTERPOLATION" equiv-text="{{ getDefaultThemeLabel() }}"/>)</target>
+        <target state="translated">Thème par défaut de l'instance (<x id="INTERPOLATION" equiv-text="{{ getDefaultThemeLabel() }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -11265,7 +11264,7 @@
       </trans-unit>
       <trans-unit id="5622582942980351192" datatype="html">
         <source>Light/Orange</source>
-        <target state="new">Light/Orange</target>
+        <target state="translated">Clair/Orange</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.ts</context>
           <context context-type="linenumber">21</context>
@@ -11347,7 +11346,7 @@
       </trans-unit>
       <trans-unit id="5609201297201028750" datatype="html">
         <source>(extensions: <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</source>
-        <target state="new">(extensions: <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</target>
+        <target state="translated">(extensions : <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -11359,7 +11358,7 @@
       </trans-unit>
       <trans-unit id="2763845919408843325" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the beginning of the video</source>
-        <target state="new">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the beginning of the video</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" sera ajouté au début de la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -11367,7 +11366,7 @@
       </trans-unit>
       <trans-unit id="4952096817126306891" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the end of the video</source>
-        <target state="new">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the end of the video</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" sera ajouté à la fin de la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">124</context>
@@ -11375,7 +11374,7 @@
       </trans-unit>
       <trans-unit id="665518679871959619" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" image watermark will be added to the video</source>
-        <target state="new">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" image watermark will be added to the video</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" sera ajouté à la vidéo comme filigrane</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">128</context>
@@ -11383,7 +11382,7 @@
       </trans-unit>
       <trans-unit id="2677581013897190613" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></source>
-        <target state="new">Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
+        <target state="translated">La vidéo commencera à <x id="PH" equiv-text="secondsToTime(start)"/> et finira à <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -11391,7 +11390,7 @@
       </trans-unit>
       <trans-unit id="2299077646120636288" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/></source>
-        <target state="new">Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/></target>
+        <target state="translated">La vidéo commencera à <x id="PH" equiv-text="secondsToTime(start)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -11399,7 +11398,7 @@
       </trans-unit>
       <trans-unit id="7209039243783736285" datatype="html">
         <source>Video will stop at <x id="PH" equiv-text="secondsToTime(end)"/></source>
-        <target state="new">Video will stop at <x id="PH" equiv-text="secondsToTime(end)"/></target>
+        <target state="translated">La vidéo finira à <x id="PH" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/edit/video-editor-edit.component.ts</context>
           <context context-type="linenumber">143</context>
@@ -11407,7 +11406,7 @@
       </trans-unit>
       <trans-unit id="9127817756370915850" datatype="html">
         <source>Edit video</source>
-        <target state="new">Edit video</target>
+        <target state="translated">Éditer la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-editor/video-editor-routing.module.ts</context>
           <context context-type="linenumber">15</context>
@@ -11518,7 +11517,7 @@
       </trans-unit>
       <trans-unit id="4791956574676305640" datatype="html">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90%</source>
-        <target state="translated">Passez à un pourcentage de la vidéo : 0 est 0% et 9 est 90%.</target>
+        <target state="translated">Passer à un pourcentage de la vidéo : 0 est 0% et 9 est 90%</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">743</context></context-group>
       </trans-unit>
       <trans-unit id="3887762369650091344" datatype="html">
