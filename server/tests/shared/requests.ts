@@ -1,7 +1,7 @@
-import { activityPubContextify } from '@server/helpers/activitypub'
 import { buildDigest } from '@server/helpers/peertube-crypto'
 import { doRequest } from '@server/helpers/requests'
 import { ACTIVITY_PUB, HTTP_SIGNATURE } from '@server/initializers/constants'
+import { activityPubContextify } from '@server/lib/activitypub/context'
 
 export function makePOSTAPRequest (url: string, body: any, httpSignature: any, headers: any) {
   const options = {

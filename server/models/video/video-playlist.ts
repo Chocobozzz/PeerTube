@@ -17,6 +17,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { activityPubCollectionPagination } from '@server/lib/activitypub/collection'
 import { MAccountId, MChannelId } from '@server/types/models'
 import { buildPlaylistEmbedPath, buildPlaylistWatchPath, pick } from '@shared/core-utils'
 import { buildUUID, uuidToShort } from '@shared/extra-utils'
@@ -26,7 +27,6 @@ import { PlaylistObject } from '../../../shared/models/activitypub/objects/playl
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylistType } from '../../../shared/models/videos/playlist/video-playlist-type.model'
 import { VideoPlaylist } from '../../../shared/models/videos/playlist/video-playlist.model'
-import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import {
   isVideoPlaylistDescriptionValid,

@@ -2,9 +2,10 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { activityPubContextify, buildSignedActivity } from '@server/helpers/activitypub'
 import { buildDigest } from '@server/helpers/peertube-crypto'
 import { HTTP_SIGNATURE } from '@server/initializers/constants'
+import { buildSignedActivity } from '@server/lib/activitypub/activity'
+import { activityPubContextify } from '@server/lib/activitypub/context'
 import { buildGlobalHeaders } from '@server/lib/job-queue/handlers/utils/activitypub-http-utils'
 import { makeFollowRequest, makePOSTAPRequest } from '@server/tests/shared'
 import { buildAbsoluteFixturePath, wait } from '@shared/core-utils'

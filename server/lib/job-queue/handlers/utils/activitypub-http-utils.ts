@@ -1,7 +1,7 @@
 import { buildDigest } from '@server/helpers/peertube-crypto'
+import { buildSignedActivity } from '@server/lib/activitypub/activity'
 import { getServerActor } from '@server/models/application/application'
 import { ContextType } from '@shared/models/activitypub/context'
-import { buildSignedActivity } from '../../../../helpers/activitypub'
 import { ACTIVITY_PUB, HTTP_SIGNATURE } from '../../../../initializers/constants'
 import { ActorModel } from '../../../../models/actor/actor'
 import { MActor } from '../../../../types/models'

@@ -5,8 +5,8 @@ import { expect } from 'chai'
 import { cloneDeep } from 'lodash'
 import { buildRequestStub } from '@server/tests/shared'
 import { buildAbsoluteFixturePath } from '@shared/core-utils'
-import { buildSignedActivity } from '../../../helpers/activitypub'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../../../helpers/peertube-crypto'
+import { buildSignedActivity } from '../../../lib/activitypub/activity'
 
 describe('Test activity pub helpers', function () {
   describe('When checking the Linked Signature', function () {

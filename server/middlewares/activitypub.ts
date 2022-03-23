@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
-import { getAPId } from '@server/helpers/activitypub'
 import { isActorDeleteActivityValid } from '@server/helpers/custom-validators/activitypub/actor'
+import { getAPId } from '@server/lib/activitypub/activity'
 import { ActivityDelete, ActivityPubSignature, HttpStatusCode } from '@shared/models'
 import { logger } from '../helpers/logger'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../helpers/peertube-crypto'

@@ -1,10 +1,11 @@
 import cors from 'cors'
 import express from 'express'
+import { activityPubCollectionPagination } from '@server/lib/activitypub/collection'
+import { activityPubContextify } from '@server/lib/activitypub/context'
 import { getServerActor } from '@server/models/application/application'
 import { MAccountId, MActorId, MChannelId, MVideoId } from '@server/types/models'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants'
 import { audiencify, getAudience } from '../../lib/activitypub/audience'
 import { buildAnnounceWithVideoAudience, buildLikeActivity } from '../../lib/activitypub/send'
@@ -400,7 +401,7 @@ function videoPlaylistElementController (req: express.Request, res: express.Resp
 
 // ---------------------------------------------------------------------------
 
-async function actorFollowing (req: express.Request, actor: MActorId) {
+function actorFollowing (req: express.Request, actor: MActorId) {
   const handler = (start: number, count: number) => {
     return ActorFollowModel.listAcceptedFollowingUrlsForApi([ actor.id ], undefined, start, count)
   }
@@ -408,7 +409,7 @@ async function actorFollowing (req: express.Request, actor: MActorId) {
   return activityPubCollectionPagination(WEBSERVER.URL + req.path, handler, req.query.page)
 }
 
-async function actorFollowers (req: express.Request, actor: MActorId) {
+function actorFollowers (req: express.Request, actor: MActorId) {
   const handler = (start: number, count: number) => {
     return ActorFollowModel.listAcceptedFollowerUrlsForAP([ actor.id ], undefined, start, count)
   }
@@ -416,7 +417,7 @@ async function actorFollowers (req: express.Request, actor: MActorId) {
   return activityPubCollectionPagination(WEBSERVER.URL + req.path, handler, req.query.page)
 }
 
-async function actorPlaylists (req: express.Request, options: { account: MAccountId } | { channel: MChannelId }) {
+function actorPlaylists (req: express.Request, options: { account: MAccountId } | { channel: MChannelId }) {
   const handler = (start: number, count: number) => {
     return VideoPlaylistModel.listPublicUrlsOfForAP(options, start, count)
   }

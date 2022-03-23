@@ -1,11 +1,11 @@
-
-import { checkUrlsSameHost, getAPId } from '@server/helpers/activitypub'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { logger } from '@server/helpers/logger'
 import { JobQueue } from '@server/lib/job-queue'
 import { ActorLoadByUrlType, loadActorByUrl } from '@server/lib/model-loaders'
 import { MActor, MActorAccountChannelId, MActorAccountChannelIdActor, MActorAccountId, MActorFullActor } from '@server/types/models'
 import { ActivityPubActor } from '@shared/models'
+import { getAPId } from '../activity'
+import { checkUrlsSameHost } from '../url'
 import { refreshActorIfNeeded } from './refresh'
 import { APActorCreator, fetchRemoteActor } from './shared'
 

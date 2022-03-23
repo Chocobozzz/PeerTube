@@ -1,11 +1,11 @@
 import { Transaction } from 'sequelize/types'
-import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 import { isAPVideoTrackerUrlObject } from '@server/helpers/custom-validators/activitypub/videos'
 import { isArray } from '@server/helpers/custom-validators/misc'
 import { REMOTE_SCHEME } from '@server/initializers/constants'
 import { TrackerModel } from '@server/models/server/tracker'
 import { MVideo, MVideoWithHost } from '@server/types/models'
 import { ActivityTrackerUrlObject, VideoObject } from '@shared/models'
+import { buildRemoteVideoBaseUrl } from '../../url'
 
 function getTrackerUrls (object: VideoObject, video: MVideoWithHost) {
   let wsFound = false

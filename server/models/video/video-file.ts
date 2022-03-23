@@ -19,9 +19,9 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import validator from 'validator'
-import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 import { logger } from '@server/helpers/logger'
 import { extractVideo } from '@server/helpers/video'
+import { buildRemoteVideoBaseUrl } from '@server/lib/activitypub/url'
 import { getHLSPublicFileUrl, getWebTorrentPublicFileUrl } from '@server/lib/object-storage'
 import { getFSTorrentFilePath } from '@server/lib/paths'
 import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/models'
