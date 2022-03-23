@@ -8,6 +8,7 @@ import {
   HttpStatusCode,
   LiveVideo,
   OAuth2ErrorCode,
+  PublicServerSetting,
   ResultList,
   UserRefreshToken,
   Video,
@@ -21,7 +22,7 @@ import { P2PMediaLoaderOptions, PeertubePlayerManagerOptions, PlayerMode, VideoJ
 import { TranslationsManager } from '../../assets/player/translations-manager'
 import { getBoolOrDefault } from '../../root-helpers/local-storage-utils'
 import { peertubeLocalStorage } from '../../root-helpers/peertube-web-storage'
-import { PluginsManager } from '../../root-helpers/plugins-manager'
+import { PluginInfo, PluginsManager } from '../../root-helpers/plugins-manager'
 import { UserLocalStorageKeys, UserTokens } from '../../root-helpers/users'
 import { objectToUrlEncoded } from '../../root-helpers/utils'
 import { isP2PEnabled } from '../../root-helpers/video'
@@ -96,6 +97,10 @@ export class PeerTubeEmbed {
 
   getLiveUrl (videoId: string) {
     return window.location.origin + '/api/v1/videos/live/' + videoId
+  }
+
+  getPluginUrl () {
+    return window.location.origin + '/api/v1/plugins'
   }
 
   refreshFetch (url: string, options?: RequestInit) {
@@ -760,8 +765,12 @@ export class PeerTubeEmbed {
     return document.getElementById('placeholder-preview')
   }
 
+  private getHeaderTokenValue () {
+    return `${this.userTokens.tokenType} ${this.userTokens.accessToken}`
+  }
+
   private setHeadersFromTokens () {
-    this.headers.set('Authorization', `${this.userTokens.tokenType} ${this.userTokens.accessToken}`)
+    this.headers.set('Authorization', this.getHeaderTokenValue())
   }
 
   private removeTokensFromHeaders () {
@@ -779,7 +788,7 @@ export class PeerTubeEmbed {
 
   private loadPlugins (translations?: { [ id: string ]: string }) {
     this.pluginsManager = new PluginsManager({
-      peertubeHelpersFactory: _ => this.buildPeerTubeHelpers(translations)
+      peertubeHelpersFactory: pluginInfo => this.buildPeerTubeHelpers(pluginInfo, translations)
     })
 
     this.pluginsManager.loadPluginsList(this.config)
@@ -787,7 +796,7 @@ export class PeerTubeEmbed {
     return this.pluginsManager.ensurePluginsAreLoaded('embed')
   }
 
-  private buildPeerTubeHelpers (translations?: { [ id: string ]: string }): RegisterClientHelpers {
+  private buildPeerTubeHelpers (pluginInfo: PluginInfo, translations?: { [ id: string ]: string }): RegisterClientHelpers {
     const unimplemented = () => {
       throw new Error('This helper is not implemented in embed.')
     }
@@ -797,10 +806,20 @@ export class PeerTubeEmbed {
       getBaseRouterRoute: unimplemented,
       getBasePluginClientPath: unimplemented,
 
-      getSettings: unimplemented,
+      getSettings: () => {
+        const url = this.getPluginUrl() + '/' + pluginInfo.plugin.npmName + '/public-settings'
 
-      isLoggedIn: unimplemented,
-      getAuthHeader: unimplemented,
+        return this.refreshFetch(url, { headers: this.headers })
+          .then(res => res.json())
+          .then((obj: PublicServerSetting) => obj.publicSettings)
+      },
+
+      isLoggedIn: () => !!this.userTokens,
+      getAuthHeader: () => {
+        if (!this.userTokens) return undefined
+
+        return { Authorization: this.getHeaderTokenValue() }
+      },
 
       notifier: {
         info: unimplemented,
