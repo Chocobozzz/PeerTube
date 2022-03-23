@@ -22,7 +22,7 @@ export async function makeFollowRequest (to: { url: string }, by: { url: string,
     object: to.url
   }
 
-  const body = activityPubContextify(follow)
+  const body = activityPubContextify(follow, 'Follow')
 
   const httpSignature = {
     algorithm: HTTP_SIGNATURE.ALGORITHM,

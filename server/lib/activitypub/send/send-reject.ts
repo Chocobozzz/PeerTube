@@ -18,7 +18,7 @@ function sendReject (followUrl: string, follower: MActor, following: MActor) {
   const url = getLocalActorFollowRejectActivityPubUrl(follower, following)
   const data = buildRejectActivity(url, following, followData)
 
-  return unicastTo(data, following, follower.inboxUrl)
+  return unicastTo({ data, byActor: following, toActorUrl: follower.inboxUrl, contextType: 'Reject' })
 }
 
 // ---------------------------------------------------------------------------

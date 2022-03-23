@@ -45,7 +45,7 @@ async function outboxController (req: express.Request, res: express.Response) {
   const handler = (start: number, count: number) => buildActivities(actor, start, count)
   const json = await activityPubCollectionPagination(actorOutboxUrl, handler, req.query.page, req.query.size)
 
-  return activityPubResponse(activityPubContextify(json), res)
+  return activityPubResponse(activityPubContextify(json, 'Collection'), res)
 }
 
 async function buildActivities (actor: MActorLight, start: number, count: number) {

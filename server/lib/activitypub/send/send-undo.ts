@@ -6,7 +6,8 @@ import {
   ActivityDislike,
   ActivityFollow,
   ActivityLike,
-  ActivityUndo
+  ActivityUndo,
+  ContextType
 } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
@@ -43,24 +44,37 @@ function sendUndoFollow (actorFollow: MActorFollowActors, t: Transaction) {
   const followActivity = buildFollowActivity(actorFollow.url, me, following)
   const undoActivity = undoActivityData(undoUrl, me, followActivity)
 
-  t.afterCommit(() => unicastTo(undoActivity, me, following.inboxUrl))
+  return t.afterCommit(() => {
+    return unicastTo({
+      data: undoActivity,
+      byActor: me,
+      toActorUrl: following.inboxUrl,
+      contextType: 'Follow'
+    })
+  })
 }
 
 // ---------------------------------------------------------------------------
 
-async function sendUndoAnnounce (byActor: MActorLight, videoShare: MVideoShare, video: MVideo, t: Transaction) {
+async function sendUndoAnnounce (byActor: MActorLight, videoShare: MVideoShare, video: MVideo, transaction: Transaction) {
   logger.info('Creating job to undo announce %s.', videoShare.url)
 
   const undoUrl = getUndoActivityPubUrl(videoShare.url)
 
-  const { activity: announceActivity, actorsInvolvedInVideo } = await buildAnnounceWithVideoAudience(byActor, videoShare, video, t)
-  const undoActivity = undoActivityData(undoUrl, byActor, announceActivity)
+  const { activity: announce, actorsInvolvedInVideo } = await buildAnnounceWithVideoAudience(byActor, videoShare, video, transaction)
+  const undoActivity = undoActivityData(undoUrl, byActor, announce)
 
-  const followersException = [ byActor ]
-  return broadcastToFollowers(undoActivity, byActor, actorsInvolvedInVideo, t, followersException)
+  return broadcastToFollowers({
+    data: undoActivity,
+    byActor,
+    toFollowersOf: actorsInvolvedInVideo,
+    transaction,
+    actorsException: [ byActor ],
+    contextType: 'Announce'
+  })
 }
 
-async function sendUndoCacheFile (byActor: MActor, redundancyModel: MVideoRedundancyVideo, t: Transaction) {
+async function sendUndoCacheFile (byActor: MActor, redundancyModel: MVideoRedundancyVideo, transaction: Transaction) {
   logger.info('Creating job to undo cache file %s.', redundancyModel.url)
 
   const associatedVideo = redundancyModel.getVideo()
@@ -72,7 +86,14 @@ async function sendUndoCacheFile (byActor: MActor, redundancyModel: MVideoRedund
   const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(associatedVideo.id)
   const createActivity = buildCreateActivity(redundancyModel.url, byActor, redundancyModel.toActivityPubObject())
 
-  return sendUndoVideoRelatedActivity({ byActor, video, url: redundancyModel.url, activity: createActivity, transaction: t })
+  return sendUndoVideoRelatedActivity({
+    byActor,
+    video,
+    url: redundancyModel.url,
+    activity: createActivity,
+    contextType: 'CacheFile',
+    transaction
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -83,7 +104,7 @@ async function sendUndoLike (byActor: MActor, video: MVideoAccountLight, t: Tran
   const likeUrl = getVideoLikeActivityPubUrlByLocalActor(byActor, video)
   const likeActivity = buildLikeActivity(likeUrl, byActor, video)
 
-  return sendUndoVideoToOriginActivity({ byActor, video, url: likeUrl, activity: likeActivity, transaction: t })
+  return sendUndoVideoRateToOriginActivity({ byActor, video, url: likeUrl, activity: likeActivity, transaction: t })
 }
 
 async function sendUndoDislike (byActor: MActor, video: MVideoAccountLight, t: Transaction) {
@@ -92,7 +113,7 @@ async function sendUndoDislike (byActor: MActor, video: MVideoAccountLight, t: T
   const dislikeUrl = getVideoDislikeActivityPubUrlByLocalActor(byActor, video)
   const dislikeActivity = buildDislikeActivity(dislikeUrl, byActor, video)
 
-  return sendUndoVideoToOriginActivity({ byActor, video, url: dislikeUrl, activity: dislikeActivity, transaction: t })
+  return sendUndoVideoRateToOriginActivity({ byActor, video, url: dislikeUrl, activity: dislikeActivity, transaction: t })
 }
 
 // ---------------------------------------------------------------------------
@@ -131,6 +152,7 @@ async function sendUndoVideoRelatedActivity (options: {
   video: MVideoAccountLight
   url: string
   activity: ActivityFollow | ActivityCreate | ActivityAnnounce
+  contextType: ContextType
   transaction: Transaction
 }) {
   const activityBuilder = (audience: ActivityAudience) => {
@@ -142,7 +164,7 @@ async function sendUndoVideoRelatedActivity (options: {
   return sendVideoRelatedActivity(activityBuilder, options)
 }
 
-async function sendUndoVideoToOriginActivity (options: {
+async function sendUndoVideoRateToOriginActivity (options: {
   byActor: MActor
   video: MVideoAccountLight
   url: string
@@ -155,5 +177,5 @@ async function sendUndoVideoToOriginActivity (options: {
     return undoActivityData(undoUrl, options.byActor, options.activity, audience)
   }
 
-  return sendVideoActivityToOrigin(activityBuilder, options)
+  return sendVideoActivityToOrigin(activityBuilder, { ...options, contextType: 'Rate' })
 }

@@ -605,7 +605,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       image
     }
 
-    return activityPubContextify(json)
+    return activityPubContextify(json, 'Actor')
   }
 
   getFollowerSharedInboxUrls (t: Transaction) {

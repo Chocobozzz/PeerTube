@@ -186,35 +186,35 @@ export {
 function accountController (req: express.Request, res: express.Response) {
   const account = res.locals.account
 
-  return activityPubResponse(activityPubContextify(account.toActivityPubObject()), res)
+  return activityPubResponse(activityPubContextify(account.toActivityPubObject(), 'Actor'), res)
 }
 
 async function accountFollowersController (req: express.Request, res: express.Response) {
   const account = res.locals.account
   const activityPubResult = await actorFollowers(req, account.Actor)
 
-  return activityPubResponse(activityPubContextify(activityPubResult), res)
+  return activityPubResponse(activityPubContextify(activityPubResult, 'Collection'), res)
 }
 
 async function accountFollowingController (req: express.Request, res: express.Response) {
   const account = res.locals.account
   const activityPubResult = await actorFollowing(req, account.Actor)
 
-  return activityPubResponse(activityPubContextify(activityPubResult), res)
+  return activityPubResponse(activityPubContextify(activityPubResult, 'Collection'), res)
 }
 
 async function accountPlaylistsController (req: express.Request, res: express.Response) {
   const account = res.locals.account
   const activityPubResult = await actorPlaylists(req, { account })
 
-  return activityPubResponse(activityPubContextify(activityPubResult), res)
+  return activityPubResponse(activityPubContextify(activityPubResult, 'Collection'), res)
 }
 
 async function videoChannelPlaylistsController (req: express.Request, res: express.Response) {
   const channel = res.locals.videoChannel
   const activityPubResult = await actorPlaylists(req, { channel })
 
-  return activityPubResponse(activityPubContextify(activityPubResult), res)
+  return activityPubResponse(activityPubContextify(activityPubResult, 'Collection'), res)
 }
 
 function getAccountVideoRateFactory (rateType: VideoRateType) {
@@ -226,7 +226,7 @@ function getAccountVideoRateFactory (rateType: VideoRateType) {
       ? buildLikeActivity(accountVideoRate.url, byActor, accountVideoRate.Video)
       : buildDislikeActivity(accountVideoRate.url, byActor, accountVideoRate.Video)
 
-    return activityPubResponse(activityPubContextify(APObject), res)
+    return activityPubResponse(activityPubContextify(APObject, 'Rate'), res)
   }
 }
 
@@ -244,10 +244,10 @@ async function videoController (req: express.Request, res: express.Response) {
 
   if (req.path.endsWith('/activity')) {
     const data = buildCreateActivity(videoWithCaptions.url, video.VideoChannel.Account.Actor, videoObject, audience)
-    return activityPubResponse(activityPubContextify(data), res)
+    return activityPubResponse(activityPubContextify(data, 'Video'), res)
   }
 
-  return activityPubResponse(activityPubContextify(videoObject), res)
+  return activityPubResponse(activityPubContextify(videoObject, 'Video'), res)
 }
 
 async function videoAnnounceController (req: express.Request, res: express.Response) {
@@ -274,7 +274,7 @@ async function videoAnnouncesController (req: express.Request, res: express.Resp
   }
   const json = await activityPubCollectionPagination(getLocalVideoSharesActivityPubUrl(video), handler, req.query.page)
 
-  return activityPubResponse(activityPubContextify(json), res)
+  return activityPubResponse(activityPubContextify(json, 'Collection'), res)
 }
 
 async function videoLikesController (req: express.Request, res: express.Response) {
@@ -284,7 +284,7 @@ async function videoLikesController (req: express.Request, res: express.Response
 
   const json = await videoRates(req, 'like', video, getLocalVideoLikesActivityPubUrl(video))
 
-  return activityPubResponse(activityPubContextify(json), res)
+  return activityPubResponse(activityPubContextify(json, 'Collection'), res)
 }
 
 async function videoDislikesController (req: express.Request, res: express.Response) {
@@ -294,7 +294,7 @@ async function videoDislikesController (req: express.Request, res: express.Respo
 
   const json = await videoRates(req, 'dislike', video, getLocalVideoDislikesActivityPubUrl(video))
 
-  return activityPubResponse(activityPubContextify(json), res)
+  return activityPubResponse(activityPubContextify(json, 'Collection'), res)
 }
 
 async function videoCommentsController (req: express.Request, res: express.Response) {
@@ -312,27 +312,27 @@ async function videoCommentsController (req: express.Request, res: express.Respo
   }
   const json = await activityPubCollectionPagination(getLocalVideoCommentsActivityPubUrl(video), handler, req.query.page)
 
-  return activityPubResponse(activityPubContextify(json), res)
+  return activityPubResponse(activityPubContextify(json, 'Collection'), res)
 }
 
 function videoChannelController (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
 
-  return activityPubResponse(activityPubContextify(videoChannel.toActivityPubObject()), res)
+  return activityPubResponse(activityPubContextify(videoChannel.toActivityPubObject(), 'Actor'), res)
 }
 
 async function videoChannelFollowersController (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
   const activityPubResult = await actorFollowers(req, videoChannel.Actor)
 
-  return activityPubResponse(activityPubContextify(activityPubResult), res)
+  return activityPubResponse(activityPubContextify(activityPubResult, 'Collection'), res)
 }
 
 async function videoChannelFollowingController (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
   const activityPubResult = await actorFollowing(req, videoChannel.Actor)
 
-  return activityPubResponse(activityPubContextify(activityPubResult), res)
+  return activityPubResponse(activityPubContextify(activityPubResult, 'Collection'), res)
 }
 
 async function videoCommentController (req: express.Request, res: express.Response) {
@@ -350,11 +350,11 @@ async function videoCommentController (req: express.Request, res: express.Respon
 
     if (req.path.endsWith('/activity')) {
       const data = buildCreateActivity(videoComment.url, videoComment.Account.Actor, videoCommentObject, audience)
-      return activityPubResponse(activityPubContextify(data), res)
+      return activityPubResponse(activityPubContextify(data, 'Comment'), res)
     }
   }
 
-  return activityPubResponse(activityPubContextify(videoCommentObject), res)
+  return activityPubResponse(activityPubContextify(videoCommentObject, 'Comment'), res)
 }
 
 async function videoRedundancyController (req: express.Request, res: express.Response) {
@@ -387,7 +387,7 @@ async function videoPlaylistController (req: express.Request, res: express.Respo
   const audience = getAudience(playlist.OwnerAccount.Actor, playlist.privacy === VideoPlaylistPrivacy.PUBLIC)
   const object = audiencify(json, audience)
 
-  return activityPubResponse(activityPubContextify(object), res)
+  return activityPubResponse(activityPubContextify(object, 'Playlist'), res)
 }
 
 function videoPlaylistElementController (req: express.Request, res: express.Response) {
@@ -396,7 +396,7 @@ function videoPlaylistElementController (req: express.Request, res: express.Resp
   if (redirectIfNotOwned(videoPlaylistElement.url, res)) return
 
   const json = videoPlaylistElement.toActivityPubObject()
-  return activityPubResponse(activityPubContextify(json), res)
+  return activityPubResponse(activityPubContextify(json, 'Playlist'), res)
 }
 
 // ---------------------------------------------------------------------------

@@ -1,12 +1,12 @@
-import { buildDigest } from '@server/helpers/peertube-crypto'
-import { buildSignedActivity } from '@server/lib/activitypub/activity'
+import { buildDigest, signJsonLDObject } from '@server/helpers/peertube-crypto'
+import { ACTIVITY_PUB, HTTP_SIGNATURE } from '@server/initializers/constants'
+import { ActorModel } from '@server/models/actor/actor'
 import { getServerActor } from '@server/models/application/application'
+import { MActor } from '@server/types/models'
 import { ContextType } from '@shared/models/activitypub/context'
-import { ACTIVITY_PUB, HTTP_SIGNATURE } from '../../../../initializers/constants'
-import { ActorModel } from '../../../../models/actor/actor'
-import { MActor } from '../../../../types/models'
+import { activityPubContextify } from '../context'
 
-type Payload <T> = { body: T, contextType?: ContextType, signatureActorId?: number }
+type Payload <T> = { body: T, contextType: ContextType, signatureActorId?: number }
 
 async function computeBody <T> (
   payload: Payload<T>
@@ -17,7 +17,7 @@ async function computeBody <T> (
     const actorSignature = await ActorModel.load(payload.signatureActorId)
     if (!actorSignature) throw new Error('Unknown signature actor id.')
 
-    body = await buildSignedActivity(actorSignature, payload.body, payload.contextType)
+    body = await signAndContextify(actorSignature, payload.body, payload.contextType)
   }
 
   return body
@@ -52,8 +52,17 @@ function buildGlobalHeaders (body: any) {
   }
 }
 
+function signAndContextify <T> (byActor: MActor, data: T, contextType: ContextType | null) {
+  const activity = contextType
+    ? activityPubContextify(data, contextType)
+    : data
+
+  return signJsonLDObject(byActor, activity)
+}
+
 export {
   buildGlobalHeaders,
   computeBody,
-  buildSignedRequestOptions
+  buildSignedRequestOptions,
+  signAndContextify
 }

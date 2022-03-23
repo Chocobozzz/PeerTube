@@ -21,7 +21,12 @@ function sendAccept (actorFollow: MActorFollowActors) {
   const url = getLocalActorFollowAcceptActivityPubUrl(actorFollow)
   const data = buildAcceptActivity(url, me, followData)
 
-  return unicastTo(data, me, follower.inboxUrl)
+  return unicastTo({
+    data,
+    byActor: me,
+    toActorUrl: follower.inboxUrl,
+    contextType: 'Accept'
+  })
 }
 
 // ---------------------------------------------------------------------------

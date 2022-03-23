@@ -40,9 +40,9 @@ export interface Job {
 
 export type ActivitypubHttpBroadcastPayload = {
   uris: string[]
-  signatureActorId?: number
+  contextType: ContextType
   body: any
-  contextType?: ContextType
+  signatureActorId?: number
 }
 
 export type ActivitypubFollowPayload = {
@@ -62,9 +62,9 @@ export type ActivitypubHttpFetcherPayload = {
 
 export type ActivitypubHttpUnicastPayload = {
   uri: string
+  contextType: ContextType
   signatureActorId?: number
   body: object
-  contextType?: ContextType
 }
 
 export type RefreshPayload = {

@@ -6,7 +6,7 @@ import { audiencify, getAudience } from '../audience'
 import { getVideoLikeActivityPubUrlByLocalActor } from '../url'
 import { sendVideoActivityToOrigin } from './shared/send-utils'
 
-function sendLike (byActor: MActor, video: MVideoAccountLight, t: Transaction) {
+function sendLike (byActor: MActor, video: MVideoAccountLight, transaction: Transaction) {
   logger.info('Creating job to like %s.', video.url)
 
   const activityBuilder = (audience: ActivityAudience) => {
@@ -15,7 +15,7 @@ function sendLike (byActor: MActor, video: MVideoAccountLight, t: Transaction) {
     return buildLikeActivity(url, byActor, video, audience)
   }
 
-  return sendVideoActivityToOrigin(activityBuilder, { byActor, video, transaction: t })
+  return sendVideoActivityToOrigin(activityBuilder, { byActor, video, transaction, contextType: 'Rate' })
 }
 
 function buildLikeActivity (url: string, byActor: MActorAudience, video: MVideoUrl, audience?: ActivityAudience): ActivityLike {
