@@ -55,7 +55,7 @@ async function run () {
       path: '/accounts/peertube',
       headers: buildAPHeader(),
       expecter: (body, status) => {
-        return status === 200 && body.startsWith('{"type":')
+        return status === 200 && body.startsWith('{"@context":')
       }
     },
     {
@@ -63,7 +63,7 @@ async function run () {
       path: '/videos/watch/' + video.uuid,
       headers: buildAPHeader(),
       expecter: (body, status) => {
-        return status === 200 && body.startsWith('{"type":"Video"')
+        return status === 200 && body.startsWith('{"@context":')
       }
     },
     {
