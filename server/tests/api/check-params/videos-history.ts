@@ -17,7 +17,7 @@ import {
 describe('Test videos history API validator', function () {
   const myHistoryPath = '/api/v1/users/me/history/videos'
   const myHistoryRemove = myHistoryPath + '/remove'
-  let watchingPath: string
+  let viewPath: string
   let server: PeerTubeServer
   let videoId: number
 
@@ -31,51 +31,15 @@ describe('Test videos history API validator', function () {
     await setAccessTokensToServers([ server ])
 
     const { id, uuid } = await server.videos.upload()
-    watchingPath = '/api/v1/videos/' + uuid + '/watching'
+    viewPath = '/api/v1/videos/' + uuid + '/views'
     videoId = id
   })
 
   describe('When notifying a user is watching a video', function () {
 
-    it('Should fail with an unauthenticated user', async function () {
+    it('Should fail with a bad token', async function () {
       const fields = { currentTime: 5 }
-      await makePutBodyRequest({ url: server.url, path: watchingPath, fields, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
-    })
-
-    it('Should fail with an incorrect video id', async function () {
-      const fields = { currentTime: 5 }
-      const path = '/api/v1/videos/blabla/watching'
-      await makePutBodyRequest({
-        url: server.url,
-        path,
-        fields,
-        token: server.accessToken,
-        expectedStatus: HttpStatusCode.BAD_REQUEST_400
-      })
-    })
-
-    it('Should fail with an unknown video', async function () {
-      const fields = { currentTime: 5 }
-      const path = '/api/v1/videos/d91fff41-c24d-4508-8e13-3bd5902c3b02/watching'
-
-      await makePutBodyRequest({
-        url: server.url,
-        path,
-        fields,
-        token: server.accessToken,
-        expectedStatus: HttpStatusCode.NOT_FOUND_404
-      })
-    })
-
-    it('Should fail with a bad current time', async function () {
-      const fields = { currentTime: 'hello' }
-      await makePutBodyRequest({
-        url: server.url,
-        path: watchingPath,
-        fields,
-        token: server.accessToken,
-        expectedStatus: HttpStatusCode.BAD_REQUEST_400
-      })
+      await makePutBodyRequest({ url: server.url, path: viewPath, fields, token: 'bad', expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -83,7 +47,7 @@ describe('Test videos history API validator', function () {
 
       await makePutBodyRequest({
         url: server.url,
-        path: watchingPath,
+        path: viewPath,
         fields,
         token: server.accessToken,
         expectedStatus: HttpStatusCode.NO_CONTENT_204

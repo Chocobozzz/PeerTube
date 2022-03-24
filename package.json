@@ -121,6 +121,7 @@
     "magnet-uri": "^6.1.0",
     "markdown-it": "^12.0.4",
     "markdown-it-emoji": "^2.0.0",
+    "maxmind": "^4.3.6",
     "memoizee": "^0.4.14",
     "morgan": "^1.5.3",
     "multer": "^1.4.4",

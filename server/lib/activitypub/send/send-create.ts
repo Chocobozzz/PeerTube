@@ -6,6 +6,7 @@ import { VideoCommentModel } from '../../../models/video/video-comment'
 import {
   MActorLight,
   MCommentOwnerVideo,
+  MLocalVideoViewerWithWatchSections,
   MVideoAccountLight,
   MVideoAP,
   MVideoPlaylistFull,
@@ -19,6 +20,7 @@ import {
   getActorsInvolvedInVideo,
   getAudienceFromFollowersOf,
   getVideoCommentAudience,
+  sendVideoActivityToOrigin,
   sendVideoRelatedActivity,
   unicastTo
 } from './shared'
@@ -59,6 +61,18 @@ async function sendCreateCacheFile (
     object: fileRedundancy.toActivityPubObject(),
     contextType: 'CacheFile'
   })
+}
+
+async function sendCreateWatchAction (stats: MLocalVideoViewerWithWatchSections, transaction: Transaction) {
+  logger.info('Creating job to send create watch action %s.', stats.url, lTags(stats.uuid))
+
+  const byActor = await getServerActor()
+
+  const activityBuilder = (audience: ActivityAudience) => {
+    return buildCreateActivity(stats.url, byActor, stats.toActivityPubObject(), audience)
+  }
+
+  return sendVideoActivityToOrigin(activityBuilder, { byActor, video: stats.Video, transaction, contextType: 'WatchAction' })
 }
 
 async function sendCreateVideoPlaylist (playlist: MVideoPlaylistFull, transaction: Transaction) {
@@ -175,7 +189,8 @@ export {
   buildCreateActivity,
   sendCreateVideoComment,
   sendCreateVideoPlaylist,
-  sendCreateCacheFile
+  sendCreateCacheFile,
+  sendCreateWatchAction
 }
 
 // ---------------------------------------------------------------------------

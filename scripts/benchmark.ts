@@ -153,21 +153,23 @@ async function run () {
       }
     },
     {
-      title: 'API - watching',
+      title: 'API - views with token',
       method: 'PUT',
       headers: {
         ...buildAuthorizationHeader(),
         ...buildJSONHeader()
       },
       body: JSON.stringify({ currentTime: 2 }),
-      path: '/api/v1/videos/' + video.uuid + '/watching',
+      path: '/api/v1/videos/' + video.uuid + '/views',
       expecter: (body, status) => {
         return status === 204
       }
     },
     {
-      title: 'API - views',
+      title: 'API - views without token',
       method: 'POST',
+      headers: buildJSONHeader(),
+      body: JSON.stringify({ currentTime: 2 }),
       path: '/api/v1/videos/' + video.uuid + '/views',
       expecter: (body, status) => {
         return status === 204

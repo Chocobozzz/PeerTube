@@ -107,23 +107,6 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  view (options: OverrideCommandOptions & {
-    id: number | string
-    xForwardedFor?: string
-  }) {
-    const { id, xForwardedFor } = options
-    const path = '/api/v1/videos/' + id + '/views'
-
-    return this.postBodyRequest({
-      ...options,
-
-      path,
-      xForwardedFor,
-      implicitToken: false,
-      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
-    })
-  }
-
   rate (options: OverrideCommandOptions & {
     id: number | string
     rating: UserVideoRateType

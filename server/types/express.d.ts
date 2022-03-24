@@ -185,6 +185,8 @@ declare module 'express' {
       externalAuth?: RegisterServerAuthExternalOptions
 
       plugin?: MPlugin
+
+      localViewerFull?: MLocalVideoViewerWithWatchSections
     }
   }
 }

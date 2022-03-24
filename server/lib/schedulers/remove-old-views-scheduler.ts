@@ -1,8 +1,8 @@
+import { VideoViewModel } from '@server/models/view/video-view'
 import { logger } from '../../helpers/logger'
-import { AbstractScheduler } from './abstract-scheduler'
-import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 import { CONFIG } from '../../initializers/config'
-import { VideoViewModel } from '../../models/video/video-view'
+import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
+import { AbstractScheduler } from './abstract-scheduler'
 
 export class RemoveOldViewsScheduler extends AbstractScheduler {
 

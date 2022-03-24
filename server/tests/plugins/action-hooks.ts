@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -10,7 +11,6 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@shared/server-commands'
-import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 
 describe('Test plugin action hooks', function () {
   let servers: PeerTubeServer[]
@@ -61,7 +61,7 @@ describe('Test plugin action hooks', function () {
     })
 
     it('Should run action:api.video.viewed', async function () {
-      await servers[0].videos.view({ id: videoUUID })
+      await servers[0].views.simulateView({ id: videoUUID })
 
       await checkHook('action:api.video.viewed')
     })

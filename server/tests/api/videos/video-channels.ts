@@ -466,8 +466,8 @@ describe('Test video channels', function () {
 
     {
       // video has been posted on channel servers[0].store.videoChannel.id since last update
-      await servers[0].videos.view({ id: videoUUID, xForwardedFor: '0.0.0.1,127.0.0.1' })
-      await servers[0].videos.view({ id: videoUUID, xForwardedFor: '0.0.0.2,127.0.0.1' })
+      await servers[0].views.simulateView({ id: videoUUID, xForwardedFor: '0.0.0.1,127.0.0.1' })
+      await servers[0].views.simulateView({ id: videoUUID, xForwardedFor: '0.0.0.2,127.0.0.1' })
 
       // Wait the repeatable job
       await wait(8000)

@@ -2,6 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { processViewersStats } from '@server/tests/shared'
+import { HttpStatusCode, VideoPlaylistPrivacy, WatchActionObject } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -11,7 +13,6 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@shared/server-commands'
-import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -113,6 +114,23 @@ describe('Test activitypub', function () {
     const res = await makeActivityPubGetRequest(servers[1].url, '/videos/watch/' + video.uuid, HttpStatusCode.FOUND_302)
 
     expect(res.header.location).to.equal('http://localhost:' + servers[0].port + '/videos/watch/' + video.uuid)
+  })
+
+  it('Should return the watch action', async function () {
+    this.timeout(50000)
+
+    await servers[0].views.simulateViewer({ id: video.uuid, currentTimes: [ 0, 2 ] })
+    await processViewersStats(servers)
+
+    const res = await makeActivityPubGetRequest(servers[0].url, '/videos/local-viewer/1', HttpStatusCode.OK_200)
+
+    const object: WatchActionObject = res.body
+    expect(object.type).to.equal('WatchAction')
+    expect(object.duration).to.equal('PT2S')
+    expect(object.actionStatus).to.equal('CompletedActionStatus')
+    expect(object.watchSections).to.have.lengthOf(1)
+    expect(object.watchSections[0].startTimestamp).to.equal(0)
+    expect(object.watchSections[0].endTimestamp).to.equal(2)
   })
 
   after(async function () {

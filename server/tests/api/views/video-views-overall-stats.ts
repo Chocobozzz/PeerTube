@@ -1,0 +1,291 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+
+import 'mocha'
+import * as chai from 'chai'
+import { FfmpegCommand } from 'fluent-ffmpeg'
+import { prepareViewsServers, prepareViewsVideos, processViewersStats } from '@server/tests/shared'
+import { cleanupTests, PeerTubeServer, stopFfmpeg, waitJobs } from '@shared/server-commands'
+
+const expect = chai.expect
+
+describe('Test views overall stats', function () {
+  let servers: PeerTubeServer[]
+
+  before(async function () {
+    this.timeout(120000)
+
+    servers = await prepareViewsServers()
+  })
+
+  describe('Test rates and comments of local videos on VOD', function () {
+    let vodVideoId: string
+
+    before(async function () {
+      this.timeout(60000);
+
+      ({ vodVideoId } = await prepareViewsVideos({ servers, live: false, vod: true }))
+    })
+
+    it('Should have the appropriate likes', async function () {
+      this.timeout(60000)
+
+      await servers[0].videos.rate({ id: vodVideoId, rating: 'like' })
+      await servers[1].videos.rate({ id: vodVideoId, rating: 'like' })
+
+      await waitJobs(servers)
+
+      const stats = await servers[0].videoStats.getOverallStats({ videoId: vodVideoId })
+
+      expect(stats.likes).to.equal(2)
+      expect(stats.dislikes).to.equal(0)
+    })
+
+    it('Should have the appropriate dislikes', async function () {
+      this.timeout(60000)
+
+      await servers[0].videos.rate({ id: vodVideoId, rating: 'dislike' })
+      await servers[1].videos.rate({ id: vodVideoId, rating: 'dislike' })
+
+      await waitJobs(servers)
+
+      const stats = await servers[0].videoStats.getOverallStats({ videoId: vodVideoId })
+
+      expect(stats.likes).to.equal(0)
+      expect(stats.dislikes).to.equal(2)
+    })
+
+    it('Should have the appropriate comments', async function () {
+      this.timeout(60000)
+
+      await servers[0].comments.createThread({ videoId: vodVideoId, text: 'root' })
+      await servers[0].comments.addReplyToLastThread({ text: 'reply' })
+      await servers[1].comments.createThread({ videoId: vodVideoId, text: 'root' })
+
+      await waitJobs(servers)
+
+      const stats = await servers[0].videoStats.getOverallStats({ videoId: vodVideoId })
+      expect(stats.comments).to.equal(3)
+    })
+  })
+
+  describe('Test watch time stats of local videos on live and VOD', function () {
+    let vodVideoId: string
+    let liveVideoId: string
+    let command: FfmpegCommand
+
+    before(async function () {
+      this.timeout(60000);
+
+      ({ vodVideoId, liveVideoId, ffmpegCommand: command } = await prepareViewsVideos({ servers, live: true, vod: true }))
+    })
+
+    it('Should display overall stats of a video with no viewers', async function () {
+      for (const videoId of [ liveVideoId, vodVideoId ]) {
+        const stats = await servers[0].videoStats.getOverallStats({ videoId })
+
+        expect(stats.views).to.equal(0)
+        expect(stats.averageWatchTime).to.equal(0)
+        expect(stats.totalWatchTime).to.equal(0)
+      }
+    })
+
+    it('Should display overall stats with 1 viewer below the watch time limit', async function () {
+      this.timeout(60000)
+
+      for (const videoId of [ liveVideoId, vodVideoId ]) {
+        await servers[0].views.simulateViewer({ id: videoId, currentTimes: [ 0, 1 ] })
+      }
+
+      await processViewersStats(servers)
+
+      for (const videoId of [ liveVideoId, vodVideoId ]) {
+        const stats = await servers[0].videoStats.getOverallStats({ videoId })
+
+        expect(stats.views).to.equal(0)
+        expect(stats.averageWatchTime).to.equal(1)
+        expect(stats.totalWatchTime).to.equal(1)
+      }
+    })
+
+    it('Should display overall stats with 2 viewers', async function () {
+      this.timeout(60000)
+
+      {
+        await servers[0].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 3 ] })
+        await servers[0].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 35, 40 ] })
+
+        await processViewersStats(servers)
+
+        {
+          const stats = await servers[0].videoStats.getOverallStats({ videoId: vodVideoId })
+          expect(stats.views).to.equal(1)
+          expect(stats.averageWatchTime).to.equal(2)
+          expect(stats.totalWatchTime).to.equal(4)
+        }
+
+        {
+          const stats = await servers[0].videoStats.getOverallStats({ videoId: liveVideoId })
+          expect(stats.views).to.equal(1)
+          expect(stats.averageWatchTime).to.equal(21)
+          expect(stats.totalWatchTime).to.equal(41)
+        }
+      }
+    })
+
+    it('Should display overall stats with a remote viewer below the watch time limit', async function () {
+      this.timeout(60000)
+
+      for (const videoId of [ liveVideoId, vodVideoId ]) {
+        await servers[1].views.simulateViewer({ id: videoId, currentTimes: [ 0, 2 ] })
+      }
+
+      await processViewersStats(servers)
+
+      {
+        const stats = await servers[0].videoStats.getOverallStats({ videoId: vodVideoId })
+
+        expect(stats.views).to.equal(1)
+        expect(stats.averageWatchTime).to.equal(2)
+        expect(stats.totalWatchTime).to.equal(6)
+      }
+
+      {
+        const stats = await servers[0].videoStats.getOverallStats({ videoId: liveVideoId })
+
+        expect(stats.views).to.equal(1)
+        expect(stats.averageWatchTime).to.equal(14)
+        expect(stats.totalWatchTime).to.equal(43)
+      }
+    })
+
+    it('Should display overall stats with a remote viewer above the watch time limit', async function () {
+      this.timeout(60000)
+
+      await servers[1].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 5 ] })
+      await servers[1].views.simulateViewer({ id: liveVideoId, currentTimes: [ 0, 45 ] })
+      await processViewersStats(servers)
+
+      {
+        const stats = await servers[0].videoStats.getOverallStats({ videoId: vodVideoId })
+        expect(stats.views).to.equal(2)
+        expect(stats.averageWatchTime).to.equal(3)
+        expect(stats.totalWatchTime).to.equal(11)
+      }
+
+      {
+        const stats = await servers[0].videoStats.getOverallStats({ videoId: liveVideoId })
+        expect(stats.views).to.equal(2)
+        expect(stats.averageWatchTime).to.equal(22)
+        expect(stats.totalWatchTime).to.equal(88)
+      }
+    })
+
+    after(async function () {
+      await stopFfmpeg(command)
+    })
+  })
+
+  describe('Test watchers peak stats of local videos on VOD', function () {
+    let videoUUID: string
+
+    before(async function () {
+      this.timeout(60000);
+
+      ({ vodVideoId: videoUUID } = await prepareViewsVideos({ servers, live: true, vod: true }))
+    })
+
+    it('Should not have watchers peak', async function () {
+      const stats = await servers[0].videoStats.getOverallStats({ videoId: videoUUID })
+
+      expect(stats.viewersPeak).to.equal(0)
+      expect(stats.viewersPeakDate).to.be.null
+    })
+
+    it('Should have watcher peak with 1 watcher', async function () {
+      this.timeout(60000)
+
+      const before = new Date()
+      await servers[0].views.simulateViewer({ id: videoUUID, currentTimes: [ 0, 2 ] })
+      const after = new Date()
+
+      await processViewersStats(servers)
+
+      const stats = await servers[0].videoStats.getOverallStats({ videoId: videoUUID })
+
+      expect(stats.viewersPeak).to.equal(1)
+      expect(new Date(stats.viewersPeakDate)).to.be.above(before).and.below(after)
+    })
+
+    it('Should have watcher peak with 2 watchers', async function () {
+      this.timeout(60000)
+
+      const before = new Date()
+      await servers[0].views.view({ id: videoUUID, currentTime: 0 })
+      await servers[1].views.view({ id: videoUUID, currentTime: 0 })
+      await servers[0].views.view({ id: videoUUID, currentTime: 2 })
+      await servers[1].views.view({ id: videoUUID, currentTime: 2 })
+      const after = new Date()
+
+      await processViewersStats(servers)
+
+      const stats = await servers[0].videoStats.getOverallStats({ videoId: videoUUID })
+
+      expect(stats.viewersPeak).to.equal(2)
+      expect(new Date(stats.viewersPeakDate)).to.be.above(before).and.below(after)
+    })
+  })
+
+  describe('Test countries', function () {
+
+    it('Should not report countries if geoip is disabled', async function () {
+      this.timeout(60000)
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+      await waitJobs(servers)
+
+      await servers[1].views.view({ id: uuid, xForwardedFor: '8.8.8.8,127.0.0.1', currentTime: 1 })
+
+      await processViewersStats(servers)
+
+      const stats = await servers[0].videoStats.getOverallStats({ videoId: uuid })
+      expect(stats.countries).to.have.lengthOf(0)
+    })
+
+    it('Should report countries if geoip is enabled', async function () {
+      this.timeout(60000)
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+      await waitJobs(servers)
+
+      await Promise.all([
+        servers[0].kill(),
+        servers[1].kill()
+      ])
+
+      const config = { geo_ip: { enabled: true } }
+      await Promise.all([
+        servers[0].run(config),
+        servers[1].run(config)
+      ])
+
+      await servers[0].views.view({ id: uuid, xForwardedFor: '8.8.8.8,127.0.0.1', currentTime: 1 })
+      await servers[1].views.view({ id: uuid, xForwardedFor: '8.8.8.4,127.0.0.1', currentTime: 3 })
+      await servers[1].views.view({ id: uuid, xForwardedFor: '80.67.169.12,127.0.0.1', currentTime: 2 })
+
+      await processViewersStats(servers)
+
+      const stats = await servers[0].videoStats.getOverallStats({ videoId: uuid })
+      expect(stats.countries).to.have.lengthOf(2)
+
+      expect(stats.countries[0].isoCode).to.equal('US')
+      expect(stats.countries[0].viewers).to.equal(2)
+
+      expect(stats.countries[1].isoCode).to.equal('FR')
+      expect(stats.countries[1].viewers).to.equal(1)
+    })
+  })
+
+  after(async function () {
+    await cleanupTests(servers)
+  })
+})

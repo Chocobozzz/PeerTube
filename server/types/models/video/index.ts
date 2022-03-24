@@ -1,3 +1,5 @@
+export * from './local-video-viewer-watch-section'
+export * from './local-video-viewer'
 export * from './schedule-video-update'
 export * from './tag'
 export * from './thumbnail'

@@ -25,10 +25,12 @@ import {
   PlaylistsCommand,
   ServicesCommand,
   StreamingPlaylistsCommand,
+  VideosCommand,
   VideoStudioCommand,
-  VideosCommand
+  ViewsCommand
 } from '../videos'
 import { CommentsCommand } from '../videos/comments-command'
+import { VideoStatsCommand } from '../videos/video-stats-command'
 import { ConfigCommand } from './config-command'
 import { ContactFormCommand } from './contact-form-command'
 import { DebugCommand } from './debug-command'
@@ -127,6 +129,8 @@ export class PeerTubeServer {
   objectStorage?: ObjectStorageCommand
   videoStudio?: VideoStudioCommand
   videos?: VideosCommand
+  videoStats?: VideoStatsCommand
+  views?: ViewsCommand
 
   constructor (options: { serverNumber: number } | { url: string }) {
     if ((options as any).url) {
@@ -397,5 +401,7 @@ export class PeerTubeServer {
     this.videos = new VideosCommand(this)
     this.objectStorage = new ObjectStorageCommand(this)
     this.videoStudio = new VideoStudioCommand(this)
+    this.videoStats = new VideoStatsCommand(this)
+    this.views = new ViewsCommand(this)
   }
 }

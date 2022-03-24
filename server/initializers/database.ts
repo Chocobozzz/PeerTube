@@ -1,10 +1,14 @@
 import { QueryTypes, Transaction } from 'sequelize'
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
+import { ActorCustomPageModel } from '@server/models/account/actor-custom-page'
 import { TrackerModel } from '@server/models/server/tracker'
 import { VideoTrackerModel } from '@server/models/server/video-tracker'
 import { UserModel } from '@server/models/user/user'
 import { UserNotificationModel } from '@server/models/user/user-notification'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history'
+import { VideoJobInfoModel } from '@server/models/video/video-job-info'
+import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer'
+import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-video-viewer-watch-section'
 import { isTestInstance } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
 import { AbuseModel } from '../models/abuse/abuse'
@@ -42,10 +46,8 @@ import { VideoPlaylistElementModel } from '../models/video/video-playlist-elemen
 import { VideoShareModel } from '../models/video/video-share'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 import { VideoTagModel } from '../models/video/video-tag'
-import { VideoViewModel } from '../models/video/video-view'
+import { VideoViewModel } from '../models/view/video-view'
 import { CONFIG } from './config'
-import { ActorCustomPageModel } from '@server/models/account/actor-custom-page'
-import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -140,6 +142,8 @@ async function initDatabaseModels (silent: boolean) {
     VideoStreamingPlaylistModel,
     VideoPlaylistModel,
     VideoPlaylistElementModel,
+    LocalVideoViewerModel,
+    LocalVideoViewerWatchSectionModel,
     ThumbnailModel,
     TrackerModel,
     VideoTrackerModel,

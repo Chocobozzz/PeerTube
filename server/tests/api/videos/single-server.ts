@@ -179,22 +179,21 @@ describe('Test a single server', function () {
     it('Should have the views updated', async function () {
       this.timeout(20000)
 
-      await server.videos.view({ id: videoId })
-      await server.videos.view({ id: videoId })
-      await server.videos.view({ id: videoId })
+      await server.views.simulateView({ id: videoId })
+      await server.views.simulateView({ id: videoId })
+      await server.views.simulateView({ id: videoId })
 
       await wait(1500)
 
-      await server.videos.view({ id: videoId })
-      await server.videos.view({ id: videoId })
+      await server.views.simulateView({ id: videoId })
+      await server.views.simulateView({ id: videoId })
 
       await wait(1500)
 
-      await server.videos.view({ id: videoId })
-      await server.videos.view({ id: videoId })
+      await server.views.simulateView({ id: videoId })
+      await server.views.simulateView({ id: videoId })
 
-      // Wait the repeatable job
-      await wait(8000)
+      await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
 
       const video = await server.videos.get({ id: videoId })
       expect(video.views).to.equal(3)

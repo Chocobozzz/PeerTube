@@ -7,6 +7,7 @@ import {
   MActorId,
   MActorUrl,
   MCommentId,
+  MLocalVideoViewer,
   MVideoId,
   MVideoPlaylistElement,
   MVideoUrl,
@@ -57,6 +58,10 @@ function getLocalAbuseActivityPubUrl (abuse: MAbuseId) {
 
 function getLocalVideoViewActivityPubUrl (byActor: MActorUrl, video: MVideoId) {
   return byActor.url + '/views/videos/' + video.id + '/' + new Date().toISOString()
+}
+
+function getLocalVideoViewerActivityPubUrl (stats: MLocalVideoViewer) {
+  return WEBSERVER.URL + '/videos/local-viewer/' + stats.uuid
 }
 
 function getVideoLikeActivityPubUrlByLocalActor (byActor: MActorUrl, video: MVideoId) {
@@ -167,6 +172,7 @@ export {
   getLocalVideoCommentsActivityPubUrl,
   getLocalVideoLikesActivityPubUrl,
   getLocalVideoDislikesActivityPubUrl,
+  getLocalVideoViewerActivityPubUrl,
 
   getAbuseTargetUrl,
   checkUrlsSameHost,
