@@ -24,7 +24,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 700
+const LAST_MIGRATION_VERSION = 705
 
 // ---------------------------------------------------------------------------
 
@@ -228,6 +228,7 @@ const SCHEDULER_INTERVALS_MS = {
   REMOVE_OLD_JOBS: 60000 * 60, // 1 hour
   UPDATE_VIDEOS: 60000, // 1 minute
   YOUTUBE_DL_UPDATE: 60000 * 60 * 24, // 1 day
+  GEO_IP_UPDATE: 60000 * 60 * 24, // 1 day
   VIDEO_VIEWS_BUFFER_UPDATE: CONFIG.VIEWS.VIDEOS.LOCAL_BUFFER_UPDATE_INTERVAL,
   CHECK_PLUGINS: CONFIG.PLUGINS.INDEX.CHECK_LATEST_VERSIONS_INTERVAL,
   CHECK_PEERTUBE_VERSION: 60000 * 60 * 24, // 1 day
@@ -366,8 +367,11 @@ const CONSTRAINTS_FIELDS = {
 
 const VIEW_LIFETIME = {
   VIEW: CONFIG.VIEWS.VIDEOS.IP_VIEW_EXPIRATION,
-  VIEWER: 60000 * 5 // 5 minutes
+  VIEWER: 60000 * 5, // 5 minutes
+  VIEWER_STATS: 60000 * 60 // 1 hour
 }
+
+const MAX_LOCAL_VIEWER_WATCH_SECTIONS = 10
 
 let CONTACT_FORM_LIFETIME = 60000 * 60 // 1 hour
 
@@ -800,6 +804,12 @@ const SEARCH_INDEX = {
 
 // ---------------------------------------------------------------------------
 
+const STATS_TIMESERIE = {
+  MAX_DAYS: 30
+}
+
+// ---------------------------------------------------------------------------
+
 // Special constants for a test instance
 if (isTestInstance() === true) {
   PRIVATE_RSA_KEY_SIZE = 1024
@@ -836,6 +846,7 @@ if (isTestInstance() === true) {
   REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
 
   VIEW_LIFETIME.VIEWER = 1000 * 5 // 5 second
+  VIEW_LIFETIME.VIEWER_STATS = 1000 * 5 // 5 second
   CONTACT_FORM_LIFETIME = 1000 // 1 second
 
   JOB_ATTEMPTS['email'] = 1
@@ -907,6 +918,7 @@ export {
   LAST_MIGRATION_VERSION,
   OAUTH_LIFETIME,
   CUSTOM_HTML_TAG_COMMENTS,
+  STATS_TIMESERIE,
   BROADCAST_CONCURRENCY,
   AUDIT_LOG_FILENAME,
   PAGINATION,
@@ -949,6 +961,7 @@ export {
   ABUSE_STATES,
   LRU_CACHE,
   REQUEST_TIMEOUTS,
+  MAX_LOCAL_VIEWER_WATCH_SECTIONS,
   USER_PASSWORD_RESET_LIFETIME,
   USER_PASSWORD_CREATE_LIFETIME,
   MEMOIZE_TTL,

@@ -27,7 +27,7 @@ import {
   videosShareValidator
 } from '../../middlewares'
 import { cacheRoute } from '../../middlewares/cache/cache'
-import { getAccountVideoRateValidatorFactory, videoCommentGetValidator } from '../../middlewares/validators'
+import { getAccountVideoRateValidatorFactory, getVideoLocalViewerValidator, videoCommentGetValidator } from '../../middlewares/validators'
 import { videoFileRedundancyGetValidator, videoPlaylistRedundancyGetValidator } from '../../middlewares/validators/redundancy'
 import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists'
 import { AccountModel } from '../../models/account/account'
@@ -173,6 +173,12 @@ activityPubClientRouter.get('/video-playlists/:playlistId/videos/:playlistElemen
   executeIfActivityPub,
   asyncMiddleware(videoPlaylistElementAPGetValidator),
   videoPlaylistElementController
+)
+
+activityPubClientRouter.get('/videos/local-viewer/:localViewerId',
+  executeIfActivityPub,
+  asyncMiddleware(getVideoLocalViewerValidator),
+  getVideoLocalViewerController
 )
 
 // ---------------------------------------------------------------------------
@@ -397,6 +403,12 @@ function videoPlaylistElementController (req: express.Request, res: express.Resp
 
   const json = videoPlaylistElement.toActivityPubObject()
   return activityPubResponse(activityPubContextify(json, 'Playlist'), res)
+}
+
+function getVideoLocalViewerController (req: express.Request, res: express.Response) {
+  const localViewer = res.locals.localViewerFull
+
+  return activityPubResponse(activityPubContextify(localViewer.toActivityPubObject(), 'WatchAction'), res)
 }
 
 // ---------------------------------------------------------------------------

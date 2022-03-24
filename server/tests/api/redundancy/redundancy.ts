@@ -87,7 +87,7 @@ async function createServers (strategy: VideoRedundancyStrategy | null, addition
     const { id } = await servers[1].videos.upload({ attributes: { name: 'video 1 server 2' } })
     video1Server2 = await servers[1].videos.get({ id })
 
-    await servers[1].videos.view({ id })
+    await servers[1].views.simulateView({ id })
   }
 
   await waitJobs(servers)
@@ -447,8 +447,8 @@ describe('Test videos redundancy', function () {
     it('Should view 2 times the first video to have > min_views config', async function () {
       this.timeout(80000)
 
-      await servers[0].videos.view({ id: video1Server2.uuid })
-      await servers[2].videos.view({ id: video1Server2.uuid })
+      await servers[0].views.simulateView({ id: video1Server2.uuid })
+      await servers[2].views.simulateView({ id: video1Server2.uuid })
 
       await wait(10000)
       await waitJobs(servers)
@@ -516,8 +516,8 @@ describe('Test videos redundancy', function () {
     it('Should have 1 redundancy on the first video', async function () {
       this.timeout(160000)
 
-      await servers[0].videos.view({ id: video1Server2.uuid })
-      await servers[2].videos.view({ id: video1Server2.uuid })
+      await servers[0].views.simulateView({ id: video1Server2.uuid })
+      await servers[2].views.simulateView({ id: video1Server2.uuid })
 
       await wait(10000)
       await waitJobs(servers)

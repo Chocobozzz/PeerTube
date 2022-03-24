@@ -106,6 +106,7 @@ import { setAsUpdated } from '../shared'
 import { UserModel } from '../user/user'
 import { UserVideoHistoryModel } from '../user/user-video-history'
 import { buildTrigramSearchIndex, buildWhereIdOrUUID, getVideoSort, isOutdated, throwIfNotValid } from '../utils'
+import { VideoViewModel } from '../view/video-view'
 import {
   videoFilesModelToFormattedJSON,
   VideoFormattingJSONOptions,
@@ -135,7 +136,6 @@ import { VideoPlaylistElementModel } from './video-playlist-element'
 import { VideoShareModel } from './video-share'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
-import { VideoViewModel } from './video-view'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',

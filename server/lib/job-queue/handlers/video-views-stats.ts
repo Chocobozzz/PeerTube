@@ -1,7 +1,7 @@
+import { VideoViewModel } from '@server/models/view/video-view'
 import { isTestInstance } from '../../../helpers/core-utils'
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
-import { VideoViewModel } from '../../../models/video/video-view'
 import { Redis } from '../../redis'
 
 async function processVideosViewsStats () {

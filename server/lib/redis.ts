@@ -249,6 +249,45 @@ class Redis {
     ])
   }
 
+  /* ************ Video viewers stats ************ */
+
+  getLocalVideoViewer (options: {
+    key?: string
+    // Or
+    ip?: string
+    videoId?: number
+  }) {
+    if (options.key) return this.getObject(options.key)
+
+    const { viewerKey } = this.generateLocalVideoViewerKeys(options.ip, options.videoId)
+
+    return this.getObject(viewerKey)
+  }
+
+  setLocalVideoViewer (ip: string, videoId: number, object: any) {
+    const { setKey, viewerKey } = this.generateLocalVideoViewerKeys(ip, videoId)
+
+    return Promise.all([
+      this.addToSet(setKey, viewerKey),
+      this.setObject(viewerKey, object)
+    ])
+  }
+
+  listLocalVideoViewerKeys () {
+    const { setKey } = this.generateLocalVideoViewerKeys()
+
+    return this.getSet(setKey)
+  }
+
+  deleteLocalVideoViewersKeys (key: string) {
+    const { setKey } = this.generateLocalVideoViewerKeys()
+
+    return Promise.all([
+      this.deleteFromSet(setKey, key),
+      this.deleteKey(key)
+    ])
+  }
+
   /* ************ Resumable uploads final responses ************ */
 
   setUploadSession (uploadId: string, response?: { video: { id: number, shortUUID: string, uuid: string } }) {
@@ -290,8 +329,16 @@ class Redis {
 
   /* ************ Keys generation ************ */
 
-  private generateLocalVideoViewsKeys (videoId?: Number) {
+  private generateLocalVideoViewsKeys (videoId: number): { setKey: string, videoKey: string }
+  private generateLocalVideoViewsKeys (): { setKey: string }
+  private generateLocalVideoViewsKeys (videoId?: number) {
     return { setKey: `local-video-views-buffer`, videoKey: `local-video-views-buffer-${videoId}` }
+  }
+
+  private generateLocalVideoViewerKeys (ip: string, videoId: number): { setKey: string, viewerKey: string }
+  private generateLocalVideoViewerKeys (): { setKey: string }
+  private generateLocalVideoViewerKeys (ip?: string, videoId?: number) {
+    return { setKey: `local-video-viewer-stats-keys`, viewerKey: `local-video-viewer-stats-${ip}-${videoId}` }
   }
 
   private generateVideoViewStatsKeys (options: { videoId?: number, hour?: number }) {
@@ -352,8 +399,23 @@ class Redis {
     return this.client.del(this.prefix + key)
   }
 
-  private async setValue (key: string, value: string, expirationMilliseconds: number) {
-    const result = await this.client.set(this.prefix + key, value, { PX: expirationMilliseconds })
+  private async getObject (key: string) {
+    const value = await this.getValue(key)
+    if (!value) return null
+
+    return JSON.parse(value)
+  }
+
+  private setObject (key: string, value: { [ id: string ]: number | string }) {
+    return this.setValue(key, JSON.stringify(value))
+  }
+
+  private async setValue (key: string, value: string, expirationMilliseconds?: number) {
+    const options = expirationMilliseconds
+      ? { PX: expirationMilliseconds }
+      : {}
+
+    const result = await this.client.set(this.prefix + key, value, options)
 
     if (result !== 'OK') throw new Error('Redis set result is not OK.')
   }

@@ -39,8 +39,7 @@ export interface Video {
   url: string
 
   views: number
-  // If live
-  viewers?: number
+  viewers: number
 
   likes: number
   dislikes: number

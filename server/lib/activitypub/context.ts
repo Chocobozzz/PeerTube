@@ -15,7 +15,7 @@ export {
 
 type ContextValue = { [ id: string ]: (string | { '@type': string, '@id': string }) }
 
-const contextStore = {
+const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string })[] } = {
   Video: buildContext({
     Hashtag: 'as:Hashtag',
     uuid: 'sc:identifier',
@@ -109,7 +109,8 @@ const contextStore = {
     stopTimestamp: {
       '@type': 'sc:Number',
       '@id': 'pt:stopTimestamp'
-    }
+    },
+    uuid: 'sc:identifier'
   }),
 
   CacheFile: buildContext({
@@ -128,6 +129,24 @@ const contextStore = {
     }
   }),
 
+  WatchAction: buildContext({
+    WatchAction: 'sc:WatchAction',
+    startTimestamp: {
+      '@type': 'sc:Number',
+      '@id': 'pt:startTimestamp'
+    },
+    stopTimestamp: {
+      '@type': 'sc:Number',
+      '@id': 'pt:stopTimestamp'
+    },
+    watchSection: {
+      '@type': 'sc:Number',
+      '@id': 'pt:stopTimestamp'
+    },
+    uuid: 'sc:identifier'
+  }),
+
+  Collection: buildContext(),
   Follow: buildContext(),
   Reject: buildContext(),
   Accept: buildContext(),

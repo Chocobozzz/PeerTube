@@ -168,5 +168,8 @@ views:
     local_buffer_update_interval: '5 seconds'
     ip_view_expiration: '1 second'
 
+geo_ip:
+  enabled: false
+
 video_studio:
   enabled: true

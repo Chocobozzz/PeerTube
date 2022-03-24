@@ -1,4 +1,4 @@
-import { VideoViews } from '@server/lib/video-views'
+import { VideoViewsManager } from '@server/lib/views/video-views-manager'
 import { ActivityView } from '../../../../shared/models/activitypub'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
@@ -32,7 +32,7 @@ async function processCreateView (activity: ActivityView, byActor: MActorSignatu
     ? new Date(activity.expires)
     : undefined
 
-  await VideoViews.Instance.processView({ video, ip: null, viewerExpires })
+  await VideoViewsManager.Instance.processRemoteView({ video, viewerExpires })
 
   if (video.isOwned()) {
     // Forward the view but don't resend the activity to the sender

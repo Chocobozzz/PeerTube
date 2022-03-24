@@ -261,6 +261,13 @@ views:
 
     ip_view_expiration: '1 hour'
 
+# Used to get country location of views of local videos
+geo_ip:
+  enabled: true
+
+  country:
+    database_url: 'https://dbip.mirror.framasoft.org/files/dbip-country-lite-latest.mmdb'
+
 plugins:
   # The website PeerTube will ask for available PeerTube plugins and themes
   # This is an unmoderated plugin index, so only install plugins/themes you trust

@@ -41,8 +41,8 @@ describe('Test application behind a reverse proxy', function () {
   it('Should view a video only once with the same IP by default', async function () {
     this.timeout(20000)
 
-    await server.videos.view({ id: videoId })
-    await server.videos.view({ id: videoId })
+    await server.views.simulateView({ id: videoId })
+    await server.views.simulateView({ id: videoId })
 
     // Wait the repeatable job
     await wait(8000)
@@ -54,8 +54,8 @@ describe('Test application behind a reverse proxy', function () {
   it('Should view a video 2 times with the X-Forwarded-For header set', async function () {
     this.timeout(20000)
 
-    await server.videos.view({ id: videoId, xForwardedFor: '0.0.0.1,127.0.0.1' })
-    await server.videos.view({ id: videoId, xForwardedFor: '0.0.0.2,127.0.0.1' })
+    await server.views.simulateView({ id: videoId, xForwardedFor: '0.0.0.1,127.0.0.1' })
+    await server.views.simulateView({ id: videoId, xForwardedFor: '0.0.0.2,127.0.0.1' })
 
     // Wait the repeatable job
     await wait(8000)
@@ -67,8 +67,8 @@ describe('Test application behind a reverse proxy', function () {
   it('Should view a video only once with the same client IP in the X-Forwarded-For header', async function () {
     this.timeout(20000)
 
-    await server.videos.view({ id: videoId, xForwardedFor: '0.0.0.4,0.0.0.3,::ffff:127.0.0.1' })
-    await server.videos.view({ id: videoId, xForwardedFor: '0.0.0.5,0.0.0.3,127.0.0.1' })
+    await server.views.simulateView({ id: videoId, xForwardedFor: '0.0.0.4,0.0.0.3,::ffff:127.0.0.1' })
+    await server.views.simulateView({ id: videoId, xForwardedFor: '0.0.0.5,0.0.0.3,127.0.0.1' })
 
     // Wait the repeatable job
     await wait(8000)
@@ -80,8 +80,8 @@ describe('Test application behind a reverse proxy', function () {
   it('Should view a video two times with a different client IP in the X-Forwarded-For header', async function () {
     this.timeout(20000)
 
-    await server.videos.view({ id: videoId, xForwardedFor: '0.0.0.8,0.0.0.6,127.0.0.1' })
-    await server.videos.view({ id: videoId, xForwardedFor: '0.0.0.8,0.0.0.7,127.0.0.1' })
+    await server.views.simulateView({ id: videoId, xForwardedFor: '0.0.0.8,0.0.0.6,127.0.0.1' })
+    await server.views.simulateView({ id: videoId, xForwardedFor: '0.0.0.8,0.0.0.7,127.0.0.1' })
 
     // Wait the repeatable job
     await wait(8000)

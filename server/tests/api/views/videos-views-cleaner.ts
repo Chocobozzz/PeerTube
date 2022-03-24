@@ -34,10 +34,10 @@ describe('Test video views cleaner', function () {
 
     await waitJobs(servers)
 
-    await servers[0].videos.view({ id: videoIdServer1 })
-    await servers[1].videos.view({ id: videoIdServer1 })
-    await servers[0].videos.view({ id: videoIdServer2 })
-    await servers[1].videos.view({ id: videoIdServer2 })
+    await servers[0].views.simulateView({ id: videoIdServer1 })
+    await servers[1].views.simulateView({ id: videoIdServer1 })
+    await servers[0].views.simulateView({ id: videoIdServer2 })
+    await servers[1].views.simulateView({ id: videoIdServer2 })
 
     await waitJobs(servers)
   })

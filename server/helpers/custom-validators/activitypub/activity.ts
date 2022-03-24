@@ -8,6 +8,7 @@ import { isActivityPubUrlValid, isBaseActivityValid, isObjectValid } from './mis
 import { isPlaylistObjectValid } from './playlist'
 import { sanitizeAndCheckVideoCommentObject } from './video-comments'
 import { sanitizeAndCheckVideoTorrentObject } from './videos'
+import { isWatchActionObjectValid } from './watch-action'
 
 function isRootActivityValid (activity: any) {
   return isCollection(activity) || isActivity(activity)
@@ -82,6 +83,7 @@ function isCreateActivityValid (activity: any) {
       isDislikeActivityValid(activity.object) ||
       isFlagActivityValid(activity.object) ||
       isPlaylistObjectValid(activity.object) ||
+      isWatchActionObjectValid(activity.object) ||
 
       isCacheFileObjectValid(activity.object) ||
       sanitizeAndCheckVideoCommentObject(activity.object) ||

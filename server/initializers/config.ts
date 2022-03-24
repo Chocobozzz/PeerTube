@@ -215,6 +215,12 @@ const CONFIG = {
       IP_VIEW_EXPIRATION: parseDurationToMs(config.get('views.videos.ip_view_expiration'))
     }
   },
+  GEO_IP: {
+    ENABLED: config.get<boolean>('geo_ip.enabled'),
+    COUNTRY: {
+      DATABASE_URL: config.get<string>('geo_ip.country.database_url')
+    }
+  },
   PLUGINS: {
     INDEX: {
       ENABLED: config.get<boolean>('plugins.index.enabled'),

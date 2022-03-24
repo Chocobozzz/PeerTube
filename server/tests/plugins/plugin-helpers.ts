@@ -301,7 +301,7 @@ describe('Test plugin helpers', function () {
       // Should not throw -> video exists
       const video = await servers[0].videos.get({ id: videoUUID })
       // Should delete the video
-      await servers[0].videos.view({ id: videoUUID })
+      await servers[0].views.simulateView({ id: videoUUID })
 
       await servers[0].servers.waitUntilLog('Video deleted by plugin four.')
 

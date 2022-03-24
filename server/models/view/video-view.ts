@@ -1,7 +1,7 @@
 import { literal, Op } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
 import { AttributesOnly } from '@shared/typescript-utils'
-import { VideoModel } from './video'
+import { VideoModel } from '../video/video'
 
 @Table({
   tableName: 'videoView',

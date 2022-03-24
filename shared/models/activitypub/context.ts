@@ -12,4 +12,5 @@ export type ContextType =
   'Rate' |
   'Flag' |
   'Actor' |
-  'Collection'
+  'Collection' |
+  'WatchAction'
