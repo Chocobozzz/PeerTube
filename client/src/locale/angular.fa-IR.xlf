@@ -465,12 +465,12 @@
       </trans-unit>
       <trans-unit id="7385834259346199883" datatype="html">
         <source>Video stream</source>
-        <target state="translated">ویدیو در جریان</target>
+        <target state="translated">استریم ویدئو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="5496771215105419189" datatype="html">
         <source>Audio stream</source>
-        <target state="translated">جریان صوتی</target>
+        <target state="translated">استریم صوتی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="6316149158173629264" datatype="html">
@@ -627,7 +627,7 @@
       </trans-unit>
       <trans-unit id="9088099192924395359" datatype="html">
         <source>Are you sure you want to delete <x id="PH" equiv-text="videos.length"/> HLS streaming playlists?</source>
-        <target state="translated">آیااز حذف کردن مطمئن هستید <x id="PH" equiv-text="videos.length"/> لیست جریانی پخش HLS ?</target>
+        <target state="translated">آیااز حذف کردن  <x id="PH" equiv-text="videos.length"/> لیست استریم پخش HLSمطمئن هستید ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">226</context>
@@ -774,7 +774,7 @@
       </trans-unit>
       <trans-unit id="6691897331062834756" datatype="html">
         <source>Subscribe with an account on this instance</source>
-        <target state="translated">با یک حساب در این نمونه مشترک شوید</target>
+        <target state="translated">با یک حساب کاربری می توانید در این سایت مشترک شوید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="1740917574463702967" datatype="html">
@@ -784,7 +784,7 @@
       </trans-unit>
       <trans-unit id="7639191791633609999" datatype="html">
         <source>The live stream will be automatically terminated.</source>
-        <target state="translated">پخش جریانی مستقیم به طور خودکار خاتمه می یابد.</target>
+        <target state="translated">استریم پخش زنده  به طور خودکار خاتمه می یابد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">226</context></context-group>
       </trans-unit>
       <trans-unit id="8023282004085823427" datatype="html">
@@ -834,12 +834,12 @@
       </trans-unit>
       <trans-unit id="6462281745850371027" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="translated">می‌توانید از طریق هر نمونه فدیورس مبتنی بر اکتیویتی‌پاب (مثلا پیرتیوب، ماستودون یا پلروما) مشترک کانال شوید.</target>
+        <target state="translated">می‌توانید از طریق هر سایت فدیورس مبتنی بر اکتیویتی‌پاب (مثلا پیرتیوب، ماستودون یا پلروما) مشترک کانال شوید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="20374890400263257" datatype="html">
         <source>You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="translated">می‌توانید از طریق هر نمونه فدیورس مبتنی بر اکتیویتی‌پاب (مثلا پیرتیوب، ماستودون یا پلروما) با این تعامل داشته باشید.</target>
+        <target state="translated">می‌توانید از طریق هر سایت فدیورس مبتنی بر اکتیویتی‌پاب (مثلا پیرتیوب، ماستودون یا پلروما) با این تعامل داشته باشید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="6751395526297887552" datatype="html">
@@ -920,7 +920,7 @@
       </trans-unit>
       <trans-unit id="6276792241563504067" datatype="html">
         <source>You can import any torrent file that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
-        <target state="translated">می‌توانید هر پرونده تورنتی که به یک پرونده رسانه‌ای اشاره داشته باشد را وارد کنید. بایستی اطمینان حاصل کنید که شما حق انتشار محتوایی که به آن اشاره می‌کنید را دارید مگر نه این کار می‌تواند شما و نمونهٔ شما را با مشکلات حقوقی مواجه کند.</target>
+        <target state="translated">می‌توانید هر پرونده تورنتی که به یک رسانه‌ اشاره داشته باشد را وارد کنید. بایستی اطمینان حاصل کنید که شما حق انتشار محتوایی که به آن اشاره می‌کنید را دارید وگر نه این کار می‌تواند شما و سایت  شما را با مشکلات حقوقی مواجه کند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="5812787579835788700" datatype="html">
@@ -945,7 +945,7 @@
       </trans-unit>
       <trans-unit id="4603134051700562542" datatype="html">
         <source>Loading instance statistics...</source>
-        <target state="translated">در حال بار گذاری آمار نمونه...</target>
+        <target state="translated">در حال بار گذاری آمار سایت ...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="5851173629316588976" datatype="html">
@@ -1161,7 +1161,7 @@
       </trans-unit>
       <trans-unit id="7252854992688790751" datatype="html">
         <source>This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">این نمونه اجازه نام‌نویسی را می‌دهد. با این حال پیش از ساخت حساب، با دقت <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>قوانین<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>قوانین<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> را مطالعه کنید. به منظور یافتن نمونه‌ای که بهترین انطباق را با نیاز شما داشته باشد می‌تواند در این جا دنبال نمونه‌های دیگر بگردید: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
+        <target state="translated">این سایت  اجازه نام‌نویسی را می‌دهد. با این حال پیش از ساخت حساب، با دقت <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>قوانین<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>قوانین<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> را مطالعه کنید. به منظور یافتن نمونه‌ای که بهترین انطباق را با نیاز شما داشته باشد می‌تواند در این جا دنبال نمونه‌های دیگر بگردید: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="7215649348148521605" datatype="html">
@@ -2343,7 +2343,7 @@
       </trans-unit>
       <trans-unit id="1212376766715456139" datatype="html">
         <source>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</source>
-        <target state="translated">⚠️ اگر این گزینه را فعال کنید، اگر شما از سهمیه های ویدئویی خود فراتر رفته اید، زندگی می کنید</target>
+        <target state="translated">⚠️ اگر این گزینه را فعال کنید، اگر از سهمیه های ویدئویی خود فراتر رفته باشید ، پخش زنده به صورت خودکار پایان می یابد .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">288</context></context-group>
       </trans-unit>
       <trans-unit id="1966495339378120213" datatype="html">
@@ -2532,7 +2532,7 @@
       </trans-unit>
       <trans-unit id="1087181129481039628" datatype="html">
         <source>Normal live</source>
-        <target state="translated">زندگی عادی</target>
+        <target state="translated">پخش زنده عادی</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
           <context context-type="linenumber">22</context>
@@ -2661,12 +2661,12 @@
       </trans-unit>
       <trans-unit id="7860848084471862305" datatype="html">
         <source>Cannot create live because this instance have too many created lives</source>
-        <target state="translated">نمی تواند زندگی کند، زیرا این نمونه بیش از حد بسیاری از زندگی ایجاد شده است</target>
+        <target state="translated">بدلیل آنکه تعداد پخش زنده های ایجاد شده شما زیاد است ،امکان ایجاد پخش زنده جدید وجود ندارد .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="1278564497286613571" datatype="html">
         <source>Cannot create live because you created too many lives</source>
-        <target state="translated">نمی تواند زندگی کند، زیرا شما زندگی بیش از حد بسیاری را ایجاد کردید</target>
+        <target state="translated">بدلیل آنکه تعداد پخش زنده های ایجاد شده شما زیاد است ،امکان ایجاد پخش زنده جدید وجود ندارد .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="2621043320678012413" datatype="html">
@@ -2676,22 +2676,22 @@
       </trans-unit>
       <trans-unit id="5872059367236038160" datatype="html">
         <source>Stream only once and save a replay of your live</source>
-        <target state="translated">جریان تنها یک بار و ذخیره یک پخش از زندگی خود را</target>
+        <target state="translated">استریم تنها یکبار صورت پذیرفته و بعداز آن بازپخش ،پخش زنده را ذخیره کنید .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">157</context></context-group>
       </trans-unit>
       <trans-unit id="2360261543675520397" datatype="html">
         <source>Stream only once</source>
-        <target state="translated">جریان فقط یک بار</target>
+        <target state="translated">استریم تنها برای یکبار</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="5168540607709796871" datatype="html">
         <source>Stream multiple times, replays can't be saved</source>
-        <target state="translated">جریان چند بار، پخش را نمی توان ذخیره کرد</target>
+        <target state="translated">استریم چند باره،  نمی توان آن را ذخیره کرد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">165</context></context-group>
       </trans-unit>
       <trans-unit id="58134197356653483" datatype="html">
         <source>Stream multiple times using the same URL</source>
-        <target state="translated">جریان چند بار با استفاده از همان URL</target>
+        <target state="translated">استریم چندباره با آدرس یکسان</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">168</context></context-group>
       </trans-unit>
       <trans-unit id="8218579597782287078" datatype="html">
@@ -2701,7 +2701,7 @@
       </trans-unit>
       <trans-unit id="3282368691598224543" datatype="html">
         <source>Max live duration is <x id="INTERPOLATION"/>. If your live reaches this limit, it will be automatically terminated. </source>
-        <target state="translated">حداکثر مدت زمان زنده <x id="INTERPOLATION"/>. اگر زندگی شما به این حد برسد، به طور خودکار خاتمه خواهد یافت. </target>
+        <target state="translated">حدکثر مدت زمان پخش زنده <x id="INTERPOLATION"/> می باشد .اگر زمان شما به این حد برسد ، پخش زنده به صورت خودکار پایان می یابد . </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="2993949426196989262" datatype="html">
@@ -2946,7 +2946,7 @@
       </trans-unit>
       <trans-unit id="6671956963490165282" datatype="html">
         <source>SAVE</source>
-        <target state="translated">صرفه جویی</target>
+        <target state="translated">ذخیره</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="647016352598204238" datatype="html">
@@ -3104,7 +3104,7 @@
       </trans-unit>
       <trans-unit id="4262297989675590582" datatype="html">
         <source>This live has not started yet.</source>
-        <target state="translated">این زندگی هنوز شروع نشده است.</target>
+        <target state="translated">این پخش زنده هنوز آغاز نشده است .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="4926204350710628499" datatype="html">
@@ -3405,7 +3405,7 @@
       </trans-unit>
       <trans-unit id="8246779176913476983" datatype="html">
         <source>Open instance in a new tab</source>
-        <target state="translated">مثال را در یک برگه جدید باز کنید</target>
+        <target state="translated">سایت خود را در یک برگه جدید باز کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">44</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">42</context></context-group>
@@ -3978,7 +3978,7 @@
       </trans-unit>
       <trans-unit id="2381859602529023966" datatype="html">
         <source>Instance</source>
-        <target state="translated">نمونه، مثال</target>
+        <target state="translated">سایت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about.component.html</context><context context-type="linenumber">5</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">217</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">31</context></context-group>
@@ -4287,7 +4287,7 @@
       </trans-unit>
       <trans-unit id="6170245880855918780" datatype="html">
         <source>Job state</source>
-        <target state="translated">دولت شغلی</target>
+        <target state="translated">وضعیت فعالیت ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="2296681895307893686" datatype="html">
@@ -4337,7 +4337,7 @@
       </trans-unit>
       <trans-unit id="2384897339170501794" datatype="html">
         <source>No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</source>
-        <target state="translated">نه <x id="START_TAG_SPAN"/> <x id="INTERPOLATION"/> <x id="CLOSE_TAG_SPAN"/> شغل پیدا نشد.</target>
+        <target state="translated">هیچ <x id="START_TAG_SPAN"/> <x id="INTERPOLATION"/> <x id="CLOSE_TAG_SPAN"/> فعالتی پیدا نشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="4457061340457477073" datatype="html">
@@ -4386,7 +4386,7 @@
       </trans-unit>
       <trans-unit id="7396175500300709096" datatype="html">
         <source>INSTANCE</source>
-        <target state="translated">نمونه، مثال</target>
+        <target state="translated">سایت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="8953033926734869941">
@@ -4459,7 +4459,7 @@
       </trans-unit>
       <trans-unit id="7030031694783481217" datatype="html">
         <source>This instance is dedicated to sensitive or NSFW content</source>
-        <target state="translated">این مثال به محتوای حساس یا NSFW اختصاص یافته است</target>
+        <target state="translated">این سایت به محتوای حساس یا NSFW اختصاص یافته است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="4620493570088713907" datatype="html">
@@ -4534,7 +4534,7 @@
       </trans-unit>
       <trans-unit id="5480243297215266596" datatype="html">
         <source>Why did you create this instance?</source>
-        <target state="translated">چرا این مثال را ایجاد کردید؟</target>
+        <target state="translated">چرا این سایت را ایجاد کردید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">185</context></context-group>
       </trans-unit>
       <trans-unit id="6995481962115300007" datatype="html">
@@ -4544,7 +4544,7 @@
       </trans-unit>
       <trans-unit id="3667968987954856844" datatype="html">
         <source>How long do you plan to maintain this instance?</source>
-        <target state="translated">چقدر طول می کشد تا این مثال را حفظ کنید؟</target>
+        <target state="translated">جقدر می خواهید این سایت را حفظ کنید ؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">197</context></context-group>
       </trans-unit>
       <trans-unit id="6722472563287778070" datatype="html">
@@ -4569,7 +4569,7 @@
       </trans-unit>
       <trans-unit id="3447208665089679283" datatype="html">
         <source>What server/hardware does the instance run on?</source>
-        <target state="translated">چه سرور / سخت افزار به عنوان مثال اجرا می شود؟</target>
+        <target state="translated">چه سرور / سخت افزاری برای سایت بکارگیری می شود؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">231</context></context-group>
       </trans-unit>
       <trans-unit id="4739907951373047958" datatype="html">
@@ -4863,7 +4863,7 @@
       </trans-unit>
       <trans-unit id="2258148539285928012" datatype="html">
         <source>Allow <x id="START_TAG_STRONG"/>your users<x id="CLOSE_TAG_STRONG"/> to look up remote videos/actors that may not be federated with your instance</source>
-        <target state="translated">اجازه دهید <x id="START_TAG_STRONG"/> کاربران شما <x id="CLOSE_TAG_STRONG"/> برای جستجوی فیلم های راه دور / بازیگران که ممکن است با نمونه شما فدراسیون نشوند</target>
+        <target state="translated">به کاربران  <x id="START_TAG_STRONG"/> اجازه دهید  <x id="CLOSE_TAG_STRONG"/>  فیلم های راه دور / فیلم سازانی که ممکن است با نمونه شما فدراسیون نشوند جستجو کنند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">351</context></context-group>
       </trans-unit>
       <trans-unit id="7295422540935146771" datatype="html">
@@ -5000,7 +5000,7 @@
       </trans-unit>
       <trans-unit id="5648651824279408711" datatype="html">
         <source>Instance allowed by Twitter</source>
-        <target state="translated">مثال توسط توییتر مجاز است</target>
+        <target state="translated">سایت توسط توییتر مجاز است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">559</context></context-group>
       </trans-unit>
       <trans-unit id="2076338542820061819" datatype="html">
@@ -5016,12 +5016,12 @@
       </trans-unit>
       <trans-unit id="1429138002697017359" datatype="html">
         <source>Enable users of your instance to stream live.</source>
-        <target state="translated">فعال کردن کاربران از نمونه خود را به جریان زنده.</target>
+        <target state="translated">دسترسی کاربران سایت خود به استریم پخش زنده را فعال کنید .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="8894612824234881672" datatype="html">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
-        <target state="translated">⚠️ فعال کردن جریان زنده نیاز به اعتماد به کاربران شما و کار اعتدال اضافی دارد</target>
+        <target state="translated">⚠️ فعال کردن استریم پخش زنده نیاز به اعتماد شما به  کاربران و اصلاحات اضافی دارد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="5205613575147327732" datatype="html">
@@ -5039,7 +5039,7 @@
       </trans-unit>
       <trans-unit id="3472969629566153023" datatype="html">
         <source>If the user quota is reached, PeerTube will automatically terminate the live streaming</source>
-        <target state="translated">اگر سهمیه کاربر رسیده باشد، Peertube به طور خودکار جریان زنده را خاتمه می دهد</target>
+        <target state="translated">اگر سهمیه کاربر رسیده باشد، Peertube به طور خودکار استریم پخش زنده را خاتمه می دهد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="8583623894789865917" datatype="html">
@@ -5111,12 +5111,12 @@
       </trans-unit>
       <trans-unit id="2281161665447607254" datatype="html">
         <source>Allow live streaming</source>
-        <target state="translated">اجازه جریان زنده</target>
+        <target state="translated">استریم پخش  زنده را مجاز کنید .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="6759167469686242835" datatype="html">
         <source>Transcoding enabled for live streams</source>
-        <target state="translated">Transcoding برای جریان های زنده فعال است</target>
+        <target state="translated">Transcoding برای استریم های پخش زنده  فعال است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="5975271795105968425" datatype="html">
@@ -5138,7 +5138,7 @@
       </trans-unit>
       <trans-unit id="8212237880239644112" datatype="html">
         <source>Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some.</source>
-        <target state="translated">همانند Transcoding VOD، Transcoding جریان های زنده به طوری که آنها در یک فرم ثابت است که هر دستگاه می تواند بازی کند. نیاز به یک CPU گوشت گاو، و سپس برخی.</target>
+        <target state="translated">همانند Transcoding VOD، Transcoding استریم پخشمی تواند از هر دستگاهی انجام شود .و صرفا به میزان حافظه و پردازنده مناسب و تجهیزات دیگری دارد .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="3444148141968928069" datatype="html">
@@ -5368,7 +5368,7 @@
       </trans-unit>
       <trans-unit id="4067880101082150743" datatype="html">
         <source>Write JavaScript code directly.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="translated">نوشتن کد جاوا اسکریپت به طور مستقیم. &lt;x id = "line_break" ctype = "lb" equiv-text = "&amp; lt؛ br / &amp; gt؛" /&gt; مثال: &lt;x id = "start_tag_pre" ctype = "x-pre" equiv-text = "&amp; lt؛ pre &amp; gt؛" /&gt; console.log ('مثال من شگفت انگیز است)؛ &lt;x id = "close_tag_pre" ctype = "x-pre" equiv-text = "&amp; lt؛ / pre &amp; gt؛" /&gt;</target>
+        <target state="translated">کد های جاوااسکریپت را مستقیمابنویسد.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>برای مثال: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="5464209657969421100" datatype="html">
@@ -5553,7 +5553,7 @@
       </trans-unit>
       <trans-unit id="8481241275509347668" datatype="html">
         <source>Local videos (this instance)</source>
-        <target state="translated">فیلم های محلی (این مثال)</target>
+        <target state="translated">فیلم های محلی (این سایت)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">85</context>
@@ -5561,7 +5561,7 @@
       </trans-unit>
       <trans-unit id="8383401711408398806" datatype="html">
         <source>Federated videos (this instance + followed instances)</source>
-        <target state="translated">فیلم های فدراسیون (این نمونه + نمونه ها)</target>
+        <target state="translated">فیلم های فدراسیون (این سایت+ سایت های دیگر)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">90</context>
@@ -6355,7 +6355,7 @@
       </trans-unit>
       <trans-unit id="1161141363959659794" datatype="html">
         <source>PeerTube is a self-hosted ActivityPub-federated video streaming platform using P2P directly in your web browser.</source>
-        <target state="translated">Peertube یک پلت فرم جریان ویدئویی فدراسیون ویدئویی خود را با استفاده از P2P به طور مستقیم در مرورگر وب خود دارد.</target>
+        <target state="translated">Peertube یک پلت فرم استریم ویدئویی فدراسیونی با استفاده از P2P به طور مستقیم در مرورگر وب شما می باشد .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="135286612733607700" datatype="html">
@@ -7554,7 +7554,7 @@
       </trans-unit>
       <trans-unit id="3229595422546554334" datatype="html">
         <source>Jobs</source>
-        <target state="translated">شغل ها</target>
+        <target state="translated">فعالیت ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">154</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/system.routes.ts</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
@@ -9705,7 +9705,7 @@
       </trans-unit>
       <trans-unit id="1225050607125362052" datatype="html">
         <source>Live stream key</source>
-        <target state="translated">کلید جریان پخش زنده</target>
+        <target state="translated">کلید استریم  پخش زنده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">255</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
@@ -9717,7 +9717,7 @@
       </trans-unit>
       <trans-unit id="5941639683192662500" datatype="html">
         <source>This is a normal live</source>
-        <target state="translated">این یک زندگی عادی است</target>
+        <target state="translated">این یک پخش زنده در حالت عادی می باشد .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">264</context></context-group>
       </trans-unit>
       <trans-unit id="7263323611663811322" datatype="html">
