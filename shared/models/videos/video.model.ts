@@ -4,6 +4,7 @@ import { VideoFile } from './file'
 import { VideoConstant } from './video-constant.model'
 import { VideoPrivacy } from './video-privacy.enum'
 import { VideoScheduleUpdate } from './video-schedule-update.model'
+import { VideoSource } from './video-source'
 import { VideoState } from './video-state.enum'
 import { VideoStreamingPlaylist } from './video-streaming-playlist.model'
 
@@ -87,4 +88,6 @@ export interface VideoDetails extends Video {
 
   files: VideoFile[]
   streamingPlaylists: VideoStreamingPlaylist[]
+
+  sources?: VideoSource[]
 }

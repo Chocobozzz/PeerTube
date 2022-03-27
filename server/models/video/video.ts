@@ -136,6 +136,7 @@ import { VideoShareModel } from './video-share'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
 import { VideoViewModel } from './video-view'
+import { VideoSourceModel } from './video-source'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -596,6 +597,15 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     onDelete: 'set null'
   })
   VideoPlaylistElements: VideoPlaylistElementModel[]
+
+  @HasMany(() => VideoSourceModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: true
+    },
+    onDelete: 'set null'
+  })
+  VideoSources: VideoSourceModel[]
 
   @HasMany(() => VideoAbuseModel, {
     foreignKey: {

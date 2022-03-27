@@ -175,7 +175,7 @@ function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): Vid
 
   const tags = video.Tags ? video.Tags.map(t => t.name) : []
 
-  const detailsJSON = {
+  const detailsJSON: any = {
     support: video.support,
     descriptionPath: video.getDescriptionAPIPath(),
     channel: video.VideoChannel.toFormattedJSON(),
@@ -191,6 +191,8 @@ function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): Vid
 
     trackerUrls: video.getTrackerUrls()
   }
+
+  if (video.VideoSources) detailsJSON.sources = video.VideoSources.map((s) => s.toFormattedJSON())
 
   return Object.assign(videoJSON, detailsJSON)
 }

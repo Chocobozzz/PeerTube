@@ -58,6 +58,7 @@ import {
   doesVideoFileOfVideoExist,
   isValidVideoIdParam
 } from '../shared'
+import { VideoSourceModel } from '@server/models/video/video-source'
 
 const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -296,6 +297,11 @@ const videosCustomGetValidator = (
       if (fetchType === 'only-immutable-attributes') return next()
 
       const video = getVideoWithAttributes(res) as MVideoFullLight
+      const user = res.locals.oauth ? res.locals.oauth.token.User : null
+
+      if (user?.hasRight(UserRight.UPDATE_ANY_VIDEO) === true || video.VideoChannel.Account.userId === user?.id) {
+        video.VideoSources = await VideoSourceModel.findAll({ where: { videoId: video.id } })
+      }
 
       // Video private or blacklisted
       if (video.requiresAuth()) {

@@ -18,6 +18,7 @@ import {
 } from './video-channels'
 import { MVideoFile, MVideoFileRedundanciesAll, MVideoFileRedundanciesOpt } from './video-file'
 import { MVideoLive } from './video-live'
+import { MVideoSourceFormattable } from './video-source'
 import {
   MStreamingPlaylistFiles,
   MStreamingPlaylistRedundancies,
@@ -220,4 +221,5 @@ export type MVideoFormattableDetails =
   Use<'Tags', MTag[]> &
   Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundanciesOpt[]> &
   Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
-  PickWithOpt<VideoModel, 'Trackers', MTrackerUrl[]>
+  PickWithOpt<VideoModel, 'Trackers', MTrackerUrl[]> &
+  Use<'VideoSources', MVideoSourceFormattable[]>

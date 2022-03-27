@@ -46,6 +46,7 @@ import { VideoViewModel } from '../models/video/video-view'
 import { CONFIG } from './config'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
+import { VideoSourceModel } from '@server/models/video/video-source'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -123,6 +124,7 @@ async function initDatabaseModels (silent: boolean) {
     VideoChannelModel,
     VideoShareModel,
     VideoFileModel,
+    VideoSourceModel,
     VideoCaptionModel,
     VideoBlacklistModel,
     VideoTagModel,
