@@ -299,7 +299,7 @@ const videosCustomGetValidator = (
       const video = getVideoWithAttributes(res) as MVideoFullLight
       const user = res.locals.oauth ? res.locals.oauth.token.User : null
 
-      if (user?.hasRight(UserRight.UPDATE_ANY_VIDEO) === true || video.VideoChannel.Account.userId === user?.id) {
+      if (user?.hasRight(UserRight.UPDATE_ANY_VIDEO) === true || video.VideoChannel?.Account.userId === user?.id) {
         video.VideoSources = await VideoSourceModel.findAll({ where: { videoId: video.id } })
       }
 
