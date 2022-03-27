@@ -10,23 +10,20 @@ async function validateVideoFile (options: {
 }) {
   logger.debug('Will validate video file.', { options, ...lTags() })
 
-  let validationFailed = false
-
+  let stderr = ''
   const command = ffmpeg(options.path)
     .addOption('-loglevel', 'error')
     .addOption('-f', 'null')
     .output('/dev/null')
-    .on('stderr', () => {
-      if (validationFailed) {
-        return command.kill('SIGKILL')
-      }
-      validationFailed = true
+    .on('stderr', (s) => {
+      stderr += s
+      return command.kill('SIGKILL')
     })
 
-  await runCommand({ command, job: options.job })
-
-  if (validationFailed) {
-    throw Error(`Video validation failed for file ${options.path}`)
+  try {
+    await runCommand({ command, job: options.job })
+  } catch (err) {
+    throw Error(`Video validation failed for file ${options.path}: ${stderr}`)
   }
 }
 
