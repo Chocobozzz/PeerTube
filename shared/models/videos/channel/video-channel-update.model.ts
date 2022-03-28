@@ -4,4 +4,6 @@ export interface VideoChannelUpdate {
   support?: string
 
   bulkVideosSupportUpdate?: boolean
+  enableSync?: boolean
+  externalChannelUrl?: string
 }

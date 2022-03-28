@@ -61,7 +61,7 @@
         </div>
 
         <div class="form-group">
-          <label for="support">Support</label>
+          <label i18n for="support">Support</label>
           <my-help
             helpType="markdownEnhanced" i18n-preHtml preHtml="Short text to tell people how they can support the channel (membership platform...).<br /><br />
       When a video is uploaded in this channel, the video support field will be automatically filled by this text."
@@ -81,6 +81,38 @@
         </div>
 
       </div>
+      <div class="form-group col-12 col-lg-4 col-xl-3">
+        <div class="video-channel-title" i18n>SYNCHRONIZATION</div>
+      </div>
+      <div class="form-group col-12 col-lg-8 col-xl-9">
+        <!-- FIXME: should we synchronization if the user has a quota of 0? -->
+        <my-peertube-checkbox inputName="enableSync" formControlName="enableSync">
+          <ng-template ptTemplate="label">
+            <ng-container i18n>Enable synchronization</ng-container>
+          </ng-template>
+
+          <ng-template ptTemplate="help">
+            <ng-container i18n>
+              Enabling it will synchronize your PeerTube channel with a channel from another platform (Youtube, Vimeo, Dailymotion, etc.)<br /><br />
+              Ensure to enter a valid video channel URL.
+            </ng-container>
+          </ng-template>
+          <ng-container ngProjectAs="extra">
+            <div [ngClass]="getDisabledSync()">
+              <label i18n for="externalChannelUrl">Remote channel URL</label>
+
+              <input type="text" id="externalChannelUrl" name="externalChannelUrl"
+                     class="form-control" placeholder="https://youtube.com/channel/UCxxxxxx"
+                     [ngClass]="{ 'input-error': formErrors['externalChannelUrl'] }"
+                     formControlName="externalChannelUrl" >
+            </div>
+            <div *ngIf="formErrors['externalChannelUrl']" class="form-error">
+              {{ formErrors['externalChannelUrl'] }}
+            </div>
+          </ng-container>
+        </my-peertube-checkbox>
+      </div>
+
     </div>
 
     <div class="row"> <!-- submit placement block -->

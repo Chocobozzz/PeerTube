@@ -6,6 +6,7 @@ import { AuthService, HooksService, Notifier } from '@app/core'
 import {
   VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
   VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
+  VIDEO_CHANNEL_EXTERNAL_URL,
   VIDEO_CHANNEL_NAME_VALIDATOR,
   VIDEO_CHANNEL_SUPPORT_VALIDATOR
 } from '@app/shared/form-validators/video-channel-validators'
@@ -41,7 +42,9 @@ export class VideoChannelCreateComponent extends VideoChannelEdit implements OnI
       name: VIDEO_CHANNEL_NAME_VALIDATOR,
       'display-name': VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
       description: VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
-      support: VIDEO_CHANNEL_SUPPORT_VALIDATOR
+      support: VIDEO_CHANNEL_SUPPORT_VALIDATOR,
+      enableSync: null,
+      externalChannelUrl: VIDEO_CHANNEL_EXTERNAL_URL
     })
   }
 
@@ -57,7 +60,8 @@ export class VideoChannelCreateComponent extends VideoChannelEdit implements OnI
       name: body.name,
       displayName: body['display-name'],
       description: body.description || null,
-      support: body.support || null
+      support: body.support || null,
+      externalChannelUrl: body.enableSync ? body.externalChannelUrl : null
     }
 
     this.videoChannelService.createVideoChannel(videoChannelCreate)

@@ -270,6 +270,7 @@ const CONSTRAINTS_FIELDS = {
     NAME: { min: 1, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 1000 }, // Length
     SUPPORT: { min: 3, max: 1000 }, // Length
+    EXTERNAL_CHANNEL_URL: { min: 3, max: 2000 }, // Length
     URL: { min: 3, max: 2000 } // Length
   },
   VIDEO_CAPTIONS: {

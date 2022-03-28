@@ -26,6 +26,7 @@ import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos
 import {
   isVideoChannelDescriptionValid,
   isVideoChannelDisplayNameValid,
+  isVideoChannelExternalChannelUrlValid,
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
@@ -358,6 +359,12 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
   @Is('VideoChannelSupport', value => throwIfNotValid(value, isVideoChannelSupportValid, 'support', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.SUPPORT.max))
   support: string
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('VideoChannelExternalChannelUrl', value => throwIfNotValid(value, isVideoChannelExternalChannelUrlValid, 'externalChannelUrl', true))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.EXTERNAL_CHANNEL_URL.max))
+  externalChannelUrl: string
 
   @CreatedAt
   createdAt: Date
@@ -784,6 +791,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       displayName: this.getDisplayName(),
       description: this.description,
       support: this.support,
+      externalChannelUrl: this.externalChannelUrl, // TODO: is this information published to activity pub?
       isLocal: this.Actor.isOwned(),
       updatedAt: this.updatedAt,
 

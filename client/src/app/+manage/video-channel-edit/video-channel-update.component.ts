@@ -7,7 +7,8 @@ import { genericUploadErrorHandler } from '@app/helpers'
 import {
   VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
   VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
-  VIDEO_CHANNEL_SUPPORT_VALIDATOR
+  VIDEO_CHANNEL_SUPPORT_VALIDATOR,
+  VIDEO_CHANNEL_EXTERNAL_URL
 } from '@app/shared/form-validators/video-channel-validators'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
@@ -47,7 +48,9 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
       'display-name': VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
       description: VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
       support: VIDEO_CHANNEL_SUPPORT_VALIDATOR,
-      bulkVideosSupportUpdate: null
+      bulkVideosSupportUpdate: null,
+      enableSync: null,
+      externalChannelUrl: VIDEO_CHANNEL_EXTERNAL_URL
     })
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
@@ -65,7 +68,9 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
             this.form.patchValue({
               'display-name': videoChannelToUpdate.displayName,
               description: videoChannelToUpdate.description,
-              support: videoChannelToUpdate.support
+              support: videoChannelToUpdate.support,
+              externalChannelUrl: videoChannelToUpdate.externalChannelUrl,
+              enableSync: !!videoChannelToUpdate.externalChannelUrl
             })
           },
 
@@ -92,7 +97,8 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
       displayName: body['display-name'],
       description: body.description || null,
       support: body.support || null,
-      bulkVideosSupportUpdate: body.bulkVideosSupportUpdate || false
+      bulkVideosSupportUpdate: body.bulkVideosSupportUpdate || false,
+      externalChannelUrl: body.enableSync ? body.externalChannelUrl : null
     }
 
     this.videoChannelService.updateVideoChannel(this.videoChannel.name, videoChannelUpdate)
@@ -113,62 +119,62 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
 
   onAvatarChange (formData: FormData) {
     this.videoChannelService.changeVideoChannelImage(this.videoChannel.name, formData, 'avatar')
-        .subscribe({
-          next: data => {
-            this.notifier.success($localize`Avatar changed.`)
+      .subscribe({
+        next: data => {
+          this.notifier.success($localize`Avatar changed.`)
 
-            this.videoChannel.updateAvatar(data.avatars)
-          },
+          this.videoChannel.updateAvatar(data.avatars)
+        },
 
-          error: (err: HttpErrorResponse) => genericUploadErrorHandler({
-            err,
-            name: $localize`avatar`,
-            notifier: this.notifier
-          })
+        error: (err: HttpErrorResponse) => genericUploadErrorHandler({
+          err,
+          name: $localize`avatar`,
+          notifier: this.notifier
         })
+      })
   }
 
   onAvatarDelete () {
     this.videoChannelService.deleteVideoChannelImage(this.videoChannel.name, 'avatar')
-                            .subscribe({
-                              next: () => {
-                                this.notifier.success($localize`Avatar deleted.`)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Avatar deleted.`)
 
-                                this.videoChannel.resetAvatar()
-                              },
+          this.videoChannel.resetAvatar()
+        },
 
-                              error: err => this.notifier.error(err.message)
-                            })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   onBannerChange (formData: FormData) {
     this.videoChannelService.changeVideoChannelImage(this.videoChannel.name, formData, 'banner')
-        .subscribe({
-          next: data => {
-            this.notifier.success($localize`Banner changed.`)
+      .subscribe({
+        next: data => {
+          this.notifier.success($localize`Banner changed.`)
 
-            this.videoChannel.updateBanner(data.banners)
-          },
+          this.videoChannel.updateBanner(data.banners)
+        },
 
-          error: (err: HttpErrorResponse) => genericUploadErrorHandler({
-            err,
-            name: $localize`banner`,
-            notifier: this.notifier
-          })
+        error: (err: HttpErrorResponse) => genericUploadErrorHandler({
+          err,
+          name: $localize`banner`,
+          notifier: this.notifier
         })
+      })
   }
 
   onBannerDelete () {
     this.videoChannelService.deleteVideoChannelImage(this.videoChannel.name, 'banner')
-                            .subscribe({
-                              next: () => {
-                                this.notifier.success($localize`Banner deleted.`)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Banner deleted.`)
 
-                                this.videoChannel.resetBanner()
-                              },
+          this.videoChannel.resetBanner()
+        },
 
-                              error: err => this.notifier.error(err.message)
-                            })
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   get maxAvatarSize () {
