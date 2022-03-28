@@ -22,6 +22,7 @@ import { VideoChannelEdit } from './video-channel-edit'
 export class VideoChannelCreateComponent extends VideoChannelEdit implements OnInit, AfterViewInit {
   error: string
   videoChannel = new VideoChannel({})
+  isUploadAllowed = true
 
   private avatar: FormData
   private banner: FormData

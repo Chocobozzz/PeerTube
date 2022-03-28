@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs'
 import { HttpErrorResponse } from '@angular/common/http'
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService, HooksService, Notifier, RedirectService, ServerService } from '@app/core'
+import { AuthService, HooksService, Notifier, RedirectService, ServerService, UserService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
 import {
   VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
@@ -23,6 +23,7 @@ import { VideoChannelEdit } from './video-channel-edit'
 export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnInit, AfterViewInit, OnDestroy {
   error: string
   videoChannel: VideoChannel
+  isUploadAllowed = false
 
   private paramsSub: Subscription
   private oldSupportField: string
@@ -36,7 +37,8 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
     private videoChannelService: VideoChannelService,
     private serverService: ServerService,
     private redirectService: RedirectService,
-    private hooks: HooksService
+    private hooks: HooksService,
+    private userService: UserService
   ) {
     super()
   }
@@ -50,7 +52,8 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
       support: VIDEO_CHANNEL_SUPPORT_VALIDATOR,
       bulkVideosSupportUpdate: null,
       enableSync: null,
-      externalChannelUrl: VIDEO_CHANNEL_EXTERNAL_URL
+      externalChannelUrl: VIDEO_CHANNEL_EXTERNAL_URL,
+      isUploadAllowed: null
     })
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
@@ -71,6 +74,14 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
               support: videoChannelToUpdate.support,
               externalChannelUrl: videoChannelToUpdate.externalChannelUrl,
               enableSync: !!videoChannelToUpdate.externalChannelUrl
+            })
+            this.userService.getUser(videoChannelToUpdate.ownerAccount.userId).subscribe({
+              next: userInfo => {
+                this.isUploadAllowed = userInfo.videoQuota !== 0
+              },
+              error: err => {
+                this.error = err.message
+              }
             })
           },
 
@@ -197,5 +208,17 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
     if (this.oldSupportField === undefined) return false
 
     return this.oldSupportField !== this.form.value['support']
+  }
+
+  getDisallowedSync () {
+    return { 'disallowed-sync': !this.isUploadAllowed }
+  }
+
+  getDisabledSync () {
+    // Prevent doubling opacity of checkbox extras if
+    // upload is not allowed
+    if (this.isUploadAllowed) {
+      return super.getDisabledSync()
+    }
   }
 }

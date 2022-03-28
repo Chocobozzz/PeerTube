@@ -66,7 +66,7 @@ my-markdown-textarea {
   }
 }
 
-.disabled-checkbox-extra {
+.disabled-checkbox-extra, .disallowed-sync my-peertube-checkbox {
   &,
   ::ng-deep label {
     opacity: .5;

@@ -23,4 +23,9 @@ export abstract class VideoChannelEdit extends FormReactive {
   isSyncEnabled (): boolean {
     return this.form.value['enableSync'] === true
   }
+
+  // should be implemented by the child
+  getDisallowedSync () {
+    return { }
+  }
 }
