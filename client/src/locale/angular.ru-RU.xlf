@@ -584,12 +584,12 @@
       </trans-unit>
       <trans-unit id="7688104409544625220" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 просмотр} other {<x id="INTERPOLATION"/> просмотров}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> просмотр} few {<x id="INTERPOLATION"/> просмотра} other {<x id="INTERPOLATION"/> просмотров}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="8562063050145802350" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 зритель} other {<x id="INTERPOLATION"/> зрителей}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> зритель} few {<x id="INTERPOLATION"/> зрителя} other {<x id="INTERPOLATION"/> зрителей}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">7</context>
@@ -1056,7 +1056,7 @@
       </trans-unit>
       <trans-unit id="8530934870279569179" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file was too large (max. size: <x id="PH_1" equiv-text="maxFileSize"/>)</source>
-        <target state="translated">Ваш <x id="PH" equiv-text="name"/> файл был слишком большим (Максимум. размер:<x id="PH_1" equiv-text="maxFileSize"/>)</target>
+        <target state="translated">Ваш <x id="PH" equiv-text="name"/> файл был слишком большим (Макс. размер:<x id="PH_1" equiv-text="maxFileSize"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="7908493851025027368">
@@ -1809,7 +1809,7 @@
       </trans-unit>
       <trans-unit id="2971365540217107489" datatype="html">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target state="translated">Видео слишком большое для сервера. Пожалуйста свяжитесь со вашим администратором для увеличение лимита.</target>
+        <target state="translated">Видео слишком большое для сервера. Пожалуйста свяжитесь со вашим администратором для увеличения лимита.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="5131854469652959713" datatype="html">
@@ -3131,7 +3131,7 @@
       </trans-unit>
       <trans-unit id="6448160249466325288" datatype="html">
         <source>Most recent first (default)</source>
-        <target state="translated">Самый последний - первым (по умолчанию)</target>
+        <target state="translated">Самый недавний - первым (по умолчанию)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="5179007899354903649" datatype="html">
@@ -3151,7 +3151,7 @@
       </trans-unit>
       <trans-unit id="4036338619293319383" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> replies}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> ответов}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> ответ} few {<x id="INTERPOLATION"/> ответа} other {<x id="INTERPOLATION"/> ответов}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">74</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">77</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">81</context></context-group>
@@ -3220,7 +3220,7 @@
       </trans-unit>
       <trans-unit id="2810844969104710423" datatype="html">
         <source>bold</source>
-        <target state="translated">толстый</target>
+        <target state="translated">жирный</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="8497278965577453274" datatype="html">
@@ -3813,7 +3813,7 @@
       </trans-unit>
       <trans-unit id="2721988499779041837" datatype="html">
         <source>Remote comments</source>
-        <target state="translated">Удаленные комментарии</target>
+        <target state="translated">Комментарии на других экземплярах</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="1420624050293070194" datatype="html">
@@ -3997,7 +3997,7 @@
       </trans-unit>
       <trans-unit id="6540177673229220400" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> отчетов}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> отчёт} few {<x id="INTERPOLATION"/> отчёта} other {<x id="INTERPOLATION"/> отчетов}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">22</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
@@ -4148,7 +4148,7 @@
       </trans-unit>
       <trans-unit id="8630916846096019339" datatype="html">
         <source>Users can resolve distant content</source>
-        <target state="translated">Пользователи могут искать удаленный контент</target>
+        <target state="translated">Пользователи могут искать дистанционный контент</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="3300472325769888962" datatype="html">
@@ -4363,22 +4363,22 @@
       </trans-unit>
       <trans-unit id="914197284349366734" datatype="html">
         <source>No jobs found.</source>
-        <target state="translated">Работы не найдено.</target>
+        <target state="translated">Задания не найдены.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="2713421326605345655" datatype="html">
         <source>No <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> jobs found.</source>
-        <target state="translated">Нет <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> задача не найдена.</target>
+        <target state="translated">Заданий <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> не найдено.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="2384897339170501794" datatype="html">
         <source>No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</source>
-        <target state="translated">Не найдено <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> задании.</target>
+        <target state="translated">Не найдено <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> заданий.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="4457061340457477073" datatype="html">
         <source>No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</source>
-        <target state="translated">Не найдено задании <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> которые <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
+        <target state="translated">Не найдено заданий <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> которые <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="1102717806459547726" datatype="html">
@@ -4879,7 +4879,7 @@
       </trans-unit>
       <trans-unit id="3840267063842708224" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {channel} other {channels}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {канал} other {каналов}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {канал} few {канала} other {каналов}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">327</context></context-group>
       </trans-unit>
       <trans-unit id="3428986951244800347" datatype="html">
@@ -6022,7 +6022,7 @@
       </trans-unit>
       <trans-unit id="8901774330683812267" datatype="html">
         <source>See the <x id="START_LINK"/>documentation<x id="CLOSE_LINK"/> for more information. </source>
-        <target state="translated">Смотрите <x id="START_LINK"/>документация<x id="CLOSE_LINK"/> Чтобы получить больше информации. </target>
+        <target state="translated">Смотрите <x id="START_LINK"/>документацию<x id="CLOSE_LINK"/>, чтобы получить больше информации. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="5904811038805050477" datatype="html">
@@ -6032,7 +6032,7 @@
       </trans-unit>
       <trans-unit id="3461985498881453026" datatype="html">
         <source>If you need help to use PeerTube, you can have a look at the <x id="START_LINK"/>documentation<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Если вам нужна помощь, в использовании PeerTube, вы можете взглянуть на <x id="START_LINK"/>documentation<x id="CLOSE_LINK"/>. </target>
+        <target state="translated">Если вам нужна помощь в использовании PeerTube, вы можете посмотреть <x id="START_LINK"/>документацию<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="8844610145426272276" datatype="html">
@@ -6047,7 +6047,7 @@
       </trans-unit>
       <trans-unit id="3505845886770923767" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 playlist} other {<x id="INTERPOLATION"/> плейлистов}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> плейлист} few {<x id="INTERPOLATION"/> плейлиста} other {<x id="INTERPOLATION"/> плейлистов}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6172,7 +6172,7 @@
       </trans-unit>
       <trans-unit id="403587185492002456" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> подписчиков}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> подписчик} few {<x id="INTERPOLATION"/> подписчика} other {<x id="INTERPOLATION"/> подписчиков}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">26</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">34</context></context-group>
@@ -6205,7 +6205,7 @@
       </trans-unit>
       <trans-unit id="7766488542631150871" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> видео}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Нет видео} other {<x id="INTERPOLATION"/> видео}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">37</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
@@ -6243,7 +6243,7 @@
       </trans-unit>
       <trans-unit id="2705478076887104088" datatype="html">
         <source>SHOW THIS CHANNEL &gt;</source>
-        <target state="translated">ПОКАЗАТЬ ЭТО КАНАЛ &gt;</target>
+        <target state="translated">ПОКАЗАТЬ ЭТОТ КАНАЛ &gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="4088311569349098646">
@@ -6644,7 +6644,7 @@
       </trans-unit>
       <trans-unit id="2573967459337636542" datatype="html">
         <source>Administrators &amp; Sustainability</source>
-        <target state="translated">Администраторы &amp; Sustainability</target>
+        <target state="translated">Администраторы &amp; Устойчивость</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">15</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
@@ -6790,7 +6790,7 @@
       </trans-unit>
       <trans-unit id="1949800099101277248" datatype="html">
         <source>Languages</source>
-        <target state="translated">Язык</target>
+        <target state="translated">Языки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="1902100407096396858" datatype="html">
@@ -6871,7 +6871,7 @@
       </trans-unit>
       <trans-unit id="8011855989482474311" datatype="html">
         <source>A &lt;code&gt;.mp4&lt;/code&gt; that keeps the original audio track, with no video</source>
-        <target state="translated">A &lt;code&gt;.mp4&lt;/code&gt; сохраняет исходную звуковую дорожку без видео</target>
+        <target state="translated">&lt;code&gt;.mp4&lt;/code&gt; сохраняет исходную звуковую дорожку без видео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="7756250490108954499" datatype="html">
@@ -6932,7 +6932,7 @@
       </trans-unit>
       <trans-unit id="931255636742351800" datatype="html">
         <source>No limit</source>
-        <target state="translated">Без ограничении</target>
+        <target state="translated">Без ограничений</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="5250062810079582285" datatype="html">
