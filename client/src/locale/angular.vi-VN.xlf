@@ -904,7 +904,7 @@
       </trans-unit>
       <trans-unit id="2602586221576511475">
         <source>Video quota</source>
-        <target>Dung lượng</target>
+        <target>Dung lượng cho phép</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">151</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">151</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">128</context></context-group>
@@ -912,7 +912,7 @@
       </trans-unit>
       <trans-unit id="1502595455339510144" datatype="html">
         <source>Unlimited <x id="START_TAG_NG_CONTAINER"/>(<x id="INTERPOLATION"/> per day)<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated">Không giới hạn <x id="START_TAG_NG_CONTAINER"/>(<x id="INTERPOLATION"/> mỗi ngày)<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target state="translated">Vô hạn <x id="START_TAG_NG_CONTAINER"/>(<x id="INTERPOLATION"/> mỗi ngày)<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="1071721880474488785">
@@ -1643,7 +1643,7 @@
       </trans-unit>
       <trans-unit id="7844706011418789951">
         <source>Administration</source>
-        <target>Người quản trị</target>
+        <target>Quản trị viên</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">82</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
@@ -2351,7 +2351,7 @@
       </trans-unit>
       <trans-unit id="1212376766715456139" datatype="html">
         <source>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</source>
-        <target state="translated">⚠️ Nếu kích hoạt tùy chọn này, buổi livestream sẽ hủy bỏ nếu bạn đạt giới hạn dung lượng</target>
+        <target state="translated">⚠️ Nếu kích hoạt tùy chọn này, buổi livestream sẽ hủy bỏ nếu bạn đạt giới hạn dung lượng cho phép</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">288</context></context-group>
       </trans-unit>
       <trans-unit id="1966495339378120213" datatype="html">
@@ -2582,7 +2582,7 @@
       </trans-unit>
       <trans-unit id="2127094963121208963" datatype="html">
         <source>Total video quota</source>
-        <target state="translated">Quota</target>
+        <target state="translated">Dung lượng cho phép</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">131</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-quota.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
@@ -2886,7 +2886,7 @@
       </trans-unit>
       <trans-unit id="3959826834147169200">
         <source>Muted</source>
-        <target>Tắt tiếng</target>
+        <target>Đã ẩn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">104</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.html</context><context context-type="linenumber">1</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">192</context></context-group>
@@ -3479,7 +3479,7 @@
       </trans-unit>
       <trans-unit id="5248717555542428023">
         <source>Username</source>
-        <target>Tên đăng nhập</target>
+        <target>Tên người dùng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">83</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">83</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">125</context></context-group>
@@ -3519,13 +3519,13 @@
       </trans-unit>
       <trans-unit id="7046347992315328430" datatype="html">
         <source>Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG"/>original<x id="CLOSE_TAG_STRONG"/> video size. <x id="LINE_BREAK"/> At most, this user could upload ~ <x id="INTERPOLATION"/>. </source>
-        <target state="translated">Đã bật chuyển đổi độ phân giải. Giới hạn dung lượng chỉ áp dụng vào tài khoản <x id="START_TAG_STRONG"/>gốc<x id="CLOSE_TAG_STRONG"/> thước video. <x id="LINE_BREAK"/> Dù vậy, tài khoản vẫn có thể upload ~ <x id="INTERPOLATION"/>. </target>
+        <target state="translated">Đã bật chuyển đổi độ phân giải. Dung lượng cho phép chỉ tính vào <x id="START_TAG_STRONG"/>dung lượng video gốc<x id="CLOSE_TAG_STRONG"/>. <x id="LINE_BREAK"/> Dù vậy, tài khoản vẫn có thể upload ~ <x id="INTERPOLATION"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">161</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">161</context></context-group>
       </trans-unit>
       <trans-unit id="2743014784334706527">
         <source>Daily video quota</source>
-        <target>Giới hạn video hằng ngày</target>
+        <target>Dung lượng tải lên mỗi ngày</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">172</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">172</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-quota.component.html</context><context context-type="linenumber">13</context></context-group>
@@ -3621,7 +3621,7 @@
       </trans-unit>
       <trans-unit id="242888077027281874" datatype="html">
         <source>Total daily video quota</source>
-        <target state="translated">Dung lượng giới hạn</target>
+        <target state="translated">Dung lượng tải lên trong ngày</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="1242902302929086301">
@@ -3654,7 +3654,7 @@
       </trans-unit>
       <trans-unit id="7815838401315213887">
         <source>Muted accounts</source>
-        <target>Tài khoản đã tắt tiếng</target>
+        <target>Tài khoản đã ẩn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">117</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">90</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">85</context></context-group>
@@ -3664,7 +3664,7 @@
       </trans-unit>
       <trans-unit id="5668793810321242853">
         <source>Muted servers</source>
-        <target>Máy chủ đã tắt tiếng</target>
+        <target>Máy chủ đã ẩn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">125</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">94</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">36</context></context-group>
@@ -3801,7 +3801,7 @@
       </trans-unit>
       <trans-unit id="639328713281980021" datatype="html">
         <source>No abuses found.</source>
-        <target state="translated">Không tìm thấy xâm phạm.</target>
+        <target state="translated">Không tìm thấy báo cáo.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">153</context></context-group>
       </trans-unit>
       <trans-unit id="1807029821872995706" datatype="html">
@@ -3874,9 +3874,7 @@
       </trans-unit>
       <trans-unit id="7358611947192442969">
         <source>This comment can only be seen by you or the other moderators.</source>
-        <target>
-        Chỉ có bạn và những người quản trị khác mới thấy được bình luận này.
-      </target>
+        <target>Chỉ có bạn và những quản trị viên khác mới thấy được bình luận này.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="3981851640772035362" datatype="html">
@@ -4705,7 +4703,7 @@
       </trans-unit>
       <trans-unit id="2669509104300979449" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> to set their quota individually. </source>
-        <target state="translated">Quản lí <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>người dùng<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> để cho dung lượng tối đa của họ. </target>
+        <target state="translated">Quản lý <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>người dùng<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> để cài dung lượng tối đa của họ. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">151</context></context-group>
       </trans-unit>
       <trans-unit id="4497115134891299867" datatype="html">
@@ -5440,7 +5438,7 @@
       </trans-unit>
       <trans-unit id="7752239348028675311" datatype="html">
         <source>DANGER ZONE</source>
-        <target state="translated">DANGER ZONE</target>
+        <target state="translated">VÙNG HỦY DIỆT</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">219</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">219</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">77</context></context-group>
@@ -5934,7 +5932,7 @@
       </trans-unit>
       <trans-unit id="7679199047720825365" datatype="html">
         <source>All read</source>
-        <target state="translated">Toàn bộ đọc</target>
+        <target state="translated">Đánh dấu đã đọc toàn bộ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="9167786874272926575" datatype="html">
@@ -6658,7 +6656,7 @@
       </trans-unit>
       <trans-unit id="7981235640417633362" datatype="html">
         <source>The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="translated">Tên kênh là mã nhận dạng duy nhất của kênh của bạn trên máy chủ này và tất cả các máy chủ khác. Nó độc đáo như một địa chỉ email, giúp người khác dễ dàng tương tác với nó.</target>
+        <target state="translated">Địa chỉ kênh là mã nhận dạng duy nhất của kênh của bạn trên máy chủ này và tất cả các máy chủ khác. Nó độc đáo như một địa chỉ email, giúp người khác dễ dàng tương tác với nó.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="5203776997447520497" datatype="html">
@@ -6676,7 +6674,7 @@
       </trans-unit>
       <trans-unit id="7326471570669373149" datatype="html">
         <source>The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="translated">Tên kênh là mã nhận dạng duy nhất của kênh của bạn trên máy chủ này và tất cả các máy chủ khác. Nó độc đáo như một địa chỉ email, giúp người khác dễ dàng tương tác với nó.</target>
+        <target state="translated">Tên người dùng là mã nhận dạng duy nhất của kênh của bạn trên máy chủ này và tất cả các máy chủ khác. Nó độc đáo như một địa chỉ email, giúp người khác dễ dàng tương tác với nó.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="2770947245861951784" datatype="html">
@@ -8433,7 +8431,7 @@
       </trans-unit>
       <trans-unit id="6658000829978978023" datatype="html">
         <source>Applications</source>
-        <target state="translated">Những ứng dụng</target>
+        <target state="translated">Ứng dụng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">126</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">60</context></context-group>
@@ -9467,12 +9465,12 @@
       </trans-unit>
       <trans-unit id="2027337371129904473">
         <source>Video quota is required.</source>
-        <target>Phải có giới hạn video.</target>
+        <target>Phải có giới hạn dung lượng.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="267386529333143660" datatype="html">
         <source>Quota must be greater than -1.</source>
-        <target state="translated">Quota phải lớn hơn -1.</target>
+        <target state="translated">Dung lượng phải lớn hơn -1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="1220179061234048936" datatype="html">
@@ -10260,7 +10258,7 @@
       </trans-unit>
       <trans-unit id="2173989454916398137">
         <source>Blurred with confirmation request</source>
-        <target>Được che mờ, yêu cầu xác nhận</target>
+        <target>Che mờ, cần nhấn để xem</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="8929218224642530466">
@@ -10484,7 +10482,7 @@
       </trans-unit>
       <trans-unit id="4728427543536046034" datatype="html">
         <source>Change quota, role, and more.</source>
-        <target state="translated">Thay quota, chức vụ và nhiều nữa.</target>
+        <target state="translated">Đặt dung lượng cho phép, chức vụ và nhiều nữa.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">340</context></context-group>
       </trans-unit>
       <trans-unit id="7913022656086109932" datatype="html">
@@ -10504,7 +10502,7 @@
       </trans-unit>
       <trans-unit id="1888272455383898478">
         <source>Mute this account</source>
-        <target>Tắt tiếng tài khoản này</target>
+        <target>Ẩn tài khoản này</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">295</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">373</context></context-group>
       </trans-unit>
@@ -10515,7 +10513,7 @@
       </trans-unit>
       <trans-unit id="4043508901590508211">
         <source>Unmute this account</source>
-        <target>Ngừng tắt tiếng tài khoản này</target>
+        <target>Bỏ ẩn tài khoản này</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">301</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">379</context></context-group>
       </trans-unit>
@@ -10526,7 +10524,7 @@
       </trans-unit>
       <trans-unit id="6198109035280957164">
         <source>Mute the instance</source>
-        <target>Tắt tiếng đơn vị</target>
+        <target>Ẩn máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">307</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">391</context></context-group>
       </trans-unit>
@@ -10537,7 +10535,7 @@
       </trans-unit>
       <trans-unit id="6247487021683085858">
         <source>Unmute the instance</source>
-        <target>Ngừng tắt tiếng đơn vị</target>
+        <target>Bỏ ẩn máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">313</context></context-group>
       </trans-unit>
       <trans-unit id="4024846984475742259" datatype="html">
@@ -10738,7 +10736,7 @@
       </trans-unit>
       <trans-unit id="4968151111061046122">
         <source>Moderator</source>
-        <target>Người quản trị</target>
+        <target>Kiểm duyệt viên</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-users/user-admin.service.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="2279527393438260622" datatype="html">
