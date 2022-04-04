@@ -1709,7 +1709,7 @@
       </trans-unit>
       <trans-unit id="2218100934178971211" datatype="html">
         <source>Don't show me this anymore</source>
-        <target state="translated">Không hiển thị video này nữa</target>
+        <target state="translated">Không hiện lại nữa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">23</context>
@@ -3264,7 +3264,7 @@
       </trans-unit>
       <trans-unit id="3516494528184217808" datatype="html">
         <source>1 host (without "http://") per line</source>
-        <target state="translated">1 host (mà không "http://") mỗi dòng</target>
+        <target state="translated">Mỗi dòng là một máy chủ (không cần "http://")</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/batch-domains-modal.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="7651712714082200084" datatype="html">
@@ -3424,7 +3424,7 @@
       </trans-unit>
       <trans-unit id="9132918641931433659" datatype="html">
         <source>No host found matching current filters.</source>
-        <target state="translated">Không tìm thấy host trùng khớp với bộ lọc.</target>
+        <target state="translated">Không tìm thấy máy chủ trùng khớp với bộ lọc.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="7274241885665071790" datatype="html">
@@ -3434,7 +3434,7 @@
       </trans-unit>
       <trans-unit id="4774348799569692380" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> hosts</source>
-        <target state="translated">Đang hiện <x id="INTERPOLATION"/> tới <x id="INTERPOLATION_1"/> của <x id="INTERPOLATION_2"/> hosts</target>
+        <target state="translated">Đang hiện <x id="INTERPOLATION"/> tới <x id="INTERPOLATION_1"/> của <x id="INTERPOLATION_2"/> máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="9216117865911519658" datatype="html">
@@ -6623,7 +6623,7 @@
       </trans-unit>
       <trans-unit id="4665274432258993920" datatype="html">
         <source>A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.<x id="LINE_BREAK"/> For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology. </source>
-        <target state="translated">Một kênh là nơi bạn mà đăng video lên. Tạo nhiều kênh sẽ giúp bạn sắp xếp và chia nội dung của bạn hợp lí.<x id="LINE_BREAK"/> Ví dụ: bạn có thể tạo một kênh để đăng các buổi hòa nhạc piano của bạn và một kênh khác để đăng các video nói về bảo vệ môi trường. </target>
+        <target state="translated">Kênh là nơi bạn mà đăng video lên. Tạo nhiều kênh sẽ giúp bạn sắp xếp và chia nội dung hợp lí.<x id="LINE_BREAK"/> Ví dụ: bạn có thể tạo một kênh để đăng các buổi hòa nhạc piano của bạn và một kênh khác để đăng các video nói về bảo vệ môi trường. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="2254156021453506528" datatype="html">
@@ -7035,7 +7035,7 @@
       </trans-unit>
       <trans-unit id="7951488350851416577" datatype="html">
         <source>Hosts entered are invalid.</source>
-        <target state="translated">Những host đã nhập không còn sử dụng được.</target>
+        <target state="translated">Những máy chủ đã nhập không hợp lệ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">93</context>
@@ -7043,7 +7043,7 @@
       </trans-unit>
       <trans-unit id="1469559036084108672" datatype="html">
         <source>Hosts entered contain duplicates.</source>
-        <target state="translated">Những host đã nhập bị trùng lặp.</target>
+        <target state="translated">Những máy chủ đã nhập bị trùng lặp.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">94</context>
@@ -7051,7 +7051,7 @@
       </trans-unit>
       <trans-unit id="5991533283446904296" datatype="html">
         <source>Hosts or handles are invalid.</source>
-        <target state="translated">Host hoặc địa chỉ bị sai.</target>
+        <target state="translated">Máy chủ hoặc địa chỉ bị sai.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">102</context>
@@ -7059,7 +7059,7 @@
       </trans-unit>
       <trans-unit id="6759198394434886237" datatype="html">
         <source>Hosts or handles contain duplicates.</source>
-        <target state="translated">Host hoặc địa chỉ bị trùng lặp.</target>
+        <target state="translated">Máy chủ hoặc địa chỉ bị trùng lặp.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">103</context>
