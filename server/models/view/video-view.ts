@@ -3,6 +3,13 @@ import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, T
 import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoModel } from '../video/video'
 
+/**
+ *
+ * Aggregate views of all videos federated with our instance
+ * Mainly used by the trending/hot algorithms
+ *
+ */
+
 @Table({
   tableName: 'videoView',
   updatedAt: false,

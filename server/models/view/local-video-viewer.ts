@@ -8,6 +8,13 @@ import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoModel } from '../video/video'
 import { LocalVideoViewerWatchSectionModel } from './local-video-viewer-watch-section'
 
+/**
+ *
+ * Aggregate viewers of local videos only to display statistics to video owners
+ * A viewer is a user that watched one or multiple sections of a specific video inside a time window
+ *
+ */
+
 @Table({
   tableName: 'localVideoViewer',
   updatedAt: false,
