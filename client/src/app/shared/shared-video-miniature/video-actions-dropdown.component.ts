@@ -30,6 +30,7 @@ export type VideoActionsDisplayType = {
   removeFiles?: boolean
   transcoding?: boolean
   studio?: boolean
+  stats?: boolean
 }
 
 @Component({
@@ -61,9 +62,11 @@ export class VideoActionsDropdownComponent implements OnChanges {
     liveInfo: false,
     removeFiles: false,
     transcoding: false,
-    studio: true
+    studio: true,
+    stats: true
   }
   @Input() placement = 'left'
+  @Input() moreActions: DropdownAction<{ video: Video }>[][] = []
 
   @Input() label: string
 
@@ -154,6 +157,10 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   isVideoEditable () {
     return this.video.isEditableBy(this.user, this.serverService.getHTMLConfig().videoStudio.enabled)
+  }
+
+  isVideoStatsAvailable () {
+    return this.video.canSeeStats(this.user)
   }
 
   isVideoRemovable () {
@@ -343,6 +350,12 @@ export class VideoActionsDropdownComponent implements OnChanges {
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.studio && this.isVideoEditable()
         },
         {
+          label: $localize`Stats`,
+          linkBuilder: ({ video }) => [ '/stats/videos', video.uuid ],
+          iconName: 'stats',
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.stats && this.isVideoStatsAvailable()
+        },
+        {
           label: $localize`Block`,
           handler: () => this.showBlockModal(),
           iconName: 'no',
@@ -408,5 +421,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
         }
       ]
     ]
+
+    this.videoActions = this.videoActions.concat(this.moreActions)
   }
 }

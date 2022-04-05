@@ -88,23 +88,20 @@ type VideoJSCaption = {
   src: string
 }
 
-type UserWatching = {
-  url: string
-  authorizationHeader: string
-}
-
 type PeerTubePluginOptions = {
   mode: PlayerMode
 
   autoplay: boolean
-  videoViewUrl: string
   videoDuration: number
 
-  userWatching?: UserWatching
+  videoViewUrl: string
+  authorizationHeader?: string
+
   subtitle?: string
 
   videoCaptions: VideoJSCaption[]
 
+  startTime: number | string
   stopTime: number | string
 
   isLive: boolean
@@ -230,7 +227,6 @@ export {
   AutoResolutionUpdateData,
   PlaylistPluginOptions,
   VideoJSCaption,
-  UserWatching,
   PeerTubePluginOptions,
   WebtorrentPluginOptions,
   P2PMediaLoaderPluginOptions,

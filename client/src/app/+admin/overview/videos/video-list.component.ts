@@ -41,7 +41,9 @@ export class VideoListComponent extends RestTable implements OnInit {
     mute: true,
     liveInfo: false,
     removeFiles: true,
-    transcoding: true
+    transcoding: true,
+    studio: true,
+    stats: true
   }
 
   loading = true

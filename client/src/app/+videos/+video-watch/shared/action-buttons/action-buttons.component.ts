@@ -41,7 +41,8 @@ export class ActionButtonsComponent implements OnInit, OnChanges {
     report: true,
     duplicate: true,
     mute: true,
-    liveInfo: true
+    liveInfo: true,
+    stats: true
   }
 
   userRating: UserVideoRateType

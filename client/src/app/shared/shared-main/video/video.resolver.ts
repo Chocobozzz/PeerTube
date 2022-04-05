@@ -1,10 +1,9 @@
-
 import { Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router'
-import { VideoService } from '@app/shared/shared-main'
+import { VideoService } from './video.service'
 
 @Injectable()
-export class VideoStudioEditResolver implements Resolve<any> {
+export class VideoResolver implements Resolve<any> {
   constructor (
     private videoService: VideoService
   ) {

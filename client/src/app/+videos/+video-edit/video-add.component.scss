@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_nav' as *;
 
 $border-width: 3px;
 $border-type: solid;
@@ -51,39 +52,11 @@ $nav-link-height: 40px;
 }
 
 ::ng-deep .video-add-nav {
-  border-bottom: $border-width $border-type $border-color;
-  margin: 20px 0 0 !important;
-
-  &.hide-nav {
-    display: none !important;
-  }
+  @include peertube-nav-tabs($border-width, $border-type, $border-color, $nav-link-height);
 
   a.nav-link {
-    @include disable-default-a-behaviour;
-
-    margin-bottom: -$border-width;
-    height: $nav-link-height !important;
-    padding: 0 30px !important;
-    font-size: 15px;
-
-    border: $border-width $border-type transparent;
-
-    span {
-      border-bottom: 2px solid transparent;
-    }
-
     &.active {
-      border-color: $border-color;
-      border-bottom-color: transparent;
       background-color: pvar(--submenuBackgroundColor) !important;
-
-      span {
-        border-bottom-color: pvar(--mainColor);
-      }
-    }
-
-    &:hover:not(.active) {
-      border-color: transparent;
     }
   }
 }
