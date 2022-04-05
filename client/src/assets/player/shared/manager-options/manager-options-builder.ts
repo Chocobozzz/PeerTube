@@ -32,14 +32,18 @@ export class ManagerOptionsBuilder {
       peertube: {
         mode: this.mode,
         autoplay, // Use peertube plugin autoplay because we could get the file by webtorrent
-        videoViewUrl: commonOptions.videoViewUrl,
-        videoDuration: commonOptions.videoDuration,
-        userWatching: commonOptions.userWatching,
-        subtitle: commonOptions.subtitle,
-        videoCaptions: commonOptions.videoCaptions,
-        stopTime: commonOptions.stopTime,
-        isLive: commonOptions.isLive,
-        videoUUID: commonOptions.videoUUID
+
+        ...pick(commonOptions, [
+          'videoViewUrl',
+          'authorizationHeader',
+          'startTime',
+          'videoDuration',
+          'subtitle',
+          'videoCaptions',
+          'stopTime',
+          'isLive',
+          'videoUUID'
+        ])
       }
     }
 

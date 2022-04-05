@@ -553,9 +553,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     videoCaptions: VideoCaption[]
     urlOptions: CustomizationOptions & { playerMode: PlayerMode }
     loggedInOrAnonymousUser: User
-    user?: AuthUser
+    user?: AuthUser // Keep for plugins
   }) {
-    const { video, liveVideo, videoCaptions, urlOptions, loggedInOrAnonymousUser, user } = params
+    const { video, liveVideo, videoCaptions, urlOptions, loggedInOrAnonymousUser } = params
 
     const getStartTime = () => {
       const byUrl = urlOptions.startTime !== undefined
@@ -615,6 +615,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         videoViewUrl: video.privacy.id !== VideoPrivacy.PRIVATE
           ? this.videoService.getVideoViewUrl(video.uuid)
           : null,
+        authorizationHeader: this.authService.getRequestHeaderValue(),
+
         embedUrl: video.embedUrl,
         embedTitle: video.name,
 
@@ -622,13 +624,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         liveOptions,
 
         language: this.localeId,
-
-        userWatching: user && user.videosHistoryEnabled === true
-          ? {
-            url: this.videoService.getUserWatchingVideoUrl(video.uuid),
-            authorizationHeader: this.authService.getRequestHeaderValue()
-          }
-          : undefined,
 
         serverUrl: environment.apiUrl,
 

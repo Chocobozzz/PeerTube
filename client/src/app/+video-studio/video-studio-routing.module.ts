@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { VideoStudioEditComponent, VideoStudioEditResolver } from './edit'
+import { VideoResolver } from '@app/shared/shared-main'
+import { VideoStudioEditComponent } from './edit'
 
 const videoStudioRoutes: Routes = [
   {
@@ -15,7 +16,7 @@ const videoStudioRoutes: Routes = [
           }
         },
         resolve: {
-          video: VideoStudioEditResolver
+          video: VideoResolver
         }
       }
     ]

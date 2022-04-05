@@ -45,7 +45,7 @@ import {
 import { PluginPlaceholderComponent, PluginSelectorDirective } from './plugins'
 import { ActorRedirectGuard } from './router'
 import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
-import { EmbedComponent, RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
+import { EmbedComponent, RedundancyService, VideoImportService, VideoOwnershipService, VideoResolver, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
 import { VideoChannelService } from './video-channel'
 
@@ -190,6 +190,7 @@ import { VideoChannelService } from './video-channel'
     VideoImportService,
     VideoOwnershipService,
     VideoService,
+    VideoResolver,
 
     VideoCaptionService,
 

@@ -1,0 +1,34 @@
+import { catchError } from 'rxjs'
+import { environment } from 'src/environments/environment'
+import { HttpClient } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { RestExtractor } from '@app/core'
+import { VideoService } from '@app/shared/shared-main'
+import { VideoStatsOverall, VideoStatsRetention, VideoStatsTimeserie, VideoStatsTimeserieMetric } from '@shared/models/videos'
+
+@Injectable({
+  providedIn: 'root'
+})
+export class VideoStatsService {
+  static BASE_VIDEO_STATS_URL = environment.apiUrl + '/api/v1/videos/'
+
+  constructor (
+    private authHttp: HttpClient,
+    private restExtractor: RestExtractor
+  ) { }
+
+  getOverallStats (videoId: string) {
+    return this.authHttp.get<VideoStatsOverall>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/stats/overall')
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  getTimeserieStats (videoId: string, metric: VideoStatsTimeserieMetric) {
+    return this.authHttp.get<VideoStatsTimeserie>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/stats/timeseries/' + metric)
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  getRetentionStats (videoId: string) {
+    return this.authHttp.get<VideoStatsRetention>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/stats/retention')
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+}

@@ -65,10 +65,6 @@ export class VideoService {
     return `${VideoService.BASE_VIDEO_URL}/${uuid}/views`
   }
 
-  getUserWatchingVideoUrl (uuid: string) {
-    return `${VideoService.BASE_VIDEO_URL}/${uuid}/watching`
-  }
-
   getVideo (options: { videoId: string }): Observable<VideoDetails> {
     return this.serverService.getServerLocale()
                .pipe(

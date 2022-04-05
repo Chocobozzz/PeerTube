@@ -75,7 +75,8 @@ const icons = {
   'chevrons-up': require('!!raw-loader?!../../../assets/images/feather/chevrons-up.svg').default,
   'message-circle': require('!!raw-loader?!../../../assets/images/feather/message-circle.svg').default,
   codesandbox: require('!!raw-loader?!../../../assets/images/feather/codesandbox.svg').default,
-  award: require('!!raw-loader?!../../../assets/images/feather/award.svg').default
+  award: require('!!raw-loader?!../../../assets/images/feather/award.svg').default,
+  stats: require('!!raw-loader?!../../../assets/images/feather/stats.svg').default
 }
 
 export type GlobalIconName = keyof typeof icons

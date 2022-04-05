@@ -1,0 +1,54 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_nav' as *;
+
+.overall-stats-embed {
+  display: flex;
+  justify-content: space-between;
+}
+
+.overall-stats {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.overall-stats-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
+  min-height: 100px;
+  min-width: 200px;
+  margin-right: 15px;
+  background-color: pvar(--submenuBackgroundColor);
+
+  .label,
+  .more-info {
+    font-size: 14px;
+  }
+
+  .label {
+    color: pvar(--greyForegroundColor);
+    font-weight: $font-semibold;
+    opacity: 0.8;
+  }
+
+  .value {
+    font-size: 24px;
+    font-weight: $font-semibold;
+  }
+}
+
+my-embed {
+  display: block;
+  max-width: 500px;
+  width: 100%;
+}
+
+.tab-content {
+  margin-top: 15px;
+}
+
+.nav-tabs {
+  @include peertube-nav-tabs($border-width: 2px);
+}

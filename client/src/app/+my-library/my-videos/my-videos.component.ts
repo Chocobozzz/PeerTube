@@ -8,7 +8,12 @@ import { immutableAssign } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { LiveStreamInformationComponent } from '@app/shared/shared-video-live'
-import { MiniatureDisplayOptions, SelectionType, VideosSelectionComponent } from '@app/shared/shared-video-miniature'
+import {
+  MiniatureDisplayOptions,
+  SelectionType,
+  VideoActionsDisplayType,
+  VideosSelectionComponent
+} from '@app/shared/shared-video-miniature'
 import { VideoChannel, VideoSortField } from '@shared/models'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
@@ -37,8 +42,23 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     state: true,
     blacklistInfo: true
   }
+  videoDropdownDisplayOptions: VideoActionsDisplayType = {
+    playlist: false,
+    download: false,
+    update: false,
+    blacklist: false,
+    delete: true,
+    report: false,
+    duplicate: false,
+    mute: false,
+    liveInfo: false,
+    removeFiles: false,
+    transcoding: false,
+    studio: true,
+    stats: true
+  }
 
-  videoActions: DropdownAction<{ video: Video }>[] = []
+  moreVideoActions: DropdownAction<{ video: Video }>[][] = []
 
   videos: Video[] = []
   getVideosObservableFunction = this.getVideosObservable.bind(this)
@@ -172,30 +192,12 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
       })
   }
 
-  async deleteVideo (video: Video) {
-    const res = await this.confirmService.confirm(
-      $localize`Do you really want to delete ${video.name}?`,
-      $localize`Delete`
-    )
-    if (res === false) return
-
-    this.videoService.removeVideo(video.id)
-        .subscribe({
-          next: () => {
-            this.notifier.success($localize`Video ${video.name} deleted.`)
-            this.removeVideoFromArray(video.id)
-          },
-
-          error: err => this.notifier.error(err.message)
-        })
+  onVideoRemoved (video: Video) {
+    this.removeVideoFromArray(video.id)
   }
 
   changeOwnership (video: Video) {
     this.videoChangeOwnershipModal.show(video)
-  }
-
-  displayLiveInformation (video: Video) {
-    this.liveStreamInformationModal.show(video)
   }
 
   private removeVideoFromArray (id: number) {
@@ -203,29 +205,14 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   }
 
   private buildActions () {
-    this.videoActions = [
-      {
-        label: $localize`Studio`,
-        linkBuilder: ({ video }) => [ '/studio/edit', video.uuid ],
-        isDisplayed: ({ video }) => video.isEditableBy(this.authService.getUser(), this.serverService.getHTMLConfig().videoStudio.enabled),
-        iconName: 'film'
-      },
-      {
-        label: $localize`Display live information`,
-        handler: ({ video }) => this.displayLiveInformation(video),
-        isDisplayed: ({ video }) => video.isLive,
-        iconName: 'live'
-      },
-      {
-        label: $localize`Change ownership`,
-        handler: ({ video }) => this.changeOwnership(video),
-        iconName: 'ownership-change'
-      },
-      {
-        label: $localize`Delete`,
-        handler: ({ video }) => this.deleteVideo(video),
-        iconName: 'delete'
-      }
+    this.moreVideoActions = [
+      [
+        {
+          label: $localize`Change ownership`,
+          handler: ({ video }) => this.changeOwnership(video),
+          iconName: 'ownership-change'
+        }
+      ]
     ]
   }
 }
