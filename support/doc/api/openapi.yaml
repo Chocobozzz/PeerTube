@@ -273,6 +273,8 @@ tags:
     description: Operations on video files
   - name: Video Transcoding
     description: Video transcoding related operations
+  - name: Video stats
+    description: Video statistics
   - name: Feeds
     description: Server syndication feeds
   - name: Search
@@ -314,6 +316,7 @@ x-tagGroups:
       - Video Comments
       - Video Rates
       - Video Playlists
+      - Video Stats
       - Video Ownership Change
       - Video Mirroring
       - Video Files
@@ -1902,12 +1905,19 @@ paths:
 
   '/videos/{id}/views':
     post:
-      summary: Add a view to a video
+      summary: Notify user is watching a video
+      description: Call this endpoint regularly (every 5-10 seconds for example) to notify the server the user is watching the video. After a while, PeerTube will increase video's viewers counter. If the user is authenticated, PeerTube will also store the current player time.
       operationId: addView
       tags:
         - Video
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserViewingVideo'
+        required: true
       responses:
         '204':
           description: successful operation
@@ -1915,7 +1925,8 @@ paths:
   '/videos/{id}/watching':
     put:
       summary: Set watching progress of a video
-      operationId: setProgress
+      deprecated: true
+      description: This endpoint has been deprecated. Use `/videos/{id}/views` instead
       tags:
         - Video
       security:
@@ -1926,11 +1937,72 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserWatchingVideo'
+              $ref: '#/components/schemas/UserViewingVideo'
         required: true
       responses:
         '204':
           description: successful operation
+
+  '/videos/{id}/stats/overall':
+    get:
+      summary: Get overall stats of a video
+      tags:
+        - Video Stats
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoStatsOverall'
+
+  '/videos/{id}/stats/retention':
+    get:
+      summary: Get retention stats of a video
+      tags:
+        - Video Stats
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoStatsRetention'
+
+  '/videos/{id}/stats/timeseries/{metric}':
+    get:
+      summary: Get timeserie stats of a video
+      tags:
+        - Video Stats
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        -
+          name: metric
+          in: path
+          required: true
+          description: The metric to get
+          schema:
+            type: string
+            enum:
+              - 'viewers'
+              - 'aggregateWatchTime'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoStatsTimeserie'
 
   /videos/upload:
     post:
@@ -6054,13 +6126,67 @@ components:
             description:
               type: string
               description: text or bio displayed on the account's profile
-    UserWatchingVideo:
+    UserViewingVideo:
       properties:
         currentTime:
           type: integer
           format: seconds
           description: timestamp within the video, in seconds
           example: 5
+
+    VideoStatsOverall:
+      properties:
+        averageWatchTime:
+          type: number
+        totalWatchTime:
+          type: number
+        viewersPeak:
+          type: number
+        viewersPeakDate:
+          type: string
+          format: date-time
+        views:
+          type: number
+        likes:
+          type: number
+        dislikes:
+          type: number
+        comments:
+          type: number
+        countries:
+          type: array
+          items:
+            type: object
+            properties:
+              isoCode:
+                type: string
+              viewers:
+                type: number
+
+    VideoStatsRetention:
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              second:
+                type: number
+              retentionPercent:
+                type: number
+
+    VideoStatsTimeserie:
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+              value:
+                type: number
+
     ServerConfig:
       properties:
         instance:
