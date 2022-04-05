@@ -6127,12 +6127,21 @@ components:
               type: string
               description: text or bio displayed on the account's profile
     UserViewingVideo:
+      required:
+        - currentTime
       properties:
         currentTime:
           type: integer
           format: seconds
           description: timestamp within the video, in seconds
           example: 5
+        viewEvent:
+          type: string
+          enum:
+            - seek
+          description: >
+            Event since last viewing call:
+             * `seek` - If the user seeked the video
 
     VideoStatsOverall:
       properties:
