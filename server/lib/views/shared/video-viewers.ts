@@ -41,7 +41,7 @@ export class VideoViewers {
   private processingViewerStats = false
 
   constructor () {
-    setInterval(() => this.cleanViewerCounters(), VIEW_LIFETIME.VIEWER)
+    setInterval(() => this.cleanViewerCounters(), VIEW_LIFETIME.VIEWER_COUNTER)
 
     setInterval(() => this.processViewerStats(), VIEW_LIFETIME.VIEWER_STATS)
   }
@@ -56,7 +56,7 @@ export class VideoViewers {
   }
 
   buildViewerExpireTime () {
-    return new Date().getTime() + VIEW_LIFETIME.VIEWER
+    return new Date().getTime() + VIEW_LIFETIME.VIEWER_COUNTER
   }
 
   async getWatchTime (videoId: number, ip: string) {
@@ -210,7 +210,7 @@ export class VideoViewers {
     if (this.processingViewerStats) return
     this.processingViewerStats = true
 
-    if (!isTestInstance()) logger.info('Processing viewers.', lTags())
+    if (!isTestInstance()) logger.info('Processing viewer statistics.', lTags())
 
     const now = new Date().getTime()
 
@@ -220,6 +220,7 @@ export class VideoViewers {
       for (const key of allKeys) {
         const stats: LocalViewerStats = await Redis.Instance.getLocalVideoViewer({ key })
 
+        // Process expired stats
         if (stats.lastUpdated > now - VIEW_LIFETIME.VIEWER_STATS) {
           continue
         }

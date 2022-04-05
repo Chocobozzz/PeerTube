@@ -146,7 +146,7 @@ class Redis {
   }
 
   setIPVideoViewer (ip: string, videoUUID: string) {
-    return this.setValue(this.generateIPViewerKey(ip, videoUUID), '1', VIEW_LIFETIME.VIEWER)
+    return this.setValue(this.generateIPViewerKey(ip, videoUUID), '1', VIEW_LIFETIME.VIEWER_COUNTER)
   }
 
   async doesVideoIPViewExist (ip: string, videoUUID: string) {
