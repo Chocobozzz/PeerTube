@@ -25,7 +25,7 @@ describe('Test videos history', function () {
     await setAccessTokensToServers([ server ])
 
     // 10 seconds long
-    const fixture = 'video_59fps.mp4'
+    const fixture = 'video_short1.webm'
 
     {
       const { id, uuid } = await server.videos.upload({ attributes: { name: 'video 1', fixture } })
