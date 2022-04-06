@@ -107,6 +107,8 @@ async function checkFiles (options: {
 }
 
 function runTestSuite (options: {
+  fixture?: string
+
   playlistBucket: string
   playlistPrefix?: string
 
@@ -114,10 +116,9 @@ function runTestSuite (options: {
   webtorrentPrefix?: string
 
   useMockBaseUrl?: boolean
-
-  maxUploadPart?: string
 }) {
   const mockObjectStorage = new MockObjectStorage()
+  const { fixture } = options
   let baseMockUrl: string
 
   let servers: PeerTubeServer[]
@@ -144,7 +145,7 @@ function runTestSuite (options: {
 
         credentials: ObjectStorageCommand.getCredentialsConfig(),
 
-        max_upload_part: options.maxUploadPart || '2MB',
+        max_upload_part: '5MB',
 
         streaming_playlists: {
           bucket_name: options.playlistBucket,
@@ -181,7 +182,7 @@ function runTestSuite (options: {
   it('Should upload a video and move it to the object storage without transcoding', async function () {
     this.timeout(40000)
 
-    const { uuid } = await servers[0].videos.quickUpload({ name: 'video 1' })
+    const { uuid } = await servers[0].videos.quickUpload({ name: 'video 1', fixture })
     uuidsToDelete.push(uuid)
 
     await waitJobs(servers)
@@ -197,7 +198,7 @@ function runTestSuite (options: {
   it('Should upload a video and move it to the object storage with transcoding', async function () {
     this.timeout(120000)
 
-    const { uuid } = await servers[1].videos.quickUpload({ name: 'video 2' })
+    const { uuid } = await servers[1].videos.quickUpload({ name: 'video 2', fixture })
     uuidsToDelete.push(uuid)
 
     await waitJobs(servers)
@@ -390,12 +391,11 @@ describe('Object storage for videos', function () {
     })
   })
 
-  describe('Test object storage with small upload part', function () {
+  describe.only('Test object storage with file bigger than upload part', function () {
     runTestSuite({
       playlistBucket: 'streaming-playlists',
       webtorrentBucket: 'videos',
-
-      maxUploadPart: '5KB'
+      fixture: 'video_12mb.mp4'
     })
   })
 })
