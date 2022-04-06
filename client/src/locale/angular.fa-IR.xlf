@@ -432,7 +432,7 @@
       </trans-unit>
       <trans-unit id="2409672154570643758" datatype="html">
         <source>Display name</source>
-        <target state="translated">نمایش نام</target>
+        <target state="translated">نام</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">43</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">43</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context><context context-type="linenumber">17</context></context-group>
@@ -1161,7 +1161,7 @@
       </trans-unit>
       <trans-unit id="7252854992688790751" datatype="html">
         <source>This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">این سایت  اجازه نام‌نویسی را می‌دهد. با این حال پیش از ساخت حساب، با دقت <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>قوانین<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>قوانین<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> را مطالعه کنید. به منظور یافتن نمونه‌ای که بهترین انطباق را با نیاز شما داشته باشد می‌تواند در این جا دنبال نمونه‌های دیگر بگردید: <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_LINK_2" equiv-text="&lt;a class=&quot;alert-link&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
+        <target state="translated">پیش از ساخت حساب، با دقت <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>قوانین<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>قوانین<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> را مطالعه کنید. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="7215649348148521605" datatype="html">
@@ -1210,7 +1210,7 @@
       </trans-unit>
       <trans-unit id="2101170466365500913" datatype="html">
         <source>Logging into an account lets you publish content</source>
-        <target state="translated">وارد شدن به حساب به شما امکان انتشار محتوا می‌دهد</target>
+        <target state="translated">وارد شدن به حساب ، به شما امکان انتشار محتوا می‌دهد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="3183213940445113677" datatype="html">
@@ -1225,7 +1225,7 @@
       </trans-unit>
       <trans-unit id="87327320394367488" datatype="html">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target state="translated">متاسفیم، ما نمی‌توانیم گذرواژه شما را بازیابی کنیم زیرا مدیر نمونه‌تان، سامانه رایانامه پیرتیوب را پیکربندی نکرده‌اند.</target>
+        <target state="translated">متاسفیم، در حال حاظر امکان بازیابی رمز عبور شما میسر نیست . لطفا با مدیر سیستم جهت بررسی تنظیمات مربوطه تماس بگیرید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="3188014010833256853" datatype="html">
@@ -1404,7 +1404,7 @@
       </trans-unit>
       <trans-unit id="7997432701743294657" datatype="html">
         <source>Set up</source>
-        <target state="translated">نصب کردن</target>
+        <target state="translated">انجام دادن</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="9202089339019827574" datatype="html">
@@ -1629,7 +1629,7 @@
       </trans-unit>
       <trans-unit id="7627544798203088407" datatype="html">
         <source>Discover</source>
-        <target state="translated">یافتن</target>
+        <target state="translated">جستجو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.html</context><context context-type="linenumber">1</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
@@ -1691,7 +1691,7 @@
       </trans-unit>
       <trans-unit id="5856432243446401016" datatype="html">
         <source>Uploading an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">در حال آپلود <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>آواتار<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt; /strong&gt;"/></target>
+        <target state="translated">آپلود  <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>آواتاریا عکس خود <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt; /strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="3221645359464920754" datatype="html">
@@ -1823,7 +1823,7 @@
       </trans-unit>
       <trans-unit id="2807610143550376912" datatype="html">
         <source>Your query will be matched against video names or descriptions, channel names.</source>
-        <target state="translated">پرس و جو شما در برابر نام های ویدئویی یا توضیحات، نام های کانال مطابقت دارد.</target>
+        <target state="translated">جستجوی شمادر  نام ویدئوها یا توضیحات وهمچنین نام  کانال های موجود انجام می شود.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">37</context>
@@ -1841,7 +1841,7 @@
       </trans-unit>
       <trans-unit id="1764675694412365696" datatype="html">
         <source>only followed instances</source>
-        <target state="translated">فقط نمونه ها را دنبال می کنند</target>
+        <target state="translated">--</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="6462732349450217281" datatype="html">
@@ -1851,13 +1851,13 @@
       </trans-unit>
       <trans-unit id="3710530516408401495" datatype="html">
         <source>will list the matching channel</source>
-        <target state="translated">کانال تطبیق را فهرست می کند</target>
+        <target state="translated">کانال ها را فهرست می کند</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">50</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="6913541939335935215" datatype="html">
         <source>will list the matching video</source>
-        <target state="translated">ویدیو تطبیق را فهرست می کند</target>
+        <target state="translated">ویدیو ها را فهرست می کند</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="8854094932942190741">
@@ -2338,7 +2338,7 @@
       </trans-unit>
       <trans-unit id="8508836953540308271" datatype="html">
         <source>Live settings</source>
-        <target state="translated">تنظیمات زنده</target>
+        <target state="translated">تنظیمات پخش زنده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">235</context></context-group>
       </trans-unit>
       <trans-unit id="1212376766715456139" datatype="html">
@@ -2540,7 +2540,7 @@
       </trans-unit>
       <trans-unit id="3517255641769192386" datatype="html">
         <source>Permanent/recurring live</source>
-        <target state="translated">دائمی / تکراری زنده</target>
+        <target state="translated">پخش زنده دائمی / تکراری</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
           <context context-type="linenumber">29</context>
@@ -2606,7 +2606,7 @@
       </trans-unit>
       <trans-unit id="1138810463037464722" datatype="html">
         <source>Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.</source>
-        <target state="translated">فیلم های آپلود شده قبل از انتشار برای حساب کاربری شما بررسی می شوند. اگر می خواهید فیلم ها را بدون بررسی اعتدال اضافه کنید، یک مدیر باید ویدیوهای خود را خودکار بلوک کنید.</target>
+        <target state="translated">فیلم های آپلود شده قبل از انتشار برای حساب کاربری شما بررسی می شوند. اگر می خواهید فیلم ها  بدون بررسی سازمان اضافه کنید، اطلاعات هویتی کامل خود را برای پشتیبانی سیستم ارسال فرمایید.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -2630,7 +2630,7 @@
       </trans-unit>
       <trans-unit id="2587226585711833549" datatype="html">
         <source>Read instance rules for help</source>
-        <target state="translated">قوانین نمونه را بخوانید</target>
+        <target state="translated">قوانین سایت را بخوانید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="3455474330346212563" datatype="html">
@@ -2671,7 +2671,7 @@
       </trans-unit>
       <trans-unit id="2621043320678012413" datatype="html">
         <source>Live published.</source>
-        <target state="translated">زنده منتشر شده است.</target>
+        <target state="translated">پخش زنده منتشر شده است.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="5872059367236038160" datatype="html">
@@ -2696,7 +2696,7 @@
       </trans-unit>
       <trans-unit id="8218579597782287078" datatype="html">
         <source>Go Live</source>
-        <target state="translated">زنده ماندن</target>
+        <target state="translated">رفتن به پخش زنده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3282368691598224543" datatype="html">
@@ -2736,7 +2736,7 @@
       </trans-unit>
       <trans-unit id="6066940329544282265" datatype="html">
         <source>Go live</source>
-        <target state="translated">زنده ماندن</target>
+        <target state="translated">رفتن به پخش زنده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="3907889591911208762" datatype="html">
@@ -3263,12 +3263,12 @@
       </trans-unit>
       <trans-unit id="658727060940996385" datatype="html">
         <source>Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?</source>
-        <target state="translated">تجدید نشانه، مشتریان قبلا پیکربندی شده را از بازیابی خوراک رد می کنند تا زمانی که از نشانه جدید استفاده کنند. ادامه دهید؟</target>
+        <target state="translated">تجدید توکن، مشترکانی که قبلا پیکربندی شده را تا زمانی که از نشانه جدید استفاده کنند ، از دسترسی به جمع آوری کننده، خارج می کند . ادامه می دهید؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="3029923402309610616" datatype="html">
         <source>Token renewed. Update your client configuration accordingly.</source>
-        <target state="translated">نشانه تمدید شد پیکربندی مشتری خود را به روز کنید.</target>
+        <target state="translated">توکن تازه سازی شد .  پیکربندی مشترکان خود را به روز کنید.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -3284,12 +3284,12 @@
       </trans-unit>
       <trans-unit id="2645809032917283525" datatype="html">
         <source>Use third-party feed aggregators to retrieve the list of videos from channels you subscribed to.</source>
-        <target state="translated">از جمع آوری خوراک شخص ثالث برای بازیابی لیست فیلم ها از کانال های شما به اشتراک گذاشته شده استفاده کنید.</target>
+        <target state="translated">از جمع آوری کننده اطلاعات کانالهای  ثالث برای جمع آوری لیست فیلم ها ، از کانال هایی که شما در آنها مشترک شده اید ، استفاده کنید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="7944777648309302794" datatype="html">
         <source>Feed URL</source>
-        <target state="translated">URL خوراک</target>
+        <target state="translated">URL جمع آوری کننده</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">18</context>
@@ -3297,7 +3297,7 @@
       </trans-unit>
       <trans-unit id="6086365181226161548" datatype="html">
         <source>Feed Token</source>
-        <target state="translated">علامت خوراک</target>
+        <target state="translated">توکن جمع آوری کننده</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">23</context>
@@ -3305,7 +3305,7 @@
       </trans-unit>
       <trans-unit id="6492684506192237359" datatype="html">
         <source>⚠️ Never share your feed token with anyone.</source>
-        <target state="translated">⚠️ هرگز علامت تغذیه خود را با هر کسی به اشتراک بگذارید.</target>
+        <target state="translated">⚠️ هرگز توکن جمع آوری کننده خود را با  کسی به اشتراک نگذارید.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">26</context>
@@ -3313,7 +3313,7 @@
       </trans-unit>
       <trans-unit id="270726559962362501" datatype="html">
         <source>Renew token</source>
-        <target state="translated">تمدید</target>
+        <target state="translated">تازه سازی توکن</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">35</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
@@ -3629,7 +3629,7 @@
       </trans-unit>
       <trans-unit id="2049290282534091182" datatype="html">
         <source>Moderation</source>
-        <target state="translated">تعدیل</target>
+        <target state="translated">سایر تنظیمات</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">95</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">72</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">28</context></context-group>
@@ -4414,7 +4414,7 @@
       </trans-unit>
       <trans-unit id="8953934448427251062" datatype="html">
         <source>The <x id="START_LINK"/>sharing system<x id="CLOSE_LINK"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</source>
-        <target state="translated">این<x id="START_LINK"/>سیستم اشتراک گذاری<x id="CLOSE_LINK"/>  نشان می دهد که برخی از اطلاعات فنی در مورد سیستم شما (مانند یک آدرس IP عمومی) می تواند به سایر سایتهای مشابه ارسال شود، و به شدت به کاهش بار سرور کمک می کند.</target>
+        <target state="translated">این  <x id="START_LINK"/>سیستم اشتراک گذاری<x id="CLOSE_LINK"/> نشان می دهد که برخی از اطلاعات فنی در مورد سیستم شما (مانند یک آدرس IP عمومی) می تواند به سایر سایتهای مشابه ارسال شود، و به شدت به کاهش بار سرور کمک می کند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="34094919610906740" datatype="html">
@@ -4424,7 +4424,7 @@
       </trans-unit>
       <trans-unit id="6236140336967052987" datatype="html">
         <source>When on a video page, directly start playing the video.</source>
-        <target state="translated">هنگامی که در صفحه ویدئویی، به طور مستقیم شروع به پخش ویدئو کنید.</target>
+        <target state="translated">در صفحه ویدئو، به طور مستقیم شروع به پخش ویدئو کنید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="9135112681389493865" datatype="html">
@@ -4439,7 +4439,7 @@
       </trans-unit>
       <trans-unit id="2701970773087072815" datatype="html">
         <source>Automatically start playing the next video</source>
-        <target state="translated">به طور خودکار شروع به پخش ویدئو بعدی</target>
+        <target state="translated">شروع به پخش ویدئو بعدی، به طور خودکار صورت پذیرد .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="5983800192187691457" datatype="html">
@@ -4507,7 +4507,7 @@
       </trans-unit>
       <trans-unit id="3076079242537393946" datatype="html">
         <source>Moderation information</source>
-        <target state="translated">اطلاعات اعتدال</target>
+        <target state="translated">اطلاعات بررسی های انجام شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">141</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">151</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">41</context></context-group>
@@ -4619,7 +4619,7 @@
       </trans-unit>
       <trans-unit id="8177374861384376651" datatype="html">
         <source>Most liked videos</source>
-        <target state="translated">بیشتر فیلم های دوست داشتنی</target>
+        <target state="translated">فیلم هایی که بیشتر پسندیده شده اند</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="5862227717871131052" datatype="html">
@@ -4878,7 +4878,7 @@
       </trans-unit>
       <trans-unit id="5273935530181504015" datatype="html">
         <source>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</source>
-        <target state="translated">⚠️ این قابلیت به شدت بستگی به اعتدال نمونه ها و سپس شاخص جستجو را انتخاب می کنید.</target>
+        <target state="translated">⚠️ این قابلیت به شدت بستگی به روابط نظارتی بر سایت ها و سپس شاخص جستجویی را که انتخاب می کنید ، دارد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">376</context></context-group>
       </trans-unit>
       <trans-unit id="1886227550697837417" datatype="html">
@@ -4938,7 +4938,7 @@
       </trans-unit>
       <trans-unit id="2092224316392295720" datatype="html">
         <source>⚠️ This functionality requires a lot of attention and extra moderation.</source>
-        <target state="translated">⚠️ این قابلیت نیاز به توجه زیادی و اعتدال اضافی دارد.</target>
+        <target state="translated">⚠️ این قابلیت نیاز به توجه زیادی و بررسی های اضافی دارد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">165</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">463</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">476</context></context-group>
@@ -5010,7 +5010,7 @@
       </trans-unit>
       <trans-unit id="493135676263039396" datatype="html">
         <source>LIVE</source>
-        <target state="translated">زنده</target>
+        <target state="translated">پخش زنده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">5</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
@@ -5021,7 +5021,7 @@
       </trans-unit>
       <trans-unit id="8894612824234881672" datatype="html">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
-        <target state="translated">⚠️ فعال کردن استریم پخش زنده نیاز به اعتماد شما به  کاربران و اصلاحات اضافی دارد</target>
+        <target state="translated">⚠️ فعال کردن استریم پخش زنده نیاز به اعتماد شما به  کاربران و بررسی های اضافی دارد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="5205613575147327732" datatype="html">
@@ -5406,7 +5406,7 @@
       </trans-unit>
       <trans-unit id="507542497458686905" datatype="html">
         <source>NOTIFICATIONS</source>
-        <target state="translated">اطلاعیه</target>
+        <target state="translated">اطلاع رسانی ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="9138757724802460941" datatype="html">
@@ -5593,7 +5593,7 @@
       </trans-unit>
       <trans-unit id="4250125031269088402" datatype="html">
         <source>Moderation:</source>
-        <target state="translated">اعتدال:</target>
+        <target state="translated">بررسی و نظارت:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">120</context>
@@ -5655,7 +5655,7 @@
       </trans-unit>
       <trans-unit id="1534085756270333258" datatype="html">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target state="translated">به تازگی اضافه شده، روند، محلی، بیشتر دوست داشتنی و جستجو صفحات</target>
+        <target state="translated">در به تازگی اضافه شده، ویدئوهای داغ ، محلی، بیشتر پسندیده شده و صفحات جستجو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="2658703380934466003" datatype="html">
@@ -5692,22 +5692,22 @@
       </trans-unit>
       <trans-unit id="1788875035518441092" datatype="html">
         <source>Last published first</source>
-        <target state="translated">آخرین انتشار اول</target>
+        <target state="translated">تاریخ انتشار</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="4541072509002204177" datatype="html">
         <source>Last created first</source>
-        <target state="translated">آخرین اولین بار ایجاد شد</target>
+        <target state="translated">تاریخ ایجاد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="1142493792593089647" datatype="html">
         <source>Most viewed first</source>
-        <target state="translated">اولین بار دیده می شود</target>
+        <target state="translated">میزان مشاهده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="8108088952881606566" datatype="html">
         <source>Most liked first</source>
-        <target state="translated">بیشتر دوست داشتم</target>
+        <target state="translated">میزان پسندیده شدن</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="2782422473180760140" datatype="html">
@@ -5889,7 +5889,7 @@
       </trans-unit>
       <trans-unit id="5511928240200239994" datatype="html">
         <source>Some of your channels are not fully set up. Make them welcoming and explicit about what you publish by adding a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>banner<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</source>
-        <target state="translated">بعضی از کانالهای شما به صورت کامل نصب و تنظیم نشده اند . آنها را با اضافه کردن این موارد خوشایندتر و حرفه ای تر کنید  <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>بنر<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, یک<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>آواتار<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> و یک <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>توضیحات<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
+        <target state="translated">بعضی از کانالهای شما به صورت کامل نصب و تنظیم نشده اند . آنها را با تکمیل اطلاعات کانال خوشایندتر و حرفه ای تر کنید.مواردی مانند <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>بنر<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>آواتار<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> و <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>توضیحات<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/channels-setup-message.component.html</context>
           <context context-type="linenumber">5</context>
@@ -5989,17 +5989,17 @@
       </trans-unit>
       <trans-unit id="5904811038805050477" datatype="html">
         <source>Welcome to PeerTube!</source>
-        <target state="translated">خوش آمدید به Peertube!</target>
+        <target state="translated">به سامانه آموزش سازمان امور مالیاتی خوش آمدید !</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="3461985498881453026" datatype="html">
         <source>If you need help to use PeerTube, you can have a look at the <x id="START_LINK"/>documentation<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">اگر برای استفاده از PEERTUBE به کمک نیاز دارید ، می توانید نگاهی به این مستندات بیاندازید <x id="START_LINK"/>   "    " <x id="CLOSE_LINK"/>. </target>
+        <target state="translated">اگر برای استفاده از این سامانه به کمک نیاز دارید ، می توانید نگاهی به این راهنما بیاندازید <x id="START_LINK"/> " راهنما " <x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="8844610145426272276" datatype="html">
         <source>To help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, don't forget to <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot;&gt;"/>set up your account profile<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> by adding an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="translated">برای کمک کردن به ناظران و دیگر استفاده کنندگان برای دانستن اینکه <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>شما کیستید<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, فراموش نکنید که<x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot;&gt;"/>پروفایل خود را تکمیل کنید با <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> اضافه کردن  <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>آواتار<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> و <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>توضیحات لازم<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">برای کمک کردن به مدیران سامانه و دیگر استفاده کنندگان برای دانستن <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>هویت شما <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, فراموش نکنید که  <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot;&gt;"/>با  <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> اضافه کردن <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>آواتار<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> و <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>توضیحات لازم<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>پروفایل خود را تکمیل کنید. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="3030338154442300172" datatype="html">
@@ -6240,7 +6240,7 @@
       </trans-unit>
       <trans-unit id="2081837971167498893" datatype="html">
         <source>Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</source>
-        <target state="translated">درحال دنبال کردن کنال های  (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
+        <target state="translated">درحال دنبال کردن کانال های (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">16</context>
@@ -6375,7 +6375,7 @@
       </trans-unit>
       <trans-unit id="8674693181203168033" datatype="html">
         <source>Discover how to setup your account, what is a channel, how to create a playlist and more!</source>
-        <target state="translated">کشف نحوه راه اندازی حساب خود، چه کانال، چگونگی ایجاد یک لیست پخش و بیشتر!</target>
+        <target state="translated">نحوه راه اندازی حساب خود، کانال یا چگونگی ایجاد یک لیست پخش و بیشتر را یاد بگیرید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="5336387229608682776" datatype="html">
@@ -6385,7 +6385,7 @@
       </trans-unit>
       <trans-unit id="7916664392219781729" datatype="html">
         <source>Discover unofficial Android applications or browser addons!</source>
-        <target state="translated">کشف برنامه های غیر رسمی آندروید یا افزونه های مرورگر!</target>
+        <target state="translated">جستجوی برنامه های غیر رسمی آندروید یا افزونه های مرورگر!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="4093735071527927163" datatype="html">
@@ -6527,7 +6527,7 @@
       </trans-unit>
       <trans-unit id="7128556172318221342" datatype="html">
         <source>This instance is not following any other.</source>
-        <target state="translated">این کانال به دنبال دیگری نیست.</target>
+        <target state="translated">این کانال دیگری را دنبال نمی کند .</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
@@ -6613,12 +6613,12 @@
       </trans-unit>
       <trans-unit id="4665274432258993920" datatype="html">
         <source>A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.<x id="LINE_BREAK"/> For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology. </source>
-        <target state="translated">یک کانال یک نهاد است که در آن ویدیوهای خود را آپلود می کنید. ایجاد چندین از آنها به شما کمک می کند تا محتوای خود را سازماندهی کنید و جدا کنید. <x id="LINE_BREAK"/> به عنوان مثال، شما می توانید یک کانال برای انتشار کنسرت های پیانو خود و کانال دیگری که در آن شما درباره اکولوژی بحث می کنید  منتشر کنید. </target>
+        <target state="translated">کانال جایی است که در آن ویدیوهای خود را آپلود می کنید. ایجاد چندین کانال  به شما کمک می کند تا محتوای خود را سازماندهی  و جدا سازی کنید. <x id="LINE_BREAK"/> به عنوان مثال، شما می توانید یک کانال برای انتشار ویدئوهای مرتبط با حسابداری خود و کانال دیگری که در آن شما درباره مباحث مالیاتی بحث می کنید، داشته باشید. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="2254156021453506528" datatype="html">
         <source>Other users can decide to subscribe any channel they want, to be notified when you publish a new video.</source>
-        <target state="translated">سایر کاربران می توانند تصمیم بگیرند که در کانالی که می خواهند مشترک شوندو زمانی که شما یک ویدیو جدید منتشر می کنید مطلع شوند.</target>
+        <target state="translated">سایر کاربران می توانند تصمیم بگیرند که در کدام کانال  مشترک شوندو زمانی که شما یک ویدیو جدید منتشر می کنید مطلع شوند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="8583412279916132438" datatype="html">
@@ -6646,7 +6646,7 @@
       </trans-unit>
       <trans-unit id="7981235640417633362" datatype="html">
         <source>The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="translated">نام کانال یک شناسه منحصر به فرد از کانال شما در این و تمام موارد دیگر است. این نام مانند یک آدرس ایمیل منحصر به فرد است، که باعث می شود دیگران با آن ارتباط برقرار کنند.</target>
+        <target state="translated">نام کانال یک شناسه منحصر به فرد از کانال شما در این سایت است. این نام مانند یک آدرس ایمیل منحصر به فرد است، که باعث می شود دیگران به وسیله  آن ارتباط برقرار کنند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="5203776997447520497" datatype="html">
@@ -6656,7 +6656,7 @@
       </trans-unit>
       <trans-unit id="7440807341905682986" datatype="html">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of this instance </source>
-        <target state="translated">اینجانب حداقل  <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/>ساله بوده و موافقت خود را با موارد متعاقب اعلامی دارم  <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>قوانین <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> و همچنین <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>شرایط استفاده<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> این سایت </target>
+        <target state="translated">اینجانب موافقت خود را با موارد  <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>قوانین <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> اعلام می دارم . </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-terms.component.html</context>
           <context context-type="linenumber">5,10</context>
@@ -6664,7 +6664,7 @@
       </trans-unit>
       <trans-unit id="7326471570669373149" datatype="html">
         <source>The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="translated">نام کاربری یک شناسه منحصر به فرد از حساب شما در این کانال و تمام موارد دیگر سایت است. این شناسه مشابه یک آدرس ایمیل منحصر به فرد است، که باعث می شود دیگران بتوانند از آن طریق ارتباط برقرار کنند.</target>
+        <target state="translated">نام کاربری یک شناسه منحصر به فرد از حساب شما در این سایت  است. این شناسه مشابه یک آدرس ایمیل منحصر به فرد است، که باعث می شود دیگران بتوانند از آن طریق ارتباط برقرار کنند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="2770947245861951784" datatype="html">
@@ -8021,7 +8021,7 @@
       </trans-unit>
       <trans-unit id="8553059323353586765" datatype="html">
         <source>Your current email is <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. It is never shown to the public. </source>
-        <target state="translated">ایمیل فعلی شما <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. این ایمیل هرگز به صورت عمومی نمایش داده نخواهد شد. </target>
+        <target state="translated">ایمیل فعلی شما <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> می باشد . این ایمیل  به صورت عمومی نمایش داده نخواهد شد. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="853586874765134886" datatype="html">
@@ -8151,7 +8151,7 @@
       </trans-unit>
       <trans-unit id="900099988467638766" datatype="html">
         <source>An abuse report received a new message</source>
-        <target state="translated">گزارشات سوء استفاده ، یک پیام جدید دریافت کرد</target>
+        <target state="translated">یک پیام جدید در گزارشات سوء استفاده دارید.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="2326816287669585542" datatype="html">
@@ -8177,7 +8177,7 @@
       </trans-unit>
       <trans-unit id="988319118163514570" datatype="html">
         <source>Video studio edition has finished</source>
-        <target state="new">Video studio edition has finished</target>
+        <target state="translated">ویرایش ویدئوی استدیویی به پایان رسید.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -8185,7 +8185,7 @@
       </trans-unit>
       <trans-unit id="4579496777570550463" datatype="html">
         <source>Social</source>
-        <target state="translated">اجتماعی</target>
+        <target state="translated">شبکه اجتماعی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="1852164487280647902" datatype="html">
@@ -8411,7 +8411,7 @@
       </trans-unit>
       <trans-unit id="5851560788527570644" datatype="html">
         <source>Notifications</source>
-        <target state="translated">اطلاعیه ها</target>
+        <target state="translated">اطلاع رسانی ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">1</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">108</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">55</context></context-group>
@@ -8545,7 +8545,7 @@
       </trans-unit>
       <trans-unit id="5752861278140673787" datatype="html">
         <source>Ownership changes</source>
-        <target state="translated">مالکیت تغییر می کند</target>
+        <target state="translated">تغییر مالکیت</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">117</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
@@ -11526,7 +11526,7 @@
       </trans-unit>
       <trans-unit id="4668975178372693951" datatype="html">
         <source>Discover videos</source>
-        <target state="translated">یافتن فیلم ها</target>
+        <target state="translated">جستجوی فیلم ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context><context context-type="linenumber">17</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
