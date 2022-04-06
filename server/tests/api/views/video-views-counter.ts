@@ -57,10 +57,11 @@ describe('Test video views/viewers counters', function () {
     })
 
     it('Should not view again this video with the same IP', async function () {
-      await servers[0].views.simulateViewer({ id: videoUUID, currentTimes: [ 1, 4 ] })
+      await servers[0].views.simulateViewer({ id: videoUUID, xForwardedFor: '0.0.0.1,127.0.0.1', currentTimes: [ 1, 4 ] })
+      await servers[0].views.simulateViewer({ id: videoUUID, xForwardedFor: '0.0.0.1,127.0.0.1', currentTimes: [ 1, 4 ] })
       await processViewsBuffer(servers)
 
-      await checkCounter('views', videoUUID, 1)
+      await checkCounter('views', videoUUID, 2)
     })
 
     it('Should view the video from server 2 and send the event', async function () {
@@ -68,7 +69,7 @@ describe('Test video views/viewers counters', function () {
       await waitJobs(servers)
       await processViewsBuffer(servers)
 
-      await checkCounter('views', videoUUID, 2)
+      await checkCounter('views', videoUUID, 3)
     })
   })
 
@@ -78,7 +79,7 @@ describe('Test video views/viewers counters', function () {
     let command: FfmpegCommand
 
     before(async function () {
-      this.timeout(60000);
+      this.timeout(120000);
 
       ({ vodVideoId, liveVideoId, ffmpegCommand: command } = await prepareViewsVideos({ servers, live: true, vod: true }))
     })

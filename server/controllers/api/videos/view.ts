@@ -1,8 +1,6 @@
 import express from 'express'
-import { sendView } from '@server/lib/activitypub/send/send-view'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { VideoViewsManager } from '@server/lib/views/video-views-manager'
-import { getServerActor } from '@server/models/application/application'
 import { MVideoId } from '@server/types/models'
 import { HttpStatusCode, VideoView } from '@shared/models'
 import { asyncMiddleware, methodsValidator, openapiOperationDoc, optionalAuthenticate, videoViewValidator } from '../../../middlewares'
@@ -33,7 +31,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
   const body = req.body as VideoView
 
   const ip = req.ip
-  const { successView, successViewer } = await VideoViewsManager.Instance.processLocalView({
+  const { successView } = await VideoViewsManager.Instance.processLocalView({
     video,
     ip,
     currentTime: body.currentTime,
@@ -41,13 +39,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
   })
 
   if (successView) {
-    await sendView({ byActor: await getServerActor(), video, type: 'view' })
-
     Hooks.runAction('action:api.video.viewed', { video: video, ip, req, res })
-  }
-
-  if (successViewer) {
-    await sendView({ byActor: await getServerActor(), video, type: 'viewer' })
   }
 
   await updateUserHistoryIfNeeded(body, video, res)

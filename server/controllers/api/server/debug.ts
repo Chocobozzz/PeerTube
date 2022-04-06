@@ -43,7 +43,7 @@ async function runCommand (req: express.Request, res: express.Response) {
   const processors: { [id in SendDebugCommand['command']]: () => Promise<any> } = {
     'remove-dandling-resumable-uploads': () => RemoveDanglingResumableUploadsScheduler.Instance.execute(),
     'process-video-views-buffer': () => VideoViewsBufferScheduler.Instance.execute(),
-    'process-video-viewers': () => VideoViewsManager.Instance.processViewers()
+    'process-video-viewers': () => VideoViewsManager.Instance.processViewerStats()
   }
 
   await processors[body.command]()

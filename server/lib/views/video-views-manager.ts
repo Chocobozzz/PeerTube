@@ -1,7 +1,7 @@
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { MVideo } from '@server/types/models'
 import { VideoViewEvent } from '@shared/models'
-import { VideoViewers, VideoViews } from './shared'
+import { VideoViewerCounters, VideoViewerStats, VideoViews } from './shared'
 
 /**
  * If processing a local view:
@@ -27,14 +27,16 @@ export class VideoViewsManager {
 
   private static instance: VideoViewsManager
 
-  private videoViewers: VideoViewers
+  private videoViewerStats: VideoViewerStats
+  private videoViewerCounters: VideoViewerCounters
   private videoViews: VideoViews
 
   private constructor () {
   }
 
   init () {
-    this.videoViewers = new VideoViewers()
+    this.videoViewerStats = new VideoViewerStats()
+    this.videoViewerCounters = new VideoViewerCounters()
     this.videoViews = new VideoViews()
   }
 
@@ -48,10 +50,12 @@ export class VideoViewsManager {
 
     logger.debug('Processing local view for %s and ip %s.', video.url, ip, lTags())
 
-    const successViewer = await this.videoViewers.addLocalViewer({ video, ip, viewEvent, currentTime })
+    await this.videoViewerStats.addLocalViewer({ video, ip, viewEvent, currentTime })
+
+    const successViewer = await this.videoViewerCounters.addLocalViewer({ video, ip })
 
     // Do it after added local viewer to fetch updated information
-    const watchTime = await this.videoViewers.getWatchTime(video.id, ip)
+    const watchTime = await this.videoViewerStats.getWatchTime(video.id, ip)
 
     const successView = await this.videoViews.addLocalView({ video, watchTime, ip })
 
@@ -60,26 +64,27 @@ export class VideoViewsManager {
 
   async processRemoteView (options: {
     video: MVideo
+    viewerId: string | null
     viewerExpires?: Date
   }) {
-    const { video, viewerExpires } = options
+    const { video, viewerId, viewerExpires } = options
 
-    logger.debug('Processing remote view for %s.', video.url, { viewerExpires, ...lTags() })
+    logger.debug('Processing remote view for %s.', video.url, { viewerExpires, viewerId, ...lTags() })
 
-    if (viewerExpires) await this.videoViewers.addRemoteViewer({ video, viewerExpires })
+    if (viewerExpires) await this.videoViewerCounters.addRemoteViewer({ video, viewerId, viewerExpires })
     else await this.videoViews.addRemoteView({ video })
   }
 
   getViewers (video: MVideo) {
-    return this.videoViewers.getViewers(video)
+    return this.videoViewerCounters.getViewers(video)
   }
 
   buildViewerExpireTime () {
-    return this.videoViewers.buildViewerExpireTime()
+    return this.videoViewerCounters.buildViewerExpireTime()
   }
 
-  processViewers () {
-    return this.videoViewers.processViewerStats()
+  processViewerStats () {
+    return this.videoViewerStats.processViewerStats()
   }
 
   static get Instance () {

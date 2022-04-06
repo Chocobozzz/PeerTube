@@ -56,8 +56,8 @@ function getLocalAbuseActivityPubUrl (abuse: MAbuseId) {
   return WEBSERVER.URL + '/admin/abuses/' + abuse.id
 }
 
-function getLocalVideoViewActivityPubUrl (byActor: MActorUrl, video: MVideoId) {
-  return byActor.url + '/views/videos/' + video.id + '/' + new Date().toISOString()
+function getLocalVideoViewActivityPubUrl (byActor: MActorUrl, video: MVideoId, viewerIdentifier: string) {
+  return byActor.url + '/views/videos/' + video.id + '/' + viewerIdentifier
 }
 
 function getLocalVideoViewerActivityPubUrl (stats: MLocalVideoViewer) {

@@ -145,16 +145,8 @@ class Redis {
     return this.setValue(this.generateIPViewKey(ip, videoUUID), '1', VIEW_LIFETIME.VIEW)
   }
 
-  setIPVideoViewer (ip: string, videoUUID: string) {
-    return this.setValue(this.generateIPViewerKey(ip, videoUUID), '1', VIEW_LIFETIME.VIEWER_COUNTER)
-  }
-
   async doesVideoIPViewExist (ip: string, videoUUID: string) {
     return this.exists(this.generateIPViewKey(ip, videoUUID))
-  }
-
-  async doesVideoIPViewerExist (ip: string, videoUUID: string) {
-    return this.exists(this.generateIPViewerKey(ip, videoUUID))
   }
 
   /* ************ Tracker IP block ************ */
@@ -359,10 +351,6 @@ class Redis {
 
   private generateIPViewKey (ip: string, videoUUID: string) {
     return `views-${videoUUID}-${ip}`
-  }
-
-  private generateIPViewerKey (ip: string, videoUUID: string) {
-    return `viewer-${videoUUID}-${ip}`
   }
 
   private generateTrackerBlockIPKey (ip: string) {
