@@ -1,5 +1,8 @@
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
+import { sendView } from '@server/lib/activitypub/send/send-view'
+import { getServerActor } from '@server/models/application/application'
 import { MVideo } from '@server/types/models'
+import { buildUUID } from '@shared/extra-utils'
 import { Redis } from '../../redis'
 
 const lTags = loggerTagsFactory('views')
@@ -24,6 +27,8 @@ export class VideoViews {
 
     await this.addView(video)
 
+    await sendView({ byActor: await getServerActor(), video, type: 'view', viewerIdentifier: buildUUID() })
+
     return true
   }
 
@@ -38,6 +43,8 @@ export class VideoViews {
 
     return true
   }
+
+  // ---------------------------------------------------------------------------
 
   private async addView (video: MVideo) {
     const promises: Promise<any>[] = []

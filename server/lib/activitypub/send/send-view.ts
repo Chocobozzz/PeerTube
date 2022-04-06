@@ -13,14 +13,15 @@ async function sendView (options: {
   byActor: MActorLight
   type: ViewType
   video: MVideoImmutable
+  viewerIdentifier: string
   transaction?: Transaction
 }) {
-  const { byActor, type, video, transaction } = options
+  const { byActor, type, video, viewerIdentifier, transaction } = options
 
   logger.info('Creating job to send %s of %s.', type, video.url)
 
   const activityBuilder = (audience: ActivityAudience) => {
-    const url = getLocalVideoViewActivityPubUrl(byActor, video)
+    const url = getLocalVideoViewActivityPubUrl(byActor, video, viewerIdentifier)
 
     return buildViewActivity({ url, byActor, video, audience, type })
   }

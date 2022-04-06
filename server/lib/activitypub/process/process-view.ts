@@ -32,7 +32,7 @@ async function processCreateView (activity: ActivityView, byActor: MActorSignatu
     ? new Date(activity.expires)
     : undefined
 
-  await VideoViewsManager.Instance.processRemoteView({ video, viewerExpires })
+  await VideoViewsManager.Instance.processRemoteView({ video, viewerId: activity.id, viewerExpires })
 
   if (video.isOwned()) {
     // Forward the view but don't resend the activity to the sender

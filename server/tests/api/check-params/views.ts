@@ -19,7 +19,7 @@ describe('Test videos views', function () {
   let userAccessToken: string
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
