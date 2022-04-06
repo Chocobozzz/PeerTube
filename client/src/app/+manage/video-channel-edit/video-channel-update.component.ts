@@ -23,7 +23,7 @@ import { VideoChannelEdit } from './video-channel-edit'
 export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnInit, AfterViewInit, OnDestroy {
   error: string
   videoChannel: VideoChannel
-  isUploadAllowed = false
+  isQuotaPositive = false
 
   private paramsSub: Subscription
   private oldSupportField: string
@@ -77,7 +77,7 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
             })
             this.userService.getUser(videoChannelToUpdate.ownerAccount.userId).subscribe({
               next: userInfo => {
-                this.isUploadAllowed = userInfo.videoQuota !== 0
+                this.isQuotaPositive = userInfo.videoQuota !== 0
               },
               error: err => {
                 this.error = err.message
@@ -217,8 +217,18 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
   getDisabledSync () {
     // Prevent doubling opacity of checkbox extras if
     // upload is not allowed
-    if (this.isUploadAllowed) {
-      return super.getDisabledSync()
+    if (this.isUploadAllowed()) {
+      const enableSync = this.form.value['enableSync'] === true
+      return {'disabled-checkbox-extra': !enableSync}
     }
   }
+
+  isUploadAllowed(): boolean {
+    return this.isQuotaPositive && this.isHttpUploadAllowed()
+  }
+
+  isHttpUploadAllowed(): boolean {
+    return this.serverConfig.import.videos.http.enabled
+  }
+
 }

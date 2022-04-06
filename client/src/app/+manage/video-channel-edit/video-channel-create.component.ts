@@ -2,7 +2,7 @@ import { of } from 'rxjs'
 import { switchMap } from 'rxjs/operators'
 import { AfterViewInit, Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, HooksService, Notifier } from '@app/core'
+import { AuthService, HooksService, Notifier, ServerService } from '@app/core'
 import {
   VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
   VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
@@ -12,7 +12,7 @@ import {
 } from '@app/shared/form-validators/video-channel-validators'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
-import { HttpStatusCode, VideoChannelCreate } from '@shared/models'
+import { HTMLServerConfig, HttpStatusCode, VideoChannelCreate } from '@shared/models'
 import { VideoChannelEdit } from './video-channel-edit'
 
 @Component({
@@ -22,10 +22,10 @@ import { VideoChannelEdit } from './video-channel-edit'
 export class VideoChannelCreateComponent extends VideoChannelEdit implements OnInit, AfterViewInit {
   error: string
   videoChannel = new VideoChannel({})
-  isUploadAllowed = true
 
   private avatar: FormData
   private banner: FormData
+  private serverConfig: HTMLServerConfig
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -33,12 +33,14 @@ export class VideoChannelCreateComponent extends VideoChannelEdit implements OnI
     private notifier: Notifier,
     private router: Router,
     private videoChannelService: VideoChannelService,
-    private hooks: HooksService
+    private hooks: HooksService,
+    private serverService: ServerService
   ) {
     super()
   }
 
   ngOnInit () {
+    this.serverConfig = this.serverService.getHTMLConfig()
     this.buildForm({
       name: VIDEO_CHANNEL_NAME_VALIDATOR,
       'display-name': VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
@@ -114,6 +116,19 @@ export class VideoChannelCreateComponent extends VideoChannelEdit implements OnI
 
   getUsername () {
     return this.form.value.name
+  }
+
+  getDisabledSync () {
+    const enableSync = this.form.value['enableSync'] === true
+    return { 'disabled-checkbox-extra': !enableSync }
+  }
+
+  isUploadAllowed (): boolean {
+    return this.isHttpUploadAllowed()
+  }
+
+  isHttpUploadAllowed (): boolean {
+    return this.serverConfig.import.videos.http.enabled
   }
 
   private uploadAvatar () {

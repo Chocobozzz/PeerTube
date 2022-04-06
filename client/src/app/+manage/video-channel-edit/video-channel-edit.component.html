@@ -84,7 +84,7 @@
       <div class="form-group col-12 col-lg-4 col-xl-3">
         <div class="video-channel-title" i18n>SYNCHRONIZATION</div>
       </div>
-      <div class="form-group col-12 col-lg-8 col-xl-9" [ngClass]="getDisallowedSync()">
+      <div class="form-group col-12 col-lg-8 col-xl-9" [ngClass]="{ 'disallowed-sync': !isUploadAllowed() }">
         <my-peertube-checkbox inputName="enableSync" formControlName="enableSync">
           <ng-template ptTemplate="label">
             <ng-container i18n>Enable synchronization</ng-container>
@@ -110,8 +110,8 @@
             </div>
           </ng-container>
         </my-peertube-checkbox>
-        <div *ngIf="isUploadAllowed !== true">
-          <p class="small muted" i18n>⚠️ The account is not allowed to upload videos, synchronization is thus disallowed</p>
+        <div *ngIf="isUploadAllowed() !== true">
+          <p class="small muted" i18n>⚠️ The account is not allowed to upload videos or the instance doesn't allow import with HTTP URL, synchronization is thus disallowed</p>
         </div>
       </div>
 

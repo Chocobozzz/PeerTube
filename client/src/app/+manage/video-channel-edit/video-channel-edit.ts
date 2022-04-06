@@ -15,17 +15,4 @@ export abstract class VideoChannelEdit extends FormReactive {
   isBulkUpdateVideosDisplayed () {
     return false
   }
-
-  getDisabledSync () {
-    return { 'disabled-checkbox-extra': !this.isSyncEnabled() }
-  }
-
-  isSyncEnabled (): boolean {
-    return this.form.value['enableSync'] === true
-  }
-
-  // should be implemented by the child
-  getDisallowedSync () {
-    return { }
-  }
 }
