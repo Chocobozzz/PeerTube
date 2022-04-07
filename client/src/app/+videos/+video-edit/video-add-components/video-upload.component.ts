@@ -3,8 +3,8 @@ import { UploadState, UploadxOptions, UploadxService } from 'ngx-uploadx'
 import { isIOS } from '@root-helpers/web-browser'
 import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
-import { Router } from '@angular/router'
-import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService, UserService } from '@app/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { AuthService, CanComponentDeactivate, HooksService, MetaService, Notifier, ServerService, UserService } from '@app/core'
 import { genericUploadErrorHandler, scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { BytesPipe, Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
@@ -66,7 +66,9 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     private userService: UserService,
     private router: Router,
     private hooks: HooksService,
-    private resumableUploadService: UploadxService
+    private resumableUploadService: UploadxService,
+    private metaService: MetaService,
+    private route: ActivatedRoute
   ) {
     super()
   }
@@ -113,6 +115,18 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     }
   }
 
+  updateTitle () {
+    const videoName = this.form.get('name').value
+
+    if (this.isUploadingAudioFile || this.isUploadingVideo) {
+      this.metaService.setTitle(`${this.videoUploadPercents}% ${videoName}`)
+    } else if (this.videoUploaded) {
+      this.metaService.setTitle($localize`Upload ${videoName}`)
+    } else {
+      this.metaService.update(this.route.snapshot.data['meta'])
+    }
+  }
+
   onUploadVideoOngoing (state: UploadState) {
     switch (state.status) {
       case 'error': {
@@ -153,7 +167,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         break
 
       case 'uploading':
-        this.videoUploadPercents = state.progress
+        this.videoUploadPercents = state.progress || 0 // https://github.com/kukhariev/ngx-uploadx/pull/368
         break
 
       case 'paused':
@@ -167,6 +181,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         this.videoUploadedIds = state?.response.video
         break
     }
+
+    this.updateTitle()
   }
 
   onFileDropped (files: FileList) {
@@ -305,6 +321,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     })
 
     this.firstStepDone.emit(name)
+    this.updateTitle()
   }
 
   private checkGlobalUserQuota (videofile: File) {
