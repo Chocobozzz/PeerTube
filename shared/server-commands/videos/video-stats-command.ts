@@ -1,3 +1,4 @@
+import { pick } from '@shared/core-utils'
 import { HttpStatusCode, VideoStatsOverall, VideoStatsRetention, VideoStatsTimeserie, VideoStatsTimeserieMetric } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
@@ -20,6 +21,8 @@ export class VideoStatsCommand extends AbstractCommand {
   getTimeserieStats (options: OverrideCommandOptions & {
     videoId: number | string
     metric: VideoStatsTimeserieMetric
+    startDate?: Date
+    endDate?: Date
   }) {
     const path = '/api/v1/videos/' + options.videoId + '/stats/timeseries/' + options.metric
 
@@ -27,6 +30,7 @@ export class VideoStatsCommand extends AbstractCommand {
       ...options,
       path,
 
+      query: pick(options, [ 'startDate', 'endDate' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
