@@ -1,7 +1,7 @@
 import { QueryTypes } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, HasMany, IsUUID, Model, Table } from 'sequelize-typescript'
-import { STATS_TIMESERIE } from '@server/initializers/constants'
 import { getActivityStreamDuration } from '@server/lib/activitypub/activity'
+import { buildGroupByAndBoundaries } from '@server/lib/timeserie'
 import { MLocalVideoViewer, MLocalVideoViewerWithWatchSections, MVideo } from '@server/types/models'
 import { VideoStatsOverall, VideoStatsRetention, VideoStatsTimeserie, VideoStatsTimeserieMetric, WatchActionObject } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
@@ -216,33 +216,48 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
   static async getTimeserieStats (options: {
     video: MVideo
     metric: VideoStatsTimeserieMetric
+    startDate: string
+    endDate: string
   }): Promise<VideoStatsTimeserie> {
     const { video, metric } = options
+
+    const { groupInterval, sqlInterval, startDate, endDate } = buildGroupByAndBoundaries(options.startDate, options.endDate)
 
     const selectMetrics: { [ id in VideoStatsTimeserieMetric ]: string } = {
       viewers: 'COUNT("localVideoViewer"."id")',
       aggregateWatchTime: 'SUM("localVideoViewer"."watchTime")'
     }
 
-    const query = `WITH days AS ( ` +
-       `SELECT (current_date::timestamp - (serie || ' days')::interval)::timestamptz AS day
-        FROM generate_series(0, ${STATS_TIMESERIE.MAX_DAYS - 1}) serie` +
-      `) ` +
-      `SELECT days.day AS date, COALESCE(${selectMetrics[metric]}, 0) AS value ` +
-      `FROM days ` +
-      `LEFT JOIN "localVideoViewer" ON "localVideoViewer"."videoId" = :videoId ` +
-        `AND date_trunc('day', "localVideoViewer"."startDate") = date_trunc('day', days.day) ` +
-      `GROUP BY day ` +
-      `ORDER BY day `
+    const query = `WITH "intervals" AS (
+      SELECT
+        "time" AS "startDate", "time" + :sqlInterval::interval as "endDate"
+      FROM
+        generate_series(:startDate::timestamptz, :endDate::timestamptz, :sqlInterval::interval) serie("time")
+    )
+    SELECT "intervals"."startDate" as "date", COALESCE(${selectMetrics[metric]}, 0) AS value
+    FROM
+      intervals
+      LEFT JOIN "localVideoViewer" ON "localVideoViewer"."videoId" = :videoId
+        AND "localVideoViewer"."startDate" >= "intervals"."startDate" AND "localVideoViewer"."startDate" <= "intervals"."endDate"
+    GROUP BY
+      "intervals"."startDate"
+    ORDER BY
+      "intervals"."startDate"`
 
     const queryOptions = {
       type: QueryTypes.SELECT as QueryTypes.SELECT,
-      replacements: { videoId: video.id }
+      replacements: {
+        startDate,
+        endDate,
+        sqlInterval,
+        videoId: video.id
+      }
     }
 
     const rows = await LocalVideoViewerModel.sequelize.query<any>(query, queryOptions)
 
     return {
+      groupInterval,
       data: rows.map(r => ({
         date: r.date,
         value: parseInt(r.value)

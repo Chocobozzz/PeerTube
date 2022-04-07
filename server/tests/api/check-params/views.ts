@@ -112,6 +112,54 @@ describe('Test videos views', function () {
       await servers[0].videoStats.getTimeserieStats({ videoId, metric: 'hello' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
+    it('Should fail with an invalid start date', async function () {
+      await servers[0].videoStats.getTimeserieStats({
+        videoId,
+        metric: 'viewers',
+        startDate: 'fake' as any,
+        endDate: new Date(),
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with an invalid end date', async function () {
+      await servers[0].videoStats.getTimeserieStats({
+        videoId,
+        metric: 'viewers',
+        startDate: new Date(),
+        endDate: 'fake' as any,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail if start date is specified but not end date', async function () {
+      await servers[0].videoStats.getTimeserieStats({
+        videoId,
+        metric: 'viewers',
+        startDate: new Date(),
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail if end date is specified but not start date', async function () {
+      await servers[0].videoStats.getTimeserieStats({
+        videoId,
+        metric: 'viewers',
+        endDate: new Date(),
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with a too big interval', async function () {
+      await servers[0].videoStats.getTimeserieStats({
+        videoId,
+        metric: 'viewers',
+        startDate: new Date('2021-04-07T08:31:57.126Z'),
+        endDate: new Date(),
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
     it('Should succeed with the correct parameters', async function () {
       await servers[0].videoStats.getTimeserieStats({ videoId, metric: 'viewers' })
     })
