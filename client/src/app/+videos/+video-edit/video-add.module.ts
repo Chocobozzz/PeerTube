@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core'
-import { CanDeactivateGuard } from '@app/core'
+import { CanDeactivateGuard, MetaService } from '@app/core'
 import { UploadxModule } from 'ngx-uploadx'
 import { VideoEditModule } from './shared/video-edit.module'
 import { DragDropDirective } from './video-add-components/drag-drop.directive'
@@ -31,7 +31,8 @@ import { VideoAddComponent } from './video-add.component'
   exports: [ ],
 
   providers: [
-    CanDeactivateGuard
+    CanDeactivateGuard,
+    MetaService
   ]
 })
 export class VideoAddModule { }
