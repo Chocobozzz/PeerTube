@@ -497,17 +497,17 @@
         <target state="translated">video</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">286</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">56</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">303</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">56</context></context-group></trans-unit>
       <trans-unit id="6995024616159044376" datatype="html">
         <source>Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
         <target state="translated">Din videokvot kommer överskridas av den här videon (videostorlek: <x id="PH" equiv-text="videoSizeBytes"/>, använt: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, kvot: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">321</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">339</context></context-group></trans-unit>
       <trans-unit id="7873395933409147217" datatype="html">
         <source>Your daily video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</source>
         <target state="translated">Din dagliga videokvot kommer överskridas av den här videon (videostorlek: <x id="PH" equiv-text="videoSizeBytes"/>, använt: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, kvot:<x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">340</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">358</context></context-group></trans-unit>
       <trans-unit id="5235042777215655908" datatype="html">
         <source>subtitles</source>
         <target state="translated">undertexter</target>
@@ -1550,11 +1550,7 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">70</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
-      <trans-unit id="6307374733149824815" datatype="html">
-        <source>powered by PeerTube - CopyLeft 2015-2021</source>
-        <target state="translated">drivs av PeerTube – CopyLeft 2015–2021</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">151</context></context-group>
-      </trans-unit>
+      
       <trans-unit id="7911416166208830577" datatype="html">
         <source>Help</source>
         <target state="translated">Hjälp</target>
@@ -2247,6 +2243,12 @@ The link will expire within 1 hour.</source>
         <source>API</source>
         <target state="translated">API</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">145</context></context-group>
+      </trans-unit><trans-unit id="7366542359085748162" datatype="html">
+        <source>powered by PeerTube - CopyLeft 2015-2022</source><target state="new">powered by PeerTube - CopyLeft 2015-2022</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/menu/menu.component.html</context>
+          <context context-type="linenumber">151</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="3722967224215437913" datatype="html">
         <source>API documentation</source>
@@ -2587,7 +2589,7 @@ The link will expire within 1 hour.</source>
         <source>Upload on hold</source>
         <target state="translated">Uppladdning pausad</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">160</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">175</context></context-group></trans-unit>
       <trans-unit id="285180972645018518" datatype="html">
         <source>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</source>
         <target state="translated">Uppladdning är inte aktiverat från ditt konto. Om du vill lägga upp videor, måste en administratör låsa upp din videokvot.</target>
@@ -11209,34 +11211,40 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Your video was uploaded to your account and is private.</source>
         <target>Din video har laddats upp till ditt konto och är privat.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">104</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">106</context></context-group></trans-unit>
       <trans-unit id="5699822024600815733">
         <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
         <target>Men associerad data (taggar, beskrivning …) kommer försvinna, är du säker på att du vill lämna sidan?</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">105</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">107</context></context-group></trans-unit>
       <trans-unit id="1219739004043110649">
         <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
         <target>Din video har inte laddats upp än, vill du lämna sidan?</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">107</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">109</context></context-group></trans-unit><trans-unit id="1830802698757049943" datatype="html">
+        <source>Publish <x id="PH" equiv-text="videoName"/></source><target state="new">Publish <x id="PH" equiv-text="videoName"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
+          <context context-type="linenumber">122</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6932865105766151309" datatype="html">
         <source>Upload</source>
         <target state="translated">Ladda upp</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">220</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">237</context></context-group></trans-unit>
       <trans-unit id="8278735427925094503">
         <source>Upload <x id="PH"/> </source>
         <target>Ladda upp 
           <x id="PH"/>
         </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">222</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">239</context></context-group></trans-unit>
       <trans-unit id="5981816353437801748">
         <source>Video published.</source>
         <target>Videon har publicerats.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">243</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">260</context></context-group></trans-unit>
       <trans-unit id="764164089183618119">
         <source>You have unsaved changes! If you leave, your changes will be lost.</source>
         <target>Du har gjort ändringar som inte sparats! Om du lämnar nu kommer de förkastas.</target>
@@ -11530,13 +11538,13 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="8212906256415538361" datatype="html">
         <source>Upload a video</source>
         <target state="translated">Ladda upp en video</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/app-routing.module.ts</context><context context-type="linenumber">101</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/app-routing.module.ts</context><context context-type="linenumber">102</context></context-group></trans-unit>
       <trans-unit id="7590784934397800835" datatype="html">
         <source>Edit a video</source>
         <target state="translated">Redigera en video</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/app-routing.module.ts</context><context context-type="linenumber">110</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/app-routing.module.ts</context><context context-type="linenumber">112</context></context-group></trans-unit>
     </body>
   </file>
 </xliff>
