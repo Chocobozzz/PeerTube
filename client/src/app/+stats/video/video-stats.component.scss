@@ -21,6 +21,7 @@
   min-width: 200px;
   margin-right: 15px;
   background-color: pvar(--submenuBackgroundColor);
+  margin-bottom: 15px;
 
   .label,
   .more-info {
@@ -37,6 +38,12 @@
     font-size: 24px;
     font-weight: $font-semibold;
   }
+
+  @media screen and (max-width: $mobile-view) {
+    min-height: fit-content;
+    min-width: fit-content;
+    padding: 15px;
+  }
 }
 
 my-embed {
@@ -45,10 +52,29 @@ my-embed {
   width: 100%;
 }
 
+@include on-small-main-col {
+  my-embed {
+    display: none;
+  }
+}
+
 .tab-content {
   margin-top: 15px;
 }
 
 .nav-tabs {
   @include peertube-nav-tabs($border-width: 2px);
+}
+
+.chart-container {
+  margin-bottom: 10px;
+}
+
+.zoom-container {
+  display: flex;
+  justify-content: center;
+
+  .description {
+    font-style: italic;
+  }
 }

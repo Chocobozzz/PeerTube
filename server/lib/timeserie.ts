@@ -1,24 +1,17 @@
 import { logger } from '@server/helpers/logger'
-import { VideoStatsTimeserieGroupInterval } from '@shared/models'
 
 function buildGroupByAndBoundaries (startDateString: string, endDateString: string) {
   const startDate = new Date(startDateString)
   const endDate = new Date(endDateString)
 
-  const groupByMatrix: { [ id in VideoStatsTimeserieGroupInterval ]: string } = {
-    one_day: '1 day',
-    one_hour: '1 hour',
-    ten_minutes: '10 minutes',
-    one_minute: '1 minute'
-  }
   const groupInterval = buildGroupInterval(startDate, endDate)
 
   logger.debug('Found "%s" group interval.', groupInterval, { startDate, endDate })
 
   // Remove parts of the date we don't need
-  if (groupInterval === 'one_day') {
+  if (groupInterval.endsWith(' day') || groupInterval.endsWith(' days')) {
     startDate.setHours(0, 0, 0, 0)
-  } else if (groupInterval === 'one_hour') {
+  } else if (groupInterval.endsWith(' hour') || groupInterval.endsWith(' hours')) {
     startDate.setMinutes(0, 0, 0)
   } else {
     startDate.setSeconds(0, 0)
@@ -26,7 +19,6 @@ function buildGroupByAndBoundaries (startDateString: string, endDateString: stri
 
   return {
     groupInterval,
-    sqlInterval: groupByMatrix[groupInterval],
     startDate,
     endDate
   }
@@ -40,16 +32,18 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function buildGroupInterval (startDate: Date, endDate: Date): VideoStatsTimeserieGroupInterval {
+function buildGroupInterval (startDate: Date, endDate: Date): string {
   const aDay = 86400
   const anHour = 3600
   const aMinute = 60
 
   const diffSeconds = (endDate.getTime() - startDate.getTime()) / 1000
 
-  if (diffSeconds >= 6 * aDay) return 'one_day'
-  if (diffSeconds >= 6 * anHour) return 'one_hour'
-  if (diffSeconds >= 60 * aMinute) return 'ten_minutes'
+  if (diffSeconds >= 15 * aDay) return '1 day'
+  if (diffSeconds >= 8 * aDay) return '12 hours'
+  if (diffSeconds >= 4 * aDay) return '6 hours'
+  if (diffSeconds >= 15 * anHour) return '1 hour'
+  if (diffSeconds >= 180 * aMinute) return '10 minutes'
 
-  return 'one_minute'
+  return '1 minute'
 }

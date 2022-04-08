@@ -1,6 +1,6 @@
 import { catchError } from 'rxjs'
 import { environment } from 'src/environments/environment'
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { VideoService } from '@app/shared/shared-main'
@@ -22,8 +22,19 @@ export class VideoStatsService {
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  getTimeserieStats (videoId: string, metric: VideoStatsTimeserieMetric) {
-    return this.authHttp.get<VideoStatsTimeserie>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/stats/timeseries/' + metric)
+  getTimeserieStats (options: {
+    videoId: string
+    metric: VideoStatsTimeserieMetric
+    startDate?: Date
+    endDate?: Date
+  }) {
+    const { videoId, metric, startDate, endDate } = options
+
+    let params = new HttpParams()
+    if (startDate) params = params.append('startDate', startDate.toISOString())
+    if (endDate) params = params.append('endDate', endDate.toISOString())
+
+    return this.authHttp.get<VideoStatsTimeserie>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/stats/timeseries/' + metric, { params })
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 

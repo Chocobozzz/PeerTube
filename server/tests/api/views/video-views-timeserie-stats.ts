@@ -110,21 +110,21 @@ describe('Test views timeserie stats', function () {
 
     it('Should use a custom start/end date', async function () {
       const now = new Date()
-      const tenDaysAgo = new Date()
-      tenDaysAgo.setDate(tenDaysAgo.getDate() - 9)
+      const twentyDaysAgo = new Date()
+      twentyDaysAgo.setDate(twentyDaysAgo.getDate() - 19)
 
       const result = await servers[0].videoStats.getTimeserieStats({
         videoId: vodVideoId,
         metric: 'aggregateWatchTime',
-        startDate: tenDaysAgo,
+        startDate: twentyDaysAgo,
         endDate: now
       })
 
-      expect(result.groupInterval).to.equal('one_day')
-      expect(result.data).to.have.lengthOf(10)
+      expect(result.groupInterval).to.equal('1 day')
+      expect(result.data).to.have.lengthOf(20)
 
       const first = result.data[0]
-      expect(new Date(first.date).toLocaleDateString()).to.equal(tenDaysAgo.toLocaleDateString())
+      expect(new Date(first.date).toLocaleDateString()).to.equal(twentyDaysAgo.toLocaleDateString())
 
       expectInterval(result, 24 * 3600 * 1000)
       expectTodayLastValue(result, 9)
@@ -142,7 +142,7 @@ describe('Test views timeserie stats', function () {
         endDate: now
       })
 
-      expect(result.groupInterval).to.equal('one_hour')
+      expect(result.groupInterval).to.equal('1 hour')
       expect(result.data).to.have.length.above(24).and.below(50)
 
       expectInterval(result, 3600 * 1000)
@@ -152,7 +152,7 @@ describe('Test views timeserie stats', function () {
     it('Should automatically group by ten minutes', async function () {
       const now = new Date()
       const twoHoursAgo = new Date()
-      twoHoursAgo.setHours(twoHoursAgo.getHours() - 1)
+      twoHoursAgo.setHours(twoHoursAgo.getHours() - 4)
 
       const result = await servers[0].videoStats.getTimeserieStats({
         videoId: vodVideoId,
@@ -161,8 +161,8 @@ describe('Test views timeserie stats', function () {
         endDate: now
       })
 
-      expect(result.groupInterval).to.equal('ten_minutes')
-      expect(result.data).to.have.length.above(6).and.below(18)
+      expect(result.groupInterval).to.equal('10 minutes')
+      expect(result.data).to.have.length.above(20).and.below(30)
 
       expectInterval(result, 60 * 10 * 1000)
       expectTodayLastValue(result, 9)
@@ -180,7 +180,7 @@ describe('Test views timeserie stats', function () {
         endDate: now
       })
 
-      expect(result.groupInterval).to.equal('one_minute')
+      expect(result.groupInterval).to.equal('1 minute')
       expect(result.data).to.have.length.above(20).and.below(40)
 
       expectInterval(result, 60 * 1000)
