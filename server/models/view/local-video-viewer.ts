@@ -221,7 +221,7 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
   }): Promise<VideoStatsTimeserie> {
     const { video, metric } = options
 
-    const { groupInterval, sqlInterval, startDate, endDate } = buildGroupByAndBoundaries(options.startDate, options.endDate)
+    const { groupInterval, startDate, endDate } = buildGroupByAndBoundaries(options.startDate, options.endDate)
 
     const selectMetrics: { [ id in VideoStatsTimeserieMetric ]: string } = {
       viewers: 'COUNT("localVideoViewer"."id")',
@@ -230,9 +230,9 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
 
     const query = `WITH "intervals" AS (
       SELECT
-        "time" AS "startDate", "time" + :sqlInterval::interval as "endDate"
+        "time" AS "startDate", "time" + :groupInterval::interval as "endDate"
       FROM
-        generate_series(:startDate::timestamptz, :endDate::timestamptz, :sqlInterval::interval) serie("time")
+        generate_series(:startDate::timestamptz, :endDate::timestamptz, :groupInterval::interval) serie("time")
     )
     SELECT "intervals"."startDate" as "date", COALESCE(${selectMetrics[metric]}, 0) AS value
     FROM
@@ -249,7 +249,7 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
       replacements: {
         startDate,
         endDate,
-        sqlInterval,
+        groupInterval,
         videoId: video.id
       }
     }
