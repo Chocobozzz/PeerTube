@@ -522,23 +522,6 @@ describe('Test a client controllers', function () {
         expect(res.text).to.contain('<meta name="robots" content="noindex" />')
       }
     })
-
-    it('Should add noindex meta tag for remote accounts', async function () {
-      const handle = 'root_channel@' + servers[0].host
-      const paths = [ '/video-channels/', '/c/', '/@' ]
-
-      for (const path of paths) {
-        {
-          const { text } = await makeHTMLRequest(servers[1].url, path + handle)
-          expect(text).to.contain('<meta name="robots" content="noindex" />')
-        }
-
-        {
-          const { text } = await makeHTMLRequest(servers[0].url, path + handle)
-          expect(text).to.not.contain('<meta name="robots" content="noindex" />')
-        }
-      }
-    })
   })
 
   describe('Embed HTML', function () {
