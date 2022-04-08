@@ -3,7 +3,15 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import { Account, HTMLServerConfig, HttpStatusCode, ServerConfig, VideoPlaylistCreateResult, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
+import {
+  Account,
+  HTMLServerConfig,
+  HttpStatusCode,
+  ServerConfig,
+  VideoPlaylistCreateResult,
+  VideoPlaylistPrivacy,
+  VideoPrivacy
+} from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
