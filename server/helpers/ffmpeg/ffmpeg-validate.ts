@@ -12,6 +12,7 @@ async function validateVideoFile (options: {
 
   let stderr = ''
   const command = ffmpeg(options.path)
+    .addOption('-max_muxing_queue_size', '1024')
     .addOption('-loglevel', 'error')
     .addOption('-f', 'null')
     .output('/dev/null')
