@@ -119,7 +119,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     const videoName = this.form.get('name').value
 
     if (this.videoUploaded) {
-      this.metaService.setTitle($localize`Upload ${videoName}`)
+      this.metaService.setTitle($localize`Publish ${videoName}`)
     } else if (this.isUploadingAudioFile || this.isUploadingVideo) {
       this.metaService.setTitle(`${this.videoUploadPercents}% - ${videoName}`)
     } else {
