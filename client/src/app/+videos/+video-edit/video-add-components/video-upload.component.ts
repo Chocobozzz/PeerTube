@@ -118,10 +118,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   updateTitle () {
     const videoName = this.form.get('name').value
 
-    if (this.isUploadingAudioFile || this.isUploadingVideo) {
-      this.metaService.setTitle(`${this.videoUploadPercents}% ${videoName}`)
-    } else if (this.videoUploaded) {
+    if (this.videoUploaded) {
       this.metaService.setTitle($localize`Upload ${videoName}`)
+    } else if (this.isUploadingAudioFile || this.isUploadingVideo) {
+      this.metaService.setTitle(`${this.videoUploadPercents}% - ${videoName}`)
     } else {
       this.metaService.update(this.route.snapshot.data['meta'])
     }
@@ -167,7 +167,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         break
 
       case 'uploading':
-        this.videoUploadPercents = state.progress || 0 // https://github.com/kukhariev/ngx-uploadx/pull/368
+        // TODO: remove || 0 when // https://github.com/kukhariev/ngx-uploadx/pull/368 is released
+        this.videoUploadPercents = state.progress || 0
         break
 
       case 'paused':
