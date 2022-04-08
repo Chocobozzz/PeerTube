@@ -391,7 +391,7 @@ describe('Object storage for videos', function () {
     })
   })
 
-  describe.only('Test object storage with file bigger than upload part', function () {
+  describe('Test object storage with file bigger than upload part', function () {
     runTestSuite({
       playlistBucket: 'streaming-playlists',
       webtorrentBucket: 'videos',
