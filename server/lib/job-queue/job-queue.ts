@@ -39,6 +39,7 @@ import { processVideoFileImport } from './handlers/video-file-import'
 import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoStudioEdition } from './handlers/video-studio-edition'
+import { processVideoChannelsSync } from './handlers/video-channels-sync'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViewsStats } from './handlers/video-views-stats'
 
@@ -61,7 +62,8 @@ type CreateJobArgument =
   { type: 'delete-resumable-upload-meta-file', payload: DeleteResumableUploadMetaFilePayload } |
   { type: 'video-studio-edition', payload: VideoStudioEditionPayload } |
   { type: 'manage-video-torrent', payload: ManageVideoTorrentPayload } |
-  { type: 'move-to-object-storage', payload: MoveObjectStoragePayload }
+  { type: 'move-to-object-storage', payload: MoveObjectStoragePayload } |
+  { type: 'video-channel-sync', payload: {} }
 
 export type CreateJobOptions = {
   delay?: number
@@ -86,7 +88,8 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'video-redundancy': processVideoRedundancy,
   'move-to-object-storage': processMoveToObjectStorage,
   'manage-video-torrent': processManageVideoTorrent,
-  'video-studio-edition': processVideoStudioEdition
+  'video-studio-edition': processVideoStudioEdition,
+  'video-channels-sync': processVideoChannelsSync
 }
 
 const errorHandlers: { [id in JobType]?: (job: Job, err: any) => Promise<any> } = {
@@ -111,7 +114,8 @@ const jobTypes: JobType[] = [
   'video-live-ending',
   'move-to-object-storage',
   'manage-video-torrent',
-  'video-studio-edition'
+  'video-studio-edition',
+  'video-channels-sync'
 ]
 
 const silentFailure = new Set<JobType>([ 'activitypub-http-unicast' ])
@@ -305,6 +309,10 @@ class JobQueue {
   private addRepeatableJobs () {
     this.queues['videos-views-stats'].add({}, {
       repeat: REPEAT_JOBS['videos-views-stats']
+    }).catch(err => logger.error('Cannot add repeatable job.', { err }))
+
+    this.queues['video-channels-sync'].add({}, {
+      repeat: REPEAT_JOBS['video-channels-sync']
     }).catch(err => logger.error('Cannot add repeatable job.', { err }))
 
     if (CONFIG.FEDERATION.VIDEOS.CLEANUP_REMOTE_INTERACTIONS) {

@@ -5347,6 +5347,7 @@ components:
           - activitypub-refresher
           - video-redundancy
           - video-live-ending
+          - video-channels-sync
     followState:
       name: state
       in: query
@@ -6953,6 +6954,7 @@ components:
             - videos-views-stats
             - activitypub-refresher
             - video-redundancy
+            - video-channel-sync
         data:
           type: object
           additionalProperties: true
