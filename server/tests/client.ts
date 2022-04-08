@@ -3,7 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import { Account, HTMLServerConfig, HttpStatusCode, ServerConfig, VideoPlaylistCreateResult, VideoPlaylistPrivacy } from '@shared/models'
+import { Account, HTMLServerConfig, HttpStatusCode, ServerConfig, VideoPlaylistCreateResult, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -48,6 +48,10 @@ describe('Test a client controllers', function () {
   const watchPlaylistBasePaths = [ '/videos/watch/playlist/', '/w/p/' ]
 
   let videoIds: (string | number)[] = []
+  let privateVideoId: string
+  let internalVideoId: string
+  let unlistedVideoId: string
+
   let playlistIds: (string | number)[] = []
 
   before(async function () {
@@ -66,7 +70,7 @@ describe('Test a client controllers', function () {
       attributes: { description: channelDescription }
     })
 
-    // Video
+    // Public video
 
     {
       const attributes = { name: videoName, description: videoDescription }
@@ -78,6 +82,12 @@ describe('Test a client controllers', function () {
       const video = data[0]
       servers[0].store.video = video
       videoIds = [ video.id, video.uuid, video.shortUUID ]
+    }
+
+    {
+      ({ uuid: privateVideoId } = await servers[0].videos.quickUpload({ name: 'private', privacy: VideoPrivacy.PRIVATE }));
+      ({ uuid: unlistedVideoId } = await servers[0].videos.quickUpload({ name: 'unlisted', privacy: VideoPrivacy.UNLISTED }));
+      ({ uuid: internalVideoId } = await servers[0].videos.quickUpload({ name: 'internal', privacy: VideoPrivacy.INTERNAL }))
     }
 
     // Playlist
@@ -463,6 +473,53 @@ describe('Test a client controllers', function () {
           const { text } = await makeHTMLRequest(servers[0].url, path + handle)
           expect(text).to.not.contain('<meta name="robots" content="noindex" />')
         }
+      }
+    })
+
+    it('Should add noindex meta tag for remote channels', async function () {
+      const handle = 'root_channel@' + servers[0].host
+      const paths = [ '/video-channels/', '/c/', '/@' ]
+
+      for (const path of paths) {
+        {
+          const { text } = await makeHTMLRequest(servers[1].url, path + handle)
+          expect(text).to.contain('<meta name="robots" content="noindex" />')
+        }
+
+        {
+          const { text } = await makeHTMLRequest(servers[0].url, path + handle)
+          expect(text).to.not.contain('<meta name="robots" content="noindex" />')
+        }
+      }
+    })
+
+    it('Should not display internal/private video', async function () {
+      for (const basePath of watchVideoBasePaths) {
+        for (const id of [ privateVideoId, internalVideoId ]) {
+          const res = await makeGetRequest({
+            url: servers[0].url,
+            path: basePath + id,
+            accept: 'text/html',
+            expectedStatus: HttpStatusCode.NOT_FOUND_404
+          })
+
+          expect(res.text).to.not.contain('internal')
+          expect(res.text).to.not.contain('private')
+        }
+      }
+    })
+
+    it('Should add noindex meta tag for unlisted video', async function () {
+      for (const basePath of watchVideoBasePaths) {
+        const res = await makeGetRequest({
+          url: servers[0].url,
+          path: basePath + unlistedVideoId,
+          accept: 'text/html',
+          expectedStatus: HttpStatusCode.OK_200
+        })
+
+        expect(res.text).to.contain('unlisted')
+        expect(res.text).to.contain('<meta name="robots" content="noindex" />')
       }
     })
 
