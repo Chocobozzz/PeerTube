@@ -3,7 +3,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { merge } from 'lodash'
-import { checkTmpIsEmpty, expectLogDoesNotContain, expectStartWith, MockObjectStorage } from '@server/tests/shared'
+import { checkTmpIsEmpty, expectLogDoesNotContain, expectStartWith, generateHighBitrateVideo, MockObjectStorage } from '@server/tests/shared'
 import { areObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoDetails } from '@shared/models'
 import {
@@ -392,10 +392,16 @@ describe('Object storage for videos', function () {
   })
 
   describe('Test object storage with file bigger than upload part', function () {
+    let fixture
+
+    before(async function () {
+      fixture = await generateHighBitrateVideo()
+    })
+
     runTestSuite({
       playlistBucket: 'streaming-playlists',
       webtorrentBucket: 'videos',
-      fixture: 'video_12mb.mp4'
+      fixture
     })
   })
 })
