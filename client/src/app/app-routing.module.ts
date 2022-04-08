@@ -96,6 +96,7 @@ const routes: Routes = [
   {
     path: 'videos/upload',
     loadChildren: () => import('@app/+videos/+video-edit/video-add.module').then(m => m.VideoAddModule),
+    canActivateChild: [ MetaGuard ],
     data: {
       meta: {
         title: $localize`Upload a video`
@@ -105,6 +106,7 @@ const routes: Routes = [
   {
     path: 'videos/update/:uuid',
     loadChildren: () => import('@app/+videos/+video-edit/video-update.module').then(m => m.VideoUpdateModule),
+    canActivateChild: [ MetaGuard ],
     data: {
       meta: {
         title: $localize`Edit a video`
