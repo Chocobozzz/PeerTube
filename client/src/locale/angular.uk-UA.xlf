@@ -521,7 +521,7 @@
       </trans-unit>
       <trans-unit id="1781854282711822539" datatype="html">
         <source>Mute to also hide videos/comments</source>
-        <target state="new">Mute to also hide videos/comments</target>
+        <target state="translated">Заблокувати, щоб також сховати відео/коментарі</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">27</context>
@@ -9782,17 +9782,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1276238402004616037" datatype="html">
         <source>The channel is required when the playlist is public.</source>
-        <target state="new">The channel is required when the playlist is public.</target>
+        <target state="translated">Канал обов'язковий, якщо добірка загальнодоступна.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="5226261760726752768" datatype="html">
         <source>Live information</source>
-        <target state="new">Live information</target>
+        <target state="translated">Подробиці трансляції</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="5078078160576986217" datatype="html">
         <source>Permanent/Recurring live</source>
-        <target state="new">Permanent/Recurring live</target>
+        <target state="translated">Постійна/Повторювана трансляція</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">10</context>
@@ -9800,31 +9800,31 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7220386604464537651" datatype="html">
         <source>Live RTMP Url</source>
-        <target state="new">Live RTMP Url</target>
+        <target state="translated">URL-адреса трансляції RTMP</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">245</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="4956017863340142734" datatype="html">
         <source>Live RTMPS Url</source>
-        <target state="new">Live RTMPS Url</target>
+        <target state="translated">URL-адреса трансляції RTMPS</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">250</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="1225050607125362052" datatype="html">
         <source>Live stream key</source>
-        <target state="new">Live stream key</target>
+        <target state="translated">Ключ прямої трансляції</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">255</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="5058286083557987083" datatype="html">
         <source>⚠️ Never share your stream key with anyone.</source>
-        <target state="new">⚠️ Never share your stream key with anyone.</target>
+        <target state="translated">⚠️ Ніколи й ні з ким не діліться ключем трансляції.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">258</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="5941639683192662500" datatype="html">
         <source>This is a normal live</source>
-        <target state="new">This is a normal live</target>
+        <target state="translated">Це звичайна трансляція</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">264</context></context-group>
       </trans-unit>
       <trans-unit id="7263323611663811322" datatype="html">
@@ -9834,7 +9834,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2261925229535541622" datatype="html">
         <source>This is a permanent/recurring live</source>
-        <target state="new">This is a permanent/recurring live</target>
+        <target state="translated">Це звичайна/повторювана трансляція</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">273</context></context-group>
       </trans-unit>
       <trans-unit id="6791299537270100091" datatype="html">
@@ -9857,17 +9857,17 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2807676084745266104" datatype="html">
         <source>Video name must be at least 3 characters long.</source>
-        <target state="new">Video name must be at least 3 characters long.</target>
+        <target state="translated">Назва відео повинна складатися принаймні з 3 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="2155414141025589556" datatype="html">
         <source>Video name cannot be more than 120 characters long.</source>
-        <target state="new">Video name cannot be more than 120 characters long.</target>
+        <target state="translated">Назва відео не може бути довшою за 120 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="1074634769552897790" datatype="html">
         <source>Video name has leading or trailing whitespace.</source>
-        <target state="new">Video name has leading or trailing whitespace.</target>
+        <target state="translated">Назва відео має пробіл на початку або вкінці.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">18</context>
@@ -9875,42 +9875,42 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="9115337161597088460" datatype="html">
         <source>Video privacy is required.</source>
-        <target state="new">Video privacy is required.</target>
+        <target state="translated">Приватність відео обов'язкова.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="7309902991450450996" datatype="html">
         <source>Video channel is required.</source>
-        <target state="new">Video channel is required.</target>
+        <target state="translated">Відеоканал обов'язковий.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="3959376623771116873" datatype="html">
         <source>Video description must be at least 3 characters long.</source>
-        <target state="new">Video description must be at least 3 characters long.</target>
+        <target state="translated">Опис відео повинен складатися принаймні з 3 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="725195891739570830" datatype="html">
         <source>Video description cannot be more than 10000 characters long.</source>
-        <target state="new">Video description cannot be more than 10000 characters long.</target>
+        <target state="translated">Опис відео не може бути довшим за 10000 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="142488285332434408" datatype="html">
         <source>A tag should be more than 2 characters long.</source>
-        <target state="new">A tag should be more than 2 characters long.</target>
+        <target state="translated">Мітка повинна складатися принаймні з 2 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="691846635236293620" datatype="html">
         <source>A tag should be less than 30 characters long.</source>
-        <target state="new">A tag should be less than 30 characters long.</target>
+        <target state="translated">Мітка повинна бути коротшою за 30 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="4146790476782316573" datatype="html">
         <source>A maximum of 5 tags can be used on a video.</source>
-        <target state="new">A maximum of 5 tags can be used on a video.</target>
+        <target state="translated">До відео може бути застосовано до 5 міток.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="2389667090302909529" datatype="html">
         <source>A tag should be more than 1 and less than 30 characters long.</source>
-        <target state="new">A tag should be more than 1 and less than 30 characters long.</target>
+        <target state="translated">Мітка повинна бути довшою за 1 і коротшою за 30 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="4806300480558315727" datatype="html">
@@ -9925,7 +9925,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4246579596585402255" datatype="html">
         <source>A date is required to schedule video update.</source>
-        <target state="new">A date is required to schedule video update.</target>
+        <target state="translated">Дата обов'язкова для планування оновлення відео.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="8728283516316752593" datatype="html">
@@ -10584,7 +10584,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3508163549683020253" datatype="html">
         <source>Allow the user to login and create videos/comments again</source>
-        <target state="new">Allow the user to login and create videos/comments again</target>
+        <target state="translated">Дозволити користувачеві знову входити та створювати відео/коментарі</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">357</context></context-group>
       </trans-unit>
       <trans-unit id="1888272455383898478" datatype="html">
