@@ -853,7 +853,7 @@
       </trans-unit>
       <trans-unit id="7196664247366401915" datatype="html">
         <source>The IP address is a vague information: usually, it regularly changes and can represent many persons or entities</source>
-        <target/>
+        <target>Alamat IP adalah sebuah informasi yang samar: biasanya, ia berganti secara reguler dan bisa mewakili banyak orang ataupun entitas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">114,115</context>
@@ -893,7 +893,7 @@
       </trans-unit>
       <trans-unit id="2676074687792256808" datatype="html">
         <source>What can I do to limit the exposure of my IP address?</source>
-        <target/>
+        <target>Apa yang bisa saya lakukan untuk membatasi pemaparan alamat IP saya?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">138</context>
@@ -957,7 +957,7 @@
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
         <source>About this instance</source>
-        <target/>
+        <target>Tentang instance ini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">26</context>
@@ -965,7 +965,7 @@
       </trans-unit>
       <trans-unit id="8773846522957677259" datatype="html">
         <source>About PeerTube</source>
-        <target/>
+        <target>Tentang PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">38</context>
@@ -973,7 +973,7 @@
       </trans-unit>
       <trans-unit id="1812900507515561988" datatype="html">
         <source>About this instance's network</source>
-        <target/>
+        <target>Tentang jaringan instance ini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-routing.module.ts</context>
           <context context-type="linenumber">47</context>
@@ -981,7 +981,7 @@
       </trans-unit>
       <trans-unit id="2381859602529023966" datatype="html">
         <source>Instance</source>
-        <target/>
+        <target>Instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1001,7 +1001,7 @@
       </trans-unit>
       <trans-unit id="5066829276646988805" datatype="html">
         <source>PeerTube</source>
-        <target/>
+        <target>PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.html</context>
           <context context-type="linenumber">7</context>
@@ -1009,7 +1009,7 @@
       </trans-unit>
       <trans-unit id="1415060111017347427" datatype="html">
         <source>Network</source>
-        <target/>
+        <target>Jaringan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.html</context>
           <context context-type="linenumber">9</context>
@@ -1017,7 +1017,7 @@
       </trans-unit>
       <trans-unit id="1726363342938046830" datatype="html">
         <source>About</source>
-        <target/>
+        <target>Tentang</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-about/account-about.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1029,7 +1029,7 @@
       </trans-unit>
       <trans-unit id="4af6287e70a4a87329affe109839f14ae598f0ca" datatype="html">
         <source>DESCRIPTION</source>
-        <target/>
+        <target>DESKRIPSI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-about/account-about.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1041,7 +1041,7 @@
       </trans-unit>
       <trans-unit id="bfc87613409a6cfae59b79ead5d910d8d3c216f5" datatype="html">
         <source>STATS</source>
-        <target/>
+        <target>STATISTIK</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-about/account-about.component.html</context>
           <context context-type="linenumber">10</context>
@@ -1053,7 +1053,7 @@
       </trans-unit>
       <trans-unit id="8bc634cd9d8c9b684dbfaaf17a522f894bedbffc" datatype="html">
         <source>Joined <x id="INTERPOLATION" equiv-text="{{ account.createdAt | date }}"/></source>
-        <target/>
+        <target>Mulai bergabung <x id="INTERPOLATION" equiv-text="{{ account.createdAt | date }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-about/account-about.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1061,7 +1061,7 @@
       </trans-unit>
       <trans-unit id="3830487495946043372" datatype="html">
         <source>No description</source>
-        <target/>
+        <target>Tidak ada deskripsi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-about/account-about.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -1097,7 +1097,7 @@
       </trans-unit>
       <trans-unit id="6479885129995567639" datatype="html">
         <source>Video channels</source>
-        <target/>
+        <target>Kanal video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1105,7 +1105,7 @@
       </trans-unit>
       <trans-unit id="3666829335406793239" datatype="html">
         <source>This account does not have channels.</source>
-        <target/>
+        <target>Akun ini tidak memiliki kanal apapun.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1113,7 +1113,7 @@
       </trans-unit>
       <trans-unit id="7828153032795614080" datatype="html">
         <source>See this video channel</source>
-        <target/>
+        <target>Lihat kanal video ini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">9</context>
@@ -1137,7 +1137,7 @@
       </trans-unit>
       <trans-unit id="1545109431751219382" datatype="html">
         <source>This channel doesn't have any videos.</source>
-        <target/>
+        <target>Kanal ini tidak memiliki video apapun.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">20</context>
@@ -1145,7 +1145,7 @@
       </trans-unit>
       <trans-unit id="5c2b42818f05eafa2690d5eac6bcde295c713097" datatype="html">
         <source>SHOW THIS CHANNEL</source>
-        <target/>
+        <target>TUNJUKKAN KANAL INI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">29,30</context>
@@ -1161,7 +1161,7 @@
       </trans-unit>
       <trans-unit id="7678273613459026643" datatype="html">
         <source>About account</source>
-        <target/>
+        <target>Tentang akun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">39</context>
@@ -1169,7 +1169,7 @@
       </trans-unit>
       <trans-unit id="819067926858619041" datatype="html">
         <source>Account videos</source>
-        <target/>
+        <target>Video akun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">48</context>
@@ -1177,7 +1177,7 @@
       </trans-unit>
       <trans-unit id="2131232107132374967" datatype="html">
         <source>Search videos within account</source>
-        <target/>
+        <target>Cari video dalam akun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">61</context>
@@ -1185,7 +1185,7 @@
       </trans-unit>
       <trans-unit id="2999492056553212422" datatype="html">
         <source>Banned</source>
-        <target/>
+        <target>Dilarang</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1237,7 +1237,7 @@
       </trans-unit>
       <trans-unit id="230b7aa1bc012b2e5bafc1f24b6aa734a978183c" datatype="html">
         <source>Search videos</source>
-        <target/>
+        <target>Cari video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">48</context>
@@ -1245,7 +1245,7 @@
       </trans-unit>
       <trans-unit id="424703522835656806" datatype="html">
         <source>VIDEO CHANNELS</source>
-        <target/>
+        <target>KANAL VIDEO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -1265,7 +1265,7 @@
       </trans-unit>
       <trans-unit id="1341921152640000230" datatype="html">
         <source>ABOUT</source>
-        <target/>
+        <target>TENTANG</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -1277,7 +1277,7 @@
       </trans-unit>
       <trans-unit id="25349740244798533" datatype="html">
         <source>Username copied</source>
-        <target/>
+        <target>Nama pengguna disalin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -1289,7 +1289,7 @@
       </trans-unit>
       <trans-unit id="9221735175659318025" datatype="html">
         <source>1 subscriber</source>
-        <target/>
+        <target>1 pelanggan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -1297,7 +1297,7 @@
       </trans-unit>
       <trans-unit id="4097331874769079975" datatype="html">
         <source><x id="PH" equiv-text="count"/> subscribers</source>
-        <target/>
+        <target><x id="PH" equiv-text="count"/> pelanggan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -1881,7 +1881,7 @@
       </trans-unit>
       <trans-unit id="1504521795586863905" datatype="html">
         <source>VIDEOS</source>
-        <target/>
+        <target>VIDEO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">210</context>
