@@ -1,4 +1,4 @@
-import { Op, QueryOptions, WhereOptions } from 'sequelize'
+import { Op, WhereOptions } from 'sequelize'
 import {
   AfterUpdate,
   AllowNull,
