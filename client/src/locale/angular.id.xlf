@@ -285,7 +285,7 @@
       </trans-unit>
       <trans-unit id="33a9a4343ee46c354d8b716167990efeea654382" datatype="html">
         <source>Followers instances (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</source>
-        <target>Instance pelanggan (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</target>
+        <target>Contoh pelanggan (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">4</context>
@@ -293,7 +293,7 @@
       </trans-unit>
       <trans-unit id="3857357852909495917" datatype="html">
         <source>This instance does not have instances followers.</source>
-        <target>Instance ini tidak memiliki pengikut instance.</target>
+        <target>Contoh ini tidak memiliki pengikut contoh.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">6</context>
@@ -313,7 +313,7 @@
       </trans-unit>
       <trans-unit id="2081837971167498893" datatype="html">
         <source>Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</source>
-        <target>Instance yang diikuti (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
+        <target>Contoh yang diikuti (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">16</context>
@@ -321,7 +321,7 @@
       </trans-unit>
       <trans-unit id="7128556172318221342" datatype="html">
         <source>This instance is not following any other.</source>
-        <target>Instance ini tidak mengikuti siapapun.</target>
+        <target>Contoh ini tidak mengikuti siapapun.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">18</context>
@@ -345,7 +345,7 @@
       </trans-unit>
       <trans-unit id="19872047295276660" datatype="html">
         <source>This instance is dedicated to sensitive/NSFW content.</source>
-        <target>Instance ini terdedikasi untuk konten sensitif/NSFW.</target>
+        <target>Contoh ini terdedikasi untuk konten sensitif/NSFW.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">19</context>
@@ -369,7 +369,7 @@
       </trans-unit>
       <trans-unit id="4722135551130122302" datatype="html">
         <source>Why we created this instance</source>
-        <target>Mengapa kami membuat instance ini</target>
+        <target>Mengapa kami membuat contoh ini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">58</context>
@@ -377,7 +377,7 @@
       </trans-unit>
       <trans-unit id="6434467346812189214" datatype="html">
         <source>How long we plan to maintain this instance</source>
-        <target>Berapa lama kami berencana untuk memelihara instance ini</target>
+        <target>Berapa lama kami berencana untuk memelihara contoh ini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">72</context>
@@ -385,7 +385,7 @@
       </trans-unit>
       <trans-unit id="2646614e3af5f103885f64e4f097e45569091fd6" datatype="html">
         <source>How we will pay for this instance</source>
-        <target>Bagaimana kami akan membayar untuk instance ini</target>
+        <target>Bagaimana kami akan membayar untuk contoh ini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">86</context>
@@ -981,7 +981,7 @@
       </trans-unit>
       <trans-unit id="2381859602529023966" datatype="html">
         <source>Instance</source>
-        <target>Instance</target>
+        <target>Contoh</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.html</context>
           <context context-type="linenumber">5</context>
@@ -13824,7 +13824,7 @@
       </trans-unit>
       <trans-unit id="4603134051700562542" datatype="html">
         <source>Loading instance statistics...</source>
-        <target/>
+        <target>Memuat statistik instance...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">1</context>
@@ -13912,7 +13912,7 @@
       </trans-unit>
       <trans-unit id="31472093355465024" datatype="html">
         <source>Upload a new avatar</source>
-        <target/>
+        <target>Unggah avatar baru</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.html</context>
           <context context-type="linenumber">10</context>
@@ -13924,7 +13924,7 @@
       </trans-unit>
       <trans-unit id="3321250177023376249" datatype="html">
         <source>Change your avatar</source>
-        <target/>
+        <target>Ganti avatar Anda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.html</context>
           <context context-type="linenumber">16</context>
@@ -13940,7 +13940,7 @@
       </trans-unit>
       <trans-unit id="8411430224810427392" datatype="html">
         <source>Remove avatar</source>
-        <target/>
+        <target>Hapus avatar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.html</context>
           <context context-type="linenumber">41</context>
@@ -13956,7 +13956,7 @@
       </trans-unit>
       <trans-unit id="8054921481196967348" datatype="html">
         <source>This image is too large.</source>
-        <target/>
+        <target>Ukuran gambar ini terlalu besar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/actor-avatar-info.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -13964,7 +13964,7 @@
       </trans-unit>
       <trans-unit id="f50983ee112befc1afddea5c570283db67e20fed" datatype="html">
         <source>Channel avatar</source>
-        <target/>
+        <target>Avatar kanal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context>
           <context context-type="linenumber">4</context>
@@ -13976,7 +13976,7 @@
       </trans-unit>
       <trans-unit id="879fef27271d8247d791381cf1f9bb0eb8974166" datatype="html">
         <source>Account avatar</source>
-        <target/>
+        <target>Avatar akun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.html</context>
           <context context-type="linenumber">7</context>
