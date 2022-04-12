@@ -285,7 +285,7 @@
       </trans-unit>
       <trans-unit id="33a9a4343ee46c354d8b716167990efeea654382" datatype="html">
         <source>Followers instances (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</source>
-        <target/>
+        <target>Instance pelanggan (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">4</context>
@@ -313,7 +313,7 @@
       </trans-unit>
       <trans-unit id="2081837971167498893" datatype="html">
         <source>Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</source>
-        <target/>
+        <target>Instance yang diikuti (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">16</context>
@@ -321,7 +321,7 @@
       </trans-unit>
       <trans-unit id="7128556172318221342" datatype="html">
         <source>This instance is not following any other.</source>
-        <target/>
+        <target>Instance ini tidak mengikuti siapapun.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">18</context>
@@ -329,7 +329,7 @@
       </trans-unit>
       <trans-unit id="3174354408404578867" datatype="html">
         <source>About <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target/>
+        <target>Tentang <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">5</context>
@@ -337,7 +337,7 @@
       </trans-unit>
       <trans-unit id="8253752633925167769" datatype="html">
         <source>Contact administrator</source>
-        <target/>
+        <target>Hubungi administrator</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">7</context>
@@ -345,7 +345,7 @@
       </trans-unit>
       <trans-unit id="19872047295276660" datatype="html">
         <source>This instance is dedicated to sensitive/NSFW content.</source>
-        <target/>
+        <target>Instance ini terdedikasi untuk konten sensitif/NSFW.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">19</context>
@@ -353,7 +353,7 @@
       </trans-unit>
       <trans-unit id="1970848297295860531" datatype="html">
         <source>ADMINISTRATORS &amp; SUSTAINABILITY</source>
-        <target/>
+        <target>ADMINISTRATOR &amp; KEBERLANJUTAN</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -377,7 +377,7 @@
       </trans-unit>
       <trans-unit id="6434467346812189214" datatype="html">
         <source>How long we plan to maintain this instance</source>
-        <target/>
+        <target>Berapa lama kami berencana untuk memelihara instance ini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">72</context>
@@ -393,7 +393,7 @@
       </trans-unit>
       <trans-unit id="7707185552909365717" datatype="html">
         <source>INFORMATION</source>
-        <target/>
+        <target>INFORMASI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">101,102</context>
@@ -401,7 +401,7 @@
       </trans-unit>
       <trans-unit id="4902817035128594900" datatype="html">
         <source>Description</source>
-        <target/>
+        <target>Deskripsi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">113</context>
@@ -437,7 +437,7 @@
       </trans-unit>
       <trans-unit id="8685905644837116382" datatype="html">
         <source>MODERATION</source>
-        <target/>
+        <target>MODERASI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">128,129</context>
@@ -445,7 +445,7 @@
       </trans-unit>
       <trans-unit id="3076079242537393946" datatype="html">
         <source>Moderation information</source>
-        <target/>
+        <target>Informasi moderasi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">140</context>
@@ -461,7 +461,7 @@
       </trans-unit>
       <trans-unit id="4127416011499804250" datatype="html">
         <source>Code of conduct</source>
-        <target/>
+        <target>Kode etik</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">154</context>
@@ -477,7 +477,7 @@
       </trans-unit>
       <trans-unit id="2544569632476723854" datatype="html">
         <source>Terms</source>
-        <target/>
+        <target>Ketentuan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">168</context>
@@ -537,7 +537,7 @@
       </trans-unit>
       <trans-unit id="6613567056718289931" datatype="html">
         <source>Contact <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrator</source>
-        <target/>
+        <target>Hubungi administrator <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -693,7 +693,7 @@
       </trans-unit>
       <trans-unit id="1045244999981860085" datatype="html">
         <source>Developed with ❤ by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target/>
+        <target>Dikembangkan dengan ❤ oleh <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube-contributors.component.html</context>
           <context context-type="linenumber">3</context>
@@ -701,7 +701,7 @@
       </trans-unit>
       <trans-unit id="8351124097389031348" datatype="html">
         <source>What is PeerTube?</source>
-        <target/>
+        <target>Apa itu PeerTube?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">3,4</context>
@@ -709,7 +709,7 @@
       </trans-unit>
       <trans-unit id="1161141363959659794" datatype="html">
         <source>PeerTube is a self-hosted ActivityPub-federated video streaming platform using P2P directly in your web browser.</source>
-        <target/>
+        <target>PeerTube adalah sebuah platform streaming video federasi ActivityPub yang di-hosting sendiri yang menggunakan P2P secara langsung pada penjelajah web Anda.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -717,7 +717,7 @@
       </trans-unit>
       <trans-unit id="135286612733607700" datatype="html">
         <source>It is free and open-source software, under <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE&quot;&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target/>
+        <target>Ia adalah perangkat lunak gratis dan open-source, dibawah <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE&quot;&gt;"/>lisensi AGPLv3<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -789,7 +789,7 @@
       </trans-unit>
       <trans-unit id="442017645619017020" datatype="html">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server, but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What follows applies only if you want to keep using the P2P mode of PeerTube.</source>
-        <target/>
+        <target>PeerTube menggunakan protokol BitTorrent untuk membagi bandwidth di antara pengguna secara default guna mengurangi beban pada server, namun pada akhirnya meninggalkan Anda dengan pilihan untuk kembali ke streaming reguler secara eksklusif dari server video tersebut. Apa yang kemudian terjadi hanya berlaku jika Anda ingin terus menggunakan mode P2P Peertube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">75,78</context>
@@ -797,7 +797,7 @@
       </trans-unit>
       <trans-unit id="6314880288843792309" datatype="html">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
-        <target/>
+        <target>Ancaman utama kepada privasi Anda yang disebabkan oleh BitTorrent berada pada alamat IP-mu yang disimpan pada pelacak BitTorrent instance-mu selama Anda mengunduh atau menonton video tersebut.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">81,83</context>
@@ -813,7 +813,7 @@
       </trans-unit>
       <trans-unit id="1411398404280870617" datatype="html">
         <source>In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video. In practice, this is much more difficult because:</source>
-        <target/>
+        <target>Secara teoritis, seseorang dengan kemampuan teknis yang cukup dapat membuat sebuah script yang melacak alamat IP apakah yang mengunduh video apa. Namun, secara praktis, hal ini lebih sulit karena:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">88,90</context>
@@ -821,7 +821,7 @@
       </trans-unit>
       <trans-unit id="6870500454322981404" datatype="html">
         <source>An HTTP request has to be sent on each tracker for each video to spy. If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)</source>
-        <target/>
+        <target>Sebuah permintaan HTTP harus dikirim untuk setiap pelacak yang ada dalam setiap video agar bisa dimata-matai. Jika kami ingin memata-matai semua video yang ada di PeerTube, kami harus mengirim permintaan sebanyak video yang ada (jadi bisa saja sangat banyak)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">94,96</context>
@@ -909,7 +909,7 @@
       </trans-unit>
       <trans-unit id="401806741040118292" datatype="html">
         <source>What will be done to mitigate this problem?</source>
-        <target/>
+        <target>Apa yang akan dilakukan untuk mengatasi masalah ini?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">147</context>
@@ -13784,7 +13784,7 @@
       </trans-unit>
       <trans-unit id="6291055174438137560" datatype="html">
         <source>~ 1 minute</source>
-        <target/>
+        <target>~ 1 menit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -13840,7 +13840,7 @@
       </trans-unit>
       <trans-unit id="1670306451865226564" datatype="html">
         <source>users</source>
-        <target/>
+        <target>pengguna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">11</context>
@@ -13848,7 +13848,7 @@
       </trans-unit>
       <trans-unit id="5178138591256693636" datatype="html">
         <source>videos</source>
-        <target/>
+        <target>video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">21</context>
@@ -13860,7 +13860,7 @@
       </trans-unit>
       <trans-unit id="853055819436340388" datatype="html">
         <source>video views</source>
-        <target/>
+        <target>tontonan pada video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">31</context>
@@ -13868,7 +13868,7 @@
       </trans-unit>
       <trans-unit id="3055185920299594800" datatype="html">
         <source>video comments</source>
-        <target/>
+        <target>komentar dalam video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">41</context>
@@ -13896,7 +13896,7 @@
       </trans-unit>
       <trans-unit id="3541687134897970106" datatype="html">
         <source>followers</source>
-        <target/>
+        <target>pengikut</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">85</context>
@@ -13904,7 +13904,7 @@
       </trans-unit>
       <trans-unit id="6751995972535426095" datatype="html">
         <source>following</source>
-        <target/>
+        <target>mengikuti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">95</context>
@@ -13992,7 +13992,7 @@
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
         <source><x id="PH" equiv-text="this.video.account.name"/> (channel page)</source>
-        <target/>
+        <target><x id="PH" equiv-text="this.video.account.name"/> (halaman kanal)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.ts</context>
           <context context-type="linenumber">20</context>
@@ -14004,7 +14004,7 @@
       </trans-unit>
       <trans-unit id="1209500590333005801" datatype="html">
         <source><x id="PH" equiv-text="this.video.byAccount"/> (account page)</source>
-        <target/>
+        <target><x id="PH" equiv-text="this.video.byAccount"/> (halaman akun)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/video-avatar-channel.component.ts</context>
           <context context-type="linenumber">21</context>
@@ -14012,7 +14012,7 @@
       </trans-unit>
       <trans-unit id="1191071088182425837" datatype="html">
         <source><x id="PH" equiv-text="hours"/>h</source>
-        <target/>
+        <target><x id="PH" equiv-text="hours"/>j</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context>
           <context context-type="linenumber">14</context>
@@ -14020,7 +14020,7 @@
       </trans-unit>
       <trans-unit id="8981309282078866700" datatype="html">
         <source><x id="PH" equiv-text="minutes"/>min</source>
-        <target/>
+        <target><x id="PH" equiv-text="minutes"/>men</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context>
           <context context-type="linenumber">16</context>
@@ -14032,7 +14032,7 @@
       </trans-unit>
       <trans-unit id="350798057497677761" datatype="html">
         <source><x id="PH" equiv-text="seconds"/>sec</source>
-        <target/>
+        <target><x id="PH" equiv-text="seconds"/>det</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context>
           <context context-type="linenumber">17</context>
@@ -14040,7 +14040,7 @@
       </trans-unit>
       <trans-unit id="2222108104954671970" datatype="html">
         <source><x id="PH" equiv-text="seconds"/> sec</source>
-        <target/>
+        <target><x id="PH" equiv-text="seconds"/> det</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context>
           <context context-type="linenumber">30</context>
@@ -14048,7 +14048,7 @@
       </trans-unit>
       <trans-unit id="5891040073345002614" datatype="html">
         <source><x id="PH" equiv-text="interval"/> years ago</source>
-        <target/>
+        <target><x id="PH" equiv-text="interval"/> tahun yang lalu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">12</context>
@@ -14056,7 +14056,7 @@
       </trans-unit>
       <trans-unit id="6852474139781331706" datatype="html">
         <source><x id="PH" equiv-text="interval"/> year ago</source>
-        <target/>
+        <target><x id="PH" equiv-text="interval"/> tahun yang lalu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">13</context>
@@ -14064,7 +14064,7 @@
       </trans-unit>
       <trans-unit id="9022576335789205254" datatype="html">
         <source><x id="PH" equiv-text="interval"/> months ago</source>
-        <target/>
+        <target><x id="PH" equiv-text="interval"/> bulan yang lalu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">16</context>
@@ -14072,7 +14072,7 @@
       </trans-unit>
       <trans-unit id="9139359498077914820" datatype="html">
         <source><x id="PH" equiv-text="interval"/> month ago</source>
-        <target/>
+        <target><x id="PH" equiv-text="interval"/> bulan yang lalu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">17</context>
@@ -14080,7 +14080,7 @@
       </trans-unit>
       <trans-unit id="6473426250245763193" datatype="html">
         <source><x id="PH" equiv-text="interval"/> weeks ago</source>
-        <target/>
+        <target><x id="PH" equiv-text="interval"/> minggu yang lalu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">20</context>
@@ -14088,7 +14088,7 @@
       </trans-unit>
       <trans-unit id="3334373857036457679" datatype="html">
         <source><x id="PH" equiv-text="interval"/> week ago</source>
-        <target/>
+        <target><x id="PH" equiv-text="interval"/> minggu yang lalu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">21</context>
@@ -14096,7 +14096,7 @@
       </trans-unit>
       <trans-unit id="5186107770140555014" datatype="html">
         <source><x id="PH" equiv-text="interval"/> days ago</source>
-        <target/>
+        <target><x id="PH" equiv-text="interval"/> hari yang lalu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">24</context>
@@ -14104,7 +14104,7 @@
       </trans-unit>
       <trans-unit id="5968335347732866388" datatype="html">
         <source><x id="PH" equiv-text="interval"/> day ago</source>
-        <target/>
+        <target><x id="PH" equiv-text="interval"/> hari yang lalu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">25</context>
@@ -14112,7 +14112,7 @@
       </trans-unit>
       <trans-unit id="6522428509564266583" datatype="html">
         <source><x id="PH" equiv-text="interval"/> hours ago</source>
-        <target/>
+        <target><x id="PH" equiv-text="interval"/> jam yang lalu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">28</context>
@@ -14120,7 +14120,7 @@
       </trans-unit>
       <trans-unit id="1791228261125511283" datatype="html">
         <source><x id="PH" equiv-text="interval"/> hour ago</source>
-        <target/>
+        <target><x id="PH" equiv-text="interval"/> jam yang lalu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">29</context>
@@ -14216,7 +14216,7 @@
       </trans-unit>
       <trans-unit id="414887388288176527" datatype="html">
         <source>Images</source>
-        <target/>
+        <target>Gambar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -14236,7 +14236,7 @@
       </trans-unit>
       <trans-unit id="9075761896562520962" datatype="html">
         <source>You don't have notifications.</source>
-        <target/>
+        <target>Anda tidak memiliki notifikasi apapun.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">1</context>
@@ -14340,7 +14340,7 @@
       </trans-unit>
       <trans-unit id="2020563642195933477" datatype="html">
         <source>The notification concerns a comment now unavailable</source>
-        <target/>
+        <target>Notifikasi ini mengarahkan kepada sebuah komentar yang sekarang tidak tersedia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">109,110</context>
@@ -14404,7 +14404,7 @@
       </trans-unit>
       <trans-unit id="325842756252267394" datatype="html">
         <source>Your instance automatically followed <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.instanceFollowUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target/>
+        <target>Instance Anda mengikuti <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.instanceFollowUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> secara otomatis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">182</context>
@@ -14412,7 +14412,7 @@
       </trans-unit>
       <trans-unit id="5421414445136873229" datatype="html">
         <source>The notification points to content now unavailable</source>
-        <target/>
+        <target>Notifikasi ini menunjukkan pada konten yang sekarang tidak tersedia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">190,191</context>
@@ -14420,7 +14420,7 @@
       </trans-unit>
       <trans-unit id="8312101634344200207" datatype="html">
         <source><x id="PH" equiv-text="this.views"/> viewers</source>
-        <target/>
+        <target><x id="PH" equiv-text="this.views"/> penonton</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">211</context>
@@ -14428,7 +14428,7 @@
       </trans-unit>
       <trans-unit id="7756087706411154095" datatype="html">
         <source><x id="PH" equiv-text="this.views"/> views</source>
-        <target/>
+        <target><x id="PH" equiv-text="this.views"/> tontonan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">214</context>
@@ -14436,7 +14436,7 @@
       </trans-unit>
       <trans-unit id="2439066254855913806" datatype="html">
         <source>Only I can see this video</source>
-        <target/>
+        <target>Hanya saya saja yang bisa melihat video ini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">375</context>
@@ -14444,7 +14444,7 @@
       </trans-unit>
       <trans-unit id="6767380569816110388" datatype="html">
         <source>Only shareable via a private link</source>
-        <target/>
+        <target>Hanya bisa dibagi lewat sebuah tautan privat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">379</context>
@@ -14452,7 +14452,7 @@
       </trans-unit>
       <trans-unit id="6828965264297239528" datatype="html">
         <source>Anyone can see this video</source>
-        <target/>
+        <target>Siapapun bisa melihat video ini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">383</context>
@@ -14460,7 +14460,7 @@
       </trans-unit>
       <trans-unit id="1425933035739773115" datatype="html">
         <source>Only users of this instance can see this video</source>
-        <target/>
+        <target>Hanya pengguna instance ini saja yang bisa melihat video ini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">387</context>
@@ -14468,7 +14468,7 @@
       </trans-unit>
       <trans-unit id="6746743143272021955" datatype="html">
         <source>Violent or repulsive</source>
-        <target/>
+        <target>Mengandung kekerasan atau bersifat menjijikkan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">139</context>
@@ -14476,7 +14476,7 @@
       </trans-unit>
       <trans-unit id="5272553814105457319" datatype="html">
         <source>Contains offensive, violent, or coarse language or iconography.</source>
-        <target/>
+        <target>Mengandung bahasa atau ikonografi yang tidak sopan, mengandung unsur kekerasan, atau kasar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">140</context>
@@ -14484,7 +14484,7 @@
       </trans-unit>
       <trans-unit id="6979166468838302269" datatype="html">
         <source>Hateful or abusive</source>
-        <target/>
+        <target>Penuh dengan kebencian atau bersifat melecehkan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">144</context>
@@ -14492,7 +14492,7 @@
       </trans-unit>
       <trans-unit id="8006612645824137458" datatype="html">
         <source>Contains abusive, racist or sexist language or iconography.</source>
-        <target/>
+        <target>Mengandung bahasa atau gambar yang melecehkan, rasis, ataupun sexist.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">145</context>
@@ -14500,7 +14500,7 @@
       </trans-unit>
       <trans-unit id="5413552012131573970" datatype="html">
         <source>Spam, ad or false news</source>
-        <target/>
+        <target>Spam, iklan, atau berita palsu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">149</context>
@@ -14508,7 +14508,7 @@
       </trans-unit>
       <trans-unit id="6374940465448453212" datatype="html">
         <source>Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</source>
-        <target/>
+        <target>Mengandung pemasaran, spam, berita yang sengaja dibuat untuk menyesatkan khalayak, ataupun thumbnail/teks/tag lainnya yang bersifat menyimpang. Sediakanlah sumber-sumber yang terpercaya untuk melaporkan berita palsu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">150</context>
@@ -14516,7 +14516,7 @@
       </trans-unit>
       <trans-unit id="7401289443263903223" datatype="html">
         <source>Privacy breach or doxxing</source>
-        <target/>
+        <target>Pelanggaran hak privasi atau doxxing</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">154</context>
@@ -14540,7 +14540,7 @@
       </trans-unit>
       <trans-unit id="1378933246324202613" datatype="html">
         <source>Breaks server rules</source>
-        <target/>
+        <target>Melanggar aturan server</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">164</context>
@@ -14648,7 +14648,7 @@
       </trans-unit>
       <trans-unit id="3819155299647062711" datatype="html">
         <source>No account found.</source>
-        <target/>
+        <target>Tidak ada akun yang ditemukan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context>
           <context context-type="linenumber">64</context>
@@ -14728,7 +14728,7 @@
       </trans-unit>
       <trans-unit id="6245265026120479954" datatype="html">
         <source>Comment reported.</source>
-        <target/>
+        <target>Komentar telah dilaporkan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/comment-report.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -14836,7 +14836,7 @@
       </trans-unit>
       <trans-unit id="1472171759957681533" datatype="html">
         <source>Video reported.</source>
-        <target/>
+        <target>Video telah dilaporkan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.ts</context>
           <context context-type="linenumber">110</context>
@@ -14856,7 +14856,7 @@
       </trans-unit>
       <trans-unit id="6250599179731937899" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted instances</source>
-        <target/>
+        <target>Menunjukkan <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> dari <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> dari <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> instance yang dibungkam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context>
           <context context-type="linenumber">10</context>
@@ -14868,7 +14868,7 @@
       </trans-unit>
       <trans-unit id="6409548912081699487" datatype="html">
         <source>Mute domain</source>
-        <target/>
+        <target>Bungkam domain</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context>
           <context context-type="linenumber">17</context>
@@ -14980,7 +14980,7 @@
       </trans-unit>
       <trans-unit id="3616223838716839702" datatype="html">
         <source>Ban this user</source>
-        <target/>
+        <target>Larang pengguna ini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">31</context>
@@ -15104,7 +15104,7 @@
       </trans-unit>
       <trans-unit id="7187838764371214919" datatype="html">
         <source>Edit user</source>
-        <target/>
+        <target>Edit pengguna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">263</context>
@@ -15208,7 +15208,7 @@
       </trans-unit>
       <trans-unit id="3108200185023875257" datatype="html">
         <source>Remove comments from your videos</source>
-        <target/>
+        <target>Hapus komentar dari video-video Anda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">321</context>
@@ -15216,7 +15216,7 @@
       </trans-unit>
       <trans-unit id="4810478487244286994" datatype="html">
         <source>Remove comments made by this account on your videos.</source>
-        <target/>
+        <target>Hapus komentar yang dibuat oleh akun ini dari video-video Anda.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">322</context>
@@ -15288,7 +15288,7 @@
       </trans-unit>
       <trans-unit id="3785095284194008197" datatype="html">
         <source>Remove comments from your instance</source>
-        <target/>
+        <target>Hapus komentar dari instance Anda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">368</context>
@@ -15296,7 +15296,7 @@
       </trans-unit>
       <trans-unit id="4809327075591089709" datatype="html">
         <source>Remove comments made by this account from your instance.</source>
-        <target/>
+        <target>Hapus komentar yang dibuat oleh akun ini dari instance Anda.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">369</context>
@@ -15304,7 +15304,7 @@
       </trans-unit>
       <trans-unit id="4526499522377118108" datatype="html">
         <source>Block video "<x id="INTERPOLATION" equiv-text="{{ video.name }}"/>"</source>
-        <target/>
+        <target>Blok video "<x id="INTERPOLATION" equiv-text="{{ video.name }}"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">3</context>
@@ -15312,7 +15312,7 @@
       </trans-unit>
       <trans-unit id="2992313729068029516" datatype="html">
         <source>Block live "<x id="INTERPOLATION" equiv-text="{{ video.name }}"/>"</source>
-        <target/>
+        <target>Blok siaran langsung "<x id="INTERPOLATION" equiv-text="{{ video.name }}"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">4</context>
@@ -15320,7 +15320,7 @@
       </trans-unit>
       <trans-unit id="7256462927215762997" datatype="html">
         <source>Please describe the reason...</source>
-        <target/>
+        <target>Mohon jelaskan alasannya...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">13</context>
@@ -15384,7 +15384,7 @@
       </trans-unit>
       <trans-unit id="1122876732223594710" datatype="html">
         <source>The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).</source>
-        <target/>
+        <target>URL ini tidak aman (tidak ada HTTPS), oleh sebab itu video embed tidak akan berfungsi di situs HTTPS (penjelajah-penjelajah web memblok permintaan HTTP tidak aman pada situs HTTPS).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">44,45</context>
@@ -15492,7 +15492,7 @@
       </trans-unit>
       <trans-unit id="1219783168145776019" datatype="html">
         <source>LIVE ENDED</source>
-        <target/>
+        <target>SIARAN LANGSUNG SUDAH DIAKHIRI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context>
           <context context-type="linenumber">32</context>
@@ -15500,7 +15500,7 @@
       </trans-unit>
       <trans-unit id="1795705931707209785" datatype="html">
         <source>Add to watch later</source>
-        <target/>
+        <target>Tambahkan ke tonton nanti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
           <context context-type="linenumber">29</context>
@@ -15544,7 +15544,7 @@
       </trans-unit>
       <trans-unit id="7377817702119089263" datatype="html">
         <source>Default policy on videos containing sensitive content</source>
-        <target/>
+        <target>Polis default terhadap video dengan konten sensitif</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">4</context>
@@ -15592,7 +15592,7 @@
       </trans-unit>
       <trans-unit id="9135112681389493865" datatype="html">
         <source>Automatically play videos</source>
-        <target/>
+        <target>Mainkan video secara otomatis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">58</context>
@@ -15640,7 +15640,7 @@
       </trans-unit>
       <trans-unit id="1904720062363293328" datatype="html">
         <source>You need to enable at least 1 video language.</source>
-        <target/>
+        <target>Anda harus memasukkan sekurang-kurangnya 1 bahasa video.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
           <context context-type="linenumber">108</context>
@@ -15696,7 +15696,7 @@
       </trans-unit>
       <trans-unit id="1144407473317535723" datatype="html">
         <source>Subscribe</source>
-        <target/>
+        <target>Ikuti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">9</context>
@@ -15704,7 +15704,7 @@
       </trans-unit>
       <trans-unit id="5432070253720498105" datatype="html">
         <source>Subscribe to all channels</source>
-        <target/>
+        <target>Ikuti semua kanal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">11</context>
@@ -15712,7 +15712,7 @@
       </trans-unit>
       <trans-unit id="7542242186854344789" datatype="html">
         <source>channels subscribed</source>
-        <target/>
+        <target>kanal yang diikuti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">13</context>
@@ -15784,7 +15784,7 @@
       </trans-unit>
       <trans-unit id="7695158742270602420" datatype="html">
         <source>Subscribe via RSS</source>
-        <target/>
+        <target>Berlangganan lewat RSS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">69</context>
@@ -15848,7 +15848,7 @@
       </trans-unit>
       <trans-unit id="5226261760726752768" datatype="html">
         <source>Live information</source>
-        <target/>
+        <target>Informasi siaran langsung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">3</context>
@@ -15856,7 +15856,7 @@
       </trans-unit>
       <trans-unit id="1276362324126004421" datatype="html">
         <source>Permanent live</source>
-        <target/>
+        <target>Siaran langsung permanen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">10</context>
@@ -15960,7 +15960,7 @@
       </trans-unit>
       <trans-unit id="7460399579150761114" datatype="html">
         <source>function is not implemented</source>
-        <target/>
+        <target>fungsi tidak diimplementasikan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/abstract-video-list.ts</context>
           <context context-type="linenumber">300</context>
@@ -16092,7 +16092,7 @@
       </trans-unit>
       <trans-unit id="6316149158173629264" datatype="html">
         <source>Direct download</source>
-        <target/>
+        <target>Unduh langsung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context>
           <context context-type="linenumber">87</context>
@@ -16160,7 +16160,7 @@
       </trans-unit>
       <trans-unit id="4915431133669985304" datatype="html">
         <source>Profile</source>
-        <target/>
+        <target>Profil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">171</context>
@@ -16168,7 +16168,7 @@
       </trans-unit>
       <trans-unit id="1963136290621768454" datatype="html">
         <source>Resolution</source>
-        <target/>
+        <target>Resolusi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context>
           <context context-type="linenumber">180</context>
@@ -16248,7 +16248,7 @@
       </trans-unit>
       <trans-unit id="4887724548587271148" datatype="html">
         <source>Waiting transcoding</source>
-        <target/>
+        <target>Menunggu transcoding</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">171</context>
@@ -16344,7 +16344,7 @@
       </trans-unit>
       <trans-unit id="5643561794785412000" datatype="html">
         <source>Unavailable</source>
-        <target/>
+        <target>Tidak tersedia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">32</context>
