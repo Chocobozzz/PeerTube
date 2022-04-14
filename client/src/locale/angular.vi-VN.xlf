@@ -6700,7 +6700,7 @@
       </trans-unit>
       <trans-unit id="6979021199788941693" datatype="html">
         <source>Your message has been sent.</source>
-        <target state="translated">Tin nhắn của bạn đã được gửi đi.</target>
+        <target state="translated">Tin nhắn của bạn đã được gửi.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.ts</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="2072135752262464360" datatype="html">
