@@ -316,7 +316,7 @@ export class VideoStatsComponent implements OnInit {
               const { min, max } = chart.scales.x
 
               const startDate = rawData.data[min].date
-              const endDate = rawData.data[max].date
+              const endDate = this.buildZoomEndDate(rawData.groupInterval, rawData.data[max].date)
 
               this.peertubeRouter.silentNavigate([], { startDate, endDate })
             }
@@ -448,5 +448,20 @@ export class VideoStatsComponent implements OnInit {
         }
       }
     }
+  }
+
+  private buildZoomEndDate (groupInterval: string, last: string) {
+    const date = new Date(last)
+
+    // Remove parts of the date we don't need
+    if (groupInterval.endsWith(' day') || groupInterval.endsWith(' days')) {
+      date.setHours(23, 59, 59)
+    } else if (groupInterval.endsWith(' hour') || groupInterval.endsWith(' hours')) {
+      date.setMinutes(59, 59)
+    } else {
+      date.setSeconds(59)
+    }
+
+    return date.toISOString()
   }
 }
