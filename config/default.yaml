@@ -47,7 +47,7 @@ database:
 
 # Redis server for short time storage
 # You can also specify a 'socket' path to a unix socket but first need to
-# comment out hostname and port
+# set 'hostname' and 'port' to null
 redis:
   hostname: 'localhost'
   port: 6379
