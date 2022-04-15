@@ -2,6 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import bytes from 'bytes'
+import { stat } from 'fs-extra'
 import { merge } from 'lodash'
 import {
   checkTmpIsEmpty,
@@ -115,6 +117,8 @@ async function checkFiles (options: {
 function runTestSuite (options: {
   fixture?: string
 
+  maxUploadPart?: string
+
   playlistBucket: string
   playlistPrefix?: string
 
@@ -151,7 +155,7 @@ function runTestSuite (options: {
 
         credentials: ObjectStorageCommand.getCredentialsConfig(),
 
-        max_upload_part: '5MB',
+        max_upload_part: options.maxUploadPart || '5MB',
 
         streaming_playlists: {
           bucket_name: options.playlistBucket,
@@ -398,13 +402,20 @@ describe('Object storage for videos', function () {
   })
 
   describe('Test object storage with file bigger than upload part', function () {
-    let fixture
+    let fixture: string
+    const maxUploadPart = '5 mb'
 
     before(async function () {
       fixture = await generateHighBitrateVideo()
+      const fixtureStat = await stat(fixture)
+
+      if (bytes.parse(maxUploadPart) > fixtureStat.size) {
+        throw Error(`Fixture file is too small (${fixtureStat.size}) to make sense for this test.`)
+      }
     })
 
     runTestSuite({
+      maxUploadPart,
       playlistBucket: 'streaming-playlists',
       webtorrentBucket: 'videos',
       fixture
