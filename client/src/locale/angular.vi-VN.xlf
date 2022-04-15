@@ -351,7 +351,7 @@
       </trans-unit>
       <trans-unit id="731573110355765429" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> edition has finished </source>
-        <target state="translated">Phiên bản video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> của bạn đã hoàn thành </target>
+        <target state="translated">Phiên bản mới của video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> đã được biên tập xong </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">213,215</context>
@@ -402,7 +402,7 @@
       </trans-unit>
       <trans-unit id="5964984095397511808">
         <source>Stop at</source>
-        <target>Dừng tại</target>
+        <target>Kết thúc tại</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">60</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">170</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">35</context></context-group>
@@ -707,7 +707,7 @@
       </trans-unit>
       <trans-unit id="834805431202576194">
         <source>No results.</source>
-        <target>Không có kết quả.</target>
+        <target>Không có video nào.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.ts</context><context context-type="linenumber">23</context></context-group>
@@ -934,7 +934,7 @@
       </trans-unit>
       <trans-unit id="4992364287704007430">
         <source>Torrent import</source>
-        <target>Nhập torrent</target>
+        <target>Nhập bằng torrent</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="7683705529753923369" datatype="html">
@@ -1264,7 +1264,7 @@
       </trans-unit>
       <trans-unit id="7808756054397155068" datatype="html">
         <source>Reset</source>
-        <target state="translated">Reset</target>
+        <target state="translated">Đặt lại</target>
         <note priority="1" from="description">Password reset button</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
@@ -1275,7 +1275,7 @@
       </trans-unit>
       <trans-unit id="761579517995454927" datatype="html">
         <source>on the vidiverse</source>
-        <target state="translated">trên vidiverse</target>
+        <target state="translated">trên mạng lưới PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="8434369348784683733" datatype="html">
@@ -1875,7 +1875,7 @@
       </trans-unit>
       <trans-unit id="4494942989613184609" datatype="html">
         <source>In the vidiverse</source>
-        <target state="translated">Trong Vidiverse</target>
+        <target state="translated">Trong mạng lưới PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="5146398958364876914">
@@ -1898,7 +1898,7 @@
       </trans-unit>
       <trans-unit id="5038188980760269298">
         <source>Original publication year</source>
-        <target>Năm xuất bản gốc</target>
+        <target>Năm đăng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="2316758236788716819">
@@ -1981,7 +1981,7 @@
       </trans-unit>
       <trans-unit id="5143793904897598509" datatype="html">
         <source>PeerTube instance host</source>
-        <target state="translated">Máy chủ lưu trữ PeerTube</target>
+        <target state="translated">Máy chủ PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">178</context>
@@ -1997,17 +1997,17 @@
       </trans-unit>
       <trans-unit id="283421392567624698" datatype="html">
         <source>Search target</source>
-        <target state="translated">Tìm kiếm mục tiêu</target>
+        <target state="translated">Phạm vi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">212</context></context-group>
       </trans-unit>
       <trans-unit id="2489767671380266270" datatype="html">
         <source>Vidiverse</source>
-        <target state="translated">Vidiverse</target>
+        <target state="translated">Mạng lưới PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">222</context></context-group>
       </trans-unit>
       <trans-unit id="5478121364779850827" datatype="html">
         <source>Reset</source>
-        <target state="translated">Reset</target>
+        <target state="translated">Đặt lại</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">8</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">22</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">41</context></context-group>
@@ -2025,7 +2025,7 @@
       </trans-unit>
       <trans-unit id="8829497237648100098">
         <source>Filter</source>
-        <target>Bộ lọc</target>
+        <target>Lọc</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">233</context></context-group>
       </trans-unit>
       <trans-unit id="6479885129995567639" datatype="html">
@@ -2359,7 +2359,7 @@
       </trans-unit>
       <trans-unit id="1966495339378120213" datatype="html">
         <source>Latency mode</source>
-        <target state="translated">Chế độ độ trễ</target>
+        <target state="translated">Kiểu độ trễ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">294</context>
@@ -2433,7 +2433,7 @@
       </trans-unit>
       <trans-unit id="54931094224146544" datatype="html">
         <source>Small latency</source>
-        <target state="translated">Độ trễ nhỏ</target>
+        <target state="translated">Độ trễ thấp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -2744,7 +2744,7 @@
       </trans-unit>
       <trans-unit id="8740142697043012403">
         <source>Import with torrent</source>
-        <target>Nhập torrent</target>
+        <target>Nhập bằng torrent</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="6066940329544282265" datatype="html">
@@ -2994,7 +2994,7 @@
       </trans-unit>
       <trans-unit id="5432070253720498105" datatype="html">
         <source>Subscribe to all channels</source>
-        <target state="translated">Đăng ký tất cả kênh</target>
+        <target state="translated">Đăng ký toàn bộ kênh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="7542242186854344789" datatype="html">
@@ -3004,7 +3004,7 @@
       </trans-unit>
       <trans-unit id="8426539297729416784" datatype="html">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</source>
-        <target state="translated">{VAR_SELECT, select, undefined {Ngưng đăng ký} other {Ngưng đăng ký tất cả kênh} }</target>
+        <target state="translated">{VAR_SELECT, select, undefined {Ngưng đăng ký} other {Ngưng đăng ký toàn bộ kênh} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="7215101881367554791">
@@ -3410,7 +3410,7 @@
       </trans-unit>
       <trans-unit id="2845798909207198924" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> followers</source>
-        <target state="translated">Đang hiện <x id="INTERPOLATION"/> từ <x id="INTERPOLATION_1"/> của <x id="INTERPOLATION_2"/> người theo dõi</target>
+        <target state="translated">Đang hiện từ <x id="INTERPOLATION"/> tới <x id="INTERPOLATION_1"/> của <x id="INTERPOLATION_2"/> người theo dõi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="6571718060636962350" datatype="html">
@@ -3437,7 +3437,7 @@
       </trans-unit>
       <trans-unit id="4774348799569692380" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> hosts</source>
-        <target state="translated">Đang hiện <x id="INTERPOLATION"/> tới <x id="INTERPOLATION_1"/> của <x id="INTERPOLATION_2"/> máy chủ</target>
+        <target state="translated">Đang hiện từ <x id="INTERPOLATION"/> tới <x id="INTERPOLATION_1"/> của <x id="INTERPOLATION_2"/> máy chủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="9216117865911519658" datatype="html">
@@ -3639,7 +3639,7 @@
       </trans-unit>
       <trans-unit id="5642198289374753866" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> users</source>
-        <target state="translated">Đang hiện <x id="INTERPOLATION"/> đến <x id="INTERPOLATION_1"/> của <x id="INTERPOLATION_2"/> người dùng</target>
+        <target state="translated">Đang hiện từ <x id="INTERPOLATION"/> tới <x id="INTERPOLATION_1"/> của <x id="INTERPOLATION_2"/> người dùng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="2049290282534091182" datatype="html">
@@ -3819,17 +3819,17 @@
       </trans-unit>
       <trans-unit id="4335414817109654558" datatype="html">
         <source>Refused reports</source>
-        <target state="translated">Những báo cáo đã từ chối</target>
+        <target state="translated">Báo cáo bị từ chối</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="5604806676748121035" datatype="html">
         <source>Reports with blocked videos</source>
-        <target state="translated">Những báo cáo với video đã chặn</target>
+        <target state="translated">Báo cáo với video đã chặn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="5105869928182826553" datatype="html">
         <source>Reports with deleted videos</source>
-        <target state="translated">Những báo cáo với video đã xóa</target>
+        <target state="translated">Báo cáo với video đã xóa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="4678289986918934018" datatype="html">
@@ -3960,7 +3960,7 @@
       </trans-unit>
       <trans-unit id="9173448803033928792" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> reports</source>
-        <target state="translated">Đang hiện <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> báo cáo</target>
+        <target state="translated">Đang hiện từ <x id="INTERPOLATION"/> tới <x id="INTERPOLATION_1"/> của <x id="INTERPOLATION_2"/> báo cáo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="3109314382334906782" datatype="html">
@@ -4001,7 +4001,7 @@
       </trans-unit>
       <trans-unit id="1300704815627663264" datatype="html">
         <source>Muted at <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></source>
-        <target state="translated">Ẩn <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
+        <target state="translated">Ẩn vào <x id="START_TAG_P_SORTICON"/><x id="CLOSE_TAG_P_SORTICON"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">32</context></context-group>
@@ -4285,7 +4285,7 @@
       </trans-unit>
       <trans-unit id="4523382115569186450" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> comments</source>
-        <target state="translated">Đang hiện <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> bình luận</target>
+        <target state="translated">Đang hiện từ <x id="INTERPOLATION"/> tới <x id="INTERPOLATION_1"/> của <x id="INTERPOLATION_2"/> bình luận</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="6110554376228744887" datatype="html">
@@ -4774,7 +4774,7 @@
       </trans-unit>
       <trans-unit id="407487463718398437" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Người Theo Dõi} other {Người Đăng Ký} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Người Đăng Ký} other {Người Đăng Ký} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
@@ -5067,7 +5067,7 @@
       </trans-unit>
       <trans-unit id="6422195560028891534" datatype="html">
         <source>Small latency disables P2P and high latency can increase P2P ratio</source>
-        <target state="translated">Độ trễ nhỏ tắt P2P và độ trễ cao tăng tỉ lệ P2P</target>
+        <target state="translated">Độ trễ thấp tắt P2P và độ trễ cao tăng tỉ lệ P2P</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">44,46</context>
@@ -5584,7 +5584,7 @@
       </trans-unit>
       <trans-unit id="2736556170366900089" datatype="html">
         <source>Type:</source>
-        <target state="translated">Loại:</target>
+        <target state="translated">Định dạng:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">95</context>
@@ -5829,7 +5829,7 @@
       </trans-unit>
       <trans-unit id="5500467336262464724" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> subscribers </source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> người theo dõi </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> người đăng ký </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">25</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">55</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.html</context><context context-type="linenumber">27</context></context-group>
@@ -5852,7 +5852,7 @@
       </trans-unit>
       <trans-unit id="6924803931258995553" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> imports</source>
-        <target state="translated">Đang hiện <x id="INTERPOLATION"/> đến <x id="INTERPOLATION_1"/> của <x id="INTERPOLATION_2"/> những video nhập</target>
+        <target state="translated">Đang hiện từ <x id="INTERPOLATION"/> tới <x id="INTERPOLATION_1"/> của <x id="INTERPOLATION_2"/> những video nhập</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="8173902679178787744" datatype="html">
@@ -6236,7 +6236,7 @@
       </trans-unit>
       <trans-unit id="1415060111017347427" datatype="html">
         <source>Network</source>
-        <target state="translated">Network</target>
+        <target state="translated">Mạng liên hợp</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="3701439542279610547" datatype="html">
@@ -6557,7 +6557,7 @@
       </trans-unit>
       <trans-unit id="1812900507515561988" datatype="html">
         <source>About this instance's network</source>
-        <target state="translated">Về mạng lưới của máy chủ này</target>
+        <target state="translated">Về mạng liên hợp của máy chủ này</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-routing.module.ts</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="892073694820881630" datatype="html">
@@ -6731,7 +6731,7 @@
       </trans-unit>
       <trans-unit id="6823616469362610020" datatype="html">
         <source>Account video channels</source>
-        <target state="translated">Những kênh của tài khoản này</target>
+        <target state="translated">Kênh tài khoản</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="807777065817324789" datatype="html">
@@ -7388,7 +7388,7 @@
       </trans-unit>
       <trans-unit id="6473213678768782133" datatype="html">
         <source>Internal actions</source>
-        <target state="translated">Hành động quốc tế</target>
+        <target state="translated">Hành động nội bộ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">59</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">244</context></context-group>
       </trans-unit>
@@ -8192,7 +8192,7 @@
       </trans-unit>
       <trans-unit id="988319118163514570" datatype="html">
         <source>Video studio edition has finished</source>
-        <target state="translated">Phiên bản biên tập video đã hoàn thành</target>
+        <target state="translated">Phiên bản mới video đã biên tập xong</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -8643,7 +8643,7 @@
       </trans-unit>
       <trans-unit id="1593265243494758679" datatype="html">
         <source>Studio for <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></source>
-        <target state="translated">Biên tập cho <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></target>
+        <target state="translated">Biên tập video <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">2</context>
@@ -8676,7 +8676,7 @@
       </trans-unit>
       <trans-unit id="5030063045826839645" datatype="html">
         <source>Concatenate a file at the beginning of the video.</source>
-        <target state="translated">Ghép một tập tin ở đầu video.</target>
+        <target state="translated">Ghép một tập tin ở phần đầu video.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="4798642303989337390" datatype="html">
@@ -8696,7 +8696,7 @@
       </trans-unit>
       <trans-unit id="4368653199478595315" datatype="html">
         <source>Select the outro video file</source>
-        <target state="translated">Chọn tập tin outtro</target>
+        <target state="translated">Chọn tập tin outro</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="3463158361655332380" datatype="html">
@@ -8711,22 +8711,22 @@
       </trans-unit>
       <trans-unit id="155510305759087510" datatype="html">
         <source>Select watermark image file</source>
-        <target state="translated">Chọn tập tin ảnh watermark</target>
+        <target state="translated">Chọn tập tin watermark</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="3926035808219061063" datatype="html">
         <source>Run video edition</source>
-        <target state="translated">Chạy phiên bản video</target>
+        <target state="translated">Áp dụng tác vụ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="1514792472513458403" datatype="html">
         <source>Video before edition</source>
-        <target state="translated">Video phiên bản trước</target>
+        <target state="translated">Phiên bản hiện tại</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="1109043661443571733" datatype="html">
         <source>Edition tasks:</source>
-        <target state="translated">Phiên bản task:</target>
+        <target state="translated">Tác vụ:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="3541115907775840269" datatype="html">
@@ -8736,17 +8736,17 @@
       </trans-unit>
       <trans-unit id="3858880927114551513" datatype="html">
         <source>The current video will be overwritten by this edited video and &lt;strong&gt;you won't be able to recover it&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</source>
-        <target state="translated">Video gốc sẽ bị ghi đè bởi video đã sửa này và &lt;strong&gt;bạn không thể phục hồi như cũ&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</target>
+        <target state="translated">Video gốc sẽ bị ghi đè bởi video mới và bạn &lt;strong&gt;không thể phục hồi như cũ&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="4876327655498234453" datatype="html">
         <source>As a reminder, the following tasks will be executed: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</source>
-        <target state="translated">Những task sau sẽ được thực thi: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
+        <target state="translated">Những tác vụ sau sẽ được áp dụng: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="7934869554046374009" datatype="html">
         <source>Edition tasks created.</source>
-        <target state="translated">Đã tạo tác vụ phiên bản.</target>
+        <target state="translated">Đã áp dụng xong tác vụ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">90</context>
@@ -8774,7 +8774,7 @@
       </trans-unit>
       <trans-unit id="3242234958443825475" datatype="html">
         <source>Go to the recently added videos page</source>
-        <target state="translated">Đến trang video mới đăng gần đây</target>
+        <target state="translated">Đến trang Mới Nhất</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">294</context></context-group>
       </trans-unit>
       <trans-unit id="2887122197778293919" datatype="html">
@@ -9726,7 +9726,7 @@
       </trans-unit>
       <trans-unit id="5058286083557987083" datatype="html">
         <source>⚠️ Never share your stream key with anyone.</source>
-        <target state="translated">⚠️ Không chia sẻ mã trực tiếp của bạn với bất cứ ai.</target>
+        <target state="translated">⚠️ Không chia sẻ mã livestream của bạn với bất cứ ai.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">258</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
@@ -10303,7 +10303,7 @@
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
         <source><x id="PH"/> (channel page) </source>
-        <target state="translated"><x id="PH"/> (trang kênh) </target>
+        <target state="translated"><x id="PH"/> (kênh) </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">20</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">40</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">125</context></context-group>
@@ -10533,7 +10533,7 @@
       </trans-unit>
       <trans-unit id="4537735378779630558" datatype="html">
         <source>Hide any content from that instance for you.</source>
-        <target state="translated">Ẩn bất cứ nội dung nào từ máy chủ đó.</target>
+        <target state="translated">Ẩn mọi nội dung từ máy chủ của người này.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">308</context></context-group>
       </trans-unit>
       <trans-unit id="6247487021683085858">
@@ -10543,7 +10543,7 @@
       </trans-unit>
       <trans-unit id="4024846984475742259" datatype="html">
         <source>Show back content from that instance for you.</source>
-        <target state="translated">Hiện lại nội dung từ máy chủ đó.</target>
+        <target state="translated">Hiện lại nội dung từ máy chủ của người này.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">314</context></context-group>
       </trans-unit>
       <trans-unit id="3108200185023875257" datatype="html">
@@ -10693,7 +10693,7 @@
       </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="translated">Đã đăng ký tất cả kênh gần đây của <x id="PH"/>. Bạn sẽ nhận được thông báo về video mới của họ.</target>
+        <target state="translated">Đã đăng ký toàn bộ kênh gần đây của <x id="PH"/>. Bạn sẽ nhận được thông báo về video mới của họ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="2780460651686172544" datatype="html">
@@ -10708,7 +10708,7 @@
       </trans-unit>
       <trans-unit id="7070823964189404459" datatype="html">
         <source>Unsubscribed from all channels of <x id="PH"/> </source>
-        <target state="translated">Đã hủy đăng ký tất cả kênh của <x id="PH"/> </target>
+        <target state="translated">Đã hủy đăng ký toàn bộ kênh của <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="9201562016527884133">
@@ -10939,7 +10939,7 @@
       </trans-unit>
       <trans-unit id="1950057220179636309">
         <source>Save to playlist</source>
-        <target>Lưu vào danh sách phát</target>
+        <target>Thêm vào danh sách phát</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context><context context-type="linenumber">58</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">314</context></context-group>
       </trans-unit>
@@ -10963,12 +10963,12 @@
       </trans-unit>
       <trans-unit id="4814285799071780083" datatype="html">
         <source>Remove</source>
-        <target state="translated">Hủy bỏ</target>
+        <target state="translated">Xóa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.ts</context><context context-type="linenumber">186</context></context-group>
       </trans-unit>
       <trans-unit id="6871668720687277843" datatype="html">
         <source>Remove &amp; re-draft</source>
-        <target state="translated">Bỏ &amp; chỉnh sửa</target>
+        <target state="translated">Xóa &amp; viết lại</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.ts</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="60216491008745400" datatype="html">
@@ -11281,7 +11281,7 @@
       </trans-unit>
       <trans-unit id="2677581013897190613" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></source>
-        <target state="translated">Video sẽ bắt đầu tại <x id="PH" equiv-text="secondsToTime(start)"/> và dừng tại <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
+        <target state="translated">Video sẽ bắt đầu tại <x id="PH" equiv-text="secondsToTime(start)"/> và kết thúc tại <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
       <trans-unit id="2299077646120636288" datatype="html">
