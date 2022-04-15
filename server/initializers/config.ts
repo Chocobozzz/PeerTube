@@ -300,7 +300,8 @@ const CONFIG = {
     get VIDEO_QUOTA_DAILY () { return parseBytes(config.get<number>('user.video_quota_daily')) }
   },
   VIDEO_CHANNELS: {
-    get MAX_PER_USER () { return config.get<number>('video_channels.max_per_user') }
+    get MAX_PER_USER () { return config.get<number>('video_channels.max_per_user') },
+    get SYNCHRONIZATION_INTERVAL () { return parseDurationToMs(config.get<string>('video_channels.synchronization_interval')) }
   },
   TRANSCODING: {
     get ENABLED () { return config.get<boolean>('transcoding.enabled') },
