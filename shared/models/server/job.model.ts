@@ -1,5 +1,6 @@
 import { ContextType } from '../activitypub/context'
-import { VideoEditorTaskCut } from '../videos/editor'
+import { VideoState } from '../videos'
+import { VideoStudioTaskCut } from '../videos/studio'
 import { VideoResolution } from '../videos/file/video-resolution.enum'
 import { SendEmailOptions } from './emailer.model'
 
@@ -22,7 +23,7 @@ export type JobType =
   | 'actor-keys'
   | 'manage-video-torrent'
   | 'move-to-object-storage'
-  | 'video-edition'
+  | 'video-studio-edition'
 
 export interface Job {
   id: number
@@ -39,9 +40,9 @@ export interface Job {
 
 export type ActivitypubHttpBroadcastPayload = {
   uris: string[]
-  signatureActorId?: number
+  contextType: ContextType
   body: any
-  contextType?: ContextType
+  signatureActorId?: number
 }
 
 export type ActivitypubFollowPayload = {
@@ -61,9 +62,9 @@ export type ActivitypubHttpFetcherPayload = {
 
 export type ActivitypubHttpUnicastPayload = {
   uri: string
+  contextType: ContextType
   signatureActorId?: number
   body: object
-  contextType?: ContextType
 }
 
 export type RefreshPayload = {
@@ -171,11 +172,12 @@ export interface DeleteResumableUploadMetaFilePayload {
 export interface MoveObjectStoragePayload {
   videoUUID: string
   isNewVideo: boolean
+  previousVideoState: VideoState
 }
 
-export type VideoEditorTaskCutPayload = VideoEditorTaskCut
+export type VideoStudioTaskCutPayload = VideoStudioTaskCut
 
-export type VideoEditorTaskIntroPayload = {
+export type VideoStudioTaskIntroPayload = {
   name: 'add-intro'
 
   options: {
@@ -183,7 +185,7 @@ export type VideoEditorTaskIntroPayload = {
   }
 }
 
-export type VideoEditorTaskOutroPayload = {
+export type VideoStudioTaskOutroPayload = {
   name: 'add-outro'
 
   options: {
@@ -191,7 +193,7 @@ export type VideoEditorTaskOutroPayload = {
   }
 }
 
-export type VideoEditorTaskWatermarkPayload = {
+export type VideoStudioTaskWatermarkPayload = {
   name: 'add-watermark'
 
   options: {
@@ -199,13 +201,13 @@ export type VideoEditorTaskWatermarkPayload = {
   }
 }
 
-export type VideoEditionTaskPayload =
-  VideoEditorTaskCutPayload |
-  VideoEditorTaskIntroPayload |
-  VideoEditorTaskOutroPayload |
-  VideoEditorTaskWatermarkPayload
+export type VideoStudioTaskPayload =
+  VideoStudioTaskCutPayload |
+  VideoStudioTaskIntroPayload |
+  VideoStudioTaskOutroPayload |
+  VideoStudioTaskWatermarkPayload
 
-export interface VideoEditionPayload {
+export interface VideoStudioEditionPayload {
   videoUUID: string
-  tasks: VideoEditionTaskPayload[]
+  tasks: VideoStudioTaskPayload[]
 }

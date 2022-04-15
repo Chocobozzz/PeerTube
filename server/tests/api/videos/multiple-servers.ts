@@ -504,21 +504,22 @@ describe('Test multiple servers', function () {
     it('Should view multiple videos on owned servers', async function () {
       this.timeout(30000)
 
-      await servers[2].videos.view({ id: localVideosServer3[0] })
+      await servers[2].views.simulateView({ id: localVideosServer3[0] })
       await wait(1000)
 
-      await servers[2].videos.view({ id: localVideosServer3[0] })
-      await servers[2].videos.view({ id: localVideosServer3[1] })
+      await servers[2].views.simulateView({ id: localVideosServer3[0] })
+      await servers[2].views.simulateView({ id: localVideosServer3[1] })
 
       await wait(1000)
 
-      await servers[2].videos.view({ id: localVideosServer3[0] })
-      await servers[2].videos.view({ id: localVideosServer3[0] })
+      await servers[2].views.simulateView({ id: localVideosServer3[0] })
+      await servers[2].views.simulateView({ id: localVideosServer3[0] })
 
       await waitJobs(servers)
 
-      // Wait the repeatable job
-      await wait(6000)
+      for (const server of servers) {
+        await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
+      }
 
       await waitJobs(servers)
 
@@ -537,23 +538,24 @@ describe('Test multiple servers', function () {
       this.timeout(45000)
 
       const tasks: Promise<any>[] = []
-      tasks.push(servers[0].videos.view({ id: remoteVideosServer1[0] }))
-      tasks.push(servers[1].videos.view({ id: remoteVideosServer2[0] }))
-      tasks.push(servers[1].videos.view({ id: remoteVideosServer2[0] }))
-      tasks.push(servers[2].videos.view({ id: remoteVideosServer3[0] }))
-      tasks.push(servers[2].videos.view({ id: remoteVideosServer3[1] }))
-      tasks.push(servers[2].videos.view({ id: remoteVideosServer3[1] }))
-      tasks.push(servers[2].videos.view({ id: remoteVideosServer3[1] }))
-      tasks.push(servers[2].videos.view({ id: localVideosServer3[1] }))
-      tasks.push(servers[2].videos.view({ id: localVideosServer3[1] }))
-      tasks.push(servers[2].videos.view({ id: localVideosServer3[1] }))
+      tasks.push(servers[0].views.simulateView({ id: remoteVideosServer1[0] }))
+      tasks.push(servers[1].views.simulateView({ id: remoteVideosServer2[0] }))
+      tasks.push(servers[1].views.simulateView({ id: remoteVideosServer2[0] }))
+      tasks.push(servers[2].views.simulateView({ id: remoteVideosServer3[0] }))
+      tasks.push(servers[2].views.simulateView({ id: remoteVideosServer3[1] }))
+      tasks.push(servers[2].views.simulateView({ id: remoteVideosServer3[1] }))
+      tasks.push(servers[2].views.simulateView({ id: remoteVideosServer3[1] }))
+      tasks.push(servers[2].views.simulateView({ id: localVideosServer3[1] }))
+      tasks.push(servers[2].views.simulateView({ id: localVideosServer3[1] }))
+      tasks.push(servers[2].views.simulateView({ id: localVideosServer3[1] }))
 
       await Promise.all(tasks)
 
       await waitJobs(servers)
 
-      // Wait the repeatable job
-      await wait(16000)
+      for (const server of servers) {
+        await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
+      }
 
       await waitJobs(servers)
 

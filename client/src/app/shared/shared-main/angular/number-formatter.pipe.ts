@@ -22,6 +22,7 @@ export class NumberFormatterPipe implements PipeTransform {
     { max: 1000000, type: 'K' },
     { max: 1000000000, type: 'M' }
   ]
+
   constructor (@Inject(LOCALE_ID) private localeId: string) {}
 
   transform (value: number) {

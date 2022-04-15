@@ -78,7 +78,7 @@ async function run () {
     if (files.some(f => f.storage === VideoStorage.FILE_SYSTEM) || hls?.storage === VideoStorage.FILE_SYSTEM) {
       console.log('Processing video %s.', videoFull.name)
 
-      const success = await moveToExternalStorageState(videoFull, false, undefined)
+      const success = await moveToExternalStorageState({ video: videoFull, isNewVideo: false, transaction: undefined })
 
       if (!success) {
         console.error(

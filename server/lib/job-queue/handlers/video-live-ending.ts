@@ -133,7 +133,7 @@ async function saveLive (video: MVideo, live: MVideoLive, streamingPlaylist: MSt
     })
   }
 
-  await moveToNextState(videoWithFiles, false)
+  await moveToNextState({ video: videoWithFiles, isNewVideo: false })
 }
 
 async function cleanupTMPLiveFiles (hlsDirectory: string) {

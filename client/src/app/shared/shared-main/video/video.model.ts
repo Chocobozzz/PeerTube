@@ -58,8 +58,7 @@ export class Video implements VideoServerModel {
   url: string
 
   views: number
-  // If live
-  viewers?: number
+  viewers: number
 
   likes: number
   dislikes: number
@@ -228,15 +227,19 @@ export class Video implements VideoServerModel {
     return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.UPDATE_ANY_VIDEO))
   }
 
-  isEditableBy (user: AuthUser, videoEditorEnabled: boolean) {
-    return videoEditorEnabled &&
+  isEditableBy (user: AuthUser, videoStudioEnabled: boolean) {
+    return videoStudioEnabled &&
       this.state?.id === VideoState.PUBLISHED &&
       this.isUpdatableBy(user)
   }
 
+  canSeeStats (user: AuthUser) {
+    return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.SEE_ALL_VIDEOS))
+  }
+
   canRemoveFiles (user: AuthUser) {
     return this.isLocal &&
-      user.hasRight(UserRight.MANAGE_VIDEO_FILES) &&
+      user && user.hasRight(UserRight.MANAGE_VIDEO_FILES) &&
       this.state.id !== VideoState.TO_TRANSCODE &&
       this.hasHLS() &&
       this.hasWebTorrent()
@@ -244,7 +247,7 @@ export class Video implements VideoServerModel {
 
   canRunTranscoding (user: AuthUser) {
     return this.isLocal &&
-      user.hasRight(UserRight.RUN_VIDEO_TRANSCODING) &&
+      user && user.hasRight(UserRight.RUN_VIDEO_TRANSCODING) &&
       this.state.id !== VideoState.TO_TRANSCODE
   }
 

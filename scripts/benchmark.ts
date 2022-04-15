@@ -55,7 +55,7 @@ async function run () {
       path: '/accounts/peertube',
       headers: buildAPHeader(),
       expecter: (body, status) => {
-        return status === 200 && body.startsWith('{"type":')
+        return status === 200 && body.startsWith('{"@context":')
       }
     },
     {
@@ -63,7 +63,7 @@ async function run () {
       path: '/videos/watch/' + video.uuid,
       headers: buildAPHeader(),
       expecter: (body, status) => {
-        return status === 200 && body.startsWith('{"type":"Video"')
+        return status === 200 && body.startsWith('{"@context":')
       }
     },
     {
@@ -153,21 +153,23 @@ async function run () {
       }
     },
     {
-      title: 'API - watching',
+      title: 'API - views with token',
       method: 'PUT',
       headers: {
         ...buildAuthorizationHeader(),
         ...buildJSONHeader()
       },
       body: JSON.stringify({ currentTime: 2 }),
-      path: '/api/v1/videos/' + video.uuid + '/watching',
+      path: '/api/v1/videos/' + video.uuid + '/views',
       expecter: (body, status) => {
         return status === 204
       }
     },
     {
-      title: 'API - views',
+      title: 'API - views without token',
       method: 'POST',
+      headers: buildJSONHeader(),
+      body: JSON.stringify({ currentTime: 2 }),
       path: '/api/v1/videos/' + video.uuid + '/views',
       expecter: (body, status) => {
         return status === 204
@@ -201,12 +203,12 @@ function runBenchmark (options: {
   headers?: { [ id: string ]: string }
   expecter: Function
 }) {
-  const { method, path, body, expecter, headers } = options
+  const { method = 'GET', path, body, expecter, headers } = options
 
   return new Promise((res, rej) => {
     autocannon({
       url: server.url + path,
-      method,
+      method: method,
       body,
       connections: 20,
       headers,

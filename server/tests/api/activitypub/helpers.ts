@@ -3,9 +3,9 @@
 import 'mocha'
 import { expect } from 'chai'
 import { cloneDeep } from 'lodash'
+import { signAndContextify } from '@server/lib/activitypub/send'
 import { buildRequestStub } from '@server/tests/shared'
 import { buildAbsoluteFixturePath } from '@shared/core-utils'
-import { buildSignedActivity } from '../../../helpers/activitypub'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../../../helpers/peertube-crypto'
 
 describe('Test activity pub helpers', function () {
@@ -46,7 +46,7 @@ describe('Test activity pub helpers', function () {
       const body = require(buildAbsoluteFixturePath('./ap-json/peertube/announce-without-context.json'))
 
       const actorSignature = { url: 'http://localhost:9002/accounts/peertube', privateKey: keys.privateKey }
-      const signedBody = await buildSignedActivity(actorSignature as any, body)
+      const signedBody = await signAndContextify(actorSignature as any, body, 'Announce')
 
       const fromActor = { publicKey: keys.publicKey, url: 'http://localhost:9002/accounts/peertube' }
       const result = await isJsonLDSignatureVerified(fromActor as any, signedBody)
@@ -59,7 +59,7 @@ describe('Test activity pub helpers', function () {
       const body = require(buildAbsoluteFixturePath('./ap-json/peertube/announce-without-context.json'))
 
       const actorSignature = { url: 'http://localhost:9002/accounts/peertube', privateKey: keys.privateKey }
-      const signedBody = await buildSignedActivity(actorSignature as any, body)
+      const signedBody = await signAndContextify(actorSignature as any, body, 'Announce')
 
       const fromActor = { publicKey: keys.publicKey, url: 'http://localhost:9002/accounts/peertube' }
       const result = await isJsonLDSignatureVerified(fromActor as any, signedBody)

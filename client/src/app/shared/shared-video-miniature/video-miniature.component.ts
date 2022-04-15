@@ -49,7 +49,20 @@ export class VideoMiniatureComponent implements OnInit {
     state: false,
     blacklistInfo: false
   }
+
   @Input() displayVideoActions = true
+  @Input() videoActionsDisplayOptions: VideoActionsDisplayType = {
+    playlist: true,
+    download: false,
+    update: true,
+    blacklist: true,
+    delete: true,
+    report: true,
+    duplicate: true,
+    mute: true,
+    studio: false,
+    stats: false
+  }
 
   @Input() actorImageSize: ActorAvatarSize = '40'
 
@@ -62,16 +75,6 @@ export class VideoMiniatureComponent implements OnInit {
   @Output() videoRemoved = new EventEmitter()
   @Output() videoAccountMuted = new EventEmitter()
 
-  videoActionsDisplayOptions: VideoActionsDisplayType = {
-    playlist: true,
-    download: false,
-    update: true,
-    blacklist: true,
-    delete: true,
-    report: true,
-    duplicate: true,
-    mute: true
-  }
   showActions = false
   serverConfig: HTMLServerConfig
 

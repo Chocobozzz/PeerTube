@@ -62,9 +62,10 @@ my-edit-button {
   min-width: 190px;
 }
 
-::ng-deep .chartjs-render-monitor {
-  position: relative;
-  top: 1px;
+.chart-container {
+  // Sync these values with the template
+  width: 40vw;
+  height: 100px;
 }
 
 .video-channels-header {

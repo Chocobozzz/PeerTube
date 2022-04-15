@@ -148,7 +148,7 @@ describe('Test config API validators', function () {
         }
       }
     },
-    videoEditor: {
+    videoStudio: {
       enabled: true
     },
     import: {

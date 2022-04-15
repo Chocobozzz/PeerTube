@@ -23,11 +23,11 @@ import {
   WEBSERVER
 } from '../initializers/constants'
 import { AccountModel } from '../models/account/account'
-import { getActivityStreamDuration } from '../models/video/formatter/video-format-utils'
 import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
+import { getActivityStreamDuration } from './activitypub/activity'
 import { getBiggestActorImage } from './actor-image'
 import { ServerConfigManager } from './server-config-manager'
 
@@ -134,6 +134,7 @@ class ClientHtml {
       escapedSiteName: escapeHTML(siteName),
       escapedTitle: escapeHTML(title),
       escapedDescription: escapeHTML(description),
+      disallowIndexation: video.privacy !== VideoPrivacy.PUBLIC,
       image,
       embed,
       ogType,
@@ -197,6 +198,7 @@ class ClientHtml {
       escapedSiteName: escapeHTML(siteName),
       escapedTitle: escapeHTML(title),
       escapedDescription: escapeHTML(description),
+      disallowIndexation: videoPlaylist.privacy !== VideoPlaylistPrivacy.PUBLIC,
       embed,
       image,
       list,

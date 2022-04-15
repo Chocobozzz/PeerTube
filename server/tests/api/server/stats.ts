@@ -38,7 +38,7 @@ describe('Test stats (excluding redundancy)', function () {
 
     await servers[0].comments.createThread({ videoId: uuid, text: 'comment' })
 
-    await servers[0].videos.view({ id: uuid })
+    await servers[0].views.simulateView({ id: uuid })
 
     // Wait the video views repeatable job
     await wait(8000)

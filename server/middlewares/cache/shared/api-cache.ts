@@ -6,8 +6,8 @@ import { OutgoingHttpHeaders } from 'http'
 import { isTestInstance, parseDurationToMs } from '@server/helpers/core-utils'
 import { logger } from '@server/helpers/logger'
 import { Redis } from '@server/lib/redis'
-import { HttpStatusCode } from '@shared/models'
 import { asyncMiddleware } from '@server/middlewares'
+import { HttpStatusCode } from '@shared/models'
 
 export interface APICacheOptions {
   headerBlacklist?: string[]
@@ -152,7 +152,7 @@ export class ApiCache {
       end: res.end,
       cacheable: true,
       content: undefined,
-      headers: {}
+      headers: undefined
     }
 
     // Patch express

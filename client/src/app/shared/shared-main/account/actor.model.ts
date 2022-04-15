@@ -55,7 +55,7 @@ export abstract class Actor implements ServerActor {
 
     if (hash.createdAt) this.createdAt = new Date(hash.createdAt.toString())
 
-    this.avatars = hash.avatars
+    this.avatars = hash.avatars || []
     this.isLocal = Actor.IS_LOCAL(this.host)
   }
 }

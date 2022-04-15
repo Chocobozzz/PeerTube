@@ -57,10 +57,19 @@ function setValidAttributedTo (obj: any) {
   return true
 }
 
+function isActivityPubVideoDurationValid (value: string) {
+  // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
+  return exists(value) &&
+    typeof value === 'string' &&
+    value.startsWith('PT') &&
+    value.endsWith('S')
+}
+
 export {
   isUrlValid,
   isActivityPubUrlValid,
   isBaseActivityValid,
   setValidAttributedTo,
-  isObjectValid
+  isObjectValid,
+  isActivityPubVideoDurationValid
 }

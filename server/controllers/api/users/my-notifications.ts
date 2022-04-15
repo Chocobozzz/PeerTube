@@ -82,7 +82,8 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
     abuseNewMessage: body.abuseNewMessage,
     abuseStateChange: body.abuseStateChange,
     newPeerTubeVersion: body.newPeerTubeVersion,
-    newPluginVersion: body.newPluginVersion
+    newPluginVersion: body.newPluginVersion,
+    myVideoStudioEditionFinished: body.myVideoStudioEditionFinished
   }
 
   await UserNotificationSettingModel.update(values, query)

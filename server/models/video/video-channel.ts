@@ -143,28 +143,28 @@ export type SummaryOptions = {
       })
     }
 
-    const channelInclude: Includeable[] = []
-    const accountInclude: Includeable[] = []
+    const channelActorInclude: Includeable[] = []
+    const accountActorInclude: Includeable[] = []
 
     if (options.forCount !== true) {
-      accountInclude.push({
+      accountActorInclude.push({
         model: ServerModel,
         required: false
       })
 
-      accountInclude.push({
+      accountActorInclude.push({
         model: ActorImageModel,
         as: 'Avatars',
         required: false
       })
 
-      channelInclude.push({
+      channelActorInclude.push({
         model: ActorImageModel,
         as: 'Avatars',
         required: false
       })
 
-      channelInclude.push({
+      channelActorInclude.push({
         model: ActorImageModel,
         as: 'Banners',
         required: false
@@ -172,7 +172,7 @@ export type SummaryOptions = {
     }
 
     if (options.forCount !== true || serverRequired) {
-      channelInclude.push({
+      channelActorInclude.push({
         model: ServerModel,
         duplicating: false,
         required: serverRequired,
@@ -190,7 +190,7 @@ export type SummaryOptions = {
           where: {
             [Op.and]: whereActorAnd
           },
-          include: channelInclude
+          include: channelActorInclude
         },
         {
           model: AccountModel.unscoped(),
@@ -202,7 +202,7 @@ export type SummaryOptions = {
               },
               model: ActorModel.unscoped(),
               required: true,
-              include: accountInclude
+              include: accountActorInclude
             }
           ]
         }
@@ -419,7 +419,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
       }
     }
 
-    return VideoChannelModel.count(query)
+    return VideoChannelModel.unscoped().count(query)
   }
 
   static async getStats () {
@@ -605,17 +605,17 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       }
     }
 
-    const scopes: string | ScopeOptions | (string | ScopeOptions)[] = [ ScopeNames.WITH_ACTOR_BANNER ]
+    const findScopes: string | ScopeOptions | (string | ScopeOptions)[] = [ ScopeNames.WITH_ACTOR_BANNER ]
 
     if (options.withStats === true) {
-      scopes.push({
+      findScopes.push({
         method: [ ScopeNames.WITH_STATS, { daysPrior: 30 } as AvailableWithStatsOptions ]
       })
     }
 
     return Promise.all([
-      VideoChannelModel.scope(scopes).count(getQuery(true)),
-      VideoChannelModel.scope(scopes).findAll(getQuery(false))
+      VideoChannelModel.unscoped().count(getQuery(true)),
+      VideoChannelModel.scope(findScopes).findAll(getQuery(false))
     ]).then(([ total, data ]) => ({ total, data }))
   }
 

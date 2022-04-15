@@ -254,12 +254,12 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     }
 
     if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-      return addMoveToObjectStorageJob(videoImportUpdated.Video)
+      return addMoveToObjectStorageJob({ video: videoImportUpdated.Video, previousVideoState: VideoState.TO_IMPORT })
     }
 
     // Create transcoding jobs?
     if (video.state === VideoState.TO_TRANSCODE) {
-      await addOptimizeOrMergeAudioJob(videoImportUpdated.Video, videoFile, videoImport.User)
+      await addOptimizeOrMergeAudioJob({ video: videoImportUpdated.Video, videoFile, user: videoImport.User })
     }
 
   } catch (err) {

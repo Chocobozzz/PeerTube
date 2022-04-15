@@ -141,6 +141,12 @@ class Emailer {
 
     const email = new Email({
       send: true,
+      htmlToText: {
+        selectors: [
+          { selector: 'img', format: 'skip' },
+          { selector: 'a', options: { hideLinkHrefIfSameAsText: true } }
+        ]
+      },
       message: {
         from: `"${fromDisplayName}" <${CONFIG.SMTP.FROM_ADDRESS}>`
       },

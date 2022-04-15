@@ -1,6 +1,6 @@
 import execa from 'execa'
-import { pathExists, writeFile } from 'fs-extra'
-import { join } from 'path'
+import { ensureDir, pathExists, writeFile } from 'fs-extra'
+import { dirname, join } from 'path'
 import { CONFIG } from '@server/initializers/config'
 import { VideoResolution } from '@shared/models'
 import { logger, loggerTagsFactory } from '../logger'
@@ -15,6 +15,8 @@ export class YoutubeDLCLI {
 
   static async safeGet () {
     if (!await pathExists(youtubeDLBinaryPath)) {
+      await ensureDir(dirname(youtubeDLBinaryPath))
+
       await this.updateYoutubeDLBinary()
     }
 

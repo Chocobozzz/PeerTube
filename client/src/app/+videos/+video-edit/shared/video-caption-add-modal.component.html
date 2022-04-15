@@ -23,7 +23,7 @@
         <my-reactive-file
           formControlName="captionfile" inputName="captionfile" i18n-inputLabel inputLabel="Select the caption file"
           [extensions]="videoCaptionExtensions" [maxFileSize]="videoCaptionMaxSize" [displayFilename]="true"
-          i18n-ngbTooltip [ngbTooltip]="'(extensions: ' + videoCaptionExtensions.join(', ') + ')'"
+          [buttonTooltip]="getReactiveFileButtonTooltip()"
         ></my-reactive-file>
       </div>
 

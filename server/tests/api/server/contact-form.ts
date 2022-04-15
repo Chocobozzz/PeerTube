@@ -61,6 +61,13 @@ describe('Test contact form', function () {
     expect(email['text']).contains('my super message')
   })
 
+  it('Should not have duplicated email adress in text message', async function () {
+    const text = emails[0]['text'] as string
+
+    const matches = text.match(/toto@example.com/g)
+    expect(matches).to.have.lengthOf(1)
+  })
+
   it('Should not be able to send another contact form because of the anti spam checker', async function () {
     this.timeout(10000)
 

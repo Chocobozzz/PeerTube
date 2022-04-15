@@ -6,7 +6,7 @@ import { VideoModel } from '@server/models/video/video'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { FilteredModelAttributes } from '@server/types'
 import { MThumbnail, MUserId, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
-import { ThumbnailType, VideoCreate, VideoPrivacy, VideoTranscodingPayload } from '@shared/models'
+import { ThumbnailType, VideoCreate, VideoPrivacy, VideoState, VideoTranscodingPayload } from '@shared/models'
 import { CreateJobOptions, JobQueue } from './job-queue/job-queue'
 import { updateVideoMiniatureFromExisting } from './thumbnail'
 import { CONFIG } from '@server/initializers/config'
@@ -67,6 +67,8 @@ async function buildVideoThumbnailsFromReq (options: {
   return Promise.all(promises)
 }
 
+// ---------------------------------------------------------------------------
+
 async function setVideoTags (options: {
   video: MVideoTag
   tags: string[]
@@ -81,7 +83,16 @@ async function setVideoTags (options: {
   video.Tags = tagInstances
 }
 
-async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoFile, user: MUserId, isNewVideo = true) {
+// ---------------------------------------------------------------------------
+
+async function addOptimizeOrMergeAudioJob (options: {
+  video: MVideoUUID
+  videoFile: MVideoFile
+  user: MUserId
+  isNewVideo?: boolean // Default true
+}) {
+  const { video, videoFile, user, isNewVideo } = options
+
   let dataInput: VideoTranscodingPayload
 
   if (videoFile.isAudio()) {
@@ -113,13 +124,6 @@ async function addTranscodingJob (payload: VideoTranscodingPayload, options: Cre
   return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: payload }, options)
 }
 
-async function addMoveToObjectStorageJob (video: MVideoUUID, isNewVideo = true) {
-  await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingMove')
-
-  const dataInput = { videoUUID: video.uuid, isNewVideo }
-  return JobQueue.Instance.createJobWithPromise({ type: 'move-to-object-storage', payload: dataInput })
-}
-
 async function getTranscodingJobPriority (user: MUserId) {
   const now = new Date()
   const lastWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7)
@@ -127,6 +131,21 @@ async function getTranscodingJobPriority (user: MUserId) {
   const videoUploadedByUser = await VideoModel.countVideosUploadedByUserSince(user.id, lastWeek)
 
   return JOB_PRIORITY.TRANSCODING + videoUploadedByUser
+}
+
+// ---------------------------------------------------------------------------
+
+async function addMoveToObjectStorageJob (options: {
+  video: MVideoUUID
+  previousVideoState: VideoState
+  isNewVideo?: boolean // Default true
+}) {
+  const { video, previousVideoState, isNewVideo = true } = options
+
+  await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingMove')
+
+  const dataInput = { videoUUID: video.uuid, isNewVideo, previousVideoState }
+  return JobQueue.Instance.createJobWithPromise({ type: 'move-to-object-storage', payload: dataInput })
 }
 
 // ---------------------------------------------------------------------------

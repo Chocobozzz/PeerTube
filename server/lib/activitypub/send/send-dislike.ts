@@ -6,7 +6,7 @@ import { audiencify, getAudience } from '../audience'
 import { getVideoDislikeActivityPubUrlByLocalActor } from '../url'
 import { sendVideoActivityToOrigin } from './shared/send-utils'
 
-function sendDislike (byActor: MActor, video: MVideoAccountLight, t: Transaction) {
+function sendDislike (byActor: MActor, video: MVideoAccountLight, transaction: Transaction) {
   logger.info('Creating job to dislike %s.', video.url)
 
   const activityBuilder = (audience: ActivityAudience) => {
@@ -15,7 +15,7 @@ function sendDislike (byActor: MActor, video: MVideoAccountLight, t: Transaction
     return buildDislikeActivity(url, byActor, video, audience)
   }
 
-  return sendVideoActivityToOrigin(activityBuilder, { byActor, video, transaction: t })
+  return sendVideoActivityToOrigin(activityBuilder, { byActor, video, transaction, contextType: 'Rate' })
 }
 
 function buildDislikeActivity (url: string, byActor: MActorAudience, video: MVideoUrl, audience?: ActivityAudience): ActivityDislike {

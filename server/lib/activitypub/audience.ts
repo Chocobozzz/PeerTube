@@ -22,7 +22,7 @@ function buildAudience (followerUrls: string[], isPublic = true) {
 }
 
 function audiencify<T> (object: T, audience: ActivityAudience) {
-  return Object.assign(object, audience)
+  return { ...audience, ...object }
 }
 
 // ---------------------------------------------------------------------------

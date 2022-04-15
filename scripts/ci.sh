@@ -84,8 +84,9 @@ elif [ "$1" = "api-3" ]; then
     npm run build:server
 
     videosFiles=$(findTestFiles ./dist/server/tests/api/videos)
+    viewsFiles=$(findTestFiles ./dist/server/tests/api/views)
 
-    MOCHA_PARALLEL=true runTest "$1" $((3*$speedFactor)) $videosFiles
+    MOCHA_PARALLEL=true runTest "$1" $((3*$speedFactor)) $viewsFiles $videosFiles
 elif [ "$1" = "api-4" ]; then
     npm run build:server
 

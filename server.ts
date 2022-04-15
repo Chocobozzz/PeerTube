@@ -112,6 +112,7 @@ import { RemoveOldHistoryScheduler } from './server/lib/schedulers/remove-old-hi
 import { AutoFollowIndexInstances } from './server/lib/schedulers/auto-follow-index-instances'
 import { RemoveDanglingResumableUploadsScheduler } from './server/lib/schedulers/remove-dangling-resumable-uploads-scheduler'
 import { VideoViewsBufferScheduler } from './server/lib/schedulers/video-views-buffer-scheduler'
+import { GeoIPUpdateScheduler } from './server/lib/schedulers/geo-ip-update-scheduler'
 import { isHTTPSignatureDigestValid } from './server/helpers/peertube-crypto'
 import { PeerTubeSocket } from './server/lib/peertube-socket'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './server/lib/hls'
@@ -123,7 +124,7 @@ import { LiveManager } from './server/lib/live'
 import { HttpStatusCode } from './shared/models/http/http-error-codes'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
-import { VideoViews } from '@server/lib/video-views'
+import { VideoViewsManager } from '@server/lib/views/video-views-manager'
 import { isTestInstance } from './server/helpers/core-utils'
 
 // ----------- Command line -----------
@@ -295,10 +296,11 @@ async function startApplication () {
   AutoFollowIndexInstances.Instance.enable()
   RemoveDanglingResumableUploadsScheduler.Instance.enable()
   VideoViewsBufferScheduler.Instance.enable()
+  GeoIPUpdateScheduler.Instance.enable()
 
   Redis.Instance.init()
   PeerTubeSocket.Instance.init(server)
-  VideoViews.Instance.init()
+  VideoViewsManager.Instance.init()
 
   updateStreamingPlaylistsInfohashesIfNeeded()
     .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))

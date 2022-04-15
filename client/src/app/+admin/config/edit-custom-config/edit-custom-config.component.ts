@@ -200,7 +200,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           resolutions: {}
         }
       },
-      videoEditor: {
+      videoStudio: {
         enabled: null
       },
       autoBlacklist: {

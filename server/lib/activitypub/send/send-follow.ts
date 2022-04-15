@@ -15,7 +15,9 @@ function sendFollow (actorFollow: MActorFollowActors, t: Transaction) {
 
   const data = buildFollowActivity(actorFollow.url, me, following)
 
-  t.afterCommit(() => unicastTo(data, me, following.inboxUrl))
+  return t.afterCommit(() => {
+    return unicastTo({ data, byActor: me, toActorUrl: following.inboxUrl, contextType: 'Follow' })
+  })
 }
 
 function buildFollowActivity (url: string, byActor: MActor, targetActor: MActor): ActivityFollow {

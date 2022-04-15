@@ -180,7 +180,13 @@ See our [ActivityPub documentation](https://docs.joinpeertube.org/api-activitypu
 
 ## License
 
-Copyright (C) 2015-2021 PeerTube Contributors (see [CREDITS.md](CREDITS.md))
+### Logo
+
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), by [Framasoft](https://framasoft.org)
+
+### Code
+
+Copyright (C) 2015-2022 PeerTube Contributors (see [CREDITS.md](CREDITS.md))
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published

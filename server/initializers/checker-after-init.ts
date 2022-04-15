@@ -49,7 +49,7 @@ function checkConfig () {
   checkSearchConfig()
   checkLiveConfig()
   checkObjectStorageConfig()
-  checkVideoEditorConfig()
+  checkVideoStudioConfig()
 }
 
 // We get db by param to not import it in this file (import orders)
@@ -260,8 +260,8 @@ function checkObjectStorageConfig () {
   }
 }
 
-function checkVideoEditorConfig () {
-  if (CONFIG.VIDEO_EDITOR.ENABLED === true && CONFIG.TRANSCODING.ENABLED === false) {
-    throw new Error('Video editor cannot be enabled if transcoding is disabled')
+function checkVideoStudioConfig () {
+  if (CONFIG.VIDEO_STUDIO.ENABLED === true && CONFIG.TRANSCODING.ENABLED === false) {
+    throw new Error('Video studio cannot be enabled if transcoding is disabled')
   }
 }

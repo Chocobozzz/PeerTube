@@ -1,4 +1,4 @@
-import { Transaction } from 'sequelize/dist'
+import { Transaction } from 'sequelize'
 import { ACTIVITY_PUB } from '@server/initializers/constants'
 import { ActorModel } from '@server/models/actor/actor'
 import { VideoModel } from '@server/models/video/video'

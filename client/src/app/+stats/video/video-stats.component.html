@@ -1,0 +1,45 @@
+<div class="margin-content">
+  <h1 class="title-page title-page-single" i18n>Stats for {{ video.name }}</h1>
+
+  <div class="overall-stats-embed">
+    <div class="overall-stats">
+      <div *ngFor="let card of overallStatCards" class="card overall-stats-card">
+        <div class="label">{{ card.label }}</div>
+        <div class="value">{{ card.value }}</div>
+        <div *ngIf="card.moreInfo" class="more-info">{{ card.moreInfo }}</div>
+      </div>
+    </div>
+
+    <my-embed [video]="video"></my-embed>
+  </div>
+
+  <div class="timeserie">
+    <div ngbNav #nav="ngbNav" [activeId]="activeGraphId" (activeIdChange)="onChartChange($event)" class="nav-tabs">
+
+      <ng-container *ngFor="let availableChart of availableCharts" [ngbNavItem]="availableChart.id">
+        <a ngbNavLink i18n>
+          <span>{{ availableChart.label }}</span>
+        </a>
+
+        <ng-template ngbNavContent>
+          <div class="chart-container" [ngStyle]="{ 'min-height': chartHeight }">
+            <p-chart
+              *ngIf="chartOptions[availableChart.id]"
+              [height]="chartHeight" [width]="chartWidth"
+              [type]="chartOptions[availableChart.id].type" [options]="chartOptions[availableChart.id].options" [data]="chartOptions[availableChart.id].data"
+              [plugins]="chartPlugins"
+            ></p-chart>
+          </div>
+
+          <div class="zoom-container">
+            <span *ngIf="!hasZoom() && availableChart.zoomEnabled" i18n class="description">You can select a part of the graph to zoom in</span>
+
+            <my-button i18n *ngIf="hasZoom()" (click)="resetZoom()">Reset zoom</my-button>
+          </div>
+        </ng-template>
+      </ng-container>
+    </div>
+
+    <div [ngbNavOutlet]="nav"></div>
+  </div>
+</div>

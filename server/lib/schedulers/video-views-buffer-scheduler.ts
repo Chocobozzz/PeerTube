@@ -21,8 +21,6 @@ export class VideoViewsBufferScheduler extends AbstractScheduler {
     const videoIds = await Redis.Instance.listLocalVideosViewed()
     if (videoIds.length === 0) return
 
-    logger.info('Processing local video views buffer.', { videoIds, ...lTags() })
-
     for (const videoId of videoIds) {
       try {
         const views = await Redis.Instance.getLocalVideoViews(videoId)
@@ -33,6 +31,8 @@ export class VideoViewsBufferScheduler extends AbstractScheduler {
           logger.debug('Video %d does not exist anymore, skipping videos view addition.', videoId, lTags())
           continue
         }
+
+        logger.info('Processing local video %s views buffer.', video.uuid, lTags(video.uuid))
 
         // If this is a remote video, the origin instance will send us an update
         await VideoModel.incrementViews(videoId, views)

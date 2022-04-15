@@ -171,6 +171,7 @@ describe('Test user notifications API validators', function () {
       abuseNewMessage: UserNotificationSettingValue.WEB,
       abuseStateChange: UserNotificationSettingValue.WEB,
       newPeerTubeVersion: UserNotificationSettingValue.WEB,
+      myVideoStudioEditionFinished: UserNotificationSettingValue.WEB,
       newPluginVersion: UserNotificationSettingValue.WEB
     }
 

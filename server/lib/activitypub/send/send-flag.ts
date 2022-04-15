@@ -17,16 +17,20 @@ function sendAbuse (byActor: MActor, abuse: MAbuseAP, flaggedAccount: MAccountLi
   const audience = { to: [ flaggedAccount.Actor.url ], cc: [] }
   const flagActivity = buildFlagActivity(url, byActor, abuse, audience)
 
-  t.afterCommit(() => unicastTo(flagActivity, byActor, flaggedAccount.Actor.getSharedInbox()))
+  return t.afterCommit(() => {
+    return unicastTo({
+      data: flagActivity,
+      byActor,
+      toActorUrl: flaggedAccount.Actor.getSharedInbox(),
+      contextType: 'Flag'
+    })
+  })
 }
 
 function buildFlagActivity (url: string, byActor: MActor, abuse: MAbuseAP, audience: ActivityAudience): ActivityFlag {
   if (!audience) audience = getAudience(byActor)
 
-  const activity = Object.assign(
-    { id: url, actor: byActor.url },
-    abuse.toActivityPubObject()
-  )
+  const activity = { id: url, actor: byActor.url, ...abuse.toActivityPubObject() }
 
   return audiencify(activity, audience)
 }

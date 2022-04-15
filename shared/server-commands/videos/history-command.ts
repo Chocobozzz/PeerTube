@@ -3,25 +3,6 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class HistoryCommand extends AbstractCommand {
 
-  watchVideo (options: OverrideCommandOptions & {
-    videoId: number | string
-    currentTime: number
-  }) {
-    const { videoId, currentTime } = options
-
-    const path = '/api/v1/videos/' + videoId + '/watching'
-    const fields = { currentTime }
-
-    return this.putBodyRequest({
-      ...options,
-
-      path,
-      fields,
-      implicitToken: true,
-      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
-    })
-  }
-
   list (options: OverrideCommandOptions & {
     search?: string
   } = {}) {

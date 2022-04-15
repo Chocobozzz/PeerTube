@@ -16,12 +16,12 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { activityPubContextify } from '@server/lib/activitypub/context'
 import { getBiggestActorImage } from '@server/lib/actor-image'
 import { ModelCache } from '@server/models/model-cache'
 import { getLowercaseExtension } from '@shared/core-utils'
 import { ActivityIconObject, ActivityPubActorType, ActorImageType } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
-import { activityPubContextify } from '../../helpers/activitypub'
 import {
   isActorFollowersCountValid,
   isActorFollowingCountValid,
@@ -605,7 +605,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
       image
     }
 
-    return activityPubContextify(json)
+    return activityPubContextify(json, 'Actor')
   }
 
   getFollowerSharedInboxUrls (t: Transaction) {

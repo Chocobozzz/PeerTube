@@ -1,9 +1,8 @@
-
-import { checkUrlsSameHost } from '@server/helpers/activitypub'
 import { sanitizeAndCheckActorObject } from '@server/helpers/custom-validators/activitypub/actor'
 import { logger } from '@server/helpers/logger'
 import { doJSONRequest } from '@server/helpers/requests'
 import { ActivityPubActor, ActivityPubOrderedCollection } from '@shared/models'
+import { checkUrlsSameHost } from '../../url'
 
 async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode: number, actorObject: ActivityPubActor }> {
   logger.info('Fetching remote actor %s.', actorUrl)

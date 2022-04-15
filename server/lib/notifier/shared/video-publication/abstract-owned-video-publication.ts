@@ -46,7 +46,7 @@ export abstract class AbstractOwnedVideoPublication extends AbstractNotification
       subject: `Your video ${this.payload.name} has been published`,
       text: `Your video "${this.payload.name}" has been published.`,
       locals: {
-        title: 'You video is live',
+        title: 'Your video is live',
         action: {
           text: 'View video',
           url: videoUrl

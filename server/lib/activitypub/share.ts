@@ -1,15 +1,15 @@
 import { map } from 'bluebird'
 import { Transaction } from 'sequelize'
 import { getServerActor } from '@server/models/application/application'
-import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
 import { logger, loggerTagsFactory } from '../../helpers/logger'
 import { doJSONRequest } from '../../helpers/requests'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { VideoShareModel } from '../../models/video/video-share'
 import { MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../types/models/video'
+import { getAPId } from './activity'
 import { getOrCreateAPActor } from './actors'
 import { sendUndoAnnounce, sendVideoAnnounce } from './send'
-import { getLocalVideoAnnounceActivityPubUrl } from './url'
+import { checkUrlsSameHost, getLocalVideoAnnounceActivityPubUrl } from './url'
 
 const lTags = loggerTagsFactory('share')
 

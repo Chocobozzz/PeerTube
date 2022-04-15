@@ -5,24 +5,26 @@
  * Filip Bengtsson
  * Александр
  * josé m
- * Simon Brosdetzko
  * Berto Te
+ * Simon Brosdetzko
  * Jeff Huang
  * kontrollanten
+ * Hồ Nhất Duy
+ * DignifiedSilence
  * kimsible
  * Laurent Ettouati
  * Jiri Podhorecky
- * Phongpanot
- * Clemens Schielicke
- * GunChleoc
- * DignifiedSilence
- * Racida S
- * Marcin Mikołajczak
  * Ihor Hordiichuk
- * Hồ Nhất Duy
- * Tirifto
+ * Phongpanot
+ * GunChleoc
+ * Clemens Schielicke
+ * Racida S
  * Zet
+ * Marcin Mikołajczak
+ * Tirifto
  * Kim
+ * Eivind Ødegård
+ * Mohamad Reza
  * Vodoyo Kamal
  * Kimsible
  * Felix Ableitner
@@ -33,59 +35,64 @@
  * Slimane Selyan AMIRI
  * Mark Van den Borre
  * x
+ * ButterflyOfFire
  * Julien Maulny
- * Eivind Ødegård
+ * Besnik Bleta
  * Jorropo
  * Josh Morel
  * Manuel Viens
  * BO41
  * Balázs Meskó
- * Besnik Bleta
- * vachan
- * Francesc
  * Quentin PAGÈS
+ * vachan
+ * Elegant Codes
+ * Francesc
  * mando laress
  * Florian CUNY
  * Cedric F
+ * Dingzhong Chen
  * Marc Strange
- * ButterflyOfFire
+ * Ch
  * Martin Hoefler
  * Xabi
  * buoyantair
+ * lutangar
  * Balázs Úr
  * Jan Keromnes
  * Luca Calcaterra
- * lutangar
+ * knuxify
+ * Agron Selimaj
  * Attila F
  * Caroline Chuong
  * David Soh
+ * Diazepan Medina
+ * J. Lavoie
  * Ms Kimsible
  * Porrumentzio
+ * Poslovitch
  * Siourdakis Thanos
  * Thomas Citharel
- * knuxify
- * Agron Selimaj
  * Benjamin Bouvier
- * Dingzhong Chen
  * Joe Bill
  * Kemal Oktay Aktoğan
  * Luc Didry
  * Lucas Declercq
- * Poslovitch
  * chris@famichiki.tube
  * matograine
  * Alexander Ivanov
  * Daniel Santos
  * David Libeau
- * Diazepan Medina
+ * Eric Guichaoua
  * Ewald Arnold
  * Florent F
+ * Jason Zhou
  * Kempelen
  * Nassim Bounouas
  * NorbiPeti
  * Rafael Fontenelle
  * Tzafrir Cohen
  * Viorel-Cătălin Răpițeanu
+ * miro
  * owiox8+1viroxeaziaxw@sharklasers.com
  * Adrià Martín
  * Ahmed ABERWAG
@@ -100,6 +107,7 @@
  * Green-Star
  * Micah Elizabeth Scott
  * SVNET Libre
+ * Sergey Zigachev
  * Thomas Kuntz
  * Tony Simoes
  * William Lahti
@@ -113,14 +121,16 @@
  * Ajeje Brazorf
  * Andrey
  * Angristan
- * Ch
+ * Armin
  * Chris Sakura 佐倉くりす on Youtube
  * DontUseGithub
- * Eric Guichaoua
  * Kristoffer Grundström
+ * LecygneNoir
+ * Lukas
  * MahdiTurki
  * Maxime Louet
  * Mildred
+ * Nikolay
  * Okhin
  * Pierre-Alain TORET
  * Serge Victor
@@ -158,19 +168,16 @@
  * Jocelyn Jaubert
  * Johan Fleury
  * Kiro
- * LecygneNoir
  * Leopere
  * Loukas Stamellos
- * Lukas
  * Lukas Winkler
  * Manuela Silva
- * Mohamad Reza
  * Mélanie Chauvel
  * Natsuki Tsukishiro
  * Pedro
  * Petr Balíček
+ * Pierre-Jean
  * Piotr Sikora
- * Sergey Zigachev
  * Stefan Keks
  * Waazdakka
  * Winfried Hyronimus
@@ -212,6 +219,7 @@
  * Jan Marsalek
  * Jelle Besseling
  * Julien Lemaire
+ * Jurij Podgoršek
  * Lucas Teixeira
  * Millicent Billette
  * Mondo Xíbaro
@@ -220,7 +228,6 @@
  * Nicolai Larsen
  * Nojus
  * Pierre Jaury
- * Pierre-Jean
  * Quentin
  * ROBERT MCDOWELL
  * Ronan
@@ -228,12 +235,14 @@
  * Stakovicz
  * Takeshi Umeda
  * Thai Localization
+ * Toso Malero
  * Valvin
  * YiDai
  * Yogesh K S
  * ahmadsharifian
  * bopol
  * framail
+ * hecko
  * les
  * libertas
  * mater
@@ -245,6 +254,7 @@
  * vancha march
  * victor héry
  * Àngel Pérez Beroy
+ * 李奕寯
  * 3risian
  * A.D.R.S
  * Acid Chicken (硫酸鶏)
@@ -263,7 +273,6 @@
  * Antoine Millet
  * Anton Latukha
  * Armando Lüscher
- * Armin
  * Artem Prosvetov
  * Arthur Lutz
  * Austin Heap
@@ -272,6 +281,7 @@
  * Ben Lubar
  * Benjamin EWFT
  * Benoît Piédallu
+ * Bob Oob
  * Brad Johnson
  * Cadence Ember
  * Cale
@@ -285,9 +295,12 @@
  * David Dobryakov
  * DeeJayBro
  * Dimitri DI GUSTO
+ * Dimitrios Glentadakis
+ * Doug Luce
  * Edouard SCHWEISGUTH
  * Edwin Alberto Amado Baron
  * Emmanuel Pret
+ * Enfong Cao
  * Eric Brehault
  * Erwan Croze
  * Esmail_Hazem
@@ -335,6 +348,7 @@
  * Lint
  * LoveIsGrief
  * Lucien A
+ * Lupinard
  * Léo Andrès
  * ManMade-cube42
  * Marco Zehe
@@ -358,6 +372,7 @@
  * Nicolas Fortin
  * Niklas Reimer
  * Nitesh Sawant
+ * Novel Martin Harianto
  * Olivier Jolly
  * Pablo Joubert
  * Paul FLORENCE
@@ -378,11 +393,13 @@
  * Rebecca
  * Rech
  * Rep Dolsay
+ * Robert Riemann
  * Robin
  * Rostyslav Haitkulov
  * Sankar
  * SansPseudoFix
  * Sebastian Paweł Wolski
+ * Showfom
  * Simon Gilliot
  * Simounet
  * Stefan Schüller
@@ -398,6 +415,7 @@
  * Thomas
  * Timo Gurr
  * Timothée Grégoire
+ * Tolga KARABATAK
  * Tomás Sebastián Romero
  * TrashMacNugget
  * Tsuki
@@ -444,9 +462,11 @@
  * pitchum
  * potedeo
  * rdxuan
+ * retiolus
  * saleh oukiki
  * sanchis
  * smilekison
+ * sn0wygecko
  * thecashewtrader
  * tilllt
  * tomamplius

@@ -16,6 +16,7 @@ function buildNextVideoState (currentState?: VideoState) {
   }
 
   if (
+    currentState !== VideoState.TO_EDIT &&
     currentState !== VideoState.TO_TRANSCODE &&
     currentState !== VideoState.TO_MOVE_TO_EXTERNAL_STORAGE &&
     CONFIG.TRANSCODING.ENABLED
@@ -33,7 +34,13 @@ function buildNextVideoState (currentState?: VideoState) {
   return VideoState.PUBLISHED
 }
 
-function moveToNextState (video: MVideoUUID, isNewVideo = true) {
+function moveToNextState (options: {
+  video: MVideoUUID
+  previousVideoState?: VideoState
+  isNewVideo?: boolean // Default true
+}) {
+  const { video, previousVideoState, isNewVideo = true } = options
+
   return sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
     const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
@@ -48,28 +55,35 @@ function moveToNextState (video: MVideoUUID, isNewVideo = true) {
     const newState = buildNextVideoState(videoDatabase.state)
 
     if (newState === VideoState.PUBLISHED) {
-      return moveToPublishedState(videoDatabase, isNewVideo, t)
+      return moveToPublishedState({ video: videoDatabase, previousVideoState, isNewVideo, transaction: t })
     }
 
     if (newState === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-      return moveToExternalStorageState(videoDatabase, isNewVideo, t)
+      return moveToExternalStorageState({ video: videoDatabase, isNewVideo, transaction: t })
     }
   })
 }
 
-async function moveToExternalStorageState (video: MVideoFullLight, isNewVideo: boolean, transaction: Transaction) {
+async function moveToExternalStorageState (options: {
+  video: MVideoFullLight
+  isNewVideo: boolean
+  transaction: Transaction
+}) {
+  const { video, isNewVideo, transaction } = options
+
   const videoJobInfo = await VideoJobInfoModel.load(video.id, transaction)
   const pendingTranscode = videoJobInfo?.pendingTranscode || 0
 
   // We want to wait all transcoding jobs before moving the video on an external storage
   if (pendingTranscode !== 0) return false
 
+  const previousVideoState = video.state
   await video.setNewState(VideoState.TO_MOVE_TO_EXTERNAL_STORAGE, isNewVideo, transaction)
 
   logger.info('Creating external storage move job for video %s.', video.uuid, { tags: [ video.uuid ] })
 
   try {
-    await addMoveToObjectStorageJob(video, isNewVideo)
+    await addMoveToObjectStorageJob({ video, previousVideoState, isNewVideo })
 
     return true
   } catch (err) {
@@ -103,21 +117,33 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function moveToPublishedState (video: MVideoFullLight, isNewVideo: boolean, transaction: Transaction) {
-  logger.info('Publishing video %s.', video.uuid, { tags: [ video.uuid ] })
+async function moveToPublishedState (options: {
+  video: MVideoFullLight
+  isNewVideo: boolean
+  transaction: Transaction
+  previousVideoState?: VideoState
+}) {
+  const { video, isNewVideo, transaction, previousVideoState } = options
+  const previousState = previousVideoState ?? video.state
 
-  const previousState = video.state
+  logger.info('Publishing video %s.', video.uuid, { previousState, tags: [ video.uuid ] })
+
   await video.setNewState(VideoState.PUBLISHED, isNewVideo, transaction)
 
   // If the video was not published, we consider it is a new one for other instances
   // Live videos are always federated, so it's not a new video
   await federateVideoIfNeeded(video, isNewVideo, transaction)
 
-  if (!isNewVideo) return
+  if (previousState === VideoState.TO_EDIT) {
+    Notifier.Instance.notifyOfFinishedVideoStudioEdition(video)
+    return
+  }
 
-  Notifier.Instance.notifyOnNewVideoIfNeeded(video)
+  if (isNewVideo) {
+    Notifier.Instance.notifyOnNewVideoIfNeeded(video)
 
-  if (previousState === VideoState.TO_TRANSCODE) {
-    Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(video)
+    if (previousState === VideoState.TO_TRANSCODE) {
+      Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(video)
+    }
   }
 }

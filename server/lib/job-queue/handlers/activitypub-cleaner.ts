@@ -1,6 +1,5 @@
 import { map } from 'bluebird'
 import { Job } from 'bull'
-import { checkUrlsSameHost } from '@server/helpers/activitypub'
 import {
   isAnnounceActivityValid,
   isDislikeActivityValid,
@@ -9,6 +8,7 @@ import {
 import { sanitizeAndCheckVideoCommentObject } from '@server/helpers/custom-validators/activitypub/video-comments'
 import { doJSONRequest, PeerTubeRequestError } from '@server/helpers/requests'
 import { AP_CLEANER } from '@server/initializers/constants'
+import { checkUrlsSameHost } from '@server/lib/activitypub/url'
 import { Redis } from '@server/lib/redis'
 import { VideoModel } from '@server/models/video/video'
 import { VideoCommentModel } from '@server/models/video/video-comment'
@@ -29,6 +29,9 @@ async function processActivityPubCleaner (_job: Job) {
     const { bodyValidator, deleter, updater } = rateOptionsFactory()
 
     await map(rateUrls, async rateUrl => {
+      // TODO: remove when https://github.com/mastodon/mastodon/issues/13571 is fixed
+      if (rateUrl.includes('#')) return
+
       const result = await updateObjectIfNeeded({ url: rateUrl, bodyValidator, updater, deleter })
 
       if (result?.status === 'deleted') {

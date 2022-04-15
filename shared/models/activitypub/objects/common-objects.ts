@@ -46,7 +46,7 @@ export type ActivityTrackerUrlObject = {
   href: string
 }
 
-export type ActivityPlaylistInfohashesObject = {
+export type ActivityStreamingPlaylistInfohashesObject = {
   type: 'Infohash'
   name: string
 }
@@ -97,7 +97,7 @@ export interface ActivityFlagReasonObject {
 
 export type ActivityTagObject =
   ActivityPlaylistSegmentHashesObject
-  | ActivityPlaylistInfohashesObject
+  | ActivityStreamingPlaylistInfohashesObject
   | ActivityVideoUrlObject
   | ActivityHashTagObject
   | ActivityMentionObject

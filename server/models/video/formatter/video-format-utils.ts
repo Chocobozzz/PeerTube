@@ -1,11 +1,19 @@
 import { generateMagnetUri } from '@server/helpers/webtorrent'
+import { getActivityStreamDuration } from '@server/lib/activitypub/activity'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls'
-import { VideoViews } from '@server/lib/video-views'
+import { VideoViewsManager } from '@server/lib/views/video-views-manager'
 import { uuidToShort } from '@shared/extra-utils'
-import { VideoFile, VideosCommonQueryAfterSanitize } from '@shared/models'
-import { ActivityTagObject, ActivityUrlObject, VideoObject } from '../../../../shared/models/activitypub/objects'
-import { Video, VideoDetails, VideoInclude } from '../../../../shared/models/videos'
-import { VideoStreamingPlaylist } from '../../../../shared/models/videos/video-streaming-playlist.model'
+import {
+  ActivityTagObject,
+  ActivityUrlObject,
+  Video,
+  VideoDetails,
+  VideoFile,
+  VideoInclude,
+  VideoObject,
+  VideosCommonQueryAfterSanitize,
+  VideoStreamingPlaylist
+} from '@shared/models'
 import { isArray } from '../../../helpers/custom-validators/misc'
 import {
   MIMETYPES,
@@ -97,7 +105,10 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options: VideoForm
 
     isLocal: video.isOwned(),
     duration: video.duration,
+
     views: video.views,
+    viewers: VideoViewsManager.Instance.getViewers(video),
+
     likes: video.likes,
     dislikes: video.dislikes,
     thumbnailPath: video.getMiniatureStaticPath(),
@@ -119,10 +130,6 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options: VideoForm
 
     // Can be added by external plugins
     pluginData: (video as any).pluginData
-  }
-
-  if (video.isLive) {
-    videoObject.viewers = VideoViews.Instance.getViewers(video)
   }
 
   const add = options.additionalAttributes
@@ -461,11 +468,6 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
   }
 }
 
-function getActivityStreamDuration (duration: number) {
-  // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
-  return 'PT' + duration + 'S'
-}
-
 function getCategoryLabel (id: number) {
   return VIDEO_CATEGORIES[id] || 'Misc'
 }
@@ -491,7 +493,6 @@ export {
   videoModelToFormattedDetailsJSON,
   videoFilesModelToFormattedJSON,
   videoModelToActivityPubObject,
-  getActivityStreamDuration,
 
   guessAdditionalAttributesFromQuery,
 

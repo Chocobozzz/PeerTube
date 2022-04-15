@@ -42,7 +42,7 @@ export class MyVideoPlaylistsComponent {
           this.videoPlaylists = this.videoPlaylists
                                     .filter(p => p.id !== videoPlaylist.id)
 
-          this.notifier.success($localize`Playlist ${videoPlaylist.displayName}} deleted.`)
+          this.notifier.success($localize`Playlist ${videoPlaylist.displayName} deleted.`)
         },
 
         error: err => this.notifier.error(err.message)
