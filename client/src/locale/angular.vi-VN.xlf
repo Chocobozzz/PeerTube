@@ -410,12 +410,12 @@
       </trans-unit>
       <trans-unit id="2816407313459209541" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="translated">Báo cáo của bạn sẽ được gửi tới kiểm duyệt viên <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/>và đồng thời chuyển tiếp tới nơi lưu trữ gốc của video (<x id="INTERPOLATION_1"/>) nữa<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
+        <target state="translated">Báo cáo của bạn sẽ được gửi tới kiểm duyệt viên <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> và đồng thời chuyển tiếp tới nơi lưu trữ gốc của video (<x id="INTERPOLATION_1"/>)<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="6990204431018013063" datatype="html">
         <source>Please describe the issue...</source>
-        <target state="translated">Xin mô tả vấn đề...</target>
+        <target state="translated">Thêm mô tả vấn đề...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">78</context></context-group>
@@ -2889,7 +2889,7 @@
       </trans-unit>
       <trans-unit id="3959826834147169200">
         <source>Muted</source>
-        <target>Đã ẩn</target>
+        <target>Tắt tiếng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">104</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.html</context><context context-type="linenumber">1</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">192</context></context-group>
@@ -3272,7 +3272,7 @@
       </trans-unit>
       <trans-unit id="7651712714082200084" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the comment origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="translated">Báo cáo của bạn sẽ được gửi đến quản trị viên <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> và đồng thời lẫn bình luận gốc (<x id="INTERPOLATION_1"/>) nữa<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
+        <target state="translated">Báo cáo của bạn sẽ được gửi tới kiểm duyệt viên <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> và đồng thời chuyển tiếp tới máy chủ của người bình luận (<x id="INTERPOLATION_1"/>)<x id="CLOSE_TAG_NG_CONTAINER"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
@@ -5528,7 +5528,7 @@
       </trans-unit>
       <trans-unit id="3082811226222076503" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Best"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">Xếp theo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Hay Nhất"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Xếp theo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Nổi Bật"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">50</context>
@@ -7795,7 +7795,7 @@
       </trans-unit>
       <trans-unit id="780323526182667308" datatype="html">
         <source>User <x id="PH"/> updated.</source>
-        <target state="translated">Người dùng <x id="PH"/> đã cập nhật.</target>
+        <target state="translated">Đã cập nhật tài khoản <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-update.component.ts</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="1349763489797682899" datatype="html">
@@ -8276,7 +8276,7 @@
       </trans-unit>
       <trans-unit id="7589345916094713536" datatype="html">
         <source>Video channel <x id="PH"/> updated.</source>
-        <target state="translated">Kênh video <x id="PH"/> đã cập nhật.</target>
+        <target state="translated">Đã cập nhật kênh <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-update.component.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="8407755843502300957" datatype="html">
@@ -8446,7 +8446,7 @@
       </trans-unit>
       <trans-unit id="1431617394009162547" datatype="html">
         <source>Playlist <x id="PH"/> updated.</source>
-        <target state="translated">Danh sách phát <x id="PH"/> đã cập nhật.</target>
+        <target state="translated">Đã cập nhật danh sách phát <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="4844578664427956129" datatype="html">
@@ -9457,7 +9457,7 @@
       </trans-unit>
       <trans-unit id="1099684476181448167">
         <source>Password cannot be more than 255 characters long.</source>
-        <target>Mật khẩu phải ngắn hơn 255 kí tự.</target>
+        <target>Mật khẩu phải ngắn hơn 255 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">73</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
@@ -9493,14 +9493,14 @@
       </trans-unit>
       <trans-unit id="2761226139624435788">
         <source>Description must be at least 3 characters long.</source>
-        <target>Mô tả phải từ 3 kí tự trở lên.</target>
+        <target>Mô tả phải từ 3 ký tự trở lên.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">125</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="4717982586356605243">
         <source>Description cannot be more than 1000 characters long.</source>
-        <target>Mô tả phải từ 100 kí tự trở xuống.</target>
+        <target>Mô tả phải từ 100 ký tự trở xuống.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">126</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">37</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">34</context></context-group>
@@ -9512,12 +9512,12 @@
       </trans-unit>
       <trans-unit id="7803960725351649605">
         <source>Ban reason must be at least 3 characters long.</source>
-        <target>Lí do chặn phải từ 3 kí tự trở lên.</target>
+        <target>Lí do chặn phải từ 3 ký tự trở lên.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">143</context></context-group>
       </trans-unit>
       <trans-unit id="3851609012243698179">
         <source>Ban reason cannot be more than 250 characters long.</source>
-        <target>Lí do chặn phải từ 250 kí tự trở xuống.</target>
+        <target>Lý do vô hiệu hóa phải từ 250 kí tự trở xuống.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">144</context></context-group>
       </trans-unit>
       <trans-unit id="6632896893630378443" datatype="html">
@@ -9765,12 +9765,12 @@
       </trans-unit>
       <trans-unit id="2807676084745266104">
         <source>Video name must be at least 3 characters long.</source>
-        <target>Tên video cần dài hơn 3 kí tự.</target>
+        <target>Tên video cần dài hơn 3 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="2155414141025589556">
         <source>Video name cannot be more than 120 characters long.</source>
-        <target>Tên video cần ngắn hơn 120 kí tự.</target>
+        <target>Tên video cần ngắn hơn 120 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="1074634769552897790" datatype="html">
@@ -9803,12 +9803,12 @@
       </trans-unit>
       <trans-unit id="142488285332434408">
         <source>A tag should be more than 2 characters long.</source>
-        <target>Một thẻ cần dài hơn 2 kí tự.</target>
+        <target>Một thẻ cần dài hơn 2 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="691846635236293620">
         <source>A tag should be less than 30 characters long.</source>
-        <target>Một thẻ cần ngắn hơn 30 kí tự.</target>
+        <target>Một thẻ cần ngắn hơn 30 ký tự.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="4146790476782316573" datatype="html">
@@ -10939,7 +10939,7 @@
       </trans-unit>
       <trans-unit id="1950057220179636309">
         <source>Save to playlist</source>
-        <target>Đã lưu vào danh sách phát</target>
+        <target>Lưu vào danh sách phát</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context><context context-type="linenumber">58</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">314</context></context-group>
       </trans-unit>
