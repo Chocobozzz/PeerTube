@@ -197,11 +197,12 @@ export class VideosListCommonPageComponent implements OnInit, OnDestroy, Disable
       return
     }
 
-    if ([ 'hot', 'trending', 'likes' ].includes(sanitizedSort)) {
+    if ([ 'hot', 'trending', 'likes', 'views' ].includes(sanitizedSort)) {
       this.title = $localize`Trending`
 
       if (sanitizedSort === 'hot') this.titleTooltip = $localize`Videos with the most interactions for recent videos`
       if (sanitizedSort === 'likes') this.titleTooltip = $localize`Videos that have the most likes`
+      if (sanitizedSort === 'views') this.titleTooltip = undefined
 
       if (sanitizedSort === 'trending') {
         if (this.trendingDays === 1) this.titleTooltip = $localize`Videos with the most views during the last 24 hours`
