@@ -29,6 +29,9 @@ async function processActivityPubCleaner (_job: Job) {
     const { bodyValidator, deleter, updater } = rateOptionsFactory()
 
     await map(rateUrls, async rateUrl => {
+      // TODO: remove when https://github.com/mastodon/mastodon/issues/13571 is fixed
+      if (rateUrl.includes('#')) return
+
       const result = await updateObjectIfNeeded({ url: rateUrl, bodyValidator, updater, deleter })
 
       if (result?.status === 'deleted') {
