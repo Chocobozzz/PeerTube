@@ -4781,23 +4781,31 @@ components:
       name: sort
       in: query
       required: false
-      description: Sort videos by criteria
       schema:
         type: string
         enum:
-        - name
-        - -duration
-        - -createdAt
-        - -publishedAt
-        - -views
-        - -likes
-        - -trending
-        - -hot
+          - name
+          - -duration
+          - -createdAt
+          - -publishedAt
+          - -views
+          - -likes
+          - -trending
+          - -hot
+          - -best
+        description: >
+          Sort videos by criteria (prefixing with `-` means `DESC` order):
+            * `hot` - Adaptation of Reddit "hot" algorithm taking into account video views, likes, dislikes and comments and publication date
+            * `best` - Same than `hot`, but also takes into account user video history
+            * `trending` - Sort videos by recent views ("recent" is defined by the admin)
+            * `views` - Sort videos using their `views` counter
+            * `publishedAt` - Sort by video publication date (when it became publicly available)
     videosSearchSort:
       name: sort
       in: query
       required: false
-      description: Sort videos by criteria
+      description: >
+        Sort videos by criteria (prefixing with `-` means `DESC` order):
       schema:
         type: string
         enum:
