@@ -144,7 +144,7 @@ class Emailer {
       htmlToText: {
         selectors: [
           { selector: 'img', format: 'skip' },
-          { selector: 'a', options: { ignoreHref: true } }
+          { selector: 'a', options: { hideLinkHrefIfSameAsText: true } }
         ]
       },
       message: {
