@@ -159,7 +159,7 @@ class PeerTubePlugin extends Plugin {
     })
 
     this.player.one('ended', () => {
-      const currentTime = Math.floor(this.player.duration())
+      const currentTime = Math.round(this.player.duration())
       lastCurrentTime = currentTime
 
       this.notifyUserIsWatching(currentTime, lastViewEvent)
@@ -168,7 +168,7 @@ class PeerTubePlugin extends Plugin {
     })
 
     this.videoViewInterval = setInterval(() => {
-      const currentTime = Math.floor(this.player.currentTime())
+      const currentTime = Math.round(this.player.currentTime())
 
       // No need to update
       if (currentTime === lastCurrentTime) return
