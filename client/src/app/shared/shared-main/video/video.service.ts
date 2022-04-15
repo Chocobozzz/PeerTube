@@ -3,7 +3,7 @@ import { from, Observable } from 'rxjs'
 import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
+import { AuthService, ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import {
   BooleanBothQuery,
@@ -55,6 +55,7 @@ export class VideoService {
   static BASE_SUBSCRIPTION_FEEDS_URL = environment.apiUrl + '/feeds/subscriptions.'
 
   constructor (
+    private auth: AuthService,
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private restService: RestService,
@@ -418,7 +419,7 @@ export class VideoService {
       ? this.restService.componentToRestPagination(videoPagination)
       : undefined
 
-    let newParams = this.restService.addRestGetParams(params, pagination, sort)
+    let newParams = this.restService.addRestGetParams(params, pagination, this.buildListSort(sort))
 
     if (skipCount) newParams = newParams.set('skipCount', skipCount + '')
 
@@ -432,6 +433,22 @@ export class VideoService {
     if (privacyOneOf) newParams = this.restService.addArrayParams(newParams, 'privacyOneOf', privacyOneOf)
 
     return newParams
+  }
+
+  private buildListSort (sortArg: VideoSortField | SortMeta) {
+    const sort = this.restService.buildSortString(sortArg)
+
+    if (typeof sort === 'string') {
+      // Silently use the best algorithm for logged in users if they chose the hot algorithm
+      if (
+        this.auth.isLoggedIn() &&
+        (sort === 'hot' || sort === '-hot')
+      ) {
+        return sort.replace('hot', 'best')
+      }
+
+      return sort
+    }
   }
 
   private setVideoRate (id: number, rateType: UserVideoRateType) {

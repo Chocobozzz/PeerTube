@@ -31,19 +31,19 @@ export class RestService {
     }
 
     if (sort !== undefined) {
-      let sortString = ''
-
-      if (typeof sort === 'string') {
-        sortString = sort
-      } else {
-        const sortPrefix = sort.order === 1 ? '' : '-'
-        sortString = sortPrefix + sort.field
-      }
-
-      newParams = newParams.set('sort', sortString)
+      newParams = newParams.set('sort', this.buildSortString(sort))
     }
 
     return newParams
+  }
+
+  buildSortString (sort: SortMeta | string) {
+    if (typeof sort === 'string') {
+      return sort
+    }
+
+    const sortPrefix = sort.order === 1 ? '' : '-'
+    return sortPrefix + sort.field
   }
 
   addArrayParams (params: HttpParams, name: string, values: (string | number)[]) {

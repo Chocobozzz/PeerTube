@@ -72,15 +72,10 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
     return this.auth.getUser().hasRight(UserRight.SEE_ALL_VIDEOS)
   }
 
-  isTrendingSortEnabled (sort: 'most-viewed' | 'hot' | 'best' | 'most-liked') {
+  isTrendingSortEnabled (sort: 'most-viewed' | 'hot' | 'most-liked') {
     const serverConfig = this.serverService.getHTMLConfig()
 
-    const enabled = serverConfig.trending.videos.algorithms.enabled.includes(sort)
-
-    // Best is adapted from the user
-    if (sort === 'best') return enabled && this.auth.isLoggedIn()
-
-    return enabled
+    return serverConfig.trending.videos.algorithms.enabled.includes(sort)
   }
 
   resetFilter (key: string, canRemove: boolean) {
