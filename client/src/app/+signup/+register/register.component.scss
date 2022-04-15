@@ -62,11 +62,17 @@ button {
 
   &[cdkStepperNext] {
     @include orange-button;
+
+    // Chrome does not support inline-end
+    float: right;
     float: inline-end;
   }
 
   &[cdkStepperPrevious] {
     @include grey-button;
+
+    // Chrome does not support inline-start
+    float: left;
     float: inline-start;
   }
 }
