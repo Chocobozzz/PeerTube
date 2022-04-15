@@ -765,7 +765,7 @@
       </trans-unit>
       <trans-unit id="1779391511451594552">
         <source>Using an ActivityPub account</source>
-        <target>Sử dụng tài khoản ActivityPub</target>
+        <target>ActivityPub</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="3372646000533908418" datatype="html">
@@ -818,7 +818,7 @@
       </trans-unit>
       <trans-unit id="2949829240129672512" datatype="html">
         <source>Using a syndication feed</source>
-        <target state="translated">Sử dụng feed</target>
+        <target state="translated">Feed</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="7695158742270602420">
@@ -1786,7 +1786,7 @@
       </trans-unit>
       <trans-unit id="3543381263966122204" datatype="html">
         <source>You might need to check your account is allowed by the resource or instance owner.</source>
-        <target state="translated">Bạn cần phải kiểm tra lại tài khoản của bạn đã được cho phép sử dụng tài nguyên hay sở hữu máy chủ hay chưa.</target>
+        <target state="translated">Bạn cần kiểm tra lại tài khoản của bạn đã được cho phép sử dụng tài nguyên hay quản trị máy chủ hay chưa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">31</context>
@@ -2598,7 +2598,7 @@
       </trans-unit>
       <trans-unit id="3768339632235914548">
         <source>Publish will be available when upload is finished</source>
-        <target>Bạn chỉ có thể xuất bản khi video đã được tải lên hoàn toàn</target>
+        <target>Bạn chỉ có thể đăng sau khi video đã được tải lên 100%</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="7430416142942514215">
@@ -2788,7 +2788,7 @@
       </trans-unit>
       <trans-unit id="937533808893845780" datatype="html">
         <source>This playlist is private so you won't be able to share it with external users</source>
-        <target state="translated">Đây là danh sách phát riêng tư nên bạn không thể chia sẻ nó</target>
+        <target state="translated">Bạn không thể chia sẻ danh sách phát riêng tư</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">14</context>
@@ -10511,7 +10511,7 @@
       </trans-unit>
       <trans-unit id="2365286519320230773" datatype="html">
         <source>Hide any content from that user from you.</source>
-        <target state="translated">Ẩn mọi nội dung nào từ người này.</target>
+        <target state="translated">Ẩn mọi nội dung từ người này.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">296</context></context-group>
       </trans-unit>
       <trans-unit id="4043508901590508211">
@@ -10558,7 +10558,7 @@
       </trans-unit>
       <trans-unit id="2077144178298031252" datatype="html">
         <source>Hide any content from that user from you, your instance and its users.</source>
-        <target state="translated">Ẩn mọi nội dung từ người dùng này khỏi máy chủ của bạn.</target>
+        <target state="translated">Ẩn mọi nội dung từ người này khỏi máy chủ của bạn.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">374</context></context-group>
       </trans-unit>
       <trans-unit id="7675070596643104983" datatype="html">
@@ -10693,7 +10693,7 @@
       </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="translated">Đã đăng toàn bộ kênh gần đây của <x id="PH"/>. Bạn sẽ nhận được thông báo về video mới của họ.</target>
+        <target state="translated">Đã đăng ký tất cả kênh gần đây của <x id="PH"/>. Bạn sẽ nhận được thông báo về video mới của họ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="2780460651686172544" datatype="html">
@@ -11066,12 +11066,12 @@
       </trans-unit>
       <trans-unit id="4058575476871566236">
         <source>Published</source>
-        <target>Đã xuất bản</target>
+        <target>Đã đăng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">170</context></context-group>
       </trans-unit>
       <trans-unit id="1747928867514972971">
         <source>Publication scheduled on</source>
-        <target>Đã lên lịch xuất bản vào</target>
+        <target>Đã lên lịch đăng vào</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">175</context></context-group>
       </trans-unit>
       <trans-unit id="5093002376262354382" datatype="html">
@@ -11174,22 +11174,22 @@
       </trans-unit>
       <trans-unit id="2439066254855913806">
         <source>Only I can see this video</source>
-        <target>Chỉ mình tôi có thể thấy video này</target>
+        <target>Chỉ mình tôi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">367</context></context-group>
       </trans-unit>
       <trans-unit id="6767380569816110388" datatype="html">
         <source>Only shareable via a private link</source>
-        <target state="translated">Chỉ có thể xem được bằng một link bí mật</target>
+        <target state="translated">Chỉ người có được liên kết</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">368</context></context-group>
       </trans-unit>
       <trans-unit id="6828965264297239528">
         <source>Anyone can see this video</source>
-        <target>Ai cũng có thể thấy video này</target>
+        <target>Ai cũng có thể xem video này</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">369</context></context-group>
       </trans-unit>
       <trans-unit id="1425933035739773115" datatype="html">
         <source>Only users of this instance can see this video</source>
-        <target state="translated">Chỉ người dùng trên máy chủ này mới có thể xem video</target>
+        <target state="translated">Chỉ người dùng trên máy chủ này</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">370</context></context-group>
       </trans-unit>
       <trans-unit id="8312101634344200207" datatype="html">
@@ -11245,7 +11245,7 @@
       </trans-unit>
       <trans-unit id="5981816353437801748">
         <source>Video published.</source>
-        <target>Đã xuất bản video.</target>
+        <target>Đã đăng video.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">260</context></context-group>
       </trans-unit>
       <trans-unit id="764164089183618119">
@@ -11321,7 +11321,7 @@
       </trans-unit>
       <trans-unit id="6775540171466219199" datatype="html">
         <source>Stop autoplaying next video</source>
-        <target state="translated">Ngưng tự phát video kế tiếp</target>
+        <target state="translated">Tắt tự phát video kế tiếp</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/playlist/video-watch-playlist.component.ts</context><context context-type="linenumber">234</context></context-group>
       </trans-unit>
       <trans-unit id="5149234672404299151" datatype="html">
@@ -11331,12 +11331,12 @@
       </trans-unit>
       <trans-unit id="5870421136141540382" datatype="html">
         <source>Stop looping playlist videos</source>
-        <target state="translated">Ngừng lặp lại video trong danh sách phát</target>
+        <target state="translated">Tắt phát lặp lại video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/playlist/video-watch-playlist.component.ts</context><context context-type="linenumber">240</context></context-group>
       </trans-unit>
       <trans-unit id="1599585307037758139" datatype="html">
         <source>Loop playlist videos</source>
-        <target state="translated">Lặp lại video trong danh sách phát</target>
+        <target state="translated">Phát lặp lại video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/playlist/video-watch-playlist.component.ts</context><context context-type="linenumber">241</context></context-group>
       </trans-unit>
       <trans-unit id="3704292036525161260" datatype="html">
