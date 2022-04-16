@@ -66,8 +66,12 @@ function optimizeOriginalVideofile (video: MVideoFullLight, inputVideoFile: MVid
       job
     }
 
-    // Could be very long!
-    await transcodeVODAndValidate(transcodeOptions)
+    /**
+     * Could be very long!
+     * Don't validate the file here, since ffmpeg may solve some issues upon transcoding
+     * (which isn't done upon quick-transcode)
+     */
+    await transcodeVOD(transcodeOptions)
 
     // Important to do this before getVideoFilename() to take in account the new filename
     inputVideoFile.extname = newExtname
