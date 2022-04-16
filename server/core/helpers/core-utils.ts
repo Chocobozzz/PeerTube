@@ -7,7 +7,8 @@
 
 import { promisify1, promisify2, promisify3 } from '@peertube/peertube-core-utils'
 import { exec, ExecOptions } from 'child_process'
-import { ED25519KeyPairOptions, generateKeyPair, randomBytes, RSAKeyPairOptions, scrypt } from 'crypto'
+import { createHash, ED25519KeyPairOptions, generateKeyPair, randomBytes, RSAKeyPairOptions, scrypt } from 'crypto'
+import { createReadStream } from 'fs'
 import truncate from 'lodash-es/truncate.js'
 import { pipeline } from 'stream'
 import { URL } from 'url'
@@ -261,6 +262,17 @@ function generateED25519KeyPairPromise () {
   })
 }
 
+function getContentHash (filePath: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const hash = createHash('md5')
+    hash.update(Date.now().toString())
+    const stream = createReadStream(filePath)
+    stream.on('error', err => reject(err))
+    stream.on('data', chunk => hash.update(chunk))
+    stream.on('end', () => resolve(hash.digest('hex')))
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 const randomBytesPromise = promisify1<number, Buffer>(randomBytes)
@@ -284,6 +296,8 @@ export {
   peertubeTruncate,
 
   scryptPromise,
+
+  getContentHash,
 
   randomBytesPromise,
 

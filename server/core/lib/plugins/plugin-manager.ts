@@ -1,6 +1,7 @@
 import express from 'express'
-import { createReadStream, createWriteStream } from 'fs'
-import { ensureDir, outputFile, readJSON } from 'fs-extra/esm'
+import { createReadStream, createWriteStream, statSync } from 'fs'
+import { mkdir, readlink } from 'fs/promises'
+import { ensureDir, outputFile, readJSON, ensureSymlink } from 'fs-extra/esm'
 import { Server } from 'http'
 import { createRequire } from 'module'
 import { basename, join } from 'path'
@@ -16,7 +17,6 @@ import {
   ServerHook,
   ServerHookName
 } from '@peertube/peertube-models'
-import { decachePlugin } from '@server/helpers/decache.js'
 import { ApplicationModel } from '@server/models/application/application.js'
 import { MOAuthTokenUser, MUser } from '@server/types/models/index.js'
 import { isLibraryCodeValid, isPackageJSONValid } from '../../helpers/custom-validators/plugins.js'
@@ -77,13 +77,23 @@ export class PluginManager implements ServerHook {
   private hooks: { [name: string]: HookInformationValue[] } = {}
   private translations: PluginLocalesTranslations = {}
 
+  private readonly latestDirectory = join(CONFIG.STORAGE.PLUGINS_DIR, 'latest')
+
   private server: Server
 
   private constructor () {
   }
 
-  init (server: Server) {
+  async init (server: Server) {
     this.server = server
+
+    try {
+      statSync(this.latestDirectory)
+    } catch (err) {
+      const workingDir = join(CONFIG.STORAGE.PLUGINS_DIR, Date.now().toString())
+      await mkdir(workingDir)
+      await ensureSymlink(workingDir, this.latestDirectory)
+    }
   }
 
   registerWebSocketRouter () {
@@ -374,6 +384,11 @@ export class PluginManager implements ServerHook {
       logger.info('Successful installation of plugin %s.', toInstall)
 
       if (register) {
+        // Unregister old hooks if it's an update
+        try {
+          await this.unregister(npmName)
+        } catch (err) {}
+
         await this.registerPluginOrTheme(plugin)
       }
     } catch (rootErr) {
@@ -394,6 +409,12 @@ export class PluginManager implements ServerHook {
       }
 
       throw rootErr
+    } finally {
+      // Update plugin paths
+      for (const npmName in this.registeredPlugins) {
+        const { name, type } = this.registeredPlugins[npmName]
+        this.registeredPlugins[npmName].path = await this.getPluginPath(name, type)
+      }
     }
 
     return plugin
@@ -410,9 +431,6 @@ export class PluginManager implements ServerHook {
       const plugin = await PluginModel.loadByNpmName(toUpdate)
       version = plugin.latestVersion
     }
-
-    // Unregister old hooks
-    await this.unregister(npmName)
 
     return this.install({ toInstall: toUpdate, version, fromDisk })
   }
@@ -463,7 +481,7 @@ export class PluginManager implements ServerHook {
     logger.info('Registering plugin or theme %s.', npmName)
 
     const packageJSON = await this.getPackageJSON(plugin.name, plugin.type)
-    const pluginPath = this.getPluginPath(plugin.name, plugin.type)
+    const pluginPath = await this.getPluginPath(plugin.name, plugin.type)
 
     this.sanitizeAndCheckPackageJSONOrThrow(packageJSON, plugin.type)
 
@@ -503,9 +521,7 @@ export class PluginManager implements ServerHook {
   private async registerPlugin (plugin: PluginModel, pluginPath: string, packageJSON: PluginPackageJSON) {
     const npmName = PluginModel.buildNpmName(plugin.name, plugin.type)
 
-    // Delete cache if needed
     const modulePath = join(pluginPath, packageJSON.library)
-    decachePlugin(require, modulePath)
     const library: PluginLibrary = require(modulePath)
 
     if (!isLibraryCodeValid(library)) {
@@ -530,7 +546,7 @@ export class PluginManager implements ServerHook {
   private async addTranslations (plugin: PluginModel, npmName: string, translationPaths: PluginTranslationPathsJSON) {
     for (const locale of Object.keys(translationPaths)) {
       const path = translationPaths[locale]
-      const json = await readJSON(join(this.getPluginPath(plugin.name, plugin.type), path))
+      const json = await readJSON(join(await this.getPluginPath(plugin.name, plugin.type), path))
 
       const completeLocale = getCompleteLocale(locale)
 
@@ -591,16 +607,17 @@ export class PluginManager implements ServerHook {
     }
   }
 
-  private getPackageJSON (pluginName: string, pluginType: PluginType_Type) {
-    const pluginPath = join(this.getPluginPath(pluginName, pluginType), 'package.json')
+  private async getPackageJSON (pluginName: string, pluginType: PluginType_Type) {
+    const pluginPath = join(await this.getPluginPath(pluginName, pluginType), 'package.json')
 
     return readJSON(pluginPath) as Promise<PluginPackageJSON>
   }
 
-  private getPluginPath (pluginName: string, pluginType: PluginType_Type) {
+  private async getPluginPath (pluginName: string, pluginType: PluginType_Type) {
     const npmName = PluginModel.buildNpmName(pluginName, pluginType)
+    const currentDirectory = await readlink(join(CONFIG.STORAGE.PLUGINS_DIR, 'latest'))
 
-    return join(CONFIG.STORAGE.PLUGINS_DIR, 'node_modules', npmName)
+    return join(currentDirectory, 'node_modules', npmName)
   }
 
   private getAuth (npmName: string, authName: string) {

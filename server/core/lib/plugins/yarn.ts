@@ -1,6 +1,7 @@
-import { outputJSON, pathExists } from 'fs-extra/esm'
+import { copy, ensureSymlink, remove, outputJSON, pathExists, ensureDir } from 'fs-extra/esm'
+import { readlink } from 'fs/promises'
 import { join } from 'path'
-import { execShell } from '../../helpers/core-utils.js'
+import { execShell, getContentHash } from '../../helpers/core-utils.js'
 import { isNpmPluginNameValid, isPluginStableOrUnstableVersionValid } from '../../helpers/custom-validators/plugins.js'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
@@ -16,7 +17,7 @@ async function installNpmPlugin (npmName: string, versionArg?: string) {
   let toInstall = npmName
   if (version) toInstall += `@${version}`
 
-  const { stdout } = await execYarn('add ' + toInstall)
+  const stdout = await execYarn('add ' + toInstall)
 
   logger.debug('Added a yarn package.', { yarnStdout: stdout })
 }
@@ -47,21 +48,55 @@ export {
 // ############################################################################
 
 async function execYarn (command: string) {
+  const latestDirectory = join(CONFIG.STORAGE.PLUGINS_DIR, 'latest')
+  const currentDirectory = await readlink(latestDirectory)
+  let workingDirectory: string
+  let stdout: string
+
   try {
-    const pluginDirectory = CONFIG.STORAGE.PLUGINS_DIR
-    const pluginPackageJSON = join(pluginDirectory, 'package.json')
+    const pluginPackageJSON = join(currentDirectory, 'package.json')
 
     // Create empty package.json file if needed
     if (!await pathExists(pluginPackageJSON)) {
       await outputJSON(pluginPackageJSON, {})
     }
 
-    return execShell(`yarn ${command}`, { cwd: pluginDirectory })
+    const hash = await getContentHash(pluginPackageJSON)
+
+    workingDirectory = join(CONFIG.STORAGE.PLUGINS_DIR, hash)
+    await ensureDir(workingDirectory)
+    await copy(join(currentDirectory, 'package.json'), join(workingDirectory, 'package.json'))
+
+    try {
+      await copy(join(currentDirectory, 'yarn.lock'), join(workingDirectory, 'yarn.lock'))
+    } catch (err) {
+      logger.debug('No yarn.lock file to copy, will continue without.')
+    }
+
+    const result = await execShell(`yarn ${command}`, { cwd: workingDirectory })
+    stdout = result.stdout
   } catch (result) {
-    logger.error('Cannot exec yarn.', { command, err: result.err, stderr: result.stderr })
+    logger.error('Cannot exec yarn.', { command, err: result, stderr: result.stderr })
+
+    await remove(workingDirectory)
 
     throw result.err
   }
+
+  try {
+    await remove(latestDirectory)
+    await ensureSymlink(workingDirectory, latestDirectory)
+  } catch (err) {
+    logger.error('Cannot create symlink for new plugin set. Trying to restore the old one.', { err })
+    await ensureSymlink(currentDirectory, latestDirectory)
+    logger.info('Succeeded to restore old plugin set.')
+
+    throw err
+  }
+
+  await remove(currentDirectory)
+
+  return stdout
 }
 
 function checkNpmPluginNameOrThrow (name: string) {

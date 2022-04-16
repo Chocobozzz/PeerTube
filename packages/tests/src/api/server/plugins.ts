@@ -370,7 +370,7 @@ describe('Test plugins', function () {
     const query = `UPDATE "application" SET "nodeABIVersion" = 1`
     await sqlCommand.updateQuery(query)
 
-    const baseNativeModule = server.servers.buildDirectory(join('plugins', 'node_modules', 'a-native-example'))
+    const baseNativeModule = server.servers.buildDirectory(join('plugins', 'latest', 'node_modules', 'a-native-example'))
 
     await removeNativeModule()
     await server.kill()
