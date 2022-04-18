@@ -297,7 +297,7 @@
       </trans-unit>
       <trans-unit id="7130219900907848048" datatype="html">
         <source><x id="START_LINK"/>Your video import<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> succeeded </source>
-        <target state="translated"><x id="START_LINK"/>Nhập video từ nguồn khác<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> thành công </target>
+        <target state="translated"><x id="START_LINK"/>Video nhập từ nguồn khác<x id="CLOSE_LINK"/> <x id="INTERPOLATION"/> thành công </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="2099623308096969132" datatype="html">
@@ -1867,7 +1867,7 @@
       </trans-unit>
       <trans-unit id="4540121094340493564" datatype="html">
         <source>Display only</source>
-        <target state="translated">Chỉ hiển thị</target>
+        <target state="translated">Chỉ hiện</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">21</context>
@@ -4114,7 +4114,7 @@
       </trans-unit>
       <trans-unit id="3300472325769888962" datatype="html">
         <source>Plugins &amp; Themes</source>
-        <target state="translated">Plugin &amp; Chủ đề</target>
+        <target state="translated">Plugin &amp; Theme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">133</context>
@@ -4122,7 +4122,7 @@
       </trans-unit>
       <trans-unit id="1782375284146839174" datatype="html">
         <source>Available themes</source>
-        <target state="translated">Chủ đề có sẵn</target>
+        <target state="translated">Theme có sẵn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">137</context>
@@ -5076,7 +5076,7 @@
       </trans-unit>
       <trans-unit id="5309195634424105927" datatype="html">
         <source>Live transcoding threads</source>
-        <target state="translated">Chủ đề chuyển độ phân giải buổi livestream</target>
+        <target state="translated">Chuyển mã buổi livestream thành nhiều luồng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="4240037618955024499" datatype="html">
@@ -5217,7 +5217,7 @@
       </trans-unit>
       <trans-unit id="1126867109775813762" datatype="html">
         <source>Transcoding threads</source>
-        <target state="translated">Những chủ đề Transcoding</target>
+        <target state="translated">Những luồng chuyển mã</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">144</context></context-group>
       </trans-unit>
       <trans-unit id="7815122216882553289" datatype="html">
@@ -5353,7 +5353,7 @@
       </trans-unit>
       <trans-unit id="1714039296068260295" datatype="html">
         <source>Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.</source>
-        <target state="translated">Các sửa đổi nhẹ đối với phiên bản PeerTube của bạn khi tạo plugin hoặc chủ đề là quá mức cần thiết.</target>
+        <target state="translated">Các sửa đổi nhẹ đối với phiên bản PeerTube của bạn khi tạo plugin hoặc theme là quá mức cần thiết.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="6180346896314915203" datatype="html">
@@ -5500,7 +5500,7 @@
       </trans-unit>
       <trans-unit id="3224510615614621760" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Hot"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">Xếp theo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Bình Luận Nhiều Nhất"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Xếp theo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Bình Luận"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">49</context>
@@ -5516,7 +5516,7 @@
       </trans-unit>
       <trans-unit id="4322133526902910662" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Likes"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">Xếp theo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Thích Nhiều Nhất"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Xếp theo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Lượt Thích"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">51</context>
@@ -5727,7 +5727,7 @@
       </trans-unit>
       <trans-unit id="7391040346436232576" datatype="html">
         <source>Initiator</source>
-        <target state="translated">Người dẫn đầu</target>
+        <target state="translated">Người đổi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="3963749584812225989" datatype="html">
@@ -5969,7 +5969,7 @@
       </trans-unit>
       <trans-unit id="7743343997362363486">
         <source>No videos in this playlist.</source>
-        <target>Danh sách phát này không có video.</target>
+        <target>Danh sách phát này chưa có video.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="2427149618141327033" datatype="html">
@@ -6404,7 +6404,7 @@
       </trans-unit>
       <trans-unit id="4722135551130122302" datatype="html">
         <source>Why we created this instance</source>
-        <target state="translated">Lý do tạo máy chủ này</target>
+        <target state="translated">Mục đích tạo máy chủ này</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="6434467346812189214" datatype="html">
@@ -7043,12 +7043,12 @@
       </trans-unit>
       <trans-unit id="1618463615802675111" datatype="html">
         <source>threads</source>
-        <target state="translated">chủ đề</target>
+        <target state="translated">luồng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="593234948551881507" datatype="html">
         <source>thread</source>
-        <target state="translated">chủ đề</target>
+        <target state="translated">luồng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="709846045064893539" datatype="html">
@@ -11213,7 +11213,7 @@
       </trans-unit>
       <trans-unit id="5629495543088475111" datatype="html">
         <source>Instance default theme (<x id="INTERPOLATION" equiv-text="{{ getDefaultThemeLabel() }}"/>)</source>
-        <target state="translated">Chủ đề mặc định máy chủ (<x id="INTERPOLATION" equiv-text="{{ getDefaultThemeLabel() }}"/>)</target>
+        <target state="translated">Theme mặc định máy chủ (<x id="INTERPOLATION" equiv-text="{{ getDefaultThemeLabel() }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">8</context>
