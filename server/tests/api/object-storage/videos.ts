@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import * as chai from 'chai'
 import bytes from 'bytes'
+import * as chai from 'chai'
 import { stat } from 'fs-extra'
 import { merge } from 'lodash'
 import {
@@ -403,14 +403,15 @@ describe('Object storage for videos', function () {
 
   describe('Test object storage with file bigger than upload part', function () {
     let fixture: string
-    const maxUploadPart = '5 mb'
+    const maxUploadPart = '5MB'
 
     before(async function () {
       fixture = await generateHighBitrateVideo()
-      const fixtureStat = await stat(fixture)
 
-      if (bytes.parse(maxUploadPart) > fixtureStat.size) {
-        throw Error(`Fixture file is too small (${fixtureStat.size}) to make sense for this test.`)
+      const { size } = await stat(fixture)
+
+      if (bytes.parse(maxUploadPart) > size) {
+        throw Error(`Fixture file is too small (${size}) to make sense for this test.`)
       }
     })
 
