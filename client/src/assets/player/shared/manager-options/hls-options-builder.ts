@@ -90,7 +90,7 @@ export class HLSOptionsBuilder {
       },
       segments: {
         swarmId: this.options.p2pMediaLoader.playlistUrl,
-        forwardSegmentCount: specificLiveOrVODOptions.p2pDownloadMaxPriority
+        forwardSegmentCount: specificLiveOrVODOptions.p2pDownloadMaxPriority ?? 20
       }
     }
   }
