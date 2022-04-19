@@ -1,9 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import bytes from 'bytes'
 import * as chai from 'chai'
+import { stat } from 'fs-extra'
 import { merge } from 'lodash'
-import { checkTmpIsEmpty, expectLogDoesNotContain, expectStartWith, MockObjectStorage } from '@server/tests/shared'
+import {
+  checkTmpIsEmpty,
+  expectLogDoesNotContain,
+  expectStartWith,
+  generateHighBitrateVideo,
+  MockObjectStorage
+} from '@server/tests/shared'
 import { areObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoDetails } from '@shared/models'
 import {
@@ -107,6 +115,10 @@ async function checkFiles (options: {
 }
 
 function runTestSuite (options: {
+  fixture?: string
+
+  maxUploadPart?: string
+
   playlistBucket: string
   playlistPrefix?: string
 
@@ -114,10 +126,9 @@ function runTestSuite (options: {
   webtorrentPrefix?: string
 
   useMockBaseUrl?: boolean
-
-  maxUploadPart?: string
 }) {
   const mockObjectStorage = new MockObjectStorage()
+  const { fixture } = options
   let baseMockUrl: string
 
   let servers: PeerTubeServer[]
@@ -144,7 +155,7 @@ function runTestSuite (options: {
 
         credentials: ObjectStorageCommand.getCredentialsConfig(),
 
-        max_upload_part: options.maxUploadPart || '2MB',
+        max_upload_part: options.maxUploadPart || '5MB',
 
         streaming_playlists: {
           bucket_name: options.playlistBucket,
@@ -181,7 +192,7 @@ function runTestSuite (options: {
   it('Should upload a video and move it to the object storage without transcoding', async function () {
     this.timeout(40000)
 
-    const { uuid } = await servers[0].videos.quickUpload({ name: 'video 1' })
+    const { uuid } = await servers[0].videos.quickUpload({ name: 'video 1', fixture })
     uuidsToDelete.push(uuid)
 
     await waitJobs(servers)
@@ -197,7 +208,7 @@ function runTestSuite (options: {
   it('Should upload a video and move it to the object storage with transcoding', async function () {
     this.timeout(120000)
 
-    const { uuid } = await servers[1].videos.quickUpload({ name: 'video 2' })
+    const { uuid } = await servers[1].videos.quickUpload({ name: 'video 2', fixture })
     uuidsToDelete.push(uuid)
 
     await waitJobs(servers)
@@ -390,12 +401,25 @@ describe('Object storage for videos', function () {
     })
   })
 
-  describe('Test object storage with small upload part', function () {
+  describe('Test object storage with file bigger than upload part', function () {
+    let fixture: string
+    const maxUploadPart = '5MB'
+
+    before(async function () {
+      fixture = await generateHighBitrateVideo()
+
+      const { size } = await stat(fixture)
+
+      if (bytes.parse(maxUploadPart) > size) {
+        throw Error(`Fixture file is too small (${size}) to make sense for this test.`)
+      }
+    })
+
     runTestSuite({
+      maxUploadPart,
       playlistBucket: 'streaming-playlists',
       webtorrentBucket: 'videos',
-
-      maxUploadPart: '5KB'
+      fixture
     })
   })
 })
