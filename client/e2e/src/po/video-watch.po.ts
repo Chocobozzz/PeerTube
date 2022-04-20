@@ -52,10 +52,8 @@ export class VideoWatchPage {
     await $('.vjs-big-play-button').waitForDisplayed()
   }
 
-  async isEmbedWarningDisplayed () {
-    const text = await $('.vjs-dock-description').getText()
-
-    return !!text.trim()
+  isEmbedWarningDisplayed () {
+    return $('.peertube-dock-description').isDisplayed()
   }
 
   goOnP2PMediaLoaderEmbed () {
