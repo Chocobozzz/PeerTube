@@ -154,7 +154,9 @@ export class VideoStatsComponent implements OnInit {
       {
         label: $localize`Peak viewers`,
         value: this.numberFormatter.transform(overallStats.viewersPeak),
-        moreInfo: $localize`at ${new Date(overallStats.viewersPeakDate).toLocaleString()}`
+        moreInfo: overallStats.viewersPeak !== 0
+          ? $localize`at ${new Date(overallStats.viewersPeakDate).toLocaleString()}`
+          : undefined
       }
     ]
   }
