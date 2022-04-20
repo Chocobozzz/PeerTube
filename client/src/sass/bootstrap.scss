@@ -190,7 +190,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
     margin-bottom: 0;
     text-align: end;
 
-    > .peertube-button:not(:first-child) {
+    > *:not(:first-child) {
       @include margin-left(10px);
     }
   }
