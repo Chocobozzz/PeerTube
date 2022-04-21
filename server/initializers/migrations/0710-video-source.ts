@@ -7,36 +7,20 @@ async function up (utils: {
   db: any
 }): Promise<void> {
   {
-    await utils.queryInterface.createTable('videoSource', {
-      id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      createdAt: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
-      updatedAt: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
-      filename: {
-        type: Sequelize.STRING,
-        defaultValue: null,
-        allowNull: true
-      },
-      videoId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-        references: {
-          model: 'video',
-          key: 'id'
-        }
-      }
-    })
+    const query = `
+      CREATE TABLE IF NOT EXISTS "videoSource" (
+        "id"  SERIAL ,
+        "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
+        "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL,
+        "filename" VARCHAR(255) DEFAULT NULL,
+        "videoId" INTEGER
+          REFERENCES "video" ("id")
+          ON DELETE CASCADE
+          ON UPDATE CASCADE,
+        PRIMARY KEY ("id")
+      );
+    `
+    await utils.sequelize.query(query)
   }
 }
 
