@@ -14,7 +14,7 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
-import { checkLiveCleanupAfterSave } from '../../shared'
+import { checkLiveCleanup } from '../../shared'
 
 const expect = chai.expect
 
@@ -43,7 +43,7 @@ describe('Test live constraints', function () {
       expect(video.duration).to.be.greaterThan(0)
     }
 
-    await checkLiveCleanupAfterSave(servers[0], videoId, resolutions)
+    await checkLiveCleanup(servers[0], videoId, resolutions)
   }
 
   async function waitUntilLivePublishedOnAllServers (videoId: string) {

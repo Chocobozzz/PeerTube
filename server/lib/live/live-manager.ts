@@ -1,6 +1,7 @@
 
-import { readFile } from 'fs-extra'
+import { readdir, readFile } from 'fs-extra'
 import { createServer, Server } from 'net'
+import { join } from 'path'
 import { createServer as createServerTLS, Server as ServerTLS } from 'tls'
 import {
   computeLowerResolutionsToTranscode,
@@ -18,10 +19,11 @@ import { VideoModel } from '@server/models/video/video'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { MStreamingPlaylistVideo, MVideo, MVideoLiveVideo } from '@server/types/models'
+import { wait } from '@shared/core-utils'
 import { VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { federateVideoIfNeeded } from '../activitypub/videos'
 import { JobQueue } from '../job-queue'
-import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename } from '../paths'
+import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getLiveReplayBaseDirectory } from '../paths'
 import { PeerTubeSocket } from '../peertube-socket'
 import { LiveQuotaStore } from './live-quota-store'
 import { LiveSegmentShaStore } from './live-segment-sha-store'
@@ -322,7 +324,7 @@ class LiveManager {
 
       muxingSession.destroy()
 
-      return this.onAfterMuxingCleanup(videoId)
+      return this.onAfterMuxingCleanup({ videoId })
         .catch(err => logger.error('Error in end transmuxing.', { err, ...localLTags }))
     })
 
@@ -349,12 +351,15 @@ class LiveManager {
 
       live.Video = video
 
-      setTimeout(() => {
-        federateVideoIfNeeded(video, false)
-          .catch(err => logger.error('Cannot federate live video %s.', video.url, { err, ...localLTags }))
+      await wait(getLiveSegmentTime(live.latencyMode) * 1000 * VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION)
 
-        PeerTubeSocket.Instance.sendVideoLiveNewState(video)
-      }, getLiveSegmentTime(live.latencyMode) * 1000 * VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION)
+      try {
+        await federateVideoIfNeeded(video, false)
+      } catch (err) {
+        logger.error('Cannot federate live video %s.', video.url, { err, ...localLTags })
+      }
+
+      PeerTubeSocket.Instance.sendVideoLiveNewState(video)
     } catch (err) {
       logger.error('Cannot save/federate live video %d.', videoId, { err, ...localLTags })
     }
@@ -364,25 +369,32 @@ class LiveManager {
     this.videoSessions.delete(videoId)
   }
 
-  private async onAfterMuxingCleanup (videoUUID: string, cleanupNow = false) {
+  private async onAfterMuxingCleanup (options: {
+    videoId: number | string
+    cleanupNow?: boolean // Default false
+  }) {
+    const { videoId, cleanupNow = false } = options
+
     try {
-      const fullVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoUUID)
+      const fullVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
       if (!fullVideo) return
 
       const live = await VideoLiveModel.loadByVideoId(fullVideo.id)
 
-      if (!live.permanentLive) {
-        JobQueue.Instance.createJob({
-          type: 'video-live-ending',
-          payload: {
-            videoId: fullVideo.id
-          }
-        }, { delay: cleanupNow ? 0 : VIDEO_LIVE.CLEANUP_DELAY })
+      JobQueue.Instance.createJob({
+        type: 'video-live-ending',
+        payload: {
+          videoId: fullVideo.id,
+          replayDirectory: live.saveReplay
+            ? await this.findReplayDirectory(fullVideo)
+            : undefined,
+          publishedAt: fullVideo.publishedAt.toISOString()
+        }
+      }, { delay: cleanupNow ? 0 : VIDEO_LIVE.CLEANUP_DELAY })
 
-        fullVideo.state = VideoState.LIVE_ENDED
-      } else {
-        fullVideo.state = VideoState.WAITING_FOR_LIVE
-      }
+      fullVideo.state = live.permanentLive
+        ? VideoState.WAITING_FOR_LIVE
+        : VideoState.LIVE_ENDED
 
       await fullVideo.save()
 
@@ -390,7 +402,7 @@ class LiveManager {
 
       await federateVideoIfNeeded(fullVideo, false)
     } catch (err) {
-      logger.error('Cannot save/federate new video state of live streaming of video %d.', videoUUID, { err, ...lTags(videoUUID) })
+      logger.error('Cannot save/federate new video state of live streaming of video %d.', videoId, { err, ...lTags(videoId + '') })
     }
   }
 
@@ -398,8 +410,17 @@ class LiveManager {
     const videoUUIDs = await VideoModel.listPublishedLiveUUIDs()
 
     for (const uuid of videoUUIDs) {
-      await this.onAfterMuxingCleanup(uuid, true)
+      await this.onAfterMuxingCleanup({ videoId: uuid, cleanupNow: true })
     }
+  }
+
+  private async findReplayDirectory (video: MVideo) {
+    const directory = getLiveReplayBaseDirectory(video)
+    const files = await readdir(directory)
+
+    if (files.length === 0) return undefined
+
+    return join(directory, files.sort().reverse()[0])
   }
 
   private buildAllResolutionsToTranscode (originResolution: number) {

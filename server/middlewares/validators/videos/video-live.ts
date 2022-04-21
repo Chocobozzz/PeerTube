@@ -118,12 +118,6 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
       })
     }
 
-    if (body.permanentLive && body.saveReplay) {
-      cleanUpReqFiles(req)
-
-      return res.fail({ message: 'Cannot set this live as permanent while saving its replay' })
-    }
-
     const user = res.locals.oauth.token.User
     if (!await doesVideoChannelOfAccountExist(body.channelId, user, res)) return cleanUpReqFiles(req)
 

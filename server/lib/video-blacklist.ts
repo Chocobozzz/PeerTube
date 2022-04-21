@@ -73,8 +73,7 @@ async function blacklistVideo (videoInstance: MVideoAccountLight, options: Video
     unfederated: options.unfederate === true,
     reason: options.reason,
     type: VideoBlacklistType.MANUAL
-  }
-  )
+  })
   blacklist.Video = videoInstance
 
   if (options.unfederate === true) {

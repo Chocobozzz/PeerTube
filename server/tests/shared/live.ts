@@ -5,11 +5,11 @@ import { pathExists, readdir } from 'fs-extra'
 import { join } from 'path'
 import { PeerTubeServer } from '@shared/server-commands'
 
-async function checkLiveCleanupAfterSave (server: PeerTubeServer, videoUUID: string, resolutions: number[] = []) {
+async function checkLiveCleanup (server: PeerTubeServer, videoUUID: string, savedResolutions: number[] = []) {
   const basePath = server.servers.buildDirectory('streaming-playlists')
   const hlsPath = join(basePath, 'hls', videoUUID)
 
-  if (resolutions.length === 0) {
+  if (savedResolutions.length === 0) {
     const result = await pathExists(hlsPath)
     expect(result).to.be.false
 
@@ -19,9 +19,9 @@ async function checkLiveCleanupAfterSave (server: PeerTubeServer, videoUUID: str
   const files = await readdir(hlsPath)
 
   // fragmented file and playlist per resolution + master playlist + segments sha256 json file
-  expect(files).to.have.lengthOf(resolutions.length * 2 + 2)
+  expect(files).to.have.lengthOf(savedResolutions.length * 2 + 2)
 
-  for (const resolution of resolutions) {
+  for (const resolution of savedResolutions) {
     const fragmentedFile = files.find(f => f.endsWith(`-${resolution}-fragmented.mp4`))
     expect(fragmentedFile).to.exist
 
@@ -37,5 +37,5 @@ async function checkLiveCleanupAfterSave (server: PeerTubeServer, videoUUID: str
 }
 
 export {
-  checkLiveCleanupAfterSave
+  checkLiveCleanup
 }

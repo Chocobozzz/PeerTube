@@ -121,7 +121,7 @@ describe('Permanent live', function () {
     await waitJobs(servers)
   })
 
-  it('Should not have cleaned up this live', async function () {
+  it('Should have cleaned up this live', async function () {
     this.timeout(40000)
 
     await wait(5000)
@@ -129,7 +129,8 @@ describe('Permanent live', function () {
 
     for (const server of servers) {
       const videoDetails = await server.videos.get({ id: videoUUID })
-      expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
+
+      expect(videoDetails.streamingPlaylists).to.have.lengthOf(0)
     }
   })
 

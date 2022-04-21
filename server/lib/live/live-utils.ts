@@ -9,12 +9,12 @@ function buildConcatenatedName (segmentOrPlaylistPath: string) {
   return 'concat-' + num[1] + '.ts'
 }
 
-async function cleanupLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
+async function cleanupLive (video: MVideo, streamingPlaylist?: MStreamingPlaylist) {
   const hlsDirectory = getLiveDirectory(video)
 
   await remove(hlsDirectory)
 
-  await streamingPlaylist.destroy()
+  if (streamingPlaylist) await streamingPlaylist.destroy()
 }
 
 export {

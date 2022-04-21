@@ -3,13 +3,13 @@ import { copyFile, ensureDir, move, remove, stat } from 'fs-extra'
 import { basename, extname as extnameUtil, join } from 'path'
 import { toEven } from '@server/helpers/core-utils'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
-import { MStreamingPlaylistFilesVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
+import { MStreamingPlaylistFilesVideo, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { VideoResolution, VideoStorage } from '../../../shared/models/videos'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import {
+  buildFileMetadata,
   canDoQuickTranscode,
   getVideoStreamDuration,
-  buildFileMetadata,
   getVideoStreamFPS,
   transcodeVOD,
   TranscodeVODOptions,
@@ -191,7 +191,7 @@ function mergeAudioVideofile (video: MVideoFullLight, resolution: VideoResolutio
 
 // Concat TS segments from a live video to a fragmented mp4 HLS playlist
 async function generateHlsPlaylistResolutionFromTS (options: {
-  video: MVideoFullLight
+  video: MVideo
   concatenatedTsFilePath: string
   resolution: VideoResolution
   isPortraitMode: boolean
@@ -209,7 +209,7 @@ async function generateHlsPlaylistResolutionFromTS (options: {
 
 // Generate an HLS playlist from an input file, and update the master playlist
 function generateHlsPlaylistResolution (options: {
-  video: MVideoFullLight
+  video: MVideo
   videoInputPath: string
   resolution: VideoResolution
   copyCodecs: boolean
@@ -265,7 +265,7 @@ async function onWebTorrentVideoFileTranscoding (
 
 async function generateHlsPlaylistCommon (options: {
   type: 'hls' | 'hls-from-ts'
-  video: MVideoFullLight
+  video: MVideo
   inputPath: string
   resolution: VideoResolution
   copyCodecs?: boolean

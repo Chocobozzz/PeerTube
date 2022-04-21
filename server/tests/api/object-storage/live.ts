@@ -2,13 +2,13 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { FfmpegCommand } from 'fluent-ffmpeg'
 import { expectStartWith } from '@server/tests/shared'
 import { areObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, LiveVideoCreate, VideoFile, VideoPrivacy } from '@shared/models'
 import {
   createMultipleServers,
   doubleFollow,
+  findExternalSavedVideo,
   killallServers,
   makeRawRequest,
   ObjectStorageCommand,
@@ -18,17 +18,19 @@ import {
   stopFfmpeg,
   waitJobs,
   waitUntilLivePublishedOnAllServers,
-  waitUntilLiveSavedOnAllServers
+  waitUntilLiveReplacedByReplayOnAllServers,
+  waitUntilLiveWaitingOnAllServers
 } from '@shared/server-commands'
 
 const expect = chai.expect
 
-async function createLive (server: PeerTubeServer) {
+async function createLive (server: PeerTubeServer, permanent: boolean) {
   const attributes: LiveVideoCreate = {
     channelId: server.store.channel.id,
     privacy: VideoPrivacy.PUBLIC,
     name: 'my super live',
-    saveReplay: true
+    saveReplay: true,
+    permanentLive: permanent
   }
 
   const { uuid } = await server.live.create({ fields: attributes })
@@ -44,12 +46,39 @@ async function checkFiles (files: VideoFile[]) {
   }
 }
 
+async function getFiles (server: PeerTubeServer, videoUUID: string) {
+  const video = await server.videos.get({ id: videoUUID })
+
+  expect(video.files).to.have.lengthOf(0)
+  expect(video.streamingPlaylists).to.have.lengthOf(1)
+
+  return video.streamingPlaylists[0].files
+}
+
+async function streamAndEnd (servers: PeerTubeServer[], liveUUID: string) {
+  const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveUUID })
+  await waitUntilLivePublishedOnAllServers(servers, liveUUID)
+
+  const videoLiveDetails = await servers[0].videos.get({ id: liveUUID })
+  const liveDetails = await servers[0].live.get({ videoId: liveUUID })
+
+  await stopFfmpeg(ffmpegCommand)
+
+  if (liveDetails.permanentLive) {
+    await waitUntilLiveWaitingOnAllServers(servers, liveUUID)
+  } else {
+    await waitUntilLiveReplacedByReplayOnAllServers(servers, liveUUID)
+  }
+
+  await waitJobs(servers)
+
+  return { videoLiveDetails, liveDetails }
+}
+
 describe('Object storage for lives', function () {
   if (areObjectStorageTestsDisabled()) return
 
-  let ffmpegCommand: FfmpegCommand
   let servers: PeerTubeServer[]
-  let videoUUID: string
 
   before(async function () {
     this.timeout(120000)
@@ -66,31 +95,22 @@ describe('Object storage for lives', function () {
   })
 
   describe('Without live transcoding', async function () {
+    let videoUUID: string
 
     before(async function () {
       await servers[0].config.enableLive({ transcoding: false })
 
-      videoUUID = await createLive(servers[0])
+      videoUUID = await createLive(servers[0], false)
     })
 
     it('Should create a live and save the replay on object storage', async function () {
       this.timeout(220000)
 
-      ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUID })
-      await waitUntilLivePublishedOnAllServers(servers, videoUUID)
-
-      await stopFfmpeg(ffmpegCommand)
-
-      await waitUntilLiveSavedOnAllServers(servers, videoUUID)
-      await waitJobs(servers)
+      await streamAndEnd(servers, videoUUID)
 
       for (const server of servers) {
-        const video = await server.videos.get({ id: videoUUID })
-
-        expect(video.files).to.have.lengthOf(0)
-        expect(video.streamingPlaylists).to.have.lengthOf(1)
-
-        const files = video.streamingPlaylists[0].files
+        const files = await getFiles(server, videoUUID)
+        expect(files).to.have.lengthOf(1)
 
         await checkFiles(files)
       }
@@ -98,31 +118,38 @@ describe('Object storage for lives', function () {
   })
 
   describe('With live transcoding', async function () {
+    let videoUUIDPermanent: string
+    let videoUUIDNonPermanent: string
 
     before(async function () {
       await servers[0].config.enableLive({ transcoding: true })
 
-      videoUUID = await createLive(servers[0])
+      videoUUIDPermanent = await createLive(servers[0], true)
+      videoUUIDNonPermanent = await createLive(servers[0], false)
     })
 
-    it('Should import a video and have sent it to object storage', async function () {
+    it('Should create a live and save the replay on object storage', async function () {
       this.timeout(240000)
 
-      ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUID })
-      await waitUntilLivePublishedOnAllServers(servers, videoUUID)
-
-      await stopFfmpeg(ffmpegCommand)
-
-      await waitUntilLiveSavedOnAllServers(servers, videoUUID)
-      await waitJobs(servers)
+      await streamAndEnd(servers, videoUUIDNonPermanent)
 
       for (const server of servers) {
-        const video = await server.videos.get({ id: videoUUID })
+        const files = await getFiles(server, videoUUIDNonPermanent)
+        expect(files).to.have.lengthOf(5)
 
-        expect(video.files).to.have.lengthOf(0)
-        expect(video.streamingPlaylists).to.have.lengthOf(1)
+        await checkFiles(files)
+      }
+    })
 
-        const files = video.streamingPlaylists[0].files
+    it('Should create a live and save the replay of permanent live on object storage', async function () {
+      this.timeout(240000)
+
+      const { videoLiveDetails } = await streamAndEnd(servers, videoUUIDPermanent)
+
+      const replay = await findExternalSavedVideo(servers[0], videoLiveDetails)
+
+      for (const server of servers) {
+        const files = await getFiles(server, replay.uuid)
         expect(files).to.have.lengthOf(5)
 
         await checkFiles(files)

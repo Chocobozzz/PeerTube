@@ -159,6 +159,9 @@ export type VideoTranscodingPayload =
 
 export interface VideoLiveEndingPayload {
   videoId: number
+  publishedAt: string
+
+  replayDirectory?: string
 }
 
 export interface ActorKeysPayload {

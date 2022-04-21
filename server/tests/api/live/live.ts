@@ -4,7 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { basename, join } from 'path'
 import { ffprobePromise, getVideoStream } from '@server/helpers/ffmpeg'
-import { checkLiveCleanupAfterSave, checkLiveSegmentHash, checkResolutionsInMasterPlaylist, testImage } from '@server/tests/shared'
+import { checkLiveCleanup, checkLiveSegmentHash, checkResolutionsInMasterPlaylist, testImage } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import {
   HttpStatusCode,
@@ -583,7 +583,7 @@ describe('Test live', function () {
     it('Should correctly have cleaned up the live files', async function () {
       this.timeout(30000)
 
-      await checkLiveCleanupAfterSave(servers[0], liveVideoId, [ 240, 360, 720 ])
+      await checkLiveCleanup(servers[0], liveVideoId, [ 240, 360, 720 ])
     })
   })
 

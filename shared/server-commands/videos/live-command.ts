@@ -117,7 +117,7 @@ export class LiveCommand extends AbstractCommand {
     return this.server.servers.waitUntilLog(`${videoUUID}/${segmentName}`, 2, false)
   }
 
-  async waitUntilSaved (options: OverrideCommandOptions & {
+  async waitUntilReplacedByReplay (options: OverrideCommandOptions & {
     videoId: number | string
   }) {
     let video: VideoDetails

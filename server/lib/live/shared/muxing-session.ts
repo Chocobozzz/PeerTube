@@ -11,7 +11,7 @@ import { CONFIG } from '@server/initializers/config'
 import { MEMOIZE_TTL, VIDEO_LIVE } from '@server/initializers/constants'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { MStreamingPlaylistVideo, MUserId, MVideoLiveVideo } from '@server/types/models'
-import { getLiveDirectory } from '../../paths'
+import { getLiveDirectory, getLiveReplayBaseDirectory } from '../../paths'
 import { VideoTranscodingProfilesManager } from '../../transcoding/default-transcoding-profiles'
 import { isAbleToUploadVideo } from '../../user'
 import { LiveQuotaStore } from '../live-quota-store'
@@ -63,6 +63,9 @@ class MuxingSession extends EventEmitter {
   private readonly videoUUID: string
   private readonly saveReplay: boolean
 
+  private readonly outDirectory: string
+  private readonly replayDirectory: string
+
   private readonly lTags: LoggerTagsFn
 
   private segmentsToProcessPerPlaylist: { [playlistId: string]: string[] } = {}
@@ -110,19 +113,22 @@ class MuxingSession extends EventEmitter {
 
     this.saveReplay = this.videoLive.saveReplay
 
+    this.outDirectory = getLiveDirectory(this.videoLive.Video)
+    this.replayDirectory = join(getLiveReplayBaseDirectory(this.videoLive.Video), new Date().toISOString())
+
     this.lTags = loggerTagsFactory('live', this.sessionId, this.videoUUID)
   }
 
   async runMuxing () {
     this.createFiles()
 
-    const outPath = await this.prepareDirectories()
+    await this.prepareDirectories()
 
     this.ffmpegCommand = CONFIG.LIVE.TRANSCODING.ENABLED
       ? await getLiveTranscodingCommand({
         inputUrl: this.inputUrl,
 
-        outPath,
+        outPath: this.outDirectory,
         masterPlaylistName: this.streamingPlaylist.playlistFilename,
 
         latencyMode: this.videoLive.latencyMode,
@@ -137,15 +143,15 @@ class MuxingSession extends EventEmitter {
       })
       : getLiveMuxingCommand({
         inputUrl: this.inputUrl,
-        outPath,
+        outPath: this.outDirectory,
         masterPlaylistName: this.streamingPlaylist.playlistFilename,
         latencyMode: this.videoLive.latencyMode
       })
 
     logger.info('Running live muxing/transcoding for %s.', this.videoUUID, this.lTags())
 
-    this.watchTSFiles(outPath)
-    this.watchMasterFile(outPath)
+    this.watchTSFiles(this.outDirectory)
+    this.watchMasterFile(this.outDirectory)
 
     let ffmpegShellCommand: string
     this.ffmpegCommand.on('start', cmdline => {
@@ -155,10 +161,10 @@ class MuxingSession extends EventEmitter {
     })
 
     this.ffmpegCommand.on('error', (err, stdout, stderr) => {
-      this.onFFmpegError({ err, stdout, stderr, outPath, ffmpegShellCommand })
+      this.onFFmpegError({ err, stdout, stderr, outPath: this.outDirectory, ffmpegShellCommand })
     })
 
-    this.ffmpegCommand.on('end', () => this.onFFmpegEnded(outPath))
+    this.ffmpegCommand.on('end', () => this.onFFmpegEnded(this.outDirectory))
 
     this.ffmpegCommand.run()
   }
@@ -304,16 +310,11 @@ class MuxingSession extends EventEmitter {
   }
 
   private async prepareDirectories () {
-    const outPath = getLiveDirectory(this.videoLive.Video)
-    await ensureDir(outPath)
-
-    const replayDirectory = join(outPath, VIDEO_LIVE.REPLAY_DIRECTORY)
+    await ensureDir(this.outDirectory)
 
     if (this.videoLive.saveReplay === true) {
-      await ensureDir(replayDirectory)
+      await ensureDir(this.replayDirectory)
     }
-
-    return outPath
   }
 
   private isDurationConstraintValid (streamingStartTime: number) {
@@ -364,7 +365,7 @@ class MuxingSession extends EventEmitter {
 
   private async addSegmentToReplay (hlsVideoPath: string, segmentPath: string) {
     const segmentName = basename(segmentPath)
-    const dest = join(hlsVideoPath, VIDEO_LIVE.REPLAY_DIRECTORY, buildConcatenatedName(segmentName))
+    const dest = join(this.replayDirectory, buildConcatenatedName(segmentName))
 
     try {
       const data = await readFile(segmentPath)

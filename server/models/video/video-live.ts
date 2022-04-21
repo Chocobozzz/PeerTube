@@ -2,7 +2,7 @@ import { AllowNull, BelongsTo, Column, CreatedAt, DataType, DefaultScope, Foreig
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
 import { MVideoLive, MVideoLiveVideo } from '@server/types/models'
-import { LiveVideo, LiveVideoLatencyMode, VideoState } from '@shared/models'
+import { LiveVideo, LiveVideoLatencyMode, VideoPrivacy, VideoState } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoModel } from './video'
 import { VideoBlacklistModel } from './video-blacklist'

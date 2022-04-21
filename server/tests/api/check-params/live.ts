@@ -212,12 +212,6 @@ describe('Test video lives API validator', function () {
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
     })
 
-    it('Should fail with save replay and permanent live set to true', async function () {
-      const fields = { ...baseCorrectParams, saveReplay: true, permanentLive: true }
-
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
-    })
-
     it('Should fail with bad latency setting', async function () {
       const fields = { ...baseCorrectParams, latencyMode: 42 }
 
