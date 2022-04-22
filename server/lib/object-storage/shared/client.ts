@@ -1,4 +1,4 @@
-import { NodeHttpHandler } from "@aws-sdk/node-http-handler";
+import { NodeHttpHandler } from "@aws-sdk/node-http-handler"
 import { HttpsProxyAgent } from 'https-proxy-agent'
 import { getProxy, isProxyEnabled } from '@server/helpers/proxy'
 import { S3Client } from '@aws-sdk/client-s3'
@@ -6,7 +6,7 @@ import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { lTags } from './logger'
 
-function getProxyRequestHandler() {
+function getProxyRequestHandler () {
 
   if (!isProxyEnabled()) { return new NodeHttpHandler() }
 
