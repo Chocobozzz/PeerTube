@@ -590,13 +590,17 @@ describe('Test live', function () {
   describe('After a server restart', function () {
     let liveVideoId: string
     let liveVideoReplayId: string
+    let permanentLiveVideoReplayId: string
 
-    async function createLiveWrapper (saveReplay: boolean) {
-      const liveAttributes = {
+    let permanentLiveReplayName: string
+
+    async function createLiveWrapper (options: { saveReplay: boolean, permanent: boolean }) {
+      const liveAttributes: LiveVideoCreate = {
         name: 'live video',
         channelId: servers[0].store.channel.id,
         privacy: VideoPrivacy.PUBLIC,
-        saveReplay
+        saveReplay: options.saveReplay,
+        permanentLive: options.permanent
       }
 
       const { uuid } = await commands[0].create({ fields: liveAttributes })
@@ -604,40 +608,58 @@ describe('Test live', function () {
     }
 
     before(async function () {
-      this.timeout(120000)
+      this.timeout(160000)
 
-      liveVideoId = await createLiveWrapper(false)
-      liveVideoReplayId = await createLiveWrapper(true)
+      liveVideoId = await createLiveWrapper({ saveReplay: false, permanent: false })
+      liveVideoReplayId = await createLiveWrapper({ saveReplay: true, permanent: false })
+      permanentLiveVideoReplayId = await createLiveWrapper({ saveReplay: true, permanent: true })
 
       await Promise.all([
         commands[0].sendRTMPStreamInVideo({ videoId: liveVideoId }),
+        commands[0].sendRTMPStreamInVideo({ videoId: permanentLiveVideoReplayId }),
         commands[0].sendRTMPStreamInVideo({ videoId: liveVideoReplayId })
       ])
 
       await Promise.all([
         commands[0].waitUntilPublished({ videoId: liveVideoId }),
+        commands[0].waitUntilPublished({ videoId: permanentLiveVideoReplayId }),
         commands[0].waitUntilPublished({ videoId: liveVideoReplayId })
       ])
 
       await commands[0].waitUntilSegmentGeneration({ videoUUID: liveVideoId, resolution: 0, segment: 2 })
       await commands[0].waitUntilSegmentGeneration({ videoUUID: liveVideoReplayId, resolution: 0, segment: 2 })
+      await commands[0].waitUntilSegmentGeneration({ videoUUID: permanentLiveVideoReplayId, resolution: 0, segment: 2 })
+
+      {
+        const video = await servers[0].videos.get({ id: permanentLiveVideoReplayId })
+        permanentLiveReplayName = video.name + ' - ' + new Date(video.publishedAt).toLocaleString()
+      }
 
       await killallServers([ servers[0] ])
       await servers[0].run()
 
       await wait(5000)
+      await waitJobs(servers)
     })
 
     it('Should cleanup lives', async function () {
       this.timeout(60000)
 
       await commands[0].waitUntilEnded({ videoId: liveVideoId })
+      await commands[0].waitUntilWaiting({ videoId: permanentLiveVideoReplayId })
     })
 
-    it('Should save a live replay', async function () {
+    it('Should save a non permanent live replay', async function () {
       this.timeout(120000)
 
       await commands[0].waitUntilPublished({ videoId: liveVideoReplayId })
+    })
+
+    it('Should have saved a permanent live replay', async function () {
+      this.timeout(120000)
+
+      const { data } = await servers[0].videos.listMyVideos({ sort: '-publishedAt' })
+      expect(data.find(v => v.name === permanentLiveReplayName)).to.exist
     })
   })
 
