@@ -341,7 +341,6 @@ describe('Test video lives API validator', function () {
 
   describe('When getting live information', function () {
 
-
     it('Should fail with a bad access token', async function () {
       await command.get({ token: 'toto', videoId: video.id, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })

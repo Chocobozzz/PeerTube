@@ -131,8 +131,8 @@ describe('Test live', function () {
           expect(live.rtmpUrl).to.equal('rtmp://' + server.hostname + ':' + servers[0].rtmpPort + '/live')
           expect(live.streamKey).to.not.be.empty
         } else {
-          expect(live.rtmpUrl).to.be.null
-          expect(live.streamKey).to.be.null
+          expect(live.rtmpUrl).to.not.exist
+          expect(live.streamKey).to.not.exist
         }
 
         expect(live.saveReplay).to.be.true
@@ -193,8 +193,8 @@ describe('Test live', function () {
           expect(live.rtmpUrl).to.equal('rtmp://' + server.hostname + ':' + servers[0].rtmpPort + '/live')
           expect(live.streamKey).to.not.be.empty
         } else {
-          expect(live.rtmpUrl).to.be.null
-          expect(live.streamKey).to.be.null
+          expect(live.rtmpUrl).to.not.exist
+          expect(live.streamKey).to.not.exist
         }
 
         expect(live.saveReplay).to.be.false
