@@ -10,11 +10,11 @@ import { videoLiveAddValidator, videoLiveGetValidator, videoLiveUpdateValidator 
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { MVideoDetails, MVideoFullLight } from '@server/types/models'
 import { buildUUID, uuidToShort } from '@shared/extra-utils'
-import { HttpStatusCode, LiveVideoCreate, LiveVideoLatencyMode, LiveVideoUpdate, VideoState } from '@shared/models'
+import { HttpStatusCode, LiveVideoCreate, LiveVideoLatencyMode, LiveVideoUpdate, UserRight, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { updateVideoMiniatureFromExisting } from '../../../lib/thumbnail'
-import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate } from '../../../middlewares'
+import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, optionalAuthenticate } from '../../../middlewares'
 import { VideoModel } from '../../../models/video/video'
 
 const liveRouter = express.Router()
@@ -29,7 +29,7 @@ liveRouter.post('/live',
 )
 
 liveRouter.get('/live/:videoId',
-  authenticate,
+  optionalAuthenticate,
   asyncMiddleware(videoLiveGetValidator),
   getLiveVideo
 )
@@ -52,7 +52,17 @@ export {
 function getLiveVideo (req: express.Request, res: express.Response) {
   const videoLive = res.locals.videoLive
 
-  return res.json(videoLive.toFormattedJSON())
+  return res.json(videoLive.toFormattedJSON(canSeePrivateLiveInformation(res)))
+}
+
+function canSeePrivateLiveInformation (res: express.Response) {
+  const user = res.locals.oauth?.token.User
+  if (!user) return false
+
+  if (user.hasRight(UserRight.GET_ANY_LIVE)) return true
+
+  const video = res.locals.videoAll
+  return video.VideoChannel.Account.userId === user.id
 }
 
 async function updateLiveVideo (req: express.Request, res: express.Response) {

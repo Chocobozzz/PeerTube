@@ -33,14 +33,10 @@ const videoLiveGetValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoLiveGetValidator parameters', { parameters: req.params, user: res.locals.oauth.token.User.username })
+    logger.debug('Checking videoLiveGetValidator parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'all')) return
-
-    // Check if the user who did the request is able to get the live info
-    const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.GET_ANY_LIVE, res, false)) return
 
     const videoLive = await VideoLiveModel.loadByVideoId(res.locals.videoAll.id)
     if (!videoLive) {

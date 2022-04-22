@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
+import { expect } from 'chai'
 import { omit } from 'lodash'
 import { buildAbsoluteFixturePath } from '@shared/core-utils'
 import { HttpStatusCode, LiveVideoLatencyMode, VideoCreateResult, VideoPrivacy } from '@shared/models'
@@ -340,16 +341,33 @@ describe('Test video lives API validator', function () {
 
   describe('When getting live information', function () {
 
-    it('Should fail without access token', async function () {
-      await command.get({ token: '', videoId: video.id, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
-    })
 
     it('Should fail with a bad access token', async function () {
       await command.get({ token: 'toto', videoId: video.id, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
-    it('Should fail with access token of another user', async function () {
-      await command.get({ token: userAccessToken, videoId: video.id, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    it('Should not display private information without access token', async function () {
+      const live = await command.get({ token: '', videoId: video.id })
+
+      expect(live.rtmpUrl).to.not.exist
+      expect(live.streamKey).to.not.exist
+      expect(live.latencyMode).to.exist
+    })
+
+    it('Should not display private information with token of another user', async function () {
+      const live = await command.get({ token: userAccessToken, videoId: video.id })
+
+      expect(live.rtmpUrl).to.not.exist
+      expect(live.streamKey).to.not.exist
+      expect(live.latencyMode).to.exist
+    })
+
+    it('Should display private information with appropriate token', async function () {
+      const live = await command.get({ videoId: video.id })
+
+      expect(live.rtmpUrl).to.exist
+      expect(live.streamKey).to.exist
+      expect(live.latencyMode).to.exist
     })
 
     it('Should fail with a bad video id', async function () {

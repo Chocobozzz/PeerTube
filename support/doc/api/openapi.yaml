@@ -7657,11 +7657,13 @@ components:
       properties:
         rtmpUrl:
           type: string
+          description: Included in the response if an appropriate token is provided
         rtmpsUrl:
           type: string
+          description: Included in the response if an appropriate token is provided
         streamKey:
           type: string
-          description: RTMP stream key to use to stream into this live video
+          description: RTMP stream key to use to stream into this live video. Included in the response if an appropriate token is provided
         saveReplay:
           type: boolean
         permanentLive:

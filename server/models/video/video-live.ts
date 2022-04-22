@@ -101,21 +101,28 @@ export class VideoLiveModel extends Model<Partial<AttributesOnly<VideoLiveModel>
     return VideoLiveModel.findOne<MVideoLive>(query)
   }
 
-  toFormattedJSON (): LiveVideo {
-    let rtmpUrl: string = null
-    let rtmpsUrl: string = null
+  toFormattedJSON (canSeePrivateInformation: boolean): LiveVideo {
+    let privateInformation: Pick<LiveVideo, 'rtmpUrl' | 'rtmpsUrl' | 'streamKey'> | {} = {}
 
     // If we don't have a stream key, it means this is a remote live so we don't specify the rtmp URL
-    if (this.streamKey) {
-      if (CONFIG.LIVE.RTMP.ENABLED) rtmpUrl = WEBSERVER.RTMP_URL
-      if (CONFIG.LIVE.RTMPS.ENABLED) rtmpsUrl = WEBSERVER.RTMPS_URL
+    // We also display these private information only to the live owne/moderators
+    if (this.streamKey && canSeePrivateInformation === true) {
+      privateInformation = {
+        streamKey: this.streamKey,
+
+        rtmpUrl: CONFIG.LIVE.RTMP.ENABLED
+          ? WEBSERVER.RTMP_URL
+          : null,
+
+        rtmpsUrl: CONFIG.LIVE.RTMPS.ENABLED
+          ? WEBSERVER.RTMPS_URL
+          : null
+      }
     }
 
     return {
-      rtmpUrl,
-      rtmpsUrl,
+      ...privateInformation,
 
-      streamKey: this.streamKey,
       permanentLive: this.permanentLive,
       saveReplay: this.saveReplay,
       latencyMode: this.latencyMode
