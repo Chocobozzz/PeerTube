@@ -10958,7 +10958,7 @@
       </trans-unit>
       <trans-unit id="7672331870004528654" datatype="html">
         <source>Display live information</source>
-        <target state="translated">Hiện thông tin buổi livestream</target>
+        <target state="translated">Thông tin buổi livestream</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">335</context></context-group>
       </trans-unit>
       <trans-unit id="4021752662928002901" datatype="html">
