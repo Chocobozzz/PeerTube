@@ -261,17 +261,17 @@
       </trans-unit>
       <trans-unit id="2008776855594205860" datatype="html">
         <source><x id="START_LINK"/>A new abuse<x id="CLOSE_LINK"/> has been created </source>
-        <target state="translated"><x id="START_LINK"/>Một xâm phạm mới<x id="CLOSE_LINK"/> vừa được tạo </target>
+        <target state="translated"><x id="START_LINK"/>Một vi phạm mới<x id="CLOSE_LINK"/> vừa được tạo </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="8816959058080937679" datatype="html">
         <source><x id="START_LINK"/>Your abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been <x id="START_TAG_NG_CONTAINER"/>accepted<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>rejected<x id="CLOSE_TAG_NG_CONTAINER"/></source>
-        <target state="translated"><x id="START_LINK"/>Xâm phạm của bạn <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> đã <x id="START_TAG_NG_CONTAINER"/>được phê duyệt<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>từ chối<x id="CLOSE_TAG_NG_CONTAINER"/></target>
+        <target state="translated"><x id="START_LINK"/>Vi phạm của bạn <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> đã <x id="START_TAG_NG_CONTAINER"/>được phê duyệt<x id="CLOSE_TAG_NG_CONTAINER"/><x id="START_TAG_NG_CONTAINER_1"/>từ chối<x id="CLOSE_TAG_NG_CONTAINER"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="6464941273929604379" datatype="html">
         <source><x id="START_LINK"/>Abuse <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has a new message </source>
-        <target state="translated"><x id="START_LINK"/>Xâm phạm <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> có một tin nhắn mới </target>
+        <target state="translated"><x id="START_LINK"/>Vi phạm <x id="INTERPOLATION"/><x id="CLOSE_LINK"/> có một tin nhắn mới </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="420488506127153204" datatype="html">
@@ -747,12 +747,12 @@
       </trans-unit>
       <trans-unit id="1779391511451594552">
         <source>Using an ActivityPub account</source>
-        <target>ActivityPub</target>
+        <target>Bằng ActivityPub</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="3372646000533908418" datatype="html">
         <source>Subscribe with a remote account:</source>
-        <target state="translated">Đăng ký bằng tài khoản ở máy chủ khác</target>
+        <target state="translated">Dùng tài khoản ở máy chủ khác</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">62</context>
@@ -760,12 +760,12 @@
       </trans-unit>
       <trans-unit id="6691897331062834756" datatype="html">
         <source>Subscribe with an account on this instance</source>
-        <target state="translated">Đăng ký bằng tài khoản máy chủ này</target>
+        <target state="translated">Dùng tài khoản ở máy chủ này</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="1740917574463702967">
         <source>Subscribe with your local account</source>
-        <target>Đăng ký bằng tài khoản hiện tại</target>
+        <target>Dùng tài khoản hiện tại</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="7639191791633609999" datatype="html">
@@ -800,12 +800,12 @@
       </trans-unit>
       <trans-unit id="2949829240129672512" datatype="html">
         <source>Using a syndication feed</source>
-        <target state="translated">Feed</target>
+        <target state="translated">Bằng Feed</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="7695158742270602420">
         <source>Subscribe via RSS</source>
-        <target>Đăng ký bằng RSS</target>
+        <target>Dùng trình đọc RSS</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="6086125715086510222" datatype="html">
@@ -3781,7 +3781,7 @@
       </trans-unit>
       <trans-unit id="1420624050293070194" datatype="html">
         <source>No abuses found matching current filters.</source>
-        <target state="translated">Không xâm phạm nào trùng khớp với bộ lọc gần đây.</target>
+        <target state="translated">Không vi phạm nào trùng khớp với bộ lọc gần đây.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">152</context></context-group>
       </trans-unit>
       <trans-unit id="639328713281980021" datatype="html">
@@ -7458,7 +7458,7 @@
       </trans-unit>
       <trans-unit id="8768506950499277937" datatype="html">
         <source>Copyright</source>
-        <target state="translated">Xâm phạm bản quyền</target>
+        <target state="translated">Vi phạm bản quyền</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context><context context-type="linenumber">23</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
@@ -10545,7 +10545,7 @@
       </trans-unit>
       <trans-unit id="4268530178786707817" datatype="html">
         <source>My account moderation</source>
-        <target state="translated">Hành động</target>
+        <target state="translated">Hành động kiểm duyệt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">290</context></context-group>
       </trans-unit>
       <trans-unit id="7187838764371214919" datatype="html">
@@ -10706,7 +10706,7 @@
       </trans-unit>
       <trans-unit id="7401289443263903223" datatype="html">
         <source>Privacy breach or doxxing</source>
-        <target state="translated">Vi phạm quyền riêng tư hoặc doxxing</target>
+        <target state="translated">Xâm phạm quyền riêng tư hoặc doxxing</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="8363008638081993167" datatype="html">
