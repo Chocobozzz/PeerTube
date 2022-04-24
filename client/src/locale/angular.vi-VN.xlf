@@ -2410,7 +2410,7 @@
       </trans-unit>
       <trans-unit id="1669378369440073270" datatype="html">
         <source>Plugin settings</source>
-        <target state="translated">Thiết lập plugin</target>
+        <target state="translated">Cài đặt plugin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">381</context></context-group>
       </trans-unit>
       <trans-unit id="54931094224146544" datatype="html">
@@ -2986,7 +2986,7 @@
       </trans-unit>
       <trans-unit id="8426539297729416784" datatype="html">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</source>
-        <target state="translated">{VAR_SELECT, select, undefined {Ngưng đăng ký} other {Ngưng đăng ký toàn bộ kênh} }</target>
+        <target state="translated">{VAR_SELECT, select, undefined {Hủy đăng ký} other {Hủy đăng ký toàn bộ kênh} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="7215101881367554791">
@@ -5687,27 +5687,27 @@
       </trans-unit>
       <trans-unit id="1788875035518441092" datatype="html">
         <source>Last published first</source>
-        <target state="translated">Đăng gần đây nhất</target>
+        <target state="translated">Mới đăng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="4541072509002204177" datatype="html">
         <source>Last created first</source>
-        <target state="translated">Mới tạo gần nhất</target>
+        <target state="translated">Mới tạo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="1142493792593089647" datatype="html">
         <source>Most viewed first</source>
-        <target state="translated">Xem nhiều nhất</target>
+        <target state="translated">Xem nhiều</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="8108088952881606566" datatype="html">
         <source>Most liked first</source>
-        <target state="translated">Yêu thích nhất</target>
+        <target state="translated">Yêu thích</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="2782422473180760140" datatype="html">
         <source>Longest first</source>
-        <target state="translated">Dài nhất</target>
+        <target state="translated">Thời lượng</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="8714145624854863455" datatype="html">
