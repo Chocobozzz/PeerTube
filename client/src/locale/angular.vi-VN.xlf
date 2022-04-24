@@ -1143,7 +1143,7 @@
       </trans-unit>
       <trans-unit id="8390073108781420493">
         <source>Request new verification email.</source>
-        <target>Yêu cầu thư xác thực mới.</target>
+        <target>Yêu cầu email xác minh mới.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">12</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
@@ -3596,7 +3596,7 @@
       </trans-unit>
       <trans-unit id="3254358851993549668">
         <source>User's email must be verified to login</source>
-        <target>Cần xác thực email trước khi đăng nhập</target>
+        <target>Cần xác minh email trước khi đăng nhập</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">120</context></context-group>
       </trans-unit>
       <trans-unit id="3939342579126794385">
@@ -4637,7 +4637,7 @@
       </trans-unit>
       <trans-unit id="2138469194506455231" datatype="html">
         <source>⚠️ You don't have any external auth plugin enabled.</source>
-        <target state="translated">⚠️ Bạn chưa bật bất kỳ plugin xác thực bên ngoài nào.</target>
+        <target state="translated">⚠️ Bạn chưa bật bất kỳ plugin xác minh bên ngoài nào.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">80</context>
@@ -4645,7 +4645,7 @@
       </trans-unit>
       <trans-unit id="6608125149782412086" datatype="html">
         <source>⚠️ You have multiple external auth plugins enabled.</source>
-        <target state="translated">⚠️ Bạn có nhiều plugin xác thực đang bật.</target>
+        <target state="translated">⚠️ Bạn có nhiều plugin xác minh đang bật.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">81</context>
@@ -4693,7 +4693,7 @@
       </trans-unit>
       <trans-unit id="4497115134891299867" datatype="html">
         <source>Signup requires email verification</source>
-        <target state="translated">Yêu cầu xác thực email</target>
+        <target state="translated">Yêu cầu xác minh email</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
       <trans-unit id="8133107840061687919" datatype="html">
@@ -5661,7 +5661,7 @@
       </trans-unit>
       <trans-unit id="1530331428384894781" datatype="html">
         <source><x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> is awaiting email verification </source>
-        <target state="translated"><x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> đang chờ xác thực email </target>
+        <target state="translated"><x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> đang chờ xác minh email </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="264068562357780835" datatype="html">
@@ -6120,7 +6120,7 @@
       </trans-unit>
       <trans-unit id="8746826171043347689" datatype="html">
         <source>Verify account email confirmation</source>
-        <target state="translated">Xác thực email tài khoản</target>
+        <target state="translated">Xác minh email tài khoản</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="5705969545943613067" datatype="html">
@@ -6150,27 +6150,27 @@
       </trans-unit>
       <trans-unit id="4302331889176439801" datatype="html">
         <source>Request email for account verification</source>
-        <target state="translated">Yêu cầu email để xác thực tài khoản</target>
+        <target state="translated">Yêu cầu email để xác minh tài khoản</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="4027779086550572813" datatype="html">
         <source>Send verification email</source>
-        <target state="translated">Gửi email xác thực</target>
+        <target state="translated">Gửi email xác minh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="8610022770999239699" datatype="html">
         <source>This instance does not require email verification.</source>
-        <target state="translated">Máy chủ này không yêu cầu xác thực email.</target>
+        <target state="translated">Máy chủ này không yêu cầu xác minh email.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="248731258067914565" datatype="html">
         <source>Verify account via email</source>
-        <target state="translated">Xác thực tài khoản bằng email</target>
+        <target state="translated">Xác minh tài khoản bằng email</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="9197112111252826229" datatype="html">
         <source>Ask to send an email to verify you account</source>
-        <target state="translated">Hỏi để gửi một email xác thực tài khoản của bạn</target>
+        <target state="translated">Yêu cầu gửi một email xác minh tài khoản của bạn</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="2999492056553212422">
@@ -7992,7 +7992,7 @@
       </trans-unit>
       <trans-unit id="7210277223053877333" datatype="html">
         <source>Set Email as Verified</source>
-        <target state="translated">Cài Email như Xác Thực</target>
+        <target state="translated">Cài Email như Xác Minh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">114</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">362</context></context-group>
       </trans-unit>
@@ -8047,7 +8047,7 @@
       </trans-unit>
       <trans-unit id="8360664597512051242" datatype="html">
         <source><x id="PH"/> users email set as verified. </source>
-        <target state="translated"><x id="PH"/> đã xác thực email người dùng. </target>
+        <target state="translated"><x id="PH"/> đã xác minh email người dùng. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">227</context></context-group>
       </trans-unit>
       <trans-unit id="7390990800435887351" datatype="html">
@@ -8113,7 +8113,7 @@
       </trans-unit>
       <trans-unit id="6012072687166259654" datatype="html">
         <source>Please check your emails to verify your new email.</source>
-        <target state="translated">Xin kiểm tra email để xác thực email mới.</target>
+        <target state="translated">Xin kiểm tra email để xác minh email mới.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="6585766371605707311" datatype="html">
@@ -8680,7 +8680,7 @@
       </trans-unit>
       <trans-unit id="6537885755702623401" datatype="html">
         <source>Now please check your emails to verify your account and complete signup.</source>
-        <target state="translated">Hãy kiểm tra email để xác thực và hoàn thành đăng ký.</target>
+        <target state="translated">Hãy kiểm tra email để xác minh và hoàn thành đăng ký.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
       <trans-unit id="2847376451647729886" datatype="html">
@@ -8690,7 +8690,7 @@
       </trans-unit>
       <trans-unit id="2687679787442328897" datatype="html">
         <source>An email with verification link will be sent to <x id="PH"/>.</source>
-        <target state="translated">Một email xác thực sẽ được gửi tới <x id="PH"/>.</target>
+        <target state="translated">Một email xác minh sẽ được gửi tới <x id="PH"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="4180693983967989981" datatype="html">
@@ -10472,7 +10472,7 @@
       </trans-unit>
       <trans-unit id="3896582359861826661" datatype="html">
         <source>User <x id="PH"/> email set as verified</source>
-        <target state="translated">Email người dùng <x id="PH"/> đã được xác thực</target>
+        <target state="translated">Email người dùng <x id="PH"/> đã được xác minh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="8150022485860412528">
