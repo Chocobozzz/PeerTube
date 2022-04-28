@@ -10681,17 +10681,17 @@
       </trans-unit>
       <trans-unit id="5272553814105457319" datatype="html">
         <source>Contains offensive, violent, or coarse language or iconography.</source>
-        <target state="translated">Chứa ngôn ngữ xúc phạm, bạo lực hoặc thô tục hoặc hình tượng.</target>
+        <target state="translated">Chứa ngôn ngữ hoặc hình ảnh xúc phạm, bạo lực, thô tục.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="6979166468838302269" datatype="html">
         <source>Hateful or abusive</source>
-        <target state="translated">Căm thù hoặc quá lố</target>
+        <target state="translated">Căm thù hoặc bắt nạt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">129</context></context-group>
       </trans-unit>
       <trans-unit id="8006612645824137458" datatype="html">
         <source>Contains abusive, racist or sexist language or iconography.</source>
-        <target state="translated">Chứa ngôn ngữ hoặc hình tượng quá lố, phân biệt chủng tộc hoặc phân biệt giới tính.</target>
+        <target state="translated">Chứa ngôn ngữ hoặc hình ảnh bắt nạt, phân biệt chủng tộc hoặc phân biệt giới tính.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
       <trans-unit id="5413552012131573970" datatype="html">
