@@ -2976,7 +2976,7 @@
       </trans-unit>
       <trans-unit id="5432070253720498105" datatype="html">
         <source>Subscribe to all channels</source>
-        <target state="translated">Đăng ký toàn bộ kênh</target>
+        <target state="translated">Đăng ký tất cả kênh</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="7542242186854344789" datatype="html">
@@ -2986,7 +2986,7 @@
       </trans-unit>
       <trans-unit id="8426539297729416784" datatype="html">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</source>
-        <target state="translated">{VAR_SELECT, select, undefined {Hủy đăng ký} other {Hủy đăng ký toàn bộ kênh} }</target>
+        <target state="translated">{VAR_SELECT, select, undefined {Hủy đăng ký} other {Hủy đăng ký tất cả kênh} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="7215101881367554791">
@@ -3203,7 +3203,7 @@
       </trans-unit>
       <trans-unit id="381522038671562286" datatype="html">
         <source>See complete list</source>
-        <target state="translated">Xem danh sách hoàn chỉnh</target>
+        <target state="translated">Xem danh sách đầy đủ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="2263890353858735493" datatype="html">
@@ -6218,7 +6218,7 @@
       </trans-unit>
       <trans-unit id="1311667768861466464" datatype="html">
         <source>Search account videos</source>
-        <target state="translated">Tìm kiếm toàn bộ video</target>
+        <target state="translated">Tìm kiếm tất cả video</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="5512878593724620692" datatype="html">
@@ -10763,7 +10763,7 @@
       </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="translated">Đã đăng ký toàn bộ kênh gần đây của <x id="PH"/>. Bạn sẽ nhận được thông báo về video mới của họ.</target>
+        <target state="translated">Đã đăng ký tất cả kênh hiện tại của <x id="PH"/>. Bạn sẽ nhận được thông báo về video mới của họ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="2780460651686172544" datatype="html">
@@ -10778,7 +10778,7 @@
       </trans-unit>
       <trans-unit id="7070823964189404459" datatype="html">
         <source>Unsubscribed from all channels of <x id="PH"/> </source>
-        <target state="translated">Đã hủy đăng ký toàn bộ kênh của <x id="PH"/> </target>
+        <target state="translated">Đã hủy đăng ký tất cả kênh của <x id="PH"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="9201562016527884133">
@@ -11014,7 +11014,7 @@
       </trans-unit>
       <trans-unit id="8272123190776748811" datatype="html">
         <source>You need to be &lt;a href="/login"&gt;logged in&lt;/a&gt; to rate this video.</source>
-        <target state="translated">Bạn cần &lt;a href="/login"&gt;đăng nhập&lt;/a&gt; để đánh giá video này.</target>
+        <target state="translated">Cần &lt;a href="/login"&gt;đăng nhập&lt;/a&gt; để đánh giá video này.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="4503408361537553733" datatype="html">
