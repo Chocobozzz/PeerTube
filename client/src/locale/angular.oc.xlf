@@ -4029,7 +4029,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="2398388496754671928" datatype="html">
         <source>No comments found.</source>
-        <target state="new">No comments found.</target>
+        <target state="translated">Cap de comentari pas trobat.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="4604870995665811499" datatype="html">
