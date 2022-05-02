@@ -428,7 +428,7 @@
       </trans-unit>
       <trans-unit id="80975420989930934" datatype="html">
         <source>(extensions: <x id="PH" equiv-text="this.videoImageExtensions"/>, <x id="PH_1" equiv-text="this.maxSizeText"/>: <x id="PH_2" equiv-text="this.maxVideoImageSizeInBytes"/>)</source>
-        <target state="translated">(الإضافات: <x id="PH" equiv-text="this.videoImageExtensions"/>، <x id="PH_1" equiv-text="this.maxSizeText"/>: <x id="PH_2" equiv-text="this.maxVideoImageSizeInBytes"/>)</target>
+        <target state="translated">(امتدادات: <x id="PH" equiv-text="this.videoImageExtensions"/>، <x id="PH_1" equiv-text="this.maxSizeText"/>: <x id="PH_2" equiv-text="this.maxVideoImageSizeInBytes"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/preview-upload.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -8400,7 +8400,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5752861278140673787" datatype="html">
         <source>Ownership changes</source>
-        <target state="new">Ownership changes</target>
+        <target state="translated">تغير الملكية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">117</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
@@ -8416,7 +8416,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2591467977473302125" datatype="html">
         <source>Videos list</source>
-        <target state="new">Videos list</target>
+        <target state="translated">قائمة الفيديوهات</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video.routes.ts</context>
           <context context-type="linenumber">24</context>
@@ -8436,7 +8436,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6389312883797462351" datatype="html">
         <source>Studio</source>
-        <target state="new">Studio</target>
+        <target state="translated">الاستوديو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/video-studio-routing.module.ts</context><context context-type="linenumber">15</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">347</context></context-group>
       </trans-unit>
@@ -8447,7 +8447,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7699622144571229146" datatype="html">
         <source>Sort by</source>
-        <target state="new">Sort by</target>
+        <target state="translated">افرز حسب</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">26</context>
@@ -8463,12 +8463,12 @@ color: red;
       </trans-unit>
       <trans-unit id="3108704604266608109" datatype="html">
         <source>My video imports</source>
-        <target state="new">My video imports</target>
+        <target state="translated">فيديوهاتي المستوردة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="949618577357088829" datatype="html">
         <source>Create a new playlist</source>
-        <target state="new">Create a new playlist</target>
+        <target state="translated">أنشئ قائمة تشغيل جديدة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="7545420287297803988" datatype="html">
@@ -8487,7 +8487,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5177154708872200221" datatype="html">
         <source>You don't have any subscription yet.</source>
-        <target state="new">You don't have any subscription yet.</target>
+        <target state="translated">لا تمتلك أي اشتراكات.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="1991904494976135035" datatype="html">
@@ -8520,12 +8520,12 @@ color: red;
       </trans-unit>
       <trans-unit id="5073473933031004097" datatype="html">
         <source>This week</source>
-        <target state="new">This week</target>
+        <target state="translated">هذا الاسبوع</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="842657237693374355" datatype="html">
         <source>This month</source>
-        <target state="new">This month</target>
+        <target state="translated">هذا الشهر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
       <trans-unit id="4463380307954693363" datatype="html">
@@ -8568,7 +8568,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2180217594100853008" datatype="html">
         <source>Live videos</source>
-        <target state="needs-translation">فيديوهات مباشرة</target>
+        <target state="translated">فيديوهات مباشرة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">29</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">104</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">159</context></context-group>
@@ -8632,7 +8632,7 @@ color: red;
       </trans-unit>
       <trans-unit id="320689395528621696" datatype="html">
         <source>Navigate between plugins and themes</source>
-        <target state="new">Navigate between plugins and themes</target>
+        <target state="translated">أبحر عبر الإضافات والسمات</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-navigation.component.html</context>
           <context context-type="linenumber">7</context>
@@ -8640,7 +8640,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}" xid="3148804384763272950"/></source>
-        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {نتيجة} other {نتيجة}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">5</context>
@@ -8669,12 +8669,12 @@ color: red;
       </trans-unit>
       <trans-unit id="3131904093925601441" datatype="html">
         <source>PLAYLISTS</source>
-        <target state="new">PLAYLISTS</target>
+        <target state="translated">قوائم التشغيل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">82</context></context-group>
       </trans-unit>
       <trans-unit id="1593265243494758679" datatype="html">
         <source>Studio for <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></source>
-        <target state="new">Studio for <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></target>
+        <target state="translated">استوديو <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">2</context>
@@ -8682,27 +8682,27 @@ color: red;
       </trans-unit>
       <trans-unit id="5470809226184152498" datatype="html">
         <source>CUT VIDEO</source>
-        <target state="new">CUT VIDEO</target>
+        <target state="translated">قص الفيديو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="5639348768609905535" datatype="html">
         <source>Set a new start/end.</source>
-        <target state="new">Set a new start/end.</target>
+        <target state="translated">عيّن بداية/نهاية جديدة.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="783359429228696335" datatype="html">
         <source>New start</source>
-        <target state="new">New start</target>
+        <target state="translated">بداية جديدة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="8910806821370505981" datatype="html">
         <source>New end</source>
-        <target state="new">New end</target>
+        <target state="translated">نهاية جديدة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="2502254344085150809" datatype="html">
         <source>ADD INTRO</source>
-        <target state="new">ADD INTRO</target>
+        <target state="translated">أضف مقدمة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="5030063045826839645" datatype="html">
@@ -8712,7 +8712,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4798642303989337390" datatype="html">
         <source>Select the intro video file</source>
-        <target state="new">Select the intro video file</target>
+        <target state="translated">اختر ملف فيديو للمقدمة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="7698413240170540435" datatype="html">
@@ -8732,17 +8732,17 @@ color: red;
       </trans-unit>
       <trans-unit id="3463158361655332380" datatype="html">
         <source>ADD WATERMARK</source>
-        <target state="new">ADD WATERMARK</target>
+        <target state="translated">أضف علامة مائية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="4472450670859114703" datatype="html">
         <source>Add a watermark image to the video.</source>
-        <target state="new">Add a watermark image to the video.</target>
+        <target state="translated">أضف صورة كعلامة مائية على الفيديو.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="155510305759087510" datatype="html">
         <source>Select watermark image file</source>
-        <target state="new">Select watermark image file</target>
+        <target state="translated">اختر صورة للعلامة المائية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="3926035808219061063" datatype="html">
@@ -8762,7 +8762,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3541115907775840269" datatype="html">
         <source>Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</source>
-        <target state="new">Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</target>
+        <target state="translated">أتريد تعديل "<x id="PH" equiv-text="this.video.name"/>"؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="3858880927114551513" datatype="html">
@@ -8820,7 +8820,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1391351050292665308" datatype="html">
         <source>Sun</source>
-        <target state="new">Sun</target>
+        <target state="translated">أح</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">20</context>
@@ -8830,7 +8830,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7037142944838911104" datatype="html">
         <source>Mon</source>
-        <target state="new">Mon</target>
+        <target state="translated">إث</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">21</context>
@@ -8840,7 +8840,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4051951828654963549" datatype="html">
         <source>Tue</source>
-        <target state="new">Tue</target>
+        <target state="translated">ثل</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">22</context>
@@ -8850,7 +8850,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5265738215297391426" datatype="html">
         <source>Wed</source>
-        <target state="new">Wed</target>
+        <target state="translated">أر</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">23</context>
@@ -8860,7 +8860,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1370330981433231150" datatype="html">
         <source>Thu</source>
-        <target state="new">Thu</target>
+        <target state="translated">خم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">24</context>
@@ -8870,7 +8870,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8713535243933137493" datatype="html">
         <source>Fri</source>
-        <target state="new">Fri</target>
+        <target state="translated">جم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">25</context>
@@ -8880,7 +8880,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3547824477629753314" datatype="html">
         <source>Sat</source>
-        <target state="new">Sat</target>
+        <target state="translated">سب</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">26</context>
@@ -8890,7 +8890,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6115403217651453591" datatype="html">
         <source>Su</source>
-        <target state="new">Su</target>
+        <target state="translated">أح</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -8900,7 +8900,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3797918310510782582" datatype="html">
         <source>Mo</source>
-        <target state="new">Mo</target>
+        <target state="translated">إث</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">31</context>
@@ -8910,7 +8910,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8011371911136291436" datatype="html">
         <source>Tu</source>
-        <target state="new">Tu</target>
+        <target state="translated">ثل</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">32</context>
@@ -8920,7 +8920,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1673380870543456256" datatype="html">
         <source>We</source>
-        <target state="new">We</target>
+        <target state="translated">أر</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">33</context>
@@ -8930,7 +8930,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8502005439670299526" datatype="html">
         <source>Th</source>
-        <target state="new">Th</target>
+        <target state="translated">خم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">34</context>
@@ -8940,7 +8940,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2800261787799336637" datatype="html">
         <source>Fr</source>
-        <target state="new">Fr</target>
+        <target state="translated">جم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">35</context>
@@ -8950,7 +8950,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2045915324506422459" datatype="html">
         <source>Sa</source>
-        <target state="new">Sa</target>
+        <target state="translated">سب</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">36</context>
@@ -9020,7 +9020,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1799348348510504995" datatype="html">
         <source>Jan</source>
-        <target state="new">Jan</target>
+        <target state="translated">جان</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">55</context>
@@ -9030,7 +9030,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2980544278361296608" datatype="html">
         <source>Feb</source>
-        <target state="new">Feb</target>
+        <target state="translated">فيف</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">56</context>
@@ -9040,7 +9040,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3124926955462217092" datatype="html">
         <source>Mar</source>
-        <target state="new">Mar</target>
+        <target state="translated">مار</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">57</context>
@@ -9050,7 +9050,7 @@ color: red;
       </trans-unit>
       <trans-unit id="9658641661863772" datatype="html">
         <source>Apr</source>
-        <target state="new">Apr</target>
+        <target state="translated">أفر</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">58</context>
@@ -9060,7 +9060,7 @@ color: red;
       </trans-unit>
       <trans-unit id="502512326533496869" datatype="html">
         <source>May</source>
-        <target state="new">May</target>
+        <target state="translated">ماي</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">59</context>
@@ -9070,7 +9070,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3044090977322782161" datatype="html">
         <source>Jun</source>
-        <target state="new">Jun</target>
+        <target state="translated">جوا</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">60</context>
@@ -9080,7 +9080,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8066434078267346927" datatype="html">
         <source>Jul</source>
-        <target state="new">Jul</target>
+        <target state="translated">جوي</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">61</context>
@@ -9090,7 +9090,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1796563865253467834" datatype="html">
         <source>Aug</source>
-        <target state="new">Aug</target>
+        <target state="translated">أوت</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">62</context>
@@ -9100,7 +9100,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5865190625753625986" datatype="html">
         <source>Sep</source>
-        <target state="new">Sep</target>
+        <target state="translated">سبت</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">63</context>
@@ -9110,7 +9110,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4011114601374284323" datatype="html">
         <source>Oct</source>
-        <target state="new">Oct</target>
+        <target state="translated">أكت</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">64</context>
@@ -9120,7 +9120,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5063734982204786445" datatype="html">
         <source>Nov</source>
-        <target state="new">Nov</target>
+        <target state="translated">نفم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">65</context>
@@ -9130,7 +9130,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4789897150069082503" datatype="html">
         <source>Dec</source>
-        <target state="new">Dec</target>
+        <target state="translated">ديس</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">66</context>
@@ -9183,7 +9183,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1830802698757049943" datatype="html">
         <source>Publish <x id="PH" equiv-text="videoName"/></source>
-        <target state="new">Publish <x id="PH" equiv-text="videoName"/></target>
+        <target state="translated">انشر <x id="PH" equiv-text="videoName"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">122</context>
@@ -9216,18 +9216,18 @@ color: red;
       </trans-unit>
       <trans-unit id="5609201297201028750" datatype="html">
         <source>(extensions: <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</source>
-        <target state="new">(extensions: <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</target>
+        <target state="translated">(امتدادت: <x id="PH" equiv-text="this.videoExtensions.join(', ')"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">106</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="2763845919408843325" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the beginning of the video</source>
-        <target state="new">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the beginning of the video</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" سيضاف لبداية الفيديو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="4952096817126306891" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the end of the video</source>
-        <target state="new">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the end of the video</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" سيضاف لنهاية الفيديو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="665518679871959619" datatype="html">
