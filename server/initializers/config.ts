@@ -313,13 +313,15 @@ const CONFIG = {
     RTMP: {
       get ENABLED () { return config.get<boolean>('live.rtmp.enabled') },
       get PORT () { return config.get<number>('live.rtmp.port') },
-      get HOSTNAME () { return config.get<number>('live.rtmp.hostname') }
+      get HOSTNAME () { return config.get<number>('live.rtmp.hostname') },
+      get PUBLIC_HOSTNAME () { return config.get<number>('live.rtmp.public_hostname') }
     },
 
     RTMPS: {
       get ENABLED () { return config.get<boolean>('live.rtmps.enabled') },
       get PORT () { return config.get<number>('live.rtmps.port') },
       get HOSTNAME () { return config.get<number>('live.rtmps.hostname') },
+      get PUBLIC_HOSTNAME () { return config.get<number>('live.rtmps.public_hostname') },
       get KEY_FILE () { return config.get<string>('live.rtmps.key_file') },
       get CERT_FILE () { return config.get<string>('live.rtmps.cert_file') }
     },

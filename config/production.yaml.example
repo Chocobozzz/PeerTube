@@ -419,17 +419,27 @@ live:
   # Your firewall should accept traffic from this port in TCP if you enable live
   rtmp:
     enabled: true
-    port: 1935
+
     hostname: 'localhost'
+    port: 1935
+
+    # Public endpoint of your RTMP server
+    # Use null to use the same value than `webserver.hostname`
+    public_hostname: null
 
   rtmps:
     enabled: false
-    port: 1936
-    # Absolute path
-    key_file: ''
-    # Absolute path
-    cert_file: ''
+
     hostname: 'localhost'
+    port: 1936
+
+    # Absolute paths
+    key_file: ''
+    cert_file: ''
+
+    # Public endpoint of your RTMPS server
+    # Use null to use the same value than `webserver.hostname`
+    public_hostname: null
 
   # Allow to transcode the live streaming in multiple live resolutions
   transcoding:

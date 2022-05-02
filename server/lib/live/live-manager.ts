@@ -118,7 +118,7 @@ class LiveManager {
         logger.error('Cannot run RTMP server.', { err, ...lTags() })
       })
 
-      this.rtmpServer.listen(CONFIG.LIVE.RTMP.PORT)
+      this.rtmpServer.listen(CONFIG.LIVE.RTMP.PORT, CONFIG.LIVE.RTMP.HOSTNAME)
     }
 
     if (CONFIG.LIVE.RTMPS.ENABLED) {
@@ -141,7 +141,7 @@ class LiveManager {
         logger.error('Cannot run RTMPS server.', { err, ...lTags() })
       })
 
-      this.rtmpsServer.listen(CONFIG.LIVE.RTMPS.PORT)
+      this.rtmpsServer.listen(CONFIG.LIVE.RTMPS.PORT, CONFIG.LIVE.RTMPS.HOSTNAME)
     }
   }
 
