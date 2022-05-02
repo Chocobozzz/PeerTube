@@ -186,7 +186,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     if (options.privacyOneOf) {
       this.wherePrivacyOneOf(options.privacyOneOf)
     } else {
-      // Only list videos with the appropriate priavcy
+      // Only list videos with the appropriate privacy
       this.wherePrivacyAvailable(options.user)
     }
 
