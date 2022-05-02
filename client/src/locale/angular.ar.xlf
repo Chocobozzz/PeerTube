@@ -3940,27 +3940,27 @@ color: red;
       </trans-unit>
       <trans-unit id="8023282004085823427" datatype="html">
         <source><x id="PH" equiv-text="this.video.name"/> will be duplicated by your instance.</source>
-        <target state="new"><x id="PH" equiv-text="this.video.name"/> will be duplicated by your instance.</target>
+        <target state="translated"><x id="PH" equiv-text="this.video.name"/> سيكرره مثيلك.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">254</context></context-group>
       </trans-unit>
       <trans-unit id="4140366911638662173" datatype="html">
         <source>Do you really want to remove "<x id="PH" equiv-text="this.video.name"/>" files?</source>
-        <target state="new">Do you really want to remove "<x id="PH" equiv-text="this.video.name"/>" files?</target>
+        <target state="translated">أتريد إزالة ملفات "<x id="PH" equiv-text="this.video.name"/>"؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">277</context></context-group>
       </trans-unit>
       <trans-unit id="2955645766721124100" datatype="html">
         <source>Remove "<x id="PH" equiv-text="this.video.name"/>" files</source>
-        <target state="new">Remove "<x id="PH" equiv-text="this.video.name"/>" files</target>
+        <target state="translated">أزل ملفات "<x id="PH" equiv-text="this.video.name"/>"</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">279</context></context-group>
       </trans-unit>
       <trans-unit id="7758350391886784213" datatype="html">
         <source>Removed files of <x id="PH" equiv-text="video.name"/>.</source>
-        <target state="new">Removed files of <x id="PH" equiv-text="video.name"/>.</target>
+        <target state="translated">أُزيلت ملفات <x id="PH" equiv-text="video.name"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">285</context></context-group>
       </trans-unit>
       <trans-unit id="6279087330074580345" datatype="html">
         <source>Transcoding jobs created for <x id="PH" equiv-text="video.name"/>.</source>
-        <target state="new">Transcoding jobs created for <x id="PH" equiv-text="video.name"/>.</target>
+        <target state="translated">أُنشئت عمليات تحويل ترميز <x id="PH" equiv-text="video.name"/>.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">297</context></context-group>
       </trans-unit>
       <trans-unit id="2949829240129672512" datatype="html">
@@ -4120,7 +4120,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8936704404804793618" datatype="html">
         <source>Videos</source>
-        <target state="new">Videos</target>
+        <target state="translated">فيديوهات</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-videos/account-videos.component.ts</context><context context-type="linenumber">17</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">49</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">3</context></context-group>
@@ -4131,7 +4131,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1823843876735462104" datatype="html">
         <source>Playlists</source>
-        <target state="new">Playlists</target>
+        <target state="translated">قوائم التشغيل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">59</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">205</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">85</context></context-group>
@@ -4222,7 +4222,7 @@ color: red;
       </trans-unit>
       <trans-unit id="989169929300254768" datatype="html">
         <source>Delete from history</source>
-        <target state="new">Delete from history</target>
+        <target state="translated">احذف من التأريخ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">36</context>
@@ -4400,7 +4400,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5013100494982905528" datatype="html">
         <source>Banner image of the channel</source>
-        <target state="new">Banner image of the channel</target>
+        <target state="translated">صورة لافتة القناة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">13</context>
@@ -4439,7 +4439,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8479900728400966992" datatype="html">
         <source>Video stats</source>
-        <target state="new">Video stats</target>
+        <target state="translated">احصائيات الفيديو</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/stats-routing.module.ts</context>
           <context context-type="linenumber">12</context>
@@ -4447,7 +4447,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3144602205070880541" datatype="html">
         <source>Stats for <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></source>
-        <target state="new">Stats for <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></target>
+        <target state="translated">احصائيات <x id="INTERPOLATION" equiv-text="{{ video.name }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.html</context>
           <context context-type="linenumber">2</context>
@@ -4455,7 +4455,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5293436881670238217" datatype="html">
         <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ availableChart.label }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="new"><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ availableChart.label }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated"><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ availableChart.label }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.html</context>
           <context context-type="linenumber">21</context>
@@ -4463,7 +4463,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2121875025429043110" datatype="html">
         <source>You can select a part of the graph to zoom in</source>
-        <target state="new">You can select a part of the graph to zoom in</target>
+        <target state="translated">يمكنك اختيار جزء من البيان لتكبيره</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.html</context>
           <context context-type="linenumber">35</context>
@@ -4479,13 +4479,13 @@ color: red;
       </trans-unit>
       <trans-unit id="5864040054093006922" datatype="html">
         <source>Viewers</source>
-        <target state="new">Viewers</target>
+        <target state="translated">مشاهدون</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">39</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">363</context></context-group>
       </trans-unit>
       <trans-unit id="5691818894884119596" datatype="html">
         <source>Watch time</source>
-        <target state="new">Watch time</target>
+        <target state="translated">وقت المشاهدة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -4501,7 +4501,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6782077395930235254" datatype="html">
         <source>Countries</source>
-        <target state="new">Countries</target>
+        <target state="translated">البلدان</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -4509,7 +4509,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7112532281224432421" datatype="html">
         <source>Likes</source>
-        <target state="new">Likes</target>
+        <target state="translated">الإعجابات</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">147</context>
@@ -4517,7 +4517,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1155438117303179048" datatype="html">
         <source>Average watch time</source>
-        <target state="new">Average watch time</target>
+        <target state="translated">متوسط الوقت المتابع</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">151</context>
@@ -4533,17 +4533,17 @@ color: red;
       </trans-unit>
       <trans-unit id="8536543691393468142" datatype="html">
         <source>at <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></source>
-        <target state="new">at <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></target>
+        <target state="translated">على <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">158</context></context-group>
       </trans-unit>
       <trans-unit id="3030338154442300172" datatype="html">
         <source>Created <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}" xid="498463490165953744"/> </source>
-        <target state="needs-translation">Created <x id="ICU" xid="498463490165953744" equiv-text="{pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}"/> </target>
+        <target state="translated">أنشئت <x id="ICU" xid="498463490165953744" equiv-text="{pagination.totalItems, plural, =1 {قائمة تشغيل} other {{{ pagination.totalItems }} قائمة تشغيل}}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="3505845886770923767" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {قائمة تشغيل} other {<x id="INTERPOLATION"/> قائمة تشغيل}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context>
           <context context-type="linenumber">3</context>
