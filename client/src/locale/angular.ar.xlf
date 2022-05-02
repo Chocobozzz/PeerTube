@@ -7152,7 +7152,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3459358413436264734" datatype="html">
         <source>Your instance subscriptions</source>
-        <target state="new">Your instance subscriptions</target>
+        <target state="translated">اشتراكات مثيلك</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -7285,7 +7285,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4021487547497211597" datatype="html">
         <source>Open video actions</source>
-        <target state="new">Open video actions</target>
+        <target state="translated">افتح إجراءات الفيديو</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.html</context>
           <context context-type="linenumber">4</context>
