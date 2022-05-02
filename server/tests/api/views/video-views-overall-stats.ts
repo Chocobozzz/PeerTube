@@ -238,7 +238,7 @@ describe('Test views overall stats', function () {
   describe('Test countries', function () {
 
     it('Should not report countries if geoip is disabled', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
       await waitJobs(servers)
