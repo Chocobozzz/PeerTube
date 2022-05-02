@@ -23,7 +23,7 @@ export class ActorAvatarComponent {
 
   @Input() previewImage: string
 
-  @Input() size: ActorAvatarSize = '32'
+  @Input() size: ActorAvatarSize
 
   // Use an external link
   @Input() href: string
@@ -50,13 +50,13 @@ export class ActorAvatarComponent {
   }
 
   get defaultAvatarUrl () {
-    if (this.account) return Account.GET_DEFAULT_AVATAR_URL(+this.size)
-    if (this.channel) return VideoChannel.GET_DEFAULT_AVATAR_URL(+this.size)
+    if (this.account) return Account.GET_DEFAULT_AVATAR_URL(this.getSizeNumber())
+    if (this.channel) return VideoChannel.GET_DEFAULT_AVATAR_URL(this.getSizeNumber())
   }
 
   get avatarUrl () {
-    if (this.account) return Account.GET_ACTOR_AVATAR_URL(this.account, +this.size)
-    if (this.channel) return VideoChannel.GET_ACTOR_AVATAR_URL(this.channel, +this.size)
+    if (this.account) return Account.GET_ACTOR_AVATAR_URL(this.account, this.getSizeNumber())
+    if (this.channel) return VideoChannel.GET_ACTOR_AVATAR_URL(this.channel, this.getSizeNumber())
 
     return ''
   }
@@ -86,6 +86,12 @@ export class ActorAvatarComponent {
 
   hasActor () {
     return !!this.account || !!this.channel
+  }
+
+  private getSizeNumber () {
+    if (this.size) return +this.size
+
+    return undefined
   }
 
   private getColorTheme () {

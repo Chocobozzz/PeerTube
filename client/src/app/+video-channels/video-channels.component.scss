@@ -124,6 +124,10 @@
       font-size: var(--myGreyOwnerFontSize);
       color: pvar(--greyForegroundColor);
     }
+
+    .account-avatar {
+      @include actor-avatar-size(48px);
+    }
   }
 
   .owner-description {
