@@ -1,4 +1,4 @@
-FROM node:14-bullseye-slim
+FROM node:16-bullseye-slim
 
 # Install dependencies
 RUN apt update \
