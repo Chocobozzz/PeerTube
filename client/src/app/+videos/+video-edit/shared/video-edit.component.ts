@@ -180,7 +180,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
     this.trackChannelChange()
     this.trackPrivacyChange()
-    this.trackLivePermanentFieldChange()
 
     this.formBuilt.emit()
   }
@@ -453,24 +452,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
             // Update the support text with our new channel
             this.updateSupportField(newChannel.support)
           })
-        }
-      )
-  }
-
-  private trackLivePermanentFieldChange () {
-    // We will update the "support" field depending on the channel
-    this.form.controls['permanentLive']
-      .valueChanges
-      .subscribe(
-        permanentLive => {
-          const saveReplayControl = this.form.controls['saveReplay']
-
-          if (permanentLive === true) {
-            saveReplayControl.setValue(false)
-            saveReplayControl.disable()
-          } else {
-            saveReplayControl.enable()
-          }
         }
       )
   }

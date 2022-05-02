@@ -170,10 +170,6 @@ const videoLiveUpdateValidator = [
 
     const body: LiveVideoUpdate = req.body
 
-    if (body.permanentLive && body.saveReplay) {
-      return res.fail({ message: 'Cannot set this live as permanent while saving its replay' })
-    }
-
     if (hasValidSaveReplay(body) !== true) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,

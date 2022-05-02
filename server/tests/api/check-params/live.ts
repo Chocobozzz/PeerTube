@@ -414,12 +414,6 @@ describe('Test video lives API validator', function () {
       await command.update({ videoId: videoIdNotLive, fields: {}, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
-    it('Should fail with save replay and permanent live set to true', async function () {
-      const fields = { saveReplay: true, permanentLive: true }
-
-      await command.update({ videoId: video.id, fields, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
-    })
-
     it('Should fail with bad latency setting', async function () {
       const fields = { latencyMode: 42 }
 
