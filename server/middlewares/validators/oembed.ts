@@ -6,7 +6,7 @@ import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isTestInstance } from '../../helpers/core-utils'
-import { isIdOrUUIDValid, toCompleteUUID } from '../../helpers/custom-validators/misc'
+import { isIdOrUUIDValid, isUUIDValid, toCompleteUUID } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
 import { areValidationErrors } from './shared'
@@ -107,15 +107,18 @@ const oembedValidator = [
         })
       }
 
-      if (video.privacy !== VideoPrivacy.PUBLIC) {
-        return res.fail({
-          status: HttpStatusCode.FORBIDDEN_403,
-          message: 'Video is not public'
-        })
+      if (
+        video.privacy === VideoPrivacy.PUBLIC ||
+        (video.privacy === VideoPrivacy.UNLISTED && isUUIDValid(elementId) === true)
+      ) {
+        res.locals.videoAll = video
+        return next()
       }
 
-      res.locals.videoAll = video
-      return next()
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Video is not publicly available'
+      })
     }
 
     // Is playlist
@@ -128,15 +131,18 @@ const oembedValidator = [
       })
     }
 
-    if (videoPlaylist.privacy !== VideoPlaylistPrivacy.PUBLIC) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Playlist is not public'
-      })
+    if (
+      videoPlaylist.privacy === VideoPlaylistPrivacy.PUBLIC ||
+      (videoPlaylist.privacy === VideoPlaylistPrivacy.UNLISTED && isUUIDValid(elementId))
+    ) {
+      res.locals.videoPlaylistSummary = videoPlaylist
+      return next()
     }
 
-    res.locals.videoPlaylistSummary = videoPlaylist
-    return next()
+    return res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'Playlist is not public'
+    })
   }
 
 ]
