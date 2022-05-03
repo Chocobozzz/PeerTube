@@ -13,6 +13,7 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs,
+  waitUntilLiveReplacedByReplayOnAllServers,
   waitUntilLiveWaitingOnAllServers
 } from '@shared/server-commands'
 import { checkLiveCleanup } from '../../shared'
@@ -51,12 +52,6 @@ describe('Test live constraints', function () {
     }
 
     await checkLiveCleanup(servers[0], videoId, resolutions)
-  }
-
-  async function waitUntilLivePublishedOnAllServers (videoId: string) {
-    for (const server of servers) {
-      await server.live.waitUntilPublished({ videoId })
-    }
   }
 
   function updateQuota (options: { total: number, daily: number }) {
@@ -117,7 +112,7 @@ describe('Test live constraints', function () {
     const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
-    await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
+    await waitUntilLiveReplacedByReplayOnAllServers(servers, userVideoLiveoId)
     await waitJobs(servers)
 
     await checkSaveReplay(userVideoLiveoId)
@@ -153,7 +148,7 @@ describe('Test live constraints', function () {
     const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
-    await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
+    await waitUntilLiveReplacedByReplayOnAllServers(servers, userVideoLiveoId)
     await waitJobs(servers)
 
     await checkSaveReplay(userVideoLiveoId)
@@ -194,7 +189,7 @@ describe('Test live constraints', function () {
     const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
-    await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
+    await waitUntilLiveReplacedByReplayOnAllServers(servers, userVideoLiveoId)
     await waitJobs(servers)
 
     await checkSaveReplay(userVideoLiveoId, [ 720, 480, 360, 240, 144 ])
