@@ -1,5 +1,6 @@
 import { ensureDir, readdir, remove } from 'fs-extra'
 import passwordGenerator from 'password-generator'
+import { join } from 'path'
 import { UserRole } from '@shared/models'
 import { logger } from '../helpers/logger'
 import { buildUser, createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user'
@@ -67,7 +68,7 @@ async function removeDirectoryOrContent (dir: string) {
     const files = await readdir(dir)
 
     for (const file of files) {
-      await remove(file)
+      await remove(join(dir, file))
     }
   }
 }
