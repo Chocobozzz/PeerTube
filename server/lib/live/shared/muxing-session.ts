@@ -28,7 +28,7 @@ interface MuxingSessionEvents {
   'quota-exceeded': ({ videoId: number }) => void
 
   'ffmpeg-end': ({ videoId: number }) => void
-  'ffmpeg-error': ({ sessionId: string }) => void
+  'ffmpeg-error': ({ videoId: string }) => void
 
   'after-cleanup': ({ videoId: number }) => void
 }
@@ -164,7 +164,11 @@ class MuxingSession extends EventEmitter {
       this.onFFmpegError({ err, stdout, stderr, outPath: this.outDirectory, ffmpegShellCommand })
     })
 
-    this.ffmpegCommand.on('end', () => this.onFFmpegEnded(this.outDirectory))
+    this.ffmpegCommand.on('end', () => {
+      this.emit('ffmpeg-end', ({ videoId: this.videoId }))
+
+      this.onFFmpegEnded(this.outDirectory)
+    })
 
     this.ffmpegCommand.run()
   }
@@ -197,7 +201,7 @@ class MuxingSession extends EventEmitter {
 
     logger.error('Live transcoding error.', { err, stdout, stderr, ffmpegShellCommand, ...this.lTags() })
 
-    this.emit('ffmpeg-error', ({ sessionId: this.sessionId }))
+    this.emit('ffmpeg-error', ({ videoId: this.videoId }))
   }
 
   private onFFmpegEnded (outPath: string) {

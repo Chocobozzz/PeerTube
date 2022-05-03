@@ -126,12 +126,10 @@ async function moveToPublishedState (options: {
   const { video, isNewVideo, transaction, previousVideoState } = options
   const previousState = previousVideoState ?? video.state
 
-  logger.info('Publishing video %s.', video.uuid, { previousState, tags: [ video.uuid ] })
+  logger.info('Publishing video %s.', video.uuid, { isNewVideo, previousState, tags: [ video.uuid ] })
 
   await video.setNewState(VideoState.PUBLISHED, isNewVideo, transaction)
 
-  // If the video was not published, we consider it is a new one for other instances
-  // Live videos are always federated, so it's not a new video
   await federateVideoIfNeeded(video, isNewVideo, transaction)
 
   if (previousState === VideoState.TO_EDIT) {

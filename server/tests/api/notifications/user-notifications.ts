@@ -7,8 +7,8 @@ import {
   checkMyVideoImportIsFinished,
   checkNewActorFollow,
   checkNewVideoFromSubscription,
-  checkVideoStudioEditionIsFinished,
   checkVideoIsPublished,
+  checkVideoStudioEditionIsFinished,
   FIXTURE_URLS,
   MockSmtpServer,
   prepareNotificationsTest,
@@ -16,8 +16,8 @@ import {
 } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
-import { UserNotification, UserNotificationType, VideoStudioTask, VideoPrivacy } from '@shared/models'
-import { cleanupTests, PeerTubeServer, waitJobs } from '@shared/server-commands'
+import { UserNotification, UserNotificationType, VideoPrivacy, VideoStudioTask } from '@shared/models'
+import { cleanupTests, findExternalSavedVideo, PeerTubeServer, stopFfmpeg, waitJobs } from '@shared/server-commands'
 
 const expect = chai.expect
 
@@ -320,6 +320,76 @@ describe('Test user notifications', function () {
 
       await wait(6000)
       await checkVideoIsPublished({ ...baseParams, videoName: name, shortUUID, checkType: 'absence' })
+    })
+  })
+
+  describe('My live replay is published', function () {
+
+    let baseParams: CheckerBaseParams
+
+    before(() => {
+      baseParams = {
+        server: servers[1],
+        emails,
+        socketNotifications: adminNotificationsServer2,
+        token: servers[1].accessToken
+      }
+    })
+
+    it('Should send a notification is a live replay of a non permanent live is published', async function () {
+      this.timeout(120000)
+
+      const { shortUUID } = await servers[1].live.create({
+        fields: {
+          name: 'non permanent live',
+          privacy: VideoPrivacy.PUBLIC,
+          channelId: servers[1].store.channel.id,
+          saveReplay: true,
+          permanentLive: false
+        }
+      })
+
+      const ffmpegCommand = await servers[1].live.sendRTMPStreamInVideo({ videoId: shortUUID })
+
+      await waitJobs(servers)
+      await servers[1].live.waitUntilPublished({ videoId: shortUUID })
+
+      await stopFfmpeg(ffmpegCommand)
+      await servers[1].live.waitUntilReplacedByReplay({ videoId: shortUUID })
+
+      await waitJobs(servers)
+      await checkVideoIsPublished({ ...baseParams, videoName: 'non permanent live', shortUUID, checkType: 'presence' })
+    })
+
+    it('Should send a notification is a live replay of a permanent live is published', async function () {
+      this.timeout(120000)
+
+      const { shortUUID } = await servers[1].live.create({
+        fields: {
+          name: 'permanent live',
+          privacy: VideoPrivacy.PUBLIC,
+          channelId: servers[1].store.channel.id,
+          saveReplay: true,
+          permanentLive: true
+        }
+      })
+
+      const ffmpegCommand = await servers[1].live.sendRTMPStreamInVideo({ videoId: shortUUID })
+
+      await waitJobs(servers)
+      await servers[1].live.waitUntilPublished({ videoId: shortUUID })
+
+      const liveDetails = await servers[1].videos.get({ id: shortUUID })
+
+      await stopFfmpeg(ffmpegCommand)
+
+      await servers[1].live.waitUntilWaiting({ videoId: shortUUID })
+      await waitJobs(servers)
+
+      const video = await findExternalSavedVideo(servers[1], liveDetails)
+      expect(video).to.exist
+
+      await checkVideoIsPublished({ ...baseParams, videoName: video.name, shortUUID: video.shortUUID, checkType: 'presence' })
     })
   })
 

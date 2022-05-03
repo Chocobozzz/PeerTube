@@ -4,7 +4,17 @@ import { readdir } from 'fs-extra'
 import { omit } from 'lodash'
 import { join } from 'path'
 import { wait } from '@shared/core-utils'
-import { HttpStatusCode, LiveVideo, LiveVideoCreate, LiveVideoUpdate, VideoCreateResult, VideoDetails, VideoState } from '@shared/models'
+import {
+  HttpStatusCode,
+  LiveVideo,
+  LiveVideoCreate,
+  LiveVideoSession,
+  LiveVideoUpdate,
+  ResultList,
+  VideoCreateResult,
+  VideoDetails,
+  VideoState
+} from '@shared/models'
 import { unwrapBody } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 import { sendRTMPStream, testFfmpegStreamError } from './live'
@@ -20,6 +30,42 @@ export class LiveCommand extends AbstractCommand {
       ...options,
 
       path: path + '/' + options.videoId,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  listSessions (options: OverrideCommandOptions & {
+    videoId: number | string
+  }) {
+    const path = `/api/v1/videos/live/${options.videoId}/sessions`
+
+    return this.getRequestBody<ResultList<LiveVideoSession>>({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  async findLatestSession (options: OverrideCommandOptions & {
+    videoId: number | string
+  }) {
+    const { data: sessions } = await this.listSessions(options)
+
+    return sessions[sessions.length - 1]
+  }
+
+  getReplaySession (options: OverrideCommandOptions & {
+    videoId: number | string
+  }) {
+    const path = `/api/v1/videos/${options.videoId}/live-session`
+
+    return this.getRequestBody<LiveVideoSession>({
+      ...options,
+
+      path,
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

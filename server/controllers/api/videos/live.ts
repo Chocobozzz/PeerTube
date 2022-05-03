@@ -1,13 +1,21 @@
 import express from 'express'
 import { exists } from '@server/helpers/custom-validators/misc'
 import { createReqFiles } from '@server/helpers/express-utils'
+import { getFormattedObjects } from '@server/helpers/utils'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
-import { videoLiveAddValidator, videoLiveGetValidator, videoLiveUpdateValidator } from '@server/middlewares/validators/videos/video-live'
+import {
+  videoLiveAddValidator,
+  videoLiveFindReplaySessionValidator,
+  videoLiveGetValidator,
+  videoLiveListSessionsValidator,
+  videoLiveUpdateValidator
+} from '@server/middlewares/validators/videos/video-live'
 import { VideoLiveModel } from '@server/models/video/video-live'
+import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 import { MVideoDetails, MVideoFullLight } from '@server/types/models'
 import { buildUUID, uuidToShort } from '@shared/extra-utils'
 import { HttpStatusCode, LiveVideoCreate, LiveVideoLatencyMode, LiveVideoUpdate, UserRight, VideoState } from '@shared/models'
@@ -28,6 +36,13 @@ liveRouter.post('/live',
   asyncRetryTransactionMiddleware(addLiveVideo)
 )
 
+liveRouter.get('/live/:videoId/sessions',
+  authenticate,
+  asyncMiddleware(videoLiveGetValidator),
+  videoLiveListSessionsValidator,
+  asyncMiddleware(getLiveVideoSessions)
+)
+
 liveRouter.get('/live/:videoId',
   optionalAuthenticate,
   asyncMiddleware(videoLiveGetValidator),
@@ -39,6 +54,11 @@ liveRouter.put('/live/:videoId',
   asyncMiddleware(videoLiveGetValidator),
   videoLiveUpdateValidator,
   asyncRetryTransactionMiddleware(updateLiveVideo)
+)
+
+liveRouter.get('/:videoId/live-session',
+  asyncMiddleware(videoLiveFindReplaySessionValidator),
+  getLiveReplaySession
 )
 
 // ---------------------------------------------------------------------------
@@ -53,6 +73,20 @@ function getLiveVideo (req: express.Request, res: express.Response) {
   const videoLive = res.locals.videoLive
 
   return res.json(videoLive.toFormattedJSON(canSeePrivateLiveInformation(res)))
+}
+
+function getLiveReplaySession (req: express.Request, res: express.Response) {
+  const session = res.locals.videoLiveSession
+
+  return res.json(session.toFormattedJSON())
+}
+
+async function getLiveVideoSessions (req: express.Request, res: express.Response) {
+  const videoLive = res.locals.videoLive
+
+  const data = await VideoLiveSessionModel.listSessionsOfLiveForAPI({ videoId: videoLive.videoId })
+
+  return res.json(getFormattedObjects(data, data.length))
 }
 
 function canSeePrivateLiveInformation (res: express.Response) {

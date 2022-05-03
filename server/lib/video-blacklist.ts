@@ -9,7 +9,7 @@ import {
   MVideoFullLight,
   MVideoWithBlacklistLight
 } from '@server/types/models'
-import { UserRight, VideoBlacklistCreate, VideoBlacklistType } from '../../shared/models'
+import { LiveVideoError, UserRight, VideoBlacklistCreate, VideoBlacklistType } from '../../shared/models'
 import { UserAdminFlag } from '../../shared/models/users/user-flag.model'
 import { logger, loggerTagsFactory } from '../helpers/logger'
 import { CONFIG } from '../initializers/config'
@@ -81,7 +81,7 @@ async function blacklistVideo (videoInstance: MVideoAccountLight, options: Video
   }
 
   if (videoInstance.isLive) {
-    LiveManager.Instance.stopSessionOf(videoInstance.id)
+    LiveManager.Instance.stopSessionOf(videoInstance.id, LiveVideoError.BLACKLISTED)
   }
 
   Notifier.Instance.notifyOnVideoBlacklist(blacklist)

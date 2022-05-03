@@ -172,6 +172,23 @@ describe('Permanent live', function () {
     await stopFfmpeg(ffmpegCommand)
   })
 
+  it('Should have appropriate sessions', async function () {
+    this.timeout(60000)
+
+    await servers[0].live.waitUntilWaiting({ videoId: videoUUID })
+
+    const { data, total } = await servers[0].live.listSessions({ videoId: videoUUID })
+    expect(total).to.equal(2)
+    expect(data).to.have.lengthOf(2)
+
+    for (const session of data) {
+      expect(session.startDate).to.exist
+      expect(session.endDate).to.exist
+
+      expect(session.error).to.not.exist
+    }
+  })
+
   after(async function () {
     await cleanupTests(servers)
   })

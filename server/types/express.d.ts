@@ -119,6 +119,7 @@ declare module 'express' {
       videoId?: MVideoId
 
       videoLive?: MVideoLive
+      videoLiveSession?: MVideoLiveSession
 
       videoShare?: MVideoShareActor
 

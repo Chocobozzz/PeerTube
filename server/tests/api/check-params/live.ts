@@ -388,6 +388,52 @@ describe('Test video lives API validator', function () {
     })
   })
 
+  describe('When getting live sessions', function () {
+
+    it('Should fail with a bad access token', async function () {
+      await command.listSessions({ token: 'toto', videoId: video.id, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should fail without token', async function () {
+      await command.listSessions({ token: null, videoId: video.id, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should fail with the token of another user', async function () {
+      await command.listSessions({ token: userAccessToken, videoId: video.id, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail with a bad video id', async function () {
+      await command.listSessions({ videoId: 'toto', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with an unknown video id', async function () {
+      await command.listSessions({ videoId: 454555, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should fail with a non live video', async function () {
+      await command.listSessions({ videoId: videoIdNotLive, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await command.listSessions({ videoId: video.id })
+    })
+  })
+
+  describe('When getting live session of a replay', function () {
+
+    it('Should fail with a bad video id', async function () {
+      await command.getReplaySession({ videoId: 'toto', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with an unknown video id', async function () {
+      await command.getReplaySession({ videoId: 454555, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should fail with a non replay video', async function () {
+      await command.getReplaySession({ videoId: videoIdNotLive, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+  })
+
   describe('When updating live information', async function () {
 
     it('Should fail without access token', async function () {

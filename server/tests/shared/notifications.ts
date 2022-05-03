@@ -16,7 +16,8 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
-  setDefaultChannelAvatar
+  setDefaultChannelAvatar,
+  setDefaultVideoChannel
 } from '@shared/server-commands'
 import { MockSmtpServer } from './mock-servers'
 
@@ -682,10 +683,14 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
   const servers = await createMultipleServers(serversCount, Object.assign(overrideConfig, overrideConfigArg))
 
   await setAccessTokensToServers(servers)
+  await setDefaultVideoChannel(servers)
   await setDefaultChannelAvatar(servers)
   await setDefaultAccountAvatar(servers)
 
-  if (servers[1]) await servers[1].config.enableStudio()
+  if (servers[1]) {
+    await servers[1].config.enableStudio()
+    await servers[1].config.enableLive({ allowReplay: true, transcoding: false })
+  }
 
   if (serversCount > 1) {
     await doubleFollow(servers[0], servers[1])

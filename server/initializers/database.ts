@@ -7,6 +7,7 @@ import { UserModel } from '@server/models/user/user'
 import { UserNotificationModel } from '@server/models/user/user-notification'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
+import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer'
 import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-video-viewer-watch-section'
 import { isTestInstance } from '../helpers/core-utils'
@@ -135,6 +136,7 @@ async function initDatabaseModels (silent: boolean) {
     VideoRedundancyModel,
     UserVideoHistoryModel,
     VideoLiveModel,
+    VideoLiveSessionModel,
     AccountBlocklistModel,
     ServerBlocklistModel,
     UserNotificationModel,

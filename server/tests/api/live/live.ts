@@ -594,6 +594,8 @@ describe('Test live', function () {
 
     let permanentLiveReplayName: string
 
+    let beforeServerRestart: Date
+
     async function createLiveWrapper (options: { saveReplay: boolean, permanent: boolean }) {
       const liveAttributes: LiveVideoCreate = {
         name: 'live video',
@@ -636,6 +638,8 @@ describe('Test live', function () {
       }
 
       await killallServers([ servers[0] ])
+
+      beforeServerRestart = new Date()
       await servers[0].run()
 
       await wait(5000)
@@ -653,6 +657,10 @@ describe('Test live', function () {
       this.timeout(120000)
 
       await commands[0].waitUntilPublished({ videoId: liveVideoReplayId })
+
+      const session = await commands[0].getReplaySession({ videoId: liveVideoReplayId })
+      expect(session.endDate).to.exist
+      expect(new Date(session.endDate)).to.be.above(beforeServerRestart)
     })
 
     it('Should have saved a permanent live replay', async function () {

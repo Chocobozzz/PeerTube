@@ -5,7 +5,7 @@ import * as chai from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { checkLiveCleanup } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
-import { HttpStatusCode, LiveVideoCreate, VideoPrivacy, VideoState } from '@shared/models'
+import { HttpStatusCode, LiveVideoCreate, LiveVideoError, VideoPrivacy, VideoState } from '@shared/models'
 import {
   cleanupTests,
   ConfigCommand,
@@ -143,6 +143,9 @@ describe('Save replay setting', function () {
   })
 
   describe('With save replay disabled', function () {
+    let sessionStartDateMin: Date
+    let sessionStartDateMax: Date
+    let sessionEndDateMin: Date
 
     it('Should correctly create and federate the "waiting for stream" live', async function () {
       this.timeout(20000)
@@ -160,7 +163,9 @@ describe('Save replay setting', function () {
 
       ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
 
+      sessionStartDateMin = new Date()
       await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
+      sessionStartDateMax = new Date()
 
       await waitJobs(servers)
 
@@ -171,6 +176,7 @@ describe('Save replay setting', function () {
     it('Should correctly delete the video files after the stream ended', async function () {
       this.timeout(40000)
 
+      sessionEndDateMin = new Date()
       await stopFfmpeg(ffmpegCommand)
 
       for (const server of servers) {
@@ -186,6 +192,24 @@ describe('Save replay setting', function () {
       await checkLiveCleanup(servers[0], liveVideoUUID, [])
     })
 
+    it('Should have appropriate ended session', async function () {
+      const { data, total } = await servers[0].live.listSessions({ videoId: liveVideoUUID })
+      expect(total).to.equal(1)
+      expect(data).to.have.lengthOf(1)
+
+      const session = data[0]
+
+      const startDate = new Date(session.startDate)
+      expect(startDate).to.be.above(sessionStartDateMin)
+      expect(startDate).to.be.below(sessionStartDateMax)
+
+      expect(session.endDate).to.exist
+      expect(new Date(session.endDate)).to.be.above(sessionEndDateMin)
+
+      expect(session.error).to.not.exist
+      expect(session.replayVideo).to.not.exist
+    })
+
     it('Should correctly terminate the stream on blacklist and delete the live', async function () {
       this.timeout(40000)
 
@@ -199,6 +223,15 @@ describe('Save replay setting', function () {
       await wait(5000)
       await waitJobs(servers)
       await checkLiveCleanup(servers[0], liveVideoUUID, [])
+    })
+
+    it('Should have blacklisted session error', async function () {
+      const session = await servers[0].live.findLatestSession({ videoId: liveVideoUUID })
+      expect(session.startDate).to.exist
+      expect(session.endDate).to.exist
+
+      expect(session.error).to.equal(LiveVideoError.BLACKLISTED)
+      expect(session.replayVideo).to.not.exist
     })
 
     it('Should correctly terminate the stream on delete and delete the video', async function () {
@@ -247,6 +280,22 @@ describe('Save replay setting', function () {
       // Live has been transcoded
       await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
       await checkVideoState(liveVideoUUID, VideoState.PUBLISHED)
+    })
+
+    it('Should find the replay live session', async function () {
+      const session = await servers[0].live.getReplaySession({ videoId: liveVideoUUID })
+
+      expect(session).to.exist
+
+      expect(session.startDate).to.exist
+      expect(session.endDate).to.exist
+
+      expect(session.error).to.not.exist
+
+      expect(session.replayVideo).to.exist
+      expect(session.replayVideo.id).to.exist
+      expect(session.replayVideo.shortUUID).to.exist
+      expect(session.replayVideo.uuid).to.equal(liveVideoUUID)
     })
 
     it('Should update the saved live and correctly federate the updated attributes', async function () {
@@ -335,6 +384,27 @@ describe('Save replay setting', function () {
       }
 
       lastReplayUUID = video.uuid
+    })
+
+    it('Should have appropriate ended session and replay live session', async function () {
+      const { data, total } = await servers[0].live.listSessions({ videoId: liveVideoUUID })
+      expect(total).to.equal(1)
+      expect(data).to.have.lengthOf(1)
+
+      const sessionFromLive = data[0]
+      const sessionFromReplay = await servers[0].live.getReplaySession({ videoId: lastReplayUUID })
+
+      for (const session of [ sessionFromLive, sessionFromReplay ]) {
+        expect(session.startDate).to.exist
+        expect(session.endDate).to.exist
+
+        expect(session.error).to.not.exist
+
+        expect(session.replayVideo).to.exist
+        expect(session.replayVideo.id).to.exist
+        expect(session.replayVideo.shortUUID).to.exist
+        expect(session.replayVideo.uuid).to.equal(lastReplayUUID)
+      }
     })
 
     it('Should have cleaned up the live files', async function () {

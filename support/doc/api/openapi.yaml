@@ -2462,6 +2462,48 @@ paths:
           description: bad parameters or trying to update a live that has already started
         '403':
           description: trying to save replay of the live but saving replay is not enabled on the instance
+  /videos/live/{id}/sessions:
+    get:
+      summary: List live sessions
+      description: List all sessions created in a particular live
+      security:
+        - OAuth2: []
+      tags:
+        - Live Videos
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LiveVideoSessionResponse'
+  /videos/{id}/live-session:
+    get:
+      summary: Get live session of a replay
+      description: If the video is a replay of a live, you can find the associated live session using this endpoint
+      security:
+        - OAuth2: []
+      tags:
+        - Live Videos
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LiveVideoSessionResponse'
 
   /users/me/abuses:
     get:
@@ -7672,6 +7714,46 @@ components:
         latencyMode:
           description: User can select live latency mode if enabled by the instance
           $ref: '#/components/schemas/LiveVideoLatencyMode'
+
+    LiveVideoSessionResponse:
+        properties:
+          id:
+            type: integer
+          startDate:
+            type: string
+            format: date-time
+            description: Start date of the live session
+          endDate:
+            type: string
+            format: date-time
+            nullable: true
+            description: End date of the live session
+          error:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+            nullable: true
+            description: >
+              Error type if an error occured during the live session:
+                - `1`: Bad socket health (transcoding is too slow)
+                - `2`: Max duration exceeded
+                - `3`: Quota exceeded
+                - `4`: Quota FFmpeg error
+                - `5`: Video has been blacklisted during the live
+          replayVideo:
+            type: object
+            description: Video replay information
+            properties:
+              id:
+                type: number
+              uuid:
+                $ref: '#/components/schemas/UUIDv4'
+              shortUUID:
+                $ref: '#/components/schemas/shortUUID'
 
   callbacks:
     searchIndex:
