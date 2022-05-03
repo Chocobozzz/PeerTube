@@ -1,4 +1,4 @@
-import { ensureDir, remove } from 'fs-extra'
+import { ensureDir, readdir, remove } from 'fs-extra'
 import passwordGenerator from 'password-generator'
 import { UserRole } from '@shared/models'
 import { logger } from '../helpers/logger'
@@ -50,12 +50,26 @@ function removeCacheAndTmpDirectories () {
   // Cache directories
   for (const key of Object.keys(cacheDirectories)) {
     const dir = cacheDirectories[key]
-    tasks.push(remove(dir))
+    tasks.push(removeDirectoryOrContent(dir))
   }
 
-  tasks.push(remove(CONFIG.STORAGE.TMP_DIR))
+  tasks.push(removeDirectoryOrContent(CONFIG.STORAGE.TMP_DIR))
 
   return Promise.all(tasks)
+}
+
+async function removeDirectoryOrContent (dir: string) {
+  try {
+    await remove(dir)
+  } catch (err) {
+    logger.debug('Cannot remove directory %s. Removing content instead.', dir, { err })
+
+    const files = await readdir(dir)
+
+    for (const file of files) {
+      await remove(file)
+    }
+  }
 }
 
 function createDirectoriesIfNotExist () {
