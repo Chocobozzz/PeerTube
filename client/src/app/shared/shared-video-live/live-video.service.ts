@@ -2,7 +2,7 @@ import { catchError } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor } from '@app/core'
-import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, VideoCreateResult } from '@shared/models'
+import { LiveVideo, LiveVideoCreate, LiveVideoSession, LiveVideoUpdate, ResultList, VideoCreateResult } from '@shared/models'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
@@ -23,6 +23,12 @@ export class LiveVideoService {
   getVideoLive (videoId: number | string) {
     return this.authHttp
                .get<LiveVideo>(LiveVideoService.BASE_VIDEO_LIVE_URL + videoId)
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  listSessions (videoId: number | string) {
+    return this.authHttp
+               .get<ResultList<LiveVideoSession>>(LiveVideoService.BASE_VIDEO_LIVE_URL + videoId + '/sessions')
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
