@@ -412,16 +412,18 @@ live:
   rtmp:
     enabled: true
 
+    # Listening hostname/port for RTMP server
     hostname: 'localhost'
     port: 1935
 
-    # Public endpoint of your RTMP server
+    # Public hostname of your RTMP server
     # Use null to use the same value than `webserver.hostname`
     public_hostname: null
 
   rtmps:
     enabled: false
 
+    # Listening hostname/port for RTMPS server
     hostname: 'localhost'
     port: 1936
 
@@ -429,7 +431,7 @@ live:
     key_file: ''
     cert_file: ''
 
-    # Public endpoint of your RTMPS server
+    # Public hostname of your RTMPS server
     # Use null to use the same value than `webserver.hostname`
     public_hostname: null
 
