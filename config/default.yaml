@@ -413,8 +413,9 @@ live:
     enabled: true
 
     # Listening hostname/port for RTMP server
-    # :: to listen on IPv6 and IPv4, 0.0.0.0 to listen on IPv4
-    hostname: '::'
+    # '::' to listen on IPv6 and IPv4, '0.0.0.0' to listen on IPv4
+    # Use null to automatically listen on '::' if IPv6 is available, or '0.0.0.0' otherwise
+    hostname: null
     port: 1935
 
     # Public hostname of your RTMP server
@@ -425,8 +426,9 @@ live:
     enabled: false
 
     # Listening hostname/port for RTMPS server
-    # :: to listen on IPv6 and IPv4, 0.0.0.0 to listen on IPv4
-    hostname: '::'
+    # '::' to listen on IPv6 and IPv4, '0.0.0.0' to listen on IPv4
+    # Use null to automatically listen on '::' if IPv6 is available, or '0.0.0.0' otherwise
+    hostname: null
     port: 1936
 
     # Absolute paths
