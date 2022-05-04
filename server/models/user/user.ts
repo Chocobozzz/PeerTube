@@ -22,6 +22,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { TokensCache } from '@server/lib/auth/tokens-cache'
+import { LiveQuotaStore } from '@server/lib/live'
 import {
   MMyUserFormattable,
   MUser,
@@ -72,8 +73,6 @@ import { VideoImportModel } from '../video/video-import'
 import { VideoLiveModel } from '../video/video-live'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { UserNotificationSettingModel } from './user-notification-setting'
-import { LiveQuotaStore } from '@server/lib/live'
-import { logger } from '@server/helpers/logger'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',
