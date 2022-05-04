@@ -2427,7 +2427,7 @@
       </trans-unit>
       <trans-unit id="4299493457408757206" datatype="html">
         <source>Average latency of 30s</source>
-        <target state="translated">平均的な遅延時間は30秒です</target>
+        <target state="translated">平均遅延時間は30秒です</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -2443,7 +2443,7 @@
       </trans-unit>
       <trans-unit id="369497609327288447" datatype="html">
         <source>Average latency of 60s increasing P2P ratio</source>
-        <target state="new">Average latency of 60s increasing P2P ratio</target>
+        <target state="translated">平均遅延時間は60秒です。P2P機能をより利用します</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">96</context>
@@ -6001,7 +6001,7 @@
       </trans-unit>
       <trans-unit id="5864040054093006922" datatype="html">
         <source>Viewers</source>
-        <target state="translated">視聴者</target>
+        <target state="translated">視聴者数</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">39</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">363</context></context-group>
       </trans-unit>
@@ -6031,7 +6031,7 @@
       </trans-unit>
       <trans-unit id="7112532281224432421" datatype="html">
         <source>Likes</source>
-        <target state="new">Likes</target>
+        <target state="translated">評価（高評価・低評価の合算）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">147</context>
