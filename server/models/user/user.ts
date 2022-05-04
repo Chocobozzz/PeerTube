@@ -72,10 +72,13 @@ import { VideoImportModel } from '../video/video-import'
 import { VideoLiveModel } from '../video/video-live'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { UserNotificationSettingModel } from './user-notification-setting'
+import { LiveQuotaStore } from '@server/lib/live'
+import { logger } from '@server/helpers/logger'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',
   WITH_VIDEOCHANNELS = 'WITH_VIDEOCHANNELS',
+  WITH_QUOTA = 'WITH_QUOTA',
   WITH_STATS = 'WITH_STATS'
 }
 
@@ -153,7 +156,7 @@ enum ScopeNames {
       }
     ]
   },
-  [ScopeNames.WITH_STATS]: {
+  [ScopeNames.WITH_QUOTA]: {
     attributes: {
       include: [
         [
@@ -161,12 +164,31 @@ enum ScopeNames {
             '(' +
               UserModel.generateUserQuotaBaseSQL({
                 withSelect: false,
-                whereUserId: '"UserModel"."id"'
+                whereUserId: '"UserModel"."id"',
+                daily: false
               }) +
             ')'
           ),
           'videoQuotaUsed'
         ],
+        [
+          literal(
+            '(' +
+              UserModel.generateUserQuotaBaseSQL({
+                withSelect: false,
+                whereUserId: '"UserModel"."id"',
+                daily: true
+              }) +
+            ')'
+          ),
+          'videoQuotaUsedDaily'
+        ]
+      ]
+    }
+  },
+  [ScopeNames.WITH_STATS]: {
+    attributes: {
+      include: [
         [
           literal(
             '(' +
@@ -474,21 +496,6 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
     }
 
     const query: FindOptions = {
-      attributes: {
-        include: [
-          [
-            literal(
-              '(' +
-                UserModel.generateUserQuotaBaseSQL({
-                  withSelect: false,
-                  whereUserId: '"UserModel"."id"'
-                }) +
-              ')'
-            ),
-            'videoQuotaUsed'
-          ]
-        ]
-      },
       offset: start,
       limit: count,
       order: getSort(sort),
@@ -497,7 +504,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
     return Promise.all([
       UserModel.unscoped().count(query),
-      UserModel.findAll(query)
+      UserModel.scope([ 'defaultScope', ScopeNames.WITH_QUOTA ]).findAll(query)
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
@@ -579,7 +586,10 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
       ScopeNames.WITH_VIDEOCHANNELS
     ]
 
-    if (withStats) scopes.push(ScopeNames.WITH_STATS)
+    if (withStats) {
+      scopes.push(ScopeNames.WITH_QUOTA)
+      scopes.push(ScopeNames.WITH_STATS)
+    }
 
     return UserModel.scope(scopes).findByPk(id)
   }
@@ -760,10 +770,10 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   static generateUserQuotaBaseSQL (options: {
     whereUserId: '$userId' | '"UserModel"."id"'
     withSelect: boolean
-    where?: string
+    daily: boolean
   }) {
-    const andWhere = options.where
-      ? 'AND ' + options.where
+    const andWhere = options.daily === true
+      ? 'AND "video"."createdAt" > now() - interval \'24 hours\''
       : ''
 
     const videoChannelJoin = 'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
@@ -904,12 +914,15 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
       videoQuota: this.videoQuota,
       videoQuotaDaily: this.videoQuotaDaily,
+
       videoQuotaUsed: videoQuotaUsed !== undefined
-        ? parseInt(videoQuotaUsed + '', 10)
+        ? parseInt(videoQuotaUsed + '', 10) + LiveQuotaStore.Instance.getLiveQuotaOf(this.id)
         : undefined,
+
       videoQuotaUsedDaily: videoQuotaUsedDaily !== undefined
-        ? parseInt(videoQuotaUsedDaily + '', 10)
+        ? parseInt(videoQuotaUsedDaily + '', 10) + LiveQuotaStore.Instance.getLiveQuotaOf(this.id)
         : undefined,
+
       videosCount: videosCount !== undefined
         ? parseInt(videosCount + '', 10)
         : undefined,

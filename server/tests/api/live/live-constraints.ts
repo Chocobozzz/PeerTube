@@ -12,6 +12,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
+  stopFfmpeg,
   waitJobs,
   waitUntilLiveReplacedByReplayOnAllServers,
   waitUntilLiveWaitingOnAllServers
@@ -167,6 +168,30 @@ describe('Test live constraints', function () {
 
     const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: false })
+  })
+
+  it('Should have the same quota in admin and as a user', async function () {
+    this.timeout(120000)
+
+    const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: false })
+    const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ token: userAccessToken, videoId: userVideoLiveoId })
+
+    await servers[0].live.waitUntilPublished({ videoId: userVideoLiveoId })
+
+    await wait(3000)
+
+    const quotaUser = await servers[0].users.getMyQuotaUsed({ token: userAccessToken })
+
+    const { data } = await servers[0].users.list()
+    const quotaAdmin = data.find(u => u.username === 'user1')
+
+    expect(quotaUser.videoQuotaUsed).to.equal(quotaAdmin.videoQuotaUsed)
+    expect(quotaUser.videoQuotaUsedDaily).to.equal(quotaAdmin.videoQuotaUsedDaily)
+
+    expect(quotaUser.videoQuotaUsed).to.be.above(10)
+    expect(quotaUser.videoQuotaUsedDaily).to.be.above(10)
+
+    await stopFfmpeg(ffmpegCommand)
   })
 
   it('Should have max duration limit', async function () {

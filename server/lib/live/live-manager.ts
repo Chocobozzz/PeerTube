@@ -331,6 +331,8 @@ class LiveManager {
     muxingSession.on('after-cleanup', ({ videoId }) => {
       this.muxingSessions.delete(sessionId)
 
+      LiveQuotaStore.Instance.removeLive(user.id, videoLive.id)
+
       muxingSession.destroy()
 
       return this.onAfterMuxingCleanup({ videoId, liveSession })

@@ -173,7 +173,8 @@ async function getOriginalVideoFileTotalFromUser (user: MUserId) {
   // Don't use sequelize because we need to use a sub query
   const query = UserModel.generateUserQuotaBaseSQL({
     withSelect: true,
-    whereUserId: '$userId'
+    whereUserId: '$userId',
+    daily: false
   })
 
   const base = await UserModel.getTotalRawQuery(query, user.id)
@@ -187,7 +188,7 @@ async function getOriginalVideoFileTotalDailyFromUser (user: MUserId) {
   const query = UserModel.generateUserQuotaBaseSQL({
     withSelect: true,
     whereUserId: '$userId',
-    where: '"video"."createdAt" > now() - interval \'24 hours\''
+    daily: true
   })
 
   const base = await UserModel.getTotalRawQuery(query, user.id)
