@@ -5174,7 +5174,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7440807341905682986" datatype="html">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of this instance </source>
-        <target state="needs-translation">I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of this instance </target>
+        <target state="translated">عمري لا يقل عن <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> سنة وأنا أوفق على the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>الشروط<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> وعلى <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>قوانين السلوك<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> لهذا المثيل </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-terms.component.html</context>
           <context context-type="linenumber">5,10</context>
@@ -5298,7 +5298,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
-        <target state="needs-translation">An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</target>
+        <target state="translated">أُرسل بريد يحوي تعليمات استعادة كلمة المرور الى <x id="PH" equiv-text="this.forgotPasswordEmail"/>. ستنتهي صلاحية الرابط خلال ساعة.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="4319634264526091601" datatype="html">
@@ -5824,7 +5824,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
         <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="8553183884518584864"/> </source>
-        <target state="needs-translation"><x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}"/> </target>
+        <target state="translated"><x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {فيديو} other {{{ getTotalVideosOf(videoChannel) }} فيديو}}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">28</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">38</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">33</context></context-group>
@@ -8230,7 +8230,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5618790697446401830" datatype="html">
         <source>An automatically blocked video is awaiting review</source>
-        <target state="new">An automatically blocked video is awaiting review</target>
+        <target state="translated">فيديو محجوب تلقائيا ينتظر المراجعة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">35</context>
@@ -8278,7 +8278,7 @@ color: red;
       </trans-unit>
       <trans-unit id="900099988467638766" datatype="html">
         <source>An abuse report received a new message</source>
-        <target state="new">An abuse report received a new message</target>
+        <target state="translated">أُستلمت رسالة جديدة لبلاغ إساءة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="2326816287669585542" datatype="html">
@@ -8288,7 +8288,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2764971902180889905" datatype="html">
         <source>A new PeerTube version is available</source>
-        <target state="new">A new PeerTube version is available</target>
+        <target state="translated">تتوفر نسخة حديثة من بيرتيوب</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -8296,7 +8296,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2560339336098442670" datatype="html">
         <source>One of your plugin/theme has a new available version</source>
-        <target state="new">One of your plugin/theme has a new available version</target>
+        <target state="translated">تتوفر نسخة حديثة من إحدى إضافاتك/سماتك</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -8312,12 +8312,12 @@ color: red;
       </trans-unit>
       <trans-unit id="4579496777570550463" datatype="html">
         <source>Social</source>
-        <target state="new">Social</target>
+        <target state="translated">اجتماعي</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="1852164487280647902" datatype="html">
         <source>Your videos</source>
-        <target state="new">Your videos</target>
+        <target state="translated">فيديوهاتك</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="5095562193296630034" datatype="html">
@@ -8332,7 +8332,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6721822899525405039" datatype="html">
         <source>People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </source>
-        <target state="new"> People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
+        <target state="translated">يمكن للناس العثور عليم باستخدام @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -8387,7 +8387,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4844578664427956129" datatype="html">
         <source>Change ownership</source>
-        <target state="new">Change ownership</target>
+        <target state="translated">غيّر الملكية</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/modals/video-change-ownership.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">211</context></context-group>
       </trans-unit>
@@ -8560,7 +8560,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2392481201920342009" datatype="html">
         <source>VOD videos</source>
-        <target state="new">VOD videos</target>
+        <target state="translated">فيديوهات VOD</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">34</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">109</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">165</context></context-group>
@@ -9919,12 +9919,12 @@ color: red;
       </trans-unit>
       <trans-unit id="2779726697233311712" datatype="html">
         <source>Max user lives should be greater or equal to -1.</source>
-        <target state="new">Max user lives should be greater or equal to -1.</target>
+        <target state="translated">عدد البثوث المباشر للمستخدمين يجب أن يساوي القيمة -1 أو يزيد عنها.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="351272950792130803" datatype="html">
         <source>Max video channels per user is required.</source>
-        <target state="new">Max video channels per user is required.</target>
+        <target state="translated">حد عدد القنوات لكل مستخدم مطلوب.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">104</context>
@@ -9932,7 +9932,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5253683089104713724" datatype="html">
         <source>Max video channels per user must be greater or equal to 1.</source>
-        <target state="new">Max video channels per user must be greater or equal to 1.</target>
+        <target state="translated">عدد القنوات لكل مستخدم يجب أن يساوي القيمة -1 أو يزيد عنها.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">105</context>
@@ -9940,7 +9940,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8354695459880751923" datatype="html">
         <source>Max video channels per user must be a number.</source>
-        <target state="new">Max video channels per user must be a number.</target>
+        <target state="translated">يجب أن يكون عدد القنوات رقمًا.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">106</context>
@@ -9980,12 +9980,12 @@ color: red;
       </trans-unit>
       <trans-unit id="544279804045883862" datatype="html">
         <source>Handle is required.</source>
-        <target state="new">Handle is required.</target>
+        <target state="translated">المقبض مطلوب.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="2805037637775107078" datatype="html">
         <source>Handle must be valid (eg. chocobozzz@example.com).</source>
-        <target state="new">Handle must be valid (eg. chocobozzz@example.com).</target>
+        <target state="translated">يجب أن يكون المقبض صالحًا (مثل chocobozzz@example.com).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="4968369344159400023" datatype="html">
@@ -10083,7 +10083,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3419415520566928243" datatype="html">
         <source>Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</source>
-        <target state="new">Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</target>
+        <target state="translated">يقتصر محتوى اسم القناة على الأحرف الصغيرة والأرقام والنقطة والشرطة السفلية.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="525871656034789056" datatype="html">
@@ -10249,7 +10249,7 @@ color: red;
       </trans-unit>
       <trans-unit id="9145435275110757909" datatype="html">
         <source>Caption content is required.</source>
-        <target state="new">Caption content is required.</target>
+        <target state="translated">الوصف التوضيحي مطلوبة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">21</context>
@@ -10297,8 +10297,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5637879201055173642" datatype="html">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;   "/> to learn how to use the PeerTube live streaming feature. </source>
-        <target state="new"> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;   "/> to learn how to use the PeerTube live streaming feature.
-</target>
+        <target state="translated">راجع <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>التوثيق<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;   "/> للاستزادة عن البثووث المباشرة. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-documentation-link.component.html</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="4267638333776227701" datatype="html">
@@ -10333,7 +10332,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5226261760726752768" datatype="html">
         <source>Live information</source>
-        <target state="new">Live information</target>
+        <target state="translated">معلومات البث</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="5078078160576986217" datatype="html">
@@ -10346,31 +10345,31 @@ color: red;
       </trans-unit>
       <trans-unit id="7220386604464537651" datatype="html">
         <source>Live RTMP Url</source>
-        <target state="new">Live RTMP Url</target>
+        <target state="translated">رابط بث RTMP</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">245</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="4956017863340142734" datatype="html">
         <source>Live RTMPS Url</source>
-        <target state="new">Live RTMPS Url</target>
+        <target state="translated">رابط بث RTMPS</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">250</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="1225050607125362052" datatype="html">
         <source>Live stream key</source>
-        <target state="new">Live stream key</target>
+        <target state="translated">مفتاح البث المباشر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">255</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="5058286083557987083" datatype="html">
         <source>⚠️ Never share your stream key with anyone.</source>
-        <target state="new">⚠️ Never share your stream key with anyone.</target>
+        <target state="translated">⚠️ لا تشارك مفتاح البث المباشر مع أي أحد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">258</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="5941639683192662500" datatype="html">
         <source>This is a normal live</source>
-        <target state="new">This is a normal live</target>
+        <target state="translated">هذا بث مباشر عادي</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">264</context></context-group>
       </trans-unit>
       <trans-unit id="7263323611663811322" datatype="html">
@@ -10390,7 +10389,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3112273530390098557" datatype="html">
         <source>Replay will be saved</source>
-        <target state="new">Replay will be saved</target>
+        <target state="translated">ستُحفظ الإعادة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">11</context>
@@ -10413,7 +10412,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1074634769552897790" datatype="html">
         <source>Video name has leading or trailing whitespace.</source>
-        <target state="new">Video name has leading or trailing whitespace.</target>
+        <target state="translated">يحوي أول اسم الفيديو أو آخره على مسافة.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">18</context>
@@ -10456,7 +10455,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2389667090302909529" datatype="html">
         <source>A tag should be more than 1 and less than 30 characters long.</source>
-        <target state="new">A tag should be more than 1 and less than 30 characters long.</target>
+        <target state="translated">يجب أن يكون الوسم محصورا بين 1 و30 محرفًا.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="4806300480558315727" datatype="html">
@@ -10482,7 +10481,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4323470180912194028" datatype="html">
         <source>Copy</source>
-        <target state="new">Copy</target>
+        <target state="translated">انسخ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/input-toggle-hidden.component.html</context><context context-type="linenumber">15</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/input-toggle-hidden.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
@@ -10494,12 +10493,12 @@ color: red;
       </trans-unit>
       <trans-unit id="6489275254908395777" datatype="html">
         <source>Maximize editor</source>
-        <target state="new">Maximize editor</target>
+        <target state="translated">كبِر المحرر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="4243591013849340688" datatype="html">
         <source>Exit maximized editor</source>
-        <target state="new">Exit maximized editor</target>
+        <target state="translated">اخرج من الوضع الكبير للمحرر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="8728283516316752593" datatype="html">
@@ -10514,7 +10513,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3393133458004181121" datatype="html">
         <source>All categories</source>
-        <target state="new">All categories</target>
+        <target state="translated">كل الفئات</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-categories.component.ts</context>
           <context context-type="linenumber">24</context>
@@ -10522,7 +10521,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3999967345340145904" datatype="html">
         <source>You can't select more than <x id="PH" equiv-text="this.maxItems"/> items</source>
-        <target state="new">You can't select more than <x id="PH" equiv-text="this.maxItems"/> items</target>
+        <target state="translated">لا يمكنك اختيار أكثر من <x id="PH" equiv-text="this.maxItems"/> عنصر</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -10535,7 +10534,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4076995379551303829" datatype="html">
         <source>Custom value...</source>
-        <target state="new">Custom value...</target>
+        <target state="translated">قيمة مخصصة...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-custom-value.component.ts</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="996392855508119363" datatype="html">
@@ -10599,7 +10598,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8392321423487952834" datatype="html">
         <source>1 year ago</source>
-        <target state="new">1 year ago</target>
+        <target state="translated">منذ سنة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">12</context>
@@ -10616,7 +10615,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6874778750344205852" datatype="html">
         <source>1 month ago</source>
-        <target state="new">1 month ago</target>
+        <target state="translated">منذ شهر</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">19</context>
@@ -10633,7 +10632,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6538455390369999912" datatype="html">
         <source>1 week ago</source>
-        <target state="new">1 week ago</target>
+        <target state="translated">منذ أسبوع</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">26</context>
@@ -10646,7 +10645,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3927517496763161987" datatype="html">
         <source>1 day ago</source>
-        <target state="new">1 day ago</target>
+        <target state="translated">منذ يوم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">30</context>
@@ -10659,7 +10658,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6285422673271535468" datatype="html">
         <source>1 hour ago</source>
-        <target state="new">1 hour ago</target>
+        <target state="translated">منذ ساعة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">34</context>
@@ -10704,7 +10703,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6853170548960328665" datatype="html">
         <source>Close search</source>
-        <target state="new">Close search</target>
+        <target state="translated">أغلق البحث</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/simple-search-input.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="2439066254855913806" datatype="html">
@@ -10729,12 +10728,12 @@ color: red;
       </trans-unit>
       <trans-unit id="8312101634344200207" datatype="html">
         <source><x id="PH" equiv-text="this.views"/> viewers</source>
-        <target state="new"><x id="PH" equiv-text="this.views"/> viewers</target>
+        <target state="translated"><x id="PH" equiv-text="this.views"/> مشاهد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context><context context-type="linenumber">275</context></context-group>
       </trans-unit>
       <trans-unit id="7756087706411154095" datatype="html">
         <source><x id="PH" equiv-text="this.views"/> views</source>
-        <target state="new"><x id="PH" equiv-text="this.views"/> views</target>
+        <target state="translated"><x id="PH" equiv-text="this.views"/> مشاهدة</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context><context context-type="linenumber">278</context></context-group>
       </trans-unit>
       <trans-unit id="7390990800435887351" datatype="html">
@@ -10796,7 +10795,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3160979325245958752" datatype="html">
         <source>Ban <x id="PH" equiv-text="this.usersToBan.length"/> users</source>
-        <target state="new">Ban <x id="PH" equiv-text="this.usersToBan.length"/> users</target>
+        <target state="translated">احظر <x id="PH" equiv-text="this.usersToBan.length"/> مستخدم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -10804,7 +10803,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8088707210191809175" datatype="html">
         <source>Ban "<x id="PH" equiv-text="this.usersToBan.username"/>"</source>
-        <target state="new">Ban "<x id="PH" equiv-text="this.usersToBan.username"/>"</target>
+        <target state="translated">احظر "<x id="PH" equiv-text="this.usersToBan.username"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">84</context>
@@ -10827,7 +10826,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6307826440781941134" datatype="html">
         <source>Delete <x id="PH" equiv-text="user.username"/></source>
-        <target state="new">Delete <x id="PH" equiv-text="user.username"/></target>
+        <target state="translated">احذف <x id="PH" equiv-text="user.username"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">104</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">236</context></context-group>
       </trans-unit>
