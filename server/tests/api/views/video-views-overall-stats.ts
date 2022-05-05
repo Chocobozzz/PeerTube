@@ -17,57 +17,6 @@ describe('Test views overall stats', function () {
     servers = await prepareViewsServers()
   })
 
-  describe('Test rates and comments of local videos on VOD', function () {
-    let vodVideoId: string
-
-    before(async function () {
-      this.timeout(120000);
-
-      ({ vodVideoId } = await prepareViewsVideos({ servers, live: false, vod: true }))
-    })
-
-    it('Should have the appropriate likes', async function () {
-      this.timeout(60000)
-
-      await servers[0].videos.rate({ id: vodVideoId, rating: 'like' })
-      await servers[1].videos.rate({ id: vodVideoId, rating: 'like' })
-
-      await waitJobs(servers)
-
-      const stats = await servers[0].videoStats.getOverallStats({ videoId: vodVideoId })
-
-      expect(stats.likes).to.equal(2)
-      expect(stats.dislikes).to.equal(0)
-    })
-
-    it('Should have the appropriate dislikes', async function () {
-      this.timeout(60000)
-
-      await servers[0].videos.rate({ id: vodVideoId, rating: 'dislike' })
-      await servers[1].videos.rate({ id: vodVideoId, rating: 'dislike' })
-
-      await waitJobs(servers)
-
-      const stats = await servers[0].videoStats.getOverallStats({ videoId: vodVideoId })
-
-      expect(stats.likes).to.equal(0)
-      expect(stats.dislikes).to.equal(2)
-    })
-
-    it('Should have the appropriate comments', async function () {
-      this.timeout(60000)
-
-      await servers[0].comments.createThread({ videoId: vodVideoId, text: 'root' })
-      await servers[0].comments.addReplyToLastThread({ text: 'reply' })
-      await servers[1].comments.createThread({ videoId: vodVideoId, text: 'root' })
-
-      await waitJobs(servers)
-
-      const stats = await servers[0].videoStats.getOverallStats({ videoId: vodVideoId })
-      expect(stats.comments).to.equal(3)
-    })
-  })
-
   describe('Test watch time stats of local videos on live and VOD', function () {
     let vodVideoId: string
     let liveVideoId: string
@@ -82,8 +31,9 @@ describe('Test views overall stats', function () {
     it('Should display overall stats of a video with no viewers', async function () {
       for (const videoId of [ liveVideoId, vodVideoId ]) {
         const stats = await servers[0].videoStats.getOverallStats({ videoId })
+        const video = await servers[0].videos.get({ id: videoId })
 
-        expect(stats.views).to.equal(0)
+        expect(video.views).to.equal(0)
         expect(stats.averageWatchTime).to.equal(0)
         expect(stats.totalWatchTime).to.equal(0)
       }
@@ -100,8 +50,9 @@ describe('Test views overall stats', function () {
 
       for (const videoId of [ liveVideoId, vodVideoId ]) {
         const stats = await servers[0].videoStats.getOverallStats({ videoId })
+        const video = await servers[0].videos.get({ id: videoId })
 
-        expect(stats.views).to.equal(0)
+        expect(video.views).to.equal(0)
         expect(stats.averageWatchTime).to.equal(1)
         expect(stats.totalWatchTime).to.equal(1)
       }
@@ -118,14 +69,18 @@ describe('Test views overall stats', function () {
 
         {
           const stats = await servers[0].videoStats.getOverallStats({ videoId: vodVideoId })
-          expect(stats.views).to.equal(1)
+          const video = await servers[0].videos.get({ id: vodVideoId })
+
+          expect(video.views).to.equal(1)
           expect(stats.averageWatchTime).to.equal(2)
           expect(stats.totalWatchTime).to.equal(4)
         }
 
         {
           const stats = await servers[0].videoStats.getOverallStats({ videoId: liveVideoId })
-          expect(stats.views).to.equal(1)
+          const video = await servers[0].videos.get({ id: liveVideoId })
+
+          expect(video.views).to.equal(1)
           expect(stats.averageWatchTime).to.equal(21)
           expect(stats.totalWatchTime).to.equal(41)
         }
@@ -143,16 +98,18 @@ describe('Test views overall stats', function () {
 
       {
         const stats = await servers[0].videoStats.getOverallStats({ videoId: vodVideoId })
+        const video = await servers[0].videos.get({ id: vodVideoId })
 
-        expect(stats.views).to.equal(1)
+        expect(video.views).to.equal(1)
         expect(stats.averageWatchTime).to.equal(2)
         expect(stats.totalWatchTime).to.equal(6)
       }
 
       {
         const stats = await servers[0].videoStats.getOverallStats({ videoId: liveVideoId })
+        const video = await servers[0].videos.get({ id: liveVideoId })
 
-        expect(stats.views).to.equal(1)
+        expect(video.views).to.equal(1)
         expect(stats.averageWatchTime).to.equal(14)
         expect(stats.totalWatchTime).to.equal(43)
       }
@@ -167,14 +124,18 @@ describe('Test views overall stats', function () {
 
       {
         const stats = await servers[0].videoStats.getOverallStats({ videoId: vodVideoId })
-        expect(stats.views).to.equal(2)
+        const video = await servers[0].videos.get({ id: vodVideoId })
+
+        expect(video.views).to.equal(2)
         expect(stats.averageWatchTime).to.equal(3)
         expect(stats.totalWatchTime).to.equal(11)
       }
 
       {
         const stats = await servers[0].videoStats.getOverallStats({ videoId: liveVideoId })
-        expect(stats.views).to.equal(2)
+        const video = await servers[0].videos.get({ id: liveVideoId })
+
+        expect(video.views).to.equal(2)
         expect(stats.averageWatchTime).to.equal(22)
         expect(stats.totalWatchTime).to.equal(88)
       }

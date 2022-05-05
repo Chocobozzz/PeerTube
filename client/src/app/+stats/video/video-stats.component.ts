@@ -137,15 +137,11 @@ export class VideoStatsComponent implements OnInit {
     this.overallStatCards = [
       {
         label: $localize`Views`,
-        value: this.numberFormatter.transform(overallStats.views)
-      },
-      {
-        label: $localize`Comments`,
-        value: this.numberFormatter.transform(overallStats.comments)
+        value: this.numberFormatter.transform(this.video.views)
       },
       {
         label: $localize`Likes`,
-        value: this.numberFormatter.transform(overallStats.likes)
+        value: this.numberFormatter.transform(this.video.likes)
       },
       {
         label: $localize`Average watch time`,

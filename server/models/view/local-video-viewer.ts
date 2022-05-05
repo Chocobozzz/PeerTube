@@ -134,9 +134,6 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
       FETCH FIRST 1 ROW ONLY`
     const watchPeakPromise = LocalVideoViewerModel.sequelize.query<any>(watchPeakQuery, options)
 
-    const commentsQuery = `SELECT COUNT(*) AS comments FROM "videoComment" WHERE "videoId" = :videoId`
-    const commentsPromise = LocalVideoViewerModel.sequelize.query<any>(commentsQuery, options)
-
     const countriesQuery = `SELECT country, COUNT(country) as viewers ` +
       `FROM "localVideoViewer" ` +
       `WHERE "videoId" = :videoId AND country IS NOT NULL ` +
@@ -144,10 +141,9 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
       `ORDER BY viewers DESC`
     const countriesPromise = LocalVideoViewerModel.sequelize.query<any>(countriesQuery, options)
 
-    const [ rowsWatchTime, rowsWatchPeak, rowsComment, rowsCountries ] = await Promise.all([
+    const [ rowsWatchTime, rowsWatchPeak, rowsCountries ] = await Promise.all([
       watchTimePromise,
       watchPeakPromise,
-      commentsPromise,
       countriesPromise
     ])
 
@@ -165,14 +161,6 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
       viewersPeakDate: rowsWatchPeak.length !== 0
         ? rowsWatchPeak[0].dateBreakpoint || null
         : null,
-
-      views: video.views,
-      likes: video.likes,
-      dislikes: video.dislikes,
-
-      comments: rowsComment.length !== 0
-        ? parseInt(rowsComment[0].comments) || 0
-        : 0,
 
       countries: rowsCountries.map(r => ({
         isoCode: r.country,

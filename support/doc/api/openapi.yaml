@@ -6220,14 +6220,6 @@ components:
         viewersPeakDate:
           type: string
           format: date-time
-        views:
-          type: number
-        likes:
-          type: number
-        dislikes:
-          type: number
-        comments:
-          type: number
         countries:
           type: array
           items:
