@@ -2631,64 +2631,57 @@ color: red;
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3472969629566153023" datatype="html">
-        <source> If the user quota is reached, PeerTube will automatically terminate the live streaming </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">33,35</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="8583623894789865917" datatype="html">
         <source>Allow your users to change live latency</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6422195560028891534" datatype="html">
         <source> Small latency disables P2P and high latency can increase P2P ratio </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">44,46</context>
+          <context context-type="linenumber">41,43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4420104899393268652" datatype="html">
         <source> Max simultaneous lives created on your instance <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;muted&quot;>"/>(-1 for "unlimited")<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span>"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">52,53</context>
+          <context context-type="linenumber">49,50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6830777508073747241" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {live} other {lives}}</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">55</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7210210728441530221" datatype="html">
         <source> Max simultaneous lives created per user <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;muted&quot;>"/>(-1 for "unlimited")<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span>"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">65,66</context>
+          <context context-type="linenumber">62,63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1521259619066122077" datatype="html">
         <source>Max live duration</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7911929966701561067" datatype="html">
         <source>TRANSCODING</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">97</context>
+          <context context-type="linenumber">94</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
@@ -2699,56 +2692,56 @@ color: red;
         <source> Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">98,100</context>
+          <context context-type="linenumber">95,97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6759167469686242835" datatype="html">
         <source>Transcoding enabled for live streams</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">113</context>
+          <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6727057461851446921" datatype="html">
         <source>Live resolutions to generate</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5309195634424105927" datatype="html">
         <source>Live transcoding threads</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">140</context>
+          <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4240037618955024499" datatype="html">
         <source> will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">143,145</context>
+          <context context-type="linenumber">140,142</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8489317904250057957" datatype="html">
         <source> will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">147,149</context>
+          <context context-type="linenumber">144,146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1417246074503129277" datatype="html">
         <source>Live transcoding profile</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">162</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8294583621306221742" datatype="html">
         <source>new live transcoding profiles can be added by PeerTube plugins</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
-          <context context-type="linenumber">163</context>
+          <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
       <trans-unit id="931255636742351800" datatype="html">
@@ -5608,7 +5601,7 @@ color: red;
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
-          <context context-type="linenumber">122</context>
+          <context context-type="linenumber">110</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/simple-search-input.component.ts</context>
@@ -9694,7 +9687,7 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
         <source>Other</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
-          <context context-type="linenumber">209</context>
+          <context context-type="linenumber">208</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context>
@@ -9705,14 +9698,14 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
         <source>Instance languages</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
-          <context context-type="linenumber">212</context>
+          <context context-type="linenumber">211</context>
         </context-group>
       </trans-unit>
       <trans-unit id="40119547597591062" datatype="html">
         <source>All languages</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
-          <context context-type="linenumber">213</context>
+          <context context-type="linenumber">212</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context>
@@ -9723,14 +9716,14 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
         <source>Scheduled</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
-          <context context-type="linenumber">228</context>
+          <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1435317307066082710" datatype="html">
         <source>Hide the video until a specific date</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
-          <context context-type="linenumber">229</context>
+          <context context-type="linenumber">228</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1087181129481039628" datatype="html">
@@ -9802,8 +9795,8 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5872059367236038160" datatype="html">
-        <source>Stream only once and save a replay of your live</source>
+      <trans-unit id="8675588963276687921" datatype="html">
+        <source>Stream only once, replay will replace your live</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">157</context>
@@ -9816,8 +9809,8 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
           <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5168540607709796871" datatype="html">
-        <source>Stream multiple times, replays can't be saved</source>
+      <trans-unit id="3384650899171037827" datatype="html">
+        <source>Stream multiple times, replays will be separate videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">165</context>
@@ -11312,6 +11305,10 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="sourcefile">src/app/core/notification/notifier.service.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="2971365540217107489" datatype="html">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
@@ -11772,7 +11769,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7997432701743294657" datatype="html">
@@ -13868,46 +13865,32 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7683705529753923369" datatype="html">
-        <source>Player</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
-          <context context-type="linenumber">111</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2000016511993764346" datatype="html">
-        <source>P2P enabled</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
-          <context context-type="linenumber">115</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="8630916846096019339" datatype="html">
         <source>Users can resolve distant content</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
-          <context context-type="linenumber">126</context>
+          <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3300472325769888962" datatype="html">
         <source>Plugins &amp; Themes</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
-          <context context-type="linenumber">133</context>
+          <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1782375284146839174" datatype="html">
         <source>Available themes</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9205443410527464015" datatype="html">
         <source>Plugins enabled</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
-          <context context-type="linenumber">146</context>
+          <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
       <trans-unit id="996392855508119363" datatype="html">
@@ -15809,11 +15792,74 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6445713766140892433" datatype="html">
+        <source>Latest live sessions</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1018828582442463303" datatype="html">
+        <source>Started on <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6765028278622459314" datatype="html">
+        <source>Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3424935624805832445" datatype="html">
+        <source>Go to replay</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4853631149357965563" datatype="html">
         <source>Update live settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1254225561962113354" datatype="html">
+        <source>Server too slow</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1599290313974118905" datatype="html">
+        <source>Live blacklisted</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5274374742436838139" datatype="html">
+        <source>Max duration exceeded</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1677142486230902467" datatype="html">
+        <source>Server error</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="189546967059369850" datatype="html">
+        <source>Quota exceeded</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4021487547497211597" datatype="html">
