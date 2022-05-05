@@ -1952,6 +1952,18 @@ paths:
         - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
+        - name: startDate
+          in: query
+          description: Filter stats by start date
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          description: Filter stats by end date
+          schema:
+            type: string
+            format: date-time
       responses:
         '200':
           description: successful operation
@@ -1996,6 +2008,18 @@ paths:
             enum:
               - 'viewers'
               - 'aggregateWatchTime'
+        - name: startDate
+          in: query
+          description: Filter stats by start date
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          description: Filter stats by end date
+          schema:
+            type: string
+            format: date-time
       responses:
         '200':
           description: successful operation

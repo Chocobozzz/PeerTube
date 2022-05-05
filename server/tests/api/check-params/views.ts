@@ -75,8 +75,30 @@ describe('Test videos views', function () {
       })
     })
 
+    it('Should fail with an invalid start date', async function () {
+      await servers[0].videoStats.getOverallStats({
+        videoId,
+        startDate: 'fake' as any,
+        endDate: new Date().toISOString(),
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with an invalid end date', async function () {
+      await servers[0].videoStats.getOverallStats({
+        videoId,
+        startDate: new Date().toISOString(),
+        endDate: 'fake' as any,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
     it('Should succeed with the correct parameters', async function () {
-      await servers[0].videoStats.getOverallStats({ videoId })
+      await servers[0].videoStats.getOverallStats({
+        videoId,
+        startDate: new Date().toISOString(),
+        endDate: new Date().toISOString()
+      })
     })
   })
 

@@ -10,6 +10,16 @@ import { areValidationErrors, checkUserCanManageVideo, doesVideoExist, isValidVi
 const videoOverallStatsValidator = [
   isValidVideoIdParam('videoId'),
 
+  query('startDate')
+    .optional()
+    .custom(isDateValid)
+    .withMessage('Should have a valid start date'),
+
+  query('endDate')
+    .optional()
+    .custom(isDateValid)
+    .withMessage('Should have a valid end date'),
+
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoOverallStatsValidator parameters', { parameters: req.body })
 

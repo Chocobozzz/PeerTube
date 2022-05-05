@@ -1,6 +1,6 @@
 import express from 'express'
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer'
-import { VideoStatsTimeserieMetric, VideoStatsTimeserieQuery } from '@shared/models'
+import { VideoStatsOverallQuery, VideoStatsTimeserieMetric, VideoStatsTimeserieQuery } from '@shared/models'
 import {
   asyncMiddleware,
   authenticate,
@@ -39,8 +39,13 @@ export {
 
 async function getOverallStats (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
+  const query = req.query as VideoStatsOverallQuery
 
-  const stats = await LocalVideoViewerModel.getOverallStats(video)
+  const stats = await LocalVideoViewerModel.getOverallStats({
+    video,
+    startDate: query.startDate,
+    endDate: query.endDate
+  })
 
   return res.json(stats)
 }

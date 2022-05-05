@@ -141,6 +141,27 @@ describe('Test views overall stats', function () {
       }
     })
 
+    it('Should filter overall stats by date', async function () {
+      this.timeout(60000)
+
+      const beforeView = new Date()
+
+      await servers[0].views.simulateViewer({ id: vodVideoId, currentTimes: [ 0, 3 ] })
+      await processViewersStats(servers)
+
+      {
+        const stats = await servers[0].videoStats.getOverallStats({ videoId: vodVideoId, startDate: beforeView.toISOString() })
+        expect(stats.averageWatchTime).to.equal(3)
+        expect(stats.totalWatchTime).to.equal(3)
+      }
+
+      {
+        const stats = await servers[0].videoStats.getOverallStats({ videoId: liveVideoId, endDate: beforeView.toISOString() })
+        expect(stats.averageWatchTime).to.equal(22)
+        expect(stats.totalWatchTime).to.equal(88)
+      }
+    })
+
     after(async function () {
       await stopFfmpeg(command)
     })

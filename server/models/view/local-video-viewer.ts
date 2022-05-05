@@ -100,10 +100,28 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
     })
   }
 
-  static async getOverallStats (video: MVideo): Promise<VideoStatsOverall> {
-    const options = {
+  static async getOverallStats (options: {
+    video: MVideo
+    startDate?: string
+    endDate?: string
+  }): Promise<VideoStatsOverall> {
+    const { video, startDate, endDate } = options
+
+    const queryOptions = {
       type: QueryTypes.SELECT as QueryTypes.SELECT,
-      replacements: { videoId: video.id }
+      replacements: { videoId: video.id } as any
+    }
+
+    let dateWhere = ''
+
+    if (startDate) {
+      dateWhere += ' AND "localVideoViewer"."startDate" >= :startDate'
+      queryOptions.replacements.startDate = startDate
+    }
+
+    if (endDate) {
+      dateWhere += ' AND "localVideoViewer"."endDate" <= :endDate'
+      queryOptions.replacements.endDate = endDate
     }
 
     const watchTimeQuery = `SELECT ` +
@@ -111,9 +129,9 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
       `AVG("localVideoViewer"."watchTime") AS "averageWatchTime" ` +
       `FROM "localVideoViewer" ` +
       `INNER JOIN "video" ON "video"."id" = "localVideoViewer"."videoId" ` +
-      `WHERE "videoId" = :videoId`
+      `WHERE "videoId" = :videoId ${dateWhere}`
 
-    const watchTimePromise = LocalVideoViewerModel.sequelize.query<any>(watchTimeQuery, options)
+    const watchTimePromise = LocalVideoViewerModel.sequelize.query<any>(watchTimeQuery, queryOptions)
 
     const watchPeakQuery = `WITH "watchPeakValues" AS (
         SELECT "startDate" AS "dateBreakpoint", 1 AS "inc"
@@ -122,7 +140,7 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
         UNION ALL
         SELECT "endDate" AS "dateBreakpoint", -1 AS "inc"
         FROM "localVideoViewer"
-        WHERE "videoId" = :videoId
+        WHERE "videoId" = :videoId ${dateWhere}
       )
       SELECT "dateBreakpoint", "concurrent"
       FROM (
@@ -132,14 +150,14 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
       ) tmp
       ORDER BY "concurrent" DESC
       FETCH FIRST 1 ROW ONLY`
-    const watchPeakPromise = LocalVideoViewerModel.sequelize.query<any>(watchPeakQuery, options)
+    const watchPeakPromise = LocalVideoViewerModel.sequelize.query<any>(watchPeakQuery, queryOptions)
 
     const countriesQuery = `SELECT country, COUNT(country) as viewers ` +
       `FROM "localVideoViewer" ` +
-      `WHERE "videoId" = :videoId AND country IS NOT NULL ` +
+      `WHERE "videoId" = :videoId AND country IS NOT NULL ${dateWhere} ` +
       `GROUP BY country ` +
       `ORDER BY viewers DESC`
-    const countriesPromise = LocalVideoViewerModel.sequelize.query<any>(countriesQuery, options)
+    const countriesPromise = LocalVideoViewerModel.sequelize.query<any>(countriesQuery, queryOptions)
 
     const [ rowsWatchTime, rowsWatchPeak, rowsCountries ] = await Promise.all([
       watchTimePromise,
