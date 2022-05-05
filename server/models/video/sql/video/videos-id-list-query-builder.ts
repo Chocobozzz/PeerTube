@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize'
 import validator from 'validator'
 import { exists } from '@server/helpers/custom-validators/misc'
 import { WEBSERVER } from '@server/initializers/constants'
-import { buildDirectionAndField, createSafeIn } from '@server/models/utils'
+import { buildDirectionAndField, createSafeIn, parseRowCountResult } from '@server/models/utils'
 import { MUserAccountId, MUserId } from '@server/types/models'
 import { VideoInclude, VideoPrivacy, VideoState } from '@shared/models'
 import { AbstractRunQuery } from '../../../shared/abstract-run-query'
@@ -105,7 +105,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   countVideoIds (countOptions: BuildVideosListQueryOptions): Promise<number> {
     this.buildIdsListQuery(countOptions)
 
-    return this.runQuery().then(rows => rows.length !== 0 ? rows[0].total : 0)
+    return this.runQuery().then(rows => parseRowCountResult(rows))
   }
 
   getQuery (options: BuildVideosListQueryOptions) {

@@ -44,7 +44,7 @@ function sendUndoFollow (actorFollow: MActorFollowActors, t: Transaction) {
   const followActivity = buildFollowActivity(actorFollow.url, me, following)
   const undoActivity = undoActivityData(undoUrl, me, followActivity)
 
-  return t.afterCommit(() => {
+  t.afterCommit(() => {
     return unicastTo({
       data: undoActivity,
       byActor: me,

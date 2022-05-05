@@ -87,12 +87,12 @@ function getBlacklistSort (model: any, value: string, lastSort: OrderItem = [ 'i
   return [ firstSort, lastSort ]
 }
 
-function getFollowsSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+function getInstanceFollowsSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
   const { direction, field } = buildDirectionAndField(value)
 
   if (field === 'redundancyAllowed') {
     return [
-      [ 'ActorFollowing', 'Server', 'redundancyAllowed', direction ],
+      [ 'ActorFollowing.Server.redundancyAllowed', direction ],
       lastSort
     ]
   }
@@ -197,6 +197,12 @@ function parseAggregateResult (result: any) {
   return total
 }
 
+function parseRowCountResult (result: any) {
+  if (result.length !== 0) return result[0].total
+
+  return 0
+}
+
 function createSafeIn (sequelize: Sequelize, stringArr: (string | number)[]) {
   return stringArr.map(t => {
     return t === null
@@ -263,10 +269,11 @@ export {
   buildWhereIdOrUUID,
   isOutdated,
   parseAggregateResult,
-  getFollowsSort,
+  getInstanceFollowsSort,
   buildDirectionAndField,
   createSafeIn,
-  searchAttribute
+  searchAttribute,
+  parseRowCountResult
 }
 
 // ---------------------------------------------------------------------------
