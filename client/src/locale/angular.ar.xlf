@@ -2943,7 +2943,7 @@
       </trans-unit>
       <trans-unit id="5926348345797688952" datatype="html">
         <source>VOD Transcoding</source>
-        <target state="new">VOD Transcoding</target>
+        <target state="translated">تحويل ترميز VOD</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="8557599287230755359" datatype="html">
@@ -3345,18 +3345,18 @@
       </trans-unit>
       <trans-unit id="6830777508073747241" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {live} other {lives}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {live} other {lives}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {بث مباشر} other {بثوث مباشرة}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">55</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="1521259619066122077" datatype="html">
         <source>Max live duration</source>
-        <target state="new">Max live duration</target>
+        <target state="translated">الحد الأقصى لطول البث المباشر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="5309195634424105927" datatype="html">
         <source>Live transcoding threads</source>
-        <target state="new">Live transcoding threads</target>
+        <target state="translated">خيوط تحويل ترميز البث المباشر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">137</context></context-group>
       </trans-unit>
       <trans-unit id="4240037618955024499" datatype="html">
@@ -3381,17 +3381,17 @@
       </trans-unit>
       <trans-unit id="6727057461851446921" datatype="html">
         <source>Live resolutions to generate</source>
-        <target state="new">Live resolutions to generate</target>
+        <target state="translated">أبعاد البث النباشر المراد توليدها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">116</context></context-group>
       </trans-unit>
       <trans-unit id="2281161665447607254" datatype="html">
         <source>Allow live streaming</source>
-        <target state="new">Allow live streaming</target>
+        <target state="translated">اسمح بالبث المباشر</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="6759167469686242835" datatype="html">
         <source>Transcoding enabled for live streams</source>
-        <target state="new">Transcoding enabled for live streams</target>
+        <target state="translated">تحويل ترميز البث المباشر مفعل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="8167543029214637769" datatype="html">
@@ -3412,7 +3412,7 @@
       </trans-unit>
       <trans-unit id="3444148141968928069" datatype="html">
         <source>Input formats</source>
-        <target state="new">Input formats</target>
+        <target state="translated">صيغة المدخلات</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="4560217482714993155" datatype="html">
