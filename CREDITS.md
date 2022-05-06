@@ -2,24 +2,24 @@
 
  * Chocobozzz
  * Rigel Kent
- * Filip Bengtsson
  * Александр
- * josé m
+ * Filip Bengtsson
+ * Hồ Nhất Duy
  * Berto Te
+ * josé m
  * Simon Brosdetzko
  * Jeff Huang
  * kontrollanten
- * Hồ Nhất Duy
  * DignifiedSilence
- * kimsible
  * Laurent Ettouati
- * Jiri Podhorecky
+ * kimsible
  * Ihor Hordiichuk
- * Phongpanot
+ * Jiri Podhorecky
+ * Zet
  * GunChleoc
+ * Phongpanot
  * Clemens Schielicke
  * Racida S
- * Zet
  * Marcin Mikołajczak
  * Tirifto
  * Kim
@@ -31,26 +31,26 @@
  * Frank Sträter
  * Gérald Niel
  * John Livingston
+ * Quentin PAGÈS
  * Duy
  * Slimane Selyan AMIRI
  * Mark Van den Borre
  * x
+ * Besnik Bleta
  * ButterflyOfFire
  * Julien Maulny
- * Besnik Bleta
  * Jorropo
  * Josh Morel
  * Manuel Viens
  * BO41
  * Balázs Meskó
- * Quentin PAGÈS
  * vachan
  * Elegant Codes
  * Francesc
  * mando laress
+ * Dingzhong Chen
  * Florian CUNY
  * Cedric F
- * Dingzhong Chen
  * Marc Strange
  * Ch
  * Martin Hoefler
@@ -80,6 +80,7 @@
  * chris@famichiki.tube
  * matograine
  * Alexander Ivanov
+ * Armin
  * Daniel Santos
  * David Libeau
  * Eric Guichaoua
@@ -121,7 +122,6 @@
  * Ajeje Brazorf
  * Andrey
  * Angristan
- * Armin
  * Chris Sakura 佐倉くりす on Youtube
  * DontUseGithub
  * Kristoffer Grundström
@@ -266,6 +266,7 @@
  * Agron
  * Alejandro Criado-Pérez
  * Aleksandr Sokolov
+ * Alex
  * Alexander F. Rødseth
  * Ali Alim
  * Aman Sharma
