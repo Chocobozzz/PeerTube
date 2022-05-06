@@ -51,11 +51,18 @@ function isHTTPSignatureVerified (httpSignatureParsed: any, actor: MActor): bool
 }
 
 function parseHTTPSignature (req: Request, clockSkew?: number) {
-  const headers = req.method === 'POST'
-    ? HTTP_SIGNATURE.REQUIRED_HEADERS.POST
-    : HTTP_SIGNATURE.REQUIRED_HEADERS.ALL
+  const requiredHeaders = req.method === 'POST'
+    ? [ '(request-target)', 'host', 'digest' ]
+    : [ '(request-target)', 'host' ]
 
-  return httpSignature.parse(req, { clockSkew, headers })
+  const parsed = httpSignature.parse(req, { clockSkew, headers: requiredHeaders })
+
+  const parsedHeaders = parsed.params.headers
+  if (!parsedHeaders.includes('date') && !parsedHeaders.includes('(created)')) {
+    throw new Error(`date or (created) must be included in signature`)
+  }
+
+  return parsed
 }
 
 // JSONLD

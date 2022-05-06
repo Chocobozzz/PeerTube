@@ -147,6 +147,17 @@ describe('Test ActivityPub security', function () {
       }
     })
 
+    it('Should succeed with a valid HTTP signature draft 11 (without date but with (created))', async function () {
+      const body = activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
+      const headers = buildGlobalHeaders(body)
+
+      const signatureOptions = baseHttpSignature()
+      signatureOptions.headers = [ '(request-target)', '(created)', 'host', 'digest' ]
+
+      const { statusCode } = await makePOSTAPRequest(url, body, signatureOptions, headers)
+      expect(statusCode).to.equal(HttpStatusCode.NO_CONTENT_204)
+    })
+
     it('Should succeed with a valid HTTP signature', async function () {
       const body = activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce')
       const headers = buildGlobalHeaders(body)
