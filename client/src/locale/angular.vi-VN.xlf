@@ -292,7 +292,7 @@
       </trans-unit>
       <trans-unit id="2436106664506839309" datatype="html">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been published </source>
-        <target state="translated">Video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> của bạn vừa được đăng </target>
+        <target state="translated">Video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> của bạn đã tải lên xong </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="7130219900907848048" datatype="html">
@@ -5635,7 +5635,7 @@
       </trans-unit>
       <trans-unit id="1534085756270333258" datatype="html">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target state="translated">Trong Mới Nhất, Thịnh Hành, Máy Chủ, Yêu Thích Nhất và trong các kết quả tìm kiếm</target>
+        <target state="translated">Trong Mới Nhất, Thịnh Hành, Máy Chủ, Yêu Thích và các kết quả tìm kiếm</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="2658703380934466003" datatype="html">
@@ -11275,7 +11275,7 @@
       </trans-unit>
       <trans-unit id="3284171506518522275">
         <source>Your video was uploaded to your account and is private.</source>
-        <target>Video đã được tải lên riêng tư vào tài khoản của bạn.</target>
+        <target>Video đã được tải lên và lưu vào tài khoản của bạn dưới dạng riêng tư.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="5699822024600815733">
