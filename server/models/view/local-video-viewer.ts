@@ -236,6 +236,16 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
       aggregateWatchTime: 'SUM("localVideoViewer"."watchTime")'
     }
 
+    const intervalWhere: { [ id in VideoStatsTimeserieMetric ]: string } = {
+      // Viewer is still in the interval. Overlap algorithm
+      viewers: '"localVideoViewer"."startDate" <= "intervals"."endDate" ' +
+        'AND "localVideoViewer"."endDate" >= "intervals"."startDate"',
+
+      // We do an aggregation, so only sum things once. Arbitrary we use the end date for that purpose
+      aggregateWatchTime: '"localVideoViewer"."endDate" >= "intervals"."startDate" ' +
+        'AND "localVideoViewer"."endDate" <= "intervals"."endDate"'
+    }
+
     const query = `WITH "intervals" AS (
       SELECT
         "time" AS "startDate", "time" + :groupInterval::interval as "endDate"
@@ -246,7 +256,7 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
     FROM
       intervals
       LEFT JOIN "localVideoViewer" ON "localVideoViewer"."videoId" = :videoId
-        AND "localVideoViewer"."startDate" >= "intervals"."startDate" AND "localVideoViewer"."startDate" <= "intervals"."endDate"
+        AND ${intervalWhere[metric]}
     GROUP BY
       "intervals"."startDate"
     ORDER BY
