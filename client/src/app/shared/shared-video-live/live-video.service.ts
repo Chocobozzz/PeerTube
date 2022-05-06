@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { LiveVideo, LiveVideoCreate, LiveVideoSession, LiveVideoUpdate, ResultList, VideoCreateResult } from '@shared/models'
 import { environment } from '../../../environments/environment'
+import { VideoService } from '../shared-main'
 
 @Injectable()
 export class LiveVideoService {
@@ -29,6 +30,12 @@ export class LiveVideoService {
   listSessions (videoId: number | string) {
     return this.authHttp
                .get<ResultList<LiveVideoSession>>(LiveVideoService.BASE_VIDEO_LIVE_URL + videoId + '/sessions')
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  findLiveSessionFromVOD (videoId: number | string) {
+    return this.authHttp
+               .get<LiveVideoSession>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/live-session')
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 

@@ -67,18 +67,9 @@ async function getTimeserieStats (req: express.Request, res: express.Response) {
   const stats = await LocalVideoViewerModel.getTimeserieStats({
     video,
     metric,
-    startDate: query.startDate ?? buildOneMonthAgo().toISOString(),
+    startDate: query.startDate ?? video.createdAt.toISOString(),
     endDate: query.endDate ?? new Date().toISOString()
   })
 
   return res.json(stats)
-}
-
-function buildOneMonthAgo () {
-  const monthAgo = new Date()
-  monthAgo.setHours(0, 0, 0, 0)
-
-  monthAgo.setDate(monthAgo.getDate() - 29)
-
-  return monthAgo
 }

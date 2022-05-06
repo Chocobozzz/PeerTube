@@ -17,8 +17,18 @@ export class VideoStatsService {
     private restExtractor: RestExtractor
   ) { }
 
-  getOverallStats (videoId: string) {
-    return this.authHttp.get<VideoStatsOverall>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/stats/overall')
+  getOverallStats (options: {
+    videoId: string
+    startDate?: Date
+    endDate?: Date
+  }) {
+    const { videoId, startDate, endDate } = options
+
+    let params = new HttpParams()
+    if (startDate) params = params.append('startDate', startDate.toISOString())
+    if (endDate) params = params.append('endDate', endDate.toISOString())
+
+    return this.authHttp.get<VideoStatsOverall>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/stats/overall', { params })
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 

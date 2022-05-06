@@ -9,6 +9,15 @@ import { cleanupTests, PeerTubeServer, stopFfmpeg } from '@shared/server-command
 
 const expect = chai.expect
 
+function buildOneMonthAgo () {
+  const monthAgo = new Date()
+  monthAgo.setHours(0, 0, 0, 0)
+
+  monthAgo.setDate(monthAgo.getDate() - 29)
+
+  return monthAgo
+}
+
 describe('Test views timeserie stats', function () {
   const availableMetrics: VideoStatsTimeserieMetric[] = [ 'viewers' ]
 
@@ -33,7 +42,7 @@ describe('Test views timeserie stats', function () {
       for (const metric of availableMetrics) {
         const { data } = await servers[0].videoStats.getTimeserieStats({ videoId: vodVideoId, metric })
 
-        expect(data).to.have.lengthOf(30)
+        expect(data).to.have.length.at.least(1)
 
         for (const d of data) {
           expect(d.value).to.equal(0)
@@ -47,17 +56,19 @@ describe('Test views timeserie stats', function () {
     let liveVideoId: string
     let command: FfmpegCommand
 
-    function expectTodayLastValue (result: VideoStatsTimeserie, lastValue: number) {
+    function expectTodayLastValue (result: VideoStatsTimeserie, lastValue?: number) {
       const { data } = result
 
       const last = data[data.length - 1]
       const today = new Date().getDate()
       expect(new Date(last.date).getDate()).to.equal(today)
+
+      if (lastValue) expect(last.value).to.equal(lastValue)
     }
 
     function expectTimeserieData (result: VideoStatsTimeserie, lastValue: number) {
       const { data } = result
-      expect(data).to.have.lengthOf(30)
+      expect(data).to.have.length.at.least(25)
 
       expectTodayLastValue(result, lastValue)
 
@@ -87,14 +98,24 @@ describe('Test views timeserie stats', function () {
       await processViewersStats(servers)
 
       for (const videoId of [ vodVideoId, liveVideoId ]) {
-        const result = await servers[0].videoStats.getTimeserieStats({ videoId, metric: 'viewers' })
+        const result = await servers[0].videoStats.getTimeserieStats({
+          videoId,
+          startDate: buildOneMonthAgo(),
+          endDate: new Date(),
+          metric: 'viewers'
+        })
         expectTimeserieData(result, 2)
       }
     })
 
     it('Should display appropriate watch time metrics', async function () {
       for (const videoId of [ vodVideoId, liveVideoId ]) {
-        const result = await servers[0].videoStats.getTimeserieStats({ videoId, metric: 'aggregateWatchTime' })
+        const result = await servers[0].videoStats.getTimeserieStats({
+          videoId,
+          startDate: buildOneMonthAgo(),
+          endDate: new Date(),
+          metric: 'aggregateWatchTime'
+        })
         expectTimeserieData(result, 8)
 
         await servers[1].views.simulateViewer({ id: videoId, currentTimes: [ 0, 1 ] })
@@ -103,7 +124,12 @@ describe('Test views timeserie stats', function () {
       await processViewersStats(servers)
 
       for (const videoId of [ vodVideoId, liveVideoId ]) {
-        const result = await servers[0].videoStats.getTimeserieStats({ videoId, metric: 'aggregateWatchTime' })
+        const result = await servers[0].videoStats.getTimeserieStats({
+          videoId,
+          startDate: buildOneMonthAgo(),
+          endDate: new Date(),
+          metric: 'aggregateWatchTime'
+        })
         expectTimeserieData(result, 9)
       }
     })
@@ -128,6 +154,38 @@ describe('Test views timeserie stats', function () {
 
       expectInterval(result, 24 * 3600 * 1000)
       expectTodayLastValue(result, 9)
+    })
+
+    it('Should automatically group by months', async function () {
+      const now = new Date()
+      const heightYearsAgo = new Date()
+      heightYearsAgo.setFullYear(heightYearsAgo.getFullYear() - 7)
+
+      const result = await servers[0].videoStats.getTimeserieStats({
+        videoId: vodVideoId,
+        metric: 'aggregateWatchTime',
+        startDate: heightYearsAgo,
+        endDate: now
+      })
+
+      expect(result.groupInterval).to.equal('6 months')
+      expect(result.data).to.have.length.above(10).and.below(200)
+    })
+
+    it('Should automatically group by days', async function () {
+      const now = new Date()
+      const threeMonthsAgo = new Date()
+      threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3)
+
+      const result = await servers[0].videoStats.getTimeserieStats({
+        videoId: vodVideoId,
+        metric: 'aggregateWatchTime',
+        startDate: threeMonthsAgo,
+        endDate: now
+      })
+
+      expect(result.groupInterval).to.equal('2 days')
+      expect(result.data).to.have.length.above(10).and.below(200)
     })
 
     it('Should automatically group by hours', async function () {
@@ -165,7 +223,7 @@ describe('Test views timeserie stats', function () {
       expect(result.data).to.have.length.above(20).and.below(30)
 
       expectInterval(result, 60 * 10 * 1000)
-      expectTodayLastValue(result, 9)
+      expectTodayLastValue(result)
     })
 
     it('Should automatically group by one minute', async function () {
@@ -184,7 +242,7 @@ describe('Test views timeserie stats', function () {
       expect(result.data).to.have.length.above(20).and.below(40)
 
       expectInterval(result, 60 * 1000)
-      expectTodayLastValue(result, 9)
+      expectTodayLastValue(result)
     })
 
     after(async function () {

@@ -169,6 +169,7 @@ describe('Test views overall stats', function () {
 
   describe('Test watchers peak stats of local videos on VOD', function () {
     let videoUUID: string
+    let before2Watchers: Date
 
     before(async function () {
       this.timeout(120000);
@@ -201,7 +202,7 @@ describe('Test views overall stats', function () {
     it('Should have watcher peak with 2 watchers', async function () {
       this.timeout(60000)
 
-      const before = new Date()
+      before2Watchers = new Date()
       await servers[0].views.view({ id: videoUUID, currentTime: 0 })
       await servers[1].views.view({ id: videoUUID, currentTime: 0 })
       await servers[0].views.view({ id: videoUUID, currentTime: 2 })
@@ -213,11 +214,26 @@ describe('Test views overall stats', function () {
       const stats = await servers[0].videoStats.getOverallStats({ videoId: videoUUID })
 
       expect(stats.viewersPeak).to.equal(2)
-      expect(new Date(stats.viewersPeakDate)).to.be.above(before).and.below(after)
+      expect(new Date(stats.viewersPeakDate)).to.be.above(before2Watchers).and.below(after)
+    })
+
+    it('Should filter peak viewers stats by date', async function () {
+      {
+        const stats = await servers[0].videoStats.getOverallStats({ videoId: videoUUID, startDate: new Date().toISOString() })
+        expect(stats.viewersPeak).to.equal(0)
+        expect(stats.viewersPeakDate).to.not.exist
+      }
+
+      {
+        const stats = await servers[0].videoStats.getOverallStats({ videoId: videoUUID, endDate: before2Watchers.toISOString() })
+        expect(stats.viewersPeak).to.equal(1)
+        expect(new Date(stats.viewersPeakDate)).to.be.below(before2Watchers)
+      }
     })
   })
 
   describe('Test countries', function () {
+    let videoUUID: string
 
     it('Should not report countries if geoip is disabled', async function () {
       this.timeout(120000)
@@ -237,6 +253,7 @@ describe('Test views overall stats', function () {
       this.timeout(240000)
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+      videoUUID = uuid
       await waitJobs(servers)
 
       await Promise.all([
@@ -264,6 +281,11 @@ describe('Test views overall stats', function () {
 
       expect(stats.countries[1].isoCode).to.equal('FR')
       expect(stats.countries[1].viewers).to.equal(1)
+    })
+
+    it('Should filter countries stats by date', async function () {
+      const stats = await servers[0].videoStats.getOverallStats({ videoId: videoUUID, startDate: new Date().toISOString() })
+      expect(stats.countries).to.have.lengthOf(0)
     })
   })
 

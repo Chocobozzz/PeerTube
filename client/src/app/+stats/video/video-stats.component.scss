@@ -2,17 +2,31 @@
 @use '_mixins' as *;
 @use '_nav' as *;
 
-.overall-stats-embed {
+.stats-embed {
   display: flex;
   justify-content: space-between;
 }
 
-.overall-stats {
+.overall-stats,
+.global-stats {
   display: flex;
   flex-wrap: wrap;
+
+  h2 {
+    font-size: 16px;
+    width: 100%;
+  }
 }
 
-.overall-stats-card {
+.overall-stats {
+  justify-content: space-between;
+
+  .cards {
+    display: flex;
+  }
+}
+
+.stats-card {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,12 +40,6 @@
   .label,
   .more-info {
     font-size: 14px;
-  }
-
-  .label {
-    color: pvar(--greyForegroundColor);
-    font-weight: $font-semibold;
-    opacity: 0.8;
   }
 
   .value {
@@ -52,6 +60,12 @@ my-embed {
   width: 100%;
 }
 
+.stats-with-date {
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid $separator-border-color;
+}
+
 @include on-small-main-col {
   my-embed {
     display: none;
@@ -59,7 +73,7 @@ my-embed {
 }
 
 .tab-content {
-  margin-top: 15px;
+  margin-top: 5px;
 }
 
 .nav-tabs {

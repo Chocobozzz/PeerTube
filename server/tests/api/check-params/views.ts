@@ -176,7 +176,7 @@ describe('Test videos views', function () {
       await servers[0].videoStats.getTimeserieStats({
         videoId,
         metric: 'viewers',
-        startDate: new Date('2021-04-07T08:31:57.126Z'),
+        startDate: new Date('2000-04-07T08:31:57.126Z'),
         endDate: new Date(),
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })

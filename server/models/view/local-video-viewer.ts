@@ -136,7 +136,7 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
     const watchPeakQuery = `WITH "watchPeakValues" AS (
         SELECT "startDate" AS "dateBreakpoint", 1 AS "inc"
         FROM "localVideoViewer"
-        WHERE "videoId" = :videoId
+        WHERE "videoId" = :videoId ${dateWhere}
         UNION ALL
         SELECT "endDate" AS "dateBreakpoint", -1 AS "inc"
         FROM "localVideoViewer"
@@ -165,6 +165,10 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
       countriesPromise
     ])
 
+    const viewersPeak = rowsWatchPeak.length !== 0
+      ? parseInt(rowsWatchPeak[0].concurrent) || 0
+      : 0
+
     return {
       totalWatchTime: rowsWatchTime.length !== 0
         ? Math.round(rowsWatchTime[0].totalWatchTime) || 0
@@ -173,10 +177,8 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
         ? Math.round(rowsWatchTime[0].averageWatchTime) || 0
         : 0,
 
-      viewersPeak: rowsWatchPeak.length !== 0
-        ? parseInt(rowsWatchPeak[0].concurrent) || 0
-        : 0,
-      viewersPeakDate: rowsWatchPeak.length !== 0
+      viewersPeak,
+      viewersPeakDate: rowsWatchPeak.length !== 0 && viewersPeak !== 0
         ? rowsWatchPeak[0].dateBreakpoint || null
         : null,
 
