@@ -4,7 +4,13 @@
   <div class="stats-embed">
     <div class="global-stats">
       <div *ngFor="let card of globalStatsCards" class="card stats-card">
-        <div class="label">{{ card.label }}</div>
+        <div class="label">
+          {{ card.label }}
+
+          <my-help *ngIf="card.help">
+            <ng-template ptTemplate="customHtml">{{ card.help }}</ng-template>
+          </my-help>
+        </div>
         <div class="value">{{ card.value }}</div>
         <div *ngIf="card.moreInfo" class="more-info">{{ card.moreInfo }}</div>
       </div>

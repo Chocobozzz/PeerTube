@@ -30,7 +30,7 @@ type ChartBuilderResult = {
   displayLegend: boolean
 }
 
-type Card = { label: string, value: string | number, moreInfo?: string }
+type Card = { label: string, value: string | number, moreInfo?: string, help?: string }
 
 @Component({
   templateUrl: './video-stats.component.html',
@@ -252,7 +252,8 @@ export class VideoStatsComponent implements OnInit {
     this.globalStatsCards = [
       {
         label: $localize`Views`,
-        value: this.numberFormatter.transform(this.video.views)
+        value: this.numberFormatter.transform(this.video.views),
+        help: $localize`A view means that someone watched the video for at least 30 seconds`
       },
       {
         label: $localize`Likes`,
