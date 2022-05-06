@@ -2513,7 +2513,7 @@
       </trans-unit>
       <trans-unit id="6760671759540007434" datatype="html">
         <source>You can import any URL <x id="START_LINK"/>supported by youtube-dl<x id="CLOSE_LINK"/> or URL that points to a media file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="translated">Bạn có thể nhập bất cứ URLnào <x id="START_LINK"/>hỗ trợ bởi youtube-dl<x id="CLOSE_LINK"/> hoặc URL chỉ đến một file video. Bạn cần chắc chắn rằng bạn có toàn quyền sử dụng nội dung, bởi vì điều này ảnh hưởng tới bạn và máy chủ của bạn. </target>
+        <target state="translated">Bạn có thể nhập bất cứ URL nào <x id="START_LINK"/>hỗ trợ bởi youtube-dl<x id="CLOSE_LINK"/> hoặc URL chỉ đến một file video. Bạn cần chắc chắn rằng bạn có toàn quyền sử dụng nội dung, bởi vì điều này ảnh hưởng tới bạn và máy chủ của bạn. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="460353452916242022">
@@ -5409,7 +5409,7 @@
       </trans-unit>
       <trans-unit id="7752239348028675311" datatype="html">
         <source>DANGER ZONE</source>
-        <target state="translated">VÙNG HỦY DIỆT</target>
+        <target state="translated">HỦY DIỆT</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">219</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">219</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">77</context></context-group>
@@ -6025,7 +6025,7 @@
       </trans-unit>
       <trans-unit id="5691818894884119596" datatype="html">
         <source>Watch time</source>
-        <target state="translated">Thời gian xem</target>
+        <target state="translated">Thời điểm</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -9039,7 +9039,7 @@
       </trans-unit>
       <trans-unit id="2123659921722214537" datatype="html">
         <source>Views</source>
-        <target state="translated">Xem nhiều</target>
+        <target state="translated">Lượt xem</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">82</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
