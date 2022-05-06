@@ -815,7 +815,7 @@
       </trans-unit>
       <trans-unit id="6462281745850371027" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="translated">Bạn có thể đăng ký kênh thông qua bất cứ tài khoản nào trên mọi nền tảng ActivityPub (ví dụ PeerTube, Mastodon hoặc Pleroma).</target>
+        <target state="translated">Bạn có thể đăng ký kênh thông qua tài khoản của một nền tảng ActivityPub (ví dụ PeerTube, Mastodon hoặc Pleroma).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="20374890400263257" datatype="html">
@@ -6602,7 +6602,7 @@
       </trans-unit>
       <trans-unit id="7128556172318221342" datatype="html">
         <source>This instance is not following any other.</source>
-        <target state="translated">Máy chủ này chưa theo dõi bất kỳ ai.</target>
+        <target state="translated">Máy chủ này chưa theo dõi máy chủ nào khác.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
