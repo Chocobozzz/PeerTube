@@ -1,21 +1,18 @@
 import { NodeHttpHandler } from "@aws-sdk/node-http-handler"
-import { HttpsProxyAgent } from 'https-proxy-agent'
-import { getProxy, isProxyEnabled } from '@server/helpers/proxy'
+import { getAgent } from '@server/helpers/requests'
 import { S3Client } from '@aws-sdk/client-s3'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { lTags } from './logger'
 
 function getProxyRequestHandler () {
+  const { agent } = getAgent()
+  if ( agent === null || agent === undefined ) return null
 
-  if (!isProxyEnabled()) { return new NodeHttpHandler() }
+  const httpAgent = agent.hasOwnProperty('http') ? agent.http : null
+  const httpsAgent = agent.hasOwnProperty('https') ? agent.https : null
 
-  const proxy = getProxy()
-
-  return new NodeHttpHandler({
-    httpAgent: new HttpsProxyAgent(proxy),
-    httpsAgent: new HttpsProxyAgent(proxy)
-  })
+  return new NodeHttpHandler({ httpAgent, httpsAgent })
 }
 
 let endpointParsed: URL
