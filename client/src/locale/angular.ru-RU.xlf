@@ -6064,7 +6064,7 @@
       </trans-unit>
       <trans-unit id="8973918644831688583" datatype="html">
         <source>Of live of <x id="PH" equiv-text="new Date(session.startDate).toLocaleString()"/></source>
-        <target state="new">Of live of <x id="PH" equiv-text="new Date(session.startDate).toLocaleString()"/></target>
+        <target state="translated">В прямом эфире <x id="PH" equiv-text="new Date(session.startDate).toLocaleString()"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">226</context>
