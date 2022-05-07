@@ -7,10 +7,10 @@ import { lTags } from './logger'
 
 function getProxyRequestHandler () {
   const { agent } = getAgent()
-  if ( agent === null || agent === undefined ) return null
+  if (agent === null || agent === undefined) return null
 
-  const httpAgent = agent.hasOwnProperty('http') ? agent.http : null
-  const httpsAgent = agent.hasOwnProperty('https') ? agent.https : null
+  const httpAgent = Object.prototype.hasOwnProperty.call(agent, 'http') ? agent.http : null
+  const httpsAgent = Object.prototype.hasOwnProperty.call(agent, 'https') ? agent.https : null
 
   return new NodeHttpHandler({ httpAgent, httpsAgent })
 }
