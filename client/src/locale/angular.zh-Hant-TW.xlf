@@ -6046,7 +6046,7 @@
       </trans-unit>
       <trans-unit id="5697131528899933134" datatype="html">
         <source>Viewers stats</source>
-        <target state="new">Viewers stats</target>
+        <target state="translated">觀眾統計資料</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">155</context>
@@ -6054,7 +6054,7 @@
       </trans-unit>
       <trans-unit id="8973918644831688583" datatype="html">
         <source>Of live of <x id="PH" equiv-text="new Date(session.startDate).toLocaleString()"/></source>
-        <target state="new">Of live of <x id="PH" equiv-text="new Date(session.startDate).toLocaleString()"/></target>
+        <target state="translated"><x id="PH" equiv-text="new Date(session.startDate).toLocaleString()"/> 的直播</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">226</context>
@@ -6062,7 +6062,7 @@
       </trans-unit>
       <trans-unit id="3249405667632600635" datatype="html">
         <source>Custom dates</source>
-        <target state="new">Custom dates</target>
+        <target state="translated">自訂日期</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">237</context>
@@ -6070,7 +6070,7 @@
       </trans-unit>
       <trans-unit id="5382746022482410588" datatype="html">
         <source>A view means that someone watched the video for at least 30 seconds</source>
-        <target state="new">A view means that someone watched the video for at least 30 seconds</target>
+        <target state="translated">觀看代表了有人至少觀看了影片 30 秒</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">256</context>
@@ -6094,7 +6094,7 @@
       </trans-unit>
       <trans-unit id="3457644129579531516" datatype="html">
         <source>Total watch time</source>
-        <target state="new">Total watch time</target>
+        <target state="translated">總觀看時間</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">270</context>
@@ -9895,7 +9895,7 @@
       </trans-unit>
       <trans-unit id="6445713766140892433" datatype="html">
         <source>Latest live sessions</source>
-        <target state="new">Latest live sessions</target>
+        <target state="translated">最新的直播工作階段</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">36</context>
@@ -9903,7 +9903,7 @@
       </trans-unit>
       <trans-unit id="1018828582442463303" datatype="html">
         <source>Started on <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></source>
-        <target state="new">Started on <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></target>
+        <target state="translated">開始於 <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">42</context>
@@ -9911,7 +9911,7 @@
       </trans-unit>
       <trans-unit id="6765028278622459314" datatype="html">
         <source>Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></source>
-        <target state="new">Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></target>
+        <target state="translated">結束於 <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">43</context>
@@ -9919,7 +9919,7 @@
       </trans-unit>
       <trans-unit id="3424935624805832445" datatype="html">
         <source>Go to replay</source>
-        <target state="new">Go to replay</target>
+        <target state="translated">跳到重播</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">44</context>
