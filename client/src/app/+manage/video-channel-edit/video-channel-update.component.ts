@@ -96,7 +96,7 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
 
           this.notifier.success($localize`Video channel ${videoChannelUpdate.displayName} updated.`)
 
-          this.redirectService.redirectToPreviousRoute([ '/c', this.videoChannel.name ])
+          this.redirectService.redirectToPreviousRoute('/c/' + this.videoChannel.name)
         },
 
         error: err => {
