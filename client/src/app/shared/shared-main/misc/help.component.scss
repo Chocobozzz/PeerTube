@@ -19,6 +19,7 @@
 
 ::ng-deep {
   .help-popover {
+    min-width: 200px;
     max-width: 300px;
 
     .popover-body {
