@@ -18,7 +18,7 @@ async function activityPubCollectionPagination (
 
     return {
       id: baseUrl,
-      type: 'OrderedCollectionPage',
+      type: 'OrderedCollection',
       totalItems: result.total,
       first: result.data.length === 0
         ? undefined
