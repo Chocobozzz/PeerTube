@@ -19,6 +19,10 @@ function expectStartWith (str: string, start: string) {
   expect(str.startsWith(start), `${str} does not start with ${start}`).to.be.true
 }
 
+function expectNotStartWith (str: string, start: string) {
+  expect(str.startsWith(start), `${str} does not start with ${start}`).to.be.false
+}
+
 async function expectLogDoesNotContain (server: PeerTubeServer, str: string) {
   const content = await server.servers.getLogContent()
 
@@ -92,6 +96,7 @@ export {
   expectLogDoesNotContain,
   testFileExistsOrNot,
   expectStartWith,
+  expectNotStartWith,
   checkBadStartPagination,
   checkBadCountPagination,
   checkBadSortPagination

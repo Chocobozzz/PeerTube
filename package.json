@@ -79,6 +79,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.23.0",
     "@aws-sdk/lib-storage": "^3.72.0",
+    "@aws-sdk/node-http-handler": "^3.82.0",
     "@babel/parser": "7.17.8",
     "@peertube/feed": "^5.0.1",
     "@peertube/http-signature": "^1.4.0",
