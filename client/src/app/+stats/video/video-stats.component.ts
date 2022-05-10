@@ -449,6 +449,11 @@ export class VideoStatsComponent implements OnInit {
               this.peertubeRouter.silentNavigate([], { startDate, endDate })
               this.addAndSelectCustomDateFilter()
             }
+          },
+          limits: {
+            x: {
+              minRange: 2
+            }
           }
         }
       },
