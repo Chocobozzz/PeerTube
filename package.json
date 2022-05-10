@@ -82,7 +82,7 @@
     "@aws-sdk/node-http-handler": "^3.82.0",
     "@babel/parser": "7.17.8",
     "@peertube/feed": "^5.0.1",
-    "@peertube/http-signature": "^1.4.0",
+    "@peertube/http-signature": "^1.6.0",
     "@uploadx/core": "^5.1.0",
     "async": "^3.0.1",
     "async-lru": "^1.1.1",
