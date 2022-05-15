@@ -1476,7 +1476,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source>Slide <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> of <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </source>
-        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> sur <x id="INTERPOLATION_1" equiv-text="ect(false); p"/> </target>
+        <target state="translated">Diapositive <x id="INTERPOLATION" equiv-text="ate _pauseOnHov"/> sur <x id="INTERPOLATION_1" equiv-text="ect(false);   p"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/carousel/carousel.ts</context>
           <context context-type="linenumber">114,118</context>
@@ -4194,7 +4194,7 @@
       </trans-unit>
       <trans-unit id="9221735175659318025" datatype="html">
         <source>1 subscriber</source>
-        <target>1 abonné</target>
+        <target>1 abonné·e</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -4202,7 +4202,7 @@
       </trans-unit>
       <trans-unit id="4097331874769079975" datatype="html">
         <source><x id="PH" equiv-text="count"/> subscribers</source>
-        <target><x id="PH" equiv-text="count"/> abonnés</target>
+        <target><x id="PH" equiv-text="count"/> abonné·es</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -4846,7 +4846,7 @@
       </trans-unit>
       <trans-unit id="8426539297729416784" datatype="html">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels}}</source>
-        <target state="translated">{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels}}</target>
+        <target state="translated">{VAR_SELECT, select, undefined {Se désabonner} other {Se désabonner de toutes les chaînes}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">34</context>
@@ -5302,7 +5302,7 @@
       </trans-unit>
       <trans-unit id="8828123061564507501" datatype="html">
         <source>Playlist <x id="PH" equiv-text="videoPlaylist.displayName"/>} deleted.</source>
-        <target state="needs-translation">Liste de lecture <x id="PH" equiv-text="videoPlaylist.displayName"/>} supprimée.</target>
+        <target state="translated">Liste de lecture <x id="PH" equiv-text="videoPlaylist.displayName"/>} supprimée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -14326,7 +14326,7 @@
       </trans-unit>
       <trans-unit id="5056489767203690328" datatype="html">
         <source>Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</source>
-        <target state="translated">Qui modère l’instance ? Quelle politique est appliquée à propos des vidéos NSFW ? À propos des vidéos politiques ? etc.</target>
+        <target state="translated">Qui modère l’instance ? Quelle politique est appliquée à propos des vidéos NSFW ? À propos des vidéos politiques ? etc</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">145</context>
@@ -15262,7 +15262,7 @@
       </trans-unit>
       <trans-unit id="85d060be6823b8207e82fbc75429753f1beb06ce" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {image en cache} other {images en cache}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">1038</context>
