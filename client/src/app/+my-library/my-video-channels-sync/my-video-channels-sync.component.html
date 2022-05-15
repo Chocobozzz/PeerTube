@@ -1,0 +1,55 @@
+<h1>
+  <my-global-icon iconName="refresh" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>My synchronizations</ng-container>
+</h1>
+
+<p-table
+  [value]="channelsSync" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
+  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
+  currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} synchronizations"
+  [expandedRowKeys]="expandedRows"
+>
+  <ng-template pTemplate="caption">
+    <div class="caption">
+      <div class="left-buttons">
+        <a class="add-sync" routerLink="/admin/users/create">
+          <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
+          <ng-container i18n>Add synchronization</ng-container>
+        </a>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 40px;"></th>
+      <th style="width: 200px">Action</th>
+      <th style="width: 45%" i18n pSortableColumn="externalChannelUrl">External Channel</th>
+      <th style="width: 150px" i18n>State</th>
+      <th style="width: 150px" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-expanded="expanded" let-videoChannelSync>
+    <tr>
+      <td class="expand-cell" [pRowToggler]="videoChannelSync">
+        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
+      </td>
+      <td class="action-cell">
+        <my-action-dropdown
+           container="body"
+          [actions]="videoChannelSyncActions" [entry]="videoChannelSync"
+        ></my-action-dropdown>
+      </td>
+      <td>
+        <a [href]="videoChannelSync.externalChannelUrl" target="_blank" rel="noopener noreferrer">{{ videoChannelSync.externalChannelUrl }}</a>
+      </td>
+      <td>
+        <span class="badge" [ngClass]="getVideoChannelSyncStateClass(videoChannelSync.state.id)">
+          {{ videoChannelSync.state.label }}
+        </span>
+      </td>
+      <td>{{ videoChannelSync.createdAt | date: 'short' }}</td>
+
+    </tr>
+  </ng-template>
+</p-table>

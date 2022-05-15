@@ -1,0 +1,5 @@
+@use '_mixins' as *;
+
+.add-sync {
+  @include create-button;
+}
