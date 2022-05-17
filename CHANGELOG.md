@@ -36,10 +36,10 @@
    * Add an intro at the beginning and/or an outro at the end of the video
    * Add an icon/watermark in the top right corner of the video
    * PeerTube will automatically transcode the new video and replace the original one
- * :tada: Add advanced video statistics :tada:
+ * :tada: Add advanced statistics of a specific video :tada:
    * Provide *Average watch time*, *Total watch time* and *Peak viewers* video statistics
    * Display total viewers, aggregated watch time and audience retention in interactive time series graphs
-   * Display viewer countries in bar chart if enabled by admins
+   * Display viewer countries in bar chart if not disabled by admins
  * :tada: Add latency setting support for lives (small latency without P2P or high latency to increase P2P ratio) :tada:
  * :tada: Add ability to save a replay of every streaming session of a permanent live :tada:
  * Add simple subtitle edition from video captions tab in video edition form [#4666](https://github.com/Chocobozzz/PeerTube/pull/4666)

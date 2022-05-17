@@ -136,7 +136,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           return this.refereshTokenAndRetryUpload()
         }
 
-        const error = state.response?.error || 'Unknow error'
+        const error = state.response?.error?.message || state.response?.error || 'Unknown error'
 
         this.handleUploadError({
           error: new Error(error),
