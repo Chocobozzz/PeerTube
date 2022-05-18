@@ -34,7 +34,7 @@ describe('Test video views/viewers counters', function () {
     let videoUUID: string
 
     before(async function () {
-      this.timeout(30000)
+      this.timeout(120000)
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
       videoUUID = uuid

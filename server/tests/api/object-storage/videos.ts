@@ -406,6 +406,8 @@ describe('Object storage for videos', function () {
     const maxUploadPart = '5MB'
 
     before(async function () {
+      this.timeout(120000)
+
       fixture = await generateHighBitrateVideo()
 
       const { size } = await stat(fixture)

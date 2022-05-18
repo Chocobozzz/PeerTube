@@ -40,7 +40,7 @@
       <div ngbNav #nav="ngbNav" [activeId]="activeGraphId" (activeIdChange)="onChartChange($event)" class="nav-tabs">
 
         <ng-container *ngFor="let availableChart of availableCharts" [ngbNavItem]="availableChart.id">
-          <a ngbNavLink i18n>
+          <a ngbNavLink>
             <span>{{ availableChart.label }}</span>
           </a>
 
