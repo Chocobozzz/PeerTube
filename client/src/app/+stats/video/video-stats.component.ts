@@ -2,7 +2,7 @@ import { ChartConfiguration, ChartData, PluginOptionsByType, Scale, TooltipItem 
 import zoomPlugin from 'chartjs-plugin-zoom'
 import { Observable, of } from 'rxjs'
 import { SelectOptionsItem } from 'src/types'
-import { Component, OnInit } from '@angular/core'
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { Notifier, PeerTubeRouterService } from '@app/core'
 import { NumberFormatterPipe, VideoDetails } from '@app/shared/shared-main'
@@ -70,6 +70,7 @@ export class VideoStatsComponent implements OnInit {
   private chartIngestData: { [ id in ActiveGraphId ]?: ChartIngestData } = {}
 
   constructor (
+    @Inject(LOCALE_ID) private localeId: string,
     private route: ActivatedRoute,
     private notifier: Notifier,
     private statsService: VideoStatsService,
@@ -149,7 +150,7 @@ export class VideoStatsComponent implements OnInit {
 
   getViewersStatsTitle () {
     if (this.statsStartDate && this.statsEndDate) {
-      return $localize`Viewers stats between ${this.statsStartDate.toLocaleString()} and ${this.statsEndDate.toLocaleString()}`
+      return $localize`Viewers stats between ${this.toMediumDate(this.statsStartDate)} and ${this.toMediumDate(this.statsEndDate)}`
     }
 
     return $localize`Viewers stats`
@@ -223,7 +224,7 @@ export class VideoStatsComponent implements OnInit {
   private buildLiveFilter (session: LiveVideoSession) {
     return {
       id: session.startDate + '|' + session.endDate,
-      label: $localize`Live as of ${new Date(session.startDate).toLocaleString()}`
+      label: $localize`Live as of ${this.toMediumDate(new Date(session.startDate))}`
     }
   }
 
@@ -274,7 +275,7 @@ export class VideoStatsComponent implements OnInit {
         label: $localize`Peak viewers`,
         value: this.numberFormatter.transform(overallStats.viewersPeak),
         moreInfo: overallStats.viewersPeak !== 0
-          ? $localize`at ${new Date(overallStats.viewersPeakDate).toLocaleString()}`
+          ? $localize`at ${this.toMediumDate(new Date(overallStats.viewersPeakDate))}`
           : undefined
       },
       {
@@ -550,7 +551,7 @@ export class VideoStatsComponent implements OnInit {
     if (graphId === 'retention') return value + ' %'
     if (graphId === 'aggregateWatchTime') return secondsToTime(+value)
 
-    return value.toLocaleString()
+    return value.toLocaleString(this.localeId)
   }
 
   private formatTooltipTitle (options: {
@@ -560,7 +561,9 @@ export class VideoStatsComponent implements OnInit {
     const { graphId, items } = options
     const item = items[0]
 
-    if (this.isTimeserieGraph(graphId)) return new Date(item.label).toLocaleString()
+    if (this.isTimeserieGraph(graphId)) {
+      return this.toMediumDate(new Date(item.label))
+    }
 
     return item.label
   }
@@ -590,6 +593,17 @@ export class VideoStatsComponent implements OnInit {
         }
       }
     }
+  }
+
+  private toMediumDate (d: Date) {
+    return new Date(d).toLocaleString(this.localeId, {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric'
+    })
   }
 
   private buildZoomEndDate (groupInterval: string, last: string) {
