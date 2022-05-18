@@ -125,6 +125,7 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
     }
 
     const watchTimeQuery = `SELECT ` +
+      `COUNT("localVideoViewer"."id") AS "totalViewers", ` +
       `SUM("localVideoViewer"."watchTime") AS "totalWatchTime", ` +
       `AVG("localVideoViewer"."watchTime") AS "averageWatchTime" ` +
       `FROM "localVideoViewer" ` +
@@ -175,6 +176,10 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
         : 0,
       averageWatchTime: rowsWatchTime.length !== 0
         ? Math.round(rowsWatchTime[0].averageWatchTime) || 0
+        : 0,
+
+      totalViewers: rowsWatchTime.length !== 0
+        ? Math.round(rowsWatchTime[0].totalViewers) || 0
         : 0,
 
       viewersPeak,

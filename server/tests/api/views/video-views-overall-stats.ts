@@ -36,6 +36,7 @@ describe('Test views overall stats', function () {
         expect(video.views).to.equal(0)
         expect(stats.averageWatchTime).to.equal(0)
         expect(stats.totalWatchTime).to.equal(0)
+        expect(stats.totalViewers).to.equal(0)
       }
     })
 
@@ -55,6 +56,7 @@ describe('Test views overall stats', function () {
         expect(video.views).to.equal(0)
         expect(stats.averageWatchTime).to.equal(1)
         expect(stats.totalWatchTime).to.equal(1)
+        expect(stats.totalViewers).to.equal(1)
       }
     })
 
@@ -74,6 +76,7 @@ describe('Test views overall stats', function () {
           expect(video.views).to.equal(1)
           expect(stats.averageWatchTime).to.equal(2)
           expect(stats.totalWatchTime).to.equal(4)
+          expect(stats.totalViewers).to.equal(2)
         }
 
         {
@@ -83,6 +86,7 @@ describe('Test views overall stats', function () {
           expect(video.views).to.equal(1)
           expect(stats.averageWatchTime).to.equal(21)
           expect(stats.totalWatchTime).to.equal(41)
+          expect(stats.totalViewers).to.equal(2)
         }
       }
     })
@@ -103,6 +107,7 @@ describe('Test views overall stats', function () {
         expect(video.views).to.equal(1)
         expect(stats.averageWatchTime).to.equal(2)
         expect(stats.totalWatchTime).to.equal(6)
+        expect(stats.totalViewers).to.equal(3)
       }
 
       {
@@ -112,6 +117,7 @@ describe('Test views overall stats', function () {
         expect(video.views).to.equal(1)
         expect(stats.averageWatchTime).to.equal(14)
         expect(stats.totalWatchTime).to.equal(43)
+        expect(stats.totalViewers).to.equal(3)
       }
     })
 
@@ -129,6 +135,7 @@ describe('Test views overall stats', function () {
         expect(video.views).to.equal(2)
         expect(stats.averageWatchTime).to.equal(3)
         expect(stats.totalWatchTime).to.equal(11)
+        expect(stats.totalViewers).to.equal(4)
       }
 
       {
@@ -138,6 +145,7 @@ describe('Test views overall stats', function () {
         expect(video.views).to.equal(2)
         expect(stats.averageWatchTime).to.equal(22)
         expect(stats.totalWatchTime).to.equal(88)
+        expect(stats.totalViewers).to.equal(4)
       }
     })
 
@@ -153,12 +161,14 @@ describe('Test views overall stats', function () {
         const stats = await servers[0].videoStats.getOverallStats({ videoId: vodVideoId, startDate: beforeView.toISOString() })
         expect(stats.averageWatchTime).to.equal(3)
         expect(stats.totalWatchTime).to.equal(3)
+        expect(stats.totalViewers).to.equal(1)
       }
 
       {
         const stats = await servers[0].videoStats.getOverallStats({ videoId: liveVideoId, endDate: beforeView.toISOString() })
         expect(stats.averageWatchTime).to.equal(22)
         expect(stats.totalWatchTime).to.equal(88)
+        expect(stats.totalViewers).to.equal(4)
       }
     })
 

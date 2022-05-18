@@ -223,7 +223,7 @@ export class VideoStatsComponent implements OnInit {
   private buildLiveFilter (session: LiveVideoSession) {
     return {
       id: session.startDate + '|' + session.endDate,
-      label: $localize`Of live of ${new Date(session.startDate).toLocaleString()}`
+      label: $localize`Live as of ${new Date(session.startDate).toLocaleString()}`
     }
   }
 
@@ -276,6 +276,10 @@ export class VideoStatsComponent implements OnInit {
         moreInfo: overallStats.viewersPeak !== 0
           ? $localize`at ${new Date(overallStats.viewersPeakDate).toLocaleString()}`
           : undefined
+      },
+      {
+        label: $localize`Unique viewers`,
+        value: this.numberFormatter.transform(overallStats.totalViewers)
       }
     ]
 

@@ -2,6 +2,8 @@ export interface VideoStatsOverall {
   averageWatchTime: number
   totalWatchTime: number
 
+  totalViewers: number
+
   viewersPeak: number
   viewersPeakDate: string
 

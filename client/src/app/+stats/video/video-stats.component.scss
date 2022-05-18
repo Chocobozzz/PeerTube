@@ -23,6 +23,11 @@
 
   .cards {
     display: flex;
+    flex-wrap: wrap;
+  }
+
+  .date-filter-wrapper {
+    margin-bottom: 10px;
   }
 }
 
