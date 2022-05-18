@@ -5818,10 +5818,7 @@ channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</sou
       </trans-unit><trans-unit id="8479900728400966992" datatype="html">
         <source>Video stats</source><target state="new">Video stats</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/stats-routing.module.ts</context><context context-type="linenumber">14</context></context-group></trans-unit><trans-unit id="5293436881670238217" datatype="html">
-        <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span>"/><x id="INTERPOLATION" equiv-text="{{ availableChart.label }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span>"/></source><target state="new"><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span>"/><x id="INTERPOLATION" equiv-text="{{ availableChart.label }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span>"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.html</context><context context-type="linenumber">44</context></context-group></trans-unit><trans-unit id="2121875025429043110" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/stats-routing.module.ts</context><context context-type="linenumber">14</context></context-group></trans-unit><trans-unit id="2121875025429043110" datatype="html">
         <source>You can select a part of the graph to zoom in</source><target state="new">You can select a part of the graph to zoom in</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.html</context><context context-type="linenumber">58</context></context-group></trans-unit><trans-unit id="3787205057553482493" datatype="html">
