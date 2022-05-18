@@ -136,6 +136,7 @@ export class VideoViewerStats {
         try {
           await sequelizeTypescript.transaction(async t => {
             const video = await VideoModel.load(stats.videoId, t)
+            if (!video) return
 
             const statsModel = await this.saveViewerStats(video, stats, t)
 
