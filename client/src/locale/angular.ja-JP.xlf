@@ -1206,7 +1206,7 @@
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
-        <target state="translated">パスワードをリセットするための手順が書かれたメールが <x id="PH" equiv-text="this.forgotPasswordEmail"/>に送られます。このリンクは1時間以内に無効になります。</target>
+        <target state="translated">パスワードをリセットするための手順が書かれたメールが <x id="PH" equiv-text="this.forgotPasswordEmail"/>に送られます。このリンクは1時間以内に無効となります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
       <trans-unit id="4768749765465246664">
@@ -1804,7 +1804,7 @@
       </trans-unit>
       <trans-unit id="2971365540217107489" datatype="html">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target state="translated">メディアのサイズがサーバーに対して大きすぎます。サーバーのサイズ制限を増やしたい場合は、インスタンス運営者に連絡を取ってください。</target>
+        <target state="translated">メディアのサイズがPeerTubeサーバーに対して大きすぎます。サーバーのサイズ上限を上げたい場合は、インスタンス運営者に連絡を取って下さい。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="5131854469652959713" datatype="html">
@@ -8850,7 +8850,7 @@
       </trans-unit>
       <trans-unit id="3779524668013120370">
         <source>Go to my subscriptions</source>
-        <target>あなたが登録したチャンネルへ移動</target>
+        <target>あなたが登録したチャンネルへアクセス</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="1136469849928650779">
@@ -8865,7 +8865,7 @@
       </trans-unit>
       <trans-unit id="7511292153332773503">
         <source>Go to my channels</source>
-        <target>あなたのチャンネルに移動する</target>
+        <target>あなたのチャンネルにアクセス</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
@@ -11434,7 +11434,7 @@
       </trans-unit>
       <trans-unit id="1599585307037758139" datatype="html">
         <source>Loop playlist videos</source>
-        <target state="translated">プレイリストのループ再生を有効にする</target>
+        <target state="translated">プレイリストの繰り返し再生を有効にする</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/playlist/video-watch-playlist.component.ts</context><context context-type="linenumber">241</context></context-group>
       </trans-unit>
       <trans-unit id="3704292036525161260" datatype="html">
