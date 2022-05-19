@@ -18,7 +18,7 @@ describe('Test videos history', function () {
   let userAccessToken: string
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     server = await createSingleServer(1)
 
