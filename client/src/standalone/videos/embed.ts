@@ -37,7 +37,10 @@ export class PeerTubeEmbed {
   api: PeerTubeEmbedApi = null
 
   autoplay: boolean
+
   controls: boolean
+  controlBar: boolean
+
   muted: boolean
   loop: boolean
   subtitle: string
@@ -295,7 +298,10 @@ export class PeerTubeEmbed {
       const params = new URL(window.location.toString()).searchParams
 
       this.autoplay = this.getParamToggle(params, 'autoplay', false)
+
       this.controls = this.getParamToggle(params, 'controls', true)
+      this.controlBar = this.getParamToggle(params, 'controlBar', true)
+
       this.muted = this.getParamToggle(params, 'muted', undefined)
       this.loop = this.getParamToggle(params, 'loop', false)
       this.title = this.getParamToggle(params, 'title', true)
@@ -539,7 +545,10 @@ export class PeerTubeEmbed {
       common: {
         // Autoplay in playlist mode
         autoplay: alreadyHadPlayer ? true : this.autoplay,
+
         controls: this.controls,
+        controlBar: this.controlBar,
+
         muted: this.muted,
         loop: this.loop,
 

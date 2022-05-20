@@ -110,6 +110,7 @@ export class PeertubePlayerManager {
 
         if (isMobile()) player.peertubeMobile()
         if (options.common.enableHotkeys === true) player.peerTubeHotkeysPlugin()
+        if (options.common.controlBar === false) player.controlBar.addClass('control-bar-hidden')
 
         player.bezels()
 

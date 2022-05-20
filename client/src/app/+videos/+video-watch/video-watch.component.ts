@@ -602,6 +602,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         startTime,
         stopTime: urlOptions.stopTime,
+        controlBar: urlOptions.controlBar,
         controls: urlOptions.controls,
         muted: urlOptions.muted,
         loop: urlOptions.loop,

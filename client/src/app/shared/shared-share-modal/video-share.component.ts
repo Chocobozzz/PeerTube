@@ -27,7 +27,7 @@ type Customizations = {
   onlyEmbedUrl: boolean
   title: boolean
   warningTitle: boolean
-  controls: boolean
+  controlBar: boolean
   peertubeLink: boolean
 }
 
@@ -88,7 +88,7 @@ export class VideoShareComponent {
       onlyEmbedUrl: false,
       title: true,
       warningTitle: true,
-      controls: true,
+      controlBar: true,
       peertubeLink: true
     }, {
       set: (target, prop, value) => {
@@ -190,7 +190,7 @@ export class VideoShareComponent {
       ? {
         title: this.customizations.title,
         warningTitle: this.customizations.warningTitle,
-        controls: this.customizations.controls,
+        controlBar: this.customizations.controlBar,
         peertubeLink: this.customizations.peertubeLink,
 
         // If using default value, we don't need to specify it

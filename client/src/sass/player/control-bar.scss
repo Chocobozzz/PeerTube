@@ -4,6 +4,10 @@
 @use './_player-variables' as *;
 
 .video-js.vjs-peertube-skin .vjs-control-bar {
+  &.control-bar-hidden {
+    display: none !important;
+  }
+
   z-index: 100;
 
   height: $control-bar-height;
