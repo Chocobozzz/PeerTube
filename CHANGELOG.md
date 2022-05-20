@@ -4,7 +4,7 @@
 
 ### IMPORTANT NOTES
 
- * **Important** You need to execute manually a migration script (can be executed after your upgrade, while your PeerTube instance is running) to generate small avatar miniatures:
+ * **Important** You need to execute manually a migration script (can be executed after your upgrade, while your PeerTube instance is running) to generate smaller avatar miniatures:
    * Classic installation: `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-4.2.js`
    * Docker installation: `cd /var/www/peertube-docker && docker-compose exec -u peertube peertube node dist/scripts/migrations/peertube-4.2.js`
  * REST API:
@@ -28,6 +28,8 @@
  * Add server plugin hooks
    * `filter:api.video-playlist.videos.list.params` and `filter:api.video-playlist.videos.list.result`
  * Support `getSettings()`, `isLoggedIn()` and `getAuthHeader()` client plugin helpers in embed
+ * Player URL query parameters:
+   * Support `controlBar=0` to hide player control bar. See [the documentation](https://docs.joinpeertube.org/api-embed-player?id=url-parameters) for more information
 
 ### Features
 
@@ -36,12 +38,15 @@
    * Add an intro at the beginning and/or an outro at the end of the video
    * Add an icon/watermark in the top right corner of the video
    * PeerTube will automatically transcode the new video and replace the original one
+   * :sparkles: *Funded by "la Direction du numérique du Ministère de l'Éducation Nationale, de la Jeunesse et des Sports"* :sparkles:
  * :tada: Add advanced statistics of a specific video :tada:
    * Provide *Average watch time*, *Total watch time* and *Peak viewers* video statistics
    * Display total viewers, aggregated watch time and audience retention in interactive time series graphs
    * Display viewer countries in bar chart if not disabled by admins
+   * :sparkles: *Funded by HowlRound Theatre Commons at Emerson College* :sparkles:
  * :tada: Add latency setting support for lives (small latency without P2P or high latency to increase P2P ratio) :tada:
  * :tada: Add ability to save a replay of every streaming session of a permanent live :tada:
+   * :sparkles: *Funded by HowlRound Theatre Commons at Emerson College* :sparkles:
  * Add simple subtitle edition from video captions tab in video edition form [#4666](https://github.com/Chocobozzz/PeerTube/pull/4666)
  * Display live streaming sessions details in permanent live information modal
  * Add ability to also mute users when banning them [#4650](https://github.com/Chocobozzz/PeerTube/pull/4650)
@@ -52,6 +57,9 @@
    * Add a *Refresh* button to admin comments list
    * Add ability to sort videos by total views
  * Add *Persian* locale support
+ * Add previous page redirection support on external auth login
+ * Support proxy for object storage [#4973](https://github.com/Chocobozzz/PeerTube/pull/4973)
+ * Add "Only display embed URL" checkbox in share modal
 
 ### Bug fixes
 
@@ -61,6 +69,7 @@
     * Fix upload of some videos with unknown duration (`.m2v` for example)
     * Fix 2 hours limit on uploads
     * Fix upload page title [#4904](https://github.com/Chocobozzz/PeerTube/pull/4904)
+    * Fix video upload with some characters in filename
     * Fix `.ac3` and `.mts` upload on some OS
  * Fix avatar with account username starting with a number
  * Fix client html cache on theme update
@@ -72,6 +81,7 @@
  * Fix admin instance following list when sorting by *Redundancy allowed*
  * More reliable object storage upload when using multipart [#4903](https://github.com/Chocobozzz/PeerTube/pull/4903)
  * Correctly handle HTTP signature draft 11 requests (without `date` header but with `(created)`)
+ * Fix `ctrl + 0-9` player hotkeys conflicting with web browser hotkeys
 
 
 ## v4.1.1
