@@ -1,9 +1,15 @@
+import * as debug from 'debug'
 import { Injectable } from '@angular/core'
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router'
 import { ServerService } from '../server'
+import { SessionStorageService } from '../wrappers/storage.service'
+
+const logger = debug('peertube:router:RedirectService')
 
 @Injectable()
 export class RedirectService {
+  private static SESSION_STORAGE_LATEST_SESSION_URL_KEY = 'redirect-latest-session-url'
+
   // Default route could change according to the instance configuration
   static INIT_DEFAULT_ROUTE = '/videos/trending'
   static INIT_DEFAULT_TRENDING_ALGORITHM = 'most-viewed'
@@ -11,13 +17,16 @@ export class RedirectService {
   private previousUrl: string
   private currentUrl: string
 
+  private latestSessionUrl: string
+
   private redirectingToHomepage = false
   private defaultTrendingAlgorithm = RedirectService.INIT_DEFAULT_TRENDING_ALGORITHM
   private defaultRoute = RedirectService.INIT_DEFAULT_ROUTE
 
   constructor (
     private router: Router,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private storage: SessionStorageService
   ) {
     // The config is first loaded from the cache so try to get the default route
     const config = this.serverService.getHTMLConfig()
@@ -28,12 +37,22 @@ export class RedirectService {
       this.defaultTrendingAlgorithm = config.trending.videos.algorithms.default
     }
 
+    this.latestSessionUrl = this.storage.getItem(RedirectService.SESSION_STORAGE_LATEST_SESSION_URL_KEY)
+    this.storage.removeItem(RedirectService.SESSION_STORAGE_LATEST_SESSION_URL_KEY)
+
+    logger('Loaded latest session URL %s', this.latestSessionUrl)
+
     // Track previous url
     this.currentUrl = this.router.url
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd || event instanceof NavigationCancel) {
         this.previousUrl = this.currentUrl
         this.currentUrl = event.url
+
+        logger('Previous URL is %s, current URL is %s', this.previousUrl, this.currentUrl)
+        logger('Setting %s as latest URL in session storage.', this.currentUrl)
+
+        this.storage.setItem(RedirectService.SESSION_STORAGE_LATEST_SESSION_URL_KEY, this.currentUrl)
       }
     })
   }
@@ -46,26 +65,16 @@ export class RedirectService {
     return this.defaultTrendingAlgorithm
   }
 
-  getPreviousUrl () {
-    return this.previousUrl
+  redirectToLatestSessionRoute () {
+    return this.doRedirect(this.latestSessionUrl)
   }
 
   redirectToPreviousRoute (fallbackRoute?: string) {
-    const exceptions = [
-      '/verify-account',
-      '/reset-password'
-    ]
+    return this.doRedirect(this.previousUrl, fallbackRoute)
+  }
 
-    if (this.previousUrl && this.previousUrl !== '/') {
-      const isException = exceptions.find(e => this.previousUrl.startsWith(e))
-      if (!isException) return this.router.navigateByUrl(this.previousUrl)
-    }
-
-    if (fallbackRoute) {
-      return this.router.navigateByUrl(fallbackRoute)
-    }
-
-    return this.redirectToHomepage()
+  getPreviousUrl () {
+    return this.previousUrl
   }
 
   redirectToHomepage (skipLocationChange = false) {
@@ -90,5 +99,33 @@ export class RedirectService {
           return this.router.navigateByUrl(this.defaultRoute, { skipLocationChange })
         })
 
+  }
+
+  private doRedirect (redirectUrl: string, fallbackRoute?: string) {
+    logger('Redirecting on %s', redirectUrl)
+
+    if (this.isValidRedirection(redirectUrl)) {
+      return this.router.navigateByUrl(redirectUrl)
+    }
+
+    logger('%s is not a valid redirection, try fallback route %s', redirectUrl, fallbackRoute)
+    if (fallbackRoute) {
+      return this.router.navigateByUrl(fallbackRoute)
+    }
+
+    logger('There was no fallback route, redirecting to homepage')
+    return this.redirectToHomepage()
+  }
+
+  private isValidRedirection (redirectUrl: string) {
+    const exceptions = [
+      '/verify-account',
+      '/reset-password',
+      '/login'
+    ]
+
+    if (!redirectUrl || redirectUrl === '/') return false
+
+    return exceptions.every(e => !redirectUrl.startsWith(e))
   }
 }

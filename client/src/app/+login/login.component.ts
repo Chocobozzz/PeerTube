@@ -1,6 +1,6 @@
 
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, Notifier, RedirectService, SessionStorageService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { LOGIN_PASSWORD_VALIDATOR, LOGIN_USERNAME_VALIDATOR } from '@app/shared/form-validators/login-validators'
@@ -49,7 +49,8 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     private redirectService: RedirectService,
     private notifier: Notifier,
     private hooks: HooksService,
-    private storage: SessionStorageService
+    private storage: SessionStorageService,
+    private router: Router
   ) {
     super()
   }
@@ -92,7 +93,10 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
       return
     }
 
-    this.storage.setItem(LoginComponent.SESSION_STORAGE_REDIRECT_URL_KEY, this.redirectService.getPreviousUrl())
+    const previousUrl = this.redirectService.getPreviousUrl()
+    if (previousUrl && previousUrl !== '/') {
+      this.storage.setItem(LoginComponent.SESSION_STORAGE_REDIRECT_URL_KEY, previousUrl)
+    }
   }
 
   ngAfterViewInit () {
@@ -157,7 +161,13 @@ The link will expire within 1 hour.`
     this.authService.login(username, null, token)
       .subscribe({
         next: () => {
-          this.redirectService.redirectToPreviousRoute(this.storage.getItem(LoginComponent.SESSION_STORAGE_REDIRECT_URL_KEY))
+          const redirectUrl = this.storage.getItem(LoginComponent.SESSION_STORAGE_REDIRECT_URL_KEY)
+          if (redirectUrl) {
+            this.storage.removeItem(LoginComponent.SESSION_STORAGE_REDIRECT_URL_KEY)
+            return this.router.navigateByUrl(redirectUrl)
+          }
+
+          this.redirectService.redirectToLatestSessionRoute()
         },
 
         error: err => {
