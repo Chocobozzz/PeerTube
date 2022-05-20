@@ -54,10 +54,17 @@ export class MyAccountPage {
 
     await container.$('.dropdown-toggle').click()
 
-    const dropdownMenu = () => container.$$('.dropdown-menu .dropdown-item')[1]
+    const deleteItem = () => {
+      return $$('.dropdown-menu .dropdown-item').find<WebdriverIO.Element>(async v => {
+        const text = await v.getText()
 
-    await dropdownMenu().waitForDisplayed()
-    return dropdownMenu().click()
+        return text.includes('Delete')
+      })
+    }
+
+    await (await deleteItem()).waitForClickable()
+
+    return (await deleteItem()).click()
   }
 
   validRemove () {
