@@ -4,10 +4,6 @@
 @use './_player-variables' as *;
 
 .video-js.vjs-peertube-skin .vjs-control-bar {
-  &.control-bar-hidden {
-    display: none !important;
-  }
-
   z-index: 100;
 
   height: $control-bar-height;
@@ -15,6 +11,10 @@
   box-shadow: 0 -15px 40px 10px rgba(0, 0, 0, 0.2);
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   transition: visibility 0.3s, opacity 0.3s !important;
+
+  &.control-bar-hidden {
+    display: none !important;
+  }
 
   > button:first-child {
     @include margin-left($first-control-bar-element-margin-left);
