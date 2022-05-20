@@ -24,6 +24,7 @@ type Customizations = {
   muted: boolean
 
   embedP2P: boolean
+  onlyEmbedUrl: boolean
   title: boolean
   warningTitle: boolean
   controls: boolean
@@ -82,9 +83,9 @@ export class VideoShareComponent {
       autoplay: false,
       muted: false,
 
-      embedP2P: this.server.getHTMLConfig().defaults.p2p.embed.enabled,
-
       // Embed options
+      embedP2P: this.server.getHTMLConfig().defaults.p2p.embed.enabled,
+      onlyEmbedUrl: false,
       title: true,
       warningTitle: true,
       controls: true,
@@ -112,15 +113,19 @@ export class VideoShareComponent {
   }
 
   getVideoIframeCode () {
-    const embedUrl = decorateVideoLink({ url: this.video.embedUrl, ...this.getVideoOptions(true) })
+    return buildVideoOrPlaylistEmbed(this.getVideoEmbedUrl(), this.video.name)
+  }
 
-    return buildVideoOrPlaylistEmbed(embedUrl, this.video.name)
+  getVideoEmbedUrl () {
+    return decorateVideoLink({ url: this.video.embedUrl, ...this.getVideoOptions(true) })
+  }
+
+  getPlaylistEmbedUrl () {
+    return decoratePlaylistLink({ url: this.playlist.embedUrl, ...this.getPlaylistOptions() })
   }
 
   getPlaylistIframeCode () {
-    const embedUrl = decoratePlaylistLink({ url: this.playlist.embedUrl, ...this.getPlaylistOptions() })
-
-    return buildVideoOrPlaylistEmbed(embedUrl, this.playlist.displayName)
+    return buildVideoOrPlaylistEmbed(this.getPlaylistEmbedUrl(), this.playlist.displayName)
   }
 
   getVideoUrl () {
@@ -152,8 +157,12 @@ export class VideoShareComponent {
     return window.location.protocol === 'http:'
   }
 
-  isVideoInEmbedTab () {
+  isInVideoEmbedTab () {
     return this.activeVideoId === 'embed'
+  }
+
+  isInPlaylistEmbedTab () {
+    return this.activePlaylistId === 'embed'
   }
 
   isLocalVideo () {
