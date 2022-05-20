@@ -145,9 +145,9 @@ describe('Test video imports', function () {
 
             const regex = `WEBVTT[ \n]+Kind: captions[ \n]+` +
               `(Language: en[ \n]+)?` +
-              `00:00:01.600 --> 00:00:04.200 (position:\\d+% line:\\d+%)?[ \n]+English \\(US\\)[ \n]+` +
-              `00:00:05.900 --> 00:00:07.999 (position:\\d+% line:\\d+%)?[ \n]+This is a subtitle in American English[ \n]+` +
-              `00:00:10.000 --> 00:00:14.000 (position:\\d+% line:\\d+%)?[ \n]+Adding subtitles is very easy to do`
+              `00:00:01.600 --> 00:00:04.200( position:\\d+% line:\\d+%)?[ \n]+English \\(US\\)[ \n]+` +
+              `00:00:05.900 --> 00:00:07.999( position:\\d+% line:\\d+%)?[ \n]+This is a subtitle in American English[ \n]+` +
+              `00:00:10.000 --> 00:00:14.000( position:\\d+% line:\\d+%)?[ \n]+Adding subtitles is very easy to do`
             await testCaptionFile(servers[0].url, enCaption.captionPath, new RegExp(regex))
           }
 
@@ -159,9 +159,9 @@ describe('Test video imports', function () {
 
             const regex = `WEBVTT[ \n]+Kind: captions[ \n]+` +
               `(Language: fr[ \n]+)?` +
-              `00:00:01.600 --> 00:00:04.200 (position:\\d+% line:\\d+%)?[ \n]+Français \\(FR\\)[ \n]+` +
-              `00:00:05.900 --> 00:00:07.999 (position:\\d+% line:\\d+%)?[ \n]+C'est un sous-titre français[ \n]+` +
-              `00:00:10.000 --> 00:00:14.000 (position:\\d+% line:\\d+%)?[ \n]+Ajouter un sous-titre est vraiment facile`
+              `00:00:01.600 --> 00:00:04.200( position:\\d+% line:\\d+%)?[ \n]+Français \\(FR\\)[ \n]+` +
+              `00:00:05.900 --> 00:00:07.999( position:\\d+% line:\\d+%)?[ \n]+C'est un sous-titre français[ \n]+` +
+              `00:00:10.000 --> 00:00:14.000( position:\\d+% line:\\d+%)?[ \n]+Ajouter un sous-titre est vraiment facile`
 
             await testCaptionFile(servers[0].url, frCaption.captionPath, new RegExp(regex))
           }
