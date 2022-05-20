@@ -186,7 +186,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should not send a new video notification when a remote video becomes unlisted', async function () {
-      this.timeout(50000)
+      this.timeout(100000)
 
       const data = { privacy: VideoPrivacy.PRIVATE }
       const { name, uuid, shortUUID } = await uploadRandomVideoOnServers(servers, 2, data)
