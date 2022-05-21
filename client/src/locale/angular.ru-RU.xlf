@@ -874,7 +874,7 @@
       </trans-unit>
       <trans-unit id="3584756669036615394" datatype="html">
         <source>Automatically published</source>
-        <target state="translated">Опубликовано автоматически</target>
+        <target state="translated">Публиковать автоматически</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="2602586221576511475">
@@ -4161,7 +4161,7 @@
       </trans-unit>
       <trans-unit id="8630916846096019339" datatype="html">
         <source>Users can resolve distant content</source>
-        <target state="translated">Пользователи могут искать дистанционный контент</target>
+        <target state="translated">Пользователи могут искать удаленный контент</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
       <trans-unit id="3300472325769888962" datatype="html">
@@ -4176,7 +4176,7 @@
       </trans-unit>
       <trans-unit id="9205443410527464015" datatype="html">
         <source>Plugins enabled</source>
-        <target state="translated">Плагины включены</target>
+        <target state="translated">Активные плагины</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="5410940035535748578" datatype="html">
