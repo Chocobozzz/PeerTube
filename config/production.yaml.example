@@ -469,6 +469,7 @@ live:
 
 video_studio:
   # Enable video edition by users (cut, add intro/outro, add watermark etc)
+  # If enabled, users can create transcoding tasks as they wish
   enabled: false
 
 import:
