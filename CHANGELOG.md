@@ -1,6 +1,6 @@
 # Changelog
 
-## v4.2.0-rc.1 (not released yet)
+## v4.2.0-rc.1
 
 ### IMPORTANT NOTES
 
