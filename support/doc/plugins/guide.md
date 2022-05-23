@@ -1015,13 +1015,16 @@ You built files are in the `dist/` directory. Check `package.json` to correctly 
 
 ### Test your plugin/theme
 
+PeerTube dev server (ran with `npm run dev` on `localhost:3000`) can't inject plugin CSS.
+It's the reason why we don't use the dev mode but build PeerTube instead.
+
 You'll need to have a local PeerTube instance:
  * Follow the [dev prerequisites](https://github.com/Chocobozzz/PeerTube/blob/develop/.github/CONTRIBUTING.md#prerequisites)
  (to clone the repository, install dependencies and prepare the database)
- * Build PeerTube (`--light` to only build the english language):
+ * Build PeerTube:
 
 ```
-$ npm run build -- --light
+$ npm run build
 ```
 
  * Build the CLI:
