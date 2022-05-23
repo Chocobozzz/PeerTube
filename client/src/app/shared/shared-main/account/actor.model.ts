@@ -21,7 +21,7 @@ export abstract class Actor implements ServerActor {
   isLocal: boolean
 
   static GET_ACTOR_AVATAR_URL (actor: { avatars: { width: number, url?: string, path: string }[] }, size?: number) {
-    const avatars = actor.avatars.sort((a, b) => a.width - b.width)
+    const avatars = actor.avatars.sort((a, b) => b.width - a.width)
 
     const avatar = size
       ? avatars.find(a => a.width >= size)
