@@ -7,10 +7,10 @@
  * Hồ Nhất Duy
  * Berto Te
  * josé m
- * Simon Brosdetzko
  * Jeff Huang
- * kontrollanten
+ * Simon Brosdetzko
  * DignifiedSilence
+ * kontrollanten
  * Laurent Ettouati
  * kimsible
  * Ihor Hordiichuk
@@ -78,6 +78,7 @@
  * Luc Didry
  * Lucas Declercq
  * chris@famichiki.tube
+ * hecko
  * matograine
  * Alexander Ivanov
  * Armin
@@ -242,7 +243,6 @@
  * ahmadsharifian
  * bopol
  * framail
- * hecko
  * les
  * libertas
  * mater
@@ -305,6 +305,7 @@
  * Eric Brehault
  * Erwan Croze
  * Esmail_Hazem
+ * Ethan Corgatelli
  * Fabio Agreles Bezerra
  * Fernandez, ReK2
  * Gabriel Scherer
@@ -429,6 +430,7 @@
  * Yaron Shahrabani
  * Yorwba
  * Yun
+ * Zekovski
  * Zig-03
  * [ Bie ] Watcharapong Suriyawan
  * anmol26s
