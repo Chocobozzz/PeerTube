@@ -8967,6 +8967,7 @@
       </trans-unit>
       <trans-unit id="2677581013897190613" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></source>
+        <target>sitelen li open lon tenpo <x id="PH" equiv-text="secondsToTime(start)"/> li pini lon tenpo <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">137</context>
@@ -8974,6 +8975,7 @@
       </trans-unit>
       <trans-unit id="2299077646120636288" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/></source>
+        <target>sitelen li open lon tenpo <x id="PH" equiv-text="secondsToTime(start)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">141</context>
@@ -8981,6 +8983,7 @@
       </trans-unit>
       <trans-unit id="7209039243783736285" datatype="html">
         <source>Video will stop at <x id="PH" equiv-text="secondsToTime(end)"/></source>
+        <target>sitelen li pini lon tenpo <x id="PH" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">145</context>
@@ -9174,6 +9177,7 @@
       </trans-unit>
       <trans-unit id="3913843642962116845" datatype="html">
         <source>January</source>
+        <target>mun nanpa 1</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">40</context>
@@ -9181,6 +9185,7 @@
       </trans-unit>
       <trans-unit id="6642324138857419870" datatype="html">
         <source>February</source>
+        <target>mun nanpa 2</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">41</context>
@@ -9188,6 +9193,7 @@
       </trans-unit>
       <trans-unit id="7918954644624211958" datatype="html">
         <source>March</source>
+        <target>mun nanpa 3</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">42</context>
@@ -9195,6 +9201,7 @@
       </trans-unit>
       <trans-unit id="1809521303476565743" datatype="html">
         <source>April</source>
+        <target>mun nanpa 4</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">43</context>
@@ -9202,6 +9209,7 @@
       </trans-unit>
       <trans-unit id="8469692700277617405" datatype="html">
         <source>May</source>
+        <target>mun nanpa 5</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">44</context>
@@ -9209,6 +9217,7 @@
       </trans-unit>
       <trans-unit id="9055297580745330415" datatype="html">
         <source>June</source>
+        <target>mun nanpa 6</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">45</context>
@@ -9216,6 +9225,7 @@
       </trans-unit>
       <trans-unit id="9087113544612471348" datatype="html">
         <source>July</source>
+        <target>mun nanpa 7</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">46</context>
@@ -9223,6 +9233,7 @@
       </trans-unit>
       <trans-unit id="3984618989093293779" datatype="html">
         <source>August</source>
+        <target>mun nanpa 8</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">47</context>
@@ -9230,6 +9241,7 @@
       </trans-unit>
       <trans-unit id="5872622085239011307" datatype="html">
         <source>September</source>
+        <target>mun nanpa 9</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">48</context>
@@ -9237,6 +9249,7 @@
       </trans-unit>
       <trans-unit id="1491482705364427867" datatype="html">
         <source>October</source>
+        <target>mun nanpa 10</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">49</context>
@@ -9244,6 +9257,7 @@
       </trans-unit>
       <trans-unit id="1109977718843277527" datatype="html">
         <source>November</source>
+        <target>mun nanpa 11</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">50</context>
@@ -9251,6 +9265,7 @@
       </trans-unit>
       <trans-unit id="124191049522509365" datatype="html">
         <source>December</source>
+        <target>mun nanpa 12</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">51</context>
@@ -9258,6 +9273,7 @@
       </trans-unit>
       <trans-unit id="1799348348510504995" datatype="html">
         <source>Jan</source>
+        <target>mun #1</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">55</context>
@@ -9267,6 +9283,7 @@
       </trans-unit>
       <trans-unit id="2980544278361296608" datatype="html">
         <source>Feb</source>
+        <target>mun #2</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">56</context>
@@ -9276,6 +9293,7 @@
       </trans-unit>
       <trans-unit id="3124926955462217092" datatype="html">
         <source>Mar</source>
+        <target>mun #3</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">57</context>
@@ -9285,6 +9303,7 @@
       </trans-unit>
       <trans-unit id="9658641661863772" datatype="html">
         <source>Apr</source>
+        <target>mun #4</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">58</context>
@@ -9294,6 +9313,7 @@
       </trans-unit>
       <trans-unit id="502512326533496869" datatype="html">
         <source>May</source>
+        <target>mun #5</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">59</context>
@@ -9303,6 +9323,7 @@
       </trans-unit>
       <trans-unit id="3044090977322782161" datatype="html">
         <source>Jun</source>
+        <target>mun #6</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">60</context>
@@ -9312,6 +9333,7 @@
       </trans-unit>
       <trans-unit id="8066434078267346927" datatype="html">
         <source>Jul</source>
+        <target>mun #7</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">61</context>
@@ -9321,6 +9343,7 @@
       </trans-unit>
       <trans-unit id="1796563865253467834" datatype="html">
         <source>Aug</source>
+        <target>mun #8</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">62</context>
@@ -9330,6 +9353,7 @@
       </trans-unit>
       <trans-unit id="5865190625753625986" datatype="html">
         <source>Sep</source>
+        <target>mun #9</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">63</context>
@@ -9339,6 +9363,7 @@
       </trans-unit>
       <trans-unit id="4011114601374284323" datatype="html">
         <source>Oct</source>
+        <target>mun #10</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">64</context>
@@ -9348,6 +9373,7 @@
       </trans-unit>
       <trans-unit id="5063734982204786445" datatype="html">
         <source>Nov</source>
+        <target>mun #11</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">65</context>
@@ -9357,6 +9383,7 @@
       </trans-unit>
       <trans-unit id="4789897150069082503" datatype="html">
         <source>Dec</source>
+        <target>mun #12</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">66</context>
@@ -9373,6 +9400,7 @@
       </trans-unit>
       <trans-unit id="5922757127987546008" datatype="html">
         <source>yy-mm-dd</source>
+        <target>sike-mun-suno</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">83</context>
@@ -9381,6 +9409,7 @@
       </trans-unit>
       <trans-unit id="1909308046360229945" datatype="html">
         <source>Add caption</source>
+        <target>o pana e sitelen toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">5</context>
@@ -9388,6 +9417,7 @@
       </trans-unit>
       <trans-unit id="753928283782809091" datatype="html">
         <source>Select the caption file</source>
+        <target state="needs-translation">o anu e lipu pi sitelen toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">24</context>
@@ -9395,6 +9425,7 @@
       </trans-unit>
       <trans-unit id="4616828176080418150" datatype="html">
         <source>This will replace an existing caption!</source>
+        <target>sina pana e sitelen toki sin la ni li weka e sitelen toki lon!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">30,32</context>
@@ -9402,6 +9433,7 @@
       </trans-unit>
       <trans-unit id="2752121353049766867" datatype="html">
         <source>Add this caption</source>
+        <target>o pana e sitelen toki ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">42</context>
@@ -9416,6 +9448,7 @@
       </trans-unit>
       <trans-unit id="6838559377527923778" datatype="html">
         <source>Caption</source>
+        <target>sitelen toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">10</context>
@@ -9437,6 +9470,7 @@
       </trans-unit>
       <trans-unit id="5701618810648052610" datatype="html">
         <source>Title</source>
+        <target>nimi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">17</context>
@@ -9511,6 +9545,7 @@
       </trans-unit>
       <trans-unit id="2602773901491715295" datatype="html">
         <source>Captions</source>
+        <target>sitelen toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">166</context>
@@ -9717,6 +9752,7 @@
       </trans-unit>
       <trans-unit id="7958716262877895706" datatype="html">
         <source>Original publication date</source>
+        <target>tenpo pi pana nanpa wan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">347</context>
@@ -9738,6 +9774,7 @@
       </trans-unit>
       <trans-unit id="8896564060463626070" datatype="html">
         <source>Enable download</source>
+        <target>o ken e kama jo pi sitelen ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">373</context>
@@ -9752,6 +9789,7 @@
       </trans-unit>
       <trans-unit id="54931094224146544" datatype="html">
         <source>Small latency</source>
+        <target>tenpo lili</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -9766,6 +9804,7 @@
       </trans-unit>
       <trans-unit id="5607669932062416162" datatype="html">
         <source>Default</source>
+        <target>tenpo pona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">90</context>
@@ -9780,6 +9819,7 @@
       </trans-unit>
       <trans-unit id="3378360148342029710" datatype="html">
         <source>High latency</source>
+        <target>tenpo suli</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -9794,6 +9834,7 @@
       </trans-unit>
       <trans-unit id="8693603235657020323" datatype="html">
         <source>Other</source>
+        <target>ante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">208</context>
@@ -9805,6 +9846,7 @@
       </trans-unit>
       <trans-unit id="2830831449226931729" datatype="html">
         <source>Instance languages</source>
+        <target>toki pi ma ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">211</context>
@@ -9812,6 +9854,7 @@
       </trans-unit>
       <trans-unit id="40119547597591062" datatype="html">
         <source>All languages</source>
+        <target>toki ale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">212</context>
@@ -9944,6 +9987,7 @@
       </trans-unit>
       <trans-unit id="290735093992020324" datatype="html">
         <source>OR</source>
+        <target>ANU</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">13</context>
@@ -9951,6 +9995,7 @@
       </trans-unit>
       <trans-unit id="6173286379208830044" datatype="html">
         <source>Paste magnet URI</source>
+        <target>o pana e nimi linluwi Magnet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">16</context>
@@ -10005,6 +10050,7 @@
       </trans-unit>
       <trans-unit id="2375260419993138758" datatype="html">
         <source>URL</source>
+        <target>nimi linluwi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">6</context>
@@ -10073,6 +10119,7 @@
       </trans-unit>
       <trans-unit id="7934833136974560675" datatype="html">
         <source>Retry</source>
+        <target>o pana sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">80</context>
@@ -10162,6 +10209,7 @@
       </trans-unit>
       <trans-unit id="1006562256968398209" datatype="html">
         <source>video</source>
+        <target>sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">303</context>
@@ -10359,6 +10407,7 @@
       </trans-unit>
       <trans-unit id="8272123190776748811" datatype="html">
         <source>You need to be &lt;a href="/login"&gt;logged in&lt;/a&gt; to rate this video.</source>
+        <target>sina wile toki e pona pi sitelen ni la &lt;a href="/login"&gt;o lon sijelo ilo&lt;/a&gt;.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -10366,6 +10415,7 @@
       </trans-unit>
       <trans-unit id="5733075023444401902" datatype="html">
         <source>Add comment...</source>
+        <target>o toki...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">6</context>
@@ -10476,6 +10526,7 @@
       </trans-unit>
       <trans-unit id="7508177761852352782" datatype="html">
         <source>You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example).</source>
+        <target>sina ken toki kepeken sijelo ilo pi nasin ActivityPub (sama ilo PeerTube anu ilo Mastodon anu ilo Pleroma).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">64,66</context>
@@ -10646,6 +10697,7 @@
       </trans-unit>
       <trans-unit id="6747218355168080191" datatype="html">
         <source>Do you really want to delete this comment?</source>
+        <target>sina wile ala wile weka e toki ni?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">172</context>
@@ -10713,6 +10765,7 @@
       </trans-unit>
       <trans-unit id="5184373289520493569" datatype="html">
         <source>OK</source>
+        <target>pona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context>
           <context context-type="linenumber">12,14</context>
@@ -10837,6 +10890,7 @@
       </trans-unit>
       <trans-unit id="7215101881367554791" datatype="html">
         <source>Show more</source>
+        <target>o pana lukin e mute</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-description.component.html</context>
           <context context-type="linenumber">10</context>
@@ -10844,6 +10898,7 @@
       </trans-unit>
       <trans-unit id="3517550046701184661" datatype="html">
         <source>Show less</source>
+        <target>o pana lukin e lili</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-description.component.html</context>
           <context context-type="linenumber">16</context>
@@ -10986,6 +11041,7 @@
       </trans-unit>
       <trans-unit id="8858527736400081688" datatype="html">
         <source>This video contains mature or explicit content. Are you sure you want to watch it?</source>
+        <target>ijo unpa li lon sitelen ni. sina wile ala wile lukin e ona?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">367</context>
@@ -10993,6 +11049,7 @@
       </trans-unit>
       <trans-unit id="3937119019020041049" datatype="html">
         <source>Mature or explicit content</source>
+        <target>ijo unpa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">368</context>
@@ -11000,6 +11057,7 @@
       </trans-unit>
       <trans-unit id="1755474755114288376" datatype="html">
         <source>Up Next</source>
+        <target>kama</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">441</context>
@@ -11276,6 +11334,7 @@
       </trans-unit>
       <trans-unit id="2887122197778293919" datatype="html">
         <source>Go to the local videos page</source>
+        <target>o tawa lipu "sitelen pi ma ni"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">299</context>
@@ -11389,6 +11448,7 @@
       </trans-unit>
       <trans-unit id="6470888608149621404" datatype="html">
         <source>ON <x id="PH" equiv-text="config.instance.name"/></source>
+        <target>LON <x id="PH" equiv-text="config.instance.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/menu/menu.service.ts</context>
           <context context-type="linenumber">150</context>
@@ -11456,6 +11516,7 @@
       </trans-unit>
       <trans-unit id="5131854469652959713" datatype="html">
         <source>GLOBAL SEARCH</source>
+        <target>ALASA PI MA ALE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">26</context>
@@ -11484,6 +11545,7 @@
       </trans-unit>
       <trans-unit id="3801957940570333397" datatype="html">
         <source>ADVANCED SEARCH</source>
+        <target>ALASA WAWA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">39</context>
@@ -11639,6 +11701,7 @@
       </trans-unit>
       <trans-unit id="7507948636555938109" datatype="html">
         <source>Log out</source>
+        <target>o weka tan sijelo ilo mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">75</context>
@@ -11646,6 +11709,7 @@
       </trans-unit>
       <trans-unit id="8893390761160292681" datatype="html">
         <source>My account</source>
+        <target>sijelo mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">86</context>
@@ -11660,6 +11724,7 @@
       </trans-unit>
       <trans-unit id="4116024528500133384" datatype="html">
         <source>My settings</source>
+        <target>wile ilo mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">124</context>
@@ -11854,6 +11919,7 @@
       </trans-unit>
       <trans-unit id="7819314041543176992" datatype="html">
         <source>Close</source>
+        <target>o weka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">28</context>
@@ -11869,6 +11935,7 @@
       </trans-unit>
       <trans-unit id="7997432701743294657" datatype="html">
         <source>Set up</source>
+        <target>pali open</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">34,36</context>
@@ -11876,6 +11943,7 @@
       </trans-unit>
       <trans-unit id="1516969129397662377" datatype="html">
         <source>Welcome to PeerTube, dear administrator!</source>
+        <target>o kama pona lon ilo Peertube, lawa o!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">3</context>
