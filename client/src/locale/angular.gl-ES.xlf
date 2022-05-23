@@ -6054,7 +6054,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8089238718524110373" datatype="html">
         <source>Live as of <x id="PH" equiv-text="this.toMediumDate(new Date(session.startDate))"/></source>
-        <target state="new">Live as of <x id="PH" equiv-text="this.toMediumDate(new Date(session.startDate))"/></target>
+        <target state="translated">En directo o <x id="PH" equiv-text="this.toMediumDate(new Date(session.startDate))"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">227</context>
@@ -6062,12 +6062,12 @@ color: red;
       </trans-unit>
       <trans-unit id="3249405667632600635" datatype="html">
         <source>Custom dates</source>
-        <target state="new">Custom dates</target>
+        <target state="translated">Datas personalizadas</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">238</context></context-group>
       </trans-unit>
       <trans-unit id="5382746022482410588" datatype="html">
         <source>A view means that someone watched the video for at least 30 seconds</source>
-        <target state="new">A view means that someone watched the video for at least 30 seconds</target>
+        <target state="translated">Unha visualización significa que alguén mirou o vídeo polo menos durante 30 seg</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">257</context></context-group>
       </trans-unit>
       <trans-unit id="6782077395930235254" datatype="html">
@@ -6088,7 +6088,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3457644129579531516" datatype="html">
         <source>Total watch time</source>
-        <target state="new">Total watch time</target>
+        <target state="translated">Tempo total de visualización</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">271</context></context-group>
       </trans-unit>
       <trans-unit id="7988517647183541852" datatype="html">
@@ -6103,7 +6103,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7299658893351817136" datatype="html">
         <source>Unique viewers</source>
-        <target state="new">Unique viewers</target>
+        <target state="translated">Espectadores únicos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">282</context>
@@ -9826,7 +9826,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4022826795131920912" datatype="html">
         <source>You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live</source>
-        <target state="new"> You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live </target>
+        <target state="translated">Podes emitir só unha vez durante un directo normal. Se activas a repetición, garadarase baixo o mesmo URL que o directo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">266,268</context>
@@ -9839,7 +9839,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8986073791327847979" datatype="html">
         <source>You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos</source>
-        <target state="new"> You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos </target>
+        <target state="translated">Podes emitir varias veces un directo recurrente/permanente. Se activas a repetición, serán gardadas como vídeos separados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">275,277</context>
@@ -9855,7 +9855,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6445713766140892433" datatype="html">
         <source>Latest live sessions</source>
-        <target state="new">Latest live sessions</target>
+        <target state="translated">Últimas sesións en directo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">36</context>
@@ -9863,7 +9863,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1018828582442463303" datatype="html">
         <source>Started on <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></source>
-        <target state="new">Started on <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></target>
+        <target state="translated">Inicidado o <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">42</context>
@@ -9871,7 +9871,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="6765028278622459314" datatype="html">
         <source>Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></source>
-        <target state="new">Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></target>
+        <target state="translated">Rematou o <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">43</context>
@@ -9879,7 +9879,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="3424935624805832445" datatype="html">
         <source>Go to replay</source>
-        <target state="new">Go to replay</target>
+        <target state="translated">Ir á repetición</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">44</context>
