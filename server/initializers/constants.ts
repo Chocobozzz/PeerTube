@@ -766,12 +766,6 @@ const CUSTOM_HTML_TAG_COMMENTS = {
   SERVER_CONFIG: '<!-- server config -->'
 }
 
-// ---------------------------------------------------------------------------
-
-const FEEDS = {
-  COUNT: 20
-}
-
 const MAX_LOGS_OUTPUT_CHARACTERS = 10 * 1000 * 1000
 const LOG_FILENAME = 'peertube.log'
 const AUDIT_LOG_FILENAME = 'peertube-audit.log'
@@ -939,7 +933,6 @@ export {
   ROUTE_CACHE_LIFETIME,
   SORTABLE_COLUMNS,
   HLS_STREAMING_PLAYLIST_DIRECTORY,
-  FEEDS,
   JOB_TTL,
   DEFAULT_THEME_NAME,
   NSFW_POLICY_TYPES,

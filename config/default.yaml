@@ -297,6 +297,16 @@ webadmin:
       # Set this to false if you don't want to allow config edition in the web interface by instance admins
       allowed: true
 
+# XML, Atom or JSON feeds
+feeds:
+  videos:
+    # Default number of videos displayed in feeds
+    count: 20
+
+  comments:
+    # Default number of comments displayed in feeds
+    count: 20
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache

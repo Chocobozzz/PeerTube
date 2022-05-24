@@ -1,13 +1,13 @@
 import express from 'express'
-import { Feed } from '@peertube/feed'
 import { extname } from 'path'
+import { Feed } from '@peertube/feed'
 import { mdToOneLinePlainText, toSafeHtml } from '@server/helpers/markdown'
 import { getServerActor } from '@server/models/application/application'
 import { getCategoryLabel } from '@server/models/video/formatter/video-format-utils'
 import { VideoInclude } from '@shared/models'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
-import { FEEDS, MIMETYPES, PREVIEWS_SIZE, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
+import { MIMETYPES, PREVIEWS_SIZE, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,
@@ -76,7 +76,7 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
 
   const comments = await VideoCommentModel.listForFeed({
     start,
-    count: FEEDS.COUNT,
+    count: CONFIG.FEEDS.COMMENTS.COUNT,
     videoId: video ? video.id : undefined,
     accountId: account ? account.id : undefined,
     videoChannelId: videoChannel ? videoChannel.id : undefined
@@ -166,7 +166,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   const server = await getServerActor()
   const { data } = await VideoModel.listForApi({
     start,
-    count: FEEDS.COUNT,
+    count: CONFIG.FEEDS.VIDEOS.COUNT,
     sort: req.query.sort,
     displayOnlyForFollower: {
       actorId: server.id,
@@ -202,7 +202,7 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
 
   const { data } = await VideoModel.listForApi({
     start,
-    count: FEEDS.COUNT,
+    count: CONFIG.FEEDS.VIDEOS.COUNT,
     sort: req.query.sort,
     nsfw,
 

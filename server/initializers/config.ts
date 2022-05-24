@@ -247,6 +247,14 @@ const CONFIG = {
       }
     }
   },
+  FEEDS: {
+    VIDEOS: {
+      COUNT: config.get<number>('feeds.videos.count')
+    },
+    COMMENTS: {
+      COUNT: config.get<number>('feeds.comments.count')
+    }
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },
