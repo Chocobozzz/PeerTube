@@ -622,6 +622,13 @@ describe('Test users', function () {
       }
     })
 
+    it('Should still have the same amount of videos in my account', async function () {
+      const { total, data } = await server.videos.listMyVideos({ token: userToken })
+
+      expect(total).to.equal(2)
+      expect(data).to.have.lengthOf(2)
+    })
+
     it('Should be able to update my display name', async function () {
       await server.users.updateMe({ token: userToken, displayName: 'new display name' })
 
