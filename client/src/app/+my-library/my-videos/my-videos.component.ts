@@ -4,7 +4,7 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService, User } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
-import { immutableAssign } from '@app/helpers'
+import { prepareIcu, immutableAssign } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { LiveStreamInformationComponent } from '@app/shared/shared-video-live'
@@ -167,7 +167,10 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
                                     .map(k => parseInt(k, 10))
 
     const res = await this.confirmService.confirm(
-      $localize`Do you really want to delete ${toDeleteVideosIds.length} videos?`,
+      prepareIcu($localize`Do you really want to delete {length, plural, =1 {this video} other {{length} videos}}?`)(
+        { length: toDeleteVideosIds.length },
+        $localize`Do you really want to delete ${toDeleteVideosIds.length} videos?`
+      ),
       $localize`Delete`
     )
     if (res === false) return
@@ -184,7 +187,13 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
       .pipe(toArray())
       .subscribe({
         next: () => {
-          this.notifier.success($localize`${toDeleteVideosIds.length} videos deleted.`)
+          this.notifier.success(
+            prepareIcu($localize`{length, plural, =1 {Video has been deleted} other {{length} videos have been deleted}}`)(
+              { length: toDeleteVideosIds.length },
+              $localize`${toDeleteVideosIds.length} have been deleted.`
+            )
+          )
+
           this.selection = {}
         },
 

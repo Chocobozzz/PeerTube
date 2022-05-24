@@ -7,6 +7,7 @@ import { DropdownAction } from '@app/shared/shared-main'
 import { BulkService } from '@app/shared/shared-moderation'
 import { VideoCommentAdmin, VideoCommentService } from '@app/shared/shared-video-comment'
 import { FeedFormat, UserRight } from '@shared/models'
+import { prepareIcu } from '@app/helpers'
 
 @Component({
   selector: 'my-video-comment-list',
@@ -145,7 +146,13 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
     this.videoCommentService.deleteVideoComments(commentArgs)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`${commentArgs.length} comments deleted.`)
+          this.notifier.success(
+            prepareIcu($localize`{count, plural, =1 {1 comment} other {{count} comments}} deleted.`)(
+              { count: commentArgs.length },
+              $localize`${commentArgs.length} comment(s) deleted.`
+            )
+          )
+
           this.reloadData()
         },
 

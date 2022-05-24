@@ -100,6 +100,7 @@
     "html-loader": "^3.0.1",
     "html-webpack-plugin": "^5.3.1",
     "https-browserify": "^1.0.0",
+    "intl-messageformat": "^10.0.1",
     "jschannel": "^1.0.2",
     "linkify-html": "^3.0.2",
     "linkify-plugin-mention": "^3.0.2",

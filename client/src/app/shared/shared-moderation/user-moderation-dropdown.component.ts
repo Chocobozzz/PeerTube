@@ -100,7 +100,8 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
       return
     }
 
-    const message = $localize`If you remove user ${user.username}, you won't be able to create another with the same username!`
+    // eslint-disable-next-line max-len
+    const message = $localize`If you remove this user, you won't be able to create another user or channel with <strong>${user.username}</strong> username!`
     const res = await this.confirmService.confirm(message, $localize`Delete ${user.username}`)
     if (res === false) return
 

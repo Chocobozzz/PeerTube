@@ -30,8 +30,6 @@ export class AccountsComponent implements OnInit, OnDestroy {
   links: ListOverflowItem[] = []
   hideMenu = false
 
-  accountFollowerTitle = ''
-
   accountVideosCount: number
   accountDescriptionHTML = ''
   accountDescriptionExpanded = false
@@ -121,12 +119,6 @@ export class AccountsComponent implements OnInit, OnDestroy {
     this.notifier.success($localize`Username copied`)
   }
 
-  subscribersDisplayFor (count: number) {
-    if (count === 1) return $localize`1 subscriber`
-
-    return $localize`${count} subscribers`
-  }
-
   searchChanged (search: string) {
     const queryParams = { search }
 
@@ -150,8 +142,6 @@ export class AccountsComponent implements OnInit, OnDestroy {
   }
 
   private async onAccount (account: Account) {
-    this.accountFollowerTitle = $localize`${account.followersCount} direct account followers`
-
     this.accountDescriptionHTML = await this.markdown.textMarkdownToHTML(account.description)
 
     // After the markdown renderer to avoid layout changes
