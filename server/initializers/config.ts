@@ -349,6 +349,7 @@ const CONFIG = {
   IMPORT: {
     VIDEOS: {
       get CONCURRENCY () { return config.get<number>('import.videos.concurrency') },
+      get TIMEOUT () { return parseDurationToMs(config.get<string>('import.videos.timeout')) },
 
       HTTP: {
         get ENABLED () { return config.get<boolean>('import.videos.http.enabled') },

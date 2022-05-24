@@ -6,7 +6,7 @@ export class GeoIPUpdateScheduler extends AbstractScheduler {
 
   private static instance: AbstractScheduler
 
-  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.YOUTUBE_DL_UPDATE
+  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.GEO_IP_UPDATE
 
   private constructor () {
     super()

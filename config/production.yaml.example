@@ -478,6 +478,9 @@ import:
     # Amount of import jobs to execute in parallel
     concurrency: 1
 
+    # Set a custom video import timeout to not block import queue
+    timeout: '2 hours'
+
     # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
     http:
       # We recommend to use a HTTP proxy if you enable HTTP import to prevent private URL access from this server

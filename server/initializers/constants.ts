@@ -183,7 +183,7 @@ const JOB_TTL: { [id in JobType]: number } = {
   'video-file-import': 1000 * 3600, // 1 hour
   'video-transcoding': 1000 * 3600 * 48, // 2 days, transcoding could be long
   'video-studio-edition': 1000 * 3600 * 10, // 10 hours
-  'video-import': 1000 * 3600 * 2, // 2 hours
+  'video-import': CONFIG.IMPORT.VIDEOS.TIMEOUT,
   'email': 60000 * 10, // 10 minutes
   'actor-keys': 60000 * 20, // 20 minutes
   'videos-views-stats': undefined, // Unlimited
