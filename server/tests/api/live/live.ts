@@ -654,7 +654,7 @@ describe('Test live', function () {
     })
 
     it('Should save a non permanent live replay', async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       await commands[0].waitUntilPublished({ videoId: liveVideoReplayId })
 
