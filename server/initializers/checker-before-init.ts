@@ -44,6 +44,7 @@ function checkMissedConfig () {
     'history.videos.max_age', 'views.videos.remote.max_age', 'views.videos.local_buffer_update_interval', 'views.videos.ip_view_expiration',
     'rates_limit.login.window', 'rates_limit.login.max', 'rates_limit.ask_send_email.window', 'rates_limit.ask_send_email.max',
     'theme.default',
+    'feeds.videos.count', 'feeds.comments.count',
     'geo_ip.enabled', 'geo_ip.country.database_url',
     'remote_redundancy.videos.accept_from',
     'federation.videos.federate_unlisted', 'federation.videos.cleanup_remote_interactions',
