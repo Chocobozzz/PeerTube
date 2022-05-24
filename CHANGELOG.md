@@ -4,10 +4,11 @@
 
 ### IMPORTANT NOTES
 
- * **Important** SQL migrations (in particular `0685-multiple-actor-images`) can take several minutes to complete
  * **Important** You need to execute manually a migration script (can be executed after your upgrade, while your PeerTube instance is running) to generate smaller avatar miniatures:
    * Classic installation: `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-4.2.js`
    * Docker installation: `cd /var/www/peertube-docker && docker-compose exec -u peertube peertube node dist/scripts/migrations/peertube-4.2.js`
+ * **Important** SQL migrations (in particular `0685-multiple-actor-images`) can take several minutes to complete
+ * **Important** You must update your nginx configuration to support video web editor: https://docs.joinpeertube.org/install-any-os?id=nginx
  * REST API:
    * `PUT /api/v1/videos/{id}/watching` is deprecated, use `POST /api/v1/videos/videos/{id}/views` instead: https://docs.joinpeertube.org/api-rest-reference.html#operation/addView
 
