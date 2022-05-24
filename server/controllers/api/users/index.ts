@@ -32,7 +32,7 @@ import {
   usersListValidator,
   usersRegisterValidator,
   usersRemoveValidator,
-  usersSortValidator,
+  adminUsersSortValidator,
   usersUpdateValidator
 } from '../../../middlewares'
 import {
@@ -84,7 +84,7 @@ usersRouter.get('/',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
   paginationValidator,
-  usersSortValidator,
+  adminUsersSortValidator,
   setDefaultSort,
   setDefaultPagination,
   usersListValidator,
@@ -277,7 +277,7 @@ async function autocompleteUsers (req: express.Request, res: express.Response) {
 }
 
 async function listUsers (req: express.Request, res: express.Response) {
-  const resultList = await UserModel.listForApi({
+  const resultList = await UserModel.listForAdminApi({
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,

@@ -66,7 +66,7 @@ import { ActorModel } from '../actor/actor'
 import { ActorFollowModel } from '../actor/actor-follow'
 import { ActorImageModel } from '../actor/actor-image'
 import { OAuthTokenModel } from '../oauth/oauth-token'
-import { getSort, throwIfNotValid } from '../utils'
+import { getAdminUsersSort, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoImportModel } from '../video/video-import'
@@ -461,7 +461,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
     return this.count()
   }
 
-  static listForApi (parameters: {
+  static listForAdminApi (parameters: {
     start: number
     count: number
     sort: string
@@ -497,7 +497,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
     const query: FindOptions = {
       offset: start,
       limit: count,
-      order: getSort(sort),
+      order: getAdminUsersSort(sort),
       where
     }
 

@@ -1,7 +1,7 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { AuthService, ConfirmService, LocalStorageService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { getAPIHost } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { Actor, DropdownAction } from '@app/shared/shared-main'
@@ -22,6 +22,8 @@ type UserForList = User & {
   styleUrls: [ './user-list.component.scss' ]
 })
 export class UserListComponent extends RestTable implements OnInit {
+  private static readonly LOCAL_STORAGE_SELECTED_COLUMNS_KEY = 'admin-user-list-selected-columns'
+
   @ViewChild('userBanModal', { static: true }) userBanModal: UserBanModalComponent
 
   users: (User & { accountMutedStatus: AccountMutedStatus })[] = []
@@ -56,7 +58,7 @@ export class UserListComponent extends RestTable implements OnInit {
 
   requiresEmailVerification = false
 
-  private _selectedColumns: string[]
+  private _selectedColumns: string[] = []
 
   constructor (
     protected route: ActivatedRoute,
@@ -66,7 +68,8 @@ export class UserListComponent extends RestTable implements OnInit {
     private serverService: ServerService,
     private auth: AuthService,
     private blocklist: BlocklistService,
-    private userAdminService: UserAdminService
+    private userAdminService: UserAdminService,
+    private peertubeLocalStorage: LocalStorageService
   ) {
     super()
   }
@@ -76,11 +79,13 @@ export class UserListComponent extends RestTable implements OnInit {
   }
 
   get selectedColumns () {
-    return this._selectedColumns
+    return this._selectedColumns || []
   }
 
   set selectedColumns (val: string[]) {
     this._selectedColumns = val
+
+    this.saveSelectedColumns()
   }
 
   ngOnInit () {
@@ -126,14 +131,35 @@ export class UserListComponent extends RestTable implements OnInit {
       { id: 'role', label: $localize`Role` },
       { id: 'email', label: $localize`Email` },
       { id: 'quota', label: $localize`Video quota` },
-      { id: 'createdAt', label: $localize`Created` }
+      { id: 'createdAt', label: $localize`Created` },
+      { id: 'lastLoginDate', label: $localize`Last login` },
+
+      { id: 'quotaDaily', label: $localize`Daily quota` },
+      { id: 'pluginAuth', label: $localize`Auth plugin` }
     ]
 
-    this.selectedColumns = this.columns.map(c => c.id)
+    this.loadSelectedColumns()
+  }
 
-    this.columns.push({ id: 'quotaDaily', label: $localize`Daily quota` })
-    this.columns.push({ id: 'pluginAuth', label: $localize`Auth plugin` })
-    this.columns.push({ id: 'lastLoginDate', label: $localize`Last login` })
+  loadSelectedColumns () {
+    const result = this.peertubeLocalStorage.getItem(UserListComponent.LOCAL_STORAGE_SELECTED_COLUMNS_KEY)
+
+    if (result) {
+      try {
+        this.selectedColumns = JSON.parse(result)
+        return
+      } catch (err) {
+        console.error('Cannot load selected columns.', err)
+      }
+    }
+
+    // Default behaviour
+    this.selectedColumns = [ 'username', 'role', 'email', 'quota', 'createdAt', 'lastLoginDate' ]
+    return
+  }
+
+  saveSelectedColumns () {
+    this.peertubeLocalStorage.setItem(UserListComponent.LOCAL_STORAGE_SELECTED_COLUMNS_KEY, JSON.stringify(this.selectedColumns))
   }
 
   getIdentifier () {
