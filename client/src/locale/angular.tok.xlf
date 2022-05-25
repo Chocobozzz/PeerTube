@@ -716,7 +716,7 @@
       </trans-unit>
       <trans-unit id="1097932116708163073" datatype="html">
         <source>This website is powered by PeerTube</source>
-        <target>ma ni li kepeken ilo PeerTube</target>
+        <target>lipu ni li kepeken ilo Pitu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">2,4</context>
