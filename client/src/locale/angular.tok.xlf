@@ -781,6 +781,7 @@
       </trans-unit>
       <trans-unit id="6886584917624458638" datatype="html">
         <source>Want to help to improve PeerTube? You can translate the web interface, give your feedback or directly contribute to the code!</source>
+        <target>sina wile pona e ilo Pitu anu seme? sina ken ante toki e lipu sinpin, sina ken pana e pilin sina, sina ken pana tawa toki ilo insa!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">58,60</context>
