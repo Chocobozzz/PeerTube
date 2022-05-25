@@ -28,7 +28,7 @@ import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, g
 import { PeerTubeSocket } from '../peertube-socket'
 import { LiveQuotaStore } from './live-quota-store'
 import { LiveSegmentShaStore } from './live-segment-sha-store'
-import { cleanupLive } from './live-utils'
+import { cleanupPermanentLive } from './live-utils'
 import { MuxingSession } from './shared'
 
 const NodeRtmpSession = require('node-media-server/src/node_rtmp_session')
@@ -224,7 +224,9 @@ class LiveManager {
 
     const oldStreamingPlaylist = await VideoStreamingPlaylistModel.loadHLSPlaylistByVideo(video.id)
     if (oldStreamingPlaylist) {
-      await cleanupLive(video, oldStreamingPlaylist)
+      if (!videoLive.permanentLive) throw new Error('Found previous session in a non permanent live: ' + video.uuid)
+
+      await cleanupPermanentLive(video, oldStreamingPlaylist)
     }
 
     this.videoSessions.set(video.id, sessionId)
