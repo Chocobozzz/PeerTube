@@ -150,8 +150,8 @@ class MuxingSession extends EventEmitter {
 
     logger.info('Running live muxing/transcoding for %s.', this.videoUUID, this.lTags())
 
-    this.watchTSFiles(this.outDirectory)
-    this.watchMasterFile(this.outDirectory)
+    this.watchTSFiles()
+    this.watchMasterFile()
 
     let ffmpegShellCommand: string
     this.ffmpegCommand.on('start', cmdline => {
@@ -161,13 +161,13 @@ class MuxingSession extends EventEmitter {
     })
 
     this.ffmpegCommand.on('error', (err, stdout, stderr) => {
-      this.onFFmpegError({ err, stdout, stderr, outPath: this.outDirectory, ffmpegShellCommand })
+      this.onFFmpegError({ err, stdout, stderr, ffmpegShellCommand })
     })
 
     this.ffmpegCommand.on('end', () => {
       this.emit('ffmpeg-end', ({ videoId: this.videoId }))
 
-      this.onFFmpegEnded(this.outDirectory)
+      this.onFFmpegEnded()
     })
 
     this.ffmpegCommand.run()
@@ -189,12 +189,11 @@ class MuxingSession extends EventEmitter {
     err: any
     stdout: string
     stderr: string
-    outPath: string
     ffmpegShellCommand: string
   }) {
-    const { err, stdout, stderr, outPath, ffmpegShellCommand } = options
+    const { err, stdout, stderr, ffmpegShellCommand } = options
 
-    this.onFFmpegEnded(outPath)
+    this.onFFmpegEnded()
 
     // Don't care that we killed the ffmpeg process
     if (err?.message?.includes('Exiting normally')) return
@@ -204,7 +203,7 @@ class MuxingSession extends EventEmitter {
     this.emit('ffmpeg-error', ({ videoId: this.videoId }))
   }
 
-  private onFFmpegEnded (outPath: string) {
+  private onFFmpegEnded () {
     logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', this.inputUrl, this.lTags())
 
     setTimeout(() => {
@@ -214,12 +213,12 @@ class MuxingSession extends EventEmitter {
         .then(() => {
           // Process remaining segments hash
           for (const key of Object.keys(this.segmentsToProcessPerPlaylist)) {
-            this.processSegments(outPath, this.segmentsToProcessPerPlaylist[key])
+            this.processSegments(this.segmentsToProcessPerPlaylist[key])
           }
         })
         .catch(err => {
           logger.error(
-            'Cannot close watchers of %s or process remaining hash segments.', outPath,
+            'Cannot close watchers of %s or process remaining hash segments.', this.outDirectory,
             { err, ...this.lTags() }
           )
         })
@@ -228,21 +227,21 @@ class MuxingSession extends EventEmitter {
     }, 1000)
   }
 
-  private watchMasterFile (outPath: string) {
-    this.masterWatcher = watch(outPath + '/' + this.streamingPlaylist.playlistFilename)
+  private watchMasterFile () {
+    this.masterWatcher = watch(this.outDirectory + '/' + this.streamingPlaylist.playlistFilename)
 
     this.masterWatcher.on('add', () => {
       this.emit('master-playlist-created', { videoId: this.videoId })
 
       this.masterWatcher.close()
-        .catch(err => logger.error('Cannot close master watcher of %s.', outPath, { err, ...this.lTags() }))
+        .catch(err => logger.error('Cannot close master watcher of %s.', this.outDirectory, { err, ...this.lTags() }))
     })
   }
 
-  private watchTSFiles (outPath: string) {
+  private watchTSFiles () {
     const startStreamDateTime = new Date().getTime()
 
-    this.tsWatcher = watch(outPath + '/*.ts')
+    this.tsWatcher = watch(this.outDirectory + '/*.ts')
 
     const playlistIdMatcher = /^([\d+])-/
 
@@ -252,7 +251,7 @@ class MuxingSession extends EventEmitter {
       const playlistId = basename(segmentPath).match(playlistIdMatcher)[0]
 
       const segmentsToProcess = this.segmentsToProcessPerPlaylist[playlistId] || []
-      this.processSegments(outPath, segmentsToProcess)
+      this.processSegments(segmentsToProcess)
 
       this.segmentsToProcessPerPlaylist[playlistId] = [ segmentPath ]
 
@@ -273,7 +272,7 @@ class MuxingSession extends EventEmitter {
       }
     }
 
-    const deleteHandler = segmentPath => LiveSegmentShaStore.Instance.removeSegmentSha(this.videoUUID, segmentPath)
+    const deleteHandler = (segmentPath: string) => LiveSegmentShaStore.Instance.removeSegmentSha(this.videoUUID, segmentPath)
 
     this.tsWatcher.on('add', p => addHandler(p))
     this.tsWatcher.on('unlink', p => deleteHandler(p))
@@ -332,15 +331,15 @@ class MuxingSession extends EventEmitter {
     return now <= max
   }
 
-  private processSegments (hlsVideoPath: string, segmentPaths: string[]) {
+  private processSegments (segmentPaths: string[]) {
     mapSeries(segmentPaths, async previousSegment => {
       // Add sha hash of previous segments, because ffmpeg should have finished generating them
       await LiveSegmentShaStore.Instance.addSegmentSha(this.videoUUID, previousSegment)
 
       if (this.saveReplay) {
-        await this.addSegmentToReplay(hlsVideoPath, previousSegment)
+        await this.addSegmentToReplay(previousSegment)
       }
-    }).catch(err => logger.error('Cannot process segments in %s', hlsVideoPath, { err, ...this.lTags() }))
+    }).catch(err => logger.error('Cannot process segments', { err, ...this.lTags() }))
   }
 
   private hasClientSocketInBadHealth (sessionId: string) {
@@ -367,7 +366,7 @@ class MuxingSession extends EventEmitter {
     return false
   }
 
-  private async addSegmentToReplay (hlsVideoPath: string, segmentPath: string) {
+  private async addSegmentToReplay (segmentPath: string) {
     const segmentName = basename(segmentPath)
     const dest = join(this.replayDirectory, buildConcatenatedName(segmentName))
 
