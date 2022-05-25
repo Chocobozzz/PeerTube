@@ -874,7 +874,7 @@
       </trans-unit>
       <trans-unit id="8484650229450883706" datatype="html">
         <source>How does PeerTube compare with YouTube?</source>
-        <target>ilo Pitu en ilo Jutu li sama seme li ante seme?</target>
+        <target>ilo PeerTube en ilo YouTube li sama seme li ante seme?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">128</context>
@@ -1719,6 +1719,7 @@
       </trans-unit>
       <trans-unit id="554741830445276244" datatype="html">
         <source>Hot videos</source>
+        <target>sitelen sin pona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">47</context>
