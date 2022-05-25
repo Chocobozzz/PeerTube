@@ -1,10 +1,10 @@
 import { Job } from 'bull'
-import { pathExists, readdir, remove } from 'fs-extra'
+import { readdir, remove } from 'fs-extra'
 import { join } from 'path'
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamDuration } from '@server/helpers/ffmpeg'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
-import { cleanupLive, LiveSegmentShaStore } from '@server/lib/live'
+import { cleanupNormalLive, cleanupPermanentLive, cleanupTMPLiveFiles, LiveSegmentShaStore } from '@server/lib/live'
 import {
   generateHLSMasterPlaylistFilename,
   generateHlsSha256SegmentsFilename,
@@ -45,13 +45,13 @@ async function processVideoLiveEnding (job: Job) {
   LiveSegmentShaStore.Instance.cleanupShaSegments(liveVideo.uuid)
 
   if (live.saveReplay !== true) {
-    return cleanupLiveAndFederate({ liveVideo })
+    return cleanupLiveAndFederate({ live, video: liveVideo })
   }
 
   if (live.permanentLive) {
     await saveReplayToExternalVideo({ liveVideo, liveSession, publishedAt: payload.publishedAt, replayDirectory: payload.replayDirectory })
 
-    return cleanupLiveAndFederate({ liveVideo })
+    return cleanupLiveAndFederate({ live, video: liveVideo })
   }
 
   return replaceLiveByReplay({ liveVideo, live, liveSession, replayDirectory: payload.replayDirectory })
@@ -164,7 +164,11 @@ async function replaceLiveByReplay (options: {
 
   await assignReplayFilesToVideo({ video: videoWithFiles, replayDirectory })
 
-  await remove(getLiveReplayBaseDirectory(videoWithFiles))
+  if (live.permanentLive) { // Remove session replay
+    await remove(replayDirectory)
+  } else { // We won't stream again in this live, we can delete the base replay directory
+    await remove(getLiveReplayBaseDirectory(videoWithFiles))
+  }
 
   // Regenerate the thumbnail & preview?
   if (videoWithFiles.getMiniature().automaticallyGenerated === true) {
@@ -227,34 +231,23 @@ async function assignReplayFilesToVideo (options: {
 }
 
 async function cleanupLiveAndFederate (options: {
-  liveVideo: MVideo
+  live: MVideoLive
+  video: MVideo
 }) {
-  const { liveVideo } = options
+  const { live, video } = options
 
-  const streamingPlaylist = await VideoStreamingPlaylistModel.loadHLSPlaylistByVideo(liveVideo.id)
-  await cleanupLive(liveVideo, streamingPlaylist)
+  const streamingPlaylist = await VideoStreamingPlaylistModel.loadHLSPlaylistByVideo(video.id)
 
-  const fullVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(liveVideo.id)
-  return federateVideoIfNeeded(fullVideo, false, undefined)
-}
+  if (live.permanentLive) {
+    await cleanupPermanentLive(video, streamingPlaylist)
+  } else {
+    await cleanupNormalLive(video, streamingPlaylist)
+  }
 
-async function cleanupTMPLiveFiles (hlsDirectory: string) {
-  if (!await pathExists(hlsDirectory)) return
-
-  const files = await readdir(hlsDirectory)
-
-  for (const filename of files) {
-    if (
-      filename.endsWith('.ts') ||
-      filename.endsWith('.m3u8') ||
-      filename.endsWith('.mpd') ||
-      filename.endsWith('.m4s') ||
-      filename.endsWith('.tmp')
-    ) {
-      const p = join(hlsDirectory, filename)
-
-      remove(p)
-        .catch(err => logger.error('Cannot remove %s.', p, { err }))
-    }
+  try {
+    const fullVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.id)
+    return federateVideoIfNeeded(fullVideo, false, undefined)
+  } catch (err) {
+    logger.warn('Cannot federate live after cleanup', { videoId: video.id, err })
   }
 }

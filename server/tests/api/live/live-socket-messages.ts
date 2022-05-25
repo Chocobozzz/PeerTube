@@ -18,7 +18,7 @@ import {
 
 const expect = chai.expect
 
-describe('Test live', function () {
+describe('Test live socket messages', function () {
   let servers: PeerTubeServer[] = []
 
   before(async function () {
