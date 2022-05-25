@@ -138,6 +138,9 @@ export class ActorImageModel extends Model<Partial<AttributesOnly<ActorImageMode
 
       case ActorImageType.BANNER:
         return join(LAZY_STATIC_PATHS.BANNERS, this.filename)
+
+      default:
+        throw new Error('Unknown actor image type: ' + this.type)
     }
   }
 
