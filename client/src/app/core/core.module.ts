@@ -41,7 +41,9 @@ import { LocalStorageService, ScreenService, SessionStorageService } from './wra
     ToastModule,
 
     HotkeyModule.forRoot({
-      cheatSheetCloseEsc: true
+      cheatSheetCloseEsc: true,
+      cheatSheetDescription: $localize`Show/hide this help menu`,
+      cheatSheetCloseEscDescription: $localize`Hide this help menu`
     })
   ],
 
