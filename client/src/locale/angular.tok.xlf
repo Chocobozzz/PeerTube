@@ -532,7 +532,7 @@
       </trans-unit>
       <trans-unit id="892073694820881630" datatype="html">
         <source>Link copied</source>
-        <target>mi pana jo e nimi linluwi</target>
+        <target>mi jo e nimi linluwi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">98</context>
@@ -1213,7 +1213,7 @@
       </trans-unit>
       <trans-unit id="8661266239199665830" datatype="html">
         <source>Copy account handle</source>
-        <target>o pana jo e nimi linluwi pi sijelo ni</target>
+        <target>o jo e nimi linluwi pi sijelo ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">29</context>
@@ -1281,7 +1281,7 @@
       </trans-unit>
       <trans-unit id="25349740244798533" datatype="html">
         <source>Username copied</source>
-        <target>mi pana jo e nimi linluwi</target>
+        <target>mi jo e nimi linluwi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">121</context>
@@ -8000,7 +8000,7 @@
       </trans-unit>
       <trans-unit id="3589238979642505685" datatype="html">
         <source>Display sensitive content</source>
-        <target>mi o pana ala pana lukin e ijo len?</target>
+        <target>mi o pana ala pana lukin e ijo len</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">40</context>
