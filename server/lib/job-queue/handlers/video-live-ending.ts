@@ -244,6 +244,10 @@ async function cleanupLiveAndFederate (options: {
     await cleanupNormalLive(video, streamingPlaylist)
   }
 
-  const fullVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.id)
-  return federateVideoIfNeeded(fullVideo, false, undefined)
+  try {
+    const fullVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.id)
+    return federateVideoIfNeeded(fullVideo, false, undefined)
+  } catch (err) {
+    logger.warn('Cannot federate live after cleanup', { videoId: video.id, err })
+  }
 }
