@@ -49,6 +49,7 @@ export class AdvancedSearch {
     originallyPublishedStartDate?: string
     originallyPublishedEndDate?: string
     nsfw?: BooleanBothQuery
+    sponsored?: BooleanBothQuery
     categoryOneOf?: string
     licenceOneOf?: string
     languageOneOf?: string

@@ -98,6 +98,7 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options: VideoForm
       label: getPrivacyLabel(video.privacy)
     },
     nsfw: video.nsfw,
+    sponsored: video.sponsored,
 
     description: options && options.completeDescription === true
       ? video.description
@@ -417,6 +418,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     language,
     views: video.views,
     sensitive: video.nsfw,
+    sponsored: video.sponsored,
     waitTranscoding: video.waitTranscoding,
 
     state: video.state,

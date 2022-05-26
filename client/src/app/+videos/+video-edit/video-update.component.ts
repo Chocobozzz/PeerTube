@@ -46,6 +46,10 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.buildForm({})
 
     const { videoData } = this.route.snapshot.data
+    console.log("ROUTE: ")
+    console.log(this.route)
+    console.log("VIDEODATA: ")
+    console.log(videoData)
     const { video, videoChannels, videoCaptions, liveVideo } = videoData
 
     this.video = new VideoEdit(video)
@@ -61,6 +65,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   onFormBuilt () {
     hydrateFormFromVideo(this.form, this.video, true)
 
+    console.log(this.form)
     if (this.liveVideo) {
       this.form.patchValue({
         saveReplay: this.liveVideo.saveReplay,

@@ -22,6 +22,7 @@ function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): Fil
     downloadEnabled: videoInfo.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
     waitTranscoding: videoInfo.waitTranscoding || false,
     nsfw: videoInfo.nsfw || false,
+    sponsored: videoInfo.sponsored || false,
     description: videoInfo.description,
     support: videoInfo.support,
     privacy: videoInfo.privacy || VideoPrivacy.PRIVATE,

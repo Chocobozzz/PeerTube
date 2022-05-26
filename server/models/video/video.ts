@@ -413,6 +413,12 @@ export type ForAPIOptions = {
       }
     },
     {
+      fields: [ 'sponsored' ], // Most of the videos are not sponsored
+      where: {
+        sponsored: true
+      }
+    },
+    {
       fields: [ 'remote' ], // Only index local videos
       where: {
         remote: false
@@ -465,6 +471,11 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   @Is('VideoNSFW', value => throwIfNotValid(value, isBooleanValid, 'NSFW boolean'))
   @Column
   nsfw: boolean
+
+  @AllowNull(false)
+  @Is("VideoSponsored", value => throwIfNotValid(value, isBooleanValid, 'Sponsored boolean'))
+  @Column
+  sponsored: boolean
 
   @AllowNull(true)
   @Default(null)
@@ -1043,6 +1054,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     sort: string
 
     nsfw: boolean
+    sponsored?: boolean
     isLive?: boolean
     isLocal?: boolean
     include?: VideoInclude
@@ -1093,6 +1105,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         'count',
         'sort',
         'nsfw',
+        'sponsored',
         'isLive',
         'categoryOneOf',
         'licenceOneOf',
@@ -1128,6 +1141,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     sort: string
 
     nsfw?: boolean
+    sponsored?: boolean
     isLive?: boolean
     isLocal?: boolean
     include?: VideoInclude
@@ -1167,6 +1181,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       ...pick(options, [
         'include',
         'nsfw',
+        'sponsored',
         'isLive',
         'categoryOneOf',
         'licenceOneOf',

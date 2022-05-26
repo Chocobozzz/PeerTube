@@ -13,6 +13,7 @@ export interface VideoUpdate {
   commentsEnabled?: boolean
   downloadEnabled?: boolean
   nsfw?: boolean
+  sponsored?: boolean
   waitTranscoding?: boolean
   channelId?: number
   thumbnailfile?: Blob

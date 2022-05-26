@@ -44,6 +44,7 @@ export interface Video {
   likes: number
   dislikes: number
   nsfw: boolean
+  sponsored: boolean
 
   account: AccountSummary
   channel: VideoChannelSummary

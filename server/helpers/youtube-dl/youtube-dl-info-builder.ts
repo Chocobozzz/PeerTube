@@ -9,6 +9,7 @@ type YoutubeDLInfo = {
   language?: string
   licence?: number
   nsfw?: boolean
+  sponsored?: boolean
   tags?: string[]
   thumbnailUrl?: string
   ext?: string

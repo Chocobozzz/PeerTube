@@ -11,6 +11,7 @@ export interface VideoCreate {
   description?: string
   support?: string
   nsfw?: boolean
+  sponsored?: boolean
   waitTranscoding?: boolean
   tags?: string[]
   commentsEnabled?: boolean

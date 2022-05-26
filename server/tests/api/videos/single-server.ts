@@ -31,6 +31,7 @@ describe('Test a single server', function () {
       licence: 6,
       language: 'zh',
       nsfw: true,
+      sponsored: false,
       description: 'my super description',
       support: 'my super support text',
       account: {
@@ -64,6 +65,7 @@ describe('Test a single server', function () {
       licence: 2,
       language: 'ar',
       nsfw: false,
+      sponsored: true,
       description: 'my super description updated',
       support: 'my super support text updated',
       account: {

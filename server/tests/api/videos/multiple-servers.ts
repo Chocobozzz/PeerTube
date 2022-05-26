@@ -103,6 +103,7 @@ describe('Test multiple servers', function () {
           licence: 4,
           language: 'ja',
           nsfw: true,
+          sponsored: false,
           description: 'my super description for server 1',
           support: 'my super support text for server 1',
           originallyPublishedAt: '2019-02-10T13:38:14.449Z',
@@ -195,6 +196,7 @@ describe('Test multiple servers', function () {
           licence: 3,
           language: 'de',
           nsfw: true,
+          sponsored: false,
           description: 'my super description for server 2',
           support: 'my super support text for server 2',
           account: {
@@ -305,6 +307,7 @@ describe('Test multiple servers', function () {
           licence: 5,
           language: 'de',
           nsfw: true,
+          sponsored: false,
           description: 'my super description for server 3',
           support: 'my super support text for server 3',
           account: {
@@ -339,6 +342,7 @@ describe('Test multiple servers', function () {
           licence: 6,
           language: 'ko',
           nsfw: false,
+          sponsored: false,
           description: 'my super description for server 3-2',
           support: 'my super support text for server 3-2',
           account: {
@@ -659,6 +663,7 @@ describe('Test multiple servers', function () {
           licence: 7,
           language: 'fr',
           nsfw: true,
+          sponsored: false,
           description: 'my super description updated',
           support: 'my super support text updated',
           originallyPublishedAt: '2019-02-11T13:38:14.449Z',
@@ -1052,6 +1057,7 @@ describe('Test multiple servers', function () {
           licence: null,
           language: null,
           nsfw: false,
+          sponsored: false,
           description: null,
           support: null,
           account: {

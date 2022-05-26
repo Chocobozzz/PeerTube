@@ -86,6 +86,7 @@ export class VideoImportService {
       privacy: video.privacy,
       tags: video.tags,
       nsfw: video.nsfw,
+      sponsored: video.sponsored,
       waitTranscoding: video.waitTranscoding,
       commentsEnabled: video.commentsEnabled,
       downloadEnabled: video.downloadEnabled,

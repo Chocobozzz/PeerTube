@@ -454,6 +454,7 @@ describe('Test follows', function () {
         licence: 6,
         language: 'zh',
         nsfw: true,
+        sponsored: false,
         description: 'my super description',
         support: 'my super support text',
         account: {

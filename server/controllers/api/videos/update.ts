@@ -20,6 +20,7 @@ import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videosUpdateValidator } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
+import { debug } from 'winston'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -73,12 +74,15 @@ async function updateVideo (req: express.Request, res: express.Response) {
         'licence',
         'language',
         'nsfw',
+        'sponsored',
         'waitTranscoding',
         'support',
         'description',
         'commentsEnabled',
         'downloadEnabled'
       ]
+      
+      // is it also "undefined" here, even if it is sent by the form??
 
       for (const key of keysToUpdate) {
         if (videoInfoToUpdate[key] !== undefined) video.set(key, videoInfoToUpdate[key])

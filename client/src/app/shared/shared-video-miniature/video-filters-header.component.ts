@@ -40,6 +40,7 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       sort: [ '' ],
       nsfw: [ '' ],
+      sponsored: [ '' ],
       languageOneOf: [ '' ],
       categoryOneOf: [ '' ],
       scope: [ '' ],

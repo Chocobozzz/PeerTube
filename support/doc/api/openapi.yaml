@@ -1824,6 +1824,9 @@ paths:
                 nsfw:
                   description: Whether or not this video contains sensitive content
                   type: boolean
+                sponsored:
+                  description: Whether or not this video contains sponsered content
+                  type: boolean
                 name:
                   description: Video name
                   type: string
@@ -2416,6 +2419,9 @@ paths:
                   type: string
                 nsfw:
                   description: Whether or not this live video/replay contains sensitive content
+                  type: boolean
+                sponsored:
+                  description: Whether or not this live video/replay contains sponsored content
                   type: boolean
                 name:
                   description: Live video/replay name
@@ -5752,6 +5758,8 @@ components:
           example: 7
         nsfw:
           type: boolean
+        sponsored:
+          type: boolean
         waitTranscoding:
           type: boolean
           nullable: true
@@ -6808,6 +6816,9 @@ components:
           type: string
         nsfw:
           description: Whether or not this video contains sensitive content
+          type: boolean
+        sponsored:
+          description: Whether or not this video contains sponsored content
           type: boolean
         tags:
           description: Video tags (maximum 5 tags each between 2 and 30 characters)

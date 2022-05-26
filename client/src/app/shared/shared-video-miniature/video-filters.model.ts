@@ -12,6 +12,7 @@ export type VideoFilterScope = 'local' | 'federated'
 export class VideoFilters {
   sort: VideoSortField
   nsfw: BooleanBothQuery
+  sponsored: BooleanBothQuery
 
   languageOneOf: string[]
   categoryOneOf: number[]
@@ -26,6 +27,7 @@ export class VideoFilters {
   private defaultValues = new Map<keyof VideoFilters, any>([
     [ 'sort', '-publishedAt' ],
     [ 'nsfw', 'false' ],
+    [ 'sponsored', 'false' ],
     [ 'languageOneOf', undefined ],
     [ 'categoryOneOf', undefined ],
     [ 'scope', 'federated' ],
@@ -217,6 +219,7 @@ export class VideoFilters {
     return {
       sort: this.sort,
       nsfw: this.nsfw,
+      sponsored: this.sponsored,
       languageOneOf: this.languageOneOf,
       categoryOneOf: this.categoryOneOf,
       search: this.search,

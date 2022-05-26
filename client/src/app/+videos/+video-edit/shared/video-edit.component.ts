@@ -134,6 +134,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   updateForm () {
     const defaultValues: any = {
       nsfw: 'false',
+      sponsored: 'false',
       commentsEnabled: this.serverConfig.defaults.publish.commentsEnabled,
       downloadEnabled: this.serverConfig.defaults.publish.downloadEnabled,
       waitTranscoding: 'true',
@@ -145,6 +146,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       privacy: VIDEO_PRIVACY_VALIDATOR,
       channelId: VIDEO_CHANNEL_VALIDATOR,
       nsfw: null,
+      sponsored: null,
       commentsEnabled: null,
       downloadEnabled: null,
       waitTranscoding: null,

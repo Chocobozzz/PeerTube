@@ -194,6 +194,7 @@ function getVideoAttributesFromObject (videoChannel: MChannelId, videoObject: Vi
     description,
     support,
     nsfw: videoObject.sensitive,
+    sponsored: videoObject.sponsored,
     commentsEnabled: videoObject.commentsEnabled,
     downloadEnabled: videoObject.downloadEnabled,
     waitTranscoding: videoObject.waitTranscoding,

@@ -20,6 +20,7 @@ async function completeVideoCheck (
     licence: number
     language: string
     nsfw: boolean
+    sponsored: boolean
     commentsEnabled: boolean
     downloadEnabled: boolean
     description: string
@@ -67,6 +68,7 @@ async function completeVideoCheck (
   expect(video.privacy.id).to.deep.equal(attributes.privacy)
   expect(video.privacy.label).to.deep.equal(VIDEO_PRIVACIES[attributes.privacy])
   expect(video.nsfw).to.equal(attributes.nsfw)
+  expect(video.sponsored).to.equal(attributes.sponsored)
   expect(video.description).to.equal(attributes.description)
   expect(video.account.id).to.be.a('number')
   expect(video.account.host).to.equal(attributes.account.host)

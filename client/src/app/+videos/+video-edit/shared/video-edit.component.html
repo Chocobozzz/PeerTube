@@ -142,6 +142,16 @@
               </ng-template>
             </my-peertube-checkbox>
 
+            <my-peertube-checkbox inputName="sponsored" formControlName="sponsored" helpPlacement="bottom-right">
+              <ng-template ptTemplate="label">
+                <ng-container i18n>Contains sponsored content</ng-container>
+              </ng-template>
+
+              <ng-template ptTemplate="help">
+                <ng-container i18n>Part of or the whole video contains sponsored content.</ng-container>
+              </ng-template>
+            </my-peertube-checkbox>
+
             <my-peertube-checkbox *ngIf="waitTranscodingEnabled" inputName="waitTranscoding" formControlName="waitTranscoding" helpPlacement="bottom-right">
               <ng-template ptTemplate="label">
                 <ng-container i18n>Publish after transcoding</ng-container>

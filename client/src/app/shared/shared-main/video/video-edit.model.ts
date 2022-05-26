@@ -10,6 +10,7 @@ export class VideoEdit implements VideoUpdate {
   name: string
   tags: string[]
   nsfw: boolean
+  sponsored: boolean
   commentsEnabled: boolean
   downloadEnabled: boolean
   waitTranscoding: boolean
@@ -49,6 +50,7 @@ export class VideoEdit implements VideoUpdate {
       this.name = video.name
       this.tags = video.tags
       this.nsfw = video.nsfw
+      this.sponsored = video.sponsored
       this.commentsEnabled = video.commentsEnabled
       this.downloadEnabled = video.downloadEnabled
       this.waitTranscoding = video.waitTranscoding
@@ -97,6 +99,8 @@ export class VideoEdit implements VideoUpdate {
   }
 
   toFormPatch () {
+    console.log("VIDEOEDIT: " + this.sponsored)
+
     const json = {
       category: this.category,
       licence: this.licence,
@@ -106,6 +110,7 @@ export class VideoEdit implements VideoUpdate {
       name: this.name,
       tags: this.tags,
       nsfw: this.nsfw,
+      sponsored: this.sponsored,
       commentsEnabled: this.commentsEnabled,
       downloadEnabled: this.downloadEnabled,
       waitTranscoding: this.waitTranscoding,
@@ -113,6 +118,8 @@ export class VideoEdit implements VideoUpdate {
       privacy: this.privacy,
       originallyPublishedAt: this.originallyPublishedAt
     }
+
+    console.log("VIDEOEDIT: " + json)
 
     // Special case if we scheduled an update
     if (this.scheduleUpdate) {

@@ -270,6 +270,7 @@ async function buildVideo (channelId: number, body: VideoImportCreate, importDat
     waitTranscoding: body.waitTranscoding || false,
     state: VideoState.TO_IMPORT,
     nsfw: body.nsfw || importData.nsfw || false,
+    sponsored: body.sponsored || importData.sponsored || false,
     description: body.description || importData.description,
     support: body.support || null,
     privacy: body.privacy || VideoPrivacy.PRIVATE,

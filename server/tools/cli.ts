@@ -147,6 +147,7 @@ async function buildVideoAttributesFromCommander (server: PeerTubeServer, comman
 
   const defaultBooleanAttributes = {
     nsfw: false,
+    sponsored: false,
     commentsEnabled: true,
     downloadEnabled: true,
     waitTranscoding: true
