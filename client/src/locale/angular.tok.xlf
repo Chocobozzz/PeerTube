@@ -894,6 +894,7 @@
       </trans-unit>
       <trans-unit id="6213340208914097303" datatype="html">
         <source>The threats to privacy with YouTube are different from PeerTube's. In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you. Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).</source>
+        <target>ijo li wile e sona pi ijo sina. sina wile ala e ni la ken ike li lon tawa ilo YouTube tawa ilo PeerTube. taso ken ni li ante. ilo YouTube la ilo li kama sona mute mute e ijo sina li kama sona e nasin li awen lukin e sina lon ma ante. kin la kulupu Google/Alphabet li lawa e ilo Youtube li awen lukin e sina lon lipu ilo mute mute (kepeken ilo AdSense anu ilo Google Analytics).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">130,134</context>
