@@ -478,7 +478,7 @@ describe('Test video channels', function () {
     }
   })
 
-  it('Should report correct total views count', async function() {
+  it('Should report correct total views count', async function () {
     this.timeout(10000)
 
     // check if there's the property
