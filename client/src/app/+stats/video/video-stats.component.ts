@@ -1,12 +1,21 @@
 import { ChartConfiguration, ChartData, PluginOptionsByType, Scale, TooltipItem } from 'chart.js'
 import zoomPlugin from 'chartjs-plugin-zoom'
 import { Observable, of } from 'rxjs'
-import { Component, OnInit } from '@angular/core'
+import { SelectOptionsItem } from 'src/types'
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { Notifier, PeerTubeRouterService } from '@app/core'
 import { NumberFormatterPipe, VideoDetails } from '@app/shared/shared-main'
+import { LiveVideoService } from '@app/shared/shared-video-live'
 import { secondsToTime } from '@shared/core-utils'
-import { VideoStatsOverall, VideoStatsRetention, VideoStatsTimeserie, VideoStatsTimeserieMetric } from '@shared/models/videos'
+import { HttpStatusCode } from '@shared/models/http'
+import {
+  LiveVideoSession,
+  VideoStatsOverall,
+  VideoStatsRetention,
+  VideoStatsTimeserie,
+  VideoStatsTimeserieMetric
+} from '@shared/models/videos'
 import { VideoStatsService } from './video-stats.service'
 
 type ActiveGraphId = VideoStatsTimeserieMetric | 'retention' | 'countries'
@@ -21,41 +30,24 @@ type ChartBuilderResult = {
   displayLegend: boolean
 }
 
+type Card = { label: string, value: string | number, moreInfo?: string, help?: string }
+
 @Component({
   templateUrl: './video-stats.component.html',
   styleUrls: [ './video-stats.component.scss' ],
   providers: [ NumberFormatterPipe ]
 })
 export class VideoStatsComponent implements OnInit {
-  overallStatCards: { label: string, value: string | number, moreInfo?: string }[] = []
+  // Cannot handle date filters
+  globalStatsCards: Card[] = []
+  // Can handle date filters
+  overallStatCards: Card[] = []
 
   chartOptions: { [ id in ActiveGraphId ]?: ChartConfiguration<'line' | 'bar'> } = {}
   chartHeight = '300px'
   chartWidth: string = null
 
-  availableCharts = [
-    {
-      id: 'viewers',
-      label: $localize`Viewers`,
-      zoomEnabled: true
-    },
-    {
-      id: 'aggregateWatchTime',
-      label: $localize`Watch time`,
-      zoomEnabled: true
-    },
-    {
-      id: 'retention',
-      label: $localize`Retention`,
-      zoomEnabled: false
-    },
-    {
-      id: 'countries',
-      label: $localize`Countries`,
-      zoomEnabled: false
-    }
-  ]
-
+  availableCharts: { id: string, label: string, zoomEnabled: boolean }[] = []
   activeGraphId: ActiveGraphId = 'viewers'
 
   video: VideoDetails
@@ -64,35 +56,77 @@ export class VideoStatsComponent implements OnInit {
 
   chartPlugins = [ zoomPlugin ]
 
-  private timeseriesStartDate: Date
-  private timeseriesEndDate: Date
+  currentDateFilter = 'all'
+  dateFilters: SelectOptionsItem[] = [
+    {
+      id: 'all',
+      label: $localize`Since the video publication`
+    }
+  ]
+
+  private statsStartDate: Date
+  private statsEndDate: Date
 
   private chartIngestData: { [ id in ActiveGraphId ]?: ChartIngestData } = {}
 
   constructor (
+    @Inject(LOCALE_ID) private localeId: string,
     private route: ActivatedRoute,
     private notifier: Notifier,
     private statsService: VideoStatsService,
     private peertubeRouter: PeerTubeRouterService,
-    private numberFormatter: NumberFormatterPipe
+    private numberFormatter: NumberFormatterPipe,
+    private liveService: LiveVideoService
   ) {}
 
   ngOnInit () {
     this.video = this.route.snapshot.data.video
 
+    this.availableCharts = [
+      {
+        id: 'viewers',
+        label: $localize`Viewers`,
+        zoomEnabled: true
+      },
+      {
+        id: 'aggregateWatchTime',
+        label: $localize`Watch time`,
+        zoomEnabled: true
+      },
+      {
+        id: 'countries',
+        label: $localize`Countries`,
+        zoomEnabled: false
+      }
+    ]
+
+    if (!this.video.isLive) {
+      this.availableCharts.push({
+        id: 'retention',
+        label: $localize`Retention`,
+        zoomEnabled: false
+      })
+    }
+
+    const snapshotQuery = this.route.snapshot.queryParams
+    if (snapshotQuery.startDate || snapshotQuery.endDate) {
+      this.addAndSelectCustomDateFilter()
+    }
+
     this.route.queryParams.subscribe(params => {
-      this.timeseriesStartDate = params.startDate
+      this.statsStartDate = params.startDate
         ? new Date(params.startDate)
         : undefined
 
-      this.timeseriesEndDate = params.endDate
+      this.statsEndDate = params.endDate
         ? new Date(params.endDate)
         : undefined
 
       this.loadChart()
+      this.loadOverallStats()
     })
 
-    this.loadOverallStats()
+    this.loadDateFilters()
   }
 
   hasCountries () {
@@ -107,10 +141,30 @@ export class VideoStatsComponent implements OnInit {
 
   resetZoom () {
     this.peertubeRouter.silentNavigate([], {})
+    this.removeAndResetCustomDateFilter()
   }
 
   hasZoom () {
-    return !!this.timeseriesStartDate && this.isTimeserieGraph(this.activeGraphId)
+    return !!this.statsStartDate && this.isTimeserieGraph(this.activeGraphId)
+  }
+
+  getViewersStatsTitle () {
+    if (this.statsStartDate && this.statsEndDate) {
+      return $localize`Viewers stats between ${this.toMediumDate(this.statsStartDate)} and ${this.toMediumDate(this.statsEndDate)}`
+    }
+
+    return $localize`Viewers stats`
+  }
+
+  onDateFilterChange () {
+    if (this.currentDateFilter === 'all') {
+      return this.resetZoom()
+    }
+
+    const idParts = this.currentDateFilter.split('|')
+    if (idParts.length === 2) {
+      return this.peertubeRouter.silentNavigate([], { startDate: idParts[0], endDate: idParts[1] })
+    }
   }
 
   private isTimeserieGraph (graphId: ActiveGraphId) {
@@ -118,7 +172,7 @@ export class VideoStatsComponent implements OnInit {
   }
 
   private loadOverallStats () {
-    this.statsService.getOverallStats(this.video.uuid)
+    this.statsService.getOverallStats({ videoId: this.video.uuid, startDate: this.statsStartDate, endDate: this.statsEndDate })
       .subscribe({
         next: res => {
           this.countries = res.countries.slice(0, 10).map(c => ({
@@ -133,30 +187,109 @@ export class VideoStatsComponent implements OnInit {
       })
   }
 
+  private loadDateFilters () {
+    if (this.video.isLive) return this.loadLiveDateFilters()
+
+    return this.loadVODDateFilters()
+  }
+
+  private loadLiveDateFilters () {
+    this.liveService.listSessions(this.video.id)
+      .subscribe({
+        next: ({ data }) => {
+          const newFilters = data.map(session => this.buildLiveFilter(session))
+
+          this.dateFilters = this.dateFilters.concat(newFilters)
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  private loadVODDateFilters () {
+    this.liveService.findLiveSessionFromVOD(this.video.id)
+      .subscribe({
+        next: session => {
+          this.dateFilters = this.dateFilters.concat([ this.buildLiveFilter(session) ])
+        },
+
+        error: err => {
+          if (err.status === HttpStatusCode.NOT_FOUND_404) return
+
+          this.notifier.error(err.message)
+        }
+      })
+  }
+
+  private buildLiveFilter (session: LiveVideoSession) {
+    return {
+      id: session.startDate + '|' + session.endDate,
+      label: $localize`Live as of ${this.toMediumDate(new Date(session.startDate))}`
+    }
+  }
+
+  private addAndSelectCustomDateFilter () {
+    const exists = this.dateFilters.some(d => d.id === 'custom')
+
+    if (!exists) {
+      this.dateFilters = this.dateFilters.concat([
+        {
+          id: 'custom',
+          label: $localize`Custom dates`
+        }
+      ])
+    }
+
+    this.currentDateFilter = 'custom'
+  }
+
+  private removeAndResetCustomDateFilter () {
+    this.dateFilters = this.dateFilters.filter(d => d.id !== 'custom')
+
+    this.currentDateFilter = 'all'
+  }
+
   private buildOverallStatCard (overallStats: VideoStatsOverall) {
-    this.overallStatCards = [
+    this.globalStatsCards = [
       {
         label: $localize`Views`,
-        value: this.numberFormatter.transform(overallStats.views)
-      },
-      {
-        label: $localize`Comments`,
-        value: this.numberFormatter.transform(overallStats.comments)
+        value: this.numberFormatter.transform(this.video.views),
+        help: $localize`A view means that someone watched the video for at least 30 seconds`
       },
       {
         label: $localize`Likes`,
-        value: this.numberFormatter.transform(overallStats.likes)
-      },
+        value: this.numberFormatter.transform(this.video.likes)
+      }
+    ]
+
+    this.overallStatCards = [
       {
         label: $localize`Average watch time`,
         value: secondsToTime(overallStats.averageWatchTime)
       },
       {
+        label: $localize`Total watch time`,
+        value: secondsToTime(overallStats.totalWatchTime)
+      },
+      {
         label: $localize`Peak viewers`,
         value: this.numberFormatter.transform(overallStats.viewersPeak),
-        moreInfo: $localize`at ${new Date(overallStats.viewersPeakDate).toLocaleString()}`
+        moreInfo: overallStats.viewersPeak !== 0
+          ? $localize`at ${this.toMediumDate(new Date(overallStats.viewersPeakDate))}`
+          : undefined
+      },
+      {
+        label: $localize`Unique viewers`,
+        value: this.numberFormatter.transform(overallStats.totalViewers)
       }
     ]
+
+    if (overallStats.countries.length !== 0) {
+      this.overallStatCards.push({
+        label: $localize`Countries`,
+        value: this.numberFormatter.transform(overallStats.countries.length)
+      })
+    }
   }
 
   private loadChart () {
@@ -165,14 +298,14 @@ export class VideoStatsComponent implements OnInit {
 
       aggregateWatchTime: this.statsService.getTimeserieStats({
         videoId: this.video.uuid,
-        startDate: this.timeseriesStartDate,
-        endDate: this.timeseriesEndDate,
+        startDate: this.statsStartDate,
+        endDate: this.statsEndDate,
         metric: 'aggregateWatchTime'
       }),
       viewers: this.statsService.getTimeserieStats({
         videoId: this.video.uuid,
-        startDate: this.timeseriesStartDate,
-        endDate: this.timeseriesEndDate,
+        startDate: this.statsStartDate,
+        endDate: this.statsEndDate,
         metric: 'viewers'
       }),
 
@@ -319,6 +452,12 @@ export class VideoStatsComponent implements OnInit {
               const endDate = this.buildZoomEndDate(rawData.groupInterval, rawData.data[max].date)
 
               this.peertubeRouter.silentNavigate([], { startDate, endDate })
+              this.addAndSelectCustomDateFilter()
+            }
+          },
+          limits: {
+            x: {
+              minRange: 2
             }
           }
         }
@@ -388,6 +527,10 @@ export class VideoStatsComponent implements OnInit {
 
     const date = new Date(label)
 
+    if (data.groupInterval.match(/ month?$/)) {
+      return date.toLocaleDateString([], { month: 'numeric' })
+    }
+
     if (data.groupInterval.match(/ days?$/)) {
       return date.toLocaleDateString([], { month: 'numeric', day: 'numeric' })
     }
@@ -408,7 +551,7 @@ export class VideoStatsComponent implements OnInit {
     if (graphId === 'retention') return value + ' %'
     if (graphId === 'aggregateWatchTime') return secondsToTime(+value)
 
-    return value.toLocaleString()
+    return value.toLocaleString(this.localeId)
   }
 
   private formatTooltipTitle (options: {
@@ -418,7 +561,9 @@ export class VideoStatsComponent implements OnInit {
     const { graphId, items } = options
     const item = items[0]
 
-    if (this.isTimeserieGraph(graphId)) return new Date(item.label).toLocaleString()
+    if (this.isTimeserieGraph(graphId)) {
+      return this.toMediumDate(new Date(item.label))
+    }
 
     return item.label
   }
@@ -448,6 +593,17 @@ export class VideoStatsComponent implements OnInit {
         }
       }
     }
+  }
+
+  private toMediumDate (d: Date) {
+    return new Date(d).toLocaleString(this.localeId, {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric'
+    })
   }
 
   private buildZoomEndDate (groupInterval: string, last: string) {

@@ -160,7 +160,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
     // 0-9 key handlers
     for (let i = 0; i < 10; i++) {
       handlers.push({
-        accept: e => e.key === i + '',
+        accept: e => e.key === i + '' && !e.ctrlKey, // If using ctrl key, it's a web browser hotkey
         cb: e => {
           e.preventDefault()
 

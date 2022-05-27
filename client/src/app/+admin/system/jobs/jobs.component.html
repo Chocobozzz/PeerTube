@@ -65,7 +65,7 @@
         <span class="badge" [ngClass]="getJobStateClass(job.state)">{{ job.state }}</span>
       </td>
 
-      <td class="job-progress c-hand" [pRowToggler]="job">
+      <td *ngIf="hasGlobalProgress()" class="job-progress c-hand" [pRowToggler]="job">
         <ng-container *ngIf="hasProgress(job)">{{ getProgress(job) }}</ng-container>
       </td>
 

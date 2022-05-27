@@ -1,0 +1,69 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.header {
+  z-index: z(header);
+}
+
+.help-popover {
+  z-index: z(help-popover);
+}
+
+ngx-loading-bar {
+  z-index: z(header) + 1 !important;
+}
+
+/* rules for dropdowns excepts when in button group, to avoid impacting the dropdown-toggle */
+.dropdown,
+.dropup {
+  z-index: z(dropdown) !important;
+}
+
+.list-overflow-menu,
+.parent-entry {
+  z-index: z(menu) - 1 !important;
+}
+
+.btn-group,
+.dropdown-root,
+.action-dropdown,
+.input-group-prepend,
+.column-toggle {
+  z-index: inherit !important;
+}
+
+.dropdown-menu {
+  z-index: z(dropdown) + 1 !important;
+}
+
+p-toast .p-toast {
+  z-index: z(notification) !important;
+}
+
+ngb-modal-backdrop {
+  z-index: z(modal) - 1 !important;
+}
+
+ngb-popover-window {
+  z-index: z(popover) !important;
+}
+
+ngb-tooltip-window {
+  z-index: z(tooltip) !important;
+}
+
+ngb-modal-window {
+  z-index: z(modal) !important;
+
+  ngb-tooltip-window {
+    z-index: z(modal + 1) !important;
+  }
+
+  ngb-popover-window {
+    z-index: z(modal + 1) !important;
+  }
+
+  .help-popover {
+    z-index: z(modal + 1) !important;
+  }
+}

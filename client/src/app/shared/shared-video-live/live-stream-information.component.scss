@@ -15,4 +15,14 @@ p-autocomplete {
 
 .badge {
   font-size: 13px;
+  margin-right: 5px;
+}
+
+.journal-session {
+  margin-bottom: 5px;
+
+  span:not(.badge, :last-child)::after {
+    margin: 3px;
+    content: '•';
+  }
 }

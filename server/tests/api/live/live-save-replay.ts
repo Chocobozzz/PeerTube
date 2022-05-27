@@ -3,14 +3,15 @@
 import 'mocha'
 import * as chai from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
-import { checkLiveCleanupAfterSave } from '@server/tests/shared'
+import { checkLiveCleanup } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
-import { HttpStatusCode, LiveVideoCreate, VideoPrivacy, VideoState } from '@shared/models'
+import { HttpStatusCode, LiveVideoCreate, LiveVideoError, VideoPrivacy, VideoState } from '@shared/models'
 import {
   cleanupTests,
   ConfigCommand,
   createMultipleServers,
   doubleFollow,
+  findExternalSavedVideo,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -18,7 +19,8 @@ import {
   testFfmpegStreamError,
   waitJobs,
   waitUntilLivePublishedOnAllServers,
-  waitUntilLiveSavedOnAllServers
+  waitUntilLiveReplacedByReplayOnAllServers,
+  waitUntilLiveWaitingOnAllServers
 } from '@shared/server-commands'
 
 const expect = chai.expect
@@ -28,7 +30,7 @@ describe('Save replay setting', function () {
   let liveVideoUUID: string
   let ffmpegCommand: FfmpegCommand
 
-  async function createLiveWrapper (saveReplay: boolean) {
+  async function createLiveWrapper (options: { permanent: boolean, replay: boolean }) {
     if (liveVideoUUID) {
       try {
         await servers[0].videos.remove({ id: liveVideoUUID })
@@ -40,11 +42,56 @@ describe('Save replay setting', function () {
       channelId: servers[0].store.channel.id,
       privacy: VideoPrivacy.PUBLIC,
       name: 'my super live',
-      saveReplay
+      saveReplay: options.replay,
+      permanentLive: options.permanent
     }
 
     const { uuid } = await servers[0].live.create({ fields: attributes })
     return uuid
+  }
+
+  async function publishLive (options: { permanent: boolean, replay: boolean }) {
+    liveVideoUUID = await createLiveWrapper(options)
+
+    const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
+    await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
+
+    const liveDetails = await servers[0].videos.get({ id: liveVideoUUID })
+
+    await waitJobs(servers)
+    await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
+
+    return { ffmpegCommand, liveDetails }
+  }
+
+  async function publishLiveAndDelete (options: { permanent: boolean, replay: boolean }) {
+    const { ffmpegCommand, liveDetails } = await publishLive(options)
+
+    await Promise.all([
+      servers[0].videos.remove({ id: liveVideoUUID }),
+      testFfmpegStreamError(ffmpegCommand, true)
+    ])
+
+    await waitJobs(servers)
+    await wait(5000)
+    await waitJobs(servers)
+
+    return { liveDetails }
+  }
+
+  async function publishLiveAndBlacklist (options: { permanent: boolean, replay: boolean }) {
+    const { ffmpegCommand, liveDetails } = await publishLive(options)
+
+    await Promise.all([
+      servers[0].blacklist.add({ videoId: liveVideoUUID, reason: 'bad live', unfederate: true }),
+      testFfmpegStreamError(ffmpegCommand, true)
+    ])
+
+    await waitJobs(servers)
+    await wait(5000)
+    await waitJobs(servers)
+
+    return { liveDetails }
   }
 
   async function checkVideosExist (videoId: string, existsInList: boolean, expectedStatus?: number) {
@@ -96,15 +143,14 @@ describe('Save replay setting', function () {
   })
 
   describe('With save replay disabled', function () {
-
-    before(async function () {
-      this.timeout(10000)
-    })
+    let sessionStartDateMin: Date
+    let sessionStartDateMax: Date
+    let sessionEndDateMin: Date
 
     it('Should correctly create and federate the "waiting for stream" live', async function () {
       this.timeout(20000)
 
-      liveVideoUUID = await createLiveWrapper(false)
+      liveVideoUUID = await createLiveWrapper({ permanent: false, replay: false })
 
       await waitJobs(servers)
 
@@ -117,7 +163,9 @@ describe('Save replay setting', function () {
 
       ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
 
+      sessionStartDateMin = new Date()
       await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
+      sessionStartDateMax = new Date()
 
       await waitJobs(servers)
 
@@ -128,6 +176,7 @@ describe('Save replay setting', function () {
     it('Should correctly delete the video files after the stream ended', async function () {
       this.timeout(40000)
 
+      sessionEndDateMin = new Date()
       await stopFfmpeg(ffmpegCommand)
 
       for (const server of servers) {
@@ -140,27 +189,31 @@ describe('Save replay setting', function () {
       await checkVideoState(liveVideoUUID, VideoState.LIVE_ENDED)
 
       // No resolutions saved since we did not save replay
-      await checkLiveCleanupAfterSave(servers[0], liveVideoUUID, [])
+      await checkLiveCleanup(servers[0], liveVideoUUID, [])
+    })
+
+    it('Should have appropriate ended session', async function () {
+      const { data, total } = await servers[0].live.listSessions({ videoId: liveVideoUUID })
+      expect(total).to.equal(1)
+      expect(data).to.have.lengthOf(1)
+
+      const session = data[0]
+
+      const startDate = new Date(session.startDate)
+      expect(startDate).to.be.above(sessionStartDateMin)
+      expect(startDate).to.be.below(sessionStartDateMax)
+
+      expect(session.endDate).to.exist
+      expect(new Date(session.endDate)).to.be.above(sessionEndDateMin)
+
+      expect(session.error).to.not.exist
+      expect(session.replayVideo).to.not.exist
     })
 
     it('Should correctly terminate the stream on blacklist and delete the live', async function () {
       this.timeout(40000)
 
-      liveVideoUUID = await createLiveWrapper(false)
-
-      ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
-
-      await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
-
-      await waitJobs(servers)
-      await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
-
-      await Promise.all([
-        servers[0].blacklist.add({ videoId: liveVideoUUID, reason: 'bad live', unfederate: true }),
-        testFfmpegStreamError(ffmpegCommand, true)
-      ])
-
-      await waitJobs(servers)
+      await publishLiveAndBlacklist({ permanent: false, replay: false })
 
       await checkVideosExist(liveVideoUUID, false)
 
@@ -169,40 +222,34 @@ describe('Save replay setting', function () {
 
       await wait(5000)
       await waitJobs(servers)
-      await checkLiveCleanupAfterSave(servers[0], liveVideoUUID, [])
+      await checkLiveCleanup(servers[0], liveVideoUUID, [])
+    })
+
+    it('Should have blacklisted session error', async function () {
+      const session = await servers[0].live.findLatestSession({ videoId: liveVideoUUID })
+      expect(session.startDate).to.exist
+      expect(session.endDate).to.exist
+
+      expect(session.error).to.equal(LiveVideoError.BLACKLISTED)
+      expect(session.replayVideo).to.not.exist
     })
 
     it('Should correctly terminate the stream on delete and delete the video', async function () {
       this.timeout(40000)
 
-      liveVideoUUID = await createLiveWrapper(false)
-
-      ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
-
-      await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
-
-      await waitJobs(servers)
-      await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
-
-      await Promise.all([
-        testFfmpegStreamError(ffmpegCommand, true),
-        servers[0].videos.remove({ id: liveVideoUUID })
-      ])
-
-      await wait(5000)
-      await waitJobs(servers)
+      await publishLiveAndDelete({ permanent: false, replay: false })
 
       await checkVideosExist(liveVideoUUID, false, HttpStatusCode.NOT_FOUND_404)
-      await checkLiveCleanupAfterSave(servers[0], liveVideoUUID, [])
+      await checkLiveCleanup(servers[0], liveVideoUUID, [])
     })
   })
 
-  describe('With save replay enabled', function () {
+  describe('With save replay enabled on non permanent live', function () {
 
     it('Should correctly create and federate the "waiting for stream" live', async function () {
       this.timeout(20000)
 
-      liveVideoUUID = await createLiveWrapper(true)
+      liveVideoUUID = await createLiveWrapper({ permanent: false, replay: true })
 
       await waitJobs(servers)
 
@@ -227,12 +274,28 @@ describe('Save replay setting', function () {
 
       await stopFfmpeg(ffmpegCommand)
 
-      await waitUntilLiveSavedOnAllServers(servers, liveVideoUUID)
+      await waitUntilLiveReplacedByReplayOnAllServers(servers, liveVideoUUID)
       await waitJobs(servers)
 
       // Live has been transcoded
       await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
       await checkVideoState(liveVideoUUID, VideoState.PUBLISHED)
+    })
+
+    it('Should find the replay live session', async function () {
+      const session = await servers[0].live.getReplaySession({ videoId: liveVideoUUID })
+
+      expect(session).to.exist
+
+      expect(session.startDate).to.exist
+      expect(session.endDate).to.exist
+
+      expect(session.error).to.not.exist
+
+      expect(session.replayVideo).to.exist
+      expect(session.replayVideo.id).to.exist
+      expect(session.replayVideo.shortUUID).to.exist
+      expect(session.replayVideo.uuid).to.equal(liveVideoUUID)
     })
 
     it('Should update the saved live and correctly federate the updated attributes', async function () {
@@ -249,26 +312,13 @@ describe('Save replay setting', function () {
     })
 
     it('Should have cleaned up the live files', async function () {
-      await checkLiveCleanupAfterSave(servers[0], liveVideoUUID, [ 720 ])
+      await checkLiveCleanup(servers[0], liveVideoUUID, [ 720 ])
     })
 
     it('Should correctly terminate the stream on blacklist and blacklist the saved replay video', async function () {
       this.timeout(40000)
 
-      liveVideoUUID = await createLiveWrapper(true)
-
-      ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
-      await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
-
-      await waitJobs(servers)
-      await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
-
-      await Promise.all([
-        servers[0].blacklist.add({ videoId: liveVideoUUID, reason: 'bad live', unfederate: true }),
-        testFfmpegStreamError(ffmpegCommand, true)
-      ])
-
-      await waitJobs(servers)
+      await publishLiveAndBlacklist({ permanent: false, replay: true })
 
       await checkVideosExist(liveVideoUUID, false)
 
@@ -277,30 +327,153 @@ describe('Save replay setting', function () {
 
       await wait(5000)
       await waitJobs(servers)
-      await checkLiveCleanupAfterSave(servers[0], liveVideoUUID, [ 720 ])
+      await checkLiveCleanup(servers[0], liveVideoUUID, [ 720 ])
     })
 
     it('Should correctly terminate the stream on delete and delete the video', async function () {
       this.timeout(40000)
 
-      liveVideoUUID = await createLiveWrapper(true)
+      await publishLiveAndDelete({ permanent: false, replay: true })
+
+      await checkVideosExist(liveVideoUUID, false, HttpStatusCode.NOT_FOUND_404)
+      await checkLiveCleanup(servers[0], liveVideoUUID, [])
+    })
+  })
+
+  describe('With save replay enabled on permanent live', function () {
+    let lastReplayUUID: string
+
+    it('Should correctly create and federate the "waiting for stream" live', async function () {
+      this.timeout(20000)
+
+      liveVideoUUID = await createLiveWrapper({ permanent: true, replay: true })
+
+      await waitJobs(servers)
+
+      await checkVideosExist(liveVideoUUID, false, HttpStatusCode.OK_200)
+      await checkVideoState(liveVideoUUID, VideoState.WAITING_FOR_LIVE)
+    })
+
+    it('Should correctly have updated the live and federated it when streaming in the live', async function () {
+      this.timeout(20000)
 
       ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
       await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
 
       await waitJobs(servers)
+
       await checkVideosExist(liveVideoUUID, true, HttpStatusCode.OK_200)
+      await checkVideoState(liveVideoUUID, VideoState.PUBLISHED)
+    })
 
-      await Promise.all([
-        servers[0].videos.remove({ id: liveVideoUUID }),
-        testFfmpegStreamError(ffmpegCommand, true)
-      ])
+    it('Should correctly have saved the live and federated it after the streaming', async function () {
+      this.timeout(30000)
 
-      await wait(5000)
+      const liveDetails = await servers[0].videos.get({ id: liveVideoUUID })
+
+      await stopFfmpeg(ffmpegCommand)
+
+      await waitUntilLiveWaitingOnAllServers(servers, liveVideoUUID)
       await waitJobs(servers)
 
+      const video = await findExternalSavedVideo(servers[0], liveDetails)
+      expect(video).to.exist
+
+      for (const server of servers) {
+        await server.videos.get({ id: video.uuid })
+      }
+
+      lastReplayUUID = video.uuid
+    })
+
+    it('Should have appropriate ended session and replay live session', async function () {
+      const { data, total } = await servers[0].live.listSessions({ videoId: liveVideoUUID })
+      expect(total).to.equal(1)
+      expect(data).to.have.lengthOf(1)
+
+      const sessionFromLive = data[0]
+      const sessionFromReplay = await servers[0].live.getReplaySession({ videoId: lastReplayUUID })
+
+      for (const session of [ sessionFromLive, sessionFromReplay ]) {
+        expect(session.startDate).to.exist
+        expect(session.endDate).to.exist
+
+        expect(session.error).to.not.exist
+
+        expect(session.replayVideo).to.exist
+        expect(session.replayVideo.id).to.exist
+        expect(session.replayVideo.shortUUID).to.exist
+        expect(session.replayVideo.uuid).to.equal(lastReplayUUID)
+      }
+    })
+
+    it('Should have cleaned up the live files', async function () {
+      await checkLiveCleanup(servers[0], liveVideoUUID, [])
+    })
+
+    it('Should correctly terminate the stream on blacklist and blacklist the saved replay video', async function () {
+      this.timeout(60000)
+
+      await servers[0].videos.remove({ id: lastReplayUUID })
+      const { liveDetails } = await publishLiveAndBlacklist({ permanent: true, replay: true })
+
+      const replay = await findExternalSavedVideo(servers[0], liveDetails)
+      expect(replay).to.exist
+
+      for (const videoId of [ liveVideoUUID, replay.uuid ]) {
+        await checkVideosExist(videoId, false)
+
+        await servers[0].videos.get({ id: videoId, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+        await servers[1].videos.get({ id: videoId, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      }
+
+      await checkLiveCleanup(servers[0], liveVideoUUID, [])
+    })
+
+    it('Should correctly terminate the stream on delete and not save the video', async function () {
+      this.timeout(40000)
+
+      const { liveDetails } = await publishLiveAndDelete({ permanent: true, replay: true })
+
+      const replay = await findExternalSavedVideo(servers[0], liveDetails)
+      expect(replay).to.not.exist
+
       await checkVideosExist(liveVideoUUID, false, HttpStatusCode.NOT_FOUND_404)
-      await checkLiveCleanupAfterSave(servers[0], liveVideoUUID, [])
+      await checkLiveCleanup(servers[0], liveVideoUUID, [])
+    })
+
+    it('Should correctly save replays with multiple sessions', async function () {
+      this.timeout(120000)
+
+      liveVideoUUID = await createLiveWrapper({ permanent: true, replay: true })
+      await waitJobs(servers)
+
+      // Streaming session #1
+      ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
+      await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
+      await stopFfmpeg(ffmpegCommand)
+      await servers[0].live.waitUntilWaiting({ videoId: liveVideoUUID })
+
+      // Streaming session #2
+      ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
+      await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
+      await stopFfmpeg(ffmpegCommand)
+      await waitUntilLiveWaitingOnAllServers(servers, liveVideoUUID)
+
+      // Wait for replays
+      await waitJobs(servers)
+
+      const { total, data: sessions } = await servers[0].live.listSessions({ videoId: liveVideoUUID })
+
+      expect(total).to.equal(2)
+      expect(sessions).to.have.lengthOf(2)
+
+      for (const session of sessions) {
+        expect(session.error).to.be.null
+        expect(session.replayVideo).to.exist
+
+        await servers[0].videos.get({ id: session.replayVideo.uuid })
+      }
     })
   })
 

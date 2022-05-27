@@ -2,13 +2,10 @@ export interface VideoStatsOverall {
   averageWatchTime: number
   totalWatchTime: number
 
+  totalViewers: number
+
   viewersPeak: number
   viewersPeakDate: string
-
-  views: number
-  likes: number
-  dislikes: number
-  comments: number
 
   countries: {
     isoCode: string

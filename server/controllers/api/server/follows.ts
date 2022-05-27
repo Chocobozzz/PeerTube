@@ -99,7 +99,7 @@ export {
 async function listFollowing (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
   const resultList = await ActorFollowModel.listInstanceFollowingForApi({
-    id: serverActor.id,
+    followerId: serverActor.id,
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
@@ -159,7 +159,7 @@ async function removeFollowing (req: express.Request, res: express.Response) {
   const follow = res.locals.follow
 
   await sequelizeTypescript.transaction(async t => {
-    if (follow.state === 'accepted') await sendUndoFollow(follow, t)
+    if (follow.state === 'accepted') sendUndoFollow(follow, t)
 
     // Disable redundancy on unfollowed instances
     const server = follow.ActorFollowing.Server

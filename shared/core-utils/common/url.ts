@@ -48,7 +48,10 @@ function decorateVideoLink (options: {
   // Embed options
   title?: boolean
   warningTitle?: boolean
+
   controls?: boolean
+  controlBar?: boolean
+
   peertubeLink?: boolean
   p2p?: boolean
 }) {
@@ -73,7 +76,10 @@ function decorateVideoLink (options: {
   if (options.muted === true) params.set('muted', '1')
   if (options.title === false) params.set('title', '0')
   if (options.warningTitle === false) params.set('warningTitle', '0')
+
   if (options.controls === false) params.set('controls', '0')
+  if (options.controlBar === false) params.set('controlBar', '0')
+
   if (options.peertubeLink === false) params.set('peertubeLink', '0')
   if (options.p2p !== undefined) params.set('p2p', options.p2p ? '1' : '0')
 

@@ -328,7 +328,7 @@ Copy new configuration defaults values and update your configuration file:
 
 ```bash
 $ sudo -u peertube cp /var/www/peertube/versions/peertube-${VERSION}/config/default.yaml /var/www/peertube/config/default.yaml
-$ diff /var/www/peertube/versions/peertube-${VERSION}/config/production.yaml.example /var/www/peertube/config/production.yaml
+$ diff -u /var/www/peertube/versions/peertube-${VERSION}/config/production.yaml.example /var/www/peertube/config/production.yaml
 ```
 
 Change the link to point to the latest version:
@@ -345,7 +345,7 @@ Check changes in nginx configuration:
 
 ```bash
 $ cd /var/www/peertube/versions
-$ diff "$(ls --sort=t | head -2 | tail -1)/support/nginx/peertube" "$(ls --sort=t | head -1)/support/nginx/peertube"
+$ diff -u "$(ls --sort=t | head -2 | tail -1)/support/nginx/peertube" "$(ls --sort=t | head -1)/support/nginx/peertube"
 ```
 
 ### systemd
@@ -354,7 +354,7 @@ Check changes in systemd configuration:
 
 ```bash
 $ cd /var/www/peertube/versions
-$ diff "$(ls --sort=t | head -2 | tail -1)/support/systemd/peertube.service" "$(ls --sort=t | head -1)/support/systemd/peertube.service"
+$ diff -u "$(ls --sort=t | head -2 | tail -1)/support/systemd/peertube.service" "$(ls --sort=t | head -1)/support/systemd/peertube.service"
 ```
 
 ### Restart PeerTube

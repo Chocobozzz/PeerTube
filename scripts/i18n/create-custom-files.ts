@@ -56,6 +56,7 @@ const playerKeys = {
   'disabled': 'disabled',
   '  off': '  off',
   'Player mode': 'Player mode',
+  'Play in loop': 'Play in loop',
   'The video failed to play, will try to fast forward.': 'The video failed to play, will try to fast forward.'
 }
 Object.assign(playerKeys, videojs)

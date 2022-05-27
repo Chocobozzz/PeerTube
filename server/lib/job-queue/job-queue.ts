@@ -106,6 +106,8 @@ const jobTypes: JobType[] = [
   'video-studio-edition'
 ]
 
+const silentFailure = new Set<JobType>([ 'activitypub-http-unicast' ])
+
 class JobQueue {
 
   private static instance: JobQueue
@@ -152,7 +154,11 @@ class JobQueue {
            .catch(err => logger.error('Error in job queue processor %s.', handlerName, { err }))
 
       queue.on('failed', (job, err) => {
-        logger.error('Cannot execute job %d in queue %s.', job.id, handlerName, { payload: job.data, err })
+        const logLevel = silentFailure.has(handlerName)
+          ? 'debug'
+          : 'error'
+
+        logger.log(logLevel, 'Cannot execute job %d in queue %s.', job.id, handlerName, { payload: job.data, err })
       })
 
       queue.on('error', err => {

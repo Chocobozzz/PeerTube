@@ -39,6 +39,7 @@
     "disabled": "desactivado",
     "  off": "  desactivado",
     "Player mode": "Modo reproductor",
+    "Play in loop": "Play in loop",
     "The video failed to play, will try to fast forward.": "No se pudo reproducir el video, se intentará avanzar rápidamente.",
     "Audio Player": "Reproductor de audio",
     "Video Player": "Reproductor de vídeo",

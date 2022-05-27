@@ -47,7 +47,7 @@
           <ng-template ngbNavContent>
             <div class="nav-content">
               <my-input-toggle-hidden
-                [value]="getPlaylistIframeCode()" (change)="updateEmbedCode()"
+                [value]="customizations.onlyEmbedUrl ? getPlaylistEmbedUrl() : getPlaylistIframeCode()" (change)="updateEmbedCode()"
                 [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
               ></my-input-toggle-hidden>
 
@@ -67,8 +67,18 @@
       <div class="filters">
 
         <div class="form-group" *ngIf="video">
-          <my-peertube-checkbox inputName="includeVideoInPlaylist" [(ngModel)]="includeVideoInPlaylist" i18n-labelText
-            labelText="Share the playlist at this video position"></my-peertube-checkbox>
+          <my-peertube-checkbox
+            inputName="includeVideoInPlaylist" [(ngModel)]="includeVideoInPlaylist"
+            i18n-labelText labelText="Share the playlist at this video position"
+          ></my-peertube-checkbox>
+        </div>
+
+        <div class="form-group">
+          <my-peertube-checkbox
+            *ngIf="isInPlaylistEmbedTab()"
+            inputName="onlyEmbedUrl" [(ngModel)]="customizations.onlyEmbedUrl"
+            i18n-labelText labelText="Only display embed URL"
+          ></my-peertube-checkbox>
         </div>
 
       </div>
@@ -114,7 +124,7 @@
           <ng-template ngbNavContent>
             <div class="nav-content">
               <my-input-toggle-hidden
-                [value]="getVideoIframeCode()" (ngModelChange)="updateEmbedCode()"
+                [value]="customizations.onlyEmbedUrl ? getVideoEmbedUrl() : getVideoIframeCode()" (ngModelChange)="updateEmbedCode()"
                 [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
               ></my-input-toggle-hidden>
 
@@ -160,6 +170,14 @@
               </select>
             </div>
           </div>
+
+          <div class="form-group">
+            <my-peertube-checkbox
+              *ngIf="isInVideoEmbedTab()"
+              inputName="onlyEmbedUrl" [(ngModel)]="customizations.onlyEmbedUrl"
+              i18n-labelText labelText="Only display embed URL"
+            ></my-peertube-checkbox>
+          </div>
         </div>
 
         <div class="advanced-filters collapse-transition" [ngbCollapse]="isAdvancedCustomizationCollapsed">
@@ -200,7 +218,7 @@
               ></my-peertube-checkbox>
             </div>
 
-            <div *ngIf="!isLocalVideo() && !isVideoInEmbedTab()" class="form-group">
+            <div *ngIf="!isLocalVideo() && !isInVideoEmbedTab()" class="form-group">
               <my-peertube-checkbox
                 inputName="originUrl" [(ngModel)]="customizations.originUrl"
                 i18n-labelText labelText="Use origin instance URL"
@@ -208,7 +226,7 @@
             </div>
           </div>
 
-          <ng-container *ngIf="isVideoInEmbedTab()">
+          <ng-container *ngIf="isInVideoEmbedTab()">
             <div class="form-group">
               <my-peertube-checkbox
                 inputName="title" [(ngModel)]="customizations.title"
@@ -232,8 +250,8 @@
 
             <div class="form-group">
               <my-peertube-checkbox
-                inputName="controls" [(ngModel)]="customizations.controls"
-                i18n-labelText labelText="Display player controls"
+                inputName="controlBar" [(ngModel)]="customizations.controlBar"
+                i18n-labelText labelText="Display player control bar"
               ></my-peertube-checkbox>
             </div>
 

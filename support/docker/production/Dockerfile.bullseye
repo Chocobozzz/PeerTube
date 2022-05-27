@@ -1,4 +1,4 @@
-FROM node:14-bullseye-slim
+FROM node:16-bullseye-slim
 
 # Install dependencies
 RUN apt update \
@@ -37,10 +37,10 @@ VOLUME /data
 VOLUME /config
 
 COPY ./support/docker/production/entrypoint.sh /usr/local/bin/entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 
 # Expose API and RTMP
 EXPOSE 9000 1935
 
 # Run the application
-CMD ["npm", "start"]
+CMD [ "node", "dist/server" ]

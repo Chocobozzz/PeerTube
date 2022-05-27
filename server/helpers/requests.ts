@@ -212,6 +212,7 @@ export {
   doRequestAndSaveToFile,
   isBinaryResponse,
   downloadImage,
+  getAgent,
   findLatestRedirection,
   peertubeGot
 }

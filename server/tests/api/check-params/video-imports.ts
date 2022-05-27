@@ -272,7 +272,7 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
-      this.timeout(30000)
+      this.timeout(120000)
 
       await makePostBodyRequest({
         url: server.url,

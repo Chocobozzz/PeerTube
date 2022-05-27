@@ -1,7 +1,7 @@
 {
   "name": "peertube",
   "description": "PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.",
-  "version": "4.1.1",
+  "version": "4.2.0-rc.1",
   "private": true,
   "licence": "AGPL-3.0",
   "engines": {
@@ -78,10 +78,12 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.23.0",
-    "@babel/parser": "7.17.9",
+    "@aws-sdk/lib-storage": "^3.72.0",
+    "@aws-sdk/node-http-handler": "^3.82.0",
+    "@babel/parser": "7.17.8",
     "@peertube/feed": "^5.0.1",
-    "@peertube/http-signature": "^1.4.0",
-    "@uploadx/core": "^5.0.0",
+    "@peertube/http-signature": "^1.6.0",
+    "@uploadx/core": "^5.1.2",
     "async": "^3.0.1",
     "async-lru": "^1.1.1",
     "bcrypt": "5.0.1",

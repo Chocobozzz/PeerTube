@@ -1952,6 +1952,18 @@ paths:
         - OAuth2: []
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
+        - name: startDate
+          in: query
+          description: Filter stats by start date
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          description: Filter stats by end date
+          schema:
+            type: string
+            format: date-time
       responses:
         '200':
           description: successful operation
@@ -1996,6 +2008,18 @@ paths:
             enum:
               - 'viewers'
               - 'aggregateWatchTime'
+        - name: startDate
+          in: query
+          description: Filter stats by start date
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          description: Filter stats by end date
+          schema:
+            type: string
+            format: date-time
       responses:
         '200':
           description: successful operation
@@ -2462,6 +2486,48 @@ paths:
           description: bad parameters or trying to update a live that has already started
         '403':
           description: trying to save replay of the live but saving replay is not enabled on the instance
+  /videos/live/{id}/sessions:
+    get:
+      summary: List live sessions
+      description: List all sessions created in a particular live
+      security:
+        - OAuth2: []
+      tags:
+        - Live Videos
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LiveVideoSessionResponse'
+  /videos/{id}/live-session:
+    get:
+      summary: Get live session of a replay
+      description: If the video is a replay of a live, you can find the associated live session using this endpoint
+      security:
+        - OAuth2: []
+      tags:
+        - Live Videos
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LiveVideoSessionResponse'
 
   /users/me/abuses:
     get:
@@ -5387,7 +5453,23 @@ components:
             - 1
             - 2
             - 3
-          description: 'The video state (Published = `1`, to transcode = `2`, to import = `3`)'
+            - 4
+            - 5
+            - 6
+            - 7
+            - 8
+            - 9
+          description: |
+            The video state:
+            - `1`: Published
+            - `2`: To transcode
+            - `3`: To import
+            - `4`: Waiting for live stream
+            - `5`: Live ended
+            - `6`: To move to an external storage (object storage...)
+            - `7`: Transcoding failed
+            - `8`: Moving to an external storage failed
+            - `9`: To edit using studio edition feature
         label:
           type: string
 
@@ -6162,14 +6244,6 @@ components:
         viewersPeakDate:
           type: string
           format: date-time
-        views:
-          type: number
-        likes:
-          type: number
-        dislikes:
-          type: number
-        comments:
-          type: number
         countries:
           type: array
           items:
@@ -7641,11 +7715,13 @@ components:
       properties:
         rtmpUrl:
           type: string
+          description: Included in the response if an appropriate token is provided
         rtmpsUrl:
           type: string
+          description: Included in the response if an appropriate token is provided
         streamKey:
           type: string
-          description: RTMP stream key to use to stream into this live video
+          description: RTMP stream key to use to stream into this live video. Included in the response if an appropriate token is provided
         saveReplay:
           type: boolean
         permanentLive:
@@ -7654,6 +7730,46 @@ components:
         latencyMode:
           description: User can select live latency mode if enabled by the instance
           $ref: '#/components/schemas/LiveVideoLatencyMode'
+
+    LiveVideoSessionResponse:
+        properties:
+          id:
+            type: integer
+          startDate:
+            type: string
+            format: date-time
+            description: Start date of the live session
+          endDate:
+            type: string
+            format: date-time
+            nullable: true
+            description: End date of the live session
+          error:
+            type: integer
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+              - 5
+            nullable: true
+            description: >
+              Error type if an error occured during the live session:
+                - `1`: Bad socket health (transcoding is too slow)
+                - `2`: Max duration exceeded
+                - `3`: Quota exceeded
+                - `4`: Quota FFmpeg error
+                - `5`: Video has been blacklisted during the live
+          replayVideo:
+            type: object
+            description: Video replay information
+            properties:
+              id:
+                type: number
+              uuid:
+                $ref: '#/components/schemas/UUIDv4'
+              shortUUID:
+                $ref: '#/components/schemas/shortUUID'
 
   callbacks:
     searchIndex:

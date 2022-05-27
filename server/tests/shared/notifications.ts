@@ -16,7 +16,8 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
-  setDefaultChannelAvatar
+  setDefaultChannelAvatar,
+  setDefaultVideoChannel
 } from '@shared/server-commands'
 import { MockSmtpServer } from './mock-servers'
 
@@ -184,7 +185,7 @@ async function checkUserRegistered (options: CheckerBaseParams & {
       expect(notification).to.not.be.undefined
       expect(notification.type).to.equal(notificationType)
 
-      checkActor(notification.account)
+      checkActor(notification.account, { withAvatar: false })
       expect(notification.account.name).to.equal(username)
     } else {
       expect(notification).to.satisfy(n => n.type !== notificationType || n.account.name !== username)
@@ -252,7 +253,7 @@ async function checkNewInstanceFollower (options: CheckerBaseParams & {
       expect(notification).to.not.be.undefined
       expect(notification.type).to.equal(notificationType)
 
-      checkActor(notification.actorFollow.follower)
+      checkActor(notification.actorFollow.follower, { withAvatar: false })
       expect(notification.actorFollow.follower.name).to.equal('peertube')
       expect(notification.actorFollow.follower.host).to.equal(followerHost)
 
@@ -287,7 +288,8 @@ async function checkAutoInstanceFollowing (options: CheckerBaseParams & {
       expect(notification.type).to.equal(notificationType)
 
       const following = notification.actorFollow.following
-      checkActor(following)
+
+      checkActor(following, { withAvatar: false })
       expect(following.name).to.equal('peertube')
       expect(following.host).to.equal(followingHost)
 
@@ -682,10 +684,14 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
   const servers = await createMultipleServers(serversCount, Object.assign(overrideConfig, overrideConfigArg))
 
   await setAccessTokensToServers(servers)
+  await setDefaultVideoChannel(servers)
   await setDefaultChannelAvatar(servers)
   await setDefaultAccountAvatar(servers)
 
-  if (servers[1]) await servers[1].config.enableStudio()
+  if (servers[1]) {
+    await servers[1].config.enableStudio()
+    await servers[1].config.enableLive({ allowReplay: true, transcoding: false })
+  }
 
   if (serversCount > 1) {
     await doubleFollow(servers[0], servers[1])
@@ -696,6 +702,9 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
   const userAccessToken = await servers[0].login.getAccessToken(user)
 
   await servers[0].notifications.updateMySettings({ token: userAccessToken, settings: getAllNotificationsSettings() })
+  await servers[0].users.updateMyAvatar({ token: userAccessToken, fixture: 'avatar.png' })
+  await servers[0].channels.updateImage({ channelName: 'user_1_channel', token: userAccessToken, fixture: 'avatar.png', type: 'avatar' })
+
   await servers[0].notifications.updateMySettings({ settings: getAllNotificationsSettings() })
 
   if (serversCount > 1) {
@@ -827,10 +836,18 @@ function checkVideo (video: any, videoName?: string, shortUUID?: string) {
   expect(video.id).to.be.a('number')
 }
 
-function checkActor (actor: any) {
+function checkActor (actor: any, options: { withAvatar?: boolean } = {}) {
+  const { withAvatar = true } = options
+
   expect(actor.displayName).to.be.a('string')
   expect(actor.displayName).to.not.be.empty
   expect(actor.host).to.not.be.undefined
+
+  if (withAvatar) {
+    expect(actor.avatars).to.be.an('array')
+    expect(actor.avatars).to.have.lengthOf(2)
+    expect(actor.avatars[0].path).to.exist.and.not.empty
+  }
 }
 
 function checkComment (comment: any, commentId: number, threadId: number) {

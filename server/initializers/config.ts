@@ -247,6 +247,14 @@ const CONFIG = {
       }
     }
   },
+  FEEDS: {
+    VIDEOS: {
+      COUNT: config.get<number>('feeds.videos.count')
+    },
+    COMMENTS: {
+      COUNT: config.get<number>('feeds.comments.count')
+    }
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },
@@ -313,13 +321,15 @@ const CONFIG = {
     RTMP: {
       get ENABLED () { return config.get<boolean>('live.rtmp.enabled') },
       get PORT () { return config.get<number>('live.rtmp.port') },
-      get HOSTNAME () { return config.get<number>('live.rtmp.hostname') }
+      get HOSTNAME () { return config.get<number>('live.rtmp.hostname') },
+      get PUBLIC_HOSTNAME () { return config.get<number>('live.rtmp.public_hostname') }
     },
 
     RTMPS: {
       get ENABLED () { return config.get<boolean>('live.rtmps.enabled') },
       get PORT () { return config.get<number>('live.rtmps.port') },
       get HOSTNAME () { return config.get<number>('live.rtmps.hostname') },
+      get PUBLIC_HOSTNAME () { return config.get<number>('live.rtmps.public_hostname') },
       get KEY_FILE () { return config.get<string>('live.rtmps.key_file') },
       get CERT_FILE () { return config.get<string>('live.rtmps.cert_file') }
     },
@@ -347,6 +357,7 @@ const CONFIG = {
   IMPORT: {
     VIDEOS: {
       get CONCURRENCY () { return config.get<number>('import.videos.concurrency') },
+      get TIMEOUT () { return parseDurationToMs(config.get<string>('import.videos.timeout')) },
 
       HTTP: {
         get ENABLED () { return config.get<boolean>('import.videos.http.enabled') },

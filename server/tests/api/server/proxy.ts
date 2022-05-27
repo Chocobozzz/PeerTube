@@ -2,12 +2,14 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { FIXTURE_URLS, MockProxy } from '@server/tests/shared'
+import { expectNotStartWith, expectStartWith, FIXTURE_URLS, MockProxy } from '@server/tests/shared'
+import { areObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
+  ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -117,6 +119,44 @@ describe('Test proxy', function () {
       await servers[0].run({}, { env: badEnv })
 
       await quickImport(HttpStatusCode.BAD_REQUEST_400)
+    })
+  })
+
+  describe('Object storage', function () {
+    if (areObjectStorageTestsDisabled()) return
+
+    before(async function () {
+      this.timeout(30000)
+
+      await ObjectStorageCommand.prepareDefaultBuckets()
+    })
+
+    it('Should succeed to upload to object storage with the appropriate proxy config', async function () {
+      this.timeout(120000)
+
+      await servers[0].kill()
+      await servers[0].run(ObjectStorageCommand.getDefaultConfig(), { env: goodEnv })
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+      await waitJobs(servers)
+
+      const video = await servers[0].videos.get({ id: uuid })
+
+      expectStartWith(video.files[0].fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())
+    })
+
+    it('Should fail to upload to object storage with a wrong proxy config', async function () {
+      this.timeout(120000)
+
+      await servers[0].kill()
+      await servers[0].run(ObjectStorageCommand.getDefaultConfig(), { env: badEnv })
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+      await waitJobs(servers)
+
+      const video = await servers[0].videos.get({ id: uuid })
+
+      expectNotStartWith(video.files[0].fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())
     })
   })
 

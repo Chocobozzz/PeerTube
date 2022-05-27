@@ -1,7 +1,7 @@
 
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
-import { AuthService, Notifier, RedirectService, UserService } from '@app/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { AuthService, Notifier, RedirectService, SessionStorageService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { LOGIN_PASSWORD_VALIDATOR, LOGIN_USERNAME_VALIDATOR } from '@app/shared/form-validators/login-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
@@ -17,6 +17,8 @@ import { RegisteredExternalAuthConfig, ServerConfig } from '@shared/models'
 })
 
 export class LoginComponent extends FormReactive implements OnInit, AfterViewInit {
+  private static SESSION_STORAGE_REDIRECT_URL_KEY = 'login-previous-url'
+
   @ViewChild('forgotPasswordModal', { static: true }) forgotPasswordModal: ElementRef
 
   accordion: NgbAccordion
@@ -46,7 +48,9 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     private userService: UserService,
     private redirectService: RedirectService,
     private notifier: Notifier,
-    private hooks: HooksService
+    private hooks: HooksService,
+    private storage: SessionStorageService,
+    private router: Router
   ) {
     super()
   }
@@ -87,6 +91,11 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     if (snapshot.queryParams.externalAuthError) {
       this.externalAuthError = true
       return
+    }
+
+    const previousUrl = this.redirectService.getPreviousUrl()
+    if (previousUrl && previousUrl !== '/') {
+      this.storage.setItem(LoginComponent.SESSION_STORAGE_REDIRECT_URL_KEY, previousUrl)
     }
   }
 
@@ -151,7 +160,15 @@ The link will expire within 1 hour.`
 
     this.authService.login(username, null, token)
       .subscribe({
-        next: () => this.redirectService.redirectToPreviousRoute(),
+        next: () => {
+          const redirectUrl = this.storage.getItem(LoginComponent.SESSION_STORAGE_REDIRECT_URL_KEY)
+          if (redirectUrl) {
+            this.storage.removeItem(LoginComponent.SESSION_STORAGE_REDIRECT_URL_KEY)
+            return this.router.navigateByUrl(redirectUrl)
+          }
+
+          this.redirectService.redirectToLatestSessionRoute()
+        },
 
         error: err => {
           this.handleError(err)

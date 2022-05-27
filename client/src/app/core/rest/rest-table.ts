@@ -39,6 +39,10 @@ export abstract class RestTable {
     }
   }
 
+  saveSort () {
+    peertubeLocalStorage.setItem(this.getSortLocalStorageKey(), JSON.stringify(this.sort))
+  }
+
   loadLazy (event: LazyLoadEvent) {
     logger('Load lazy %o.', event)
 
@@ -58,10 +62,6 @@ export abstract class RestTable {
 
     this.reloadData()
     this.saveSort()
-  }
-
-  saveSort () {
-    peertubeLocalStorage.setItem(this.getSortLocalStorageKey(), JSON.stringify(this.sort))
   }
 
   onSearch (search: string) {

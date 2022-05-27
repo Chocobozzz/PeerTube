@@ -12,6 +12,10 @@
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   transition: visibility 0.3s, opacity 0.3s !important;
 
+  &.control-bar-hidden {
+    display: none !important;
+  }
+
   > button:first-child {
     @include margin-left($first-control-bar-element-margin-left);
   }

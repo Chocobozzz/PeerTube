@@ -646,9 +646,10 @@ export async function isVideoAccepted (
 }
 
 async function addDurationToVideo (videoFile: { path: string, duration?: number }) {
-  const duration: number = await getVideoStreamDuration(videoFile.path)
+  const duration = await getVideoStreamDuration(videoFile.path)
 
-  if (isNaN(duration)) throw new Error(`Couldn't get video duration`)
-
-  videoFile.duration = duration
+  // FFmpeg may not be able to guess video duration
+  // For example with m2v files: https://trac.ffmpeg.org/ticket/9726#comment:2
+  if (isNaN(duration)) videoFile.duration = 0
+  else videoFile.duration = duration
 }

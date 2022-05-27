@@ -51,7 +51,7 @@ export class AbuseStateChangeForReporter extends AbstractNotification <MAbuseFul
     const abuseUrl = WEBSERVER.URL + '/my-account/abuses?search=%23' + this.abuse.id
 
     const action = {
-      text,
+      text: 'View report #' + this.abuse.id,
       url: abuseUrl
     }
 

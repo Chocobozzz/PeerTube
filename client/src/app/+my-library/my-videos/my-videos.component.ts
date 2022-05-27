@@ -51,7 +51,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     report: false,
     duplicate: false,
     mute: false,
-    liveInfo: false,
+    liveInfo: true,
     removeFiles: false,
     transcoding: false,
     studio: true,

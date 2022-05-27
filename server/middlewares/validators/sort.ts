@@ -28,7 +28,7 @@ function createSortableColumns (sortableColumns: string[]) {
   return sortableColumns.concat(sortableColumnDesc)
 }
 
-const usersSortValidator = checkSortFactory(SORTABLE_COLUMNS.USERS)
+const adminUsersSortValidator = checkSortFactory(SORTABLE_COLUMNS.ADMIN_USERS)
 const accountsSortValidator = checkSortFactory(SORTABLE_COLUMNS.ACCOUNTS)
 const jobsSortValidator = checkSortFactory(SORTABLE_COLUMNS.JOBS, [ 'jobs' ])
 const abusesSortValidator = checkSortFactory(SORTABLE_COLUMNS.ABUSES)
@@ -59,7 +59,7 @@ const videoChannelsFollowersSortValidator = checkSortFactory(SORTABLE_COLUMNS.CH
 // ---------------------------------------------------------------------------
 
 export {
-  usersSortValidator,
+  adminUsersSortValidator,
   abusesSortValidator,
   videoChannelsSortValidator,
   videoImportsSortValidator,

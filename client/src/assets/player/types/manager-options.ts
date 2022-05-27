@@ -21,6 +21,8 @@ export interface CustomizationOptions {
   stopTime: number | string
 
   controls?: boolean
+  controlBar?: boolean
+
   muted?: boolean
   loop?: boolean
   subtitle?: string

@@ -53,7 +53,7 @@ export class GeoIP {
 
       await writeFile(mmdbPath, gotResult.body)
 
-      // Reini reader
+      // Reinit reader
       this.reader = undefined
 
       logger.info('GeoIP database updated %s.', mmdbPath, lTags())

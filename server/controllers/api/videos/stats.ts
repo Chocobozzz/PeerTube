@@ -1,6 +1,6 @@
 import express from 'express'
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer'
-import { VideoStatsTimeserieMetric, VideoStatsTimeserieQuery } from '@shared/models'
+import { VideoStatsOverallQuery, VideoStatsTimeserieMetric, VideoStatsTimeserieQuery } from '@shared/models'
 import {
   asyncMiddleware,
   authenticate,
@@ -39,8 +39,13 @@ export {
 
 async function getOverallStats (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
+  const query = req.query as VideoStatsOverallQuery
 
-  const stats = await LocalVideoViewerModel.getOverallStats(video)
+  const stats = await LocalVideoViewerModel.getOverallStats({
+    video,
+    startDate: query.startDate,
+    endDate: query.endDate
+  })
 
   return res.json(stats)
 }
@@ -62,18 +67,9 @@ async function getTimeserieStats (req: express.Request, res: express.Response) {
   const stats = await LocalVideoViewerModel.getTimeserieStats({
     video,
     metric,
-    startDate: query.startDate ?? buildOneMonthAgo().toISOString(),
+    startDate: query.startDate ?? video.createdAt.toISOString(),
     endDate: query.endDate ?? new Date().toISOString()
   })
 
   return res.json(stats)
-}
-
-function buildOneMonthAgo () {
-  const monthAgo = new Date()
-  monthAgo.setHours(0, 0, 0, 0)
-
-  monthAgo.setDate(monthAgo.getDate() - 29)
-
-  return monthAgo
 }

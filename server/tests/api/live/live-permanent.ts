@@ -121,7 +121,7 @@ describe('Permanent live', function () {
     await waitJobs(servers)
   })
 
-  it('Should not have cleaned up this live', async function () {
+  it('Should have cleaned up this live', async function () {
     this.timeout(40000)
 
     await wait(5000)
@@ -129,7 +129,8 @@ describe('Permanent live', function () {
 
     for (const server of servers) {
       const videoDetails = await server.videos.get({ id: videoUUID })
-      expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
+
+      expect(videoDetails.streamingPlaylists).to.have.lengthOf(0)
     }
   })
 
@@ -169,6 +170,23 @@ describe('Permanent live', function () {
     expect(count).to.equal(2)
 
     await stopFfmpeg(ffmpegCommand)
+  })
+
+  it('Should have appropriate sessions', async function () {
+    this.timeout(60000)
+
+    await servers[0].live.waitUntilWaiting({ videoId: videoUUID })
+
+    const { data, total } = await servers[0].live.listSessions({ videoId: videoUUID })
+    expect(total).to.equal(2)
+    expect(data).to.have.lengthOf(2)
+
+    for (const session of data) {
+      expect(session.startDate).to.exist
+      expect(session.endDate).to.exist
+
+      expect(session.error).to.not.exist
+    }
   })
 
   after(async function () {

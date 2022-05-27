@@ -58,7 +58,7 @@ const WEBSERVER = {
 
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
-  USERS: [ 'id', 'username', 'videoQuotaUsed', 'createdAt', 'lastLoginDate', 'role' ],
+  ADMIN_USERS: [ 'id', 'username', 'videoQuotaUsed', 'createdAt', 'lastLoginDate', 'role' ],
   USER_SUBSCRIPTIONS: [ 'id', 'createdAt' ],
   ACCOUNTS: [ 'createdAt' ],
   JOBS: [ 'createdAt' ],
@@ -183,7 +183,7 @@ const JOB_TTL: { [id in JobType]: number } = {
   'video-file-import': 1000 * 3600, // 1 hour
   'video-transcoding': 1000 * 3600 * 48, // 2 days, transcoding could be long
   'video-studio-edition': 1000 * 3600 * 10, // 10 hours
-  'video-import': 1000 * 3600 * 2, // 2 hours
+  'video-import': CONFIG.IMPORT.VIDEOS.TIMEOUT,
   'email': 60000 * 10, // 10 minutes
   'actor-keys': 60000 * 20, // 20 minutes
   'videos-views-stats': undefined, // Unlimited
@@ -484,17 +484,25 @@ const MIMETYPES = {
     MIMETYPE_EXT: {
       'audio/mpeg': '.mp3',
       'audio/mp3': '.mp3',
+
       'application/ogg': '.ogg',
       'audio/ogg': '.ogg',
+
       'audio/x-ms-wma': '.wma',
       'audio/wav': '.wav',
       'audio/x-wav': '.wav',
+
       'audio/x-flac': '.flac',
       'audio/flac': '.flac',
+
+      'audio/vnd.dlna.adts': '.aac',
       'audio/aac': '.aac',
+
       'audio/m4a': '.m4a',
       'audio/mp4': '.m4a',
       'audio/x-m4a': '.m4a',
+
+      'audio/vnd.dolby.dd-raw': '.ac3',
       'audio/ac3': '.ac3'
     },
     EXT_MIMETYPE: null as { [ id: string ]: string }
@@ -582,10 +590,6 @@ const HTTP_SIGNATURE = {
   HEADER_NAME: 'signature',
   ALGORITHM: 'rsa-sha256',
   HEADERS_TO_SIGN: [ '(request-target)', 'host', 'date', 'digest' ],
-  REQUIRED_HEADERS: {
-    ALL: [ '(request-target)', 'host', 'date' ],
-    POST: [ '(request-target)', 'host', 'date', 'digest' ]
-  },
   CLOCK_SKEW_SECONDS: 1800
 }
 
@@ -762,12 +766,6 @@ const CUSTOM_HTML_TAG_COMMENTS = {
   SERVER_CONFIG: '<!-- server config -->'
 }
 
-// ---------------------------------------------------------------------------
-
-const FEEDS = {
-  COUNT: 20
-}
-
 const MAX_LOGS_OUTPUT_CHARACTERS = 10 * 1000 * 1000
 const LOG_FILENAME = 'peertube.log'
 const AUDIT_LOG_FILENAME = 'peertube-audit.log'
@@ -805,7 +803,7 @@ const SEARCH_INDEX = {
 // ---------------------------------------------------------------------------
 
 const STATS_TIMESERIE = {
-  MAX_DAYS: 30
+  MAX_DAYS: 365 * 10 // Around 10 years
 }
 
 // ---------------------------------------------------------------------------
@@ -935,7 +933,6 @@ export {
   ROUTE_CACHE_LIFETIME,
   SORTABLE_COLUMNS,
   HLS_STREAMING_PLAYLIST_DIRECTORY,
-  FEEDS,
   JOB_TTL,
   DEFAULT_THEME_NAME,
   NSFW_POLICY_TYPES,
@@ -1033,6 +1030,8 @@ function buildVideoMimetypeExt () {
         // The standard video format used by many Sony and Panasonic HD camcorders.
         // It is also used for storing high definition video on Blu-ray discs.
         'video/mp2t': '.mts',
+        'video/vnd.dlna.mpeg-tts': '.mts',
+
         'video/m2ts': '.m2ts',
 
         // Old formats reliant on MPEG-1/MPEG-2
@@ -1064,8 +1063,11 @@ function updateWebserverUrls () {
   WEBSERVER.HOSTNAME = CONFIG.WEBSERVER.HOSTNAME
   WEBSERVER.PORT = CONFIG.WEBSERVER.PORT
 
-  WEBSERVER.RTMP_URL = 'rtmp://' + CONFIG.LIVE.RTMP.HOSTNAME + ':' + CONFIG.LIVE.RTMP.PORT + '/' + VIDEO_LIVE.RTMP.BASE_PATH
-  WEBSERVER.RTMPS_URL = 'rtmps://' + CONFIG.LIVE.RTMPS.HOSTNAME + ':' + CONFIG.LIVE.RTMPS.PORT + '/' + VIDEO_LIVE.RTMP.BASE_PATH
+  const rtmpHostname = CONFIG.LIVE.RTMP.PUBLIC_HOSTNAME || CONFIG.WEBSERVER.HOSTNAME
+  const rtmpsHostname = CONFIG.LIVE.RTMPS.PUBLIC_HOSTNAME || CONFIG.WEBSERVER.HOSTNAME
+
+  WEBSERVER.RTMP_URL = 'rtmp://' + rtmpHostname + ':' + CONFIG.LIVE.RTMP.PORT + '/' + VIDEO_LIVE.RTMP.BASE_PATH
+  WEBSERVER.RTMPS_URL = 'rtmps://' + rtmpsHostname + ':' + CONFIG.LIVE.RTMPS.PORT + '/' + VIDEO_LIVE.RTMP.BASE_PATH
 }
 
 function updateWebserverConfig () {

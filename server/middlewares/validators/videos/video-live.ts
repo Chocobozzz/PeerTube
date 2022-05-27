@@ -28,19 +28,16 @@ import {
   isValidVideoIdParam
 } from '../shared'
 import { getCommonVideoEditAttributes } from './videos'
+import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 
 const videoLiveGetValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoLiveGetValidator parameters', { parameters: req.params, user: res.locals.oauth.token.User.username })
+    logger.debug('Checking videoLiveGetValidator parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'all')) return
-
-    // Check if the user who did the request is able to get the live info
-    const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.GET_ANY_LIVE, res, false)) return
 
     const videoLive = await VideoLiveModel.loadByVideoId(res.locals.videoAll.id)
     if (!videoLive) {
@@ -118,12 +115,6 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
       })
     }
 
-    if (body.permanentLive && body.saveReplay) {
-      cleanUpReqFiles(req)
-
-      return res.fail({ message: 'Cannot set this live as permanent while saving its replay' })
-    }
-
     const user = res.locals.oauth.token.User
     if (!await doesVideoChannelOfAccountExist(body.channelId, user, res)) return cleanUpReqFiles(req)
 
@@ -180,10 +171,6 @@ const videoLiveUpdateValidator = [
 
     const body: LiveVideoUpdate = req.body
 
-    if (body.permanentLive && body.saveReplay) {
-      return res.fail({ message: 'Cannot set this live as permanent while saving its replay' })
-    }
-
     if (hasValidSaveReplay(body) !== true) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
@@ -210,11 +197,48 @@ const videoLiveUpdateValidator = [
   }
 ]
 
+const videoLiveListSessionsValidator = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videoLiveListSessionsValidator parameters', { parameters: req.params })
+
+    // Check the user can manage the live
+    const user = res.locals.oauth.token.User
+    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.GET_ANY_LIVE, res)) return
+
+    return next()
+  }
+]
+
+const videoLiveFindReplaySessionValidator = [
+  isValidVideoIdParam('videoId'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videoLiveFindReplaySessionValidator parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'id')) return
+
+    const session = await VideoLiveSessionModel.findSessionOfReplay(res.locals.videoId.id)
+    if (!session) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'No live replay found'
+      })
+    }
+
+    res.locals.videoLiveSession = session
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
   videoLiveAddValidator,
   videoLiveUpdateValidator,
+  videoLiveListSessionsValidator,
+  videoLiveFindReplaySessionValidator,
   videoLiveGetValidator
 }
 

@@ -24,6 +24,9 @@ function runServer (appInstance: string, config: any = {}) {
     transcoding: {
       enabled: false
     },
+    video_studio: {
+      enabled: false
+    },
 
     ...config
   })

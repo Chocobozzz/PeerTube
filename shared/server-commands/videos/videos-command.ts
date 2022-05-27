@@ -497,8 +497,17 @@ export class VideosCommand extends AbstractCommand {
     size: number
     contentLength?: number
     contentRangeBuilder?: (start: number, chunk: any) => string
+    digestBuilder?: (chunk: any) => string
   }) {
-    const { pathUploadId, videoFilePath, size, contentLength, contentRangeBuilder, expectedStatus = HttpStatusCode.OK_200 } = options
+    const {
+      pathUploadId,
+      videoFilePath,
+      size,
+      contentLength,
+      contentRangeBuilder,
+      digestBuilder,
+      expectedStatus = HttpStatusCode.OK_200
+    } = options
 
     const path = '/api/v1/videos/upload-resumable'
     let start = 0
@@ -518,6 +527,10 @@ export class VideosCommand extends AbstractCommand {
             ? contentRangeBuilder(start, chunk)
             : `bytes ${start}-${start + chunk.length - 1}/${size}`,
           'Content-Length': contentLength ? contentLength + '' : chunk.length + ''
+        }
+
+        if (digestBuilder) {
+          Object.assign(headers, { digest: digestBuilder(chunk) })
         }
 
         const res = await got<{ video: VideoCreateResult }>({

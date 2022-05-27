@@ -17,6 +17,8 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 @import './bootstrap';
 @import './primeng-custom';
 
+@import './z-index';
+
 [hidden] {
   display: none !important;
 }
@@ -322,10 +324,6 @@ table {
 
   font-size: 90%;
   margin-top: 10px;
-}
-
-ngx-loading-bar {
-  z-index: z(header) + 1 !important;
 }
 
 @media screen and (max-width: #{breakpoint(xxl)}) {

@@ -293,15 +293,25 @@ webadmin:
       # Set this to false if you don't want to allow config edition in the web interface by instance admins
       allowed: true
 
+# XML, Atom or JSON feeds
+feeds:
+  videos:
+    # Default number of videos displayed in feeds
+    count: 20
+
+  comments:
+    # Default number of comments displayed in feeds
+    count: 20
+
 ###############################################################################
 #
-# From this point, all the following keys can be overridden by the web interface
+# From this point, almost all following keys can be overridden by the web interface
 # (local-production.json file). If you need to change some values, prefer to
 # use the web interface because the configuration will be automatically
 # reloaded without any need to restart PeerTube
 #
-# /!\ If you already have a local-production.json file, the modification of the
-# following keys will have no effect /!\
+# /!\ If you already have a local-production.json file, modification of some of
+# the following keys will have no effect /!\
 #
 ###############################################################################
 
@@ -419,17 +429,33 @@ live:
   # Your firewall should accept traffic from this port in TCP if you enable live
   rtmp:
     enabled: true
+
+    # Listening hostname/port for RTMP server
+    # '::' to listen on IPv6 and IPv4, '0.0.0.0' to listen on IPv4
+    # Use null to automatically listen on '::' if IPv6 is available, or '0.0.0.0' otherwise
+    hostname: null
     port: 1935
-    hostname: 'localhost'
+
+    # Public hostname of your RTMP server
+    # Use null to use the same value than `webserver.hostname`
+    public_hostname: null
 
   rtmps:
     enabled: false
+
+    # Listening hostname/port for RTMPS server
+    # '::' to listen on IPv6 and IPv4, '0.0.0.0' to listen on IPv4
+    # Use null to automatically listen on '::' if IPv6 is available, or '0.0.0.0' otherwise
+    hostname: null
     port: 1936
-    # Absolute path
+
+    # Absolute paths
     key_file: ''
-    # Absolute path
     cert_file: ''
-    hostname: 'localhost'
+
+    # Public hostname of your RTMPS server
+    # Use null to use the same value than `webserver.hostname`
+    public_hostname: null
 
   # Allow to transcode the live streaming in multiple live resolutions
   transcoding:
@@ -453,6 +479,7 @@ live:
 
 video_studio:
   # Enable video edition by users (cut, add intro/outro, add watermark etc)
+  # If enabled, users can create transcoding tasks as they wish
   enabled: false
 
 import:
@@ -460,6 +487,9 @@ import:
   videos:
     # Amount of import jobs to execute in parallel
     concurrency: 1
+
+    # Set a custom video import timeout to not block import queue
+    timeout: '2 hours'
 
     # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
     http:

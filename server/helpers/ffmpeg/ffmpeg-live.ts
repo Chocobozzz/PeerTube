@@ -177,7 +177,7 @@ function addDefaultLiveHLSParams (options: {
 
   command.outputOption('-hls_time ' + getLiveSegmentTime(latencyMode))
   command.outputOption('-hls_list_size ' + VIDEO_LIVE.SEGMENTS_LIST_SIZE)
-  command.outputOption('-hls_flags delete_segments+independent_segments')
+  command.outputOption('-hls_flags delete_segments+independent_segments+program_date_time')
   command.outputOption(`-hls_segment_filename ${join(outPath, '%v-%06d.ts')}`)
   command.outputOption('-master_pl_name ' + masterPlaylistName)
   command.outputOption(`-f hls`)

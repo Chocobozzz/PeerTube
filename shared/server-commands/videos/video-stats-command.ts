@@ -6,12 +6,16 @@ export class VideoStatsCommand extends AbstractCommand {
 
   getOverallStats (options: OverrideCommandOptions & {
     videoId: number | string
+    startDate?: string
+    endDate?: string
   }) {
     const path = '/api/v1/videos/' + options.videoId + '/stats/overall'
 
     return this.getRequestBody<VideoStatsOverall>({
       ...options,
       path,
+
+      query: pick(options, [ 'startDate', 'endDate' ]),
 
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200

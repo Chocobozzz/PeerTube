@@ -1,6 +1,7 @@
 import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
 import { buildAbsoluteFixturePath, wait } from '@shared/core-utils'
 import { PeerTubeServer } from '../server/server'
+import { VideoDetails, VideoInclude } from '@shared/models'
 
 function sendRTMPStream (options: {
   rtmpBaseUrl: string
@@ -84,10 +85,22 @@ async function waitUntilLivePublishedOnAllServers (servers: PeerTubeServer[], vi
   }
 }
 
-async function waitUntilLiveSavedOnAllServers (servers: PeerTubeServer[], videoId: string) {
+async function waitUntilLiveWaitingOnAllServers (servers: PeerTubeServer[], videoId: string) {
   for (const server of servers) {
-    await server.live.waitUntilSaved({ videoId })
+    await server.live.waitUntilWaiting({ videoId })
   }
+}
+
+async function waitUntilLiveReplacedByReplayOnAllServers (servers: PeerTubeServer[], videoId: string) {
+  for (const server of servers) {
+    await server.live.waitUntilReplacedByReplay({ videoId })
+  }
+}
+
+async function findExternalSavedVideo (server: PeerTubeServer, liveDetails: VideoDetails) {
+  const { data } = await server.videos.list({ token: server.accessToken, sort: '-publishedAt', include: VideoInclude.BLACKLISTED })
+
+  return data.find(v => v.name === liveDetails.name + ' - ' + new Date(liveDetails.publishedAt).toLocaleString())
 }
 
 export {
@@ -95,6 +108,10 @@ export {
   waitFfmpegUntilError,
   testFfmpegStreamError,
   stopFfmpeg,
+
   waitUntilLivePublishedOnAllServers,
-  waitUntilLiveSavedOnAllServers
+  waitUntilLiveReplacedByReplayOnAllServers,
+  waitUntilLiveWaitingOnAllServers,
+
+  findExternalSavedVideo
 }

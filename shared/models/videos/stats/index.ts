@@ -1,3 +1,4 @@
+export * from './video-stats-overall-query.model'
 export * from './video-stats-overall.model'
 export * from './video-stats-retention.model'
 export * from './video-stats-timeserie-query.model'

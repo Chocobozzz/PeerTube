@@ -2,24 +2,24 @@
 
  * Chocobozzz
  * Rigel Kent
- * Filip Bengtsson
  * Александр
- * josé m
- * Berto Te
- * Simon Brosdetzko
- * Jeff Huang
- * kontrollanten
+ * Filip Bengtsson
  * Hồ Nhất Duy
+ * Berto Te
+ * josé m
+ * Jeff Huang
+ * Simon Brosdetzko
  * DignifiedSilence
- * kimsible
+ * kontrollanten
  * Laurent Ettouati
- * Jiri Podhorecky
+ * kimsible
  * Ihor Hordiichuk
- * Phongpanot
+ * Jiri Podhorecky
+ * Zet
  * GunChleoc
+ * Phongpanot
  * Clemens Schielicke
  * Racida S
- * Zet
  * Marcin Mikołajczak
  * Tirifto
  * Kim
@@ -31,26 +31,26 @@
  * Frank Sträter
  * Gérald Niel
  * John Livingston
+ * Quentin PAGÈS
  * Duy
  * Slimane Selyan AMIRI
  * Mark Van den Borre
  * x
+ * Besnik Bleta
  * ButterflyOfFire
  * Julien Maulny
- * Besnik Bleta
  * Jorropo
  * Josh Morel
  * Manuel Viens
  * BO41
  * Balázs Meskó
- * Quentin PAGÈS
  * vachan
  * Elegant Codes
  * Francesc
  * mando laress
+ * Dingzhong Chen
  * Florian CUNY
  * Cedric F
- * Dingzhong Chen
  * Marc Strange
  * Ch
  * Martin Hoefler
@@ -78,8 +78,10 @@
  * Luc Didry
  * Lucas Declercq
  * chris@famichiki.tube
+ * hecko
  * matograine
  * Alexander Ivanov
+ * Armin
  * Daniel Santos
  * David Libeau
  * Eric Guichaoua
@@ -121,7 +123,6 @@
  * Ajeje Brazorf
  * Andrey
  * Angristan
- * Armin
  * Chris Sakura 佐倉くりす on Youtube
  * DontUseGithub
  * Kristoffer Grundström
@@ -242,7 +243,6 @@
  * ahmadsharifian
  * bopol
  * framail
- * hecko
  * les
  * libertas
  * mater
@@ -266,6 +266,7 @@
  * Agron
  * Alejandro Criado-Pérez
  * Aleksandr Sokolov
+ * Alex
  * Alexander F. Rødseth
  * Ali Alim
  * Aman Sharma
@@ -304,6 +305,7 @@
  * Eric Brehault
  * Erwan Croze
  * Esmail_Hazem
+ * Ethan Corgatelli
  * Fabio Agreles Bezerra
  * Fernandez, ReK2
  * Gabriel Scherer
@@ -428,6 +430,7 @@
  * Yaron Shahrabani
  * Yorwba
  * Yun
+ * Zekovski
  * Zig-03
  * [ Bie ] Watcharapong Suriyawan
  * anmol26s

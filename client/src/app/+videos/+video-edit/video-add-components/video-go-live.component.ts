@@ -71,7 +71,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
       nsfw: this.serverConfig.instance.isNSFW,
       waitTranscoding: true,
       permanentLive: this.firstStepPermanentLive,
-      saveReplay: this.firstStepPermanentLive === false && this.isReplayAllowed(),
+      saveReplay: this.isReplayAllowed(),
       channelId: this.firstStepChannelId
     }
 
@@ -154,7 +154,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
 
   getNormalLiveDescription () {
     if (this.isReplayAllowed()) {
-      return $localize`Stream only once and save a replay of your live`
+      return $localize`Stream only once, replay will replace your live`
     }
 
     return $localize`Stream only once`
@@ -162,7 +162,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
 
   getPermanentLiveDescription () {
     if (this.isReplayAllowed()) {
-      return $localize`Stream multiple times, replays can't be saved`
+      return $localize`Stream multiple times, replays will be separate videos`
     }
 
     return $localize`Stream multiple times using the same URL`

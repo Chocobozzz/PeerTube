@@ -58,33 +58,12 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   }
 }
 
-/* rules for dropdowns excepts when in button group, to avoid impacting the dropdown-toggle */
-.dropdown,
-.dropup {
-  z-index: z(dropdown) !important;
-}
-
-.list-overflow-menu,
-.parent-entry {
-  z-index: z(menu) - 1 !important;
-}
-
-.btn-group,
-.dropdown-root,
-.action-dropdown,
-.input-group-prepend,
-.column-toggle {
-  z-index: inherit !important;
-}
-
 .btn-group > .btn:not(:first-child) {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
 
 .dropdown-menu {
-  z-index: z(dropdown) + 1 !important;
-
   border-radius: 3px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
   font-size: 15px;
@@ -190,7 +169,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
     margin-bottom: 0;
     text-align: end;
 
-    > .peertube-button:not(:first-child) {
+    > *:not(:first-child) {
       @include margin-left(10px);
     }
   }
@@ -300,22 +279,6 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 .dropdown-divider {
   margin: 0.3rem 0;
-}
-
-ngb-modal-backdrop {
-  z-index: z(modal) - 1 !important;
-}
-
-ngb-modal-window {
-  z-index: z(modal) !important;
-}
-
-ngb-popover-window {
-  z-index: z(popover) !important;
-}
-
-ngb-tooltip-window {
-  z-index: z(tooltip) !important;
 }
 
 .btn-outline-secondary {

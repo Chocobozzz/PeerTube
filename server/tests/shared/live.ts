@@ -3,15 +3,35 @@
 import { expect } from 'chai'
 import { pathExists, readdir } from 'fs-extra'
 import { join } from 'path'
+import { LiveVideo } from '@shared/models'
 import { PeerTubeServer } from '@shared/server-commands'
 
-async function checkLiveCleanupAfterSave (server: PeerTubeServer, videoUUID: string, resolutions: number[] = []) {
+async function checkLiveCleanup (server: PeerTubeServer, videoUUID: string, savedResolutions: number[] = []) {
+  let live: LiveVideo
+
+  try {
+    live = await server.live.get({ videoId: videoUUID })
+  } catch {}
+
   const basePath = server.servers.buildDirectory('streaming-playlists')
   const hlsPath = join(basePath, 'hls', videoUUID)
 
-  if (resolutions.length === 0) {
-    const result = await pathExists(hlsPath)
-    expect(result).to.be.false
+  if (savedResolutions.length === 0) {
+
+    if (live?.permanentLive) {
+      expect(await pathExists(hlsPath)).to.be.true
+
+      const hlsFiles = await readdir(hlsPath)
+      expect(hlsFiles).to.have.lengthOf(1) // Only replays directory
+
+      const replayDir = join(hlsPath, 'replay')
+      expect(await pathExists(replayDir)).to.be.true
+
+      const replayFiles = await readdir(join(hlsPath, 'replay'))
+      expect(replayFiles).to.have.lengthOf(0)
+    } else {
+      expect(await pathExists(hlsPath)).to.be.false
+    }
 
     return
   }
@@ -19,9 +39,9 @@ async function checkLiveCleanupAfterSave (server: PeerTubeServer, videoUUID: str
   const files = await readdir(hlsPath)
 
   // fragmented file and playlist per resolution + master playlist + segments sha256 json file
-  expect(files).to.have.lengthOf(resolutions.length * 2 + 2)
+  expect(files).to.have.lengthOf(savedResolutions.length * 2 + 2)
 
-  for (const resolution of resolutions) {
+  for (const resolution of savedResolutions) {
     const fragmentedFile = files.find(f => f.endsWith(`-${resolution}-fragmented.mp4`))
     expect(fragmentedFile).to.exist
 
@@ -37,5 +57,5 @@ async function checkLiveCleanupAfterSave (server: PeerTubeServer, videoUUID: str
 }
 
 export {
-  checkLiveCleanupAfterSave
+  checkLiveCleanup
 }

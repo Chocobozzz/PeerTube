@@ -797,7 +797,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     logger.info('Stopping live of video %s after video deletion.', instance.uuid)
 
-    LiveManager.Instance.stopSessionOf(instance.id)
+    LiveManager.Instance.stopSessionOf(instance.id, null)
   }
 
   @BeforeDestroy
@@ -982,7 +982,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }) {
     const { accountId, channelId, start, count, sort, search, isLive } = options
 
-    function buildBaseQuery (): FindOptions {
+    function buildBaseQuery (forCount: boolean): FindOptions {
       const where: WhereOptions = {}
 
       if (search) {
@@ -1011,7 +1011,9 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
             where: channelWhere,
             include: [
               {
-                model: AccountModel,
+                model: forCount
+                  ? AccountModel.unscoped()
+                  : AccountModel,
                 where: {
                   id: accountId
                 },
@@ -1025,8 +1027,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       return baseQuery
     }
 
-    const countQuery = buildBaseQuery()
-    const findQuery = buildBaseQuery()
+    const countQuery = buildBaseQuery(true)
+    const findQuery = buildBaseQuery(false)
 
     const findScopes: (string | ScopeOptions)[] = [
       ScopeNames.WITH_SCHEDULED_UPDATE,

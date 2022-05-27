@@ -100,29 +100,48 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
     })
   }
 
-  static async getOverallStats (video: MVideo): Promise<VideoStatsOverall> {
-    const options = {
+  static async getOverallStats (options: {
+    video: MVideo
+    startDate?: string
+    endDate?: string
+  }): Promise<VideoStatsOverall> {
+    const { video, startDate, endDate } = options
+
+    const queryOptions = {
       type: QueryTypes.SELECT as QueryTypes.SELECT,
-      replacements: { videoId: video.id }
+      replacements: { videoId: video.id } as any
+    }
+
+    let dateWhere = ''
+
+    if (startDate) {
+      dateWhere += ' AND "localVideoViewer"."startDate" >= :startDate'
+      queryOptions.replacements.startDate = startDate
+    }
+
+    if (endDate) {
+      dateWhere += ' AND "localVideoViewer"."endDate" <= :endDate'
+      queryOptions.replacements.endDate = endDate
     }
 
     const watchTimeQuery = `SELECT ` +
+      `COUNT("localVideoViewer"."id") AS "totalViewers", ` +
       `SUM("localVideoViewer"."watchTime") AS "totalWatchTime", ` +
       `AVG("localVideoViewer"."watchTime") AS "averageWatchTime" ` +
       `FROM "localVideoViewer" ` +
       `INNER JOIN "video" ON "video"."id" = "localVideoViewer"."videoId" ` +
-      `WHERE "videoId" = :videoId`
+      `WHERE "videoId" = :videoId ${dateWhere}`
 
-    const watchTimePromise = LocalVideoViewerModel.sequelize.query<any>(watchTimeQuery, options)
+    const watchTimePromise = LocalVideoViewerModel.sequelize.query<any>(watchTimeQuery, queryOptions)
 
     const watchPeakQuery = `WITH "watchPeakValues" AS (
         SELECT "startDate" AS "dateBreakpoint", 1 AS "inc"
         FROM "localVideoViewer"
-        WHERE "videoId" = :videoId
+        WHERE "videoId" = :videoId ${dateWhere}
         UNION ALL
         SELECT "endDate" AS "dateBreakpoint", -1 AS "inc"
         FROM "localVideoViewer"
-        WHERE "videoId" = :videoId
+        WHERE "videoId" = :videoId ${dateWhere}
       )
       SELECT "dateBreakpoint", "concurrent"
       FROM (
@@ -132,24 +151,24 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
       ) tmp
       ORDER BY "concurrent" DESC
       FETCH FIRST 1 ROW ONLY`
-    const watchPeakPromise = LocalVideoViewerModel.sequelize.query<any>(watchPeakQuery, options)
-
-    const commentsQuery = `SELECT COUNT(*) AS comments FROM "videoComment" WHERE "videoId" = :videoId`
-    const commentsPromise = LocalVideoViewerModel.sequelize.query<any>(commentsQuery, options)
+    const watchPeakPromise = LocalVideoViewerModel.sequelize.query<any>(watchPeakQuery, queryOptions)
 
     const countriesQuery = `SELECT country, COUNT(country) as viewers ` +
       `FROM "localVideoViewer" ` +
-      `WHERE "videoId" = :videoId AND country IS NOT NULL ` +
+      `WHERE "videoId" = :videoId AND country IS NOT NULL ${dateWhere} ` +
       `GROUP BY country ` +
       `ORDER BY viewers DESC`
-    const countriesPromise = LocalVideoViewerModel.sequelize.query<any>(countriesQuery, options)
+    const countriesPromise = LocalVideoViewerModel.sequelize.query<any>(countriesQuery, queryOptions)
 
-    const [ rowsWatchTime, rowsWatchPeak, rowsComment, rowsCountries ] = await Promise.all([
+    const [ rowsWatchTime, rowsWatchPeak, rowsCountries ] = await Promise.all([
       watchTimePromise,
       watchPeakPromise,
-      commentsPromise,
       countriesPromise
     ])
+
+    const viewersPeak = rowsWatchPeak.length !== 0
+      ? parseInt(rowsWatchPeak[0].concurrent) || 0
+      : 0
 
     return {
       totalWatchTime: rowsWatchTime.length !== 0
@@ -159,20 +178,14 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
         ? Math.round(rowsWatchTime[0].averageWatchTime) || 0
         : 0,
 
-      viewersPeak: rowsWatchPeak.length !== 0
-        ? parseInt(rowsWatchPeak[0].concurrent) || 0
+      totalViewers: rowsWatchTime.length !== 0
+        ? Math.round(rowsWatchTime[0].totalViewers) || 0
         : 0,
-      viewersPeakDate: rowsWatchPeak.length !== 0
+
+      viewersPeak,
+      viewersPeakDate: rowsWatchPeak.length !== 0 && viewersPeak !== 0
         ? rowsWatchPeak[0].dateBreakpoint || null
         : null,
-
-      views: video.views,
-      likes: video.likes,
-      dislikes: video.dislikes,
-
-      comments: rowsComment.length !== 0
-        ? parseInt(rowsComment[0].comments) || 0
-        : 0,
 
       countries: rowsCountries.map(r => ({
         isoCode: r.country,
@@ -228,6 +241,16 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
       aggregateWatchTime: 'SUM("localVideoViewer"."watchTime")'
     }
 
+    const intervalWhere: { [ id in VideoStatsTimeserieMetric ]: string } = {
+      // Viewer is still in the interval. Overlap algorithm
+      viewers: '"localVideoViewer"."startDate" <= "intervals"."endDate" ' +
+        'AND "localVideoViewer"."endDate" >= "intervals"."startDate"',
+
+      // We do an aggregation, so only sum things once. Arbitrary we use the end date for that purpose
+      aggregateWatchTime: '"localVideoViewer"."endDate" >= "intervals"."startDate" ' +
+        'AND "localVideoViewer"."endDate" <= "intervals"."endDate"'
+    }
+
     const query = `WITH "intervals" AS (
       SELECT
         "time" AS "startDate", "time" + :groupInterval::interval as "endDate"
@@ -238,7 +261,7 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
     FROM
       intervals
       LEFT JOIN "localVideoViewer" ON "localVideoViewer"."videoId" = :videoId
-        AND "localVideoViewer"."startDate" >= "intervals"."startDate" AND "localVideoViewer"."startDate" <= "intervals"."endDate"
+        AND ${intervalWhere[metric]}
     GROUP BY
       "intervals"."startDate"
     ORDER BY

@@ -25,4 +25,8 @@ export class AbstractRunQuery {
 
     return this.sequelize.query<any>(this.query, queryOptions)
   }
+
+  protected buildSelect (entities: string[]) {
+    return `SELECT ${entities.join(', ')} `
+  }
 }

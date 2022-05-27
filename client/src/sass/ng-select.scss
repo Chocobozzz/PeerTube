@@ -27,9 +27,15 @@ $ng-select-value-font-size: 15px;
     }
   }
 
+  .ng-input > input {
+    color: pvar(--inputForegroundColor) !important;
+  }
+
   .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
-    color: pvar(--mainForegroundColor);
-    background-color: pvar(--mainBackgroundColor);
+    &:not(.ng-option-marked, .ng-option-selected) {
+      color: pvar(--mainForegroundColor);
+      background-color: pvar(--mainBackgroundColor);
+    }
   }
 
   .ng-select-container {

@@ -70,6 +70,10 @@
     color: pvar(--mainColor);
   }
 
+  .main-avatar {
+    @include actor-avatar-size(120px);
+  }
+
   @media screen and (max-width: $mobile-view) {
     margin-bottom: 15px;
 

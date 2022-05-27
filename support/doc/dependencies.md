@@ -9,7 +9,7 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Debian / Ubuntu and derivatives](#debian--ubuntu-and-derivatives)
+- [Debian / Ubuntu and derivatives](#debian-ubuntu-and-derivatives)
 - [Arch Linux](#arch-linux)
 - [CentOS 7](#centos-7)
 - [Centos 8](#centos-8)
