@@ -801,7 +801,7 @@
       </trans-unit>
       <trans-unit id="185970110822844952" datatype="html">
         <source>P2P &amp; Privacy</source>
-        <target state="needs-translation">nasin pana P2P en awen pi len sina</target>
+        <target state="translated">nasin pana P2P en awen pi len sina</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">69</context>
@@ -833,7 +833,7 @@
       </trans-unit>
       <trans-unit id="1411398404280870617" datatype="html">
         <source>In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video. In practice, this is much more difficult because:</source>
-        <target state="needs-translation">jan li sona ilo mute li wile la ona li ken pali e ilo ni: ona li sona e nanpa IP pi jan lukin e ni: ona li lukin e sitelen seme. taso ni li pali suli a tan ni:</target>
+        <target state="translated">jan li sona ilo mute li wile la ona li ken pali e ilo ni: ona li sona e nanpa IP pi jan lukin e ni: ona li lukin e sitelen seme. taso ni li pali pi suli mute tan ni:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">85,88</context>
@@ -881,6 +881,7 @@
       </trans-unit>
       <trans-unit id="1120376809358109718" datatype="html">
         <source>Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information </source>
+        <target>ilo linluwi la nasin pana li sama ala nasin BitTorrent pi ilo ante. sina wile sona mute la o lukin e <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>lipu ni<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">115,120</context>
@@ -920,6 +921,7 @@
       </trans-unit>
       <trans-unit id="8804946818315976118" datatype="html">
         <source>Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more. PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser. Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.</source>
+        <target>sina lukin e lipu linluwi ale la ilo pana ona li sona e nanpa IP sina. esun linluwi sina li sona e ona. kulupu ante kin li sona e ona. taso ona li toki ala e ni. mi toki e ni. sina wile len la o kepeken ilo len. weka pi nasin pana P2P li len ala e sina.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">138,143</context>
@@ -927,6 +929,7 @@
       </trans-unit>
       <trans-unit id="401806741040118292" datatype="html">
         <source>What will be done to mitigate this problem?</source>
+        <target>mi weka e ike ni kepeken nasin seme?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">145</context>
@@ -934,6 +937,7 @@
       </trans-unit>
       <trans-unit id="7404776804526394585" datatype="html">
         <source>PeerTube wants to deliver the best countermeasures possible, to give you more choice and render attacks less likely. Here is what we put in place so far:</source>
+        <target>ilo PeerTube la mi wile pana e ken tawa sina li wile weka e ken tan jan ante. tenpo ni la mi pali e ni:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">147,150</context>
@@ -941,6 +945,7 @@
       </trans-unit>
       <trans-unit id="8635362984201852982" datatype="html">
         <source>We set a limit to the number of peers sent by the tracker</source>
+        <target>ilo mama li pana e nanpa pi mute lili taso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">153</context>
@@ -948,6 +953,7 @@
       </trans-unit>
       <trans-unit id="8903417899533541365" datatype="html">
         <source>We set a limit on the request frequency received by the tracker</source>
+        <target>ilo mama li pana e nanpa lon tenpo pi mute lili taso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">154</context>
@@ -955,6 +961,7 @@
       </trans-unit>
       <trans-unit id="2470460396724373169" datatype="html">
         <source>Allow instance admins to disable P2P from the administration interface</source>
+        <target>lawa li ken weka e nasin P2P lon ma ona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">155</context>
@@ -962,6 +969,7 @@
       </trans-unit>
       <trans-unit id="5991790391344625653" datatype="html">
         <source>Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling WebRTC in your browser.</source>
+        <target>ale la, o sona e ni: sina wile ala pana kepeken nasin P2P la sina ken pini e ni lon ilo lukin. ante la sina ken pini e nasin WebRTC lon ilo linluwi sina.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">158,161</context>
@@ -1101,7 +1109,7 @@
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
         <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="8553183884518584864"/> </source>
-        <target state="needs-translation"><x id="ICU" xid="8553183884518584864" equiv-text="sitelen {{ getTotalVideosOf(videoChannel) }}"/> </target>
+        <target state="translated"><x id="ICU" xid="8553183884518584864" equiv-text="sitelen {{ getTotalVideosOf(videoChannel) }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -1233,6 +1241,7 @@
       </trans-unit>
       <trans-unit id="2999492056553212422" datatype="html">
         <source>Banned</source>
+        <target>weka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1264,7 +1273,7 @@
       </trans-unit>
       <trans-unit id="9098920722959201547" datatype="html">
         <source>Show more...</source>
-        <target state="needs-translation">o pana lukin e ale...</target>
+        <target state="translated">o pana lukin e ale...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">54,56</context>
@@ -1375,6 +1384,7 @@
       </trans-unit>
       <trans-unit id="2614607010577950577" datatype="html">
         <source>Overview</source>
+        <target state="needs-translation">lukin suli</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">35</context>
@@ -1447,6 +1457,7 @@
       </trans-unit>
       <trans-unit id="9031514421077169181" datatype="html">
         <source>Video redundancies</source>
+        <target state="needs-translation">jasima sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -1550,6 +1561,7 @@
       </trans-unit>
       <trans-unit id="3008420115644088420" datatype="html">
         <source>Configuration</source>
+        <target>nasin pali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">136</context>
@@ -1569,6 +1581,7 @@
       </trans-unit>
       <trans-unit id="29832309535656200" datatype="html">
         <source>System</source>
+        <target state="needs-translation">ilo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">148</context>
@@ -1576,6 +1589,7 @@
       </trans-unit>
       <trans-unit id="3229595422546554334" datatype="html">
         <source>Jobs</source>
+        <target>pali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">154</context>
@@ -1587,6 +1601,7 @@
       </trans-unit>
       <trans-unit id="4804785061014590286" datatype="html">
         <source>Logs</source>
+        <target state="needs-translation">toki pali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">162</context>
@@ -1616,6 +1631,7 @@
       </trans-unit>
       <trans-unit id="6879611446286948126" datatype="html">
         <source>CACHE</source>
+        <target>AWEN LILI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1623,6 +1639,7 @@
       </trans-unit>
       <trans-unit id="5511334650211127631" datatype="html">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
+        <target state="needs-translation">ijo ni la mi kama jo e ona tan ilo ante li awen e ona lon tenpo lili taso. o toki e ni: mi o awen pi mute seme e ona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -1630,6 +1647,7 @@
       </trans-unit>
       <trans-unit id="4382565260112874406" datatype="html">
         <source>Number of previews to keep in cache</source>
+        <target>o awen lili e sitelen sinpin pi mute ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">15</context>
@@ -1637,6 +1655,7 @@
       </trans-unit>
       <trans-unit id="3710881484246327863" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
+        <target>(sitelen sinpin)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">22</context>
@@ -1644,6 +1663,7 @@
       </trans-unit>
       <trans-unit id="2279905277031617076" datatype="html">
         <source>Number of video captions to keep in cache</source>
+        <target>o awen lili e sitelen toki pi mute ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">29</context>
@@ -1651,6 +1671,7 @@
       </trans-unit>
       <trans-unit id="6193666854590647323" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</source>
+        <target>(sitelen toki)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">36</context>
@@ -1658,6 +1679,7 @@
       </trans-unit>
       <trans-unit id="330647913034301472" datatype="html">
         <source>Number of video torrents to keep in cache</source>
+        <target state="needs-translation">o awen lili e ijo Torrent sitelen pi mute ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">43</context>
@@ -1665,6 +1687,7 @@
       </trans-unit>
       <trans-unit id="4613961764793311850" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached torrent} other {cached torrents}}</source>
+        <target>(ijo Torrent)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">50</context>
@@ -1947,6 +1970,7 @@
       </trans-unit>
       <trans-unit id="502260296951057925" datatype="html">
         <source>Default video quota per user</source>
+        <target>jan o ken pana e sitelen pi mute seme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">211</context>
@@ -1982,6 +2006,7 @@
       </trans-unit>
       <trans-unit id="8509882464852636851" datatype="html">
         <source>Default daily upload limit per user</source>
+        <target>jan o ken pana e sitelen pi mute seme lon tenpo suno wan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">225</context>
@@ -1996,6 +2021,7 @@
       </trans-unit>
       <trans-unit id="2184839376696112704" datatype="html">
         <source>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</source>
+        <target>ni la mi ken kama jo e sitelen mute tan ma pi nasin ante lon tenpo sama. ⚠️ sina ante e ni la o pini e ilo PeerTube o open sin e ona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">255</context>
@@ -2003,7 +2029,7 @@
       </trans-unit>
       <trans-unit id="780513172839038392" datatype="html">
         <source>jobs in parallel</source>
-        <target>pali pi mute ni li ken lon tenpo sama</target>
+        <target>- pali pi mute ni li ken lon tenpo sama</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">259</context>
