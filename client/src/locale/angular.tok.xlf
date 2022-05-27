@@ -817,7 +817,7 @@
       </trans-unit>
       <trans-unit id="6314880288843792309" datatype="html">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
-        <target>nasin BitTorrent li ken pakala e len sina. suli la sina lukin e sitelen la ilo mama li pana e nanpa linluwi IP sina tawa ilo ante.</target>
+        <target>nasin BitTorrent li ken pakala e len sina. suli la sina lukin e sitelen la ilo mama li pana e nanpa linluwi IP pi ilo sina tawa ilo ante.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">78,81</context>
@@ -833,6 +833,7 @@
       </trans-unit>
       <trans-unit id="1411398404280870617" datatype="html">
         <source>In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video. In practice, this is much more difficult because:</source>
+        <target state="needs-translation">jan li sona ilo mute li wile la ona li ken pali e ilo ni: ona li sona e nanpa IP pi jan lukin e ni: ona li lukin e sitelen seme. taso ni li pali suli a tan ni:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">85,88</context>
@@ -840,6 +841,7 @@
       </trans-unit>
       <trans-unit id="6870500454322981404" datatype="html">
         <source>An HTTP request has to be sent on each tracker for each video to spy. If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)</source>
+        <target>jan li wile sona e nanpa pi jan lukin la ona o toki e ni tawa ilo mama: ona li wile e jan lukin pi sitelen seme. ona li wile e jan lukin pi sitelen ale la ona o toki mute e wile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">91,94</context>
@@ -847,6 +849,7 @@
       </trans-unit>
       <trans-unit id="4042605201005159699" datatype="html">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
+        <target>ilo mama li pana ala e nanpa ale, li pana e nanpa pi mute lili taso. jan li wile sona e nanpa ale la ona o toki mute e wile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">96,100</context>
@@ -854,6 +857,7 @@
       </trans-unit>
       <trans-unit id="8817667841110447397" datatype="html">
         <source>Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour</source>
+        <target>mute toki ni li nasa. ni la ilo mama li ken sona e pali ike ni li ken pini e ona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">102,104</context>
@@ -861,6 +865,7 @@
       </trans-unit>
       <trans-unit id="4100327951517495019" datatype="html">
         <source>If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video</source>
+        <target>ni li ken: jan li wile e nanpa IP pi sitelen wan la ilo mama li pana e nanpa, taso jan pi nanpa ni li lukin ala e sitelen ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">106,109</context>
@@ -868,6 +873,7 @@
       </trans-unit>
       <trans-unit id="7196664247366401915" datatype="html">
         <source>The IP address is a vague information: usually, it regularly changes and can represent many persons or entities</source>
+        <target>nanpa IP li ken kama ante lon tenpo mute li ken ijo pi jan mute</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">111,113</context>
@@ -882,6 +888,7 @@
       </trans-unit>
       <trans-unit id="7812408733559506009" datatype="html">
         <source>The worst-case scenario of an average person spying on their friends is quite unlikely. There are much more effective ways to get that kind of information.</source>
+        <target>ni li ken lili lili taso: jan li kama sona e lukin pi jan poka ona. ona li wile e ni la nasin pona ante li lon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">123,126</context>
