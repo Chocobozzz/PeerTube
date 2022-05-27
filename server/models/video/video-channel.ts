@@ -311,6 +311,17 @@ export type SummaryOptions = {
               ')'
             ),
             'viewsPerDay'
+          ],
+          [
+            literal(
+              '(' +
+              'SELECT COALESCE(SUM("video".views), 0) AS totalViews ' +
+              'FROM "video" ' +
+              'WHERE "video"."channelId" = "VideoChannelModel"."id" ' +
+              'GROUP BY "video"."channelId" ' +
+              ')'
+            ),
+            'totalViews'
           ]
         ]
       }
@@ -766,6 +777,8 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
         })
     }
 
+    const totalViews = this.get('totalViews') as number
+
     const actor = this.Actor.toFormattedJSON()
     const videoChannel = {
       id: this.id,
@@ -779,6 +792,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
 
       videosCount,
       viewsPerDay,
+      totalViews,
 
       avatars: actor.avatars,
 
