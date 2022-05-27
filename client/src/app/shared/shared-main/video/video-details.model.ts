@@ -8,7 +8,6 @@ import {
   VideoStreamingPlaylist,
   VideoStreamingPlaylistType
 } from '@shared/models'
-import { VideoSource } from '@shared/models/videos/video-source'
 import { Video } from './video.model'
 
 export class VideoDetails extends Video implements VideoDetailsServerModel {
@@ -30,8 +29,6 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
 
   files: VideoFile[]
   streamingPlaylists: VideoStreamingPlaylist[]
-
-  sources: VideoSource[]
 
   constructor (hash: VideoDetailsServerModel, translations = {}) {
     super(hash, translations)

@@ -302,6 +302,7 @@ const videosCustomGetValidator = (
         if (await checkCanSeePrivateVideo(req, res, video, authenticateInQuery)) {
           return next()
         }
+
         return
       }
 
