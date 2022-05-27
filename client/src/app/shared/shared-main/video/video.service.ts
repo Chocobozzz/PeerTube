@@ -31,6 +31,7 @@ import { VideoChannel, VideoChannelService } from '../video-channel'
 import { VideoDetails } from './video-details.model'
 import { VideoEdit } from './video-edit.model'
 import { Video } from './video.model'
+import { VideoSource } from '@shared/models/videos/video-source'
 
 export type CommonVideoParams = {
   videoPagination?: ComponentPaginationLight
@@ -319,6 +320,14 @@ export class VideoService {
                .get<{ description: string }>(environment.apiUrl + descriptionPath)
                .pipe(
                  map(res => res.description),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
+  getSource (videoId: number) {
+    return this.authHttp
+               .get<{ source: VideoSource }>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/source')
+               .pipe(
                  catchError(err => this.restExtractor.handleError(err))
                )
   }

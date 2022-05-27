@@ -1,7 +1,7 @@
 import 'mocha'
 import * as chai from 'chai'
 import { createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
-import { UserRole } from '@shared/models'
+import { HttpStatusCode, UserRole } from '@shared/models'
 
 const expect = chai.expect
 
@@ -14,27 +14,25 @@ describe('Test video source', () => {
     this.timeout(30000)
 
     server = await createSingleServer(1)
-
-    await setAccessTokensToServers([ server ])
   })
 
   it('Should get the source filename', async function () {
     this.timeout(10000)
+    await setAccessTokensToServers([ server ])
 
     const attributes = {
       fixture: filename
     }
     const created = await server.videos.upload({ attributes, mode: 'resumable' })
     uuid = created.uuid
-    const video = await server.videos.getWithToken({ id: uuid })
+    const source = await server.videos.getSource({ id: uuid, token: server.accessToken })
 
-    expect(video.sources[0].filename).to.equal(filename)
+    expect(source.filename).to.equal(filename)
   })
 
   it('Should not get the source as unauthenticated', async function () {
-    const video = await server.videos.get({ id: uuid })
-
-    expect(video.sources).to.equal(undefined)
+    server.accessToken = null
+    await server.videos.getSource({ id: uuid, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
   })
 
   it('Should not get the source as another user', async function () {
@@ -42,11 +40,10 @@ describe('Test video source', () => {
       username: 'another_user',
       password: 'secret'
     }
+    await setAccessTokensToServers([ server ])
     await server.users.create(user)
     const anotherUserToken = await server.login.getAccessToken(user)
-    const video = await server.videos.getWithToken({ id: uuid, token: anotherUserToken })
-
-    expect(video.sources).to.equal(undefined)
+    await server.videos.getSource({ id: uuid, token: anotherUserToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
   })
 
   it('Should get the source as moderator', async function () {
@@ -55,10 +52,11 @@ describe('Test video source', () => {
       password: 'secret',
       role: UserRole.MODERATOR
     }
+    await setAccessTokensToServers([ server ])
     await server.users.create(user)
     const anotherUserToken = await server.login.getAccessToken(user)
-    const video = await server.videos.getWithToken({ id: uuid, token: anotherUserToken })
+    const source = await server.videos.getSource({ id: uuid, token: anotherUserToken })
 
-    expect(video.sources[0].filename).to.equal(filename)
+    expect(source.filename).to.equal(filename)
   })
 })

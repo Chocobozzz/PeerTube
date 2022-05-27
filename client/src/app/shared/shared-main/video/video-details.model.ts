@@ -46,8 +46,6 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
 
     this.trackerUrls = hash.trackerUrls
 
-    this.sources = hash.sources
-
     this.buildLikeAndDislikePercents()
   }
 

@@ -598,14 +598,14 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   })
   VideoPlaylistElements: VideoPlaylistElementModel[]
 
-  @HasMany(() => VideoSourceModel, {
+  @HasOne(() => VideoSourceModel, {
     foreignKey: {
       name: 'videoId',
       allowNull: true
     },
     onDelete: 'set null'
   })
-  VideoSources: VideoSourceModel[]
+  VideoSource: VideoSourceModel
 
   @HasMany(() => VideoAbuseModel, {
     foreignKey: {

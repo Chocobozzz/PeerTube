@@ -222,4 +222,4 @@ export type MVideoFormattableDetails =
   Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundanciesOpt[]> &
   Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
   PickWithOpt<VideoModel, 'Trackers', MTrackerUrl[]> &
-  Use<'VideoSources', MVideoSourceFormattable[]>
+  Use<'VideoSource', MVideoSourceFormattable>
