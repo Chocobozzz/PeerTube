@@ -31,7 +31,7 @@
         i18n class="video-channel-followers"
         [routerLink]="[ '/my-library', 'followers' ]" [queryParams]="{ search: 'channel:' + videoChannel.name }"
       >
-        {videoChannel.followersCount, plural, =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}
+        {videoChannel.followersCount, plural, =0 {No subscribers} =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}
       </a>
 
       <div i18n class="video-channel-videos">{videoChannel.videosCount, plural, =0 {No videos} =1 {1 video} other {{{ videoChannel.videosCount }} videos}}</div>
