@@ -1345,7 +1345,7 @@
       </trans-unit>
       <trans-unit id="4097331874769079975" datatype="html">
         <source><x id="PH" equiv-text="count"/> subscribers</source>
-        <target>jan <x id="PH" equiv-text="count"/> pi wile lukin</target>
+        <target>jan <x id="PH" equiv-text="count"/> li wile lukin e sitelen kama pi lipu ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">127</context>
@@ -1353,6 +1353,7 @@
       </trans-unit>
       <trans-unit id="4856575356061361269" datatype="html">
         <source><x id="PH" equiv-text="account.followersCount"/> direct account followers</source>
+        <target>jan <x id="PH" equiv-text="account.followersCount"/> li lukin e sijelo ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">153</context>
