@@ -1647,7 +1647,7 @@
       </trans-unit>
       <trans-unit id="5511334650211127631" datatype="html">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
-        <target state="needs-translation">ijo ni la mi kama jo e ona tan ilo ante li awen e ona lon tenpo lili taso. o toki e ni: mi o awen pi mute seme e ona.</target>
+        <target state="translated">ijo ni la mi kama jo e ona tan ilo ante li awen e ona lon tenpo lili taso. o toki e ni: mi o awen pi mute seme e ona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -1779,7 +1779,7 @@
       </trans-unit>
       <trans-unit id="4096396973250090478" datatype="html">
         <source>Landing page</source>
-        <target>lipu sinpin</target>
+        <target>lipu open</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">27</context>
@@ -2233,6 +2233,7 @@
       </trans-unit>
       <trans-unit id="9119248927271669654" datatype="html">
         <source>Other instances can follow yours</source>
+        <target>ma ante li ken lukin e ma ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">439</context>
@@ -2240,6 +2241,7 @@
       </trans-unit>
       <trans-unit id="7015551137649102649" datatype="html">
         <source>Manually approve new instance followers</source>
+        <target>ma ante li wile lukin e ma ni la ona o toki tawa lawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">446</context>
@@ -2247,6 +2249,7 @@
       </trans-unit>
       <trans-unit id="4803992993548153434" datatype="html">
         <source>Automatically follow back instances</source>
+        <target>ma ante li lukin e ma ni la o lukin kin e ona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">459</context>
@@ -2254,6 +2257,7 @@
       </trans-unit>
       <trans-unit id="173263206605027981" datatype="html">
         <source>Automatically follow instances of a public index</source>
+        <target>o lukin e ma ale tan lipu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">472</context>
@@ -2261,6 +2265,7 @@
       </trans-unit>
       <trans-unit id="9076632742417302918" datatype="html">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information about the expected URL </source>
+        <target>sina wile sona e nasin pi pali lipu la o lukin e <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;"/>lipu sona<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">477,479</context>
@@ -2268,6 +2273,7 @@
       </trans-unit>
       <trans-unit id="1718269478813020014" datatype="html">
         <source>Index URL</source>
+        <target>nimi linluwi pi lipu ma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">484</context>
@@ -2275,6 +2281,7 @@
       </trans-unit>
       <trans-unit id="3946988229617310200" datatype="html">
         <source>ADMINISTRATORS</source>
+        <target>LAWA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">504</context>
@@ -2282,6 +2289,7 @@
       </trans-unit>
       <trans-unit id="3171683206914962995" datatype="html">
         <source>Admin email</source>
+        <target>nimi linluwi pi poki Email lawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">510</context>
@@ -2289,6 +2297,7 @@
       </trans-unit>
       <trans-unit id="4722881456283329321" datatype="html">
         <source>Enable contact form</source>
+        <target>jan o ken toki tawa lawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">523</context>
@@ -2296,6 +2305,7 @@
       </trans-unit>
       <trans-unit id="1765095834299337775" datatype="html">
         <source>TWITTER</source>
+        <target>ILO TWITTER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">532</context>
@@ -2303,6 +2313,7 @@
       </trans-unit>
       <trans-unit id="3202133522706129143" datatype="html">
         <source>Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value.</source>
+        <target>sina pali e sijelo pi ma ni lon ilo Twitter la o pana e nimi ona lon ni. ni la jan li pana e nimi linluwi sitelen tan ma ni lon ilo Twitter la ona li pona lukin. sina pali ala e sijelo la o ante ala e nimi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">533,536</context>
@@ -2310,6 +2321,7 @@
       </trans-unit>
       <trans-unit id="4087837092261487511" datatype="html">
         <source>Your Twitter username</source>
+        <target>nimi sijelo pi ilo Twitter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">545</context>
@@ -2317,6 +2329,7 @@
       </trans-unit>
       <trans-unit id="5648651824279408711" datatype="html">
         <source>Instance allowed by Twitter</source>
+        <target>ma ni li pona ala pona tawa ilo Twitter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">558</context>
@@ -2324,6 +2337,7 @@
       </trans-unit>
       <trans-unit id="2076338542820061819" datatype="html">
         <source>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/w/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to see if you instance is allowed. </source>
+        <target>ma ni li pona tawa ilo Twitter la jan li ken lukin e sitelen pi ma ni li lon ona.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> ala la, mi pana e sitelen wan taso.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> sina wile sona e pona pi ma ni tawa ilo Twitter la, o luka e poki wile ni, o awen e wile, o pana e nimi linluwi sitelen (https://nimi.com/w/mumumu) tan ma ni lon ilo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">562,568</context>
@@ -2331,6 +2345,7 @@
       </trans-unit>
       <trans-unit id="3203902538239082422" datatype="html">
         <source>You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</source>
+        <target>sina ken e pali pi sijelo sin. ni la mi kama e ni: jan li pana e sitelen sin la mi awen li pana ala e ona tawa jan ale. sina ken ante e ni lon anpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">105</context>
@@ -2338,6 +2353,7 @@
       </trans-unit>
       <trans-unit id="1035838766454786107" datatype="html">
         <source>Audio-only</source>
+        <target>kalama taso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">17</context>
@@ -2345,6 +2361,7 @@
       </trans-unit>
       <trans-unit id="8011855989482474311" datatype="html">
         <source>A &lt;code&gt;.mp4&lt;/code&gt; that keeps the original audio track, with no video</source>
+        <target state="needs-translation">sitelen pi nasin &lt;code&gt;.mp4&lt;/code&gt;, taso kalama en sitelen ala li lon ona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">18</context>
@@ -2352,6 +2369,7 @@
       </trans-unit>
       <trans-unit id="7756250490108954499" datatype="html">
         <source>144p</source>
+        <target>144p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">22</context>
@@ -2359,6 +2377,7 @@
       </trans-unit>
       <trans-unit id="3768852440495368591" datatype="html">
         <source>240p</source>
+        <target>240p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">26</context>
@@ -2366,6 +2385,7 @@
       </trans-unit>
       <trans-unit id="6824490596490222280" datatype="html">
         <source>360p</source>
+        <target>360p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">30</context>
@@ -2373,6 +2393,7 @@
       </trans-unit>
       <trans-unit id="4039682741786530029" datatype="html">
         <source>480p</source>
+        <target>480p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">34</context>
@@ -2380,6 +2401,7 @@
       </trans-unit>
       <trans-unit id="5165245100010036661" datatype="html">
         <source>720p</source>
+        <target>720p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">38</context>
@@ -2387,6 +2409,7 @@
       </trans-unit>
       <trans-unit id="7709767791012306261" datatype="html">
         <source>1080p</source>
+        <target>1080p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">42</context>
@@ -2394,6 +2417,7 @@
       </trans-unit>
       <trans-unit id="3671005503070777897" datatype="html">
         <source>1440p</source>
+        <target>1440p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">46</context>
@@ -2401,6 +2425,7 @@
       </trans-unit>
       <trans-unit id="597839553814574067" datatype="html">
         <source>2160p</source>
+        <target>2160p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">50</context>
@@ -2429,6 +2454,7 @@
       </trans-unit>
       <trans-unit id="1305357231288135414" datatype="html">
         <source>Homepage</source>
+        <target>lipu open</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">12</context>
