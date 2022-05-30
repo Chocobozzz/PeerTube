@@ -487,7 +487,7 @@ describe('Test video channels', function () {
 
       for (const channel of data) {
         expect(channel).to.haveOwnProperty('totalViews')
-        expect(channel.totalViews).to.be.an('number')
+        expect(channel.totalViews).to.be.a('number')
       }
     }
 
