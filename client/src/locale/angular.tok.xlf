@@ -1337,7 +1337,7 @@
       </trans-unit>
       <trans-unit id="9221735175659318025" datatype="html">
         <source>1 subscriber</source>
-        <target>jan 1 pi wile lukin</target>
+        <target>jan 1 li wile lukin e sitelen kama pi lipu ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">125</context>
@@ -1353,7 +1353,7 @@
       </trans-unit>
       <trans-unit id="4856575356061361269" datatype="html">
         <source><x id="PH" equiv-text="account.followersCount"/> direct account followers</source>
-        <target>jan <x id="PH" equiv-text="account.followersCount"/> li lukin e sijelo ni</target>
+        <target>jan <x id="PH" equiv-text="account.followersCount"/> li wile lukin e sitelen kama pi sijelo ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">153</context>
@@ -1361,7 +1361,7 @@
       </trans-unit>
       <trans-unit id="7008439939460403347" datatype="html">
         <source>Report</source>
-        <target>ni li ike lawa</target>
+        <target>lawa pi ma ni la ni li ike</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">198</context>
@@ -1385,7 +1385,7 @@
       </trans-unit>
       <trans-unit id="2614607010577950577" datatype="html">
         <source>Overview</source>
-        <target state="needs-translation">lukin suli</target>
+        <target state="translated">ale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">35</context>
@@ -1421,6 +1421,7 @@
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
         <source>Federation</source>
+        <target>kulupu ma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">72</context>
@@ -1428,6 +1429,7 @@
       </trans-unit>
       <trans-unit id="8726138323871139597" datatype="html">
         <source>Following</source>
+        <target>mi lukin e ma ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">75</context>
@@ -1443,6 +1445,7 @@
       </trans-unit>
       <trans-unit id="4914577418256256836" datatype="html">
         <source>Followers</source>
+        <target>ma ni li lukin e mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -1458,7 +1461,7 @@
       </trans-unit>
       <trans-unit id="9031514421077169181" datatype="html">
         <source>Video redundancies</source>
-        <target state="needs-translation">jasima sitelen</target>
+        <target state="translated">sitelen awen tan ma ante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -1482,6 +1485,7 @@
       </trans-unit>
       <trans-unit id="1868606282505332204" datatype="html">
         <source>Reports</source>
+        <target>toki pi ijo ike</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -1501,6 +1505,7 @@
       </trans-unit>
       <trans-unit id="746099155736913817" datatype="html">
         <source>Video blocks</source>
+        <target>weka sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">109</context>
@@ -1512,6 +1517,7 @@
       </trans-unit>
       <trans-unit id="7815838401315213887" datatype="html">
         <source>Muted accounts</source>
+        <target>sijelo pi lukin ala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">117</context>
@@ -1539,6 +1545,7 @@
       </trans-unit>
       <trans-unit id="5668793810321242853" datatype="html">
         <source>Muted servers</source>
+        <target>ma pi lukin ala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">125</context>
@@ -1582,7 +1589,7 @@
       </trans-unit>
       <trans-unit id="29832309535656200" datatype="html">
         <source>System</source>
-        <target state="needs-translation">ilo</target>
+        <target state="translated">ilo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">148</context>
@@ -1924,6 +1931,7 @@
       </trans-unit>
       <trans-unit id="4497115134891299867" datatype="html">
         <source>Signup requires email verification</source>
+        <target state="needs-translation">jan li pali e sijelo la ona o tawa poki ona pi lipu Email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">172</context>
@@ -2042,6 +2050,7 @@
       </trans-unit>
       <trans-unit id="5997625369044180192" datatype="html">
         <source>Allow import with HTTP URL (e.g. YouTube)</source>
+        <target>o ken kama jo e sitelen tan ma pi nasin ante (sama ma YouTube)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">268</context>
@@ -2056,6 +2065,7 @@
       </trans-unit>
       <trans-unit id="4719342289581047890" datatype="html">
         <source>Allow import with a torrent file or a magnet URI</source>
+        <target>o ken kama jo e sitelen kepeken nasin Torrent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">279</context>
@@ -2071,6 +2081,7 @@
       </trans-unit>
       <trans-unit id="3428986951244800347" datatype="html">
         <source>Block new videos automatically</source>
+        <target>jan li pana e sitelen sin la o awen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">297</context>
@@ -2078,6 +2089,7 @@
       </trans-unit>
       <trans-unit id="3950258704315544174" datatype="html">
         <source>Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</source>
+        <target>ni la mi pana lukin ala e sitelen sin tawa ale. lawa o lukin e ona o toki e pona ona. (jan pona li pana e sitelen la mi pana e ona tawa ale.)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">300</context>
@@ -2117,6 +2129,7 @@
       </trans-unit>
       <trans-unit id="3442084803796199253" datatype="html">
         <source>Allow users to do remote URI/handle search</source>
+        <target>jan sijelo o ken lukin e ijo tan ma pi kulupu ala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">347</context>
@@ -2124,6 +2137,7 @@
       </trans-unit>
       <trans-unit id="2258148539285928012" datatype="html">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your instance</source>
+        <target>ni la jan li <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>lon sijelo<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> la ona li ken lukin e ijo tan ma ni: ma ni li lukin ala e ona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">350</context>
@@ -2131,6 +2145,7 @@
       </trans-unit>
       <trans-unit id="7295422540935146771" datatype="html">
         <source>Allow anonymous to do remote URI/handle search</source>
+        <target>jan pi sijelo ala o ken lukin e ijo tan ma pi kulupu ala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">358</context>
@@ -2138,6 +2153,7 @@
       </trans-unit>
       <trans-unit id="7305237807882754643" datatype="html">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your instance</source>
+        <target>ni la jan li <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>lon ala sijelo<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> la ona li ken lukin e ijo tan ma ni: ma ni li lukin ala e ona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">361</context>
@@ -2145,6 +2161,7 @@
       </trans-unit>
       <trans-unit id="6476750382562952780" datatype="html">
         <source>Enable global search</source>
+        <target>jan o ken alasa lon ma ale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">372</context>
