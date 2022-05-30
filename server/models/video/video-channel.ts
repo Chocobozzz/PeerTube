@@ -317,8 +317,7 @@ export type SummaryOptions = {
               '(' +
               'SELECT COALESCE(SUM("video".views), 0) AS totalViews ' +
               'FROM "video" ' +
-              'WHERE "video"."channelId" = "VideoChannelModel"."id" ' +
-              'GROUP BY "video"."channelId" ' +
+              'WHERE "video"."channelId" = "VideoChannelModel"."id"' +
               ')'
             ),
             'totalViews'
