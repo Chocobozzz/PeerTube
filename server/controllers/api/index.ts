@@ -1,6 +1,6 @@
 import cors from 'cors'
 import express from 'express'
-import RateLimit from 'express-rate-limit'
+import { buildRateLimiter } from '@server/middlewares'
 import { HttpStatusCode } from '../../../shared/models'
 import { badRequest } from '../../helpers/express-utils'
 import { CONFIG } from '../../initializers/config'
@@ -29,7 +29,7 @@ apiRouter.use(cors({
   credentials: true
 }))
 
-const apiRateLimiter = RateLimit({
+const apiRateLimiter = buildRateLimiter({
   windowMs: CONFIG.RATES_LIMIT.API.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.API.MAX
 })

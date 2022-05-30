@@ -1,18 +1,17 @@
 import express from 'express'
-import RateLimit from 'express-rate-limit'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { getAuthNameFromRefreshGrant, getBypassFromExternalAuth, getBypassFromPasswordGrant } from '@server/lib/auth/external-auth'
 import { handleOAuthToken } from '@server/lib/auth/oauth'
 import { BypassLogin, revokeToken } from '@server/lib/auth/oauth-model'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { asyncMiddleware, authenticate, openapiOperationDoc } from '@server/middlewares'
+import { asyncMiddleware, authenticate, buildRateLimiter, openapiOperationDoc } from '@server/middlewares'
 import { buildUUID } from '@shared/extra-utils'
 import { ScopedToken } from '@shared/models/users/user-scoped-token'
 
 const tokensRouter = express.Router()
 
-const loginRateLimiter = RateLimit({
+const loginRateLimiter = buildRateLimiter({
   windowMs: CONFIG.RATES_LIMIT.LOGIN.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.LOGIN.MAX
 })

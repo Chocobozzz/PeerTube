@@ -7,6 +7,7 @@ import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServ
 
 describe('Test application behind a reverse proxy', function () {
   let server: PeerTubeServer
+  let userAccessToken: string
   let videoId: string
 
   before(async function () {
@@ -33,6 +34,8 @@ describe('Test application behind a reverse proxy', function () {
 
     server = await createSingleServer(1, config)
     await setAccessTokensToServers([ server ])
+
+    userAccessToken = await server.users.generateUserAndToken('user')
 
     const { uuid } = await server.videos.upload()
     videoId = uuid
@@ -93,7 +96,7 @@ describe('Test application behind a reverse proxy', function () {
   it('Should rate limit logins', async function () {
     const user = { username: 'root', password: 'fail' }
 
-    for (let i = 0; i < 19; i++) {
+    for (let i = 0; i < 18; i++) {
       await server.login.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     }
 
@@ -139,6 +142,12 @@ describe('Test application behind a reverse proxy', function () {
     }
 
     await server.videos.get({ id: videoId, expectedStatus: HttpStatusCode.TOO_MANY_REQUESTS_429 })
+  })
+
+  it('Should rate limit API calls with a user but not with an admin', async function () {
+    await server.videos.get({ id: videoId, token: userAccessToken, expectedStatus: HttpStatusCode.TOO_MANY_REQUESTS_429 })
+
+    await server.videos.get({ id: videoId, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
   })
 
   after(async function () {
