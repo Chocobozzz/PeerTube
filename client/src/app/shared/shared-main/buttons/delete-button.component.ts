@@ -9,6 +9,7 @@ import { Component, Input, OnInit } from '@angular/core'
 export class DeleteButtonComponent implements OnInit {
   @Input() label: string
   @Input() title: string
+  @Input() responsiveLabel = false
 
   ngOnInit () {
     // <my-delete-button /> No label

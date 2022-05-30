@@ -82,6 +82,11 @@ async function countVideoViewsOf (internalServerNumber: number, uuid: string) {
   return parseInt(total + '', 10)
 }
 
+function getActorImage (internalServerNumber: number, filename: string) {
+  return selectQuery(internalServerNumber, `SELECT * FROM "actorImage" WHERE filename = '${filename}'`)
+    .then(rows => rows[0])
+}
+
 function selectQuery (internalServerNumber: number, query: string) {
   const seq = getSequelize(internalServerNumber)
   const options = { type: QueryTypes.SELECT as QueryTypes.SELECT }
@@ -106,12 +111,20 @@ async function closeAllSequelize (servers: ServerInfo[]) {
   }
 }
 
-function setPluginVersion (internalServerNumber: number, pluginName: string, newVersion: string) {
+function setPluginField (internalServerNumber: number, pluginName: string, field: string, value: string) {
   const seq = getSequelize(internalServerNumber)
 
   const options = { type: QueryTypes.UPDATE }
 
-  return seq.query(`UPDATE "plugin" SET "version" = '${newVersion}' WHERE "name" = '${pluginName}'`, options)
+  return seq.query(`UPDATE "plugin" SET "${field}" = '${value}' WHERE "name" = '${pluginName}'`, options)
+}
+
+function setPluginVersion (internalServerNumber: number, pluginName: string, newVersion: string) {
+  return setPluginField(internalServerNumber, pluginName, 'version', newVersion)
+}
+
+function setPluginLatestVersion (internalServerNumber: number, pluginName: string, newVersion: string) {
+  return setPluginField(internalServerNumber, pluginName, 'latestVersion', newVersion)
 }
 
 function setActorFollowScores (internalServerNumber: number, newScore: number) {
@@ -122,14 +135,25 @@ function setActorFollowScores (internalServerNumber: number, newScore: number) {
   return seq.query(`UPDATE "actorFollow" SET "score" = ${newScore}`, options)
 }
 
+function setTokenField (internalServerNumber: number, accessToken: string, field: string, value: string) {
+  const seq = getSequelize(internalServerNumber)
+
+  const options = { type: QueryTypes.UPDATE }
+
+  return seq.query(`UPDATE "oAuthToken" SET "${field}" = '${value}' WHERE "accessToken" = '${accessToken}'`, options)
+}
+
 export {
   setVideoField,
   setPlaylistField,
   setActorField,
   countVideoViewsOf,
   setPluginVersion,
+  setPluginLatestVersion,
   selectQuery,
+  getActorImage,
   deleteAll,
+  setTokenField,
   updateQuery,
   setActorFollowScores,
   closeAllSequelize,

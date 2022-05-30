@@ -12,7 +12,12 @@ export type EncoderOptionsBuilder = (params: {
 export interface EncoderOptions {
   copy?: boolean // Copy stream? Default to false
 
-  outputOptions: string[]
+  scaleFilter?: {
+    name: string
+  }
+
+  inputOptions?: string[]
+  outputOptions?: string[]
 }
 
 // All our encoders

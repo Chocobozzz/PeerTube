@@ -19,7 +19,7 @@ import {
 } from 'sequelize-typescript'
 import { ModelCache } from '@server/models/model-cache'
 import { ActivityIconObject, ActivityPubActorType } from '../../../shared/models/activitypub'
-import { Avatar } from '../../../shared/models/avatars/avatar.model'
+import { ActorImage } from '../../../shared/models/actors/actor-image.model'
 import { activityPubContextify } from '../../helpers/activitypub'
 import {
   isActorFollowersCountValid,
@@ -29,11 +29,19 @@ import {
   isActorPublicKeyValid
 } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { ACTIVITY_PUB, ACTIVITY_PUB_ACTOR_TYPES, CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants'
+import {
+  ACTIVITY_PUB,
+  ACTIVITY_PUB_ACTOR_TYPES,
+  CONSTRAINTS_FIELDS,
+  MIMETYPES,
+  SERVER_ACTOR_NAME,
+  WEBSERVER
+} from '../../initializers/constants'
 import {
   MActor,
   MActorAccountChannelId,
-  MActorAP,
+  MActorAPAccount,
+  MActorAPChannel,
   MActorFormattable,
   MActorFull,
   MActorHost,
@@ -43,7 +51,7 @@ import {
   MActorWithInboxes
 } from '../../types/models'
 import { AccountModel } from '../account/account'
-import { AvatarModel } from '../avatar/avatar'
+import { ActorImageModel } from '../account/actor-image'
 import { ServerModel } from '../server/server'
 import { isOutdated, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
@@ -61,9 +69,7 @@ export const unusedActorAttributesForAPI = [
   'outboxUrl',
   'sharedInboxUrl',
   'followersUrl',
-  'followingUrl',
-  'createdAt',
-  'updatedAt'
+  'followingUrl'
 ]
 
 @DefaultScope(() => ({
@@ -73,7 +79,8 @@ export const unusedActorAttributesForAPI = [
       required: false
     },
     {
-      model: AvatarModel,
+      model: ActorImageModel,
+      as: 'Avatar',
       required: false
     }
   ]
@@ -100,7 +107,13 @@ export const unusedActorAttributesForAPI = [
         required: false
       },
       {
-        model: AvatarModel,
+        model: ActorImageModel,
+        as: 'Avatar',
+        required: false
+      },
+      {
+        model: ActorImageModel,
+        as: 'Banner',
         required: false
       }
     ]
@@ -207,24 +220,45 @@ export class ActorModel extends Model {
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   followingUrl: string
 
+  @AllowNull(true)
+  @Column
+  remoteCreatedAt: Date
+
   @CreatedAt
   createdAt: Date
 
   @UpdatedAt
   updatedAt: Date
 
-  @ForeignKey(() => AvatarModel)
+  @ForeignKey(() => ActorImageModel)
   @Column
   avatarId: number
 
-  @BelongsTo(() => AvatarModel, {
+  @ForeignKey(() => ActorImageModel)
+  @Column
+  bannerId: number
+
+  @BelongsTo(() => ActorImageModel, {
     foreignKey: {
+      name: 'avatarId',
       allowNull: true
     },
+    as: 'Avatar',
     onDelete: 'set null',
     hooks: true
   })
-  Avatar: AvatarModel
+  Avatar: ActorImageModel
+
+  @BelongsTo(() => ActorImageModel, {
+    foreignKey: {
+      name: 'bannerId',
+      allowNull: true
+    },
+    as: 'Banner',
+    onDelete: 'set null',
+    hooks: true
+  })
+  Banner: ActorImageModel
 
   @HasMany(() => ActorFollowModel, {
     foreignKey: {
@@ -496,7 +530,7 @@ export class ActorModel extends Model {
   }
 
   toFormattedSummaryJSON (this: MActorSummaryFormattable) {
-    let avatar: Avatar = null
+    let avatar: ActorImage = null
     if (this.Avatar) {
       avatar = this.Avatar.toFormattedJSON()
     }
@@ -512,26 +546,47 @@ export class ActorModel extends Model {
   toFormattedJSON (this: MActorFormattable) {
     const base = this.toFormattedSummaryJSON()
 
+    let banner: ActorImage = null
+    if (this.Banner) {
+      banner = this.Banner.toFormattedJSON()
+    }
+
     return Object.assign(base, {
       id: this.id,
       hostRedundancyAllowed: this.getRedundancyAllowed(),
       followingCount: this.followingCount,
       followersCount: this.followersCount,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      banner,
+      createdAt: this.getCreatedAt()
     })
   }
 
-  toActivityPubObject (this: MActorAP, name: string) {
+  toActivityPubObject (this: MActorAPChannel | MActorAPAccount, name: string) {
     let icon: ActivityIconObject
+    let image: ActivityIconObject
 
     if (this.avatarId) {
       const extension = extname(this.Avatar.filename)
 
       icon = {
         type: 'Image',
-        mediaType: extension === '.png' ? 'image/png' : 'image/jpeg',
+        mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extension],
+        height: this.Avatar.height,
+        width: this.Avatar.width,
         url: this.getAvatarUrl()
+      }
+    }
+
+    if (this.bannerId) {
+      const banner = (this as MActorAPChannel).Banner
+      const extension = extname(banner.filename)
+
+      image = {
+        type: 'Image',
+        mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extension],
+        height: banner.height,
+        width: banner.width,
+        url: this.getBannerUrl()
       }
     }
 
@@ -554,7 +609,9 @@ export class ActorModel extends Model {
         owner: this.url,
         publicKeyPem: this.publicKey
       },
-      icon
+      published: this.getCreatedAt().toISOString(),
+      icon,
+      image
     }
 
     return activityPubContextify(json)
@@ -624,9 +681,19 @@ export class ActorModel extends Model {
     return WEBSERVER.URL + this.Avatar.getStaticPath()
   }
 
+  getBannerUrl () {
+    if (!this.bannerId) return undefined
+
+    return WEBSERVER.URL + this.Banner.getStaticPath()
+  }
+
   isOutdated () {
     if (this.isOwned()) return false
 
     return isOutdated(this, ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL)
+  }
+
+  getCreatedAt (this: MActorAPChannel | MActorAPAccount | MActorFormattable) {
+    return this.remoteCreatedAt || this.createdAt
   }
 }

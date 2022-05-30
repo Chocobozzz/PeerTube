@@ -38,6 +38,10 @@ log:
 contact_form:
   enabled: true
 
+peertube:
+  check_latest_version:
+    enabled: false
+
 redundancy:
   videos:
     check_interval: '1 minute'
@@ -83,6 +87,8 @@ transcoding:
     1080p: true
     1440p: true
     2160p: true
+  webtorrent:
+    enabled: true
   hls:
     enabled: true
 

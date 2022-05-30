@@ -1,6 +1,5 @@
 import { Subject } from 'rxjs'
-import { debounceTime } from 'rxjs/operators'
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 import { ComponentPagination, Notifier } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
@@ -9,7 +8,7 @@ import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
   templateUrl: './my-subscriptions.component.html',
   styleUrls: [ './my-subscriptions.component.scss' ]
 })
-export class MySubscriptionsComponent implements OnInit {
+export class MySubscriptionsComponent {
   videoChannels: VideoChannel[] = []
 
   pagination: ComponentPagination = {
@@ -20,33 +19,12 @@ export class MySubscriptionsComponent implements OnInit {
 
   onDataSubject = new Subject<any[]>()
 
-  subscriptionsSearch: string
-  subscriptionsSearchChanged = new Subject<string>()
+  search: string
 
   constructor (
     private userSubscriptionService: UserSubscriptionService,
     private notifier: Notifier
   ) {}
-
-  ngOnInit () {
-    this.loadSubscriptions()
-
-    this.subscriptionsSearchChanged
-      .pipe(debounceTime(500))
-      .subscribe(() => {
-        this.pagination.currentPage = 1
-        this.loadSubscriptions(false)
-      })
-  }
-
-  resetSearch () {
-    this.subscriptionsSearch = ''
-    this.onSubscriptionsSearchChanged()
-  }
-
-  onSubscriptionsSearchChanged () {
-    this.subscriptionsSearchChanged.next()
-  }
 
   onNearOfBottom () {
     // Last page
@@ -56,8 +34,13 @@ export class MySubscriptionsComponent implements OnInit {
     this.loadSubscriptions()
   }
 
+  onSearch (search: string) {
+    this.search = search
+    this.loadSubscriptions(false)
+  }
+
   private loadSubscriptions (more = true) {
-    this.userSubscriptionService.listSubscriptions({ pagination: this.pagination, search: this.subscriptionsSearch })
+    this.userSubscriptionService.listSubscriptions({ pagination: this.pagination, search: this.search })
         .subscribe(
           res => {
             this.videoChannels = more

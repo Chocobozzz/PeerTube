@@ -5,7 +5,8 @@ h2 {
   margin-bottom: 20px;
 }
 
-input[type=submit], button {
+input[type=submit],
+button {
   @include peertube-button;
   @include orange-button;
 

@@ -1,12 +1,13 @@
-import { IConfig } from 'config'
-import { dirname, join } from 'path'
-import { VideosRedundancyStrategy } from '../../shared/models'
-// Do not use barrels, remain constants as independent as possible
-import { buildPath, parseBytes, parseDurationToMs, root } from '../helpers/core-utils'
-import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import * as bytes from 'bytes'
+import { IConfig } from 'config'
+import decache from 'decache'
+import { dirname, join } from 'path'
 import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
 import { BroadcastMessageLevel } from '@shared/models/server'
+import { VideosRedundancyStrategy } from '../../shared/models'
+import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
+// Do not use barrels, remain constants as independent as possible
+import { buildPath, parseBytes, parseDurationToMs, root } from '../helpers/core-utils'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
@@ -59,7 +60,7 @@ const CONFIG = {
   },
   STORAGE: {
     TMP_DIR: buildPath(config.get<string>('storage.tmp')),
-    AVATARS_DIR: buildPath(config.get<string>('storage.avatars')),
+    ACTOR_IMAGES: buildPath(config.get<string>('storage.avatars')),
     LOG_DIR: buildPath(config.get<string>('storage.logs')),
     VIDEOS_DIR: buildPath(config.get<string>('storage.videos')),
     STREAMING_PLAYLISTS_DIR: buildPath(config.get<string>('storage.streaming_playlists')),
@@ -133,6 +134,11 @@ const CONFIG = {
     REPORT_ONLY: config.get<boolean>('csp.report_only'),
     REPORT_URI: config.get<string>('csp.report_uri')
   },
+  SECURITY: {
+    FRAMEGUARD: {
+      ENABLED: config.get<boolean>('security.frameguard.enabled')
+    }
+  },
   TRACKER: {
     ENABLED: config.get<boolean>('tracker.enabled'),
     PRIVATE: config.get<boolean>('tracker.private'),
@@ -161,6 +167,12 @@ const CONFIG = {
     VIDEOS: {
       FEDERATE_UNLISTED: config.get<boolean>('federation.videos.federate_unlisted'),
       CLEANUP_REMOTE_INTERACTIONS: config.get<boolean>('federation.videos.cleanup_remote_interactions')
+    }
+  },
+  PEERTUBE: {
+    CHECK_LATEST_VERSION: {
+      ENABLED: config.get<boolean>('peertube.check_latest_version.enabled'),
+      URL: config.get<string>('peertube.check_latest_version.url')
     }
   },
   ADMIN: {
@@ -412,7 +424,7 @@ function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {
 
 export function reloadConfig () {
 
-  function directory () {
+  function getConfigDirectory () {
     if (process.env.NODE_CONFIG_DIR) {
       return process.env.NODE_CONFIG_DIR
     }
@@ -421,15 +433,17 @@ export function reloadConfig () {
   }
 
   function purge () {
+    const directory = getConfigDirectory()
+
     for (const fileName in require.cache) {
-      if (fileName.includes(directory()) === false) {
+      if (fileName.includes(directory) === false) {
         continue
       }
 
       delete require.cache[fileName]
     }
 
-    delete require.cache[require.resolve('config')]
+    decache('config')
   }
 
   purge()

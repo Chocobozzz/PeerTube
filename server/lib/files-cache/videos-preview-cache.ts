@@ -39,7 +39,7 @@ class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
     const destPath = join(FILES_CACHE.PREVIEWS.DIRECTORY, preview.filename)
 
     const remoteUrl = preview.getFileUrl(video)
-    await doRequestAndSaveToFile({ uri: remoteUrl }, destPath)
+    await doRequestAndSaveToFile(remoteUrl, destPath)
 
     logger.debug('Fetched remote preview %s to %s.', remoteUrl, destPath)
 

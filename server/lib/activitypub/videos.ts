@@ -1,8 +1,7 @@
 import * as Bluebird from 'bluebird'
 import { maxBy, minBy } from 'lodash'
 import * as magnetUtil from 'magnet-uri'
-import { basename, join } from 'path'
-import * as request from 'request'
+import { basename } from 'path'
 import { Transaction } from 'sequelize/types'
 import { TrackerModel } from '@server/models/server/tracker'
 import { VideoLiveModel } from '@server/models/video/video-live'
@@ -17,7 +16,7 @@ import {
   ActivityUrlObject,
   ActivityVideoUrlObject
 } from '../../../shared/index'
-import { ActivityIconObject, ActivityTrackerUrlObject, VideoObject } from '../../../shared/models/activitypub/objects'
+import { ActivityTrackerUrlObject, VideoObject } from '../../../shared/models/activitypub/objects'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
@@ -31,11 +30,10 @@ import { isArray } from '../../helpers/custom-validators/misc'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { deleteNonExistingModels, resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
-import { doRequest } from '../../helpers/requests'
+import { doJSONRequest, PeerTubeRequestError } from '../../helpers/requests'
 import { fetchVideoByUrl, getExtFromMimetype, VideoFetchByUrlType } from '../../helpers/video'
 import {
   ACTIVITY_PUB,
-  LAZY_STATIC_PATHS,
   MIMETYPES,
   P2P_MEDIA_LOADER_PEER_VERSION,
   PREVIEWS_SIZE,
@@ -115,36 +113,26 @@ async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVid
   }
 }
 
-async function fetchRemoteVideo (videoUrl: string): Promise<{ response: request.RequestResponse, videoObject: VideoObject }> {
-  const options = {
-    uri: videoUrl,
-    method: 'GET',
-    json: true,
-    activityPub: true
-  }
-
+async function fetchRemoteVideo (videoUrl: string): Promise<{ statusCode: number, videoObject: VideoObject }> {
   logger.info('Fetching remote video %s.', videoUrl)
 
-  const { response, body } = await doRequest<any>(options)
+  const { statusCode, body } = await doJSONRequest<any>(videoUrl, { activityPub: true })
 
   if (sanitizeAndCheckVideoTorrentObject(body) === false || checkUrlsSameHost(body.id, videoUrl) !== true) {
     logger.debug('Remote video JSON is not valid.', { body })
-    return { response, videoObject: undefined }
+    return { statusCode, videoObject: undefined }
   }
 
-  return { response, videoObject: body }
+  return { statusCode, videoObject: body }
 }
 
 async function fetchRemoteVideoDescription (video: MVideoAccountLight) {
   const host = video.VideoChannel.Account.Actor.Server.host
   const path = video.getDescriptionAPIPath()
-  const options = {
-    uri: REMOTE_SCHEME.HTTP + '://' + host + path,
-    json: true
-  }
+  const url = REMOTE_SCHEME.HTTP + '://' + host + path
 
-  const { body } = await doRequest<any>(options)
-  return body.description ? body.description : ''
+  const { body } = await doJSONRequest<any>(url)
+  return body.description || ''
 }
 
 function getOrCreateVideoChannelFromVideoObject (videoObject: VideoObject) {
@@ -348,7 +336,7 @@ async function updateVideoFromAP (options: {
       }
 
       const to = overrideTo || videoObject.to
-      const videoData = await videoActivityObjectToDBAttributes(channel, videoObject, to)
+      const videoData = videoActivityObjectToDBAttributes(channel, videoObject, to)
       video.name = videoData.name
       video.uuid = videoData.uuid
       video.url = videoData.url
@@ -378,13 +366,13 @@ async function updateVideoFromAP (options: {
 
       if (thumbnailModel) await videoUpdated.addAndSaveThumbnail(thumbnailModel, t)
 
-      if (videoUpdated.getPreview()) {
-        const previewUrl = getPreviewUrl(getPreviewFromIcons(videoObject), video)
+      const previewIcon = getPreviewFromIcons(videoObject)
+      if (videoUpdated.getPreview() && previewIcon) {
         const previewModel = createPlaceholderThumbnail({
-          fileUrl: previewUrl,
+          fileUrl: previewIcon.url,
           video,
           type: ThumbnailType.PREVIEW,
-          size: PREVIEWS_SIZE
+          size: previewIcon
         })
         await videoUpdated.addAndSaveThumbnail(previewModel, t)
       }
@@ -534,14 +522,7 @@ async function refreshVideoIfNeeded (options: {
     : await VideoModel.loadByUrlAndPopulateAccount(options.video.url)
 
   try {
-    const { response, videoObject } = await fetchRemoteVideo(video.url)
-    if (response.statusCode === HttpStatusCode.NOT_FOUND_404) {
-      logger.info('Cannot refresh remote video %s: video does not exist anymore. Deleting it.', video.url)
-
-      // Video does not exist anymore
-      await video.destroy()
-      return undefined
-    }
+    const { videoObject } = await fetchRemoteVideo(video.url)
 
     if (videoObject === undefined) {
       logger.warn('Cannot refresh remote video %s: invalid body.', video.url)
@@ -558,13 +539,21 @@ async function refreshVideoIfNeeded (options: {
       account: channelActor.VideoChannel.Account,
       channel: channelActor.VideoChannel
     }
-    await retryTransactionWrapper(updateVideoFromAP, updateOptions)
+    await updateVideoFromAP(updateOptions)
     await syncVideoExternalAttributes(video, videoObject, options.syncParam)
 
     ActorFollowScoreCache.Instance.addGoodServerId(video.VideoChannel.Actor.serverId)
 
     return video
   } catch (err) {
+    if ((err as PeerTubeRequestError).statusCode === HttpStatusCode.NOT_FOUND_404) {
+      logger.info('Cannot refresh remote video %s: video does not exist anymore. Deleting it.', video.url)
+
+      // Video does not exist anymore
+      await video.destroy()
+      return undefined
+    }
+
     logger.warn('Cannot refresh video %s.', options.video.url, { err })
 
     ActorFollowScoreCache.Instance.addBadServerId(video.VideoChannel.Actor.serverId)
@@ -638,15 +627,17 @@ async function createVideo (videoObject: VideoObject, channel: MChannelAccountLi
 
       if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
 
-      const previewUrl = getPreviewUrl(getPreviewFromIcons(videoObject), videoCreated)
-      const previewModel = createPlaceholderThumbnail({
-        fileUrl: previewUrl,
-        video: videoCreated,
-        type: ThumbnailType.PREVIEW,
-        size: PREVIEWS_SIZE
-      })
+      const previewIcon = getPreviewFromIcons(videoObject)
+      if (previewIcon) {
+        const previewModel = createPlaceholderThumbnail({
+          fileUrl: previewIcon.url,
+          video: videoCreated,
+          type: ThumbnailType.PREVIEW,
+          size: previewIcon
+        })
 
-      if (thumbnailModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
+        await videoCreated.addAndSaveThumbnail(previewModel, t)
+      }
 
       // Process files
       const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoCreated, videoObject.url)
@@ -705,6 +696,9 @@ async function createVideo (videoObject: VideoObject, channel: MChannelAccountLi
 
         videoCreated.VideoLive = await videoLive.save({ transaction: t })
       }
+
+      // We added a video in this channel, set it as updated
+      await channel.setAsUpdated(t)
 
       const autoBlacklisted = await autoBlacklistVideoIfNeeded({
         video: videoCreated,
@@ -904,12 +898,6 @@ function getPreviewFromIcons (videoObject: VideoObject) {
   const validIcons = videoObject.icon.filter(i => i.width > PREVIEWS_SIZE.minWidth)
 
   return maxBy(validIcons, 'width')
-}
-
-function getPreviewUrl (previewIcon: ActivityIconObject, video: MVideoWithHost) {
-  return previewIcon
-    ? previewIcon.url
-    : buildRemoteVideoBaseUrl(video, join(LAZY_STATIC_PATHS.PREVIEWS, video.generatePreviewName()))
 }
 
 function getTrackerUrls (object: VideoObject, video: MVideoWithHost) {

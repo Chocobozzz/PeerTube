@@ -23,7 +23,7 @@ const signatureValidator = [
     .custom(isSignatureValueValid).withMessage('Should have a valid signature value'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking activitypub signature parameter', { parameters: { signature: req.body.signature } })
+    logger.debug('Checking Linked Data Signature parameter', { parameters: { signature: req.body.signature } })
 
     if (areValidationErrors(req, res)) return
 

@@ -1,7 +1,6 @@
 import * as Bull from 'bull'
 import { TranscodeOptionsType } from '@server/helpers/ffmpeg-utils'
-import { JOB_PRIORITY } from '@server/initializers/constants'
-import { getJobTranscodingPriorityMalus, publishAndFederateIfNeeded } from '@server/lib/video'
+import { getTranscodingJobPriority, publishAndFederateIfNeeded } from '@server/lib/video'
 import { getVideoFilePath } from '@server/lib/video-paths'
 import { UserModel } from '@server/models/account/user'
 import { MUser, MUserId, MVideoFullLight, MVideoUUID, MVideoWithFile } from '@server/types/models'
@@ -215,7 +214,7 @@ async function createHlsJobIfEnabled (user: MUserId, payload: {
   if (!payload || CONFIG.TRANSCODING.HLS.ENABLED !== true) return false
 
   const jobOptions = {
-    priority: JOB_PRIORITY.TRANSCODING.NEW_RESOLUTION + await getJobTranscodingPriorityMalus(user)
+    priority: await getTranscodingJobPriority(user)
   }
 
   const hlsTranscodingPayload: HLSTranscodingPayload = {
@@ -272,7 +271,7 @@ async function createLowerResolutionsJobs (
     resolutionCreated.push(resolution)
 
     const jobOptions = {
-      priority: JOB_PRIORITY.TRANSCODING.NEW_RESOLUTION + await getJobTranscodingPriorityMalus(user)
+      priority: await getTranscodingJobPriority(user)
     }
 
     JobQueue.Instance.createJob({ type: 'video-transcoding', payload: dataInput }, jobOptions)

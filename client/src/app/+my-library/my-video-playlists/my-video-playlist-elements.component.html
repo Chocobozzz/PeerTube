@@ -1,6 +1,6 @@
-<div class="row">
+<div class="root">
 
-  <div class="playlist-info col-xs-12 col-md-5 col-xl-3">
+  <div class="playlist-info">
     <my-video-playlist-miniature
       *ngIf="playlist" [playlist]="playlist" [toManage]="false" [displayChannel]="true"
       [displayDescription]="true" [displayPrivacy]="true"
@@ -20,7 +20,7 @@
 
   </div>
 
-  <div class="playlist-elements col-xs-12 col-md-7 col-xl-9">
+  <div class="playlist-elements">
     <div class="no-results" *ngIf="pagination.totalItems === 0">
       <div i18n>No videos in this playlist.</div>
 

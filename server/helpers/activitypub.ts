@@ -3,7 +3,6 @@ import { URL } from 'url'
 import validator from 'validator'
 import { ContextType } from '@shared/models/activitypub/context'
 import { ResultList } from '../../shared/models'
-import { Activity } from '../../shared/models/activitypub'
 import { ACTIVITY_PUB, REMOTE_SCHEME } from '../initializers/constants'
 import { MActor, MVideoWithHost } from '../types/models'
 import { pageToStartAndCount } from './core-utils'
@@ -182,10 +181,10 @@ async function activityPubCollectionPagination (
 
 }
 
-function buildSignedActivity (byActor: MActor, data: Object, contextType?: ContextType) {
+function buildSignedActivity <T> (byActor: MActor, data: T, contextType?: ContextType) {
   const activity = activityPubContextify(data, contextType)
 
-  return signJsonLDObject(byActor, activity) as Promise<Activity>
+  return signJsonLDObject(byActor, activity)
 }
 
 function getAPId (activity: string | { id: string }) {

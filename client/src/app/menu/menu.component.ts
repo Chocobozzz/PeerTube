@@ -1,15 +1,16 @@
-import { ViewportScroller } from '@angular/common'
 import { HotkeysService } from 'angular2-hotkeys'
 import * as debug from 'debug'
 import { switchMap } from 'rxjs/operators'
+import { ViewportScroller } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { scrollToTop } from '@app/helpers'
 import { AuthService, AuthStatus, AuthUser, MenuService, RedirectService, ScreenService, ServerService, UserService } from '@app/core'
+import { scrollToTop } from '@app/helpers'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
+import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
+import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
 import { ServerConfig, UserRight, VideoConstant } from '@shared/models'
-import { NgbDropdown, NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap'
 
 const logger = debug('peertube:menu:MenuComponent')
 
@@ -54,22 +55,18 @@ export class MenuComponent implements OnInit {
     private hotkeysService: HotkeysService,
     private screenService: ScreenService,
     private menuService: MenuService,
-    private dropdownConfig: NgbDropdownConfig,
+    private modalService: PeertubeModalService,
     private router: Router
-  ) {
-    this.dropdownConfig.container = 'body'
-  }
+  ) { }
 
   get isInMobileView () {
     return this.screenService.isInMobileView()
   }
 
   get dropdownContainer () {
-    if (this.isInMobileView) {
-      return null
-    } else {
-      return this.dropdownConfig.container
-    }
+    if (this.isInMobileView) return null
+
+    return 'body' as 'body'
   }
 
   get language () {
@@ -130,6 +127,9 @@ export class MenuComponent implements OnInit {
         this.authService.userInformationLoaded
           .subscribe(() => this.buildUserLanguages())
       })
+
+    this.modalService.openQuickSettingsSubject
+      .subscribe(() => this.openQuickSettings())
   }
 
   isRegistrationAllowed () {

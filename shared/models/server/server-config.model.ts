@@ -151,6 +151,15 @@ export interface ServerConfig {
     }
   }
 
+  banner: {
+    file: {
+      size: {
+        max: number
+      }
+      extensions: string[]
+    }
+  }
+
   video: {
     image: {
       size: {

@@ -109,7 +109,6 @@ const installOrUpdatePluginValidator = [
     if (!body.path && !body.npmName) {
       return res.status(HttpStatusCode.BAD_REQUEST_400)
                 .json({ error: 'Should have either a npmName or a path' })
-                .end()
     }
 
     return next()
@@ -140,7 +139,6 @@ const existingPluginValidator = [
     if (!plugin) {
       return res.status(HttpStatusCode.NOT_FOUND_404)
                 .json({ error: 'Plugin not found' })
-                .end()
     }
 
     res.locals.plugin = plugin

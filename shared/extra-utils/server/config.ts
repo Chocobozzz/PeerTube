@@ -231,6 +231,18 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
   return updateCustomConfig(url, token, updateParams)
 }
 
+function getCustomConfigResolutions (enabled: boolean) {
+  return {
+    '240p': enabled,
+    '360p': enabled,
+    '480p': enabled,
+    '720p': enabled,
+    '1080p': enabled,
+    '1440p': enabled,
+    '2160p': enabled
+  }
+}
+
 function deleteCustomConfig (url: string, token: string, statusCodeExpected = HttpStatusCode.OK_200) {
   const path = '/api/v1/config/custom'
 
@@ -250,5 +262,6 @@ export {
   updateCustomConfig,
   getAbout,
   deleteCustomConfig,
-  updateCustomSubConfig
+  updateCustomSubConfig,
+  getCustomConfigResolutions
 }

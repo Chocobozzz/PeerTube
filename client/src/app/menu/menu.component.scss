@@ -3,8 +3,11 @@
 
 $menu-link-icon-size: 22px;
 $menu-link-icon-margin-right: 18px;
+$footer-links-base-opacity: .8;
 
-@mixin menu-link {
+.menu-link {
+  @include disable-default-a-behaviour;
+
   display: flex;
   align-items: center;
   padding-left: $menu-lateral-padding;
@@ -21,8 +24,9 @@ $menu-link-icon-margin-right: 18px;
     background-color: rgba(255, 255, 255, 0.15);
   }
 
-  &:hover, &.focus-visible {
-    background-color: rgba(255, 255, 255, 0.10);
+  &:hover,
+  &.focus-visible {
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   my-global-icon {
@@ -57,7 +61,8 @@ menu {
   margin: 0;
   padding: 0;
 
-  &:focus, &:hover {
+  &:focus,
+  &:hover {
     overflow-y: auto;
   }
 
@@ -90,198 +95,182 @@ menu {
     display: flex;
     align-items: center;
     justify-content: left;
+  }
+}
 
-    .logged-in-more {
-      $main-radius: 25px;
+my-notification {
+  margin-left: auto;
+  margin-right: 15px;
+}
 
-      flex: 1;
-      margin-left: 13px;
-      border-radius: $main-radius;
-      transition: all .1s ease-in-out;
-      cursor: pointer;
+.logged-in-more {
+  @mixin display-hints($is-mobile: false) {
+    background-color: rgba(255, 255, 255, 0.15);
 
-      *, & {
-        line-height: 1;
-      }
-
-      &.show {
-        background-color: rgba(255, 255, 255, 0.20);
-        box-shadow: inset 0 3px 5px rgba(0, 0, 0, .325);
-      }
-
-      @mixin display-hints($is-mobile: false) {
-        background-color: rgba(255, 255, 255, 0.15);
-
-        @if $is-mobile {
-          .dropdown-toggle-indicator {
-            display: inherit !important;
-          }
-          .dropdown-toggle:first-child {
-            padding-right: 30px !important;
-          }
-        }
-      }
-
-      &:hover {
-        @include display-hints;
-      }
-
-      /* smartphones and touchscreens */
-      @media (hover: none) and (pointer: coarse) {
-        @include display-hints($is-mobile: true);
-
-        /* fill space when on mobile */
-        max-width: calc(100% - 80px);
-        .dropdown-toggle {
-          max-width: 100%;
-        }
-        .logged-in-info {
-          max-width: calc(100% - 45px) !important;
-        }
-
-      }
-
+    @if $is-mobile {
       .dropdown-toggle-indicator {
-        position: relative;
-        width: 0;
-        display: none;
-
-        span {
-          position: absolute;
-          right: -35px;
-          top: -8px;
-          color: grey;
-          width: $main-radius;
-        }
+        display: inherit !important;
       }
-
-      .dropdown-toggle {
-        &::after {
-          border: none;
-        }
-      }
-
       .dropdown-toggle:first-child {
-        display: flex;
-        align-items: center;
-        padding: 5px 7px;
-        border-radius: $main-radius;
+        padding-right: 30px !important;
       }
-
-      img {
-        @include avatar(34px);
-
-        margin-right: 10px;
-      }
-
-      .logged-in-info {
-        max-width: 105px;
-
-        flex-grow: 1;
-
-        .logged-in-display-name,
-        .logged-in-username {
-          @include ellipsis;
-        }
-
-        .logged-in-display-name {
-          font-size: 16px;
-          font-weight: $font-semibold;
-          color: pvar(--menuForegroundColor);
-
-          @include disable-default-a-behaviour;
-        }
-
-        .logged-in-username {
-          font-size: 13px;
-          color: #C6C6C6;
-          margin-top: 3px;
-        }
-      }
-    }
-
-    my-notification {
-      margin-left: auto;
-      margin-right: 15px;
     }
   }
 
-  .logged-in-menu {
+  $main-radius: 25px;
+
+  flex: 1;
+  margin-left: 13px;
+  border-radius: $main-radius;
+  transition: all .1s ease-in-out;
+  cursor: pointer;
+  line-height: 1;
+
+  &.show {
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .325);
+  }
+
+  &:hover {
+    @include display-hints;
+  }
+
+  /* smartphones and touchscreens */
+  @media (hover: none) and (pointer: coarse) {
+    @include display-hints($is-mobile: true);
+
+    /* fill space when on mobile */
+    max-width: calc(100% - 80px);
+
+    .dropdown-toggle {
+      max-width: 100%;
+    }
+
+    .logged-in-info {
+      max-width: calc(100% - 45px) !important;
+    }
+  }
+
+  .dropdown-toggle-indicator {
+    position: relative;
+    width: 0;
+    display: none;
+
+    span {
+      position: absolute;
+      right: -35px;
+      top: -8px;
+      color: #808080;
+      width: $main-radius;
+    }
+  }
+
+  .dropdown-toggle {
+    &::after {
+      border: 0;
+    }
+  }
+
+  .dropdown-toggle:first-child {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    border-top: 1px solid var(--greyForegroundColor);
-    line-height: $line-height-normal;
+    align-items: center;
+    padding: 5px 7px;
+    border-radius: $main-radius;
+  }
+}
 
-    a {
-      @include menu-link;
-      @include disable-default-a-behaviour;
+my-actor-avatar {
+  margin-right: 10px;
+}
 
-      $icon-size: 13px;
-      $additional-margin: ($menu-link-icon-size - $icon-size) / 2;
+.logged-in-info {
+  max-width: 105px;
 
-      font-size: 14px;
-      width: 100%;
-      min-height: 35px;
+  flex-grow: 1;
+}
+
+.logged-in-display-name,
+.logged-in-username {
+  @include ellipsis;
+}
+
+.logged-in-display-name {
+  @include disable-default-a-behaviour;
+
+  font-size: 16px;
+  font-weight: $font-semibold;
+  color: pvar(--menuForegroundColor);
+}
+
+.logged-in-username {
+  font-size: 13px;
+  color: #C6C6C6;
+  margin-top: 3px;
+}
+
+.logged-in-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-top: 1px solid var(--greyForegroundColor);
+  line-height: $line-height-normal;
+
+  a {
+    $icon-size: 13px;
+    $additional-margin: ($menu-link-icon-size - $icon-size) / 2;
+
+    font-size: 14px;
+    width: 100%;
+    min-height: 35px;
+
+    my-global-icon {
+      width: $icon-size;
+      height: $icon-size;
+
+      // Keep aligned with other icons
+      margin-left: $additional-margin;
+    }
+
+    &.active,
+    &:hover,
+    &:focus-visible {
+      my-global-icon {
+        @include apply-svg-color(var(--menuForegroundColor));
+      }
+    }
+
+    &.active {
+      $border-left-width: 4px;
+
+      font-weight: $font-semibold;
+      border-left: $border-left-width solid var(--mainColor);
 
       my-global-icon {
-        width: $icon-size;
-        height: $icon-size;
-
-        // Keep aligned with other icons
-        margin-left: $additional-margin;
-
-        &[iconName="channel"] {
-          margin-top: -2px;
-        }
-      }
-
-      &.active,
-      &:hover,
-      &:focus-visible {
-        my-global-icon {
-          @include apply-svg-color(var(--menuForegroundColor));
-        }
-      }
-
-      &.active {
-        $border-left-width: 4px;
-
-        font-weight: $font-semibold;
-        border-left: $border-left-width solid var(--mainColor);
-
-        my-global-icon {
-          margin-left: $additional-margin - $border-left-width;
-        }
+        margin-left: $additional-margin - $border-left-width;
       }
     }
   }
 }
 
 .login-buttons-block {
-  margin: 30px 25px 35px 25px;
+  margin: 30px 25px 35px;
 
-  .login-button {
-    @include peertube-button-link;
-    @include orange-button;
-
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  .create-account-button {
-    @include peertube-button-link;
-
+  > a {
     display: block;
     width: 100%;
 
-    color: #fff;
-    background-color: rgba(255, 255, 255, 0.25);
-
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.28);
+    &:not(:last-child) {
+      margin-bottom: 10px;
     }
+  }
+}
+
+.create-account-button {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.25);
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.28);
   }
 }
 
@@ -291,92 +280,58 @@ menu {
   margin-bottom: 15px;
 
   .block-title {
+    @include ellipsis;
+
     text-transform: uppercase;
     font-weight: $font-bold; // Bold
     font-size: 13px;
     margin-bottom: 25px;
     margin-left: 26px;
-
-    @include ellipsis;
-
     margin-right: 30px;
   }
 
   a {
-    @include menu-link;
-    @include disable-default-a-behaviour;
-
     min-height: 40px;
-
-    my-global-icon {
-      &[iconName="playlists"] {
-        height: 24px;
-        width: 24px;
-
-        margin-right: 16px;
-      }
-
-      &[iconName="videos"] {
-        position: relative;
-        right: -1px;
-      }
-    }
   }
 }
 
 .footer {
   width: $menu-width;
   padding-bottom: 15px;
+}
 
-  .bottom-links {
+.footer-bottom {
+  display: flex;
+  flex-direction: column;
+  padding: 0 $menu-lateral-padding;
+}
+
+.footer-links {
+  &,
+  > div {
     display: flex;
-    flex-direction: column;
-    padding: 0 $menu-lateral-padding;
+    flex-wrap: wrap;
   }
 
-  $footer-links-base-opacity: .8;
-
-  .footer-links {
-    &, > div {
-      display: flex;
-      flex-wrap: wrap;
-    }
-
-    a, span[role=button] {
-      display: inline-block;
-      text-decoration: none;
-      color: pvar(--menuForegroundColor);
-      opacity: $footer-links-base-opacity;
-      white-space: nowrap;
-      font-size: 90%;
-      font-weight: 500;
-      line-height: 1.4rem;
-      margin-right: 8px;
-
-      &.inline-global-icon {
-        display: inline-flex;
-        align-items: center;
-        white-space: nowrap;
-        height: 1.4rem;
-
-        my-global-icon {
-          @include apply-svg-color(pvar(--menuForegroundColor));
-
-          display: flex;
-          width: auto;
-          height: 90%;
-          margin-right: .2rem;
-        }
-      }
-    }
-  }
-
-  .footer-copyleft small a {
-    @include disable-default-a-behaviour;
-
+  a,
+  span[role=button] {
+    display: inline-block;
+    text-decoration: none;
     color: pvar(--menuForegroundColor);
-    opacity: $footer-links-base-opacity - .2;
+    opacity: $footer-links-base-opacity;
+    white-space: nowrap;
+    font-size: 90%;
+    font-weight: 500;
+    line-height: 1.4rem;
+    margin-right: 8px;
   }
+}
+
+.footer-copyleft small a {
+  @include disable-default-a-behaviour;
+
+  color: pvar(--menuForegroundColor);
+  opacity: $footer-links-base-opacity - .2;
 }
 
 .dropdown {
@@ -398,32 +353,13 @@ menu {
     opacity: .4;
   }
 
-  my-global-icon {
-    &[iconName="cog"],
-    &[iconName="sign-out"] {
-      position: relative;
-      right: -2px;
-      height: 20px;
-      width: 20px;
-    }
-  }
-
-  my-global-icon.not-displayed {
-    display: none;
-  }
-
   &:hover {
-    my-global-icon.hover-display-toggle.not-displayed {
-      display: inherit;
-    }
-    my-global-icon.hover-display-toggle {
+    .hover-display-toggle {
       display: none;
     }
 
-    &.settings-sensitive {
-      my-global-icon ::ng-deep svg {
-        margin-top: 2px !important;
-      }
+    .hover-display-toggle[hidden] {
+      display: inherit !important;
     }
   }
 }
@@ -443,7 +379,8 @@ menu {
     }
   }
 
-  .top-menu, .footer {
+  .top-menu,
+  .footer {
     width: 100% !important;
   }
 
@@ -451,9 +388,35 @@ menu {
     width: calc(100vw - 30px);
   }
 
-  .dropdown-item:hover, .dropdown-item:active {
+  .dropdown-item:hover,
+  .dropdown-item:active {
     &.settings-sensitive my-global-icon ::ng-deep svg {
-      margin-top: 0px !important;
+      margin-top: 0 !important;
     }
+  }
+}
+
+my-global-icon {
+  &[iconName=playlists] {
+    height: 24px;
+    width: 24px;
+
+    margin-right: 16px;
+  }
+
+  &[iconName=videos] {
+    position: relative;
+    right: -1px;
+  }
+
+  &[iconName=channel] {
+    margin-top: -2px;
+  }
+
+  &[iconName='sign-out'] {
+    position: relative;
+    right: -2px;
+    height: 20px;
+    width: 20px;
   }
 }

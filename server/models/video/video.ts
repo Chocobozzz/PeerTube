@@ -24,7 +24,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { v4 as uuidv4 } from 'uuid'
+import { setAsUpdated } from '@server/helpers/database-utils'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live-manager'
@@ -100,10 +100,10 @@ import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../types/models
 import { VideoAbuseModel } from '../abuse/video-abuse'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
+import { ActorImageModel } from '../account/actor-image'
 import { UserModel } from '../account/user'
 import { UserVideoHistoryModel } from '../account/user-video-history'
 import { ActorModel } from '../activitypub/actor'
-import { AvatarModel } from '../avatar/avatar'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { ServerModel } from '../server/server'
 import { TrackerModel } from '../server/tracker'
@@ -286,7 +286,8 @@ export type AvailableForListIDsOptions = {
                 required: false
               },
               {
-                model: AvatarModel.unscoped(),
+                model: ActorImageModel.unscoped(),
+                as: 'Avatar',
                 required: false
               }
             ]
@@ -308,7 +309,8 @@ export type AvailableForListIDsOptions = {
                     required: false
                   },
                   {
-                    model: AvatarModel.unscoped(),
+                    model: ActorImageModel.unscoped(),
+                    as: 'Avatar',
                     required: false
                   }
                 ]
@@ -1006,6 +1008,7 @@ export class VideoModel extends Model {
       attributes: [ 'id' ],
       where: {
         isLive: true,
+        remote: false,
         state: VideoState.PUBLISHED
       }
     }
@@ -1020,14 +1023,28 @@ export class VideoModel extends Model {
     start: number
     count: number
     sort: string
+    isLive?: boolean
     search?: string
   }) {
-    const { accountId, start, count, sort, search } = options
+    const { accountId, start, count, sort, search, isLive } = options
 
     function buildBaseQuery (): FindOptions {
-      let baseQuery = {
+      const where: WhereOptions = {}
+
+      if (search) {
+        where.name = {
+          [Op.iLike]: '%' + search + '%'
+        }
+      }
+
+      if (isLive) {
+        where.isLive = isLive
+      }
+
+      const baseQuery = {
         offset: start,
         limit: count,
+        where,
         order: getVideoSort(sort),
         include: [
           {
@@ -1044,16 +1061,6 @@ export class VideoModel extends Model {
             ]
           }
         ]
-      }
-
-      if (search) {
-        baseQuery = Object.assign(baseQuery, {
-          where: {
-            name: {
-              [Op.iLike]: '%' + search + '%'
-            }
-          }
-        })
       }
 
       return baseQuery
@@ -1083,7 +1090,11 @@ export class VideoModel extends Model {
     start: number
     count: number
     sort: string
+
     nsfw: boolean
+    filter?: VideoFilter
+    isLive?: boolean
+
     includeLocalVideos: boolean
     withFiles: boolean
     withCaptions?: boolean
@@ -1092,15 +1103,21 @@ export class VideoModel extends Model {
     languageOneOf?: string[]
     tagsOneOf?: string[]
     tagsAllOf?: string[]
-    filter?: VideoFilter
+
     accountId?: number
     videoChannelId?: number
+
     followerActorId?: number
+
     videoPlaylistId?: number
+
     trendingDays?: number
+
     user?: MUserAccountId
     historyOfUser?: MUserId
+
     countVideos?: boolean
+
     search?: string
   }) {
     if ((options.filter === 'all-local' || options.filter === 'all') && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
@@ -1128,6 +1145,7 @@ export class VideoModel extends Model {
       followerActorId,
       serverAccountId: serverActor.Account.id,
       nsfw: options.nsfw,
+      isLive: options.isLive,
       categoryOneOf: options.categoryOneOf,
       licenceOneOf: options.licenceOneOf,
       languageOneOf: options.languageOneOf,
@@ -1161,6 +1179,7 @@ export class VideoModel extends Model {
     originallyPublishedStartDate?: string
     originallyPublishedEndDate?: string
     nsfw?: boolean
+    isLive?: boolean
     categoryOneOf?: number[]
     licenceOneOf?: number[]
     languageOneOf?: string[]
@@ -1172,23 +1191,32 @@ export class VideoModel extends Model {
     filter?: VideoFilter
   }) {
     const serverActor = await getServerActor()
+
     const queryOptions = {
       followerActorId: serverActor.id,
       serverAccountId: serverActor.Account.id,
+
       includeLocalVideos: options.includeLocalVideos,
       nsfw: options.nsfw,
+      isLive: options.isLive,
+
       categoryOneOf: options.categoryOneOf,
       licenceOneOf: options.licenceOneOf,
       languageOneOf: options.languageOneOf,
+
       tagsOneOf: options.tagsOneOf,
       tagsAllOf: options.tagsAllOf,
+
       user: options.user,
       filter: options.filter,
+
       start: options.start,
       count: options.count,
       sort: options.sort,
+
       startDate: options.startDate,
       endDate: options.endDate,
+
       originallyPublishedStartDate: options.originallyPublishedStartDate,
       originallyPublishedEndDate: options.originallyPublishedEndDate,
 
@@ -1715,7 +1743,7 @@ export class VideoModel extends Model {
 
     function buildActor (rowActor: any) {
       const avatarModel = rowActor.Avatar.id !== null
-        ? new AvatarModel(pick(rowActor.Avatar, avatarKeys), buildOpts)
+        ? new ActorImageModel(pick(rowActor.Avatar, avatarKeys), buildOpts)
         : null
 
       const serverModel = rowActor.Server.id !== null
@@ -1889,18 +1917,10 @@ export class VideoModel extends Model {
     this.Thumbnails.push(savedThumbnail)
   }
 
-  generateThumbnailName () {
-    return uuidv4() + '.jpg'
-  }
-
   getMiniature () {
     if (Array.isArray(this.Thumbnails) === false) return undefined
 
     return this.Thumbnails.find(t => t.type === ThumbnailType.MINIATURE)
-  }
-
-  generatePreviewName () {
-    return uuidv4() + '.jpg'
   }
 
   hasPreview () {
@@ -2054,9 +2074,7 @@ export class VideoModel extends Model {
   }
 
   setAsRefreshed () {
-    this.changed('updatedAt', true)
-
-    return this.save()
+    return setAsUpdated('video', this.id)
   }
 
   requiresAuth () {

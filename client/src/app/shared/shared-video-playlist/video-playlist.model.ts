@@ -37,10 +37,8 @@ export class VideoPlaylist implements ServerVideoPlaylist {
   embedUrl: string
 
   ownerBy: string
-  ownerAvatarUrl: string
 
   videoChannelBy?: string
-  videoChannelAvatarUrl?: string
 
   private thumbnailVersion: number
   private originThumbnailUrl: string
@@ -78,12 +76,10 @@ export class VideoPlaylist implements ServerVideoPlaylist {
 
     this.ownerAccount = hash.ownerAccount
     this.ownerBy = Actor.CREATE_BY_STRING(hash.ownerAccount.name, hash.ownerAccount.host)
-    this.ownerAvatarUrl = Account.GET_ACTOR_AVATAR_URL(this.ownerAccount)
 
     if (hash.videoChannel) {
       this.videoChannel = hash.videoChannel
       this.videoChannelBy = Actor.CREATE_BY_STRING(hash.videoChannel.name, hash.videoChannel.host)
-      this.videoChannelAvatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(this.videoChannel)
     }
 
     this.privacy.label = peertubeTranslate(this.privacy.label, translations)

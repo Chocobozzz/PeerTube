@@ -2,15 +2,15 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { User, VideoDetails, VideoPrivacy } from '@shared/models'
+import { VideoDetails, VideoPrivacy } from '@shared/models'
 import {
   checkLiveCleanup,
   cleanupTests,
   createLive,
-  createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  getMyUserInformation,
+  generateUser,
+  getCustomConfigResolutions,
   getVideo,
   runAndTestFfmpegStreamError,
   ServerInfo,
@@ -18,7 +18,6 @@ import {
   setDefaultVideoChannel,
   updateCustomSubConfig,
   updateUser,
-  userLogin,
   wait,
   waitJobs,
   waitUntilLivePublished
@@ -62,6 +61,16 @@ describe('Test live constraints', function () {
     }
   }
 
+  function updateQuota (options: { total: number, daily: number }) {
+    return updateUser({
+      url: servers[0].url,
+      accessToken: servers[0].accessToken,
+      userId,
+      videoQuota: options.total,
+      videoQuotaDaily: options.daily
+    })
+  }
+
   before(async function () {
     this.timeout(120000)
 
@@ -82,27 +91,12 @@ describe('Test live constraints', function () {
     })
 
     {
-      const user = { username: 'user1', password: 'superpassword' }
-      const res = await createUser({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
-        username: user.username,
-        password: user.password
-      })
-      userId = res.body.user.id
+      const res = await generateUser(servers[0], 'user1')
+      userId = res.userId
+      userChannelId = res.userChannelId
+      userAccessToken = res.token
 
-      userAccessToken = await userLogin(servers[0], user)
-
-      const resMe = await getMyUserInformation(servers[0].url, userAccessToken)
-      userChannelId = (resMe.body as User).videoChannels[0].id
-
-      await updateUser({
-        url: servers[0].url,
-        userId,
-        accessToken: servers[0].accessToken,
-        videoQuota: 1,
-        videoQuotaDaily: -1
-      })
+      await updateQuota({ total: 1, daily: -1 })
     }
 
     // Server 1 and server 2 follow each other
@@ -137,13 +131,7 @@ describe('Test live constraints', function () {
     // Wait for user quota memoize cache invalidation
     await wait(5000)
 
-    await updateUser({
-      url: servers[0].url,
-      userId,
-      accessToken: servers[0].accessToken,
-      videoQuota: -1,
-      videoQuotaDaily: 1
-    })
+    await updateQuota({ total: -1, daily: 1 })
 
     const userVideoLiveoId = await createLiveWrapper(true)
     await runAndTestFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, true)
@@ -160,13 +148,7 @@ describe('Test live constraints', function () {
     // Wait for user quota memoize cache invalidation
     await wait(5000)
 
-    await updateUser({
-      url: servers[0].url,
-      userId,
-      accessToken: servers[0].accessToken,
-      videoQuota: 10 * 1000 * 1000,
-      videoQuotaDaily: -1
-    })
+    await updateQuota({ total: 10 * 1000 * 1000, daily: -1 })
 
     const userVideoLiveoId = await createLiveWrapper(true)
     await runAndTestFfmpegStreamError(servers[0].url, userAccessToken, userVideoLiveoId, false)
@@ -182,15 +164,7 @@ describe('Test live constraints', function () {
         maxDuration: 1,
         transcoding: {
           enabled: true,
-          resolutions: {
-            '240p': true,
-            '360p': true,
-            '480p': true,
-            '720p': true,
-            '1080p': true,
-            '1440p': true,
-            '2160p': true
-          }
+          resolutions: getCustomConfigResolutions(true)
         }
       }
     })

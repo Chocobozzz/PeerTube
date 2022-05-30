@@ -57,7 +57,7 @@ input[type=submit] {
   display: flex;
   margin-left: auto;
 
-  & + .form-error {
+  + .form-error {
     display: inline;
     margin-left: 5px;
   }
@@ -84,7 +84,8 @@ textarea {
 }
 
 .disabled-checkbox-extra {
-  &, ::ng-deep label {
+  &,
+  ::ng-deep label {
     opacity: .5;
     pointer-events: none;
   }

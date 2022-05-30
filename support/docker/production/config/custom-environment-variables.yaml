@@ -19,6 +19,9 @@ database:
   suffix: "PEERTUBE_DB_SUFFIX"
   username: "PEERTUBE_DB_USERNAME"
   password: "PEERTUBE_DB_PASSWORD"
+  ssl:
+    __name: "PEERTUBE_DB_SSL"
+    __format: "json"
 
 redis:
   hostname: "PEERTUBE_REDIS_HOSTNAME"
@@ -116,6 +119,10 @@ transcoding:
       __format: "json"
     2160p:
       __name: "PEERTUBE_TRANSCODING_2160P"
+      __format: "json"
+  webtorrent:
+    enabled:
+      __name: "PEERTUBE_TRANSCODING_WEBTORRENT_ENABLED"
       __format: "json"
   hls:
     enabled:

@@ -2,27 +2,31 @@
 @import '_mixins';
 @import '_miniature';
 
+.root {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
 .playlist-info {
-  background-color: pvar(--submenuColor);
-  margin-left: -$not-expanded-horizontal-margins;
+  grid-column: 1;
+  background-color: pvar(--submenuBackgroundColor);
+  margin-left: calc(#{pvar(--horizontalMarginContent)} * -1);
   margin-top: -$sub-menu-margin-bottom;
 
-  padding: 10px;
+  padding: 15px;
 
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
 
   /* fix ellipsis dots background color */
   ::ng-deep .miniature-name::after {
-    background-color: pvar(--submenuColor) !important;
+    background-color: pvar(--submenuBackgroundColor) !important;
   }
 }
 
 .playlist-buttons {
-  display:flex;
-  margin: 30px 0 10px 0;
+  display: flex;
+  margin: 30px 0 10px;
 
   .share-button {
     @include peertube-button;
@@ -38,9 +42,10 @@
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-  0 8px 10px 1px rgba(0, 0, 0, 0.14),
-  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  box-shadow:
+    0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
 .cdk-drag-placeholder {
@@ -52,22 +57,42 @@
 }
 
 .video:last-child {
-  border: none;
+  border: 0;
 }
 
 .videos.cdk-drop-list-dragging .video:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-@media screen and (max-width: $small-view) {
-  .playlist-info {
-    width: 100vw;
-    padding-top: 20px;
-    margin-left: calc(#{var(--expanded-horizontal-margin-content)} * -1);
+.playlist-elements {
+  grid-column: 2;
+}
+
+my-video-playlist-miniature {
+  width: $video-thumbnail-width;
+}
+
+@include on-small-main-col {
+  my-video-playlist-miniature {
+    width: $video-thumbnail-medium-width;
+  }
+}
+
+@include on-mobile-main-col {
+  .root {
+    display: block;
   }
 
-  .playlist-elements {
-    padding: 0 !important;
+  .playlist-info {
+    width: calc(100% + (2 * var(--horizontalMarginContent)));
+    padding-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  my-video-playlist-miniature,
+  .playlist-buttons {
+    margin-left: auto;
+    margin-right: auto;
   }
 
   ::ng-deep my-video-playlist-element-miniature {

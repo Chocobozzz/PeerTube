@@ -1,9 +1,10 @@
 import * as express from 'express'
-import { body, param, query, ValidationChain } from 'express-validator'
+import { body, header, param, query, ValidationChain } from 'express-validator'
+import { getResumableUploadPath } from '@server/helpers/upload'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express'
-import { MVideoWithRights } from '@server/types/models'
+import { MUserAccountId, MVideoWithRights } from '@server/types/models'
 import { ServerErrorCode, UserRight, VideoChangeOwnershipStatus, VideoPrivacy } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { VideoChangeOwnershipAccept } from '../../../../shared/models/videos/video-change-ownership-accept.model'
@@ -20,7 +21,7 @@ import {
   toIntOrNull,
   toValueOrNull
 } from '../../../helpers/custom-validators/misc'
-import { isNSFWQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
+import { isBooleanBothQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
 import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../../helpers/custom-validators/video-ownership'
 import {
   isScheduleVideoUpdatePrivacyValid,
@@ -47,6 +48,7 @@ import {
   doesVideoExist,
   doesVideoFileOfVideoExist
 } from '../../../helpers/middlewares'
+import { deleteFileAndCatch } from '../../../helpers/utils'
 import { getVideoWithAttributes } from '../../../helpers/video'
 import { CONFIG } from '../../../initializers/config'
 import { CONSTRAINTS_FIELDS, OVERVIEWS } from '../../../initializers/constants'
@@ -54,10 +56,10 @@ import { isLocalVideoAccepted } from '../../../lib/moderation'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
-import { authenticatePromiseIfNeeded } from '../../oauth'
+import { authenticatePromiseIfNeeded } from '../../auth'
 import { areValidationErrors } from '../utils'
 
-const videosAddValidator = getCommonVideoEditAttributes().concat([
+const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
     .custom((value, { req }) => isFileFieldValid(req.files, 'videofile'))
     .withMessage('Should have a file'),
@@ -73,54 +75,117 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
-    if (areErrorsInScheduleUpdate(req, res)) return cleanUpReqFiles(req)
 
-    const videoFile: Express.Multer.File & { duration?: number } = req.files['videofile'][0]
+    const videoFile: express.VideoUploadFile = req.files['videofile'][0]
     const user = res.locals.oauth.token.User
 
-    if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
-
-    if (!isVideoFileMimeTypeValid(req.files)) {
-      res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
-         .json({
-           error: 'This file is not supported. Please, make sure it is of the following type: ' +
-                  CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
-         })
-
+    if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFile.size, files: req.files })) {
       return cleanUpReqFiles(req)
     }
-
-    if (!isVideoFileSizeValid(videoFile.size.toString())) {
-      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-         .json({
-           error: 'This file is too large.'
-         })
-
-      return cleanUpReqFiles(req)
-    }
-
-    if (await isAbleToUploadVideo(user.id, videoFile.size) === false) {
-      res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-         .json({ error: 'The user video quota is exceeded with this video.' })
-
-      return cleanUpReqFiles(req)
-    }
-
-    let duration: number
 
     try {
-      duration = await getDurationFromVideoFile(videoFile.path)
+      if (!videoFile.duration) await addDurationToVideo(videoFile)
     } catch (err) {
-      logger.error('Invalid input file in videosAddValidator.', { err })
+      logger.error('Invalid input file in videosAddLegacyValidator.', { err })
       res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422)
          .json({ error: 'Video file unreadable.' })
 
       return cleanUpReqFiles(req)
     }
 
-    videoFile.duration = duration
-
     if (!await isVideoAccepted(req, res, videoFile)) return cleanUpReqFiles(req)
+
+    return next()
+  }
+])
+
+/**
+ * Gets called after the last PUT request
+ */
+const videosAddResumableValidator = [
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const user = res.locals.oauth.token.User
+
+    const body: express.CustomUploadXFile<express.UploadXFileMetadata> = req.body
+    const file = { ...body, duration: undefined, path: getResumableUploadPath(body.id), filename: body.metadata.filename }
+
+    const cleanup = () => deleteFileAndCatch(file.path)
+
+    if (!await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)) return cleanup()
+
+    try {
+      if (!file.duration) await addDurationToVideo(file)
+    } catch (err) {
+      logger.error('Invalid input file in videosAddResumableValidator.', { err })
+      res.status(HttpStatusCode.UNPROCESSABLE_ENTITY_422)
+         .json({ error: 'Video file unreadable.' })
+
+      return cleanup()
+    }
+
+    if (!await isVideoAccepted(req, res, file)) return cleanup()
+
+    res.locals.videoFileResumable = file
+
+    return next()
+  }
+]
+
+/**
+ * File is created in POST initialisation, and its body is saved as a 'metadata' field is saved by uploadx for later use.
+ * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/uploadx.ts
+ *
+ * Uploadx doesn't use next() until the upload completes, so this middleware has to be placed before uploadx
+ * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/base-handler.ts
+ *
+ */
+const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
+  body('filename')
+    .isString()
+    .exists()
+    .withMessage('Should have a valid filename'),
+  body('name')
+    .trim()
+    .custom(isVideoNameValid)
+    .withMessage('Should have a valid name'),
+  body('channelId')
+    .customSanitizer(toIntOrNull)
+    .custom(isIdValid).withMessage('Should have correct video channel id'),
+
+  header('x-upload-content-length')
+    .isNumeric()
+    .exists()
+    .withMessage('Should specify the file length'),
+  header('x-upload-content-type')
+    .isString()
+    .exists()
+    .withMessage('Should specify the file mimetype'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const videoFileMetadata = {
+      mimetype: req.headers['x-upload-content-type'] as string,
+      size: +req.headers['x-upload-content-length'],
+      originalname: req.body.name
+    }
+
+    const user = res.locals.oauth.token.User
+    const cleanup = () => cleanUpReqFiles(req)
+
+    logger.debug('Checking videosAddResumableInitValidator parameters and headers', {
+      parameters: req.body,
+      headers: req.headers,
+      files: req.files
+    })
+
+    if (areValidationErrors(req, res)) return cleanup()
+
+    const files = { videofile: [ videoFileMetadata ] }
+    if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFileMetadata.size, files })) return cleanup()
+
+    // multer required unsetting the Content-Type, now we can set it for node-uploadx
+    req.headers['content-type'] = 'application/json; charset=utf-8'
+    // place previewfile in metadata so that uploadx saves it in .META
+    if (req.files['previewfile']) req.body.previewfile = req.files['previewfile']
 
     return next()
   }
@@ -439,7 +504,11 @@ const commonVideosFiltersValidator = [
     .custom(isStringArray).withMessage('Should have a valid all of tags array'),
   query('nsfw')
     .optional()
-    .custom(isNSFWQueryValid).withMessage('Should have a valid NSFW attribute'),
+    .custom(isBooleanBothQueryValid).withMessage('Should have a valid NSFW attribute'),
+  query('isLive')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid).withMessage('Should have a valid live boolean'),
   query('filter')
     .optional()
     .custom(isVideoFilterValid).withMessage('Should have a valid filter attribute'),
@@ -474,7 +543,10 @@ const commonVideosFiltersValidator = [
 // ---------------------------------------------------------------------------
 
 export {
-  videosAddValidator,
+  videosAddLegacyValidator,
+  videosAddResumableValidator,
+  videosAddResumableInitValidator,
+
   videosUpdateValidator,
   videosGetValidator,
   videoFileMetadataGetValidator,
@@ -511,7 +583,51 @@ function areErrorsInScheduleUpdate (req: express.Request, res: express.Response)
   return false
 }
 
-async function isVideoAccepted (req: express.Request, res: express.Response, videoFile: Express.Multer.File & { duration?: number }) {
+async function commonVideoChecksPass (parameters: {
+  req: express.Request
+  res: express.Response
+  user: MUserAccountId
+  videoFileSize: number
+  files: express.UploadFilesForCheck
+}): Promise<boolean> {
+  const { req, res, user, videoFileSize, files } = parameters
+
+  if (areErrorsInScheduleUpdate(req, res)) return false
+
+  if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return false
+
+  if (!isVideoFileMimeTypeValid(files)) {
+    res.status(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
+        .json({
+          error: 'This file is not supported. Please, make sure it is of the following type: ' +
+                CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
+        })
+
+    return false
+  }
+
+  if (!isVideoFileSizeValid(videoFileSize.toString())) {
+    res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
+        .json({ error: 'This file is too large. It exceeds the maximum file size authorized.' })
+
+    return false
+  }
+
+  if (await isAbleToUploadVideo(user.id, videoFileSize) === false) {
+    res.status(HttpStatusCode.PAYLOAD_TOO_LARGE_413)
+        .json({ error: 'The user video quota is exceeded with this video.' })
+
+    return false
+  }
+
+  return true
+}
+
+export async function isVideoAccepted (
+  req: express.Request,
+  res: express.Response,
+  videoFile: express.VideoUploadFile
+) {
   // Check we accept this video
   const acceptParameters = {
     videoBody: req.body,
@@ -533,4 +649,12 @@ async function isVideoAccepted (req: express.Request, res: express.Response, vid
   }
 
   return true
+}
+
+async function addDurationToVideo (videoFile: { path: string, duration?: number }) {
+  const duration: number = await getDurationFromVideoFile(videoFile.path)
+
+  if (isNaN(duration)) throw new Error(`Couldn't get video duration`)
+
+  videoFile.duration = duration
 }

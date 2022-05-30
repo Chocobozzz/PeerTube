@@ -7,7 +7,7 @@ import {
   VIDEO_PLAYLIST_PRIVACIES,
   VIDEO_PRIVACIES
 } from '@server/initializers/constants'
-import { onExternalUserAuthenticated } from '@server/lib/auth'
+import { onExternalUserAuthenticated } from '@server/lib/auth/external-auth'
 import { PluginModel } from '@server/models/server/plugin'
 import {
   RegisterServerAuthExternalOptions,
@@ -73,7 +73,7 @@ export class RegisterHelpers {
   private idAndPassAuths: RegisterServerAuthPassOptions[] = []
   private externalAuths: RegisterServerAuthExternalOptions[] = []
 
-  private readonly onSettingsChangeCallbacks: ((settings: any) => void)[] = []
+  private readonly onSettingsChangeCallbacks: ((settings: any) => Promise<any>)[] = []
 
   private readonly router: express.Router
 
@@ -109,7 +109,7 @@ export class RegisterHelpers {
     const unregisterIdAndPassAuth = this.buildUnregisterIdAndPassAuth()
     const unregisterExternalAuth = this.buildUnregisterExternalAuth()
 
-    const peertubeHelpers = buildPluginHelpers(this.npmName)
+    const peertubeHelpers = buildPluginHelpers(this.plugin, this.npmName)
 
     return {
       registerHook,
@@ -277,7 +277,7 @@ export class RegisterHelpers {
 
       setSetting: (name: string, value: string) => PluginModel.setSetting(this.plugin.name, this.plugin.type, name, value),
 
-      onSettingsChange: (cb: (settings: any) => void) => this.onSettingsChangeCallbacks.push(cb)
+      onSettingsChange: (cb: (settings: any) => Promise<any>) => this.onSettingsChangeCallbacks.push(cb)
     }
   }
 

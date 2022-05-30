@@ -3,12 +3,13 @@ import * as ffmpeg from 'fluent-ffmpeg'
 import { readFile, remove, writeFile } from 'fs-extra'
 import { dirname, join } from 'path'
 import { FFMPEG_NICE, VIDEO_LIVE } from '@server/initializers/constants'
-import { AvailableEncoders, EncoderOptionsBuilder, EncoderProfile, VideoResolution } from '../../shared/models/videos'
+import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptions, EncoderProfile, VideoResolution } from '../../shared/models/videos'
 import { CONFIG } from '../initializers/config'
-import { promisify0 } from './core-utils'
+import { execPromise, promisify0 } from './core-utils'
 import { computeFPS, getAudioStream, getVideoFileFPS } from './ffprobe-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
+import { FilterSpecification } from 'fluent-ffmpeg'
 
 /**
  *
@@ -226,23 +227,15 @@ async function getLiveTranscodingCommand (options: {
 
   const varStreamMap: string[] = []
 
-  command.complexFilter([
+  const complexFilter: FilterSpecification[] = [
     {
       inputs: '[v:0]',
       filter: 'split',
       options: resolutions.length,
       outputs: resolutions.map(r => `vtemp${r}`)
-    },
+    }
+  ]
 
-    ...resolutions.map(r => ({
-      inputs: `vtemp${r}`,
-      filter: 'scale',
-      options: `w=-2:h=${r}`,
-      outputs: `vout${r}`
-    }))
-  ])
-
-  command.outputOption('-preset superfast')
   command.outputOption('-sc_threshold 0')
 
   addDefaultEncoderGlobalParams({ command })
@@ -277,7 +270,14 @@ async function getLiveTranscodingCommand (options: {
       logger.debug('Apply ffmpeg live video params from %s using %s profile.', builderResult.encoder, profile, builderResult)
 
       command.outputOption(`${buildStreamSuffix('-c:v', i)} ${builderResult.encoder}`)
-      command.addOutputOptions(builderResult.result.outputOptions)
+      applyEncoderOptions(command, builderResult.result)
+
+      complexFilter.push({
+        inputs: `vtemp${resolution}`,
+        filter: getScaleFilter(builderResult.result),
+        options: `w=-2:h=${resolution}`,
+        outputs: `vout${resolution}`
+      })
     }
 
     {
@@ -294,11 +294,13 @@ async function getLiveTranscodingCommand (options: {
       logger.debug('Apply ffmpeg live audio params from %s using %s profile.', builderResult.encoder, profile, builderResult)
 
       command.outputOption(`${buildStreamSuffix('-c:a', i)} ${builderResult.encoder}`)
-      command.addOutputOptions(builderResult.result.outputOptions)
+      applyEncoderOptions(command, builderResult.result)
     }
 
     varStreamMap.push(`v:${i},a:${i}`)
   }
+
+  command.complexFilter(complexFilter)
 
   addDefaultLiveHLSParams(command, outPath)
 
@@ -389,16 +391,15 @@ async function buildx264VODCommand (command: ffmpeg.FfmpegCommand, options: Tran
   let fps = await getVideoFileFPS(options.inputPath)
   fps = computeFPS(fps, options.resolution)
 
-  command = await presetVideo(command, options.inputPath, options, fps)
+  let scaleFilterValue: string
 
   if (options.resolution !== undefined) {
-    // '?x720' or '720x?' for example
-    const size = options.isPortraitMode === true
-      ? `${options.resolution}x?`
-      : `?x${options.resolution}`
-
-    command = command.size(size)
+    scaleFilterValue = options.isPortraitMode === true
+      ? `w=${options.resolution}:h=-2`
+      : `w=-2:h=${options.resolution}`
   }
+
+  command = await presetVideo({ command, input: options.inputPath, transcodeOptions: options, fps, scaleFilterValue })
 
   return command
 }
@@ -406,12 +407,13 @@ async function buildx264VODCommand (command: ffmpeg.FfmpegCommand, options: Tran
 async function buildAudioMergeCommand (command: ffmpeg.FfmpegCommand, options: MergeAudioTranscodeOptions) {
   command = command.loop(undefined)
 
-  command = await presetVideo(command, options.audioPath, options)
+  // Avoid "height not divisible by 2" error
+  const scaleFilterValue = 'trunc(iw/2)*2:trunc(ih/2)*2'
+  command = await presetVideo({ command, input: options.audioPath, transcodeOptions: options, scaleFilterValue })
 
   command.outputOption('-preset:v veryfast')
 
   command = command.input(options.audioPath)
-                   .videoFilter('scale=trunc(iw/2)*2:trunc(ih/2)*2') // Avoid "height not divisible by 2" error
                    .outputOption('-tune stillimage')
                    .outputOption('-shortest')
 
@@ -555,12 +557,15 @@ async function getEncoderBuilderResult (options: {
   return null
 }
 
-async function presetVideo (
-  command: ffmpeg.FfmpegCommand,
-  input: string,
-  transcodeOptions: TranscodeOptions,
+async function presetVideo (options: {
+  command: ffmpeg.FfmpegCommand
+  input: string
+  transcodeOptions: TranscodeOptions
   fps?: number
-) {
+  scaleFilterValue?: string
+}) {
+  const { command, input, transcodeOptions, fps, scaleFilterValue } = options
+
   let localCommand = command
     .format('mp4')
     .outputOption('-movflags faststart')
@@ -601,11 +606,15 @@ async function presetVideo (
 
     if (streamType === 'video') {
       localCommand.videoCodec(builderResult.encoder)
+
+      if (scaleFilterValue) {
+        localCommand.outputOption(`-vf ${getScaleFilter(builderResult.result)}=${scaleFilterValue}`)
+      }
     } else if (streamType === 'audio') {
       localCommand.audioCodec(builderResult.encoder)
     }
 
-    command.addOutputOptions(builderResult.result.outputOptions)
+    applyEncoderOptions(localCommand, builderResult.result)
     addDefaultEncoderParams({ command: localCommand, encoder: builderResult.encoder, fps })
   }
 
@@ -624,6 +633,18 @@ function presetOnlyAudio (command: ffmpeg.FfmpegCommand): ffmpeg.FfmpegCommand {
     .format('mp4')
     .audioCodec('copy')
     .noVideo()
+}
+
+function applyEncoderOptions (command: ffmpeg.FfmpegCommand, options: EncoderOptions): ffmpeg.FfmpegCommand {
+  return command
+    .inputOptions(options.inputOptions ?? [])
+    .outputOptions(options.outputOptions ?? [])
+}
+
+function getScaleFilter (options: EncoderOptions): string {
+  if (options.scaleFilter) return options.scaleFilter.name
+
+  return 'scale'
 }
 
 // ---------------------------------------------------------------------------
@@ -647,6 +668,30 @@ function getFFmpeg (input: string, type: 'live' | 'vod') {
   }
 
   return command
+}
+
+function getFFmpegVersion () {
+  return new Promise<string>((res, rej) => {
+    (ffmpeg() as any)._getFfmpegPath((err, ffmpegPath) => {
+      if (err) return rej(err)
+      if (!ffmpegPath) return rej(new Error('Could not find ffmpeg path'))
+
+      return execPromise(`${ffmpegPath} -version`)
+        .then(stdout => {
+          const parsed = stdout.match(/ffmpeg version .?(\d+\.\d+(\.\d+)?)/)
+          if (!parsed || !parsed[1]) return rej(new Error(`Could not find ffmpeg version in ${stdout}`))
+
+          // Fix ffmpeg version that does not include patch version (4.4 for example)
+          let version = parsed[1]
+          if (version.match(/^\d+\.\d+$/)) {
+            version += '.0'
+          }
+
+          return res(version)
+        })
+        .catch(err => rej(err))
+    })
+  })
 }
 
 async function runCommand (options: {
@@ -695,6 +740,7 @@ export {
   TranscodeOptionsType,
   transcode,
   runCommand,
+  getFFmpegVersion,
 
   resetSupportedEncoders,
 

@@ -3,6 +3,8 @@ import { ServerService } from '@app/core'
 import { AdvancedSearch } from '@app/shared/shared-search'
 import { ServerConfig, VideoConstant } from '@shared/models'
 
+type FormOption = { id: string, label: string }
+
 @Component({
   selector: 'my-search-filters',
   styleUrls: [ './search-filters.component.scss' ],
@@ -17,9 +19,10 @@ export class SearchFiltersComponent implements OnInit {
   videoLicences: VideoConstant<number>[] = []
   videoLanguages: VideoConstant<string>[] = []
 
-  publishedDateRanges: { id: string, label: string }[] = []
-  sorts: { id: string, label: string }[] = []
-  durationRanges: { id: string, label: string }[] = []
+  publishedDateRanges: FormOption[] = []
+  sorts: FormOption[] = []
+  durationRanges: FormOption[] = []
+  videoType: FormOption[] = []
 
   publishedDateRange: string
   durationRange: string
@@ -33,10 +36,6 @@ export class SearchFiltersComponent implements OnInit {
     private serverService: ServerService
   ) {
     this.publishedDateRanges = [
-      {
-        id: 'any_published_date',
-        label: $localize`Any`
-      },
       {
         id: 'today',
         label: $localize`Today`
@@ -55,11 +54,18 @@ export class SearchFiltersComponent implements OnInit {
       }
     ]
 
-    this.durationRanges = [
+    this.videoType = [
       {
-        id: 'any_duration',
-        label: $localize`Any`
+        id: 'vod',
+        label: $localize`VOD videos`
       },
+      {
+        id: 'live',
+        label: $localize`Live videos`
+      }
+    ]
+
+    this.durationRanges = [
       {
         id: 'short',
         label: $localize`Short (< 4 min)`
@@ -104,24 +110,26 @@ export class SearchFiltersComponent implements OnInit {
     this.loadOriginallyPublishedAtYears()
   }
 
-  inputUpdated () {
+  onInputUpdated () {
     this.updateModelFromDurationRange()
     this.updateModelFromPublishedRange()
     this.updateModelFromOriginallyPublishedAtYears()
   }
 
   formUpdated () {
-    this.inputUpdated()
+    this.onInputUpdated()
     this.filtered.emit(this.advancedSearch)
   }
 
   reset () {
     this.advancedSearch.reset()
+
+    this.resetOriginalPublicationYears()
+
     this.durationRange = undefined
     this.publishedDateRange = undefined
-    this.originallyPublishedStartYear = undefined
-    this.originallyPublishedEndYear = undefined
-    this.inputUpdated()
+
+    this.onInputUpdated()
   }
 
   resetField (fieldName: string, value?: any) {
@@ -130,7 +138,7 @@ export class SearchFiltersComponent implements OnInit {
 
   resetLocalField (fieldName: string, value?: any) {
     this[fieldName] = value
-    this.inputUpdated()
+    this.onInputUpdated()
   }
 
   resetOriginalPublicationYears () {

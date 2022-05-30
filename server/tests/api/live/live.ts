@@ -19,10 +19,12 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   getLive,
+  getMyVideosWithFilter,
   getPlaylist,
   getVideo,
   getVideoIdFromUUID,
   getVideosList,
+  getVideosWithFilters,
   killallServers,
   makeRawRequest,
   removeVideo,
@@ -37,6 +39,7 @@ import {
   testImage,
   updateCustomSubConfig,
   updateLive,
+  uploadVideoAndGetId,
   viewVideo,
   wait,
   waitJobs,
@@ -229,6 +232,68 @@ describe('Test live', function () {
     })
   })
 
+  describe('Live filters', function () {
+    let command: any
+    let liveVideoId: string
+    let vodVideoId: string
+
+    before(async function () {
+      this.timeout(120000)
+
+      vodVideoId = (await uploadVideoAndGetId({ server: servers[0], videoName: 'vod video' })).uuid
+
+      const liveOptions = { name: 'live', privacy: VideoPrivacy.PUBLIC, channelId: servers[0].videoChannel.id }
+      const resLive = await createLive(servers[0].url, servers[0].accessToken, liveOptions)
+      liveVideoId = resLive.body.video.uuid
+
+      command = await sendRTMPStreamInVideo(servers[0].url, servers[0].accessToken, liveVideoId)
+      await waitUntilLivePublishedOnAllServers(liveVideoId)
+      await waitJobs(servers)
+    })
+
+    it('Should only display lives', async function () {
+      const res = await getVideosWithFilters(servers[0].url, { isLive: true })
+
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data).to.have.lengthOf(1)
+      expect(res.body.data[0].name).to.equal('live')
+    })
+
+    it('Should not display lives', async function () {
+      const res = await getVideosWithFilters(servers[0].url, { isLive: false })
+
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data).to.have.lengthOf(1)
+      expect(res.body.data[0].name).to.equal('vod video')
+    })
+
+    it('Should display my lives', async function () {
+      this.timeout(60000)
+
+      await stopFfmpeg(command)
+      await waitJobs(servers)
+
+      const res = await getMyVideosWithFilter(servers[0].url, servers[0].accessToken, { isLive: true })
+      const videos = res.body.data as Video[]
+
+      const result = videos.every(v => v.isLive)
+      expect(result).to.be.true
+    })
+
+    it('Should not display my lives', async function () {
+      const res = await getMyVideosWithFilter(servers[0].url, servers[0].accessToken, { isLive: false })
+      const videos = res.body.data as Video[]
+
+      const result = videos.every(v => !v.isLive)
+      expect(result).to.be.true
+    })
+
+    after(async function () {
+      await removeVideo(servers[0].url, servers[0].accessToken, vodVideoId)
+      await removeVideo(servers[0].url, servers[0].accessToken, liveVideoId)
+    })
+  })
+
   describe('Stream checks', function () {
     let liveVideo: LiveVideo & VideoDetails
     let rtmpUrl: string
@@ -255,7 +320,7 @@ describe('Test live', function () {
     }
 
     it('Should not allow a stream without the appropriate path', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       liveVideo = await createLiveWrapper()
 
@@ -264,14 +329,14 @@ describe('Test live', function () {
     })
 
     it('Should not allow a stream without the appropriate stream key', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       const command = sendRTMPStream(rtmpUrl + '/live', 'bad-stream-key')
       await testFfmpegStreamError(command, true)
     })
 
     it('Should succeed with the correct params', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       const command = sendRTMPStream(rtmpUrl + '/live', liveVideo.streamKey)
       await testFfmpegStreamError(command, false)
@@ -292,7 +357,7 @@ describe('Test live', function () {
     })
 
     it('Should not allow a stream on a live that was blacklisted', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       liveVideo = await createLiveWrapper()
 
@@ -303,7 +368,7 @@ describe('Test live', function () {
     })
 
     it('Should not allow a stream on a live that was deleted', async function () {
-      this.timeout(30000)
+      this.timeout(60000)
 
       liveVideo = await createLiveWrapper()
 

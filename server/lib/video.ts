@@ -1,3 +1,4 @@
+import { UploadFiles } from 'express'
 import { Transaction } from 'sequelize/types'
 import { DEFAULT_AUDIO_RESOLUTION, JOB_PRIORITY } from '@server/initializers/constants'
 import { sequelizeTypescript } from '@server/initializers/database'
@@ -32,7 +33,7 @@ function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): Fil
 
 async function buildVideoThumbnailsFromReq (options: {
   video: MVideoThumbnail
-  files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[]
+  files: UploadFiles
   fallback: (type: ThumbnailType) => Promise<MThumbnail>
   automaticallyGenerated?: boolean
 }) {
@@ -121,19 +122,19 @@ async function addOptimizeOrMergeAudioJob (video: MVideo, videoFile: MVideoFile,
   }
 
   const jobOptions = {
-    priority: JOB_PRIORITY.TRANSCODING.OPTIMIZER + await getJobTranscodingPriorityMalus(user)
+    priority: await getTranscodingJobPriority(user)
   }
 
   return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: dataInput }, jobOptions)
 }
 
-async function getJobTranscodingPriorityMalus (user: MUserId) {
+async function getTranscodingJobPriority (user: MUserId) {
   const now = new Date()
   const lastWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7)
 
   const videoUploadedByUser = await VideoModel.countVideosUploadedByUserSince(user.id, lastWeek)
 
-  return videoUploadedByUser
+  return JOB_PRIORITY.TRANSCODING + videoUploadedByUser
 }
 
 // ---------------------------------------------------------------------------
@@ -144,5 +145,5 @@ export {
   buildVideoThumbnailsFromReq,
   setVideoTags,
   addOptimizeOrMergeAudioJob,
-  getJobTranscodingPriorityMalus
+  getTranscodingJobPriority
 }

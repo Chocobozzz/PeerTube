@@ -12,16 +12,13 @@
   left: 0;
   color: #333;
   font-size: 1em;
-  background-color: rgba(255,255,255,0.9);
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .cfp-hotkeys-container.fade {
   z-index: -1024;
   visibility: hidden;
   opacity: 0;
-  -webkit-transition: opacity 0.15s linear;
-  -moz-transition: opacity 0.15s linear;
-  -o-transition: opacity 0.15s linear;
   transition: opacity 0.15s linear;
 }
 

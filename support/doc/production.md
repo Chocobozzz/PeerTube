@@ -6,7 +6,7 @@
 ## Installation
 
 Please don't install PeerTube for production on a device behind a low bandwidth connection (example: your ADSL link).
-If you want information about the appropriate hardware to run PeerTube, please see the [FAQ](https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md#should-i-have-a-big-server-to-run-peertube).
+If you want information about the appropriate hardware to run PeerTube, please see the [FAQ](https://joinpeertube.org/en_US/faq#should-i-have-a-big-server-to-run-peertube).
 
 ### Dependencies
 
@@ -38,6 +38,7 @@ or use `adduser` to create it interactively.
 Create the production database and a peertube user inside PostgreSQL:
 
 ```
+$ cd /var/www/peertube
 $ sudo -u postgres createuser -P peertube
 ```
 
@@ -66,6 +67,7 @@ Open the peertube directory, create a few required directories
 ```
 $ cd /var/www/peertube
 $ sudo -u peertube mkdir config storage versions
+$ sudo -u peertube chmod 750 config/
 ```
 
 Download the latest version of the Peertube client, unzip it and remove the zip

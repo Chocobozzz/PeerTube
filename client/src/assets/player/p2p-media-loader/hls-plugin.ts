@@ -259,13 +259,17 @@ class Html5Hlsjs {
     const error: { message: string, code?: number } = {
       message: `HLS.js error: ${data.type} - fatal: ${data.fatal} - ${data.details}`
     }
-    console.error(error.message)
 
     // increment/set error count
     if (this.errorCounts[ data.type ]) this.errorCounts[ data.type ] += 1
     else this.errorCounts[ data.type ] = 1
 
-    if (!data.fatal) return
+    if (!data.fatal) {
+      console.warn(error.message)
+      return
+    }
+
+    console.error(error.message)
 
     if (data.type === Hlsjs.ErrorTypes.NETWORK_ERROR) {
       error.code = 2

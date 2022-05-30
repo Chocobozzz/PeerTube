@@ -1,6 +1,7 @@
+import decache from 'decache'
 import * as express from 'express'
 import { createReadStream, createWriteStream } from 'fs'
-import { outputFile, readJSON } from 'fs-extra'
+import { ensureDir, outputFile, readJSON } from 'fs-extra'
 import { basename, join } from 'path'
 import { MOAuthTokenUser, MUser } from '@server/types/models'
 import { RegisterServerHookOptions } from '@shared/models/plugins/register-server-hook.model'
@@ -22,6 +23,7 @@ import { PluginLibrary, RegisterServerAuthExternalOptions, RegisterServerAuthPas
 import { ClientHtml } from '../client-html'
 import { RegisterHelpers } from './register-helpers'
 import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
+import { getCompleteLocale } from '@shared/core-utils'
 
 export interface RegisteredPlugin {
   npmName: string
@@ -188,7 +190,7 @@ export class PluginManager implements ServerHook {
     return undefined
   }
 
-  onSettingsChanged (name: string, settings: any) {
+  async onSettingsChanged (name: string, settings: any) {
     const registered = this.getRegisteredPluginByShortName(name)
     if (!registered) {
       logger.error('Cannot find plugin %s to call on settings changed.', name)
@@ -196,7 +198,7 @@ export class PluginManager implements ServerHook {
 
     for (const cb of registered.registerHelpers.getOnSettingsChangedCallbacks()) {
       try {
-        cb(settings)
+        await cb(settings)
       } catch (err) {
         logger.error('Cannot run on settings changed callback for %s.', registered.npmName, { err })
       }
@@ -327,10 +329,17 @@ export class PluginManager implements ServerHook {
     return plugin
   }
 
-  async update (toUpdate: string, version?: string, fromDisk = false) {
+  async update (toUpdate: string, fromDisk = false) {
     const npmName = fromDisk ? basename(toUpdate) : toUpdate
 
     logger.info('Updating plugin %s.', npmName)
+
+    // Use the latest version from DB, to not upgrade to a version that does not support our PeerTube version
+    let version: string
+    if (!fromDisk) {
+      const plugin = await PluginModel.loadByNpmName(toUpdate)
+      version = plugin.latestVersion
+    }
 
     // Unregister old hooks
     await this.unregister(npmName)
@@ -411,7 +420,7 @@ export class PluginManager implements ServerHook {
 
     // Delete cache if needed
     const modulePath = join(pluginPath, packageJSON.library)
-    delete require.cache[modulePath]
+    decache(modulePath)
     const library: PluginLibrary = require(modulePath)
 
     if (!isLibraryCodeValid(library)) {
@@ -419,6 +428,9 @@ export class PluginManager implements ServerHook {
     }
 
     const { registerOptions, registerStore } = this.getRegisterHelpers(npmName, plugin)
+
+    await ensureDir(registerOptions.peertubeHelpers.plugin.getDataDirectoryPath())
+
     library.register(registerOptions)
            .catch(err => logger.error('Cannot register plugin %s.', npmName, { err }))
 
@@ -436,10 +448,12 @@ export class PluginManager implements ServerHook {
       const path = translationPaths[locale]
       const json = await readJSON(join(this.getPluginPath(plugin.name, plugin.type), path))
 
-      if (!this.translations[locale]) this.translations[locale] = {}
-      this.translations[locale][npmName] = json
+      const completeLocale = getCompleteLocale(locale)
 
-      logger.info('Added locale %s of plugin %s.', locale, npmName)
+      if (!this.translations[completeLocale]) this.translations[completeLocale] = {}
+      this.translations[completeLocale][npmName] = json
+
+      logger.info('Added locale %s of plugin %s.', completeLocale, npmName)
     }
   }
 

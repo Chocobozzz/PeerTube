@@ -11,7 +11,7 @@
       [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels"
       [videoCaptions]="videoCaptions" [waitTranscodingEnabled]="isWaitTranscodingEnabled()"
       type="update" (pluginFieldsAdded)="hydratePluginFieldsFromVideo()"
-      [liveVideo]="liveVideo"
+      [liveVideo]="liveVideo" [videoToUpdate]="videoDetails"
     ></my-video-edit>
 
     <div class="submit-container">

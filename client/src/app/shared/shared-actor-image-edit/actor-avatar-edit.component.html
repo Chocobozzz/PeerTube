@@ -1,0 +1,42 @@
+<div class="actor" *ngIf="actor">
+  <div class="d-flex">
+    <my-actor-avatar [channel]="getChannel()" [account]="getAccount()" [previewImage]="preview" size="100"></my-actor-avatar>
+
+    <div class="actor-img-edit-container">
+
+      <div *ngIf="editable && !hasAvatar()" class="actor-img-edit-button" [ngbTooltip]="avatarFormat" placement="right" container="body">
+        <my-global-icon iconName="upload"></my-global-icon>
+        <label class="sr-only" for="avatarfile" i18n>Upload a new avatar</label>
+        <input #avatarfileInput type="file" name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange(avatarfileInput)"/>
+      </div>
+
+      <div
+        *ngIf="editable && hasAvatar()" class="actor-img-edit-button"
+        #avatarPopover="ngbPopover" [ngbPopover]="avatarEditContent" popoverClass="popover-image-info" autoClose="outside" placement="right"
+      >
+        <my-global-icon iconName="edit"></my-global-icon>
+        <label class="sr-only" for="avatarMenu" i18n>Change your avatar</label>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="actor-info">
+    <div class="actor-info-display-name">{{ actor.displayName }}</div>
+    <div *ngIf="displayUsername" class="actor-info-username">{{ actor.name }}</div>
+    <div *ngIf="displaySubscribers" i18n class="actor-info-followers">{{ actor.followersCount }} subscribers</div>
+  </div>
+</div>
+
+<ng-template #avatarEditContent>
+  <div class="dropdown-item c-hand" [ngbTooltip]="avatarFormat" placement="right" container="body">
+    <my-global-icon iconName="upload"></my-global-icon>
+    <span for="avatarfile" i18n>Upload a new avatar</span>
+    <input #avatarfileInput type="file" name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange(avatarfileInput)"/>
+  </div>
+
+  <div class="dropdown-item c-hand" (click)="deleteAvatar()" (key.enter)="deleteAvatar()">
+    <my-global-icon iconName="delete"></my-global-icon>
+    <span i18n>Remove avatar</span>
+  </div>
+</ng-template>

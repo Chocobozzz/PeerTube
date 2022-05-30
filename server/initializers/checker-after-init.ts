@@ -1,16 +1,17 @@
 import * as config from 'config'
-import { isProdInstance, isTestInstance } from '../helpers/core-utils'
-import { UserModel } from '../models/account/user'
-import { getServerActor, ApplicationModel } from '../models/application/application'
-import { OAuthClientModel } from '../models/oauth/oauth-client'
-import { URL } from 'url'
-import { CONFIG, isEmailEnabled } from './config'
-import { logger } from '../helpers/logger'
-import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
-import { isArray } from '../helpers/custom-validators/misc'
 import { uniq } from 'lodash'
-import { WEBSERVER } from './constants'
+import { URL } from 'url'
+import { getFFmpegVersion } from '@server/helpers/ffmpeg-utils'
 import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
+import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
+import { isProdInstance, isTestInstance, parseSemVersion } from '../helpers/core-utils'
+import { isArray } from '../helpers/custom-validators/misc'
+import { logger } from '../helpers/logger'
+import { UserModel } from '../models/account/user'
+import { ApplicationModel, getServerActor } from '../models/application/application'
+import { OAuthClientModel } from '../models/oauth/oauth-client'
+import { CONFIG, isEmailEnabled } from './config'
+import { WEBSERVER } from './constants'
 
 async function checkActivityPubUrls () {
   const actor = await getServerActor()
@@ -176,11 +177,21 @@ async function applicationExist () {
   return totalApplication !== 0
 }
 
+async function checkFFmpegVersion () {
+  const version = await getFFmpegVersion()
+  const { major, minor } = parseSemVersion(version)
+
+  if (major < 4 || (major === 4 && minor < 1)) {
+    logger.warn('Your ffmpeg version (%s) is outdated. PeerTube supports ffmpeg >= 4.1. Please upgrade.', version)
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   checkConfig,
   clientsExist,
+  checkFFmpegVersion,
   usersExist,
   applicationExist,
   checkActivityPubUrls

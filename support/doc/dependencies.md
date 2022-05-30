@@ -281,16 +281,33 @@ service nginx start
 
 1. Add the packages:
 
+```sh
+brew install bash ffmpeg nginx postgresql openssl gcc make redis git yarn
 ```
-brew install ffmpeg nginx postgresql openssl gcc make redis git yarn
+
+You may need to update your default version of bash.
+
+**How to change your default shell**
+
+```sh
+which -a bash # Check where bash is installed
+bash --version # You need a version at least as recent as 4.0
+sudo vim /etc/shells # Add in this file : /usr/local/bin/bash
+chsh -s /usr/local/bin/bash # To set the brew-installed bash as default bash
 ```
+
+In a new shell, type `bash --version` to assert your changes took effect and 
+correctly modified your default bash version.
 
 2. Run the services:
 
-```
+```sh
 brew services run postgresql
 brew services run redis
 ```
+
+On macOS, the `postgresql` user can be `_postgres` instead of `postgres`.
+If `sudo -u postgres createuser -P peertube` gives you an `unknown user: postgres` error, you can try `sudo -u _postgres createuser -U peertube`.
 
 ## Gentoo
 

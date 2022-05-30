@@ -1,4 +1,6 @@
+import { UploadFilesForCheck } from 'express'
 import { values } from 'lodash'
+import * as magnetUtil from 'magnet-uri'
 import validator from 'validator'
 import { VideoFilter, VideoPrivacy, VideoRateType } from '../../../shared'
 import {
@@ -6,13 +8,12 @@ import {
   MIMETYPES,
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
+  VIDEO_LIVE,
   VIDEO_PRIVACIES,
   VIDEO_RATE_TYPES,
-  VIDEO_STATES,
-  VIDEO_LIVE
+  VIDEO_STATES
 } from '../../initializers/constants'
 import { exists, isArray, isDateValid, isFileMimeTypeValid, isFileValid } from './misc'
-import * as magnetUtil from 'magnet-uri'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 
@@ -81,7 +82,7 @@ function isVideoFileExtnameValid (value: string) {
   return exists(value) && (value === VIDEO_LIVE.EXTENSION || MIMETYPES.VIDEO.EXT_MIMETYPE[value] !== undefined)
 }
 
-function isVideoFileMimeTypeValid (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
+function isVideoFileMimeTypeValid (files: UploadFilesForCheck) {
   return isFileMimeTypeValid(files, MIMETYPES.VIDEO.MIMETYPES_REGEX, 'videofile')
 }
 

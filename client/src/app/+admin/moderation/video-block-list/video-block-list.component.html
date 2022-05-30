@@ -4,8 +4,9 @@
 </h1>
 
 <p-table
-  [value]="blocklist" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
+  [value]="blocklist" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id"
+  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} blocked videos"
   (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
@@ -13,25 +14,7 @@
   <ng-template pTemplate="caption">
     <div class="caption">
       <div class="ml-auto">
-        <div class="input-group has-feedback has-clear">
-          <div class="input-group-prepend c-hand" ngbDropdown placement="bottom-left auto" container="body">
-            <div class="input-group-text" ngbDropdownToggle>
-              <span class="caret" aria-haspopup="menu" role="button"></span>
-            </div>
-
-            <div role="menu" ngbDropdownMenu>
-              <h6 class="dropdown-header" i18n>Advanced block filters</h6>
-              <a [routerLink]="[ '/admin/moderation/video-blocks/list' ]" [queryParams]="{ 'search': 'type:auto' }" class="dropdown-item" i18n>Automatic blocks</a>
-              <a [routerLink]="[ '/admin/moderation/video-blocks/list' ]" [queryParams]="{ 'search': 'type:manual' }" class="dropdown-item" i18n>Manual blocks</a>
-            </div>
-          </div>
-          <input
-            type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
-            (keyup)="onSearch($event)"
-          >
-          <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetTableFilter()"></a>
-          <span class="sr-only" i18n>Clear filters</span>
-        </div>
+        <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
     </div>
   </ng-template>

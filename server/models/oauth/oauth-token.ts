@@ -12,9 +12,10 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { TokensCache } from '@server/lib/auth/tokens-cache'
+import { MUserAccountId } from '@server/types/models'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token'
 import { logger } from '../../helpers/logger'
-import { clearCacheByToken } from '../../lib/oauth-model'
 import { AccountModel } from '../account/account'
 import { UserModel } from '../account/user'
 import { ActorModel } from '../activitypub/actor'
@@ -26,9 +27,7 @@ export type OAuthTokenInfo = {
   client: {
     id: number
   }
-  user: {
-    id: number
-  }
+  user: MUserAccountId
   token: MOAuthTokenUser
 }
 
@@ -133,7 +132,7 @@ export class OAuthTokenModel extends Model {
   @AfterUpdate
   @AfterDestroy
   static removeTokenCache (token: OAuthTokenModel) {
-    return clearCacheByToken(token.accessToken)
+    return TokensCache.Instance.clearCacheByToken(token.accessToken)
   }
 
   static loadByRefreshToken (refreshToken: string) {
@@ -206,6 +205,8 @@ export class OAuthTokenModel extends Model {
   }
 
   static deleteUserToken (userId: number, t?: Transaction) {
+    TokensCache.Instance.deleteUserToken(userId)
+
     const query = {
       where: {
         userId

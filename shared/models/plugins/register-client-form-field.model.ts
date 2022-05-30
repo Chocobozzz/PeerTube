@@ -1,14 +1,23 @@
-export interface RegisterClientFormFieldOptions {
-  name: string
-  label: string
-  type: 'input' | 'input-checkbox' | 'input-password' | 'input-textarea' | 'markdown-text' | 'markdown-enhanced'
+export type RegisterClientFormFieldOptions = {
+  name?: string
+  label?: string
+  type: 'input' | 'input-checkbox' | 'input-password' | 'input-textarea' | 'markdown-text' | 'markdown-enhanced' | 'select' | 'html'
+
+  // For select type
+  options?: { value: string, label: string }[]
+
+  // For html type
+  html?: string
 
   descriptionHTML?: string
 
   // Default setting value
   default?: string | boolean
+
+  // Not supported by plugin setting registration, use registerSettingsScript instead
+  hidden?: (options: any) => boolean
 }
 
 export interface RegisterClientVideoFieldOptions {
-  type: 'import-url' | 'import-torrent' | 'update' | 'upload'
+  type: 'update' | 'upload' | 'import-url' | 'import-torrent' | 'go-live'
 }

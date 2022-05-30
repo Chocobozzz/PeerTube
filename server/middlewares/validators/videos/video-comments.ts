@@ -216,7 +216,7 @@ async function isVideoCommentAccepted (req: express.Request, res: express.Respon
   if (!acceptedResult || acceptedResult.accepted !== true) {
     logger.info('Refused local comment.', { acceptedResult, acceptParameters })
     res.status(HttpStatusCode.FORBIDDEN_403)
-       .json({ error: acceptedResult.errorMessage || 'Refused local comment' })
+       .json({ error: acceptedResult?.errorMessage || 'Refused local comment' })
 
     return false
   }

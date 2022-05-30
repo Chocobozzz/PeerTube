@@ -41,7 +41,7 @@ class VideosCaptionCache extends AbstractVideoStaticFileCache <string> {
     const remoteUrl = videoCaption.getFileUrl(video)
     const destPath = join(FILES_CACHE.VIDEO_CAPTIONS.DIRECTORY, videoCaption.filename)
 
-    await doRequestAndSaveToFile({ uri: remoteUrl }, destPath)
+    await doRequestAndSaveToFile(remoteUrl, destPath)
 
     return { isOwned: false, path: destPath }
   }

@@ -1,4 +1,4 @@
-import { NSFWQuery, SearchTargetType } from '@shared/models'
+import { BooleanBothQuery, BooleanQuery, SearchTargetType, VideosSearchQuery } from '@shared/models'
 
 export class AdvancedSearch {
   startDate: string // ISO 8601
@@ -7,7 +7,7 @@ export class AdvancedSearch {
   originallyPublishedStartDate: string // ISO 8601
   originallyPublishedEndDate: string // ISO 8601
 
-  nsfw: NSFWQuery
+  nsfw: BooleanBothQuery
 
   categoryOneOf: string
 
@@ -21,6 +21,8 @@ export class AdvancedSearch {
   durationMin: number // seconds
   durationMax: number // seconds
 
+  isLive: BooleanQuery
+
   sort: string
 
   searchTarget: SearchTargetType
@@ -33,13 +35,15 @@ export class AdvancedSearch {
     endDate?: string
     originallyPublishedStartDate?: string
     originallyPublishedEndDate?: string
-    nsfw?: NSFWQuery
+    nsfw?: BooleanBothQuery
     categoryOneOf?: string
     licenceOneOf?: string
     languageOneOf?: string
 
     tagsOneOf?: any
     tagsAllOf?: any
+
+    isLive?: BooleanQuery
 
     durationMin?: string
     durationMax?: string
@@ -54,6 +58,8 @@ export class AdvancedSearch {
     this.originallyPublishedEndDate = options.originallyPublishedEndDate || undefined
 
     this.nsfw = options.nsfw || undefined
+    this.isLive = options.isLive || undefined
+
     this.categoryOneOf = options.categoryOneOf || undefined
     this.licenceOneOf = options.licenceOneOf || undefined
     this.languageOneOf = options.languageOneOf || undefined
@@ -94,6 +100,7 @@ export class AdvancedSearch {
     this.tagsAllOf = undefined
     this.durationMin = undefined
     this.durationMax = undefined
+    this.isLive = undefined
 
     this.sort = '-match'
   }
@@ -112,12 +119,16 @@ export class AdvancedSearch {
       tagsAllOf: this.tagsAllOf,
       durationMin: this.durationMin,
       durationMax: this.durationMax,
+      isLive: this.isLive,
       sort: this.sort,
       searchTarget: this.searchTarget
     }
   }
 
-  toAPIObject () {
+  toAPIObject (): VideosSearchQuery {
+    let isLive: boolean
+    if (this.isLive) isLive = this.isLive === 'true'
+
     return {
       startDate: this.startDate,
       endDate: this.endDate,
@@ -131,6 +142,7 @@ export class AdvancedSearch {
       tagsAllOf: this.tagsAllOf,
       durationMin: this.durationMin,
       durationMax: this.durationMax,
+      isLive,
       sort: this.sort,
       searchTarget: this.searchTarget
     }

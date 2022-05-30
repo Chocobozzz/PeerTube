@@ -1,16 +1,15 @@
+import { PickWith } from '@shared/core-utils'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import {
   MActor,
   MActorChannelAccountActor,
   MActorDefault,
   MActorDefaultAccountChannel,
+  MActorDefaultChannelId,
   MActorFormattable,
   MActorHost,
   MActorUsername
 } from './actor'
-import { PickWith } from '@shared/core-utils'
-import { ActorModel } from '@server/models/activitypub/actor'
-import { MChannelDefault } from '../video/video-channels'
 
 type Use<K extends keyof ActorFollowModel, M> = PickWith<ActorFollowModel, K, M>
 
@@ -47,14 +46,10 @@ export type MActorFollowFull =
 
 // For subscriptions
 
-type SubscriptionFollowing =
-  MActorDefault &
-  PickWith<ActorModel, 'VideoChannel', MChannelDefault>
-
 export type MActorFollowActorsDefaultSubscription =
   MActorFollow &
   Use<'ActorFollower', MActorDefault> &
-  Use<'ActorFollowing', SubscriptionFollowing>
+  Use<'ActorFollowing', MActorDefaultChannelId>
 
 export type MActorFollowSubscriptions =
   MActorFollow &

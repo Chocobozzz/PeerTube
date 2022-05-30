@@ -5,6 +5,7 @@ import { CONFIG } from '../../initializers/config'
 import { FILES_CACHE } from '../../initializers/constants'
 import { VideoModel } from '../../models/video/video'
 import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
+import { MVideo, MVideoFile } from '@server/types/models'
 
 class VideosTorrentCache extends AbstractVideoStaticFileCache <string> {
 
@@ -22,7 +23,11 @@ class VideosTorrentCache extends AbstractVideoStaticFileCache <string> {
     const file = await VideoFileModel.loadWithVideoOrPlaylistByTorrentFilename(filename)
     if (!file) return undefined
 
-    if (file.getVideo().isOwned()) return { isOwned: true, path: join(CONFIG.STORAGE.TORRENTS_DIR, file.torrentFilename) }
+    if (file.getVideo().isOwned()) {
+      const downloadName = this.buildDownloadName(file.getVideo(), file)
+
+      return { isOwned: true, path: join(CONFIG.STORAGE.TORRENTS_DIR, file.torrentFilename), downloadName }
+    }
 
     return this.loadRemoteFile(filename)
   }
@@ -41,11 +46,15 @@ class VideosTorrentCache extends AbstractVideoStaticFileCache <string> {
     const remoteUrl = file.getRemoteTorrentUrl(video)
     const destPath = join(FILES_CACHE.TORRENTS.DIRECTORY, file.torrentFilename)
 
-    await doRequestAndSaveToFile({ uri: remoteUrl }, destPath)
+    await doRequestAndSaveToFile(remoteUrl, destPath)
 
-    const downloadName = `${video.name}-${file.resolution}p.torrent`
+    const downloadName = this.buildDownloadName(video, file)
 
     return { isOwned: false, path: destPath, downloadName }
+  }
+
+  private buildDownloadName (video: MVideo, file: MVideoFile) {
+    return `${video.name}-${file.resolution}p.torrent`
   }
 }
 

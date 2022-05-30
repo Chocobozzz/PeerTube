@@ -21,6 +21,7 @@ import { RedirectService } from '@app/core/routing/redirect.service'
 import { isXPercentInViewport, scrollToTop } from '@app/helpers'
 import { Video, VideoCaptionService, VideoDetails, VideoService } from '@app/shared/shared-main'
 import { VideoShareComponent } from '@app/shared/shared-share-modal'
+import { SupportModalComponent } from '@app/shared/shared-support-modal'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { VideoActionsDisplayType, VideoDownloadComponent } from '@app/shared/shared-video-miniature'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
@@ -28,7 +29,12 @@ import { MetaService } from '@ngx-meta/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { ServerConfig, ServerErrorCode, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'
-import { getStoredP2PEnabled, getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
+import {
+  cleanupVideoWatch,
+  getStoredP2PEnabled,
+  getStoredTheater,
+  getStoredVideoWatchHistory
+} from '../../../assets/player/peertube-player-local-storage'
 import {
   CustomizationOptions,
   P2PMediaLoaderOptions,
@@ -39,7 +45,6 @@ import {
 } from '../../../assets/player/peertube-player-manager'
 import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
 import { environment } from '../../../environments/environment'
-import { VideoSupportComponent } from './modal/video-support.component'
 import { VideoWatchPlaylistComponent } from './video-watch-playlist.component'
 
 type URLOptions = CustomizationOptions & { playerMode: PlayerMode }
@@ -54,7 +59,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   @ViewChild('videoWatchPlaylist', { static: true }) videoWatchPlaylist: VideoWatchPlaylistComponent
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
-  @ViewChild('videoSupportModal') videoSupportModal: VideoSupportComponent
+  @ViewChild('supportModal') supportModal: SupportModalComponent
   @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
   @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
 
@@ -183,7 +188,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     })
 
     this.queryParamsSub = this.route.queryParams.subscribe(queryParams => {
-      this.playlistPosition = queryParams[ 'playlistPosition' ]
+      // Handle the ?playlistPosition
+      const positionParam = queryParams[ 'playlistPosition' ] ?? 1
+
+      this.playlistPosition = positionParam === 'last'
+        ? -1 // Handle the "last" index
+        : parseInt(positionParam + '', 10)
+
+      if (isNaN(this.playlistPosition)) {
+        console.error(`playlistPosition query param '${positionParam}' was parsed as NaN, defaulting to 1.`)
+        this.playlistPosition = 1
+      }
+
       this.videoWatchPlaylist.updatePlaylistIndex(this.playlistPosition)
 
       const start = queryParams[ 'start' ]
@@ -195,6 +211,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.theaterEnabled = getStoredTheater()
 
     this.hooks.runAction('action:video-watch.init', 'video-watch')
+
+    setTimeout(cleanupVideoWatch, 1500) // Run in timeout to ensure we're not blocking the UI
   }
 
   ngOnDestroy () {
@@ -277,28 +295,22 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   showSupportModal () {
-    // Check video was playing before opening support modal
-    const isVideoPlaying = this.isPlaying()
-
-    this.pausePlayer()
-
-    const modalRef = this.videoSupportModal.show()
-
-    modalRef.result.then(() => {
-      if (isVideoPlaying) {
-        this.resumePlayer()
-      }
-    })
+    this.supportModal.show()
   }
 
   showShareModal () {
-    this.pausePlayer()
-
     this.videoShareModal.show(this.currentTime, this.videoWatchPlaylist.currentPlaylistPosition)
   }
 
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
+  }
+
+  getVideoUrl () {
+    if (!this.video.url) {
+      return this.video.originInstanceUrl + VideoDetails.buildClientUrl(this.video.uuid)
+    }
+    return this.video.url
   }
 
   getVideoTags () {
@@ -314,10 +326,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.nextVideoUuid = video.uuid
       this.nextVideoTitle = video.name
     }
-  }
-
-  onModalOpened () {
-    this.pausePlayer()
   }
 
   onVideoRemoved () {
@@ -394,6 +402,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   onPlaylistVideoFound (videoId: string) {
     this.loadVideo(videoId)
+  }
+
+  displayOtherVideosAsRow () {
+    // Use the same value as in the SASS file
+    return this.screenService.getWindowInnerWidth() <= 1100
   }
 
   private loadVideo (videoId: string) {
@@ -570,7 +583,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.setOpenGraphTags()
     this.checkUserRating()
 
-    this.hooks.runAction('action:video-watch.video.loaded', 'video-watch', { videojs })
+    const hookOptions = {
+      videojs,
+      video: this.video,
+      playlist: this.playlist
+    }
+    this.hooks.runAction('action:video-watch.video.loaded', 'video-watch', hookOptions)
   }
 
   private async buildPlayer (urlOptions: URLOptions) {
@@ -656,7 +674,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       this.player.one('ended', () => {
         if (this.video.isLive) {
-          this.video.state.id = VideoState.LIVE_ENDED
+          this.zone.run(() => this.video.state.id = VideoState.LIVE_ENDED)
         }
       })
 
@@ -768,9 +786,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const getStartTime = () => {
       const byUrl = urlOptions.startTime !== undefined
       const byHistory = video.userHistory && (!this.playlist || urlOptions.resume !== undefined)
+      const byLocalStorage = getStoredVideoWatchHistory(video.uuid)
 
       if (byUrl) return timeToInt(urlOptions.startTime)
       if (byHistory) return video.userHistory.currentTime
+      if (byLocalStorage) return byLocalStorage.duration
 
       return 0
     }
@@ -815,6 +835,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           ? this.videoService.getVideoViewUrl(video.uuid)
           : null,
         embedUrl: video.embedUrl,
+        embedTitle: video.name,
 
         isLive: video.isLive,
 
@@ -827,11 +848,20 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         serverUrl: environment.apiUrl,
 
-        videoCaptions: playerCaptions
+        videoCaptions: playerCaptions,
+
+        videoUUID: video.uuid
       },
 
       webtorrent: {
         videoFiles: video.files
+      }
+    }
+
+    // Only set this if we're in a playlist
+    if (this.playlist) {
+      options.common.previousVideo = () => {
+        this.zone.run(() => this.videoWatchPlaylist.navigateToPreviousPlaylistVideo())
       }
     }
 
@@ -865,24 +895,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     return { playerMode: mode, playerOptions: options }
-  }
-
-  private pausePlayer () {
-    if (!this.player) return
-
-    this.player.pause()
-  }
-
-  private resumePlayer () {
-    if (!this.player) return
-
-    this.player.play()
-  }
-
-  private isPlaying () {
-    if (!this.player) return
-
-    return !this.player.paused()
   }
 
   private async subscribeToLiveEventsIfNeeded (oldVideo: VideoDetails, newVideo: VideoDetails) {

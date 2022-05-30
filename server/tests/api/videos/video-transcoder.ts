@@ -361,106 +361,117 @@ describe('Test video transcoding', function () {
 
   describe('Audio upload', function () {
 
-    before(async function () {
-      await updateCustomSubConfig(servers[1].url, servers[1].accessToken, {
-        transcoding: {
-          hls: { enabled: true },
-          webtorrent: { enabled: true },
-          resolutions: {
-            '0p': false,
-            '240p': false,
-            '360p': false,
-            '480p': false,
-            '720p': false,
-            '1080p': false,
-            '1440p': false,
-            '2160p': false
+    function runSuite (mode: 'legacy' | 'resumable') {
+
+      before(async function () {
+        await updateCustomSubConfig(servers[1].url, servers[1].accessToken, {
+          transcoding: {
+            hls: { enabled: true },
+            webtorrent: { enabled: true },
+            resolutions: {
+              '0p': false,
+              '240p': false,
+              '360p': false,
+              '480p': false,
+              '720p': false,
+              '1080p': false,
+              '1440p': false,
+              '2160p': false
+            }
           }
-        }
+        })
       })
-    })
 
-    it('Should merge an audio file with the preview file', async function () {
-      this.timeout(60_000)
+      it('Should merge an audio file with the preview file', async function () {
+        this.timeout(60_000)
 
-      const videoAttributesArg = { name: 'audio_with_preview', previewfile: 'preview.jpg', fixture: 'sample.ogg' }
-      await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributesArg)
+        const videoAttributesArg = { name: 'audio_with_preview', previewfile: 'preview.jpg', fixture: 'sample.ogg' }
+        await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributesArg, HttpStatusCode.OK_200, mode)
 
-      await waitJobs(servers)
+        await waitJobs(servers)
 
-      for (const server of servers) {
-        const res = await getVideosList(server.url)
+        for (const server of servers) {
+          const res = await getVideosList(server.url)
 
-        const video = res.body.data.find(v => v.name === 'audio_with_preview')
-        const res2 = await getVideo(server.url, video.id)
-        const videoDetails: VideoDetails = res2.body
+          const video = res.body.data.find(v => v.name === 'audio_with_preview')
+          const res2 = await getVideo(server.url, video.id)
+          const videoDetails: VideoDetails = res2.body
 
-        expect(videoDetails.files).to.have.lengthOf(1)
+          expect(videoDetails.files).to.have.lengthOf(1)
 
-        await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, statusCodeExpected: HttpStatusCode.OK_200 })
-        await makeGetRequest({ url: server.url, path: videoDetails.previewPath, statusCodeExpected: HttpStatusCode.OK_200 })
+          await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, statusCodeExpected: HttpStatusCode.OK_200 })
+          await makeGetRequest({ url: server.url, path: videoDetails.previewPath, statusCodeExpected: HttpStatusCode.OK_200 })
 
-        const magnetUri = videoDetails.files[0].magnetUri
-        expect(magnetUri).to.contain('.mp4')
-      }
-    })
-
-    it('Should upload an audio file and choose a default background image', async function () {
-      this.timeout(60_000)
-
-      const videoAttributesArg = { name: 'audio_without_preview', fixture: 'sample.ogg' }
-      await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributesArg)
-
-      await waitJobs(servers)
-
-      for (const server of servers) {
-        const res = await getVideosList(server.url)
-
-        const video = res.body.data.find(v => v.name === 'audio_without_preview')
-        const res2 = await getVideo(server.url, video.id)
-        const videoDetails = res2.body
-
-        expect(videoDetails.files).to.have.lengthOf(1)
-
-        await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, statusCodeExpected: HttpStatusCode.OK_200 })
-        await makeGetRequest({ url: server.url, path: videoDetails.previewPath, statusCodeExpected: HttpStatusCode.OK_200 })
-
-        const magnetUri = videoDetails.files[0].magnetUri
-        expect(magnetUri).to.contain('.mp4')
-      }
-    })
-
-    it('Should upload an audio file and create an audio version only', async function () {
-      this.timeout(60_000)
-
-      await updateCustomSubConfig(servers[1].url, servers[1].accessToken, {
-        transcoding: {
-          hls: { enabled: true },
-          webtorrent: { enabled: true },
-          resolutions: {
-            '0p': true,
-            '240p': false,
-            '360p': false
-          }
+          const magnetUri = videoDetails.files[0].magnetUri
+          expect(magnetUri).to.contain('.mp4')
         }
       })
 
-      const videoAttributesArg = { name: 'audio_with_preview', previewfile: 'preview.jpg', fixture: 'sample.ogg' }
-      const resVideo = await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributesArg)
+      it('Should upload an audio file and choose a default background image', async function () {
+        this.timeout(60_000)
 
-      await waitJobs(servers)
+        const videoAttributesArg = { name: 'audio_without_preview', fixture: 'sample.ogg' }
+        await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributesArg, HttpStatusCode.OK_200, mode)
 
-      for (const server of servers) {
-        const res2 = await getVideo(server.url, resVideo.body.video.id)
-        const videoDetails: VideoDetails = res2.body
+        await waitJobs(servers)
 
-        for (const files of [ videoDetails.files, videoDetails.streamingPlaylists[0].files ]) {
-          expect(files).to.have.lengthOf(2)
-          expect(files.find(f => f.resolution.id === 0)).to.not.be.undefined
+        for (const server of servers) {
+          const res = await getVideosList(server.url)
+
+          const video = res.body.data.find(v => v.name === 'audio_without_preview')
+          const res2 = await getVideo(server.url, video.id)
+          const videoDetails = res2.body
+
+          expect(videoDetails.files).to.have.lengthOf(1)
+
+          await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, statusCodeExpected: HttpStatusCode.OK_200 })
+          await makeGetRequest({ url: server.url, path: videoDetails.previewPath, statusCodeExpected: HttpStatusCode.OK_200 })
+
+          const magnetUri = videoDetails.files[0].magnetUri
+          expect(magnetUri).to.contain('.mp4')
         }
-      }
+      })
 
-      await updateConfigForTranscoding(servers[1])
+      it('Should upload an audio file and create an audio version only', async function () {
+        this.timeout(60_000)
+
+        await updateCustomSubConfig(servers[1].url, servers[1].accessToken, {
+          transcoding: {
+            hls: { enabled: true },
+            webtorrent: { enabled: true },
+            resolutions: {
+              '0p': true,
+              '240p': false,
+              '360p': false
+            }
+          }
+        })
+
+        const videoAttributesArg = { name: 'audio_with_preview', previewfile: 'preview.jpg', fixture: 'sample.ogg' }
+        const resVideo = await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributesArg, HttpStatusCode.OK_200, mode)
+
+        await waitJobs(servers)
+
+        for (const server of servers) {
+          const res2 = await getVideo(server.url, resVideo.body.video.id)
+          const videoDetails: VideoDetails = res2.body
+
+          for (const files of [ videoDetails.files, videoDetails.streamingPlaylists[0].files ]) {
+            expect(files).to.have.lengthOf(2)
+            expect(files.find(f => f.resolution.id === 0)).to.not.be.undefined
+          }
+        }
+
+        await updateConfigForTranscoding(servers[1])
+      })
+    }
+
+    describe('Legacy upload', function () {
+      runSuite('legacy')
+    })
+
+    describe('Resumable upload', function () {
+      runSuite('resumable')
     })
   })
 
@@ -721,12 +732,7 @@ describe('Test video transcoding', function () {
       expect(webtorrentJobs).to.have.lengthOf(6)
       expect(optimizeJobs).to.have.lengthOf(1)
 
-      for (const j of optimizeJobs) {
-        expect(j.priority).to.be.greaterThan(11)
-        expect(j.priority).to.be.lessThan(50)
-      }
-
-      for (const j of hlsJobs.concat(webtorrentJobs)) {
+      for (const j of optimizeJobs.concat(hlsJobs.concat(webtorrentJobs))) {
         expect(j.priority).to.be.greaterThan(100)
         expect(j.priority).to.be.lessThan(150)
       }

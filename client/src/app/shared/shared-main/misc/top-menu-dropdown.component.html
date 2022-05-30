@@ -4,7 +4,7 @@
     <a *ngIf="menuEntry.routerLink && isDisplayed(menuEntry)" [routerLink]="menuEntry.routerLink" routerLinkActive="active" class="title-page title-page-settings" #routerLink (click)="onActiveLinkScrollToTop(routerLink)">{{ menuEntry.label }}</a>
 
     <div *ngIf="!menuEntry.routerLink && isDisplayed(menuEntry)" ngbDropdown class="parent-entry"
-      #dropdown="ngbDropdown" autoClose="true">
+      #dropdown="ngbDropdown" autoClose="true" container="body">
       <span
         *ngIf="isInSmallView"
         tabindex=0

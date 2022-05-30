@@ -8,10 +8,12 @@ import {
   VIDEO_CHANNEL_SUPPORT_VALIDATOR
 } from '@app/shared/form-validators/video-channel-validators'
 import { FormValidatorService } from '@app/shared/shared-forms'
-import { VideoChannelService } from '@app/shared/shared-main'
+import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { VideoChannelCreate } from '@shared/models'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { MyVideoChannelEdit } from './my-video-channel-edit'
+import { switchMap } from 'rxjs/operators'
+import { of } from 'rxjs'
 
 @Component({
   templateUrl: './my-video-channel-edit.component.html',
@@ -19,6 +21,10 @@ import { MyVideoChannelEdit } from './my-video-channel-edit'
 })
 export class MyVideoChannelCreateComponent extends MyVideoChannelEdit implements OnInit {
   error: string
+  videoChannel = new VideoChannel({})
+
+  private avatar: FormData
+  private banner: FormData
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -50,23 +56,43 @@ export class MyVideoChannelCreateComponent extends MyVideoChannelEdit implements
       support: body.support || null
     }
 
-    this.videoChannelService.createVideoChannel(videoChannelCreate).subscribe(
-      () => {
-        this.authService.refreshUserInformation()
+    this.videoChannelService.createVideoChannel(videoChannelCreate)
+      .pipe(
+        switchMap(() => this.uploadAvatar()),
+        switchMap(() => this.uploadBanner())
+      ).subscribe(
+        () => {
+          this.authService.refreshUserInformation()
 
-        this.notifier.success($localize`Video channel ${videoChannelCreate.displayName} created.`)
-        this.router.navigate([ '/my-library', 'video-channels' ])
-      },
+          this.notifier.success($localize`Video channel ${videoChannelCreate.displayName} created.`)
+          this.router.navigate(['/my-library', 'video-channels'])
+        },
 
-      err => {
-        if (err.status === HttpStatusCode.CONFLICT_409) {
-          this.error = $localize`This name already exists on this instance.`
-          return
+        err => {
+          if (err.status === HttpStatusCode.CONFLICT_409) {
+            this.error = $localize`This name already exists on this instance.`
+            return
+          }
+
+          this.error = err.message
         }
+      )
+  }
 
-        this.error = err.message
-      }
-    )
+  onAvatarChange (formData: FormData) {
+    this.avatar = formData
+  }
+
+  onAvatarDelete () {
+    this.avatar = null
+  }
+
+  onBannerChange (formData: FormData) {
+    this.banner = formData
+  }
+
+  onBannerDelete () {
+    this.banner = null
   }
 
   isCreation () {
@@ -75,5 +101,21 @@ export class MyVideoChannelCreateComponent extends MyVideoChannelEdit implements
 
   getFormButtonTitle () {
     return $localize`Create`
+  }
+
+  getUsername () {
+    return this.form.value.name
+  }
+
+  private uploadAvatar () {
+    if (!this.avatar) return of(undefined)
+
+    return this.videoChannelService.changeVideoChannelImage(this.getUsername(), this.avatar, 'avatar')
+  }
+
+  private uploadBanner () {
+    if (!this.banner) return of(undefined)
+
+    return this.videoChannelService.changeVideoChannelImage(this.getUsername(), this.banner, 'banner')
   }
 }

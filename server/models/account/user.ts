@@ -21,6 +21,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { TokensCache } from '@server/lib/auth/tokens-cache'
 import {
   MMyUserFormattable,
   MUser,
@@ -58,7 +59,6 @@ import {
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { DEFAULT_USER_THEME_NAME, NSFW_POLICY_TYPES } from '../../initializers/constants'
-import { clearCacheByUserId } from '../../lib/oauth-model'
 import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
 import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
@@ -71,6 +71,7 @@ import { VideoLiveModel } from '../video/video-live'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { AccountModel } from './account'
 import { UserNotificationSettingModel } from './user-notification-setting'
+import { ActorImageModel } from './actor-image'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',
@@ -97,7 +98,20 @@ enum ScopeNames {
         model: AccountModel,
         include: [
           {
-            model: VideoChannelModel
+            model: VideoChannelModel.unscoped(),
+            include: [
+              {
+                model: ActorModel,
+                required: true,
+                include: [
+                  {
+                    model: ActorImageModel,
+                    as: 'Banner',
+                    required: false
+                  }
+                ]
+              }
+            ]
           },
           {
             attributes: [ 'id', 'name', 'type' ],
@@ -411,7 +425,7 @@ export class UserModel extends Model {
   @AfterUpdate
   @AfterDestroy
   static removeTokenCache (instance: UserModel) {
-    return clearCacheByUserId(instance.id)
+    return TokensCache.Instance.clearCacheByUserId(instance.id)
   }
 
   static countTotal () {
@@ -549,6 +563,10 @@ export class UserModel extends Model {
 
   static loadById (id: number): Promise<MUser> {
     return UserModel.unscoped().findByPk(id)
+  }
+
+  static loadByIdFull (id: number): Promise<MUserDefault> {
+    return UserModel.findByPk(id)
   }
 
   static loadByIdWithChannels (id: number, withStats = false): Promise<MUserDefault> {

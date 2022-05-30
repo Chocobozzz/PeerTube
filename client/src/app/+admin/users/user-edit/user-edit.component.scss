@@ -37,7 +37,8 @@ my-select-custom-value {
   display: block;
 }
 
-input[type=submit], button {
+input[type=submit],
+button {
   @include peertube-button;
   @include orange-button;
 
@@ -71,12 +72,4 @@ input[type=submit], button {
 .dashboard {
   @include dashboard;
   max-width: 900px;
-}
-
-my-actor-avatar-info ::ng-deep {
-  .actor-img-edit-container,
-  .actor-info-followers,
-  .actor-info-username {
-    display: none;
-  }
 }

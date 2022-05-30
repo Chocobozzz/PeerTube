@@ -5,7 +5,7 @@
         <div>
           <div class="logged-in-more" ngbDropdown #dropdown="ngbDropdown" placement="bottom-left" [container]="dropdownContainer" (openChange)="onDropdownOpenChange($event)" autoClose="outside">
             <div ngbDropdownToggle>
-              <img [src]="user.accountAvatarUrl" alt="Avatar" />
+              <my-actor-avatar [account]="user.account" size="34"></my-actor-avatar>
               <div class="logged-in-info">
                 <div class="logged-in-display-name">{{ user.account?.displayName }}</div>
 
@@ -40,9 +40,10 @@
 
               <a ngbDropdownItem ngbDropdownToggle class="dropdown-item settings-sensitive" routerLink="/my-account/settings"
                 fragment="video-sensitive-content-policy" #settingsSensitiveContentPolicy
-                (click)="onActiveLinkScrollToAnchor(settingsSensitiveContentPolicy)">
-                <my-global-icon class="hover-display-toggle" [ngClass]="{ 'not-displayed': user.nsfwPolicy === 'display' }" iconName="sensitive" aria-hidden="true"></my-global-icon>
-                <my-global-icon class="hover-display-toggle" [ngClass]="{ 'not-displayed': user.nsfwPolicy !== 'display' }" iconName="unsensitive" aria-hidden="true"></my-global-icon>
+                (click)="onActiveLinkScrollToAnchor(settingsSensitiveContentPolicy)"
+              >
+                <my-global-icon class="hover-display-toggle" [hidden]="user.nsfwPolicy === 'display'" iconName="sensitive" aria-hidden="true"></my-global-icon>
+                <my-global-icon class="hover-display-toggle" [hidden]="user.nsfwPolicy !== 'display'" iconName="unsensitive" aria-hidden="true"></my-global-icon>
                 <span i18n>Sensitive:</span>
                 <span class="ml-auto text-muted">{{ nsfwPolicy }}</span>
               </a>
@@ -72,17 +73,17 @@
         </div>
 
         <div class="logged-in-menu">
-          <a routerLink="/my-account" routerLinkActive="active" #settingsLink (click)="onActiveLinkScrollToAnchor(settingsLink)">
+          <a class="menu-link" routerLink="/my-account" routerLinkActive="active" #settingsLink (click)="onActiveLinkScrollToAnchor(settingsLink)">
             <my-global-icon iconName="user" aria-hidden="true"></my-global-icon>
             <ng-container i18n>My account</ng-container>
           </a>
 
-          <a routerLink="/my-library" routerLinkActive="active" #libraryLink (click)="onActiveLinkScrollToAnchor(libraryLink)">
+          <a class="menu-link" routerLink="/my-library" routerLinkActive="active" #libraryLink (click)="onActiveLinkScrollToAnchor(libraryLink)">
             <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon>
             <ng-container i18n>My library</ng-container>
           </a>
 
-          <a *ngIf="userHasAdminAccess" [routerLink]="getFirstAdminRouteAvailable()" routerLinkActive="active">
+          <a class="menu-link" *ngIf="userHasAdminAccess" [routerLink]="getFirstAdminRouteAvailable()" routerLinkActive="active">
             <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
             <ng-container i18n>Administration</ng-container>
           </a>
@@ -90,29 +91,29 @@
       </div>
 
       <div *ngIf="!isLoggedIn" class="login-buttons-block">
-        <a i18n routerLink="/login" class="login-button">Login</a>
-        <a i18n *ngIf="isRegistrationAllowed()" routerLink="/signup" class="create-account-button">Create an account</a>
+        <a i18n routerLink="/login" class="peertube-button-link orange-button">Login</a>
+        <a i18n *ngIf="isRegistrationAllowed()" routerLink="/signup" class="peertube-button-link create-account-button">Create an account</a>
       </div>
 
       <div *ngIf="isLoggedIn" class="in-my-library">
         <div i18n class="block-title">IN MY LIBRARY</div>
 
-        <a *ngIf="user.canSeeVideosLink" routerLink="/my-library/videos" routerLinkActive="active">
+        <a *ngIf="user.canSeeVideosLink" class="menu-link" routerLink="/my-library/videos" routerLinkActive="active">
           <my-global-icon iconName="videos" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Videos</ng-container>
         </a>
 
-        <a routerLink="/my-library/video-playlists" routerLinkActive="active">
+        <a class="menu-link" routerLink="/my-library/video-playlists" routerLinkActive="active">
           <my-global-icon iconName="playlists" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Playlists</ng-container>
         </a>
 
-        <a routerLink="/videos/subscriptions" routerLinkActive="active">
+        <a class="menu-link" routerLink="/videos/subscriptions" routerLinkActive="active">
           <my-global-icon iconName="subscriptions" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Subscriptions</ng-container>
         </a>
 
-        <a routerLink="/my-library/history/videos" routerLinkActive="active">
+        <a class="menu-link" routerLink="/my-library/history/videos" routerLinkActive="active">
           <my-global-icon iconName="history" aria-hidden="true"></my-global-icon>
           <ng-container i18n>History</ng-container>
         </a>
@@ -122,22 +123,22 @@
       <div class="on-instance">
         <div i18n class="block-title">ON {{instanceName}}</div>
 
-        <a routerLink="/videos/overview" routerLinkActive="active">
+        <a class="menu-link" routerLink="/videos/overview" routerLinkActive="active">
           <my-global-icon iconName="globe" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Discover</ng-container>
         </a>
 
-        <a routerLink="/videos/trending" routerLinkActive="active">
+        <a class="menu-link" routerLink="/videos/trending" routerLinkActive="active">
           <my-global-icon iconName="trending" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Trending</ng-container>
         </a>
 
-        <a routerLink="/videos/recently-added" routerLinkActive="active">
+        <a class="menu-link" routerLink="/videos/recently-added" routerLinkActive="active">
           <my-global-icon iconName="recently-added" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Recently added</ng-container>
         </a>
 
-        <a routerLink="/videos/local" routerLinkActive="active">
+        <a class="menu-link" routerLink="/videos/local" routerLinkActive="active">
           <my-global-icon iconName="home" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Local videos</ng-container>
         </a>
@@ -146,18 +147,18 @@
 
     <div class="footer">
       <div class="footer-block">
-        <a *ngIf="!isLoggedIn" (click)="openQuickSettings()">
+        <a *ngIf="!isLoggedIn" class="menu-link" (click)="openQuickSettings()">
           <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
           <ng-container i18n>My settings</ng-container>
         </a>
 
-        <a routerLink="/about" routerLinkActive="active">
+        <a class="menu-link" routerLink="/about" routerLinkActive="active">
           <my-global-icon iconName="help" aria-hidden="true"></my-global-icon>
           <ng-container i18n>About</ng-container>
         </a>
       </div>
 
-      <div class="bottom-links">
+      <div class="footer-bottom">
 
         <div class="footer-links">
           <div *ngIf="isLoggedIn === false">

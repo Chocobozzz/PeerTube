@@ -84,7 +84,7 @@ button {
       border-color: pvar(--mainColor) transparent transparent transparent;
     }
 
-    & + div {
+    + div {
       font-size: 15px;
     }
   }

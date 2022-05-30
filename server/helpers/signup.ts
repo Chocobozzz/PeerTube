@@ -20,6 +20,8 @@ async function isSignupAllowed (): Promise<{ allowed: boolean, errorMessage?: st
 }
 
 function isSignupAllowedForCurrentIP (ip: string) {
+  if (!ip) return false
+
   const addr = ipaddr.parse(ip)
   const excludeList = [ 'blacklist' ]
   let matched = ''

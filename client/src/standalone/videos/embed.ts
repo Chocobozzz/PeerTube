@@ -531,6 +531,7 @@ export class PeerTubeEmbed {
         videoCaptions,
         inactivityTimeout: 2500,
         videoViewUrl: this.getVideoUrl(videoInfo.uuid) + '/views',
+        videoUUID: videoInfo.uuid,
 
         isLive: videoInfo.isLive,
 
@@ -545,7 +546,8 @@ export class PeerTubeEmbed {
 
         serverUrl: window.location.origin,
         language: navigator.language,
-        embedUrl: window.location.origin + videoInfo.embedPath
+        embedUrl: window.location.origin + videoInfo.embedPath,
+        embedTitle: videoInfo.name
       },
 
       webtorrent: {
@@ -757,6 +759,7 @@ export class PeerTubeEmbed {
         await loadPlugin({
           hooks: this.peertubeHooks,
           pluginInfo,
+          onSettingsScripts: () => undefined,
           peertubeHelpersFactory: _ => this.buildPeerTubeHelpers(translations)
         })
       }
@@ -774,6 +777,7 @@ export class PeerTubeEmbed {
       getSettings: unimplemented,
 
       isLoggedIn: unimplemented,
+      getAuthHeader: unimplemented,
 
       notifier: {
         info: unimplemented,
@@ -782,6 +786,8 @@ export class PeerTubeEmbed {
       },
 
       showModal: unimplemented,
+
+      getServerConfig: unimplemented,
 
       markdownRenderer: {
         textMarkdownToHTML: unimplemented,

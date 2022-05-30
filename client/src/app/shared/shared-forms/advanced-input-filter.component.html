@@ -1,0 +1,24 @@
+<div class="input-group has-feedback has-clear">
+  <div *ngIf="hasFilters()" class="input-group-prepend c-hand" ngbDropdown placement="bottom-left auto" container="body">
+    <div class="input-group-text" ngbDropdownToggle>
+      <span class="caret" aria-haspopup="menu" role="button"></span>
+    </div>
+
+    <div role="menu" ngbDropdownMenu>
+      <h6 class="dropdown-header" i18n>Advanced filters</h6>
+
+      <a *ngFor="let filter of filters" [routerLink]="[ '.' ]" [queryParams]="filter.queryParams" class="dropdown-item">
+        {{ filter.label }}
+      </a>
+    </div>
+  </div>
+
+  <input
+    type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
+    [(ngModel)]="searchValue"
+    (keyup)="onInputSearch($event)"
+  >
+
+  <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="onResetTableFilter()"></a>
+  <span class="sr-only" i18n>Clear filters</span>
+</div>

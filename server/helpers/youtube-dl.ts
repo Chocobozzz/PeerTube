@@ -1,13 +1,13 @@
 import { createWriteStream } from 'fs'
 import { ensureDir, move, pathExists, remove, writeFile } from 'fs-extra'
+import got from 'got'
 import { join } from 'path'
-import * as request from 'request'
 import { CONFIG } from '@server/initializers/config'
 import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 import { VideoResolution } from '../../shared/models/videos'
 import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES } from '../initializers/constants'
 import { getEnabledResolutions } from '../lib/video-transcoding'
-import { peertubeTruncate, root } from './core-utils'
+import { peertubeTruncate, pipelinePromise, root } from './core-utils'
 import { isVideoFileExtnameValid } from './custom-validators/videos'
 import { logger } from './logger'
 import { generateVideoImportTmpPath } from './utils'
@@ -195,55 +195,32 @@ async function updateYoutubeDLBinary () {
 
   await ensureDir(binDirectory)
 
-  return new Promise<void>(res => {
-    request.get(url, { followRedirect: false }, (err, result) => {
-      if (err) {
-        logger.error('Cannot update youtube-dl.', { err })
-        return res()
-      }
+  try {
+    const result = await got(url, { followRedirect: false })
 
-      if (result.statusCode !== HttpStatusCode.FOUND_302) {
-        logger.error('youtube-dl update error: did not get redirect for the latest version link. Status %d', result.statusCode)
-        return res()
-      }
+    if (result.statusCode !== HttpStatusCode.FOUND_302) {
+      logger.error('youtube-dl update error: did not get redirect for the latest version link. Status %d', result.statusCode)
+      return
+    }
 
-      const url = result.headers.location
-      const downloadFile = request.get(url)
-      const newVersion = /yt-dl\.org\/downloads\/(\d{4}\.\d\d\.\d\d(\.\d)?)\/youtube-dl/.exec(url)[1]
+    const newUrl = result.headers.location
+    const newVersion = /yt-dl\.org\/downloads\/(\d{4}\.\d\d\.\d\d(\.\d)?)\/youtube-dl/.exec(newUrl)[1]
 
-      downloadFile.on('response', result => {
-        if (result.statusCode !== HttpStatusCode.OK_200) {
-          logger.error('Cannot update youtube-dl: new version response is not 200, it\'s %d.', result.statusCode)
-          return res()
-        }
+    const downloadFileStream = got.stream(newUrl)
+    const writeStream = createWriteStream(bin, { mode: 493 })
 
-        const writeStream = createWriteStream(bin, { mode: 493 }).on('error', err => {
-          logger.error('youtube-dl update error in write stream', { err })
-          return res()
-        })
+    await pipelinePromise(
+      downloadFileStream,
+      writeStream
+    )
 
-        downloadFile.pipe(writeStream)
-      })
+    const details = JSON.stringify({ version: newVersion, path: bin, exec: 'youtube-dl' })
+    await writeFile(detailsPath, details, { encoding: 'utf8' })
 
-      downloadFile.on('error', err => {
-        logger.error('youtube-dl update error.', { err })
-        return res()
-      })
-
-      downloadFile.on('end', () => {
-        const details = JSON.stringify({ version: newVersion, path: bin, exec: 'youtube-dl' })
-        writeFile(detailsPath, details, { encoding: 'utf8' }, err => {
-          if (err) {
-            logger.error('youtube-dl update error: cannot write details.', { err })
-            return res()
-          }
-
-          logger.info('youtube-dl updated to version %s.', newVersion)
-          return res()
-        })
-      })
-    })
-  })
+    logger.info('youtube-dl updated to version %s.', newVersion)
+  } catch (err) {
+    logger.error('Cannot update youtube-dl.', { err })
+  }
 }
 
 async function safeGetYoutubeDL () {

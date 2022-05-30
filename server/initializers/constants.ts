@@ -24,12 +24,12 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 612
+const LAST_MIGRATION_VERSION = 645
 
 // ---------------------------------------------------------------------------
 
 const API_VERSION = 'v1'
-const PEERTUBE_VERSION = require(join(root(), 'package.json')).version
+const PEERTUBE_VERSION: string = require(join(root(), 'package.json')).version
 
 const PAGINATION = {
   GLOBAL: {
@@ -188,10 +188,7 @@ const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = 
   }
 }
 const JOB_PRIORITY = {
-  TRANSCODING: {
-    OPTIMIZER: 10,
-    NEW_RESOLUTION: 100
-  }
+  TRANSCODING: 100
 }
 
 const BROADCAST_CONCURRENCY = 30 // How many requests in parallel we do in activitypub-http-broadcast job
@@ -207,10 +204,12 @@ const SCHEDULER_INTERVALS_MS = {
   updateVideos: 60000, // 1 minute
   youtubeDLUpdate: 60000 * 60 * 24, // 1 day
   checkPlugins: CONFIG.PLUGINS.INDEX.CHECK_LATEST_VERSIONS_INTERVAL,
+  checkPeerTubeVersion: 60000 * 60 * 24, // 1 day
   autoFollowIndexInstances: 60000 * 60 * 24, // 1 day
   removeOldViews: 60000 * 60 * 24, // 1 day
   removeOldHistory: 60000 * 60 * 24, // 1 day
-  updateInboxStats: 1000 * 60// 1 minute
+  updateInboxStats: 1000 * 60, // 1 minute
+  removeDanglingResumableUploads: 60000 * 60 * 16 // 16 hours
 }
 
 // ---------------------------------------------------------------------------
@@ -287,6 +286,7 @@ const CONSTRAINTS_FIELDS = {
     LIKES: { min: 0 },
     DISLIKES: { min: 0 },
     FILE_SIZE: { min: -1 },
+    PARTIAL_UPLOAD_SIZE: { max: 50 * 1024 * 1024 * 1024 }, // 50GB
     URL: { min: 3, max: 2000 } // Length
   },
   VIDEO_PLAYLISTS: {
@@ -304,7 +304,7 @@ const CONSTRAINTS_FIELDS = {
     PUBLIC_KEY: { min: 10, max: 5000 }, // Length
     PRIVATE_KEY: { min: 10, max: 5000 }, // Length
     URL: { min: 3, max: 2000 }, // Length
-    AVATAR: {
+    IMAGE: {
       EXTNAME: [ '.png', '.jpeg', '.jpg', '.gif', '.webp' ],
       FILE_SIZE: {
         max: 2 * 1024 * 1024 // 2MB
@@ -465,6 +465,8 @@ const MIMETYPES = {
   IMAGE: {
     MIMETYPE_EXT: {
       'image/png': '.png',
+      'image/gif': '.gif',
+      'image/webp': '.webp',
       'image/jpg': '.jpg',
       'image/jpeg': '.jpg'
     },
@@ -579,6 +581,7 @@ const STATIC_DOWNLOAD_PATHS = {
   HLS_VIDEOS: '/download/streaming-playlists/hls/videos/'
 }
 const LAZY_STATIC_PATHS = {
+  BANNERS: '/lazy-static/banners/',
   AVATARS: '/lazy-static/avatars/',
   PREVIEWS: '/lazy-static/previews/',
   VIDEO_CAPTIONS: '/lazy-static/video-captions/',
@@ -594,8 +597,8 @@ const STATIC_MAX_AGE = {
 
 // Videos thumbnail size
 const THUMBNAILS_SIZE = {
-  width: 223,
-  height: 122,
+  width: 280,
+  height: 157,
   minWidth: 150
 }
 const PREVIEWS_SIZE = {
@@ -603,9 +606,15 @@ const PREVIEWS_SIZE = {
   height: 480,
   minWidth: 400
 }
-const AVATARS_SIZE = {
-  width: 120,
-  height: 120
+const ACTOR_IMAGES_SIZE = {
+  AVATARS: {
+    width: 120,
+    height: 120
+  },
+  BANNERS: {
+    width: 1920,
+    height: 317 // 6/1 ratio
+  }
 }
 
 const EMBED_SIZE = {
@@ -633,11 +642,12 @@ const LRU_CACHE = {
   USER_TOKENS: {
     MAX_SIZE: 1000
   },
-  AVATAR_STATIC: {
+  ACTOR_IMAGE_STATIC: {
     MAX_SIZE: 500
   }
 }
 
+const RESUMABLE_UPLOAD_DIRECTORY = join(CONFIG.STORAGE.TMP_DIR, 'resumable-uploads')
 const HLS_STREAMING_PLAYLIST_DIRECTORY = join(CONFIG.STORAGE.STREAMING_PLAYLISTS_DIR, 'hls')
 const HLS_REDUNDANCY_DIRECTORY = join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
 
@@ -670,7 +680,7 @@ const MEMOIZE_LENGTH = {
 }
 
 const QUEUE_CONCURRENCY = {
-  AVATAR_PROCESS_IMAGE: 3
+  ACTOR_PROCESS_IMAGE: 3
 }
 
 const REDUNDANCY = {
@@ -753,7 +763,7 @@ if (isTestInstance() === true) {
   ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
   ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
 
-  CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
+  CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max = 100 * 1024 // 100KB
   CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max = 400 * 1024 // 400KB
 
   SCHEDULER_INTERVALS_MS.actorFollowScores = 1000
@@ -763,6 +773,7 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.updateVideos = 5000
   SCHEDULER_INTERVALS_MS.autoFollowIndexInstances = 5000
   SCHEDULER_INTERVALS_MS.updateInboxStats = 5000
+  SCHEDULER_INTERVALS_MS.checkPeerTubeVersion = 2000
   REPEAT_JOBS['videos-views'] = { every: 5000 }
   REPEAT_JOBS['activitypub-cleaner'] = { every: 5000 }
 
@@ -811,9 +822,10 @@ export {
   PEERTUBE_VERSION,
   LAZY_STATIC_PATHS,
   SEARCH_INDEX,
+  RESUMABLE_UPLOAD_DIRECTORY,
   HLS_REDUNDANCY_DIRECTORY,
   P2P_MEDIA_LOADER_PEER_VERSION,
-  AVATARS_SIZE,
+  ACTOR_IMAGES_SIZE,
   ACCEPT_HEADERS,
   BCRYPT_SALT_SIZE,
   TRACKER_RATE_LIMITS,

@@ -6,19 +6,20 @@ import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import {
+  NgbButtonsModule,
   NgbCollapseModule,
   NgbDropdownModule,
   NgbModalModule,
   NgbNavModule,
   NgbPopoverModule,
-  NgbTooltipModule,
-  NgbButtonsModule
+  NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap'
 import { LoadingBarModule } from '@ngx-loading-bar/core'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { SharedGlobalIconModule } from '../shared-icons'
-import { AccountService, ActorAvatarInfoComponent, VideoAvatarChannelComponent } from './account'
+import { AccountService } from './account'
 import {
+  AutofocusDirective,
   BytesPipe,
   DurationFormatterPipe,
   FromNowPipe,
@@ -31,7 +32,8 @@ import { ActionDropdownComponent, ButtonComponent, DeleteButtonComponent, EditBu
 import { DateToggleComponent } from './date'
 import { FeedComponent } from './feeds'
 import { LoaderComponent, SmallLoaderComponent } from './loaders'
-import { HelpComponent, ListOverflowComponent, TopMenuDropdownComponent, SimpleSearchInputComponent } from './misc'
+import { HelpComponent, ListOverflowComponent, SimpleSearchInputComponent, TopMenuDropdownComponent } from './misc'
+import { PluginPlaceholderComponent } from './plugins'
 import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
 import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
@@ -64,13 +66,11 @@ import { VideoChannelService } from './video-channel'
   ],
 
   declarations: [
-    VideoAvatarChannelComponent,
-    ActorAvatarInfoComponent,
-
     FromNowPipe,
     NumberFormatterPipe,
     BytesPipe,
     DurationFormatterPipe,
+    AutofocusDirective,
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
@@ -93,7 +93,9 @@ import { VideoChannelService } from './video-channel'
     SimpleSearchInputComponent,
 
     UserQuotaComponent,
-    UserNotificationsComponent
+    UserNotificationsComponent,
+
+    PluginPlaceholderComponent
   ],
 
   exports: [
@@ -118,13 +120,11 @@ import { VideoChannelService } from './video-channel'
 
     PrimeSharedModule,
 
-    VideoAvatarChannelComponent,
-    ActorAvatarInfoComponent,
-
     FromNowPipe,
     BytesPipe,
     NumberFormatterPipe,
     DurationFormatterPipe,
+    AutofocusDirective,
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
@@ -147,7 +147,9 @@ import { VideoChannelService } from './video-channel'
     SimpleSearchInputComponent,
 
     UserQuotaComponent,
-    UserNotificationsComponent
+    UserNotificationsComponent,
+
+    PluginPlaceholderComponent
   ],
 
   providers: [

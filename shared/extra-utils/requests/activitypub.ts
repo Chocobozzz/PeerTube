@@ -5,20 +5,19 @@ import { activityPubContextify } from '../../../server/helpers/activitypub'
 
 function makePOSTAPRequest (url: string, body: any, httpSignature: any, headers: any) {
   const options = {
-    method: 'POST',
-    uri: url,
+    method: 'POST' as 'POST',
     json: body,
     httpSignature,
     headers
   }
 
-  return doRequest(options)
+  return doRequest(url, options)
 }
 
 async function makeFollowRequest (to: { url: string }, by: { url: string, privateKey }) {
   const follow = {
     type: 'Follow',
-    id: by.url + '/toto',
+    id: by.url + '/' + new Date().getTime(),
     actor: by.url,
     object: to.url
   }
@@ -34,7 +33,7 @@ async function makeFollowRequest (to: { url: string }, by: { url: string, privat
   }
   const headers = buildGlobalHeaders(body)
 
-  return makePOSTAPRequest(to.url, body, httpSignature, headers)
+  return makePOSTAPRequest(to.url + '/inbox', body, httpSignature, headers)
 }
 
 export {

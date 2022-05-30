@@ -20,6 +20,8 @@ export class EditVODTranscodingComponent implements OnInit, OnChanges {
   transcodingProfiles: SelectOptionsItem[] = []
   resolutions: ResolutionOption[] = []
 
+  additionalVideoExtensions = ''
+
   constructor (
     private configService: ConfigService,
     private editConfigurationService: EditConfigurationService
@@ -35,6 +37,8 @@ export class EditVODTranscodingComponent implements OnInit, OnChanges {
   ngOnChanges (changes: SimpleChanges) {
     if (changes['serverConfig']) {
       this.transcodingProfiles = this.buildAvailableTranscodingProfile()
+
+      this.additionalVideoExtensions = this.serverConfig.video.file.extensions.join(' ')
     }
   }
 

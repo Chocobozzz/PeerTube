@@ -18,6 +18,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
   @Input() prependActions: DropdownAction<{ user: User, account: Account }>[]
 
   @Input() buttonSize: 'normal' | 'small' = 'normal'
+  @Input() buttonStyled = true
   @Input() placement = 'right-top right-bottom auto'
   @Input() label: string
   @Input() container: 'body' | undefined = undefined

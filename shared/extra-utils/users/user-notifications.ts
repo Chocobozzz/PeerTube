@@ -2,7 +2,8 @@
 
 import { expect } from 'chai'
 import { inspect } from 'util'
-import { AbuseState } from '@shared/models'
+import { AbuseState, PluginType } from '@shared/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { UserNotification, UserNotificationSetting, UserNotificationSettingValue, UserNotificationType } from '../../models/users'
 import { MockSmtpServer } from '../miscs/email'
 import { makeGetRequest, makePostBodyRequest, makePutBodyRequest } from '../requests/requests'
@@ -11,7 +12,6 @@ import { flushAndRunMultipleServers, ServerInfo } from '../server/servers'
 import { getUserNotificationSocket } from '../socket/socket-io'
 import { setAccessTokensToServers, userLogin } from './login'
 import { createUser, getMyUserInformation } from './users'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 function updateMyNotificationSettings (
   url: string,
@@ -629,7 +629,59 @@ async function checkNewBlacklistOnMyVideo (
   await checkNotification(base, notificationChecker, emailNotificationFinder, 'presence')
 }
 
-function getAllNotificationsSettings () {
+async function checkNewPeerTubeVersion (base: CheckerBaseParams, latestVersion: string, type: CheckerType) {
+  const notificationType = UserNotificationType.NEW_PEERTUBE_VERSION
+
+  function notificationChecker (notification: UserNotification, type: CheckerType) {
+    if (type === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      expect(notification.peertube).to.exist
+      expect(notification.peertube.latestVersion).to.equal(latestVersion)
+    } else {
+      expect(notification).to.satisfy((n: UserNotification) => {
+        return n === undefined || n.peertube === undefined || n.peertube.latestVersion !== latestVersion
+      })
+    }
+  }
+
+  function emailNotificationFinder (email: object) {
+    const text = email['text']
+
+    return text.includes(latestVersion)
+  }
+
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
+}
+
+async function checkNewPluginVersion (base: CheckerBaseParams, pluginType: PluginType, pluginName: string, type: CheckerType) {
+  const notificationType = UserNotificationType.NEW_PLUGIN_VERSION
+
+  function notificationChecker (notification: UserNotification, type: CheckerType) {
+    if (type === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      expect(notification.plugin.name).to.equal(pluginName)
+      expect(notification.plugin.type).to.equal(pluginType)
+    } else {
+      expect(notification).to.satisfy((n: UserNotification) => {
+        return n === undefined || n.plugin === undefined || n.plugin.name !== pluginName
+      })
+    }
+  }
+
+  function emailNotificationFinder (email: object) {
+    const text = email['text']
+
+    return text.includes(pluginName)
+  }
+
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
+}
+
+function getAllNotificationsSettings (): UserNotificationSetting {
   return {
     newVideoFromSubscription: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newCommentOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
@@ -644,11 +696,13 @@ function getAllNotificationsSettings () {
     newInstanceFollower: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     abuseNewMessage: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     abuseStateChange: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    autoInstanceFollowing: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
-  } as UserNotificationSetting
+    autoInstanceFollowing: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newPeerTubeVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newPluginVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
+  }
 }
 
-async function prepareNotificationsTest (serversCount = 3) {
+async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: any = {}) {
   const userNotifications: UserNotification[] = []
   const adminNotifications: UserNotification[] = []
   const adminNotificationsServer2: UserNotification[] = []
@@ -665,7 +719,7 @@ async function prepareNotificationsTest (serversCount = 3) {
       limit: 20
     }
   }
-  const servers = await flushAndRunMultipleServers(serversCount, overrideConfig)
+  const servers = await flushAndRunMultipleServers(serversCount, Object.assign(overrideConfig, overrideConfigArg))
 
   await setAccessTokensToServers(servers)
 
@@ -749,5 +803,7 @@ export {
   checkNewInstanceFollower,
   prepareNotificationsTest,
   checkNewCommentAbuseForModerators,
-  checkNewAccountAbuseForModerators
+  checkNewAccountAbuseForModerators,
+  checkNewPeerTubeVersion,
+  checkNewPluginVersion
 }

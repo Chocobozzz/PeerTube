@@ -1,19 +1,19 @@
 <div class="root">
-  <h4>IP</h4>
+  <h4 i18n>IP address</h4>
 
-  <p>PeerTube thinks your web browser public IP is <strong>{{ debug?.ip }}</strong>.</p>
+  <p i18n>PeerTube thinks your web browser public IP is <strong>{{ debug?.ip }}</strong>.</p>
 
-  <p>If this is not your correct public IP, please consider fixing it because:</p>
+  <p i18n>If this is not your correct public IP, please consider fixing it because:</p>
   <ul>
-    <li>Views may not be counted correctly (reduced compared to what they should be)</li>
-    <li>Anti brute force system could be overzealous</li>
-    <li>P2P system could not work correctly</li>
+    <li i18n>Views may not be counted correctly (reduced compared to what they should be)</li>
+    <li i18n>Anti brute force system could be overzealous</li>
+    <li i18n>P2P system could not work correctly</li>
   </ul>
 
-  <p>To fix it:<p>
+  <p i18n>To fix it:<p>
   <ul>
-    <li>Check the <code>trust_proxy</code> configuration key</li>
-    <li>If you run PeerTube using Docker, check you run the <code>reverse-proxy</code> with <code>network_mode: "host"</code>
+    <li i18n>Check the <code>trust_proxy</code> configuration key</li>
+    <li i18n>If you run PeerTube using Docker, check you run the <code>reverse-proxy</code> with <code>network_mode: "host"</code>
       (see <a href="https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666">issue 1643</a>)</li>
   </ul>
 </div>

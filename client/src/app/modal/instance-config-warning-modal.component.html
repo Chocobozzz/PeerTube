@@ -15,7 +15,7 @@
 
       <li i18n *ngIf="!about.instance.administrator">Who you are</li>
       <li i18n *ngIf="!about.instance.maintenanceLifetime">How long you plan to maintain your instance</li>
-      <li i18n *ngIf="!about.instance.businessModel">How you plan to pay your instance</li>
+      <li i18n *ngIf="!about.instance.businessModel">How you plan to pay for keeping your instance running</li>
 
       <li i18n *ngIf="!about.instance.moderationInformation">How you will moderate your instance</li>
       <li i18n *ngIf="!about.instance.terms">Instance terms</li>
@@ -35,10 +35,11 @@
     </my-peertube-checkbox>
 
     <input
-      type="button" role="button" i18n-value value="Close" class="action-button action-button-cancel"
+      type="button" role="button" i18n-value value="Close" class="peertube-button grey-button"
       (click)="hide()" (key.enter)="hide()"
     >
-    <a i18n class="action-button action-button-configure" ngbAutofocus
+
+    <a i18n class="peertube-button-link orange-button" ngbAutofocus
        href="/admin/config/edit-custom" target="_blank" rel="noopener noreferrer">
        Configure
     </a>

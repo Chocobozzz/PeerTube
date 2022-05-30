@@ -1,18 +1,19 @@
-import { Actor as ActorServer, Avatar } from '@shared/models'
 import { getAbsoluteAPIUrl } from '@app/helpers'
+import { Actor as ServerActor, ActorImage } from '@shared/models'
 
-export abstract class Actor implements ActorServer {
+export abstract class Actor implements ServerActor {
   id: number
-  url: string
   name: string
+
   host: string
+  url: string
+
   followingCount: number
   followersCount: number
-  createdAt: Date | string
-  updatedAt: Date | string
-  avatar: Avatar
 
-  avatarUrl: string
+  createdAt: Date | string
+
+  avatar: ActorImage
 
   isLocal: boolean
 
@@ -24,6 +25,8 @@ export abstract class Actor implements ActorServer {
 
       return absoluteAPIUrl + actor.avatar.path
     }
+
+    return ''
   }
 
   static CREATE_BY_STRING (accountName: string, host: string, forceHostname = false) {
@@ -42,16 +45,15 @@ export abstract class Actor implements ActorServer {
     return host.trim() === thisHost
   }
 
-  protected constructor (hash: ActorServer) {
+  protected constructor (hash: Partial<ServerActor>) {
     this.id = hash.id
-    this.url = hash.url
-    this.name = hash.name
-    this.host = hash.host
+    this.url = hash.url ?? ''
+    this.name = hash.name ?? ''
+    this.host = hash.host ?? ''
     this.followingCount = hash.followingCount
     this.followersCount = hash.followersCount
 
     if (hash.createdAt) this.createdAt = new Date(hash.createdAt.toString())
-    if (hash.updatedAt) this.updatedAt = new Date(hash.updatedAt.toString())
 
     this.avatar = hash.avatar
     this.isLocal = Actor.IS_LOCAL(this.host)

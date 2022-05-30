@@ -37,6 +37,7 @@ interface ServerInfo {
   customConfigFile?: string
 
   accessToken?: string
+  refreshToken?: string
   videoChannel?: VideoChannel
 
   video?: {
@@ -273,7 +274,7 @@ async function reRunServer (server: ServerInfo, configOverride?: any) {
 }
 
 async function checkTmpIsEmpty (server: ServerInfo) {
-  await checkDirectoryIsEmpty(server, 'tmp', [ 'plugins-global.css', 'hls' ])
+  await checkDirectoryIsEmpty(server, 'tmp', [ 'plugins-global.css', 'hls', 'resumable-uploads' ])
 
   if (await pathExists(join('test' + server.internalServerNumber, 'tmp', 'hls'))) {
     await checkDirectoryIsEmpty(server, 'tmp/hls')

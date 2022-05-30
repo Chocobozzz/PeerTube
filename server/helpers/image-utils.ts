@@ -1,8 +1,13 @@
 import { copy, readFile, remove, rename } from 'fs-extra'
 import * as Jimp from 'jimp'
 import { extname } from 'path'
+import { v4 as uuidv4 } from 'uuid'
 import { convertWebPToJPG, processGIF } from './ffmpeg-utils'
 import { logger } from './logger'
+
+function generateImageFilename (extension = '.jpg') {
+  return uuidv4() + extension
+}
 
 async function processImage (
   path: string,
@@ -31,6 +36,7 @@ async function processImage (
 // ---------------------------------------------------------------------------
 
 export {
+  generateImageFilename,
   processImage
 }
 

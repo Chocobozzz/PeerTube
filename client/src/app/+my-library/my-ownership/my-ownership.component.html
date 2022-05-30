@@ -37,12 +37,7 @@
       <td>
         <a [href]="videoChangeOwnership.initiatorAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="chip two-lines">
-            <img
-              class="avatar"
-              [src]="videoChangeOwnership.initiatorAccount.avatar?.path"
-              (error)="switchToDefaultAvatar($event)"
-              alt="Avatar"
-            >
+            <my-actor-avatar [account]="videoChangeOwnership.initiatorAccount"></my-actor-avatar>
             <div>
               {{ videoChangeOwnership.initiatorAccount.displayName }}
               <span class="text-muted">{{ videoChangeOwnership.initiatorAccount.nameWithHost }}</span>

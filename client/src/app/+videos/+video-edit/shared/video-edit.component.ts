@@ -2,7 +2,7 @@ import { forkJoin } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
-import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms'
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
 import { HooksService, PluginService, ServerService } from '@app/core'
 import { removeElementFromArray } from '@app/helpers'
 import {
@@ -21,13 +21,17 @@ import {
 import { FormReactiveValidationMessages, FormValidatorService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { VideoCaptionEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
-import { LiveVideo, ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
+import { LiveVideo, ServerConfig, VideoConstant, VideoDetails, VideoPrivacy } from '@shared/models'
 import { RegisterClientFormFieldOptions, RegisterClientVideoFieldOptions } from '@shared/models/plugins/register-client-form-field.model'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
 import { VideoEditType } from './video-edit.type'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
+type PluginField = {
+  commonOptions: RegisterClientFormFieldOptions
+  videoFormOptions: RegisterClientVideoFieldOptions
+}
 
 @Component({
   selector: 'my-video-edit',
@@ -38,9 +42,14 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup
   @Input() formErrors: { [ id: string ]: string } = {}
   @Input() validationMessages: FormReactiveValidationMessages = {}
+
+  @Input() videoToUpdate: VideoDetails
+
   @Input() userVideoChannels: SelectChannelItem[] = []
   @Input() schedulePublicationPossible = true
+
   @Input() videoCaptions: (VideoCaptionEdit & { captionPath?: string })[] = []
+
   @Input() waitTranscodingEnabled = true
   @Input() type: VideoEditType
   @Input() liveVideo: LiveVideo
@@ -57,9 +66,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   videoLicences: VideoConstant<number>[] = []
   videoLanguages: VideoLanguages[] = []
 
-  tagValidators: ValidatorFn[]
-  tagValidatorsMessages: { [ name: string ]: string }
-
   pluginDataFormGroup: FormGroup
 
   schedulePublicationEnabled = false
@@ -73,10 +79,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   serverConfig: ServerConfig
 
-  pluginFields: {
-    commonOptions: RegisterClientFormFieldOptions
-    videoFormOptions: RegisterClientVideoFieldOptions
-  }[] = []
+  pluginFields: PluginField[] = []
 
   private schedulerInterval: any
   private firstPatchDone = false
@@ -92,7 +95,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     private hooks: HooksService
   ) {
-    this.calendarLocale = this.i18nPrimengCalendarService.getCalendarLocale()
     this.calendarTimezone = this.i18nPrimengCalendarService.getTimezone()
     this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
   }
@@ -249,6 +251,16 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   isPermanentLiveEnabled () {
     return this.form.value['permanentLive'] === true
+  }
+
+  isPluginFieldHidden (pluginField: PluginField) {
+    if (typeof pluginField.commonOptions.hidden !== 'function') return false
+
+    return pluginField.commonOptions.hidden({
+      formValues: this.form.value,
+      videoToUpdate: this.videoToUpdate,
+      liveVideo: this.liveVideo
+    })
   }
 
   private sortVideoCaptions () {

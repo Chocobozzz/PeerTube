@@ -5,36 +5,16 @@ import { join } from 'path'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { MVideoBlacklistLightVideo, MVideoBlacklistVideo } from '@server/types/models/video/video-blacklist'
 import { MVideoImport, MVideoImportVideo } from '@server/types/models/video/video-import'
-import { SANITIZE_OPTIONS, TEXT_WITH_HTML_RULES } from '@shared/core-utils'
 import { AbuseState, EmailPayload, UserAbuse } from '@shared/models'
-import { SendEmailOptions } from '../../shared/models/server/emailer.model'
+import { SendEmailDefaultOptions } from '../../shared/models/server/emailer.model'
 import { isTestInstance, root } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
 import { CONFIG, isEmailEnabled } from '../initializers/config'
 import { WEBSERVER } from '../initializers/constants'
-import { MAbuseFull, MAbuseMessage, MAccountDefault, MActorFollowActors, MActorFollowFull, MUser } from '../types/models'
+import { MAbuseFull, MAbuseMessage, MAccountDefault, MActorFollowActors, MActorFollowFull, MPlugin, MUser } from '../types/models'
 import { MCommentOwnerVideo, MVideo, MVideoAccountLight } from '../types/models/video'
 import { JobQueue } from './job-queue'
-
-const sanitizeHtml = require('sanitize-html')
-const markdownItEmoji = require('markdown-it-emoji/light')
-const MarkdownItClass = require('markdown-it')
-const markdownIt = new MarkdownItClass('default', { linkify: true, breaks: true, html: true })
-
-markdownIt.enable(TEXT_WITH_HTML_RULES)
-
-markdownIt.use(markdownItEmoji)
-
-const toSafeHtml = text => {
-  // Restore line feed
-  const textWithLineFeed = text.replace(/<br.?\/?>/g, '\r\n')
-
-  // Convert possible markdown (emojis, emphasis and lists) to html
-  const html = markdownIt.render(textWithLineFeed)
-
-  // Convert to safe Html
-  return sanitizeHtml(html, SANITIZE_OPTIONS)
-}
+import { toSafeHtml } from '../helpers/markdown'
 
 const Email = require('email-templates')
 
@@ -403,9 +383,9 @@ class Emailer {
   }
 
   async addVideoAutoBlacklistModeratorsNotification (to: string[], videoBlacklist: MVideoBlacklistLightVideo) {
-    const VIDEO_AUTO_BLACKLIST_URL = WEBSERVER.URL + '/admin/moderation/video-auto-blacklist/list'
+    const videoAutoBlacklistUrl = WEBSERVER.URL + '/admin/moderation/video-auto-blacklist/list'
     const videoUrl = WEBSERVER.URL + videoBlacklist.Video.getWatchStaticPath()
-    const channel = (await VideoChannelModel.loadByIdAndPopulateAccount(videoBlacklist.Video.channelId)).toFormattedSummaryJSON()
+    const channel = (await VideoChannelModel.loadAndPopulateAccount(videoBlacklist.Video.channelId)).toFormattedSummaryJSON()
 
     const emailPayload: EmailPayload = {
       template: 'video-auto-blacklist-new',
@@ -417,7 +397,7 @@ class Emailer {
         videoName: videoBlacklist.Video.name,
         action: {
           text: 'Review autoblacklist',
-          url: VIDEO_AUTO_BLACKLIST_URL
+          url: videoAutoBlacklistUrl
         }
       }
     }
@@ -466,6 +446,36 @@ class Emailer {
       text: `Your video "${video.name}" (${videoUrl}) on ${CONFIG.INSTANCE.NAME} has been unblacklisted.`,
       locals: {
         title: 'Your video was unblacklisted'
+      }
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  addNewPeerTubeVersionNotification (to: string[], latestVersion: string) {
+    const emailPayload: EmailPayload = {
+      to,
+      template: 'peertube-version-new',
+      subject: `A new PeerTube version is available: ${latestVersion}`,
+      locals: {
+        latestVersion
+      }
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  addNewPlugionVersionNotification (to: string[], plugin: MPlugin) {
+    const pluginUrl = WEBSERVER.URL + '/admin/plugins/list-installed?pluginType=' + plugin.type
+
+    const emailPayload: EmailPayload = {
+      to,
+      template: 'plugin-version-new',
+      subject: `A new plugin/theme version is available: ${plugin.name}@${plugin.latestVersion}`,
+      locals: {
+        pluginName: plugin.name,
+        latestVersion: plugin.latestVersion,
+        pluginUrl
       }
     }
 
@@ -569,26 +579,27 @@ class Emailer {
     })
 
     for (const to of options.to) {
-      await email
-        .send(merge(
-          {
-            template: 'common',
-            message: {
-              to,
-              from: options.from,
-              subject: options.subject,
-              replyTo: options.replyTo
-            },
-            locals: { // default variables available in all templates
-              WEBSERVER,
-              EMAIL: CONFIG.EMAIL,
-              instanceName: CONFIG.INSTANCE.NAME,
-              text: options.text,
-              subject: options.subject
-            }
-          },
-          options // overriden/new variables given for a specific template in the payload
-        ) as SendEmailOptions)
+      const baseOptions: SendEmailDefaultOptions = {
+        template: 'common',
+        message: {
+          to,
+          from: options.from,
+          subject: options.subject,
+          replyTo: options.replyTo
+        },
+        locals: { // default variables available in all templates
+          WEBSERVER,
+          EMAIL: CONFIG.EMAIL,
+          instanceName: CONFIG.INSTANCE.NAME,
+          text: options.text,
+          subject: options.subject
+        }
+      }
+
+      // overriden/new variables given for a specific template in the payload
+      const sendOptions = merge(baseOptions, options)
+
+      await email.send(sendOptions)
         .then(res => logger.debug('Sent email.', { res }))
         .catch(err => logger.error('Error in email sender.', { err }))
     }
@@ -634,7 +645,8 @@ class Emailer {
     this.transporter = createTransport({
       sendmail: true,
       newline: 'unix',
-      path: CONFIG.SMTP.SENDMAIL
+      path: CONFIG.SMTP.SENDMAIL,
+      logger: bunyanLogger as any
     })
   }
 

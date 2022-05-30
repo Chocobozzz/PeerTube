@@ -16,8 +16,7 @@ async function processActivityPubHttpBroadcast (job: Bull.Job) {
   const httpSignatureOptions = await buildSignedRequestOptions(payload)
 
   const options = {
-    method: 'POST',
-    uri: '',
+    method: 'POST' as 'POST',
     json: body,
     httpSignature: httpSignatureOptions,
     timeout: REQUEST_TIMEOUT,
@@ -28,7 +27,7 @@ async function processActivityPubHttpBroadcast (job: Bull.Job) {
   const goodUrls: string[] = []
 
   await Bluebird.map(payload.uris, uri => {
-    return doRequest(Object.assign({}, options, { uri }))
+    return doRequest(uri, options)
       .then(() => goodUrls.push(uri))
       .catch(() => badUrls.push(uri))
   }, { concurrency: BROADCAST_CONCURRENCY })

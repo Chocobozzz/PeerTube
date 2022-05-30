@@ -26,7 +26,12 @@ export class VideoUploadPage {
     await elem.sendKeys(fileToUpload)
 
     // Wait for the upload to finish
-    await browser.wait(browser.ExpectedConditions.elementToBeClickable(this.getSecondStepSubmitButton()))
+    await browser.wait(async () => {
+      const actionButton = this.getSecondStepSubmitButton().element(by.css('.action-button'))
+
+      const klass = await actionButton.getAttribute('class')
+      return !klass.includes('disabled')
+    })
   }
 
   async validSecondUploadStep (videoName: string) {

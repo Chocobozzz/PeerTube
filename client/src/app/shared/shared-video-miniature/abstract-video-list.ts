@@ -28,8 +28,8 @@ import { isLastMonth, isLastWeek, isThisMonth, isToday, isYesterday } from '@sha
 import { ServerConfig, UserRight, VideoFilter, VideoSortField } from '@shared/models'
 import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
 import { Syndication, Video } from '../shared-main'
-import { MiniatureDisplayOptions, OwnerDisplayType } from './video-miniature.component'
 import { GenericHeaderComponent, VideoListHeaderComponent } from './video-list-header.component'
+import { MiniatureDisplayOptions } from './video-miniature.component'
 
 enum GroupDate {
   UNKNOWN = 0,
@@ -65,7 +65,6 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
   loadOnInit = true
   loadUserVideoPreferences = false
 
-  ownerDisplayType: OwnerDisplayType = 'account'
   displayModerationBlock = false
   titleTooltip: string
   displayVideoActions = true
@@ -318,6 +317,11 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
 
     const componentFactory = this.cfr.resolveComponentFactory(t)
     viewContainerRef.createComponent(componentFactory, 0, injector)
+  }
+
+  // Can be redefined by child
+  displayAsRow () {
+    return false
   }
 
   // On videos hook for children that want to do something

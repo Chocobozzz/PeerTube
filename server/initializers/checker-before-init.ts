@@ -1,5 +1,5 @@
 import * as config from 'config'
-import { promisify0 } from '../helpers/core-utils'
+import { parseSemVersion, promisify0 } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
 
 // ONLY USE CORE MODULES IN THIS FILE!
@@ -17,6 +17,7 @@ function checkMissedConfig () {
     'log.level',
     'user.video_quota', 'user.video_quota_daily',
     'csp.enabled', 'csp.report_only', 'csp.report_uri',
+    'security.frameguard.enabled',
     'cache.previews.size', 'cache.captions.size', 'cache.torrents.size', 'admin.email', 'contact_form.enabled',
     'signup.enabled', 'signup.limit', 'signup.requires_email_verification',
     'signup.filters.cidr.whitelist', 'signup.filters.cidr.blacklist',
@@ -37,6 +38,7 @@ function checkMissedConfig () {
     'theme.default',
     'remote_redundancy.videos.accept_from',
     'federation.videos.federate_unlisted', 'federation.videos.cleanup_remote_interactions',
+    'peertube.check_latest_version.enabled', 'peertube.check_latest_version.url',
     'search.remote_uri.users', 'search.remote_uri.anonymous', 'search.search_index.enabled', 'search.search_index.url',
     'search.search_index.disable_local_search', 'search.search_index.is_default_search',
     'live.enabled', 'live.allow_replay', 'live.max_duration', 'live.max_user_lives', 'live.max_instance_lives',
@@ -102,8 +104,7 @@ async function checkFFmpeg (CONFIG: { TRANSCODING: { ENABLED: boolean } }) {
 
 function checkNodeVersion () {
   const v = process.version
-  const majorString = v.split('.')[0].replace('v', '')
-  const major = parseInt(majorString, 10)
+  const { major } = parseSemVersion(v)
 
   logger.debug('Checking NodeJS version %s.', v)
 

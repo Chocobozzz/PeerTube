@@ -1,36 +1,55 @@
-import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core'
+import { Subject } from 'rxjs'
+import { tap } from 'rxjs/operators'
+import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import {
   AuthService,
   ComponentPagination,
   ConfirmService,
+  DisableForReuseHook,
   LocalStorageService,
   Notifier,
   ScreenService,
   ServerService,
+  User,
   UserService
 } from '@app/core'
 import { immutableAssign } from '@app/helpers'
-import { UserHistoryService } from '@app/shared/shared-main'
-import { AbstractVideoList } from '@app/shared/shared-video-miniature'
-import { Subject } from 'rxjs'
-import { debounceTime, tap, distinctUntilChanged } from 'rxjs/operators'
+import { UserHistoryService, Video } from '@app/shared/shared-main'
+import { MiniatureDisplayOptions, VideosSelectionComponent } from '@app/shared/shared-video-miniature'
 
 @Component({
   templateUrl: './my-history.component.html',
   styleUrls: [ './my-history.component.scss' ]
 })
-export class MyHistoryComponent extends AbstractVideoList implements OnInit, OnDestroy {
+export class MyHistoryComponent implements OnInit, DisableForReuseHook {
+  @ViewChild('videosSelection', { static: true }) videosSelection: VideosSelectionComponent
+
   titlePage: string
   pagination: ComponentPagination = {
     currentPage: 1,
     itemsPerPage: 5,
     totalItems: null
   }
-  videosHistoryEnabled: boolean
-  search: string
 
-  protected searchStream: Subject<string>
+  videosHistoryEnabled: boolean
+
+  miniatureDisplayOptions: MiniatureDisplayOptions = {
+    date: true,
+    views: true,
+    by: true,
+    privacyLabel: false,
+    privacyText: true,
+    state: true,
+    blacklistInfo: true
+  }
+
+  getVideosObservableFunction = this.getVideosObservable.bind(this)
+
+  user: User
+
+  videos: Video[] = []
+  search: string
 
   constructor (
     protected router: Router,
@@ -45,45 +64,31 @@ export class MyHistoryComponent extends AbstractVideoList implements OnInit, OnD
     private userHistoryService: UserHistoryService,
     protected cfr: ComponentFactoryResolver
   ) {
-    super()
-
     this.titlePage = $localize`My watch history`
   }
 
   ngOnInit () {
-    super.ngOnInit()
+    this.user = this.authService.getUser()
 
     this.authService.userInformationLoaded
-      .subscribe(() => {
-        this.videosHistoryEnabled = this.authService.getUser().videosHistoryEnabled
-      })
-
-    this.searchStream = new Subject()
-
-    this.searchStream
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged()
-      )
-      .subscribe(search => {
-        this.search = search
-        this.reloadVideos()
-      })
+      .subscribe(() => this.videosHistoryEnabled = this.user.videosHistoryEnabled)
   }
 
-  onSearch (event: Event) {
-    const target = event.target as HTMLInputElement
-    this.searchStream.next(target.value)
+  disableForReuse () {
+    this.videosSelection.disableForReuse()
   }
 
-  resetSearch () {
-    const searchInput = document.getElementById('history-search') as HTMLInputElement
-    searchInput.value = ''
-    this.searchStream.next('')
+  enabledForReuse () {
+    this.videosSelection.enabledForReuse()
   }
 
-  ngOnDestroy () {
-    super.ngOnDestroy()
+  reloadData () {
+    this.videosSelection.reloadVideos()
+  }
+
+  onSearch (search: string) {
+    this.search = search
+    this.reloadData()
   }
 
   getVideosObservable (page: number) {
@@ -129,7 +134,7 @@ export class MyHistoryComponent extends AbstractVideoList implements OnInit, OnD
           () => {
             this.notifier.success($localize`Videos history deleted`)
 
-            this.reloadVideos()
+            this.reloadData()
           },
 
           err => this.notifier.error(err.message)

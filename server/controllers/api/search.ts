@@ -1,8 +1,9 @@
 import * as express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils'
-import { doRequest } from '@server/helpers/requests'
+import { doJSONRequest } from '@server/helpers/requests'
 import { CONFIG } from '@server/initializers/config'
 import { getOrCreateVideoAndAccountAndChannel } from '@server/lib/activitypub/videos'
+import { Hooks } from '@server/lib/plugins/hooks'
 import { AccountBlocklistModel } from '@server/models/account/account-blocklist'
 import { getServerActor } from '@server/models/application/application'
 import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
@@ -22,8 +23,8 @@ import {
   paginationValidator,
   setDefaultPagination,
   setDefaultSearchSort,
-  videoChannelsSearchSortValidator,
   videoChannelsListSearchValidator,
+  videoChannelsSearchSortValidator,
   videosSearchSortValidator,
   videosSearchValidator
 } from '../../middlewares'
@@ -87,16 +88,17 @@ function searchVideoChannels (req: express.Request, res: express.Response) {
 async function searchVideoChannelsIndex (query: VideoChannelsSearchQuery, res: express.Response) {
   const result = await buildMutedForSearchIndex(res)
 
-  const body = Object.assign(query, result)
+  const body = await Hooks.wrapObject(Object.assign(query, result), 'filter:api.search.video-channels.index.list.params')
 
   const url = sanitizeUrl(CONFIG.SEARCH.SEARCH_INDEX.URL) + '/api/v1/search/video-channels'
 
   try {
     logger.debug('Doing video channels search index request on %s.', url, { body })
 
-    const searchIndexResult = await doRequest<ResultList<VideoChannel>>({ uri: url, body, json: true })
+    const { body: searchIndexResult } = await doJSONRequest<ResultList<VideoChannel>>(url, { method: 'POST', json: body })
+    const jsonResult = await Hooks.wrapObject(searchIndexResult, 'filter:api.search.video-channels.index.list.result')
 
-    return res.json(searchIndexResult.body)
+    return res.json(jsonResult)
   } catch (err) {
     logger.warn('Cannot use search index to make video channels search.', { err })
 
@@ -107,14 +109,19 @@ async function searchVideoChannelsIndex (query: VideoChannelsSearchQuery, res: e
 async function searchVideoChannelsDB (query: VideoChannelsSearchQuery, res: express.Response) {
   const serverActor = await getServerActor()
 
-  const options = {
+  const apiOptions = await Hooks.wrapObject({
     actorId: serverActor.id,
     search: query.search,
     start: query.start,
     count: query.count,
     sort: query.sort
-  }
-  const resultList = await VideoChannelModel.searchForApi(options)
+  }, 'filter:api.search.video-channels.local.list.params')
+
+  const resultList = await Hooks.wrapPromiseFun(
+    VideoChannelModel.searchForApi,
+    apiOptions,
+    'filter:api.search.video-channels.local.list.result'
+  )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -168,7 +175,7 @@ function searchVideos (req: express.Request, res: express.Response) {
 async function searchVideosIndex (query: VideosSearchQuery, res: express.Response) {
   const result = await buildMutedForSearchIndex(res)
 
-  const body: VideosSearchQuery = Object.assign(query, result)
+  let body: VideosSearchQuery = Object.assign(query, result)
 
   // Use the default instance NSFW policy if not specified
   if (!body.nsfw) {
@@ -181,14 +188,17 @@ async function searchVideosIndex (query: VideosSearchQuery, res: express.Respons
       : 'both'
   }
 
+  body = await Hooks.wrapObject(body, 'filter:api.search.videos.index.list.params')
+
   const url = sanitizeUrl(CONFIG.SEARCH.SEARCH_INDEX.URL) + '/api/v1/search/videos'
 
   try {
     logger.debug('Doing videos search index request on %s.', url, { body })
 
-    const searchIndexResult = await doRequest<ResultList<Video>>({ uri: url, body, json: true })
+    const { body: searchIndexResult } = await doJSONRequest<ResultList<Video>>(url, { method: 'POST', json: body })
+    const jsonResult = await Hooks.wrapObject(searchIndexResult, 'filter:api.search.videos.index.list.result')
 
-    return res.json(searchIndexResult.body)
+    return res.json(jsonResult)
   } catch (err) {
     logger.warn('Cannot use search index to make video search.', { err })
 
@@ -197,13 +207,18 @@ async function searchVideosIndex (query: VideosSearchQuery, res: express.Respons
 }
 
 async function searchVideosDB (query: VideosSearchQuery, res: express.Response) {
-  const options = Object.assign(query, {
+  const apiOptions = await Hooks.wrapObject(Object.assign(query, {
     includeLocalVideos: true,
     nsfw: buildNSFWFilter(res, query.nsfw),
     filter: query.filter,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined
-  })
-  const resultList = await VideoModel.searchAndPopulateAccountAndServer(options)
+  }), 'filter:api.search.videos.local.list.params')
+
+  const resultList = await Hooks.wrapPromiseFun(
+    VideoModel.searchAndPopulateAccountAndServer,
+    apiOptions,
+    'filter:api.search.videos.local.list.result'
+  )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

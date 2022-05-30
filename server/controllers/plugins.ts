@@ -1,15 +1,15 @@
 import * as express from 'express'
-import { PLUGIN_GLOBAL_CSS_PATH } from '../initializers/constants'
 import { join } from 'path'
-import { PluginManager, RegisteredPlugin } from '../lib/plugins/plugin-manager'
-import { getPluginValidator, pluginStaticDirectoryValidator, getExternalAuthValidator } from '../middlewares/validators/plugins'
-import { serveThemeCSSValidator } from '../middlewares/validators/themes'
-import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import { logger } from '@server/helpers/logger'
+import { optionalAuthenticate } from '@server/middlewares/auth'
 import { getCompleteLocale, is18nLocale } from '../../shared/core-utils/i18n'
+import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 import { PluginType } from '../../shared/models/plugins/plugin.type'
 import { isTestInstance } from '../helpers/core-utils'
-import { logger } from '@server/helpers/logger'
-import { optionalAuthenticate } from '@server/middlewares/oauth'
+import { PLUGIN_GLOBAL_CSS_PATH } from '../initializers/constants'
+import { PluginManager, RegisteredPlugin } from '../lib/plugins/plugin-manager'
+import { getExternalAuthValidator, getPluginValidator, pluginStaticDirectoryValidator } from '../middlewares/validators/plugins'
+import { serveThemeCSSValidator } from '../middlewares/validators/themes'
 
 const sendFileOptions = {
   maxAge: '30 days',

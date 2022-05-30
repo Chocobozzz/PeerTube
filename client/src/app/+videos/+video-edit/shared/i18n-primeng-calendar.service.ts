@@ -3,7 +3,6 @@ import { PrimeNGConfig } from 'primeng/api'
 
 @Injectable()
 export class I18nPrimengCalendarService {
-  private readonly calendarLocale: any = {}
 
   constructor (private config: PrimeNGConfig) {
     this.config.setTranslation({
@@ -71,10 +70,6 @@ export class I18nPrimengCalendarService {
 
       clear: $localize`Clear`
     })
-  }
-
-  getCalendarLocale () {
-    return this.calendarLocale
   }
 
   getTimezone () {

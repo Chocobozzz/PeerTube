@@ -10,9 +10,14 @@ label {
   @include settings-big-title;
 }
 
-my-actor-avatar-info {
+my-actor-avatar-edit,
+my-actor-banner-edit {
   display: block;
   margin-bottom: 20px;
+}
+
+my-actor-banner-edit {
+  max-width: 500px;
 }
 
 .input-group {
@@ -61,7 +66,8 @@ textarea {
     width: auto !important;
   }
 
-  label[for=name] + div, textarea {
+  label[for=name] + div,
+  textarea {
     width: 100%;
   }
 }

@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import * as libxmljs from 'libxmljs'
+import * as xmlParser from 'fast-xml-parser'
 import {
   addAccountToAccountBlocklist,
   addAccountToServerBlocklist,
@@ -139,12 +139,15 @@ describe('Test syndication feeds', () => {
     it('Should contain a valid enclosure (covers RSS 2.0 endpoint)', async function () {
       for (const server of servers) {
         const rss = await getXMLfeed(server.url, 'videos')
-        const xmlDoc = libxmljs.parseXmlString(rss.text)
-        const xmlEnclosure = xmlDoc.get('/rss/channel/item/enclosure')
-        expect(xmlEnclosure).to.exist
-        expect(xmlEnclosure.attr('type').value()).to.be.equal('application/x-bittorrent')
-        expect(xmlEnclosure.attr('length').value()).to.be.equal('218910')
-        expect(xmlEnclosure.attr('url').value()).to.contain('720.torrent')
+        expect(xmlParser.validate(rss.text)).to.be.true
+
+        const xmlDoc = xmlParser.parse(rss.text, { parseAttributeValue: true, ignoreAttributes: false })
+
+        const enclosure = xmlDoc.rss.channel.item[0].enclosure
+        expect(enclosure).to.exist
+        expect(enclosure['@_type']).to.equal('application/x-bittorrent')
+        expect(enclosure['@_length']).to.equal(218910)
+        expect(enclosure['@_url']).to.contain('720.torrent')
       }
     })
 

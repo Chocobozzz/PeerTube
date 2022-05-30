@@ -1,7 +1,17 @@
 @import '_variables';
 @import '_mixins';
 
+/* stylelint-disable */
 @import '~primeng/resources/primeng.css';
+
+// Override primeng style we don't want
+input[type=button] {
+  border-radius: inherit;
+}
+
+p-table .p-datatable-header .caption {
+  margin-bottom: 15px;
+}
 
 // Taken from old nova light theme
 
@@ -506,10 +516,6 @@ p-table {
       .left-buttons {
         padding-left: 15px;
       }
-
-      .input-group-text {
-        background-color: transparent;
-      }
     }
   }
 
@@ -547,7 +553,7 @@ p-table {
     height: 46px;
 
     &.p-highlight {
-      background-color: pvar(--submenuColor) !important;
+      background-color: pvar(--submenuBackgroundColor) !important;
 
       td, td > a {
         color: pvar(--mainForegroundColor) !important;
@@ -558,7 +564,7 @@ p-table {
   .p-datatable-tbody {
     tr {
       &:hover {
-        background-color: pvar(--submenuColor) !important;
+        background-color: pvar(--submenuBackgroundColor) !important;
       }
 
       td {
@@ -590,16 +596,16 @@ p-table {
   th {
     border: none !important;
     border-bottom: 1px solid !important;
-    border-color: pvar(--submenuColor) !important;
+    border-color: pvar(--submenuBackgroundColor) !important;
     text-align: left !important;
     padding: 5px 0 5px 15px !important;
     font-weight: $font-semibold !important;
     color: pvar(--mainForegroundColor) !important;
 
     &.p-sortable-column:hover {
-      background-color: pvar(--submenuColor) !important;
+      background-color: pvar(--submenuBackgroundColor) !important;
       border: 1px solid !important;
-      border-color: pvar(--submenuColor) !important;
+      border-color: pvar(--submenuBackgroundColor) !important;
       border-width: 0 1px !important;
 
       &:first-child {
@@ -608,7 +614,7 @@ p-table {
     }
 
     &.p-highlight {
-      background-color: pvar(--submenuColor) !important;
+      background-color: pvar(--submenuBackgroundColor) !important;
 
       .pi {
         @extend .glyphicon;
@@ -654,7 +660,7 @@ p-table {
       position: relative;
       border: none;
       border-top: 1px solid !important;
-      border-color: pvar(--submenuColor) !important;
+      border-color: pvar(--submenuBackgroundColor) !important;
       height: 40px;
       display: flex;
       justify-content: center;
@@ -753,29 +759,32 @@ p-table {
 }
 
 // overflow data table
-@mixin overflow-datatable ($table-min-width, $horizontal-margins, $mobile-paginator: true) {
-  p-table {
-    .p-datatable-wrapper {
-      overflow-x: auto;
-      max-width: calc(100vw - #{$horizontal-margins * 2});
+p-table {
+  .p-datatable-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
 
-      table {
-        min-width: $table-min-width;
+    table {
+      min-width: breakpoint(lg);
+    }
+  }
+
+  @media screen and (max-width: #{breakpoint(lg)}) {
+    // Prevent overflow
+    p-paginator {
+      .p-paginator-current,
+      .p-dropdown {
+        top: 0;
+        margin-top: 30px;
       }
     }
+  }
 
-    @if $mobile-paginator {
-      p-paginator .p-paginator-bottom {
-        display: block;
-
-        .p-paginator-current {
-          position: relative;
-          display: block;
-        }
-
-        a, .p-paginator-pages {
-          vertical-align: middle;
-        }
+  @media screen and (max-width: $mobile-view) {
+    // Prevent overflow
+    p-paginator {
+      .p-paginator-pages > .p-paginator-page:not(.p-highlight) {
+        display: none;
       }
     }
   }

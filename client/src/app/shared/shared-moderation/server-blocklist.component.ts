@@ -46,7 +46,7 @@ export class GenericServerBlocklistComponent extends RestTable implements OnInit
             : $localize`Instance ${host} unmuted by your instance.`
         )
 
-        this.loadData()
+        this.reloadData()
       }
     )
   }
@@ -69,13 +69,13 @@ export class GenericServerBlocklistComponent extends RestTable implements OnInit
               : $localize`Instance ${domain} muted by your instance.`
           )
 
-          this.loadData()
+          this.reloadData()
         }
       )
     })
   }
 
-  protected loadData () {
+  protected reloadData () {
     const operation = this.mode === BlocklistComponentType.Account
       ? this.blocklistService.getUserServerBlocklist({
         pagination: this.pagination,

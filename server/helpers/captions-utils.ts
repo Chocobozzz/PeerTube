@@ -3,6 +3,8 @@ import { join } from 'path'
 import * as srt2vtt from 'srt-to-vtt'
 import { MVideoCaption } from '@server/types/models'
 import { CONFIG } from '../initializers/config'
+import { pipelinePromise } from './core-utils'
+import { Transform } from 'stream'
 
 async function moveAndProcessCaptionFile (physicalFile: { filename: string, path: string }, videoCaption: MVideoCaption) {
   const videoCaptionsDir = CONFIG.STORAGE.CAPTIONS_DIR
@@ -30,17 +32,22 @@ export {
 // ---------------------------------------------------------------------------
 
 function convertSrtToVtt (source: string, destination: string) {
-  return new Promise<void>((res, rej) => {
-    const file = createReadStream(source)
-    const converter = srt2vtt()
-    const writer = createWriteStream(destination)
+  const fixVTT = new Transform({
+    transform: (chunk, _encoding, cb) => {
+      let block: string = chunk.toString()
 
-    for (const s of [ file, converter, writer ]) {
-      s.on('error', err => rej(err))
+      block = block.replace(/(\d\d:\d\d:\d\d)(\s)/g, '$1.000$2')
+                   .replace(/(\d\d:\d\d:\d\d),(\d)(\s)/g, '$1.00$2$3')
+                   .replace(/(\d\d:\d\d:\d\d),(\d\d)(\s)/g, '$1.0$2$3')
+
+      return cb(undefined, block)
     }
-
-    return file.pipe(converter)
-               .pipe(writer)
-               .on('finish', () => res())
   })
+
+  return pipelinePromise(
+    createReadStream(source),
+    srt2vtt(),
+    fixVTT,
+    createWriteStream(destination)
+  )
 }

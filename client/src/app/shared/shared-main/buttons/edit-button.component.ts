@@ -5,11 +5,11 @@ import { Component, Input, OnInit } from '@angular/core'
   styleUrls: [ './button.component.scss' ],
   templateUrl: './edit-button.component.html'
 })
-
 export class EditButtonComponent implements OnInit {
   @Input() label: string
   @Input() title: string
   @Input() routerLink: string[] | string = []
+  @Input() responsiveLabel = false
 
   ngOnInit () {
     // <my-edit-button /> No label

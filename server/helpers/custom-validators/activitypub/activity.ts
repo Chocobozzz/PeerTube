@@ -1,16 +1,13 @@
 import validator from 'validator'
 import { Activity, ActivityType } from '../../../../shared/models/activitypub'
+import { isAbuseReasonValid } from '../abuses'
 import { exists } from '../misc'
 import { sanitizeAndCheckActorObject } from './actor'
 import { isCacheFileObjectValid } from './cache-file'
-import { isFlagActivityValid } from './flag'
 import { isActivityPubUrlValid, isBaseActivityValid, isObjectValid } from './misc'
 import { isPlaylistObjectValid } from './playlist'
-import { isDislikeActivityValid, isLikeActivityValid } from './rate'
-import { isShareActivityValid } from './share'
 import { sanitizeAndCheckVideoCommentObject } from './video-comments'
 import { sanitizeAndCheckVideoTorrentObject } from './videos'
-import { isViewActivityValid } from './view'
 
 function isRootActivityValid (activity: any) {
   return isCollection(activity) || isActivity(activity)
@@ -29,18 +26,18 @@ function isActivity (activity: any) {
 }
 
 const activityCheckers: { [ P in ActivityType ]: (activity: Activity) => boolean } = {
-  Create: checkCreateActivity,
-  Update: checkUpdateActivity,
-  Delete: checkDeleteActivity,
-  Follow: checkFollowActivity,
-  Accept: checkAcceptActivity,
-  Reject: checkRejectActivity,
-  Announce: checkAnnounceActivity,
-  Undo: checkUndoActivity,
-  Like: checkLikeActivity,
-  View: checkViewActivity,
-  Flag: checkFlagActivity,
-  Dislike: checkDislikeActivity
+  Create: isCreateActivityValid,
+  Update: isUpdateActivityValid,
+  Delete: isDeleteActivityValid,
+  Follow: isFollowActivityValid,
+  Accept: isAcceptActivityValid,
+  Reject: isRejectActivityValid,
+  Announce: isAnnounceActivityValid,
+  Undo: isUndoActivityValid,
+  Like: isLikeActivityValid,
+  View: isViewActivityValid,
+  Flag: isFlagActivityValid,
+  Dislike: isDislikeActivityValid
 }
 
 function isActivityValid (activity: any) {
@@ -51,34 +48,34 @@ function isActivityValid (activity: any) {
   return checker(activity)
 }
 
-// ---------------------------------------------------------------------------
-
-export {
-  isRootActivityValid,
-  isActivityValid
-}
-
-// ---------------------------------------------------------------------------
-
-function checkViewActivity (activity: any) {
-  return isBaseActivityValid(activity, 'View') &&
-    isViewActivityValid(activity)
-}
-
-function checkFlagActivity (activity: any) {
+function isFlagActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Flag') &&
-    isFlagActivityValid(activity)
+    isAbuseReasonValid(activity.content) &&
+    isActivityPubUrlValid(activity.object)
 }
 
-function checkDislikeActivity (activity: any) {
-  return isDislikeActivityValid(activity)
+function isLikeActivityValid (activity: any) {
+  return isBaseActivityValid(activity, 'Like') &&
+    isObjectValid(activity.object)
 }
 
-function checkLikeActivity (activity: any) {
-  return isLikeActivityValid(activity)
+function isDislikeActivityValid (activity: any) {
+  return isBaseActivityValid(activity, 'Dislike') &&
+    isObjectValid(activity.object)
 }
 
-function checkCreateActivity (activity: any) {
+function isAnnounceActivityValid (activity: any) {
+  return isBaseActivityValid(activity, 'Announce') &&
+    isObjectValid(activity.object)
+}
+
+function isViewActivityValid (activity: any) {
+  return isBaseActivityValid(activity, 'View') &&
+    isActivityPubUrlValid(activity.actor) &&
+    isActivityPubUrlValid(activity.object)
+}
+
+function isCreateActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Create') &&
     (
       isViewActivityValid(activity.object) ||
@@ -92,7 +89,7 @@ function checkCreateActivity (activity: any) {
     )
 }
 
-function checkUpdateActivity (activity: any) {
+function isUpdateActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Update') &&
     (
       isCacheFileObjectValid(activity.object) ||
@@ -102,36 +99,51 @@ function checkUpdateActivity (activity: any) {
     )
 }
 
-function checkDeleteActivity (activity: any) {
+function isDeleteActivityValid (activity: any) {
   // We don't really check objects
   return isBaseActivityValid(activity, 'Delete') &&
     isObjectValid(activity.object)
 }
 
-function checkFollowActivity (activity: any) {
+function isFollowActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Follow') &&
     isObjectValid(activity.object)
 }
 
-function checkAcceptActivity (activity: any) {
+function isAcceptActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Accept')
 }
 
-function checkRejectActivity (activity: any) {
+function isRejectActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Reject')
 }
 
-function checkAnnounceActivity (activity: any) {
-  return isShareActivityValid(activity)
-}
-
-function checkUndoActivity (activity: any) {
+function isUndoActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Undo') &&
     (
-      checkFollowActivity(activity.object) ||
-      checkLikeActivity(activity.object) ||
-      checkDislikeActivity(activity.object) ||
-      checkAnnounceActivity(activity.object) ||
-      checkCreateActivity(activity.object)
+      isFollowActivityValid(activity.object) ||
+      isLikeActivityValid(activity.object) ||
+      isDislikeActivityValid(activity.object) ||
+      isAnnounceActivityValid(activity.object) ||
+      isCreateActivityValid(activity.object)
     )
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  isRootActivityValid,
+  isActivityValid,
+  isFlagActivityValid,
+  isLikeActivityValid,
+  isDislikeActivityValid,
+  isAnnounceActivityValid,
+  isViewActivityValid,
+  isCreateActivityValid,
+  isUpdateActivityValid,
+  isDeleteActivityValid,
+  isFollowActivityValid,
+  isAcceptActivityValid,
+  isRejectActivityValid,
+  isUndoActivityValid
 }

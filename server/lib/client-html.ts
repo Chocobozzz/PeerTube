@@ -5,12 +5,13 @@ import validator from 'validator'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/core-utils/i18n/i18n'
 import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '../../shared/models/videos'
-import { escapeHTML, isTestInstance, sha256 } from '../helpers/core-utils'
+import { isTestInstance, sha256 } from '../helpers/core-utils'
+import { escapeHTML } from '@shared/core-utils/renderer'
 import { logger } from '../helpers/logger'
 import { CONFIG } from '../initializers/config'
 import {
   ACCEPT_HEADERS,
-  AVATARS_SIZE,
+  ACTOR_IMAGES_SIZE,
   CUSTOM_HTML_TAG_COMMENTS,
   EMBED_SIZE,
   FILES_CONTENT_HASH,
@@ -23,6 +24,7 @@ import { VideoChannelModel } from '../models/video/video-channel'
 import { getActivityStreamDuration } from '../models/video/video-format-utils'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
+import { mdToPlainText } from '../helpers/markdown'
 
 type Tags = {
   ogType: string
@@ -93,13 +95,13 @@ class ClientHtml {
     }
 
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(video.name))
-    customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(video.description))
+    customHtml = ClientHtml.addDescriptionTag(customHtml, mdToPlainText(video.description))
 
     const url = WEBSERVER.URL + video.getWatchStaticPath()
     const originUrl = video.url
     const title = escapeHTML(video.name)
     const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
-    const description = escapeHTML(video.description)
+    const description = mdToPlainText(video.description)
 
     const image = {
       url: WEBSERVER.URL + video.getPreviewStaticPath()
@@ -151,13 +153,13 @@ class ClientHtml {
     }
 
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(videoPlaylist.name))
-    customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(videoPlaylist.description))
+    customHtml = ClientHtml.addDescriptionTag(customHtml, mdToPlainText(videoPlaylist.description))
 
     const url = videoPlaylist.getWatchUrl()
     const originUrl = videoPlaylist.url
     const title = escapeHTML(videoPlaylist.name)
     const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
-    const description = escapeHTML(videoPlaylist.description)
+    const description = mdToPlainText(videoPlaylist.description)
 
     const image = {
       url: videoPlaylist.getThumbnailUrl()
@@ -235,18 +237,18 @@ class ClientHtml {
     }
 
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(entity.getDisplayName()))
-    customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(entity.description))
+    customHtml = ClientHtml.addDescriptionTag(customHtml, mdToPlainText(entity.description))
 
     const url = entity.getLocalUrl()
     const originUrl = entity.Actor.url
     const siteName = escapeHTML(CONFIG.INSTANCE.NAME)
     const title = escapeHTML(entity.getDisplayName())
-    const description = escapeHTML(entity.description)
+    const description = mdToPlainText(entity.description)
 
     const image = {
       url: entity.Actor.getAvatarUrl(),
-      width: AVATARS_SIZE.width,
-      height: AVATARS_SIZE.height
+      width: ACTOR_IMAGES_SIZE.AVATARS.width,
+      height: ACTOR_IMAGES_SIZE.AVATARS.height
     }
 
     const ogType = 'website'
@@ -377,7 +379,7 @@ class ClientHtml {
     }
 
     metaTags['og:url'] = tags.url
-    metaTags['og:description'] = tags.description
+    metaTags['og:description'] = mdToPlainText(tags.description)
 
     if (tags.embed) {
       metaTags['og:video:url'] = tags.embed.url
@@ -393,7 +395,7 @@ class ClientHtml {
   private static generateStandardMetaTags (tags: Tags) {
     return {
       name: tags.title,
-      description: tags.description,
+      description: mdToPlainText(tags.description),
       image: tags.image.url
     }
   }

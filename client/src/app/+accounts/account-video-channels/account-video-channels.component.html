@@ -1,33 +1,51 @@
 <h1 class="sr-only" i18n>Video channels</h1>
+
 <div class="margin-content">
 
   <div class="no-results" i18n *ngIf="channelPagination.totalItems === 0">This account does not have channels.</div>
 
   <div class="channels" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" [dataObservable]="onChannelDataSubject.asObservable()">
-    <div class="section channel" *ngFor="let videoChannel of videoChannels">
-      <div class="section-title">
-        <a [routerLink]="getVideoChannelLink(videoChannel)" i18n-title title="See this video channel">
-          <img [src]="videoChannel.avatarUrl" alt="Avatar" />
+    <div class="channel" *ngFor="let videoChannel of videoChannels">
 
-          <h2 class="section-title">{{ videoChannel.displayName }}</h2>
+      <div class="channel-avatar-row">
+        <my-actor-avatar
+          [channel]="videoChannel" [internalHref]="getVideoChannelLink(videoChannel)"
+          i18n-title title="See this video channel"
+        ></my-actor-avatar>
+
+        <h2>
+          <a [routerLink]="getVideoChannelLink(videoChannel)" i18n-title title="See this video channel">
+            {{ videoChannel.displayName }}
+          </a>
+        </h2>
+
+        <div class="actor-counters">
           <div class="followers" i18n>{videoChannel.followersCount, plural, =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}</div>
-        </a>
 
-        <my-subscribe-button [videoChannels]="[videoChannel]"></my-subscribe-button>
+          <span class="videos-count" *ngIf="getTotalVideosOf(videoChannel) !== undefined" i18n>
+            {getTotalVideosOf(videoChannel), plural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}
+          </span>
+        </div>
+
+        <div class="description-html" [innerHTML]="getChannelDescription(videoChannel)"></div>
       </div>
 
-      <div *ngIf="getVideosOf(videoChannel)" class="videos">
-        <div class="no-results my-5" i18n *ngIf="getVideosOf(videoChannel).length === 0">This channel doesn't have any videos.</div>
+      <my-subscribe-button [videoChannels]="[videoChannel]"></my-subscribe-button>
+
+      <a i18n class="button-show-channel peertube-button-link orange-button-inverted" [routerLink]="getVideoChannelLink(videoChannel)">Show this channel</a>
+
+      <div class="videos">
+        <div class="no-results" i18n *ngIf="getTotalVideosOf(videoChannel) === 0">This channel doesn't have any videos.</div>
 
         <my-video-miniature
           *ngFor="let video of getVideosOf(videoChannel)"
-          [video]="video" [user]="userMiniature" [displayVideoActions]="true"
+          [video]="video" [user]="userMiniature" [displayVideoActions]="true" [displayOptions]="miniatureDisplayOptions"
         ></my-video-miniature>
-      </div>
 
-      <a *ngIf="getVideosOf(videoChannel).length !== 0" class="show-more" i18n [routerLink]="getVideoChannelLink(videoChannel)">
-        SHOW THIS CHANNEL
-      </a>
+        <div *ngIf="getTotalVideosOf(videoChannel)" class="miniature-show-channel">
+          <a i18n [routerLink]="getVideoChannelLink(videoChannel)">SHOW THIS CHANNEL ></a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

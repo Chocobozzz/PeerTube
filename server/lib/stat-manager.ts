@@ -3,9 +3,12 @@ import { UserModel } from '@server/models/account/user'
 import { ActorFollowModel } from '@server/models/activitypub/actor-follow'
 import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy'
 import { VideoModel } from '@server/models/video/video'
+import { VideoChannelModel } from '@server/models/video/video-channel'
 import { VideoCommentModel } from '@server/models/video/video-comment'
 import { VideoFileModel } from '@server/models/video/video-file'
+import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { ActivityType, ServerStats, VideoRedundancyStrategyWithManual } from '@shared/models'
+import * as Bluebird from 'bluebird'
 
 class StatsManager {
 
@@ -46,21 +49,36 @@ class StatsManager {
     const { totalUsers, totalDailyActiveUsers, totalWeeklyActiveUsers, totalMonthlyActiveUsers } = await UserModel.getStats()
     const { totalInstanceFollowers, totalInstanceFollowing } = await ActorFollowModel.getStats()
     const { totalLocalVideoFilesSize } = await VideoFileModel.getStats()
+    const {
+      totalLocalVideoChannels,
+      totalLocalDailyActiveVideoChannels,
+      totalLocalWeeklyActiveVideoChannels,
+      totalLocalMonthlyActiveVideoChannels
+    } = await VideoChannelModel.getStats()
+    const { totalLocalPlaylists } = await VideoPlaylistModel.getStats()
 
     const videosRedundancyStats = await this.buildRedundancyStats()
 
     const data: ServerStats = {
-      totalLocalVideos,
-      totalLocalVideoViews,
-      totalLocalVideoFilesSize,
-      totalLocalVideoComments,
-      totalVideos,
-      totalVideoComments,
-
       totalUsers,
       totalDailyActiveUsers,
       totalWeeklyActiveUsers,
       totalMonthlyActiveUsers,
+
+      totalLocalVideos,
+      totalLocalVideoViews,
+      totalLocalVideoComments,
+      totalLocalVideoFilesSize,
+
+      totalVideos,
+      totalVideoComments,
+
+      totalLocalVideoChannels,
+      totalLocalDailyActiveVideoChannels,
+      totalLocalWeeklyActiveVideoChannels,
+      totalLocalMonthlyActiveVideoChannels,
+
+      totalLocalPlaylists,
 
       totalInstanceFollowers,
       totalInstanceFollowing,
@@ -89,12 +107,10 @@ class StatsManager {
 
     strategies.push({ strategy: 'manual', size: null })
 
-    return Promise.all(
-      strategies.map(r => {
-        return VideoRedundancyModel.getStats(r.strategy)
-          .then(stats => Object.assign(stats, { strategy: r.strategy, totalSize: r.size }))
-      })
-    )
+    return Bluebird.mapSeries(strategies, r => {
+      return VideoRedundancyModel.getStats(r.strategy)
+        .then(stats => Object.assign(stats, { strategy: r.strategy, totalSize: r.size }))
+    })
   }
 
   private buildAPPerType () {

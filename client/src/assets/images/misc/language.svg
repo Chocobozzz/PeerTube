@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" transform="scale(1.2)" viewBox="0 0 200 200">
   <defs/>
-  <path stroke="#000" stroke-width="3" d="M93 155H42a18 18 0 01-18-18V29a5 5 0 015-5h89a5 5 0 015 6L98 151a5 5 0 01-5 4zM34 34v103a8 8 0 008 8h47l22-111z"/>
-  <path stroke="#000" stroke-width="3" d="M171 176H75a5 5 0 01-5-6l4-21a5 5 0 0110 2l-3 15h85V63a8 8 0 00-8-8h-45a5 5 0 010-10h45a18 18 0 0118 18v108a5 5 0 01-5 5zM50 92h0a5 5 0 01-5-5V63a17 17 0 0135 0v24a5 5 0 01-10 0V62a7 7 0 00-15 0v25a5 5 0 01-5 5z"/>
-  <path stroke="#000" stroke-width="3" d="M75 76H50a5 5 0 010-10h25a5 5 0 010 10zM120 155a5 5 0 01-3-9l21-21h-18a5 5 0 010-10h30a5 5 0 014 9l-30 30a5 5 0 01-4 1z"/>
-  <path stroke="#000" stroke-width="3" d="M150 155a5 5 0 01-4-1l-14-15a5 5 0 017-7l15 14a5 5 0 01-4 9zM143 110h-15a5 5 0 110-10h15a5 5 0 010 10z"/>
+  <path stroke="currentColor" stroke-width="3" d="M93 155H42a18 18 0 01-18-18V29a5 5 0 015-5h89a5 5 0 015 6L98 151a5 5 0 01-5 4zM34 34v103a8 8 0 008 8h47l22-111z"/>
+  <path stroke="currentColor" stroke-width="3" d="M171 176H75a5 5 0 01-5-6l4-21a5 5 0 0110 2l-3 15h85V63a8 8 0 00-8-8h-45a5 5 0 010-10h45a18 18 0 0118 18v108a5 5 0 01-5 5zM50 92h0a5 5 0 01-5-5V63a17 17 0 0135 0v24a5 5 0 01-10 0V62a7 7 0 00-15 0v25a5 5 0 01-5 5z"/>
+  <path stroke="currentColor" stroke-width="3" d="M75 76H50a5 5 0 010-10h25a5 5 0 010 10zM120 155a5 5 0 01-3-9l21-21h-18a5 5 0 010-10h30a5 5 0 014 9l-30 30a5 5 0 01-4 1z"/>
+  <path stroke="currentColor" stroke-width="3" d="M150 155a5 5 0 01-4-1l-14-15a5 5 0 017-7l15 14a5 5 0 01-4 9zM143 110h-15a5 5 0 110-10h15a5 5 0 010 10z"/>
 </svg>

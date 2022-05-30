@@ -13,6 +13,7 @@ import {
   getStoredVolume,
   saveLastSubtitle,
   saveMuteInStore,
+  saveVideoWatchHistory,
   saveVolumeInStore
 } from './peertube-player-local-storage'
 
@@ -120,7 +121,7 @@ class PeerTubePlugin extends Plugin {
       this.initializePlayer()
       this.runViewAdd()
 
-      if (options.userWatching) this.runUserWatchVideo(options.userWatching)
+      this.runUserWatchVideo(options.userWatching, options.videoUUID)
     })
   }
 
@@ -178,7 +179,7 @@ class PeerTubePlugin extends Plugin {
     }, 1000)
   }
 
-  private runUserWatchVideo (options: UserWatching) {
+  private runUserWatchVideo (options: UserWatching, videoUUID: string) {
     let lastCurrentTime = 0
 
     this.userWatchingVideoInterval = setInterval(() => {
@@ -187,8 +188,12 @@ class PeerTubePlugin extends Plugin {
       if (currentTime - lastCurrentTime >= 1) {
         lastCurrentTime = currentTime
 
-        this.notifyUserIsWatching(currentTime, options.url, options.authorizationHeader)
-          .catch(err => console.error('Cannot notify user is watching.', err))
+        if (options) {
+          this.notifyUserIsWatching(currentTime, options.url, options.authorizationHeader)
+            .catch(err => console.error('Cannot notify user is watching.', err))
+        } else {
+          saveVideoWatchHistory(videoUUID, currentTime)
+        }
       }
     }, this.CONSTANTS.USER_WATCHING_VIDEO_INTERVAL)
   }

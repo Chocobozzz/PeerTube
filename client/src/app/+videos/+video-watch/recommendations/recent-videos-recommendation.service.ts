@@ -61,7 +61,7 @@ export class RecentVideosRecommendationService implements RecommendationService 
             componentPagination: pagination,
             advancedSearch: new AdvancedSearch({
               tagsOneOf: recommendation.tags.join(','),
-              sort: '-createdAt',
+              sort: '-publishedAt',
               searchTarget: 'local',
               nsfw: user.nsfwPolicy
                 ? this.videos.nsfwPolicyToParam(user.nsfwPolicy)

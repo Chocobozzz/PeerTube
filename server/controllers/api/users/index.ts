@@ -2,8 +2,10 @@ import * as express from 'express'
 import * as RateLimit from 'express-rate-limit'
 import { tokensRouter } from '@server/controllers/api/users/token'
 import { Hooks } from '@server/lib/plugins/hooks'
+import { OAuthTokenModel } from '@server/models/oauth/oauth-token'
 import { MUser, MUserAccountDefault } from '@server/types/models'
 import { UserCreate, UserRight, UserRole, UserUpdate } from '../../../../shared'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 import { UserRegister } from '../../../../shared/models/users/user-register.model'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
@@ -14,7 +16,6 @@ import { WEBSERVER } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { Emailer } from '../../../lib/emailer'
 import { Notifier } from '../../../lib/notifier'
-import { deleteUserToken } from '../../../lib/oauth-model'
 import { Redis } from '../../../lib/redis'
 import { createUserAccountAndChannelAndPlaylist, sendVerifyUserEmail } from '../../../lib/user'
 import {
@@ -52,7 +53,6 @@ import { myVideosHistoryRouter } from './my-history'
 import { myNotificationsRouter } from './my-notifications'
 import { mySubscriptionsRouter } from './my-subscriptions'
 import { myVideoPlaylistsRouter } from './my-video-playlists'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -335,7 +335,7 @@ async function updateUser (req: express.Request, res: express.Response) {
   const user = await userToUpdate.save()
 
   // Destroy user token to refresh rights
-  if (roleChanged || body.password !== undefined) await deleteUserToken(userToUpdate.id)
+  if (roleChanged || body.password !== undefined) await OAuthTokenModel.deleteUserToken(userToUpdate.id)
 
   auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
 
@@ -395,7 +395,7 @@ async function changeUserBlock (res: express.Response, user: MUserAccountDefault
   user.blockedReason = reason || null
 
   await sequelizeTypescript.transaction(async t => {
-    await deleteUserToken(user.id, t)
+    await OAuthTokenModel.deleteUserToken(user.id, t)
 
     await user.save({ transaction: t })
   })

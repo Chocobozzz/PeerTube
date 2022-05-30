@@ -86,7 +86,7 @@ export class VideoWatchPage {
     const dropdown = element(by.css('my-video-actions-dropdown .action-button'))
     await dropdown.click()
 
-    const items: ElementFinder[] = await element.all(by.css('my-video-actions-dropdown .dropdown-menu .dropdown-item'))
+    const items: ElementFinder[] = await element.all(by.css('.dropdown-menu.show .dropdown-item'))
 
     for (const item of items) {
       const href = await item.getAttribute('href')

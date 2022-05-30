@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: PeerTube
-  version: 3.1.0
+  version: 3.2.1
   contact:
     name: PeerTube Community
     url: 'https://joinpeertube.org'
@@ -12,8 +12,6 @@ info:
     url: 'https://joinpeertube.org/img/brand.png'
     altText: PeerTube Project Homepage
   description: |
-    # Introduction
-
     The PeerTube API is built on HTTP(S) and is RESTful. You can use your favorite
     HTTP/REST library for your programming language to use PeerTube. The spec API is fully compatible with
     [openapi-generator](https://github.com/OpenAPITools/openapi-generator/wiki/API-client-generator-HOWTO)
@@ -23,13 +21,14 @@ info:
     - [Go](https://framagit.org/framasoft/peertube/clients/go)
     - [Kotlin](https://framagit.org/framasoft/peertube/clients/kotlin)
 
-    See the [Quick Start guide](https://docs.joinpeertube.org/api-rest-getting-started) so you can play with the PeerTube API.
+    See the [REST API quick start](https://docs.joinpeertube.org/api-rest-getting-started) for a few
+    examples of using with the PeerTube API.
 
     # Authentication
 
-    When you sign up for an account, you are given the possibility to generate
-    sessions, and authenticate using this session token. One session token can
-    currently be used at a time.
+    When you sign up for an account on a PeerTube instance, you are given the possibility
+    to generate sessions on it, and authenticate there using a session token. Only __one
+    session token can currently be used at a time__.
 
     ## Roles
 
@@ -40,14 +39,51 @@ info:
 
     The API uses standard HTTP status codes to indicate the success or failure
     of the API call. The body of the response will be JSON in the following
-    format.
+    formats.
 
     ```
     {
-      "code": "unauthorized_request", // example inner error code
-      "error": "Token is invalid." // example exposed error message
+      "error": "Account not found" // error debug message
     }
     ```
+
+    Some errors benefit from a more detailed message:
+    ```
+    {
+      "errors": {
+        "id": { // where 'id' is the name of the parameter concerned by the error.
+          "value": "a117eb-c6a9-4756-bb09-2a956239f", // value that triggered the error.
+          "msg": "Should have an valid id",  // error debug message
+          "param": "id",
+          "location": "params" // 'params', 'body', 'header', 'query' or 'cookies'
+        }
+      }
+    }
+    ```
+
+    # Rate limits
+
+    We are rate-limiting all endpoints of PeerTube's API. Custom values can be set by administrators:
+
+    | Endpoint                | Calls            | Time frame                |
+    |-------------------------|------------------|---------------------------|
+    | `/*`                    | 50               | 10 seconds                |
+    | `POST /users/token`     | 15               | 5 minutes                 |
+    | `POST /users/register`  | 2¹               | 5 minutes                 |
+    | `POST /users/ask-send-verify-email` | 3    | 5 minutes                 |
+
+    Depending on the endpoint, ¹failed requests are not taken into account. A service
+    limit is announced by a `429 Too Many Requests` status code.
+
+    You can get details about the current state of your rate limit by reading the
+    following headers:
+
+    | Header                  | Description                                                |
+    |-------------------------|------------------------------------------------------------|
+    | X-RateLimit-Limit       | Number of max requests allowed in the current time period  |
+    | X-RateLimit-Remaining   | Number of remaining requests in the current time period    |
+    | X-RateLimit-Reset       | Timestamp of end of current time period as UNIX timestamp  |
+    | Retry-After             | Seconds to delay after the first `429` is received         |
 externalDocs:
   url: https://docs.joinpeertube.org/api-rest-reference.html
 tags:
@@ -101,7 +137,7 @@ tags:
       Redundancy is part of the inter-server solidarity that PeerTube fosters.
       Manage the list of instances you wish to help by seeding their videos according
       to the policy of video selection of your choice. Note that you have a similar functionality
-      to mirror individual videos, see `Video Mirroring`.
+      to mirror individual videos, see [video mirroring](#tag/Video-Mirroring).
     externalDocs:
       url: https://docs.joinpeertube.org/admin-following-instances?id=instances-redundancy
   - name: Plugins
@@ -115,6 +151,50 @@ tags:
   - name: Video
     description: |
       Operations dealing with listing, uploading, fetching or modifying videos.
+  - name: Video Upload
+    description: |
+      Operations dealing with adding video or audio. PeerTube supports two upload modes, and three import modes.
+
+      ### Upload
+
+      - [_legacy_](#operation/uploadLegacy), where the video file is sent in a single request
+      - [_resumable_](#operation/uploadResumableInit), where the video file is sent in chunks
+
+      You can upload videos more reliably by using the resumable variant. Its protocol lets
+      you resume an upload operation after a network interruption or other transmission failure,
+      saving time and bandwidth in the event of network failures.
+
+      Favor using resumable uploads in any of the following cases:
+      - You are transferring large files
+      - The likelihood of a network interruption is high
+      - Uploads are originating from a device with a low-bandwidth or unstable Internet connection,
+        such as a mobile device
+
+      ### Import
+
+      - _URL_-based: where the URL points to any service supported by [youtube-dl](https://ytdl-org.github.io/youtube-dl/)
+      - _magnet_-based: where the URI resolves to a BitTorrent ressource containing a single supported video file
+      - _torrent_-based: where the metainfo file resolves to a BitTorrent ressource containing a single supported video file
+
+      The import function is practical when the desired video/audio is available online. It makes PeerTube
+      download it for you, saving you as much bandwidth and avoiding any instability or limitation your network might have.
+  - name: Video Captions
+    description: Operations dealing with listing, adding and removing closed captions of a video.
+  - name: Video Channels
+    description: Operations dealing with the creation, modification and listing of videos within a channel.
+  - name: Video Comments
+    description: >
+      Operations dealing with comments to a video. Comments are organized in threads: adding a
+      comment in response to the video starts a thread, adding a reply to a comment adds it to
+      its root comment thread.
+  - name: Video Blocks
+    description: Operations dealing with blocking videos (removing them from view and preventing interactions).
+  - name: Video Rates
+    description: Like/dislike a video.
+  - name: Video Playlists
+    description: Operations dealing with playlists of videos. Playlists are bound to users and/or channels.
+  - name: Feeds
+    description: Server syndication feeds
   - name: Search
     description: |
       The search helps to find _videos_ or _channels_ from within the instance and beyond.
@@ -124,27 +204,11 @@ tags:
 
       Administrators can also enable the use of a remote search system, indexing
       videos and channels not could be not federated by the instance.
-  - name: Video Comments
-    description: >
-      Operations dealing with comments to a video. Comments are organized in
-      threads.
-  - name: Video Playlists
-    description: >
-      Operations dealing with playlists of videos. Playlists are bound to users
-      and/or channels.
-  - name: Video Channels
-    description: >
-      Operations dealing with the creation, modification and listing of videos within a channel.
-  - name: Video Blocks
-    description: >
-      Operations dealing with blocking videos (removing them from view and
-      preventing interactions).
-  - name: Video Rates
-    description: >
-      Like/dislike a video.
-  - name: Feeds
-    description: >
-      Server syndication feeds
+  - name: Video Mirroring
+    description: |
+      PeerTube instances can mirror videos from one another, and help distribute some videos.
+
+      For importing videos as your own, refer to [video imports](#operation/importVideo).
 x-tagGroups:
   - name: Accounts
     tags:
@@ -157,6 +221,7 @@ x-tagGroups:
   - name: Videos
     tags:
       - Video
+      - Video Upload
       - Video Captions
       - Video Channels
       - Video Comments
@@ -210,6 +275,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/name'
         - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/tagsOneOf'
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
@@ -227,7 +293,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
-      x-code-samples:
+      x-codeSamples:
         - lang: JavaScript
           source: |
             fetch('https://peertube2.cpy.re/api/v1/accounts/{name}/videos')
@@ -291,6 +357,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServerConfig'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/api/v1/config
   /config/about:
     get:
       summary: Get instance "About" information
@@ -303,6 +372,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServerConfigAbout'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/api/v1/config/about
   /config/custom:
     get:
       summary: Get instance runtime configuration
@@ -520,7 +592,9 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AddUser'
-        description: User to create
+        description: |
+          If the smtp server is configured, you can leave the password empty and an email will be sent
+          asking the user to set it first.
         required: true
     get:
       summary: List users
@@ -565,13 +639,24 @@ paths:
       tags:
         - Users
       operationId: getUserId
+      parameters:
+        - name: withStats
+          in: query
+          description: include statistics about the user (only available as a moderator/admin)
+          schema:
+            type: boolean
       responses:
         '200':
-          description: successful operation
+          x-summary: successful operation
+          description: |
+            As an admin/moderator, you can request a response augmented with statistics about the user's
+            moderation relations and videos usage, by using the `withStats` parameter.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                oneOf:
+                  - $ref: '#/components/schemas/User'
+                  - $ref: '#/components/schemas/UserWithStats'
     put:
       summary: Update a user
       security:
@@ -654,7 +739,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VideoImport'
+                $ref: '#/components/schemas/VideoImportsList'
   /users/me/video-quota-used:
     get:
       summary: Get my user used quota
@@ -669,7 +754,16 @@ paths:
           content:
             application/json:
               schema:
-                type: number
+                type: object
+                properties:
+                  videoQuotaUsed:
+                    type: number
+                    description: The user video quota used so far in bytes
+                    example: 16810141515
+                  videoQuotaUsedDaily:
+                    type: number
+                    description: The user video quota used today in bytes
+                    example: 1681014151
   '/users/me/videos/{videoId}/rating':
     get:
       summary: Get rate of my user for a video
@@ -682,9 +776,9 @@ paths:
         - name: videoId
           in: path
           required: true
-          description: 'The video id '
+          description: The video id
           schema:
-            type: string
+            $ref: '#/components/schemas/Video/properties/id'
       responses:
         '200':
           description: successful operation
@@ -727,6 +821,10 @@ paths:
       responses:
         '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoChannelList'
     post:
       tags:
         - My Subscriptions
@@ -781,6 +879,7 @@ paths:
         - Videos
       parameters:
         - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/tagsOneOf'
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
@@ -974,7 +1073,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Avatar'
+                type: object
+                properties:
+                  avatar:
+                    $ref: '#/components/schemas/ActorImage'
         '413':
           description: image file too large
           headers:
@@ -990,12 +1092,23 @@ paths:
               type: object
               properties:
                 avatarfile:
-                  description: The file to upload.
+                  description: The file to upload
                   type: string
                   format: binary
             encoding:
               avatarfile:
                 contentType: image/png, image/jpeg
+  /users/me/avatar:
+    delete:
+      summary: Delete my avatar
+      security:
+        - OAuth2: []
+      tags:
+        - My User
+      responses:
+        '204':
+          description: successful operation
+
   /videos/ownership:
     get:
       summary: List video ownership changes
@@ -1072,6 +1185,7 @@ paths:
         - Video
       parameters:
         - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/tagsOneOf'
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
@@ -1092,6 +1206,7 @@ paths:
   /videos/categories:
     get:
       summary: List available video categories
+      operationId: getCategories
       tags:
         - Video
       responses:
@@ -1109,6 +1224,7 @@ paths:
   /videos/licences:
     get:
       summary: List available video licences
+      operationId: getLicences
       tags:
         - Video
       responses:
@@ -1126,6 +1242,7 @@ paths:
   /videos/languages:
     get:
       summary: List available video languages
+      operationId: getLanguages
       tags:
         - Video
       responses:
@@ -1142,7 +1259,8 @@ paths:
                   externalValue: https://peertube2.cpy.re/api/v1/videos/languages
   /videos/privacies:
     get:
-      summary: List available video privacies
+      summary: List available video privacy policies
+      operationId: getPrivacyPolicies
       tags:
         - Video
       responses:
@@ -1184,16 +1302,11 @@ paths:
                   type: string
                   format: binary
                 category:
-                  description: Video category
-                  type: integer
-                  example: 4
+                  $ref: '#/components/schemas/VideoCategorySet'
                 licence:
-                  description: Video licence
-                  type: integer
-                  example: 2
+                  $ref: '#/components/schemas/VideoLicenceSet'
                 language:
-                  description: Video language
-                  type: string
+                  $ref: '#/components/schemas/VideoLanguageSet'
                 privacy:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 description:
@@ -1212,6 +1325,8 @@ paths:
                 name:
                   description: Video name
                   type: string
+                  minLength: 3
+                  maxLength: 120
                 tags:
                   description: Video tags (maximum 5 tags each between 2 and 30 characters)
                   type: array
@@ -1272,7 +1387,12 @@ paths:
           content:
             application/json:
               schema:
+                nullable: true
                 type: string
+                minLength: 3
+                maxLength: 10000
+                example: |
+                  **[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n**Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**
   '/videos/{id}/views':
     post:
       summary: Add a view to a video
@@ -1304,10 +1424,13 @@ paths:
   /videos/upload:
     post:
       summary: Upload a video
+      description: Uses a single request to upload a video.
+      operationId: uploadLegacy
       security:
         - OAuth2: []
       tags:
         - Video
+        - Video Upload
       responses:
         '200':
           description: successful operation
@@ -1337,78 +1460,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                videofile:
-                  description: Video file
-                  type: string
-                  format: binary
-                channelId:
-                  description: Channel id that will contain this video
-                  type: integer
-                thumbnailfile:
-                  description: Video thumbnail file
-                  type: string
-                  format: binary
-                previewfile:
-                  description: Video preview file
-                  type: string
-                  format: binary
-                privacy:
-                  $ref: '#/components/schemas/VideoPrivacySet'
-                category:
-                  description: Video category
-                  type: integer
-                  example: 4
-                licence:
-                  description: Video licence
-                  type: integer
-                  example: 2
-                language:
-                  description: Video language
-                  type: string
-                description:
-                  description: Video description
-                  type: string
-                waitTranscoding:
-                  description: Whether or not we wait transcoding before publish the video
-                  type: boolean
-                support:
-                  description: A text tell the audience how to support the video creator
-                  example: Please support my work on <insert crowdfunding plateform>! <3
-                  type: string
-                nsfw:
-                  description: Whether or not this video contains sensitive content
-                  type: boolean
-                name:
-                  description: Video name
-                  type: string
-                tags:
-                  description: Video tags (maximum 5 tags each between 2 and 30 characters)
-                  type: array
-                  minItems: 1
-                  maxItems: 5
-                  uniqueItems: true
-                  items:
-                    type: string
-                    minLength: 2
-                    maxLength: 30
-                commentsEnabled:
-                  description: Enable or disable comments for this video
-                  type: boolean
-                downloadEnabled:
-                  description: Enable or disable downloading for this video
-                  type: boolean
-                originallyPublishedAt:
-                  description: Date when the content was originally published
-                  type: string
-                  format: date-time
-                scheduleUpdate:
-                  $ref: '#/components/schemas/VideoScheduledUpdate'
-              required:
-                - videofile
-                - channelId
-                - name
+              $ref: '#/components/schemas/VideoUploadRequestLegacy'
             encoding:
               videofile:
                 contentType: video/mp4, video/webm, video/ogg, video/avi, video/quicktime, video/x-msvideo, video/x-flv, video/x-matroska, application/octet-stream
@@ -1416,7 +1468,7 @@ paths:
                 contentType: image/jpeg
               previewfile:
                 contentType: image/jpeg
-      x-code-samples:
+      x-codeSamples:
         - lang: Shell
           source: |
             ## DEPENDENCIES: jq
@@ -1445,14 +1497,177 @@ paths:
               --form videofile=@"$FILE_PATH" \
               --form channelId=$CHANNEL_ID \
               --form name="$NAME"
-  /videos/imports:
+  /videos/upload-resumable:
     post:
-      summary: Import a video
-      description: Import a torrent or magnetURI or HTTP resource (if enabled by the instance administrator)
+      summary: Initialize the resumable upload of a video
+      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to initialize the upload of a video
+      operationId: uploadResumableInit
       security:
         - OAuth2: []
       tags:
         - Video
+        - Video Upload
+      parameters:
+        - name: X-Upload-Content-Length
+          in: header
+          schema:
+            type: number
+            example: 2469036
+          required: true
+          description: Number of bytes that will be uploaded in subsequent requests. Set this value to the size of the file you are uploading.
+        - name: X-Upload-Content-Type
+          in: header
+          schema:
+            type: string
+            format: mimetype
+            example: video/mp4
+          required: true
+          description: MIME type of the file that you are uploading. Depending on your instance settings, acceptable values might vary.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoUploadRequestResumable'
+      responses:
+        '200':
+          description: file already exists, send a [`resume`](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) request instead
+        '201':
+          description: created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: url
+                example: /api/v1/videos/upload-resumable?upload_id=471e97554f21dec3b8bb5d4602939c51
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+        '400':
+          description: invalid file field, schedule date or parameter
+        '413':
+          description: video file too large, due to quota, absolute max file size or concurrent partial upload limit
+        '415':
+          description: video type unsupported
+    put:
+      summary: Send chunk for the resumable upload of a video
+      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to continue, pause or resume the upload of a video
+      operationId: uploadResumable
+      security:
+        - OAuth2: []
+      tags:
+        - Video
+        - Video Upload
+      parameters:
+        - name: upload_id
+          in: path
+          required: true
+          description: |
+            Created session id to proceed with. If you didn't send chunks in the last 12 hours, it is
+            not valid anymore and you need to initialize a new upload.
+          schema:
+            type: string
+        - name: Content-Range
+          in: header
+          schema:
+            type: string
+            example: bytes 0-262143/2469036
+          required: true
+          description: |
+            Specifies the bytes in the file that the request is uploading.
+
+            For example, a value of `bytes 0-262143/1000000` shows that the request is sending the first
+            262144 bytes (256 x 1024) in a 2,469,036 byte file.
+        - name: Content-Length
+          in: header
+          schema:
+            type: number
+            example: 262144
+          required: true
+          description: |
+            Size of the chunk that the request is sending.
+
+            The chunk size __must be a multiple of 256 KB__, and unlike [Google Resumable](https://developers.google.com/youtube/v3/guides/using_resumable_upload_protocol)
+            doesn't mandate for chunks to have the same size throughout the upload sequence.
+
+            Remember that larger chunks are more efficient. PeerTube's web client uses chunks varying from
+            1048576 bytes (~1MB) and increases or reduces size depending on connection health.
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: last chunk received
+          headers:
+            Content-Length:
+              schema:
+                type: number
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoUploadResponse'
+        '308':
+          description: resume incomplete
+          headers:
+            Range:
+              schema:
+                type: string
+                example: bytes=0-262143
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+        '403':
+          description: video didn't pass upload filter
+        '413':
+          description: video file too large, due to quota or max body size limit set by the reverse-proxy
+        '422':
+          description: video unreadable
+    delete:
+      summary: Cancel the resumable upload of a video, deleting any data uploaded so far
+      description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the upload of a video
+      operationId: uploadResumableCancel
+      security:
+        - OAuth2: []
+      tags:
+        - Video
+        - Video Upload
+      parameters:
+        - name: upload_id
+          in: path
+          required: true
+          description: |
+            Created session id to proceed with. If you didn't send chunks in the last 12 hours, it is
+            not valid anymore and the upload session has already been deleted with its data ;-)
+          schema:
+            type: string
+        - name: Content-Length
+          in: header
+          required: true
+          schema:
+            type: number
+            example: 0
+      responses:
+        '204':
+          description: upload cancelled
+          headers:
+            Content-Length:
+              schema:
+                type: number
+                example: 0
+  /videos/imports:
+    post:
+      summary: Import a video
+      description: Import a torrent or magnetURI or HTTP resource (if enabled by the instance administrator)
+      operationId: importVideo
+      security:
+        - OAuth2: []
+      tags:
+        - Video
+        - Video Upload
       requestBody:
         content:
           multipart/form-data:
@@ -1464,14 +1679,13 @@ paths:
                   type: string
                   format: binary
                 targetUrl:
-                  description: HTTP target URL
-                  type: string
+                  $ref: '#/components/schemas/VideoImport/properties/targetUrl'
                 magnetUri:
-                  description: Magnet URI
-                  type: string
+                  $ref: '#/components/schemas/VideoImport/properties/magnetUri'
                 channelId:
                   description: Channel id that will contain this video
-                  type: integer
+                  allOf:
+                    - $ref: '#/components/schemas/VideoChannel/properties/id'
                 thumbnailfile:
                   description: Video thumbnail file
                   type: string
@@ -1483,16 +1697,11 @@ paths:
                 privacy:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 category:
-                  description: Video category
-                  type: integer
-                  example: 4
+                  $ref: '#/components/schemas/VideoCategorySet'
                 licence:
-                  description: Video licence
-                  type: integer
-                  example: 2
+                  $ref: '#/components/schemas/VideoLicenceSet'
                 language:
-                  description: Video language
-                  type: string
+                  $ref: '#/components/schemas/VideoLanguageSet'
                 description:
                   description: Video description
                   type: string
@@ -1509,6 +1718,8 @@ paths:
                 name:
                   description: Video name
                   type: string
+                  minLength: 3
+                  maxLength: 120
                 tags:
                   description: Video tags (maximum 5 tags each between 2 and 30 characters)
                   type: array
@@ -1553,6 +1764,7 @@ paths:
   /videos/live:
     post:
       summary: Create a live
+      operationId: createLive
       security:
         - OAuth2: []
       tags:
@@ -1566,7 +1778,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoUploadResponse'
         '403':
-          description: Live is not enabled, allow replay is not enabled, or max instance/user live videos limit is exceeded
+          description: live is not enabled, allow replay is not enabled, or max instance/user live videos limit is exceeded
       requestBody:
         content:
           multipart/form-data:
@@ -1592,14 +1804,11 @@ paths:
                 privacy:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 category:
-                  description: Live video/replay category
-                  type: string
+                  $ref: '#/components/schemas/VideoCategorySet'
                 licence:
-                  description: Live video/replay licence
-                  type: string
+                  $ref: '#/components/schemas/VideoLicenceSet'
                 language:
-                  description: Live video/replay language
-                  type: string
+                  $ref: '#/components/schemas/VideoLanguageSet'
                 description:
                   description: Live video/replay description
                   type: string
@@ -1613,6 +1822,8 @@ paths:
                 name:
                   description: Live video/replay name
                   type: string
+                  minLength: 3
+                  maxLength: 120
                 tags:
                   description: Live video/replay tags (maximum 5 tags each between 2 and 30 characters)
                   type: array
@@ -1639,7 +1850,8 @@ paths:
 
   /videos/live/{id}:
     get:
-      summary: Get a live information
+      summary: Get information about a live
+      operationId: getLiveId
       security:
         - OAuth2: []
       tags:
@@ -1655,7 +1867,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/LiveVideoResponse'
     put:
-      summary: Update a live information
+      summary: Update information about a live
+      operationId: updateLiveId
       security:
         - OAuth2: []
       tags:
@@ -1670,15 +1883,16 @@ paths:
               $ref: '#/components/schemas/LiveVideoUpdate'
       responses:
         '204':
-          description: Successful operation
+          description: successful operation
         '400':
-          description: Bad parameters or trying to update a live that has already started
+          description: bad parameters or trying to update a live that has already started
         '403':
-          description: Trying to save replay of the live but saving replay is not enabled on the instance
+          description: trying to save replay of the live but saving replay is not enabled on the instance
 
   /users/me/abuses:
     get:
       summary: List my abuses
+      operationId: getMyAbuses
       security:
         - OAuth2: []
       tags:
@@ -1694,22 +1908,29 @@ paths:
           in: query
           schema:
             $ref: '#/components/schemas/AbuseStateSet'
+        - $ref: '#/components/parameters/abusesSort'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/abusesSort'
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Abuse'
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Abuse'
 
   /abuses:
     get:
       summary: List abuses
+      operationId: getAbuses
       security:
         - OAuth2:
           - admin
@@ -1782,9 +2003,15 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Abuse'
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Abuse'
 
     post:
       summary: Report an abuse
@@ -1802,16 +2029,17 @@ paths:
                 reason:
                   description: Reason why the user reports this video
                   type: string
-                  minLength: 4
+                  minLength: 2
+                  maxLength: 3000
                 predefinedReasons:
                   $ref: '#/components/schemas/PredefinedAbuseReasons'
-
                 video:
                   type: object
                   properties:
                     id:
                       description: Video id to report
-                      type: number
+                      allOf:
+                        - $ref: '#/components/schemas/Video/properties/id'
                     startAt:
                       type: integer
                       description: Timestamp in the video that marks the beginning of the report
@@ -1825,13 +2053,14 @@ paths:
                   properties:
                     id:
                       description: Comment id to report
-                      type: number
+                      allOf:
+                        - $ref: '#/components/schemas/VideoComment/properties/id'
                 account:
                   type: object
                   properties:
                     id:
                       description: Account id to report
-                      type: number
+                      type: integer
               required:
                 - reason
       responses:
@@ -1861,6 +2090,8 @@ paths:
                 moderationComment:
                   type: string
                   description: Update the report comment visible only to the moderation team
+                  minLength: 2
+                  maxLength: 3000
       responses:
         '204':
           description: successful operation
@@ -1918,6 +2149,8 @@ paths:
                 message:
                   description: Message to send
                   type: string
+                  minLength: 2
+                  maxLength: 3000
               required:
                 - message
       responses:
@@ -2095,15 +2328,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  total:
-                    type: integer
-                    example: 1
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/VideoChannel'
+                $ref: '#/components/schemas/VideoChannelList'
     post:
       summary: Create a video channel
       security:
@@ -2168,6 +2393,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/channelHandle'
         - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/tagsOneOf'
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
@@ -2185,10 +2411,117 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
+  '/video-channels/{channelHandle}/avatar/pick':
+    post:
+      summary: Update channel avatar
+      security:
+        - OAuth2: []
+      tags:
+        - Video Channels
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  avatar:
+                    $ref: '#/components/schemas/ActorImage'
+        '413':
+          description: image file too large
+          headers:
+            X-File-Maximum-Size:
+              schema:
+                type: string
+                format: Nginx size
+              description: Maximum file size for the avatar
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatarfile:
+                  description: The file to upload.
+                  type: string
+                  format: binary
+            encoding:
+              avatarfile:
+                contentType: image/png, image/jpeg
+  '/video-channels/{channelHandle}/avatar':
+    delete:
+      summary: Delete channel avatar
+      security:
+        - OAuth2: []
+      tags:
+        - Video Channels
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      responses:
+        '204':
+          description: successful operation
+
+
+  '/video-channels/{channelHandle}/banner/pick':
+    post:
+      summary: Update channel banner
+      security:
+        - OAuth2: []
+      tags:
+        - Video Channels
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  banner:
+                    $ref: '#/components/schemas/ActorImage'
+        '413':
+          description: image file too large
+          headers:
+            X-File-Maximum-Size:
+              schema:
+                type: string
+                format: Nginx size
+              description: Maximum file size for the banner
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                bannerfile:
+                  description: The file to upload.
+                  type: string
+                  format: binary
+            encoding:
+              bannerfile:
+                contentType: image/png, image/jpeg
+  '/video-channels/{channelHandle}/banner':
+    delete:
+      summary: Delete channel banner
+      security:
+        - OAuth2: []
+      tags:
+        - Video Channels
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      responses:
+        '204':
+          description: successful operation
 
   /video-playlists/privacies:
     get:
-      summary: List available playlist privacies
+      summary: List available playlist privacy policies
+      operationId: getPlaylistPrivacyPolicies
       tags:
         - Video Playlists
       responses:
@@ -2207,6 +2540,7 @@ paths:
   /video-playlists:
     get:
       summary: List video playlists
+      operationId: getPlaylists
       tags:
         - Video Playlists
       parameters:
@@ -2230,7 +2564,8 @@ paths:
                       $ref: '#/components/schemas/VideoPlaylist'
     post:
       summary: Create a video playlist
-      description: 'If the video playlist is set as public, the videoChannelId is mandatory.'
+      description: If the video playlist is set as public, `videoChannelId` is mandatory.
+      operationId: createPlaylist
       security:
         - OAuth2: []
       tags:
@@ -2247,9 +2582,9 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: integer
+                        $ref: '#/components/schemas/VideoPlaylist/properties/id'
                       uuid:
-                        type: string
+                        $ref: '#/components/schemas/VideoPlaylist/properties/uuid'
       requestBody:
         content:
           multipart/form-data:
@@ -2259,6 +2594,8 @@ paths:
                 displayName:
                   description: Video playlist display name
                   type: string
+                  minLength: 1
+                  maxLength: 120
                 thumbnailfile:
                   description: Video playlist thumbnail file
                   type: string
@@ -2268,9 +2605,12 @@ paths:
                 description:
                   description: Video playlist description
                   type: string
+                  minLength: 3
+                  maxLength: 1000
                 videoChannelId:
+                  allOf:
+                    - $ref: '#/components/schemas/id'
                   description: Video channel in which the playlist will be published
-                  type: integer
               required:
                 - displayName
             encoding:
@@ -2312,6 +2652,8 @@ paths:
                 displayName:
                   description: Video playlist display name
                   type: string
+                  minLength: 1
+                  maxLength: 120
                 thumbnailfile:
                   description: Video playlist thumbnail file
                   type: string
@@ -2322,8 +2664,9 @@ paths:
                   description: Video playlist description
                   type: string
                 videoChannelId:
+                  allOf:
+                    - $ref: '#/components/schemas/id'
                   description: Video channel in which the playlist will be published
-                  type: integer
             encoding:
               thumbnailfile:
                 contentType: image/jpeg
@@ -2383,14 +2726,15 @@ paths:
               type: object
               properties:
                 videoId:
-                  type: integer
-                  description: 'Video to add in the playlist'
+                  allOf:
+                    - $ref: '#/components/schemas/Video/properties/id'
+                  description: Video to add in the playlist
                 startTimestamp:
                   type: integer
-                  description: 'Start the video at this specific timestamp (in seconds)'
+                  description: Start the video at this specific timestamp (in seconds)
                 stopTimestamp:
                   type: integer
-                  description: 'Stop the video at this specific timestamp (in seconds)'
+                  description: Stop the video at this specific timestamp (in seconds)
               required:
                 - videoId
 
@@ -2481,7 +2825,7 @@ paths:
           schema:
             type: array
             items:
-              type: integer
+              $ref: '#/components/schemas/Video/properties/id'
       responses:
         '200':
           description: successful operation
@@ -2526,14 +2870,7 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  total:
-                    type: integer
-                    example: 1
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/VideoChannel'
+                $ref: '#/components/schemas/VideoChannelList'
   '/accounts/{name}/ratings':
     get:
       summary: List ratings of an account
@@ -2651,8 +2988,7 @@ paths:
               type: object
               properties:
                 text:
-                  type: string
-                  description: 'Text comment'
+                  $ref: '#/components/schemas/VideoComment/properties/text'
               required:
                 - text
 
@@ -2705,6 +3041,7 @@ paths:
           schema:
             type: string
         - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/tagsOneOf'
         - $ref: '#/components/parameters/tagsAllOf'
         - $ref: '#/components/parameters/licenceOneOf'
@@ -2790,9 +3127,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/VideoChannel'
+                $ref: '#/components/schemas/VideoChannelList'
         '500':
           description: search index unavailable
   /blocklist/accounts:
@@ -2990,7 +3325,7 @@ paths:
               type: object
               properties:
                 videoId:
-                  type: integer
+                  $ref: '#/components/schemas/Video/properties/id'
               required:
                 - videoId
       responses:
@@ -3027,13 +3362,6 @@ paths:
       tags:
         - Feeds
       summary: List comments on videos
-      servers:
-        - url: 'https://peertube2.cpy.re'
-          description: Live Test Server (live data - latest nightly version)
-        - url: 'https://peertube3.cpy.re'
-          description: Live Test Server (live data - latest RC version)
-        - url: 'https://peertube.cpy.re'
-          description: Live Test Server (live data - stable version)
       parameters:
         - name: format
           in: path
@@ -3086,18 +3414,33 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/VideoCommentsForXML'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/video-comments.xml?filter=local
             application/rss+xml:
               schema:
                 $ref: '#/components/schemas/VideoCommentsForXML'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/video-comments.rss?filter=local
             text/xml:
               schema:
                 $ref: '#/components/schemas/VideoCommentsForXML'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/video-comments.xml?filter=local
             application/atom+xml:
               schema:
                 $ref: '#/components/schemas/VideoCommentsForXML'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/video-comments.atom?filter=local
             application/json:
               schema:
                 type: object
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/video-comments.json?filter=local
         '400':
           x-summary: field inconsistencies
           description: >
@@ -3112,13 +3455,6 @@ paths:
       tags:
         - Feeds
       summary: List videos
-      servers:
-        - url: 'https://peertube2.cpy.re'
-          description: Live Test Server (live data - latest nightly version)
-        - url: 'https://peertube3.cpy.re'
-          description: Live Test Server (live data - latest RC version)
-        - url: 'https://peertube.cpy.re'
-          description: Live Test Server (live data - stable version)
       parameters:
         - name: format
           in: path
@@ -3175,6 +3511,82 @@ paths:
             application/rss+xml:
               schema:
                 $ref: '#/components/schemas/VideosForXML'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/videos.rss?filter=local
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/VideosForXML'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/videos.xml?filter=local
+            application/atom+xml:
+              schema:
+                $ref: '#/components/schemas/VideosForXML'
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/videos.atom?filter=local
+            application/json:
+              schema:
+                type: object
+              examples:
+                nightly:
+                  externalValue: https://peertube2.cpy.re/feeds/videos.json?filter=local
+        '404':
+          description: video channel or account not found
+        '406':
+          description: accept header unsupported
+  '/feeds/subscriptions.{format}':
+    get:
+      tags:
+        - Feeds
+        - Account
+      summary: List videos of subscriptions tied to a token
+      parameters:
+        - name: format
+          in: path
+          required: true
+          description: 'format expected (we focus on making `rss` the most featureful ; it serves [Media RSS](https://www.rssboard.org/media-rss))'
+          schema:
+            type: string
+            enum:
+              - xml
+              - rss
+              - rss2
+              - atom
+              - atom1
+              - json
+              - json1
+        - name: accountId
+          in: query
+          description: limit listing to a specific account
+          schema:
+            type: string
+          required: true
+        - name: token
+          in: query
+          description: private token allowing access
+          schema:
+            type: string
+          required: true
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/filter'
+      responses:
+        '204':
+          description: successful operation
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                default: 'max-age=900' # 15 min cache
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/VideosForXML'
+            application/rss+xml:
+              schema:
+                $ref: '#/components/schemas/VideosForXML'
             text/xml:
               schema:
                 $ref: '#/components/schemas/VideosForXML'
@@ -3184,8 +3596,6 @@ paths:
             application/json:
               schema:
                 type: object
-        '404':
-          description: video channel or account not found
         '406':
           description: accept header unsupported
   /plugins:
@@ -3599,9 +4009,7 @@ components:
       required: true
       description: The user id
       schema:
-        type: integer
-        minimum: 0
-        example: 42
+        $ref: '#/components/schemas/id'
     idOrUUID:
       name: id
       in: path
@@ -3609,40 +4017,36 @@ components:
       description: The object id or uuid
       schema:
         oneOf:
-          - type: integer
-            minimum: 0
-            example: 42
-          - type: string
-            format: uuid
-            example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          - $ref: '#/components/schemas/id'
+          - $ref: '#/components/schemas/UUIDv4'
     playlistElementId:
       name: playlistElementId
       in: path
       required: true
       description: Playlist element id
       schema:
-        type: integer
+        $ref: '#/components/schemas/id'
     abuseId:
       name: abuseId
       in: path
       required: true
       description: Abuse id
       schema:
-        type: integer
+        $ref: '#/components/schemas/Abuse/properties/id'
     abuseMessageId:
       name: abuseMessageId
       in: path
       required: true
       description: Abuse message id
       schema:
-        type: integer
+        $ref: '#/components/schemas/AbuseMessage/properties/id'
     captionLanguage:
       name: captionLanguage
       in: path
       required: true
       description: The caption language
       schema:
-        type: string
+        $ref: '#/components/schemas/VideoLanguageSet'
     channelHandle:
       name: channelHandle
       in: path
@@ -3665,25 +4069,32 @@ components:
       required: true
       description: The thread id (root comment id)
       schema:
-        type: integer
+        $ref: '#/components/schemas/VideoCommentThreadTree/properties/comment/properties/id'
     commentId:
       name: commentId
       in: path
       required: true
       description: The comment id
       schema:
-        type: integer
+        $ref: '#/components/schemas/VideoComment/properties/id'
+    isLive:
+      name: isLive
+      in: query
+      required: false
+      description: whether or not the video is a live
+      schema:
+        type: boolean
     categoryOneOf:
       name: categoryOneOf
       in: query
       required: false
-      description: category id of the video (see [/videos/categories](#tag/Video/paths/~1videos~1categories/get))
+      description: category id of the video (see [/videos/categories](#operation/getCategories))
       schema:
         oneOf:
-        - type: integer
+        - $ref: '#/components/schemas/VideoCategorySet'
         - type: array
           items:
-            type: integer
+            $ref: '#/components/schemas/VideoCategorySet'
       style: form
       explode: false
     tagsOneOf:
@@ -3695,6 +4106,7 @@ components:
         oneOf:
         - type: string
         - type: array
+          maxItems: 5
           items:
             type: string
       style: form
@@ -3716,26 +4128,26 @@ components:
       name: languageOneOf
       in: query
       required: false
-      description: language id of the video (see [/videos/languages](#tag/Video/paths/~1videos~1languages/get)). Use `_unknown` to filter on videos that don't have a video language
+      description: language id of the video (see [/videos/languages](#operation/getLanguages)). Use `_unknown` to filter on videos that don't have a video language
       schema:
         oneOf:
-        - type: string
+        - $ref: '#/components/schemas/VideoLanguageSet'
         - type: array
           items:
-            type: string
+            $ref: '#/components/schemas/VideoLanguageSet'
       style: form
       explode: false
     licenceOneOf:
       name: licenceOneOf
       in: query
       required: false
-      description: licence id of the video (see [/videos/licences](#tag/Video/paths/~1videos~1licences/get))
+      description: licence id of the video (see [/videos/licences](#operation/getLicences))
       schema:
         oneOf:
-        - type: integer
+        - $ref: '#/components/schemas/VideoLicenceSet'
         - type: array
           items:
-            type: integer
+            $ref: '#/components/schemas/VideoLicenceSet'
       style: form
       explode: false
     skipCount:
@@ -3813,19 +4225,16 @@ components:
           - video-live-ending
   securitySchemes:
     OAuth2:
-      description: >
-        In the header: *Authorization: Bearer <token\>*
-
-
+      description: |
         Authenticating via OAuth requires the following steps:
-
-
-        - Have an account with sufficient authorization levels
-
+        - Have an activated account
         - [Generate](https://docs.joinpeertube.org/api-rest-getting-started) a
-        Bearer Token
+        Bearer Token for that account at `/api/v1/users/token`
+        - Make authenticated requests, putting *Authorization: Bearer <token\>*
+        - Profit, depending on the role assigned to the account
 
-        - Make Authenticated Requests
+        Note that the __access token is valid for 1 day__ and, and is given
+        along with a __refresh token valid for 2 weeks__.
       type: oauth2
       flows:
         password:
@@ -3835,18 +4244,72 @@ components:
             moderator: Moderator scope
             user: User scope
   schemas:
-    VideoConstantNumber:
+    # Resuable core properties
+    id:
+      type: integer
+      minimum: 1
+      example: 42
+    UUIDv4:
+      type: string
+      format: uuid
+      example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+      pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+      minLength: 36
+      maxLength: 36
+    username:
+      type: string
+      description: The username of the user
+      example: chocobozzz
+      pattern: '/^[a-z0-9._]{1,50}$/'
+      minLength: 1
+      maxLength: 50
+    usernameChannel:
+      type: string
+      description: The username for the default channel
+      example: The Capybara Channel
+      pattern: '/^[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_.:]+$/'
+    password:
+      type: string
+      format: password
+      description: The password of the user
+      minLength: 6
+      maxLength: 255
+
+    VideoCategorySet:
+      type: integer
+      description: category id of the video (see [/videos/categories](#operation/getCategories))
+      example: 15
+    VideoConstantNumber-Category:
       properties:
         id:
-          type: integer
+          $ref: '#/components/schemas/VideoCategorySet'
         label:
           type: string
-    VideoConstantString:
+          example: Science & Technology
+
+    VideoLicenceSet:
+      type: integer
+      description: licence id of the video (see [/videos/licences](#operation/getLicences))
+      example: 2
+    VideoConstantNumber-Licence:
       properties:
         id:
-          type: string
+          $ref: '#/components/schemas/VideoLicenceSet'
         label:
           type: string
+          example: Attribution - Share Alike
+
+    VideoLanguageSet:
+      type: string
+      description: language id of the video (see [/videos/languages](#operation/getLanguages))
+      example: en
+    VideoConstantString-Language:
+      properties:
+        id:
+          $ref: '#/components/schemas/VideoLanguageSet'
+        label:
+          type: string
+          example: English
 
     VideoPlaylistPrivacySet:
       type: integer
@@ -3854,7 +4317,7 @@ components:
         - 1
         - 2
         - 3
-      description: 'The video playlist privacy (Public = `1`, Unlisted = `2`, Private = `3`)'
+      description: Video playlist privacy policy (see [/video-playlists/privacies])
     VideoPlaylistPrivacyConstant:
       properties:
         id:
@@ -3867,7 +4330,7 @@ components:
       enum:
         - 1
         - 2
-      description: 'The video playlist type (Regular = `1`, Watch Later = `2`)'
+      description: The video playlist type (Regular = `1`, Watch Later = `2`)
     VideoPlaylistTypeConstant:
       properties:
         id:
@@ -3882,7 +4345,7 @@ components:
         - 2
         - 3
         - 4
-      description: 'The video privacy (Public = `1`, Unlisted = `2`, Private = `3`, Internal = `4`)'
+      description: privacy id of the video (see [/videos/privacies](#operation/getPrivacyPolicies))
     VideoPrivacyConstant:
       properties:
         id:
@@ -3953,12 +4416,18 @@ components:
         - captions
       example: [spamOrMisleading]
 
+    VideoResolutionSet:
+      type: integer
+      description: |
+        Video resolution (`0`, `240`, `360`, `720`, `1080`, `1440` or `2160`)
+
+        `0` is used as a special value for stillimage videos dedicated to audio, a.k.a. audio-only videos.
+      example: 240
     VideoResolutionConstant:
+      description: resolutions and their labels for the video
       properties:
         id:
-          type: integer
-          description: 'Video resolution (240, 360, 720, 1080, 1440 or 2160)'
-          example: 240
+          $ref: '#/components/schemas/VideoResolutionSet'
         label:
           type: string
           example: 240p
@@ -3989,11 +4458,11 @@ components:
         avatar:
           nullable: true
           allOf:
-            - $ref: '#/components/schemas/Avatar'
+            - $ref: '#/components/schemas/ActorImage'
     VideoChannelSummary:
       properties:
         id:
-          type: integer
+          $ref: '#/components/schemas/id'
         name:
           type: string
         displayName:
@@ -4007,7 +4476,7 @@ components:
         avatar:
           nullable: true
           allOf:
-            - $ref: '#/components/schemas/Avatar'
+            - $ref: '#/components/schemas/ActorImage'
     PlaylistElement:
       properties:
         position:
@@ -4021,40 +4490,58 @@ components:
           allOf:
             - $ref: '#/components/schemas/Video'
     VideoFile:
+      readOnly: true
       properties:
         magnetUri:
           type: string
+          format: uri
+          description: magnet URI allowing to resolve the video via BitTorrent without a metainfo file
+          example: magnet:?xs=https%3A%2F%2Fframatube.org%2Fstatic%2Ftorrents%2F9c9de5e8-0a1e-484a-b099-e80766180a6d-240.torrent&xt=urn:btih:38b4747ff788b30bf61f59d1965cd38f9e48e01f&dn=What+is+PeerTube%3F&tr=wss%3A%2F%2Fframatube.org%2Ftracker%2Fsocket&tr=https%3A%2F%2Fframatube.org%2Ftracker%2Fannounce&ws=https%3A%2F%2Fframatube.org%2Fstatic%2Fwebseed%2F9c9de5e8-0a1e-484a-b099-e80766180a6d-240.mp4
+          pattern: /magnet:\?xt=urn:[a-z0-9]+:[a-z0-9]{32}/i
         resolution:
           $ref: '#/components/schemas/VideoResolutionConstant'
         size:
           type: integer
-          description: 'Video file size in bytes'
+          description: Video file size in bytes
         torrentUrl:
           type: string
+          description: Direct URL of the torrent file
           format: url
         torrentDownloadUrl:
           type: string
+          description: URL endpoint that transfers the torrent file as an attachment (so that the browser opens a download dialog)
           format: url
         fileUrl:
           type: string
+          description: Direct URL of the video
           format: url
         fileDownloadUrl:
           type: string
+          description: URL endpoint that transfers the video file as an attachment (so that the browser opens a download dialog)
           format: url
         fps:
           type: number
+          description: Frames per second of the video file
         metadataUrl:
           type: string
           format: url
+          description: URL dereferencing the output of ffprobe on the file
     VideoStreamingPlaylists:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/id'
+            type:
+              type: integer
+              enum:
+                - 1
+              description: |
+                Playlist type:
+                - `1`: HLS
+        - $ref: '#/components/schemas/VideoStreamingPlaylists-HLS'
+    VideoStreamingPlaylists-HLS:
       properties:
-        id:
-          type: integer
-        type:
-          type: integer
-          enum:
-            - 1
-          description: 'Playlist type (HLS = `1`)'
         playlistUrl:
           type: string
           format: url
@@ -4063,7 +4550,10 @@ components:
           format: url
         files:
           type: array
-          description: 'Video files associated to this playlist. The difference with the root "files" property is that these files are fragmented, so they can be used in this streaming playlist (HLS etc)'
+          description: |
+            Video files associated to this playlist.
+
+            The difference with the root `files` property is that these files are fragmented, so they can be used in this streaming playlist (HLS, etc.)
           items:
             $ref: '#/components/schemas/VideoFile'
         redundancies:
@@ -4077,54 +4567,81 @@ components:
     VideoInfo:
       properties:
         id:
-          type: integer
+          $ref: '#/components/schemas/Video/properties/id'
         uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/Video/properties/uuid'
         name:
-          type: string
+          $ref: '#/components/schemas/Video/properties/name'
     Video:
       properties:
         id:
-          type: integer
-          example: 8
+          description: object id for the video
+          allOf:
+            - $ref: '#/components/schemas/id'
         uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          description: universal identifier for the video, that can be used across instances
+          allOf:
+            - $ref: '#/components/schemas/UUIDv4'
         isLive:
           type: boolean
         createdAt:
           type: string
           format: date-time
+          example: 2017-10-01T10:52:46.396Z
+          description: time at which the video object was first drafted
         publishedAt:
           type: string
           format: date-time
+          example: 2018-10-01T10:52:46.396Z
+          description: time at which the video was marked as ready for playback (with restrictions depending on `privacy`). Usually set after a `state` evolution.
         updatedAt:
           type: string
           format: date-time
+          example: 2021-05-04T08:01:01.502Z
+          description: last time the video's metadata was modified
         originallyPublishedAt:
           type: string
           format: date-time
+          example: 2010-10-01T10:52:46.396Z
+          description: used to represent a date of first publication, prior to the practical publication date of `publishedAt`
         category:
-          $ref: '#/components/schemas/VideoConstantNumber'
+          allOf:
+            - $ref: '#/components/schemas/VideoConstantNumber-Category'
+          description: category in which the video is classified
         licence:
-          $ref: '#/components/schemas/VideoConstantNumber'
+          allOf:
+            - $ref: '#/components/schemas/VideoConstantNumber-Licence'
+          description: licence under which the video is distributed
         language:
-          $ref: '#/components/schemas/VideoConstantString'
+          allOf:
+            - $ref: '#/components/schemas/VideoConstantString-Language'
+          description: main language used in the video
         privacy:
-          $ref: '#/components/schemas/VideoPrivacyConstant'
+          allOf:
+            - $ref: '#/components/schemas/VideoPrivacyConstant'
+          description: privacy policy used to distribute the video
         description:
           type: string
+          example: |
+            **[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n
+            **Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**\r\n*A decentralized video hosting network, based on fr...
+          minLength: 3
+          maxLength: 250
+          description: |
+            truncated description of the video, written in Markdown.
+            Resolve `descriptionPath` to get the full description of maximum `10000` characters.
         duration:
           type: integer
           example: 1419
+          description: duration of the video in seconds
         isLocal:
           type: boolean
         name:
           type: string
+          description: title of the video
           example: What is PeerTube?
+          minLength: 3
+          maxLength: 120
         thumbnailPath:
           type: string
           example: /static/thumbnails/a65bc12f-9383-462e-81ae-8207e8b434ee.jpg
@@ -4149,7 +4666,9 @@ components:
           type: boolean
           nullable: true
         state:
-          $ref: '#/components/schemas/VideoStateConstant'
+          allOf:
+            - $ref: '#/components/schemas/VideoStateConstant'
+          description: represents the internal state of the video processing within the PeerTube instance
         scheduledUpdate:
           nullable: true
           allOf:
@@ -4177,24 +4696,27 @@ components:
           properties:
             descriptionPath:
               type: string
+              example: /api/v1/videos/9c9de5e8-0a1e-484a-b099-e80766180a6d/description
+              description: path at which to get the full description of maximum `10000` characters
             support:
               type: string
               description: A text tell the audience how to support the video creator
               example: Please support my work on <insert crowdfunding plateform>! <3
+              minLength: 3
+              maxLength: 1000
             channel:
               $ref: '#/components/schemas/VideoChannel'
             account:
               $ref: '#/components/schemas/Account'
             tags:
+              example: [flowers, gardening]
               type: array
+              minItems: 1
+              maxItems: 5
               items:
                 type: string
-              example: [flowers, gardening]
-            files:
-              type: array
-              description: 'WebTorrent/raw video files. Can be empty if WebTorrent is disabled on the server. In this case, video files will be in the "streamingPlaylists[].files" property'
-              items:
-                $ref: '#/components/schemas/VideoFile'
+                minLength: 2
+                maxLength: 30
             commentsEnabled:
               type: boolean
             downloadEnabled:
@@ -4204,14 +4726,31 @@ components:
               items:
                 type: string
                 format: url
+              example:
+                - https://peertube2.cpy.re/tracker/announce
+                - wss://peertube2.cpy.re/tracker/socket
+            files:
+              type: array
+              items:
+                $ref: '#/components/schemas/VideoFile'
+              description: |
+                WebTorrent/raw video files. If WebTorrent is disabled on the server:
+
+                - field will be empty
+                - video files will be found in `streamingPlaylists[].files` field
             streamingPlaylists:
               type: array
               items:
                 $ref: '#/components/schemas/VideoStreamingPlaylists'
+              description: |
+                HLS playlists/manifest files. If HLS is disabled on the server:
+
+                - field will be empty
+                - video files will be found in `files` field
     FileRedundancyInformation:
       properties:
         id:
-          type: integer
+          $ref: '#/components/schemas/id'
         fileUrl:
           type: string
           format: url
@@ -4236,16 +4775,14 @@ components:
     VideoRedundancy:
       properties:
         id:
-          type: integer
+          $ref: '#/components/schemas/id'
         name:
           type: string
         url:
           type: string
           format: url
         uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/UUIDv4'
         redundancies:
           type: object
           properties:
@@ -4272,16 +4809,18 @@ components:
     VideoImport:
       properties:
         id:
-          type: integer
-          example: 2
+          $ref: '#/components/schemas/id'
         targetUrl:
           type: string
           format: url
+          description: remote URL where to find the import's source video
           example: https://framatube.org/videos/watch/9c9de5e8-0a1e-484a-b099-e80766180a6d
         magnetUri:
           type: string
           format: uri
+          description: magnet URI allowing to resolve the import's source video
           example: magnet:?xs=https%3A%2F%2Fframatube.org%2Fstatic%2Ftorrents%2F9c9de5e8-0a1e-484a-b099-e80766180a6d-240.torrent&xt=urn:btih:38b4747ff788b30bf61f59d1965cd38f9e48e01f&dn=What+is+PeerTube%3F&tr=wss%3A%2F%2Fframatube.org%2Ftracker%2Fsocket&tr=https%3A%2F%2Fframatube.org%2Ftracker%2Fannounce&ws=https%3A%2F%2Fframatube.org%2Fstatic%2Fwebseed%2F9c9de5e8-0a1e-484a-b099-e80766180a6d-240.mp4
+          pattern: /magnet:\?xt=urn:[a-z0-9]+:[a-z0-9]{32}/i
         torrentName:
           type: string
         state:
@@ -4295,15 +4834,28 @@ components:
           type: string
           format: date-time
         video:
-          $ref: '#/components/schemas/Video'
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Video'
+    VideoImportsList:
+      properties:
+        total:
+          type: integer
+          example: 1
+        data:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/VideoImport'
     Abuse:
       properties:
         id:
-          type: integer
-          example: 7
+          $ref: '#/components/schemas/id'
         reason:
           type: string
           example: The video is a spam
+          minLength: 2
+          maxLength: 3000
         predefinedReasons:
           $ref: '#/components/schemas/AbusePredefinedReasons'
         reporterAccount:
@@ -4313,26 +4865,21 @@ components:
         moderationComment:
           type: string
           example: Decided to ban the server since it spams us regularly
+          minLength: 2
+          maxLength: 3000
         video:
-          type: object
-          properties:
-            id:
-              type: integer
-            name:
-              type: string
-            uuid:
-              type: string
-              format: uuid
-              example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/VideoInfo'
         createdAt:
           type: string
           format: date-time
     AbuseMessage:
       properties:
         id:
-          type: integer
+          $ref: '#/components/schemas/id'
         message:
           type: string
+          minLength: 2
+          maxLength: 3000
         byModerator:
           type: boolean
         createdAt:
@@ -4343,9 +4890,9 @@ components:
     VideoBlacklist:
       properties:
         id:
-          type: integer
+          $ref: '#/components/schemas/id'
         videoId:
-          type: integer
+          $ref: '#/components/schemas/Video/properties/id'
         createdAt:
           type: string
           format: date-time
@@ -4354,12 +4901,14 @@ components:
           format: date-time
         name:
           type: string
+          minLength: 3
+          maxLength: 120
         uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          $ref: '#/components/schemas/UUIDv4'
         description:
           type: string
+          minLength: 3
+          maxLength: 10000
         duration:
           type: integer
         views:
@@ -4370,27 +4919,12 @@ components:
           type: integer
         nsfw:
           type: boolean
-    VideoChannel:
-      properties:
-        displayName:
-          type: string
-        description:
-          type: string
-        isLocal:
-          type: boolean
-        ownerAccount:
-          type: object
-          properties:
-            id:
-              type: integer
-            uuid:
-              type: string
-              format: uuid
-              example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
     VideoPlaylist:
       properties:
         id:
-          type: integer
+          $ref: '#/components/schemas/id'
+        uuid:
+          $ref: '#/components/schemas/UUIDv4'
         createdAt:
           type: string
           format: date-time
@@ -4399,16 +4933,17 @@ components:
           format: date-time
         description:
           type: string
-        uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+          minLength: 3
+          maxLength: 1000
         displayName:
           type: string
+          minLength: 1
+          maxLength: 120
         isLocal:
           type: boolean
         videoLength:
           type: integer
+          minimum: 0
         thumbnailPath:
           type: string
         privacy:
@@ -4422,18 +4957,21 @@ components:
     VideoComment:
       properties:
         id:
-          type: integer
+          $ref: '#/components/schemas/id'
         url:
           type: string
           format: url
         text:
           type: string
+          description: Text of the comment in Markdown
+          minLength: 1
+          maxLength: 10000
         threadId:
           type: integer
         inReplyToCommentId:
-          type: integer
+          $ref: '#/components/schemas/id'
         videoId:
-          type: integer
+          $ref: '#/components/schemas/Video/properties/id'
         createdAt:
           type: string
           format: date-time
@@ -4442,8 +4980,10 @@ components:
           format: date-time
         totalRepliesFromVideoAuthor:
           type: integer
+          minimum: 0
         totalReplies:
           type: integer
+          minimum: 0
         account:
           $ref: '#/components/schemas/Account'
     VideoCommentThreadTree:
@@ -4457,10 +4997,10 @@ components:
     VideoCaption:
       properties:
         language:
-          $ref: '#/components/schemas/VideoConstantString'
+          $ref: '#/components/schemas/VideoConstantString-Language'
         captionPath:
           type: string
-    Avatar:
+    ActorImage:
       properties:
         path:
           type: string
@@ -4473,8 +5013,7 @@ components:
     ActorInfo:
       properties:
         id:
-          type: integer
-          example: 11
+          $ref: '#/components/schemas/id'
         name:
           type: string
         displayName:
@@ -4491,20 +5030,29 @@ components:
     Actor:
       properties:
         id:
-          type: integer
-          example: 11
+          $ref: '#/components/schemas/id'
         url:
           type: string
           format: url
         name:
-          type: string
+          description: immutable name of the actor
+          allOf:
+            - $ref: '#/components/schemas/username'
         host:
           type: string
           format: hostname
+          description: server on which the actor is resident
+        hostRedundancyAllowed:
+          type: boolean
+          description: whether this actor's host allows redundancy of its videos
         followingCount:
           type: integer
+          minimum: 0
+          description: number of actors subscribed to by this actor, as seen by this instance
         followersCount:
           type: integer
+          minimum: 0
+          description: number of followers of this actor, as seen by this instance
         createdAt:
           type: string
           format: date-time
@@ -4512,18 +5060,21 @@ components:
           type: string
           format: date-time
         avatar:
-          $ref: '#/components/schemas/Avatar'
+          $ref: '#/components/schemas/ActorImage'
     Account:
       allOf:
         - $ref: '#/components/schemas/Actor'
         - properties:
             userId:
-              type: string
-              example: 2
+              description: object id for the user tied to this account
+              allOf:
+                - $ref: '#/components/schemas/User/properties/id'
             displayName:
               type: string
+              description: name displayed on the account's profile
             description:
               type: string
+              description: text or bio displayed on the account's profile
     UserWatchingVideo:
       properties:
         currentTime:
@@ -4615,7 +5166,7 @@ components:
             enabledResolutions:
               type: array
               items:
-                type: integer
+                $ref: '#/components/schemas/VideoResolutionSet'
         import:
           type: object
           properties:
@@ -4700,8 +5251,10 @@ components:
           properties:
             videoQuota:
               type: integer
+              example: 16810141515
             videoQuotaDaily:
               type: integer
+              example: 1681014151
         trending:
           type: object
           properties:
@@ -4816,25 +5369,44 @@ components:
               type: boolean
         user:
           type: object
+          description: Settings that apply to new users, if registration is enabled
           properties:
             videoQuota:
               type: integer
+              example: 16810141515
             videoQuotaDaily:
               type: integer
+              example: 1681014151
         transcoding:
           type: object
+          description: Settings pertaining to transcoding jobs
           properties:
             enabled:
               type: boolean
             allowAdditionalExtensions:
               type: boolean
+              description: Allow your users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos
             allowAudioFiles:
               type: boolean
+              description: If a user uploads an audio file, PeerTube will create a video by merging the preview file and the audio file
             threads:
               type: integer
+              description: Amount of threads used by ffmpeg for 1 transcoding job
+            concurrency:
+              type: number
+              description: Amount of transcoding jobs to execute in parallel
+            profile:
+              type: string
+              enum:
+                - default
+              description: |
+                New profiles can be added by plugins ; available in core PeerTube: 'default'.
             resolutions:
               type: object
+              description: Resolutions to transcode _new videos_ to
               properties:
+                0p:
+                  type: boolean
                 240p:
                   type: boolean
                 360p:
@@ -4849,8 +5421,15 @@ components:
                   type: boolean
                 2160p:
                   type: boolean
+            webtorrent:
+              type: object
+              description: WebTorrent-specific settings
+              properties:
+                enabled:
+                  type: boolean
             hls:
               type: object
+              description: HLS-specific settings
               properties:
                 enabled:
                   type: boolean
@@ -4894,7 +5473,7 @@ components:
     Follow:
       properties:
         id:
-          type: integer
+          $ref: '#/components/schemas/id'
         follower:
           $ref: '#/components/schemas/Actor'
         following:
@@ -4917,6 +5496,7 @@ components:
     PredefinedAbuseReasons:
       description: Reason categories that help triage reports
       type: array
+      maxItems: 8
       items:
         type: string
         enum:
@@ -4932,9 +5512,7 @@ components:
     Job:
       properties:
         id:
-          type: integer
-          minimum: 0
-          example: 42
+          $ref: '#/components/schemas/id'
         state:
           type: string
           enum:
@@ -4978,26 +5556,124 @@ components:
           type: object
           properties:
             id:
-              type: integer
-              example: 8
+              $ref: '#/components/schemas/id'
             account:
               type: object
               properties:
                 id:
-                  type: integer
-                  example: 37
+                  $ref: '#/components/schemas/id'
+    VideoUploadRequestCommon:
+      properties:
+        name:
+          description: Video name
+          type: string
+          example: What is PeerTube?
+          minLength: 3
+          maxLength: 120
+        channelId:
+          description: Channel id that will contain this video
+          type: integer
+          example: 3
+          minimum: 1
+        privacy:
+          $ref: '#/components/schemas/VideoPrivacySet'
+        category:
+          $ref: '#/components/schemas/VideoCategorySet'
+        licence:
+          $ref: '#/components/schemas/VideoLicenceSet'
+        language:
+          $ref: '#/components/schemas/VideoLanguageSet'
+        description:
+          description: Video description
+          type: string
+          example: |
+            **[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n**Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**
+        waitTranscoding:
+          description: Whether or not we wait transcoding before publish the video
+          type: boolean
+        support:
+          description: A text tell the audience how to support the video creator
+          example: Please support my work on <insert crowdfunding plateform>! <3
+          type: string
+        nsfw:
+          description: Whether or not this video contains sensitive content
+          type: boolean
+        tags:
+          description: Video tags (maximum 5 tags each between 2 and 30 characters)
+          type: array
+          minItems: 1
+          maxItems: 5
+          uniqueItems: true
+          example:
+            - framasoft
+            - peertube
+          items:
+            type: string
+            minLength: 2
+            maxLength: 30
+        commentsEnabled:
+          description: Enable or disable comments for this video
+          type: boolean
+        downloadEnabled:
+          description: Enable or disable downloading for this video
+          type: boolean
+        originallyPublishedAt:
+          description: Date when the content was originally published
+          type: string
+          format: date-time
+        scheduleUpdate:
+          $ref: '#/components/schemas/VideoScheduledUpdate'
+        thumbnailfile:
+          description: Video thumbnail file
+          type: string
+          format: binary
+        previewfile:
+          description: Video preview file
+          type: string
+          format: binary
+      required:
+        - channelId
+        - name
+    VideoUploadRequestLegacy:
+      allOf:
+        - $ref: '#/components/schemas/VideoUploadRequestCommon'
+        - type: object
+          required:
+            - videofile
+          properties:
+            videofile:
+              description: Video file
+              type: string
+              format: binary
+    VideoUploadRequestResumable:
+      allOf:
+        - $ref: '#/components/schemas/VideoUploadRequestCommon'
+        - type: object
+          required:
+            - filename
+          properties:
+            filename:
+              description: Video filename including extension
+              type: string
+              format: filename
+              example: what_is_peertube.mp4
+            thumbnailfile:
+              description: Video thumbnail file
+              type: string
+              format: binary
+            previewfile:
+              description: Video preview file
+              type: string
+              format: binary
     VideoUploadResponse:
       properties:
         video:
           type: object
           properties:
             id:
-              type: integer
-              example: 8
+              $ref: '#/components/schemas/Video/properties/id'
             uuid:
-              type: string
-              format: uuid
-              example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+              $ref: '#/components/schemas/Video/properties/uuid'
     CommentThreadResponse:
       properties:
         total:
@@ -5024,35 +5700,46 @@ components:
             $ref: '#/components/schemas/Video'
     User:
       properties:
-        id:
-          type: integer
-          readOnly: true
-        username:
+        account:
+          $ref: '#/components/schemas/Account'
+        autoPlayNextVideo:
+          type: boolean
+          description: Automatically start playing the upcoming video after the currently playing video
+        autoPlayNextVideoPlaylist:
+          type: boolean
+          description: Automatically start playing the video on the playlist after the currently playing video
+        autoPlayVideo:
+          type: boolean
+          description: Automatically start playing the video on the watch page
+        blocked:
+          type: boolean
+        blockedReason:
           type: string
-          description: The user username
-          minLength: 1
-          maxLength: 50
+        createdAt:
+          type: string
         email:
           type: string
           format: email
           description: The user email
-        pluginAuth:
-          type: string
-          description: Auth plugin to use to authenticate the user
-        theme:
-          type: string
-          description: Theme enabled by this user
         emailVerified:
           type: boolean
           description: Has the user confirmed their email address?
+        id:
+          allOf:
+            - $ref: '#/components/schemas/id'
+          readOnly: true
+        pluginAuth:
+          type: string
+          description: Auth plugin to use to authenticate the user
+        lastLoginDate:
+          type: string
+          format: date-time
+        noInstanceConfigWarningModal:
+          type: boolean
+        noWelcomeModal:
+          type: boolean
         nsfwPolicy:
           $ref: '#/components/schemas/NSFWPolicy'
-        webtorrentEnabled:
-          type: boolean
-          description: Enable P2P in the player
-        autoPlayVideo:
-          type: boolean
-          description: Automatically start playing the video on the watch page
         role:
           $ref: '#/components/schemas/UserRole'
         roleLabel:
@@ -5061,64 +5748,66 @@ components:
             - User
             - Moderator
             - Administrator
-        videoQuota:
-          type: integer
-          description: The user video quota
-        videoQuotaDaily:
-          type: integer
-          description: The user daily video quota
-        videosCount:
-          type: integer
-        abusesCount:
-          type: integer
-        abusesAcceptedCount:
-          type: integer
-        abusesCreatedCount:
-          type: integer
-        videoCommentsCount:
-          type: integer
-        noInstanceConfigWarningModal:
-          type: boolean
-        noWelcomeModal:
-          type: boolean
-        blocked:
-          type: boolean
-        blockedReason:
+        theme:
           type: string
-        createdAt:
-          type: string
-        account:
-          $ref: '#/components/schemas/Account'
+          description: Theme enabled by this user
+        username:
+          $ref: '#/components/schemas/username'
         videoChannels:
           type: array
           items:
             $ref: '#/components/schemas/VideoChannel'
+        videoQuota:
+          type: integer
+          description: The user video quota in bytes
+          example: -1
+        videoQuotaDaily:
+          type: integer
+          description: The user daily video quota in bytes
+          example: -1
+        webtorrentEnabled:
+          type: boolean
+          description: Enable P2P in the player
+    UserWithStats:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - properties:
+            # optionally present fields: they require WITH_STATS scope
+            videosCount:
+              type: integer
+              description: Count of videos published 
+            abusesCount:
+              type: integer
+              description: Count of reports/abuses of which the user is a target
+            abusesAcceptedCount:
+              type: integer
+              description: Count of reports/abuses created by the user and accepted/acted upon by the moderation team
+            abusesCreatedCount:
+              type: integer
+              description: Count of reports/abuses created by the user
+            videoCommentsCount:
+              type: integer
+              description: Count of comments published
     AddUser:
       properties:
         username:
-          type: string
-          description: The user username
-          minLength: 1
-          maxLength: 50
+          $ref: '#/components/schemas/username'
         password:
-          type: string
-          format: password
-          description: The user password. If the smtp server is configured, you can leave empty and an email will be sent
-          minLength: 6
-          maxLength: 255
+          $ref: '#/components/schemas/password'
         email:
           type: string
           format: email
           description: The user email
         videoQuota:
           type: integer
-          description: The user video quota
+          description: The user video quota in bytes
+          example: -1
         videoQuotaDaily:
           type: integer
-          description: The user daily video quota
+          description: The user daily video quota in bytes
+          example: -1
         channelName:
-          type: string
-          description: The user default channel username
+          $ref: '#/components/schemas/usernameChannel'
         role:
           $ref: '#/components/schemas/UserRole'
         adminFlags:
@@ -5132,9 +5821,6 @@ components:
         - role
     UpdateUser:
       properties:
-        id:
-          type: string
-          description: The user id
         email:
           type: string
           format: email
@@ -5144,10 +5830,10 @@ components:
           description: Set the email as verified
         videoQuota:
           type: integer
-          description: The updated video quota of the user
+          description: The updated video quota of the user in bytes
         videoQuotaDaily:
           type: integer
-          description: The updated daily video quota of the user
+          description: The updated daily video quota of the user in bytes
         pluginAuth:
           type: string
           nullable: true
@@ -5157,16 +5843,10 @@ components:
           $ref: '#/components/schemas/UserRole'
         adminFlags:
           $ref: '#/components/schemas/UserAdminFlags'
-      required:
-        - id
     UpdateMe:
       properties:
         password:
-          type: string
-          format: password
-          description: Your new password
-          minLength: 6
-          maxLength: 255
+          $ref: '#/components/schemas/password'
         email:
           type: string
           format: email
@@ -5189,10 +5869,13 @@ components:
     GetMeVideoRating:
       properties:
         id:
-          type: string
-          description: Id of the video
+          $ref: '#/components/schemas/id'
         rating:
-          type: number
+          type: string
+          enum:
+            - like
+            - dislike
+            - none
           description: Rating of the video
       required:
         - id
@@ -5202,25 +5885,21 @@ components:
         video:
           $ref: '#/components/schemas/Video'
         rating:
-          type: number
-          description: 'Rating of the video'
+          type: string
+          enum:
+            - like
+            - dislike
+            - none
+          description: Rating of the video
       required:
         - video
         - rating
     RegisterUser:
       properties:
         username:
-          type: string
-          description: The username of the user
-          minLength: 1
-          maxLength: 50
-          pattern: '/^[a-z0-9._]{1,50}$/'
+          $ref: '#/components/schemas/username'
         password:
-          type: string
-          format: password
-          description: The password of the user
-          minLength: 6
-          maxLength: 255
+          $ref: '#/components/schemas/password'
         email:
           type: string
           format: email
@@ -5234,9 +5913,7 @@ components:
           type: object
           properties:
             name:
-              type: string
-              description: The username for the default channel
-              pattern: '/^[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_.:]+$/'
+              $ref: '#/components/schemas/usernameChannel'
             displayName:
               type: string
               description: The display name for the default channel
@@ -5246,34 +5923,76 @@ components:
         - username
         - password
         - email
-    VideoChannelCreate:
+
+    VideoChannel:
       properties:
-        name:
-          type: string
+        # GET/POST/PUT properties
         displayName:
           type: string
+          example: Videos of Framasoft
+          minLength: 1
+          maxLength: 120
         description:
           type: string
+          example: Videos made with <3 by Framasoft
+          minLength: 3
+          maxLength: 1000
         support:
           type: string
-          description: 'A text shown by default on all videos of this channel, to tell the audience how to support it'
+          description: text shown by default on all videos of this channel, to tell the audience how to support it
           example: Please support my work on <insert crowdfunding plateform>! <3
+          minLength: 3
+          maxLength: 1000
+        # GET-only properties
+        id:
+          readOnly: true
+          allOf:
+            - $ref: '#/components/schemas/id'
+        isLocal:
+          readOnly: true
+          type: boolean
+        updatedAt:
+          readOnly: true
+          type: string
+          format: date-time
+        ownerAccount:
+          readOnly: true
+          nullable: true
+          type: object
+          properties:
+            id:
+              type: integer
+            uuid:
+              $ref: '#/components/schemas/UUIDv4'
+    VideoChannelCreate:
+      allOf:
+        - $ref: '#/components/schemas/VideoChannel'
+        - properties:
+            name:
+              description: username of the channel to create
+              allOf:
+                - $ref: '#/components/schemas/usernameChannel'
       required:
         - name
         - displayName
     VideoChannelUpdate:
+      allOf:
+        - $ref: '#/components/schemas/VideoChannel'
+        - properties:
+            bulkVideosSupportUpdate:
+              type: boolean
+              description: Update the support field for all videos of this channel
+    VideoChannelList:
       properties:
-        displayName:
-          type: string
-        description:
-          type: string
-        support:
-          type: string
-          description: 'A text shown by default on all videos of this channel, to tell the audience how to support it'
-          example: Please support my work on <insert crowdfunding plateform>! <3
-        bulkVideosSupportUpdate:
-          type: boolean
-          description: 'Update the support field for all videos of this channel'
+        total:
+          type: integer
+          example: 1
+        data:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/VideoChannel'
+              - $ref: '#/components/schemas/Actor'
 
     MRSSPeerLink:
       type: object
@@ -5478,7 +6197,7 @@ components:
     Notification:
       properties:
         id:
-          type: integer
+          $ref: '#/components/schemas/id'
         type:
           type: integer
           description: >
@@ -5526,7 +6245,7 @@ components:
           type: object
           properties:
             id:
-              type: integer
+              $ref: '#/components/schemas/id'
             video:
               nullable: true
               $ref: '#/components/schemas/VideoInfo'
@@ -5534,9 +6253,7 @@ components:
               type: string
               nullable: true
             magnetUri:
-              type: string
-              format: uri
-              nullable: true
+              $ref: '#/components/schemas/VideoImport/properties/magnetUri'
             targetUri:
               type: string
               format: uri
@@ -5546,7 +6263,7 @@ components:
           type: object
           properties:
             id:
-              type: integer
+              $ref: '#/components/schemas/id'
             threadId:
               type: integer
             video:
@@ -5558,7 +6275,7 @@ components:
           type: object
           properties:
             id:
-              type: integer
+              $ref: '#/components/schemas/id'
             video:
               allOf:
                 - $ref: '#/components/schemas/VideoInfo'
@@ -5567,7 +6284,7 @@ components:
           type: object
           properties:
             id:
-              type: integer
+              $ref: '#/components/schemas/id'
             video:
               allOf:
                 - $ref: '#/components/schemas/VideoInfo'
@@ -5580,7 +6297,7 @@ components:
           nullable: true
           properties:
             id:
-              type: integer
+              $ref: '#/components/schemas/id'
             follower:
               $ref: '#/components/schemas/ActorInfo'
             state:
@@ -5693,6 +6410,8 @@ components:
         permanentLive:
           description: User can stream multiple times in a permanent live
           type: boolean
+
+
 
   callbacks:
     searchIndex:

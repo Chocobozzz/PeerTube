@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { expect } from 'chai'
 import { omit } from 'lodash'
 import { join } from 'path'
-import { User, UserRole, VideoImport, VideoImportState } from '../../../../shared'
+import { User, UserRole } from '../../../../shared'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoChannel,
   blockUser,
@@ -29,7 +29,6 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   unblockUser,
-  updateUser,
   uploadVideo,
   userLogin
 } from '../../../../shared/extra-utils'
@@ -39,11 +38,7 @@ import {
   checkBadSortPagination,
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { getGoodVideoUrl, getMagnetURI, getMyVideoImports, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
-import { VideoPrivacy } from '../../../../shared/models/videos'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 describe('Test users API validators', function () {
   const path = '/api/v1/users/'
@@ -241,7 +236,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should succeed with no password on a server with smtp enabled', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       killallServers([ server ])
 
@@ -1090,102 +1085,6 @@ describe('Test users API validators', function () {
   describe('When registering multiple users on a server with users limit', function () {
     it('Should fail when after 3 registrations', async function () {
       await registerUser(server.url, 'user42', 'super password', HttpStatusCode.FORBIDDEN_403)
-    })
-  })
-
-  describe('When having a video quota', function () {
-    it('Should fail with a user having too many videos', async function () {
-      await updateUser({
-        url: server.url,
-        userId: rootId,
-        accessToken: server.accessToken,
-        videoQuota: 42
-      })
-
-      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-    })
-
-    it('Should fail with a registered user having too many videos', async function () {
-      this.timeout(30000)
-
-      const user = {
-        username: 'user3',
-        password: 'my super password'
-      }
-      userAccessToken = await userLogin(server, user)
-
-      const videoAttributes = { fixture: 'video_short2.webm' }
-      await uploadVideo(server.url, userAccessToken, videoAttributes)
-      await uploadVideo(server.url, userAccessToken, videoAttributes)
-      await uploadVideo(server.url, userAccessToken, videoAttributes)
-      await uploadVideo(server.url, userAccessToken, videoAttributes)
-      await uploadVideo(server.url, userAccessToken, videoAttributes)
-      await uploadVideo(server.url, userAccessToken, videoAttributes, HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-    })
-
-    it('Should fail to import with HTTP/Torrent/magnet', async function () {
-      this.timeout(120000)
-
-      const baseAttributes = {
-        channelId: 1,
-        privacy: VideoPrivacy.PUBLIC
-      }
-      await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { targetUrl: getGoodVideoUrl() }))
-      await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { magnetUri: getMagnetURI() }))
-      await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { torrentfile: 'video-720p.torrent' as any }))
-
-      await waitJobs([ server ])
-
-      const res = await getMyVideoImports(server.url, server.accessToken)
-
-      expect(res.body.total).to.equal(3)
-      const videoImports: VideoImport[] = res.body.data
-      expect(videoImports).to.have.lengthOf(3)
-
-      for (const videoImport of videoImports) {
-        expect(videoImport.state.id).to.equal(VideoImportState.FAILED)
-        expect(videoImport.error).not.to.be.undefined
-        expect(videoImport.error).to.contain('user video quota is exceeded')
-      }
-    })
-  })
-
-  describe('When having a daily video quota', function () {
-    it('Should fail with a user having too many videos daily', async function () {
-      await updateUser({
-        url: server.url,
-        userId: rootId,
-        accessToken: server.accessToken,
-        videoQuotaDaily: 42
-      })
-
-      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-    })
-  })
-
-  describe('When having an absolute and daily video quota', function () {
-    it('Should fail if exceeding total quota', async function () {
-      await updateUser({
-        url: server.url,
-        userId: rootId,
-        accessToken: server.accessToken,
-        videoQuota: 42,
-        videoQuotaDaily: 1024 * 1024 * 1024
-      })
-
-      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413)
-    })
-
-    it('Should fail if exceeding daily quota', async function () {
-      await updateUser({
-        url: server.url,
-        userId: rootId,
-        accessToken: server.accessToken,
-        videoQuota: 1024 * 1024 * 1024,
-        videoQuotaDaily: 42
-      })
-
-      await uploadVideo(server.url, server.accessToken, {}, HttpStatusCode.PAYLOAD_TOO_LARGE_413)
     })
   })
 

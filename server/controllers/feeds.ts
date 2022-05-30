@@ -3,7 +3,7 @@ import * as Feed from 'pfeed-podcast'
 import { groupBy, isNull, last, map, orderBy } from 'lodash'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
-import { FEEDS, ROUTE_CACHE_LIFETIME, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants'
+import { FEEDS, PREVIEWS_SIZE, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,
@@ -196,7 +196,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     videoChannelId: videoChannel ? videoChannel.id : null
   }
 
-  const resultList = await VideoModel.listForApi({
+  const { data } = await VideoModel.listForApi({
     start,
     count: FEEDS.COUNT,
     sort: req.query.sort,
@@ -205,10 +205,11 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     filter: req.query.filter as VideoFilter,
     withFiles: true,
     withCaptions: true,
+    countVideos: false,
     ...options
   })
 
-  addVideosToFeed(feed, resultList.data, format)
+  addVideosToFeed(feed, data, format)
 
   // Now the feed generation is done, let's send it!
   return sendFeed(feed, req, res)
@@ -229,21 +230,23 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
     queryString: new URL(WEBSERVER.URL + req.url).search
   })
 
-  const resultList = await VideoModel.listForApi({
+  const { data } = await VideoModel.listForApi({
     start,
     count: FEEDS.COUNT,
     sort: req.query.sort,
     includeLocalVideos: false,
     nsfw,
     filter: req.query.filter as VideoFilter,
+
     withFiles: true,
     withCaptions: true,
+    countVideos: false,
 
     followerActorId: res.locals.user.Account.Actor.id,
     user: res.locals.user
   })
 
-  addVideosToFeed(feed, resultList.data, format)
+  addVideosToFeed(feed, data, format)
 
   // Now the feed generation is done, let's send it!
   return sendFeed(feed, req, res)
@@ -437,58 +440,32 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
           framerate: videoFile.fps,
           duration: video.duration
         }
-
-        if (video.language) Object.assign(result, { lang: video.language })
-
-        return result
-      })
-
-      const categories: { value: number, label: string }[] = []
-      if (video.category) {
-        categories.push({
-          value: video.category,
-          label: VideoModel.getCategoryLabel(video.category)
-        })
-      }
-
-      feed.addItem({
-        title: video.name,
-        id: video.url,
-        link: WEBSERVER.URL + '/videos/watch/' + video.uuid,
-        description: video.getTruncatedDescription(),
-        content: video.description,
-        author: [
-          {
-            name: video.VideoChannel.Account.getDisplayName(),
-            link: video.VideoChannel.Account.Actor.url
-          }
-        ],
-        date: video.publishedAt,
-        nsfw: video.nsfw,
-        torrent: torrents,
-        videos,
-        embed: {
-          url: video.getEmbedStaticPath(),
-          allowFullscreen: true
-        },
-        player: {
-          url: video.getWatchStaticPath()
-        },
-        categories,
-        community: {
-          statistics: {
-            views: video.views
-          }
-        },
-        thumbnail: [
-          {
-            url: WEBSERVER.URL + video.getMiniatureStaticPath(),
-            height: THUMBNAILS_SIZE.height,
-            width: THUMBNAILS_SIZE.width
-          }
-        ]
-      })
-    }
+      ],
+      date: video.publishedAt,
+      nsfw: video.nsfw,
+      torrent: torrents,
+      videos,
+      embed: {
+        url: video.getEmbedStaticPath(),
+        allowFullscreen: true
+      },
+      player: {
+        url: video.getWatchStaticPath()
+      },
+      categories,
+      community: {
+        statistics: {
+          views: video.views
+        }
+      },
+      thumbnail: [
+        {
+          url: WEBSERVER.URL + video.getPreviewStaticPath(),
+          height: PREVIEWS_SIZE.height,
+          width: PREVIEWS_SIZE.width
+        }
+      ]
+    })
   }
 }
 

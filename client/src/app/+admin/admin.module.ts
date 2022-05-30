@@ -3,11 +3,13 @@ import { SelectButtonModule } from 'primeng/selectbutton'
 import { TableModule } from 'primeng/table'
 import { NgModule } from '@angular/core'
 import { SharedAbuseListModule } from '@app/shared/shared-abuse-list'
+import { SharedActorImageEditModule } from '@app/shared/shared-actor-image-edit'
 import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
 import { SharedVideoCommentModule } from '@app/shared/shared-video-comment'
+import { SharedActorImageModule } from '../shared/shared-actor-image/shared-actor-image.module'
 import { AdminRoutingModule } from './admin-routing.module'
 import { AdminComponent } from './admin.component'
 import {
@@ -49,6 +51,8 @@ import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersCom
     SharedGlobalIconModule,
     SharedAbuseListModule,
     SharedVideoCommentModule,
+    SharedActorImageModule,
+    SharedActorImageEditModule,
 
     TableModule,
     SelectButtonModule,

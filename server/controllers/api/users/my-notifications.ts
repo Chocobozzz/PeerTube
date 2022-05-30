@@ -80,7 +80,9 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
     newInstanceFollower: body.newInstanceFollower,
     autoInstanceFollowing: body.autoInstanceFollowing,
     abuseNewMessage: body.abuseNewMessage,
-    abuseStateChange: body.abuseStateChange
+    abuseStateChange: body.abuseStateChange,
+    newPeerTubeVersion: body.newPeerTubeVersion,
+    newPluginVersion: body.newPluginVersion
   }
 
   await UserNotificationSettingModel.update(values, query)

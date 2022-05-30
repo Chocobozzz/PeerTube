@@ -98,6 +98,12 @@ export class ServerService {
         extensions: []
       }
     },
+    banner: {
+      file: {
+        size: { max: 0 },
+        extensions: []
+      }
+    },
     video: {
       image: {
         size: { max: 0 },

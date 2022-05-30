@@ -184,6 +184,76 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       return result
     }
   })
+
+  registerHook({
+    target: 'filter:api.download.torrent.allowed.result',
+    handler: (result, params) => {
+      if (params && params.downloadName.includes('bad torrent')) {
+        return { allowed: false, errorMessage: 'Liu Bei' }
+      }
+
+      return result
+    }
+  })
+
+  registerHook({
+    target: 'filter:api.download.video.allowed.result',
+    handler: (result, params) => {
+      if (params && !params.streamingPlaylist && params.video.name.includes('bad file')) {
+        return { allowed: false, errorMessage: 'Cao Cao' }
+      }
+
+      if (params && params.streamingPlaylist && params.video.name.includes('bad playlist file')) {
+        return { allowed: false, errorMessage: 'Sun Jian' }
+      }
+
+      return result
+    }
+  })
+
+  registerHook({
+    target: 'filter:html.embed.video.allowed.result',
+    handler: (result, params) => {
+      return {
+        allowed: false,
+        html: 'Lu Bu'
+      }
+    }
+  })
+
+  registerHook({
+    target: 'filter:html.embed.video-playlist.allowed.result',
+    handler: (result, params) => {
+      return {
+        allowed: false,
+        html: 'Diao Chan'
+      }
+    }
+  })
+
+  {
+    const searchHooks = [
+      'filter:api.search.videos.local.list.params',
+      'filter:api.search.videos.local.list.result',
+      'filter:api.search.videos.index.list.params',
+      'filter:api.search.videos.index.list.result',
+      'filter:api.search.video-channels.local.list.params',
+      'filter:api.search.video-channels.local.list.result',
+      'filter:api.search.video-channels.index.list.params',
+      'filter:api.search.video-channels.index.list.result',
+    ]
+
+    for (const h of searchHooks) {
+      registerHook({
+        target: h,
+        handler: (obj) => {
+          peertubeHelpers.logger.debug('Run hook %s.', h)
+
+          return obj
+        }
+      })
+    }
+  }
 }
 
 async function unregister () {

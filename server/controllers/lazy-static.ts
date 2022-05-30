@@ -4,10 +4,10 @@ import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache
 import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 import { logger } from '../helpers/logger'
 import { LAZY_STATIC_PATHS, STATIC_MAX_AGE } from '../initializers/constants'
-import { avatarPathUnsafeCache, pushAvatarProcessInQueue } from '../lib/avatar'
+import { actorImagePathUnsafeCache, pushActorImageProcessInQueue } from '../lib/actor-image'
 import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
 import { asyncMiddleware } from '../middlewares'
-import { AvatarModel } from '../models/avatar/avatar'
+import { ActorImageModel } from '../models/account/actor-image'
 
 const lazyStaticRouter = express.Router()
 
@@ -15,7 +15,12 @@ lazyStaticRouter.use(cors())
 
 lazyStaticRouter.use(
   LAZY_STATIC_PATHS.AVATARS + ':filename',
-  asyncMiddleware(getAvatar)
+  asyncMiddleware(getActorImage)
+)
+
+lazyStaticRouter.use(
+  LAZY_STATIC_PATHS.BANNERS + ':filename',
+  asyncMiddleware(getActorImage)
 )
 
 lazyStaticRouter.use(
@@ -43,36 +48,36 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function getAvatar (req: express.Request, res: express.Response) {
+async function getActorImage (req: express.Request, res: express.Response) {
   const filename = req.params.filename
 
-  if (avatarPathUnsafeCache.has(filename)) {
-    return res.sendFile(avatarPathUnsafeCache.get(filename), { maxAge: STATIC_MAX_AGE.SERVER })
+  if (actorImagePathUnsafeCache.has(filename)) {
+    return res.sendFile(actorImagePathUnsafeCache.get(filename), { maxAge: STATIC_MAX_AGE.SERVER })
   }
 
-  const avatar = await AvatarModel.loadByName(filename)
-  if (!avatar) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+  const image = await ActorImageModel.loadByName(filename)
+  if (!image) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
-  if (avatar.onDisk === false) {
-    if (!avatar.fileUrl) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+  if (image.onDisk === false) {
+    if (!image.fileUrl) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
-    logger.info('Lazy serve remote avatar image %s.', avatar.fileUrl)
+    logger.info('Lazy serve remote actor image %s.', image.fileUrl)
 
     try {
-      await pushAvatarProcessInQueue({ filename: avatar.filename, fileUrl: avatar.fileUrl })
+      await pushActorImageProcessInQueue({ filename: image.filename, fileUrl: image.fileUrl, type: image.type })
     } catch (err) {
-      logger.warn('Cannot process remote avatar %s.', avatar.fileUrl, { err })
+      logger.warn('Cannot process remote actor image %s.', image.fileUrl, { err })
       return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
     }
 
-    avatar.onDisk = true
-    avatar.save()
-      .catch(err => logger.error('Cannot save new avatar disk state.', { err }))
+    image.onDisk = true
+    image.save()
+      .catch(err => logger.error('Cannot save new actor image disk state.', { err }))
   }
 
-  const path = avatar.getPath()
+  const path = image.getPath()
 
-  avatarPathUnsafeCache.set(filename, path)
+  actorImagePathUnsafeCache.set(filename, path)
   return res.sendFile(path, { maxAge: STATIC_MAX_AGE.LAZY_SERVER })
 }
 

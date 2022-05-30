@@ -1,11 +1,12 @@
-import { switchMap } from 'rxjs/operators'
+import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
+import { listUserChannels } from '@app/helpers'
 import { OWNERSHIP_CHANGE_CHANNEL_VALIDATOR } from '@app/shared/form-validators/video-ownership-change-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { VideoChannelService, VideoOwnershipService } from '@app/shared/shared-main'
+import { VideoOwnershipService } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { VideoChangeOwnership, VideoChannel } from '@shared/models'
+import { VideoChangeOwnership } from '@shared/models'
 
 @Component({
   selector: 'my-accept-ownership',
@@ -18,8 +19,7 @@ export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: ElementRef
 
   videoChangeOwnership: VideoChangeOwnership | undefined = undefined
-
-  videoChannels: VideoChannel[]
+  videoChannels: SelectChannelItem[]
 
   error: string = null
 
@@ -28,7 +28,6 @@ export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
     private videoOwnershipService: VideoOwnershipService,
     private notifier: Notifier,
     private authService: AuthService,
-    private videoChannelService: VideoChannelService,
     private modalService: NgbModal
     ) {
     super()
@@ -37,9 +36,8 @@ export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.videoChannels = []
 
-    this.authService.userInformationLoaded
-      .pipe(switchMap(() => this.videoChannelService.listAccountVideoChannels(this.authService.getUser().account)))
-      .subscribe(videoChannels => this.videoChannels = videoChannels.data)
+    listUserChannels(this.authService)
+      .subscribe(channels => this.videoChannels = channels)
 
     this.buildForm({
       channel: OWNERSHIP_CHANGE_CHANNEL_VALIDATOR

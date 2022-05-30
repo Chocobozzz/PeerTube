@@ -44,7 +44,7 @@ checkFFmpeg(CONFIG)
 
 checkNodeVersion()
 
-import { checkConfig, checkActivityPubUrls } from './server/initializers/checker-after-init'
+import { checkConfig, checkActivityPubUrls, checkFFmpegVersion } from './server/initializers/checker-after-init'
 
 const errorMessage = checkConfig()
 if (errorMessage !== null) {
@@ -59,11 +59,11 @@ import { baseCSP } from './server/middlewares/csp'
 
 if (CONFIG.CSP.ENABLED) {
   app.use(baseCSP)
-  app.use(helmet({
-    frameguard: {
-      action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
-    },
-    hsts: false
+}
+
+if (CONFIG.SECURITY.FRAMEGUARD.ENABLED) {
+  app.use(helmet.frameguard({
+    action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
   }))
 }
 
@@ -116,10 +116,12 @@ import { YoutubeDlUpdateScheduler } from './server/lib/schedulers/youtube-dl-upd
 import { VideosRedundancyScheduler } from './server/lib/schedulers/videos-redundancy-scheduler'
 import { RemoveOldHistoryScheduler } from './server/lib/schedulers/remove-old-history-scheduler'
 import { AutoFollowIndexInstances } from './server/lib/schedulers/auto-follow-index-instances'
+import { RemoveDanglingResumableUploadsScheduler } from './server/lib/schedulers/remove-dangling-resumable-uploads-scheduler'
 import { isHTTPSignatureDigestValid } from './server/helpers/peertube-crypto'
 import { PeerTubeSocket } from './server/lib/peertube-socket'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './server/lib/hls'
 import { PluginsCheckScheduler } from './server/lib/schedulers/plugins-check-scheduler'
+import { PeerTubeVersionCheckScheduler } from './server/lib/schedulers/peertube-version-check-scheduler'
 import { Hooks } from './server/lib/plugins/hooks'
 import { PluginManager } from './server/lib/plugins/plugin-manager'
 import { LiveManager } from './server/lib/live-manager'
@@ -160,7 +162,9 @@ morgan.token('user-agent', (req: express.Request) => {
   return req.get('user-agent')
 })
 app.use(morgan('combined', {
-  stream: { write: logger.info.bind(logger) },
+  stream: {
+    write: (str: string) => logger.info(str, { tags: [ 'http' ] })
+  },
   skip: req => CONFIG.LOG.LOG_PING_REQUESTS === false && req.originalUrl === '/api/v1/ping'
 }))
 
@@ -250,6 +254,9 @@ async function startApplication () {
       process.exit(-1)
     })
 
+  checkFFmpegVersion()
+    .catch(err => logger.error('Cannot check ffmpeg version', { err }))
+
   // Email initialization
   Emailer.Instance.init()
 
@@ -272,7 +279,9 @@ async function startApplication () {
   RemoveOldHistoryScheduler.Instance.enable()
   RemoveOldViewsScheduler.Instance.enable()
   PluginsCheckScheduler.Instance.enable()
+  PeerTubeVersionCheckScheduler.Instance.enable()
   AutoFollowIndexInstances.Instance.enable()
+  RemoveDanglingResumableUploadsScheduler.Instance.enable()
 
   // Redis initialization
   Redis.Instance.init()

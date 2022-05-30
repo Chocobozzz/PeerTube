@@ -5,5 +5,5 @@ export interface PluginSettingsManager {
 
   setSetting: (name: string, value: string) => Promise<any>
 
-  onSettingsChange: (cb: (names: string[]) => void) => void
+  onSettingsChange: (cb: (names: string[]) => Promise<any>) => void
 }

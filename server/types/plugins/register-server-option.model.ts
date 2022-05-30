@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { Router, Response } from 'express'
 import { Logger } from 'winston'
 import { ActorModel } from '@server/models/activitypub/actor'
 import {
@@ -12,6 +12,8 @@ import {
   PluginVideoPrivacyManager,
   RegisterServerHookOptions,
   RegisterServerSettingOptions,
+  ServerConfig,
+  UserRole,
   VideoBlacklistCreate
 } from '@shared/models'
 import { MVideoThumbnail } from '../models'
@@ -37,6 +39,8 @@ export type PeerTubeHelpers = {
 
   config: {
     getWebserverUrl: () => string
+
+    getServerConfig: () => Promise<ServerConfig>
   }
 
   moderation: {
@@ -51,6 +55,28 @@ export type PeerTubeHelpers = {
 
   server: {
     getServerActor: () => Promise<ActorModel>
+  }
+
+  plugin: {
+    // PeerTube >= 3.2
+    getBaseStaticRoute: () => string
+
+    // PeerTube >= 3.2
+    getBaseRouterRoute: () => string
+
+    // PeerTube >= 3.2
+    getDataDirectoryPath: () => string
+  }
+
+  user: {
+    // PeerTube >= 3.2
+    getAuthUser: (response: Response) => Promise<{
+      id?: string
+      username: string
+      email: string
+      blocked: boolean
+      role: UserRole
+    } | undefined>
   }
 }
 

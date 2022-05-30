@@ -11,7 +11,8 @@
   cursor: pointer;
 }
 
-.glyphicon, .comment-thread-loading {
+.glyphicon,
+.comment-thread-loading {
   margin-right: 5px;
   display: inline-block;
   font-size: 13px;
@@ -27,7 +28,11 @@
     margin-left: 5px;
     opacity: 0;
     transition: ease-in .2s opacity;
+    width: 12px;
+    position: relative;
+    top: -3px;
   }
+
   &:hover my-feed {
     opacity: 1;
   }
@@ -36,7 +41,7 @@
 #dropdown-sort-comments {
   font-weight: 600;
   text-transform: uppercase;
-  border: none;
+  border: 0;
   transform: translateY(-7%);
 }
 

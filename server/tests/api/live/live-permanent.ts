@@ -8,6 +8,7 @@ import {
   createLive,
   doubleFollow,
   flushAndRunMultipleServers,
+  getCustomConfigResolutions,
   getLive,
   getPlaylistsCount,
   getVideo,
@@ -69,15 +70,7 @@ describe('Permenant live', function () {
         maxDuration: -1,
         transcoding: {
           enabled: true,
-          resolutions: {
-            '240p': true,
-            '360p': true,
-            '480p': true,
-            '720p': true,
-            '1080p': true,
-            '1440p': true,
-            '2160p': true
-          }
+          resolutions: getCustomConfigResolutions(true)
         }
       }
     })
@@ -159,15 +152,7 @@ describe('Permenant live', function () {
         maxDuration: -1,
         transcoding: {
           enabled: true,
-          resolutions: {
-            '240p': false,
-            '360p': false,
-            '480p': false,
-            '720p': false,
-            '1080p': false,
-            '1440p': false,
-            '2160p': false
-          }
+          resolutions: getCustomConfigResolutions(false)
         }
       }
     })

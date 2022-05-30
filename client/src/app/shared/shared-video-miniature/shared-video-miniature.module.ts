@@ -13,6 +13,7 @@ import { VideoDownloadComponent } from './video-download.component'
 import { VideoMiniatureComponent } from './video-miniature.component'
 import { VideosSelectionComponent } from './videos-selection.component'
 import { VideoListHeaderComponent } from './video-list-header.component'
+import { SharedActorImageModule } from '../shared-actor-image/shared-actor-image.module'
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { VideoListHeaderComponent } from './video-list-header.component'
     SharedThumbnailModule,
     SharedGlobalIconModule,
     SharedVideoLiveModule,
-    SharedVideoModule
+    SharedVideoModule,
+    SharedActorImageModule
   ],
 
   declarations: [

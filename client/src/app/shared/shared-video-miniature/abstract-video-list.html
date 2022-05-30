@@ -4,6 +4,7 @@
 
     <div class="action-block">
       <my-feed *ngIf="syndicationItems" [syndicationItems]="syndicationItems"></my-feed>
+
       <ng-container *ngFor="let action of actions">
         <a *ngIf="action.routerLink" class="ml-2" [routerLink]="action.routerLink" routerLinkActive="active">
           <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
@@ -43,7 +44,7 @@
   <div class="no-results" i18n *ngIf="hasDoneFirstQuery && videos.length === 0">No results.</div>
   <div
     myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" [dataObservable]="onDataSubject.asObservable()"
-    class="videos"
+    class="videos" [ngClass]="{ 'display-as-row': displayAsRow() }"
   >
     <ng-container *ngFor="let video of videos; trackBy: videoById;">
       <h2 class="date-title" *ngIf="getCurrentGroupedDateLabel(video)">
@@ -52,8 +53,7 @@
 
       <div class="video-wrapper">
         <my-video-miniature
-          [fitWidth]="true"
-          [video]="video" [user]="userMiniature" [ownerDisplayType]="ownerDisplayType"
+          [video]="video" [user]="userMiniature" [displayAsRow]="displayAsRow()"
           [displayVideoActions]="displayVideoActions" [displayOptions]="displayOptions"
           (videoBlocked)="removeVideoFromArray(video)" (videoRemoved)="removeVideoFromArray(video)"
         >

@@ -1,24 +1,24 @@
-import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
-import { crawlCollectionPage } from './crawl'
-import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
-import { isArray } from '../../helpers/custom-validators/misc'
-import { getOrCreateActorAndServerAndModel } from './actor'
-import { logger } from '../../helpers/logger'
-import { VideoPlaylistModel } from '../../models/video/video-playlist'
-import { doRequest } from '../../helpers/requests'
-import { checkUrlsSameHost } from '../../helpers/activitypub'
 import * as Bluebird from 'bluebird'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { PlaylistElementObject } from '../../../shared/models/activitypub/objects/playlist-element-object'
-import { getOrCreateVideoAndAccountAndChannel } from './videos'
-import { isPlaylistElementObjectValid, isPlaylistObjectValid } from '../../helpers/custom-validators/activitypub/playlist'
-import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
+import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
+import { checkUrlsSameHost } from '../../helpers/activitypub'
+import { isPlaylistElementObjectValid, isPlaylistObjectValid } from '../../helpers/custom-validators/activitypub/playlist'
+import { isArray } from '../../helpers/custom-validators/misc'
+import { logger } from '../../helpers/logger'
+import { doJSONRequest, PeerTubeRequestError } from '../../helpers/requests'
+import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { sequelizeTypescript } from '../../initializers/database'
-import { createPlaylistMiniatureFromUrl } from '../thumbnail'
-import { FilteredModelAttributes } from '../../types/sequelize'
+import { VideoPlaylistModel } from '../../models/video/video-playlist'
+import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
 import { MAccountDefault, MAccountId, MVideoId } from '../../types/models'
 import { MVideoPlaylist, MVideoPlaylistId, MVideoPlaylistOwner } from '../../types/models/video/video-playlist'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { FilteredModelAttributes } from '../../types/sequelize'
+import { createPlaylistMiniatureFromUrl } from '../thumbnail'
+import { getOrCreateActorAndServerAndModel } from './actor'
+import { crawlCollectionPage } from './crawl'
+import { getOrCreateVideoAndAccountAndChannel } from './videos'
 
 function playlistObjectToDBAttributes (playlistObject: PlaylistObject, byAccount: MAccountId, to: string[]) {
   const privacy = to.includes(ACTIVITY_PUB.PUBLIC)
@@ -56,11 +56,7 @@ async function createAccountPlaylists (playlistUrls: string[], account: MAccount
       if (exists === true) return
 
       // Fetch url
-      const { body } = await doRequest<PlaylistObject>({
-        uri: playlistUrl,
-        json: true,
-        activityPub: true
-      })
+      const { body } = await doJSONRequest<PlaylistObject>(playlistUrl, { activityPub: true })
 
       if (!isPlaylistObjectValid(body)) {
         throw new Error(`Invalid playlist object when fetch account playlists: ${JSON.stringify(body)}`)
@@ -120,13 +116,7 @@ async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwner)
   if (!videoPlaylist.isOutdated()) return videoPlaylist
 
   try {
-    const { statusCode, playlistObject } = await fetchRemoteVideoPlaylist(videoPlaylist.url)
-    if (statusCode === HttpStatusCode.NOT_FOUND_404) {
-      logger.info('Cannot refresh remote video playlist %s: it does not exist anymore. Deleting it.', videoPlaylist.url)
-
-      await videoPlaylist.destroy()
-      return undefined
-    }
+    const { playlistObject } = await fetchRemoteVideoPlaylist(videoPlaylist.url)
 
     if (playlistObject === undefined) {
       logger.warn('Cannot refresh remote playlist %s: invalid body.', videoPlaylist.url)
@@ -140,6 +130,13 @@ async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwner)
 
     return videoPlaylist
   } catch (err) {
+    if ((err as PeerTubeRequestError).statusCode === HttpStatusCode.NOT_FOUND_404) {
+      logger.info('Cannot refresh remote video playlist %s: it does not exist anymore. Deleting it.', videoPlaylist.url)
+
+      await videoPlaylist.destroy()
+      return undefined
+    }
+
     logger.warn('Cannot refresh video playlist %s.', videoPlaylist.url, { err })
 
     await videoPlaylist.setAsRefreshed()
@@ -164,12 +161,7 @@ async function resetVideoPlaylistElements (elementUrls: string[], playlist: MVid
 
   await Bluebird.map(elementUrls, async elementUrl => {
     try {
-      // Fetch url
-      const { body } = await doRequest<PlaylistElementObject>({
-        uri: elementUrl,
-        json: true,
-        activityPub: true
-      })
+      const { body } = await doJSONRequest<PlaylistElementObject>(elementUrl, { activityPub: true })
 
       if (!isPlaylistElementObjectValid(body)) throw new Error(`Invalid body in video get playlist element ${elementUrl}`)
 
@@ -199,21 +191,14 @@ async function resetVideoPlaylistElements (elementUrls: string[], playlist: MVid
 }
 
 async function fetchRemoteVideoPlaylist (playlistUrl: string): Promise<{ statusCode: number, playlistObject: PlaylistObject }> {
-  const options = {
-    uri: playlistUrl,
-    method: 'GET',
-    json: true,
-    activityPub: true
-  }
-
   logger.info('Fetching remote playlist %s.', playlistUrl)
 
-  const { response, body } = await doRequest<any>(options)
+  const { body, statusCode } = await doJSONRequest<any>(playlistUrl, { activityPub: true })
 
   if (isPlaylistObjectValid(body) === false || checkUrlsSameHost(body.id, playlistUrl) !== true) {
     logger.debug('Remote video playlist JSON is not valid.', { body })
-    return { statusCode: response.statusCode, playlistObject: undefined }
+    return { statusCode, playlistObject: undefined }
   }
 
-  return { statusCode: response.statusCode, playlistObject: body }
+  return { statusCode, playlistObject: body }
 }

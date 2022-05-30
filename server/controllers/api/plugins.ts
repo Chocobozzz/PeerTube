@@ -151,7 +151,7 @@ async function updatePlugin (req: express.Request, res: express.Response) {
   const fromDisk = !!body.path
   const toUpdate = body.npmName || body.path
   try {
-    const plugin = await PluginManager.Instance.update(toUpdate, undefined, fromDisk)
+    const plugin = await PluginManager.Instance.update(toUpdate, fromDisk)
 
     return res.json(plugin.toFormattedJSON())
   } catch (err) {
@@ -205,7 +205,6 @@ async function listAvailablePlugins (req: express.Request, res: express.Response
   if (!resultList) {
     return res.status(HttpStatusCode.SERVICE_UNAVAILABLE_503)
       .json({ error: 'Plugin index unavailable. Please retry later' })
-      .end()
   }
 
   return res.json(resultList)

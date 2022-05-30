@@ -13,15 +13,15 @@
   display: inline-flex;
 
   .video-table-video-image {
-    @include miniature-thumbnail;
-
     $image-height: 45px;
+
+    @include miniature-thumbnail;
 
     height: $image-height;
     width: #{(16/9) * $image-height};
     margin-right: 0.5rem;
     border-radius: 2px;
-    border: none;
+    border: 0;
     background: transparent;
     display: inline-flex;
     justify-content: center;
@@ -60,7 +60,7 @@
 
     div .glyphicon {
       font-size: 80%;
-      color: gray;
+      color: #808080;
       margin-left: 0.1rem;
     }
 

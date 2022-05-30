@@ -50,126 +50,102 @@ async function run () {
       title: 'AP - account peertube',
       path: '/accounts/peertube',
       headers: buildAPHeader(),
-      expecter: (client, statusCode) => {
-        const body = client.resData[0].body
-
-        return statusCode === 200 && body.startsWith('{"type":')
+      expecter: (body, status) => {
+        return status === 200 && body.startsWith('{"type":')
       }
     },
     {
       title: 'AP - video',
       path: '/videos/watch/' + video.uuid,
       headers: buildAPHeader(),
-      expecter: (client, statusCode) => {
-        const body = client.resData[0].body
-
-        return statusCode === 200 && body.startsWith('{"type":"Video"')
+      expecter: (body, status) => {
+        return status === 200 && body.startsWith('{"type":"Video"')
       }
     },
     {
       title: 'Misc - webfinger peertube',
       path: '/.well-known/webfinger?resource=acct:peertube@' + server.host,
-      expecter: (client, statusCode) => {
-        const body = client.resData[0].body
-
-        return statusCode === 200 && body.startsWith('{"subject":')
+      expecter: (body, status) => {
+        return status === 200 && body.startsWith('{"subject":')
       }
     },
     {
       title: 'API - unread notifications',
       path: '/api/v1/users/me/notifications?start=0&count=0&unread=true',
       headers: buildAuthorizationHeader(),
-      expecter: (_client, statusCode) => {
-        return statusCode === 200
+      expecter: (_body, status) => {
+        return status === 200
       }
     },
     {
       title: 'API - me',
       path: '/api/v1/users/me',
       headers: buildAuthorizationHeader(),
-      expecter: (client, statusCode) => {
-        const body = client.resData[0].body
-
-        return statusCode === 200 && body.startsWith('{"id":')
+      expecter: (body, status) => {
+        return status === 200 && body.startsWith('{"id":')
       }
     },
     {
       title: 'API - videos list',
       path: '/api/v1/videos',
-      expecter: (client, statusCode) => {
-        const body = client.resData[0].body
-
-        return statusCode === 200 && body.startsWith('{"total":10')
+      expecter: (body, status) => {
+        return status === 200 && body.startsWith('{"total":10')
       }
     },
     {
       title: 'API - video get',
       path: '/api/v1/videos/' + video.uuid,
-      expecter: (client, statusCode) => {
-        const body = client.resData[0].body
-
-        return statusCode === 200 && body.startsWith('{"id":')
+      expecter: (body, status) => {
+        return status === 200 && body.startsWith('{"id":')
       }
     },
     {
       title: 'API - video captions',
       path: '/api/v1/videos/' + video.uuid + '/captions',
-      expecter: (client, statusCode) => {
-        const body = client.resData[0].body
-
-        return statusCode === 200 && body.startsWith('{"total":4')
+      expecter: (body, status) => {
+        return status === 200 && body.startsWith('{"total":4')
       }
     },
     {
       title: 'API - video threads',
       path: '/api/v1/videos/' + video.uuid + '/comment-threads',
-      expecter: (client, statusCode) => {
-        const body = client.resData[0].body
-
-        return statusCode === 200 && body.startsWith('{"total":10')
+      expecter: (body, status) => {
+        return status === 200 && body.startsWith('{"total":10')
       }
     },
     {
       title: 'API - video replies',
       path: '/api/v1/videos/' + video.uuid + '/comment-threads/' + threadId,
-      expecter: (client, statusCode) => {
-        const body = client.resData[0].body
-
-        return statusCode === 200 && body.startsWith('{"comment":{')
+      expecter: (body, status) => {
+        return status === 200 && body.startsWith('{"comment":{')
       }
     },
     {
       title: 'HTML - video watch',
       path: '/videos/watch/' + video.uuid,
-      expecter: (client, statusCode) => {
-        const body = client.resData[0].body
-
-        return statusCode === 200 && body.includes('<title>my super')
+      expecter: (body, status) => {
+        return status === 200 && body.includes('<title>my super')
       }
     },
     {
       title: 'HTML - video embed',
       path: '/videos/embed/' + video.uuid,
-      expecter: (client, statusCode) => {
-        const body = client.resData[0].body
-
-        return statusCode === 200 && body.includes('embed')
+      expecter: (body, status) => {
+        return status === 200 && body.includes('embed')
       }
     },
     {
       title: 'HTML - homepage',
       path: '/',
-      expecter: (_client, statusCode) => {
-        return statusCode === 200
+      expecter: (_body, status) => {
+        return status === 200
       }
     },
     {
       title: 'API - config',
       path: '/api/v1/config',
-      expecter: (client, statusCode) => {
-        const body = client.resData[0].body
-
-        return statusCode === 200 && body.startsWith('{"instance":')
+      expecter: (body, status) => {
+        return status === 200 && body.startsWith('{"instance":')
       }
     }
   ]
@@ -197,23 +173,26 @@ function runBenchmark (options: {
   const { path, expecter, headers } = options
 
   return new Promise((res, rej) => {
-    const instance = autocannon({
+    autocannon({
       url: server.url + path,
       connections: 20,
       headers,
       pipelining: 1,
-      duration: 10
+      duration: 10,
+      requests: [
+        {
+          onResponse: (status, body) => {
+            if (expecter(body, status) !== true) {
+              console.error('Expected result failed.', { body, status })
+              throw new Error('Invalid expectation')
+            }
+          }
+        }
+      ]
     }, (err, result) => {
       if (err) return rej(err)
 
       return res(result)
-    })
-
-    instance.on('response', (client, statusCode) => {
-      if (expecter(client, statusCode) !== true) {
-        console.error('Expected result failed.', { data: client.resData })
-        process.exit(-1)
-      }
     })
   })
 }
