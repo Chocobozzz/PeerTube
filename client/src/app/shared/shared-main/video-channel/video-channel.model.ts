@@ -75,7 +75,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
       this.viewsPerDay = hash.viewsPerDay.map(v => ({ ...v, date: new Date(v.date) }))
     }
 
-    if (hash.totalViews) {
+    if (hash.totalViews !== null && hash.totalViews !== undefined) {
       this.totalViews = hash.totalViews
     }
 
