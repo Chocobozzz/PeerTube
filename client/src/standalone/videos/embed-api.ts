@@ -27,11 +27,11 @@ export class PeerTubeEmbedApi {
   }
 
   private get element () {
-    return this.embed.playerElement
+    return this.embed.getPlayerElement()
   }
 
   private constructChannel () {
-    const channel = Channel.build({ window: window.parent, origin: '*', scope: this.embed.scope })
+    const channel = Channel.build({ window: window.parent, origin: '*', scope: this.embed.getScope() })
 
     channel.bind('play', (txn, params) => this.embed.player.play())
     channel.bind('pause', (txn, params) => this.embed.player.pause())
@@ -52,9 +52,9 @@ export class PeerTubeEmbedApi {
     channel.bind('getPlaybackRate', (txn, params) => this.embed.player.playbackRate())
     channel.bind('getPlaybackRates', (txn, params) => this.embed.player.options_.playbackRates)
 
-    channel.bind('playNextVideo', (txn, params) => this.embed.playNextVideo())
-    channel.bind('playPreviousVideo', (txn, params) => this.embed.playPreviousVideo())
-    channel.bind('getCurrentPosition', (txn, params) => this.embed.getCurrentPosition())
+    channel.bind('playNextVideo', (txn, params) => this.embed.playNextPlaylistVideo())
+    channel.bind('playPreviousVideo', (txn, params) => this.embed.playPreviousPlaylistVideo())
+    channel.bind('getCurrentPosition', (txn, params) => this.embed.getCurrentPlaylistPosition())
     this.channel = channel
   }
 
