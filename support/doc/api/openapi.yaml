@@ -3602,7 +3602,7 @@ paths:
         - $ref: '#/components/parameters/name'
         - name: withStats
           in: query
-          description: include view statistics for the last 30 days (only if authentified as the account user)
+          description: include daily view statistics for the last 30 days and total views (only if authentified as the account user)
           schema:
             type: boolean
         - $ref: '#/components/parameters/start'
