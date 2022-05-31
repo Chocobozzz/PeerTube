@@ -45,7 +45,6 @@ import { updateRouter } from './update'
 import { uploadRouter } from './upload'
 import { viewRouter } from './view'
 import { videoSourceGetValidator } from '@server/middlewares/validators/videos/video-source'
-import { VideoSourceModel } from '@server/models/video/video-source'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -101,9 +100,8 @@ videosRouter.get('/:id/description',
 videosRouter.get('/:id/source',
   openapiOperationDoc({ operationId: 'getVideoSource' }),
   authenticate,
-  asyncMiddleware(videosCustomGetValidator('only-video')),
   asyncMiddleware(videoSourceGetValidator),
-  asyncMiddleware(getVideoSource)
+  getVideoSource
 )
 videosRouter.get('/:id',
   openapiOperationDoc({ operationId: 'getVideo' }),
@@ -164,11 +162,8 @@ async function getVideoDescription (req: express.Request, res: express.Response)
   return res.json({ description })
 }
 
-async function getVideoSource (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
-  const source = await VideoSourceModel.findOne({ where: { videoId: video.id } })
-
-  return res.json(source)
+function getVideoSource (req: express.Request, res: express.Response) {
+  return res.json(res.locals.videoSource)
 }
 
 async function listVideos (req: express.Request, res: express.Response) {

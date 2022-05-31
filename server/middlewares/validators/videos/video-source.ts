@@ -1,4 +1,5 @@
 import { getVideoWithAttributes } from '@server/helpers/video'
+import { VideoSourceModel } from '@server/models/video/video-source'
 import { MVideoFullLight } from '@server/types/models'
 import { HttpStatusCode, UserRight, VideoPrivacy } from '@shared/models'
 import express from 'express'
@@ -22,6 +23,15 @@ const videoSourceGetValidator = [
     const video = getVideoWithAttributes(res) as MVideoFullLight
 
     if (user?.hasRight(UserRight.UPDATE_ANY_VIDEO) === true || video.VideoChannel?.Account.userId === user?.id) {
+      res.locals.videoSource = await VideoSourceModel.loadByVideoId(video.id)
+
+      if (!res.locals.videoSource) {
+        return res.fail({
+          status: HttpStatusCode.NOT_FOUND_404,
+          message: 'Video source not found'
+        })
+      }
+
       return next()
     }
 

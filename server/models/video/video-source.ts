@@ -40,13 +40,12 @@ export class VideoSourceModel extends Model<Partial<AttributesOnly<VideoSourceMo
   @Column
   videoId: number
 
-  @BelongsTo(() => VideoModel, {
-    foreignKey: {
-      allowNull: true
-    },
-    onDelete: 'CASCADE'
-  })
+  @BelongsTo(() => VideoModel)
   Video: VideoModel
+
+  static loadByVideoId (videoId) {
+    return VideoSourceModel.findOne({ where: { videoId } })
+  }
 
   toFormattedJSON () {
     return {

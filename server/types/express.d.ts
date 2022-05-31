@@ -42,6 +42,7 @@ import {
   MVideoThumbnail
 } from './models'
 import { Writable } from 'stream'
+import { MVideoSource } from './models/video/video-source'
 
 declare module 'express' {
   export interface Request {
@@ -122,6 +123,8 @@ declare module 'express' {
       videoLiveSession?: MVideoLiveSession
 
       videoShare?: MVideoShareActor
+
+      videoSource?: MVideoSource
 
       videoFile?: MVideoFile
 
