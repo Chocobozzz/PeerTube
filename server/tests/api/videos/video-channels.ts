@@ -479,8 +479,6 @@ describe('Test video channels', function () {
   })
 
   it('Should report correct total views count', async function () {
-    this.timeout(10000)
-
     // check if there's the property
     {
       const { data } = await servers[0].channels.listByAccount({ accountName, withStats: true })
@@ -493,13 +491,6 @@ describe('Test video channels', function () {
 
     // Check if the totalViews count can be updated
     {
-      // video has been posted on channel servers[0].store.videoChannel.id since last update
-      await servers[0].views.simulateView({ id: videoUUID, xForwardedFor: '0.0.0.1,127.0.0.1' })
-      await servers[0].views.simulateView({ id: videoUUID, xForwardedFor: '0.0.0.2,127.0.0.1' })
-
-      // Wait the repeatable job
-      await wait(8000)
-
       const { data } = await servers[0].channels.listByAccount({ accountName, withStats: true })
       const channelWithView = data.find(channel => channel.id === servers[0].store.channel.id)
       expect(channelWithView.totalViews).to.equal(2)
