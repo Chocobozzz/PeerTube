@@ -4,12 +4,12 @@ import '../../assets/player/shared/dock/peertube-dock-plugin'
 import videojs from 'video.js'
 import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
 import { HTMLServerConfig, LiveVideo, ResultList, VideoDetails, VideoPlaylist, VideoPlaylistElement } from '../../../../shared/models'
+import { PeertubePlayerManager } from '../../assets/player'
 import { TranslationsManager } from '../../assets/player/translations-manager'
 import { getParamString } from '../../root-helpers'
 import { PeerTubeEmbedApi } from './embed-api'
-import { AuthHTTP, PeerTubePlugin, PlayerManagerOptions, PlaylistFetcher, PlaylistTracker, VideoFetcher } from './shared'
+import { AuthHTTP, LiveManager, PeerTubePlugin, PlayerManagerOptions, PlaylistFetcher, PlaylistTracker, VideoFetcher } from './shared'
 import { PlayerHTML } from './shared/player-html'
-import { PeertubePlayerManager } from '../../assets/player'
 
 export class PeerTubeEmbed {
   player: videojs.Player
@@ -26,6 +26,7 @@ export class PeerTubeEmbed {
   private readonly peertubePlugin: PeerTubePlugin
   private readonly playerHTML: PlayerHTML
   private readonly playerManagerOptions: PlayerManagerOptions
+  private readonly liveManager: LiveManager
 
   private playlistTracker: PlaylistTracker
 
@@ -37,6 +38,7 @@ export class PeerTubeEmbed {
     this.peertubePlugin = new PeerTubePlugin(this.http)
     this.playerHTML = new PlayerHTML(videoWrapperId)
     this.playerManagerOptions = new PlayerManagerOptions(this.playerHTML, this.videoFetcher, this.peertubePlugin)
+    this.liveManager = new LiveManager(this.playerHTML)
 
     try {
       this.config = JSON.parse(window['PeerTubeServerConfig'])
@@ -235,6 +237,17 @@ export class PeerTubeEmbed {
     }
 
     this.peertubePlugin.getPluginsManager().runHook('action:embed.player.loaded', undefined, { player: this.player, videojs, video })
+
+    if (video.isLive) {
+      this.liveManager.displayInfoAndListenForChanges({
+        video,
+        translations,
+        onPublishedVideo: () => {
+          this.liveManager.stopListeningForChanges(video)
+          this.loadVideoAndBuildPlayer(video.uuid)
+        }
+      })
+    }
   }
 
   private resetPlayerElement () {

@@ -30,6 +30,7 @@ import { MAccountActor, MChannelActor } from '../types/models'
 import { getActivityStreamDuration } from './activitypub/activity'
 import { getBiggestActorImage } from './actor-image'
 import { ServerConfigManager } from './server-config-manager'
+import { isTestInstance } from '@server/helpers/core-utils'
 
 type Tags = {
   ogType: string
@@ -232,7 +233,10 @@ class ClientHtml {
   static async getEmbedHTML () {
     const path = ClientHtml.getEmbedPath()
 
-    if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
+    // Disable HTML cache in dev mode because webpack can regenerate JS files
+    if (!isTestInstance() && ClientHtml.htmlCache[path]) {
+      return ClientHtml.htmlCache[path]
+    }
 
     const buffer = await readFile(path)
     const serverConfig = await ServerConfigManager.Instance.getHTMLServerConfig()

@@ -6,6 +6,7 @@ export class PlayerHTML {
   private readonly wrapperElement: HTMLElement
 
   private playerElement: HTMLVideoElement
+  private informationElement: HTMLDivElement
 
   constructor (private readonly videoWrapperId: string) {
     this.wrapperElement = document.getElementById(this.videoWrapperId)
@@ -64,6 +65,20 @@ export class PlayerHTML {
   removePlaceholder () {
     const placeholder = this.getPlaceholderElement()
     placeholder.style.display = 'none'
+  }
+
+  displayInformation (text: string, translations: Translations) {
+    if (this.informationElement) this.removeInformation()
+
+    this.informationElement = document.createElement('div')
+    this.informationElement.className = 'player-information'
+    this.informationElement.innerText = peertubeTranslate(text, translations)
+
+    document.body.appendChild(this.informationElement)
+  }
+
+  removeInformation () {
+    this.removeElement(this.informationElement)
   }
 
   private getPlaceholderElement () {
