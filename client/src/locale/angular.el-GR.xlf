@@ -124,57 +124,57 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.HH" datatype="html">
         <source>HH</source>
-        <target state="new">HH</target>
+        <target state="translated">ΩΩ</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.hours" datatype="html">
         <source>Hours</source>
-        <target state="new">Hours</target>
+        <target state="translated">Ώρες</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">155</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.MM" datatype="html">
         <source>MM</source>
-        <target state="new">MM</target>
+        <target state="translated">ΛΛ</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.minutes" datatype="html">
         <source>Minutes</source>
-        <target state="new">Minutes</target>
+        <target state="translated">Λεπτά</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">188</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-hours" datatype="html">
         <source>Increment hours</source>
-        <target state="new">Increment hours</target>
+        <target state="translated">Αύξηση ωρών</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">201</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
         <source>Decrement hours</source>
-        <target state="new">Decrement hours</target>
+        <target state="translated">Μείωση ωρών</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">223</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
         <source>Increment minutes</source>
-        <target state="new">Increment minutes</target>
+        <target state="translated">Αύξηση λεπτών</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">243</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
         <source>Decrement minutes</source>
-        <target state="new">Decrement minutes</target>
+        <target state="translated">Μείωση λεπτών</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">264</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.SS" datatype="html">
         <source>SS</source>
-        <target state="new">SS</target>
+        <target state="translated">ΔΔ</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">283</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.seconds" datatype="html">
         <source>Seconds</source>
-        <target state="new">Seconds</target>
+        <target state="translated">Δευτερόλεπτα</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">295</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
         <source>Increment seconds</source>
-        <target state="new">Increment seconds</target>
+        <target state="translated">Αύξηση δευτερολέπτων</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">295</context>
@@ -182,7 +182,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html">
         <source>Decrement seconds</source>
-        <target state="new">Decrement seconds</target>
+        <target state="translated">Μείωση δευτερολέπτων</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">295</context>
@@ -190,7 +190,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
         <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
+        <target state="translated"><x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">295</context>
@@ -198,7 +198,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM" datatype="html">
         <source><x id="INTERPOLATION"/></source>
-        <target state="new"><x id="INTERPOLATION"/></target>
+        <target state="translated"><x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">295</context>
@@ -206,7 +206,7 @@
       </trans-unit>
       <trans-unit id="ngb.toast.close-aria" datatype="html">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">Κλείσιμο</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/toast/toast.ts</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="219462505467671767" datatype="html">
@@ -351,7 +351,7 @@
       </trans-unit>
       <trans-unit id="731573110355765429" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> edition has finished </source>
-        <target state="new"> Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> edition has finished </target>
+        <target state="translated">Η επεξεργασία του βίντεό σας <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ολοκληρώθηκε </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">213,215</context>
@@ -374,12 +374,12 @@
       </trans-unit>
       <trans-unit id="8817917090143649804" datatype="html">
         <source>Account muted</source>
-        <target state="new">Account muted</target>
+        <target state="translated">Λογαριασμός σε σίγαση</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="1684597533616494551" datatype="html">
         <source>Server muted</source>
-        <target state="new">Server muted</target>
+        <target state="translated">Σέρβερ σε σίγαση</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="5924559757556526785">
@@ -443,8 +443,7 @@
       </trans-unit>
       <trans-unit id="2193037168694505715" datatype="html">
         <source>Short text to tell people how they can support the channel (membership platform...).&lt;br /&gt;&lt;br /&gt; When a video is uploaded in this channel, the video support field will be automatically filled by this text.</source>
-        <target state="new">Short text to tell people how they can support the channel (membership platform...).&lt;br /&gt;&lt;br /&gt;
-      When a video is uploaded in this channel, the video support field will be automatically filled by this text.</target>
+        <target state="translated">Ένα σύντομο κείμενο που ενημερώνει πώς μπορεί κανείς να υποστηρίξει το κανάλι (π.χ. συνδρομές...).&lt;br /&gt;&lt;br /&gt; Σε κάθε βίντεο που ανεβαίνει σ' αυτό το κανάλι, το πεδίο «Υποστήριξη» συμπληρώνεται αυτόματα με αυτό το κείμενο.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">67,68</context>
@@ -502,12 +501,12 @@
       </trans-unit>
       <trans-unit id="6995024616159044376" datatype="html">
         <source>Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="new">Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
+        <target state="translated">Το όριό σας ξεπερνιέται με αυτό το βίντεο (μέγεθος βίντεο: <x id="PH" equiv-text="videoSizeBytes"/>, χρησιμοποιούνται: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, όριο: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">339</context></context-group>
       </trans-unit>
       <trans-unit id="7873395933409147217" datatype="html">
         <source>Your daily video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</source>
-        <target state="new">Your daily video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
+        <target state="translated">Το ημερήσιο όριό σας ξεπερνιέται με αυτό το βίντεο (μέγεθος βίντεο: <x id="PH" equiv-text="videoSizeBytes"/>, χρησιμοποιούνται: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, όριο: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">358</context></context-group>
       </trans-unit>
       <trans-unit id="5235042777215655908" datatype="html">
@@ -522,7 +521,7 @@
       </trans-unit>
       <trans-unit id="1781854282711822539" datatype="html">
         <source>Mute to also hide videos/comments</source>
-        <target state="new">Mute to also hide videos/comments</target>
+        <target state="translated">Σίγαση για να κρύψετε βίντεο καθώς και σχόλια</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">27</context>
@@ -547,7 +546,7 @@
       </trans-unit>
       <trans-unit id="8343217707114977013" datatype="html">
         <source>The contact form is not enabled on this instance.</source>
-        <target state="new">The contact form is not enabled on this instance.</target>
+        <target state="translated">Η φόρμα επικοινωνίας δεν είναι ενεργοποιημένη σ' αυτό τον σέρβερ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">56</context>
@@ -567,7 +566,7 @@
       </trans-unit>
       <trans-unit id="2466846716878254816" datatype="html">
         <source>Element <x id="PH" equiv-text="param"/> not found</source>
-        <target state="new">Element <x id="PH" equiv-text="param"/> not found</target>
+        <target state="translated">Το στοιχείο <x id="PH" equiv-text="param"/> δεν βρέθηκε</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-search/find-in-bulk.service.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="7539427273132299890">
@@ -609,22 +608,22 @@
       </trans-unit>
       <trans-unit id="870586304593427318" datatype="html">
         <source>Are you sure you want to delete these <x id="PH" equiv-text="videos.length"/> videos?</source>
-        <target state="new">Are you sure you want to delete these <x id="PH" equiv-text="videos.length"/> videos?</target>
+        <target state="translated">Σίγουρα θέλετε να διαγράψετε αυτά τα <x id="PH" equiv-text="videos.length"/> βίντεο?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">199</context></context-group>
       </trans-unit>
       <trans-unit id="6630644917521475697" datatype="html">
         <source>Deleted <x id="PH" equiv-text="videos.length"/> videos.</source>
-        <target state="new">Deleted <x id="PH" equiv-text="videos.length"/> videos.</target>
+        <target state="translated">Διαγράφηκαν <x id="PH" equiv-text="videos.length"/> βίντεο.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">206</context></context-group>
       </trans-unit>
       <trans-unit id="2870417795706430145" datatype="html">
         <source>Unblocked <x id="PH" equiv-text="videos.length"/> videos.</source>
-        <target state="new">Unblocked <x id="PH" equiv-text="videos.length"/> videos.</target>
+        <target state="translated">Ξεμπλοκαρίστηκαν <x id="PH" equiv-text="videos.length"/> βίντεο.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">218</context></context-group>
       </trans-unit>
       <trans-unit id="9088099192924395359" datatype="html">
         <source>Are you sure you want to delete <x id="PH" equiv-text="videos.length"/> HLS streaming playlists?</source>
-        <target state="new">Are you sure you want to delete <x id="PH" equiv-text="videos.length"/> HLS streaming playlists?</target>
+        <target state="translated">Σίγουρα θέλετε να διαγράψετε <x id="PH" equiv-text="videos.length"/> λίστες ροής HLS;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">228</context></context-group>
       </trans-unit>
       <trans-unit id="5442133371267277333" datatype="html">
