@@ -11640,7 +11640,7 @@
       </trans-unit>
       <trans-unit id="8223917068580581095" datatype="html">
         <source>Toggle theater mode</source>
-        <target state="new">Toggle theater mode</target>
+        <target state="translated">Växla teaterläge</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">756</context></context-group>
       </trans-unit>
       <trans-unit id="8025996572234182184">
