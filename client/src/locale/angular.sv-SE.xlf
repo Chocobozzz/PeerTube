@@ -11600,37 +11600,37 @@
       </trans-unit>
       <trans-unit id="3887762369650091344" datatype="html">
         <source>Increase the volume</source>
-        <target state="translated">Öka volymen</target>
+        <target state="translated">Höj volymen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">741</context></context-group>
       </trans-unit>
       <trans-unit id="1363382131573461910" datatype="html">
         <source>Decrease the volume</source>
-        <target state="new">Decrease the volume</target>
+        <target state="translated">Sänk volymen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">742</context></context-group>
       </trans-unit>
       <trans-unit id="2541031516422557760" datatype="html">
         <source>Seek the video forward</source>
-        <target state="new">Seek the video forward</target>
+        <target state="translated">Hoppa framåt i videon</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">744</context></context-group>
       </trans-unit>
       <trans-unit id="8813023402019364882" datatype="html">
         <source>Seek the video backward</source>
-        <target state="new">Seek the video backward</target>
+        <target state="translated">Hoppa bakåt i videon</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">745</context></context-group>
       </trans-unit>
       <trans-unit id="581757752202843950" datatype="html">
         <source>Increase playback rate</source>
-        <target state="new">Increase playback rate</target>
+        <target state="translated">Öka uppspelningshastigheten</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">747</context></context-group>
       </trans-unit>
       <trans-unit id="5467642834854681120" datatype="html">
         <source>Decrease playback rate</source>
-        <target state="new">Decrease playback rate</target>
+        <target state="translated">Minska uppspelningshastigheten</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">748</context></context-group>
       </trans-unit>
       <trans-unit id="3860402955823859506" datatype="html">
         <source>Navigate in the video to the previous frame</source>
-        <target state="new">Navigate in the video to the previous frame</target>
+        <target state="translated">Navigera i videon till den föregående bildrutan</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">750</context></context-group>
       </trans-unit>
       <trans-unit id="8232494782895420700" datatype="html">
