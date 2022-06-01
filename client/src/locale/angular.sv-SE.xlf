@@ -7832,12 +7832,12 @@
       </trans-unit>
       <trans-unit id="7591870443991978948">
         <source>Last week</source>
-        <target>Förra veckan</target>
+        <target>Senaste veckan</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="4981709795568846080">
         <source>Last day</source>
-        <target>Igår</target>
+        <target>Senaste dygnet</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="9178360613965745088">
