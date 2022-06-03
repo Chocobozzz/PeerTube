@@ -120,7 +120,7 @@ const videoKeysToKeep = [
   'downloadEnabled'
 ]
 class VideoAuditView extends EntityAuditView {
-  constructor (private readonly video: VideoDetails) {
+  constructor (video: VideoDetails) {
     super(videoKeysToKeep, 'video', video)
   }
 }
@@ -131,7 +131,7 @@ const videoImportKeysToKeep = [
   'video-name'
 ]
 class VideoImportAuditView extends EntityAuditView {
-  constructor (private readonly videoImport: VideoImport) {
+  constructor (videoImport: VideoImport) {
     super(videoImportKeysToKeep, 'video-import', videoImport)
   }
 }
@@ -150,7 +150,7 @@ const commentKeysToKeep = [
   'account-name'
 ]
 class CommentAuditView extends EntityAuditView {
-  constructor (private readonly comment: VideoComment) {
+  constructor (comment: VideoComment) {
     super(commentKeysToKeep, 'comment', comment)
   }
 }
@@ -179,7 +179,7 @@ const userKeysToKeep = [
   'videoChannels'
 ]
 class UserAuditView extends EntityAuditView {
-  constructor (private readonly user: User) {
+  constructor (user: User) {
     super(userKeysToKeep, 'user', user)
   }
 }
@@ -205,7 +205,7 @@ const channelKeysToKeep = [
   'ownerAccount-displayedName'
 ]
 class VideoChannelAuditView extends EntityAuditView {
-  constructor (private readonly channel: VideoChannel) {
+  constructor (channel: VideoChannel) {
     super(channelKeysToKeep, 'channel', channel)
   }
 }
@@ -217,7 +217,7 @@ const abuseKeysToKeep = [
   'createdAt'
 ]
 class AbuseAuditView extends EntityAuditView {
-  constructor (private readonly abuse: AdminAbuse) {
+  constructor (abuse: AdminAbuse) {
     super(abuseKeysToKeep, 'abuse', abuse)
   }
 }

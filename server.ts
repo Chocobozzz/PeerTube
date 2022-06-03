@@ -221,18 +221,18 @@ app.use('/', downloadRouter)
 app.use('/', lazyStaticRouter)
 
 // Client files, last valid routes!
-const cliOptions = cli.opts()
+const cliOptions = cli.opts<{ client: boolean, plugins: boolean }>()
 if (cliOptions.client) app.use('/', clientsRouter)
 
 // ----------- Errors -----------
 
 // Catch unmatched routes
-app.use((req, res: express.Response) => {
+app.use((_req, res: express.Response) => {
   res.status(HttpStatusCode.NOT_FOUND_404).end()
 })
 
 // Catch thrown errors
-app.use((err, req, res: express.Response, next) => {
+app.use((err, _req, res: express.Response, _next) => {
   // Format error to be logged
   let error = 'Unknown error.'
   if (err) {
