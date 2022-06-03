@@ -345,8 +345,8 @@ describe('Test index search', function () {
     })
 
     it('Should make host search and have appropriate results', async function () {
-      await check({ search: 'Framasoft', host: 'example.com' }, false)
-      await check({ search: 'Framasoft', host: 'framatube.org' }, true)
+      await check({ search: 'Framasoft videos', host: 'example.com' }, false)
+      await check({ search: 'Framasoft videos', host: 'framatube.org' }, true)
     })
 
     it('Should make handles search and have appropriate results', async function () {
