@@ -367,7 +367,7 @@ const newCustomConfig: CustomConfig = {
   trending: {
     videos: {
       algorithms: {
-        enabled: [ 'best', 'hot', 'most-viewed', 'most-liked' ],
+        enabled: [ 'hot', 'most-viewed', 'most-liked' ],
         default: 'hot'
       }
     }
