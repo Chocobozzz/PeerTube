@@ -5,7 +5,7 @@ import { MAbuseFull, MAbuseMessage, MAccountDefault, MUserWithNotificationSettin
 import { UserNotificationType } from '@shared/models'
 import { AbstractNotification } from '../common/abstract-notification'
 
-export type NewAbuseMessagePayload = {
+type NewAbuseMessagePayload = {
   abuse: MAbuseFull
   message: MAbuseMessage
 }
