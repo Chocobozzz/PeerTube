@@ -9,6 +9,7 @@ import { VideoState } from '@shared/models'
 })
 export class VideoAlertComponent {
   @Input() video: VideoDetails
+  @Input() noPlaylistVideoFound: boolean
 
   isVideoToTranscode () {
     return this.video && this.video.state.id === VideoState.TO_TRANSCODE

@@ -72,6 +72,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   playlist: VideoPlaylist = null
 
   remoteServerDown = false
+  noPlaylistVideoFound = false
 
   private nextVideoUUID = ''
   private nextVideoTitle = ''
@@ -176,6 +177,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   onPlaylistVideoFound (videoId: string) {
     this.loadVideo(videoId)
+  }
+
+  onPlaylistNoVideoFound () {
+    this.noPlaylistVideoFound = true
   }
 
   isUserLoggedIn () {
@@ -285,6 +290,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private loadPlaylist (playlistId: string) {
     if (this.isSameElement(this.playlist, playlistId)) return
+
+    this.noPlaylistVideoFound = false
 
     this.playlistService.getVideoPlaylist(playlistId)
       .subscribe({

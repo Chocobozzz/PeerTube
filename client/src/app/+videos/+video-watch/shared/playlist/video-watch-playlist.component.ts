@@ -18,6 +18,7 @@ export class VideoWatchPlaylistComponent {
   @Input() playlist: VideoPlaylist
 
   @Output() videoFound = new EventEmitter<string>()
+  @Output() noVideoFound = new EventEmitter<void>()
 
   playlistElements: VideoPlaylistElement[] = []
   playlistPagination: ComponentPagination = {
@@ -28,10 +29,11 @@ export class VideoWatchPlaylistComponent {
 
   autoPlayNextVideoPlaylist: boolean
   autoPlayNextVideoPlaylistSwitchText = ''
+
   loopPlaylist: boolean
   loopPlaylistSwitchText = ''
-  noPlaylistVideos = false
 
+  noPlaylistVideos = false
   currentPlaylistPosition: number
 
   constructor (
@@ -100,6 +102,7 @@ export class VideoWatchPlaylistComponent {
       const firstAvailableVideo = this.playlistElements.find(e => !!e.video)
       if (!firstAvailableVideo) {
         this.noPlaylistVideos = true
+        this.noVideoFound.emit()
         return
       }
 
