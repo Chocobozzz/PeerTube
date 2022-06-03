@@ -17,6 +17,7 @@
  * Add `client.videos.resumable_upload.max_chunk_size` config option [#4857](https://github.com/Chocobozzz/PeerTube/pull/4857)
  * Add `object_storage.upload_acl` config option [#4861](https://github.com/Chocobozzz/PeerTube/pull/4861)
  * Add ability to set RTMP/RTMPS listening hostname using `rtmp.hostname`/`rtmps.hostname` and public RTMP/RTMPS hostname using `rtmp.public_hostname`/`rtmps.public_hostname`
+ * Removed `best` default trending algorithm. It is automatically used if using `hot` algorithm with a logged in user
 
 ### Docker
 

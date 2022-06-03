@@ -173,6 +173,10 @@ export class VideosListCommonPageComponent implements OnInit, OnDestroy, Disable
       case 'most-liked':
         return '-likes'
 
+      // We'll automatically apply "best" sort if using "hot" sort with a logged user
+      case 'best':
+        return '-hot'
+
       default:
         return '-' + algorithm as VideoSortField
     }
