@@ -1,0 +1,22 @@
+FROM node:16-bullseye-slim
+
+# Install dependencies
+RUN apt update \
+ && apt install -y --no-install-recommends openssl ffmpeg python3 ca-certificates gnupg gosu build-essential curl git s3fs \
+ && gosu nobody true \
+ && rm /var/lib/apt/lists/* -fR
+
+# Add peertube user
+RUN groupadd -r peertube \
+    && useradd -r -g peertube -m peertube
+
+COPY --chown=peertube:peertube . /app
+WORKDIR /app
+
+USER peertube
+
+# Install manually client dependencies
+RUN yarn install --pure-lockfile
+RUN npm run build
+# Expose API and RTMP
+EXPOSE 9000 1935

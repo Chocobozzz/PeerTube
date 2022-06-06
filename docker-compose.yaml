@@ -1,0 +1,118 @@
+version: "3.5"
+
+
+services:
+
+  s3:
+    image: minio/minio
+    ports:
+      - "9001:9001"
+    volumes:
+      - data:/data
+    env_file:
+      - ./support/docker/development/.env.local
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
+    command: server --address 0.0.0.0:9000 --console-address :9001 /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  s3-service:
+    image: minio/mc
+    depends_on:
+      s3:
+        condition: service_healthy
+    restart: on-failure
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set peertube http://s3:9000 ${MINIO_USER} ${MINIO_PASSWORD};
+      /usr/bin/mc mb peertube/storage;
+      /usr/bin/mc policy set public peertube/storage;
+      "
+
+  peertube:
+    build:
+      context: .
+      dockerfile: ./support/docker/development/Dockerfile.development
+    networks:
+      default:
+        ipv4_address: 172.18.0.42
+    privileged: true
+    env_file:
+      - ./support/docker/development/.env.local
+    ports:
+     - "1935:1935" 
+     - "3000:3000"
+     - "9000:9000" 
+    volumes:
+      - ./config/default.yaml:/app/config/default.yaml
+      - ./support/docker/production/config/custom-environment-variables.yaml:/app/config/custom-environment-variables.yaml
+      - ./client/e2e:/app/client/e2e
+      - ./client/src:/app/client/src
+      - ./client/webpack:/app/client/webpack
+      - ./packages:/app/packages
+      - ./scripts:/app/scripts
+      - ./server:/app/server
+      - ./shared:/app/shared
+      - ./support:/app/support
+      - ./package.json:/app/package.json
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      s3:
+        condition: service_healthy
+    restart: "always"
+    command: >
+      /bin/sh -c "
+      sleep 5;
+      echo "${MINIO_USER}:${MINIO_PASSWORD}" > /app/s3cred;
+      chmod 600 /app/s3cred;
+      mkdir /app/storage;
+      s3fs storage /app/storage -o passwd_file=/app/s3cred,use_path_request_style,url=http://s3:9000;
+      npm run dev:client;
+      "
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse
+
+  postgres:
+    image: postgres:13-alpine
+    env_file:
+      - ./support/docker/development/.env.local
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./support/docker/gitpod/setup_postgres.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: "always"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-U", "peertube"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:6-alpine
+    volumes:
+      - redis:/data
+    restart: "always"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.18.0.0/16
+
+volumes:
+  data:
+  db:
+  redis:
+
