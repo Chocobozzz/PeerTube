@@ -4,6 +4,7 @@ import { asyncMiddleware, oembedValidator } from '../middlewares'
 import { accountNameWithHostGetValidator } from '../middlewares/validators'
 import { MChannelSummary } from '@server/types/models'
 import { escapeHTML } from '@shared/core-utils/renderer'
+import { logger } from '@server/helpers/logger'
 
 const servicesRouter = express.Router()
 
@@ -48,10 +49,13 @@ function generatePlaylistOEmbed (req: express.Request, res: express.Response) {
 function generateVideoOEmbed (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
 
+  const regex = /\?[^?]*$/
+  const params = regex.test(req.query.url) ? req.query.url.match(regex) : ''
+
   const json = buildOEmbed({
     channel: video.VideoChannel,
     title: video.name,
-    embedPath: video.getEmbedStaticPath(),
+    embedPath: video.getEmbedStaticPath() + params,
     previewPath: video.getPreviewStaticPath(),
     previewSize: PREVIEWS_SIZE,
     req
