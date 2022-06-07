@@ -37,6 +37,7 @@ function generatePlaylistOEmbed (req: express.Request, res: express.Response) {
     channel: playlist.VideoChannel,
     title: playlist.name,
     embedPath: playlist.getEmbedStaticPath(),
+    nsfw: true,
     previewPath: playlist.getThumbnailStaticPath(),
     previewSize: THUMBNAILS_SIZE,
     req
@@ -52,6 +53,7 @@ function generateVideoOEmbed (req: express.Request, res: express.Response) {
     channel: video.VideoChannel,
     title: video.name,
     embedPath: video.getEmbedStaticPath(),
+    nsfw: video.nsfw,
     previewPath: video.getPreviewStaticPath(),
     previewSize: PREVIEWS_SIZE,
     req
@@ -66,12 +68,13 @@ function buildOEmbed (options: {
   channel: MChannelSummary
   previewPath: string | null
   embedPath: string
+  nsfw: boolean
   previewSize: {
     height: number
     width: number
   }
 }) {
-  const { req, previewSize, previewPath, title, channel, embedPath } = options
+  const { req, previewSize, previewPath, title, channel, embedPath, nsfw } = options
 
   const webserverUrl = WEBSERVER.URL
   const maxHeight = parseInt(req.query.maxheight, 10)
@@ -98,9 +101,11 @@ function buildOEmbed (options: {
     thumbnailUrl = undefined
   }
 
-  const html = `<iframe width="${embedWidth}" height="${embedHeight}" sandbox="allow-same-origin allow-scripts allow-popups" ` +
-    `title="${embedTitle}" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`
-
+  const html = nsfw ? 
+  `<iframe  style='display:block;' srcdoc="<html><body style='background-color:#282828;'><p style='color:#EEEEEE; text-align: center; vertical-align: middle; font-size: 22px; font-weight: 500;'>The content of this video is marked as sensitive.<br><br><a style = 'color:#EEEEEE' href ='${req.query.url}' target='TARGET_NEW_WINDOW'><u>Watch on PeerTube</u></a></body></html>" width="${embedWidth}" height="${embedHeight}"></iframe>`
+  :
+  `<iframe width="${embedWidth}" height="${embedHeight}" sandbox="allow-same-origin allow-scripts allow-popups" ` +
+  `title="${embedTitle}" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`
   const json: any = {
     type: 'video',
     version: '1.0',
