@@ -168,7 +168,7 @@ describe('Test abuses', function () {
         expect(abuse2.reporterAccount.name).to.equal('root')
         expect(abuse2.reporterAccount.host).to.equal(servers[0].host)
 
-        expect(abuse2.video.id).to.equal(servers[1].store.videoCreated.id)
+        expect(abuse2.video.uuid).to.equal(servers[1].store.videoCreated.uuid)
 
         expect(abuse2.comment).to.be.null
 
@@ -530,7 +530,7 @@ describe('Test abuses', function () {
     it('Should keep the comment abuse when deleting the comment', async function () {
       this.timeout(10000)
 
-      const commentServer2 = await getComment(servers[0], servers[1].store.videoCreated.id)
+      const commentServer2 = await getComment(servers[0], servers[1].store.videoCreated.uuid)
 
       await servers[0].comments.delete({ videoId: servers[1].store.videoCreated.uuid, commentId: commentServer2.id })
 
