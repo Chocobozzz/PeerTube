@@ -1,38 +1,38 @@
-import express from "express";
+import express from "express"
 import {
   EMBED_SIZE,
   PREVIEWS_SIZE,
   WEBSERVER,
-  THUMBNAILS_SIZE,
-} from "../initializers/constants";
-import { asyncMiddleware, oembedValidator } from "../middlewares";
-import { accountNameWithHostGetValidator } from "../middlewares/validators";
-import { MChannelSummary } from "@server/types/models";
-import { escapeHTML } from "@shared/core-utils/renderer";
+  THUMBNAILS_SIZE
+} from "../initializers/constants"
+import { asyncMiddleware, oembedValidator } from "../middlewares"
+import { accountNameWithHostGetValidator } from "../middlewares/validators"
+import { MChannelSummary } from "@server/types/models"
+import { escapeHTML } from "@shared/core-utils/renderer"
 
-const servicesRouter = express.Router();
+const servicesRouter = express.Router()
 
-servicesRouter.use("/oembed", asyncMiddleware(oembedValidator), generateOEmbed);
+servicesRouter.use("/oembed", asyncMiddleware(oembedValidator), generateOEmbed)
 servicesRouter.use(
   "/redirect/accounts/:accountName",
   asyncMiddleware(accountNameWithHostGetValidator),
   redirectToAccountUrl
-);
+)
 
 // ---------------------------------------------------------------------------
 
-export { servicesRouter };
+export { servicesRouter }
 
 // ---------------------------------------------------------------------------
 
-function generateOEmbed(req: express.Request, res: express.Response) {
-  if (res.locals.videoAll) return generateVideoOEmbed(req, res);
+function generateOEmbed (req: express.Request, res: express.Response) {
+  if (res.locals.videoAll) return generateVideoOEmbed(req, res)
 
-  return generatePlaylistOEmbed(req, res);
+  return generatePlaylistOEmbed(req, res)
 }
 
-function generatePlaylistOEmbed(req: express.Request, res: express.Response) {
-  const playlist = res.locals.videoPlaylistSummary;
+function generatePlaylistOEmbed (req: express.Request, res: express.Response) {
+  const playlist = res.locals.videoPlaylistSummary
 
   const json = buildOEmbed({
     channel: playlist.VideoChannel,
@@ -41,14 +41,14 @@ function generatePlaylistOEmbed(req: express.Request, res: express.Response) {
     nsfw: false,
     previewPath: playlist.getThumbnailStaticPath(),
     previewSize: THUMBNAILS_SIZE,
-    req,
-  });
+    req
+  })
 
-  return res.json(json);
+  return res.json(json)
 }
 
-function generateVideoOEmbed(req: express.Request, res: express.Response) {
-  const video = res.locals.videoAll;
+function generateVideoOEmbed (req: express.Request, res: express.Response) {
+  const video = res.locals.videoAll
 
   const json = buildOEmbed({
     channel: video.VideoChannel,
@@ -57,48 +57,48 @@ function generateVideoOEmbed(req: express.Request, res: express.Response) {
     nsfw: video.nsfw,
     previewPath: video.getPreviewStaticPath(),
     previewSize: PREVIEWS_SIZE,
-    req,
-  });
+    req
+  })
 
-  return res.json(json);
+  return res.json(json)
 }
 
-function buildOEmbed(options: {
-  req: express.Request;
-  title: string;
-  channel: MChannelSummary;
-  previewPath: string | null;
-  embedPath: string;
-  nsfw: boolean;
+function buildOEmbed (options: {
+  req: express.Request
+  title: string
+  channel: MChannelSummary
+  previewPath: string | null
+  embedPath: string
+  nsfw: boolean
   previewSize: {
-    height: number;
-    width: number;
-  };
+    height: number
+    width: number
+  }
 }) {
   const { req, previewSize, previewPath, title, channel, embedPath, nsfw } =
-    options;
+    options
 
-  const webserverUrl = WEBSERVER.URL;
-  const maxHeight = parseInt(req.query.maxheight, 10);
-  const maxWidth = parseInt(req.query.maxwidth, 10);
+  const webserverUrl = WEBSERVER.URL
+  const maxHeight = parseInt(req.query.maxheight, 10)
+  const maxWidth = parseInt(req.query.maxwidth, 10)
 
-  const embedUrl = webserverUrl + embedPath;
-  const embedTitle = escapeHTML(title);
+  const embedUrl = webserverUrl + embedPath
+  const embedTitle = escapeHTML(title)
 
-  let thumbnailUrl = previewPath ? webserverUrl + previewPath : undefined;
+  let thumbnailUrl = previewPath ? webserverUrl + previewPath : undefined
 
-  let embedWidth = EMBED_SIZE.width;
-  if (maxWidth < embedWidth) embedWidth = maxWidth;
+  let embedWidth = EMBED_SIZE.width
+  if (maxWidth < embedWidth) embedWidth = maxWidth
 
-  let embedHeight = EMBED_SIZE.height;
-  if (maxHeight < embedHeight) embedHeight = maxHeight;
+  let embedHeight = EMBED_SIZE.height
+  if (maxHeight < embedHeight) embedHeight = maxHeight
 
   // Our thumbnail is too big for the consumer
   if (
     (maxHeight !== undefined && maxHeight < previewSize.height) ||
     (maxWidth !== undefined && maxWidth < previewSize.width)
   ) {
-    thumbnailUrl = undefined;
+    thumbnailUrl = undefined
   }
 
   const html = nsfw
@@ -108,7 +108,7 @@ function buildOEmbed(options: {
       target='TARGET_NEW_WINDOW'><u>Watch on PeerTube</u></a></body></html>" width="${embedWidth}" 
       height="${embedHeight}"></iframe>`
     : `<iframe width="${embedWidth}" height="${embedHeight}" sandbox="allow-same-origin allow-scripts allow-popups" ` +
-      `title="${embedTitle}" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`;
+      `title="${embedTitle}" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`
   const json: any = {
     type: "video",
     version: "1.0",
@@ -119,22 +119,22 @@ function buildOEmbed(options: {
     author_name: channel.name,
     author_url: channel.Actor.url,
     provider_name: "PeerTube",
-    provider_url: webserverUrl,
-  };
-
-  if (thumbnailUrl !== undefined) {
-    json.thumbnail_url = thumbnailUrl;
-    json.thumbnail_width = previewSize.width;
-    json.thumbnail_height = previewSize.height;
+    provider_url: webserverUrl
   }
 
-  return json;
+  if (thumbnailUrl !== undefined) {
+    json.thumbnail_url = thumbnailUrl
+    json.thumbnail_width = previewSize.width
+    json.thumbnail_height = previewSize.height
+  }
+
+  return json
 }
 
-function redirectToAccountUrl(
+function redirectToAccountUrl (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) {
-  return res.redirect(res.locals.account.Actor.url);
+  return res.redirect(res.locals.account.Actor.url)
 }
