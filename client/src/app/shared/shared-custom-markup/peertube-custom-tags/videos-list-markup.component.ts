@@ -7,7 +7,7 @@ import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 import { CustomMarkupComponent } from './shared'
 
 /*
- * Markup component list videos depending on criterias
+ * Markup component list videos depending on criteria
 */
 
 @Component({

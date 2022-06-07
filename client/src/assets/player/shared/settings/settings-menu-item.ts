@@ -301,7 +301,7 @@ class SettingsMenuItem extends MenuItem {
         this.settingsSubMenuValueEl_.innerHTML = html
       }, 250)
     } else {
-      // Loop trough the submenu items to find the selected child
+      // Loop through the submenu items to find the selected child
       for (const subMenuItem of this.subMenu.menu.children_) {
         if (!(subMenuItem instanceof component)) {
           continue

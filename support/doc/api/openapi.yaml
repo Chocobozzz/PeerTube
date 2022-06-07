@@ -247,8 +247,8 @@ tags:
       ### Import
 
       - _URL_-based: where the URL points to any service supported by [youtube-dl](https://ytdl-org.github.io/youtube-dl/)
-      - _magnet_-based: where the URI resolves to a BitTorrent ressource containing a single supported video file
-      - _torrent_-based: where the metainfo file resolves to a BitTorrent ressource containing a single supported video file
+      - _magnet_-based: where the URI resolves to a BitTorrent resource containing a single supported video file
+      - _torrent_-based: where the metainfo file resolves to a BitTorrent resource containing a single supported video file
 
       The import function is practical when the desired video/audio is available online. It makes PeerTube
       download it for you, saving you as much bandwidth and avoiding any instability or limitation your network might have.
@@ -2053,7 +2053,7 @@ paths:
           x-summary: video file too large, due to quota or max body size limit set by the reverse-proxy
           description: |
             If the response has no body, it means the reverse-proxy didn't let it through. Otherwise disambiguate via `type`:
-            - `quota_reached` for quota limits wether daily or global
+            - `quota_reached` for quota limits whether daily or global
           headers:
             X-File-Maximum-Size:
               schema:
@@ -5277,7 +5277,7 @@ components:
             moderator: Moderator scope
             user: User scope
   schemas:
-    # Resuable core properties
+    # Reusable core properties
     id:
       type: integer
       minimum: 1
@@ -5443,7 +5443,7 @@ components:
         - 1
         - 2
         - 3
-      description: 'The live latency mode (Default = `1`, HIght latency = `2`, Small Latency = `3`)'
+      description: 'The live latency mode (Default = `1`, High latency = `2`, Small Latency = `3`)'
 
     VideoStateConstant:
       properties:
@@ -7754,7 +7754,7 @@ components:
               - 5
             nullable: true
             description: >
-              Error type if an error occured during the live session:
+              Error type if an error occurred during the live session:
                 - `1`: Bad socket health (transcoding is too slow)
                 - `2`: Max duration exceeded
                 - `3`: Quota exceeded

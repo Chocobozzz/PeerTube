@@ -114,7 +114,7 @@ async function autoResize (options: {
 }) {
   const { sourceImage, newSize, destination } = options
 
-  // Portrait mode targetting a landscape, apply some effect on the image
+  // Portrait mode targeting a landscape, apply some effect on the image
   const sourceIsPortrait = sourceImage.getWidth() < sourceImage.getHeight()
   const destIsPortraitOrSquare = newSize.width <= newSize.height
 

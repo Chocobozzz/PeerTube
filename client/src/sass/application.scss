@@ -342,7 +342,7 @@ table {
     --videosHorizontalMarginContent: #{pvar(--horizontalMarginContent)};
   }
 
-  /* the following applies from 500px to 900px and is partially overriden from 500px to 800px by changes below to $small-view */
+  /* the following applies from 500px to 900px and is partially overridden from 500px to 800px by changes below to $small-view */
   .main-col,
   .main-col.expanded {
     --horizontalMarginContent: #{math.div($expanded-horizontal-margins, 3)};

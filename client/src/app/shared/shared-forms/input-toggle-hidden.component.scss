@@ -6,7 +6,7 @@ input {
   @include padding-left(15px !important);
   @include padding-right(15px !important);
 
-  // set again properties of peertube-input-text that are overriden by .input-group
+  // set again properties of peertube-input-text that are overridden by .input-group
   font-size: 15px !important;
 }
 

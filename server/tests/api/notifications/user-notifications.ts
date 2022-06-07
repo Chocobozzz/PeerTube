@@ -545,7 +545,7 @@ describe('Test user notifications', function () {
       await servers[1].subscriptions.remove({ uri: 'user_1_channel@localhost:' + servers[0].port })
     })
 
-    // PeerTube does not support accout -> account follows
+    // PeerTube does not support account -> account follows
     // it('Should notify when a local account is following one of our channel', async function () {
     //   this.timeout(50000)
     //
