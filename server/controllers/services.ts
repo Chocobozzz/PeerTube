@@ -37,7 +37,7 @@ function generatePlaylistOEmbed (req: express.Request, res: express.Response) {
     channel: playlist.VideoChannel,
     title: playlist.name,
     embedPath: playlist.getEmbedStaticPath(),
-    nsfw: true,
+    nsfw: false,
     previewPath: playlist.getThumbnailStaticPath(),
     previewSize: THUMBNAILS_SIZE,
     req
