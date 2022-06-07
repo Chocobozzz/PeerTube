@@ -25,6 +25,11 @@ Set its password:
 $ sudo passwd peertube
 ```
 
+Ensure the directory is traversable:
+```bash
+$ chmod a+rx /var/www/peertube
+```
+
 **On FreeBSD**
 
 ```bash
