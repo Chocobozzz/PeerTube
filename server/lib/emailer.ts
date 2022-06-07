@@ -179,7 +179,7 @@ class Emailer {
         }
       }
 
-      // overriden/new variables given for a specific template in the payload
+      // overridden/new variables given for a specific template in the payload
       const sendOptions = merge(baseOptions, options)
 
       await email.send(sendOptions)

@@ -308,7 +308,7 @@ class Redis {
     return this.deleteKey('resumable-upload-' + uploadId)
   }
 
-  /* ************ AP ressource unavailability ************ */
+  /* ************ AP resource unavailability ************ */
 
   async addAPUnavailability (url: string) {
     const key = this.generateAPUnavailabilityKey(url)
