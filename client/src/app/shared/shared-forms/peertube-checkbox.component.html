@@ -1,6 +1,6 @@
 <div class="root flex-column">
   <div class="d-flex">
-    <label class="form-group-checkbox">
+    <label>
       <input
         type="checkbox"
         [(ngModel)]="checked"
@@ -33,7 +33,7 @@
     <div *ngIf="recommended" class="recommended" i18n>Recommended</div>
   </div>
 
-  <div class="ml-4 d-flex flex-column">
+  <div class="ms-4 d-flex flex-column">
     <small class="wrapper mt-2 muted">
       <ng-content select="description"></ng-content>
     </small>

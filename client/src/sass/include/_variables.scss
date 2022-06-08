@@ -1,4 +1,5 @@
 @use 'sass:math';
+@use '~bootstrap/scss/functions' as *;
 
 $small-view: 800px;
 $mobile-view: 500px;

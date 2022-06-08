@@ -1,11 +1,11 @@
-<h1 class="sr-only" i18n>Notifications</h1>
+<h1 class="visually-hidden" i18n>Notifications</h1>
 <div class="header">
   <a routerLink="/my-account/settings" fragment="notifications" i18n>
     <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
     Notification preferences
   </a>
 
-  <div class="peertube-select-container peertube-select-button ml-2 mr-2">
+  <div class="peertube-select-container peertube-select-button ms-2 me-2">
     <select [(ngModel)]="notificationSortType" (ngModelChange)="onChangeSortColumn()" class="form-control">
       <option value="undefined" disabled>Sort by</option>
       <option value="createdAt" i18n>Newest first</option>
@@ -13,7 +13,7 @@
     </select>
   </div>
 
-  <button class="btn ml-auto" [disabled]="!hasUnreadNotifications()" (click)="markAllAsRead()">
+  <button class="btn ms-auto" [disabled]="!hasUnreadNotifications()" (click)="markAllAsRead()">
     <ng-container *ngIf="hasUnreadNotifications()">
       <my-global-icon iconName="tick" aria-hidden="true"></my-global-icon>
 

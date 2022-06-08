@@ -91,9 +91,8 @@ my-video-thumbnail,
           padding-right: 5px;
         }
 
-        .badge {
-          @include peertube-badge;
-          margin-right: 5px;
+        .pt-badge {
+          @include margin-right(5px);
         }
       }
 

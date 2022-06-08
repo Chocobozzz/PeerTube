@@ -7,27 +7,28 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
-
 @import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/utilities';
+
 @import '~bootstrap/scss/root';
 @import '~bootstrap/scss/reboot';
 @import '~bootstrap/scss/type';
 @import '~bootstrap/scss/grid';
-@import '~bootstrap/scss/tables';
 @import '~bootstrap/scss/forms';
 @import '~bootstrap/scss/buttons';
 @import '~bootstrap/scss/dropdown';
 @import '~bootstrap/scss/button-group';
-@import '~bootstrap/scss/input-group';
 @import '~bootstrap/scss/nav';
 @import '~bootstrap/scss/card';
-@import '~bootstrap/scss/badge';
+@import '~bootstrap/scss/accordion';
 @import '~bootstrap/scss/alert';
 @import '~bootstrap/scss/close';
 @import '~bootstrap/scss/modal';
 @import '~bootstrap/scss/tooltip';
 @import '~bootstrap/scss/popover';
-@import '~bootstrap/scss/utilities';
+
+@import '~bootstrap/scss/helpers';
+@import '~bootstrap/scss/utilities/api';
 
 @import '~@neos21/bootstrap3-glyphicons/assets/stylesheets/bootstrap3-glyphicons';
 
@@ -36,16 +37,12 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   animation: spin 0.7s infinite linear;
 }
 
-.glyphicon-duplicate {
-  font-size: 70%;
-}
-
 .flex-auto {
   flex: auto;
 }
 
 .c-hand {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 @keyframes spin {
@@ -58,16 +55,8 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   }
 }
 
-.btn-group > .btn:not(:first-child) {
-  border-top-left-radius: 0 !important;
-  border-bottom-left-radius: 0 !important;
-}
-
 .dropdown-menu {
-  border-radius: 3px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
   font-size: 15px;
-
   color: pvar(--mainForegroundColor);
   background-color: pvar(--mainBackgroundColor);
 
@@ -78,19 +67,10 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   .dropdown-item {
     padding: 3px 15px;
 
-    color: pvar(--mainForegroundColor);
-    background-color: pvar(--mainBackgroundColor);
-
     &.active {
       color: pvar(--mainBackgroundColor) !important;
       background-color: pvar(--mainHoverColor);
       opacity: 0.9;
-    }
-
-    a:active,
-    &:hover {
-      color: pvar(--mainForegroundColor) !important;
-      background-color: pvar(--mainBackgroundHoverColor);
     }
 
     &::after {
@@ -98,17 +78,9 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
     }
   }
 
-  button {
-    @include disable-default-a-behaviour;
-  }
-
   a {
     @include disable-default-a-behaviour;
   }
-}
-
-.badge {
-  line-height: 1.1;
 }
 
 @media screen and (min-width: #{breakpoint(md)}) {
@@ -350,22 +322,28 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 }
 
 .input-group {
-  > .form-control {
-    flex: initial;
+  > .btn,
+  > .input-group-text {
+    height: $button-height;
   }
 
-  input.form-control {
-    width: unset !important;
-    flex-grow: 1;
+  > .input-group-text {
+    font-size: 15px;
+    line-height: normal;
+    opacity: 0.9;
   }
 
-  .input-group-prepend + input {
-    border-top-left-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
+  .input-group-text > .dropdown-toggle {
+    display: flex;
+  }
+
+  .last-in-group {
+    border-top-right-radius: 3px !important;
+    border-bottom-right-radius: 3px !important;
   }
 }
 
-.has-feedback.has-clear {
+.has-clear {
   position: relative;
 
   input {
@@ -374,11 +352,6 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
   .form-control-clear {
     color: rgba(0, 0, 0, 0.4);
-    /*
-     * Enable pointer events as they have been disabled since Bootstrap 3.3
-     * See https://github.com/twbs/bootstrap/pull/14104
-     */
-    pointer-events: all;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -395,46 +368,5 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
   input:placeholder-shown + .form-control-clear {
     display: none;
-  }
-}
-
-.callout {
-  padding: 1.25rem;
-  border: 1px solid #eee;
-  border-radius: .25rem;
-
-  > label {
-    position: relative;
-    top: -5px;
-    left: -10px;
-    color: #6c757d !important;
-  }
-
-  &:not(.callout-light) {
-    border-left-width: .25rem;
-  }
-
-  &.callout-info {
-    border-color: pvar(--mainColorLightest);
-    border-left-color: pvar(--mainColor);
-  }
-}
-
-// Override these properties for Bidi support
-@each $size, $length in $spacers {
-  .ml-#{$size} {
-    @include margin-left($length);
-  }
-
-  .mr-#{$size} {
-    @include margin-right($length);
-  }
-
-  .pl-#{$size} {
-    @include padding-left($length);
-  }
-
-  .pr-#{$size} {
-    @include padding-right($length);
   }
 }

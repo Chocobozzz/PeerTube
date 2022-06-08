@@ -17,9 +17,8 @@ form {
     @include margin-right(10px);
   }
 
-  .form-group {
+  .textarea-wrapper {
     flex-grow: 1;
-    margin: 0;
     position: relative;
   }
 

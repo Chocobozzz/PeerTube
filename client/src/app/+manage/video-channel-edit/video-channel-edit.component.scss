@@ -24,31 +24,21 @@ my-actor-banner-edit {
   max-width: 500px;
 }
 
-.input-group {
-  @include peertube-input-group(fit-content);
+input[type=text] {
+  @include peertube-input-text(340px);
+
+  display: block;
+
+  &#name {
+    width: auto;
+    flex-grow: 1;
+  }
 }
 
-.input-group-append {
-  height: 30px;
-}
-
-input {
-  &[type=text] {
-    @include peertube-input-text(340px);
-
-    display: block;
-
-    &#name {
-      width: auto;
-      flex-grow: 1;
-    }
-  }
-
-  &[type=submit] {
-    @include peertube-button;
-    @include orange-button;
-    @include margin-left(auto);
-  }
+input[type=submit] {
+  @include peertube-button;
+  @include orange-button;
+  @include margin-left(auto);
 }
 
 textarea {

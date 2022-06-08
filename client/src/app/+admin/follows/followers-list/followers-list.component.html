@@ -12,7 +12,7 @@
 >
   <ng-template pTemplate="caption">
     <div class="caption">
-      <div class="ml-auto">
+      <div class="ms-auto">
         <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
     </div>
@@ -46,10 +46,10 @@
       </td>
 
       <td *ngIf="follow.state === 'accepted'">
-        <span class="badge badge-green" i18n>Accepted</span>
+        <span class="pt-badge badge-green" i18n>Accepted</span>
       </td>
       <td *ngIf="follow.state === 'pending'">
-        <span class="badge badge-yellow" i18n>Pending</span>
+        <span class="pt-badge badge-yellow" i18n>Pending</span>
       </td>
 
       <td>{{ follow.score }}</td>

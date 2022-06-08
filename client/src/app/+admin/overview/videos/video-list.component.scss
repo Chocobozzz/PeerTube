@@ -7,10 +7,8 @@ my-embed {
   width: 50%;
 }
 
-.badge {
-  @include peertube-badge;
-
-  margin-right: 5px;
+.pt-badge {
+  @include margin-right(5px);
 }
 
 .video-info > div {

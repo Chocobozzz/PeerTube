@@ -89,6 +89,7 @@
   display: inline-block;
   height: $button-height;
   width: $width;
+  max-width: $width;
   color: pvar(--inputForegroundColor);
   background-color: pvar(--inputBackgroundColor);
   border: 1px solid #C6C6C6;
@@ -105,19 +106,6 @@
 
   @media screen and (max-width: calc(#{$width} + 40px)) {
     width: 100%;
-  }
-}
-
-@mixin peertube-input-group($width) {
-  width: $width;
-  min-height: $button-height;
-  padding-top: 0;
-  padding-bottom: 0;
-  flex-wrap: nowrap;
-
-  .input-group-text {
-    font-size: 14px;
-    color: #808080;
   }
 }
 
@@ -371,6 +359,7 @@
       cursor: default;
     }
   }
+
   select[disabled] {
     background-color: #f9f9f9;
   }
@@ -547,50 +536,6 @@
   &[disabled] + span + span {
     opacity: 0.5;
     cursor: default;
-  }
-}
-
-@mixin peertube-badge {
-  border-radius: 2px;
-  padding: 1/4em 1/2em;
-  text-transform: uppercase;
-  font-weight: $font-bold;
-  font-size: 12px;
-  letter-spacing: 1/3px;
-
-  &.badge-banned,
-  &.badge-red {
-    background-color: #ffcdd2;
-    color: #c63737;
-  }
-
-  &.badge-banned {
-    text-decoration: line-through;
-  }
-
-  &.badge-yellow {
-    background-color: #feedaf;
-    color: #8a5340;
-  }
-
-  &.badge-brown {
-    background-color: #ffd8b2;
-    color: #805b36;
-  }
-
-  &.badge-green {
-    background-color: #c8e6c9;
-    color: #256029;
-  }
-
-  &.badge-blue {
-    background-color: #b3e5fc;
-    color: #23547b;
-  }
-
-  &.badge-purple {
-    background-color: #eccfff;
-    color: #694382;
   }
 }
 
@@ -937,8 +882,9 @@
       vertical-align: top;
     }
 
-    .badge {
+    .pt-badge {
       @include margin-left(7px);
+
       vertical-align: top;
     }
   }

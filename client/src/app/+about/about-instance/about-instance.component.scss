@@ -19,18 +19,11 @@
 }
 
 .instance-badges {
-  font-size: 16px;
   margin-bottom: 20px;
+  font-size: 16px;
 
-  .badge {
+  .pt-badge {
     @include margin-right(5px);
-
-    font-size: 12px;
-    font-weight: $font-semibold;
-
-    &.category {
-      background-color: pvar(--mainColor);
-    }
   }
 }
 

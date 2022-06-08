@@ -15,16 +15,10 @@ input[type=submit] {
 
 .peertube-select-container {
   @include peertube-select-container(340px);
-
-  margin-bottom: 30px;
 }
 
 my-select-languages {
   @include responsive-width(340px);
 
   display: block;
-}
-
-.form-group-select {
-  margin-bottom: 30px;
 }

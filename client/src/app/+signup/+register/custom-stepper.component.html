@@ -6,7 +6,7 @@
         (click)="onClick(i)"
       >
         <div class="step-index">
-          <ng-container *ngIf="!isCompleted(step)"><span class="sr-only" i18n>Step</span> {{ i + 1 }}</ng-container>
+          <ng-container *ngIf="!isCompleted(step)"><span class="visually-hidden" i18n>Step</span> {{ i + 1 }}</ng-container>
           <my-global-icon *ngIf="isCompleted(step)" iconName="tick"></my-global-icon>
         </div>
 

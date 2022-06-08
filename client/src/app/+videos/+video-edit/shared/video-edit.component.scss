@@ -33,10 +33,6 @@ my-peertube-checkbox {
   height: 100%;
   min-height: 300px;
 
-  .form-group {
-    margin-bottom: 25px;
-  }
-
   input {
     @include peertube-input-text(100%);
     display: block;
@@ -44,10 +40,6 @@ my-peertube-checkbox {
 
   .label-tags + span {
     font-size: 15px;
-  }
-
-  .advanced-settings .form-group {
-    margin-bottom: 20px;
   }
 }
 

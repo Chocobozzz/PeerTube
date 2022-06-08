@@ -93,6 +93,10 @@ my-user-moderation-dropdown {
   }
 }
 
+.pt-badge {
+  @include margin-right(5px);
+}
+
 @media screen and (max-width: $small-view) {
   .root {
     --myGlobalTopPadding: 45px;

@@ -96,6 +96,10 @@ noscript,
   margin: 1rem auto;
 }
 
+a {
+  text-decoration: none;
+}
+
 strong {
   font-weight: $font-semibold;
 }
@@ -120,6 +124,7 @@ button {
 label {
   font-weight: $font-bold;
   font-size: 15px;
+  margin-bottom: 0.5rem;
 }
 
 code {
@@ -131,6 +136,10 @@ code {
   font-size: 75%;
   display: inline-block;
   vertical-align: middle;
+}
+
+.form-group {
+  margin-bottom: 1rem;
 }
 
 .form-error,
@@ -152,14 +161,6 @@ my-input-toggle-hidden ::ng-deep input {
   width: 100%;
   margin: 0 auto;
   max-width: initial;
-}
-
-.glyphicon-black {
-  color: #000;
-}
-
-.row {
-  margin: 0 !important;
 }
 
 .main-col {
@@ -324,6 +325,29 @@ table {
 
   font-size: 90%;
   margin-top: 10px;
+}
+
+.callout {
+  padding: 1.25rem;
+  border: 1px solid #eee;
+  border-radius: .25rem;
+  position: relative;
+
+  > label {
+    position: relative;
+    top: -5px;
+    left: -10px;
+    color: #6c757d !important;
+  }
+
+  &:not(.callout-light) {
+    border-left-width: .25rem;
+  }
+
+  &.callout-info {
+    border-color: pvar(--mainColorLightest);
+    border-left-color: pvar(--mainColor);
+  }
 }
 
 @media screen and (max-width: #{breakpoint(xxl)}) {

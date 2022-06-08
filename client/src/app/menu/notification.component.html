@@ -24,7 +24,7 @@
       <div>
         <button
           *ngIf="unreadNotifications"
-          i18n-title title="Mark all as read" class="glyphicon glyphicon-ok mr-2"
+          i18n-title title="Mark all as read" class="glyphicon glyphicon-ok me-2"
           (click)="markAllAsRead()"
         ></button>
         <a
@@ -45,7 +45,7 @@
     ></my-user-notifications>
 
     <a *ngIf="loaded" class="all-notifications" routerLink="/my-account/notifications" #notifications (click)="onNavigate(notifications)">
-      <my-global-icon class="mr-1" iconName="bell" aria-hidden="true"></my-global-icon>
+      <my-global-icon class="me-1" iconName="bell" aria-hidden="true"></my-global-icon>
       <span i18n>See all your notifications</span>
     </a>
   </div>

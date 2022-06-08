@@ -5,11 +5,14 @@ input {
   @include peertube-input-text(auto);
   @include padding-left(15px !important);
   @include padding-right(15px !important);
-
-  // set again properties of peertube-input-text that are overridden by .input-group
-  font-size: 15px !important;
 }
 
-.eye-button {
-  line-height: 1 !important;
+.btn {
+  font-size: 15px;
+}
+
+.copy-text {
+  font-size: 14px;
+  margin-left: 5px;
+  vertical-align: top;
 }

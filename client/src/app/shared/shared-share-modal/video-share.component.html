@@ -171,9 +171,8 @@
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" *ngIf="isInVideoEmbedTab()">
             <my-peertube-checkbox
-              *ngIf="isInVideoEmbedTab()"
               inputName="onlyEmbedUrl" [(ngModel)]="customizations.onlyEmbedUrl"
               i18n-labelText labelText="Only display embed URL"
             ></my-peertube-checkbox>

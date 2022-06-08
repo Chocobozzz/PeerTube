@@ -2,13 +2,12 @@
 
   <ng-container formGroupName="instance">
 
-    <div class="form-row mt-5"> <!-- instance grid -->
-      <div class="form-group col-12 col-lg-4 col-xl-3">
+    <div class="row mt-5"> <!-- instance grid -->
+      <div class="col-12 col-lg-4 col-xl-3">
         <div i18n class="inner-form-title">INSTANCE</div>
       </div>
 
-      <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
-
+      <div class="col-12 col-lg-8 col-xl-9">
         <div class="form-group">
           <label i18n for="instanceName">Name</label>
 
@@ -77,16 +76,15 @@
       </div>
     </div>
 
-    <div class="form-row mt-4"> <!-- moderation & nsfw grid -->
-      <div class="form-group col-12 col-lg-4 col-xl-3">
+    <div class="row mt-4"> <!-- moderation & nsfw grid -->
+      <div class="col-12 col-lg-4 col-xl-3">
         <div i18n class="inner-form-title">MODERATION & NSFW</div>
-        <div i18n class="inner-for-description">
+        <div i18row="inner-for-description">
           Manage <a routerLink="/admin/users">users</a> to build a moderation team.
         </div>
       </div>
 
-      <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
-
+      <div class="col-12 col-lg-8 col-xl-9">
         <div class="form-group">
           <my-peertube-checkbox inputName="instanceIsNSFW" formControlName="isNSFW">
             <ng-template ptTemplate="label">
@@ -162,12 +160,12 @@
       </div>
     </div>
 
-    <div class="form-row mt-4"> <!-- you and your instance grid -->
-      <div class="form-group col-12 col-lg-4 col-xl-3">
+    <div class="row mt-4"> <!-- you and your instance grid -->
+      <div class="col-12 col-lg-4 col-xl-3">
         <div i18n class="inner-form-title">YOU AND YOUR INSTANCE</div>
       </div>
 
-      <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+      <div class="col-12 col-lg-8 col-xl-9">
 
         <div class="form-group">
           <label i18n for="instanceAdministrator">Who is behind the instance?</label><my-help helpType="markdownText"></my-help>
@@ -220,12 +218,12 @@
       </div>
     </div>
 
-    <div class="form-row mt-4"> <!-- other information grid -->
-      <div class="form-group col-12 col-lg-4 col-xl-3">
+    <div class="row mt-4"> <!-- other information grid -->
+      <div class="col-12 col-lg-4 col-xl-3">
         <div i18n class="inner-form-title">OTHER INFORMATION</div>
       </div>
 
-      <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+      <div class="col-12 col-lg-8 col-xl-9">
 
         <div class="form-group">
           <label i18n for="instanceHardwareInformation">What server/hardware does the instance run on?</label>

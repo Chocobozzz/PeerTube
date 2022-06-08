@@ -13,15 +13,16 @@ p-autocomplete {
   margin: 1rem 0;
 }
 
-.badge {
+.pt-badge {
+  @include margin-right(5px);
+
   font-size: 13px;
-  margin-right: 5px;
 }
 
 .journal-session {
   margin-bottom: 5px;
 
-  span:not(.badge, :last-child)::after {
+  span:not(.pt-badge, :last-child)::after {
     margin: 3px;
     content: '•';
   }

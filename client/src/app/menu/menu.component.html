@@ -36,14 +36,14 @@
               >
                 <my-global-icon iconName="language" aria-hidden="true"></my-global-icon>
                 <span i18n>Interface:</span>
-                <span class="ml-auto muted">{{ currentInterfaceLanguage }}</span>
+                <span class="ms-auto muted">{{ currentInterfaceLanguage }}</span>
               </a>
 
               <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-languages-subtitles"
                 #settingsLanguagesSubtitles (click)="onActiveLinkScrollToAnchor(settingsLanguagesSubtitles)">
                 <my-global-icon iconName="video-lang" aria-hidden="true"></my-global-icon>
                 <span i18n>Videos:</span>
-                <span class="ml-auto muted">{{ videoLanguages.join(', ') }}</span>
+                <span class="ms-auto muted">{{ videoLanguages.join(', ') }}</span>
               </a>
 
               <a ngbDropdownItem ngbDropdownToggle class="dropdown-item settings-sensitive" routerLink="/my-account/settings"
@@ -53,14 +53,14 @@
                 <my-global-icon class="hover-display-toggle" [hidden]="user.nsfwPolicy === 'display'" iconName="sensitive" aria-hidden="true"></my-global-icon>
                 <my-global-icon class="hover-display-toggle" [hidden]="user.nsfwPolicy !== 'display'" iconName="unsensitive" aria-hidden="true"></my-global-icon>
                 <span i18n>Sensitive:</span>
-                <span class="ml-auto muted">{{ nsfwPolicy }}</span>
+                <span class="ms-auto muted">{{ nsfwPolicy }}</span>
               </a>
 
               <a ngbDropdownItem class="dropdown-item" (click)="toggleUseP2P()">
                 <my-global-icon iconName="p2p" aria-hidden="true"></my-global-icon>
                 <ng-container i18n>Help share videos</ng-container>
 
-                <my-input-switch class="ml-auto" [checked]="user.p2pEnabled"></my-input-switch>
+                <my-input-switch class="ms-auto" [checked]="user.p2pEnabled"></my-input-switch>
               </a>
 
               <div class="dropdown-divider"></div>
@@ -149,7 +149,7 @@
 
         <div class="footer-copyleft">
           <small class="d-inline" i18n-title title="powered by PeerTube - CopyLeft 2015-2022">
-            <a href="https://joinpeertube.org" class="mr-1" target="_blank" rel="noopener noreferrer" i18n>powered by PeerTube</a>
+            <a href="https://joinpeertube.org" class="me-1" target="_blank" rel="noopener noreferrer" i18n>powered by PeerTube</a>
 
             <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE" target="_blank" rel="noopener noreferrer">
               <span aria-label="copyleft" class="d-inline-block" style="transform: rotateY(180deg)">&copy;</span> 2015-2022

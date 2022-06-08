@@ -1,6 +1,7 @@
-<div class="input-group has-feedback has-clear">
-  <div *ngIf="hasFilters()" class="input-group-prepend c-hand" ngbDropdown placement="bottom-left auto" container="body">
-    <div class="input-group-text" ngbDropdownToggle>
+<div class="input-group has-clear" ngbDropdown placement="bottom-left auto" container="body">
+
+  <ng-container *ngIf="hasFilters()">
+    <div class="input-group-text c-hand" ngbDropdownToggle>
       <span class="caret" aria-haspopup="menu" role="button"></span>
     </div>
 
@@ -15,14 +16,14 @@
         </button>
       </ng-container>
     </div>
-  </div>
+  </ng-container>
 
   <input
     type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
+    class="last-in-group"
     [(ngModel)]="searchValue"
     (keyup)="onInputSearch($event)"
   >
 
-  <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="onResetTableFilter()"></a>
-  <span class="sr-only" i18n>Clear filters</span>
+  <a class="glyphicon glyphicon-remove-sign form-control-clear" title="Clear filter" i18n-title (click)="onResetTableFilter()"></a>
 </div>

@@ -12,15 +12,15 @@
 
     <div class="action-block">
       <ng-container *ngFor="let action of headerActions">
-        <a *ngIf="action.routerLink" class="ml-2" [routerLink]="action.routerLink" routerLinkActive="active">
+        <a *ngIf="action.routerLink" class="ms-2" [routerLink]="action.routerLink" routerLinkActive="active">
           <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
         </a>
 
-        <a *ngIf="!action.routerLink && !action.href && action.click" class="ml-2" (click)="action.click($event)" (key.enter)="action.click($event)">
+        <a *ngIf="!action.routerLink && !action.href && action.click" class="ms-2" (click)="action.click($event)" (key.enter)="action.click($event)">
           <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
         </a>
 
-        <a *ngIf="!action.routerLink && action.href && action.click" class="ml-2" (click)="action.click($event)" (key.enter)="action.click($event)" [href]="action.href">
+        <a *ngIf="!action.routerLink && action.href && action.click" class="ms-2" (click)="action.click($event)" (key.enter)="action.click($event)" [href]="action.href">
           <ng-container *ngTemplateOutlet="actionContent; context:{ $implicit: action }"></ng-container>
         </a>
 

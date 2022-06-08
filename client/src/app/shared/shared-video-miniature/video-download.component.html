@@ -28,14 +28,15 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <div class="input-group input-group-sm">
-                <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getLink()" />
+              <div class="input-group">
+                <input #urlInput (click)="urlInput.select()" type="text" class="form-control readonly" readonly [value]="getLink()" />
 
-                <div class="input-group-append" *ngIf="!isConfidentialVideo()">
-                  <button [cdkCopyToClipboard]="urlInput.value" (click)="activateCopiedMessage()" type="button" class="btn btn-outline-secondary">
-                    <span class="glyphicon glyphicon-duplicate"></span>
-                  </button>
-                </div>
+                <button
+                  *ngIf="!isConfidentialVideo()" type="button" class="btn btn-outline-secondary"
+                  [cdkCopyToClipboard]="urlInput.value" (click)="activateCopiedMessage()"
+                >
+                  <span class="glyphicon glyphicon-duplicate"></span>
+                </button>
               </div>
             </div>
           </ng-template>
@@ -53,13 +54,15 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <div class="input-group input-group-sm">
-                <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getLink()" />
-                <div class="input-group-append" *ngIf="!isConfidentialVideo()">
-                  <button [cdkCopyToClipboard]="urlInput.value" (click)="activateCopiedMessage()" type="button" class="btn btn-outline-secondary">
-                    <span class="glyphicon glyphicon-duplicate"></span>
-                  </button>
-                </div>
+              <div class="input-group">
+                <input #urlInput (click)="urlInput.select()" type="text" class="form-control readonly" readonly [value]="getLink()" />
+
+                <button
+                  *ngIf="!isConfidentialVideo()" type="button" class="btn btn-outline-secondary"
+                  [cdkCopyToClipboard]="urlInput.value" (click)="activateCopiedMessage()"
+                >
+                  <span class="glyphicon glyphicon-duplicate"></span>
+                </button>
               </div>
             </div>
           </ng-template>

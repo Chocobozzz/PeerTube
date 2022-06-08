@@ -34,9 +34,7 @@
         type="text" id="name" i18n-placeholder placeholder="Example: my_super_channel"
         formControlName="name" [ngClass]="{ 'input-error': formErrors['name'] }"
       >
-      <div class="input-group-append">
-        <span class="input-group-text">@{{ instanceHost }}</span>
-      </div>
+      <div class="input-group-text">@{{ instanceHost }}</div>
     </div>
 
     <div class="name-information" i18n>

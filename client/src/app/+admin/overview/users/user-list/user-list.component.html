@@ -26,7 +26,7 @@
         </a>
       </div>
 
-      <div class="ml-auto">
+      <div class="ms-auto">
         <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
 
@@ -90,7 +90,7 @@
         </my-user-moderation-dropdown>
       </td>
 
-      <td *ngIf="isSelected('username')">
+      <td *ngIf="isSelected('username')" class="cell-username">
         <a i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/a/' + user.username ]">
           <div class="chip two-lines">
             <my-actor-avatar [account]="user?.account" size="32"></my-actor-avatar>
@@ -101,13 +101,13 @@
           </div>
         </a>
 
-        <div *ngIf="user.accountMutedStatus.mutedByInstance" class="badges-username badge badge-red" i18n>Muted</div>
-        <div *ngIf="user.blocked" class="badges-username badge badge-red" i18n>Banned</div>
+        <div *ngIf="user.accountMutedStatus.mutedByInstance" class="pt-badge badge-red" i18n>Muted</div>
+        <div *ngIf="user.blocked" class="pt-badge badge-red" i18n>Banned</div>
       </td>
 
       <td *ngIf="isSelected('role')">
-        <span *ngIf="user.blocked" class="badge badge-banned" i18n-title title="The user was banned">{{ user.roleLabel }}</span>
-        <span *ngIf="!user.blocked" class="badge" [ngClass]="getRoleClass(user.role)">{{ user.roleLabel }}</span>
+        <span *ngIf="user.blocked" class="pt-badge badge-banned" i18n-title title="The user was banned">{{ user.roleLabel }}</span>
+        <span *ngIf="!user.blocked" class="pt-badge" [ngClass]="getRoleClass(user.role)">{{ user.roleLabel }}</span>
       </td>
 
       <td *ngIf="isSelected('email')" [title]="user.email">

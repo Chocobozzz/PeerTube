@@ -32,9 +32,9 @@
   <ng-container *ngFor="let plugin of plugins" >
     <my-plugin-card [plugin]="plugin" [version]="plugin.latestVersion" [pluginType]="pluginType">
       <div ngProjectAs="badges">
-        <span i18n *ngIf="plugin.installed" class="badge badge-success">Installed</span>
+        <span i18n *ngIf="plugin.installed" class="pt-badge badge-success">Installed</span>
 
-        <span *ngIf="plugin.official" class="badge badge-primary" i18n i18n-title title="This plugin is developed by Framasoft">
+        <span *ngIf="plugin.official" class="pt-badge badge-primary" i18n i18n-title title="This plugin is developed by Framasoft">
           Official
         </span>
       </div>

@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '~bootstrap/scss/functions' as *;
 
 .account-title {
   @include settings-big-title;
@@ -9,6 +10,6 @@
   }
 }
 
-.form-group {
+.row > div {
   max-width: 500px;
 }

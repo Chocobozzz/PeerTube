@@ -29,22 +29,6 @@
   }
 }
 
-.form-group-terms {
-  margin: 30px 0;
-}
-
-.input-group {
-  @include peertube-input-group(100%);
-}
-
-.input-group-append {
-  height: 30px;
-}
-
-.form-group-terms {
-  width: 100% !important;
-}
-
 input:not([type=submit]) {
   @include peertube-input-text(100%);
   display: block;

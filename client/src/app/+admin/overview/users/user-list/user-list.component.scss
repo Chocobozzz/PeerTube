@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '~bootstrap/scss/functions' as *;
 
 .add-button {
   @include create-button;
@@ -23,8 +24,8 @@ tr.banned > td {
   font-weight: $font-semibold;
 }
 
-.badges-username {
-  margin-left: 15px;
+.cell-username .pt-badge {
+  @include margin-left(15px);
 }
 
 .user-table-primary-text .glyphicon {

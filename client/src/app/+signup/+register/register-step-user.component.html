@@ -27,9 +27,7 @@
         type="text" id="username" i18n-placeholder="Username choice placeholder in the registration form" placeholder="e.g. jane_doe"
         formControlName="username" class="form-control" [ngClass]="{ 'input-error': formErrors['username'] }"
       >
-      <div class="input-group-append">
-        <span class="input-group-text">@{{ instanceHost }}</span>
-      </div>
+      <span class="input-group-text">@{{ instanceHost }}</span>
     </div>
 
     <div class="name-information" i18n>

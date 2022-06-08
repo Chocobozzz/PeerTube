@@ -1,13 +1,13 @@
 <ng-container [formGroup]="form">
-  <div class="form-row mt-5"> <!-- appearance grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-5"> <!-- appearance grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">APPEARANCE</div>
       <div i18n class="inner-form-description">
         Use <a routerLink="/admin/plugins">plugins & themes</a> for more involved changes, or <a routerLink="/admin/config/edit-custom" fragment="advanced-configuration">add slight customizations</a>.
       </div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="theme">
         <div class="form-group">
@@ -88,15 +88,15 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- broadcast grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- broadcast grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">BROADCAST MESSAGE</div>
       <div i18n class="inner-for-description">
         Display a message on your instance
       </div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="broadcastMessage">
 
@@ -144,15 +144,15 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- new users grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- new users grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">NEW USERS</div>
       <div i18n class="inner-for-description">
         Manage <a routerLink="/admin/users">users</a> to set their quota individually.
       </div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="signup">
         <div class="form-group">
@@ -239,20 +239,20 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- videos grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- videos grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">VIDEOS</div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="import">
 
         <ng-container formGroupName="videos">
 
-          <div class="form-group mt-4">
+          <div class="form-group">
             <label i18n for="importConcurrency">Import jobs concurrency</label>
-            <span i18n class="muted ml-1">allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</span>
+            <span i18n class="muted ms-1">allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</span>
 
             <div class="number-with-unit">
               <input type="number" name="importConcurrency" formControlName="concurrency" />
@@ -309,12 +309,12 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- video channels grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- video channels grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">VIDEO CHANNELS</div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
       <div class="form-group" formGroupName="videoChannels">
         <label i18n for="videoChannelsMaxPerUser">Max video channels per user</label>
 
@@ -331,12 +331,12 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- search grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- search grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">SEARCH</div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="search">
         <ng-container formGroupName="remoteUri">
@@ -420,15 +420,15 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- federation grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- federation grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">FEDERATION</div>
       <div i18n class="inner-form-description">
         Manage <a routerLink="/admin/follows">relations</a> with other instances.
       </div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="followers">
         <ng-container formGroupName="instance">
@@ -499,12 +499,12 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- administrators grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- administrators grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">ADMINISTRATORS</div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <div class="form-group" formGroupName="admin">
         <label i18n for="adminEmail">Admin email</label>
@@ -527,8 +527,8 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- Twitter grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- Twitter grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">TWITTER</div>
       <div i18n class="inner-form-description">
         Provide the Twitter account representing your instance to improve link previews.
@@ -536,7 +536,7 @@
       </div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="services">
         <ng-container formGroupName="twitter">

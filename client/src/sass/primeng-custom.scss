@@ -759,8 +759,9 @@ p-table {
     }
   }
 
-  .badge {
-    @include peertube-badge;
+  .pt-badge {
+    font-size: 12px;
+    text-transform: uppercase;
   }
 }
 

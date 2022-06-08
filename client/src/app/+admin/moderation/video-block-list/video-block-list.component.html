@@ -13,7 +13,7 @@
 >
   <ng-template pTemplate="caption">
     <div class="caption">
-      <div class="ml-auto">
+      <div class="ms-auto">
         <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
     </div>
@@ -53,11 +53,11 @@
       </td>
 
       <td>
-        <span *ngIf="videoBlock.video.nsfw" class="badge badge-red" i18n>NSFW</span>
+        <span *ngIf="videoBlock.video.nsfw" class="pt-badge badge-red" i18n>NSFW</span>
       </td>
 
       <td>
-        <span *ngIf="videoBlock.unfederated" class="badge badge-blue" i18n>Unfederated</span>
+        <span *ngIf="videoBlock.unfederated" class="pt-badge badge-blue" i18n>Unfederated</span>
       </td>
 
       <td>

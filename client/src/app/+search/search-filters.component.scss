@@ -22,10 +22,6 @@ form {
   margin-bottom: 1rem;
 }
 
-.form-group {
-  margin-bottom: 25px;
-}
-
 input[type=text] {
   @include peertube-input-text(100%);
   display: block;

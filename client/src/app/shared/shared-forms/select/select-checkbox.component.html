@@ -22,7 +22,7 @@
 >
 
   <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
-    <div class="form-group-checkbox">
+    <div class="checkbox-wrapper">
       <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>
       <span role="checkbox" [attr.aria-checked]="item$.selected"></span>
       <span>{{ item.group }}</span>
@@ -30,7 +30,7 @@
   </ng-template>
 
   <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-    <div class="form-group-checkbox">
+    <div class="checkbox-wrapper">
       <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/>
       <span role="checkbox" [attr.aria-checked]="item$.selected"></span>
       <span>{{ item.label }}</span>

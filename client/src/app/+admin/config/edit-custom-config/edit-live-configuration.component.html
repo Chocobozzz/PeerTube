@@ -1,14 +1,14 @@
 <ng-container [formGroup]="form">
 
-  <div class="form-row mt-5">
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-5">
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">LIVE</div>
       <div i18n class="inner-form-description">
         Enable users of your instance to stream live.
       </div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="live">
 
@@ -89,15 +89,15 @@
     </div>
   </div>
 
-  <div class="form-row"> <!-- transcoding live streams grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row"> <!-- transcoding live streams grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">TRANSCODING</div>
       <div i18n class="inner-form-description">
         Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some.
       </div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="live">
         <ng-container formGroupName="transcoding">
@@ -115,7 +115,7 @@
           <div class="form-group" [ngClass]="getDisabledLiveTranscodingClass()">
             <label i18n for="liveTranscodingThreads">Live resolutions to generate</label>
 
-            <div class="ml-2 mt-2 d-flex flex-column">
+            <div class="ms-2 mt-2 d-flex flex-column">
               <ng-container formGroupName="resolutions">
 
                 <div class="form-group" *ngFor="let resolution of liveResolutions">
@@ -136,7 +136,7 @@
           <div class="form-group" [ngClass]="getDisabledLiveTranscodingClass()">
             <label i18n for="liveTranscodingThreads">Live transcoding threads</label>
 
-            <span class="muted ml-1">
+            <span class="muted ms-1">
               <ng-container *ngIf="getTotalTranscodingThreads().atMost" i18n>
                 will claim at most {{ getTotalTranscodingThreads().value }} {{ getTotalTranscodingThreads().unit }} with VOD transcoding
               </ng-container>
@@ -157,7 +157,7 @@
 
           <div class="form-group mt-4" [ngClass]="getDisabledLiveTranscodingClass()">
             <label i18n for="liveTranscodingProfile">Live transcoding profile</label>
-            <span class="muted ml-1" i18n>new live transcoding profiles can be added by PeerTube plugins</span>
+            <span class="muted ms-1" i18n>new live transcoding profiles can be added by PeerTube plugins</span>
 
             <my-select-options
               id="liveTranscodingProfile"

@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_badges' as *;
 
 .peertube-button {
   @include peertube-button;
@@ -31,4 +32,8 @@
 
 .muted {
   color: pvar(--greyForegroundColor) !important;
+}
+
+.pt-badge {
+  @include peertube-badge;
 }

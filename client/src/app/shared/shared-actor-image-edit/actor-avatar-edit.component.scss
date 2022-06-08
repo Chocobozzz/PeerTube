@@ -3,35 +3,35 @@
 
 .actor {
   display: flex;
+}
 
-  my-actor-avatar {
-    @include margin-right(15px);
+my-actor-avatar {
+  @include margin-right(15px);
+}
+
+.actor-info {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.actor-info-display-name {
+  font-size: 20px;
+  font-weight: $font-bold;
+
+  @media screen and (max-width: $small-view) {
+    font-size: 16px;
   }
+}
 
-  .actor-info {
-    display: inline-flex;
-    flex-direction: column;
+.actor-info-username {
+  position: relative;
+  font-size: 14px;
+  color: pvar(--greyForegroundColor);
+}
 
-    .actor-info-display-name {
-      font-size: 20px;
-      font-weight: $font-bold;
-
-      @media screen and (max-width: $small-view) {
-        font-size: 16px;
-      }
-    }
-
-    .actor-info-username {
-      position: relative;
-      font-size: 14px;
-      color: pvar(--greyForegroundColor);
-    }
-
-    .actor-info-followers {
-      font-size: 15px;
-      padding-bottom: .5rem;
-    }
-  }
+.actor-info-followers {
+  font-size: 15px;
+  padding-bottom: .5rem;
 }
 
 .actor-img-edit-container {

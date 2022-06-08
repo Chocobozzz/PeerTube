@@ -21,7 +21,7 @@
         <span i18n="Selector for the list displaying jobs, filtering by their state">any</span>
       </ng-option>
       <ng-option *ngFor="let state of jobStates" [value]="state">
-        <span class="badge" [ngClass]="getJobStateClass(state)">{{ state }}</span>
+        <span class="pt-badge" [ngClass]="getJobStateClass(state)">{{ state }}</span>
       </ng-option>
     </ng-select>
   </div>
@@ -62,7 +62,7 @@
       <td class="job-priority c-hand" [pRowToggler]="job">{{ job.priority }}</td>
 
       <td class="job-state c-hand" [pRowToggler]="job" *ngIf="jobState === 'all'">
-        <span class="badge" [ngClass]="getJobStateClass(job.state)">{{ job.state }}</span>
+        <span class="pt-badge" [ngClass]="getJobStateClass(job.state)">{{ job.state }}</span>
       </td>
 
       <td *ngIf="hasGlobalProgress()" class="job-progress c-hand" [pRowToggler]="job">
@@ -107,8 +107,8 @@
             </ng-container>
 
             <ng-container *ngIf="jobState !== 'all'">
-              <ng-container *ngIf="jobType === 'all'" i18n>No <span class="badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span> jobs found.</ng-container>
-              <ng-container *ngIf="jobType !== 'all'" i18n>No <code>{{ jobType }}</code> jobs found that are <span class="badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span>.</ng-container>
+              <ng-container *ngIf="jobType === 'all'" i18n>No <span class="pt-badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span> jobs found.</ng-container>
+              <ng-container *ngIf="jobType !== 'all'" i18n>No <code>{{ jobType }}</code> jobs found that are <span class="pt-badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span>.</ng-container>
             </ng-container>
           </div>
         </div>

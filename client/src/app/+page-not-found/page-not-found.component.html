@@ -1,7 +1,7 @@
 <div class="root">
   <div *ngIf="status !== 403 && status !== 418" class="box">
     <strong>{{ status }}.</strong>
-    <span class="ml-1 muted" i18n>That's an error.</span>
+    <span class="ms-1 muted" i18n>That's an error.</span>
 
     <div class="text mt-4">
       <ng-container *ngIf="type === 'video'" i18n>We couldn't find any video tied to the URL {{ pathname }} you were looking for.</ng-container>
@@ -24,7 +24,7 @@
 
   <div *ngIf="status === 403" class="box">
     <strong>{{ status }}.</strong>
-    <span class="ml-1 muted" i18n>You are not authorized here.</span>
+    <span class="ms-1 muted" i18n>You are not authorized here.</span>
 
     <div class="text mt-4">
       <ng-container *ngIf="type === 'video'" i18n>You might need to check your account is allowed by the video or instance owner.</ng-container>
@@ -34,7 +34,7 @@
 
   <div *ngIf="status === 418" class="box">
     <strong>{{ status }}.</strong>
-    <span class="ml-1 muted">I'm a teapot.</span>
+    <span class="ms-1 muted">I'm a teapot.</span>
 
     <div class="text mt-4" i18n="Description of a tea flavour, keeping the 'requested entity body' as a technical expression referring to a web request">
       The requested entity body blends sweet bits with a mellow earthiness.

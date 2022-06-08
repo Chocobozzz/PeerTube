@@ -6,7 +6,7 @@
 
     <my-feed [syndicationItems]="syndicationItems"></my-feed>
 
-    <div ngbDropdown class="d-inline-block ml-4 dropdown-root">
+    <div ngbDropdown class="d-inline-block ms-4 dropdown-root">
       <button class="btn btn-sm btn-outline-secondary" id="dropdown-sort-comments" ngbDropdownToggle i18n>
         SORT BY
       </button>
@@ -80,7 +80,7 @@
 
             <ng-template i18n #noAuthorComments>View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}</ng-template>
 
-            <my-small-loader class="comment-thread-loading ml-1" [loading]="threadLoading[comment.id]"></my-small-loader>
+            <my-small-loader class="comment-thread-loading ms-1" [loading]="threadLoading[comment.id]"></my-small-loader>
           </div>
         </my-video-comment>
 
