@@ -136,14 +136,14 @@ describe('Test index search', function () {
       expect(video.account.url).to.equal('https://framatube.org/accounts/framasoft')
       // TODO: remove, deprecated in 4.2
       expect(video.account.avatar).to.exist
-      expect(video.account.avatars.length).to.equal(1, 'Account should have one avatar image')
+      expect(video.account.avatars.length).to.equal(2, 'Account should have one avatar image')
 
       expect(video.channel.host).to.equal('framatube.org')
       expect(video.channel.name).to.equal('joinpeertube')
       expect(video.channel.url).to.equal('https://framatube.org/video-channels/joinpeertube')
       // TODO: remove, deprecated in 4.2
       expect(video.channel.avatar).to.exist
-      expect(video.channel.avatars.length).to.equal(1, 'Channel should have one avatar image')
+      expect(video.channel.avatars.length).to.equal(2, 'Channel should have one avatar image')
     }
 
     const baseSearch: VideosSearchQuery = {
@@ -322,7 +322,7 @@ describe('Test index search', function () {
       expect(videoChannel.host).to.equal('framatube.org')
       // TODO: remove, deprecated in 4.2
       expect(videoChannel.avatar).to.exist
-      expect(videoChannel.avatars.length).to.equal(1, 'Channel should have two avatar images')
+      expect(videoChannel.avatars.length).to.equal(2, 'Channel should have two avatar images')
       expect(videoChannel.displayName).to.exist
 
       expect(videoChannel.ownerAccount.url).to.equal('https://framatube.org/accounts/framasoft')
@@ -330,7 +330,7 @@ describe('Test index search', function () {
       expect(videoChannel.ownerAccount.host).to.equal('framatube.org')
       // TODO: remove, deprecated in 4.2
       expect(videoChannel.ownerAccount.avatar).to.exist
-      expect(videoChannel.ownerAccount.avatars.length).to.equal(1, 'Account should have two avatar images')
+      expect(videoChannel.ownerAccount.avatars.length).to.equal(2, 'Account should have two avatar images')
     }
 
     it('Should make a simple search and not have results', async function () {
