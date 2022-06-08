@@ -25,9 +25,9 @@ Set its password:
 $ sudo passwd peertube
 ```
 
-Ensure the directory is traversable by nginx:
+Ensure the peertube root directory is traversable by nginx:
 ```bash
-$ chmod 751 /var/www/peertube
+$ sudo chmod 751 /var/www/peertube
 ```
 
 **On FreeBSD**
