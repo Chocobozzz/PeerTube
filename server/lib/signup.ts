@@ -26,7 +26,7 @@ function isSignupAllowedForCurrentIP (ip: string) {
   const excludeList = [ 'blacklist' ]
   let matched = ''
 
-  // if there is a valid, non-empty whitelist, we exclude all unknown adresses too
+  // if there is a valid, non-empty whitelist, we exclude all unknown addresses too
   if (CONFIG.SIGNUP.FILTERS.CIDR.WHITELIST.filter(cidr => isCidr(cidr)).length > 0) {
     excludeList.push('unknown')
   }

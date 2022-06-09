@@ -8,7 +8,6 @@
     "emitDecoratorMetadata": true,
     "importHelpers": true,
     "removeComments": true,
-    "strictBindCallApply": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "lib": [
@@ -27,6 +26,11 @@
     },
     "resolveJsonModule": true,
     "strict": false,
+    "strictBindCallApply": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
     "skipLibCheck": true,
     "composite": true,
     "declarationMap": true

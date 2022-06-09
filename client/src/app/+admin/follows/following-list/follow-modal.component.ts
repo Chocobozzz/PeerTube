@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
+import { prepareIcu } from '@app/helpers'
 import { splitAndGetNotEmpty, UNIQUE_HOSTS_OR_HANDLE_VALIDATOR } from '@app/shared/form-validators/host-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { InstanceFollowService } from '@app/shared/shared-instance'
@@ -60,7 +61,13 @@ export class FollowModalComponent extends FormReactive implements OnInit {
     this.followService.follow(hostsOrHandles)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Follow request(s) sent!`)
+          this.notifier.success(
+            prepareIcu($localize`{count, plural, =1 {Follow request} other {Follow requests}} sent!`)(
+              { count: hostsOrHandles.length },
+              $localize`Follow request(s) sent!`
+            )
+          )
+
           this.newFollow.emit()
         },
 

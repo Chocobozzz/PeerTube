@@ -1,5 +1,5 @@
 <div
-  *ngIf="playlist && currentPlaylistPosition" class="playlist"
+  *ngIf="playlist && (currentPlaylistPosition || noPlaylistVideos)" class="playlist"
   myInfiniteScroller [onItself]="true" (nearOfBottom)="onPlaylistVideosNearOfBottom()"
 >
   <div class="playlist-info">

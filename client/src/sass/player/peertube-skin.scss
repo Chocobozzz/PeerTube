@@ -20,6 +20,15 @@ body {
   font-size: $font-size;
   color: pvar(--embedForegroundColor);
 
+  &.disabled {
+    cursor: default;
+    pointer-events: none;
+
+    .vjs-big-play-button {
+      display: none !important;
+    }
+  }
+
   .vjs-audio-button {
     display: none;
   }

@@ -11,12 +11,15 @@
       <img class="placeholder-image" *ngIf="playerPlaceholderImgSrc" [src]="playerPlaceholderImgSrc" alt="Placeholder image" i18n-alt>
     </div>
 
-    <my-video-watch-playlist #videoWatchPlaylist [playlist]="playlist" (videoFound)="onPlaylistVideoFound($event)"></my-video-watch-playlist>
+    <my-video-watch-playlist
+      #videoWatchPlaylist [playlist]="playlist"
+      (noVideoFound)="onPlaylistNoVideoFound()" (videoFound)="onPlaylistVideoFound($event)"
+    ></my-video-watch-playlist>
 
     <my-plugin-placeholder pluginId="player-next"></my-plugin-placeholder>
   </div>
 
-  <my-video-alert [video]="video"></my-video-alert>
+  <my-video-alert [video]="video" [noPlaylistVideoFound]="noPlaylistVideoFound"></my-video-alert>
 
   <!-- Video information -->
   <div *ngIf="video" class="margin-content video-bottom">

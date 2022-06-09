@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
+import { prepareIcu } from '@app/helpers'
 import { ServerConfig } from '@shared/models'
 import { PeertubeModalService } from '../shared-main/peertube-modal/peertube-modal.service'
 
@@ -65,15 +66,20 @@ export class InstanceFeaturesTableComponent implements OnInit {
 
   private getApproximateTime (seconds: number) {
     const hours = Math.floor(seconds / 3600)
-    let pluralSuffix = ''
-    if (hours > 1) pluralSuffix = 's'
-    if (hours > 0) return `~ ${hours} hour${pluralSuffix}`
+
+    if (hours !== 0) {
+      return prepareIcu($localize`~ {hours, plural, =1 {1 hour} other {{hours} hours}}`)(
+        { hours },
+        $localize`~ ${hours} hours`
+      )
+    }
 
     const minutes = Math.floor(seconds % 3600 / 60)
 
-    if (minutes === 1) return $localize`~ 1 minute`
-
-    return $localize`~ ${minutes} minutes`
+    return prepareIcu($localize`~ {minutes, plural, =1 {1 minute} other {{minutes} minutes}}`)(
+      { minutes },
+      $localize`~ ${minutes} minutes`
+    )
   }
 
   private buildQuotaHelpIndication () {

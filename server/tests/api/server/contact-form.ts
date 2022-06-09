@@ -61,7 +61,7 @@ describe('Test contact form', function () {
     expect(email['text']).contains('my super message')
   })
 
-  it('Should not have duplicated email adress in text message', async function () {
+  it('Should not have duplicated email address in text message', async function () {
     const text = emails[0]['text'] as string
 
     const matches = text.match(/toto@example.com/g)

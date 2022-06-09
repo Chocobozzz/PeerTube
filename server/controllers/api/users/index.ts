@@ -1,5 +1,4 @@
 import express from 'express'
-import RateLimit from 'express-rate-limit'
 import { tokensRouter } from '@server/controllers/api/users/token'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token'
@@ -17,9 +16,11 @@ import { Notifier } from '../../../lib/notifier'
 import { Redis } from '../../../lib/redis'
 import { buildUser, createUserAccountAndChannelAndPlaylist, sendVerifyUserEmail } from '../../../lib/user'
 import {
+  adminUsersSortValidator,
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
+  buildRateLimiter,
   ensureUserHasRight,
   ensureUserRegistrationAllowed,
   ensureUserRegistrationAllowedForIP,
@@ -32,7 +33,6 @@ import {
   usersListValidator,
   usersRegisterValidator,
   usersRemoveValidator,
-  adminUsersSortValidator,
   usersUpdateValidator
 } from '../../../middlewares'
 import {
@@ -54,13 +54,13 @@ import { myVideoPlaylistsRouter } from './my-video-playlists'
 
 const auditLogger = auditLoggerFactory('users')
 
-const signupRateLimiter = RateLimit({
+const signupRateLimiter = buildRateLimiter({
   windowMs: CONFIG.RATES_LIMIT.SIGNUP.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.SIGNUP.MAX,
   skipFailedRequests: true
 })
 
-const askSendEmailLimiter = RateLimit({
+const askSendEmailLimiter = buildRateLimiter({
   windowMs: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX
 })

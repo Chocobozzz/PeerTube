@@ -165,7 +165,7 @@ describe('Test config API validators', function () {
     trending: {
       videos: {
         algorithms: {
-          enabled: [ 'best', 'hot', 'most-viewed', 'most-liked' ],
+          enabled: [ 'hot', 'most-viewed', 'most-liked' ],
           default: 'most-viewed'
         }
       }

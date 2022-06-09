@@ -119,7 +119,7 @@ function getInstanceFollowsSort (value: string, lastSort: OrderItem = [ 'id', 'A
 
 function isOutdated (model: { createdAt: Date, updatedAt: Date }, refreshInterval: number) {
   if (!model.createdAt || !model.updatedAt) {
-    throw new Error('Miss createdAt & updatedAt attribuets to model')
+    throw new Error('Miss createdAt & updatedAt attributes to model')
   }
 
   const now = Date.now()

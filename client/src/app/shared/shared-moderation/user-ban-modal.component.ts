@@ -1,6 +1,7 @@
 import { forkJoin } from 'rxjs'
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
+import { prepareIcu } from '@app/helpers'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
@@ -63,9 +64,16 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
     forkJoin(observables)
       .subscribe({
         next: () => {
-          const message = Array.isArray(this.usersToBan)
-            ? $localize`${this.usersToBan.length} users banned.`
-            : $localize`User ${this.usersToBan.username} banned.`
+          let message: string
+
+          if (Array.isArray(this.usersToBan)) {
+            message = prepareIcu($localize`{count, plural, =1 {1 user} other {{count} users}} banned.`)(
+              { count: this.usersToBan.length },
+              $localize`${this.usersToBan.length} users banned.`
+            )
+          } else {
+            message = $localize`User ${this.usersToBan.username} banned.`
+          }
 
           this.notifier.success(message)
 
@@ -79,7 +87,12 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
   }
 
   getModalTitle () {
-    if (Array.isArray(this.usersToBan)) return $localize`Ban ${this.usersToBan.length} users`
+    if (Array.isArray(this.usersToBan)) {
+      return prepareIcu($localize`Ban {count, plural, =1 {1 user} other {{count} users}}`)(
+        { count: this.usersToBan.length },
+        $localize`Ban ${this.usersToBan.length} users`
+      )
+    }
 
     return $localize`Ban "${this.usersToBan.username}"`
   }

@@ -210,7 +210,7 @@ const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch re
 
 const AP_CLEANER = {
   CONCURRENCY: 10, // How many requests in parallel we do in activitypub-cleaner job
-  UNAVAILABLE_TRESHOLD: 3, // How many attemps we do before removing an unavailable remote resource
+  UNAVAILABLE_TRESHOLD: 3, // How many attempts we do before removing an unavailable remote resource
   PERIOD: parseDurationToMs('1 week') // /!\ Has to be sync with REPEAT_JOBS
 }
 

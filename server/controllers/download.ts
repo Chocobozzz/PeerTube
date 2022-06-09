@@ -86,7 +86,9 @@ async function downloadVideoFile (req: express.Request, res: express.Response) {
   }
 
   await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), path => {
-    const filename = `${video.name}-${videoFile.resolution}p${videoFile.extname}`
+    // Express uses basename on filename parameter
+    const videoName = video.name.replace(/[/\\]/g, '_')
+    const filename = `${videoName}-${videoFile.resolution}p${videoFile.extname}`
 
     return res.download(path, filename)
   })

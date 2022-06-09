@@ -478,6 +478,25 @@ describe('Test video channels', function () {
     }
   })
 
+  it('Should report correct total views count', async function () {
+    // check if there's the property
+    {
+      const { data } = await servers[0].channels.listByAccount({ accountName, withStats: true })
+
+      for (const channel of data) {
+        expect(channel).to.haveOwnProperty('totalViews')
+        expect(channel.totalViews).to.be.a('number')
+      }
+    }
+
+    // Check if the totalViews count can be updated
+    {
+      const { data } = await servers[0].channels.listByAccount({ accountName, withStats: true })
+      const channelWithView = data.find(channel => channel.id === servers[0].store.channel.id)
+      expect(channelWithView.totalViews).to.equal(2)
+    }
+  })
+
   it('Should report correct videos count', async function () {
     const { data } = await servers[0].channels.listByAccount({ accountName, withStats: true })
 

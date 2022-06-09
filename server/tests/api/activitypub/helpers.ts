@@ -9,6 +9,7 @@ import { buildAbsoluteFixturePath } from '@shared/core-utils'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../../../helpers/peertube-crypto'
 
 describe('Test activity pub helpers', function () {
+
   describe('When checking the Linked Signature', function () {
 
     it('Should fail with an invalid Mastodon signature', async function () {

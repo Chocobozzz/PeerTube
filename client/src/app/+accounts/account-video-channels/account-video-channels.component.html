@@ -23,10 +23,10 @@
         </h2>
 
         <div class="actor-counters">
-          <div class="followers" i18n>{videoChannel.followersCount, plural, =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}</div>
+          <div class="followers" i18n>{videoChannel.followersCount, plural, =0 {No subscribers} =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}</div>
 
           <span class="videos-count" *ngIf="getTotalVideosOf(videoChannel) !== undefined" i18n>
-            {getTotalVideosOf(videoChannel), plural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}
+            {getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}
           </span>
         </div>
 

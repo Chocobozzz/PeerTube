@@ -430,6 +430,11 @@ class WebTorrentPlugin extends Plugin {
   private initializePlayer () {
     this.buildQualities()
 
+    if (this.videoFiles.length === 0) {
+      this.player.addClass('disabled')
+      return
+    }
+
     if (this.autoplay) {
       this.player.posterImage.hide()
 

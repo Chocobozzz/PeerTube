@@ -2765,7 +2765,7 @@
       </trans-unit>
       <trans-unit id="3584756669036615394" datatype="html">
         <source>Automatically published</source>
-        <target>Publié automatiquement</target>
+        <target>Publiée automatiquement</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">42</context>
@@ -12115,7 +12115,7 @@
       </trans-unit>
       <trans-unit id="5139892963394684487" datatype="html">
         <source>Originally published</source>
-        <target state="translated">Publié originellement</target>
+        <target state="translated">Publiée originellement</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">236</context>

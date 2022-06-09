@@ -269,7 +269,7 @@ describe('Test abuses API validators', function () {
       await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
     })
 
-    it('Should succeed with the corret parameters (advanced)', async function () {
+    it('Should succeed with the correct parameters (advanced)', async function () {
       const fields: AbuseCreate = {
         video: {
           id: server.store.videoCreated.id,
@@ -333,7 +333,7 @@ describe('Test abuses API validators', function () {
       await command.addMessage({ token: userToken, abuseId, message: 'a'.repeat(5000), expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
-    it('Should suceed with the correct params', async function () {
+    it('Should succeed with the correct params', async function () {
       const res = await command.addMessage({ token: userToken, abuseId, message })
       messageId = res.body.abuseMessage.id
     })

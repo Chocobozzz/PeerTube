@@ -179,7 +179,7 @@ function buildContext (contextValue?: ContextValue) {
 
     {
       pt: 'https://joinpeertube.org/ns#',
-      sc: 'http://schema.org#',
+      sc: 'http://schema.org/',
 
       ...contextValue
     }

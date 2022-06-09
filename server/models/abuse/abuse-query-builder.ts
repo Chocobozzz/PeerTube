@@ -13,7 +13,7 @@ export type BuildAbusesQueryOptions = {
   searchReporter?: string
   searchReportee?: string
 
-  // video releated
+  // video related
   searchVideo?: string
   searchVideoChannel?: string
   videoIs?: AbuseVideoIs

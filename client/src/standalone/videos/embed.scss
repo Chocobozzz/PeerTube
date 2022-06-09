@@ -92,6 +92,17 @@ body {
   width: 100%;
   height: 100%;
   background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+
+.player-information {
+  width: 100%;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px 0;
+  position: absolute;
+  bottom: 0;
+  text-align: center;
 }
 
 @media screen and (max-width: 300px) {

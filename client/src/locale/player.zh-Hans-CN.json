@@ -40,6 +40,8 @@
     "  off": "  已关闭",
     "Player mode": "播放器模式",
     "Play in loop": "Play in loop",
+    "This live has not started yet.": "This live has not started yet.",
+    "This live has ended.": "This live has ended.",
     "The video failed to play, will try to fast forward.": "播放此视频失败，将尝试快进。",
     "Audio Player": "音频播放器",
     "Video Player": "视频播放器",

@@ -34,6 +34,10 @@
   This live has ended.
 </div>
 
+<div i18n class="alert alert-warning" *ngIf="noPlaylistVideoFound">
+  There are no videos available in this playlist.
+</div>
+
 <div class="alert alert-danger" *ngIf="video?.blacklisted">
   <div class="blocked-label" i18n>This video is blocked.</div>
   {{ video.blacklistedReason }}

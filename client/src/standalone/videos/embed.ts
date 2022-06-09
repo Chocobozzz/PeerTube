@@ -3,83 +3,42 @@ import '../../assets/player/shared/dock/peertube-dock-component'
 import '../../assets/player/shared/dock/peertube-dock-plugin'
 import videojs from 'video.js'
 import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
-import {
-  HTMLServerConfig,
-  HttpStatusCode,
-  LiveVideo,
-  OAuth2ErrorCode,
-  PublicServerSetting,
-  ResultList,
-  UserRefreshToken,
-  Video,
-  VideoCaption,
-  VideoDetails,
-  VideoPlaylist,
-  VideoPlaylistElement,
-  VideoStreamingPlaylistType
-} from '../../../../shared/models'
-import { P2PMediaLoaderOptions, PeertubePlayerManagerOptions, PlayerMode, VideoJSCaption } from '../../assets/player'
+import { HTMLServerConfig, LiveVideo, ResultList, VideoDetails, VideoPlaylist, VideoPlaylistElement } from '../../../../shared/models'
+import { PeertubePlayerManager } from '../../assets/player'
 import { TranslationsManager } from '../../assets/player/translations-manager'
-import { getBoolOrDefault } from '../../root-helpers/local-storage-utils'
-import { peertubeLocalStorage } from '../../root-helpers/peertube-web-storage'
-import { PluginInfo, PluginsManager } from '../../root-helpers/plugins-manager'
-import { UserLocalStorageKeys, UserTokens } from '../../root-helpers/users'
-import { objectToUrlEncoded } from '../../root-helpers/utils'
-import { isP2PEnabled } from '../../root-helpers/video'
-import { RegisterClientHelpers } from '../../types/register-client-option.model'
+import { getParamString } from '../../root-helpers'
 import { PeerTubeEmbedApi } from './embed-api'
-
-type Translations = { [ id: string ]: string }
+import { AuthHTTP, LiveManager, PeerTubePlugin, PlayerManagerOptions, PlaylistFetcher, PlaylistTracker, VideoFetcher } from './shared'
+import { PlayerHTML } from './shared/player-html'
 
 export class PeerTubeEmbed {
-  playerElement: HTMLVideoElement
   player: videojs.Player
   api: PeerTubeEmbedApi = null
-
-  autoplay: boolean
-
-  controls: boolean
-  controlBar: boolean
-
-  muted: boolean
-  loop: boolean
-  subtitle: string
-  enableApi = false
-  startTime: number | string = 0
-  stopTime: number | string
-
-  title: boolean
-  warningTitle: boolean
-  peertubeLink: boolean
-  p2pEnabled: boolean
-  bigPlayBackgroundColor: string
-  foregroundColor: string
-
-  mode: PlayerMode
-  scope = 'peertube'
-
-  userTokens: UserTokens
-  headers = new Headers()
-  LOCAL_STORAGE_OAUTH_CLIENT_KEYS = {
-    CLIENT_ID: 'client_id',
-    CLIENT_SECRET: 'client_secret'
-  }
 
   config: HTMLServerConfig
 
   private translationsPromise: Promise<{ [id: string]: string }>
   private PeertubePlayerManagerModulePromise: Promise<any>
 
-  private playlist: VideoPlaylist
-  private playlistElements: VideoPlaylistElement[]
-  private currentPlaylistElement: VideoPlaylistElement
+  private readonly http: AuthHTTP
+  private readonly videoFetcher: VideoFetcher
+  private readonly playlistFetcher: PlaylistFetcher
+  private readonly peertubePlugin: PeerTubePlugin
+  private readonly playerHTML: PlayerHTML
+  private readonly playerManagerOptions: PlayerManagerOptions
+  private readonly liveManager: LiveManager
 
-  private readonly wrapperElement: HTMLElement
+  private playlistTracker: PlaylistTracker
 
-  private pluginsManager: PluginsManager
+  constructor (videoWrapperId: string) {
+    this.http = new AuthHTTP()
 
-  constructor (private readonly videoWrapperId: string) {
-    this.wrapperElement = document.getElementById(this.videoWrapperId)
+    this.videoFetcher = new VideoFetcher(this.http)
+    this.playlistFetcher = new PlaylistFetcher(this.http)
+    this.peertubePlugin = new PeerTubePlugin(this.http)
+    this.playerHTML = new PlayerHTML(videoWrapperId)
+    this.playerManagerOptions = new PlayerManagerOptions(this.playerHTML, this.videoFetcher, this.peertubePlugin)
+    this.liveManager = new LiveManager(this.playerHTML)
 
     try {
       this.config = JSON.parse(window['PeerTubeServerConfig'])
@@ -94,390 +53,204 @@ export class PeerTubeEmbed {
     await embed.init()
   }
 
-  getVideoUrl (id: string) {
-    return window.location.origin + '/api/v1/videos/' + id
+  getPlayerElement () {
+    return this.playerHTML.getPlayerElement()
   }
 
-  getLiveUrl (videoId: string) {
-    return window.location.origin + '/api/v1/videos/live/' + videoId
+  getScope () {
+    return this.playerManagerOptions.getScope()
   }
 
-  getPluginUrl () {
-    return window.location.origin + '/api/v1/plugins'
-  }
+  // ---------------------------------------------------------------------------
 
-  refreshFetch (url: string, options?: RequestInit) {
-    return fetch(url, options)
-      .then((res: Response) => {
-        if (res.status !== HttpStatusCode.UNAUTHORIZED_401) return res
+  async init () {
+    this.translationsPromise = TranslationsManager.getServerTranslations(window.location.origin, navigator.language)
+    this.PeertubePlayerManagerModulePromise = import('../../assets/player/peertube-player-manager')
 
-        const refreshingTokenPromise = new Promise<void>((resolve, reject) => {
-          const clientId: string = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID)
-          const clientSecret: string = peertubeLocalStorage.getItem(this.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET)
-
-          const headers = new Headers()
-          headers.set('Content-Type', 'application/x-www-form-urlencoded')
-
-          const data = {
-            refresh_token: this.userTokens.refreshToken,
-            client_id: clientId,
-            client_secret: clientSecret,
-            response_type: 'code',
-            grant_type: 'refresh_token'
-          }
-
-          fetch('/api/v1/users/token', {
-            headers,
-            method: 'POST',
-            body: objectToUrlEncoded(data)
-          }).then(res => {
-            if (res.status === HttpStatusCode.UNAUTHORIZED_401) return undefined
-
-            return res.json()
-          }).then((obj: UserRefreshToken & { code?: OAuth2ErrorCode }) => {
-            if (!obj || obj.code === OAuth2ErrorCode.INVALID_GRANT) {
-              UserTokens.flushLocalStorage(peertubeLocalStorage)
-              this.removeTokensFromHeaders()
-
-              return resolve()
-            }
-
-            this.userTokens.accessToken = obj.access_token
-            this.userTokens.refreshToken = obj.refresh_token
-            UserTokens.saveToLocalStorage(peertubeLocalStorage, this.userTokens)
-
-            this.setHeadersFromTokens()
-
-            resolve()
-          }).catch((refreshTokenError: any) => {
-            reject(refreshTokenError)
-          })
-        })
-
-        return refreshingTokenPromise
-          .catch(() => {
-            UserTokens.flushLocalStorage(peertubeLocalStorage)
-
-            this.removeTokensFromHeaders()
-          }).then(() => fetch(url, {
-            ...options,
-            headers: this.headers
-          }))
-      })
-  }
-
-  getPlaylistUrl (id: string) {
-    return window.location.origin + '/api/v1/video-playlists/' + id
-  }
-
-  loadVideoInfo (videoId: string): Promise<Response> {
-    return this.refreshFetch(this.getVideoUrl(videoId), { headers: this.headers })
-  }
-
-  loadVideoCaptions (videoId: string): Promise<Response> {
-    return this.refreshFetch(this.getVideoUrl(videoId) + '/captions', { headers: this.headers })
-  }
-
-  loadWithLive (video: VideoDetails) {
-    return this.refreshFetch(this.getLiveUrl(video.uuid), { headers: this.headers })
-      .then(res => res.json())
-      .then((live: LiveVideo) => ({ video, live }))
-  }
-
-  loadPlaylistInfo (playlistId: string): Promise<Response> {
-    return this.refreshFetch(this.getPlaylistUrl(playlistId), { headers: this.headers })
-  }
-
-  loadPlaylistElements (playlistId: string, start = 0): Promise<Response> {
-    const url = new URL(this.getPlaylistUrl(playlistId) + '/videos')
-    url.search = new URLSearchParams({ start: '' + start, count: '100' }).toString()
-
-    return this.refreshFetch(url.toString(), { headers: this.headers })
-  }
-
-  removeElement (element: HTMLElement) {
-    element.parentElement.removeChild(element)
-  }
-
-  displayError (text: string, translations?: Translations) {
-    // Remove video element
-    if (this.playerElement) {
-      this.removeElement(this.playerElement)
-      this.playerElement = undefined
+    // Issue when we parsed config from HTML, fallback to API
+    if (!this.config) {
+      this.config = await this.http.fetch('/api/v1/config', { optionalAuth: false })
+        .then(res => res.json())
     }
 
-    const translatedText = peertubeTranslate(text, translations)
-    const translatedSorry = peertubeTranslate('Sorry', translations)
+    const videoId = this.isPlaylistEmbed()
+      ? await this.initPlaylist()
+      : this.getResourceId()
 
-    document.title = translatedSorry + ' - ' + translatedText
+    if (!videoId) return
 
-    const errorBlock = document.getElementById('error-block')
-    errorBlock.style.display = 'flex'
-
-    const errorTitle = document.getElementById('error-title')
-    errorTitle.innerHTML = peertubeTranslate('Sorry', translations)
-
-    const errorText = document.getElementById('error-content')
-    errorText.innerHTML = translatedText
-
-    this.wrapperElement.style.display = 'none'
+    return this.loadVideoAndBuildPlayer(videoId)
   }
 
-  videoNotFound (translations?: Translations) {
-    const text = 'This video does not exist.'
-    this.displayError(text, translations)
+  private async initPlaylist () {
+    const playlistId = this.getResourceId()
+
+    try {
+      const res = await this.playlistFetcher.loadPlaylist(playlistId)
+
+      const [ playlist, playlistElementResult ] = await Promise.all([
+        res.playlistResponse.json() as Promise<VideoPlaylist>,
+        res.videosResponse.json() as Promise<ResultList<VideoPlaylistElement>>
+      ])
+
+      const allPlaylistElements = await this.playlistFetcher.loadAllPlaylistVideos(playlistId, playlistElementResult)
+
+      this.playlistTracker = new PlaylistTracker(playlist, allPlaylistElements)
+
+      const params = new URL(window.location.toString()).searchParams
+      const playlistPositionParam = getParamString(params, 'playlistPosition')
+
+      const position = playlistPositionParam
+        ? parseInt(playlistPositionParam + '', 10)
+        : 1
+
+      this.playlistTracker.setPosition(position)
+    } catch (err) {
+      this.playerHTML.displayError(err.message, await this.translationsPromise)
+      return undefined
+    }
+
+    return this.playlistTracker.getCurrentElement().video.uuid
   }
 
-  videoFetchError (translations?: Translations) {
-    const text = 'We cannot fetch the video. Please try again later.'
-    this.displayError(text, translations)
+  private initializeApi () {
+    if (this.playerManagerOptions.hasAPIEnabled()) {
+      this.api = new PeerTubeEmbedApi(this)
+      this.api.initialize()
+    }
   }
 
-  playlistNotFound (translations?: Translations) {
-    const text = 'This playlist does not exist.'
-    this.displayError(text, translations)
-  }
+  // ---------------------------------------------------------------------------
 
-  playlistFetchError (translations?: Translations) {
-    const text = 'We cannot fetch the playlist. Please try again later.'
-    this.displayError(text, translations)
-  }
-
-  getParamToggle (params: URLSearchParams, name: string, defaultValue?: boolean) {
-    return params.has(name) ? (params.get(name) === '1' || params.get(name) === 'true') : defaultValue
-  }
-
-  getParamString (params: URLSearchParams, name: string, defaultValue?: string) {
-    return params.has(name) ? params.get(name) : defaultValue
-  }
-
-  async playNextVideo () {
-    const next = this.getNextPlaylistElement()
+  async playNextPlaylistVideo () {
+    const next = this.playlistTracker.getNextPlaylistElement()
     if (!next) {
       console.log('Next element not found in playlist.')
       return
     }
 
-    this.currentPlaylistElement = next
+    this.playlistTracker.setCurrentElement(next)
 
-    return this.loadVideoAndBuildPlayer(this.currentPlaylistElement.video.uuid)
+    return this.loadVideoAndBuildPlayer(next.video.uuid)
   }
 
-  async playPreviousVideo () {
-    const previous = this.getPreviousPlaylistElement()
+  async playPreviousPlaylistVideo () {
+    const previous = this.playlistTracker.getPreviousPlaylistElement()
     if (!previous) {
       console.log('Previous element not found in playlist.')
       return
     }
 
-    this.currentPlaylistElement = previous
+    this.playlistTracker.setCurrentElement(previous)
 
-    await this.loadVideoAndBuildPlayer(this.currentPlaylistElement.video.uuid)
+    await this.loadVideoAndBuildPlayer(previous.video.uuid)
   }
 
-  getCurrentPosition () {
-    if (!this.currentPlaylistElement) return -1
-
-    return this.currentPlaylistElement.position
+  getCurrentPlaylistPosition () {
+    return this.playlistTracker.getCurrentPosition()
   }
 
-  async init () {
-    this.userTokens = UserTokens.getUserTokens(peertubeLocalStorage)
-    await this.initCore()
-  }
-
-  private initializeApi () {
-    if (!this.enableApi) return
-
-    this.api = new PeerTubeEmbedApi(this)
-    this.api.initialize()
-  }
-
-  private loadParams (video: VideoDetails) {
-    try {
-      const params = new URL(window.location.toString()).searchParams
-
-      this.autoplay = this.getParamToggle(params, 'autoplay', false)
-
-      this.controls = this.getParamToggle(params, 'controls', true)
-      this.controlBar = this.getParamToggle(params, 'controlBar', true)
-
-      this.muted = this.getParamToggle(params, 'muted', undefined)
-      this.loop = this.getParamToggle(params, 'loop', false)
-      this.title = this.getParamToggle(params, 'title', true)
-      this.enableApi = this.getParamToggle(params, 'api', this.enableApi)
-      this.warningTitle = this.getParamToggle(params, 'warningTitle', true)
-      this.peertubeLink = this.getParamToggle(params, 'peertubeLink', true)
-      this.p2pEnabled = this.getParamToggle(params, 'p2p', this.isP2PEnabled(video))
-
-      this.scope = this.getParamString(params, 'scope', this.scope)
-      this.subtitle = this.getParamString(params, 'subtitle')
-      this.startTime = this.getParamString(params, 'start')
-      this.stopTime = this.getParamString(params, 'stop')
-
-      this.bigPlayBackgroundColor = this.getParamString(params, 'bigPlayBackgroundColor')
-      this.foregroundColor = this.getParamString(params, 'foregroundColor')
-
-      const modeParam = this.getParamString(params, 'mode')
-
-      if (modeParam) {
-        if (modeParam === 'p2p-media-loader') this.mode = 'p2p-media-loader'
-        else this.mode = 'webtorrent'
-      } else {
-        if (Array.isArray(video.streamingPlaylists) && video.streamingPlaylists.length !== 0) this.mode = 'p2p-media-loader'
-        else this.mode = 'webtorrent'
-      }
-    } catch (err) {
-      console.error('Cannot get params from URL.', err)
-    }
-  }
-
-  private async loadAllPlaylistVideos (playlistId: string, baseResult: ResultList<VideoPlaylistElement>) {
-    let elements = baseResult.data
-    let total = baseResult.total
-    let i = 0
-
-    while (total > elements.length && i < 10) {
-      const result = await this.loadPlaylistElements(playlistId, elements.length)
-
-      const json = await result.json()
-      total = json.total
-
-      elements = elements.concat(json.data)
-      i++
-    }
-
-    if (i === 10) {
-      console.error('Cannot fetch all playlists elements, there are too many!')
-    }
-
-    return elements
-  }
-
-  private async loadPlaylist (playlistId: string) {
-    const playlistPromise = this.loadPlaylistInfo(playlistId)
-    const playlistElementsPromise = this.loadPlaylistElements(playlistId)
-
-    let playlistResponse: Response
-    let isResponseOk: boolean
-
-    try {
-      playlistResponse = await playlistPromise
-      isResponseOk = playlistResponse.status === HttpStatusCode.OK_200
-    } catch (err) {
-      console.error(err)
-      isResponseOk = false
-    }
-
-    if (!isResponseOk) {
-      const serverTranslations = await this.translationsPromise
-
-      if (playlistResponse?.status === HttpStatusCode.NOT_FOUND_404) {
-        this.playlistNotFound(serverTranslations)
-        return undefined
-      }
-
-      this.playlistFetchError(serverTranslations)
-      return undefined
-    }
-
-    return { playlistResponse, videosResponse: await playlistElementsPromise }
-  }
-
-  private async loadVideo (videoId: string) {
-    const videoPromise = this.loadVideoInfo(videoId)
-
-    let videoResponse: Response
-    let isResponseOk: boolean
-
-    try {
-      videoResponse = await videoPromise
-      isResponseOk = videoResponse.status === HttpStatusCode.OK_200
-    } catch (err) {
-      console.error(err)
-
-      isResponseOk = false
-    }
-
-    if (!isResponseOk) {
-      const serverTranslations = await this.translationsPromise
-
-      if (videoResponse?.status === HttpStatusCode.NOT_FOUND_404) {
-        this.videoNotFound(serverTranslations)
-        return undefined
-      }
-
-      this.videoFetchError(serverTranslations)
-      return undefined
-    }
-
-    const captionsPromise = this.loadVideoCaptions(videoId)
-
-    return { captionsPromise, videoResponse }
-  }
-
-  private async buildPlaylistManager () {
-    const translations = await this.translationsPromise
-
-    this.player.upnext({
-      timeout: 10000, // 10s
-      headText: peertubeTranslate('Up Next', translations),
-      cancelText: peertubeTranslate('Cancel', translations),
-      suspendedText: peertubeTranslate('Autoplay is suspended', translations),
-      getTitle: () => this.nextVideoTitle(),
-      next: () => this.playNextVideo(),
-      condition: () => !!this.getNextPlaylistElement(),
-      suspended: () => false
-    })
-  }
+  // ---------------------------------------------------------------------------
 
   private async loadVideoAndBuildPlayer (uuid: string) {
-    const res = await this.loadVideo(uuid)
-    if (res === undefined) return
+    try {
+      const { videoResponse, captionsPromise } = await this.videoFetcher.loadVideo(uuid)
 
-    return this.buildVideoPlayer(res.videoResponse, res.captionsPromise)
-  }
-
-  private nextVideoTitle () {
-    const next = this.getNextPlaylistElement()
-    if (!next) return ''
-
-    return next.video.name
-  }
-
-  private getNextPlaylistElement (position?: number): VideoPlaylistElement {
-    if (!position) position = this.currentPlaylistElement.position + 1
-
-    if (position > this.playlist.videosLength) {
-      return undefined
+      return this.buildVideoPlayer(videoResponse, captionsPromise)
+    } catch (err) {
+      this.playerHTML.displayError(err.message, await this.translationsPromise)
     }
-
-    const next = this.playlistElements.find(e => e.position === position)
-
-    if (!next || !next.video) {
-      return this.getNextPlaylistElement(position + 1)
-    }
-
-    return next
-  }
-
-  private getPreviousPlaylistElement (position?: number): VideoPlaylistElement {
-    if (!position) position = this.currentPlaylistElement.position - 1
-
-    if (position < 1) {
-      return undefined
-    }
-
-    const prev = this.playlistElements.find(e => e.position === position)
-
-    if (!prev || !prev.video) {
-      return this.getNextPlaylistElement(position - 1)
-    }
-
-    return prev
   }
 
   private async buildVideoPlayer (videoResponse: Response, captionsPromise: Promise<Response>) {
+    const alreadyHadPlayer = this.resetPlayerElement()
+
+    const videoInfoPromise: Promise<{ video: VideoDetails, live?: LiveVideo }> = videoResponse.json()
+      .then((videoInfo: VideoDetails) => {
+        this.playerManagerOptions.loadParams(this.config, videoInfo)
+
+        if (!alreadyHadPlayer && !this.playerManagerOptions.hasAutoplay()) {
+          this.playerHTML.buildPlaceholder(videoInfo)
+        }
+
+        if (!videoInfo.isLive) {
+          return { video: videoInfo }
+        }
+
+        return this.videoFetcher.loadVideoWithLive(videoInfo)
+      })
+
+    const [ { video, live }, translations, captionsResponse, PeertubePlayerManagerModule ] = await Promise.all([
+      videoInfoPromise,
+      this.translationsPromise,
+      captionsPromise,
+      this.PeertubePlayerManagerModulePromise
+    ])
+
+    await this.peertubePlugin.loadPlugins(this.config, translations)
+
+    const PlayerManager: typeof PeertubePlayerManager = PeertubePlayerManagerModule.PeertubePlayerManager
+
+    const options = await this.playerManagerOptions.getPlayerOptions({
+      video,
+      captionsResponse,
+      alreadyHadPlayer,
+      translations,
+      onVideoUpdate: (uuid: string) => this.loadVideoAndBuildPlayer(uuid),
+
+      playlistTracker: this.playlistTracker,
+      playNextPlaylistVideo: () => this.playNextPlaylistVideo(),
+      playPreviousPlaylistVideo: () => this.playPreviousPlaylistVideo(),
+
+      live
+    })
+
+    this.player = await PlayerManager.initialize(this.playerManagerOptions.getMode(), options, (player: videojs.Player) => {
+      this.player = player
+    })
+
+    this.player.on('customError', (event: any, data: any) => {
+      const message = data?.err?.message || ''
+      if (!message.includes('from xs param')) return
+
+      this.player.dispose()
+      this.playerHTML.removePlayerElement()
+      this.playerHTML.displayError('This video is not available because the remote instance is not responding.', translations)
+    })
+
+    window['videojsPlayer'] = this.player
+
+    this.buildCSS()
+    this.buildPlayerDock(video)
+    this.initializeApi()
+
+    this.playerHTML.removePlaceholder()
+
+    if (this.isPlaylistEmbed()) {
+      await this.buildPlayerPlaylistUpnext()
+
+      this.player.playlist().updateSelected()
+
+      this.player.on('stopped', () => {
+        this.playNextPlaylistVideo()
+      })
+    }
+
+    this.peertubePlugin.getPluginsManager().runHook('action:embed.player.loaded', undefined, { player: this.player, videojs, video })
+
+    if (video.isLive) {
+      this.liveManager.displayInfoAndListenForChanges({
+        video,
+        translations,
+        onPublishedVideo: () => {
+          this.liveManager.stopListeningForChanges(video)
+          this.loadVideoAndBuildPlayer(video.uuid)
+        }
+      })
+    }
+  }
+
+  private resetPlayerElement () {
     let alreadyHadPlayer = false
 
     if (this.player) {
@@ -485,306 +258,74 @@ export class PeerTubeEmbed {
       alreadyHadPlayer = true
     }
 
-    this.playerElement = document.createElement('video')
-    this.playerElement.className = 'video-js vjs-peertube-skin'
-    this.playerElement.setAttribute('playsinline', 'true')
-    this.wrapperElement.appendChild(this.playerElement)
+    const playerElement = document.createElement('video')
+    playerElement.className = 'video-js vjs-peertube-skin'
+    playerElement.setAttribute('playsinline', 'true')
 
-    // Issue when we parsed config from HTML, fallback to API
-    if (!this.config) {
-      this.config = await this.refreshFetch('/api/v1/config')
-        .then(res => res.json())
-    }
+    this.playerHTML.setPlayerElement(playerElement)
+    this.playerHTML.addPlayerElementToDOM()
 
-    const videoInfoPromise: Promise<{ video: VideoDetails, live?: LiveVideo }> = videoResponse.json()
-      .then((videoInfo: VideoDetails) => {
-        this.loadParams(videoInfo)
+    return alreadyHadPlayer
+  }
 
-        if (!alreadyHadPlayer && !this.autoplay) this.buildPlaceholder(videoInfo)
+  private async buildPlayerPlaylistUpnext () {
+    const translations = await this.translationsPromise
 
-        if (!videoInfo.isLive) return { video: videoInfo }
-
-        return this.loadWithLive(videoInfo)
-      })
-
-    const [ videoInfoTmp, serverTranslations, captionsResponse, PeertubePlayerManagerModule ] = await Promise.all([
-      videoInfoPromise,
-      this.translationsPromise,
-      captionsPromise,
-      this.PeertubePlayerManagerModulePromise
-    ])
-
-    await this.loadPlugins(serverTranslations)
-
-    const { video: videoInfo, live } = videoInfoTmp
-
-    const PeertubePlayerManager = PeertubePlayerManagerModule.PeertubePlayerManager
-    const videoCaptions = await this.buildCaptions(serverTranslations, captionsResponse)
-
-    const liveOptions = videoInfo.isLive
-      ? { latencyMode: live.latencyMode }
-      : undefined
-
-    const playlistPlugin = this.currentPlaylistElement
-      ? {
-        elements: this.playlistElements,
-        playlist: this.playlist,
-
-        getCurrentPosition: () => this.currentPlaylistElement.position,
-
-        onItemClicked: (videoPlaylistElement: VideoPlaylistElement) => {
-          this.currentPlaylistElement = videoPlaylistElement
-
-          this.loadVideoAndBuildPlayer(this.currentPlaylistElement.video.uuid)
-              .catch(err => console.error(err))
-        }
-      }
-      : undefined
-
-    const options: PeertubePlayerManagerOptions = {
-      common: {
-        // Autoplay in playlist mode
-        autoplay: alreadyHadPlayer ? true : this.autoplay,
-
-        controls: this.controls,
-        controlBar: this.controlBar,
-
-        muted: this.muted,
-        loop: this.loop,
-
-        p2pEnabled: this.p2pEnabled,
-
-        captions: videoCaptions.length !== 0,
-        subtitle: this.subtitle,
-
-        startTime: this.playlist ? this.currentPlaylistElement.startTimestamp : this.startTime,
-        stopTime: this.playlist ? this.currentPlaylistElement.stopTimestamp : this.stopTime,
-
-        nextVideo: this.playlist ? () => this.playNextVideo() : undefined,
-        hasNextVideo: this.playlist ? () => !!this.getNextPlaylistElement() : undefined,
-
-        previousVideo: this.playlist ? () => this.playPreviousVideo() : undefined,
-        hasPreviousVideo: this.playlist ? () => !!this.getPreviousPlaylistElement() : undefined,
-
-        playlist: playlistPlugin,
-
-        videoCaptions,
-        inactivityTimeout: 2500,
-        videoViewUrl: this.getVideoUrl(videoInfo.uuid) + '/views',
-        videoShortUUID: videoInfo.shortUUID,
-        videoUUID: videoInfo.uuid,
-
-        isLive: videoInfo.isLive,
-        liveOptions,
-
-        playerElement: this.playerElement,
-        onPlayerElementChange: (element: HTMLVideoElement) => {
-          this.playerElement = element
-        },
-
-        videoDuration: videoInfo.duration,
-        enableHotkeys: true,
-        peertubeLink: this.peertubeLink,
-        poster: window.location.origin + videoInfo.previewPath,
-        theaterButton: false,
-
-        serverUrl: window.location.origin,
-        language: navigator.language,
-        embedUrl: window.location.origin + videoInfo.embedPath,
-        embedTitle: videoInfo.name,
-
-        errorNotifier: () => {
-          // Empty, we don't have a notifier in the embed
-        }
-      },
-
-      webtorrent: {
-        videoFiles: videoInfo.files
-      },
-
-      pluginsManager: this.pluginsManager
-    }
-
-    if (this.mode === 'p2p-media-loader') {
-      const hlsPlaylist = videoInfo.streamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
-
-      Object.assign(options, {
-        p2pMediaLoader: {
-          playlistUrl: hlsPlaylist.playlistUrl,
-          segmentsSha256Url: hlsPlaylist.segmentsSha256Url,
-          redundancyBaseUrls: hlsPlaylist.redundancies.map(r => r.baseUrl),
-          trackerAnnounce: videoInfo.trackerUrls,
-          videoFiles: hlsPlaylist.files
-        } as P2PMediaLoaderOptions
-      })
-    }
-
-    this.player = await PeertubePlayerManager.initialize(this.mode, options, (player: videojs.Player) => {
-      this.player = player
+    this.player.upnext({
+      timeout: 10000, // 10s
+      headText: peertubeTranslate('Up Next', translations),
+      cancelText: peertubeTranslate('Cancel', translations),
+      suspendedText: peertubeTranslate('Autoplay is suspended', translations),
+      getTitle: () => this.playlistTracker.nextVideoTitle(),
+      next: () => this.playNextPlaylistVideo(),
+      condition: () => !!this.playlistTracker.getNextPlaylistElement(),
+      suspended: () => false
     })
-
-    this.player.on('customError', (event: any, data: any) => this.handleError(data.err, serverTranslations))
-
-    window['videojsPlayer'] = this.player
-
-    this.buildCSS()
-
-    this.buildDock(videoInfo)
-
-    this.initializeApi()
-
-    this.removePlaceholder()
-
-    if (this.isPlaylistEmbed()) {
-      await this.buildPlaylistManager()
-
-      this.player.playlist().updateSelected()
-
-      this.player.on('stopped', () => {
-        this.playNextVideo()
-      })
-    }
-
-    this.pluginsManager.runHook('action:embed.player.loaded', undefined, { player: this.player, videojs, video: videoInfo })
   }
 
-  private async initCore () {
-    if (this.userTokens) this.setHeadersFromTokens()
-
-    this.translationsPromise = TranslationsManager.getServerTranslations(window.location.origin, navigator.language)
-    this.PeertubePlayerManagerModulePromise = import('../../assets/player/peertube-player-manager')
-
-    let videoId: string
-
-    if (this.isPlaylistEmbed()) {
-      const playlistId = this.getResourceId()
-      const res = await this.loadPlaylist(playlistId)
-      if (!res) return undefined
-
-      this.playlist = await res.playlistResponse.json()
-
-      const playlistElementResult = await res.videosResponse.json()
-      this.playlistElements = await this.loadAllPlaylistVideos(playlistId, playlistElementResult)
-
-      const params = new URL(window.location.toString()).searchParams
-      const playlistPositionParam = this.getParamString(params, 'playlistPosition')
-
-      let position = 1
-
-      if (playlistPositionParam) {
-        position = parseInt(playlistPositionParam + '', 10)
-      }
-
-      this.currentPlaylistElement = this.playlistElements.find(e => e.position === position)
-      if (!this.currentPlaylistElement || !this.currentPlaylistElement.video) {
-        console.error('Current playlist element is not valid.', this.currentPlaylistElement)
-        this.currentPlaylistElement = this.getNextPlaylistElement()
-      }
-
-      if (!this.currentPlaylistElement) {
-        console.error('This playlist does not have any valid element.')
-        const serverTranslations = await this.translationsPromise
-        this.playlistFetchError(serverTranslations)
-        return
-      }
-
-      videoId = this.currentPlaylistElement.video.uuid
-    } else {
-      videoId = this.getResourceId()
-    }
-
-    return this.loadVideoAndBuildPlayer(videoId)
-  }
-
-  private handleError (err: Error, translations?: { [ id: string ]: string }) {
-    if (err.message.includes('from xs param')) {
-      this.player.dispose()
-      this.playerElement = null
-      this.displayError('This video is not available because the remote instance is not responding.', translations)
-    }
-  }
-
-  private buildDock (videoInfo: VideoDetails) {
-    if (!this.controls) return
+  private buildPlayerDock (videoInfo: VideoDetails) {
+    if (!this.playerManagerOptions.hasControls()) return
 
     // On webtorrent fallback, player may have been disposed
     if (!this.player.player_) return
 
-    const title = this.title ? videoInfo.name : undefined
-    const description = this.warningTitle && this.p2pEnabled
+    const title = this.playerManagerOptions.hasTitle()
+      ? videoInfo.name
+      : undefined
+
+    const description = this.playerManagerOptions.hasWarningTitle() && this.playerManagerOptions.hasP2PEnabled()
       ? '<span class="text">' + peertubeTranslate('Watching this video may reveal your IP address to others.') + '</span>'
       : undefined
+
+    if (!title && !description) return
 
     const availableAvatars = videoInfo.channel.avatars.filter(a => a.width < 50)
     const avatar = availableAvatars.length !== 0
       ? availableAvatars[0]
       : undefined
 
-    if (title || description) {
-      this.player.peertubeDock({
-        title,
-        description,
-        avatarUrl: title && avatar
-          ? avatar.path
-          : undefined
-      })
-    }
+    this.player.peertubeDock({
+      title,
+      description,
+      avatarUrl: title && avatar
+        ? avatar.path
+        : undefined
+    })
   }
 
   private buildCSS () {
     const body = document.getElementById('custom-css')
 
-    if (this.bigPlayBackgroundColor) {
-      body.style.setProperty('--embedBigPlayBackgroundColor', this.bigPlayBackgroundColor)
+    if (this.playerManagerOptions.hasBigPlayBackgroundColor()) {
+      body.style.setProperty('--embedBigPlayBackgroundColor', this.playerManagerOptions.getBigPlayBackgroundColor())
     }
 
-    if (this.foregroundColor) {
-      body.style.setProperty('--embedForegroundColor', this.foregroundColor)
+    if (this.playerManagerOptions.hasForegroundColor()) {
+      body.style.setProperty('--embedForegroundColor', this.playerManagerOptions.getForegroundColor())
     }
   }
 
-  private async buildCaptions (serverTranslations: any, captionsResponse: Response): Promise<VideoJSCaption[]> {
-    if (captionsResponse.ok) {
-      const { data } = await captionsResponse.json()
-
-      return data.map((c: VideoCaption) => ({
-        label: peertubeTranslate(c.language.label, serverTranslations),
-        language: c.language.id,
-        src: window.location.origin + c.captionPath
-      }))
-    }
-
-    return []
-  }
-
-  private buildPlaceholder (video: VideoDetails) {
-    const placeholder = this.getPlaceholderElement()
-
-    const url = window.location.origin + video.previewPath
-    placeholder.style.backgroundImage = `url("${url}")`
-    placeholder.style.display = 'block'
-  }
-
-  private removePlaceholder () {
-    const placeholder = this.getPlaceholderElement()
-    placeholder.style.display = 'none'
-  }
-
-  private getPlaceholderElement () {
-    return document.getElementById('placeholder-preview')
-  }
-
-  private getHeaderTokenValue () {
-    return `${this.userTokens.tokenType} ${this.userTokens.accessToken}`
-  }
-
-  private setHeadersFromTokens () {
-    this.headers.set('Authorization', this.getHeaderTokenValue())
-  }
-
-  private removeTokensFromHeaders () {
-    this.headers.delete('Authorization')
-  }
+  // ---------------------------------------------------------------------------
 
   private getResourceId () {
     const urlParts = window.location.pathname.split('/')
@@ -793,69 +334,6 @@ export class PeerTubeEmbed {
 
   private isPlaylistEmbed () {
     return window.location.pathname.split('/')[1] === 'video-playlists'
-  }
-
-  private loadPlugins (translations?: { [ id: string ]: string }) {
-    this.pluginsManager = new PluginsManager({
-      peertubeHelpersFactory: pluginInfo => this.buildPeerTubeHelpers(pluginInfo, translations)
-    })
-
-    this.pluginsManager.loadPluginsList(this.config)
-
-    return this.pluginsManager.ensurePluginsAreLoaded('embed')
-  }
-
-  private buildPeerTubeHelpers (pluginInfo: PluginInfo, translations?: { [ id: string ]: string }): RegisterClientHelpers {
-    const unimplemented = () => {
-      throw new Error('This helper is not implemented in embed.')
-    }
-
-    return {
-      getBaseStaticRoute: unimplemented,
-      getBaseRouterRoute: unimplemented,
-      getBasePluginClientPath: unimplemented,
-
-      getSettings: () => {
-        const url = this.getPluginUrl() + '/' + pluginInfo.plugin.npmName + '/public-settings'
-
-        return this.refreshFetch(url, { headers: this.headers })
-          .then(res => res.json())
-          .then((obj: PublicServerSetting) => obj.publicSettings)
-      },
-
-      isLoggedIn: () => !!this.userTokens,
-      getAuthHeader: () => {
-        if (!this.userTokens) return undefined
-
-        return { Authorization: this.getHeaderTokenValue() }
-      },
-
-      notifier: {
-        info: unimplemented,
-        error: unimplemented,
-        success: unimplemented
-      },
-
-      showModal: unimplemented,
-
-      getServerConfig: unimplemented,
-
-      markdownRenderer: {
-        textMarkdownToHTML: unimplemented,
-        enhancedMarkdownToHTML: unimplemented
-      },
-
-      translate: (value: string) => Promise.resolve(peertubeTranslate(value, translations))
-    }
-  }
-
-  private isP2PEnabled (video: Video) {
-    const userP2PEnabled = getBoolOrDefault(
-      peertubeLocalStorage.getItem(UserLocalStorageKeys.P2P_ENABLED),
-      this.config.defaults.p2p.embed.enabled
-    )
-
-    return isP2PEnabled(video, this.config, userP2PEnabled)
   }
 }
 
