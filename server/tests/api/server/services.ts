@@ -51,7 +51,8 @@ describe('Test services', function () {
   })
 
   it('Should have a valid oEmbed video response', async function () {
-    for (const basePath of [ '/videos/embed/', '/w/' ]) {
+    console.log("This is valid response ")
+    for (const basePath of [ '/videos/watch/', '/w/' ]) {
       for (const suffix of [ '', '?param=1' ]) {
         const oembedUrl = server.url + basePath + video.uuid + suffix
 
@@ -59,7 +60,7 @@ describe('Test services', function () {
         const expectedHtml = '<iframe style="display:block;"  srcdoc="<html><body style="background-color:#282828;">' +
           '<p style="color:#EEEEEE; text-align: center; vertical-align: middle; font-size: 22px; font-weight: 500;">' +
           'The content of this video is marked as sensitive.<br><br><a style = "color:#EEEEEE" ' +
-          `href ="http://localhost:${server.port}/videos/embed/${video.uuid}" target="TARGET_NEW_WINDOW">` +
+          `href ="http://localhost:${server.port}/videos/watch/${video.uuid}" target="TARGET_NEW_WINDOW">` +
           '<u>Watch on PeerTube</u></a></body></html>" width="560" height="315"></iframe>'
 
         const expectedThumbnailUrl = 'http://localhost:' + server.port + video.previewPath
