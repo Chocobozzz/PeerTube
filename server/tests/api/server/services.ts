@@ -56,7 +56,7 @@ describe('Test services', function () {
         const oembedUrl = server.url + basePath + video.uuid + suffix
 
         const res = await server.services.getOEmbed({ oembedUrl })
-        const expectedHtml = '<iframe style="display:block;" srcdoc="<html><body style="background-color:#282828;"><p style="color:#EEEEEE; text-align: center; vertical-align: middle; font-size: 22px; font-weight: 500;"> The content of this video is marked as sensitive.<br><br><a style = "color:#EEEEEE" `href ="http://localhost:${server.port}/videos/embed/${video.uuid}" target="TARGET_NEW_WINDOW">` <u>Watch on PeerTube</u></a></body></html>" width="560" height="315"></iframe>'
+        const expectedHtml = `<iframe style="display:block;" srcdoc="<html><body style="background-color:#282828;"><p style="color:#EEEEEE; text-align: center; vertical-align: middle; font-size: 22px; font-weight: 500;"> The content of this video is marked as sensitive.<br><br><a style = "color:#EEEEEE" href = "http://localhost:${server.port}/videos/embed/${video.uuid}" target="TARGET_NEW_WINDOW"><u>Watch on PeerTube</u></a></body></html>" width="560" height="315"></iframe>`
         const expectedThumbnailUrl = 'http://localhost:' + server.port + video.previewPath
 
         expect(res.body.html).to.equal(expectedHtml)
