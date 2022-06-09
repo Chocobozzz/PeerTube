@@ -370,7 +370,7 @@ const CONFIG = {
     LIGHTNING: {
       get NODE_ADDRESS () { return config.get<string>('podcast.lightning.node_address') },
       get CUSTOM_KEY () { return config.get<string>('podcast.lightning.custom_key') },
-      get CUSTOM_VALUE () { return config.get<string>('podcast.lightning.custom_value') },
+      get CUSTOM_VALUE () { return config.get<string>('podcast.lightning.custom_value') }
     }
   }
 }

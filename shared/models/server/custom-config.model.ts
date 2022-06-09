@@ -195,9 +195,9 @@ export interface CustomConfig {
   }
 
   podcast: {
-    instanceFee: number,
+    instanceFee: number
     lightning: {
-      nodeAddress: string,
+      nodeAddress: string
       customKey: string
       customValue: string
     }

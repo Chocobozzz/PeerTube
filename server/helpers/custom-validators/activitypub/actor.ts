@@ -41,9 +41,9 @@ function isActorPreferredUsernameValid (preferredUsername: string) {
 function isActorPrivateKeyValid (privateKey: string) {
   return exists(privateKey) &&
     typeof privateKey === 'string' &&
-    privateKey.startsWith('-----BEGIN RSA PRIVATE KEY-----') &&
+    (privateKey.startsWith('-----BEGIN RSA PRIVATE KEY-----') || privateKey.startsWith('-----BEGIN PRIVATE KEY-----')) &&
     // Sometimes there is a \n at the end, so just assert the string contains the end mark
-    privateKey.includes('-----END RSA PRIVATE KEY-----') &&
+    (privateKey.includes('-----END RSA PRIVATE KEY-----') || privateKey.includes('-----END PRIVATE KEY-----')) &&
     validator.isLength(privateKey, CONSTRAINTS_FIELDS.ACTORS.PRIVATE_KEY)
 }
 

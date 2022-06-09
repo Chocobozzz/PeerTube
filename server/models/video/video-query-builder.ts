@@ -563,7 +563,7 @@ function wrapForAPIResults (baseQuery: string, replacements: any, options: Build
       '"VideoCaptions"."language"': '"VideoCaptions.language"',
       '"VideoCaptions"."filename"': '"VideoCaptions.filename"',
       '"VideoCaptions"."fileUrl"': '"VideoCaptions.fileUrl"',
-      '"VideoCaptions"."videoId"': '"VideoCaptions.videoId"',
+      '"VideoCaptions"."videoId"': '"VideoCaptions.videoId"'
     })
   }
 

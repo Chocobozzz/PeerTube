@@ -258,7 +258,7 @@ export class VideoService implements VideosProvider {
         format: FeedFormat.RSS,
         label: 'podcast rss 2.0',
         url: base + FeedFormat.RSS.toLowerCase(),
-        params: new HttpParams({fromObject: {format: 'podcast'}})
+        params: new HttpParams({ fromObject: { format: 'podcast' } })
       },
       {
         format: FeedFormat.RSS,

@@ -1,5 +1,6 @@
 import * as express from 'express'
 import * as Feed from 'pfeed-podcast'
+import * as showdown from 'showdown'
 import { groupBy, isNull, last, map, orderBy } from 'lodash'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
@@ -18,8 +19,7 @@ import {
 import { cacheRoute } from '../middlewares/cache'
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
-import { VideoFilter } from '@shared/models'
-import { VideoResolution, VideoStreamingPlaylistType } from '@shared/models'
+import { VideoFilter, VideoResolution, VideoStreamingPlaylistType } from '@shared/models'
 
 const feedsRouter = express.Router()
 
@@ -181,16 +181,6 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     link = WEBSERVER.URL
   }
 
-  const feed = initFeed({
-    name,
-    description,
-    link,
-    image,
-    author,
-    resourceType: 'videos',
-    queryString: new URL(WEBSERVER.URL + req.url).search
-  })
-
   const options = {
     accountId: account ? account.id : null,
     videoChannelId: videoChannel ? videoChannel.id : null
@@ -199,7 +189,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   const { data } = await VideoModel.listForApi({
     start,
     count: FEEDS.COUNT,
-    sort: req.query.sort,
+    sort: '-publishedAt',
     includeLocalVideos: true,
     nsfw,
     filter: req.query.filter as VideoFilter,
@@ -209,7 +199,23 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     ...options
   })
 
-  addVideosToFeed(feed, data, format)
+  // If the first video in the channel is a film, that will be the only video in the feed
+  // Yes, this is a hack :)
+  const isFilm: boolean = data[data.length - 1].category === 2
+  const videos = isFilm ? [ data[data.length - 1] ] : data
+
+  const feed = initFeed({
+    name: isFilm ? videos[0].name : name,
+    description: isFilm ? videos[0].description : description,
+    link: isFilm ? videos[0].url : link,
+    image: isFilm ? WEBSERVER.URL + videos[0].getPreviewStaticPath() : image,
+    author,
+    resourceType: 'videos',
+    queryString: new URL(WEBSERVER.URL + req.url).search,
+    medium: isFilm ? 'film' : 'video'
+  })
+
+  addVideosToFeed(feed, videos, format)
 
   // Now the feed generation is done, let's send it!
   return sendFeed(feed, req, res)
@@ -255,18 +261,19 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
 function initFeed (parameters: {
   name: string
   description: string
-  link?: string,
-  image?: string,
+  link?: string
+  image?: string
   author?: {
-    name: string,
-    email: string,
+    name: string
+    email: string
     link: string
-  },
+  }
   resourceType?: 'videos' | 'video-comments'
   queryString?: string
+  medium?: string
 }) {
   const webserverUrl = WEBSERVER.URL
-  const { name, description, link, image, author, resourceType, queryString } = parameters
+  const { name, description, link, image, author, resourceType, queryString, medium } = parameters
 
   return new Feed({
     title: name,
@@ -279,6 +286,7 @@ function initFeed (parameters: {
     copyright: `All rights reserved, unless otherwise specified in the terms specified at ${webserverUrl}/about` +
     ` and potential licenses granted by each content's rightholder.`,
     generator: `Toraifōsu`, // ^.~
+    medium: medium || 'video',
     feedLinks: {
       json: `${webserverUrl}/feeds/${resourceType}.json${queryString}`,
       atom: `${webserverUrl}/feeds/${resourceType}.atom${queryString}`,
@@ -300,11 +308,11 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
     // Generate feed specific to The Podcast Namespace
     for (const video of videos.filter(v => !v.isLive)) {
       const videos: {
-        type: string,
-        length: number,
-        bitrate: number,
-        sources: { uri: string, contentType?: string }[],
-        height?: number,
+        type: string
+        length: number
+        bitrate: number
+        sources: { uri: string, contentType?: string }[]
+        height?: number
         language?: string
       }[] = video.getFormattedVideoFilesJSON(false).map(videoFile => {
         const isAudio = videoFile.resolution.id === VideoResolution.H_NOVIDEO
@@ -328,17 +336,17 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
       // standard files for webtorrent are regular MP4s
       const groupedVideos = groupBy(videos, video => video.height || 0)
       const preferredVideos = map(groupedVideos, videoGroup => {
-        if (videoGroup.length == 1) {
+        if (videoGroup.length === 1) {
           return videoGroup[0]
         }
         return videoGroup.find(v => v.sources.some(s => s.uri.includes("/webseed/")))
       })
 
-      const sortedVideos = orderBy(preferredVideos, ['bitrate'], ['desc'])
+      const sortedVideos = orderBy(preferredVideos, [ 'bitrate' ], [ 'desc' ])
 
       const streamingPlaylists = video.VideoStreamingPlaylists
         .map(streamingPlaylist => {
-          let type = '';
+          let type = ''
           if (streamingPlaylist.type === VideoStreamingPlaylistType.HLS) {
             type = 'application/x-mpegURL'
           } else {
@@ -356,12 +364,12 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
           return result
         })
 
-      const media = [...sortedVideos, ...streamingPlaylists]
+      const media = [ ...sortedVideos, ...streamingPlaylists ]
 
       const categories: { value: number, label: string }[] = []
       if (video.Tags) {
-        video.Tags.forEach((tag, index) =>{
-          categories.push({value: index, label: tag.name})
+        video.Tags.forEach((tag, index) => {
+          categories.push({ value: index, label: tag.name })
         })
       }
       if (video.category) {
@@ -388,12 +396,14 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         }
       })
 
+      const markdownConverter = new showdown.Converter()
+
       const item = {
         title: video.name,
         // Live videos need unique GUIDs
         id: video.url,
         link: WEBSERVER.URL + '/videos/watch/' + video.uuid,
-        description: video.description,
+        description: markdownConverter.makeHtml(video.description),
         author: [
           {
             name: video.VideoChannel.Account.getDisplayName(),
@@ -404,10 +414,13 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         explicit: video.nsfw,
         media,
         categories,
+        socialInteract: [
+          { uri: video.url, protocol: "activitypub" }
+        ],
         subTitle: captions,
         thumbnail: [
           {
-            url: WEBSERVER.URL + video.getMiniatureStaticPath()
+            url: WEBSERVER.URL + video.getPreviewStaticPath()
           }
         ]
       }
@@ -440,32 +453,58 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
           framerate: videoFile.fps,
           duration: video.duration
         }
-      ],
-      date: video.publishedAt,
-      nsfw: video.nsfw,
-      torrent: torrents,
-      videos,
-      embed: {
-        url: video.getEmbedStaticPath(),
-        allowFullscreen: true
-      },
-      player: {
-        url: video.getWatchStaticPath()
-      },
-      categories,
-      community: {
-        statistics: {
-          views: video.views
-        }
-      },
-      thumbnail: [
-        {
-          url: WEBSERVER.URL + video.getPreviewStaticPath(),
-          height: PREVIEWS_SIZE.height,
-          width: PREVIEWS_SIZE.width
-        }
-      ]
-    })
+
+        if (video.language) Object.assign(result, { lang: video.language })
+
+        return result
+      })
+
+      const categories: { value: number, label: string }[] = []
+      if (video.category) {
+        categories.push({
+          value: video.category,
+          label: VideoModel.getCategoryLabel(video.category)
+        })
+      }
+
+      feed.addItem({
+        title: video.name,
+        id: video.url,
+        link: WEBSERVER.URL + '/videos/watch/' + video.uuid,
+        description: video.getTruncatedDescription(),
+        content: video.description,
+        author: [
+          {
+            name: video.VideoChannel.Account.getDisplayName(),
+            link: video.VideoChannel.Account.Actor.url
+          }
+        ],
+        date: video.publishedAt,
+        nsfw: video.nsfw,
+        torrent: torrents,
+        videos,
+        embed: {
+          url: video.getEmbedStaticPath(),
+          allowFullscreen: true
+        },
+        player: {
+          url: video.getWatchStaticPath()
+        },
+        categories,
+        community: {
+          statistics: {
+            views: video.views
+          }
+        },
+        thumbnail: [
+          {
+            url: WEBSERVER.URL + video.getPreviewStaticPath(),
+            height: PREVIEWS_SIZE.height,
+            width: PREVIEWS_SIZE.width
+          }
+        ]
+      })
+    }
   }
 }
 
