@@ -1,6 +1,6 @@
 import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
-import { durationToString, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
+import { durationToString, prepareIcu, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { buildVideoWatchPath } from '@shared/core-utils'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
@@ -19,6 +19,9 @@ import {
 } from '@shared/models'
 
 export class Video implements VideoServerModel {
+  private static readonly viewsICU = prepareIcu($localize`{views, plural, =0 {No view} =1 {1 view} other {{views} views}}`)
+  private static readonly viewersICU = prepareIcu($localize`{viewers, plural, =0 {No viewers} =1 {1 viewer} other {{viewers} viewers}}`)
+
   byVideoChannel: string
   byAccount: string
 
@@ -269,12 +272,10 @@ export class Video implements VideoServerModel {
   }
 
   getExactNumberOfViews () {
-    if (this.views < 1000) return ''
-
     if (this.isLive) {
-      return $localize`${this.views} viewers`
+      return Video.viewersICU({ viewers: this.viewers }, $localize`${this.viewers} viewer(s)`)
     }
 
-    return $localize`${this.views} views`
+    return Video.viewsICU({ views: this.views }, $localize`{${this.views} view(s)}`)
   }
 }

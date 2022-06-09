@@ -37,7 +37,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       myVideoPublished: $localize`Video published (after transcoding/scheduled update)`,
       myVideoImportFinished: $localize`Video import finished`,
       newUserRegistration: $localize`A new user registered on your instance`,
-      newFollow: $localize`You or your channel(s) has a new follower`,
+      newFollow: $localize`You or one of your channels has a new follower`,
       commentMention: $localize`Someone mentioned you in video comments`,
       newInstanceFollower: $localize`Your instance has a new follower`,
       autoInstanceFollowing: $localize`Your instance automatically followed another instance`,

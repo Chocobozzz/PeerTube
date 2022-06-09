@@ -486,7 +486,7 @@ const ensureAuthUserOwnsAccountValidator = [
     if (res.locals.account.id !== user.Account.id) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Only owner of this account can access this ressource.'
+        message: 'Only owner of this account can access this resource.'
       })
     }
 

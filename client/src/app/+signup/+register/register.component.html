@@ -32,7 +32,7 @@
             <button cdkStepperNext [disabled]="!formStepTerms || !formStepTerms.valid">{{ defaultNextStepButtonLabel }}</button>
           </cdk-step>
 
-          <cdk-step [stepControl]="formStepUser" i18n-label="Stepper label for the registration page asking user informations" label="User">
+          <cdk-step [stepControl]="formStepUser" i18n-label="Stepper label for the registration page asking user information" label="User">
             <my-register-step-user (formBuilt)="onUserFormBuilt($event)" [videoUploadDisabled]="videoUploadDisabled"></my-register-step-user>
 
             <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>

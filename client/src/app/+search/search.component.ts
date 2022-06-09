@@ -248,11 +248,11 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   private updateTitle () {
-    const suffix = this.currentSearch
-      ? ' ' + this.currentSearch
-      : ''
+    const title = this.currentSearch
+      ? $localize`Search ${this.currentSearch}`
+      : $localize`Search`
 
-    this.metaService.setTitle($localize`Search` + suffix)
+    this.metaService.setTitle(title)
   }
 
   private updateUrlFromAdvancedSearch () {

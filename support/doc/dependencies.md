@@ -513,7 +513,7 @@ If `sudo -u postgres createuser -P peertube` gives you an `unknown user: postgre
 ```
 net-libs/nodejs
 sys-apps/yarn
-media-video/ffmpeg[x264] # Optionnally add vorbis,vpx
+media-video/ffmpeg[x264] # Optionally add vorbis,vpx
 dev-db/postgresql
 dev-db/redis
 dev-vcs/git

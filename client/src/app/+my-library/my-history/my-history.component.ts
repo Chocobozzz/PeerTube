@@ -93,8 +93,8 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
       .subscribe({
         next: () => {
           const message = this.videosHistoryEnabled === true
-            ? $localize`Videos history is enabled`
-            : $localize`Videos history is disabled`
+            ? $localize`Video history is enabled`
+            : $localize`Video history is disabled`
 
           this.notifier.success(message)
 
@@ -117,8 +117,8 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
   }
 
   async clearAllHistory () {
-    const title = $localize`Delete videos history`
-    const message = $localize`Are you sure you want to delete all your videos history?`
+    const title = $localize`Delete video history`
+    const message = $localize`Are you sure you want to delete all your video history?`
 
     const res = await this.confirmService.confirm(message, title)
     if (res !== true) return
@@ -126,7 +126,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
     this.userHistoryService.clearAll()
         .subscribe({
           next: () => {
-            this.notifier.success($localize`Videos history deleted`)
+            this.notifier.success($localize`Video history deleted`)
 
             this.reloadData()
           },

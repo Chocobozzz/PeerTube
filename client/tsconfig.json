@@ -6,7 +6,7 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
-    "module": "esnext",
+    "module": "es2020",
     "experimentalDecorators": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
@@ -15,11 +15,12 @@
     "importHelpers": true,
     "allowSyntheticDefaultImports": true,
     "strictBindCallApply": true,
-    "target": "es2015",
+    "target": "es2017",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
+      "ES2020.Intl",
       "es2018",
       "es2017",
       "es2016",

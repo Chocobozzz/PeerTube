@@ -124,7 +124,7 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: MAc
     return
   }
 
-  // Try to not forward unwanted commments on our videos
+  // Try to not forward unwanted comments on our videos
   if (video.isOwned()) {
     if (await isBlockedByServerOrAccount(comment.Account, video.VideoChannel.Account)) {
       logger.info('Skip comment forward from blocked account or server %s.', comment.Account.Actor.url)

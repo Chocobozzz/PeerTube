@@ -175,7 +175,7 @@ export class VideoMiniatureComponent implements OnInit {
 
     if (video.scheduledUpdate) {
       const updateAt = new Date(video.scheduledUpdate.updateAt.toString()).toLocaleString(this.localeId)
-      return $localize`Publication scheduled on ` + updateAt
+      return $localize`Publication scheduled on ${updateAt}`
     }
 
     if (video.state.id === VideoState.TRANSCODING_FAILED) {

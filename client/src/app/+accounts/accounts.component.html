@@ -33,10 +33,10 @@
             </div>
 
             <div class="actor-counters">
-              <span i18n>{naiveAggregatedSubscribers(), plural, =1 {1 subscriber} other {{{ naiveAggregatedSubscribers() }} subscribers}}</span>
+              <span i18n>{naiveAggregatedSubscribers(), plural, =0 {No subscribers} =1 {1 subscriber} other {{{ naiveAggregatedSubscribers() }} subscribers}}</span>
 
               <span class="videos-count" *ngIf="accountVideosCount !== undefined" i18n>
-                {accountVideosCount, plural, =1 {1 videos} other {{{ accountVideosCount }} videos}}
+                {accountVideosCount, plural, =0 {No videos} =1 {1 video} other {{{ accountVideosCount }} videos}}
               </span>
             </div>
           </div>

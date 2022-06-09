@@ -2,7 +2,7 @@ import { QueryTypes, Sequelize, Transaction } from 'sequelize'
 
 /**
  *
- * Abstact builder to run video SQL queries
+ * Abstract builder to run video SQL queries
  *
  */
 
