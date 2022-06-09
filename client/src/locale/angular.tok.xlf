@@ -3645,6 +3645,7 @@
       </trans-unit>
       <trans-unit id="2520968456492632777" datatype="html">
         <source><x id="PH" equiv-text="handle"/> accepted in instance followers</source>
+        <target>mi ken e lukin tan ma "<x id="PH" equiv-text="handle"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -3668,7 +3669,7 @@
       </trans-unit>
       <trans-unit id="2040902819815401278" datatype="html">
         <source><x id="PH" equiv-text="handle"/> rejected from instance followers</source>
-        <target>mi ken ala e lukin pi ma "<x id="PH" equiv-text="handle"/>"</target>
+        <target>mi ken ala e lukin tan ma "<x id="PH" equiv-text="handle"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -7448,6 +7449,7 @@
       </trans-unit>
       <trans-unit id="7440637814928143808" datatype="html">
         <source>My followers</source>
+        <target>jan ni li lukin e sina</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.html</context>
           <context context-type="linenumber">4</context>
