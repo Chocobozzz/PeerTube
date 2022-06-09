@@ -1,9 +1,9 @@
 import * as Bull from 'bull'
 import { copy, stat } from 'fs-extra'
-import { extname } from 'path'
+import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
-import { UserModel } from '@server/models/account/user'
+import { UserModel } from '@server/models/user/user'
 import { MVideoFullLight } from '@server/types/models'
 import { VideoFileImportPayload } from '@shared/models'
 import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
@@ -55,7 +55,7 @@ async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
   const { size } = await stat(inputFilePath)
   const fps = await getVideoFileFPS(inputFilePath)
 
-  const fileExt = extname(inputFilePath)
+  const fileExt = getLowercaseExtension(inputFilePath)
 
   const currentVideoFile = video.VideoFiles.find(videoFile => videoFile.resolution === videoFileResolution)
 

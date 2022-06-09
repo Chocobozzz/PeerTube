@@ -24,6 +24,14 @@
     "secure": false,
     "ws": true
   },
+  "/client/assets": {
+    "target": "http://localhost:9000",
+    "secure": false
+  },
+  "/client/locales": {
+    "target": "http://localhost:9000",
+    "secure": false
+  },
   "/!(client)**": {
     "target": "http://localhost:3000/client/index.html",
     "secure": false,

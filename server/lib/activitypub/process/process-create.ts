@@ -1,3 +1,4 @@
+import { isBlockedByServerOrAccount } from '@server/lib/blocklist'
 import { isRedundancyAccepted } from '@server/lib/redundancy'
 import { ActivityCreate, CacheFileObject, VideoObject } from '../../../../shared'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
@@ -9,11 +10,10 @@ import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../../types/models'
 import { Notifier } from '../../notifier'
 import { createOrUpdateCacheFile } from '../cache-file'
-import { createOrUpdateVideoPlaylist } from '../playlist'
+import { createOrUpdateVideoPlaylist } from '../playlists'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { resolveThread } from '../video-comments'
-import { getOrCreateVideoAndAccountAndChannel } from '../videos'
-import { isBlockedByServerOrAccount } from '@server/lib/blocklist'
+import { getOrCreateAPVideo } from '../videos'
 
 async function processCreateActivity (options: APProcessorOptions<ActivityCreate>) {
   const { activity, byActor } = options
@@ -55,7 +55,7 @@ async function processCreateVideo (activity: ActivityCreate, notify: boolean) {
   const videoToCreateData = activity.object as VideoObject
 
   const syncParam = { likes: false, dislikes: false, shares: false, comments: false, thumbnail: true, refreshVideo: false }
-  const { video, created } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoToCreateData, syncParam })
+  const { video, created } = await getOrCreateAPVideo({ videoObject: videoToCreateData, syncParam })
 
   if (created && notify) Notifier.Instance.notifyOnNewVideoIfNeeded(video)
 
@@ -67,7 +67,7 @@ async function processCreateCacheFile (activity: ActivityCreate, byActor: MActor
 
   const cacheFile = activity.object as CacheFileObject
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFile.object })
+  const { video } = await getOrCreateAPVideo({ videoObject: cacheFile.object })
 
   await sequelizeTypescript.transaction(async t => {
     return createOrUpdateCacheFile(cacheFile, video, byActor, t)
@@ -128,5 +128,5 @@ async function processCreatePlaylist (activity: ActivityCreate, byActor: MActorS
 
   if (!byAccount) throw new Error('Cannot create video playlist with the non account actor ' + byActor.url)
 
-  await createOrUpdateVideoPlaylist(playlistObject, byAccount, activity.to)
+  await createOrUpdateVideoPlaylist(playlistObject, activity.to)
 }

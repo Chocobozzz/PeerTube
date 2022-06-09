@@ -1,10 +1,11 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .root {
+  @include margin-left(auto);
+  @include margin-right(auto);
+
   height: 100%;
-  margin-left: auto;
-  margin-right: auto;
   text-align: center;
   padding-top: 150px;
   display: flex;
@@ -12,20 +13,21 @@
   flex-direction: column-reverse;
 
   .box {
-    text-align: left;
+    text-align: start;
     font-size: 120%;
     padding: 0 15px;
   }
 
   img {
-    margin-left: auto;
+    @include margin-left(auto);
+
     width: 220px;
     height: auto;
   }
 
   @media screen and (max-width: $mobile-view) {
     img {
-      margin-right: auto;
+      @include margin-right(auto);
     }
   }
 

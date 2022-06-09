@@ -1,12 +1,13 @@
 import * as express from 'express'
 import { body } from 'express-validator'
 import {
-  isSignatureCreatorValid, isSignatureTypeValid,
+  isSignatureCreatorValid,
+  isSignatureTypeValid,
   isSignatureValueValid
 } from '../../../helpers/custom-validators/activitypub/signature'
 import { isDateValid } from '../../../helpers/custom-validators/misc'
 import { logger } from '../../../helpers/logger'
-import { areValidationErrors } from '../utils'
+import { areValidationErrors } from '../shared'
 
 const signatureValidator = [
   body('signature.type')
@@ -14,7 +15,7 @@ const signatureValidator = [
     .custom(isSignatureTypeValid).withMessage('Should have a valid signature type'),
   body('signature.created')
     .optional()
-    .custom(isDateValid).withMessage('Should have a valid signature created date'),
+    .custom(isDateValid).withMessage('Should have a signature created date that conforms to ISO 8601'),
   body('signature.creator')
     .optional()
     .custom(isSignatureCreatorValid).withMessage('Should have a valid signature creator'),

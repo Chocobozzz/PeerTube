@@ -3,13 +3,12 @@ import * as ffmpeg from 'fluent-ffmpeg'
 import { readFile, remove, writeFile } from 'fs-extra'
 import { dirname, join } from 'path'
 import { FFMPEG_NICE, VIDEO_LIVE } from '@server/initializers/constants'
-import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptions, EncoderProfile, VideoResolution } from '../../shared/models/videos'
+import { AvailableEncoders, EncoderOptions, EncoderOptionsBuilder, EncoderProfile, VideoResolution } from '../../shared/models/videos'
 import { CONFIG } from '../initializers/config'
 import { execPromise, promisify0 } from './core-utils'
 import { computeFPS, getAudioStream, getVideoFileFPS } from './ffprobe-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
-import { FilterSpecification } from 'fluent-ffmpeg'
 
 /**
  *
@@ -133,7 +132,7 @@ interface BaseTranscodeOptions {
   availableEncoders: AvailableEncoders
   profile: string
 
-  resolution: VideoResolution
+  resolution: number
 
   isPortraitMode?: boolean
 
@@ -227,7 +226,7 @@ async function getLiveTranscodingCommand (options: {
 
   const varStreamMap: string[] = []
 
-  const complexFilter: FilterSpecification[] = [
+  const complexFilter: ffmpeg.FilterSpecification[] = [
     {
       inputs: '[v:0]',
       filter: 'split',
@@ -407,8 +406,7 @@ async function buildx264VODCommand (command: ffmpeg.FfmpegCommand, options: Tran
 async function buildAudioMergeCommand (command: ffmpeg.FfmpegCommand, options: MergeAudioTranscodeOptions) {
   command = command.loop(undefined)
 
-  // Avoid "height not divisible by 2" error
-  const scaleFilterValue = 'trunc(iw/2)*2:trunc(ih/2)*2'
+  const scaleFilterValue = getScaleCleanerValue()
   command = await presetVideo({ command, input: options.audioPath, transcodeOptions: options, scaleFilterValue })
 
   command.outputOption('-preset:v veryfast')
@@ -542,7 +540,7 @@ async function getEncoderBuilderResult (options: {
       }
     }
 
-    const result = await builder({ input, resolution: resolution, fps, streamNum })
+    const result = await builder({ input, resolution, fps, streamNum })
 
     return {
       result,
@@ -725,6 +723,11 @@ async function runCommand (options: {
 
     command.run()
   })
+}
+
+// Avoid "height not divisible by 2" error
+function getScaleCleanerValue () {
+  return 'trunc(iw/2)*2:trunc(ih/2)*2'
 }
 
 // ---------------------------------------------------------------------------

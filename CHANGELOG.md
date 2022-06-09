@@ -1,5 +1,90 @@
 # Changelog
 
+## v3.3.0
+
+### IMPORTANT NOTES
+
+ * **Important:** v3.2.0 introduced a `pg_dump` export bug in the auto upgrade script. v3.2.1 fixed this bug. To upgrade from v3.2.**0**:
+   * You can upgrade manually https://docs.joinpeertube.org/install-any-os?id=manually
+   * Or you can apply the changes introduced in this commit: https://github.com/Chocobozzz/PeerTube/commit/86dc0b9cc9374cba7548bb613ff43d92f90570a8 and then use the auto upgrade script
+ * **Important:** Due to a bug in ffmpeg, PeerTube is not compatible with ffmpeg 4.4. See https://github.com/Chocobozzz/PeerTube/issues/3990
+
+
+### Maintenance
+
+ * Increase max image/caption/torrent upload size to `4MB`. You need to update your nginx configuration to handle this change
+ * Increase fetcher job concurrency to `3`
+
+### Docker
+
+ * Support log level env parameter `PEERTUBE_LOG_LEVEL` [#4149](https://github.com/Chocobozzz/PeerTube/pull/4149)
+
+### Plugins/Themes/Embed API
+
+ * Add client helpers:
+   * `getBaseRouterRoute()` [#4153](https://github.com/Chocobozzz/PeerTube/pull/4153)
+ * Add client plugin hooks (https://docs.joinpeertube.org/api-plugins):
+   * `filter:left-menu.links.create.result` to add/remove left menu links
+   * `filter:internal.player.videojs.options.result` to filter options sent to videojs player [#4126](https://github.com/Chocobozzz/PeerTube/pull/4126)
+ * Add server plugin hooks (https://docs.joinpeertube.org/api-plugins):
+   * `action:api.video-playlist-element.created`
+
+
+### Features
+
+ * :tada: Add ability to create a custom homepage using HTML, markdown and [custom HTML tags](https://docs.joinpeertube.org/api-custom-client-markup) [#4007](https://github.com/Chocobozzz/PeerTube/pull/4007)
+ * :tada: Add ability to search playlists in PeerTube instance and [SepiaSearch](https://sepiasearch.org/)
+ * :tada: Shorter public URLs (old URLs are still supported):
+   * Handle short UUID (`8r4jooaQpHp8tw1E1qpSeYq` instead of `3caf7bea-5ceb-4959-81a0-b44d184e897c`) for playlists and videos
+   * Use `/w/:id` instead of `/videos/watch/:id` and `/w/p/:id` instead of `/videos/watch/playlist/:id`
+   * Use `/a/:accountName` instead of `/accounts/:accountName` and `/c/:channelName` instead of `/video-channels/:channelName` [#4009](https://github.com/Chocobozzz/PeerTube/pull/4009)
+   * Provide `/@:username` page that automatically redirect to the account or channel page [#4009](https://github.com/Chocobozzz/PeerTube/pull/4009)
+ * :tada: Add RTL layout support
+ * Add ability to use HTML, markdown and [custom HTML tags](https://docs.joinpeertube.org/api-custom-client-markup) in instance description
+ * Default to dark theme (if available) if requested by the web browser
+ * Add ability for admins to configure minimum age required in signup page [#4010](https://github.com/Chocobozzz/PeerTube/pull/4010)
+ * Use a dedicated URL for each tab in publish page
+ * Add ability to prefill contact form using query parameters in URL [#4161](https://github.com/Chocobozzz/PeerTube/pull/4161)
+ * Accessibility/UI:
+   * Show logo in mobile view [#4141](https://github.com/Chocobozzz/PeerTube/pull/4141)
+   * Improve download modal to download video subtitles
+   * Better error message when trying to import a torrent containing multiple files
+ * REST API errors:
+   * Use [RFC 7807](https://datatracker.ietf.org/doc/html/rfc7807) format to display errors [#4143](https://github.com/Chocobozzz/PeerTube/pull/4143)
+   * Improve date format error messages
+   * Improve video name and tag error messages
+ * Performance:
+   * Use raw SQL to fetch a video from database (~ latency / 2)
+   * Inject server config in HTML
+   * Speed up client plugin loading
+   * Cache refresh actor promises
+   * Optimize activity pub video update
+   * Relax some database transactions
+   * Use an internal cache for DNS resolution.
+   This should speed up federation and fix weird acquire timeouts in sequelize pool (causing slowness in the client interface)
+
+### Bug fixes
+
+ * Fix video upload with a capitalized extension
+ * Fix "height not divisible by 2" ffmpeg error
+ * Don't count deleted comment for replies
+ * Fix UI bug when a plugin deleted the public privacy setting [#4163](https://github.com/Chocobozzz/PeerTube/pull/4163)
+ * Fix `player.getResolutions()` embed API when the video is has not been played yet
+ * Fix live placeholder image aspect ratio in theatre mode
+ * Fix plugin modal/notifier
+ * Fix some 404 errors for remote avatar
+ * Fix daily quota display
+ * Fix ownership change with a live video
+ * Correctly handle broken plugin install
+ * Fix channel deletion when it has videos
+ * Force TLS for webfinger in production
+ * Correctly support `wav` mimetype
+ * Fix default video privacy when plugins deleted private video privacy
+ * Fix subscribe hotkey
+ * Fix HTTP fallback with a video that does not have webtorrent files
+ * Fill video information when importing a peertube video
+
+
 ## v3.2.1
 
 ### IMPORTANT NOTES
@@ -86,7 +171,7 @@
 
 ### Features
 
- * :tada: Most robust uploads using a resumable upload endpoint [#3933](https://github.com/Chocobozzz/PeerTube/pull/3933)
+ * :tada: More robust uploads using a resumable upload endpoint [#3933](https://github.com/Chocobozzz/PeerTube/pull/3933)
  * Accessibility/UI:
    * :tada: Redesign channel and account page
    * :tada: Increase video miniature size
@@ -326,7 +411,7 @@
 
 ### IMPORTANT NOTES
 
- * Update the default configuration to not federate unlisted videos. We recommend to admins to update [this setting](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L182)
+ * Update the default configuration to not federate unlisted videos. We recommend to admins to update [this setting](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L196)
  * Update the default configuration to remove remote video views to reduce DB size and improve performances. We recommend to admins to update [this setting](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L170)
  * Remove deprecated video abuse API
 

@@ -1,12 +1,19 @@
 import * as express from 'express'
 import { UserWatchingVideo } from '../../../../shared'
-import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoWatchingValidator } from '../../../middlewares'
-import { UserVideoHistoryModel } from '../../../models/account/user-video-history'
+import {
+  asyncMiddleware,
+  asyncRetryTransactionMiddleware,
+  authenticate,
+  openapiOperationDoc,
+  videoWatchingValidator
+} from '../../../middlewares'
+import { UserVideoHistoryModel } from '../../../models/user/user-video-history'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 
 const watchingRouter = express.Router()
 
 watchingRouter.put('/:videoId/watching',
+  openapiOperationDoc({ operationId: 'setProgress' }),
   authenticate,
   asyncMiddleware(videoWatchingValidator),
   asyncRetryTransactionMiddleware(userWatchVideo)

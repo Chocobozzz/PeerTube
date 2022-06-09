@@ -1,6 +1,6 @@
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 .playlists {
   display: flex;
@@ -8,13 +8,13 @@
   justify-content: center;
 
   .playlist-wrapper {
-    margin-right: 15px;
+    @include margin-right(15px);
     padding-bottom: 15px;
   }
 }
 
 .margin-content {
-  @include grid-videos-miniature-layout;
+  @include grid-videos-miniature-layout-with-margins;
 }
 
 @media screen and (max-width: $mobile-view) {
@@ -24,9 +24,9 @@
   }
 
   .playlists {
-    justify-content: left;
+    @include margin-left(pvar(--horizontalMarginContent) !important);
+    @include margin-right(pvar(--horizontalMarginContent) !important);
 
-    margin-left: pvar(--horizontalMarginContent) !important;
-    margin-right: pvar(--horizontalMarginContent) !important;
+    justify-content: left;
   }
 }

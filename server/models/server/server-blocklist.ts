@@ -1,6 +1,7 @@
 import { Op } from 'sequelize'
 import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { MServerBlocklist, MServerBlocklistAccountServer, MServerBlocklistFormattable } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { ServerBlock } from '@shared/models'
 import { AccountModel } from '../account/account'
 import { getSort, searchAttribute } from '../utils'
@@ -42,7 +43,7 @@ enum ScopeNames {
     }
   ]
 })
-export class ServerBlocklistModel extends Model {
+export class ServerBlocklistModel extends Model<Partial<AttributesOnly<ServerBlocklistModel>>> {
 
   @CreatedAt
   createdAt: Date

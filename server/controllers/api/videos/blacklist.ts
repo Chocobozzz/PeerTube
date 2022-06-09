@@ -9,6 +9,7 @@ import {
   authenticate,
   blacklistSortValidator,
   ensureUserHasRight,
+  openapiOperationDoc,
   paginationValidator,
   setBlacklistSort,
   setDefaultPagination,
@@ -23,6 +24,7 @@ import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-c
 const blacklistRouter = express.Router()
 
 blacklistRouter.post('/:videoId/blacklist',
+  openapiOperationDoc({ operationId: 'addVideoBlock' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
   asyncMiddleware(videosBlacklistAddValidator),
@@ -30,6 +32,7 @@ blacklistRouter.post('/:videoId/blacklist',
 )
 
 blacklistRouter.get('/blacklist',
+  openapiOperationDoc({ operationId: 'getVideoBlocks' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
   paginationValidator,
@@ -48,6 +51,7 @@ blacklistRouter.put('/:videoId/blacklist',
 )
 
 blacklistRouter.delete('/:videoId/blacklist',
+  openapiOperationDoc({ operationId: 'delVideoBlock' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
   asyncMiddleware(videosBlacklistRemoveValidator),
@@ -70,7 +74,7 @@ async function addVideoToBlacklistController (req: express.Request, res: express
 
   logger.info('Video %s blacklisted.', videoInstance.uuid)
 
-  return res.type('json').sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function updateVideoBlacklistController (req: express.Request, res: express.Response) {
@@ -82,7 +86,7 @@ async function updateVideoBlacklistController (req: express.Request, res: expres
     return videoBlacklist.save({ transaction: t })
   })
 
-  return res.type('json').sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function listBlacklist (req: express.Request, res: express.Response) {
@@ -105,5 +109,5 @@ async function removeVideoFromBlacklistController (req: express.Request, res: ex
 
   logger.info('Video %s removed from blacklist.', video.uuid)
 
-  return res.type('json').sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }

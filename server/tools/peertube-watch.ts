@@ -1,7 +1,7 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
+import { program, Option, OptionValues } from 'commander'
 import { join } from 'path'
 import { execSync } from 'child_process'
 
@@ -9,7 +9,7 @@ program
   .name('watch')
   .arguments('<url>')
   .addOption(
-    new program.Option('-g, --gui <player>', 'player type')
+    new Option('-g, --gui <player>', 'player type')
       .default('vlc')
       .choices([ 'airplay', 'stdout', 'chromecast', 'mpv', 'vlc', 'mplayer', 'xbmc' ])
   )
@@ -22,7 +22,7 @@ program
   .action((url, options) => run(url, options))
   .parse(process.argv)
 
-function run (url: string, options: program.OptionValues) {
+function run (url: string, options: OptionValues) {
   if (!url) {
     console.error('<url> positional argument is required.')
     process.exit(-1)
@@ -30,7 +30,7 @@ function run (url: string, options: program.OptionValues) {
 
   const cmd = 'node ' + join(__dirname, 'node_modules', 'webtorrent-hybrid', 'bin', 'cmd.js')
   const args = ` --${options.gui} ` +
-    url.replace('videos/watch', 'download/torrents') +
+    url.replace(/(\/videos\/watch\/)|\/w\//, '/download/torrents/') +
     `-${options.resolution}.torrent`
 
   try {

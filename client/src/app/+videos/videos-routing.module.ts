@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { LoginGuard } from '@app/core'
-import { MetaGuard } from '@ngx-meta/core'
 import { VideoTrendingComponent } from './video-list'
 import { VideoOverviewComponent } from './video-list/overview/video-overview.component'
 import { VideoLocalComponent } from './video-list/video-local.component'
@@ -13,7 +12,6 @@ const videosRoutes: Routes = [
   {
     path: '',
     component: VideosComponent,
-    canActivateChild: [ MetaGuard ],
     children: [
       {
         path: 'overview',
@@ -75,31 +73,6 @@ const videosRoutes: Routes = [
             enabled: true,
             key: 'local-videos-list'
           }
-        }
-      },
-      {
-        path: 'upload',
-        loadChildren: () => import('@app/+videos/+video-edit/video-add.module').then(m => m.VideoAddModule),
-        data: {
-          meta: {
-            title: $localize`Upload a video`
-          }
-        }
-      },
-      {
-        path: 'update/:uuid',
-        loadChildren: () => import('@app/+videos/+video-edit/video-update.module').then(m => m.VideoUpdateModule),
-        data: {
-          meta: {
-            title: $localize`Edit a video`
-          }
-        }
-      },
-      {
-        path: 'watch',
-        loadChildren: () => import('@app/+videos/+video-watch/video-watch.module').then(m => m.VideoWatchModule),
-        data: {
-          preload: 3000
         }
       }
     ]

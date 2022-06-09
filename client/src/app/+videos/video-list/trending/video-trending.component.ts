@@ -35,11 +35,12 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
     protected storageService: LocalStorageService,
     protected cfr: ComponentFactoryResolver,
     private videoService: VideoService,
+    private redirectService: RedirectService,
     private hooks: HooksService
   ) {
     super()
 
-    this.defaultSort = this.parseAlgorithm(RedirectService.DEFAULT_TRENDING_ALGORITHM)
+    this.defaultSort = this.parseAlgorithm(this.redirectService.getDefaultTrendingAlgorithm())
 
     this.headerComponentInjector = this.getInjector()
   }
@@ -106,7 +107,7 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
   }
 
   protected loadPageRouteParams (queryParams: Params) {
-    const algorithm = queryParams['alg'] || RedirectService.DEFAULT_TRENDING_ALGORITHM
+    const algorithm = queryParams['alg'] || this.redirectService.getDefaultTrendingAlgorithm()
 
     this.sort = this.parseAlgorithm(algorithm)
   }
@@ -115,8 +116,10 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
     switch (algorithm) {
       case 'most-viewed':
         return '-trending'
+
       case 'most-liked':
         return '-likes'
+
       default:
         return '-' + algorithm as VideoSortField
     }

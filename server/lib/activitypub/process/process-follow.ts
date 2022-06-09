@@ -1,17 +1,17 @@
+import { getServerActor } from '@server/models/application/application'
 import { ActivityFollow } from '../../../../shared/models/activitypub'
+import { getAPId } from '../../../helpers/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
-import { sequelizeTypescript } from '../../../initializers/database'
-import { ActorModel } from '../../../models/activitypub/actor'
-import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { sendAccept, sendReject } from '../send'
-import { Notifier } from '../../notifier'
-import { getAPId } from '../../../helpers/activitypub'
 import { CONFIG } from '../../../initializers/config'
+import { sequelizeTypescript } from '../../../initializers/database'
+import { ActorModel } from '../../../models/actor/actor'
+import { ActorFollowModel } from '../../../models/actor/actor-follow'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorFollowActors, MActorSignature } from '../../../types/models'
+import { Notifier } from '../../notifier'
 import { autoFollowBackIfNeeded } from '../follow'
-import { getServerActor } from '@server/models/application/application'
+import { sendAccept, sendReject } from '../send'
 
 async function processFollowActivity (options: APProcessorOptions<ActivityFollow>) {
   const { activity, byActor } = options
@@ -43,7 +43,7 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
     if (isFollowingInstance && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
       logger.info('Rejecting %s because instance followers are disabled.', targetActor.url)
 
-      await sendReject(activityId, byActor, targetActor)
+      sendReject(activityId, byActor, targetActor)
 
       return { actorFollow: undefined as MActorFollowActors }
     }
@@ -84,8 +84,9 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
 
     // Target sends to actor he accepted the follow request
     if (actorFollow.state === 'accepted') {
-      await sendAccept(actorFollow)
-      await autoFollowBackIfNeeded(actorFollow)
+      sendAccept(actorFollow)
+
+      await autoFollowBackIfNeeded(actorFollow, t)
     }
 
     return { actorFollow, created, isFollowingInstance, targetActor }

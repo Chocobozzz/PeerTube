@@ -4,10 +4,11 @@ import { expect } from 'chai'
 import { createReadStream, pathExists, readdir, readFile, stat } from 'fs-extra'
 import got, { Response as GotResponse } from 'got/dist/source'
 import * as parseTorrent from 'parse-torrent'
-import { extname, join } from 'path'
+import { join } from 'path'
 import * as request from 'supertest'
-import { v4 as uuidv4 } from 'uuid'
 import validator from 'validator'
+import { getLowercaseExtension } from '@server/helpers/core-utils'
+import { buildUUID } from '@server/helpers/uuid'
 import { HttpStatusCode } from '@shared/core-utils'
 import { VideosCommonQuery } from '@shared/models'
 import { loadLanguages, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
@@ -738,7 +739,7 @@ async function completeVideoCheck (
     const file = videoDetails.files.find(f => f.resolution.id === attributeFile.resolution)
     expect(file).not.to.be.undefined
 
-    let extension = extname(attributes.fixture)
+    let extension = getLowercaseExtension(attributes.fixture)
     // Transcoding enabled: extension will always be .mp4
     if (attributes.files.length > 1) extension = '.mp4'
 
@@ -774,9 +775,11 @@ async function completeVideoCheck (
     expect(torrent.files[0].path).to.exist.and.to.not.equal('')
   }
 
+  expect(videoDetails.thumbnailPath).to.exist
   await testImage(url, attributes.thumbnailfile || attributes.fixture, videoDetails.thumbnailPath)
 
   if (attributes.previewfile) {
+    expect(videoDetails.previewPath).to.exist
     await testImage(url, attributes.previewfile, videoDetails.previewPath)
   }
 }
@@ -803,7 +806,7 @@ async function uploadVideoAndGetId (options: {
 
   const res = await uploadVideo(options.server.url, options.token || options.server.accessToken, videoAttrs)
 
-  return { id: res.body.video.id, uuid: res.body.video.uuid }
+  return res.body.video as { id: number, uuid: string, shortUUID: string }
 }
 
 async function getLocalIdByUUID (url: string, uuid: string) {
@@ -824,7 +827,7 @@ async function uploadRandomVideoOnServers (servers: ServerInfo[], serverNumber: 
 
 async function uploadRandomVideo (server: ServerInfo, wait = true, additionalParams: any = {}) {
   const prefixName = additionalParams.prefixName || ''
-  const name = prefixName + uuidv4()
+  const name = prefixName + buildUUID()
 
   const data = Object.assign({ name }, additionalParams)
   const res = await uploadVideo(server.url, server.accessToken, data)

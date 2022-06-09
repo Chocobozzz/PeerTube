@@ -56,7 +56,7 @@ import {
   removeServerFromServerBlocklist
 } from '../../../../shared/extra-utils/users/blocklist'
 import { User } from '../../../../shared/models/users'
-import { VideoPrivacy } from '../../../../shared/models/videos'
+import { VideoPlaylistCreateResult, VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoExistInPlaylist } from '../../../../shared/models/videos/playlist/video-exist-in-playlist.model'
 import { VideoPlaylistElement, VideoPlaylistElementType } from '../../../../shared/models/videos/playlist/video-playlist-element.model'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
@@ -427,31 +427,45 @@ describe('Test video playlists', function () {
         expect(data).to.have.lengthOf(0)
       }
     })
+  })
 
-    it('Should not list unlisted or private playlists', async function () {
+  describe('Playlist rights', function () {
+    let unlistedPlaylist: VideoPlaylistCreateResult
+    let privatePlaylist: VideoPlaylistCreateResult
+
+    before(async function () {
       this.timeout(30000)
 
-      await createVideoPlaylist({
-        url: servers[1].url,
-        token: servers[1].accessToken,
-        playlistAttrs: {
-          displayName: 'playlist unlisted',
-          privacy: VideoPlaylistPrivacy.UNLISTED
-        }
-      })
+      {
+        const res = await createVideoPlaylist({
+          url: servers[1].url,
+          token: servers[1].accessToken,
+          playlistAttrs: {
+            displayName: 'playlist unlisted',
+            privacy: VideoPlaylistPrivacy.UNLISTED,
+            videoChannelId: servers[1].videoChannel.id
+          }
+        })
+        unlistedPlaylist = res.body.videoPlaylist
+      }
 
-      await createVideoPlaylist({
-        url: servers[1].url,
-        token: servers[1].accessToken,
-        playlistAttrs: {
-          displayName: 'playlist private',
-          privacy: VideoPlaylistPrivacy.PRIVATE
-        }
-      })
+      {
+        const res = await createVideoPlaylist({
+          url: servers[1].url,
+          token: servers[1].accessToken,
+          playlistAttrs: {
+            displayName: 'playlist private',
+            privacy: VideoPlaylistPrivacy.PRIVATE
+          }
+        })
+        privatePlaylist = res.body.videoPlaylist
+      }
 
       await waitJobs(servers)
       await wait(3000)
+    })
 
+    it('Should not list unlisted or private playlists', async function () {
       for (const server of servers) {
         const results = [
           await getAccountPlaylistsList(server.url, 'root@localhost:' + servers[1].port, 0, 5, '-createdAt'),
@@ -467,6 +481,27 @@ describe('Test video playlists', function () {
           expect(data[0].displayName).to.equal('playlist 3')
           expect(data[1].displayName).to.equal('playlist 2')
         }
+      }
+    })
+
+    it('Should not get unlisted playlist using only the id', async function () {
+      await getVideoPlaylist(servers[1].url, unlistedPlaylist.id, 404)
+    })
+
+    it('Should get unlisted plyaylist using uuid or shortUUID', async function () {
+      await getVideoPlaylist(servers[1].url, unlistedPlaylist.uuid)
+      await getVideoPlaylist(servers[1].url, unlistedPlaylist.shortUUID)
+    })
+
+    it('Should not get private playlist without token', async function () {
+      for (const id of [ privatePlaylist.id, privatePlaylist.uuid, privatePlaylist.shortUUID ]) {
+        await getVideoPlaylist(servers[1].url, id, 401)
+      }
+    })
+
+    it('Should get private playlist with a token', async function () {
+      for (const id of [ privatePlaylist.id, privatePlaylist.uuid, privatePlaylist.shortUUID ]) {
+        await getVideoPlaylistWithToken(servers[1].url, servers[1].accessToken, id)
       }
     })
   })

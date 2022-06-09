@@ -16,10 +16,11 @@ import {
 } from 'sequelize-typescript'
 import { getServerActor } from '@server/models/application/application'
 import { MAccount, MAccountId, MUserAccountId } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { VideoPrivacy } from '@shared/models'
 import { ActivityTagObject, ActivityTombstoneObject } from '../../../shared/models/activitypub/objects/common-objects'
 import { VideoCommentObject } from '../../../shared/models/activitypub/objects/video-comment-object'
-import { VideoComment, VideoCommentAdmin } from '../../../shared/models/videos/video-comment.model'
+import { VideoComment, VideoCommentAdmin } from '../../../shared/models/videos/comment/video-comment.model'
 import { actorNameAlphabet } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { regexpCapture } from '../../helpers/regexp'
@@ -39,7 +40,7 @@ import {
 } from '../../types/models/video'
 import { VideoCommentAbuseModel } from '../abuse/video-comment-abuse'
 import { AccountModel } from '../account/account'
-import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
+import { ActorModel, unusedActorAttributesForAPI } from '../actor/actor'
 import {
   buildBlockedAccountSQL,
   buildBlockedAccountSQLOptimized,
@@ -68,14 +69,10 @@ export enum ScopeNames {
             Sequelize.literal(
               '(' +
                 'WITH "blocklist" AS (' + buildBlockedAccountSQL(blockerAccountIds) + ')' +
-                'SELECT COUNT("replies"."id") - (' +
-                  'SELECT COUNT("replies"."id") ' +
-                  'FROM "videoComment" AS "replies" ' +
-                  'WHERE "replies"."originCommentId" = "VideoCommentModel"."id" ' +
-                  'AND "accountId" IN (SELECT "id" FROM "blocklist")' +
-                ')' +
+                'SELECT COUNT("replies"."id") ' +
                 'FROM "videoComment" AS "replies" ' +
                 'WHERE "replies"."originCommentId" = "VideoCommentModel"."id" ' +
+                'AND "deletedAt" IS NULL ' +
                 'AND "accountId" NOT IN (SELECT "id" FROM "blocklist")' +
               ')'
             ),
@@ -173,7 +170,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class VideoCommentModel extends Model {
+export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoCommentModel>>> {
   @CreatedAt
   createdAt: Date
 
@@ -740,6 +737,12 @@ export class VideoCommentModel extends Model {
     }
 
     return this.Account.isOwned()
+  }
+
+  markAsDeleted () {
+    this.text = ''
+    this.deletedAt = new Date()
+    this.accountId = null
   }
 
   isDeleted () {

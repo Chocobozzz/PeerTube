@@ -1,14 +1,13 @@
 import * as Bull from 'bull'
 import { ActivitypubHttpFetcherPayload, FetchType } from '@shared/models'
 import { logger } from '../../../helpers/logger'
-import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { VideoShareModel } from '../../../models/video/video-share'
-import { MAccountDefault, MVideoFullLight } from '../../../types/models'
+import { MVideoFullLight } from '../../../types/models'
 import { crawlCollectionPage } from '../../activitypub/crawl'
-import { createAccountPlaylists } from '../../activitypub/playlist'
+import { createAccountPlaylists } from '../../activitypub/playlists'
 import { processActivities } from '../../activitypub/process'
 import { addVideoShares } from '../../activitypub/share'
 import { addVideoComments } from '../../activitypub/video-comments'
@@ -22,16 +21,13 @@ async function processActivityPubHttpFetcher (job: Bull.Job) {
   let video: MVideoFullLight
   if (payload.videoId) video = await VideoModel.loadAndPopulateAccountAndServerAndTags(payload.videoId)
 
-  let account: MAccountDefault
-  if (payload.accountId) account = await AccountModel.load(payload.accountId)
-
   const fetcherType: { [ id in FetchType ]: (items: any[]) => Promise<any> } = {
     'activity': items => processActivities(items, { outboxUrl: payload.uri, fromFetch: true }),
     'video-likes': items => createRates(items, video, 'like'),
     'video-dislikes': items => createRates(items, video, 'dislike'),
     'video-shares': items => addVideoShares(items, video),
     'video-comments': items => addVideoComments(items),
-    'account-playlists': items => createAccountPlaylists(items, account)
+    'account-playlists': items => createAccountPlaylists(items)
   }
 
   const cleanerType: { [ id in FetchType ]?: (crawlStartDate: Date) => Promise<any> } = {

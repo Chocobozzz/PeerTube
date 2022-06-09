@@ -1,21 +1,43 @@
-export const SANITIZE_OPTIONS = {
-  allowedTags: [ 'a', 'p', 'span', 'br', 'strong', 'em', 'ul', 'ol', 'li' ],
-  allowedSchemes: [ 'http', 'https' ],
-  allowedAttributes: {
-    a: [ 'href', 'class', 'target', 'rel' ]
-  },
-  transformTags: {
-    a: (tagName: string, attribs: any) => {
-      let rel = 'noopener noreferrer'
-      if (attribs.rel === 'me') rel += ' me'
+export function getSanitizeOptions () {
+  return {
+    allowedTags: [ 'a', 'p', 'span', 'br', 'strong', 'em', 'ul', 'ol', 'li' ],
+    allowedSchemes: [ 'http', 'https' ],
+    allowedAttributes: {
+      'a': [ 'href', 'class', 'target', 'rel' ],
+      '*': [ 'data-*' ]
+    },
+    transformTags: {
+      a: (tagName: string, attribs: any) => {
+        let rel = 'noopener noreferrer'
+        if (attribs.rel === 'me') rel += ' me'
 
-      return {
-        tagName,
-        attribs: Object.assign(attribs, {
-          target: '_blank',
-          rel
-        })
+        return {
+          tagName,
+          attribs: Object.assign(attribs, {
+            target: '_blank',
+            rel
+          })
+        }
       }
+    }
+  }
+}
+
+export function getCustomMarkupSanitizeOptions (additionalAllowedTags: string[] = []) {
+  const base = getSanitizeOptions()
+
+  return {
+    allowedTags: [
+      ...base.allowedTags,
+      ...additionalAllowedTags,
+      'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img'
+    ],
+    allowedSchemes: base.allowedSchemes,
+    allowedAttributes: {
+      ...base.allowedAttributes,
+
+      'img': [ 'src', 'alt' ],
+      '*': [ 'data-*', 'style' ]
     }
   }
 }

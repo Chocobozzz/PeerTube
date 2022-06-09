@@ -61,7 +61,7 @@ export class MyAccountPage {
 
   async goOnAssociatedPlaylistEmbed () {
     let url = await browser.getCurrentUrl()
-    url = url.replace('/videos/watch/playlist/', '/video-playlists/embed/')
+    url = url.replace('/w/p/', '/video-playlists/embed/')
     url = url.replace(':3333', ':9001')
 
     return browser.get(url)

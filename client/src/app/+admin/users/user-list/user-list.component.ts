@@ -5,7 +5,7 @@ import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, Serve
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction } from '@app/shared/shared-main'
 import { UserBanModalComponent } from '@app/shared/shared-moderation'
-import { ServerConfig, User, UserRole } from '@shared/models'
+import { User, UserRole } from '@shared/models'
 
 type UserForList = User & {
   rawVideoQuota: number
@@ -41,8 +41,9 @@ export class UserListComponent extends RestTable implements OnInit {
     }
   ]
 
+  requiresEmailVerification = false
+
   private _selectedColumns: string[]
-  private serverConfig: ServerConfig
 
   constructor (
     protected route: ActivatedRoute,
@@ -60,10 +61,6 @@ export class UserListComponent extends RestTable implements OnInit {
     return this.auth.getUser()
   }
 
-  get requiresEmailVerification () {
-    return this.serverConfig.signup.requiresEmailVerification
-  }
-
   get selectedColumns () {
     return this._selectedColumns
   }
@@ -73,9 +70,8 @@ export class UserListComponent extends RestTable implements OnInit {
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+        .subscribe(config => this.requiresEmailVerification = config.signup.requiresEmailVerification)
 
     this.initialize()
 

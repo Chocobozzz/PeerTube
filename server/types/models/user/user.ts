@@ -1,7 +1,7 @@
 import { AccountModel } from '@server/models/account/account'
+import { UserModel } from '@server/models/user/user'
 import { MVideoPlaylist } from '@server/types/models'
 import { PickWith, PickWithOpt } from '@shared/core-utils'
-import { UserModel } from '../../../models/account/user'
 import {
   MAccount,
   MAccountDefault,

@@ -8,8 +8,8 @@
  * Simon Brosdetzko
  * Александр
  * Berto Te
- * Clemens Schielicke
  * Jeff Huang
+ * Clemens Schielicke
  * kontrollanten
  * Laurent Ettouati
  * Racida S
@@ -24,23 +24,23 @@
  * GunChleoc
  * Slimane Selyan AMIRI
  * Zet
- * x
  * Frank Sträter
+ * x
  * Julien Maulny
+ * Kimsible
  * Mark Van den Borre
+ * John Livingston
  * Jorropo
  * Josh Morel
  * BO41
  * Balázs Meskó
- * Francesc
- * John Livingston
- * mando laress
  * Eivind Ødegård
+ * Francesc
+ * mando laress
  * Quentin PAGÈS
  * Besnik Bleta
  * Ihor Hordiichuk
  * ButterflyOfFire
- * Kimsible
  * Xabi
  * buoyantair
  * Balázs Úr
@@ -85,6 +85,7 @@
  * Frank Chang
  * Green-Star
  * Micah Elizabeth Scott
+ * Poslovitch
  * SVNET Libre
  * Thomas Kuntz
  * William Lahti
@@ -104,7 +105,6 @@
  * Mildred
  * Okhin
  * Pierre-Alain TORET
- * Poslovitch
  * Serge Victor
  * Théo Le Calvar
  * Ugaitz
@@ -125,9 +125,11 @@
  * Daniele Garau
  * Dep Pranata
  * Ehsan Gholami
+ * Eric Guichaoua
  * Girish Ramakrishnan
  * Hakim Oubouali
  * Hans Meiser
+ * Hồ Nhất Duy
  * Iñigo A
  * Jefferson Hernandez
  * Joan Montané
@@ -166,7 +168,6 @@
  * Diazepan Medina
  * Dirk Kelly
  * EndoGai
- * Eric Guichaoua
  * Florent Fayolle
  * Florian
  * Frank de Lange
@@ -189,6 +190,7 @@
  * Quentin
  * Ronan
  * SerCom_KC
+ * Stakovicz
  * Thai Localization
  * Valvin
  * YiDai
@@ -384,6 +386,7 @@
  * norrist
  * osauzet
  * philippe lhardy
+ * plr20
  * potedeo
  * sanchis
  * spf
@@ -529,6 +532,7 @@
  * `video-language` by Rigel Kent (CC-BY)
  * `peertube-x` by Solen DP (CC-BY)
  * `flame` by Freepik (Flaticon License)
+ * `local` by Larea (CC-BY)
 
 
 # Contributors to our 2020 crowdfunding :heart:

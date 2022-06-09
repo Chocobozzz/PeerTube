@@ -1,7 +1,11 @@
 import * as express from 'express'
 import { join } from 'path'
+import { uuidToShort } from '@server/helpers/uuid'
+import { scheduleRefreshIfNeeded } from '@server/lib/activitypub/playlists'
+import { Hooks } from '@server/lib/plugins/hooks'
 import { getServerActor } from '@server/models/application/application'
 import { MVideoPlaylistFull, MVideoPlaylistThumbnail, MVideoThumbnail } from '@server/types/models'
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { VideoPlaylistCreate } from '../../../shared/models/videos/playlist/video-playlist-create.model'
 import { VideoPlaylistElementCreate } from '../../../shared/models/videos/playlist/video-playlist-element-create.model'
 import { VideoPlaylistElementUpdate } from '../../../shared/models/videos/playlist/video-playlist-element-update.model'
@@ -17,8 +21,7 @@ import { MIMETYPES, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constant
 import { sequelizeTypescript } from '../../initializers/database'
 import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send'
 import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url'
-import { JobQueue } from '../../lib/job-queue'
-import { createPlaylistMiniatureFromExisting } from '../../lib/thumbnail'
+import { updatePlaylistMiniatureFromExisting } from '../../lib/thumbnail'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -42,7 +45,6 @@ import {
 import { AccountModel } from '../../models/account/account'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
 
@@ -144,9 +146,7 @@ async function listVideoPlaylists (req: express.Request, res: express.Response) 
 function getVideoPlaylist (req: express.Request, res: express.Response) {
   const videoPlaylist = res.locals.videoPlaylistSummary
 
-  if (videoPlaylist.isOutdated()) {
-    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video-playlist', url: videoPlaylist.url } })
-  }
+  scheduleRefreshIfNeeded(videoPlaylist)
 
   return res.json(videoPlaylist.toFormattedJSON())
 }
@@ -173,7 +173,7 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
 
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await createPlaylistMiniatureFromExisting({
+    ? await updatePlaylistMiniatureFromExisting({
       inputPath: thumbnailField[0].path,
       playlist: videoPlaylist,
       automaticallyGenerated: false
@@ -200,9 +200,10 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
   return res.json({
     videoPlaylist: {
       id: videoPlaylistCreated.id,
+      shortUUID: uuidToShort(videoPlaylistCreated.uuid),
       uuid: videoPlaylistCreated.uuid
     }
-  }).end()
+  })
 }
 
 async function updateVideoPlaylist (req: express.Request, res: express.Response) {
@@ -215,7 +216,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await createPlaylistMiniatureFromExisting({
+    ? await updatePlaylistMiniatureFromExisting({
       inputPath: thumbnailField[0].path,
       playlist: videoPlaylistInstance,
       automaticallyGenerated: false
@@ -331,6 +332,8 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
     .catch(err => logger.error('Cannot send video playlist update.', { err }))
 
   logger.info('Video added in playlist %s at position %d.', videoPlaylist.uuid, playlistElement.position)
+
+  Hooks.runAction('action:api.video-playlist-element.created', { playlistElement })
 
   return res.json({
     videoPlaylistElement: {
@@ -482,7 +485,7 @@ async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbn
   }
 
   const inputPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, videoMiniature.filename)
-  const thumbnailModel = await createPlaylistMiniatureFromExisting({
+  const thumbnailModel = await updatePlaylistMiniatureFromExisting({
     inputPath,
     playlist: videoPlaylist,
     automaticallyGenerated: true,

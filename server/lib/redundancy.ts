@@ -1,12 +1,12 @@
+import { Transaction } from 'sequelize'
+import { logger } from '@server/helpers/logger'
+import { CONFIG } from '@server/initializers/config'
+import { ActorFollowModel } from '@server/models/actor/actor-follow'
+import { getServerActor } from '@server/models/application/application'
+import { MActorSignature, MVideoRedundancyVideo } from '@server/types/models'
+import { Activity } from '@shared/models'
 import { VideoRedundancyModel } from '../models/redundancy/video-redundancy'
 import { sendUndoCacheFile } from './activitypub/send'
-import { Transaction } from 'sequelize'
-import { MActorSignature, MVideoRedundancyVideo } from '@server/types/models'
-import { CONFIG } from '@server/initializers/config'
-import { logger } from '@server/helpers/logger'
-import { ActorFollowModel } from '@server/models/activitypub/actor-follow'
-import { Activity } from '@shared/models'
-import { getServerActor } from '@server/models/application/application'
 
 async function removeVideoRedundancy (videoRedundancy: MVideoRedundancyVideo, t?: Transaction) {
   const serverActor = await getServerActor()

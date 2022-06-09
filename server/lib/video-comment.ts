@@ -3,7 +3,7 @@ import * as Sequelize from 'sequelize'
 import { logger } from '@server/helpers/logger'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { ResultList } from '../../shared/models'
-import { VideoCommentThreadTree } from '../../shared/models/videos/video-comment.model'
+import { VideoCommentThreadTree } from '../../shared/models/videos/comment/video-comment.model'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { MAccountDefault, MComment, MCommentOwnerVideo, MCommentOwnerVideoReply, MVideoFullLight } from '../types/models'
 import { sendCreateVideoComment, sendDeleteVideoComment } from './activitypub/send'
@@ -18,9 +18,9 @@ async function removeComment (videoCommentInstance: MCommentOwnerVideo) {
       await sendDeleteVideoComment(videoCommentInstance, t)
     }
 
-    markCommentAsDeleted(videoCommentInstance)
+    videoCommentInstance.markAsDeleted()
 
-    await videoCommentInstance.save()
+    await videoCommentInstance.save({ transaction: t })
   })
 
   logger.info('Video comment %d deleted.', videoCommentInstance.id)
@@ -95,17 +95,10 @@ function buildFormattedCommentTree (resultList: ResultList<VideoCommentModel>): 
   return thread
 }
 
-function markCommentAsDeleted (comment: MComment): void {
-  comment.text = ''
-  comment.deletedAt = new Date()
-  comment.accountId = null
-}
-
 // ---------------------------------------------------------------------------
 
 export {
   removeComment,
   createVideoComment,
-  buildFormattedCommentTree,
-  markCommentAsDeleted
+  buildFormattedCommentTree
 }

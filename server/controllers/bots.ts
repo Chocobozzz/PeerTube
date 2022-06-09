@@ -75,7 +75,7 @@ async function getSitemapLocalVideoUrls () {
   })
 
   return data.map(v => ({
-    url: WEBSERVER.URL + '/videos/watch/' + v.uuid,
+    url: WEBSERVER.URL + '/w/' + v.uuid,
     video: [
       {
         title: v.name,

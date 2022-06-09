@@ -1,5 +1,9 @@
-import * as express from 'express'
 import 'multer'
+import * as express from 'express'
+import { UserNotificationModel } from '@server/models/user/user-notification'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { UserNotificationSetting } from '../../../../shared/models/users'
+import { getFormattedObjects } from '../../../helpers/utils'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -9,17 +13,13 @@ import {
   setDefaultSort,
   userNotificationsSortValidator
 } from '../../../middlewares'
-import { getFormattedObjects } from '../../../helpers/utils'
-import { UserNotificationModel } from '../../../models/account/user-notification'
-import { meRouter } from './me'
 import {
   listUserNotificationsValidator,
   markAsReadUserNotificationsValidator,
   updateNotificationSettingsValidator
 } from '../../../middlewares/validators/user-notifications'
-import { UserNotificationSetting } from '../../../../shared/models/users'
-import { UserNotificationSettingModel } from '../../../models/account/user-notification-setting'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { UserNotificationSettingModel } from '../../../models/user/user-notification-setting'
+import { meRouter } from './me'
 
 const myNotificationsRouter = express.Router()
 

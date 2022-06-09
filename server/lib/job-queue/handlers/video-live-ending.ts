@@ -3,16 +3,16 @@ import { pathExists, readdir, remove } from 'fs-extra'
 import { join } from 'path'
 import { ffprobePromise, getAudioStream, getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
 import { VIDEO_LIVE } from '@server/initializers/constants'
-import { LiveManager } from '@server/lib/live-manager'
+import { buildConcatenatedName, cleanupLive, LiveSegmentShaStore } from '@server/lib/live'
 import { generateVideoMiniature } from '@server/lib/thumbnail'
+import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/video-transcoding'
 import { publishAndFederateIfNeeded } from '@server/lib/video'
 import { getHLSDirectory } from '@server/lib/video-paths'
-import { generateHlsPlaylistResolutionFromTS } from '@server/lib/video-transcoding'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MStreamingPlaylist, MVideo, MVideoLive } from '@server/types/models'
+import { MVideo, MVideoLive } from '@server/types/models'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 
@@ -37,7 +37,7 @@ async function processVideoLiveEnding (job: Bull.Job) {
     return
   }
 
-  LiveManager.Instance.cleanupShaSegments(video.uuid)
+  LiveSegmentShaStore.Instance.cleanupShaSegments(video.uuid)
 
   if (live.saveReplay !== true) {
     return cleanupLive(video, streamingPlaylist)
@@ -46,19 +46,10 @@ async function processVideoLiveEnding (job: Bull.Job) {
   return saveLive(video, live)
 }
 
-async function cleanupLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
-  const hlsDirectory = getHLSDirectory(video)
-
-  await remove(hlsDirectory)
-
-  await streamingPlaylist.destroy()
-}
-
 // ---------------------------------------------------------------------------
 
 export {
-  processVideoLiveEnding,
-  cleanupLive
+  processVideoLiveEnding
 }
 
 // ---------------------------------------------------------------------------
@@ -94,7 +85,7 @@ async function saveLive (video: MVideo, live: MVideoLive) {
   let durationDone = false
 
   for (const playlistFile of playlistFiles) {
-    const concatenatedTsFile = LiveManager.Instance.buildConcatenatedName(playlistFile)
+    const concatenatedTsFile = buildConcatenatedName(playlistFile)
     const concatenatedTsFilePath = join(replayDirectory, concatenatedTsFile)
 
     const probe = await ffprobePromise(concatenatedTsFilePath)

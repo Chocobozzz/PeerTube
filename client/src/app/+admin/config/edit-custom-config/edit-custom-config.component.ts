@@ -1,4 +1,5 @@
 
+import omit from 'lodash-es/omit'
 import { forkJoin } from 'rxjs'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { Component, OnInit } from '@angular/core'
@@ -20,12 +21,18 @@ import {
   SEARCH_INDEX_URL_VALIDATOR,
   SERVICES_TWITTER_USERNAME_VALIDATOR,
   SIGNUP_LIMIT_VALIDATOR,
+  SIGNUP_MINIMUM_AGE_VALIDATOR,
   TRANSCODING_THREADS_VALIDATOR
 } from '@app/shared/form-validators/custom-config-validators'
 import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { CustomConfig, ServerConfig } from '@shared/models'
+import { CustomPageService } from '@app/shared/shared-main/custom-page'
+import { CustomConfig, CustomPage, HTMLServerConfig } from '@shared/models'
 import { EditConfigurationService } from './edit-configuration.service'
+
+type ComponentCustomConfig = CustomConfig & {
+  instanceCustomHomepage: CustomPage
+}
 
 @Component({
   selector: 'my-edit-custom-config',
@@ -35,8 +42,10 @@ import { EditConfigurationService } from './edit-configuration.service'
 export class EditCustomConfigComponent extends FormReactive implements OnInit {
   activeNav: string
 
-  customConfig: CustomConfig
-  serverConfig: ServerConfig
+  customConfig: ComponentCustomConfig
+  serverConfig: HTMLServerConfig
+
+  homepage: CustomPage
 
   languageItems: SelectOptionsItem[] = []
   categoryItems: SelectOptionsItem[] = []
@@ -47,6 +56,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     protected formValidatorService: FormValidatorService,
     private notifier: Notifier,
     private configService: ConfigService,
+    private customPage: CustomPageService,
     private serverService: ServerService,
     private editConfigurationService: EditConfigurationService
   ) {
@@ -54,13 +64,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => {
-          this.serverConfig = config
-        })
+    this.serverConfig = this.serverService.getHTMLConfig()
 
-    const formGroupData: { [key in keyof CustomConfig ]: any } = {
+    const formGroupData: { [key in keyof ComponentCustomConfig ]: any } = {
       instance: {
         name: INSTANCE_NAME_VALIDATOR,
         shortDescription: INSTANCE_SHORT_DESCRIPTION_VALIDATOR,
@@ -113,7 +119,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       signup: {
         enabled: null,
         limit: SIGNUP_LIMIT_VALIDATOR,
-        requiresEmailVerification: null
+        requiresEmailVerification: null,
+        minimumAge: SIGNUP_MINIMUM_AGE_VALIDATOR
       },
       import: {
         videos: {
@@ -223,6 +230,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           customKey: null,
           customValue: null
         }
+      },
+
+      instanceCustomHomepage: {
+        content: null
       }
     }
 
@@ -258,15 +269,23 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   }
 
   async formValidated () {
-    const value: CustomConfig = this.form.getRawValue()
+    const value: ComponentCustomConfig = this.form.getRawValue()
 
-    this.configService.updateCustomConfig(value)
+    forkJoin([
+      this.configService.updateCustomConfig(omit(value, 'instanceCustomHomepage')),
+      this.customPage.updateInstanceHomepage(value.instanceCustomHomepage.content)
+    ])
       .subscribe(
-        res => {
-          this.customConfig = res
+        ([ resConfig ]) => {
+          const instanceCustomHomepage = {
+            content: value.instanceCustomHomepage.content
+          }
+
+          this.customConfig = { ...resConfig, instanceCustomHomepage }
 
           // Reload general configuration
           this.serverService.resetConfig()
+            .subscribe(config => this.serverConfig = config)
 
           this.updateForm()
 
@@ -325,9 +344,12 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   }
 
   private loadConfigAndUpdateForm () {
-    this.configService.getCustomConfig()
-      .subscribe(config => {
-        this.customConfig = config
+    forkJoin([
+      this.configService.getCustomConfig(),
+      this.customPage.getInstanceHomepage()
+    ])
+      .subscribe(([ config, homepage ]) => {
+        this.customConfig = { ...config, instanceCustomHomepage: homepage }
 
         this.updateForm()
         // Force form validation

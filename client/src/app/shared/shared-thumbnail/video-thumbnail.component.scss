@@ -1,6 +1,6 @@
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 .video-thumbnail {
   @include miniature-thumbnail;

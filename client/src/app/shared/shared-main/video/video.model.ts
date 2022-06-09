@@ -1,13 +1,11 @@
 import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
 import { durationToString, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
-import { Account } from '@app/shared/shared-main/account/account.model'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
-import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   ActorImage,
-  ServerConfig,
+  HTMLServerConfig,
   UserRight,
   Video as VideoServerModel,
   VideoConstant,
@@ -28,12 +26,18 @@ export class Video implements VideoServerModel {
   licence: VideoConstant<number>
   language: VideoConstant<string>
   privacy: VideoConstant<VideoPrivacy>
+
   description: string
+
   duration: number
   durationLabel: string
+
   id: number
   uuid: string
+  shortUUID: string
+
   isLocal: boolean
+
   name: string
   serverHost: string
   thumbnailPath: string
@@ -87,8 +91,12 @@ export class Video implements VideoServerModel {
 
   pluginData?: any
 
-  static buildClientUrl (videoUUID: string) {
-    return '/videos/watch/' + videoUUID
+  static buildWatchUrl (video: Partial<Pick<Video, 'uuid' | 'shortUUID'>>) {
+    return '/w/' + (video.shortUUID || video.uuid)
+  }
+
+  static buildUpdateUrl (video: Pick<Video, 'uuid'>) {
+    return '/videos/update/' + video.uuid
   }
 
   constructor (hash: VideoServerModel, translations = {}) {
@@ -111,6 +119,7 @@ export class Video implements VideoServerModel {
 
     this.id = hash.id
     this.uuid = hash.uuid
+    this.shortUUID = hash.shortUUID
 
     this.isLocal = hash.isLocal
     this.name = hash.name
@@ -163,7 +172,7 @@ export class Video implements VideoServerModel {
     this.pluginData = hash.pluginData
   }
 
-  isVideoNSFWForUser (user: User, serverConfig: ServerConfig) {
+  isVideoNSFWForUser (user: User, serverConfig: HTMLServerConfig) {
     // Video is not NSFW, skip
     if (this.nsfw === false) return false
 

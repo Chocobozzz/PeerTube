@@ -1,9 +1,9 @@
 import { isTestInstance } from '../../helpers/core-utils'
 import { logger } from '../../helpers/logger'
-import { ActorFollowModel } from '../../models/activitypub/actor-follow'
-import { AbstractScheduler } from './abstract-scheduler'
 import { ACTOR_FOLLOW_SCORE, SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
+import { ActorFollowModel } from '../../models/actor/actor-follow'
 import { ActorFollowScoreCache } from '../files-cache'
+import { AbstractScheduler } from './abstract-scheduler'
 
 export class ActorFollowScheduler extends AbstractScheduler {
 

@@ -26,6 +26,7 @@ function makeGetRequest (options: {
   contentType?: string
   range?: string
   redirects?: number
+  accept?: string
 }) {
   if (!options.statusCodeExpected) options.statusCodeExpected = HttpStatusCode.BAD_REQUEST_400
   if (options.contentType === undefined) options.contentType = 'application/json'
@@ -36,6 +37,7 @@ function makeGetRequest (options: {
   if (options.token) req.set('Authorization', 'Bearer ' + options.token)
   if (options.query) req.query(options.query)
   if (options.range) req.set('Range', options.range)
+  if (options.accept) req.set('Accept', options.accept)
   if (options.redirects) req.redirects(options.redirects)
 
   return req.expect(options.statusCodeExpected)

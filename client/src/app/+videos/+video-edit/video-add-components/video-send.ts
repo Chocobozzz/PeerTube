@@ -6,7 +6,7 @@ import { listUserChannels } from '@app/helpers'
 import { FormReactive } from '@app/shared/shared-forms'
 import { VideoCaptionEdit, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
+import { HTMLServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
 
 @Directive()
 // tslint:disable-next-line: directive-class-suffix
@@ -15,20 +15,23 @@ export abstract class VideoSend extends FormReactive implements OnInit {
   videoPrivacies: VideoConstant<VideoPrivacy>[] = []
   videoCaptions: VideoCaptionEdit[] = []
 
-  firstStepPrivacyId = 0
-  firstStepChannelId = 0
+  firstStepPrivacyId: VideoPrivacy
+  firstStepChannelId: number
 
   abstract firstStepDone: EventEmitter<string>
   abstract firstStepError: EventEmitter<void>
-  protected abstract readonly DEFAULT_VIDEO_PRIVACY: VideoPrivacy
 
   protected loadingBar: LoadingBarService
   protected notifier: Notifier
   protected authService: AuthService
+
   protected serverService: ServerService
   protected videoService: VideoService
   protected videoCaptionService: VideoCaptionService
-  protected serverConfig: ServerConfig
+
+  protected serverConfig: HTMLServerConfig
+
+  protected highestPrivacy: VideoPrivacy
 
   abstract canDeactivate (): CanComponentDeactivateResult
 
@@ -41,16 +44,17 @@ export abstract class VideoSend extends FormReactive implements OnInit {
         this.firstStepChannelId = this.userVideoChannels[0].id
       })
 
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.serverService.getVideoPrivacies()
         .subscribe(
           privacies => {
-            this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies)
+            const { videoPrivacies, defaultPrivacyId } = this.videoService.explainedPrivacyLabels(privacies)
 
-            this.firstStepPrivacyId = this.DEFAULT_VIDEO_PRIVACY
+            this.videoPrivacies = videoPrivacies
+            this.firstStepPrivacyId = defaultPrivacyId
+
+            this.highestPrivacy = this.videoService.getHighestAvailablePrivacy(privacies)
           })
   }
 

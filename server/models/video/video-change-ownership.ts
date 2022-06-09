@@ -1,5 +1,6 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { MVideoChangeOwnershipFormattable, MVideoChangeOwnershipFull } from '@server/types/models/video/video-change-ownership'
+import { AttributesOnly } from '@shared/core-utils'
 import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '../../../shared/models/videos'
 import { AccountModel } from '../account/account'
 import { getSort } from '../utils'
@@ -53,7 +54,7 @@ enum ScopeNames {
     ]
   }
 }))
-export class VideoChangeOwnershipModel extends Model {
+export class VideoChangeOwnershipModel extends Model<Partial<AttributesOnly<VideoChangeOwnershipModel>>> {
   @CreatedAt
   createdAt: Date
 

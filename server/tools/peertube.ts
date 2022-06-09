@@ -5,7 +5,7 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
+import { CommandOptions, program } from 'commander'
 import { getSettings, version } from './cli'
 
 program
@@ -28,11 +28,11 @@ program
   .command(
     'diagnostic [action]',
     'like couple therapy, but for your instance',
-    { noHelp: true } as program.CommandOptions
+    { noHelp: true } as CommandOptions
   ).alias('d')
   .command('admin',
     'manage an instance where you have elevated rights',
-    { noHelp: true } as program.CommandOptions
+    { noHelp: true } as CommandOptions
   ).alias('a')
 
 // help on no command

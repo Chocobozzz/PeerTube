@@ -1,7 +1,7 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
+import { program } from 'commander'
 import { access, constants } from 'fs-extra'
 import { isAbsolute } from 'path'
 import { getAccessToken } from '../../shared/extra-utils'

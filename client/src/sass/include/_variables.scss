@@ -1,4 +1,4 @@
-@import '_bootstrap-variables';
+@use 'sass:math';
 
 $small-view: 800px;
 $mobile-view: 500px;
@@ -53,7 +53,8 @@ $sub-menu-height: 81px;
 
 $channel-background-color: #f6ede8;
 
-$banner-inverted-ratio: 1/6;
+// FIXME: cannot use math.div here because of compilation error
+$banner-inverted-ratio: 0.1666666666;
 
 $max-channels-width: 1200px;
 
@@ -93,6 +94,9 @@ $sub-menu-margin-bottom-small-view: 10px;
 $activated-action-button-color: #000;
 
 $focus-box-shadow-form: 0 0 0 .2rem;
+
+$video-watch-player-factor: math.div(16, 9);
+$video-watch-info-margin-left: 44px;
 
 /*** map theme ***/
 

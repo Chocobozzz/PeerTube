@@ -1,7 +1,7 @@
-@import '_variables';
-@import '_mixins';
-@import '_actor';
-@import '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_actor' as *;
+@use '_miniature' as *;
 
 .root {
   --myGlobalTopPadding: 60px;
@@ -23,13 +23,13 @@
   max-width: $max-channels-width;
 
   simple-search-input {
-    margin-left: auto;
+    @include margin-left(auto);
   }
 }
 
 my-user-moderation-dropdown,
 .badge {
-  margin-left: 10px;
+  @include margin-left(10px);
 
   position: relative;
   top: 3px;

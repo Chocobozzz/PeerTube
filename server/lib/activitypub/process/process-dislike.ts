@@ -6,7 +6,7 @@ import { AccountVideoRateModel } from '../../../models/account/account-video-rat
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
 import { forwardVideoRelatedActivity } from '../send/utils'
-import { getOrCreateVideoAndAccountAndChannel } from '../videos'
+import { getOrCreateAPVideo } from '../videos'
 
 async function processDislikeActivity (options: APProcessorOptions<ActivityCreate | ActivityDislike>) {
   const { activity, byActor } = options
@@ -30,7 +30,7 @@ async function processDislike (activity: ActivityCreate | ActivityDislike, byAct
 
   if (!byAccount) throw new Error('Cannot create dislike with the non account actor ' + byActor.url)
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: dislikeObject })
+  const { video } = await getOrCreateAPVideo({ videoObject: dislikeObject })
 
   return sequelizeTypescript.transaction(async t => {
     const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, activity.id, t)

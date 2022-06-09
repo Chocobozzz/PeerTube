@@ -1,8 +1,8 @@
+import { ServerConfigManager } from '@server/lib/server-config-manager'
 import * as express from 'express'
 import { remove, writeJSON } from 'fs-extra'
 import { snakeCase } from 'lodash'
 import validator from 'validator'
-import { getServerConfig } from '@server/lib/config'
 import { UserRight } from '../../../shared'
 import { About } from '../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
@@ -10,37 +10,47 @@ import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '..
 import { objectConverter } from '../../helpers/core-utils'
 import { CONFIG, reloadConfig } from '../../initializers/config'
 import { ClientHtml } from '../../lib/client-html'
-import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
+import { asyncMiddleware, authenticate, ensureUserHasRight, openapiOperationDoc } from '../../middlewares'
 import { customConfigUpdateValidator } from '../../middlewares/validators/config'
 
 const configRouter = express.Router()
 
 const auditLogger = auditLoggerFactory('config')
 
-configRouter.get('/about', getAbout)
 configRouter.get('/',
+  openapiOperationDoc({ operationId: 'getConfig' }),
   asyncMiddleware(getConfig)
 )
 
+configRouter.get('/about',
+  openapiOperationDoc({ operationId: 'getAbout' }),
+  getAbout
+)
+
 configRouter.get('/custom',
+  openapiOperationDoc({ operationId: 'getCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   getCustomConfig
 )
+
 configRouter.put('/custom',
+  openapiOperationDoc({ operationId: 'putCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   customConfigUpdateValidator,
   asyncMiddleware(updateCustomConfig)
 )
+
 configRouter.delete('/custom',
+  openapiOperationDoc({ operationId: 'delCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   asyncMiddleware(deleteCustomConfig)
 )
 
 async function getConfig (req: express.Request, res: express.Response) {
-  const json = await getServerConfig(req.ip)
+  const json = await ServerConfigManager.Instance.getServerConfig(req.ip)
 
   return res.json(json)
 }
@@ -67,13 +77,13 @@ function getAbout (req: express.Request, res: express.Response) {
     }
   }
 
-  return res.json(about).end()
+  return res.json(about)
 }
 
 function getCustomConfig (req: express.Request, res: express.Response) {
   const data = customConfig()
 
-  return res.json(data).end()
+  return res.json(data)
 }
 
 async function deleteCustomConfig (req: express.Request, res: express.Response) {
@@ -171,7 +181,8 @@ function customConfig (): CustomConfig {
     signup: {
       enabled: CONFIG.SIGNUP.ENABLED,
       limit: CONFIG.SIGNUP.LIMIT,
-      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
+      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION,
+      minimumAge: CONFIG.SIGNUP.MINIMUM_AGE
     },
     admin: {
       email: CONFIG.ADMIN.EMAIL

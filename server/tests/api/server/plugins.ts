@@ -2,6 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { HttpStatusCode } from '@shared/core-utils'
 import {
   cleanupTests,
   closeAllSequelize,
@@ -10,6 +11,7 @@ import {
   getMyUserInformation,
   getPlugin,
   getPluginPackageJSON,
+  getPluginTestPath,
   getPublicSettings,
   installPlugin,
   killallServers,
@@ -28,14 +30,8 @@ import {
   updatePluginSettings,
   wait,
   waitUntilLog
-} from '../../../../shared/extra-utils'
-import { PeerTubePluginIndex } from '../../../../shared/models/plugins/peertube-plugin-index.model'
-import { PeerTubePlugin } from '../../../../shared/models/plugins/peertube-plugin.model'
-import { PluginPackageJson } from '../../../../shared/models/plugins/plugin-package-json.model'
-import { PluginType } from '../../../../shared/models/plugins/plugin.type'
-import { PublicServerSetting } from '../../../../shared/models/plugins/public-server.setting'
-import { ServerConfig } from '../../../../shared/models/server'
-import { User } from '../../../../shared/models/users'
+} from '@shared/extra-utils'
+import { PeerTubePlugin, PeerTubePluginIndex, PluginPackageJson, PluginType, PublicServerSetting, ServerConfig, User } from '@shared/models'
 
 const expect = chai.expect
 
@@ -404,6 +400,36 @@ describe('Test plugins', function () {
   it('Should have updated the user theme', async function () {
     const res = await getMyUserInformation(server.url, server.accessToken)
     expect((res.body as User).theme).to.equal('instance-default')
+  })
+
+  it('Should not install a broken plugin', async function () {
+    this.timeout(60000)
+
+    async function check () {
+      const res = await listPlugins({
+        url: server.url,
+        accessToken: server.accessToken,
+        pluginType: PluginType.PLUGIN
+      })
+
+      const plugins: PeerTubePlugin[] = res.body.data
+
+      expect(plugins.find(p => p.name === 'test-broken')).to.not.exist
+    }
+
+    await installPlugin({
+      url: server.url,
+      accessToken: server.accessToken,
+      path: getPluginTestPath('-broken'),
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400
+    })
+
+    await check()
+
+    killallServers([ server ])
+    await reRunServer(server)
+
+    await check()
   })
 
   after(async function () {

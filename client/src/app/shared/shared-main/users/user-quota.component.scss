@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 label {
   font-weight: $font-regular;
@@ -8,7 +8,7 @@ label {
 
 .user-quota {
   label {
-    margin-right: 5px;
+    @include margin-right(5px);
   }
 
   &,

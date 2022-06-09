@@ -1,14 +1,14 @@
 
 import { forkJoin } from 'rxjs'
-import { AfterViewChecked, AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core'
+import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
-import { VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, ServerErrorCode, VideoPrivacy } from '@shared/models'
+import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, PeerTubeProblemDocument, ServerErrorCode, VideoPrivacy } from '@shared/models'
 import { VideoSend } from './video-send'
 
 @Component({
@@ -29,8 +29,6 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
   videoId: number
   videoUUID: string
   error: string
-
-  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -64,7 +62,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
 
     const video: LiveVideoCreate = {
       name,
-      privacy: VideoPrivacy.PRIVATE,
+      privacy: this.highestPrivacy,
       nsfw: this.serverConfig.instance.isNSFW,
       waitTranscoding: true,
       commentsEnabled: true,
@@ -92,9 +90,11 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
 
         let message = err.message
 
-        if (err.body?.code === ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED) {
+        const error = err.body as PeerTubeProblemDocument
+
+        if (error?.code === ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED) {
           message = $localize`Cannot create live because this instance have too many created lives`
-        } else if (err.body?.code) {
+        } else if (error?.code === ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED) {
           message = $localize`Cannot create live because you created too many lives`
         }
 
@@ -127,7 +127,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
       () => {
         this.notifier.success($localize`Live published.`)
 
-        this.router.navigate(['/videos/watch', video.uuid])
+        this.router.navigateByUrl(Video.buildWatchUrl(video))
       },
 
       err => {

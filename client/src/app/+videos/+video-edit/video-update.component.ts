@@ -5,7 +5,7 @@ import { Component, HostListener, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Notifier } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { VideoCaptionEdit, VideoCaptionService, VideoDetails, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { Video, VideoCaptionEdit, VideoCaptionService, VideoDetails, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { LiveVideo, LiveVideoUpdate, VideoPrivacy } from '@shared/models'
@@ -156,7 +156,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
             this.isUpdatingVideo = false
             this.loadingBar.useRef().complete()
             this.notifier.success($localize`Video updated.`)
-            this.router.navigate([ '/videos/watch', this.video.uuid ])
+            this.router.navigateByUrl(Video.buildWatchUrl(this.video))
           },
 
           err => {
@@ -174,5 +174,9 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.form.patchValue({
       pluginData: this.video.pluginData
     })
+  }
+
+  getVideoUrl () {
+    return Video.buildWatchUrl(this.videoDetails)
   }
 }

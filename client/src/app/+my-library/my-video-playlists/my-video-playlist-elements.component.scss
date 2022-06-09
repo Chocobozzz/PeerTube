@@ -1,6 +1,6 @@
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 .root {
   display: grid;
@@ -8,9 +8,10 @@
 }
 
 .playlist-info {
+  @include margin-left(calc(#{pvar(--horizontalMarginContent)} * -1));
+
   grid-column: 1;
   background-color: pvar(--submenuBackgroundColor);
-  margin-left: calc(#{pvar(--horizontalMarginContent)} * -1);
   margin-top: -$sub-menu-margin-bottom;
 
   padding: 15px;
@@ -34,7 +35,7 @@
     @include grey-button;
     @include apply-svg-color(pvar(--actionButtonColor));
 
-    margin-right: 10px;
+    @include margin-right(10px);
   }
 }
 
@@ -91,8 +92,8 @@ my-video-playlist-miniature {
 
   my-video-playlist-miniature,
   .playlist-buttons {
-    margin-left: auto;
-    margin-right: auto;
+    @include margin-left(auto);
+    @include margin-right(auto);
   }
 
   ::ng-deep my-video-playlist-element-miniature {
@@ -102,7 +103,7 @@ my-video-playlist-miniature {
     }
 
     .position {
-      margin-right: 5px !important;
+      @include margin-right(5px !important);
     }
   }
 }

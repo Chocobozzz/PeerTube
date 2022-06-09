@@ -8,6 +8,7 @@ import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-code
 import {
   addVideoCommentReply,
   addVideoCommentThread,
+  advancedVideoPlaylistSearch,
   advancedVideosSearch,
   createLive,
   createVideoPlaylist,
@@ -38,6 +39,7 @@ import {
 import { cleanupTests, flushAndRunMultipleServers, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
 import { getGoodVideoUrl, getMyVideoImports, importVideo } from '../../../shared/extra-utils/videos/video-imports'
 import {
+  VideoCommentThreadTree,
   VideoDetails,
   VideoImport,
   VideoImportState,
@@ -45,7 +47,6 @@ import {
   VideoPlaylistPrivacy,
   VideoPrivacy
 } from '../../../shared/models/videos'
-import { VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
 
 const expect = chai.expect
 
@@ -71,7 +72,7 @@ describe('Test plugin filter hooks', function () {
     await installPlugin({
       url: servers[0].url,
       accessToken: servers[0].accessToken,
-      path: getPluginTestPath('-two')
+      path: getPluginTestPath('-filter-translations')
     })
 
     for (let i = 0; i < 10; i++) {
@@ -326,7 +327,7 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should blacklist on remote upload', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'remote please blacklist me' })
       await waitJobs(servers)
@@ -335,7 +336,7 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should blacklist on remote update', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video' })
       await waitJobs(servers)
@@ -372,7 +373,7 @@ describe('Test plugin filter hooks', function () {
     const downloadVideos: VideoDetails[] = []
 
     before(async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
         transcoding: {
@@ -524,6 +525,27 @@ describe('Test plugin filter hooks', function () {
       await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.local.list.result', 1)
       await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.index.list.params', 1)
       await waitUntilLog(servers[0], 'Run hook filter:api.search.video-channels.index.list.result', 1)
+    })
+
+    it('Should run filter:api.search.video-playlists.local.list.{params,result}', async function () {
+      await advancedVideoPlaylistSearch(servers[0].url, {
+        search: 'Sun Jian'
+      })
+
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.local.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.local.list.result', 1)
+    })
+
+    it('Should run filter:api.search.video-playlists.index.list.{params,result}', async function () {
+      await advancedVideoPlaylistSearch(servers[0].url, {
+        search: 'Sun Jian',
+        searchTarget: 'search-index'
+      })
+
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.local.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.local.list.result', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.index.list.params', 1)
+      await waitUntilLog(servers[0], 'Run hook filter:api.search.video-playlists.index.list.result', 1)
     })
   })
 

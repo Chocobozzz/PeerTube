@@ -15,8 +15,9 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { v4 as uuidv4 } from 'uuid'
+import { buildUUID } from '@server/helpers/uuid'
 import { MVideo, MVideoCaption, MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions'
 import { logger } from '../../helpers/logger'
@@ -57,7 +58,7 @@ export enum ScopeNames {
     }
   ]
 })
-export class VideoCaptionModel extends Model {
+export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaptionModel>>> {
   @CreatedAt
   createdAt: Date
 
@@ -90,9 +91,9 @@ export class VideoCaptionModel extends Model {
   Video: VideoModel
 
   @BeforeDestroy
-  static async removeFiles (instance: VideoCaptionModel) {
+  static async removeFiles (instance: VideoCaptionModel, options) {
     if (!instance.Video) {
-      instance.Video = await instance.$get('Video')
+      instance.Video = await instance.$get('Video', { transaction: options.transaction })
     }
 
     if (instance.isOwned()) {
@@ -108,7 +109,7 @@ export class VideoCaptionModel extends Model {
     return undefined
   }
 
-  static loadByVideoIdAndLanguage (videoId: string | number, language: string): Promise<MVideoCaptionVideo> {
+  static loadByVideoIdAndLanguage (videoId: string | number, language: string, transaction?: Transaction): Promise<MVideoCaptionVideo> {
     const videoInclude = {
       model: VideoModel.unscoped(),
       attributes: [ 'id', 'remote', 'uuid' ],
@@ -121,7 +122,8 @@ export class VideoCaptionModel extends Model {
       },
       include: [
         videoInclude
-      ]
+      ],
+      transaction
     }
 
     return VideoCaptionModel.findOne(query)
@@ -144,19 +146,21 @@ export class VideoCaptionModel extends Model {
   }
 
   static async insertOrReplaceLanguage (caption: MVideoCaption, transaction: Transaction) {
-    const existing = await VideoCaptionModel.loadByVideoIdAndLanguage(caption.videoId, caption.language)
+    const existing = await VideoCaptionModel.loadByVideoIdAndLanguage(caption.videoId, caption.language, transaction)
+
     // Delete existing file
     if (existing) await existing.destroy({ transaction })
 
     return caption.save({ transaction })
   }
 
-  static listVideoCaptions (videoId: number): Promise<MVideoCaptionVideo[]> {
+  static listVideoCaptions (videoId: number, transaction?: Transaction): Promise<MVideoCaptionVideo[]> {
     const query = {
       order: [ [ 'language', 'ASC' ] ] as OrderItem[],
       where: {
         videoId
-      }
+      },
+      transaction
     }
 
     return VideoCaptionModel.scope(ScopeNames.WITH_VIDEO_UUID_AND_REMOTE).findAll(query)
@@ -178,7 +182,7 @@ export class VideoCaptionModel extends Model {
   }
 
   static generateCaptionName (language: string) {
-    return `${uuidv4()}-${language}.vtt`
+    return `${buildUUID()}-${language}.vtt`
   }
 
   isOwned () {
@@ -209,5 +213,11 @@ export class VideoCaptionModel extends Model {
     if (video.isOwned()) return WEBSERVER.URL + this.getCaptionStaticPath()
 
     return this.fileUrl
+  }
+
+  isEqual (this: MVideoCaption, other: MVideoCaption) {
+    if (this.fileUrl) return this.fileUrl === other.fileUrl
+
+    return this.filename === other.filename
   }
 }

@@ -45,7 +45,7 @@ import {
   usersResetPasswordValidator,
   usersVerifyEmailValidator
 } from '../../../middlewares/validators'
-import { UserModel } from '../../../models/account/user'
+import { UserModel } from '../../../models/user/user'
 import { meRouter } from './me'
 import { myAbusesRouter } from './my-abuses'
 import { myBlocklistRouter } from './my-blocklist'
@@ -314,7 +314,7 @@ async function removeUser (req: express.Request, res: express.Response) {
 
   Hooks.runAction('action:api.user.deleted', { user })
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function updateUser (req: express.Request, res: express.Response) {
@@ -323,14 +323,20 @@ async function updateUser (req: express.Request, res: express.Response) {
   const oldUserAuditView = new UserAuditView(userToUpdate.toFormattedJSON())
   const roleChanged = body.role !== undefined && body.role !== userToUpdate.role
 
-  if (body.password !== undefined) userToUpdate.password = body.password
-  if (body.email !== undefined) userToUpdate.email = body.email
-  if (body.emailVerified !== undefined) userToUpdate.emailVerified = body.emailVerified
-  if (body.videoQuota !== undefined) userToUpdate.videoQuota = body.videoQuota
-  if (body.videoQuotaDaily !== undefined) userToUpdate.videoQuotaDaily = body.videoQuotaDaily
-  if (body.role !== undefined) userToUpdate.role = body.role
-  if (body.adminFlags !== undefined) userToUpdate.adminFlags = body.adminFlags
-  if (body.pluginAuth !== undefined) userToUpdate.pluginAuth = body.pluginAuth
+  const keysToUpdate: (keyof UserUpdate)[] = [
+    'password',
+    'email',
+    'emailVerified',
+    'videoQuota',
+    'videoQuotaDaily',
+    'role',
+    'adminFlags',
+    'pluginAuth'
+  ]
+
+  for (const key of keysToUpdate) {
+    if (body[key] !== undefined) userToUpdate.set(key, body[key])
+  }
 
   const user = await userToUpdate.save()
 
@@ -343,7 +349,7 @@ async function updateUser (req: express.Request, res: express.Response) {
 
   // Don't need to send this update to followers, these attributes are not federated
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function askResetUserPassword (req: express.Request, res: express.Response) {

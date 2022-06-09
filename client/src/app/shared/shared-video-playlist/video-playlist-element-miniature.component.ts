@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { Video } from '@app/shared/shared-main'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
-import { ServerConfig, VideoPlaylistElementType, VideoPlaylistElementUpdate } from '@shared/models'
+import { HTMLServerConfig, VideoPlaylistElementType, VideoPlaylistElementUpdate } from '@shared/models'
 import { secondsToTime } from '../../../assets/player/utils'
 import { VideoPlaylistElement } from './video-playlist-element.model'
 import { VideoPlaylist } from './video-playlist.model'
@@ -37,7 +37,7 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     stopTimestamp: number
   } = {} as any
 
-  private serverConfig: ServerConfig
+  private serverConfig: HTMLServerConfig
 
   constructor (
     private authService: AuthService,
@@ -48,12 +48,7 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
   ) {}
 
   ngOnInit (): void {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => {
-          this.serverConfig = config
-          this.cdr.detectChanges()
-        })
+    this.serverConfig = this.serverService.getHTMLConfig()
   }
 
   isUnavailable (e: VideoPlaylistElement) {
@@ -71,7 +66,7 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
   buildRouterLink () {
     if (!this.playlist) return null
 
-    return [ '/videos/watch/playlist', this.playlist.uuid ]
+    return VideoPlaylist.buildWatchUrl(this.playlist)
   }
 
   buildRouterQuery () {

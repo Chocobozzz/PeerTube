@@ -1,10 +1,11 @@
 import { literal, Op, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { AttributesOnly } from '@shared/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { MActorDefault } from '../../types/models'
 import { MVideoShareActor, MVideoShareFull } from '../../types/models/video'
-import { ActorModel } from '../activitypub/actor'
+import { ActorModel } from '../actor/actor'
 import { buildLocalActorIdsIn, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 
@@ -50,7 +51,7 @@ enum ScopeNames {
     }
   ]
 })
-export class VideoShareModel extends Model {
+export class VideoShareModel extends Model<Partial<AttributesOnly<VideoShareModel>>> {
 
   @AllowNull(false)
   @Is('VideoShareUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))

@@ -17,10 +17,10 @@
 
 <div class="video-channels">
   <div *ngFor="let videoChannel of videoChannels; let i = index" class="video-channel">
-    <my-actor-avatar [channel]="videoChannel" [internalHref]="[ '/video-channels', videoChannel.nameWithHost ]"></my-actor-avatar>
+    <my-actor-avatar [channel]="videoChannel" [internalHref]="[ '/c', videoChannel.nameWithHost ]"></my-actor-avatar>
 
     <div class="video-channel-info">
-      <a [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]" class="video-channel-names" i18n-title title="Channel page">
+      <a [routerLink]="[ '/c', videoChannel.nameWithHost ]" class="video-channel-names" i18n-title title="Channel page">
         <div class="video-channel-display-name">{{ videoChannel.displayName }}</div>
         <div class="video-channel-name">{{ videoChannel.nameWithHost }}</div>
       </a>

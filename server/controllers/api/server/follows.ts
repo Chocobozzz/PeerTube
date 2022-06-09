@@ -1,9 +1,15 @@
 import * as express from 'express'
+import { getServerActor } from '@server/models/application/application'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import { UserRight } from '../../../../shared/models/users'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { SERVER_ACTOR_NAME } from '../../../initializers/constants'
+import { sequelizeTypescript } from '../../../initializers/database'
+import { autoFollowBackIfNeeded } from '../../../lib/activitypub/follow'
 import { sendAccept, sendReject, sendUndoFollow } from '../../../lib/activitypub/send'
+import { JobQueue } from '../../../lib/job-queue'
+import { removeRedundanciesOfServer } from '../../../lib/redundancy'
 import {
   asyncMiddleware,
   authenticate,
@@ -19,16 +25,10 @@ import {
   followingSortValidator,
   followValidator,
   getFollowerValidator,
-  removeFollowingValidator,
-  listFollowsValidator
+  listFollowsValidator,
+  removeFollowingValidator
 } from '../../../middlewares/validators'
-import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { JobQueue } from '../../../lib/job-queue'
-import { removeRedundanciesOfServer } from '../../../lib/redundancy'
-import { sequelizeTypescript } from '../../../initializers/database'
-import { autoFollowBackIfNeeded } from '../../../lib/activitypub/follow'
-import { getServerActor } from '@server/models/application/application'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { ActorFollowModel } from '../../../models/actor/actor-follow'
 
 const serverFollowsRouter = express.Router()
 serverFollowsRouter.get('/following',
@@ -176,7 +176,7 @@ async function removeOrRejectFollower (req: express.Request, res: express.Respon
 async function acceptFollower (req: express.Request, res: express.Response) {
   const follow = res.locals.follow
 
-  await sendAccept(follow)
+  sendAccept(follow)
 
   follow.state = 'accepted'
   await follow.save()

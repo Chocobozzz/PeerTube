@@ -1,9 +1,11 @@
 import * as Bull from 'bull'
 import { move, remove, stat } from 'fs-extra'
-import { extname } from 'path'
+import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
+import { YoutubeDL } from '@server/helpers/youtube-dl'
 import { isPostImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
+import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { addOptimizeOrMergeAudioJob } from '@server/lib/video'
 import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
@@ -23,7 +25,6 @@ import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } fro
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
-import { downloadYoutubeDLVideo } from '../../../helpers/youtube-dl'
 import { CONFIG } from '../../../initializers/config'
 import { VIDEO_IMPORT_TIMEOUT } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
@@ -75,8 +76,10 @@ async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutub
     videoImportId: videoImport.id
   }
 
+  const youtubeDL = new YoutubeDL(videoImport.targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
+
   return processFile(
-    () => downloadYoutubeDLVideo(videoImport.targetUrl, payload.fileExt, VIDEO_IMPORT_TIMEOUT),
+    () => youtubeDL.downloadYoutubeDLVideo(payload.fileExt, VIDEO_IMPORT_TIMEOUT),
     videoImport,
     options
   )
@@ -116,7 +119,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     const duration = await getDurationFromVideoFile(tempVideoPath)
 
     // Prepare video file object for creation in database
-    const fileExt = extname(tempVideoPath)
+    const fileExt = getLowercaseExtension(tempVideoPath)
     const videoFileData = {
       extname: fileExt,
       resolution: videoFileResolution,

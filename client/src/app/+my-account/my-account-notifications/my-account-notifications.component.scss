@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .header {
   display: flex;
@@ -38,7 +38,7 @@ my-user-notifications {
     }
 
     .peertube-select-container {
-      margin-left: 0 !important;
+      @include margin-left(0 !important);
     }
   }
 }

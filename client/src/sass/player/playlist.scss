@@ -1,3 +1,7 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use './_player-variables' as *;
+
 $playlist-menu-width: 350px;
 
 .vjs-playlist-menu {
@@ -42,12 +46,13 @@ $playlist-menu-width: 350px;
     .cross {
       mask-image: url('#{$assets-path}/images/feather/x.svg');
       -webkit-mask-image: url('#{$assets-path}/images/feather/x.svg');
+      mask-size: cover;
+      -webkit-mask-size: cover;
 
       cursor: pointer;
       width: 20px;
       height: 20px;
       background-color: #fff;
-      mask-size: cover;
     }
   }
 }
@@ -89,11 +94,12 @@ $playlist-menu-width: 350px;
 .vjs-playlist-icon {
   mask-image: url('#{$assets-path}/images/feather/list.svg');
   -webkit-mask-image: url('#{$assets-path}/images/feather/list.svg');
+  mask-size: cover;
+  -webkit-mask-size: cover;
 
   width: 22px;
   height: 22px;
   background-color: #fff;
-  mask-size: cover;
   margin-bottom: 3px;
 }
 

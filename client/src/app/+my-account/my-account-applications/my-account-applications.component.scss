@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 label {
   font-weight: $font-regular;
@@ -17,12 +17,13 @@ label {
 input[type=submit] {
   @include peertube-button;
   @include orange-button;
+  @include margin-left(auto);
 
   display: flex;
-  margin-left: auto;
 
   + .form-error {
+    @include margin-left(5px);
+
     display: inline;
-    margin-left: 5px;
   }
 }

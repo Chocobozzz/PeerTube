@@ -112,7 +112,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
   }
 
   getAccountUrl () {
-    return [ '/accounts', this.videoChannel.ownerBy ]
+    return [ '/a', this.videoChannel.ownerBy ]
   }
 
   private loadChannelVideosCount () {

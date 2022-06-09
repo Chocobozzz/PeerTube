@@ -24,7 +24,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 645
+const LAST_MIGRATION_VERSION = 650
 
 // ---------------------------------------------------------------------------
 
@@ -77,6 +77,7 @@ const SORTABLE_COLUMNS = {
   // Don't forget to update peertube-search-index with the same values
   VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'match' ],
   VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
+  VIDEO_PLAYLISTS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
 
   ABUSES: [ 'id', 'createdAt', 'state' ],
 
@@ -152,7 +153,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-unicast': 5,
-  'activitypub-http-fetcher': 1,
+  'activitypub-http-fetcher': 3,
   'activitypub-cleaner': 1,
   'activitypub-follow': 1,
   'video-file-import': 1,
@@ -245,7 +246,7 @@ const CONSTRAINTS_FIELDS = {
     CAPTION_FILE: {
       EXTNAME: [ '.vtt', '.srt' ],
       FILE_SIZE: {
-        max: 2 * 1024 * 1024 // 2MB
+        max: 4 * 1024 * 1024 // 4MB
       }
     }
   },
@@ -274,7 +275,7 @@ const CONSTRAINTS_FIELDS = {
     IMAGE: {
       EXTNAME: [ '.png', '.jpg', '.jpeg', '.webp' ],
       FILE_SIZE: {
-        max: 2 * 1024 * 1024 // 2MB
+        max: 4 * 1024 * 1024 // 4MB
       }
     },
     EXTNAME: [] as string[],
@@ -296,7 +297,7 @@ const CONSTRAINTS_FIELDS = {
     IMAGE: {
       EXTNAME: [ '.jpg', '.jpeg' ],
       FILE_SIZE: {
-        max: 2 * 1024 * 1024 // 2MB
+        max: 4 * 1024 * 1024 // 4MB
       }
     }
   },
@@ -307,7 +308,7 @@ const CONSTRAINTS_FIELDS = {
     IMAGE: {
       EXTNAME: [ '.png', '.jpeg', '.jpg', '.gif', '.webp' ],
       FILE_SIZE: {
-        max: 2 * 1024 * 1024 // 2MB
+        max: 4 * 1024 * 1024 // 4MB
       }
     }
   },
@@ -447,9 +448,10 @@ const MIMETYPES = {
       'audio/ogg': '.ogg',
       'audio/x-ms-wma': '.wma',
       'audio/wav': '.wav',
+      'audio/x-wav': '.wav',
       'audio/x-flac': '.flac',
       'audio/flac': '.flac',
-      '‎audio/aac': '.aac',
+      'audio/aac': '.aac',
       'audio/m4a': '.m4a',
       'audio/mp4': '.m4a',
       'audio/x-m4a': '.m4a',
@@ -702,7 +704,8 @@ const CUSTOM_HTML_TAG_COMMENTS = {
   TITLE: '<!-- title tag -->',
   DESCRIPTION: '<!-- description tag -->',
   CUSTOM_CSS: '<!-- custom css tag -->',
-  META_TAGS: '<!-- meta tags -->'
+  META_TAGS: '<!-- meta tags -->',
+  SERVER_CONFIG: '<!-- server config -->'
 }
 
 // ---------------------------------------------------------------------------

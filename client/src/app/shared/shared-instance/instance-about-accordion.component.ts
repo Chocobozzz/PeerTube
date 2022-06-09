@@ -23,7 +23,6 @@ export class InstanceAboutAccordionComponent implements OnInit {
 
   about: About
   aboutHtml = {
-    description: '',
     terms: '',
     codeOfConduct: '',
     moderationInformation: '',

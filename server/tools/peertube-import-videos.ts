@@ -1,7 +1,7 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
+import { program } from 'commander'
 import { accessSync, constants } from 'fs'
 import { remove } from 'fs-extra'
 import { truncate } from 'lodash'
@@ -11,9 +11,9 @@ import { promisify } from 'util'
 import { advancedVideosSearch, getClient, getVideoCategories, login, uploadVideo } from '../../shared/extra-utils/index'
 import { sha256 } from '../helpers/core-utils'
 import { doRequestAndSaveToFile } from '../helpers/requests'
-import { buildOriginallyPublishedAt, getYoutubeDLVideoFormat, safeGetYoutubeDL } from '../helpers/youtube-dl'
 import { CONSTRAINTS_FIELDS } from '../initializers/constants'
 import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getLogger, getServerCredentials } from './cli'
+import { YoutubeDL } from '@server/helpers/youtube-dl'
 
 type UserInfo = {
   username: string
@@ -74,9 +74,9 @@ async function run (url: string, user: UserInfo) {
     user.password = await promptPassword()
   }
 
-  const youtubeDL = await safeGetYoutubeDL()
+  const youtubeDLBinary = await YoutubeDL.safeGetYoutubeDL()
 
-  let info = await getYoutubeDLInfo(youtubeDL, options.targetUrl, command.args)
+  let info = await getYoutubeDLInfo(youtubeDLBinary, options.targetUrl, command.args)
 
   if (!Array.isArray(info)) info = [ info ]
 
@@ -86,7 +86,7 @@ async function run (url: string, user: UserInfo) {
   if (uploadsObject) {
     console.log('Fixing URL to %s.', uploadsObject.url)
 
-    info = await getYoutubeDLInfo(youtubeDL, uploadsObject.url, command.args)
+    info = await getYoutubeDLInfo(youtubeDLBinary, uploadsObject.url, command.args)
   }
 
   let infoArray: any[]
@@ -130,13 +130,14 @@ async function processVideo (parameters: {
   youtubeInfo: any
 }) {
   const { youtubeInfo, cwd, url, user } = parameters
+  const youtubeDL = new YoutubeDL('', [])
 
   log.debug('Fetching object.', youtubeInfo)
 
   const videoInfo = await fetchObject(youtubeInfo)
   log.debug('Fetched object.', videoInfo)
 
-  const originallyPublishedAt = buildOriginallyPublishedAt(videoInfo)
+  const originallyPublishedAt = youtubeDL.buildOriginallyPublishedAt(videoInfo)
   if (options.since && originallyPublishedAt && originallyPublishedAt.getTime() < options.since.getTime()) {
     log.info('Video "%s" has been published before "%s", don\'t upload it.\n',
       videoInfo.title, formatDate(options.since))
@@ -161,13 +162,14 @@ async function processVideo (parameters: {
 
   log.info('Downloading video "%s"...', videoInfo.title)
 
-  const youtubeDLOptions = [ '-f', getYoutubeDLVideoFormat(), ...command.args, '-o', path ]
+  const youtubeDLOptions = [ '-f', youtubeDL.getYoutubeDLVideoFormat(), ...command.args, '-o', path ]
   try {
-    const youtubeDL = await safeGetYoutubeDL()
-    const youtubeDLExec = promisify(youtubeDL.exec).bind(youtubeDL)
+    const youtubeDLBinary = await YoutubeDL.safeGetYoutubeDL()
+    const youtubeDLExec = promisify(youtubeDLBinary.exec).bind(youtubeDLBinary)
     const output = await youtubeDLExec(videoInfo.url, youtubeDLOptions, processOptions)
     log.info(output.join('\n'))
     await uploadVideoOnPeerTube({
+      youtubeDL,
       cwd,
       url,
       user,
@@ -180,13 +182,14 @@ async function processVideo (parameters: {
 }
 
 async function uploadVideoOnPeerTube (parameters: {
+  youtubeDL: YoutubeDL
   videoInfo: any
   videoPath: string
   cwd: string
   url: string
   user: { username: string, password: string }
 }) {
-  const { videoInfo, videoPath, cwd, url, user } = parameters
+  const { youtubeDL, videoInfo, videoPath, cwd, url, user } = parameters
 
   const category = await getCategory(videoInfo.categories, url)
   const licence = getLicence(videoInfo.license)
@@ -205,7 +208,7 @@ async function uploadVideoOnPeerTube (parameters: {
     await doRequestAndSaveToFile(videoInfo.thumbnail, thumbnailfile)
   }
 
-  const originallyPublishedAt = buildOriginallyPublishedAt(videoInfo)
+  const originallyPublishedAt = youtubeDL.buildOriginallyPublishedAt(videoInfo)
 
   const defaultAttributes = {
     name: truncate(videoInfo.title, {
@@ -304,7 +307,7 @@ function fetchObject (info: any) {
   const url = buildUrl(info)
 
   return new Promise<any>(async (res, rej) => {
-    const youtubeDL = await safeGetYoutubeDL()
+    const youtubeDL = await YoutubeDL.safeGetYoutubeDL()
     youtubeDL.getInfo(url, undefined, processOptions, (err, videoInfo) => {
       if (err) return rej(err)
 

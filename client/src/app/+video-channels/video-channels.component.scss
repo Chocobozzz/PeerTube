@@ -1,7 +1,7 @@
-@import '_variables';
-@import '_mixins';
-@import '_actor';
-@import '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_actor' as *;
+@use '_miniature' as *;
 
 .root {
   --myGlobalTopPadding: 60px;
@@ -71,12 +71,12 @@
   flex-wrap: wrap;
 
   > *:not(:last-child) {
-    margin-right: 15px;
+    @include margin-right(15px);
   }
 }
 
 .channel-buttons.right {
-  margin-left: 45px;
+  @include margin-left(45px);
 }
 
 // Only used by mobile
@@ -85,7 +85,7 @@
 }
 
 .owner-card {
-  margin-left: 105px;
+  @include margin-left(105px);
   grid-column: 2;
   // Takes all the column
   grid-row: 1 / 3;
@@ -112,7 +112,7 @@
     }
 
     .actor-info {
-      margin-left: 15px;
+      @include margin-left(15px);
     }
 
     h4 {
@@ -160,8 +160,9 @@
   }
 
   .owner-card {
+    @include margin-left(60px);
+
     grid-row: 2;
-    margin-left: 60px;
   }
 }
 
@@ -215,8 +216,9 @@
     padding: 0;
 
     .avatar-row {
+      @include margin-right(30px);
+
       grid-column: 1;
-      margin-right: 30px;
     }
 
     .owner-description {
@@ -233,7 +235,7 @@
 
   .view-account.complete {
     display: block;
-    text-align: right;
+    text-align: end;
     margin-top: 10px;
     color: pvar(--mainColor);
   }

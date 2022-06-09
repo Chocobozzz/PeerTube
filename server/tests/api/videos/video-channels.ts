@@ -15,6 +15,7 @@ import {
   getVideoChannel,
   getVideoChannelVideos,
   setDefaultVideoChannel,
+  testFileExistsOrNot,
   testImage,
   updateVideo,
   updateVideoChannelImage,
@@ -52,6 +53,9 @@ describe('Test video channels', function () {
   let totoChannel: number
   let videoUUID: string
   let accountName: string
+
+  const avatarPaths: { [ port: number ]: string } = {}
+  const bannerPaths: { [ port: number ]: string } = {}
 
   before(async function () {
     this.timeout(60000)
@@ -287,9 +291,11 @@ describe('Test video channels', function () {
     for (const server of servers) {
       const videoChannel = await findChannel(server, secondVideoChannelId)
 
-      await testImage(server.url, 'avatar-resized', videoChannel.avatar.path, '.png')
+      avatarPaths[server.port] = videoChannel.avatar.path
+      await testImage(server.url, 'avatar-resized', avatarPaths[server.port], '.png')
+      await testFileExistsOrNot(server, 'avatars', basename(avatarPaths[server.port]), true)
 
-      const row = await getActorImage(server.internalServerNumber, basename(videoChannel.avatar.path))
+      const row = await getActorImage(server.internalServerNumber, basename(avatarPaths[server.port]))
       expect(row.height).to.equal(ACTOR_IMAGES_SIZE.AVATARS.height)
       expect(row.width).to.equal(ACTOR_IMAGES_SIZE.AVATARS.width)
     }
@@ -314,9 +320,11 @@ describe('Test video channels', function () {
       const res = await getVideoChannel(server.url, 'second_video_channel@' + servers[0].host)
       const videoChannel = res.body
 
-      await testImage(server.url, 'banner-resized', videoChannel.banner.path)
+      bannerPaths[server.port] = videoChannel.banner.path
+      await testImage(server.url, 'banner-resized', bannerPaths[server.port])
+      await testFileExistsOrNot(server, 'avatars', basename(bannerPaths[server.port]), true)
 
-      const row = await getActorImage(server.internalServerNumber, basename(videoChannel.banner.path))
+      const row = await getActorImage(server.internalServerNumber, basename(bannerPaths[server.port]))
       expect(row.height).to.equal(ACTOR_IMAGES_SIZE.BANNERS.height)
       expect(row.width).to.equal(ACTOR_IMAGES_SIZE.BANNERS.width)
     }
@@ -336,6 +344,7 @@ describe('Test video channels', function () {
 
     for (const server of servers) {
       const videoChannel = await findChannel(server, secondVideoChannelId)
+      await testFileExistsOrNot(server, 'avatars', basename(avatarPaths[server.port]), false)
 
       expect(videoChannel.avatar).to.be.null
     }
@@ -355,6 +364,7 @@ describe('Test video channels', function () {
 
     for (const server of servers) {
       const videoChannel = await findChannel(server, secondVideoChannelId)
+      await testFileExistsOrNot(server, 'avatars', basename(bannerPaths[server.port]), false)
 
       expect(videoChannel.banner).to.be.null
     }

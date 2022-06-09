@@ -1,5 +1,5 @@
-@import '_mixins';
-@import '_variables';
+@use '_mixins' as *;
+@use '_variables' as *;
 
 .modal-body {
   font-size: 15px;
@@ -17,9 +17,10 @@
 }
 
 .mascot {
+  @include margin-right(2rem);
+
   display: block;
   min-width: 170px;
-  margin-right: 2rem;
 }
 
 .subtitle {

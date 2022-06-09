@@ -1,6 +1,6 @@
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 .miniature {
   display: inline-block;
@@ -42,9 +42,6 @@
 
   .miniature-name {
     @include miniature-name;
-
-    margin-top: 10px;
-    margin-bottom: 5px;
   }
 
   .by {
@@ -75,7 +72,15 @@
 }
 
 .miniature:not(.display-as-row) {
+
+  .miniature-name {
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+
   .miniature-thumbnail {
+    @include block-ratio($selector: '::ng-deep a');
+
     margin-top: 10px;
     margin-bottom: 5px;
   }
@@ -87,10 +92,15 @@
 
   display: flex;
 
+  .miniature-name {
+    @include ellipsis-multiline($video-miniature-row-name-font-size, 2);
+  }
+
   .miniature-thumbnail {
+    @include margin-right(10px);
+
     width: var(--rowThumbnailWidth);
     height: var(--rowThumbnailHeight);
-    margin-right: 10px;
   }
 }
 

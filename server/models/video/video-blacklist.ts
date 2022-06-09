@@ -1,6 +1,7 @@
 import { FindOptions } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MVideoBlacklist, MVideoBlacklistFormattable } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { VideoBlacklist, VideoBlacklistType } from '../../../shared/models/videos'
 import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
@@ -18,7 +19,7 @@ import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel
     }
   ]
 })
-export class VideoBlacklistModel extends Model {
+export class VideoBlacklistModel extends Model<Partial<AttributesOnly<VideoBlacklistModel>>> {
 
   @AllowNull(true)
   @Is('VideoBlacklistReason', value => throwIfNotValid(value, isVideoBlacklistReasonValid, 'reason', true))

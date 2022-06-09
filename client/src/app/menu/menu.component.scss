@@ -1,5 +1,6 @@
-@import '_variables';
-@import '_mixins';
+@use 'sass:math';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 $menu-link-icon-size: 22px;
 $menu-link-icon-margin-right: 18px;
@@ -7,16 +8,17 @@ $footer-links-base-opacity: .8;
 
 .menu-link {
   @include disable-default-a-behaviour;
+  @include padding-left($menu-lateral-padding);
+  @include padding-right(20px);
 
   display: flex;
   align-items: center;
-  padding-left: $menu-lateral-padding;
+
   color: pvar(--menuForegroundColor);
   cursor: pointer;
   font-size: 16px;
   white-space: normal;
   word-break: break-word;
-  padding-right: 20px;
   transition: background-color .1s ease-in-out;
   line-height: $line-height-normal;
 
@@ -31,11 +33,11 @@ $footer-links-base-opacity: .8;
 
   my-global-icon {
     @include apply-svg-color(#808080);
+    @include margin-right($menu-link-icon-margin-right);
 
     display: flex;
     width: $menu-link-icon-size;
     height: $menu-link-icon-size;
-    margin-right: $menu-link-icon-margin-right;
   }
 }
 
@@ -99,8 +101,8 @@ menu {
 }
 
 my-notification {
-  margin-left: auto;
-  margin-right: 15px;
+  @include margin-left(auto);
+  @include margin-right(15px);
 }
 
 .logged-in-more {
@@ -111,16 +113,18 @@ my-notification {
       .dropdown-toggle-indicator {
         display: inherit !important;
       }
+
       .dropdown-toggle:first-child {
-        padding-right: 30px !important;
+        @include padding-left(30px !important);
       }
     }
   }
 
   $main-radius: 25px;
 
+  @include margin-left(13px);
+
   flex: 1;
-  margin-left: 13px;
   border-radius: $main-radius;
   transition: all .1s ease-in-out;
   cursor: pointer;
@@ -180,7 +184,7 @@ my-notification {
 }
 
 my-actor-avatar {
-  margin-right: 10px;
+  @include margin-right(10px);
 }
 
 .logged-in-info {
@@ -217,18 +221,18 @@ my-actor-avatar {
 
   a {
     $icon-size: 13px;
-    $additional-margin: ($menu-link-icon-size - $icon-size) / 2;
+    $additional-margin: math.div($menu-link-icon-size - $icon-size, 2);
 
     font-size: 14px;
     width: 100%;
     min-height: 35px;
 
     my-global-icon {
+      // Keep aligned with other icons
+      @include margin-left($additional-margin);
+
       width: $icon-size;
       height: $icon-size;
-
-      // Keep aligned with other icons
-      margin-left: $additional-margin;
     }
 
     &.active,
@@ -246,7 +250,7 @@ my-actor-avatar {
       border-left: $border-left-width solid var(--mainColor);
 
       my-global-icon {
-        margin-left: $additional-margin - $border-left-width;
+        @include margin-left($additional-margin - $border-left-width);
       }
     }
   }
@@ -274,20 +278,19 @@ my-actor-avatar {
   }
 }
 
-.in-my-library,
-.on-instance,
+.menu-block,
 .footer-block {
   margin-bottom: 15px;
 
   .block-title {
     @include ellipsis;
+    @include margin-left(26px);
+    @include margin-right(30px);
 
     text-transform: uppercase;
     font-weight: $font-bold; // Bold
     font-size: 13px;
     margin-bottom: 25px;
-    margin-left: 26px;
-    margin-right: 30px;
   }
 
   a {
@@ -315,6 +318,8 @@ my-actor-avatar {
 
   a,
   span[role=button] {
+    @include margin-right(8px);
+
     display: inline-block;
     text-decoration: none;
     color: pvar(--menuForegroundColor);
@@ -323,7 +328,6 @@ my-actor-avatar {
     font-size: 90%;
     font-weight: 500;
     line-height: 1.4rem;
-    margin-right: 8px;
   }
 }
 
@@ -398,10 +402,10 @@ my-actor-avatar {
 
 my-global-icon {
   &[iconName=playlists] {
+    @include margin-right(16px);
+
     height: 24px;
     width: 24px;
-
-    margin-right: 16px;
   }
 
   &[iconName=videos] {

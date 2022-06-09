@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core'
 import { Title } from '@angular/platform-browser'
 import { Router } from '@angular/router'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-
 @Component({
   selector: 'my-page-not-found',
   templateUrl: './page-not-found.component.html',
@@ -10,7 +9,7 @@ import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 })
 export class PageNotFoundComponent implements OnInit {
   status = HttpStatusCode.NOT_FOUND_404
-  type: string
+  type: 'video' | 'other' = 'other'
 
   public constructor (
     private titleService: Title,

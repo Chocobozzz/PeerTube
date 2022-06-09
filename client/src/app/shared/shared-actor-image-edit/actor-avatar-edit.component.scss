@@ -1,11 +1,11 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .actor {
   display: flex;
 
   my-actor-avatar {
-    margin-right: 15px;
+    @include margin-right(15px);
   }
 
   .actor-info {

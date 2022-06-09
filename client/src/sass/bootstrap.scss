@@ -1,8 +1,35 @@
 $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
-@import '_bootstrap';
 
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
+
+@import './_bootstrap-variables';
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/root';
+@import '~bootstrap/scss/reboot';
+@import '~bootstrap/scss/type';
+@import '~bootstrap/scss/grid';
+@import '~bootstrap/scss/tables';
+@import '~bootstrap/scss/forms';
+@import '~bootstrap/scss/buttons';
+@import '~bootstrap/scss/dropdown';
+@import '~bootstrap/scss/button-group';
+@import '~bootstrap/scss/input-group';
+@import '~bootstrap/scss/nav';
+@import '~bootstrap/scss/card';
+@import '~bootstrap/scss/badge';
+@import '~bootstrap/scss/alert';
+@import '~bootstrap/scss/close';
+@import '~bootstrap/scss/modal';
+@import '~bootstrap/scss/tooltip';
+@import '~bootstrap/scss/popover';
+@import '~bootstrap/scss/utilities';
+
+@import '~@neos21/bootstrap3-glyphicons/assets/stylesheets/bootstrap3-glyphicons';
 
 // Thanks https://gist.github.com/alexandrevicenzi/680147013e902a4eaa5d
 .glyphicon-refresh-animate {
@@ -62,7 +89,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   font-size: 15px;
 
   .dropdown-header {
-    padding-left: 1rem;
+    @include padding-left(1rem);
   }
 
   .dropdown-item {
@@ -105,7 +132,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   }
 
   .modal-dialog {
-    text-align: left;
+    text-align: start;
 
     &:not(.modal-lg):not(.modal-xl) {
       min-width: 500px;
@@ -153,10 +180,10 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
   .inputs {
     margin-bottom: 0;
-    text-align: right;
+    text-align: end;
 
     > .peertube-button:not(:first-child) {
-      margin-left: 10px;
+      @include margin-left(10px);
     }
   }
 }
@@ -342,7 +369,7 @@ ngb-tooltip-window {
   position: relative;
 
   input {
-    padding-right: 1.5rem !important;
+    @include padding-right(1.5rem !important);
   }
 
   .form-control-clear {
@@ -390,5 +417,24 @@ ngb-tooltip-window {
   &.callout-info {
     border-color: pvar(--mainColorLightest);
     border-left-color: pvar(--mainColor);
+  }
+}
+
+// Override these properties for Bidi support
+@each $size, $length in $spacers {
+  .ml-#{$size} {
+    @include margin-left($length);
+  }
+
+  .mr-#{$size} {
+    @include margin-right($length);
+  }
+
+  .pl-#{$size} {
+    @include padding-left($length);
+  }
+
+  .pr-#{$size} {
+    @include padding-right($length);
   }
 }

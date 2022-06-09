@@ -1,0 +1,60 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+#highlighted-comment {
+  margin-bottom: 25px;
+}
+
+.view-replies {
+  font-weight: $font-semibold;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.glyphicon,
+.comment-thread-loading {
+  @include margin-right(5px);
+
+  display: inline-block;
+  font-size: 13px;
+}
+
+.title-block {
+  .title-page {
+    @include margin-right(0);
+  }
+
+  my-feed {
+    @include margin-left(5px);
+
+    display: inline-block;
+    opacity: 0;
+    transition: ease-in .2s opacity;
+    width: 12px;
+    position: relative;
+    top: -3px;
+  }
+
+  &:hover my-feed {
+    opacity: 1;
+  }
+}
+
+#dropdown-sort-comments {
+  font-weight: 600;
+  text-transform: uppercase;
+  border: 0;
+  transform: translateY(-7%);
+}
+
+@media screen and (max-width: 600px) {
+  .view-replies {
+    @include margin-left(46px);
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .view-replies {
+    font-size: 14px;
+  }
+}

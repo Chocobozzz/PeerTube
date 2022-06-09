@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .action-selection-mode {
   display: flex;
@@ -11,8 +11,9 @@
   position: fixed;
 
   .action-button {
+    @include margin-left(55px);
+
     display: block;
-    margin-left: 55px;
   }
 }
 
@@ -29,10 +30,11 @@
   }
 
   .checkbox-container {
+    @include margin-right(20px);
+    @include margin-left(12px);
+
     display: flex;
     align-items: center;
-    margin-right: 20px;
-    margin-left: 12px;
   }
 
   my-video-miniature {

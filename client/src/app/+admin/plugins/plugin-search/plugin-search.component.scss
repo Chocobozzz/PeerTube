@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .search-bar {
   display: flex;
@@ -18,12 +18,13 @@
   margin-bottom: 15px;
 
   my-global-icon {
-    margin-right: 5px;
+    @include margin-right(5px);
   }
 }
 
 .badge {
+  @include margin-left(15px);
+
   font-size: 13px;
   font-weight: $font-semibold;
-  margin-left: 15px;
 }

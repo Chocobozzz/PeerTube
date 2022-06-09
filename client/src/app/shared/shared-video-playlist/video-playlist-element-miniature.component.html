@@ -20,7 +20,7 @@
           [attr.title]="playlistElement.video.name"
         >{{ playlistElement.video.name }}</a>
 
-        <a *ngIf="accountLink" tabindex="-1" class="video-info-account" [routerLink]="[ '/accounts', playlistElement.video.byAccount ]">
+        <a *ngIf="accountLink" tabindex="-1" class="video-info-account" [routerLink]="[ '/a', playlistElement.video.byAccount ]">
           {{ playlistElement.video.byAccount }}
         </a>
         <span *ngIf="!accountLink" tabindex="-1" class="video-info-account">{{ playlistElement.video.byAccount }}</span>

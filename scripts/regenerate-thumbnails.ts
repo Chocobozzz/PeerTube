@@ -2,7 +2,7 @@ import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
 import * as Bluebird from 'bluebird'
-import * as program from 'commander'
+import { program } from 'commander'
 import { pathExists, remove } from 'fs-extra'
 import { generateImageFilename, processImage } from '@server/helpers/image-utils'
 import { THUMBNAILS_SIZE } from '@server/initializers/constants'

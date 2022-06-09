@@ -1,18 +1,19 @@
 import * as express from 'express'
 import { param, query } from 'express-validator'
+
+import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
 import { isValidRSSFeed } from '../../helpers/custom-validators/feeds'
-import { exists, isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
+import { exists, isIdOrUUIDValid, isIdValid, toCompleteUUID } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import {
+  areValidationErrors,
   doesAccountIdExist,
   doesAccountNameWithHostExist,
   doesUserFeedTokenCorrespond,
   doesVideoChannelIdExist,
-  doesVideoChannelNameWithHostExist
-} from '../../helpers/middlewares'
-import { doesVideoExist } from '../../helpers/middlewares/videos'
-import { areValidationErrors } from './utils'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+  doesVideoChannelNameWithHostExist,
+  doesVideoExist
+} from './shared'
 
 const feedsFormatValidator = [
   param('format').optional().custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json, podcast)'),
@@ -36,10 +37,10 @@ function setFeedFormatContentType (req: express.Request, res: express.Response, 
   if (req.accepts(acceptableContentTypes)) {
     res.set('Content-Type', req.accepts(acceptableContentTypes) as string)
   } else {
-    return res.status(HttpStatusCode.NOT_ACCEPTABLE_406)
-              .json({
-                message: `You should accept at least one of the following content-types: ${acceptableContentTypes.join(', ')}`
-              })
+    return res.fail({
+      status: HttpStatusCode.NOT_ACCEPTABLE_406,
+      message: `You should accept at least one of the following content-types: ${acceptableContentTypes.join(', ')}`
+    })
   }
 
   return next()
@@ -98,7 +99,10 @@ const videoSubscriptionFeedsValidator = [
 ]
 
 const videoCommentsFeedsValidator = [
-  query('videoId').optional().custom(isIdOrUUIDValid),
+  query('videoId')
+    .customSanitizer(toCompleteUUID)
+    .optional()
+    .custom(isIdOrUUIDValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking feeds parameters', { parameters: req.query })
@@ -106,10 +110,7 @@ const videoCommentsFeedsValidator = [
     if (areValidationErrors(req, res)) return
 
     if (req.query.videoId && (req.query.videoChannelId || req.query.videoChannelName)) {
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-                .json({
-                  message: 'videoId cannot be mixed with a channel filter'
-                })
+      return res.fail({ message: 'videoId cannot be mixed with a channel filter' })
     }
 
     if (req.query.videoId && !await doesVideoExist(req.query.videoId, res)) return

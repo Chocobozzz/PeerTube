@@ -1,0 +1,15 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.action-button-like,
+.action-button-dislike {
+  filter: brightness(120%);
+
+  .count {
+    margin: 0 5px;
+  }
+}
+
+.activated {
+  color: pvar(--activatedActionButtonColor) !important;
+}

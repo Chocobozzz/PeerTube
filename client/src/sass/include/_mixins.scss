@@ -1,4 +1,5 @@
-@import '_variables';
+@use 'sass:math';
+@use '_variables' as *;
 
 @mixin disable-default-a-behaviour {
   &:hover,
@@ -62,7 +63,8 @@
 
 @mixin apply-svg-color ($color) {
   ::ng-deep .feather,
-  ::ng-deep .material {
+  ::ng-deep .material,
+  ::ng-deep .misc {
     color: $color;
   }
 }
@@ -83,6 +85,7 @@
 }
 
 @mixin peertube-input-text($width) {
+  padding: 0 15px;
   display: inline-block;
   height: $button-height;
   width: $width;
@@ -90,8 +93,6 @@
   background-color: pvar(--inputBackgroundColor);
   border: 1px solid #C6C6C6;
   border-radius: 3px;
-  padding-left: 15px;
-  padding-right: 15px;
   font-size: 15px;
 
   &::placeholder {
@@ -102,7 +103,7 @@
     opacity: 0.7;
   }
 
-  @media screen and (max-width: $width) {
+  @media screen and (max-width: calc(#{$width} + 40px)) {
     width: 100%;
   }
 }
@@ -256,6 +257,8 @@
 }
 
 @mixin peertube-button {
+  @include padding(0, 17px, 0, 13px);
+
   border: 0;
   font-weight: $font-semibold;
   font-size: 15px;
@@ -264,7 +267,6 @@
   // FIXME: because of primeng that redefines border-radius of all input[type="..."]
   border-radius: 3px !important;
   text-align: center;
-  padding: 0 17px 0 13px;
   cursor: pointer;
 }
 
@@ -289,9 +291,10 @@
   line-height: normal !important;
 
   my-global-icon {
+    @include margin-right($margin-right);
+
     position: relative;
     width: $width;
-    margin-right: $margin-right;
     top: $top;
   }
 }
@@ -309,7 +312,7 @@
     width: 100%;
     height: 100%;
     font-size: 100px;
-    text-align: right;
+    text-align: end;
     filter: alpha(opacity=0);
     opacity: 0;
     outline: none;
@@ -427,6 +430,8 @@
       cursor: pointer;
 
       &::before {
+        @include margin-right(10px);
+
         position: relative;
         top: -2px;
         content: '';
@@ -439,7 +444,6 @@
         vertical-align: middle;
         cursor: pointer;
         text-align: center;
-        margin-right: 10px;
       }
     }
 
@@ -499,9 +503,10 @@
   }
 
   + span + span {
+    @include margin-left(5px);
+
     font-size: 15px;
     font-weight: $font-regular;
-    margin-left: 5px;
     cursor: pointer;
     display: inline;
   }
@@ -563,6 +568,19 @@
   height: $size;
   min-width: $size;
   min-height: $size;
+}
+
+@mixin actor-counters ($separator-margin: 10px) {
+  color: pvar(--greyForegroundColor);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+
+  > *:not(:last-child)::after {
+    content: '•';
+    margin: 0 $separator-margin;
+    color: pvar(--mainColor);
+  }
 }
 
 @mixin chevron ($size, $border-width) {
@@ -634,10 +652,10 @@
   padding: 6px 15px;
 
   my-global-icon {
+    @include margin-right(10px);
+
     width: 22px;
     opacity: .7;
-
-    margin-right: 10px;
     position: relative;
     top: -2px;
   }
@@ -704,10 +722,12 @@
     }
 
     + .breadcrumb-item {
-      padding-left: 0.5rem;
+      @include padding-left(0.5rem);
+
       &::before {
+        @include padding-right(0.5rem);
+
         display: inline-block;
-        padding-right: 0.5rem;
         color: #6c757d;
         content: '/';
       }
@@ -726,7 +746,7 @@
 
   > div {
     box-sizing: border-box;
-    flex: 0 0 percentage(1/3);
+    flex: 0 0 percentage(math.div(1, 3));
     padding: 0 5px;
     margin-bottom: 10px;
 
@@ -821,8 +841,8 @@
   }
 
   my-actor-avatar {
-    margin-left: -.4rem;
-    margin-right: .2rem;
+    @include margin-left(-.4rem);
+    @include margin-right(.2rem);
   }
 
   &.two-lines {
@@ -835,11 +855,11 @@
     }
 
     div {
+      margin: 0 .1rem;
+
       display: flex;
       flex-direction: column;
       height: $avatar-height;
-      margin-left: .1rem;
-      margin-right: .1rem;
       justify-content: center;
     }
   }
@@ -848,7 +868,7 @@
 // applies ratio (default to 16:9) to a child element (using $selector) only using
 // an immediate's parent size. This allows to set a ratio without explicit
 // dimensions, as width/height cannot be computed from each other.
-@mixin block-ratio ($selector: 'div', $inverted-ratio: 9/16) {
+@mixin block-ratio ($selector: 'div', $inverted-ratio: math.div(9, 16)) {
   $padding-percent: percentage($inverted-ratio);
 
   position: relative;
@@ -861,6 +881,7 @@
     width: 100%;
     height: 100%;
     top: 0;
+
     @content;
   }
 }
@@ -874,14 +895,14 @@
 
     > span > my-global-icon,
     > my-global-icon {
-      margin-right: 10px;
+      @include margin-right(10px);
       width: 24px;
       height: 24px;
       vertical-align: top;
     }
 
     .badge {
-      margin-left: 7px;
+      @include margin-left(7px);
       vertical-align: top;
     }
   }
@@ -896,8 +917,8 @@
   top: 50%;
   transform: translate(-50%, -50%) scale(0.5);
 
-  border-top: ($height / 2) solid transparent;
-  border-bottom: ($height / 2) solid transparent;
+  border-top: #{math.div($height, 2)} solid transparent;
+  border-bottom: #{math.div($height, 2)} solid transparent;
 
   border-left: $width solid rgba(255, 255, 255, 0.95);
 }
@@ -927,5 +948,61 @@
     @media screen and (max-width: $mobile-view) {
       @content;
     }
+  }
+}
+
+@mixin margin ($block-start, $inline-end, $block-end, $inline-start) {
+  @include margin-left($inline-start);
+  @include margin-right($inline-end);
+
+  margin-top: $block-start;
+  margin-bottom: $block-end;
+}
+
+@mixin padding ($block-start, $inline-end, $block-end, $inline-start) {
+  @include padding-left($inline-start);
+  @include padding-right($inline-end);
+
+  padding-top: $block-start;
+  padding-bottom: $block-end;
+}
+
+@mixin margin-left ($value) {
+  @supports (margin-inline-start: $value) {
+    margin-inline-start: $value;
+  }
+
+  @supports not (margin-inline-start: $value) {
+    margin-left: $value;
+  }
+}
+
+@mixin margin-right ($value) {
+  @supports (margin-inline-end: $value) {
+    margin-inline-end: $value;
+  }
+
+  @supports not (margin-inline-end: $value) {
+    margin-right: $value;
+  }
+}
+
+@mixin padding-left ($value) {
+  @supports (padding-inline-start: $value) {
+    padding-inline-start: $value;
+  }
+
+  @supports not (padding-inline-start: $value) {
+    padding-left: $value;
+  }
+}
+
+@mixin padding-right ($value) {
+  @supports (padding-inline-end: $value) {
+    padding-inline-end: $value;
+  }
+
+  @supports not (padding-inline-end: $value) {
+    padding-right: $value;
   }
 }

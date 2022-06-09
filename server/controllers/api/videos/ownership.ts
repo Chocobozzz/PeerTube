@@ -99,15 +99,15 @@ async function listVideoOwnership (req: express.Request, res: express.Response) 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function acceptOwnership (req: express.Request, res: express.Response) {
+function acceptOwnership (req: express.Request, res: express.Response) {
   return sequelizeTypescript.transaction(async t => {
     const videoChangeOwnership = res.locals.videoChangeOwnership
     const channel = res.locals.videoChannel
 
     // We need more attributes for federation
-    const targetVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoChangeOwnership.Video.id)
+    const targetVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoChangeOwnership.Video.id, t)
 
-    const oldVideoChannel = await VideoChannelModel.loadAndPopulateAccount(targetVideo.channelId)
+    const oldVideoChannel = await VideoChannelModel.loadAndPopulateAccount(targetVideo.channelId, t)
 
     targetVideo.channelId = channel.id
 
@@ -122,17 +122,17 @@ async function acceptOwnership (req: express.Request, res: express.Response) {
     videoChangeOwnership.status = VideoChangeOwnershipStatus.ACCEPTED
     await videoChangeOwnership.save({ transaction: t })
 
-    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    return res.status(HttpStatusCode.NO_CONTENT_204).end()
   })
 }
 
-async function refuseOwnership (req: express.Request, res: express.Response) {
+function refuseOwnership (req: express.Request, res: express.Response) {
   return sequelizeTypescript.transaction(async t => {
     const videoChangeOwnership = res.locals.videoChangeOwnership
 
     videoChangeOwnership.status = VideoChangeOwnershipStatus.REFUSED
     await videoChangeOwnership.save({ transaction: t })
 
-    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    return res.status(HttpStatusCode.NO_CONTENT_204).end()
   })
 }

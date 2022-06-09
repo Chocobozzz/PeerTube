@@ -32,7 +32,7 @@ describe('Test plugin altering video constants', function () {
     await installPlugin({
       url: server.url,
       accessToken: server.accessToken,
-      path: getPluginTestPath('-three')
+      path: getPluginTestPath('-video-constants')
     })
   })
 
@@ -45,6 +45,7 @@ describe('Test plugin altering video constants', function () {
 
     expect(languages['al_bhed']).to.equal('Al Bhed')
     expect(languages['al_bhed2']).to.equal('Al Bhed 2')
+    expect(languages['al_bhed3']).to.not.exist
   })
 
   it('Should have updated categories', async function () {
@@ -116,7 +117,7 @@ describe('Test plugin altering video constants', function () {
   })
 
   it('Should uninstall the plugin and reset languages, categories, licences and privacies', async function () {
-    await uninstallPlugin({ url: server.url, accessToken: server.accessToken, npmName: 'peertube-plugin-test-three' })
+    await uninstallPlugin({ url: server.url, accessToken: server.accessToken, npmName: 'peertube-plugin-test-video-constants' })
 
     {
       const res = await getVideoLanguages(server.url)
@@ -127,6 +128,7 @@ describe('Test plugin altering video constants', function () {
 
       expect(languages['al_bhed']).to.not.exist
       expect(languages['al_bhed2']).to.not.exist
+      expect(languages['al_bhed3']).to.not.exist
     }
 
     {

@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { join } from 'path'
+import * as chai from 'chai'
 import * as request from 'supertest'
-import { VideoPrivacy } from '../../../../shared/models/videos'
-import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
+import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoChannel,
+  buildAbsoluteFixturePath,
   checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
   cleanupTests,
@@ -32,16 +31,16 @@ import {
   wait,
   webtorrentAdd
 } from '../../../../shared/extra-utils'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
   deleteVideoComment,
+  findCommentId,
   getVideoCommentThreads,
-  getVideoThreadComments,
-  findCommentId
+  getVideoThreadComments
 } from '../../../../shared/extra-utils/videos/video-comments'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { VideoComment, VideoCommentThreadTree, VideoPrivacy } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -935,7 +934,7 @@ describe('Test multiple servers', function () {
           expect(deletedComment.text).to.equal('')
           expect(deletedComment.inReplyToCommentId).to.be.null
           expect(deletedComment.account).to.be.null
-          expect(deletedComment.totalReplies).to.equal(3)
+          expect(deletedComment.totalReplies).to.equal(2)
           expect(dateIsValid(deletedComment.createdAt as string)).to.be.true
           expect(dateIsValid(deletedComment.updatedAt as string)).to.be.true
           expect(dateIsValid(deletedComment.deletedAt as string)).to.be.true
@@ -977,7 +976,7 @@ describe('Test multiple servers', function () {
           expect(comment.createdAt).to.not.be.null
           expect(comment.deletedAt).to.not.be.null
           expect(comment.account).to.be.null
-          expect(comment.totalReplies).to.equal(3)
+          expect(comment.totalReplies).to.equal(2)
         }
       }
     })
@@ -1019,9 +1018,7 @@ describe('Test multiple servers', function () {
         .field('privacy', '1')
         .field('channelId', '1')
 
-      const filePath = join(__dirname, '..', '..', 'fixtures', 'video_short.webm')
-
-      await req.attach('videofile', filePath)
+      await req.attach('videofile', buildAbsoluteFixturePath('video_short.webm'))
                .expect(HttpStatusCode.OK_200)
 
       await waitJobs(servers)

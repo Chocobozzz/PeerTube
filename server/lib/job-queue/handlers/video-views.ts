@@ -36,8 +36,8 @@ async function processVideosViews () {
           }
 
           await VideoViewModel.create({
-            startDate,
-            endDate,
+            startDate: new Date(startDate),
+            endDate: new Date(endDate),
             views,
             videoId
           })

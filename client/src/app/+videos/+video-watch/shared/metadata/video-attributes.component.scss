@@ -1,0 +1,40 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.video-attribute {
+  font-size: 13px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.video-attribute-label {
+  @include padding-right(5px);
+
+  min-width: 142px;
+  display: inline-block;
+  color: pvar(--greyForegroundColor);
+  font-weight: $font-bold;
+}
+
+a.video-attribute-value {
+  @include disable-default-a-behaviour;
+  color: pvar(--mainForegroundColor);
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.video-attribute-tags {
+  .video-attribute-value:not(:nth-child(2)) {
+    &::before {
+      content: ', ';
+    }
+  }
+}
+
+@media screen and (max-width: 1600px) {
+  .video-attributes .video-attribute {
+    margin-bottom: 5px;
+  }
+}

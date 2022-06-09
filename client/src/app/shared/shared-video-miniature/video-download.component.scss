@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .nav-content {
   margin-top: 30px;
@@ -19,22 +19,16 @@
   }
 
   .glyphicon {
-    margin-right: 5px;
+    @include margin-right(5px);
   }
 }
 
-.peertube-select-container {
-  @include peertube-select-container(85px);
+.peertube-select-container.title-select {
+  @include peertube-select-container(auto);
 
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-right: 0;
-
-  select {
-    height: inherit;
-    border-top-left-radius: .2rem;
-    border-bottom-left-radius: .2rem;
-  }
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: top;
 }
 
 #dropdown-download-type {
@@ -46,9 +40,9 @@
 
   .peertube-radio-container {
     @include peertube-radio-container;
+    @include margin-right(30px);
 
     display: inline-block;
-    margin-right: 30px;
   }
 }
 
@@ -66,8 +60,9 @@
   margin-bottom: 12px;
 
   .metadata-attribute-label {
+    @include padding-right(5px);
+
     min-width: 142px;
-    padding-right: 5px;
     display: inline-block;
     color: pvar(--greyForegroundColor);
     font-weight: $font-bold;
@@ -75,6 +70,7 @@
 
   a.metadata-attribute-value {
     @include disable-default-a-behaviour;
+
     color: pvar(--mainForegroundColor);
 
     &:hover {

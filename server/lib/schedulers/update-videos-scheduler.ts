@@ -1,12 +1,12 @@
-import { logger } from '../../helpers/logger'
-import { AbstractScheduler } from './abstract-scheduler'
-import { ScheduleVideoUpdateModel } from '../../models/video/schedule-video-update'
-import { retryTransactionWrapper } from '../../helpers/database-utils'
-import { federateVideoIfNeeded } from '../activitypub/videos'
-import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
-import { Notifier } from '../notifier'
-import { sequelizeTypescript } from '../../initializers/database'
+import { VideoModel } from '@server/models/video/video'
 import { MVideoFullLight } from '@server/types/models'
+import { logger } from '../../helpers/logger'
+import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
+import { sequelizeTypescript } from '../../initializers/database'
+import { ScheduleVideoUpdateModel } from '../../models/video/schedule-video-update'
+import { federateVideoIfNeeded } from '../activitypub/videos'
+import { Notifier } from '../notifier'
+import { AbstractScheduler } from './abstract-scheduler'
 
 export class UpdateVideosScheduler extends AbstractScheduler {
 
@@ -19,18 +19,19 @@ export class UpdateVideosScheduler extends AbstractScheduler {
   }
 
   protected async internalExecute () {
-    return retryTransactionWrapper(this.updateVideos.bind(this))
+    return this.updateVideos()
   }
 
   private async updateVideos () {
     if (!await ScheduleVideoUpdateModel.areVideosToUpdate()) return undefined
 
-    const publishedVideos = await sequelizeTypescript.transaction(async t => {
-      const schedules = await ScheduleVideoUpdateModel.listVideosToUpdate(t)
-      const publishedVideos: MVideoFullLight[] = []
+    const schedules = await ScheduleVideoUpdateModel.listVideosToUpdate()
+    const publishedVideos: MVideoFullLight[] = []
 
-      for (const schedule of schedules) {
-        const video = schedule.Video
+    for (const schedule of schedules) {
+      await sequelizeTypescript.transaction(async t => {
+        const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(schedule.videoId, t)
+
         logger.info('Executing scheduled video update on %s.', video.uuid)
 
         if (schedule.privacy) {
@@ -42,16 +43,13 @@ export class UpdateVideosScheduler extends AbstractScheduler {
           await federateVideoIfNeeded(video, isNewVideo, t)
 
           if (wasConfidentialVideo) {
-            const videoToPublish: MVideoFullLight = Object.assign(video, { ScheduleVideoUpdate: schedule, UserVideoHistories: [] })
-            publishedVideos.push(videoToPublish)
+            publishedVideos.push(video)
           }
         }
 
         await schedule.destroy({ transaction: t })
-      }
-
-      return publishedVideos
-    })
+      })
+    }
 
     for (const v of publishedVideos) {
       Notifier.Instance.notifyOnNewVideoIfNeeded(v)

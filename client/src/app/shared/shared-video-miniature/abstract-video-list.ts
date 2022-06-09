@@ -25,7 +25,7 @@ import {
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { GlobalIconName } from '@app/shared/shared-icons'
 import { isLastMonth, isLastWeek, isThisMonth, isToday, isYesterday } from '@shared/core-utils/miscs/date'
-import { ServerConfig, UserRight, VideoFilter, VideoSortField } from '@shared/models'
+import { HTMLServerConfig, UserRight, VideoFilter, VideoSortField } from '@shared/models'
 import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
 import { Syndication, Video } from '../shared-main'
 import { GenericHeaderComponent, VideoListHeaderComponent } from './video-list-header.component'
@@ -100,7 +100,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
 
   protected onUserLoadedSubject = new ReplaySubject<void>(1)
 
-  protected serverConfig: ServerConfig
+  protected serverConfig: HTMLServerConfig
 
   protected abstract notifier: Notifier
   protected abstract authService: AuthService
@@ -126,9 +126,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
   abstract generateSyndicationList (): void
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-      .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.groupedDateLabels = {
       [GroupDate.UNKNOWN]: null,
@@ -198,7 +196,6 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, AfterConte
     // No more results
     if (this.lastQueryLength !== undefined && this.lastQueryLength < this.pagination.itemsPerPage) return
 
-    console.log('near of bottom')
     this.pagination.currentPage += 1
 
     this.setScrollRouteParams()

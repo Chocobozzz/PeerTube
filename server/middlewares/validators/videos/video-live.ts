@@ -1,22 +1,28 @@
 import * as express from 'express'
-import { body, param } from 'express-validator'
-import { checkUserCanManageVideo, doesVideoChannelOfAccountExist, doesVideoExist } from '@server/helpers/middlewares/videos'
+import { body } from 'express-validator'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants'
+import { isLocalLiveVideoAccepted } from '@server/lib/moderation'
+import { Hooks } from '@server/lib/plugins/hooks'
+import { VideoModel } from '@server/models/video/video'
 import { VideoLiveModel } from '@server/models/video/video-live'
+import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { ServerErrorCode, UserRight, VideoState } from '@shared/models'
-import { isBooleanValid, isIdOrUUIDValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
+import { isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { isVideoNameValid } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
-import { areValidationErrors } from '../utils'
+import {
+  areValidationErrors,
+  checkUserCanManageVideo,
+  doesVideoChannelOfAccountExist,
+  doesVideoExist,
+  isValidVideoIdParam
+} from '../shared'
 import { getCommonVideoEditAttributes } from './videos'
-import { VideoModel } from '@server/models/video/video'
-import { Hooks } from '@server/lib/plugins/hooks'
-import { isLocalLiveVideoAccepted } from '@server/lib/moderation'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 
 const videoLiveGetValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
+  isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoLiveGetValidator parameters', { parameters: req.params, user: res.locals.oauth.token.User.username })
@@ -29,7 +35,12 @@ const videoLiveGetValidator = [
     if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.GET_ANY_LIVE, res, false)) return
 
     const videoLive = await VideoLiveModel.loadByVideoId(res.locals.videoAll.id)
-    if (!videoLive) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+    if (!videoLive) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Live video not found'
+      })
+    }
 
     res.locals.videoLive = videoLive
 
@@ -43,7 +54,9 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     .custom(isIdValid).withMessage('Should have correct video channel id'),
 
   body('name')
-    .custom(isVideoNameValid).withMessage('Should have a valid name'),
+    .custom(isVideoNameValid).withMessage(
+      `Should have a video name between ${CONSTRAINTS_FIELDS.VIDEOS.NAME.min} and ${CONSTRAINTS_FIELDS.VIDEOS.NAME.max} characters long`
+    ),
 
   body('saveReplay')
     .optional()
@@ -63,22 +76,27 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     if (CONFIG.LIVE.ENABLED !== true) {
       cleanUpReqFiles(req)
 
-      return res.status(HttpStatusCode.FORBIDDEN_403)
-        .json({ error: 'Live is not enabled on this instance' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Live is not enabled on this instance',
+        type: ServerErrorCode.LIVE_NOT_ENABLED
+      })
     }
 
     if (CONFIG.LIVE.ALLOW_REPLAY !== true && req.body.saveReplay === true) {
       cleanUpReqFiles(req)
 
-      return res.status(HttpStatusCode.FORBIDDEN_403)
-        .json({ error: 'Saving live replay is not allowed instance' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Saving live replay is not enabled on this instance',
+        type: ServerErrorCode.LIVE_NOT_ALLOWING_REPLAY
+      })
     }
 
     if (req.body.permanentLive && req.body.saveReplay) {
       cleanUpReqFiles(req)
 
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-        .json({ error: 'Cannot set this live as permanent while saving its replay' })
+      return res.fail({ message: 'Cannot set this live as permanent while saving its replay' })
     }
 
     const user = res.locals.oauth.token.User
@@ -90,11 +108,11 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
       if (totalInstanceLives >= CONFIG.LIVE.MAX_INSTANCE_LIVES) {
         cleanUpReqFiles(req)
 
-        return res.status(HttpStatusCode.FORBIDDEN_403)
-          .json({
-            code: ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED,
-            error: 'Cannot create this live because the max instance lives limit is reached.'
-          })
+        return res.fail({
+          status: HttpStatusCode.FORBIDDEN_403,
+          message: 'Cannot create this live because the max instance lives limit is reached.',
+          type: ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED
+        })
       }
     }
 
@@ -104,11 +122,11 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
       if (totalUserLives >= CONFIG.LIVE.MAX_USER_LIVES) {
         cleanUpReqFiles(req)
 
-        return res.status(HttpStatusCode.FORBIDDEN_403)
-          .json({
-            code: ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED,
-            error: 'Cannot create this live because the max user lives limit is reached.'
-          })
+        return res.fail({
+          status: HttpStatusCode.FORBIDDEN_403,
+          message: 'Cannot create this live because the max user lives limit is reached.',
+          type: ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED
+        })
       }
     }
 
@@ -130,18 +148,18 @@ const videoLiveUpdateValidator = [
     if (areValidationErrors(req, res)) return
 
     if (req.body.permanentLive && req.body.saveReplay) {
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-        .json({ error: 'Cannot set this live as permanent while saving its replay' })
+      return res.fail({ message: 'Cannot set this live as permanent while saving its replay' })
     }
 
     if (CONFIG.LIVE.ALLOW_REPLAY !== true && req.body.saveReplay === true) {
-      return res.status(HttpStatusCode.FORBIDDEN_403)
-        .json({ error: 'Saving live replay is not allowed instance' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Saving live replay is not allowed instance'
+      })
     }
 
     if (res.locals.videoAll.state !== VideoState.WAITING_FOR_LIVE) {
-      return res.status(HttpStatusCode.BAD_REQUEST_400)
-        .json({ error: 'Cannot update a live that has already started' })
+      return res.fail({ message: 'Cannot update a live that has already started' })
     }
 
     // Check the user can manage the live
@@ -177,9 +195,10 @@ async function isLiveVideoAccepted (req: express.Request, res: express.Response)
   if (!acceptedResult || acceptedResult.accepted !== true) {
     logger.info('Refused local live video.', { acceptedResult, acceptParameters })
 
-    res.status(HttpStatusCode.FORBIDDEN_403)
-       .json({ error: acceptedResult.errorMessage || 'Refused local live video' })
-
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: acceptedResult.errorMessage || 'Refused local live video'
+    })
     return false
   }
 

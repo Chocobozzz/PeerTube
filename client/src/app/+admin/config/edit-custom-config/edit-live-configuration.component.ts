@@ -2,7 +2,7 @@
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 import { FormGroup } from '@angular/forms'
-import { ServerConfig } from '@shared/models'
+import { HTMLServerConfig } from '@shared/models'
 import { ConfigService } from '../shared/config.service'
 import { EditConfigurationService, ResolutionOption } from './edit-configuration.service'
 
@@ -14,7 +14,7 @@ import { EditConfigurationService, ResolutionOption } from './edit-configuration
 export class EditLiveConfigurationComponent implements OnInit, OnChanges {
   @Input() form: FormGroup
   @Input() formErrors: any
-  @Input() serverConfig: ServerConfig
+  @Input() serverConfig: HTMLServerConfig
 
   transcodingThreadOptions: SelectOptionsItem[] = []
   transcodingProfiles: SelectOptionsItem[] = []

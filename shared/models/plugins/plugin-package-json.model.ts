@@ -1,4 +1,4 @@
-import { PluginClientScope } from './plugin-client-scope.type'
+import { PluginClientScope } from './client/plugin-client-scope.type'
 
 export type PluginTranslationPaths = {
   [ locale: string ]: string

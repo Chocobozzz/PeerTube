@@ -1,7 +1,5 @@
-@import '_variables';
-@import '_mixins';
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .peertube-container {
   padding-bottom: 20px;
@@ -70,22 +68,24 @@
   display: flex;
   align-items: center;
   overflow: hidden;
+  padding: 0 0 0 10px;
 
   .instance-name {
     @include ellipsis;
 
     width: 100%;
+
+    @media screen and (max-width: $mobile-view) {
+      display: none;
+    }
   }
 
   .icon.icon-logo {
+    @include margin-right(0.5rem);
+
     display: inline-block;
     width: 23px;
     height: 24px;
-    margin-right: 0.5rem;
-  }
-
-  @media screen and (max-width: $mobile-view) {
-    display: none;
   }
 }
 

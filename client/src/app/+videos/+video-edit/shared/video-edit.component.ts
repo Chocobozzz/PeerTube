@@ -21,8 +21,15 @@ import {
 import { FormReactiveValidationMessages, FormValidatorService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { VideoCaptionEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
-import { LiveVideo, ServerConfig, VideoConstant, VideoDetails, VideoPrivacy } from '@shared/models'
-import { RegisterClientFormFieldOptions, RegisterClientVideoFieldOptions } from '@shared/models/plugins/register-client-form-field.model'
+import {
+  HTMLServerConfig,
+  LiveVideo,
+  RegisterClientFormFieldOptions,
+  RegisterClientVideoFieldOptions,
+  VideoConstant,
+  VideoDetails,
+  VideoPrivacy
+} from '@shared/models'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
 import { VideoEditType } from './video-edit.type'
@@ -77,7 +84,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   calendarTimezone: string
   calendarDateFormat: string
 
-  serverConfig: ServerConfig
+  serverConfig: HTMLServerConfig
 
   pluginFields: PluginField[] = []
 
@@ -177,7 +184,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
     this.serverService.getVideoPrivacies()
       .subscribe(privacies => {
-        this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies)
+        this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies).videoPrivacies
+
         if (this.schedulePublicationPossible) {
           this.videoPrivacies.push({
             id: this.SPECIAL_SCHEDULED_PRIVACY,
@@ -187,9 +195,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
         }
       })
 
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-      .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.initialVideoCaptions = this.videoCaptions.map(c => c.language.id)
 

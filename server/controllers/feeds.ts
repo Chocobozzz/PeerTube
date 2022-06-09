@@ -2,6 +2,7 @@ import * as express from 'express'
 import * as Feed from 'pfeed-podcast'
 import * as showdown from 'showdown'
 import { groupBy, isNull, last, map, orderBy } from 'lodash'
+import { getCategoryLabel } from '@server/models/video/formatter/video-format-utils'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
 import { FEEDS, PREVIEWS_SIZE, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
@@ -375,7 +376,7 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
       if (video.category) {
         categories.push({
           value: video.category,
-          label: VideoModel.getCategoryLabel(video.category)
+          label: getCategoryLabel(video.category)
         })
       }
 
@@ -402,7 +403,7 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         title: video.name,
         // Live videos need unique GUIDs
         id: video.url,
-        link: WEBSERVER.URL + '/videos/watch/' + video.uuid,
+        link: WEBSERVER.URL + '/w/' + video.uuid,
         description: markdownConverter.makeHtml(video.description),
         author: [
           {
@@ -463,14 +464,14 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
       if (video.category) {
         categories.push({
           value: video.category,
-          label: VideoModel.getCategoryLabel(video.category)
+          label: getCategoryLabel(video.category)
         })
       }
 
       feed.addItem({
         title: video.name,
         id: video.url,
-        link: WEBSERVER.URL + '/videos/watch/' + video.uuid,
+        link: WEBSERVER.URL + '/w/' + video.uuid,
         description: video.getTruncatedDescription(),
         content: video.description,
         author: [

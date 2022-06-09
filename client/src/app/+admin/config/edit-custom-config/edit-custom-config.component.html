@@ -3,8 +3,16 @@
 
   <div ngbNav #nav="ngbNav" [activeId]="activeNav" (activeIdChange)="onNavChange($event)" class="nav-tabs">
 
+    <ng-container ngbNavItem="instance-homepage">
+      <a ngbNavLink i18n>Homepage</a>
+
+      <ng-template ngbNavContent>
+        <my-edit-homepage [form]="form" [formErrors]="formErrors"></my-edit-homepage>
+      </ng-template>
+    </ng-container>
+
     <ng-container ngbNavItem="instance-information">
-      <a ngbNavLink i18n>Instance information</a>
+      <a ngbNavLink i18n>Information</a>
 
       <ng-template ngbNavContent>
         <my-edit-instance-information [form]="form" [formErrors]="formErrors" [languageItems]="languageItems" [categoryItems]="categoryItems">
@@ -13,7 +21,7 @@
     </ng-container>
 
     <ng-container ngbNavItem="basic-configuration">
-      <a ngbNavLink i18n>Basic configuration</a>
+      <a ngbNavLink i18n>Basic</a>
 
       <ng-template ngbNavContent>
         <my-edit-basic-configuration [form]="form" [formErrors]="formErrors" [serverConfig]="serverConfig">
@@ -40,7 +48,7 @@
     </ng-container>
 
     <ng-container ngbNavItem="advanced-configuration">
-      <a ngbNavLink i18n>Advanced configuration</a>
+      <a ngbNavLink i18n>Advanced</a>
 
       <ng-template ngbNavContent>
         <my-edit-advanced-configuration [form]="form" [formErrors]="formErrors">

@@ -1,7 +1,7 @@
-@import '_bootstrap-variables';
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use '_bootstrap-variables';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 $icon-size: 16px;
 
@@ -21,7 +21,8 @@ $icon-size: 16px;
   }
 
   .moderation-block {
-    margin-left: .4rem;
+    @include margin-left(.4rem);
+
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -50,12 +51,12 @@ $icon-size: 16px;
 }
 
 .margin-content {
-  @include grid-videos-miniature-layout;
+  @include grid-videos-miniature-layout-with-margins;
 }
 
 .display-as-row.videos {
-  margin-left: pvar(--horizontalMarginContent);
-  margin-right: pvar(--horizontalMarginContent);
+  @include margin-left(pvar(--horizontalMarginContent));
+  @include margin-right(pvar(--horizontalMarginContent));
 
   .video-wrapper {
     margin-bottom: 15px;
@@ -70,8 +71,9 @@ $icon-size: 16px;
     margin-bottom: 10px;
 
     .title-page {
+      @include margin-right(0);
+
       margin-bottom: 10px;
-      margin-right: 0;
     }
   }
 }

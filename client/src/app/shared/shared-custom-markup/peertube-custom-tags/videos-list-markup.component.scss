@@ -1,0 +1,7 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
+
+.root {
+  @include grid-videos-miniature-layout;
+}

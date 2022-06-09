@@ -99,8 +99,8 @@ server {
   }
 
   location ~ ^/api/v1/(videos|video-playlists|video-channels|users/me) {
-    client_max_body_size                      3M; # default is 1M
-    add_header            X-File-Maximum-Size 2M always; # inform backend of the set value in bytes before mime-encoding (x * 1.4 >= client_max_body_size)
+    client_max_body_size                      6M; # default is 1M
+    add_header            X-File-Maximum-Size 4M always; # inform backend of the set value in bytes before mime-encoding (x * 1.4 >= client_max_body_size)
 
     try_files /dev/null @api;
   }

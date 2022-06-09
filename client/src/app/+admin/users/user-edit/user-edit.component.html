@@ -10,7 +10,7 @@
     <ng-container *ngIf="!isCreation()">
       <li class="breadcrumb-item active" i18n>Edit</li>
       <li class="breadcrumb-item active" aria-current="page">
-        <a *ngIf="user" [routerLink]="[ '/accounts', user?.username ]">{{ user?.username }}</a>
+        <a *ngIf="user" [routerLink]="[ '/a', user?.username ]">{{ user?.username }}</a>
       </li>
     </ng-container>
   </ol>

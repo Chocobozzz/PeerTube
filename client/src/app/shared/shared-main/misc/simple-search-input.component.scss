@@ -1,14 +1,15 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .root {
   display: flex;
 }
 
 my-global-icon {
+  @include margin-left(10px);
+
   height: 28px;
   width: 28px;
-  margin-left: 10px;
   cursor: pointer;
 
   &:hover {

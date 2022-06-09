@@ -12,6 +12,7 @@ import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 })
 export class RegisterStepTermsComponent extends FormReactive implements OnInit {
   @Input() hasCodeOfConduct = false
+  @Input() minimumAge = 16
 
   @Output() formBuilt = new EventEmitter<FormGroup>()
   @Output() termsClick = new EventEmitter<void>()

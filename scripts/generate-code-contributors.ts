@@ -37,6 +37,7 @@ async function run () {
     console.log(' * `video-language` by Rigel Kent (CC-BY)')
     console.log(' * `peertube-x` by Solen DP (CC-BY)')
     console.log(' * `flame` by Freepik (Flaticon License)')
+    console.log(' * `local` by Larea (CC-BY)')
   }
 
   {

@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .add-button {
   @include create-button;
@@ -24,9 +24,10 @@ tr.banned > td {
 }
 
 .user-table-primary-text .glyphicon {
+  @include margin-left(0.1rem);
+
   font-size: 80%;
   color: #808080;
-  margin-left: 0.1rem;
 }
 
 p-tableCheckbox {

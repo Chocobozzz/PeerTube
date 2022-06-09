@@ -13,8 +13,8 @@ import { CONFIG } from '../../initializers/config'
 import { MIMETYPES } from '../../initializers/constants'
 import { sequelizeTypescript } from '../../initializers/database'
 import { sendUpdateActor } from '../../lib/activitypub/send'
-import { deleteLocalActorImageFile, updateLocalActorImageFile } from '../../lib/actor-image'
 import { JobQueue } from '../../lib/job-queue'
+import { deleteLocalActorImageFile, updateLocalActorImageFile } from '../../lib/local-actor'
 import { createLocalVideoChannel, federateAllVideosOfChannel } from '../../lib/video-channel'
 import {
   asyncMiddleware,
@@ -32,7 +32,7 @@ import {
   videoChannelsUpdateValidator,
   videoPlaylistsSortValidator
 } from '../../middlewares'
-import { videoChannelsNameWithHostValidator, videoChannelsOwnSearchValidator, videosSortValidator } from '../../middlewares/validators'
+import { videoChannelsListValidator, videoChannelsNameWithHostValidator, videosSortValidator } from '../../middlewares/validators'
 import { updateAvatarValidator, updateBannerValidator } from '../../middlewares/validators/actor-image'
 import { commonVideoPlaylistFiltersValidator } from '../../middlewares/validators/videos/video-playlists'
 import { AccountModel } from '../../models/account/account'
@@ -51,7 +51,7 @@ videoChannelRouter.get('/',
   videoChannelsSortValidator,
   setDefaultSort,
   setDefaultPagination,
-  videoChannelsOwnSearchValidator,
+  videoChannelsListValidator,
   asyncMiddleware(listVideoChannels)
 )
 
@@ -162,6 +162,7 @@ async function updateVideoChannelBanner (req: express.Request, res: express.Resp
 
   return res.json({ banner: banner.toFormattedJSON() })
 }
+
 async function updateVideoChannelAvatar (req: express.Request, res: express.Response) {
   const avatarPhysicalFile = req.files['avatarfile'][0]
   const videoChannel = res.locals.videoChannel
@@ -179,7 +180,7 @@ async function deleteVideoChannelAvatar (req: express.Request, res: express.Resp
 
   await deleteLocalActorImageFile(videoChannel, ActorImageType.AVATAR)
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function deleteVideoChannelBanner (req: express.Request, res: express.Response) {
@@ -187,7 +188,7 @@ async function deleteVideoChannelBanner (req: express.Request, res: express.Resp
 
   await deleteLocalActorImageFile(videoChannel, ActorImageType.BANNER)
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function addVideoChannel (req: express.Request, res: express.Response) {
@@ -221,10 +222,6 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
 
   try {
     await sequelizeTypescript.transaction(async t => {
-      const sequelizeOptions = {
-        transaction: t
-      }
-
       if (videoChannelInfoToUpdate.displayName !== undefined) videoChannelInstance.name = videoChannelInfoToUpdate.displayName
       if (videoChannelInfoToUpdate.description !== undefined) videoChannelInstance.description = videoChannelInfoToUpdate.description
 
@@ -238,7 +235,7 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
         }
       }
 
-      const videoChannelInstanceUpdated = await videoChannelInstance.save(sequelizeOptions) as MChannelBannerAccountDefault
+      const videoChannelInstanceUpdated = await videoChannelInstance.save({ transaction: t }) as MChannelBannerAccountDefault
       await sendUpdateActor(videoChannelInstanceUpdated, t)
 
       auditLogger.update(

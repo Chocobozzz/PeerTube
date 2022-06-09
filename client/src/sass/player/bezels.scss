@@ -1,3 +1,5 @@
+@use '_mixins' as *;
+
 @keyframes bezels-fadeout {
   from {
     opacity: 1;
@@ -9,13 +11,14 @@
 }
 
 .vjs-bezel {
+  @include margin-left(-26px);
+
   position: absolute;
   left: 50%;
   top: 50%;
   width: 52px;
   height: 52px;
   z-index: 19;
-  margin-left: -26px;
   margin-top: -26px;
   background: rgba(0, 0, 0, .5);
   border-radius: 26px;

@@ -32,10 +32,14 @@
         </div>
 
         <div class="form-group">
-          <label i18n for="instanceDescription">Description</label><my-help helpType="markdownText"></my-help>
+          <label i18n for="instanceDescription">Description</label>
+          <div class="label-small-info">
+            <my-custom-markup-help></my-custom-markup-help>
+          </div>
 
           <my-markdown-textarea
             name="instanceDescription" formControlName="description" textareaMaxWidth="500px"
+            [customMarkdownRenderer]="getCustomMarkdownRenderer()"
             [classes]="{ 'input-error': formErrors['instance.description'] }"
           ></my-markdown-textarea>
 

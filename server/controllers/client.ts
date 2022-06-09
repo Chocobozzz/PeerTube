@@ -19,10 +19,11 @@ const testEmbedPath = join(distPath, 'standalone', 'videos', 'test-embed.html')
 
 // Special route that add OpenGraph and oEmbed tags
 // Do not use a template engine for a so little thing
-clientsRouter.use('/videos/watch/playlist/:id', asyncMiddleware(generateWatchPlaylistHtmlPage))
-clientsRouter.use('/videos/watch/:id', asyncMiddleware(generateWatchHtmlPage))
-clientsRouter.use('/accounts/:nameWithHost', asyncMiddleware(generateAccountHtmlPage))
-clientsRouter.use('/video-channels/:nameWithHost', asyncMiddleware(generateVideoChannelHtmlPage))
+clientsRouter.use([ '/w/p/:id', '/videos/watch/playlist/:id' ], asyncMiddleware(generateWatchPlaylistHtmlPage))
+clientsRouter.use([ '/w/:id', '/videos/watch/:id' ], asyncMiddleware(generateWatchHtmlPage))
+clientsRouter.use([ '/accounts/:nameWithHost', '/a/:nameWithHost' ], asyncMiddleware(generateAccountHtmlPage))
+clientsRouter.use([ '/video-channels/:nameWithHost', '/c/:nameWithHost' ], asyncMiddleware(generateVideoChannelHtmlPage))
+clientsRouter.use('/@:nameWithHost', asyncMiddleware(generateActorHtmlPage))
 
 const embedMiddlewares = [
   CONFIG.CSP.ENABLED
@@ -77,7 +78,7 @@ clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE.C
 
 // 404 for static files not found
 clientsRouter.use('/client/*', (req: express.Request, res: express.Response) => {
-  res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+  res.status(HttpStatusCode.NOT_FOUND_404).end()
 })
 
 // Always serve index client page (the client is a single page application, let it handle routing)
@@ -104,7 +105,7 @@ function serveServerTranslations (req: express.Request, res: express.Response) {
     return res.sendFile(path, { maxAge: STATIC_MAX_AGE.SERVER })
   }
 
-  return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+  return res.status(HttpStatusCode.NOT_FOUND_404).end()
 }
 
 async function generateEmbedHtmlPage (req: express.Request, res: express.Response) {
@@ -151,6 +152,12 @@ async function generateAccountHtmlPage (req: express.Request, res: express.Respo
 
 async function generateVideoChannelHtmlPage (req: express.Request, res: express.Response) {
   const html = await ClientHtml.getVideoChannelHTMLPage(req.params.nameWithHost, req, res)
+
+  return sendHTML(html, res)
+}
+
+async function generateActorHtmlPage (req: express.Request, res: express.Response) {
+  const html = await ClientHtml.getActorHTMLPage(req.params.nameWithHost, req, res)
 
   return sendHTML(html, res)
 }

@@ -3,7 +3,7 @@ import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms'
 import { USER_ROLE_LABELS } from '@shared/core-utils/users'
-import { ServerConfig, UserAdminFlag, UserRole, VideoResolution } from '@shared/models'
+import { HTMLServerConfig, UserAdminFlag, UserRole, VideoResolution } from '@shared/models'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 
 @Directive()
@@ -16,7 +16,7 @@ export abstract class UserEdit extends FormReactive implements OnInit {
 
   roles: { value: string, label: string }[] = []
 
-  protected serverConfig: ServerConfig
+  protected serverConfig: HTMLServerConfig
 
   protected abstract serverService: ServerService
   protected abstract configService: ConfigService
@@ -26,9 +26,7 @@ export abstract class UserEdit extends FormReactive implements OnInit {
   abstract getFormButtonTitle (): string
 
   ngOnInit (): void {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.buildRoles()
   }

@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .about-instance-title {
   display: flex;
@@ -11,7 +11,7 @@
   }
 
   .contact-admin {
-    @include peertube-button;
+    @include peertube-button-link;
     @include orange-button;
 
     height: fit-content;
@@ -23,9 +23,10 @@
   margin-bottom: 20px;
 
   .badge {
+    @include margin-right(5px);
+
     font-size: 12px;
     font-weight: $font-semibold;
-    margin-right: 5px;
 
     &.category {
       background-color: pvar(--mainColor);
@@ -53,6 +54,10 @@
   font-size: 15px;
 }
 
+.short-description {
+  margin-top: 10px;
+}
+
 .short-description .dedicated-to-nsfw {
   margin-top: 20px;
   font-weight: $font-semibold;
@@ -66,9 +71,10 @@
   &:hover,
   &:active {
     &::after {
+      @include margin-left(0.2em);
+
       content: '#';
       display: inline-block;
-      margin-left: 0.2em;
     }
   }
 

@@ -2,12 +2,14 @@ import * as express from 'express'
 import { readFile } from 'fs-extra'
 import { join } from 'path'
 import validator from 'validator'
+import { escapeHTML } from '@shared/core-utils/renderer'
+import { HTMLServerConfig } from '@shared/models'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/core-utils/i18n/i18n'
 import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '../../shared/models/videos'
 import { isTestInstance, sha256 } from '../helpers/core-utils'
-import { escapeHTML } from '@shared/core-utils/renderer'
 import { logger } from '../helpers/logger'
+import { mdToPlainText } from '../helpers/markdown'
 import { CONFIG } from '../initializers/config'
 import {
   ACCEPT_HEADERS,
@@ -19,12 +21,13 @@ import {
   WEBSERVER
 } from '../initializers/constants'
 import { AccountModel } from '../models/account/account'
+import { getActivityStreamDuration } from '../models/video/formatter/video-format-utils'
 import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
-import { getActivityStreamDuration } from '../models/video/video-format-utils'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
-import { mdToPlainText } from '../helpers/markdown'
+import { ServerConfigManager } from './server-config-manager'
+import { toCompleteUUID } from '@server/helpers/custom-validators/misc'
 
 type Tags = {
   ogType: string
@@ -76,7 +79,9 @@ class ClientHtml {
     return customHtml
   }
 
-  static async getWatchHTMLPage (videoId: string, req: express.Request, res: express.Response) {
+  static async getWatchHTMLPage (videoIdArg: string, req: express.Request, res: express.Response) {
+    const videoId = toCompleteUUID(videoIdArg)
+
     // Let Angular application handle errors
     if (!validator.isInt(videoId) && !validator.isUUID(videoId, 4)) {
       res.status(HttpStatusCode.NOT_FOUND_404)
@@ -134,7 +139,9 @@ class ClientHtml {
     return customHtml
   }
 
-  static async getWatchPlaylistHTMLPage (videoPlaylistId: string, req: express.Request, res: express.Response) {
+  static async getWatchPlaylistHTMLPage (videoPlaylistIdArg: string, req: express.Request, res: express.Response) {
+    const videoPlaylistId = toCompleteUUID(videoPlaylistIdArg)
+
     // Let Angular application handle errors
     if (!validator.isInt(videoPlaylistId) && !validator.isUUID(videoPlaylistId, 4)) {
       res.status(HttpStatusCode.NOT_FOUND_404)
@@ -196,11 +203,22 @@ class ClientHtml {
   }
 
   static async getAccountHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
-    return this.getAccountOrChannelHTMLPage(() => AccountModel.loadByNameWithHost(nameWithHost), req, res)
+    const accountModelPromise = AccountModel.loadByNameWithHost(nameWithHost)
+    return this.getAccountOrChannelHTMLPage(() => accountModelPromise, req, res)
   }
 
   static async getVideoChannelHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
-    return this.getAccountOrChannelHTMLPage(() => VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost), req, res)
+    const videoChannelModelPromise = VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost)
+    return this.getAccountOrChannelHTMLPage(() => videoChannelModelPromise, req, res)
+  }
+
+  static async getActorHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
+    const [ account, channel ] = await Promise.all([
+      AccountModel.loadByNameWithHost(nameWithHost),
+      VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost)
+    ])
+
+    return this.getAccountOrChannelHTMLPage(() => Promise.resolve(account || channel), req, res)
   }
 
   static async getEmbedHTML () {
@@ -209,11 +227,14 @@ class ClientHtml {
     if (!isTestInstance() && ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
 
     const buffer = await readFile(path)
+    const serverConfig = await ServerConfigManager.Instance.getHTMLServerConfig()
 
     let html = buffer.toString()
     html = await ClientHtml.addAsyncPluginCSS(html)
     html = ClientHtml.addCustomCSS(html)
     html = ClientHtml.addTitleTag(html)
+    html = ClientHtml.addDescriptionTag(html)
+    html = ClientHtml.addServerConfig(html, serverConfig)
 
     ClientHtml.htmlCache[path] = html
 
@@ -275,6 +296,7 @@ class ClientHtml {
     if (!isTestInstance() && ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
 
     const buffer = await readFile(path)
+    const serverConfig = await ServerConfigManager.Instance.getHTMLServerConfig()
 
     let html = buffer.toString()
 
@@ -283,6 +305,7 @@ class ClientHtml {
     html = ClientHtml.addFaviconContentHash(html)
     html = ClientHtml.addLogoContentHash(html)
     html = ClientHtml.addCustomCSS(html)
+    html = ClientHtml.addServerConfig(html, serverConfig)
     html = await ClientHtml.addAsyncPluginCSS(html)
 
     ClientHtml.htmlCache[path] = html
@@ -353,6 +376,13 @@ class ClientHtml {
     const styleTag = `<style class="custom-css-style">${CONFIG.INSTANCE.CUSTOMIZATIONS.CSS}</style>`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.CUSTOM_CSS, styleTag)
+  }
+
+  private static addServerConfig (htmlStringPage: string, serverConfig: HTMLServerConfig) {
+    const serverConfigString = JSON.stringify(serverConfig)
+    const configScriptTag = `<script type="application/javascript">window.PeerTubeServerConfig = '${serverConfigString}'</script>`
+
+    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.SERVER_CONFIG, configScriptTag)
   }
 
   private static async addAsyncPluginCSS (htmlStringPage: string) {
@@ -524,11 +554,11 @@ async function serveIndexHTML (req: express.Request, res: express.Response) {
       return
     } catch (err) {
       logger.error('Cannot generate HTML page.', err)
-      return res.sendStatus(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
+      return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500).end()
     }
   }
 
-  return res.sendStatus(HttpStatusCode.NOT_ACCEPTABLE_406)
+  return res.status(HttpStatusCode.NOT_ACCEPTABLE_406).end()
 }
 
 // ---------------------------------------------------------------------------

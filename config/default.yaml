@@ -77,7 +77,7 @@ email:
 
 # From the project root directory
 storage:
-  tmp: 'storage/tmp/' # Use to download data (imports etc), store uploaded files before processing...
+  tmp: 'storage/tmp/' # Use to download data (imports etc), store uploaded files before and during processing...
   avatars: 'storage/avatars/'
   videos: 'storage/videos/'
   streaming_playlists: 'storage/streaming-playlists/'
@@ -229,6 +229,7 @@ contact_form:
 signup:
   enabled: false
   limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
+  minimum_age: 16 # Used to configure the signup form
   requires_email_verification: false
   filters:
     cidr: # You can specify CIDR ranges to whitelist (empty = no filtering) or blacklist

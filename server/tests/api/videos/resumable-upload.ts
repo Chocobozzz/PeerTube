@@ -8,6 +8,7 @@ import { HttpStatusCode } from '@shared/core-utils'
 import {
   buildAbsoluteFixturePath,
   buildServerDirectory,
+  cleanupTests,
   flushAndRunServer,
   getMyUserInformation,
   prepareResumableUpload,
@@ -184,4 +185,7 @@ describe('Test resumable upload', function () {
     })
   })
 
+  after(async function () {
+    await cleanupTests([ server ])
+  })
 })

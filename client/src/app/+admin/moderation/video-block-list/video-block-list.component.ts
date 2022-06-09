@@ -107,13 +107,12 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
   }
 
   ngOnInit () {
-    this.serverService.getConfig()
-        .subscribe(config => {
-          // don't filter if auto-blacklist is not enabled as this will be the only list
-          if (config.autoBlacklist.videos.ofUsers.enabled) {
-            this.blocklistTypeFilter = VideoBlacklistType.MANUAL
-          }
-        })
+    const serverConfig = this.serverService.getHTMLConfig()
+
+    // Don't filter if auto-blacklist is not enabled as this will be the only list
+    if (serverConfig.autoBlacklist.videos.ofUsers.enabled) {
+      this.blocklistTypeFilter = VideoBlacklistType.MANUAL
+    }
 
     this.initialize()
   }
@@ -123,7 +122,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
   }
 
   getVideoUrl (videoBlock: VideoBlacklist) {
-    return Video.buildClientUrl(videoBlock.video.uuid)
+    return Video.buildWatchUrl(videoBlock.video)
   }
 
   toHtml (text: string) {

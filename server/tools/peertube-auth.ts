@@ -3,7 +3,7 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
+import { OptionValues, program } from 'commander'
 import * as prompt from 'prompt'
 import { getNetrc, getSettings, writeSettings } from './cli'
 import { isUserUsernameValid } from '../helpers/custom-validators/users'
@@ -66,7 +66,7 @@ program
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
   .option('--default', 'add the entry as the new default')
-  .action((options: program.OptionValues) => {
+  .action((options: OptionValues) => {
     /* eslint-disable no-import-assign */
     prompt.override = options
     prompt.start()

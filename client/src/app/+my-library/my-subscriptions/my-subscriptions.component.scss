@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 input[type=text] {
   @include peertube-input-text(300px);
@@ -11,7 +11,7 @@ input[type=text] {
   > my-actor-avatar {
     @include actor-avatar-size(80px);
 
-    margin-right: 10px;
+    @include margin-right(10px);
   }
 }
 
@@ -32,9 +32,10 @@ input[type=text] {
     }
 
     .video-channel-name {
+      @include margin-left(5px);
+
       font-size: 14px;
       color: $grey-actor-name;
-      margin-left: 5px;
     }
   }
 }
@@ -50,7 +51,7 @@ input[type=text] {
   }
 
   my-actor-avatar {
-    margin-left: 7px;
+    @include margin-left(7px);
     display: inline-block;
     vertical-align: top;
   }
@@ -78,6 +79,6 @@ input[type=text] {
   }
 
   img {
-    margin-right: 0;
+    @include margin-right(0);
   }
 }

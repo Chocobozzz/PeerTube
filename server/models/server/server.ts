@@ -1,7 +1,9 @@
+import { Transaction } from 'sequelize'
 import { AllowNull, Column, CreatedAt, Default, HasMany, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MServer, MServerFormattable } from '@server/types/models/server'
+import { AttributesOnly } from '@shared/core-utils'
 import { isHostValid } from '../../helpers/custom-validators/servers'
-import { ActorModel } from '../activitypub/actor'
+import { ActorModel } from '../actor/actor'
 import { throwIfNotValid } from '../utils'
 import { ServerBlocklistModel } from './server-blocklist'
 
@@ -14,7 +16,7 @@ import { ServerBlocklistModel } from './server-blocklist'
     }
   ]
 })
-export class ServerModel extends Model {
+export class ServerModel extends Model<Partial<AttributesOnly<ServerModel>>> {
 
   @AllowNull(false)
   @Is('Host', value => throwIfNotValid(value, isHostValid, 'valid host'))
@@ -50,11 +52,12 @@ export class ServerModel extends Model {
   })
   BlockedByAccounts: ServerBlocklistModel[]
 
-  static load (id: number): Promise<MServer> {
+  static load (id: number, transaction?: Transaction): Promise<MServer> {
     const query = {
       where: {
         id
-      }
+      },
+      transaction
     }
 
     return ServerModel.findOne(query)

@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { MetaGuard } from '@ngx-meta/core'
 import { VideoWatchComponent } from './video-watch.component'
 
 const videoWatchRoutes: Routes = [
   {
-    path: 'playlist/:playlistId',
-    component: VideoWatchComponent,
-    canActivate: [ MetaGuard ]
+    path: 'p/:playlistId',
+    component: VideoWatchComponent
   },
   {
     path: ':videoId/comments/:commentId',
@@ -15,8 +13,7 @@ const videoWatchRoutes: Routes = [
   },
   {
     path: ':videoId',
-    component: VideoWatchComponent,
-    canActivate: [ MetaGuard ]
+    component: VideoWatchComponent
   }
 ]
 

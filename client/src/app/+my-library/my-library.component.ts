@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { AuthService, AuthUser, ScreenService, ServerService } from '@app/core'
-import { ServerConfig } from '@shared/models'
+import { HTMLServerConfig } from '@shared/models'
 import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
 
 @Component({
@@ -11,7 +11,7 @@ export class MyLibraryComponent implements OnInit {
   menuEntries: TopMenuDropdownParam[] = []
   user: AuthUser
 
-  private serverConfig: ServerConfig
+  private serverConfig: HTMLServerConfig
 
   constructor (
     private serverService: ServerService,
@@ -24,9 +24,7 @@ export class MyLibraryComponent implements OnInit {
   }
 
   ngOnInit (): void {
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.user = this.authService.getUser()
 

@@ -1,5 +1,5 @@
 import { getAbsoluteAPIUrl } from '@app/helpers'
-import { Account, Actor } from '@app/shared/shared-main'
+import { Account, Actor, Video } from '@app/shared/shared-main'
 import { Account as AccountInterface, VideoComment as VideoCommentServerModel, VideoCommentAdmin as VideoCommentAdminServerModel } from '@shared/models'
 
 export class VideoComment implements VideoCommentServerModel {
@@ -85,7 +85,7 @@ export class VideoCommentAdmin implements VideoCommentAdminServerModel {
       id: hash.video.id,
       uuid: hash.video.uuid,
       name: hash.video.name,
-      localUrl: '/videos/watch/' + hash.video.uuid
+      localUrl: Video.buildWatchUrl(hash.video)
     }
 
     this.localUrl = this.video.localUrl + ';threadId=' + this.threadId
@@ -95,7 +95,7 @@ export class VideoCommentAdmin implements VideoCommentAdminServerModel {
     if (this.account) {
       this.by = Actor.CREATE_BY_STRING(this.account.name, this.account.host)
 
-      this.account.localUrl = '/accounts/' + this.by
+      this.account.localUrl = '/a/' + this.by
     }
   }
 }

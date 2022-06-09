@@ -1,37 +1,35 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { Video, VideoPrivacy } from '../../../../shared/models/videos'
-import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { cleanupTests, completeVideoCheck, deleteVideoComment } from '../../../../shared/extra-utils'
-import {
-  flushAndRunMultipleServers,
-  getVideosList,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
-} from '../../../../shared/extra-utils/index'
-import { dateIsValid } from '../../../../shared/extra-utils/miscs/miscs'
-import {
-  follow,
-  getFollowersListPaginationAndSort,
-  getFollowingListPaginationAndSort,
-  unfollow
-} from '../../../../shared/extra-utils/server/follows'
-import { expectAccountFollows } from '../../../../shared/extra-utils/users/accounts'
-import { userLogin } from '../../../../shared/extra-utils/users/login'
-import { createUser } from '../../../../shared/extra-utils/users/users'
+import * as chai from 'chai'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
+  cleanupTests,
+  completeVideoCheck,
+  createUser,
+  createVideoCaption,
+  dateIsValid,
+  deleteVideoComment,
+  expectAccountFollows,
+  flushAndRunMultipleServers,
+  follow,
+  getFollowersListPaginationAndSort,
+  getFollowingListPaginationAndSort,
   getVideoCommentThreads,
-  getVideoThreadComments
-} from '../../../../shared/extra-utils/videos/video-comments'
-import { rateVideo } from '../../../../shared/extra-utils/videos/videos'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { createVideoCaption, listVideoCaptions, testCaptionFile } from '../../../../shared/extra-utils/videos/video-captions'
-import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
+  getVideosList,
+  getVideoThreadComments,
+  listVideoCaptions,
+  rateVideo,
+  ServerInfo,
+  setAccessTokensToServers,
+  testCaptionFile,
+  unfollow,
+  uploadVideo,
+  userLogin,
+  waitJobs
+} from '@shared/extra-utils'
+import { Video, VideoCaption, VideoComment, VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -521,7 +519,7 @@ describe('Test follows', function () {
         expect(deletedComment.text).to.equal('')
         expect(deletedComment.inReplyToCommentId).to.be.null
         expect(deletedComment.account).to.be.null
-        expect(deletedComment.totalReplies).to.equal(3)
+        expect(deletedComment.totalReplies).to.equal(2)
         expect(dateIsValid(deletedComment.deletedAt as string)).to.be.true
 
         const res2 = await getVideoThreadComments(servers[0].url, video4.id, deletedComment.threadId)

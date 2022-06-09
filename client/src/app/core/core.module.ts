@@ -14,7 +14,7 @@ import { throwIfAlreadyLoaded } from './module-import-guard'
 import { Notifier } from './notification'
 import { HtmlRendererService, LinkifierService, MarkdownService } from './renderer'
 import { RestExtractor, RestService } from './rest'
-import { LoginGuard, RedirectService, UnloggedGuard, UserRightGuard } from './routing'
+import { HomepageRedirectComponent, LoginGuard, MetaGuard, MetaService, RedirectService, UnloggedGuard, UserRightGuard } from './routing'
 import { CanDeactivateGuard } from './routing/can-deactivate-guard.service'
 import { ServerConfigResolver } from './routing/server-config-resolver.service'
 import { ScopedTokensService } from './scoped-tokens'
@@ -36,13 +36,15 @@ import { LocalStorageService, ScreenService, SessionStorageService } from './wra
   ],
 
   declarations: [
-    CheatSheetComponent
+    CheatSheetComponent,
+    HomepageRedirectComponent
   ],
 
   exports: [
     ToastModule,
 
-    CheatSheetComponent
+    CheatSheetComponent,
+    HomepageRedirectComponent
   ],
 
   providers: [
@@ -77,7 +79,10 @@ import { LocalStorageService, ScreenService, SessionStorageService } from './wra
     MessageService,
     PeerTubeSocket,
     ServerConfigResolver,
-    CanDeactivateGuard
+    CanDeactivateGuard,
+
+    MetaService,
+    MetaGuard
   ]
 })
 export class CoreModule {

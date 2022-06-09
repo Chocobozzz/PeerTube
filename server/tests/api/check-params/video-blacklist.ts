@@ -191,7 +191,7 @@ describe('Test video blacklist API validators', function () {
     })
 
     it('Should succeed with the correct params', async function () {
-      const path = basePath + servers[0].video.uuid + '/blacklist'
+      const path = basePath + servers[0].video.shortUUID + '/blacklist'
       const fields = { reason: 'hello' }
 
       await makePutBodyRequest({
@@ -222,10 +222,14 @@ describe('Test video blacklist API validators', function () {
     })
 
     it('Should succeed with an admin', async function () {
-      const res = await getVideoWithToken(servers[0].url, servers[0].accessToken, servers[0].video.uuid, HttpStatusCode.OK_200)
-      const video: VideoDetails = res.body
+      const video = servers[0].video
 
-      expect(video.blacklisted).to.be.true
+      for (const id of [ video.id, video.uuid, video.shortUUID ]) {
+        const res = await getVideoWithToken(servers[0].url, servers[0].accessToken, id, HttpStatusCode.OK_200)
+        const video: VideoDetails = res.body
+
+        expect(video.blacklisted).to.be.true
+      }
     })
   })
 

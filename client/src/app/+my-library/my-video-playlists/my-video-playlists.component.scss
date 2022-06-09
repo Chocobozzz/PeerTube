@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 h1 {
   display: flex;
@@ -18,8 +18,9 @@ input[type=text] {
 }
 
 .video-playlist-buttons {
+  @include margin-left(10px);
+
   display: flex;
-  margin-left: 10px;
   align-self: flex-end;
 }
 
@@ -33,7 +34,7 @@ my-video-playlist-miniature {
 }
 
 my-delete-button {
-  margin-right: 10px;
+  @include margin-right(10px);
 }
 
 @include on-small-main-col {
@@ -46,8 +47,9 @@ my-delete-button {
   }
 
   .video-playlist-buttons {
+    @include margin-left(auto);
+
     margin-top: 10px;
-    margin-left: auto;
   }
 }
 
@@ -62,6 +64,6 @@ my-delete-button {
   }
 
   .action-button {
-    margin-left: 0;
+    @include margin-left(0);
   }
 }

@@ -1,10 +1,10 @@
-import { getOrCreateVideoAndAccountAndChannel } from '../videos'
+import { getOrCreateAPVideo } from '../videos'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { Redis } from '../../redis'
 import { ActivityCreate, ActivityView, ViewObject } from '../../../../shared/models/activitypub'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
-import { LiveManager } from '@server/lib/live-manager'
+import { LiveManager } from '@server/lib/live/live-manager'
 
 async function processViewActivity (options: APProcessorOptions<ActivityCreate | ActivityView>) {
   const { activity, byActor } = options
@@ -24,12 +24,11 @@ async function processCreateView (activity: ActivityView | ActivityCreate, byAct
     ? activity.object
     : (activity.object as ViewObject).object
 
-  const options = {
+  const { video } = await getOrCreateAPVideo({
     videoObject,
-    fetchType: 'only-video' as 'only-video',
-    allowRefresh: false as false
-  }
-  const { video } = await getOrCreateVideoAndAccountAndChannel(options)
+    fetchType: 'only-video',
+    allowRefresh: false
+  })
 
   if (!video.isLive) {
     await Redis.Instance.addVideoView(video.id)

@@ -3,7 +3,7 @@ import { URL } from 'url'
 import { ActivityPubOrderedCollection } from '../../../shared/models/activitypub'
 import { logger } from '../../helpers/logger'
 import { doJSONRequest } from '../../helpers/requests'
-import { ACTIVITY_PUB, REQUEST_TIMEOUT, WEBSERVER } from '../../initializers/constants'
+import { ACTIVITY_PUB, WEBSERVER } from '../../initializers/constants'
 
 type HandlerFunction<T> = (items: T[]) => (Promise<any> | Bluebird<any>)
 type CleanerFunction = (startedDate: Date) => (Promise<any> | Bluebird<any>)
@@ -13,10 +13,7 @@ async function crawlCollectionPage <T> (argUrl: string, handler: HandlerFunction
 
   logger.info('Crawling ActivityPub data on %s.', url)
 
-  const options = {
-    activityPub: true,
-    timeout: REQUEST_TIMEOUT
-  }
+  const options = { activityPub: true }
 
   const startDate = new Date()
 

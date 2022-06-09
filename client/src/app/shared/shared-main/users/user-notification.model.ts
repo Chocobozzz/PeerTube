@@ -12,6 +12,7 @@ import {
   UserRight,
   VideoInfo
 } from '@shared/models'
+import { Video } from '../video'
 
 export class UserNotification implements UserNotificationServer {
   id: number
@@ -238,11 +239,11 @@ export class UserNotification implements UserNotificationServer {
   }
 
   private buildVideoUrl (video: { uuid: string }) {
-    return '/videos/watch/' + video.uuid
+    return Video.buildWatchUrl(video)
   }
 
   private buildAccountUrl (account: { name: string, host: string }) {
-    return '/accounts/' + Actor.CREATE_BY_STRING(account.name, account.host)
+    return '/a/' + Actor.CREATE_BY_STRING(account.name, account.host)
   }
 
   private buildVideoImportUrl () {

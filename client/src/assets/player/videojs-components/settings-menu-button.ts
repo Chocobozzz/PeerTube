@@ -64,10 +64,7 @@ class SettingsButton extends Button {
   onDocumentClick (event: MouseEvent) {
     const element = event.target as HTMLElement
 
-    if (
-      element && element.classList &&
-      (element.classList.contains('vjs-settings') || element.parentElement.classList.contains('vjs-settings'))
-    ) {
+    if (element?.classList?.contains('vjs-settings') || element?.parentElement?.classList?.contains('vjs-settings')) {
       return
     }
 

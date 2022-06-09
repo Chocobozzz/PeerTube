@@ -431,7 +431,7 @@ async function checkNewCommentOnMyVideo (base: CheckerBaseParams, uuid: string, 
     }
   }
 
-  const commentUrl = `http://localhost:${base.server.port}/videos/watch/${uuid};threadId=${threadId}`
+  const commentUrl = `http://localhost:${base.server.port}/w/${uuid};threadId=${threadId}`
 
   function emailNotificationFinder (email: object) {
     return email['text'].indexOf(commentUrl) !== -1

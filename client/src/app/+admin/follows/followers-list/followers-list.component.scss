@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 a {
   @include disable-default-a-behaviour;
@@ -18,6 +18,6 @@ a {
 
 .action-cell {
   my-button:first-child {
-    margin-right: 10px;
+    @include margin-right(10px);
   }
 }

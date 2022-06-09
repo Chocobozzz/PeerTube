@@ -1,7 +1,7 @@
 import { forkJoin } from 'rxjs'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { VideoChannel } from '@app/shared/shared-main'
+import { Video, VideoChannel } from '@app/shared/shared-main'
 import { SearchService } from '@app/shared/shared-search'
 
 @Component({
@@ -39,11 +39,11 @@ export class RemoteInteractionComponent implements OnInit {
       if (videoResult.data.length !== 0) {
         const video = videoResult.data[0]
 
-        redirectUrl = '/videos/watch/' + video.uuid
+        redirectUrl = Video.buildWatchUrl(video)
       } else if (channelResult.data.length !== 0) {
         const channel = new VideoChannel(channelResult.data[0])
 
-        redirectUrl = '/video-channels/' + channel.nameWithHost
+        redirectUrl = '/c/' + channel.nameWithHost
       } else {
         this.error = $localize`Cannot access to the remote resource`
         return

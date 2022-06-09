@@ -2,7 +2,6 @@ import * as Bull from 'bull'
 import { ActivitypubHttpUnicastPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
-import { REQUEST_TIMEOUT } from '../../../initializers/constants'
 import { ActorFollowScoreCache } from '../../files-cache'
 import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 
@@ -19,7 +18,6 @@ async function processActivityPubHttpUnicast (job: Bull.Job) {
     method: 'POST' as 'POST',
     json: body,
     httpSignature: httpSignatureOptions,
-    timeout: REQUEST_TIMEOUT,
     headers: buildGlobalHeaders(body)
   }
 

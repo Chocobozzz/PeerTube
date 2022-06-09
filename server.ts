@@ -7,7 +7,6 @@ if (isTestInstance()) {
 }
 
 // ----------- Node modules -----------
-import * as bodyParser from 'body-parser'
 import * as express from 'express'
 import * as morgan from 'morgan'
 import * as cors from 'cors'
@@ -15,7 +14,7 @@ import * as cookieParser from 'cookie-parser'
 import * as helmet from 'helmet'
 import * as useragent from 'useragent'
 import * as anonymize from 'ip-anonymize'
-import * as cli from 'commander'
+import { program as cli } from 'commander'
 
 process.title = 'peertube'
 
@@ -107,6 +106,7 @@ import {
   downloadRouter
 } from './server/controllers'
 import { advertiseDoNotTrack } from './server/middlewares/dnt'
+import { apiFailMiddleware } from './server/middlewares/error'
 import { Redis } from './server/lib/redis'
 import { ActorFollowScheduler } from './server/lib/schedulers/actor-follow-scheduler'
 import { RemoveOldViewsScheduler } from './server/lib/schedulers/remove-old-views-scheduler'
@@ -124,9 +124,10 @@ import { PluginsCheckScheduler } from './server/lib/schedulers/plugins-check-sch
 import { PeerTubeVersionCheckScheduler } from './server/lib/schedulers/peertube-version-check-scheduler'
 import { Hooks } from './server/lib/plugins/hooks'
 import { PluginManager } from './server/lib/plugins/plugin-manager'
-import { LiveManager } from './server/lib/live-manager'
+import { LiveManager } from './server/lib/live'
 import { HttpStatusCode } from './shared/core-utils/miscs/http-error-codes'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
+import { ServerConfigManager } from '@server/lib/server-config-manager'
 
 // ----------- Command line -----------
 
@@ -163,19 +164,28 @@ morgan.token('user-agent', (req: express.Request) => {
 })
 app.use(morgan('combined', {
   stream: {
-    write: (str: string) => logger.info(str, { tags: [ 'http' ] })
+    write: (str: string) => logger.info(str.trim(), { tags: [ 'http' ] })
   },
   skip: req => CONFIG.LOG.LOG_PING_REQUESTS === false && req.originalUrl === '/api/v1/ping'
 }))
 
+// Add .fail() helper to response
+app.use(apiFailMiddleware)
+
 // For body requests
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json({
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json({
   type: [ 'application/json', 'application/*+json' ],
   limit: '500kb',
-  verify: (req: express.Request, _, buf: Buffer) => {
+  verify: (req: express.Request, res: express.Response, buf: Buffer) => {
     const valid = isHTTPSignatureDigestValid(buf, req)
-    if (valid !== true) throw new Error('Invalid digest')
+
+    if (valid !== true) {
+      res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Invalid digest'
+      })
+    }
   }
 }))
 
@@ -217,24 +227,27 @@ if (cliOptions.client) app.use('/', clientsRouter)
 
 // ----------- Errors -----------
 
-// Catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  const err = new Error('Not Found')
-  err['status'] = HttpStatusCode.NOT_FOUND_404
-  next(err)
+// Catch unmatched routes
+app.use((req, res: express.Response) => {
+  res.status(HttpStatusCode.NOT_FOUND_404).end()
 })
 
-app.use(function (err, req, res, next) {
+// Catch thrown errors
+app.use((err, req, res: express.Response, next) => {
+  // Format error to be logged
   let error = 'Unknown error.'
   if (err) {
     error = err.stack || err.message || err
   }
-
-  // Sequelize error
+  // Handling Sequelize error traces
   const sql = err.parent ? err.parent.sql : undefined
-
   logger.error('Error in controller.', { err: error, sql })
-  return res.status(err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500).end()
+
+  return res.fail({
+    status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,
+    message: err.message,
+    type: err.name
+  })
 })
 
 const server = createWebsocketTrackerServer(app)
@@ -262,7 +275,8 @@ async function startApplication () {
 
   await Promise.all([
     Emailer.Instance.checkConnection(),
-    JobQueue.Instance.init()
+    JobQueue.Instance.init(),
+    ServerConfigManager.Instance.init()
   ])
 
   // Caches initializations

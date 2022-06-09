@@ -87,7 +87,7 @@
       </td>
 
       <td *ngIf="isSelected('username')">
-        <a i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/accounts/' + user.username ]">
+        <a i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/a/' + user.username ]">
           <div class="chip two-lines">
             <my-actor-avatar [account]="user?.account" size="32"></my-actor-avatar>
            <div>

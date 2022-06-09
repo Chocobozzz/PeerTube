@@ -24,16 +24,19 @@ import {
   DurationFormatterPipe,
   FromNowPipe,
   InfiniteScrollerDirective,
+  LinkComponent,
   NumberFormatterPipe,
   PeerTubeTemplateDirective
 } from './angular'
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 import { ActionDropdownComponent, ButtonComponent, DeleteButtonComponent, EditButtonComponent } from './buttons'
+import { CustomPageService } from './custom-page'
 import { DateToggleComponent } from './date'
 import { FeedComponent } from './feeds'
 import { LoaderComponent, SmallLoaderComponent } from './loaders'
 import { HelpComponent, ListOverflowComponent, SimpleSearchInputComponent, TopMenuDropdownComponent } from './misc'
 import { PluginPlaceholderComponent } from './plugins'
+import { ActorRedirectGuard } from './router'
 import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
 import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
@@ -74,6 +77,7 @@ import { VideoChannelService } from './video-channel'
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
+    LinkComponent,
 
     ActionDropdownComponent,
     ButtonComponent,
@@ -128,6 +132,7 @@ import { VideoChannelService } from './video-channel'
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
+    LinkComponent,
 
     ActionDropdownComponent,
     ButtonComponent,
@@ -171,7 +176,11 @@ import { VideoChannelService } from './video-channel'
 
     VideoCaptionService,
 
-    VideoChannelService
+    VideoChannelService,
+
+    CustomPageService,
+
+    ActorRedirectGuard
   ]
 })
 export class SharedMainModule { }

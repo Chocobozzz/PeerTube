@@ -12,7 +12,7 @@ export class VideoThumbnailComponent {
   @Input() video: Video
   @Input() nsfw = false
 
-  @Input() videoRouterLink: any[]
+  @Input() videoRouterLink: string | any[]
   @Input() queryParams: { [ p: string ]: any }
   @Input() videoHref: string
   @Input() videoTarget: string
@@ -57,7 +57,7 @@ export class VideoThumbnailComponent {
   getVideoRouterLink () {
     if (this.videoRouterLink) return this.videoRouterLink
 
-    return [ '/videos/watch', this.video.uuid ]
+    return Video.buildWatchUrl(this.video)
   }
 
   onWatchLaterClick (event: Event) {

@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .help-tooltip-button {
   @include disable-outline;
@@ -24,7 +24,7 @@
 
     .popover-body {
       font-family: $main-fonts;
-      text-align: left;
+      text-align: start;
       padding: 10px;
       font-size: 13px;
       background-color: pvar(--mainBackgroundColor);
@@ -36,7 +36,7 @@
       }
 
       ul {
-        padding-left: 20px;
+        @include padding-left(20px);
         margin-bottom: 0;
       }
     }

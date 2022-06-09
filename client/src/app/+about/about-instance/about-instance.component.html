@@ -4,7 +4,7 @@
     <div class="about-instance-title">
       <h1 i18n class="title">About {{ instanceName }}</h1>
 
-      <button i18n *ngIf="isContactFormEnabled" (click)="openContactModal()" (keydown.enter)="openContactModal()" class="contact-admin">Contact administrator</button>
+      <a routerLink="/about/contact" i18n *ngIf="isContactFormEnabled" class="contact-admin">Contact administrator</a>
     </div>
 
     <div class="instance-badges" *ngIf="categories.length !== 0 || languages.length !== 0">
@@ -91,7 +91,7 @@
 
     <div class="anchor" id="information"></div>
     <a
-      *ngIf="html.description"
+      *ngIf="descriptionContent"
       class="anchor-link"
       routerLink="/about/instance"
       fragment="information"
@@ -113,7 +113,7 @@
         <h3 i18n class="section-title">Description</h3>
       </a>
 
-      <div [innerHTML]="html.description"></div>
+      <my-custom-markup-container [content]="descriptionContent"></my-custom-markup-container>
     </div>
 
     <div class="anchor" id="moderation"></div>

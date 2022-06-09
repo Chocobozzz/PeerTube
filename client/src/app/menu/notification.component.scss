@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .content {
   scrollbar-color: auto;
@@ -141,7 +141,7 @@
   position: relative;
 
   .unread-notifications {
-    margin-left: 20px;
+    @include margin-left(20px);
   }
 
   .unread-notifications {

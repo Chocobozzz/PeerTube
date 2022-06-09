@@ -1,7 +1,7 @@
-import { ServerActionHookName, ServerFilterHookName } from '../../../shared/models/plugins/server-hook.model'
-import { PluginManager } from './plugin-manager'
-import { logger } from '../../helpers/logger'
 import * as Bluebird from 'bluebird'
+import { ServerActionHookName, ServerFilterHookName } from '../../../shared/models'
+import { logger } from '../../helpers/logger'
+import { PluginManager } from './plugin-manager'
 
 type PromiseFunction <U, T> = (params: U) => Promise<T> | Bluebird<T>
 type RawFunction <U, T> = (params: U) => T

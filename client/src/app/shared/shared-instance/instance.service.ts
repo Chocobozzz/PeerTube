@@ -40,7 +40,6 @@ export class InstanceService {
 
   async buildHtml (about: About) {
     const html = {
-      description: '',
       terms: '',
       codeOfConduct: '',
       moderationInformation: '',

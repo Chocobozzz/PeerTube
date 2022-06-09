@@ -1,7 +1,7 @@
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
+import { program } from 'commander'
 import { createReadStream, readdir } from 'fs-extra'
 import { join } from 'path'
 import { createInterface } from 'readline'
@@ -85,6 +85,8 @@ function run () {
     const files = await getFiles()
 
     for (const file of files) {
+      if (file === 'peertube-audit.log') continue
+
       console.log('Opening %s.', file)
 
       const stream = createReadStream(file)
@@ -140,7 +142,8 @@ function toTimeFormat (time: string) {
 
   if (isNaN(timestamp) === true) return 'Unknown date'
 
-  return new Date(timestamp).toISOString()
+  const d = new Date(timestamp)
+  return d.toLocaleString() + `.${d.getMilliseconds()}`
 }
 
 function containsTags (loggerTags: string[], optionsTags: string[]) {

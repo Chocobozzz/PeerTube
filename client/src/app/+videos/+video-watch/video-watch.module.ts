@@ -10,18 +10,26 @@ import { SharedVideoModule } from '@app/shared/shared-video'
 import { SharedVideoCommentModule } from '@app/shared/shared-video-comment'
 import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
 import { SharedVideoPlaylistModule } from '@app/shared/shared-video-playlist'
+import { SharedActorImageModule } from '../../shared/shared-actor-image/shared-actor-image.module'
 import { VideoCommentService } from '../../shared/shared-video-comment/video-comment.service'
-import { VideoCommentAddComponent } from './comment/video-comment-add.component'
-import { VideoCommentComponent } from './comment/video-comment.component'
-import { VideoCommentsComponent } from './comment/video-comments.component'
 import { PlayerStylesComponent } from './player-styles.component'
-import { RecommendationsModule } from './recommendations/recommendations.module'
-import { TimestampRouteTransformerDirective } from './timestamp-route-transformer.directive'
-import { VideoWatchPlaylistComponent } from './video-watch-playlist.component'
+import {
+  ActionButtonsComponent,
+  PrivacyConcernsComponent,
+  RecommendationsModule,
+  VideoAlertComponent,
+  VideoAvatarChannelComponent,
+  VideoDescriptionComponent,
+  VideoRateComponent,
+  VideoWatchPlaylistComponent,
+  VideoAttributesComponent
+} from './shared'
+import { VideoCommentAddComponent } from './shared/comment/video-comment-add.component'
+import { VideoCommentComponent } from './shared/comment/video-comment.component'
+import { VideoCommentsComponent } from './shared/comment/video-comments.component'
+import { TimestampRouteTransformerDirective } from './shared/timestamp-route-transformer.directive'
 import { VideoWatchRoutingModule } from './video-watch-routing.module'
 import { VideoWatchComponent } from './video-watch.component'
-import { SharedActorImageModule } from '../../shared/shared-actor-image/shared-actor-image.module'
-import { VideoAvatarChannelComponent } from './video-avatar-channel.component'
 
 @NgModule({
   imports: [
@@ -45,6 +53,12 @@ import { VideoAvatarChannelComponent } from './video-avatar-channel.component'
   declarations: [
     VideoWatchComponent,
     VideoWatchPlaylistComponent,
+    VideoRateComponent,
+    VideoDescriptionComponent,
+    PrivacyConcernsComponent,
+    ActionButtonsComponent,
+    VideoAlertComponent,
+    VideoAttributesComponent,
 
     VideoCommentsComponent,
     VideoCommentAddComponent,

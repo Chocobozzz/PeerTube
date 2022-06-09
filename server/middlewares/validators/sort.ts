@@ -1,5 +1,5 @@
 import { SORTABLE_COLUMNS } from '../../initializers/constants'
-import { checkSort, createSortableColumns } from './utils'
+import { checkSort, createSortableColumns } from './shared'
 
 // Initialize constants here for better performances
 const SORTABLE_USERS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.USERS)
@@ -9,6 +9,7 @@ const SORTABLE_ABUSES_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.ABUSES)
 const SORTABLE_VIDEOS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEOS)
 const SORTABLE_VIDEOS_SEARCH_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEOS_SEARCH)
 const SORTABLE_VIDEO_CHANNELS_SEARCH_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_CHANNELS_SEARCH)
+const SORTABLE_VIDEO_PLAYLISTS_SEARCH_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_PLAYLISTS_SEARCH)
 const SORTABLE_VIDEO_IMPORTS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_IMPORTS)
 const SORTABLE_VIDEO_COMMENTS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_COMMENT_THREADS)
 const SORTABLE_VIDEO_COMMENT_THREADS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_COMMENT_THREADS)
@@ -34,6 +35,7 @@ const videosSortValidator = checkSort(SORTABLE_VIDEOS_COLUMNS)
 const videoImportsSortValidator = checkSort(SORTABLE_VIDEO_IMPORTS_COLUMNS)
 const videosSearchSortValidator = checkSort(SORTABLE_VIDEOS_SEARCH_COLUMNS)
 const videoChannelsSearchSortValidator = checkSort(SORTABLE_VIDEO_CHANNELS_SEARCH_COLUMNS)
+const videoPlaylistsSearchSortValidator = checkSort(SORTABLE_VIDEO_PLAYLISTS_SEARCH_COLUMNS)
 const videoCommentsValidator = checkSort(SORTABLE_VIDEO_COMMENTS_COLUMNS)
 const videoCommentThreadsSortValidator = checkSort(SORTABLE_VIDEO_COMMENT_THREADS_COLUMNS)
 const videoRatesSortValidator = checkSort(SORTABLE_VIDEO_RATES_COLUMNS)
@@ -75,5 +77,6 @@ export {
   userNotificationsSortValidator,
   videoPlaylistsSortValidator,
   videoRedundanciesSortValidator,
+  videoPlaylistsSearchSortValidator,
   pluginsSortValidator
 }

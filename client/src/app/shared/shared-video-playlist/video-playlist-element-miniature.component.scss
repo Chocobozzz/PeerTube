@@ -1,6 +1,6 @@
-@import '_variables';
-@import '_mixins';
-@import '_miniature';
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_miniature' as *;
 
 $thumbnail-width: 130px;
 $thumbnail-height: 72px;
@@ -17,8 +17,9 @@ my-video-thumbnail {
 
 my-video-thumbnail,
 .fake-thumbnail {
+  @include margin-right(10px);
+
   display: flex; // Avoids an issue with line-height that adds space below the element
-  margin-right: 10px;
 }
 
 .video {
@@ -60,8 +61,9 @@ my-video-thumbnail,
     cursor: pointer;
 
     .position {
+      @include margin-right(10px);
+
       font-weight: $font-semibold;
-      margin-right: 10px;
       color: pvar(--greyForegroundColor);
       min-width: 25px;
 
@@ -101,8 +103,9 @@ my-video-thumbnail,
 
   .more,
   my-edit-button {
+    @include margin-left(auto);
+
     justify-self: flex-end;
-    margin-left: auto;
     cursor: pointer;
     min-width: 24px;
   }
@@ -135,8 +138,9 @@ my-video-thumbnail,
   }
 
   .timestamp-options {
+    @include padding-left(35px);
+
     padding-top: 0;
-    padding-left: 35px;
     margin-bottom: 15px;
 
     > div {
@@ -146,7 +150,7 @@ my-video-thumbnail,
     }
 
     my-peertube-checkbox {
-      margin-right: 5px;
+      @include margin-right(5px);
     }
 
     input {

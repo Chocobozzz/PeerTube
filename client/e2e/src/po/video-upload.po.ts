@@ -41,7 +41,7 @@ export class VideoUploadPage {
 
     await this.getSecondStepSubmitButton().click()
 
-    return browser.wait(browser.ExpectedConditions.urlContains('/watch/'))
+    return browser.wait(browser.ExpectedConditions.urlContains('/w/'))
   }
 
   private getSecondStepSubmitButton () {

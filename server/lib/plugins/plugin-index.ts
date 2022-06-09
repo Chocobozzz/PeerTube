@@ -1,16 +1,16 @@
 import { sanitizeUrl } from '@server/helpers/core-utils'
-import { ResultList } from '../../../shared/models'
-import { PeertubePluginIndexList } from '../../../shared/models/plugins/peertube-plugin-index-list.model'
-import { PeerTubePluginIndex } from '../../../shared/models/plugins/peertube-plugin-index.model'
+import { logger } from '@server/helpers/logger'
+import { doJSONRequest } from '@server/helpers/requests'
+import { CONFIG } from '@server/initializers/config'
+import { PEERTUBE_VERSION } from '@server/initializers/constants'
+import { PluginModel } from '@server/models/server/plugin'
 import {
+  PeerTubePluginIndex,
+  PeertubePluginIndexList,
   PeertubePluginLatestVersionRequest,
-  PeertubePluginLatestVersionResponse
-} from '../../../shared/models/plugins/peertube-plugin-latest-version.model'
-import { logger } from '../../helpers/logger'
-import { doJSONRequest } from '../../helpers/requests'
-import { CONFIG } from '../../initializers/config'
-import { PEERTUBE_VERSION } from '../../initializers/constants'
-import { PluginModel } from '../../models/server/plugin'
+  PeertubePluginLatestVersionResponse,
+  ResultList
+} from '@shared/models'
 import { PluginManager } from './plugin-manager'
 
 async function listAvailablePluginsFromIndex (options: PeertubePluginIndexList) {

@@ -47,13 +47,13 @@ async function getVideosNames (server: ServerInfo, token: string, filter: string
   return videosResults
 }
 
-describe('Test videos filter validator', function () {
+describe('Test videos filter', function () {
   let servers: ServerInfo[]
 
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(160000)
 
     servers = await flushAndRunMultipleServers(2)
 

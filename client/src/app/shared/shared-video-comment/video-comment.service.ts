@@ -9,6 +9,7 @@ import {
   FeedFormat,
   ResultList,
   ThreadsResultList,
+  Video,
   VideoComment as VideoCommentServerModel,
   VideoCommentAdmin,
   VideoCommentCreate,
@@ -127,7 +128,7 @@ export class VideoCommentService {
       )
   }
 
-  getVideoCommentsFeeds (videoUUID?: string) {
+  getVideoCommentsFeeds (video: Pick<Video, 'uuid'>) {
     const feeds = [
       {
         format: FeedFormat.RSS,
@@ -146,9 +147,9 @@ export class VideoCommentService {
       }
     ]
 
-    if (videoUUID !== undefined) {
+    if (video !== undefined) {
       for (const feed of feeds) {
-        feed.url += '?videoId=' + videoUUID
+        feed.url += '?videoId=' + video.uuid
       }
     }
 

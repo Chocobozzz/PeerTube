@@ -2,7 +2,7 @@ import * as Bull from 'bull'
 import { TranscodeOptionsType } from '@server/helpers/ffmpeg-utils'
 import { getTranscodingJobPriority, publishAndFederateIfNeeded } from '@server/lib/video'
 import { getVideoFilePath } from '@server/lib/video-paths'
-import { UserModel } from '@server/models/account/user'
+import { UserModel } from '@server/models/user/user'
 import { MUser, MUserId, MVideoFullLight, MVideoUUID, MVideoWithFile } from '@server/types/models'
 import {
   HLSTranscodingPayload,
@@ -15,7 +15,6 @@ import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { computeResolutionsToTranscode } from '../../../helpers/ffprobe-utils'
 import { logger } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
-import { sequelizeTypescript } from '../../../initializers/database'
 import { VideoModel } from '../../../models/video/video'
 import { federateVideoIfNeeded } from '../../activitypub/videos'
 import { Notifier } from '../../notifier'
@@ -24,7 +23,7 @@ import {
   mergeAudioVideofile,
   optimizeOriginalVideofile,
   transcodeNewWebTorrentResolution
-} from '../../video-transcoding'
+} from '../../transcoding/video-transcoding'
 import { JobQueue } from '../job-queue'
 
 type HandlerFunction = (job: Bull.Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<any>
@@ -151,35 +150,31 @@ async function onVideoFileOptimizer (
   // Outside the transaction (IO on disk)
   const { videoFileResolution, isPortraitMode } = await videoArg.getMaxQualityResolution()
 
-  const { videoDatabase, videoPublished } = await sequelizeTypescript.transaction(async t => {
-    // Maybe the video changed in database, refresh it
-    const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoArg.uuid, t)
-    // Video does not exist anymore
-    if (!videoDatabase) return undefined
+  // Maybe the video changed in database, refresh it
+  const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoArg.uuid)
+  // Video does not exist anymore
+  if (!videoDatabase) return undefined
 
-    let videoPublished = false
+  let videoPublished = false
 
-    // Generate HLS version of the original file
-    const originalFileHLSPayload = Object.assign({}, payload, {
-      isPortraitMode,
-      resolution: videoDatabase.getMaxQualityFile().resolution,
-      // If we quick transcoded original file, force transcoding for HLS to avoid some weird playback issues
-      copyCodecs: transcodeType !== 'quick-transcode',
-      isMaxQuality: true
-    })
-    const hasHls = await createHlsJobIfEnabled(user, originalFileHLSPayload)
-
-    const hasNewResolutions = await createLowerResolutionsJobs(videoDatabase, user, videoFileResolution, isPortraitMode, 'webtorrent')
-
-    if (!hasHls && !hasNewResolutions) {
-      // No transcoding to do, it's now published
-      videoPublished = await videoDatabase.publishIfNeededAndSave(t)
-    }
-
-    await federateVideoIfNeeded(videoDatabase, payload.isNewVideo, t)
-
-    return { videoDatabase, videoPublished }
+  // Generate HLS version of the original file
+  const originalFileHLSPayload = Object.assign({}, payload, {
+    isPortraitMode,
+    resolution: videoDatabase.getMaxQualityFile().resolution,
+    // If we quick transcoded original file, force transcoding for HLS to avoid some weird playback issues
+    copyCodecs: transcodeType !== 'quick-transcode',
+    isMaxQuality: true
   })
+  const hasHls = await createHlsJobIfEnabled(user, originalFileHLSPayload)
+
+  const hasNewResolutions = await createLowerResolutionsJobs(videoDatabase, user, videoFileResolution, isPortraitMode, 'webtorrent')
+
+  if (!hasHls && !hasNewResolutions) {
+    // No transcoding to do, it's now published
+    videoPublished = await videoDatabase.publishIfNeededAndSave(undefined)
+  }
+
+  await federateVideoIfNeeded(videoDatabase, payload.isNewVideo)
 
   if (payload.isNewVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(videoDatabase)
   if (videoPublished) Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(videoDatabase)

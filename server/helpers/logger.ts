@@ -151,7 +151,8 @@ const bunyanLogger = {
   fatal: bunyanLogFactory('error')
 }
 
-function loggerTagsFactory (...defaultTags: string[]) {
+type LoggerTagsFn = (...tags: string[]) => { tags: string[] }
+function loggerTagsFactory (...defaultTags: string[]): LoggerTagsFn {
   return (...tags: string[]) => {
     return { tags: defaultTags.concat(tags) }
   }
@@ -160,6 +161,8 @@ function loggerTagsFactory (...defaultTags: string[]) {
 // ---------------------------------------------------------------------------
 
 export {
+  LoggerTagsFn,
+
   buildLogger,
   timestampFormatter,
   labelFormatter,

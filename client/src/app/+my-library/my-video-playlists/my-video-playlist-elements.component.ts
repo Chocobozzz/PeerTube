@@ -187,7 +187,7 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
     // Reload playlist thumbnail if the first element changed
     const newFirst = this.findFirst()
     if (oldFirst && newFirst && oldFirst.id !== newFirst.id) {
-      this.playlist.refreshThumbnail()
+      this.loadPlaylistInfo()
     }
   }
 

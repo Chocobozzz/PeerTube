@@ -2,6 +2,9 @@ import { QueryTypes, Transaction } from 'sequelize'
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
 import { TrackerModel } from '@server/models/server/tracker'
 import { VideoTrackerModel } from '@server/models/server/video-tracker'
+import { UserModel } from '@server/models/user/user'
+import { UserNotificationModel } from '@server/models/user/user-notification'
+import { UserVideoHistoryModel } from '@server/models/user/user-video-history'
 import { isTestInstance } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
 import { AbuseModel } from '../models/abuse/abuse'
@@ -11,13 +14,9 @@ import { VideoCommentAbuseModel } from '../models/abuse/video-comment-abuse'
 import { AccountModel } from '../models/account/account'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import { AccountVideoRateModel } from '../models/account/account-video-rate'
-import { ActorImageModel } from '../models/account/actor-image'
-import { UserModel } from '../models/account/user'
-import { UserNotificationModel } from '../models/account/user-notification'
-import { UserNotificationSettingModel } from '../models/account/user-notification-setting'
-import { UserVideoHistoryModel } from '../models/account/user-video-history'
-import { ActorModel } from '../models/activitypub/actor'
-import { ActorFollowModel } from '../models/activitypub/actor-follow'
+import { ActorModel } from '../models/actor/actor'
+import { ActorFollowModel } from '../models/actor/actor-follow'
+import { ActorImageModel } from '../models/actor/actor-image'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { OAuthTokenModel } from '../models/oauth/oauth-token'
@@ -25,6 +24,7 @@ import { VideoRedundancyModel } from '../models/redundancy/video-redundancy'
 import { PluginModel } from '../models/server/plugin'
 import { ServerModel } from '../models/server/server'
 import { ServerBlocklistModel } from '../models/server/server-blocklist'
+import { UserNotificationSettingModel } from '../models/user/user-notification-setting'
 import { ScheduleVideoUpdateModel } from '../models/video/schedule-video-update'
 import { TagModel } from '../models/video/tag'
 import { ThumbnailModel } from '../models/video/thumbnail'
@@ -44,6 +44,7 @@ import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-pla
 import { VideoTagModel } from '../models/video/video-tag'
 import { VideoViewModel } from '../models/video/video-view'
 import { CONFIG } from './config'
+import { ActorCustomPageModel } from '@server/models/account/actor-custom-page'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -141,7 +142,8 @@ async function initDatabaseModels (silent: boolean) {
     ThumbnailModel,
     TrackerModel,
     VideoTrackerModel,
-    PluginModel
+    PluginModel,
+    ActorCustomPageModel
   ])
 
   // Check extensions exist in the database

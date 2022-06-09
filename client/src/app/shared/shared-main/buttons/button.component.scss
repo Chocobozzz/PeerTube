@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 @mixin responsive-label {
   .action-button {
@@ -24,7 +24,7 @@ my-small-loader ::ng-deep .root {
 a[class$=-button],
 span[class$=-button] {
   > span {
-    margin-left: 5px;
+    @include margin-left(5px);
   }
 }
 

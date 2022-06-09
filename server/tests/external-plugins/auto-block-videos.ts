@@ -40,6 +40,7 @@ describe('Official plugin auto-block videos', function () {
   let blocklistServer: MockBlocklist
   let server1Videos: Video[] = []
   let server2Videos: Video[] = []
+  let port: number
 
   before(async function () {
     this.timeout(60000)
@@ -56,7 +57,7 @@ describe('Official plugin auto-block videos', function () {
     }
 
     blocklistServer = new MockBlocklist()
-    await blocklistServer.initialize()
+    port = await blocklistServer.initialize()
 
     await uploadVideoAndGetId({ server: servers[0], videoName: 'video server 1' })
     await uploadVideoAndGetId({ server: servers[1], videoName: 'video server 2' })
@@ -82,7 +83,7 @@ describe('Official plugin auto-block videos', function () {
       accessToken: servers[0].accessToken,
       npmName: 'peertube-plugin-auto-block-videos',
       settings: {
-        'blocklist-urls': 'http://localhost:42100/blocklist',
+        'blocklist-urls': `http://localhost:${port}/blocklist`,
         'check-seconds-interval': 1
       }
     })

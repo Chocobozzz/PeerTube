@@ -2,12 +2,12 @@
 
 import 'mocha'
 import { omit } from 'lodash'
-import { join } from 'path'
-import { User, UserRole } from '../../../../shared'
+import { User, UserRole, VideoCreateResult } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   addVideoChannel,
   blockUser,
+  buildAbsoluteFixturePath,
   cleanupTests,
   createUser,
   deleteMe,
@@ -45,7 +45,7 @@ describe('Test users API validators', function () {
   let userId: number
   let rootId: number
   let moderatorId: number
-  let videoId: number
+  let video: VideoCreateResult
   let server: ServerInfo
   let serverWithRegistrationDisabled: ServerInfo
   let userAccessToken = ''
@@ -126,7 +126,7 @@ describe('Test users API validators', function () {
 
     {
       const res = await uploadVideo(server.url, server.accessToken, {})
-      videoId = res.body.video.id
+      video = res.body.video
     }
 
     {
@@ -600,7 +600,7 @@ describe('Test users API validators', function () {
     it('Should fail without an incorrect input file', async function () {
       const fields = {}
       const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
+        avatarfile: buildAbsoluteFixturePath('video_short.mp4')
       }
       await makeUploadRequest({ url: server.url, path: path + '/me/avatar/pick', token: server.accessToken, fields, attaches })
     })
@@ -608,7 +608,7 @@ describe('Test users API validators', function () {
     it('Should fail with a big file', async function () {
       const fields = {}
       const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
+        avatarfile: buildAbsoluteFixturePath('avatar-big.png')
       }
       await makeUploadRequest({ url: server.url, path: path + '/me/avatar/pick', token: server.accessToken, fields, attaches })
     })
@@ -616,7 +616,7 @@ describe('Test users API validators', function () {
     it('Should fail with an unauthenticated user', async function () {
       const fields = {}
       const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+        avatarfile: buildAbsoluteFixturePath('avatar.png')
       }
       await makeUploadRequest({
         url: server.url,
@@ -630,7 +630,7 @@ describe('Test users API validators', function () {
     it('Should succeed with the correct params', async function () {
       const fields = {}
       const attaches = {
-        avatarfile: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+        avatarfile: buildAbsoluteFixturePath('avatar.png')
       }
       await makeUploadRequest({
         url: server.url,
@@ -829,7 +829,7 @@ describe('Test users API validators', function () {
 
   describe('When getting my video rating', function () {
     it('Should fail with a non authenticated user', async function () {
-      await getMyUserVideoRating(server.url, 'fake_token', videoId, HttpStatusCode.UNAUTHORIZED_401)
+      await getMyUserVideoRating(server.url, 'fake_token', video.id, HttpStatusCode.UNAUTHORIZED_401)
     })
 
     it('Should fail with an incorrect video uuid', async function () {
@@ -841,7 +841,9 @@ describe('Test users API validators', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await getMyUserVideoRating(server.url, server.accessToken, videoId)
+      await getMyUserVideoRating(server.url, server.accessToken, video.id)
+      await getMyUserVideoRating(server.url, server.accessToken, video.uuid)
+      await getMyUserVideoRating(server.url, server.accessToken, video.shortUUID)
     })
   })
 

@@ -2,7 +2,7 @@ import { createWriteStream, remove } from 'fs-extra'
 import got, { CancelableRequest, Options as GotOptions, RequestError } from 'got'
 import { join } from 'path'
 import { CONFIG } from '../initializers/config'
-import { ACTIVITY_PUB, PEERTUBE_VERSION, WEBSERVER } from '../initializers/constants'
+import { ACTIVITY_PUB, PEERTUBE_VERSION, REQUEST_TIMEOUT, WEBSERVER } from '../initializers/constants'
 import { pipelinePromise } from './core-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
@@ -24,6 +24,7 @@ type PeerTubeRequestOptions = {
     key: string
     headers: string[]
   }
+  timeout?: number
   jsonResponse?: boolean
 } & Pick<GotOptions, 'headers' | 'json' | 'method' | 'searchParams'>
 
@@ -92,6 +93,10 @@ const peertubeGot = got.extend({
             path
           }, httpSignatureOptions)
         }
+      },
+
+      (options: GotOptions) => {
+        options.timeout = REQUEST_TIMEOUT
       }
     ]
   }
@@ -180,8 +185,10 @@ function buildGotOptions (options: PeerTubeRequestOptions) {
 
   return {
     method: options.method,
+    dnsCache: true,
     json: options.json,
     searchParams: options.searchParams,
+    timeout: options.timeout ?? REQUEST_TIMEOUT,
     headers,
     context
   }

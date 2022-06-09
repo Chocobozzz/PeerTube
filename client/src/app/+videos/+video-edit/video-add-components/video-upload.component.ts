@@ -1,16 +1,16 @@
+import { UploadState, UploadxOptions, UploadxService } from 'ngx-uploadx'
+import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { UploadxOptions, UploadState, UploadxService } from 'ngx-uploadx'
-import { UploaderXFormData } from './uploaderx-form-data'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService, UserService } from '@app/core'
-import { scrollToTop, genericUploadErrorHandler } from '@app/helpers'
+import { genericUploadErrorHandler, scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
-import { BytesPipe, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { BytesPipe, Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
 import { VideoPrivacy } from '@shared/models'
+import { UploaderXFormData } from './uploaderx-form-data'
 import { VideoSend } from './video-send'
-import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 
 @Component({
   selector: 'my-video-upload',
@@ -46,7 +46,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   enableRetryAfterError: boolean
 
   // So that it can be accessed in the template
-  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
   protected readonly BASE_VIDEO_UPLOAD_URL = VideoService.BASE_VIDEO_URL + 'upload-resumable'
 
   private uploadxOptions: UploadxOptions
@@ -244,7 +243,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
             this.isUploadingVideo = false
 
             this.notifier.success($localize`Video published.`)
-            this.router.navigate([ '/videos/watch', video.uuid ])
+            this.router.navigateByUrl(Video.buildWatchUrl(video))
           },
 
           err => {
@@ -266,7 +265,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       downloadEnabled: true,
       channelId: this.firstStepChannelId,
       nsfw: this.serverConfig.instance.isNSFW,
-      privacy: VideoPrivacy.PRIVATE.toString(),
+      privacy: this.highestPrivacy.toString(),
       filename: file.name,
       previewfile: previewfile as any
     }

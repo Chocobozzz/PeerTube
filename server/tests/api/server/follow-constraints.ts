@@ -18,6 +18,7 @@ import { unfollow } from '../../../../shared/extra-utils/server/follows'
 import { userLogin } from '../../../../shared/extra-utils/users/login'
 import { createUser } from '../../../../shared/extra-utils/users/users'
 import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
 
 const expect = chai.expect
 
@@ -153,7 +154,20 @@ describe('Test follow constraints', function () {
       })
 
       it('Should not get the remote video', async function () {
-        await getVideo(servers[0].url, video2UUID, HttpStatusCode.FORBIDDEN_403)
+        const res = await getVideo(servers[0].url, video2UUID, HttpStatusCode.FORBIDDEN_403)
+
+        const error = res.body as PeerTubeProblemDocument
+
+        const doc = 'https://docs.joinpeertube.org/api-rest-reference.html#section/Errors/does_not_respect_follow_constraints'
+        expect(error.type).to.equal(doc)
+        expect(error.code).to.equal(ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS)
+
+        expect(error.detail).to.equal('Cannot get this video regarding follow constraints')
+        expect(error.error).to.equal(error.detail)
+
+        expect(error.status).to.equal(HttpStatusCode.FORBIDDEN_403)
+
+        expect(error.originUrl).to.contains(servers[1].url)
       })
 
       it('Should list local account videos', async function () {

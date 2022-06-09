@@ -3,14 +3,12 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import * as program from 'commander'
-import { PluginType } from '../../shared/models/plugins/plugin.type'
+import { program, Command, OptionValues } from 'commander'
 import { installPlugin, listPlugins, uninstallPlugin, updatePlugin } from '../../shared/extra-utils/server/plugins'
 import { getAdminTokenOrDie, getServerCredentials } from './cli'
-import { PeerTubePlugin } from '../../shared/models/plugins/peertube-plugin.model'
+import { PeerTubePlugin, PluginType } from '../../shared/models'
 import { isAbsolute } from 'path'
 import * as CliTable3 from 'cli-table3'
-import commander = require('commander')
 
 program
   .name('plugins')
@@ -63,7 +61,7 @@ program.parse(process.argv)
 
 // ----------------------------------------------------------------------------
 
-async function pluginsListCLI (command: commander.CommanderStatic, options: commander.OptionValues) {
+async function pluginsListCLI (command: Command, options: OptionValues) {
   const { url, username, password } = await getServerCredentials(command)
   const accessToken = await getAdminTokenOrDie(url, username, password)
 
@@ -102,7 +100,7 @@ async function pluginsListCLI (command: commander.CommanderStatic, options: comm
   process.exit(0)
 }
 
-async function installPluginCLI (command: commander.CommanderStatic, options: commander.OptionValues) {
+async function installPluginCLI (command: Command, options: OptionValues) {
   if (!options.path && !options.npmName) {
     console.error('You need to specify the npm name or the path of the plugin you want to install.\n')
     program.outputHelp()
@@ -133,7 +131,7 @@ async function installPluginCLI (command: commander.CommanderStatic, options: co
   process.exit(0)
 }
 
-async function updatePluginCLI (command: commander.CommanderStatic, options: commander.OptionValues) {
+async function updatePluginCLI (command: Command, options: OptionValues) {
   if (!options.path && !options.npmName) {
     console.error('You need to specify the npm name or the path of the plugin you want to update.\n')
     program.outputHelp()
@@ -164,7 +162,7 @@ async function updatePluginCLI (command: commander.CommanderStatic, options: com
   process.exit(0)
 }
 
-async function uninstallPluginCLI (command: commander.CommanderStatic, options: commander.OptionValues) {
+async function uninstallPluginCLI (command: Command, options: OptionValues) {
   if (!options.npmName) {
     console.error('You need to specify the npm name of the plugin/theme you want to uninstall.\n')
     program.outputHelp()

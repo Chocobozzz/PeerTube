@@ -21,6 +21,7 @@
     - [Notifier](#notifier)
     - [Markdown Renderer](#markdown-renderer)
     - [Auth header](#auth-header)
+    - [Plugin router route](#plugin-router-route)
     - [Custom Modal](#custom-modal)
     - [Translate](#translate)
     - [Get public settings](#get-public-settings)
@@ -28,6 +29,7 @@
     - [Add custom fields to video form](#add-custom-fields-to-video-form)
     - [Register settings script](#register-settings-script)
     - [HTML placeholder elements](#html-placeholder-elements)
+    - [Add/remove left menu links](#addremove-left-menu-links)
   - [Publishing](#publishing)
 - [Write a plugin/theme](#write-a-plugintheme)
   - [Clone the quickstart repository](#clone-the-quickstart-repository)
@@ -561,6 +563,27 @@ function register (...) {
 }
 ```
 
+#### Plugin router route
+
+**PeerTube >= 3.3**
+
+To get your plugin router route, you can use `peertubeHelpers.getBaseRouterRoute()`:
+
+```js
+function register (...) {
+  registerHook({
+    target: 'action:video-watch.video.loaded',
+    handler: ({ video }) => {
+      fetch(peertubeHelpers.getBaseRouterRoute() + '/my/plugin/api', {
+        method: 'GET',
+        headers: peertubeHelpers.getAuthHeader()
+      }).then(res => res.json())
+        .then(data => console.log('Hi %s.', data))
+    }
+  })
+}
+```
+
 #### Custom Modal
 
 To show a custom modal:
@@ -722,10 +745,16 @@ async function register (...) {
 
 See the complete list on https://docs.joinpeertube.org/api-plugins
 
+#### Add/remove left menu links
+
+Left menu links can be filtered (add/remove a section or add/remove links) using the `filter:left-menu.links.create.result` client hook.
+
+
 ### Publishing
 
-PeerTube plugins and themes should be published on [NPM](https://www.npmjs.com/) so that PeerTube indexes
-take into account your plugin (after ~ 1 day). An official PeerTube index is available on https://packages.joinpeertube.org/ (it's just a REST API, so don't expect a beautiful website).
+PeerTube plugins and themes should be published on [NPM](https://www.npmjs.com/) so that PeerTube indexes take into account your plugin (after ~ 1 day). An official plugin index is available on [packages.joinpeertube.org](https://packages.joinpeertube.org/api/v1/plugins), with no interface to present packages.
+
+> The official plugin index source code is available at https://framagit.org/framasoft/peertube/plugin-index
 
 ## Write a plugin/theme
 
@@ -909,6 +938,12 @@ $ npm publish
 
 Every time you want to publish another version of your plugin/theme, just update the `version` key from the `package.json`
 and republish it on NPM. Remember that the PeerTube index will take into account your new plugin/theme version after ~24 hours.
+
+> If you need to force your plugin update on a specific __PeerTube__ instance, you may update the latest available version manually:
+> ```sql
+> UPDATE "plugin" SET "latestVersion" = 'X.X.X' WHERE "plugin"."name" = 'plugin-shortname';
+> ```
+> You'll then be able to click the __Update plugin__ button on the plugin list.
 
 ### Unpublish
 

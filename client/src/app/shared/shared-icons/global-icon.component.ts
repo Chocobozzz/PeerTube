@@ -17,6 +17,7 @@ const icons = {
   'follower': require('!!raw-loader?!../../../assets/images/misc/account-arrow-left.svg').default, // material ui
   'following': require('!!raw-loader?!../../../assets/images/misc/account-arrow-right.svg').default, // material ui
   'flame': require('!!raw-loader?!../../../assets/images/misc/flame.svg').default,
+  'local': require('!!raw-loader?!../../../assets/images/misc/local.svg').default,
 
   // feather icons
   'flag': require('!!raw-loader?!../../../assets/images/feather/flag.svg').default,

@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 .peertube-contributors {
   .framasoft {
@@ -22,8 +22,9 @@
     text-align: center;
 
     li {
+      @include margin-right(10px);
+
       display: inline-block;
-      margin-right: 10px;
     }
   }
 }

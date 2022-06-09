@@ -1,15 +1,12 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { MetaGuard } from '@ngx-meta/core'
-import { ChannelLazyLoadResolver } from './channel-lazy-load.resolver'
 import { SearchComponent } from './search.component'
-import { VideoLazyLoadResolver } from './video-lazy-load.resolver'
+import { ChannelLazyLoadResolver, PlaylistLazyLoadResolver, VideoLazyLoadResolver } from './shared'
 
 const searchRoutes: Routes = [
   {
     path: '',
     component: SearchComponent,
-    canActivate: [ MetaGuard ],
     data: {
       meta: {
         title: $localize`Search`
@@ -19,7 +16,6 @@ const searchRoutes: Routes = [
   {
     path: 'lazy-load-video',
     component: SearchComponent,
-    canActivate: [ MetaGuard ],
     resolve: {
       data: VideoLazyLoadResolver
     }
@@ -27,9 +23,15 @@ const searchRoutes: Routes = [
   {
     path: 'lazy-load-channel',
     component: SearchComponent,
-    canActivate: [ MetaGuard ],
     resolve: {
       data: ChannelLazyLoadResolver
+    }
+  },
+  {
+    path: 'lazy-load-playlist',
+    component: SearchComponent,
+    resolve: {
+      data: PlaylistLazyLoadResolver
     }
   }
 ]

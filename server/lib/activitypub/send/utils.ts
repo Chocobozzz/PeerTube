@@ -1,14 +1,14 @@
 import { Transaction } from 'sequelize'
-import { Activity, ActivityAudience } from '../../../../shared/models/activitypub'
-import { logger } from '../../../helpers/logger'
-import { ActorModel } from '../../../models/activitypub/actor'
-import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { JobQueue } from '../../job-queue'
-import { getActorsInvolvedInVideo, getAudienceFromFollowersOf, getRemoteVideoAudience } from '../audience'
-import { afterCommitIfTransaction } from '../../../helpers/database-utils'
-import { MActor, MActorId, MActorLight, MActorWithInboxes, MVideoAccountLight, MVideoId, MVideoImmutable } from '../../../types/models'
 import { getServerActor } from '@server/models/application/application'
 import { ContextType } from '@shared/models/activitypub/context'
+import { Activity, ActivityAudience } from '../../../../shared/models/activitypub'
+import { afterCommitIfTransaction } from '../../../helpers/database-utils'
+import { logger } from '../../../helpers/logger'
+import { ActorModel } from '../../../models/actor/actor'
+import { ActorFollowModel } from '../../../models/actor/actor-follow'
+import { MActor, MActorId, MActorLight, MActorWithInboxes, MVideoAccountLight, MVideoId, MVideoImmutable } from '../../../types/models'
+import { JobQueue } from '../../job-queue'
+import { getActorsInvolvedInVideo, getAudienceFromFollowersOf, getRemoteVideoAudience } from '../audience'
 
 async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAudience) => Activity, options: {
   byActor: MActorLight
@@ -22,7 +22,9 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
 
   // Send to origin
   if (video.isOwned() === false) {
-    const accountActor = (video as MVideoAccountLight).VideoChannel?.Account?.Actor || await ActorModel.loadAccountActorByVideoId(video.id)
+    let accountActor: MActorLight = (video as MVideoAccountLight).VideoChannel?.Account?.Actor
+
+    if (!accountActor) accountActor = await ActorModel.loadAccountActorByVideoId(video.id, transaction)
 
     const audience = getRemoteVideoAudience(accountActor, actorsInvolvedInVideo)
     const activity = activityBuilder(audience)

@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core'
-import { VideoDetails } from '@app/shared/shared-main'
+import { Video, VideoDetails } from '@app/shared/shared-main'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@shared/models'
@@ -98,14 +98,15 @@ export class VideoShareComponent {
 
   getVideoUrl () {
     let baseUrl = this.customizations.originUrl ? this.video.originInstanceUrl : window.location.origin
-    baseUrl += '/videos/watch/' + this.video.uuid
+    baseUrl += Video.buildWatchUrl(this.video)
+
     const options = this.getVideoOptions(baseUrl)
 
     return buildVideoLink(options)
   }
 
   getPlaylistUrl () {
-    const base = window.location.origin + '/videos/watch/playlist/' + this.playlist.uuid
+    const base = window.location.origin + VideoPlaylist.buildWatchUrl(this.playlist)
 
     if (!this.includeVideoInPlaylist) return base
 

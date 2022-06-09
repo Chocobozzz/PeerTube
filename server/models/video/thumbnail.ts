@@ -17,6 +17,7 @@ import {
 } from 'sequelize-typescript'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 import { MThumbnail, MThumbnailVideo, MVideo } from '@server/types/models'
+import { AttributesOnly } from '@shared/core-utils'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
@@ -40,7 +41,7 @@ import { VideoPlaylistModel } from './video-playlist'
     }
   ]
 })
-export class ThumbnailModel extends Model {
+export class ThumbnailModel extends Model<Partial<AttributesOnly<ThumbnailModel>>> {
 
   @AllowNull(false)
   @Column

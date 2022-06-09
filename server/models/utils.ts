@@ -1,5 +1,4 @@
-import { literal, Op, OrderItem } from 'sequelize'
-import { Model, Sequelize } from 'sequelize-typescript'
+import { literal, Op, OrderItem, Sequelize } from 'sequelize'
 import { Col } from 'sequelize/types/lib/utils'
 import validator from 'validator'
 
@@ -103,6 +102,10 @@ function getFollowsSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): 
 }
 
 function isOutdated (model: { createdAt: Date, updatedAt: Date }, refreshInterval: number) {
+  if (!model.createdAt || !model.updatedAt) {
+    throw new Error('Miss createdAt & updatedAt attribuets to model')
+  }
+
   const now = Date.now()
   const createdAtTime = model.createdAt.getTime()
   const updatedAtTime = model.updatedAt.getTime()
@@ -195,11 +198,11 @@ function parseAggregateResult (result: any) {
   return total
 }
 
-const createSafeIn = (model: typeof Model, stringArr: (string | number)[]) => {
+function createSafeIn (sequelize: Sequelize, stringArr: (string | number)[]) {
   return stringArr.map(t => {
     return t === null
       ? null
-      : model.sequelize.escape('' + t)
+      : sequelize.escape('' + t)
   }).join(', ')
 }
 

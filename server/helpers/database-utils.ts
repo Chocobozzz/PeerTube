@@ -58,7 +58,7 @@ function transactionRetryer <T> (func: (err: any, data: T) => any) {
 
         errorFilter: err => {
           const willRetry = (err.name === 'SequelizeDatabaseError')
-          logger.debug('Maybe retrying the transaction function.', { willRetry, err })
+          logger.debug('Maybe retrying the transaction function.', { willRetry, err, tags: [ 'sql', 'retry' ] })
           return willRetry
         }
       },
@@ -68,7 +68,9 @@ function transactionRetryer <T> (func: (err: any, data: T) => any) {
   })
 }
 
-function updateInstanceWithAnother <T extends Model<T>> (instanceToUpdate: Model<T>, baseInstance: Model<T>) {
+// ---------------------------------------------------------------------------
+
+function updateInstanceWithAnother <M, T extends U, U extends Model<M>> (instanceToUpdate: T, baseInstance: U) {
   const obj = baseInstance.toJSON()
 
   for (const key of Object.keys(obj)) {
@@ -82,13 +84,7 @@ function resetSequelizeInstance (instance: Model<any>, savedFields: object) {
   })
 }
 
-function afterCommitIfTransaction (t: Transaction, fn: Function) {
-  if (t) return t.afterCommit(() => fn())
-
-  return fn()
-}
-
-function deleteNonExistingModels <T extends { hasSameUniqueKeysThan (other: T): boolean } & Model<T>> (
+function deleteNonExistingModels <T extends { hasSameUniqueKeysThan (other: T): boolean } & Pick<Model, 'destroy'>> (
   fromDatabase: T[],
   newModels: T[],
   t: Transaction
@@ -111,6 +107,20 @@ function setAsUpdated (table: string, id: number, transaction?: Transaction) {
 
 // ---------------------------------------------------------------------------
 
+function runInReadCommittedTransaction <T> (fn: (t: Transaction) => Promise<T>) {
+  const options = { isolationLevel: Transaction.ISOLATION_LEVELS.READ_COMMITTED }
+
+  return sequelizeTypescript.transaction(options, t => fn(t))
+}
+
+function afterCommitIfTransaction (t: Transaction, fn: Function) {
+  if (t) return t.afterCommit(() => fn())
+
+  return fn()
+}
+
+// ---------------------------------------------------------------------------
+
 export {
   resetSequelizeInstance,
   retryTransactionWrapper,
@@ -118,5 +128,6 @@ export {
   updateInstanceWithAnother,
   afterCommitIfTransaction,
   deleteNonExistingModels,
-  setAsUpdated
+  setAsUpdated,
+  runInReadCommittedTransaction
 }

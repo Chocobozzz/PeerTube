@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@use '_variables' as *;
+@use '_mixins' as *;
 
 h1 my-global-icon {
   position: relative;
@@ -15,7 +15,7 @@ input[type=text] {
 }
 
 my-edit-button {
-  margin-right: 10px;
+  @include margin-right(10px);
 }
 
 .video-channel {
@@ -25,8 +25,7 @@ my-edit-button {
 
   my-actor-avatar {
     @include actor-avatar-size(80px);
-
-    margin-right: 10px;
+    @include margin-right(10px);
   }
 }
 
@@ -49,9 +48,10 @@ my-edit-button {
 }
 
 .video-channel-name {
+  @include margin-left(5px);
+
   font-size: 14px;
   color: $grey-actor-name;
-  margin-left: 5px;
 }
 
 .video-channel-buttons {
@@ -77,7 +77,7 @@ my-edit-button {
     padding-bottom: 10px;
 
     img {
-      margin-right: 0;
+      @include margin-right(0);
     }
 
     .video-channel-buttons {
@@ -97,7 +97,7 @@ my-edit-button {
   }
 
   .video-channel-name {
-    margin-left: 0 !important;
+    @include margin-left(0 !important);
   }
 }
 

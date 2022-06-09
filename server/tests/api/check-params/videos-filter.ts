@@ -35,7 +35,7 @@ async function testEndpoints (server: ServerInfo, token: string, filter: string,
   }
 }
 
-describe('Test videos filters', function () {
+describe('Test video filters validators', function () {
   let server: ServerInfo
   let userAccessToken: string
   let moderatorAccessToken: string

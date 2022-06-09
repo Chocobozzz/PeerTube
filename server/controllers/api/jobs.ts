@@ -9,6 +9,7 @@ import {
   authenticate,
   ensureUserHasRight,
   jobsSortValidator,
+  openapiOperationDoc,
   paginationValidatorBuilder,
   setDefaultPagination,
   setDefaultSort
@@ -18,6 +19,7 @@ import { listJobsValidator } from '../../middlewares/validators/jobs'
 const jobsRouter = express.Router()
 
 jobsRouter.get('/:state?',
+  openapiOperationDoc({ operationId: 'getJobs' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
   paginationValidatorBuilder([ 'jobs' ]),

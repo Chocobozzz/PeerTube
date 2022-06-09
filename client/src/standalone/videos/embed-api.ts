@@ -140,12 +140,14 @@ export class PeerTubeEmbedApi {
     })
 
     // PeerTube specific capabilities
-
     if (this.isWebtorrent()) {
       this.embed.player.webtorrent().on('autoResolutionUpdate', () => this.loadWebTorrentResolutions())
       this.embed.player.webtorrent().on('videoFileUpdate', () => this.loadWebTorrentResolutions())
+
+      this.loadWebTorrentResolutions()
     } else {
       this.embed.player.p2pMediaLoader().on('resolutionChange', () => this.loadP2PMediaLoaderResolutions())
+      this.embed.player.p2pMediaLoader().on('resolutionsLoaded', () => this.loadP2PMediaLoaderResolutions())
     }
 
     this.embed.player.on('volumechange', () => {
@@ -207,6 +209,6 @@ export class PeerTubeEmbedApi {
   }
 
   private isWebtorrent () {
-    return this.embed.player.webtorrent
+    return !!this.embed.player.webtorrent
   }
 }

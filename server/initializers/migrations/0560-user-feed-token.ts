@@ -1,5 +1,5 @@
 import * as Sequelize from 'sequelize'
-import { v4 as uuidv4 } from 'uuid'
+import { buildUUID } from '@server/helpers/uuid'
 
 async function up (utils: {
   transaction: Sequelize.Transaction
@@ -26,7 +26,7 @@ async function up (utils: {
     const users = await utils.sequelize.query<any>(query, options)
 
     for (const user of users) {
-      const queryUpdate = `UPDATE "user" SET "feedToken" = '${uuidv4()}' WHERE id = ${user.id}`
+      const queryUpdate = `UPDATE "user" SET "feedToken" = '${buildUUID()}' WHERE id = ${user.id}`
       await utils.sequelize.query(queryUpdate)
     }
   }

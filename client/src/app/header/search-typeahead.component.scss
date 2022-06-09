@@ -1,13 +1,12 @@
-@import '_mixins';
-@import '_variables';
-@import '_bootstrap-variables';
-@import '~bootstrap/scss/mixins/_breakpoints';
+@use '_mixins' as *;
+@use '_variables' as *;
 
 #search-video {
   @include peertube-input-text($search-input-width);
 
-  padding-left: 10px;
-  padding-right: 40px; // For the search icon
+  @include padding-left(10px);
+  @include padding-right(40px); // For the search icon
+
   font-size: 14px;
 
   &::placeholder {
@@ -17,11 +16,12 @@
 
 .icon-search {
   @include icon(25px);
+  @include margin-left(-35px);
+
   height: 18px;
 
   // yolo
   position: absolute;
-  margin-left: -35px;
   margin-top: 3.5px;
   right: 10px;
 }
@@ -65,8 +65,9 @@ li.suggestion {
     margin-bottom: .5rem;
 
     em {
+      @include margin-right(0.2rem);
+
       font-weight: 600;
-      margin-right: 0.2rem;
       font-style: normal;
     }
   }
@@ -81,7 +82,7 @@ li.suggestion {
   }
 
   @media screen and (min-width: $mobile-view) {
-    margin-left: 10px;
+    @include margin-left(10px);
   }
 
   @media screen and (max-width: $small-view) {
@@ -121,7 +122,7 @@ li.suggestion {
       border-end-start-radius: 0;
       border-end-end-radius: 0;
 
-      @include media-breakpoint-up(lg) {
+      @media screen and (min-width: 1000px) {
         width: 500px;
       }
     }

@@ -1,8 +1,9 @@
-
 import { pairwise } from 'rxjs/operators'
-import { Component, Input, OnInit } from '@angular/core'
+import { SelectOptionsItem } from 'src/types/select-options-item.model'
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 import { FormGroup } from '@angular/forms'
-import { ServerConfig } from '@shared/models'
+import { MenuService } from '@app/core'
+import { HTMLServerConfig } from '@shared/models'
 import { ConfigService } from '../shared/config.service'
 
 @Component({
@@ -10,20 +11,29 @@ import { ConfigService } from '../shared/config.service'
   templateUrl: './edit-basic-configuration.component.html',
   styleUrls: [ './edit-custom-config.component.scss' ]
 })
-export class EditBasicConfigurationComponent implements OnInit {
+export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   @Input() form: FormGroup
   @Input() formErrors: any
 
-  @Input() serverConfig: ServerConfig
+  @Input() serverConfig: HTMLServerConfig
 
   signupAlertMessage: string
+  defaultLandingPageOptions: SelectOptionsItem[] = []
 
   constructor (
-    private configService: ConfigService
+    private configService: ConfigService,
+    private menuService: MenuService
   ) { }
 
   ngOnInit () {
+    this.buildLandingPageOptions()
     this.checkSignupField()
+  }
+
+  ngOnChanges (changes: SimpleChanges) {
+    if (changes['serverConfig']) {
+      this.buildLandingPageOptions()
+    }
   }
 
   getVideoQuotaOptions () {
@@ -68,6 +78,16 @@ export class EditBasicConfigurationComponent implements OnInit {
 
   isAutoFollowIndexEnabled () {
     return this.form.value['followings']['instance']['autoFollowIndex']['enabled'] === true
+  }
+
+  buildLandingPageOptions () {
+    this.defaultLandingPageOptions = this.menuService.buildCommonLinks(this.serverConfig)
+      .links
+      .map(o => ({
+        id: o.path,
+        label: o.label,
+        description: o.path
+      }))
   }
 
   private checkSignupField () {
