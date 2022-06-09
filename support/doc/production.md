@@ -339,6 +339,15 @@ $ cd /var/www/peertube && \
     sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest
 ```
 
+### Configuration
+
+You can check for configuration changes, and report them in your `config/production.yaml` file:
+
+```bash
+$ cd /var/www/peertube/versions
+$ diff -u "$(ls --sort=t | head -2 | tail -1)/config/production.yaml.example" "$(ls --sort=t | head -1)/config/production.yaml.example"
+```
+
 ### nginx
 
 Check changes in nginx configuration:
