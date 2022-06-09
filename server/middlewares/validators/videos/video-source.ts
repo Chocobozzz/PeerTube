@@ -6,6 +6,7 @@ import express from 'express'
 import { logger } from '../../../helpers/logger'
 import {
   areValidationErrors,
+  checkUserCanManageVideo,
   doesVideoExist,
   isValidVideoIdParam
 } from '../shared'
@@ -22,7 +23,7 @@ const videoSourceGetValidator = [
     const user = res.locals.oauth ? res.locals.oauth.token.User : null
     const video = getVideoWithAttributes(res) as MVideoFullLight
 
-    if (user?.hasRight(UserRight.UPDATE_ANY_VIDEO) === true || video.VideoChannel?.Account.userId === user?.id) {
+    if (user && checkUserCanManageVideo(user, video, UserRight.UPDATE_ANY_VIDEO, res)) {
       res.locals.videoSource = await VideoSourceModel.loadByVideoId(video.id)
 
       if (!res.locals.videoSource) {
