@@ -1621,7 +1621,7 @@
       </trans-unit>
       <trans-unit id="3422890808980876594" datatype="html">
         <source>Debug</source>
-        <target state="needs-translation">o pana lukin e insa ilo</target>
+        <target state="translated">ijo ante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">170</context>
@@ -1829,6 +1829,7 @@
       </trans-unit>
       <trans-unit id="5444889468197427724" datatype="html">
         <source>Redirect users on single external auth when users click on the login button in menu</source>
+        <target>jan li wile kama lon sijelo o tawa e ona tawa ilo ante wan pi awen sijelo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">76</context>
@@ -1836,6 +1837,7 @@
       </trans-unit>
       <trans-unit id="2138469194506455231" datatype="html">
         <source>⚠️ You don't have any external auth plugin enabled.</source>
+        <target>⚠️ ilo ante pi awen sijelo li lon ala ma ni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">79</context>
@@ -1843,6 +1845,7 @@
       </trans-unit>
       <trans-unit id="6608125149782412086" datatype="html">
         <source>⚠️ You have multiple external auth plugins enabled.</source>
+        <target>⚠️ ilo ante mute pi awen sijelo li lon ma ni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">80</context>
@@ -1882,6 +1885,7 @@
       </trans-unit>
       <trans-unit id="6582848618760132901" datatype="html">
         <source>Broadcast message level</source>
+        <target>suli toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">118</context>
@@ -1937,7 +1941,7 @@
       </trans-unit>
       <trans-unit id="4497115134891299867" datatype="html">
         <source>Signup requires email verification</source>
-        <target state="needs-translation">jan li pali e sijelo la ona o lukin e poki ona pi lipu Email</target>
+        <target state="translated">jan li pali e sijelo la ona o lukin e poki ona pi lipu Email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">172</context>
@@ -2369,7 +2373,7 @@
       </trans-unit>
       <trans-unit id="8011855989482474311" datatype="html">
         <source>A &lt;code&gt;.mp4&lt;/code&gt; that keeps the original audio track, with no video</source>
-        <target state="needs-translation">sitelen pi nasin &lt;code&gt;.mp4&lt;/code&gt;, taso kalama en sitelen ala li lon ona</target>
+        <target state="translated">kalama taso kepeken nasin &lt;code&gt;.mp4&lt;/code&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">18</context>
@@ -2441,6 +2445,7 @@
       </trans-unit>
       <trans-unit id="1618463615802675111" datatype="html">
         <source>threads</source>
+        <target>(ilo pali)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">90</context>
@@ -2448,6 +2453,7 @@
       </trans-unit>
       <trans-unit id="593234948551881507" datatype="html">
         <source>thread</source>
+        <target>(ilo pali)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">91</context>
@@ -2455,6 +2461,7 @@
       </trans-unit>
       <trans-unit id="709846045064893539" datatype="html">
         <source>Updating instance configuration from the web interface is disabled by the system administrator.</source>
+        <target>lawa la sina ken ala ante e ijo pi ma ni kepeken ilo linluwi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -2486,6 +2493,7 @@
       </trans-unit>
       <trans-unit id="8643289769990675407" datatype="html">
         <source>Basic</source>
+        <target>ijo suli</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">29</context>
@@ -2513,6 +2521,7 @@
       </trans-unit>
       <trans-unit id="6201638315245239510" datatype="html">
         <source>Advanced</source>
+        <target>ijo lili</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">56</context>
@@ -2520,6 +2529,7 @@
       </trans-unit>
       <trans-unit id="8167543029214637769" datatype="html">
         <source>There are errors in the form: <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let error of grabAllErrors()&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{ error }}"/> <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></source>
+        <target>pakala ni li lon pana sina: <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let error of grabAllErrors()&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{ error }}"/> <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">71,78</context>
@@ -2527,6 +2537,7 @@
       </trans-unit>
       <trans-unit id="283725429207896837" datatype="html">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
+        <target>sina ken ala e ante nasin la ilo li ken ala awen pana e sitelen ni lon pini ona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">81,83</context>
@@ -2534,6 +2545,7 @@
       </trans-unit>
       <trans-unit id="4249062553881932496" datatype="html">
         <source>You cannot change the server configuration because it's managed externally.</source>
+        <target>sina ken ala ante e ijo pi ma ni lon ni. ijo ante li lawa e ona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">85,87</context>
@@ -2541,6 +2553,7 @@
       </trans-unit>
       <trans-unit id="1445676851449000175" datatype="html">
         <source>Update configuration</source>
+        <target>o awen e ante mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">90</context>
@@ -2548,6 +2561,7 @@
       </trans-unit>
       <trans-unit id="2060042292048624940" datatype="html">
         <source>Configuration updated.</source>
+        <target>mi awen e ante sina.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">312</context>
@@ -2659,7 +2673,7 @@
       </trans-unit>
       <trans-unit id="4620493570088713907" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="needs-translation">ni la lawa pi ma ante li sona e ni: sina pana e ijo mute pi ken ike.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> kin la jan li pana e sitelen li toki ala e ken ike la mi toki e ni: ijo ni li ken ike. </target>
+        <target state="translated">ni la lawa pi ma ante li sona e ni: sina pana e ijo mute pi ken ike.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> kin la jan li pana e sitelen li toki ala e ken ike la mi toki e ni: ijo ni li ken ike. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">97,100</context>
@@ -2995,6 +3009,7 @@
       </trans-unit>
       <trans-unit id="5309195634424105927" datatype="html">
         <source>Live transcoding threads</source>
+        <target>ilo pali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">137</context>
@@ -3002,6 +3017,7 @@
       </trans-unit>
       <trans-unit id="4240037618955024499" datatype="html">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
+        <target>ni en sitelen pi tenpo sama ala la ilo <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> taso li ken lon </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">140,142</context>
@@ -3009,6 +3025,7 @@
       </trans-unit>
       <trans-unit id="8489317904250057957" datatype="html">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
+        <target>ni en sitelen pi tenpo sama ala la ilo <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> anu mute li ken lon </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">144,146</context>
@@ -3016,6 +3033,7 @@
       </trans-unit>
       <trans-unit id="1417246074503129277" datatype="html">
         <source>Live transcoding profile</source>
+        <target>nasin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">159</context>
@@ -3023,6 +3041,7 @@
       </trans-unit>
       <trans-unit id="8294583621306221742" datatype="html">
         <source>new live transcoding profiles can be added by PeerTube plugins</source>
+        <target>ilo lili li ken pana e nasin sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">160</context>
@@ -3138,7 +3157,7 @@
       </trans-unit>
       <trans-unit id="5698272164915890247" datatype="html">
         <source>Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</source>
-        <target state="needs-translation">ni la jan li ken pana e sitelen pi nasin ante (sama .avi, sama .mov, sama .mkv, sama ante).</target>
+        <target state="translated">ni la jan li ken pana e sitelen pi nasin ante (sama .avi, sama .mov, sama .mkv, sama ante).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">54</context>
@@ -3234,6 +3253,7 @@
       </trans-unit>
       <trans-unit id="7815122216882553289" datatype="html">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
+        <target>ni en sitelen pi tenpo sama la ilo <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> taso li ken lon </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">146,148</context>
@@ -3241,6 +3261,7 @@
       </trans-unit>
       <trans-unit id="8685484763568827375" datatype="html">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
+        <target>ni en sitelen pi tenpo sama la ilo <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> anu mute li ken lon </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">150,152</context>
@@ -3248,6 +3269,7 @@
       </trans-unit>
       <trans-unit id="7185278676178506632" datatype="html">
         <source>Transcoding jobs concurrency</source>
+        <target>pali pi mute seme o ken lon tenpo sama</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">166</context>
@@ -3255,6 +3277,7 @@
       </trans-unit>
       <trans-unit id="1969393594784140832" datatype="html">
         <source>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</source>
+        <target>ni la mi ken ante e nasin pi sitelen mute lon tenpo sama. ⚠️ sina ante e ni la o pini e ilo PeerTube o open sin e ona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">167</context>
@@ -3262,6 +3285,7 @@
       </trans-unit>
       <trans-unit id="2184317712452071847" datatype="html">
         <source>Transcoding profile</source>
+        <target>nasin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">178</context>
@@ -3269,6 +3293,7 @@
       </trans-unit>
       <trans-unit id="6289966287765074028" datatype="html">
         <source>new transcoding profiles can be added by PeerTube plugins</source>
+        <target>ilo lili li ken pana e nasin sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">179</context>
@@ -3300,6 +3325,7 @@
       </trans-unit>
       <trans-unit id="3313548535394806921" datatype="html">
         <source>⚠️ You need to enable transcoding first to enable video studio</source>
+        <target>⚠️ sina wile ken e ante sitelen la o ken e ante nasin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">213</context>
@@ -3527,6 +3553,7 @@
       </trans-unit>
       <trans-unit id="3301856295120048857" datatype="html">
         <source>State <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;state&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target state="needs-translation">lukin <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;state&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">25</context>
@@ -3542,6 +3569,7 @@
       </trans-unit>
       <trans-unit id="7418735164633152705" datatype="html">
         <source>Score <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;score&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target state="needs-translation">nanpa pona <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;score&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">26</context>
@@ -3549,6 +3577,7 @@
       </trans-unit>
       <trans-unit id="2092225601747599163" datatype="html">
         <source>Created <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target>tenpo open <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;createdAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">27</context>
@@ -3600,6 +3629,7 @@
       </trans-unit>
       <trans-unit id="8898602327647937914" datatype="html">
         <source>Open actor page in a new tab</source>
+        <target>o pana lukin e lipu ona lon poka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">42</context>
@@ -3631,6 +3661,7 @@
       </trans-unit>
       <trans-unit id="6961112234462008319" datatype="html">
         <source>No follower found matching current filters.</source>
+        <target>ma pi wile sina li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">64</context>
@@ -3806,6 +3837,7 @@
       </trans-unit>
       <trans-unit id="3596798855644241001" datatype="html">
         <source>1 host (without "http://"), account handle or channel handle per line</source>
+        <target>o pana e nimi linluwi pi ma ante (o weka e "http://") anu nimi sijelo anu nimi lipu. ijo wan taso o lon linja wan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">11</context>
@@ -3813,6 +3845,7 @@
       </trans-unit>
       <trans-unit id="4917252294930256268" datatype="html">
         <source>It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.</source>
+        <target state="needs-translation">pilin mi la ilo ni li kepeken ala nasin HTTPS. sina wile lukin e ma la o pona e ni o open e nasin TLS.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">27,29</context>
@@ -3828,6 +3861,7 @@
       </trans-unit>
       <trans-unit id="3459358413436264734" datatype="html">
         <source>Your instance subscriptions</source>
+        <target>ma sina li lukin e ma ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -3835,6 +3869,7 @@
       </trans-unit>
       <trans-unit id="4774348799569692380" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> hosts</source>
+        <target>mi pana lukin e ma nanpa <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/>-<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> tan ma <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">11</context>
@@ -4097,6 +4132,7 @@
       </trans-unit>
       <trans-unit id="2143435845912984377" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> blocked videos</source>
+        <target>mi pana lukin e sitelen len nanpa <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/>-<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> tan sitelen <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">11</context>
@@ -4322,6 +4358,7 @@
       </trans-unit>
       <trans-unit id="4523382115569186450" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> comments</source>
+        <target>mi pana lukin e toki nanpa <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/>-<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> tan toki <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context>
           <context context-type="linenumber">15</context>
@@ -4701,6 +4738,7 @@
       </trans-unit>
       <trans-unit id="9036137946566829282" datatype="html">
         <source>Incriminated in reports</source>
+        <target>jan pi mute ni li toki e ni: ona li pali ike</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">42</context>
@@ -4712,6 +4750,7 @@
       </trans-unit>
       <trans-unit id="7441750243186193044" datatype="html">
         <source>Authored reports accepted</source>
+        <target>ona li toki pi mute ni e ni: jan ante li pali ike</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">48</context>
@@ -6170,6 +6209,7 @@
       </trans-unit>
       <trans-unit id="3067132953487445901" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> jobs</source>
+        <target>mi pana lukin e pali nanpa <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/>-<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> tan pali <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">39</context>
@@ -13927,6 +13967,7 @@
       </trans-unit>
       <trans-unit id="9173448803033928792" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> reports</source>
+        <target>mi pana lukin e toki ike nanpa <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/>-<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> tan toki <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">6</context>
@@ -15125,6 +15166,7 @@
       </trans-unit>
       <trans-unit id="9082008222523034483" datatype="html">
         <source>Get help</source>
+        <target>o pona e mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">16</context>
@@ -15132,6 +15174,7 @@
       </trans-unit>
       <trans-unit id="8644431249513874405" datatype="html">
         <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</source>
+        <target>nasin toki li sama nasin &lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt;. ona la sina ken ni:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">75</context>
@@ -15139,6 +15182,7 @@
       </trans-unit>
       <trans-unit id="7565716024468232322" datatype="html">
         <source>Links</source>
+        <target>pana e nimi nasin linluwi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -15146,6 +15190,7 @@
       </trans-unit>
       <trans-unit id="7838476952710404110" datatype="html">
         <source>New lines</source>
+        <target>tu e linja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -15153,6 +15198,7 @@
       </trans-unit>
       <trans-unit id="414887388288176527" datatype="html">
         <source>Images</source>
+        <target>pana e sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -15160,6 +15206,7 @@
       </trans-unit>
       <trans-unit id="6853170548960328665" datatype="html">
         <source>Close search</source>
+        <target>o weka e alasa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/simple-search-input.component.html</context>
           <context context-type="linenumber">19</context>
@@ -15167,6 +15214,7 @@
       </trans-unit>
       <trans-unit id="9075761896562520962" datatype="html">
         <source>You don't have notifications.</source>
+        <target>ijo sin li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">1</context>
@@ -15174,6 +15222,7 @@
       </trans-unit>
       <trans-unit id="3780281836273462589" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> published a new video: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <target>lipu "<x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/>" li pana e sitelen sin "<x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">15,16</context>
@@ -15181,6 +15230,7 @@
       </trans-unit>
       <trans-unit id="3861380964267994829" datatype="html">
         <source>The notification concerns a video now unavailable</source>
+        <target>ni li ijo sin pi sitelen ni: tenpo ni la ona li weka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">23,25</context>
@@ -15339,6 +15389,7 @@
       </trans-unit>
       <trans-unit id="731573110355765429" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> edition has finished </source>
+        <target>mi pini ante e sitelen sina "<x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>" </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">213,215</context>
@@ -15556,6 +15607,7 @@
       </trans-unit>
       <trans-unit id="8564972645418093229" datatype="html">
         <source>No account found matching current filters.</source>
+        <target>sijelo pi wile sina li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context>
           <context context-type="linenumber">53</context>
@@ -15567,6 +15619,7 @@
       </trans-unit>
       <trans-unit id="3819155299647062711" datatype="html">
         <source>No account found.</source>
+        <target>sijelo li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context>
           <context context-type="linenumber">54</context>
@@ -15596,6 +15649,7 @@
       </trans-unit>
       <trans-unit id="3516494528184217808" datatype="html">
         <source>1 host (without "http://") per line</source>
+        <target>nimi linluwi pi ma wan taso o lon linja wan (o weka e "http://")</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/batch-domains-modal.component.html</context>
           <context context-type="linenumber">11</context>
