@@ -111,11 +111,11 @@ peertube._domainkey.mydomain.tld.	IN	TXT	( "v=DKIM1; h=sha256; k=rsa; "
 
 #### Administrator password
 
-See the production guide ["Administrator" section](https://docs.joinpeertube.org/install-any-os?id=administrator)
+See the production guide ["Administrator" section](https://docs.joinpeertube.org/install-any-os?id=technologist-administrator)
 
 #### What now?
 
-See the production guide ["What now" section](https://docs.joinpeertube.org/install-any-os?id=what-now).
+See the production guide ["What now" section](https://docs.joinpeertube.org/install-any-os?id=tada-what-now).
 
 ## Upgrade
 
