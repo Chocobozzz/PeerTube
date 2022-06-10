@@ -272,14 +272,17 @@ my-input-toggle-hidden ::ng-deep input {
 
 // In tables, don't have a hover different background
 table {
-  .action-button-edit,
-  .action-button-delete {
-    &:hover,
-    &:active,
-    &:focus,
-    &[disabled],
-    &.disabled {
-      background-color: $grey-background-color !important;
+  my-edit-button,
+  my-delete-button {
+    .action-button {
+      &:hover,
+      &:active,
+      &:focus,
+      &[disabled],
+      &.disabled {
+        background-color: pvar(--greyBackgroundColor) !important;
+        opacity: 0.8;
+      }
     }
   }
 }
