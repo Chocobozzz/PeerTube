@@ -4898,7 +4898,7 @@
       </trans-unit>
       <trans-unit id="1431416938026210429" datatype="html">
         <source>Password</source>
-        <target>nimi open</target>
+        <target>nimi wawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">117</context>
@@ -4934,7 +4934,7 @@
       </trans-unit>
       <trans-unit id="8371296837649897723" datatype="html">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target>sina pana ala e nimi open la mi toki tawa jan pi sijelo ni kepeken nasin Email.</target>
+        <target>sina pana ala e nimi wawa la mi toki e wile ona tawa jan pi sijelo ni kepeken nasin Email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">120,122</context>
@@ -4946,6 +4946,7 @@
       </trans-unit>
       <trans-unit id="4145496584631696119" datatype="html">
         <source>Role</source>
+        <target>wawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">136</context>
@@ -5037,6 +5038,7 @@
       </trans-unit>
       <trans-unit id="2070907480317730379" datatype="html">
         <source>Doesn't need review before a video goes public</source>
+        <target>ona li ken pana e sitelen tawa ale kepeken ala lukin pi jan lawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">201</context>
@@ -5064,7 +5066,7 @@
       </trans-unit>
       <trans-unit id="6667250632809964191" datatype="html">
         <source>Send a link to reset the password by email to the user</source>
-        <target state="needs-translation">o pana e ken ante pi nimi open tawa jan kepeken nasin Email</target>
+        <target state="translated">o pana e ken ante pi nimi wawa tawa jan ni kepeken nasin Email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">226</context>
@@ -5076,7 +5078,7 @@
       </trans-unit>
       <trans-unit id="1412406834353485520" datatype="html">
         <source>Ask for new password</source>
-        <target state="needs-translation">o wile e nimi open sin</target>
+        <target state="translated">o wile e nimi wawa sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">227</context>
@@ -5088,7 +5090,7 @@
       </trans-unit>
       <trans-unit id="3791201588898094481" datatype="html">
         <source>Manually set the user password</source>
-        <target>o ante e nimi open pi sijelo ni</target>
+        <target>o ante e nimi wawa pi sijelo ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">231</context>
@@ -5112,7 +5114,7 @@
       </trans-unit>
       <trans-unit id="5974506725502681113" datatype="html">
         <source>Password changed for user <x id="PH" equiv-text="this.username"/>.</source>
-        <target>mi ante e nimi open pi sijelo "<x id="PH" equiv-text="this.username"/>".</target>
+        <target>mi ante e nimi wawa pi sijelo "<x id="PH" equiv-text="this.username"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-password.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -5120,7 +5122,7 @@
       </trans-unit>
       <trans-unit id="149953821752893163" datatype="html">
         <source>Update user password</source>
-        <target>o ante e nimi open pi sijelo ni</target>
+        <target>o ante e nimi wawa pi sijelo ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-password.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -5144,7 +5146,7 @@
       </trans-unit>
       <trans-unit id="8819563010322372715" datatype="html">
         <source>An email asking for password reset has been sent to <x id="PH" equiv-text="this.user.username"/>.</source>
-        <target state="needs-translation">nasin Email la mi toki e ni tawa jan pi sijelo "<x id="PH" equiv-text="this.user.username"/>": "o ante e nimi open sina".</target>
+        <target state="translated">nasin Email la mi toki e ni tawa jan pi sijelo "<x id="PH" equiv-text="this.user.username"/>": "o ante e nimi wawa sina".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -7380,7 +7382,7 @@
       </trans-unit>
       <trans-unit id="7789395291034300662" datatype="html">
         <source>PASSWORD</source>
-        <target>NIMI OPEN</target>
+        <target>NIMI WAWA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">57</context>
@@ -8384,7 +8386,7 @@
       </trans-unit>
       <trans-unit id="1636934520301910285" datatype="html">
         <source>Reset password</source>
-        <target state="needs-translation">o sin e nimi open</target>
+        <target state="translated">o weka e nimi wawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/reset-password-routing.module.ts</context>
           <context context-type="linenumber">11</context>
@@ -8392,7 +8394,7 @@
       </trans-unit>
       <trans-unit id="107448797428840891" datatype="html">
         <source>Reset my password</source>
-        <target>o sin e nimi open mi</target>
+        <target>o weka e nimi wawa mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -8400,7 +8402,7 @@
       </trans-unit>
       <trans-unit id="3782563238994348625" datatype="html">
         <source>Confirm password</source>
-        <target>o pana sin e nimi open</target>
+        <target>o pana sin e nimi wawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context>
           <context context-type="linenumber">19</context>
@@ -8408,7 +8410,7 @@
       </trans-unit>
       <trans-unit id="2501430660070156325" datatype="html">
         <source>Confirmed password</source>
-        <target>nimi open li pona</target>
+        <target>nimi wawa li pona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context>
           <context context-type="linenumber">21</context>
@@ -8416,7 +8418,7 @@
       </trans-unit>
       <trans-unit id="8547184468496530386" datatype="html">
         <source>Reset my password</source>
-        <target>o sin e nimi open mi</target>
+        <target>o sin e nimi wawa mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context>
           <context context-type="linenumber">29</context>
@@ -8436,7 +8438,7 @@
       </trans-unit>
       <trans-unit id="8781423666414310853" datatype="html">
         <source>Your password has been successfully reset!</source>
-        <target>mi sin e nimi open sina!</target>
+        <target>mi weka e nimi wawa sina!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/reset-password.component.ts</context>
           <context context-type="linenumber">47</context>
