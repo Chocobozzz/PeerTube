@@ -308,6 +308,25 @@ table {
   }
 }
 
+my-global-icon[iconName=external-link] {
+  margin: 0 3px;
+  width: 13px;
+  vertical-align: text-bottom;
+  color: pvar(--inputPlaceholderColor);
+}
+
+.chevron-down {
+  @include chevron-down(0.55rem, 0.20em);
+
+  margin: 0 5px;
+}
+
+.chevron-up {
+  @include chevron-up(0.55rem, 0.20em);
+
+  margin: 0 5px;
+}
+
 /* offsetTop for scrollToAnchor */
 
 .anchor {

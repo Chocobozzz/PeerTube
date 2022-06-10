@@ -41,7 +41,7 @@
       <td>
         <a [href]="'https://' + serverBlock.blockedServer.host" i18n-title title="Open instance in a new tab" target="_blank" rel="noopener noreferrer">
           {{ serverBlock.blockedServer.host }}
-          <span class="glyphicon glyphicon-new-window"></span>
+          <my-global-icon iconName="external-link"></my-global-icon>
         </a>
       </td>
       <td>{{ serverBlock.createdAt | date: 'short' }}</td>

@@ -63,6 +63,7 @@ const icons = {
   'exit-fullscreen': require('!!raw-loader?!../../../assets/images/feather/minimize.svg').default,
   film: require('!!raw-loader?!../../../assets/images/feather/film.svg').default,
   edit: require('!!raw-loader?!../../../assets/images/feather/edit-2.svg').default,
+  'external-link': require('!!raw-loader?!../../../assets/images/feather/external-link.svg').default,
   sensitive: require('!!raw-loader?!../../../assets/images/feather/eye.svg').default,
   unsensitive: require('!!raw-loader?!../../../assets/images/feather/eye-off.svg').default,
   refresh: require('!!raw-loader?!../../../assets/images/feather/refresh-cw.svg').default,

@@ -5,7 +5,7 @@
 
   <ng-container *ngIf="isMenuDisplayed()">
     <button *ngIf="isInMobileView" class="btn btn-outline-secondary btn-sm list-overflow-menu" (click)="toggleModal()">
-      <span class="glyphicon glyphicon-chevron-down"></span>
+      <span class="chevron-down"></span>
     </button>
 
     <div
@@ -16,7 +16,7 @@
       <button class="btn btn-outline-secondary btn-sm" [ngClass]="{ 'route-active': active }"
         ngbDropdownAnchor (click)="dropdownAnchorClicked(dropdown)" role="button"
       >
-        <span class="glyphicon glyphicon-chevron-down"></span>
+        <span class="chevron-down"></span>
       </button>
 
       <div ngbDropdownMenu>

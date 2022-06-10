@@ -11,9 +11,11 @@
   >{{ video.originInstanceHost }}</a>
 
   <a
-    i18n-title title="Open the video on the origin instance" class="glyphicon glyphicon-new-window"
+    i18n-title title="Open the video on the origin instance"
     target="_blank" rel="noopener noreferrer" [href]="video.url"
-  ></a>
+  >
+    <my-global-icon iconName="external-link"></my-global-icon>
+  </a>
 </div>
 
 <div *ngIf="!!video.originallyPublishedAt" class="attribute attribute-originally-published-at">

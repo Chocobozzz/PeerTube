@@ -570,6 +570,7 @@
   transform: rotate(-45deg);
   height: $size;
   width: $size;
+  position: relative;
 }
 
 @mixin chevron-right ($size, $border-width) {
@@ -577,6 +578,20 @@
 
   left: 0;
   transform: rotate(45deg);
+}
+
+@mixin chevron-down ($size, $border-width) {
+  @include chevron($size, $border-width);
+
+  bottom: 0.15em;
+  transform: rotate(135deg);
+}
+
+@mixin chevron-up ($size, $border-width) {
+  @include chevron($size, $border-width);
+
+  top: 0.15em;
+  transform: rotate(-45deg);
 }
 
 @mixin chevron-left ($size, $border-width) {

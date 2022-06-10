@@ -106,6 +106,7 @@ my-notification {
 }
 
 .logged-in-more {
+
   @mixin display-hints($is-mobile: false) {
     background-color: rgba(255, 255, 255, 0.15);
 
@@ -114,18 +115,16 @@ my-notification {
         display: inherit !important;
       }
 
-      .dropdown-toggle {
+      > .dropdown-toggle {
         max-width: 88% !important;
       }
     }
   }
 
-  $main-radius: 25px;
-
   @include margin-left(13px);
 
   flex: 1;
-  border-radius: $main-radius;
+  border-radius: 25px;
   transition: all .1s ease-in-out;
   cursor: pointer;
   line-height: 1;
@@ -157,7 +156,6 @@ my-notification {
 
   .dropdown-toggle-indicator {
     position: relative;
-    width: 0;
     display: none;
 
     span {
@@ -165,21 +163,17 @@ my-notification {
       right: -35px;
       top: -8px;
       color: #808080;
-      width: $main-radius;
     }
   }
 
-  .dropdown-toggle {
-    &::after {
-      border: 0;
-    }
+  .dropdown-toggle::after {
+    border: 0;
   }
 
-  .dropdown-toggle:first-child {
+  > .dropdown-toggle:first-child {
     display: flex;
     align-items: center;
     padding: 5px 7px;
-    border-radius: $main-radius;
   }
 }
 
@@ -395,13 +389,6 @@ my-actor-avatar {
 
   .dropdown-menu {
     width: calc(100vw - 30px);
-  }
-
-  .dropdown-item:hover,
-  .dropdown-item:active {
-    &.settings-sensitive my-global-icon ::ng-deep svg {
-      margin-top: 0 !important;
-    }
   }
 }
 
