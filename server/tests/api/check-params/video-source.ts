@@ -11,7 +11,6 @@ describe('Test video sources API validator', function () {
 
     server = await createSingleServer(1)
 
-    this.timeout(10000)
     await setAccessTokensToServers([ server ])
 
     const attributes = {
