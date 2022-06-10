@@ -91,7 +91,7 @@
   width: $width;
   color: pvar(--inputForegroundColor);
   background-color: pvar(--inputBackgroundColor);
-  border: 1px solid #C6C6C6;
+  border: 1px solid $input-border-color;
   border-radius: 3px;
   font-size: 15px;
 
@@ -150,7 +150,7 @@
   &.disabled {
     cursor: default;
     color: #fff;
-    background-color: #C6C6C6;
+    background-color: $input-border-color;
   }
 
   my-global-icon {
@@ -180,7 +180,7 @@
   &.disabled {
     cursor: default;
     color: pvar(--mainColor);
-    background-color: #C6C6C6;
+    background-color: $input-border-color;
   }
 
   my-global-icon {
@@ -396,10 +396,9 @@
   select {
     padding: 0 35px 0 12px;
     position: relative;
-    border: 1px solid #C6C6C6;
+    border: 1px solid $input-border-color;
     background: transparent none;
     appearance: none;
-    cursor: pointer;
     height: $button-height;
     text-overflow: ellipsis;
     color: pvar(--mainForegroundColor);
@@ -460,7 +459,7 @@
     top: 0;
     width: 18px;
     height: 18px;
-    border: 1px solid #C6C6C6;
+    border: 1px solid $input-border-color;
     border-radius: 100%;
     background: #fff;
   }
@@ -507,7 +506,7 @@
     width: 18px;
     min-width: 18px;
     height: 18px;
-    border: $border-width solid #C6C6C6;
+    border: $border-width solid $input-border-color;
     border-radius: 3px;
     vertical-align: middle;
     cursor: pointer;
@@ -670,7 +669,7 @@
   margin-bottom: 20px;
 
   @if $separator {
-    border-bottom: 1px solid #C6C6C6;
+    border-bottom: 1px solid $input-border-color;
   }
 
   @media screen and (max-width: $small-view) {

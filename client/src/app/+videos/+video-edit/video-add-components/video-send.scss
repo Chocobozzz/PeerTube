@@ -17,7 +17,7 @@ $width-size: 250px;
   align-items: center;
 
   .upload-icon {
-    @include apply-svg-color(#C6C6C6);
+    @include apply-svg-color($input-border-color);
 
     width: 90px;
     margin-bottom: 25px;
