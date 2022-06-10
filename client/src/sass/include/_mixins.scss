@@ -415,14 +415,17 @@
 
     option {
       color: #000;
+
+      &[value=undefined] {
+        font-weight: $font-semibold;
+      }
     }
   }
 
   &.peertube-select-button {
     @include grey-button;
 
-    select,
-    option {
+    select {
       font-weight: $font-semibold;
       color: pvar(--greyForegroundColor);
       border: 0;
