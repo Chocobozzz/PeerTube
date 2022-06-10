@@ -26,16 +26,12 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 @import '~bootstrap/scss/modal';
 @import '~bootstrap/scss/tooltip';
 @import '~bootstrap/scss/popover';
+@import '~bootstrap/scss/spinners';
 
 @import '~bootstrap/scss/helpers';
 @import '~bootstrap/scss/utilities/api';
 
 @import '~@neos21/bootstrap3-glyphicons/assets/stylesheets/bootstrap3-glyphicons';
-
-// Thanks https://gist.github.com/alexandrevicenzi/680147013e902a4eaa5d
-.glyphicon-refresh-animate {
-  animation: spin 0.7s infinite linear;
-}
 
 .flex-auto {
   flex: auto;
@@ -43,16 +39,6 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 .c-hand {
   cursor: pointer !important;
-}
-
-@keyframes spin {
-  from {
-    transform: scale(1) rotate(0deg);
-  }
-
-  to {
-    transform: scale(1) rotate(360deg);
-  }
 }
 
 // ---------------------------------------------------------------------------

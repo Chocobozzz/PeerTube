@@ -80,7 +80,7 @@
 
             <ng-template i18n #noAuthorComments>View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}</ng-template>
 
-            <my-small-loader class="comment-thread-loading ms-1" [loading]="threadLoading[comment.id]"></my-small-loader>
+            <my-loader size="sm" class="comment-thread-loading ms-1" [loading]="threadLoading[comment.id]"></my-loader>
           </div>
         </my-video-comment>
 

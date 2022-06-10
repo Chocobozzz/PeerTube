@@ -7,7 +7,7 @@
 </a>
 
 <ng-template #content>
-  <my-small-loader [loading]="loading"></my-small-loader>
+  <my-loader size="sm" [loading]="loading"></my-loader>
   <my-global-icon *ngIf="icon && !loading" [iconName]="icon"></my-global-icon>
 
   <span *ngIf="label" class="button-label">{{ label }}</span>

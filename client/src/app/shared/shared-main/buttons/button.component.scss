@@ -20,12 +20,6 @@
   display: inline-block;
 }
 
-my-small-loader ::ng-deep .root {
-  display: inline-block;
-  margin: 0 3px 0 0;
-  width: 20px;
-}
-
 a[class$=-button],
 span[class$=-button] {
   > span {
