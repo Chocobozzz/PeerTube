@@ -20,6 +20,11 @@ input[type=text] {
   @include peertube-select-container(340px);
 }
 
+my-select-channel {
+  display: block;
+  max-width: 340px;
+}
+
 input[type=submit] {
   @include peertube-button;
   @include orange-button;

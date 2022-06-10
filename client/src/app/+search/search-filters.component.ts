@@ -138,11 +138,11 @@ export class SearchFiltersComponent implements OnInit {
   private loadOriginallyPublishedAtYears () {
     this.originallyPublishedStartYear = this.advancedSearch.originallyPublishedStartDate
       ? new Date(this.advancedSearch.originallyPublishedStartDate).getFullYear().toString()
-      : null
+      : undefined
 
     this.originallyPublishedEndYear = this.advancedSearch.originallyPublishedEndDate
       ? new Date(this.advancedSearch.originallyPublishedEndDate).getFullYear().toString()
-      : null
+      : undefined
   }
 
   private loadFromDurationRange () {
@@ -189,7 +189,7 @@ export class SearchFiltersComponent implements OnInit {
 
       this.advancedSearch.originallyPublishedStartDate = start.toISOString()
     } else {
-      this.advancedSearch.originallyPublishedStartDate = null
+      this.advancedSearch.originallyPublishedStartDate = undefined
     }
 
     if (this.originallyPublishedEndYear) {
@@ -199,7 +199,7 @@ export class SearchFiltersComponent implements OnInit {
 
       this.advancedSearch.originallyPublishedEndDate = end.toISOString()
     } else {
-      this.advancedSearch.originallyPublishedEndDate = null
+      this.advancedSearch.originallyPublishedEndDate = undefined
     }
   }
 

@@ -34,6 +34,12 @@ span[class$=-button] {
   @include button-with-icon(21px);
 
   width: 100%; // useful for ellipsis, allow to define a max-width on host component
+
+  &.icon-only {
+    my-global-icon {
+      margin: 0;
+    }
+  }
 }
 
 .orange-button {

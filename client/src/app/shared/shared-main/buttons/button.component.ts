@@ -20,6 +20,7 @@ export class ButtonComponent {
     return {
       [this.className]: true,
       disabled: this.disabled,
+      'icon-only': !this.label,
       'responsive-label': this.responsiveLabel
     }
   }

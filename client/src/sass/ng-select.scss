@@ -4,7 +4,7 @@
 $ng-select-highlight: #f2690d;
 // $ng-select-primary-text: #333 !default;
 // $ng-select-disabled-text: #f9f9f9 !default;
-// $ng-select-border: #ccc !default;
+$ng-select-border: $input-border-color;
 // $ng-select-border-radius: 4px !default;
 // $ng-select-bg: #ffffff !default;
 // $ng-select-selected: lighten($ng-select-highlight, 46) !default;
@@ -44,6 +44,14 @@ $ng-select-value-font-size: 15px;
 
   .ng-arrow-wrapper {
     @include padding-right(12px);
+  }
+
+  .ng-arrow {
+    border-color: #000 transparent transparent !important;
+  }
+
+  &.ng-select-opened .ng-arrow {
+    border-color: transparent transparent #000 !important;
   }
 
   &.ng-select-single .ng-value-container .ng-value {

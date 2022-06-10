@@ -5,9 +5,7 @@
     </div>
 
     <div *ngIf="!hasBanner()" class="actor-img-edit-button" [ngbTooltip]="bannerFormat" placement="right" container="body">
-      <my-global-icon iconName="upload"></my-global-icon>
-      <label for="bannerfile" i18n>Upload a new banner</label>
-      <input #bannerfileInput type="file" name="bannerfile" id="bannerfile" [accept]="bannerExtensions" (change)="onBannerChange(bannerfileInput)"/>
+      <ng-container *ngTemplateOutlet="uploadNewBanner"></ng-container>
     </div>
 
     <div
@@ -22,13 +20,17 @@
 
 <ng-template #bannerEditContent>
   <div class="dropdown-item c-hand" [ngbTooltip]="bannerFormat" placement="right" container="body">
-    <my-global-icon iconName="upload"></my-global-icon>
-    <span for="bannerfile" i18n>Upload a new banner</span>
-    <input #bannerfileInput type="file" name="bannerfile" id="bannerfile" [accept]="bannerExtensions" (change)="onBannerChange(bannerfileInput)"/>
+    <ng-container *ngTemplateOutlet="uploadNewBanner"></ng-container>
   </div>
 
   <div class="dropdown-item c-hand" (click)="deleteBanner()" (key.enter)="deleteBanner()">
     <my-global-icon iconName="delete"></my-global-icon>
     <span i18n>Remove banner</span>
   </div>
+</ng-template>
+
+<ng-template #uploadNewBanner>
+  <my-global-icon iconName="upload"></my-global-icon>
+  <span for="bannerfile" i18n>Upload a new banner</span>
+  <input #bannerfileInput type="file" name="bannerfile" id="bannerfile" [accept]="bannerExtensions" (change)="onBannerChange(bannerfileInput)"/>
 </ng-template>
