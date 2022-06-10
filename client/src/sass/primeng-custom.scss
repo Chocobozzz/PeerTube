@@ -927,19 +927,19 @@ p-toast {
     box-shadow: 0 2px 12px 0 rgba(0, 0 , 0, .1);
     overflow: hidden;
 
-    &.p-toast-message-success .glyphicon {
+    &.p-toast-message-success my-global-icon {
       color: #8BC34A !important;
     }
 
-    &.p-toast-message-error .glyphicon {
+    &.p-toast-message-error my-global-icon {
       color: #F44336 !important;
     }
 
-    &.p-toast-message-warn .glyphicon {
+    &.p-toast-message-warn my-global-icon {
       color: #F1680D !important;
     }
 
-    &.p-toast-message-info .glyphicon {
+    &.p-toast-message-info my-global-icon {
       color: #03A9F4 !important;
     }
 
