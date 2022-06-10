@@ -193,10 +193,6 @@ export class VideoDownloadComponent {
     return this.video.privacy.id === VideoPrivacy.PRIVATE || this.video.privacy.id === VideoPrivacy.INTERNAL
   }
 
-  activateCopiedMessage () {
-    this.notifier.success($localize`Copied`)
-  }
-
   switchToType (type: DownloadType) {
     this.type = type
   }

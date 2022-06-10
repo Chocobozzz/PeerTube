@@ -21,6 +21,7 @@ const icons = {
   local: require('!!raw-loader?!../../../assets/images/misc/local.svg').default,
 
   // feather icons
+  copy: require('!!raw-loader?!../../../assets/images/feather/copy.svg').default,
   flag: require('!!raw-loader?!../../../assets/images/feather/flag.svg').default,
   playlists: require('!!raw-loader?!../../../assets/images/feather/list.svg').default,
   syndication: require('!!raw-loader?!../../../assets/images/feather/syndication.svg').default,

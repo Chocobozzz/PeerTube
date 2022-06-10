@@ -28,16 +28,10 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <div class="input-group">
-                <input #urlInput (click)="urlInput.select()" type="text" class="form-control readonly" readonly [value]="getLink()" />
-
-                <button
-                  *ngIf="!isConfidentialVideo()" type="button" class="btn btn-outline-secondary"
-                  [cdkCopyToClipboard]="urlInput.value" (click)="activateCopiedMessage()"
-                >
-                  <span class="glyphicon glyphicon-duplicate"></span>
-                </button>
-              </div>
+              <my-input-toggle-hidden
+                *ngIf="!isConfidentialVideo()"
+                [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getLink()"
+              ></my-input-toggle-hidden>
             </div>
           </ng-template>
         </ng-container>
@@ -54,16 +48,10 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <div class="input-group">
-                <input #urlInput (click)="urlInput.select()" type="text" class="form-control readonly" readonly [value]="getLink()" />
-
-                <button
-                  *ngIf="!isConfidentialVideo()" type="button" class="btn btn-outline-secondary"
-                  [cdkCopyToClipboard]="urlInput.value" (click)="activateCopiedMessage()"
-                >
-                  <span class="glyphicon glyphicon-duplicate"></span>
-                </button>
-              </div>
+              <my-input-toggle-hidden
+                *ngIf="!isConfidentialVideo()"
+                [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getLink()"
+              ></my-input-toggle-hidden>
             </div>
           </ng-template>
         </ng-container>

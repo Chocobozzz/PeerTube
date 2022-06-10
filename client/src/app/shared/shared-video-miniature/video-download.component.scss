@@ -5,13 +5,6 @@
   margin-top: 30px;
 }
 
-.input-group > input {
-  @include peertube-input-text(auto);
-
-  font-size: 14px;
-  padding: 0 5px;
-}
-
 .advanced-filters-button {
   display: flex;
   justify-content: center;
