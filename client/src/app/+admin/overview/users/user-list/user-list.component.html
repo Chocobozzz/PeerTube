@@ -139,7 +139,7 @@
 
       <td *ngIf="isSelected('quotaDaily')">
         <div class="progress" i18n-title title="Total daily video quota">
-          <div class="progress-bar secondary" role="progressbar" [style]="{ width: getUserVideoQuotaDailyPercentage(user) + '%' }"
+          <div class="progress-bar" role="progressbar" [style]="{ width: getUserVideoQuotaDailyPercentage(user) + '%' }"
                [attr.aria-valuenow]="user.rawVideoQuotaUsedDaily" aria-valuemin="0" [attr.aria-valuemax]="user.rawVideoQuotaDaily">
           </div>
           <span>{{ user.videoQuotaUsedDaily }}</span>

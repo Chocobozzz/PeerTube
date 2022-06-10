@@ -264,18 +264,6 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   }
 }
 
-.btn-outline-tertiary {
-  color: pvar(--secondaryColor);
-  border-color: pvar(--secondaryColor);
-
-  &:focus-within,
-  &:focus,
-  &:hover {
-    color: pvar(--mainBackgroundColor);
-    background-color: pvar(--secondaryColor);
-  }
-}
-
 .btn-group.select-button {
   font-weight: $font-semibold;
 

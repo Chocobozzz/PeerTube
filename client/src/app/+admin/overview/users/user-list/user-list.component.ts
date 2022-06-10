@@ -190,6 +190,7 @@ export class UserListComponent extends RestTable implements OnInit {
   }
 
   getUserVideoQuotaDailyPercentage (user: UserForList) {
+    console.log(user.rawVideoQuotaUsedDaily * 100 / user.rawVideoQuotaDaily)
     return user.rawVideoQuotaUsedDaily * 100 / user.rawVideoQuotaDaily
   }
 

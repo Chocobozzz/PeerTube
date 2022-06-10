@@ -23,8 +23,6 @@ $main-color-lightest: lighten($main-color, 40%);
 $main-hover-color: lighten($main-color, 5%);
 $main-background-hover-color: #e9ecef;
 
-$secondary-color: hsl(187, 77%, 34%);
-
 $support-button: inherit;
 $support-button-heart: #e83e8c;
 
@@ -117,8 +115,6 @@ $variables: (
 
   --mainBackgroundColor: var(--mainBackgroundColor),
   --mainForegroundColor: var(--mainForegroundColor),
-
-  --secondaryColor: var(--secondaryColor),
 
   --greyForegroundColor: var(--greyForegroundColor),
   --greyBackgroundColor: var(--greyBackgroundColor),
