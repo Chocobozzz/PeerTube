@@ -2,8 +2,13 @@ import { Component, Input, OnInit } from '@angular/core'
 
 @Component({
   selector: 'my-edit-button',
-  styleUrls: [ './button.component.scss' ],
-  templateUrl: './edit-button.component.html'
+  template: `
+    <my-button
+      icon="edit" className="grey-button-link"
+      [label]="label" [title]="title" [responsiveLabel]="responsiveLabel"
+      [routerLink]="routerLink"
+    ></my-button>
+  `
 })
 export class EditButtonComponent implements OnInit {
   @Input() label: string

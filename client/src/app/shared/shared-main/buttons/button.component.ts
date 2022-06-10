@@ -11,6 +11,7 @@ export class ButtonComponent {
   @Input() label = ''
   @Input() className = 'grey-button'
   @Input() icon: GlobalIconName = undefined
+  @Input() routerLink: string[] | string
   @Input() title: string = undefined
   @Input() loading = false
   @Input() disabled = false
@@ -21,6 +22,7 @@ export class ButtonComponent {
       [this.className]: true,
       disabled: this.disabled,
       'icon-only': !this.label,
+      'has-icon': !!this.icon,
       'responsive-label': this.responsiveLabel
     }
   }

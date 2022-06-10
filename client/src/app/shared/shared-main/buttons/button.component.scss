@@ -9,6 +9,10 @@
   .button-label {
     display: none;
   }
+
+  my-global-icon {
+    margin: 0 !important;
+  }
 }
 
 :host {
@@ -30,35 +34,34 @@ span[class$=-button] {
 }
 
 .action-button {
-  @include peertube-button-link;
-  @include button-with-icon(21px);
-
   width: 100%; // useful for ellipsis, allow to define a max-width on host component
 
-  &.icon-only {
-    my-global-icon {
-      margin: 0;
-    }
+  &.has-icon {
+    @include button-with-icon(21px);
+  }
+
+  &.icon-only my-global-icon {
+    margin: 0 !important;
   }
 }
 
-.orange-button {
-  @include peertube-button;
-  @include orange-button;
-}
-
-.orange-button-link {
-  @include peertube-button-link;
-  @include orange-button;
-}
-
+.orange-button,
 .grey-button {
   @include peertube-button;
-  @include grey-button;
 }
 
+.orange-button-link,
 .grey-button-link {
   @include peertube-button-link;
+}
+
+.orange-button,
+.orange-button-link {
+  @include orange-button;
+}
+
+.grey-button,
+.grey-button-link {
   @include grey-button;
 }
 
