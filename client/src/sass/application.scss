@@ -151,7 +151,7 @@ code {
 }
 
 .input-error,
-my-input-toggle-hidden ::ng-deep input {
+my-input-text ::ng-deep input {
   border-color: $red !important;
 }
 

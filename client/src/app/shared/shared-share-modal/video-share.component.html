@@ -25,7 +25,7 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-toggle-hidden [value]="getPlaylistUrl()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+              <my-input-text [value]="getPlaylistUrl()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
             </div>
           </ng-template>
         </ng-container>
@@ -45,10 +45,10 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-toggle-hidden
+              <my-input-text
                 [value]="customizations.onlyEmbedUrl ? getPlaylistEmbedUrl() : getPlaylistIframeCode()" (change)="updateEmbedCode()"
                 [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
-              ></my-input-toggle-hidden>
+              ></my-input-text>
 
               <div i18n *ngIf="notSecure()" class="alert alert-warning">
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
@@ -102,7 +102,7 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-toggle-hidden [value]="getVideoUrl()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+              <my-input-text [value]="getVideoUrl()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
             </div>
           </ng-template>
         </ng-container>
@@ -122,10 +122,10 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-toggle-hidden
+              <my-input-text
                 [value]="customizations.onlyEmbedUrl ? getVideoEmbedUrl() : getVideoIframeCode()" (ngModelChange)="updateEmbedCode()"
                 [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
-              ></my-input-toggle-hidden>
+              ></my-input-text>
 
               <div i18n *ngIf="notSecure()" class="alert alert-warning">
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).

@@ -23,11 +23,11 @@
   </div>
 
   <div class="form-group">
-    <my-input-toggle-hidden formControlName="password"
+    <my-input-text formControlName="password"
                             id="password"
                             i18n-placeholder placeholder="Current password"
                             [ngClass]="{ 'input-error': formErrors['password'] }"
-                            autocomplete="current-password"></my-input-toggle-hidden>
+                            autocomplete="current-password"></my-input-text>
     <div *ngIf="formErrors['password']" class="form-error">
       {{ formErrors['password'] }}
     </div>

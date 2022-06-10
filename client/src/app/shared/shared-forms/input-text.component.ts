@@ -3,18 +3,18 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Notifier } from '@app/core'
 
 @Component({
-  selector: 'my-input-toggle-hidden',
-  templateUrl: './input-toggle-hidden.component.html',
-  styleUrls: [ './input-toggle-hidden.component.scss' ],
+  selector: 'my-input-text',
+  templateUrl: './input-text.component.html',
+  styleUrls: [ './input-text.component.scss' ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputToggleHiddenComponent),
+      useExisting: forwardRef(() => InputTextComponent),
       multi: true
     }
   ]
 })
-export class InputToggleHiddenComponent implements ControlValueAccessor {
+export class InputTextComponent implements ControlValueAccessor {
   @Input() inputId = Math.random().toString(11).slice(2, 8) // id cannot be left empty or undefined
   @Input() value = ''
   @Input() autocomplete = 'off'

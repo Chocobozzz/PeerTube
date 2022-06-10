@@ -123,9 +123,9 @@
             </ng-template>
           </my-help>
 
-          <my-input-toggle-hidden
+          <my-input-text
             formControlName="password" inputId="password" [ngClass]="{ 'input-error': formErrors['password'] }" autocomplete="new-password"
-          ></my-input-toggle-hidden>
+          ></my-input-text>
 
           <div *ngIf="formErrors.password" class="form-error">
             {{ formErrors.password }}

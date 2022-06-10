@@ -22,7 +22,7 @@ input:not([type=submit]) {
   display: block;
 }
 
-my-input-toggle-hidden {
+my-input-text {
   @include responsive-width($form-base-input-width);
 
   display: block;

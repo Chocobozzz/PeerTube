@@ -18,7 +18,7 @@
     </select>
   </div>
 
-  <my-input-toggle-hidden *ngIf="setting.type === 'input-password'" [formControlName]="setting.name" [inputId]="setting.name"></my-input-toggle-hidden>
+  <my-input-text *ngIf="setting.type === 'input-password'" [formControlName]="setting.name" [inputId]="setting.name"></my-input-text>
 
   <textarea *ngIf="setting.type === 'input-textarea'" type="text" [id]="setting.name" [formControlName]="setting.name"></textarea>
 
