@@ -40,9 +40,6 @@ export class AdvancedSearch {
   searchTarget: SearchTargetType
   resultType: AdvancedSearchResultType
 
-  // Filters we don't want to count, because they are mandatory
-  private silentFilters = new Set([ 'sort', 'searchTarget' ])
-
   constructor (options?: {
     startDate?: string
     endDate?: string
@@ -101,14 +98,7 @@ export class AdvancedSearch {
   }
 
   containsValues () {
-    const obj = this.toUrlObject()
-    for (const k of Object.keys(obj)) {
-      if (this.silentFilters.has(k)) continue
-
-      if (this.isValidValue(obj[k])) return true
-    }
-
-    return false
+    return this.size() !== 0
   }
 
   reset () {
@@ -193,12 +183,19 @@ export class AdvancedSearch {
   size () {
     let acc = 0
 
-    const obj = this.toUrlObject()
-    for (const k of Object.keys(obj)) {
-      if (this.silentFilters.has(k)) continue
+    if (this.isValidValue(this.startDate) || this.isValidValue(this.endDate)) acc++
+    if (this.isValidValue(this.originallyPublishedStartDate) || this.isValidValue(this.originallyPublishedEndDate)) acc++
 
-      if (this.isValidValue(obj[k])) acc++
-    }
+    if (this.isValidValue(this.nsfw)) acc++
+    if (this.isValidValue(this.categoryOneOf)) acc++
+    if (this.isValidValue(this.licenceOneOf)) acc++
+    if (this.isValidValue(this.languageOneOf)) acc++
+    if (this.isValidValue(this.tagsOneOf)) acc++
+    if (this.isValidValue(this.tagsAllOf)) acc++
+    if (this.isValidValue(this.durationMin) || this.isValidValue(this.durationMax)) acc++
+    if (this.isValidValue(this.isLive)) acc++
+    if (this.isValidValue(this.host)) acc++
+    if (this.isValidValue(this.resultType)) acc++
 
     return acc
   }
