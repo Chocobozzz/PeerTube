@@ -18,6 +18,7 @@ import { LiveQuotaStore } from './live-quota-store'
 import { LiveSegmentShaStore } from './live-segment-sha-store'
 import { cleanupLive } from './live-utils'
 import { MuxingSession } from './shared'
+import { clearCacheRoute } from '@server/middlewares/cache'
 
 const NodeRtmpSession = require('node-media-server/node_rtmp_session')
 const context = require('node-media-server/node_core_ctx')
@@ -242,7 +243,9 @@ class LiveManager {
       allResolutions
     })
 
-    muxingSession.on('master-playlist-created', () => this.publishAndFederateLive(videoLive, localLTags))
+    muxingSession.on('master-playlist-created', () => {
+      return this.publishAndFederateLive(videoLive, localLTags)
+    })
 
     muxingSession.on('bad-socket-health', ({ videoId }) => {
       logger.error(
@@ -303,6 +306,8 @@ class LiveManager {
       live.Video = video
 
       setTimeout(() => {
+        // Clear cache for Podcast RSS feed when live stream starts
+        clearCacheRoute(`/feeds/videos.xml?videoChannelId=${video.channelId}&format=podcast`)
         federateVideoIfNeeded(video, false)
           .catch(err => logger.error('Cannot federate live video %s.', video.url, { err, ...localLTags }))
 
@@ -339,6 +344,9 @@ class LiveManager {
       }
 
       await fullVideo.save()
+
+      // Clear cache for Podcast RSS feed when live stream ends
+      clearCacheRoute(`/feeds/videos.xml?videoChannelId=${fullVideo.channelId}&format=podcast`)
 
       PeerTubeSocket.Instance.sendVideoLiveNewState(fullVideo)
 

@@ -21,8 +21,15 @@ const cacheRoute = (extraOptions = {}) => apicache.options({
   ...extraOptions
 }).middleware
 
+const clearCacheRoute = (target: string) => {
+  const redisClient = Redis.Instance.getClient()
+  const appendKey = Redis.Instance.getPrefix()
+  redisClient.del(`${target}$$appendKey=${appendKey}`)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  cacheRoute
+  cacheRoute,
+  clearCacheRoute
 }
