@@ -10974,6 +10974,7 @@
       </trans-unit>
       <trans-unit id="2061223017941329156" datatype="html">
         <source>Import with URL</source>
+        <target>o kama jo tan ma ante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">63</context>
@@ -10981,6 +10982,7 @@
       </trans-unit>
       <trans-unit id="8740142697043012403" datatype="html">
         <source>Import with torrent</source>
+        <target>o kama jo kepeken nasin Torrent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">73</context>
@@ -17584,7 +17586,7 @@
       </trans-unit>
       <trans-unit id="985751964589921228" datatype="html">
         <source>Timestamps updated</source>
-        <target state="needs-translation">mi ante e tenpo</target>
+        <target state="translated">mi ante e tenpo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context>
           <context context-type="linenumber">277</context>
@@ -17631,7 +17633,7 @@
       </trans-unit>
       <trans-unit id="5263519165976128456" datatype="html">
         <source>Edit starts/stops at</source>
-        <target>ante li open/pini lon tenpo</target>
+        <target>o ante e tenpo open/pini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">62</context>
@@ -17647,7 +17649,7 @@
       </trans-unit>
       <trans-unit id="6421445850411984665" datatype="html">
         <source>Starts at</source>
-        <target>kipisi li open lon tenpo</target>
+        <target>tawa li open lon tenpo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -17659,7 +17661,7 @@
       </trans-unit>
       <trans-unit id="7145200412085189912" datatype="html">
         <source>Stops at</source>
-        <target>kipisi li pini lon tenpo</target>
+        <target>tawa li pini lon tenpo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">140</context>
