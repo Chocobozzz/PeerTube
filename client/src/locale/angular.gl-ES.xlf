@@ -6420,7 +6420,7 @@
       </trans-unit>
       <trans-unit id="6591746065516872491" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No subscribers} =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No subscribers} =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Sen subscritoras} =1 {1 subscritora} other {<x id="INTERPOLATION"/> subscritoras}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">26</context>
@@ -7104,7 +7104,7 @@
       </trans-unit>
       <trans-unit id="5921284055608402352" datatype="html">
         <source>{value, plural, =1 {thread} other {threads}}</source>
-        <target state="new">{value, plural, =1 {thread} other {threads}}</target>
+        <target state="translated">{value, plural, =1 {fío} other {fíos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">90</context>
@@ -8147,7 +8147,7 @@
       </trans-unit>
       <trans-unit id="7634059432691079352" datatype="html">
         <source>Do you really want to unban {count, plural, =1 {1 user} other {<x id="count"/> users}}?</source>
-        <target state="new">Do you really want to unban {count, plural, =1 {1 user} other {<x id="count"/> users}}?</target>
+        <target state="translated">Queres retirarlle o veto a {count, plural, =1 {1 usuaria} other {<x id="count"/> usuarias}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">213</context>
@@ -8160,7 +8160,7 @@
       </trans-unit>
       <trans-unit id="5100564023837126301" datatype="html">
         <source>{count, plural, =1 {1 user} other {<x id="count"/> users}} unbanned.</source>
-        <target state="new">{count, plural, =1 {1 user} other {<x id="count"/> users}} unbanned.</target>
+        <target state="translated">{count, plural, =1 {1 usuaria} other {<x id="count"/> usuarias}} restablecidas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">226</context>
@@ -8179,7 +8179,7 @@
       </trans-unit>
       <trans-unit id="5945924096465496818" datatype="html">
         <source>&lt;p&gt;You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p&gt;</source>
-        <target state="new">&lt;p&gt;You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p&gt;</target>
+        <target state="translated">&lt;p&gt;Non podes crear usuarias ou canles cun nome que xa foi utilizado por unha usuaria/canle eliminada.&lt;/p&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">244</context>
@@ -8187,7 +8187,7 @@
       </trans-unit>
       <trans-unit id="5643060985393782358" datatype="html">
         <source>It means the following usernames will be permanently deleted and cannot be recovered:</source>
-        <target state="new">It means the following usernames will be permanently deleted and cannot be recovered:</target>
+        <target state="translated">Como consecuencia os seguintes nomes de usuaria van ser eliminados e non se poderán recuperar:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">245,244</context>
@@ -8195,7 +8195,7 @@
       </trans-unit>
       <trans-unit id="6671164504886206452" datatype="html">
         <source>{count, plural, =1 {1 user} other {<x id="count"/> users}} deleted.</source>
-        <target state="new">{count, plural, =1 {1 user} other {<x id="count"/> users}} deleted.</target>
+        <target state="translated">{count, plural, =1 {1 usuaria} other {<x id="count"/> usuarias}} eliminada(s).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">255</context>
@@ -8208,7 +8208,7 @@
       </trans-unit>
       <trans-unit id="8715967024202302349" datatype="html">
         <source>{count, plural, =1 {1 user} other {<x id="count"/> users}} email set as verified.</source>
-        <target state="new">{count, plural, =1 {1 user} other {<x id="count"/> users}} email set as verified.</target>
+        <target state="translated">{count, plural, =1 {1 usuaria} other {<x id="count"/> usuarias}} verificaron o email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">273</context>
@@ -8377,7 +8377,7 @@
       </trans-unit>
       <trans-unit id="5935212402338564229" datatype="html">
         <source>You or one of your channels has a new follower</source>
-        <target state="new">You or one of your channels has a new follower</target>
+        <target state="translated">Ti ou unha das túas canles teñen un novo seguimento</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -8704,7 +8704,7 @@
       </trans-unit>
       <trans-unit id="696910741870112536" datatype="html">
         <source>{length, plural, =1 {Video has been deleted} other {<x id="length"/> videos have been deleted}}</source>
-        <target state="new">{length, plural, =1 {Video has been deleted} other {<x id="length"/> videos have been deleted}}</target>
+        <target state="translated">{length, plural, =1 {O vídeo foi eliminado} other {<x id="length"/> vídeos foron eliminados}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">191</context>
@@ -8712,7 +8712,7 @@
       </trans-unit>
       <trans-unit id="3255171236149541417" datatype="html">
         <source><x id="PH" equiv-text="toDeleteVideosIds.length"/> have been deleted.</source>
-        <target state="new"><x id="PH" equiv-text="toDeleteVideosIds.length"/> have been deleted.</target>
+        <target state="translated"><x id="PH" equiv-text="toDeleteVideosIds.length"/> foron eliminados.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">193,191</context>
@@ -9047,7 +9047,7 @@
       </trans-unit>
       <trans-unit id="8093156107152165809" datatype="html">
         <source>Show/hide this help menu</source>
-        <target state="new">Show/hide this help menu</target>
+        <target state="translated">Mostrar/agochar este menú de axuda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/core.module.ts</context>
           <context context-type="linenumber">45</context>
@@ -9055,7 +9055,7 @@
       </trans-unit>
       <trans-unit id="3314265031897048047" datatype="html">
         <source>Hide this help menu</source>
-        <target state="new">Hide this help menu</target>
+        <target state="translated">Agochar menú de axuda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/core.module.ts</context>
           <context context-type="linenumber">46</context>
@@ -9258,7 +9258,7 @@
       </trans-unit>
       <trans-unit id="6183000905044663854" datatype="html">
         <source>Search <x id="PH" equiv-text="this.currentSearch"/></source>
-        <target state="new">Search <x id="PH" equiv-text="this.currentSearch"/></target>
+        <target state="translated">Buscar <x id="PH" equiv-text="this.currentSearch"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">252</context>
@@ -9303,7 +9303,7 @@
       </trans-unit>
       <trans-unit id="1995871740249853660" datatype="html">
         <source><x id="PH" equiv-text="interval"/> month(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> month(s) ago</target>
+        <target state="translated">Fai <x id="PH" equiv-text="interval"/> mes(es)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">28</context>
@@ -9316,7 +9316,7 @@
       </trans-unit>
       <trans-unit id="3626585509896494177" datatype="html">
         <source><x id="PH" equiv-text="interval"/> week(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> week(s) ago</target>
+        <target state="translated">Fai <x id="PH" equiv-text="interval"/> semana(s)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">37</context>
@@ -9324,7 +9324,7 @@
       </trans-unit>
       <trans-unit id="4853543308896023917" datatype="html">
         <source><x id="PH" equiv-text="interval"/> day(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> day(s) ago</target>
+        <target state="translated">Fai <x id="PH" equiv-text="interval"/> dia(s)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">42</context>
@@ -9332,7 +9332,7 @@
       </trans-unit>
       <trans-unit id="1345947856864087664" datatype="html">
         <source><x id="PH" equiv-text="interval"/> hour(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> hour(s) ago</target>
+        <target state="translated">Fai <x id="PH" equiv-text="interval"/> hora(s)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">47</context>
@@ -9355,7 +9355,7 @@
       </trans-unit>
       <trans-unit id="8489397598480880903" datatype="html">
         <source>{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</source>
-        <target state="new">{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</target>
+        <target state="translated">{interval, plural, =1 {Fai 1 ano} other {Fai <x id="interval"/> anos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">7</context>
@@ -9363,7 +9363,7 @@
       </trans-unit>
       <trans-unit id="599762045687999334" datatype="html">
         <source>{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</source>
-        <target state="new">{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</target>
+        <target state="translated">{interval, plural, =1 {Fai 1 mes} other {Fai <x id="interval"/> meses}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">8</context>
@@ -9371,7 +9371,7 @@
       </trans-unit>
       <trans-unit id="4951459525104027759" datatype="html">
         <source>{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</source>
-        <target state="new">{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</target>
+        <target state="translated">{interval, plural, =1 {Fai 1 semana} other {Fai <x id="interval"/> semanas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">9</context>
@@ -9379,7 +9379,7 @@
       </trans-unit>
       <trans-unit id="2471141982657856893" datatype="html">
         <source>{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</source>
-        <target state="new">{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</target>
+        <target state="translated">{interval, plural, =1 {Fai 1 día} other {Fai <x id="interval"/> días}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">10</context>
@@ -9387,7 +9387,7 @@
       </trans-unit>
       <trans-unit id="8562677309401914974" datatype="html">
         <source>{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</source>
-        <target state="new">{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</target>
+        <target state="translated">{interval, plural, =1 {Fai 1 hora} other {Fai <x id="interval"/> horas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">11</context>
@@ -9395,7 +9395,7 @@
       </trans-unit>
       <trans-unit id="3613007385964514320" datatype="html">
         <source><x id="PH" equiv-text="interval"/> year(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> year(s) ago</target>
+        <target state="translated">Fai <x id="PH" equiv-text="interval"/> ano(s)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">19</context>
@@ -10146,7 +10146,7 @@
       </trans-unit>
       <trans-unit id="5604677701754367707" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</source>
-        <target state="new">PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
+        <target state="translated">PeerTube non pode xestionar este tipo de ficheiro. Os permitidos son <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -10162,7 +10162,7 @@
       </trans-unit>
       <trans-unit id="8280589137189201687" datatype="html">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
-        <target state="new">You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</target>
+        <target state="translated">Non podes seleccionar máis de {maxItems, plural, =1 {1 elemento} other {<x id="maxItems"/> elementos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -10583,7 +10583,7 @@
       </trans-unit>
       <trans-unit id="3911025298999036211" datatype="html">
         <source>~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</source>
-        <target state="new">~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</target>
+        <target state="translated">~ {hours, plural, =1 {1 hora} other {<x id="hours"/> horas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">71</context>
@@ -10591,7 +10591,7 @@
       </trans-unit>
       <trans-unit id="8587199198938218660" datatype="html">
         <source>~ <x id="PH" equiv-text="hours"/> hours</source>
-        <target state="new">~ <x id="PH" equiv-text="hours"/> hours</target>
+        <target state="translated">~ <x id="PH" equiv-text="hours"/> horas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -10599,7 +10599,7 @@
       </trans-unit>
       <trans-unit id="2819927377059070056" datatype="html">
         <source>~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</source>
-        <target state="new">~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</target>
+        <target state="translated">~ {minutes, plural, =1 {1 minuto} other {<x id="minutes"/> minutos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -10682,7 +10682,7 @@
       </trans-unit>
       <trans-unit id="2836537219160375057" datatype="html">
         <source>Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</source>
-        <target state="new">Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</target>
+        <target state="translated">Vetar {count, plural, =1 {1 usuaria} other {<x id="count"/> usuarias}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -10710,7 +10710,7 @@
       </trans-unit>
       <trans-unit id="4350392487994839749" datatype="html">
         <source>If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</source>
-        <target state="new">If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</target>
+        <target state="translated">Se eliminas a usuaria, non poderás crear outra usuaria ou canle con identificador &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt;!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -11020,7 +11020,7 @@
       </trans-unit>
       <trans-unit id="7436975022198908854" datatype="html">
         <source>Unknown server error</source>
-        <target state="new">Unknown server error</target>
+        <target state="translated">Erro descoñecido do servidor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">120</context>
@@ -11273,7 +11273,7 @@
       </trans-unit>
       <trans-unit id="1314383205093440631" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</source>
-        <target state="new">Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</target>
+        <target state="translated">Tes a certeza de querer eliminar {count, plural, =1 {este vídeo} other {estes <x id="count"/> vídeos}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">200</context>
@@ -11413,7 +11413,7 @@
       </trans-unit>
       <trans-unit id="7657908235362559477" datatype="html">
         <source>Publication scheduled on <x id="PH" equiv-text="updateAt"/></source>
-        <target state="new">Publication scheduled on <x id="PH" equiv-text="updateAt"/></target>
+        <target state="translated">Publicación programada para <x id="PH" equiv-text="updateAt"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">178</context>
