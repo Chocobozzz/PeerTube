@@ -61,9 +61,6 @@ function isIntPercentage (value: any) {
   }
 }
 
-function toIntOrNull (value: string) {
-  const v = toValueOrNull(value)
-
 function isFileFieldValid (
   files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[],
   field: string,

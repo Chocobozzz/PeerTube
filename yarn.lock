@@ -6288,10 +6288,10 @@ pem@^1.12.3:
     os-tmpdir "^1.0.1"
     which "^2.0.2"
 
-pfeed-podcast@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/pfeed-podcast/-/pfeed-podcast-1.4.0.tgz#10da839c9e057c8a00f049c1c7cd7c60795bdabc"
-  integrity sha512-L2oSI0qqCA9drGGPanNIbcDHOMmEaCk0UD7zvR9tNpqHG6B6hnR/CARH46l4PdA0ynElA9a7ISquYNcZdJXcmQ==
+pfeed-podcast@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/pfeed-podcast/-/pfeed-podcast-1.5.2.tgz#db3b350a3b865f6c99c5473b526e85c5f28aeb00"
+  integrity sha512-GRHFIIx0GZ8sao27RSQi3GKJ8Zf8kwukOjfZeDNUK9IUcfCN6pJjaMxA+ByWuNuIB0MInObCjQDczV9kQioBpQ==
   dependencies:
     lodash "^4.17.15"
     xml "^1.0.1"
@@ -7265,13 +7265,6 @@ shebang-regex@^3.0.0:
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-3.0.0.tgz#ae16f1644d873ecad843b0307b143362d4c42172"
   integrity sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==
 
-showdown@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/showdown/-/showdown-2.1.0.tgz#1251f5ed8f773f0c0c7bfc8e6fd23581f9e545c5"
-  integrity sha512-/6NVYu4U819R2pUIk79n67SYgJHWCce0a5xTP979WbNp0FL9MN1I1QK662IDU1b6JzKTvmhgI7T7JYIxBi3kMQ==
-  dependencies:
-    commander "^9.0.0"
-
 short-uuid@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/short-uuid/-/short-uuid-4.2.0.tgz#3706d9e7287ac589dc5ffe324d3e34817a07540b"
@@ -7279,6 +7272,13 @@ short-uuid@^4.2.0:
   dependencies:
     any-base "^1.1.0"
     uuid "^8.3.2"
+
+showdown@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/showdown/-/showdown-2.1.0.tgz#1251f5ed8f773f0c0c7bfc8e6fd23581f9e545c5"
+  integrity sha512-/6NVYu4U819R2pUIk79n67SYgJHWCce0a5xTP979WbNp0FL9MN1I1QK662IDU1b6JzKTvmhgI7T7JYIxBi3kMQ==
+  dependencies:
+    commander "^9.0.0"
 
 side-channel@^1.0.4:
   version "1.0.4"

@@ -19,8 +19,9 @@ import {
 } from '../middlewares'
 import { cacheRoute } from '../middlewares/cache'
 import { VideoModel } from '../models/video/video'
+import { VideoCaptionModel } from '../models/video/video-caption'
 import { VideoCommentModel } from '../models/video/video-comment'
-import { VideoFilter, VideoResolution, VideoStreamingPlaylistType } from '@shared/models'
+import { VideoFilter, VideoResolution, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 
 const feedsRouter = express.Router()
 
@@ -216,7 +217,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     medium: isFilm ? 'film' : 'video'
   })
 
-  addVideosToFeed(feed, videos, format)
+  await addVideosToFeed(feed, videos, format)
 
   // Now the feed generation is done, let's send it!
   return sendFeed(feed, req, res)
@@ -253,7 +254,7 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
     user: res.locals.user
   })
 
-  addVideosToFeed(feed, data, format)
+  await addVideosToFeed(feed, data, format)
 
   // Now the feed generation is done, let's send it!
   return sendFeed(feed, req, res)
@@ -301,7 +302,7 @@ function initFeed (parameters: {
   })
 }
 
-function addVideosToFeed (feed, videos: VideoModel[], format: string) {
+async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
   /**
    * Adding video items to the feed object, one at a time
    */
@@ -313,12 +314,13 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         length: number
         bitrate: number
         sources: { uri: string, contentType?: string }[]
-        height?: number
+        title: string
         language?: string
       }[] = video.getFormattedVideoFilesJSON(false).map(videoFile => {
         const isAudio = videoFile.resolution.id === VideoResolution.H_NOVIDEO
         const result = {
           type: isAudio ? 'audio/mp4' : 'video/mp4',
+          title: isAudio ? "Audio" : videoFile.resolution.label,
           length: videoFile.size,
           bitrate: videoFile.size / video.duration * 8,
           sources: [
@@ -327,7 +329,6 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
           ]
         }
 
-        if (!isAudio) Object.assign(result, { height: videoFile.resolution.id })
         if (video.language) Object.assign(result, { language: video.language })
 
         return result
@@ -335,7 +336,7 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
 
       // If both webtorrent and HLS are enabled, prefer webtorrent files
       // standard files for webtorrent are regular MP4s
-      const groupedVideos = groupBy(videos, video => video.height || 0)
+      const groupedVideos = groupBy(videos, video => video.title)
       const preferredVideos = map(groupedVideos, videoGroup => {
         if (videoGroup.length === 1) {
           return videoGroup[0]
@@ -355,6 +356,7 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
           }
           const result = {
             type,
+            title: "HLS",
             sources: [
               { uri: streamingPlaylist.playlistUrl }
             ]
@@ -380,7 +382,9 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         })
       }
 
-      const captions = video.VideoCaptions.map(caption => {
+      const videoCaptions = await VideoCaptionModel.listVideoCaptions(video.id)
+
+      const captions = videoCaptions?.map(caption => {
         const fileExtension = last(caption.filename.split("."))
         let type: string
         if (fileExtension === "srt") {
@@ -400,6 +404,7 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
       const markdownConverter = new showdown.Converter()
 
       const item = {
+        trackers: video.getTrackerUrls(),
         title: video.name,
         // Live videos need unique GUIDs
         id: video.url,
@@ -433,6 +438,96 @@ function addVideosToFeed (feed, videos: VideoModel[], format: string) {
       }
 
       feed.addItem(item)
+    }
+
+    // Filter live videos that are pending or in progress
+    for (const video of videos.filter(v => v.isLive && v.state !== VideoState.LIVE_ENDED)) {
+      const streamingPlaylists = video.VideoStreamingPlaylists
+        .map((streamingPlaylist, index) => {
+          let type = ''
+          if (streamingPlaylist.type === VideoStreamingPlaylistType.HLS) {
+            type = 'application/x-mpegURL'
+          } else {
+            return {}
+          }
+          const result = {
+            type,
+            title: `Live Stream ${index + 1}`,
+            sources: [
+              { uri: streamingPlaylist.playlistUrl }
+            ]
+          }
+
+          if (video.language) Object.assign(result, { language: video.language })
+
+          return result
+        })
+
+      const categories: { value: number, label: string }[] = []
+      if (video.Tags) {
+        video.Tags.forEach((tag, index) => {
+          categories.push({ value: index, label: tag.name })
+        })
+      }
+      if (video.category) {
+        categories.push({
+          value: video.category,
+          label: getCategoryLabel(video.category)
+        })
+      }
+
+      const markdownConverter = new showdown.Converter()
+
+      let status = ""
+
+      switch (video.state) {
+        case VideoState.WAITING_FOR_LIVE:
+          status = "pending"
+          break
+        case VideoState.LIVE_ENDED:
+          status = "ended"
+          break
+        case VideoState.PUBLISHED:
+          status = "live"
+          break
+      }
+
+      const item = {
+        isLive: true,
+        status,
+        start: video.updatedAt.toISOString(),
+        trackers: video.getTrackerUrls(),
+        title: video.name,
+        // Live videos need unique GUIDs
+        id: video.url,
+        link: WEBSERVER.URL + '/w/' + video.uuid,
+        description: markdownConverter.makeHtml(video.description),
+        author: [
+          {
+            name: video.VideoChannel.Account.getDisplayName(),
+            href: video.VideoChannel.Account.Actor.url
+          }
+        ],
+        explicit: video.nsfw,
+        media: streamingPlaylists,
+        categories,
+        socialInteract: [
+          { uri: video.url, protocol: "activitypub" }
+        ],
+        thumbnail: [
+          {
+            url: WEBSERVER.URL + video.getPreviewStaticPath()
+          }
+        ]
+      }
+
+      if (!isNull(video.VideoChannel.Account.Actor.Avatar)) {
+        Object.assign(item.author[0], {
+          img: WEBSERVER.URL + video.VideoChannel.Account.Actor.Avatar.getStaticPath()
+        })
+      }
+
+      feed.addLiveItem(item)
     }
   } else {
     for (const video of videos) {
