@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { body } from 'express-validator'
 import { isIntOrNull, isIntPercentage } from '@server/helpers/custom-validators/misc'
 import { isEmailEnabled } from '@server/initializers/config'

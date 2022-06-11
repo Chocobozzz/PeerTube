@@ -3,73 +3,64 @@
 import 'mocha'
 import * as chai from 'chai'
 import { readdir } from 'fs-extra'
-import * as magnetUtil from 'magnet-uri'
-import { join } from 'path'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import magnetUtil from 'magnet-uri'
+import { basename, join } from 'path'
 import {
   checkSegmentHash,
   checkVideoFilesWereRemoved,
   cleanupTests,
+  createMultipleServers,
   doubleFollow,
-  flushAndRunMultipleServers,
-  getFollowingListPaginationAndSort,
-  getVideo,
-  getVideoWithToken,
-  immutableAssign,
   killallServers,
-  makeGetRequest,
-  removeVideo,
-  reRunServer,
+  makeRawRequest,
+  PeerTubeServer,
   root,
-  ServerInfo,
+  saveVideoInServers,
   setAccessTokensToServers,
-  unfollow,
-  updateVideo,
-  uploadVideo,
-  viewVideo,
   wait,
-  waitUntilLog
-} from '../../../../shared/extra-utils'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+  waitJobs
+} from '@shared/extra-utils'
 import {
-  addVideoRedundancy,
-  listVideoRedundancies,
-  removeVideoRedundancy,
-  updateRedundancy
-} from '../../../../shared/extra-utils/server/redundancy'
-import { getStats } from '../../../../shared/extra-utils/server/stats'
-import { ActorFollow } from '../../../../shared/models/actors'
-import { VideoRedundancy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '../../../../shared/models/redundancy'
-import { ServerStats } from '../../../../shared/models/server/server-stats.model'
-import { VideoDetails, VideoPrivacy } from '../../../../shared/models/videos'
+  HttpStatusCode,
+  VideoDetails,
+  VideoFile,
+  VideoPrivacy,
+  VideoRedundancyStrategy,
+  VideoRedundancyStrategyWithManual
+} from '@shared/models'
 
 const expect = chai.expect
 
-let servers: ServerInfo[] = []
-let video1Server2UUID: string
-let video1Server2Id: number
+let servers: PeerTubeServer[] = []
+let video1Server2: VideoDetails
 
-function checkMagnetWebseeds (file: { magnetUri: string, resolution: { id: number } }, baseWebseeds: string[], server: ServerInfo) {
+async function checkMagnetWebseeds (file: VideoFile, baseWebseeds: string[], server: PeerTubeServer) {
   const parsed = magnetUtil.decode(file.magnetUri)
 
   for (const ws of baseWebseeds) {
-    const found = parsed.urlList.find(url => url === `${ws}-${file.resolution.id}.mp4`)
+    const found = parsed.urlList.find(url => url === `${ws}${basename(file.fileUrl)}`)
     expect(found, `Webseed ${ws} not found in ${file.magnetUri} on server ${server.url}`).to.not.be.undefined
   }
 
   expect(parsed.urlList).to.have.lengthOf(baseWebseeds.length)
+
+  for (const url of parsed.urlList) {
+    await makeRawRequest(url, HttpStatusCode.OK_200)
+  }
 }
 
-async function flushAndRunServers (strategy: VideoRedundancyStrategy | null, additionalParams: any = {}, withWebtorrent = true) {
+async function createServers (strategy: VideoRedundancyStrategy | null, additionalParams: any = {}, withWebtorrent = true) {
   const strategies: any[] = []
 
   if (strategy !== null) {
     strategies.push(
-      immutableAssign({
+      {
         min_lifetime: '1 hour',
         strategy: strategy,
-        size: '400KB'
-      }, additionalParams)
+        size: '400KB',
+
+        ...additionalParams
+      }
     )
   }
 
@@ -90,17 +81,16 @@ async function flushAndRunServers (strategy: VideoRedundancyStrategy | null, add
     }
   }
 
-  servers = await flushAndRunMultipleServers(3, config)
+  servers = await createMultipleServers(3, config)
 
   // Get the access tokens
   await setAccessTokensToServers(servers)
 
   {
-    const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 1 server 2' })
-    video1Server2UUID = res.body.video.uuid
-    video1Server2Id = res.body.video.id
+    const { id } = await servers[1].videos.upload({ attributes: { name: 'video 1 server 2' } })
+    video1Server2 = await servers[1].videos.get({ id })
 
-    await viewVideo(servers[1].url, video1Server2UUID)
+    await servers[1].videos.view({ id })
   }
 
   await waitJobs(servers)
@@ -115,54 +105,64 @@ async function flushAndRunServers (strategy: VideoRedundancyStrategy | null, add
   await waitJobs(servers)
 }
 
+async function ensureSameFilenames (videoUUID: string) {
+  let webtorrentFilenames: string[]
+  let hlsFilenames: string[]
+
+  for (const server of servers) {
+    const video = await server.videos.getWithToken({ id: videoUUID })
+
+    // Ensure we use the same filenames that the origin
+
+    const localWebtorrentFilenames = video.files.map(f => basename(f.fileUrl)).sort()
+    const localHLSFilenames = video.streamingPlaylists[0].files.map(f => basename(f.fileUrl)).sort()
+
+    if (webtorrentFilenames) expect(webtorrentFilenames).to.deep.equal(localWebtorrentFilenames)
+    else webtorrentFilenames = localWebtorrentFilenames
+
+    if (hlsFilenames) expect(hlsFilenames).to.deep.equal(localHLSFilenames)
+    else hlsFilenames = localHLSFilenames
+  }
+
+  return { webtorrentFilenames, hlsFilenames }
+}
+
 async function check1WebSeed (videoUUID?: string) {
-  if (!videoUUID) videoUUID = video1Server2UUID
+  if (!videoUUID) videoUUID = video1Server2.uuid
 
   const webseeds = [
-    `http://localhost:${servers[1].port}/static/webseed/${videoUUID}`
+    `http://localhost:${servers[1].port}/static/webseed/`
   ]
 
   for (const server of servers) {
     // With token to avoid issues with video follow constraints
-    const res = await getVideoWithToken(server.url, server.accessToken, videoUUID)
+    const video = await server.videos.getWithToken({ id: videoUUID })
 
-    const video: VideoDetails = res.body
     for (const f of video.files) {
-      checkMagnetWebseeds(f, webseeds, server)
+      await checkMagnetWebseeds(f, webseeds, server)
     }
   }
+
+  await ensureSameFilenames(videoUUID)
 }
 
 async function check2Webseeds (videoUUID?: string) {
-  if (!videoUUID) videoUUID = video1Server2UUID
+  if (!videoUUID) videoUUID = video1Server2.uuid
 
   const webseeds = [
-    `http://localhost:${servers[0].port}/static/redundancy/${videoUUID}`,
-    `http://localhost:${servers[1].port}/static/webseed/${videoUUID}`
+    `http://localhost:${servers[0].port}/static/redundancy/`,
+    `http://localhost:${servers[1].port}/static/webseed/`
   ]
 
   for (const server of servers) {
-    const res = await getVideo(server.url, videoUUID)
-
-    const video: VideoDetails = res.body
+    const video = await server.videos.get({ id: videoUUID })
 
     for (const file of video.files) {
-      checkMagnetWebseeds(file, webseeds, server)
-
-      await makeGetRequest({
-        url: servers[0].url,
-        statusCodeExpected: HttpStatusCode.OK_200,
-        path: '/static/redundancy/' + `${videoUUID}-${file.resolution.id}.mp4`,
-        contentType: null
-      })
-      await makeGetRequest({
-        url: servers[1].url,
-        statusCodeExpected: HttpStatusCode.OK_200,
-        path: `/static/webseed/${videoUUID}-${file.resolution.id}.mp4`,
-        contentType: null
-      })
+      await checkMagnetWebseeds(file, webseeds, server)
     }
   }
+
+  const { webtorrentFilenames } = await ensureSameFilenames(videoUUID)
 
   const directories = [
     'test' + servers[0].internalServerNumber + '/redundancy',
@@ -173,32 +173,31 @@ async function check2Webseeds (videoUUID?: string) {
     const files = await readdir(join(root(), directory))
     expect(files).to.have.length.at.least(4)
 
-    for (const resolution of [ 240, 360, 480, 720 ]) {
-      expect(files.find(f => f === `${videoUUID}-${resolution}.mp4`)).to.not.be.undefined
-    }
+    // Ensure we files exist on disk
+    expect(files.find(f => webtorrentFilenames.includes(f))).to.exist
   }
 }
 
 async function check0PlaylistRedundancies (videoUUID?: string) {
-  if (!videoUUID) videoUUID = video1Server2UUID
+  if (!videoUUID) videoUUID = video1Server2.uuid
 
   for (const server of servers) {
     // With token to avoid issues with video follow constraints
-    const res = await getVideoWithToken(server.url, server.accessToken, videoUUID)
-    const video: VideoDetails = res.body
+    const video = await server.videos.getWithToken({ id: videoUUID })
 
     expect(video.streamingPlaylists).to.be.an('array')
     expect(video.streamingPlaylists).to.have.lengthOf(1)
     expect(video.streamingPlaylists[0].redundancies).to.have.lengthOf(0)
   }
+
+  await ensureSameFilenames(videoUUID)
 }
 
 async function check1PlaylistRedundancies (videoUUID?: string) {
-  if (!videoUUID) videoUUID = video1Server2UUID
+  if (!videoUUID) videoUUID = video1Server2.uuid
 
   for (const server of servers) {
-    const res = await getVideo(server.url, videoUUID)
-    const video: VideoDetails = res.body
+    const video = await server.videos.get({ id: videoUUID })
 
     expect(video.streamingPlaylists).to.have.lengthOf(1)
     expect(video.streamingPlaylists[0].redundancies).to.have.lengthOf(1)
@@ -208,15 +207,17 @@ async function check1PlaylistRedundancies (videoUUID?: string) {
     expect(redundancy.baseUrl).to.equal(servers[0].url + '/static/redundancy/hls/' + videoUUID)
   }
 
-  const baseUrlPlaylist = servers[1].url + '/static/streaming-playlists/hls'
-  const baseUrlSegment = servers[0].url + '/static/redundancy/hls'
+  const baseUrlPlaylist = servers[1].url + '/static/streaming-playlists/hls/' + videoUUID
+  const baseUrlSegment = servers[0].url + '/static/redundancy/hls/' + videoUUID
 
-  const res = await getVideo(servers[0].url, videoUUID)
-  const hlsPlaylist = (res.body as VideoDetails).streamingPlaylists[0]
+  const video = await servers[0].videos.get({ id: videoUUID })
+  const hlsPlaylist = video.streamingPlaylists[0]
 
   for (const resolution of [ 240, 360, 480, 720 ]) {
-    await checkSegmentHash(baseUrlPlaylist, baseUrlSegment, videoUUID, resolution, hlsPlaylist)
+    await checkSegmentHash({ server: servers[1], baseUrlPlaylist, baseUrlSegment, resolution, hlsPlaylist })
   }
+
+  const { hlsFilenames } = await ensureSameFilenames(videoUUID)
 
   const directories = [
     'test' + servers[0].internalServerNumber + '/redundancy/hls',
@@ -227,11 +228,8 @@ async function check1PlaylistRedundancies (videoUUID?: string) {
     const files = await readdir(join(root(), directory, videoUUID))
     expect(files).to.have.length.at.least(4)
 
-    for (const resolution of [ 240, 360, 480, 720 ]) {
-      const filename = `${videoUUID}-${resolution}-fragmented.mp4`
-
-      expect(files.find(f => f === filename)).to.not.be.undefined
-    }
+    // Ensure we files exist on disk
+    expect(files.find(f => hlsFilenames.includes(f))).to.exist
   }
 }
 
@@ -244,9 +242,7 @@ async function checkStatsGlobal (strategy: VideoRedundancyStrategyWithManual) {
     statsLength = 2
   }
 
-  const res = await getStats(servers[0].url)
-  const data: ServerStats = res.body
-
+  const data = await servers[0].stats.get()
   expect(data.videosRedundancy).to.have.lengthOf(statsLength)
 
   const stat = data.videosRedundancy[0]
@@ -272,13 +268,19 @@ async function checkStatsWithoutRedundancy (strategy: VideoRedundancyStrategyWit
   expect(stat.totalVideos).to.equal(0)
 }
 
-async function enableRedundancyOnServer1 () {
-  await updateRedundancy(servers[0].url, servers[0].accessToken, servers[1].host, true)
-
-  const res = await getFollowingListPaginationAndSort({ url: servers[0].url, start: 0, count: 5, sort: '-createdAt' })
-  const follows: ActorFollow[] = res.body.data
+async function findServerFollows () {
+  const body = await servers[0].follows.getFollowings({ start: 0, count: 5, sort: '-createdAt' })
+  const follows = body.data
   const server2 = follows.find(f => f.following.host === `localhost:${servers[1].port}`)
   const server3 = follows.find(f => f.following.host === `localhost:${servers[2].port}`)
+
+  return { server2, server3 }
+}
+
+async function enableRedundancyOnServer1 () {
+  await servers[0].redundancy.updateRedundancy({ host: servers[1].host, redundancyAllowed: true })
+
+  const { server2, server3 } = await findServerFollows()
 
   expect(server3).to.not.be.undefined
   expect(server3.following.hostRedundancyAllowed).to.be.false
@@ -288,12 +290,9 @@ async function enableRedundancyOnServer1 () {
 }
 
 async function disableRedundancyOnServer1 () {
-  await updateRedundancy(servers[0].url, servers[0].accessToken, servers[1].host, false)
+  await servers[0].redundancy.updateRedundancy({ host: servers[1].host, redundancyAllowed: false })
 
-  const res = await getFollowingListPaginationAndSort({ url: servers[0].url, start: 0, count: 5, sort: '-createdAt' })
-  const follows: ActorFollow[] = res.body.data
-  const server2 = follows.find(f => f.following.host === `localhost:${servers[1].port}`)
-  const server3 = follows.find(f => f.following.host === `localhost:${servers[2].port}`)
+  const { server2, server3 } = await findServerFollows()
 
   expect(server3).to.not.be.undefined
   expect(server3.following.hostRedundancyAllowed).to.be.false
@@ -310,7 +309,7 @@ describe('Test videos redundancy', function () {
     before(function () {
       this.timeout(120000)
 
-      return flushAndRunServers(strategy)
+      return createServers(strategy)
     })
 
     it('Should have 1 webseed on the first video', async function () {
@@ -327,7 +326,7 @@ describe('Test videos redundancy', function () {
       this.timeout(80000)
 
       await waitJobs(servers)
-      await waitUntilLog(servers[0], 'Duplicated ', 5)
+      await servers[0].servers.waitUntilLog('Duplicated ', 5)
       await waitJobs(servers)
 
       await check2Webseeds()
@@ -346,7 +345,7 @@ describe('Test videos redundancy', function () {
       await check1WebSeed()
       await check0PlaylistRedundancies()
 
-      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].internalServerNumber, [ 'videos', join('playlists', 'hls') ])
+      await checkVideoFilesWereRemoved({ server: servers[0], video: video1Server2, onlyVideoFiles: true })
     })
 
     after(async function () {
@@ -360,7 +359,7 @@ describe('Test videos redundancy', function () {
     before(function () {
       this.timeout(120000)
 
-      return flushAndRunServers(strategy)
+      return createServers(strategy)
     })
 
     it('Should have 1 webseed on the first video', async function () {
@@ -377,7 +376,7 @@ describe('Test videos redundancy', function () {
       this.timeout(80000)
 
       await waitJobs(servers)
-      await waitUntilLog(servers[0], 'Duplicated ', 5)
+      await servers[0].servers.waitUntilLog('Duplicated ', 5)
       await waitJobs(servers)
 
       await check2Webseeds()
@@ -385,10 +384,23 @@ describe('Test videos redundancy', function () {
       await checkStatsWith1Redundancy(strategy)
     })
 
-    it('Should unfollow on server 1 and remove duplicated videos', async function () {
+    it('Should unfollow server 3 and keep duplicated videos', async function () {
       this.timeout(80000)
 
-      await unfollow(servers[0].url, servers[0].accessToken, servers[1])
+      await servers[0].follows.unfollow({ target: servers[2] })
+
+      await waitJobs(servers)
+      await wait(5000)
+
+      await check2Webseeds()
+      await check1PlaylistRedundancies()
+      await checkStatsWith1Redundancy(strategy)
+    })
+
+    it('Should unfollow server 2 and remove duplicated videos', async function () {
+      this.timeout(80000)
+
+      await servers[0].follows.unfollow({ target: servers[1] })
 
       await waitJobs(servers)
       await wait(5000)
@@ -396,7 +408,7 @@ describe('Test videos redundancy', function () {
       await check1WebSeed()
       await check0PlaylistRedundancies()
 
-      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].internalServerNumber, [ 'videos' ])
+      await checkVideoFilesWereRemoved({ server: servers[0], video: video1Server2, onlyVideoFiles: true })
     })
 
     after(async function () {
@@ -410,7 +422,7 @@ describe('Test videos redundancy', function () {
     before(function () {
       this.timeout(120000)
 
-      return flushAndRunServers(strategy, { min_views: 3 })
+      return createServers(strategy, { min_views: 3 })
     })
 
     it('Should have 1 webseed on the first video', async function () {
@@ -438,8 +450,8 @@ describe('Test videos redundancy', function () {
     it('Should view 2 times the first video to have > min_views config', async function () {
       this.timeout(80000)
 
-      await viewVideo(servers[0].url, video1Server2UUID)
-      await viewVideo(servers[2].url, video1Server2UUID)
+      await servers[0].videos.view({ id: video1Server2.uuid })
+      await servers[2].videos.view({ id: video1Server2.uuid })
 
       await wait(10000)
       await waitJobs(servers)
@@ -449,7 +461,7 @@ describe('Test videos redundancy', function () {
       this.timeout(80000)
 
       await waitJobs(servers)
-      await waitUntilLog(servers[0], 'Duplicated ', 5)
+      await servers[0].servers.waitUntilLog('Duplicated ', 5)
       await waitJobs(servers)
 
       await check2Webseeds()
@@ -460,12 +472,13 @@ describe('Test videos redundancy', function () {
     it('Should remove the video and the redundancy files', async function () {
       this.timeout(20000)
 
-      await removeVideo(servers[1].url, servers[1].accessToken, video1Server2UUID)
+      await saveVideoInServers(servers, video1Server2.uuid)
+      await servers[1].videos.remove({ id: video1Server2.uuid })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        await checkVideoFilesWereRemoved(video1Server2UUID, server.internalServerNumber)
+        await checkVideoFilesWereRemoved({ server, video: server.store.videoDetails })
       }
     })
 
@@ -480,7 +493,7 @@ describe('Test videos redundancy', function () {
     before(async function () {
       this.timeout(120000)
 
-      await flushAndRunServers(strategy, { min_views: 3 }, false)
+      await createServers(strategy, { min_views: 3 }, false)
     })
 
     it('Should have 0 playlist redundancy on the first video', async function () {
@@ -506,14 +519,14 @@ describe('Test videos redundancy', function () {
     it('Should have 1 redundancy on the first video', async function () {
       this.timeout(160000)
 
-      await viewVideo(servers[0].url, video1Server2UUID)
-      await viewVideo(servers[2].url, video1Server2UUID)
+      await servers[0].videos.view({ id: video1Server2.uuid })
+      await servers[2].videos.view({ id: video1Server2.uuid })
 
       await wait(10000)
       await waitJobs(servers)
 
       await waitJobs(servers)
-      await waitUntilLog(servers[0], 'Duplicated ', 1)
+      await servers[0].servers.waitUntilLog('Duplicated ', 1)
       await waitJobs(servers)
 
       await check1PlaylistRedundancies()
@@ -523,12 +536,13 @@ describe('Test videos redundancy', function () {
     it('Should remove the video and the redundancy files', async function () {
       this.timeout(20000)
 
-      await removeVideo(servers[1].url, servers[1].accessToken, video1Server2UUID)
+      await saveVideoInServers(servers, video1Server2.uuid)
+      await servers[1].videos.remove({ id: video1Server2.uuid })
 
       await waitJobs(servers)
 
       for (const server of servers) {
-        await checkVideoFilesWereRemoved(video1Server2UUID, server.internalServerNumber)
+        await checkVideoFilesWereRemoved({ server, video: server.store.videoDetails })
       }
     })
 
@@ -541,7 +555,7 @@ describe('Test videos redundancy', function () {
     before(function () {
       this.timeout(120000)
 
-      return flushAndRunServers(null)
+      return createServers(null)
     })
 
     it('Should have 1 webseed on the first video', async function () {
@@ -551,18 +565,14 @@ describe('Test videos redundancy', function () {
     })
 
     it('Should create a redundancy on first video', async function () {
-      await addVideoRedundancy({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
-        videoId: video1Server2Id
-      })
+      await servers[0].redundancy.addVideo({ videoId: video1Server2.id })
     })
 
     it('Should have 2 webseeds on the first video', async function () {
       this.timeout(80000)
 
       await waitJobs(servers)
-      await waitUntilLog(servers[0], 'Duplicated ', 5)
+      await servers[0].servers.waitUntilLog('Duplicated ', 5)
       await waitJobs(servers)
 
       await check2Webseeds()
@@ -573,22 +583,15 @@ describe('Test videos redundancy', function () {
     it('Should manually remove redundancies on server 1 and remove duplicated videos', async function () {
       this.timeout(80000)
 
-      const res = await listVideoRedundancies({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
-        target: 'remote-videos'
-      })
+      const body = await servers[0].redundancy.listVideos({ target: 'remote-videos' })
 
-      const videos = res.body.data as VideoRedundancy[]
+      const videos = body.data
       expect(videos).to.have.lengthOf(1)
 
       const video = videos[0]
+
       for (const r of video.redundancies.files.concat(video.redundancies.streamingPlaylists)) {
-        await removeVideoRedundancy({
-          url: servers[0].url,
-          accessToken: servers[0].accessToken,
-          redundancyId: r.id
-        })
+        await servers[0].redundancy.removeVideo({ redundancyId: r.id })
       }
 
       await waitJobs(servers)
@@ -597,7 +600,7 @@ describe('Test videos redundancy', function () {
       await check1WebSeed()
       await check0PlaylistRedundancies()
 
-      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].serverNumber, [ 'videos' ])
+      await checkVideoFilesWereRemoved({ server: servers[0], video: video1Server2, onlyVideoFiles: true })
     })
 
     after(async function () {
@@ -608,10 +611,9 @@ describe('Test videos redundancy', function () {
   describe('Test expiration', function () {
     const strategy = 'recently-added'
 
-    async function checkContains (servers: ServerInfo[], str: string) {
+    async function checkContains (servers: PeerTubeServer[], str: string) {
       for (const server of servers) {
-        const res = await getVideo(server.url, video1Server2UUID)
-        const video: VideoDetails = res.body
+        const video = await server.videos.get({ id: video1Server2.uuid })
 
         for (const f of video.files) {
           expect(f.magnetUri).to.contain(str)
@@ -619,10 +621,9 @@ describe('Test videos redundancy', function () {
       }
     }
 
-    async function checkNotContains (servers: ServerInfo[], str: string) {
+    async function checkNotContains (servers: PeerTubeServer[], str: string) {
       for (const server of servers) {
-        const res = await getVideo(server.url, video1Server2UUID)
-        const video: VideoDetails = res.body
+        const video = await server.videos.get({ id: video1Server2.uuid })
 
         for (const f of video.files) {
           expect(f.magnetUri).to.not.contain(str)
@@ -633,7 +634,7 @@ describe('Test videos redundancy', function () {
     before(async function () {
       this.timeout(120000)
 
-      await flushAndRunServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
+      await createServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
 
       await enableRedundancyOnServer1()
     })
@@ -656,7 +657,7 @@ describe('Test videos redundancy', function () {
     it('Should stop server 1 and expire video redundancy', async function () {
       this.timeout(80000)
 
-      killallServers([ servers[0] ])
+      await killallServers([ servers[0] ])
 
       await wait(15000)
 
@@ -675,25 +676,25 @@ describe('Test videos redundancy', function () {
     before(async function () {
       this.timeout(120000)
 
-      await flushAndRunServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
+      await createServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
 
       await enableRedundancyOnServer1()
 
       await waitJobs(servers)
-      await waitUntilLog(servers[0], 'Duplicated ', 5)
+      await servers[0].servers.waitUntilLog('Duplicated ', 5)
       await waitJobs(servers)
 
-      await check2Webseeds(video1Server2UUID)
-      await check1PlaylistRedundancies(video1Server2UUID)
+      await check2Webseeds()
+      await check1PlaylistRedundancies()
       await checkStatsWith1Redundancy(strategy)
 
-      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 2 server 2', privacy: VideoPrivacy.PRIVATE })
-      video2Server2UUID = res.body.video.uuid
+      const { uuid } = await servers[1].videos.upload({ attributes: { name: 'video 2 server 2', privacy: VideoPrivacy.PRIVATE } })
+      video2Server2UUID = uuid
 
       // Wait transcoding before federation
       await waitJobs(servers)
 
-      await updateVideo(servers[1].url, servers[1].accessToken, video2Server2UUID, { privacy: VideoPrivacy.PUBLIC })
+      await servers[1].videos.update({ id: video2Server2UUID, attributes: { privacy: VideoPrivacy.PUBLIC } })
     })
 
     it('Should cache video 2 webseeds on the first video', async function () {
@@ -707,8 +708,8 @@ describe('Test videos redundancy', function () {
         await wait(1000)
 
         try {
-          await check1WebSeed(video1Server2UUID)
-          await check0PlaylistRedundancies(video1Server2UUID)
+          await check1WebSeed()
+          await check0PlaylistRedundancies()
 
           await check2Webseeds(video2Server2UUID)
           await check1PlaylistRedundancies(video2Server2UUID)
@@ -725,8 +726,8 @@ describe('Test videos redundancy', function () {
 
       await waitJobs(servers)
 
-      killallServers([ servers[0] ])
-      await reRunServer(servers[0], {
+      await killallServers([ servers[0] ])
+      await servers[0].run({
         redundancy: {
           videos: {
             check_interval: '1 second',
@@ -737,7 +738,7 @@ describe('Test videos redundancy', function () {
 
       await waitJobs(servers)
 
-      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].internalServerNumber, [ join('redundancy', 'hls') ])
+      await checkVideoFilesWereRemoved({ server: servers[0], video: video1Server2, onlyVideoFiles: true })
     })
 
     after(async function () {

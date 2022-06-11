@@ -9,7 +9,9 @@ function getMainTemplate (options: any) {
     <div class="vjs-upnext-autoplay-icon">
       <svg height="100%" version="1.1" viewbox="0 0 98 98" width="100%">
         <circle class="vjs-upnext-svg-autoplay-circle" cx="49" cy="49" fill="#000" fill-opacity="0.8" r="48"></circle>
-        <circle class="vjs-upnext-svg-autoplay-ring" cx="-49" cy="49" fill-opacity="0" r="46.5" stroke="#FFFFFF" stroke-width="4" transform="rotate(-90)"></circle>
+        <circle class="vjs-upnext-svg-autoplay-ring" cx="-49" cy="49" fill-opacity="0" r="46.5"
+                stroke="#FFFFFF" stroke-width="4" transform="rotate(-90)"
+        ></circle>
         <polygon class="vjs-upnext-svg-autoplay-triangle" fill="#fff" points="32,27 72,49 32,71"></polygon></svg>
     </div>
     <span class="vjs-upnext-bottom">
@@ -22,7 +24,7 @@ function getMainTemplate (options: any) {
 }
 
 export interface EndCardOptions extends videojs.ComponentOptions {
-  next: Function,
+  next: () => void
   getTitle: () => string
   timeout: number
   cancelText: string
@@ -99,11 +101,11 @@ class EndCard extends Component {
     return container
   }
 
-  showCard (cb: Function) {
+  showCard (cb: (value: boolean) => void) {
     let timeout: any
 
-    this.autoplayRing.setAttribute('stroke-dasharray', '' + this.dashOffsetStart)
-    this.autoplayRing.setAttribute('stroke-dashoffset', '' + -this.dashOffsetStart)
+    this.autoplayRing.setAttribute('stroke-dasharray', `${this.dashOffsetStart}`)
+    this.autoplayRing.setAttribute('stroke-dashoffset', `${-this.dashOffsetStart}`)
 
     this.title.innerHTML = this.options_.getTitle()
 
@@ -123,7 +125,7 @@ class EndCard extends Component {
     })
 
     const goToPercent = (percent: number) => {
-      const newOffset = Math.max(-this.dashOffsetTotal, - this.dashOffsetStart - percent * this.dashOffsetTotal / 2 / 100)
+      const newOffset = Math.max(-this.dashOffsetTotal, -this.dashOffsetStart - percent * this.dashOffsetTotal / 2 / 100)
       this.autoplayRing.setAttribute('stroke-dashoffset', '' + newOffset)
     }
 

@@ -2,36 +2,34 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { advancedVideoChannelSearch, searchVideoChannel } from '@shared/extra-utils/search/video-channels'
-import { Video, VideoChannel, VideoPlaylist, VideoPlaylistPrivacy, VideoPlaylistType, VideosSearchQuery } from '@shared/models'
+import { cleanupTests, createSingleServer, PeerTubeServer, SearchCommand, setAccessTokensToServers } from '@shared/extra-utils'
 import {
-  advancedVideoPlaylistSearch,
-  advancedVideosSearch,
-  cleanupTests,
-  flushAndRunServer,
-  immutableAssign,
-  searchVideo,
-  searchVideoPlaylists,
-  ServerInfo,
-  setAccessTokensToServers,
-  updateCustomSubConfig,
-  uploadVideo
-} from '../../../../shared/extra-utils'
+  BooleanBothQuery,
+  VideoChannelsSearchQuery,
+  VideoPlaylistPrivacy,
+  VideoPlaylistsSearchQuery,
+  VideoPlaylistType,
+  VideosSearchQuery
+} from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test videos search', function () {
-  let server: ServerInfo = null
   const localVideoName = 'local video' + new Date().toISOString()
+
+  let server: PeerTubeServer = null
+  let command: SearchCommand
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 
-    await uploadVideo(server.url, server.accessToken, { name: localVideoName })
+    await server.videos.upload({ attributes: { name: localVideoName } })
+
+    command = server.search
   })
 
   describe('Default search', async function () {
@@ -39,163 +37,213 @@ describe('Test videos search', function () {
     it('Should make a local videos search by default', async function () {
       this.timeout(10000)
 
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        search: {
-          searchIndex: {
-            enabled: true,
-            isDefaultSearch: false,
-            disableLocalSearch: false
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          search: {
+            searchIndex: {
+              enabled: true,
+              isDefaultSearch: false,
+              disableLocalSearch: false
+            }
           }
         }
       })
 
-      const res = await searchVideo(server.url, 'local video')
+      const body = await command.searchVideos({ search: 'local video' })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data[0].name).to.equal(localVideoName)
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal(localVideoName)
     })
 
     it('Should make a local channels search by default', async function () {
-      const res = await searchVideoChannel(server.url, 'root')
+      const body = await command.searchChannels({ search: 'root' })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data[0].name).to.equal('root_channel')
-      expect(res.body.data[0].host).to.equal('localhost:' + server.port)
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal('root_channel')
+      expect(body.data[0].host).to.equal('localhost:' + server.port)
     })
 
     it('Should make an index videos search by default', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        search: {
-          searchIndex: {
-            enabled: true,
-            isDefaultSearch: true,
-            disableLocalSearch: false
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          search: {
+            searchIndex: {
+              enabled: true,
+              isDefaultSearch: true,
+              disableLocalSearch: false
+            }
           }
         }
       })
 
-      const res = await searchVideo(server.url, 'local video')
-      expect(res.body.total).to.be.greaterThan(2)
+      const body = await command.searchVideos({ search: 'local video' })
+      expect(body.total).to.be.greaterThan(2)
     })
 
     it('Should make an index channels search by default', async function () {
-      const res = await searchVideoChannel(server.url, 'root')
-      expect(res.body.total).to.be.greaterThan(2)
+      const body = await command.searchChannels({ search: 'root' })
+      expect(body.total).to.be.greaterThan(2)
     })
 
     it('Should make an index videos search if local search is disabled', async function () {
-      await updateCustomSubConfig(server.url, server.accessToken, {
-        search: {
-          searchIndex: {
-            enabled: true,
-            isDefaultSearch: false,
-            disableLocalSearch: true
+      await server.config.updateCustomSubConfig({
+        newConfig: {
+          search: {
+            searchIndex: {
+              enabled: true,
+              isDefaultSearch: false,
+              disableLocalSearch: true
+            }
           }
         }
       })
 
-      const res = await searchVideo(server.url, 'local video')
-      expect(res.body.total).to.be.greaterThan(2)
+      const body = await command.searchVideos({ search: 'local video' })
+      expect(body.total).to.be.greaterThan(2)
     })
 
     it('Should make an index channels search if local search is disabled', async function () {
-      const res = await searchVideoChannel(server.url, 'root')
-      expect(res.body.total).to.be.greaterThan(2)
+      const body = await command.searchChannels({ search: 'root' })
+      expect(body.total).to.be.greaterThan(2)
     })
   })
 
   describe('Videos search', async function () {
 
-    it('Should make a simple search and not have results', async function () {
-      const res = await searchVideo(server.url, 'djidane'.repeat(50))
+    async function check (search: VideosSearchQuery, exists = true) {
+      const body = await command.advancedVideoSearch({ search })
 
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.have.lengthOf(0)
+      if (exists === false) {
+        expect(body.total).to.equal(0)
+        expect(body.data).to.have.lengthOf(0)
+        return
+      }
+
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
+
+      const video = body.data[0]
+
+      expect(video.name).to.equal('What is PeerTube?')
+      expect(video.category.label).to.equal('Science & Technology')
+      expect(video.licence.label).to.equal('Attribution - Share Alike')
+      expect(video.privacy.label).to.equal('Public')
+      expect(video.duration).to.equal(113)
+      expect(video.thumbnailUrl.startsWith('https://framatube.org/static/thumbnails')).to.be.true
+
+      expect(video.account.host).to.equal('framatube.org')
+      expect(video.account.name).to.equal('framasoft')
+      expect(video.account.url).to.equal('https://framatube.org/accounts/framasoft')
+      expect(video.account.avatar).to.exist
+
+      expect(video.channel.host).to.equal('framatube.org')
+      expect(video.channel.name).to.equal('joinpeertube')
+      expect(video.channel.url).to.equal('https://framatube.org/video-channels/joinpeertube')
+      expect(video.channel.avatar).to.exist
+    }
+
+    const baseSearch: VideosSearchQuery = {
+      search: 'what is peertube',
+      start: 0,
+      count: 2,
+      categoryOneOf: [ 15 ],
+      licenceOneOf: [ 2 ],
+      tagsAllOf: [ 'framasoft', 'peertube' ],
+      startDate: '2018-10-01T10:50:46.396Z',
+      endDate: '2018-10-01T10:55:46.396Z'
+    }
+
+    it('Should make a simple search and not have results', async function () {
+      const body = await command.searchVideos({ search: 'djidane'.repeat(50) })
+
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
     })
 
     it('Should make a simple search and have results', async function () {
-      const res = await searchVideo(server.url, 'What is PeerTube')
+      const body = await command.searchVideos({ search: 'What is PeerTube' })
 
-      expect(res.body.total).to.be.greaterThan(1)
+      expect(body.total).to.be.greaterThan(1)
     })
 
-    it('Should make a complex search', async function () {
+    it('Should make a simple search', async function () {
+      await check(baseSearch)
+    })
 
-      async function check (search: VideosSearchQuery, exists = true) {
-        const res = await advancedVideosSearch(server.url, search)
+    it('Should search by start date', async function () {
+      const search = { ...baseSearch, startDate: '2018-10-01T10:54:46.396Z' }
+      await check(search, false)
+    })
 
-        if (exists === false) {
-          expect(res.body.total).to.equal(0)
-          expect(res.body.data).to.have.lengthOf(0)
-          return
+    it('Should search by tags', async function () {
+      const search = { ...baseSearch, tagsAllOf: [ 'toto', 'framasoft' ] }
+      await check(search, false)
+    })
+
+    it('Should search by duration', async function () {
+      const search = { ...baseSearch, durationMin: 2000 }
+      await check(search, false)
+    })
+
+    it('Should search by nsfw attribute', async function () {
+      {
+        const search = { ...baseSearch, nsfw: 'true' as BooleanBothQuery }
+        await check(search, false)
+      }
+
+      {
+        const search = { ...baseSearch, nsfw: 'false' as BooleanBothQuery }
+        await check(search, true)
+      }
+
+      {
+        const search = { ...baseSearch, nsfw: 'both' as BooleanBothQuery }
+        await check(search, true)
+      }
+    })
+
+    it('Should search by host', async function () {
+      {
+        const search = { ...baseSearch, host: 'example.com' }
+        await check(search, false)
+      }
+
+      {
+        const search = { ...baseSearch, host: 'framatube.org' }
+        await check(search, true)
+      }
+    })
+
+    it('Should search by uuids', async function () {
+      const goodUUID = '9c9de5e8-0a1e-484a-b099-e80766180a6d'
+      const goodShortUUID = 'kkGMgK9ZtnKfYAgnEtQxbv'
+      const badUUID = 'c29c5b77-4a04-493d-96a9-2e9267e308f0'
+      const badShortUUID = 'rP5RgUeX9XwTSrspCdkDej'
+
+      {
+        const uuidsMatrix = [
+          [ goodUUID ],
+          [ goodUUID, badShortUUID ],
+          [ badShortUUID, goodShortUUID ],
+          [ goodUUID, goodShortUUID ]
+        ]
+
+        for (const uuids of uuidsMatrix) {
+          const search = { ...baseSearch, uuids }
+          await check(search, true)
         }
-
-        expect(res.body.total).to.equal(1)
-        expect(res.body.data).to.have.lengthOf(1)
-
-        const video: Video = res.body.data[0]
-
-        expect(video.name).to.equal('What is PeerTube?')
-        expect(video.category.label).to.equal('Science & Technology')
-        expect(video.licence.label).to.equal('Attribution - Share Alike')
-        expect(video.privacy.label).to.equal('Public')
-        expect(video.duration).to.equal(113)
-        expect(video.thumbnailUrl.startsWith('https://framatube.org/static/thumbnails')).to.be.true
-
-        expect(video.account.host).to.equal('framatube.org')
-        expect(video.account.name).to.equal('framasoft')
-        expect(video.account.url).to.equal('https://framatube.org/accounts/framasoft')
-        expect(video.account.avatar).to.exist
-
-        expect(video.channel.host).to.equal('framatube.org')
-        expect(video.channel.name).to.equal('bf54d359-cfad-4935-9d45-9d6be93f63e8')
-        expect(video.channel.url).to.equal('https://framatube.org/video-channels/bf54d359-cfad-4935-9d45-9d6be93f63e8')
-        expect(video.channel.avatar).to.exist
-      }
-
-      const baseSearch: VideosSearchQuery = {
-        search: 'what is peertube',
-        start: 0,
-        count: 2,
-        categoryOneOf: [ 15 ],
-        licenceOneOf: [ 2 ],
-        tagsAllOf: [ 'framasoft', 'peertube' ],
-        startDate: '2018-10-01T10:50:46.396Z',
-        endDate: '2018-10-01T10:55:46.396Z'
       }
 
       {
-        await check(baseSearch)
-      }
+        const uuidsMatrix = [
+          [ badUUID ],
+          [ badShortUUID ]
+        ]
 
-      {
-        const search = immutableAssign(baseSearch, { startDate: '2018-10-01T10:54:46.396Z' })
-        await check(search, false)
-      }
-
-      {
-        const search = immutableAssign(baseSearch, { tagsAllOf: [ 'toto', 'framasoft' ] })
-        await check(search, false)
-      }
-
-      {
-        const search = immutableAssign(baseSearch, { durationMin: 2000 })
-        await check(search, false)
-      }
-
-      {
-        const search = immutableAssign(baseSearch, { nsfw: 'true' })
-        await check(search, false)
-      }
-
-      {
-        const search = immutableAssign(baseSearch, { nsfw: 'false' })
-        await check(search, true)
-      }
-
-      {
-        const search = immutableAssign(baseSearch, { nsfw: 'both' })
-        await check(search, true)
+        for (const uuids of uuidsMatrix) {
+          const search = { ...baseSearch, uuids }
+          await check(search, false)
+        }
       }
     })
 
@@ -206,37 +254,44 @@ describe('Test videos search', function () {
         count: 5
       }
 
-      const res = await advancedVideosSearch(server.url, search)
+      const body = await command.advancedVideoSearch({ search })
 
-      expect(res.body.total).to.be.greaterThan(5)
-      expect(res.body.data).to.have.lengthOf(5)
+      expect(body.total).to.be.greaterThan(5)
+      expect(body.data).to.have.lengthOf(5)
     })
 
     it('Should use the nsfw instance policy as default', async function () {
       let nsfwUUID: string
 
       {
-        await updateCustomSubConfig(server.url, server.accessToken, { instance: { defaultNSFWPolicy: 'display' } })
+        await server.config.updateCustomSubConfig({
+          newConfig: {
+            instance: { defaultNSFWPolicy: 'display' }
+          }
+        })
 
-        const res = await searchVideo(server.url, 'NSFW search index', '-match')
-        const video = res.body.data[0] as Video
+        const body = await command.searchVideos({ search: 'NSFW search index', sort: '-match' })
+        expect(body.data).to.have.length.greaterThan(0)
 
-        expect(res.body.data).to.have.length.greaterThan(0)
+        const video = body.data[0]
         expect(video.nsfw).to.be.true
 
         nsfwUUID = video.uuid
       }
 
       {
-        await updateCustomSubConfig(server.url, server.accessToken, { instance: { defaultNSFWPolicy: 'do_not_list' } })
+        await server.config.updateCustomSubConfig({
+          newConfig: {
+            instance: { defaultNSFWPolicy: 'do_not_list' }
+          }
+        })
 
-        const res = await searchVideo(server.url, 'NSFW search index', '-match')
+        const body = await command.searchVideos({ search: 'NSFW search index', sort: '-match' })
 
         try {
-          expect(res.body.data).to.have.lengthOf(0)
-        } catch (err) {
-          //
-          const video = res.body.data[0] as Video
+          expect(body.data).to.have.lengthOf(0)
+        } catch {
+          const video = body.data[0]
 
           expect(video.uuid).not.equal(nsfwUUID)
         }
@@ -246,20 +301,19 @@ describe('Test videos search', function () {
 
   describe('Channels search', async function () {
 
-    it('Should make a simple search and not have results', async function () {
-      const res = await searchVideoChannel(server.url, 'a'.repeat(500))
+    async function check (search: VideoChannelsSearchQuery, exists = true) {
+      const body = await command.advancedChannelSearch({ search })
 
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.have.lengthOf(0)
-    })
+      if (exists === false) {
+        expect(body.total).to.equal(0)
+        expect(body.data).to.have.lengthOf(0)
+        return
+      }
 
-    it('Should make a search and have results', async function () {
-      const res = await advancedVideoChannelSearch(server.url, { search: 'Framasoft', sort: 'createdAt' })
+      expect(body.total).to.be.greaterThan(0)
+      expect(body.data).to.have.length.greaterThan(0)
 
-      expect(res.body.total).to.be.greaterThan(0)
-      expect(res.body.data).to.have.length.greaterThan(0)
-
-      const videoChannel: VideoChannel = res.body.data[0]
+      const videoChannel = body.data[0]
       expect(videoChannel.url).to.equal('https://framatube.org/video-channels/bf54d359-cfad-4935-9d45-9d6be93f63e8')
       expect(videoChannel.host).to.equal('framatube.org')
       expect(videoChannel.avatar).to.exist
@@ -269,32 +323,53 @@ describe('Test videos search', function () {
       expect(videoChannel.ownerAccount.name).to.equal('framasoft')
       expect(videoChannel.ownerAccount.host).to.equal('framatube.org')
       expect(videoChannel.ownerAccount.avatar).to.exist
+    }
+
+    it('Should make a simple search and not have results', async function () {
+      const body = await command.searchChannels({ search: 'a'.repeat(500) })
+
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
+    })
+
+    it('Should make a search and have results', async function () {
+      await check({ search: 'Framasoft', sort: 'createdAt' }, true)
+    })
+
+    it('Should make host search and have appropriate results', async function () {
+      await check({ search: 'Framasoft', host: 'example.com' }, false)
+      await check({ search: 'Framasoft', host: 'framatube.org' }, true)
+    })
+
+    it('Should make handles search and have appropriate results', async function () {
+      await check({ handles: [ 'bf54d359-cfad-4935-9d45-9d6be93f63e8@framatube.org' ] }, true)
+      await check({ handles: [ 'jeanine', 'bf54d359-cfad-4935-9d45-9d6be93f63e8@framatube.org' ] }, true)
+      await check({ handles: [ 'jeanine', 'chocobozzz_channel2@peertube2.cpy.re' ] }, false)
     })
 
     it('Should have a correct pagination', async function () {
-      const res = await advancedVideoChannelSearch(server.url, { search: 'root', start: 0, count: 2 })
+      const body = await command.advancedChannelSearch({ search: { search: 'root', start: 0, count: 2 } })
 
-      expect(res.body.total).to.be.greaterThan(2)
-      expect(res.body.data).to.have.lengthOf(2)
+      expect(body.total).to.be.greaterThan(2)
+      expect(body.data).to.have.lengthOf(2)
     })
   })
 
   describe('Playlists search', async function () {
 
-    it('Should make a simple search and not have results', async function () {
-      const res = await searchVideoPlaylists(server.url, 'a'.repeat(500))
+    async function check (search: VideoPlaylistsSearchQuery, exists = true) {
+      const body = await command.advancedPlaylistSearch({ search })
 
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.have.lengthOf(0)
-    })
+      if (exists === false) {
+        expect(body.total).to.equal(0)
+        expect(body.data).to.have.lengthOf(0)
+        return
+      }
 
-    it('Should make a search and have results', async function () {
-      const res = await advancedVideoPlaylistSearch(server.url, { search: 'E2E playlist', sort: '-match' })
+      expect(body.total).to.be.greaterThan(0)
+      expect(body.data).to.have.length.greaterThan(0)
 
-      expect(res.body.total).to.be.greaterThan(0)
-      expect(res.body.data).to.have.length.greaterThan(0)
-
-      const videoPlaylist: VideoPlaylist = res.body.data[0]
+      const videoPlaylist = body.data[0]
 
       expect(videoPlaylist.url).to.equal('https://peertube2.cpy.re/videos/watch/playlist/73804a40-da9a-40c2-b1eb-2c6d9eec8f0a')
       expect(videoPlaylist.thumbnailUrl).to.exist
@@ -319,13 +394,62 @@ describe('Test videos search', function () {
       expect(videoPlaylist.videoChannel.name).to.equal('chocobozzz_channel')
       expect(videoPlaylist.videoChannel.host).to.equal('peertube2.cpy.re')
       expect(videoPlaylist.videoChannel.avatar).to.exist
+    }
+
+    it('Should make a simple search and not have results', async function () {
+      const body = await command.searchPlaylists({ search: 'a'.repeat(500) })
+
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
+    })
+
+    it('Should make a search and have results', async function () {
+      await check({ search: 'E2E playlist', sort: '-match' }, true)
+    })
+
+    it('Should make host search and have appropriate results', async function () {
+      await check({ search: 'E2E playlist', host: 'example.com' }, false)
+      await check({ search: 'E2E playlist', host: 'peertube2.cpy.re', sort: '-match' }, true)
+    })
+
+    it('Should make a search by uuids and have appropriate results', async function () {
+      const goodUUID = '73804a40-da9a-40c2-b1eb-2c6d9eec8f0a'
+      const goodShortUUID = 'fgei1ws1oa6FCaJ2qZPG29'
+      const badUUID = 'c29c5b77-4a04-493d-96a9-2e9267e308f0'
+      const badShortUUID = 'rP5RgUeX9XwTSrspCdkDej'
+
+      {
+        const uuidsMatrix = [
+          [ goodUUID ],
+          [ goodUUID, badShortUUID ],
+          [ badShortUUID, goodShortUUID ],
+          [ goodUUID, goodShortUUID ]
+        ]
+
+        for (const uuids of uuidsMatrix) {
+          const search = { search: 'E2E playlist', sort: '-match', uuids }
+          await check(search, true)
+        }
+      }
+
+      {
+        const uuidsMatrix = [
+          [ badUUID ],
+          [ badShortUUID ]
+        ]
+
+        for (const uuids of uuidsMatrix) {
+          const search = { search: 'E2E playlist', sort: '-match', uuids }
+          await check(search, false)
+        }
+      }
     })
 
     it('Should have a correct pagination', async function () {
-      const res = await advancedVideoChannelSearch(server.url, { search: 'root', start: 0, count: 2 })
+      const body = await command.advancedChannelSearch({ search: { search: 'root', start: 0, count: 2 } })
 
-      expect(res.body.total).to.be.greaterThan(2)
-      expect(res.body.data).to.have.lengthOf(2)
+      expect(body.total).to.be.greaterThan(2)
+      expect(body.data).to.have.lengthOf(2)
     })
   })
 

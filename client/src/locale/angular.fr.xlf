@@ -4870,7 +4870,7 @@
       </trans-unit>
       <trans-unit id="1096694538966074574" datatype="html">
         <source>Published <x id="PH" equiv-text="total"/> videos matching "<x id="PH_1" equiv-text="this.search"/>"</source>
-        <target state="translated">Published <x id="PH" equiv-text="total"/> videos matching "<x id="PH_1" equiv-text="this.search"/>"</target>
+        <target state="translated">Vidéos <x id="PH" equiv-text="total"/> publiées correspondant "<x id="PH_1" equiv-text="this.search"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-search/account-search.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -8314,7 +8314,7 @@
       </trans-unit>
       <trans-unit id="6721822899525405039" datatype="html">
         <source>People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </source>
-        <target state="translated">People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
+        <target state="translated">On peut vous trouver en utilisant @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -9110,7 +9110,7 @@
       </trans-unit>
       <trans-unit id="8553059323353586765" datatype="html">
         <source>Your current email is <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. It is never shown to the public. </source>
-        <target state="translated">Your current email is <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. It is never shown to the public. </target>
+        <target state="translated">Votre adresse courriel actuelle est <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;email&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. Elle ne sera jamais visible publiquement. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">5,7</context>
@@ -9350,7 +9350,7 @@
       </trans-unit>
       <trans-unit id="4361762785337785037" datatype="html">
         <source>Copy feed URL</source>
-        <target state="translated">Copy feed URL</target>
+        <target state="translated">Copier l'URL du flux</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/video-user-subscriptions.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -10563,7 +10563,7 @@
       </trans-unit>
       <trans-unit id="1268699198448750610" datatype="html">
         <source>Follow instances</source>
-        <target state="translated">Follow instances</target>
+        <target state="translated">Suivre des instances</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">17</context>
@@ -11003,7 +11003,7 @@
       </trans-unit>
       <trans-unit id="6314880288843792309" datatype="html">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
-        <target state="translated">The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</target>
+        <target state="translated">La principale menace pour votre vie privée induite par BitTorrent réside dans le stockage de votre IP par l'instance du traqueur de BitTorrent tant que vous téléchargez ou regardez une vidéo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">81,83</context>
@@ -12395,7 +12395,7 @@
       </trans-unit>
       <trans-unit id="7508177761852352782" datatype="html">
         <source>You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example).</source>
-        <target state="translated">You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example).</target>
+        <target state="translated">Vous pouvez commenter en utilisant un compte sur toute instance compatible avec ActivityPub (compte PeerTube/Mastodon/Pleroma par exemple).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">60,61</context>
@@ -14878,7 +14878,7 @@
       </trans-unit>
       <trans-unit id="953cc45f4ac17dee9271bd9a3667489c03c8076b" datatype="html">
         <source>Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value.</source>
-        <target state="translated">Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value.</target>
+        <target state="translated">Fournissez le compte Twitter représentant votre instance pour améliorer les aperçus de liens. Si vous n'avez pas de compte Twitter, laissez la valeur par défaut.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">654,656</context>
@@ -14970,7 +14970,7 @@
       </trans-unit>
       <trans-unit id="0ff72c066084f3c420dde9febf4f7255e7511867" datatype="html">
         <source>Allows users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, .m2ts, .mxf, or .nut videos.</source>
-        <target state="translated">Allows users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, .m2ts, .mxf, or .nut videos.</target>
+        <target state="translated">Autorise les utilisateur⋅ices à téléverser des vidéos .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, .m2ts, .mxf, ou .nut.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">756</context>
@@ -15110,7 +15110,7 @@
       </trans-unit>
       <trans-unit id="8894612824234881672" datatype="html">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
-        <target state="translated">⚠️ Enabling live streaming requires trust in your users and extra moderation work</target>
+        <target state="translated">⚠️ La mise en place d'un streaming en direct nécessite une confiance dans vos utilisateurs et un travail de modération supplémentaire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">898</context>
@@ -15118,7 +15118,7 @@
       </trans-unit>
       <trans-unit id="acdcf7ffe53af776994f9c393c1d20cdbc633ad4" datatype="html">
         <source>If enabled, your server needs to accept incoming TCP traffic on port <x id="INTERPOLATION" equiv-text="{{ liveRTMPPort }}"/></source>
-        <target state="translated">If enabled, your server needs to accept incoming TCP traffic on port <x id="INTERPOLATION" equiv-text="{{ liveRTMPPort }}"/></target>
+        <target state="translated">Si cette option est activée, votre serveur doit accepter le trafic TCP entrant sur le port <x id="INTERPOLATION" equiv-text="{{ liveRTMPPort }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">899</context>

@@ -1,4 +1,4 @@
-import { first } from 'rxjs/operators'
+import { firstValueFrom } from 'rxjs'
 import { ComponentRef, Injectable } from '@angular/core'
 import { MarkdownService } from '@app/core'
 import {
@@ -65,15 +65,15 @@ export class CustomMarkupService {
 
     for (const selector of Object.keys(this.htmlBuilders)) {
       rootElement.querySelectorAll(selector)
-      .forEach((e: HTMLElement) => {
-        try {
-          const element = this.execHTMLBuilder(selector, e)
-          // Insert as first child
-          e.insertBefore(element, e.firstChild)
-        } catch (err) {
-          console.error('Cannot inject component %s.', selector, err)
-        }
-      })
+        .forEach((e: HTMLElement) => {
+          try {
+            const element = this.execHTMLBuilder(selector, e)
+            // Insert as first child
+            e.insertBefore(element, e.firstChild)
+          } catch (err) {
+            console.error('Cannot inject component %s.', selector, err)
+          }
+        })
     }
 
     const loadedPromises: Promise<boolean>[] = []
@@ -85,7 +85,7 @@ export class CustomMarkupService {
             const component = this.execAngularBuilder(selector, e)
 
             if (component.instance.loaded) {
-              const p = component.instance.loaded.pipe(first()).toPromise()
+              const p = firstValueFrom(component.instance.loaded)
               loadedPromises.push(p)
             }
 
@@ -191,6 +191,8 @@ export class CustomMarkupService {
       accountHandle: data.accountHandle || undefined,
       channelHandle: data.channelHandle || undefined,
 
+      isLive: this.buildBoolean(data.isLive),
+
       filter: this.buildBoolean(data.onlyLocal) ? 'local' as VideoFilter : undefined
     }
 
@@ -214,6 +216,8 @@ export class CustomMarkupService {
       : 'layout-column'
 
     root.classList.add('peertube-container', layoutClass)
+
+    root.style.justifyContent = data.justifyContent || 'space-between'
 
     if (data.width) {
       root.setAttribute('width', data.width)

@@ -1,11 +1,11 @@
-import * as Bull from 'bull'
+import { Job } from 'bull'
 import { ActivitypubHttpUnicastPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
 import { ActorFollowScoreCache } from '../../files-cache'
 import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 
-async function processActivityPubHttpUnicast (job: Bull.Job) {
+async function processActivityPubHttpUnicast (job: Job) {
   logger.info('Processing ActivityPub unicast in job %d.', job.id)
 
   const payload = job.data as ActivitypubHttpUnicastPayload

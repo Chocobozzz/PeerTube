@@ -15,9 +15,12 @@ import { PeertubeCheckboxComponent } from './peertube-checkbox.component'
 import { PreviewUploadComponent } from './preview-upload.component'
 import { ReactiveFileComponent } from './reactive-file.component'
 import {
+  SelectCategoriesComponent,
   SelectChannelComponent,
+  SelectCheckboxAllComponent,
   SelectCheckboxComponent,
   SelectCustomValueComponent,
+  SelectLanguagesComponent,
   SelectOptionsComponent,
   SelectTagsComponent
 } from './select'
@@ -52,6 +55,9 @@ import { TimestampInputComponent } from './timestamp-input.component'
     SelectTagsComponent,
     SelectCheckboxComponent,
     SelectCustomValueComponent,
+    SelectLanguagesComponent,
+    SelectCategoriesComponent,
+    SelectCheckboxAllComponent,
 
     DynamicFormFieldComponent,
 
@@ -80,6 +86,9 @@ import { TimestampInputComponent } from './timestamp-input.component'
     SelectTagsComponent,
     SelectCheckboxComponent,
     SelectCustomValueComponent,
+    SelectLanguagesComponent,
+    SelectCategoriesComponent,
+    SelectCheckboxAllComponent,
 
     DynamicFormFieldComponent,
 

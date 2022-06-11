@@ -1,6 +1,6 @@
 
-import * as Bluebird from 'bluebird'
-import * as chokidar from 'chokidar'
+import { mapSeries } from 'bluebird'
+import { FSWatcher, watch } from 'chokidar'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { appendFile, ensureDir, readFile, stat } from 'fs-extra'
 import { basename, join } from 'path'
@@ -11,9 +11,9 @@ import { CONFIG } from '@server/initializers/config'
 import { MEMOIZE_TTL, VIDEO_LIVE } from '@server/initializers/constants'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { MStreamingPlaylistVideo, MUserId, MVideoLiveVideo } from '@server/types/models'
+import { getLiveDirectory } from '../../paths'
 import { VideoTranscodingProfilesManager } from '../../transcoding/video-transcoding-profiles'
 import { isAbleToUploadVideo } from '../../user'
-import { getHLSDirectory } from '../../video-paths'
 import { LiveQuotaStore } from '../live-quota-store'
 import { LiveSegmentShaStore } from '../live-segment-sha-store'
 import { buildConcatenatedName } from '../live-utils'
@@ -56,6 +56,9 @@ class MuxingSession extends EventEmitter {
   private readonly fps: number
   private readonly allResolutions: number[]
 
+  private readonly bitrate: number
+  private readonly ratio: number
+
   private readonly videoId: number
   private readonly videoUUID: string
   private readonly saveReplay: boolean
@@ -64,8 +67,8 @@ class MuxingSession extends EventEmitter {
 
   private segmentsToProcessPerPlaylist: { [playlistId: string]: string[] } = {}
 
-  private tsWatcher: chokidar.FSWatcher
-  private masterWatcher: chokidar.FSWatcher
+  private tsWatcher: FSWatcher
+  private masterWatcher: FSWatcher
 
   private readonly isAbleToUploadVideoWithCache = memoizee((userId: number) => {
     return isAbleToUploadVideo(userId, 1000)
@@ -83,6 +86,8 @@ class MuxingSession extends EventEmitter {
     streamingPlaylist: MStreamingPlaylistVideo
     rtmpUrl: string
     fps: number
+    bitrate: number
+    ratio: number
     allResolutions: number[]
   }) {
     super()
@@ -94,6 +99,10 @@ class MuxingSession extends EventEmitter {
     this.streamingPlaylist = options.streamingPlaylist
     this.rtmpUrl = options.rtmpUrl
     this.fps = options.fps
+
+    this.bitrate = options.bitrate
+    this.ratio = options.bitrate
+
     this.allResolutions = options.allResolutions
 
     this.videoId = this.videoLive.Video.id
@@ -112,13 +121,19 @@ class MuxingSession extends EventEmitter {
     this.ffmpegCommand = CONFIG.LIVE.TRANSCODING.ENABLED
       ? await getLiveTranscodingCommand({
         rtmpUrl: this.rtmpUrl,
+
         outPath,
+        masterPlaylistName: this.streamingPlaylist.playlistFilename,
+
         resolutions: this.allResolutions,
         fps: this.fps,
+        bitrate: this.bitrate,
+        ratio: this.ratio,
+
         availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
         profile: CONFIG.LIVE.TRANSCODING.PROFILE
       })
-      : getLiveMuxingCommand(this.rtmpUrl, outPath)
+      : getLiveMuxingCommand(this.rtmpUrl, outPath, this.streamingPlaylist.playlistFilename)
 
     logger.info('Running live muxing/transcoding for %s.', this.videoUUID, this.lTags)
 
@@ -182,9 +197,9 @@ class MuxingSession extends EventEmitter {
   }
 
   private watchMasterFile (outPath: string) {
-    this.masterWatcher = chokidar.watch(outPath + '/master.m3u8')
+    this.masterWatcher = watch(outPath + '/' + this.streamingPlaylist.playlistFilename)
 
-    this.masterWatcher.on('add', async () => {
+    this.masterWatcher.on('add', () => {
       this.emit('master-playlist-created', { videoId: this.videoId })
 
       this.masterWatcher.close()
@@ -195,7 +210,7 @@ class MuxingSession extends EventEmitter {
   private watchTSFiles (outPath: string) {
     const startStreamDateTime = new Date().getTime()
 
-    this.tsWatcher = chokidar.watch(outPath + '/*.ts')
+    this.tsWatcher = watch(outPath + '/*.ts')
 
     const playlistIdMatcher = /^([\d+])-/
 
@@ -267,7 +282,7 @@ class MuxingSession extends EventEmitter {
   }
 
   private async prepareDirectories () {
-    const outPath = getHLSDirectory(this.videoLive.Video)
+    const outPath = getLiveDirectory(this.videoLive.Video)
     await ensureDir(outPath)
 
     const replayDirectory = join(outPath, VIDEO_LIVE.REPLAY_DIRECTORY)
@@ -291,7 +306,7 @@ class MuxingSession extends EventEmitter {
   }
 
   private processSegments (hlsVideoPath: string, segmentPaths: string[]) {
-    Bluebird.mapSeries(segmentPaths, async previousSegment => {
+    mapSeries(segmentPaths, async previousSegment => {
       // Add sha hash of previous segments, because ffmpeg should have finished generating them
       await LiveSegmentShaStore.Instance.addSegmentSha(this.videoUUID, previousSegment)
 

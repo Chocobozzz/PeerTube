@@ -22,6 +22,7 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
   @Input() count: number
   @Input() onlyDisplayTitle: boolean
   @Input() filter: VideoFilter
+  @Input() isLive: boolean
   @Input() maxRows: number
   @Input() channelHandle: string
   @Input() accountHandle: string
@@ -70,11 +71,11 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
 
     return this.getVideosObservable()
       .pipe(finalize(() => this.loaded.emit(true)))
-      .subscribe(
-        ({ data }) => this.videos = data,
+      .subscribe({
+        next: ({ data }) => this.videos = data,
 
-        err => this.notifier.error('Error in videos list component: ' + err.message)
-      )
+        error: err => this.notifier.error($localize`Error in videos list component: ${err.message}`)
+      })
   }
 
   getVideosObservable () {
@@ -86,6 +87,7 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
       categoryOneOf: this.categoryOneOf,
       languageOneOf: this.languageOneOf,
       filter: this.filter,
+      isLive: this.isLive,
       sort: this.sort as VideoSortField,
       account: { nameWithHost: this.accountHandle },
       videoChannel: { nameWithHost: this.channelHandle }

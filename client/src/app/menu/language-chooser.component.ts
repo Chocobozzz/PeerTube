@@ -18,7 +18,7 @@ export class LanguageChooserComponent {
     @Inject(LOCALE_ID) private localeId: string
   ) {
     const l = Object.keys(I18N_LOCALES)
-                    .map(k => ({ id: k, label: I18N_LOCALES[k] , iso: getShortLocale(k) }))
+                    .map(k => ({ id: k, label: I18N_LOCALES[k], iso: getShortLocale(k) }))
 
     this.languages = sortBy(l, 'label')
   }

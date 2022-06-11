@@ -77,14 +77,14 @@ export class CommentReportComponent extends FormReactive implements OnInit {
       comment: {
         id: this.comment.id
       }
-    }).subscribe(
-      () => {
+    }).subscribe({
+      next: () => {
         this.notifier.success($localize`Comment reported.`)
         this.hide()
       },
 
-      err => this.notifier.error(err.message)
-    )
+      error: err => this.notifier.error(err.message)
+    })
   }
 
   isRemote () {

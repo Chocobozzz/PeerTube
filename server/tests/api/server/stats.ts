@@ -3,33 +3,20 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  addVideoChannel,
   cleanupTests,
-  createUser,
-  createVideoPlaylist,
+  createMultipleServers,
   doubleFollow,
-  flushAndRunMultipleServers,
-  follow,
-  ServerInfo,
-  unfollow,
-  updateCustomSubConfig,
-  uploadVideo,
-  userLogin,
-  viewVideo,
-  wait
-} from '../../../../shared/extra-utils'
-import { setAccessTokensToServers } from '../../../../shared/extra-utils/index'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { getStats } from '../../../../shared/extra-utils/server/stats'
-import { addVideoCommentThread } from '../../../../shared/extra-utils/videos/video-comments'
-import { ServerStats } from '../../../../shared/models/server/server-stats.model'
-import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { ActivityType } from '@shared/models'
+  PeerTubeServer,
+  setAccessTokensToServers,
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
+import { ActivityType, VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test stats (excluding redundancy)', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let channelId
   const user = {
     username: 'user1',
@@ -39,31 +26,29 @@ describe('Test stats (excluding redundancy)', function () {
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
 
     await setAccessTokensToServers(servers)
 
     await doubleFollow(servers[0], servers[1])
 
-    await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
+    await servers[0].users.create({ username: user.username, password: user.password })
 
-    const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { fixture: 'video_short.webm' })
-    const videoUUID = resVideo.body.video.uuid
+    const { uuid } = await servers[0].videos.upload({ attributes: { fixture: 'video_short.webm' } })
 
-    await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoUUID, 'comment')
+    await servers[0].comments.createThread({ videoId: uuid, text: 'comment' })
 
-    await viewVideo(servers[0].url, videoUUID)
+    await servers[0].videos.view({ id: uuid })
 
     // Wait the video views repeatable job
     await wait(8000)
 
-    await follow(servers[2].url, [ servers[0].url ], servers[2].accessToken)
+    await servers[2].follows.follow({ hosts: [ servers[0].url ] })
     await waitJobs(servers)
   })
 
   it('Should have the correct stats on instance 1', async function () {
-    const res = await getStats(servers[0].url)
-    const data: ServerStats = res.body
+    const data = await servers[0].stats.get()
 
     expect(data.totalLocalVideoComments).to.equal(1)
     expect(data.totalLocalVideos).to.equal(1)
@@ -78,8 +63,7 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   it('Should have the correct stats on instance 2', async function () {
-    const res = await getStats(servers[1].url)
-    const data: ServerStats = res.body
+    const data = await servers[1].stats.get()
 
     expect(data.totalLocalVideoComments).to.equal(0)
     expect(data.totalLocalVideos).to.equal(0)
@@ -94,8 +78,7 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   it('Should have the correct stats on instance 3', async function () {
-    const res = await getStats(servers[2].url)
-    const data: ServerStats = res.body
+    const data = await servers[2].stats.get()
 
     expect(data.totalLocalVideoComments).to.equal(0)
     expect(data.totalLocalVideos).to.equal(0)
@@ -111,11 +94,10 @@ describe('Test stats (excluding redundancy)', function () {
   it('Should have the correct total videos stats after an unfollow', async function () {
     this.timeout(15000)
 
-    await unfollow(servers[2].url, servers[2].accessToken, servers[0])
+    await servers[2].follows.unfollow({ target: servers[0] })
     await waitJobs(servers)
 
-    const res = await getStats(servers[2].url)
-    const data: ServerStats = res.body
+    const data = await servers[2].stats.get()
 
     expect(data.totalVideos).to.equal(0)
   })
@@ -124,18 +106,18 @@ describe('Test stats (excluding redundancy)', function () {
     const server = servers[0]
 
     {
-      const res = await getStats(server.url)
-      const data: ServerStats = res.body
+      const data = await server.stats.get()
+
       expect(data.totalDailyActiveUsers).to.equal(1)
       expect(data.totalWeeklyActiveUsers).to.equal(1)
       expect(data.totalMonthlyActiveUsers).to.equal(1)
     }
 
     {
-      await userLogin(server, user)
+      await server.login.getAccessToken(user)
 
-      const res = await getStats(server.url)
-      const data: ServerStats = res.body
+      const data = await server.stats.get()
+
       expect(data.totalDailyActiveUsers).to.equal(2)
       expect(data.totalWeeklyActiveUsers).to.equal(2)
       expect(data.totalMonthlyActiveUsers).to.equal(2)
@@ -146,33 +128,33 @@ describe('Test stats (excluding redundancy)', function () {
     const server = servers[0]
 
     {
-      const res = await getStats(server.url)
-      const data: ServerStats = res.body
+      const data = await server.stats.get()
+
       expect(data.totalLocalDailyActiveVideoChannels).to.equal(1)
       expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(1)
       expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(1)
     }
 
     {
-      const channelAttributes = {
+      const attributes = {
         name: 'stats_channel',
         displayName: 'My stats channel'
       }
-      const resChannel = await addVideoChannel(server.url, server.accessToken, channelAttributes)
-      channelId = resChannel.body.videoChannel.id
+      const created = await server.channels.create({ attributes })
+      channelId = created.id
 
-      const res = await getStats(server.url)
-      const data: ServerStats = res.body
+      const data = await server.stats.get()
+
       expect(data.totalLocalDailyActiveVideoChannels).to.equal(1)
       expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(1)
       expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(1)
     }
 
     {
-      await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.webm', channelId })
+      await server.videos.upload({ attributes: { fixture: 'video_short.webm', channelId } })
 
-      const res = await getStats(server.url)
-      const data: ServerStats = res.body
+      const data = await server.stats.get()
+
       expect(data.totalLocalDailyActiveVideoChannels).to.equal(2)
       expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(2)
       expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(2)
@@ -183,66 +165,62 @@ describe('Test stats (excluding redundancy)', function () {
     const server = servers[0]
 
     {
-      const resStats = await getStats(server.url)
-      const dataStats: ServerStats = resStats.body
-      expect(dataStats.totalLocalPlaylists).to.equal(0)
+      const data = await server.stats.get()
+      expect(data.totalLocalPlaylists).to.equal(0)
     }
 
     {
-      await createVideoPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistAttrs: {
+      await server.playlists.create({
+        attributes: {
           displayName: 'playlist for count',
           privacy: VideoPlaylistPrivacy.PUBLIC,
           videoChannelId: channelId
         }
       })
 
-      const resStats = await getStats(server.url)
-      const dataStats: ServerStats = resStats.body
-      expect(dataStats.totalLocalPlaylists).to.equal(1)
+      const data = await server.stats.get()
+      expect(data.totalLocalPlaylists).to.equal(1)
     }
   })
 
   it('Should correctly count video file sizes if transcoding is enabled', async function () {
     this.timeout(60000)
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      transcoding: {
-        enabled: true,
-        webtorrent: {
-          enabled: true
-        },
-        hls: {
-          enabled: true
-        },
-        resolutions: {
-          '0p': false,
-          '240p': false,
-          '360p': false,
-          '480p': false,
-          '720p': false,
-          '1080p': false,
-          '1440p': false,
-          '2160p': false
+    await servers[0].config.updateCustomSubConfig({
+      newConfig: {
+        transcoding: {
+          enabled: true,
+          webtorrent: {
+            enabled: true
+          },
+          hls: {
+            enabled: true
+          },
+          resolutions: {
+            '0p': false,
+            '240p': false,
+            '360p': false,
+            '480p': false,
+            '720p': false,
+            '1080p': false,
+            '1440p': false,
+            '2160p': false
+          }
         }
       }
     })
 
-    await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video', fixture: 'video_short.webm' })
+    await servers[0].videos.upload({ attributes: { name: 'video', fixture: 'video_short.webm' } })
 
     await waitJobs(servers)
 
     {
-      const res = await getStats(servers[1].url)
-      const data: ServerStats = res.body
+      const data = await servers[1].stats.get()
       expect(data.totalLocalVideoFilesSize).to.equal(0)
     }
 
     {
-      const res = await getStats(servers[0].url)
-      const data: ServerStats = res.body
+      const data = await servers[0].stats.get()
       expect(data.totalLocalVideoFilesSize).to.be.greaterThan(500000)
       expect(data.totalLocalVideoFilesSize).to.be.lessThan(600000)
     }
@@ -251,27 +229,27 @@ describe('Test stats (excluding redundancy)', function () {
   it('Should have the correct AP stats', async function () {
     this.timeout(60000)
 
-    await updateCustomSubConfig(servers[0].url, servers[0].accessToken, {
-      transcoding: {
-        enabled: false
+    await servers[0].config.updateCustomSubConfig({
+      newConfig: {
+        transcoding: {
+          enabled: false
+        }
       }
     })
 
-    const res1 = await getStats(servers[1].url)
-    const first = res1.body as ServerStats
+    const first = await servers[1].stats.get()
 
     for (let i = 0; i < 10; i++) {
-      await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
+      await servers[0].videos.upload({ attributes: { name: 'video' } })
     }
 
     await waitJobs(servers)
 
     await wait(6000)
 
-    const res2 = await getStats(servers[1].url)
-    const second: ServerStats = res2.body
-
+    const second = await servers[1].stats.get()
     expect(second.totalActivityPubMessagesProcessed).to.be.greaterThan(first.totalActivityPubMessagesProcessed)
+
     const apTypes: ActivityType[] = [
       'Create', 'Update', 'Delete', 'Follow', 'Accept', 'Announce', 'Undo', 'Like', 'Reject', 'View', 'Dislike', 'Flag'
     ]
@@ -291,9 +269,7 @@ describe('Test stats (excluding redundancy)', function () {
 
     await wait(6000)
 
-    const res3 = await getStats(servers[1].url)
-    const third: ServerStats = res3.body
-
+    const third = await servers[1].stats.get()
     expect(third.totalActivityPubMessagesWaiting).to.equal(0)
     expect(third.activityPubMessagesProcessedPerSecond).to.be.lessThan(second.activityPubMessagesProcessedPerSecond)
   })

@@ -15,10 +15,11 @@ export class MyAccountDangerZoneComponent {
     private userService: UserService,
     private confirmService: ConfirmService,
     private redirectService: RedirectService
-    ) { }
+  ) { }
 
   async deleteMe () {
     const res = await this.confirmService.confirmWithInput(
+      // eslint-disable-next-line max-len
       $localize`Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.`,
       $localize`Type your username to confirm`,
       this.user.username,
@@ -27,15 +28,16 @@ export class MyAccountDangerZoneComponent {
     )
     if (res === false) return
 
-    this.userService.deleteMe().subscribe(
-      () => {
-        this.notifier.success($localize`Your account is deleted.`)
+    this.userService.deleteMe()
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Your account is deleted.`)
 
-        this.authService.logout()
-        this.redirectService.redirectToHomepage()
-      },
+          this.authService.logout()
+          this.redirectService.redirectToHomepage()
+        },
 
-      err => this.notifier.error(err.message)
-    )
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

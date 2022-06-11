@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
     private customPageService: CustomPageService
   ) { }
 
-  async ngOnInit () {
+  ngOnInit () {
     this.customPageService.getInstanceHomepage()
       .subscribe(({ content }) => this.homepageContent = content)
   }

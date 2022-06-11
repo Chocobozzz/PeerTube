@@ -23,7 +23,7 @@ import { ActivityCreate } from '../../shared/models/activitypub'
 import { VideoObject } from '../../shared/models/activitypub/objects'
 import { VideoCommentObject } from '../../shared/models/activitypub/objects/video-comment-object'
 import { LiveVideoCreate, VideoCreate, VideoImportCreate } from '../../shared/models/videos'
-import { VideoCommentCreate } from '../../shared/models/videos/comment/video-comment.model'
+import { VideoCommentCreate } from '../../shared/models/videos/comment'
 import { ActorModel } from '../models/actor/actor'
 import { UserModel } from '../models/user/user'
 import { VideoModel } from '../models/video/video'
@@ -170,8 +170,8 @@ function createAccountAbuse (options: {
 }) {
   const { baseAbuse, accountInstance, transaction, reporterAccount } = options
 
-  const associateFun = async () => {
-    return { isOwned: accountInstance.isOwned() }
+  const associateFun = () => {
+    return Promise.resolve({ isOwned: accountInstance.isOwned() })
   }
 
   return createAbuse({

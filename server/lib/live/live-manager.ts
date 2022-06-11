@@ -1,28 +1,35 @@
 
 import { createServer, Server } from 'net'
 import { isTestInstance } from '@server/helpers/core-utils'
-import { computeResolutionsToTranscode, getVideoFileFPS, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
+import {
+  computeResolutionsToTranscode,
+  ffprobePromise,
+  getVideoFileBitrate,
+  getVideoFileFPS,
+  getVideoFileResolution
+} from '@server/helpers/ffprobe-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
-import { P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE, VIEW_LIFETIME, WEBSERVER } from '@server/initializers/constants'
+import { P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE, VIEW_LIFETIME } from '@server/initializers/constants'
+import { clearCacheRoute } from '@server/middlewares/cache/cache'
 import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoLiveVideo } from '@server/types/models'
+import { MStreamingPlaylistVideo, MVideo, MVideoLiveVideo } from '@server/types/models'
 import { VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { federateVideoIfNeeded } from '../activitypub/videos'
 import { JobQueue } from '../job-queue'
 import { PeerTubeSocket } from '../peertube-socket'
+import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename } from '../paths'
 import { LiveQuotaStore } from './live-quota-store'
 import { LiveSegmentShaStore } from './live-segment-sha-store'
 import { cleanupLive } from './live-utils'
 import { MuxingSession } from './shared'
-import { clearCacheRoute } from '@server/middlewares/cache'
 
-const NodeRtmpSession = require('node-media-server/node_rtmp_session')
-const context = require('node-media-server/node_core_ctx')
-const nodeMediaServerLogger = require('node-media-server/node_core_logger')
+const NodeRtmpSession = require('node-media-server/src/node_rtmp_session')
+const context = require('node-media-server/src/node_core_ctx')
+const nodeMediaServerLogger = require('node-media-server/src/node_core_logger')
 
 // Disable node media server logs
 nodeMediaServerLogger.setLogType(0)
@@ -193,15 +200,24 @@ class LiveManager {
 
     const rtmpUrl = 'rtmp://127.0.0.1:' + config.rtmp.port + streamPath
 
-    const [ { videoFileResolution }, fps ] = await Promise.all([
-      getVideoFileResolution(rtmpUrl),
-      getVideoFileFPS(rtmpUrl)
+    const now = Date.now()
+    const probe = await ffprobePromise(rtmpUrl)
+
+    const [ { resolution, ratio }, fps, bitrate ] = await Promise.all([
+      getVideoFileResolution(rtmpUrl, probe),
+      getVideoFileFPS(rtmpUrl, probe),
+      getVideoFileBitrate(rtmpUrl, probe)
     ])
 
-    const allResolutions = this.buildAllResolutionsToTranscode(videoFileResolution)
+    logger.info(
+      '%s probing took %d ms (bitrate: %d, fps: %d, resolution: %d)',
+      rtmpUrl, Date.now() - now, bitrate, fps, resolution, lTags(sessionId, video.uuid)
+    )
+
+    const allResolutions = this.buildAllResolutionsToTranscode(resolution)
 
     logger.info(
-      'Will mux/transcode live video of original resolution %d.', videoFileResolution,
+      'Will mux/transcode live video of original resolution %d.', resolution,
       { allResolutions, ...lTags(sessionId, video.uuid) }
     )
 
@@ -213,6 +229,8 @@ class LiveManager {
       streamingPlaylist,
       rtmpUrl,
       fps,
+      bitrate,
+      ratio,
       allResolutions
     })
   }
@@ -223,9 +241,11 @@ class LiveManager {
     streamingPlaylist: MStreamingPlaylistVideo
     rtmpUrl: string
     fps: number
+    bitrate: number
+    ratio: number
     allResolutions: number[]
   }) {
-    const { sessionId, videoLive, streamingPlaylist, allResolutions, fps, rtmpUrl } = options
+    const { sessionId, videoLive, streamingPlaylist, allResolutions, fps, bitrate, ratio, rtmpUrl } = options
     const videoUUID = videoLive.Video.uuid
     const localLTags = lTags(sessionId, videoUUID)
 
@@ -239,6 +259,8 @@ class LiveManager {
       videoLive,
       streamingPlaylist,
       rtmpUrl,
+      bitrate,
+      ratio,
       fps,
       allResolutions
     })
@@ -400,19 +422,18 @@ class LiveManager {
     return resolutionsEnabled.concat([ originResolution ])
   }
 
-  private async createLivePlaylist (video: MVideo, allResolutions: number[]) {
-    const playlistUrl = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsMasterPlaylistStaticPath(video.uuid)
-    const [ videoStreamingPlaylist ] = await VideoStreamingPlaylistModel.upsert({
-      videoId: video.id,
-      playlistUrl,
-      segmentsSha256Url: WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid, video.isLive),
-      p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrl, allResolutions),
-      p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
+  private async createLivePlaylist (video: MVideo, allResolutions: number[]): Promise<MStreamingPlaylistVideo> {
+    const playlist = await VideoStreamingPlaylistModel.loadOrGenerate(video)
 
-      type: VideoStreamingPlaylistType.HLS
-    }, { returning: true }) as [ MStreamingPlaylist, boolean ]
+    playlist.playlistFilename = generateHLSMasterPlaylistFilename(true)
+    playlist.segmentsSha256Filename = generateHlsSha256SegmentsFilename(true)
 
-    return Object.assign(videoStreamingPlaylist, { Video: video })
+    playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
+    playlist.type = VideoStreamingPlaylistType.HLS
+
+    playlist.assignP2PMediaLoaderInfoHashes(video, allResolutions)
+
+    return playlist.save()
   }
 
   static get Instance () {

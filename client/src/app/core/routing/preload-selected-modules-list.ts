@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core'
 @Injectable()
 export class PreloadSelectedModulesList implements PreloadingStrategy {
 
-  preload (route: Route, load: Function): Observable<any> {
+  preload (route: Route, load: () => Observable<any>): Observable<any> {
     if (!route.data || !route.data.preload) return ofObservable(null)
 
     if (typeof route.data.preload === 'number') {

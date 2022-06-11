@@ -1,17 +1,13 @@
-// eslint-disable @typescript-eslint/no-unnecessary-type-assertion
-
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
-import { program, Command } from 'commander'
-import { getAdminTokenOrDie, getServerCredentials } from './cli'
-import { VideoRedundanciesTarget, VideoRedundancy } from '@shared/models'
-import { addVideoRedundancy, listVideoRedundancies, removeVideoRedundancy } from '@shared/extra-utils/server/redundancy'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import validator from 'validator'
-import * as CliTable3 from 'cli-table3'
-import { URL } from 'url'
+import CliTable3 from 'cli-table3'
+import { Command, program } from 'commander'
 import { uniq } from 'lodash'
+import { URL } from 'url'
+import validator from 'validator'
+import { HttpStatusCode, VideoRedundanciesTarget } from '@shared/models'
+import { assignToken, buildServer, getServerCredentials } from './cli'
 
 import bytes = require('bytes')
 
@@ -63,15 +59,16 @@ program.parse(process.argv)
 
 async function listRedundanciesCLI (target: VideoRedundanciesTarget) {
   const { url, username, password } = await getServerCredentials(program)
-  const accessToken = await getAdminTokenOrDie(url, username, password)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
 
-  const redundancies = await listVideoRedundanciesData(url, accessToken, target)
+  const { data } = await server.redundancy.listVideos({ start: 0, count: 100, sort: 'name', target })
 
   const table = new CliTable3({
     head: [ 'video id', 'video name', 'video url', 'files', 'playlists', 'by instances', 'total size' ]
   }) as any
 
-  for (const redundancy of redundancies) {
+  for (const redundancy of data) {
     const webtorrentFiles = redundancy.redundancies.files
     const streamingPlaylists = redundancy.redundancies.streamingPlaylists
 
@@ -106,7 +103,8 @@ async function listRedundanciesCLI (target: VideoRedundanciesTarget) {
 
 async function addRedundancyCLI (options: { video: number }, command: Command) {
   const { url, username, password } = await getServerCredentials(command)
-  const accessToken = await getAdminTokenOrDie(url, username, password)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
 
   if (!options.video || validator.isInt('' + options.video) === false) {
     console.error('You need to specify the video id to duplicate and it should be a number.\n')
@@ -115,11 +113,7 @@ async function addRedundancyCLI (options: { video: number }, command: Command) {
   }
 
   try {
-    await addVideoRedundancy({
-      url,
-      accessToken,
-      videoId: options.video
-    })
+    await server.redundancy.addVideo({ videoId: options.video })
 
     console.log('Video will be duplicated by your instance!')
 
@@ -139,7 +133,8 @@ async function addRedundancyCLI (options: { video: number }, command: Command) {
 
 async function removeRedundancyCLI (options: { video: number }, command: Command) {
   const { url, username, password } = await getServerCredentials(command)
-  const accessToken = await getAdminTokenOrDie(url, username, password)
+  const server = buildServer(url)
+  await assignToken(server, username, password)
 
   if (!options.video || validator.isInt('' + options.video) === false) {
     console.error('You need to specify the video id to remove from your redundancies.\n')
@@ -149,12 +144,12 @@ async function removeRedundancyCLI (options: { video: number }, command: Command
 
   const videoId = parseInt(options.video + '', 10)
 
-  let redundancies = await listVideoRedundanciesData(url, accessToken, 'my-videos')
-  let videoRedundancy = redundancies.find(r => videoId === r.id)
+  const myVideoRedundancies = await server.redundancy.listVideos({ target: 'my-videos' })
+  let videoRedundancy = myVideoRedundancies.data.find(r => videoId === r.id)
 
   if (!videoRedundancy) {
-    redundancies = await listVideoRedundanciesData(url, accessToken, 'remote-videos')
-    videoRedundancy = redundancies.find(r => videoId === r.id)
+    const remoteVideoRedundancies = await server.redundancy.listVideos({ target: 'remote-videos' })
+    videoRedundancy = remoteVideoRedundancies.data.find(r => videoId === r.id)
   }
 
   if (!videoRedundancy) {
@@ -168,11 +163,7 @@ async function removeRedundancyCLI (options: { video: number }, command: Command
                                .map(r => r.id)
 
     for (const id of ids) {
-      await removeVideoRedundancy({
-        url,
-        accessToken,
-        redundancyId: id
-      })
+      await server.redundancy.removeVideo({ redundancyId: id })
     }
 
     console.log('Video redundancy removed!')
@@ -182,17 +173,4 @@ async function removeRedundancyCLI (options: { video: number }, command: Command
     console.error(err)
     process.exit(-1)
   }
-}
-
-async function listVideoRedundanciesData (url: string, accessToken: string, target: VideoRedundanciesTarget) {
-  const res = await listVideoRedundancies({
-    url,
-    accessToken,
-    start: 0,
-    count: 100,
-    sort: 'name',
-    target
-  })
-
-  return res.body.data as VideoRedundancy[]
 }

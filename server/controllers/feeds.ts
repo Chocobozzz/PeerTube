@@ -1,6 +1,6 @@
-import * as express from 'express'
-import * as Feed from 'pfeed-podcast'
-import * as showdown from 'showdown'
+import express from 'express'
+import Feed from 'pfeed-podcast'
+import showdown from 'showdown'
 import { groupBy, isNull, last, map, orderBy } from 'lodash'
 import { getCategoryLabel } from '@server/models/video/formatter/video-format-utils'
 import { buildNSFWFilter } from '../helpers/express-utils'
@@ -17,7 +17,7 @@ import {
   videosSortValidator,
   videoSubscriptionFeedsValidator
 } from '../middlewares'
-import { cacheRoute } from '../middlewares/cache'
+import { cacheRouteFactory } from '../middlewares/cache/cache'
 import { VideoModel } from '../models/video/video'
 import { VideoCaptionModel } from '../models/video/video-caption'
 import { VideoCommentModel } from '../models/video/video-comment'
@@ -25,14 +25,14 @@ import { VideoFilter, VideoResolution, VideoState, VideoStreamingPlaylistType } 
 
 const feedsRouter = express.Router()
 
+const cacheRoute = cacheRouteFactory({
+  headerBlacklist: [ 'Content-Type' ]
+})
+
 feedsRouter.get('/feeds/video-comments.:format',
   feedsFormatValidator,
   setFeedFormatContentType,
-  asyncMiddleware(cacheRoute({
-    headerBlacklist: [
-      'Content-Type'
-    ]
-  })(ROUTE_CACHE_LIFETIME.FEEDS)),
+  cacheRoute(ROUTE_CACHE_LIFETIME.FEEDS),
   asyncMiddleware(videoFeedsValidator),
   asyncMiddleware(videoCommentsFeedsValidator),
   asyncMiddleware(generateVideoCommentsFeed)
@@ -43,11 +43,7 @@ feedsRouter.get('/feeds/videos.:format',
   setDefaultVideosSort,
   feedsFormatValidator,
   setFeedFormatContentType,
-  asyncMiddleware(cacheRoute({
-    headerBlacklist: [
-      'Content-Type'
-    ]
-  })(ROUTE_CACHE_LIFETIME.FEEDS)),
+  cacheRoute(ROUTE_CACHE_LIFETIME.FEEDS),
   commonVideosFiltersValidator,
   asyncMiddleware(videoFeedsValidator),
   asyncMiddleware(generateVideoFeed)
@@ -58,11 +54,7 @@ feedsRouter.get('/feeds/subscriptions.:format',
   setDefaultVideosSort,
   feedsFormatValidator,
   setFeedFormatContentType,
-  asyncMiddleware(cacheRoute({
-    headerBlacklist: [
-      'Content-Type'
-    ]
-  })(ROUTE_CACHE_LIFETIME.FEEDS)),
+  cacheRoute(ROUTE_CACHE_LIFETIME.FEEDS),
   commonVideosFiltersValidator,
   asyncMiddleware(videoSubscriptionFeedsValidator),
   asyncMiddleware(generateVideoFeedForSubscriptions)
@@ -408,7 +400,7 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         title: video.name,
         // Live videos need unique GUIDs
         id: video.url,
-        link: WEBSERVER.URL + '/w/' + video.uuid,
+        link: WEBSERVER.URL + video.getWatchStaticPath(),
         description: markdownConverter.makeHtml(video.description),
         author: [
           {
@@ -500,7 +492,7 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         title: video.name,
         // Live videos need unique GUIDs
         id: video.url,
-        link: WEBSERVER.URL + '/w/' + video.uuid,
+        link: WEBSERVER.URL + video.getWatchStaticPath(),
         description: markdownConverter.makeHtml(video.description),
         author: [
           {

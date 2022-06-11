@@ -137,7 +137,7 @@ $setting-transition-easing: ease-out;
       }
 
       > .vjs-settings-sub-menu {
-        width: 80px;
+        min-width: 80px;
 
         .vjs-menu-item {
           outline: 0;

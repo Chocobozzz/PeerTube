@@ -1,12 +1,12 @@
 import { Directive, EventEmitter, HostListener, Output } from '@angular/core'
 
 @Directive({
-  selector: '[timestampRouteTransformer]'
+  selector: '[myTimestampRouteTransformer]'
 })
 export class TimestampRouteTransformerDirective {
   @Output() timestampClicked = new EventEmitter<number>()
 
-  @HostListener('click', ['$event'])
+  @HostListener('click', [ '$event' ])
   public onClick ($event: Event) {
     const target = $event.target as HTMLLinkElement
 
@@ -21,10 +21,10 @@ export class TimestampRouteTransformerDirective {
     const ngxLinkParams = new URLSearchParams(ngxLink.search)
     if (ngxLinkParams.has('start') !== true) return
 
-    const separators = ['h', 'm', 's']
+    const separators = [ 'h', 'm', 's' ]
     const start = ngxLinkParams
       .get('start')
-      .match(new RegExp('(\\d{1,9}[' + separators.join('') + '])','g')) // match digits before any given separator
+      .match(new RegExp('(\\d{1,9}[' + separators.join('') + '])', 'g')) // match digits before any given separator
       .map(t => {
         if (t.includes('h')) return parseInt(t, 10) * 3600
         if (t.includes('m')) return parseInt(t, 10) * 60

@@ -1,6 +1,6 @@
 import 'multer'
 import { queue } from 'async'
-import * as LRUCache from 'lru-cache'
+import LRUCache from 'lru-cache'
 import { join } from 'path'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { buildUUID } from '@server/helpers/uuid'

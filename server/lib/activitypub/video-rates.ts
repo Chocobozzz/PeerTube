@@ -1,4 +1,4 @@
-import * as Bluebird from 'bluebird'
+import { map } from 'bluebird'
 import { Transaction } from 'sequelize'
 import { doJSONRequest } from '@server/helpers/requests'
 import { VideoRateType } from '../../../shared/models/videos'
@@ -15,7 +15,7 @@ import { getVideoDislikeActivityPubUrlByLocalActor, getVideoLikeActivityPubUrlBy
 const lTags = loggerTagsFactory('ap', 'video-rate', 'create')
 
 async function createRates (ratesUrl: string[], video: MVideo, rate: VideoRateType) {
-  await Bluebird.map(ratesUrl, async rateUrl => {
+  await map(ratesUrl, async rateUrl => {
     try {
       await createRate(rateUrl, video, rate)
     } catch (err) {

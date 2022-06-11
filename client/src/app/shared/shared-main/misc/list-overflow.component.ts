@@ -22,7 +22,7 @@ export interface ListOverflowItem {
 }
 
 @Component({
-  selector: 'list-overflow',
+  selector: 'my-list-overflow',
   templateUrl: './list-overflow.component.html',
   styleUrls: [ './list-overflow.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -65,7 +65,7 @@ export class ListOverflowComponent<T extends ListOverflowItem> implements AfterV
     let showItemsUntilIndexExcluded: number
     let accWidth = 0
 
-    for (const [index, el] of this.itemsRendered.toArray().entries()) {
+    for (const [ index, el ] of this.itemsRendered.toArray().entries()) {
       accWidth += el.nativeElement.getBoundingClientRect().width
       if (showItemsUntilIndexExcluded === undefined) {
         showItemsUntilIndexExcluded = (parentWidth < accWidth) ? index : undefined

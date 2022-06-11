@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { body, header, param, query, ValidationChain } from 'express-validator'
 import { getResumableUploadPath } from '@server/helpers/upload'
 import { isAbleToUploadVideo } from '@server/lib/user'
@@ -6,7 +6,7 @@ import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
 import { ServerErrorCode, UserRight, VideoPrivacy } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import {
   exists,
   isBooleanValid,
@@ -188,7 +188,7 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     // multer required unsetting the Content-Type, now we can set it for node-uploadx
     req.headers['content-type'] = 'application/json; charset=utf-8'
     // place previewfile in metadata so that uploadx saves it in .META
-    if (req.files['previewfile']) req.body.previewfile = req.files['previewfile']
+    if (req.files?.['previewfile']) req.body.previewfile = req.files['previewfile']
 
     return next()
   }

@@ -1,5 +1,4 @@
 import { Model } from 'sequelize-typescript'
-import * as Bluebird from 'bluebird'
 import { logger } from '@server/helpers/logger'
 
 type ModelCacheType =
@@ -52,7 +51,7 @@ class ModelCache {
 
     if (cache.has(key)) {
       logger.debug('Model cache hit for %s -> %s.', cacheType, key)
-      return Bluebird.resolve<T>(cache.get(key))
+      return Promise.resolve<T>(cache.get(key))
     }
 
     return fun().then(m => {

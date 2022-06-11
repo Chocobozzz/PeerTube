@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { createReqFiles } from '@server/helpers/express-utils'
 import { buildUUID, uuidToShort } from '@server/helpers/uuid'
 import { CONFIG } from '@server/initializers/config'
@@ -11,7 +11,7 @@ import { videoLiveAddValidator, videoLiveGetValidator, videoLiveUpdateValidator 
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { MVideoDetails, MVideoFullLight } from '@server/types/models'
 import { LiveVideoCreate, LiveVideoUpdate, VideoState } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { updateVideoMiniatureFromExisting } from '../../../lib/thumbnail'
@@ -39,7 +39,7 @@ liveRouter.post('/live',
 liveRouter.get('/live/:videoId',
   authenticate,
   asyncMiddleware(videoLiveGetValidator),
-  asyncRetryTransactionMiddleware(getLiveVideo)
+  getLiveVideo
 )
 
 liveRouter.put('/live/:videoId',
@@ -57,7 +57,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function getLiveVideo (req: express.Request, res: express.Response) {
+function getLiveVideo (req: express.Request, res: express.Response) {
   const videoLive = res.locals.videoLive
 
   return res.json(videoLive.toFormattedJSON())

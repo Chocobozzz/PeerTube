@@ -10,7 +10,7 @@ import { User, UserRight } from '@shared/models'
 @Component({
   selector: 'my-video-comment',
   templateUrl: './video-comment.component.html',
-  styleUrls: ['./video-comment.component.scss']
+  styleUrls: [ './video-comment.component.scss' ]
 })
 export class VideoCommentComponent implements OnInit, OnChanges {
   @ViewChild('commentReportModal') commentReportModal: CommentReportComponent
@@ -149,11 +149,11 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     const user = this.authService.getUser()
     if (user.hasRight(UserRight.MANAGE_USERS)) {
       this.userService.getUserWithCache(account.userId)
-          .subscribe(
-            user => this.commentUser = user,
+          .subscribe({
+            next: user => this.commentUser = user,
 
-            err => this.notifier.error(err.message)
-          )
+            error: err => this.notifier.error(err.message)
+          })
     }
   }
 
@@ -161,7 +161,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     // Before HTML rendering restore line feed for markdown list compatibility
     const commentText = this.comment.text.replace(/<br.?\/?>/g, '\r\n')
     const html = await this.markdownService.textMarkdownToHTML(commentText, true, true)
-    this.sanitizedCommentHTML = this.markdownService.processVideoTimestamps(html)
+    this.sanitizedCommentHTML = this.markdownService.processVideoTimestamps(this.video.shortUUID, html)
     this.newParentComments = this.parentComments.concat([ this.comment ])
 
     if (this.comment.account) {

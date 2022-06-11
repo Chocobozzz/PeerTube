@@ -1,6 +1,6 @@
 import { uuidToShort } from '@server/helpers/uuid'
 import { generateMagnetUri } from '@server/helpers/webtorrent'
-import { getLocalVideoFileMetadataUrl } from '@server/lib/video-paths'
+import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { ActivityTagObject, ActivityUrlObject, VideoObject } from '../../../../shared/models/activitypub/objects'
 import { Video, VideoDetails } from '../../../../shared/models/videos'
@@ -182,8 +182,8 @@ function streamingPlaylistsModelToFormattedJSON (
       return {
         id: playlist.id,
         type: playlist.type,
-        playlistUrl: playlist.playlistUrl,
-        segmentsSha256Url: playlist.segmentsSha256Url,
+        playlistUrl: playlist.getMasterPlaylistUrl(video),
+        segmentsSha256Url: playlist.getSha256SegmentsUrl(video),
         redundancies,
         files
       }
@@ -205,7 +205,7 @@ function videoFilesModelToFormattedJSON (
     ? video.getTrackerUrls()
     : []
 
-  return [ ...videoFiles ]
+  return (videoFiles || [])
     .filter(f => !f.isLive())
     .sort(sortByResolutionDesc)
     .map(videoFile => {
@@ -240,7 +240,7 @@ function addVideoFilesInAPAcc (
 ) {
   const trackerUrls = video.getTrackerUrls()
 
-  const sortedFiles = [ ...files ]
+  const sortedFiles = (files || [])
     .filter(f => !f.isLive())
     .sort(sortByResolutionDesc)
 
@@ -331,7 +331,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
       type: 'Link',
       name: 'sha256',
       mediaType: 'application/json' as 'application/json',
-      href: playlist.segmentsSha256Url
+      href: playlist.getSha256SegmentsUrl(video)
     })
 
     addVideoFilesInAPAcc(tag, video, playlist.VideoFiles || [])
@@ -339,7 +339,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     url.push({
       type: 'Link',
       mediaType: 'application/x-mpegURL' as 'application/x-mpegURL',
-      href: playlist.playlistUrl,
+      href: playlist.getMasterPlaylistUrl(video),
       tag
     })
   }

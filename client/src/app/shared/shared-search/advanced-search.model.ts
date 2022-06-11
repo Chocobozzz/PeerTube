@@ -1,4 +1,12 @@
-import { BooleanBothQuery, BooleanQuery, SearchTargetType, VideosSearchQuery } from '@shared/models'
+import { intoArray } from '@app/helpers'
+import {
+  BooleanBothQuery,
+  BooleanQuery,
+  SearchTargetType,
+  VideoChannelsSearchQuery,
+  VideoPlaylistsSearchQuery,
+  VideosSearchQuery
+} from '@shared/models'
 
 export class AdvancedSearch {
   startDate: string // ISO 8601
@@ -23,6 +31,8 @@ export class AdvancedSearch {
 
   isLive: BooleanQuery
 
+  host: string
+
   sort: string
 
   searchTarget: SearchTargetType
@@ -45,6 +55,8 @@ export class AdvancedSearch {
 
     isLive?: BooleanQuery
 
+    host?: string
+
     durationMin?: string
     durationMax?: string
     sort?: string
@@ -63,10 +75,12 @@ export class AdvancedSearch {
     this.categoryOneOf = options.categoryOneOf || undefined
     this.licenceOneOf = options.licenceOneOf || undefined
     this.languageOneOf = options.languageOneOf || undefined
-    this.tagsOneOf = this.intoArray(options.tagsOneOf)
-    this.tagsAllOf = this.intoArray(options.tagsAllOf)
+    this.tagsOneOf = intoArray(options.tagsOneOf)
+    this.tagsAllOf = intoArray(options.tagsAllOf)
     this.durationMin = parseInt(options.durationMin, 10)
     this.durationMax = parseInt(options.durationMax, 10)
+
+    this.host = options.host || undefined
 
     this.searchTarget = options.searchTarget || undefined
 
@@ -101,6 +115,7 @@ export class AdvancedSearch {
     this.durationMin = undefined
     this.durationMax = undefined
     this.isLive = undefined
+    this.host = undefined
 
     this.sort = '-match'
   }
@@ -120,12 +135,13 @@ export class AdvancedSearch {
       durationMin: this.durationMin,
       durationMax: this.durationMax,
       isLive: this.isLive,
+      host: this.host,
       sort: this.sort,
       searchTarget: this.searchTarget
     }
   }
 
-  toAPIObject (): VideosSearchQuery {
+  toVideosAPIObject (): VideosSearchQuery {
     let isLive: boolean
     if (this.isLive) isLive = this.isLive === 'true'
 
@@ -135,15 +151,30 @@ export class AdvancedSearch {
       originallyPublishedStartDate: this.originallyPublishedStartDate,
       originallyPublishedEndDate: this.originallyPublishedEndDate,
       nsfw: this.nsfw,
-      categoryOneOf: this.intoArray(this.categoryOneOf),
-      licenceOneOf: this.intoArray(this.licenceOneOf),
-      languageOneOf: this.intoArray(this.languageOneOf),
+      categoryOneOf: intoArray(this.categoryOneOf),
+      licenceOneOf: intoArray(this.licenceOneOf),
+      languageOneOf: intoArray(this.languageOneOf),
       tagsOneOf: this.tagsOneOf,
       tagsAllOf: this.tagsAllOf,
       durationMin: this.durationMin,
       durationMax: this.durationMax,
+      host: this.host,
       isLive,
       sort: this.sort,
+      searchTarget: this.searchTarget
+    }
+  }
+
+  toPlaylistAPIObject (): VideoPlaylistsSearchQuery {
+    return {
+      host: this.host,
+      searchTarget: this.searchTarget
+    }
+  }
+
+  toChannelAPIObject (): VideoChannelsSearchQuery {
+    return {
+      host: this.host,
       searchTarget: this.searchTarget
     }
   }
@@ -167,14 +198,5 @@ export class AdvancedSearch {
     if (Array.isArray(val) && val.length === 0) return false
 
     return true
-  }
-
-  private intoArray (value: any) {
-    if (!value) return undefined
-    if (Array.isArray(value)) return value
-
-    if (typeof value === 'string') return value.split(',')
-
-    return [ value ]
   }
 }

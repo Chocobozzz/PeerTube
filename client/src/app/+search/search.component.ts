@@ -1,9 +1,10 @@
-import { forkJoin, of, Subscription } from 'rxjs'
+import { forkJoin, Subscription } from 'rxjs'
 import { LinkType } from 'src/types/link.type'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, HooksService, MetaService, Notifier, ServerService, User, UserService } from '@app/core'
 import { immutableAssign } from '@app/helpers'
+import { validateHost } from '@app/shared/form-validators/host-validators'
 import { Video, VideoChannel } from '@app/shared/shared-main'
 import { AdvancedSearch, SearchService } from '@app/shared/shared-search'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
@@ -16,7 +17,9 @@ import { HTMLServerConfig, SearchTargetType } from '@shared/models'
   templateUrl: './search.component.html'
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  results: (Video | VideoChannel)[] = []
+  error: string
+
+  results: (Video | VideoChannel | VideoPlaylist)[] = []
 
   pagination = {
     currentPage: 1,
@@ -70,34 +73,37 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
-    this.subActivatedRoute = this.route.queryParams.subscribe(
-      async queryParams => {
-        const querySearch = queryParams['search']
-        const searchTarget = queryParams['searchTarget']
+    this.subActivatedRoute = this.route.queryParams
+      .subscribe({
+        next: queryParams => {
+          const querySearch = queryParams['search']
+          const searchTarget = queryParams['searchTarget']
 
-        // Search updated, reset filters
-        if (this.currentSearch !== querySearch || searchTarget !== this.advancedSearch.searchTarget) {
-          this.resetPagination()
-          this.advancedSearch.reset()
+          // Search updated, reset filters
+          if (this.currentSearch !== querySearch || searchTarget !== this.advancedSearch.searchTarget) {
+            this.resetPagination()
+            this.advancedSearch.reset()
 
-          this.currentSearch = querySearch || undefined
-          this.updateTitle()
-        }
+            this.currentSearch = querySearch || undefined
+            this.updateTitle()
+          }
 
-        this.advancedSearch = new AdvancedSearch(queryParams)
-        if (!this.advancedSearch.searchTarget) {
-          this.advancedSearch.searchTarget = this.getDefaultSearchTarget()
-        }
+          this.advancedSearch = new AdvancedSearch(queryParams)
+          if (!this.advancedSearch.searchTarget) {
+            this.advancedSearch.searchTarget = this.getDefaultSearchTarget()
+          }
 
-        // Don't hide filters if we have some of them AND the user just came on the webpage
-        this.isSearchFilterCollapsed = this.isInitialLoad === false || !this.advancedSearch.containsValues()
-        this.isInitialLoad = false
+          this.error = this.checkFieldsAndGetError()
 
-        this.search()
-      },
+          // Don't hide filters if we have some of them AND the user just came on the webpage, or we have an error
+          this.isSearchFilterCollapsed = !this.error && (this.isInitialLoad === false || !this.advancedSearch.containsValues())
+          this.isInitialLoad = false
 
-      err => this.notifier.error(err.text)
-    )
+          this.search()
+        },
+
+        error: err => this.notifier.error(err.text)
+      })
 
     this.userService.getAnonymousOrLoggedUser()
       .subscribe(user => this.userMiniature = user)
@@ -126,39 +132,44 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   search () {
+    this.error = this.checkFieldsAndGetError()
+    if (this.error) return
+
     this.isSearching = true
 
     forkJoin([
       this.getVideoChannelObs(),
       this.getVideoPlaylistObs(),
       this.getVideosObs()
-    ]).subscribe(results => {
-      for (const result of results) {
-        this.results = this.results.concat(result.data)
+    ]).subscribe({
+      next: results => {
+        for (const result of results) {
+          this.results = this.results.concat(result.data)
+        }
+
+        this.pagination.totalItems = results.reduce((p, r) => p += r.total, 0)
+        this.lastSearchTarget = this.advancedSearch.searchTarget
+
+        this.hasMoreResults = this.results.length < this.pagination.totalItems
+      },
+
+      error: err => {
+        if (this.advancedSearch.searchTarget !== 'search-index') {
+          this.notifier.error(err.message)
+          return
+        }
+
+        this.notifier.error(
+          $localize`Search index is unavailable. Retrying with instance results instead.`,
+          $localize`Search error`
+        )
+        this.advancedSearch.searchTarget = 'local'
+        this.search()
+      },
+
+      complete: () => {
+        this.isSearching = false
       }
-
-      this.pagination.totalItems = results.reduce((p, r) => p += r.total, 0)
-      this.lastSearchTarget = this.advancedSearch.searchTarget
-
-      this.hasMoreResults = this.results.length < this.pagination.totalItems
-    },
-
-    err => {
-      if (this.advancedSearch.searchTarget !== 'search-index') {
-        this.notifier.error(err.message)
-        return
-      }
-
-      this.notifier.error(
-        $localize`Search index is unavailable. Retrying with instance results instead.`,
-        $localize`Search error`
-      )
-      this.advancedSearch.searchTarget = 'local'
-      this.search()
-    },
-
-    () => {
-      this.isSearching = false
     })
   }
 
@@ -275,12 +286,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   private getVideoChannelObs () {
-    if (!this.currentSearch) return of({ data: [], total: 0 })
-
     const params = {
       search: this.currentSearch,
       componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.channelsPerPage }),
-      searchTarget: this.advancedSearch.searchTarget
+      advancedSearch: this.advancedSearch
     }
 
     return this.hooks.wrapObsFun(
@@ -293,12 +302,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   private getVideoPlaylistObs () {
-    if (!this.currentSearch) return of({ data: [], total: 0 })
-
     const params = {
       search: this.currentSearch,
       componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.playlistsPerPage }),
-      searchTarget: this.advancedSearch.searchTarget
+      advancedSearch: this.advancedSearch
     }
 
     return this.hooks.wrapObsFun(
@@ -318,5 +325,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     return 'local'
+  }
+
+  private checkFieldsAndGetError () {
+    if (this.advancedSearch.host && !validateHost(this.advancedSearch.host)) {
+      return $localize`PeerTube instance host filter is invalid`
+    }
+
+    return undefined
   }
 }

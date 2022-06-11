@@ -1,14 +1,16 @@
-import * as Bull from 'bull'
+import { Job } from 'bull'
 import { move, remove, stat } from 'fs-extra'
 import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { YoutubeDL } from '@server/helpers/youtube-dl'
 import { isPostImportVideoAccepted } from '@server/lib/moderation'
+import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { isAbleToUploadVideo } from '@server/lib/user'
-import { addOptimizeOrMergeAudioJob } from '@server/lib/video'
-import { generateVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { addMoveToObjectStorageJob, addOptimizeOrMergeAudioJob } from '@server/lib/video'
+import { VideoPathManager } from '@server/lib/video-path-manager'
+import { buildNextVideoState } from '@server/lib/video-state'
 import { ThumbnailModel } from '@server/models/video/thumbnail'
 import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import'
 import {
@@ -25,7 +27,6 @@ import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } fro
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
-import { CONFIG } from '../../../initializers/config'
 import { VIDEO_IMPORT_TIMEOUT } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { VideoModel } from '../../../models/video/video'
@@ -36,7 +37,7 @@ import { federateVideoIfNeeded } from '../../activitypub/videos'
 import { Notifier } from '../../notifier'
 import { generateVideoMiniature } from '../../thumbnail'
 
-async function processVideoImport (job: Bull.Job) {
+async function processVideoImport (job: Job) {
   const payload = job.data as VideoImportPayload
 
   if (payload.type === 'youtube-dl') return processYoutubeDLImport(job, payload)
@@ -51,7 +52,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processTorrentImport (job: Bull.Job, payload: VideoImportTorrentPayload) {
+async function processTorrentImport (job: Job, payload: VideoImportTorrentPayload) {
   logger.info('Processing torrent video import in job %d.', job.id)
 
   const videoImport = await getVideoImportOrDie(payload.videoImportId)
@@ -62,12 +63,12 @@ async function processTorrentImport (job: Bull.Job, payload: VideoImportTorrentP
   }
   const target = {
     torrentName: videoImport.torrentName ? getSecureTorrentName(videoImport.torrentName) : undefined,
-    magnetUri: videoImport.magnetUri
+    uri: videoImport.magnetUri
   }
   return processFile(() => downloadWebTorrentVideo(target, VIDEO_IMPORT_TIMEOUT), videoImport, options)
 }
 
-async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutubeDLPayload) {
+async function processYoutubeDLImport (job: Job, payload: VideoImportYoutubeDLPayload) {
   logger.info('Processing youtubeDL video import in job %d.', job.id)
 
   const videoImport = await getVideoImportOrDie(payload.videoImportId)
@@ -100,7 +101,6 @@ type ProcessFileOptions = {
 }
 async function processFile (downloader: () => Promise<string>, videoImport: MVideoImportDefault, options: ProcessFileOptions) {
   let tempVideoPath: string
-  let videoDestFile: string
   let videoFile: VideoFileModel
 
   try {
@@ -114,7 +114,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
       throw new Error('The user video quota is exceeded with this video to import.')
     }
 
-    const { videoFileResolution } = await getVideoFileResolution(tempVideoPath)
+    const { resolution } = await getVideoFileResolution(tempVideoPath)
     const fps = await getVideoFileFPS(tempVideoPath)
     const duration = await getDurationFromVideoFile(tempVideoPath)
 
@@ -122,9 +122,9 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     const fileExt = getLowercaseExtension(tempVideoPath)
     const videoFileData = {
       extname: fileExt,
-      resolution: videoFileResolution,
+      resolution,
       size: stats.size,
-      filename: generateVideoFilename(videoImport.Video, false, videoFileResolution, fileExt),
+      filename: generateWebTorrentVideoFilename(resolution, fileExt),
       fps,
       videoId: videoImport.videoId
     }
@@ -159,7 +159,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     const videoImportWithFiles: MVideoImportDefaultFiles = Object.assign(videoImport, { Video: videoWithFiles })
 
     // Move file
-    videoDestFile = getVideoFilePath(videoImportWithFiles.Video, videoFile)
+    const videoDestFile = VideoPathManager.Instance.getFSVideoFileOutputPath(videoImportWithFiles.Video, videoFile)
     await move(tempVideoPath, videoDestFile)
     tempVideoPath = null // This path is not used anymore
 
@@ -204,7 +204,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
 
         // Update video DB object
         video.duration = duration
-        video.state = CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED
+        video.state = buildNextVideoState(video.state)
         await video.save({ transaction: t })
 
         if (thumbnailModel) await video.addAndSaveThumbnail(thumbnailModel, t)
@@ -235,7 +235,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
       })
     })
 
-    Notifier.Instance.notifyOnFinishedVideoImport(videoImportUpdated, true)
+    Notifier.Instance.notifyOnFinishedVideoImport({ videoImport: videoImportUpdated, success: true })
 
     if (video.isBlacklisted()) {
       const videoBlacklist = Object.assign(video.VideoBlacklist, { Video: video })
@@ -243,6 +243,10 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
       Notifier.Instance.notifyOnVideoAutoBlacklist(videoBlacklist)
     } else {
       Notifier.Instance.notifyOnNewVideoIfNeeded(video)
+    }
+
+    if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
+      return addMoveToObjectStorageJob(videoImportUpdated.Video)
     }
 
     // Create transcoding jobs?
@@ -263,7 +267,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     }
     await videoImport.save()
 
-    Notifier.Instance.notifyOnFinishedVideoImport(videoImport, false)
+    Notifier.Instance.notifyOnFinishedVideoImport({ videoImport, success: false })
 
     throw err
   }

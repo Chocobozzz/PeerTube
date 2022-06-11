@@ -1,9 +1,9 @@
 // Thanks http://tostring.it/2014/06/23/advanced-logging-with-nodejs/
-import { mkdirpSync } from 'fs-extra'
+import { mkdirpSync, stat } from 'fs-extra'
 import { omit } from 'lodash'
-import * as path from 'path'
+import { join } from 'path'
 import { format as sqlFormat } from 'sql-formatter'
-import * as winston from 'winston'
+import { createLogger, format, transports } from 'winston'
 import { FileTransportOptions } from 'winston/lib/winston/transports'
 import { CONFIG } from '../initializers/config'
 import { LOG_FILENAME } from '../initializers/constants'
@@ -47,7 +47,7 @@ function getLoggerReplacer () {
   }
 }
 
-const consoleLoggerFormat = winston.format.printf(info => {
+const consoleLoggerFormat = format.printf(info => {
   const toOmit = [ 'label', 'timestamp', 'level', 'message', 'sql', 'tags' ]
 
   const obj = omit(info, ...toOmit)
@@ -71,24 +71,24 @@ const consoleLoggerFormat = winston.format.printf(info => {
   return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message}${additionalInfos}`
 })
 
-const jsonLoggerFormat = winston.format.printf(info => {
+const jsonLoggerFormat = format.printf(info => {
   return JSON.stringify(info, getLoggerReplacer())
 })
 
-const timestampFormatter = winston.format.timestamp({
+const timestampFormatter = format.timestamp({
   format: 'YYYY-MM-DD HH:mm:ss.SSS'
 })
 const labelFormatter = (suffix?: string) => {
-  return winston.format.label({
+  return format.label({
     label: suffix ? `${label} ${suffix}` : label
   })
 }
 
 const fileLoggerOptions: FileTransportOptions = {
-  filename: path.join(CONFIG.STORAGE.LOG_DIR, LOG_FILENAME),
+  filename: join(CONFIG.STORAGE.LOG_DIR, LOG_FILENAME),
   handleExceptions: true,
-  format: winston.format.combine(
-    winston.format.timestamp(),
+  format: format.combine(
+    format.timestamp(),
     jsonLoggerFormat
   )
 }
@@ -101,19 +101,19 @@ if (CONFIG.LOG.ROTATION.ENABLED) {
 const logger = buildLogger()
 
 function buildLogger (labelSuffix?: string) {
-  return winston.createLogger({
+  return createLogger({
     level: CONFIG.LOG.LEVEL,
-    format: winston.format.combine(
+    format: format.combine(
       labelFormatter(labelSuffix),
-      winston.format.splat()
+      format.splat()
     ),
     transports: [
-      new winston.transports.File(fileLoggerOptions),
-      new winston.transports.Console({
+      new transports.File(fileLoggerOptions),
+      new transports.Console({
         handleExceptions: true,
-        format: winston.format.combine(
+        format: format.combine(
           timestampFormatter,
-          winston.format.colorize(),
+          format.colorize(),
           consoleLoggerFormat
         )
       })
@@ -158,6 +158,26 @@ function loggerTagsFactory (...defaultTags: string[]): LoggerTagsFn {
   }
 }
 
+async function mtimeSortFilesDesc (files: string[], basePath: string) {
+  const promises = []
+  const out: { file: string, mtime: number }[] = []
+
+  for (const file of files) {
+    const p = stat(basePath + '/' + file)
+      .then(stats => {
+        if (stats.isFile()) out.push({ file, mtime: stats.mtime.getTime() })
+      })
+
+    promises.push(p)
+  }
+
+  await Promise.all(promises)
+
+  out.sort((a, b) => b.mtime - a.mtime)
+
+  return out
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -168,6 +188,7 @@ export {
   labelFormatter,
   consoleLoggerFormat,
   jsonLoggerFormat,
+  mtimeSortFilesDesc,
   logger,
   loggerTagsFactory,
   bunyanLogger

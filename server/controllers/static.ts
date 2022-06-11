@@ -1,9 +1,9 @@
-import * as cors from 'cors'
-import * as express from 'express'
+import cors from 'cors'
+import express from 'express'
 import { join } from 'path'
 import { serveIndexHTML } from '@server/lib/client-html'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '@shared/models'
 import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo/nodeinfo.model'
 import { root } from '../helpers/core-utils'
 import { CONFIG, isEmailEnabled } from '../initializers/config'
@@ -19,7 +19,7 @@ import {
 } from '../initializers/constants'
 import { getThemeOrDefault } from '../lib/plugins/theme-utils'
 import { asyncMiddleware } from '../middlewares'
-import { cacheRoute } from '../middlewares/cache'
+import { cacheRoute } from '../middlewares/cache/cache'
 import { UserModel } from '../models/user/user'
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
@@ -66,9 +66,10 @@ staticRouter.use(
 
 // robots.txt service
 staticRouter.get('/robots.txt',
-  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.ROBOTS)),
+  cacheRoute(ROUTE_CACHE_LIFETIME.ROBOTS),
   (_, res: express.Response) => {
     res.type('text/plain')
+
     return res.send(CONFIG.INSTANCE.ROBOTS)
   }
 )
@@ -86,7 +87,7 @@ staticRouter.get('/security.txt',
 )
 
 staticRouter.get('/.well-known/security.txt',
-  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.SECURITYTXT)),
+  cacheRoute(ROUTE_CACHE_LIFETIME.SECURITYTXT),
   (_, res: express.Response) => {
     res.type('text/plain')
     return res.send(CONFIG.INSTANCE.SECURITYTXT + CONFIG.INSTANCE.SECURITYTXT_CONTACT)
@@ -95,7 +96,7 @@ staticRouter.get('/.well-known/security.txt',
 
 // nodeinfo service
 staticRouter.use('/.well-known/nodeinfo',
-  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.NODEINFO)),
+  cacheRoute(ROUTE_CACHE_LIFETIME.NODEINFO),
   (_, res: express.Response) => {
     return res.json({
       links: [
@@ -108,13 +109,13 @@ staticRouter.use('/.well-known/nodeinfo',
   }
 )
 staticRouter.use('/nodeinfo/:version.json',
-  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.NODEINFO)),
+  cacheRoute(ROUTE_CACHE_LIFETIME.NODEINFO),
   asyncMiddleware(generateNodeinfo)
 )
 
 // dnt-policy.txt service (see https://www.eff.org/dnt-policy)
 staticRouter.use('/.well-known/dnt-policy.txt',
-  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.DNT_POLICY)),
+  cacheRoute(ROUTE_CACHE_LIFETIME.DNT_POLICY),
   (_, res: express.Response) => {
     res.type('text/plain')
 

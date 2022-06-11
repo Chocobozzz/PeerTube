@@ -1,5 +1,115 @@
 # Changelog
 
+## v3.4.1
+
+### Bug fixes
+
+ * Fix broken PeerTube when cookies are disabled or if the embed iframe does not have appropriate options
+ * Fix search by channel's handle with an handle containing the local host
+ * Don't display autoblock message in upload page it is not enabled by the admin
+ * Don't index `/about/peertube` page
+ * Correctly handle OEmbed with an URL containing query parameters
+ * More robust youtube-dl thumbnail import
+ * Don't send a new video notification when using create transcoding CLI script
+
+
+## v3.4.0
+
+### IMPORTANT NOTES
+
+ * **Important:** Due to a bug in ffmpeg, PeerTube is not compatible with ffmpeg 4.4. See https://github.com/Chocobozzz/PeerTube/issues/3990
+ * **Debian Bullseye admins:** Debian Bullseye removed `python` binary/link in favour of explicit `python2`/`python3` binaries. But `youtube-dl` used by PeerTube needs it so you'll have to install [python-is-python2](https://packages.debian.org/bullseye/python-is-python2) or [python-is-python3](https://packages.debian.org/bullseye/python-is-python3) **before** upgrading PeerTube
+ * PeerTube now supports NodeJS 16
+
+### Plugins/Themes/Embed API
+
+*Documentation: https://docs.joinpeertube.org/api-plugins*
+
+ * Server helpers
+   * **Deprecate** `videoLanguageManager.addLanguage` and `videoLanguageManager.deleteLanguage`: use `videoLanguageManager.addConstant` and `videoLanguageManager.deleteConstant` instead
+   * **Deprecate** `videoCategoryManager.addCategory` and `videoCategoryManager.deleteCategory`: use `videoCategoryManager.addConstant` and `videoCategoryManager.deleteConstant` instead
+   * **Deprecate** `videoLicenceManager.addLicence` and `videoLicenceManager.deleteLicence`: use `videoLicenceManager.addConstant` and `videoLicenceManager.deleteConstant` instead
+   * **Deprecate** `videoPrivacyManager.deletePrivacy`: `videoPrivacyManager.deleteConstant` instead
+   * **Deprecate** `playlistPrivacyManager.deletePlaylistPrivacy`: `playlistPrivacyManager.deleteConstant` instead
+   * Introduce `.getConstantValue()`, `.getConstants()` and `.resetConstants()` for `videoLanguageManager`, `videoCategoryManager`, `videoLicenceManager`, `videoPrivacyManager` and `playlistPrivacyManager`
+ * Add server plugin hooks:
+   * `filter:api.overviews.videos.list.params` and `filter:api.overviews.videos.list.result`
+
+### Custom markup API
+
+*Documentation: https://docs.joinpeertube.org/api-custom-client-markup*
+
+ * Add ability to only display VOD or live videos in `<peertube-videos-list>` element
+ * `<peertube-container>` fills all available width. Can be changed using `data-justify-content` attribute
+
+### Maintenance
+
+ * Remove `StandardOutput` and `StandardError` settings from systemd service template [#4300](https://github.com/Chocobozzz/PeerTube/pull/4300)
+ * Use random UUIDs for video, torrent and streaming playlist files
+   * Filename is regenerated when the file content changes: allows admins to use aggressive caching
+
+### CLI tools
+
+ * Remove unmaintened `optimize-old-videos.js` script
+ * Add short UUID support in video scripts
+
+### Features
+
+ * :tada: Add video filters to common video pages (account videos, channel videos, recently added/local/trending videos...)
+   * Change video sort (recently added, hot, views...)
+   * Only display live/VOD videos
+   * Filter by languages/categories
+   * Hide or display sensitive content
+   * Choose to display all videos or only local videos
+ * :tada: **Beta:** Add support for saving video files in object storage [#4290](https://github.com/Chocobozzz/PeerTube/pull/4290)
+   * Check the documentation: https://docs.joinpeertube.org/admin-remote-storage
+ * :tada: Add ability for instances to follow any actor (so specific accounts and channels)
+ * Updated HLS.js (library to play HLS playlists in PeerTube player) to V1:
+   * Remember last bandwidth to prevent resolution change at the beginning of the video
+   * Automatically downgrade resolution if bandwidth is too low
+   * Add latency metric for live videos in stats for nerd card
+   * Immediate quality change when the user clicks on a specific resolution
+ * Add ability to search by PeerTube host in search filters
+ * Disallow search engine indexation of remote channels/accounts
+ * Transcoding:
+   * Improve bitrate calculation using "bit per pixel" method
+   * Limit live bitrate to input bitrate
+ * Accessibility/UI:
+   * Alert user for low quota and video auto-block on upload page [#4336](https://github.com/Chocobozzz/PeerTube/pull/4336)
+   * Display a modal when logged in to explain why and where set up the account profile [#4352](https://github.com/Chocobozzz/PeerTube/pull/4352)
+   * Display messages to inform why and where set up channels in *My library* pages [#4352](https://github.com/Chocobozzz/PeerTube/pull/4352)
+   * Display a warning when using capitalized letter for the email/username in the login form
+   * Display a message in embed on unsupported web browser
+ * Support out proxy using env variables (`HTTP_PROXY` and `HTTPS_PROXY`) [#4346](https://github.com/Chocobozzz/PeerTube/pull/4346)
+ * Support *Latin* language for videos
+
+### Bug fixes
+
+ * Fix PeerTube button link in embed
+ * Don't remove existing redundancies on host redundancy update
+ * Remove thumbnail flash when autoplay is enabled in embed
+ * Fetch data in bulk for the homepage, fixing API rate limit errors
+ * Fix channel name validator consistency between client and server
+ * Fix resumable upload without preview file in the body
+ * Fix redundancy of big HLS files
+ * Fix stats for nerd card label width
+ * Fix stats for nerd card resolution
+ * Fix uploading videos with empty tags in CLI tools
+ * Fix HLS player on non HTTPS instances
+ * Hide schedule privacy if private was removed by a plugin
+ * Fix moderation embeds
+ * Fix description timestamp click
+ * Fix privacy descriptions
+ * Safer avatar, banner and video preview
+ * Fix broken delete buttons of admin federation lists [#4378](https://github.com/Chocobozzz/PeerTube/pull/4378)
+ * More robust webtorrent redundancy download
+ * Fix hls redundancy in pruning script
+ * Fix compat' with old web browsers (Pale Moon, Safari 11, iOS 11, old webkit...))
+ * Fix silent 500 after resumable upload
+ * Fix HTML config injection with custom HTML/CSS
+ * Fix video upload on iOS
+
+
 ## v3.3.0
 
 ### IMPORTANT NOTES

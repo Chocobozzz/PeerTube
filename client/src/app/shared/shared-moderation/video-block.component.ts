@@ -51,12 +51,12 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
   }
 
   block () {
-    const reason = this.form.value[ 'reason' ] || undefined
-    const unfederate = this.video.isLocal ? this.form.value[ 'unfederate' ] : undefined
+    const reason = this.form.value['reason'] || undefined
+    const unfederate = this.video.isLocal ? this.form.value['unfederate'] : undefined
 
     this.videoBlocklistService.blockVideo(this.video.id, reason, unfederate)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Video blocked.`)
             this.hide()
 
@@ -66,7 +66,7 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
             this.videoBlocked.emit()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 }

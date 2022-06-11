@@ -81,11 +81,7 @@ function isUserAutoPlayNextVideoPlaylistValid (value: any) {
   return isBooleanValid(value)
 }
 
-function isNoInstanceConfigWarningModal (value: any) {
-  return isBooleanValid(value)
-}
-
-function isNoWelcomeModal (value: any) {
+function isUserNoModal (value: any) {
   return isBooleanValid(value)
 }
 
@@ -119,6 +115,5 @@ export {
   isUserAutoPlayNextVideoPlaylistValid,
   isUserDisplayNameValid,
   isUserDescriptionValid,
-  isNoInstanceConfigWarningModal,
-  isNoWelcomeModal
+  isUserNoModal
 }

@@ -41,8 +41,8 @@ export class MySubscriptionsComponent {
 
   private loadSubscriptions (more = true) {
     this.userSubscriptionService.listSubscriptions({ pagination: this.pagination, search: this.search })
-        .subscribe(
-          res => {
+        .subscribe({
+          next: res => {
             this.videoChannels = more
               ? this.videoChannels.concat(res.data)
               : res.data
@@ -51,7 +51,7 @@ export class MySubscriptionsComponent {
             this.onDataSubject.next(res.data)
           },
 
-          error => this.notifier.error(error.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 }

@@ -1,9 +1,9 @@
-import * as path from 'path'
+import { readdir } from 'fs-extra'
+import { join } from 'path'
+import { QueryTypes } from 'sequelize'
 import { logger } from '../helpers/logger'
 import { LAST_MIGRATION_VERSION } from './constants'
 import { sequelizeTypescript } from './database'
-import { readdir } from 'fs-extra'
-import { QueryTypes } from 'sequelize'
 
 async function migrate () {
   const tables = await sequelizeTypescript.getQueryInterface().showAllTables()
@@ -58,7 +58,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function getMigrationScripts () {
-  const files = await readdir(path.join(__dirname, 'migrations'))
+  const files = await readdir(join(__dirname, 'migrations'))
   const filesToMigrate: {
     version: string
     script: string
@@ -88,7 +88,7 @@ async function executeMigration (actualVersion: number, entity: { version: strin
   const migrationScriptName = entity.script
   logger.info('Executing %s migration script.', migrationScriptName)
 
-  const migrationScript = require(path.join(__dirname, 'migrations', migrationScriptName))
+  const migrationScript = require(join(__dirname, 'migrations', migrationScriptName))
 
   return sequelizeTypescript.transaction(async t => {
     const options = {

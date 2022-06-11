@@ -1,4 +1,3 @@
-import { Subject } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -51,6 +50,8 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
   videos: Video[] = []
   search: string
 
+  disabled = false
+
   constructor (
     protected router: Router,
     protected serverService: ServerService,
@@ -75,11 +76,11 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
   }
 
   disableForReuse () {
-    this.videosSelection.disableForReuse()
+    this.disabled = true
   }
 
   enabledForReuse () {
-    this.videosSelection.enabledForReuse()
+    this.disabled = false
   }
 
   reloadData () {
@@ -107,19 +108,19 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
 
   onVideosHistoryChange () {
     this.userService.updateMyProfile({ videosHistoryEnabled: this.videosHistoryEnabled })
-      .subscribe(
-        () => {
-          const message = this.videosHistoryEnabled === true ?
-            $localize`Videos history is enabled` :
-            $localize`Videos history is disabled`
+      .subscribe({
+        next: () => {
+          const message = this.videosHistoryEnabled === true
+            ? $localize`Videos history is enabled`
+            : $localize`Videos history is disabled`
 
           this.notifier.success(message)
 
           this.authService.refreshUserInformation()
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   async deleteHistory () {
@@ -130,14 +131,14 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
     if (res !== true) return
 
     this.userHistoryService.deleteUserVideosHistory()
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Videos history deleted`)
 
             this.reloadData()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 }

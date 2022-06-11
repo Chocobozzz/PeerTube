@@ -10,8 +10,6 @@ User=peertube
 Group=peertube
 ExecStart=/usr/bin/node dist/server
 WorkingDirectory=/var/www/peertube/peertube-latest
-StandardOutput=syslog
-StandardError=syslog
 SyslogIdentifier=peertube
 Restart=always
 

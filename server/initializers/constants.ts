@@ -2,7 +2,7 @@ import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
 import { randomBytes } from 'crypto'
 import { invert } from 'lodash'
 import { join } from 'path'
-import { randomInt } from '../../shared/core-utils/miscs/miscs'
+import { randomInt } from '../../shared/core-utils/common/miscs'
 import {
   AbuseState,
   JobType,
@@ -24,7 +24,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 650
+const LAST_MIGRATION_VERSION = 670
 
 // ---------------------------------------------------------------------------
 
@@ -147,7 +147,8 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'videos-views': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
-  'video-live-ending': 1
+  'video-live-ending': 1,
+  'move-to-object-storage': 3
 }
 // Excluded keys are jobs that can be configured by admins
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
@@ -162,7 +163,8 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'videos-views': 1,
   'activitypub-refresher': 1,
   'video-redundancy': 1,
-  'video-live-ending': 10
+  'video-live-ending': 10,
+  'move-to-object-storage': 1
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -178,7 +180,8 @@ const JOB_TTL: { [id in JobType]: number } = {
   'videos-views': undefined, // Unlimited
   'activitypub-refresher': 60000 * 10, // 10 minutes
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
-  'video-live-ending': 1000 * 60 * 10 // 10 minutes
+  'video-live-ending': 1000 * 60 * 10, // 10 minutes
+  'move-to-object-storage': 1000 * 60 * 60 * 3 // 3 hours
 }
 const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views': {
@@ -412,7 +415,8 @@ const VIDEO_STATES: { [ id in VideoState ]: string } = {
   [VideoState.TO_TRANSCODE]: 'To transcode',
   [VideoState.TO_IMPORT]: 'To import',
   [VideoState.WAITING_FOR_LIVE]: 'Waiting for livestream',
-  [VideoState.LIVE_ENDED]: 'Livestream ended'
+  [VideoState.LIVE_ENDED]: 'Livestream ended',
+  [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE]: 'To move to an external storage'
 }
 
 const VIDEO_IMPORT_STATES: { [ id in VideoImportState ]: string } = {
@@ -1050,6 +1054,8 @@ function buildLanguages () {
     rsl: true, // Russian sign language
 
     kab: true, // Kabyle
+
+    lat: true, // Latin
 
     epo: true, // Esperanto
     tlh: true, // Klingon

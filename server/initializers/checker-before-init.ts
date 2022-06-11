@@ -1,6 +1,9 @@
-import * as config from 'config'
+import { IConfig } from 'config'
 import { parseSemVersion, promisify0 } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
+
+// Special behaviour for config because we can reload it
+const config: IConfig = require('config')
 
 // ONLY USE CORE MODULES IN THIS FILE!
 

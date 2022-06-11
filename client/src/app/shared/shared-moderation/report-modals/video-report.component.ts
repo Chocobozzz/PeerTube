@@ -1,5 +1,5 @@
 import { mapValues, pickBy } from 'lodash-es'
-import { buildVideoLink, buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
+import { buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Notifier } from '@app/core'
@@ -7,6 +7,7 @@ import { ABUSE_REASON_VALIDATOR } from '@app/shared/form-validators/abuse-valida
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { decorateVideoLink } from '@shared/core-utils'
 import { abusePredefinedReasonsMap } from '@shared/core-utils/abuse'
 import { AbusePredefinedReasonsString } from '@shared/models'
 import { Video } from '../../shared-main'
@@ -57,11 +58,12 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   getVideoEmbed () {
     return this.sanitizer.bypassSecurityTrustHtml(
       buildVideoOrPlaylistEmbed(
-        buildVideoLink({
-          baseUrl: this.video.embedUrl,
+        decorateVideoLink({
+          url: this.video.embedUrl,
           title: false,
           warningTitle: false
         }),
+
         this.video.name
       )
     )
@@ -106,14 +108,14 @@ export class VideoReportComponent extends FormReactive implements OnInit {
         startAt: hasStart && startAt ? startAt : undefined,
         endAt: hasEnd && endAt ? endAt : undefined
       }
-    }).subscribe(
-      () => {
+    }).subscribe({
+      next: () => {
         this.notifier.success($localize`Video reported.`)
         this.hide()
       },
 
-      err => this.notifier.error(err.message)
-    )
+      error: err => this.notifier.error(err.message)
+    })
   }
 
   isRemote () {

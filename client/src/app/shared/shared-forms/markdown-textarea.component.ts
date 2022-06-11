@@ -6,6 +6,7 @@ import { Component, ElementRef, forwardRef, Input, OnInit, ViewChild } from '@an
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { SafeHtml } from '@angular/platform-browser'
 import { MarkdownService, ScreenService } from '@app/core'
+import { Video } from '@shared/models'
 
 @Component({
   selector: 'my-markdown-textarea',
@@ -33,7 +34,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   @Input() markdownType: 'text' | 'enhanced' = 'text'
   @Input() customMarkdownRenderer?: (text: string) => Promise<string | HTMLElement>
 
-  @Input() markdownVideo = false
+  @Input() markdownVideo: Video
 
   @Input() name = 'description'
 
@@ -147,7 +148,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
     }
 
     if (this.markdownVideo) {
-      html = this.markdownService.processVideoTimestamps(html)
+      html = this.markdownService.processVideoTimestamps(this.markdownVideo.shortUUID, html)
     }
 
     return html

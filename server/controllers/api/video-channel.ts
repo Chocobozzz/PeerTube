@@ -1,9 +1,10 @@
-import * as express from 'express'
+import express from 'express'
+import { pickCommonVideoQuery } from '@server/helpers/query'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { getServerActor } from '@server/models/application/application'
 import { MChannelBannerAccountDefault } from '@server/types/models'
-import { ActorImageType, VideoChannelCreate, VideoChannelUpdate, VideosCommonQuery } from '../../../shared'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { ActorImageType, VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
+import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { buildNSFWFilter, createReqFiles, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
@@ -107,7 +108,7 @@ videoChannelRouter.delete('/:nameWithHost',
 
 videoChannelRouter.get('/:nameWithHost',
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  asyncMiddleware(getVideoChannel)
+  getVideoChannel
 )
 
 videoChannelRouter.get('/:nameWithHost/video-playlists',
@@ -280,7 +281,7 @@ async function removeVideoChannel (req: express.Request, res: express.Response) 
   return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
-async function getVideoChannel (req: express.Request, res: express.Response) {
+function getVideoChannel (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
 
   if (videoChannel.isOutdated()) {
@@ -309,20 +310,13 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
   const videoChannelInstance = res.locals.videoChannel
   const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
   const countVideos = getCountVideos(req)
-  const query = req.query as VideosCommonQuery
+  const query = pickCommonVideoQuery(req.query)
 
   const apiOptions = await Hooks.wrapObject({
+    ...query,
+
     followerActorId,
-    start: query.start,
-    count: query.count,
-    sort: query.sort,
     includeLocalVideos: true,
-    categoryOneOf: query.categoryOneOf,
-    licenceOneOf: query.licenceOneOf,
-    languageOneOf: query.languageOneOf,
-    tagsOneOf: query.tagsOneOf,
-    tagsAllOf: query.tagsAllOf,
-    filter: query.filter,
     nsfw: buildNSFWFilter(res, query.nsfw),
     withFiles: false,
     videoChannelId: videoChannelInstance.id,

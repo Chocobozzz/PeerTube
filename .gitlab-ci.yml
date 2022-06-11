@@ -10,20 +10,20 @@ cache:
     - .yarn-cache
     - cached-fixtures
 
-build-openapi-clients:
-  stage: clients
-  only:
-    refs:
-      - master
-      - schedules
-    changes:
-      - support/doc/api/openapi.yaml
-  script:
-    - apt-get update -qq
-    - apt-get -yqqq install openjdk-8-jre
-    - yarn install --pure-lockfile
-    - scripts/openapi-peertube-version.sh
-    - scripts/openapi-clients.sh
+# build-openapi-clients:
+#   stage: clients
+#   only:
+#     refs:
+#       - master
+#       - schedules
+#     changes:
+#       - support/doc/api/openapi.yaml
+#   script:
+#     - apt-get update -qq
+#     - apt-get -yqqq install openjdk-8-jre
+#     - yarn install --pure-lockfile
+#     - scripts/openapi-peertube-version.sh
+#     - scripts/openapi-clients.sh
 
 build-nightly:
   stage: docker-nightly

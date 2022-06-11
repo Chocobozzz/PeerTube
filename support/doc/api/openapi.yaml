@@ -716,7 +716,7 @@ paths:
           - admin
       tags:
         - Instance Follows
-      summary: Follow a list of servers
+      summary: Follow a list of actors (PeerTube instance, channel or account)
       responses:
         '204':
           description: successful operation
@@ -734,28 +734,32 @@ paths:
                     type: string
                     format: hostname
                   uniqueItems: true
+                handles:
+                  type: array
+                  items:
+                    type: string
+                  uniqueItems: true
 
-  '/server/following/{host}':
+  '/server/following/{hostOrHandle}':
     delete:
-      summary: Unfollow a server
+      summary: Unfollow an actor (PeerTube instance, channel or account)
       security:
         - OAuth2:
           - admin
       tags:
         - Instance Follows
       parameters:
-        - name: host
+        - name: hostOrHandle
           in: path
           required: true
-          description: The host to unfollow
+          description: The hostOrHandle to unfollow
           schema:
             type: string
-            format: hostname
       responses:
         '204':
           description: successful operation
         '404':
-          description: host not found
+          description: host or handle not found
 
   /users:
     post:
@@ -6372,6 +6376,8 @@ components:
           format: date-time
         noInstanceConfigWarningModal:
           type: boolean
+        noAccountSetupWarningModal:
+          type: boolean
         noWelcomeModal:
           type: boolean
         nsfwPolicy:
@@ -6525,6 +6531,8 @@ components:
         theme:
           type: string
         noInstanceConfigWarningModal:
+          type: boolean
+        noAccountSetupWarningModal:
           type: boolean
         noWelcomeModal:
           type: boolean

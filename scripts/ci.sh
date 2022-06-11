@@ -47,11 +47,12 @@ if [ "$1" = "client" ]; then
 
     feedsFiles=$(findTestFiles ./dist/server/tests/feeds)
     helperFiles=$(findTestFiles ./dist/server/tests/helpers)
+    libFiles=$(findTestFiles ./dist/server/tests/lib)
     miscFiles="./dist/server/tests/client.js ./dist/server/tests/misc-endpoints.js"
     # Not in plugin task, it needs an index.html
     pluginFiles="./dist/server/tests/plugins/html-injection.js"
 
-    MOCHA_PARALLEL=true runTest "$1" 2 $feedsFiles $helperFiles $miscFiles $pluginFiles
+    MOCHA_PARALLEL=true runTest "$1" 2 $feedsFiles $helperFiles $miscFiles $pluginFiles $libFiles
 elif [ "$1" = "cli-plugin" ]; then
     npm run build:server
     npm run setup:cli
@@ -76,7 +77,7 @@ elif [ "$1" = "api-2" ]; then
     serverFiles=$(findTestFiles ./dist/server/tests/api/server)
     usersFiles=$(findTestFiles ./dist/server/tests/api/users)
 
-    MOCHA_PARALLEL=true runTest "$1" 3 $serverFiles $usersFiles $liveFiles
+    MOCHA_PARALLEL=true runTest "$1" 3 $liveFiles $serverFiles $usersFiles
 elif [ "$1" = "api-3" ]; then
     npm run build:server
 
@@ -88,9 +89,10 @@ elif [ "$1" = "api-4" ]; then
 
     moderationFiles=$(findTestFiles ./dist/server/tests/api/moderation)
     redundancyFiles=$(findTestFiles ./dist/server/tests/api/redundancy)
+    objectStorageFiles=$(findTestFiles ./dist/server/tests/api/object-storage)
     activitypubFiles=$(findTestFiles ./dist/server/tests/api/activitypub)
 
-    MOCHA_PARALLEL=true TS_NODE_FILES=true runTest "$1" 2 $moderationFiles $redundancyFiles $activitypubFiles
+    MOCHA_PARALLEL=true TS_NODE_FILES=true runTest "$1" 2 $moderationFiles $redundancyFiles $activitypubFiles $objectStorageFiles
 elif [ "$1" = "external-plugins" ]; then
     npm run build:server
 

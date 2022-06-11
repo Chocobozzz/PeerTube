@@ -13,7 +13,7 @@ export class MyAccountComponent implements OnInit {
 
   constructor (
     private screenService: ScreenService
-    ) { }
+  ) { }
 
   get isBroadcastMessageDisplayed () {
     return this.screenService.isBroadcastMessageDisplayed

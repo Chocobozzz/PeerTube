@@ -1,0 +1,39 @@
+<ng-template #modal let-hide="close">
+  <div class="modal-header">
+    <h4 i18n class="modal-title">Welcome to {{ instanceName }}, dear user!</h4>
+    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
+  </div>
+
+  <div class="modal-body">
+    <img class="mascot" src="/client/assets/images/mascot/happy.svg" alt="">
+
+    <div i18n class="subtitle">It's time to set up your account profile!</div>
+
+    <p i18n>Help moderators and other users to know <strong>who you are</strong> by:</p>
+
+    <ul>
+      <li *ngIf="!hasAccountAvatar(user)" i18n>Uploading an <strong>avatar</strong></li>
+      <li *ngIf="!hasAccountDescription(user)" i18n>Writing a <strong>description</strong></li>
+    </ul>
+  </div>
+
+  <div class="modal-footer inputs">
+    <my-peertube-checkbox
+      inputName="stopDisplayModal" [(ngModel)]="stopDisplayModal"
+      i18n-labelText labelText="Don't show me this anymore"
+    >
+    </my-peertube-checkbox>
+
+    <input
+      type="button" role="button" i18n-value value="Remind me later" class="peertube-button grey-button"
+      (click)="hide()" (key.enter)="hide()"
+    >
+
+    <a i18n (click)="hide()" (key.enter)="hide()"
+       class="peertube-button-link orange-button" routerLink="/my-account"
+       rel="noopener noreferrer" ngbAutofocus>
+      Set up
+    </a>
+  </div>
+
+</ng-template>

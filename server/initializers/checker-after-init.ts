@@ -1,4 +1,4 @@
-import * as config from 'config'
+import { util, has, get } from 'config'
 import { uniq } from 'lodash'
 import { URL } from 'url'
 import { getFFmpegVersion } from '@server/helpers/ffmpeg-utils'
@@ -18,8 +18,8 @@ async function checkActivityPubUrls () {
 
   const parsed = new URL(actor.url)
   if (WEBSERVER.HOST !== parsed.host) {
-    const NODE_ENV = config.util.getEnv('NODE_ENV')
-    const NODE_CONFIG_DIR = config.util.getEnv('NODE_CONFIG_DIR')
+    const NODE_ENV = util.getEnv('NODE_ENV')
+    const NODE_CONFIG_DIR = util.getEnv('NODE_CONFIG_DIR')
 
     logger.warn(
       'It seems PeerTube was started (and created some data) with another domain name. ' +
@@ -36,7 +36,7 @@ async function checkActivityPubUrls () {
 function checkConfig () {
 
   // Moved configuration keys
-  if (config.has('services.csp-logger')) {
+  if (has('services.csp-logger')) {
     logger.warn('services.csp-logger configuration has been renamed to csp.report_uri. Please update your configuration file.')
   }
 
@@ -97,7 +97,7 @@ function checkConfig () {
 
   // Check storage directory locations
   if (isProdInstance()) {
-    const configStorage = config.get('storage')
+    const configStorage = get('storage')
     for (const key of Object.keys(configStorage)) {
       if (configStorage[key].startsWith('storage/')) {
         logger.warn(
@@ -150,6 +150,29 @@ function checkConfig () {
   if (CONFIG.LIVE.ENABLED === true) {
     if (CONFIG.LIVE.ALLOW_REPLAY === true && CONFIG.TRANSCODING.ENABLED === false) {
       return 'Live allow replay cannot be enabled if transcoding is not enabled.'
+    }
+  }
+
+  // Object storage
+  if (CONFIG.OBJECT_STORAGE.ENABLED === true) {
+
+    if (!CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME) {
+      return 'videos_bucket should be set when object storage support is enabled.'
+    }
+
+    if (!CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME) {
+      return 'streaming_playlists_bucket should be set when object storage support is enabled.'
+    }
+
+    if (
+      CONFIG.OBJECT_STORAGE.VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME &&
+      CONFIG.OBJECT_STORAGE.VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX
+    ) {
+      if (CONFIG.OBJECT_STORAGE.VIDEOS.PREFIX === '') {
+        return 'Object storage bucket prefixes should be set when the same bucket is used for both types of video.'
+      } else {
+        return 'Object storage bucket prefixes should be set to different values when the same bucket is used for both types of video.'
+      }
     }
   }
 

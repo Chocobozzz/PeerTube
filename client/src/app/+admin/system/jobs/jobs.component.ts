@@ -36,7 +36,8 @@ export class JobsComponent extends RestTable implements OnInit {
     'video-live-ending',
     'video-redundancy',
     'video-transcoding',
-    'videos-views'
+    'videos-views',
+    'move-to-object-storage'
   ]
 
   jobs: Job[] = []
@@ -118,14 +119,14 @@ export class JobsComponent extends RestTable implements OnInit {
         pagination: this.pagination,
         sort: this.sort
       })
-      .subscribe(
-        resultList => {
+      .subscribe({
+        next: resultList => {
           this.jobs = resultList.data
           this.totalRecords = resultList.total
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   private loadJobStateAndType () {

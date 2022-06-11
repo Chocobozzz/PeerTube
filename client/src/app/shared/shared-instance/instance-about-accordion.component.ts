@@ -7,7 +7,7 @@ import { About } from '@shared/models/server'
 @Component({
   selector: 'my-instance-about-accordion',
   templateUrl: './instance-about-accordion.component.html',
-  styleUrls: ['./instance-about-accordion.component.scss']
+  styleUrls: [ './instance-about-accordion.component.scss' ]
 })
 export class InstanceAboutAccordionComponent implements OnInit {
   @ViewChild('accordion', { static: true }) accordion: NgbAccordion
@@ -36,8 +36,8 @@ export class InstanceAboutAccordionComponent implements OnInit {
 
   ngOnInit (): void {
     this.instanceService.getAbout()
-      .subscribe(
-        async about => {
+      .subscribe({
+        next: async about => {
           this.about = about
 
           this.aboutHtml = await this.instanceService.buildHtml(about)
@@ -45,8 +45,8 @@ export class InstanceAboutAccordionComponent implements OnInit {
           this.init.emit(this)
         },
 
-        err => this.notifier.error(err.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   getAdministratorsPanel () {

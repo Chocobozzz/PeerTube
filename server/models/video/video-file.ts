@@ -1,7 +1,7 @@
 import { remove } from 'fs-extra'
-import * as memoizee from 'memoizee'
+import memoizee from 'memoizee'
 import { join } from 'path'
-import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
+import { FindOptions, Op, Transaction } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -23,9 +23,11 @@ import validator from 'validator'
 import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 import { logger } from '@server/helpers/logger'
 import { extractVideo } from '@server/helpers/video'
-import { getTorrentFilePath } from '@server/lib/video-paths'
+import { getHLSPublicFileUrl, getWebTorrentPublicFileUrl } from '@server/lib/object-storage'
+import { getFSTorrentFilePath } from '@server/lib/paths'
 import { MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/models'
 import { AttributesOnly } from '@shared/core-utils'
+import { VideoStorage } from '@shared/models'
 import {
   isVideoFileExtnameValid,
   isVideoFileInfoHashValid,
@@ -44,6 +46,7 @@ import {
 } from '../../initializers/constants'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../types/models/video/video-file'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
+import { doesExist } from '../shared'
 import { parseAggregateResult, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
@@ -191,6 +194,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   @Column
   metadataUrl: string
 
+  // Could be null for remote files
   @AllowNull(true)
   @Column
   fileUrl: string
@@ -200,6 +204,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   @Column
   filename: string
 
+  // Could be null for remote files
   @AllowNull(true)
   @Column
   torrentUrl: string
@@ -212,6 +217,11 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   @ForeignKey(() => VideoModel)
   @Column
   videoId: number
+
+  @AllowNull(false)
+  @Default(VideoStorage.FILE_SYSTEM)
+  @Column
+  storage: VideoStorage
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
@@ -250,20 +260,41 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
 
   static doesInfohashExist (infoHash: string) {
     const query = 'SELECT 1 FROM "videoFile" WHERE "infoHash" = $infoHash LIMIT 1'
-    const options = {
-      type: QueryTypes.SELECT as QueryTypes.SELECT,
-      bind: { infoHash },
-      raw: true
-    }
 
-    return VideoModel.sequelize.query(query, options)
-              .then(results => results.length === 1)
+    return doesExist(query, { infoHash })
   }
 
   static async doesVideoExistForVideoFile (id: number, videoIdOrUUID: number | string) {
     const videoFile = await VideoFileModel.loadWithVideoOrPlaylist(id, videoIdOrUUID)
 
     return !!videoFile
+  }
+
+  static async doesOwnedTorrentFileExist (filename: string) {
+    const query = 'SELECT 1 FROM "videoFile" ' +
+                  'LEFT JOIN "video" "webtorrent" ON "webtorrent"."id" = "videoFile"."videoId" AND "webtorrent"."remote" IS FALSE ' +
+                  'LEFT JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
+                  'LEFT JOIN "video" "hlsVideo" ON "hlsVideo"."id" = "videoStreamingPlaylist"."videoId" AND "hlsVideo"."remote" IS FALSE ' +
+                  'WHERE "torrentFilename" = $filename AND ("hlsVideo"."id" IS NOT NULL OR "webtorrent"."id" IS NOT NULL) LIMIT 1'
+
+    return doesExist(query, { filename })
+  }
+
+  static async doesOwnedWebTorrentVideoFileExist (filename: string) {
+    const query = 'SELECT 1 FROM "videoFile" INNER JOIN "video" ON "video"."id" = "videoFile"."videoId" AND "video"."remote" IS FALSE ' +
+                  `WHERE "filename" = $filename AND "storage" = ${VideoStorage.FILE_SYSTEM} LIMIT 1`
+
+    return doesExist(query, { filename })
+  }
+
+  static loadByFilename (filename: string) {
+    const query = {
+      where: {
+        filename
+      }
+    }
+
+    return VideoFileModel.findOne(query)
   }
 
   static loadWithVideoOrPlaylistByTorrentFilename (filename: string) {
@@ -428,9 +459,20 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     return !!this.videoStreamingPlaylistId
   }
 
-  getFileUrl (video: MVideo) {
-    if (!this.Video) this.Video = video as VideoModel
+  getObjectStorageUrl () {
+    if (this.isHLS()) {
+      return getHLSPublicFileUrl(this.fileUrl)
+    }
 
+    return getWebTorrentPublicFileUrl(this.fileUrl)
+  }
+
+  getFileUrl (video: MVideo) {
+    if (this.storage === VideoStorage.OBJECT_STORAGE) {
+      return this.getObjectStorageUrl()
+    }
+
+    if (!this.Video) this.Video = video as VideoModel
     if (video.isOwned()) return WEBSERVER.URL + this.getFileStaticPath(video)
 
     return this.fileUrl
@@ -443,10 +485,9 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   }
 
   getFileDownloadUrl (video: MVideoWithHost) {
-    const basePath = this.isHLS()
-      ? STATIC_DOWNLOAD_PATHS.HLS_VIDEOS
-      : STATIC_DOWNLOAD_PATHS.VIDEOS
-    const path = join(basePath, this.filename)
+    const path = this.isHLS()
+      ? join(STATIC_DOWNLOAD_PATHS.HLS_VIDEOS, `${video.uuid}-${this.resolution}-fragmented${this.extname}`)
+      : join(STATIC_DOWNLOAD_PATHS.VIDEOS, `${video.uuid}-${this.resolution}${this.extname}`)
 
     if (video.isOwned()) return WEBSERVER.URL + path
 
@@ -482,7 +523,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   removeTorrent () {
     if (!this.torrentFilename) return null
 
-    const torrentPath = getTorrentFilePath(this)
+    const torrentPath = getFSTorrentFilePath(this)
     return remove(torrentPath)
       .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
   }

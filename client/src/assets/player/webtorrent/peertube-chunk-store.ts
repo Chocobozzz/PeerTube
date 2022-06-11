@@ -36,7 +36,7 @@ export class PeertubeChunkStore extends EventEmitter {
 
   chunkLength: number
 
-  private pendingPut: { id: number, buf: Buffer, cb: Function }[] = []
+  private pendingPut: { id: number, buf: Buffer, cb: (err?: Error) => void }[] = []
   // If the store is full
   private memoryChunks: { [ id: number ]: Buffer | true } = {}
   private databaseName: string
@@ -54,7 +54,7 @@ export class PeertubeChunkStore extends EventEmitter {
     this.databaseName = 'webtorrent-chunks-'
 
     if (!opts) opts = {}
-    if (opts.torrent && opts.torrent.infoHash) this.databaseName += opts.torrent.infoHash
+    if (opts.torrent?.infoHash) this.databaseName += opts.torrent.infoHash
     else this.databaseName += '-default'
 
     this.setMaxListeners(100)
@@ -106,7 +106,9 @@ export class PeertubeChunkStore extends EventEmitter {
       } catch (err) {
         console.log('Cannot bulk insert chunks. Store them in memory.', { err })
 
-        processing.forEach(p => this.memoryChunks[ p.id ] = p.buf)
+        processing.forEach(p => {
+          this.memoryChunks[p.id] = p.buf
+        })
       } finally {
         processing.forEach(p => p.cb())
       }
@@ -182,7 +184,7 @@ export class PeertubeChunkStore extends EventEmitter {
   private runCleaner () {
     this.checkExpiration()
 
-    this.cleanerInterval = setInterval(async () => {
+    this.cleanerInterval = setInterval(() => {
       this.checkExpiration()
     }, PeertubeChunkStore.CLEANER_INTERVAL_MS)
   }

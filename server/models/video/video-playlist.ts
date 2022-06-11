@@ -17,10 +17,9 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { setAsUpdated } from '@server/helpers/database-utils'
 import { buildUUID, uuidToShort } from '@server/helpers/uuid'
 import { MAccountId, MChannelId } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly, buildPlaylistEmbedPath, buildPlaylistWatchPath, pick } from '@shared/core-utils'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
 import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
@@ -53,6 +52,7 @@ import {
 } from '../../types/models/video/video-playlist'
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions } from '../account/account'
 import { ActorModel } from '../actor/actor'
+import { setAsUpdated } from '../shared'
 import {
   buildServerIdsFollowedBy,
   buildTrigramSearchIndex,
@@ -82,6 +82,8 @@ type AvailableForListOptions = {
   videoChannelId?: number
   listMyPlaylists?: boolean
   search?: string
+  host?: string
+  uuids?: string[]
   withVideos?: boolean
 }
 
@@ -141,9 +143,19 @@ function getVideoLengthSelect () {
     ]
   },
   [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
+    const whereAnd: WhereOptions[] = []
+
+    const whereServer = options.host && options.host !== WEBSERVER.HOST
+      ? { host: options.host }
+      : undefined
+
     let whereActor: WhereOptions = {}
 
-    const whereAnd: WhereOptions[] = []
+    if (options.host === WEBSERVER.HOST) {
+      whereActor = {
+        [Op.and]: [ { serverId: null } ]
+      }
+    }
 
     if (options.listMyPlaylists !== true) {
       whereAnd.push({
@@ -168,9 +180,7 @@ function getVideoLengthSelect () {
         })
       }
 
-      whereActor = {
-        [Op.or]: whereActorOr
-      }
+      Object.assign(whereActor, { [Op.or]: whereActorOr })
     }
 
     if (options.accountId) {
@@ -191,18 +201,26 @@ function getVideoLengthSelect () {
       })
     }
 
+    if (options.uuids) {
+      whereAnd.push({
+        uuid: {
+          [Op.in]: options.uuids
+        }
+      })
+    }
+
     if (options.withVideos === true) {
       whereAnd.push(
         literal(`(${getVideoLengthSelect()}) != 0`)
       )
     }
 
-    const attributesInclude = []
+    let attributesInclude: any[] = [ literal('0 as similarity') ]
 
     if (options.search) {
       const escapedSearch = VideoPlaylistModel.sequelize.escape(options.search)
       const escapedLikeSearch = VideoPlaylistModel.sequelize.escape('%' + options.search + '%')
-      attributesInclude.push(createSimilarityAttribute('VideoPlaylistModel.name', options.search))
+      attributesInclude = [ createSimilarityAttribute('VideoPlaylistModel.name', options.search) ]
 
       whereAnd.push({
         [Op.or]: [
@@ -228,7 +246,7 @@ function getVideoLengthSelect () {
       include: [
         {
           model: AccountModel.scope({
-            method: [ AccountScopeNames.SUMMARY, { whereActor } as SummaryOptions ]
+            method: [ AccountScopeNames.SUMMARY, { whereActor, whereServer } as SummaryOptions ]
           }),
           required: true
         },
@@ -339,17 +357,10 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
   })
   Thumbnail: ThumbnailModel
 
-  static listForApi (options: {
-    followerActorId: number
+  static listForApi (options: AvailableForListOptions & {
     start: number
     count: number
     sort: string
-    type?: VideoPlaylistType
-    accountId?: number
-    videoChannelId?: number
-    listMyPlaylists?: boolean
-    search?: string
-    withVideos?: boolean // false by default
   }) {
     const query = {
       offset: options.start,
@@ -362,12 +373,8 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
         method: [
           ScopeNames.AVAILABLE_FOR_LIST,
           {
-            type: options.type,
-            followerActorId: options.followerActorId,
-            accountId: options.accountId,
-            videoChannelId: options.videoChannelId,
-            listMyPlaylists: options.listMyPlaylists,
-            search: options.search,
+            ...pick(options, [ 'type', 'followerActorId', 'accountId', 'videoChannelId', 'listMyPlaylists', 'search', 'host', 'uuids' ]),
+
             withVideos: options.withVideos || false
           } as AvailableForListOptions
         ]
@@ -384,15 +391,14 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
       })
   }
 
-  static searchForApi (options: {
-    followerActorId: number
+  static searchForApi (options: Pick<AvailableForListOptions, 'followerActorId' | 'search'| 'host'| 'uuids'> & {
     start: number
     count: number
     sort: string
-    search?: string
   }) {
     return VideoPlaylistModel.listForApi({
       ...options,
+
       type: VideoPlaylistType.REGULAR,
       listMyPlaylists: false,
       withVideos: true
@@ -560,12 +566,12 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
     return join(STATIC_PATHS.THUMBNAILS, this.Thumbnail.filename)
   }
 
-  getWatchUrl () {
-    return WEBSERVER.URL + '/w/p/' + this.uuid
+  getWatchStaticPath () {
+    return buildPlaylistWatchPath({ shortUUID: uuidToShort(this.uuid) })
   }
 
   getEmbedStaticPath () {
-    return '/video-playlists/embed/' + this.uuid
+    return buildPlaylistEmbedPath(this)
   }
 
   static async getStats () {

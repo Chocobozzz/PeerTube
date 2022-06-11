@@ -1,22 +1,12 @@
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
-import * as autocannon from 'autocannon'
-import {
-  addVideoCommentReply,
-  addVideoCommentThread,
-  createVideoCaption,
-  flushAndRunServer,
-  getVideosList,
-  killallServers,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
-} from '@shared/extra-utils'
-import { Video, VideoPrivacy } from '@shared/models'
+import autocannon, { printResult } from 'autocannon'
 import { writeJson } from 'fs-extra'
+import { createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
+import { Video, VideoPrivacy } from '@shared/models'
 
-let server: ServerInfo
+let server: PeerTubeServer
 let video: Video
 let threadId: number
 
@@ -25,7 +15,7 @@ const outfile = process.argv[2]
 run()
   .catch(err => console.error(err))
   .finally(() => {
-    if (server) killallServers([ server ])
+    if (server) return killallServers([ server ])
   })
 
 function buildAuthorizationHeader () {
@@ -159,7 +149,7 @@ async function run () {
     Object.assign(testResult, { title: test.title, path: test.path })
     finalResult.push(testResult)
 
-    console.log(autocannon.printResult(testResult))
+    console.log(printResult(testResult))
   }
 
   if (outfile) await writeJson(outfile, finalResult)
@@ -198,7 +188,7 @@ function runBenchmark (options: {
 }
 
 async function prepare () {
-  server = await flushAndRunServer(1, {
+  server = await createSingleServer(1, {
     rates_limit: {
       api: {
         max: 5_000_000
@@ -207,7 +197,7 @@ async function prepare () {
   })
   await setAccessTokensToServers([ server ])
 
-  const videoAttributes = {
+  const attributes = {
     name: 'my super video',
     category: 2,
     nsfw: true,
@@ -220,33 +210,29 @@ async function prepare () {
   }
 
   for (let i = 0; i < 10; i++) {
-    Object.assign(videoAttributes, { name: 'my super video ' + i })
-    await uploadVideo(server.url, server.accessToken, videoAttributes)
+    await server.videos.upload({ attributes: { ...attributes, name: 'my super video ' + i } })
   }
 
-  const resVideos = await getVideosList(server.url)
-  video = resVideos.body.data.find(v => v.name === 'my super video 1')
+  const { data } = await server.videos.list()
+  video = data.find(v => v.name === 'my super video 1')
 
   for (let i = 0; i < 10; i++) {
     const text = 'my super first comment'
-    const res = await addVideoCommentThread(server.url, server.accessToken, video.id, text)
-    threadId = res.body.comment.id
+    const created = await server.comments.createThread({ videoId: video.id, text })
+    threadId = created.id
 
     const text1 = 'my super answer to thread 1'
-    const childCommentRes = await addVideoCommentReply(server.url, server.accessToken, video.id, threadId, text1)
-    const childCommentId = childCommentRes.body.comment.id
+    const child = await server.comments.addReply({ videoId: video.id, toCommentId: threadId, text: text1 })
 
     const text2 = 'my super answer to answer of thread 1'
-    await addVideoCommentReply(server.url, server.accessToken, video.id, childCommentId, text2)
+    await server.comments.addReply({ videoId: video.id, toCommentId: child.id, text: text2 })
 
     const text3 = 'my second answer to thread 1'
-    await addVideoCommentReply(server.url, server.accessToken, video.id, threadId, text3)
+    await server.comments.addReply({ videoId: video.id, toCommentId: threadId, text: text3 })
   }
 
   for (const caption of [ 'ar', 'fr', 'en', 'zh' ]) {
-    await createVideoCaption({
-      url: server.url,
-      accessToken: server.accessToken,
+    await server.captions.add({
       language: caption,
       videoId: video.id,
       fixture: 'subtitle-good2.vtt'

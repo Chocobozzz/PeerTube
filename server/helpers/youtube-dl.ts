@@ -3,7 +3,7 @@ import { ensureDir, move, pathExists, remove, writeFile } from 'fs-extra'
 import got from 'got'
 import { join } from 'path'
 import { CONFIG } from '@server/initializers/config'
-import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { VideoResolution } from '../../shared/models/videos'
 import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES } from '../initializers/constants'
 import { peertubeTruncate, pipelinePromise, root } from './core-utils'
@@ -351,7 +351,7 @@ class YoutubeDL {
       }
 
       const newUrl = result.headers.location
-      const newVersion = /yt-dl\.org\/downloads\/(\d{4}\.\d\d\.\d\d(\.\d)?)\/youtube-dl/.exec(newUrl)[1]
+      const newVersion = /\/(\d{4}\.\d\d\.\d\d(\.\d)?)\/youtube-dl$/.exec(newUrl)[1]
 
       const downloadFileStream = got.stream(newUrl)
       const writeStream = createWriteStream(bin, { mode: 493 })

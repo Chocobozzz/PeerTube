@@ -1,25 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import { expect } from 'chai'
 import {
   cleanupTests,
-  createUser,
+  createMultipleServers,
   doubleFollow,
-  flushAndRunMultipleServers,
   makeGetRequest,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo,
-  userLogin
-} from '../../../../shared/extra-utils'
-import { Video, VideoPrivacy } from '../../../../shared/models/videos'
-import { UserRole } from '../../../../shared/models/users'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+  PeerTubeServer,
+  setAccessTokensToServers
+} from '@shared/extra-utils'
+import { HttpStatusCode, UserRole, Video, VideoPrivacy } from '@shared/models'
 
-const expect = chai.expect
-
-async function getVideosNames (server: ServerInfo, token: string, filter: string, statusCodeExpected = HttpStatusCode.OK_200) {
+async function getVideosNames (server: PeerTubeServer, token: string, filter: string, expectedStatus = HttpStatusCode.OK_200) {
   const paths = [
     '/api/v1/video-channels/root_channel/videos',
     '/api/v1/accounts/root/videos',
@@ -38,7 +31,7 @@ async function getVideosNames (server: ServerInfo, token: string, filter: string
         sort: 'createdAt',
         filter
       },
-      statusCodeExpected
+      expectedStatus
     })
 
     videosResults.push(res.body.data.map(v => v.name))
@@ -48,42 +41,32 @@ async function getVideosNames (server: ServerInfo, token: string, filter: string
 }
 
 describe('Test videos filter', function () {
-  let servers: ServerInfo[]
+  let servers: PeerTubeServer[]
 
   // ---------------------------------------------------------------
 
   before(async function () {
     this.timeout(160000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
 
     for (const server of servers) {
       const moderator = { username: 'moderator', password: 'my super password' }
-      await createUser(
-        {
-          url: server.url,
-          accessToken: server.accessToken,
-          username: moderator.username,
-          password: moderator.password,
-          videoQuota: undefined,
-          videoQuotaDaily: undefined,
-          role: UserRole.MODERATOR
-        }
-      )
-      server['moderatorAccessToken'] = await userLogin(server, moderator)
+      await server.users.create({ username: moderator.username, password: moderator.password, role: UserRole.MODERATOR })
+      server['moderatorAccessToken'] = await server.login.getAccessToken(moderator)
 
-      await uploadVideo(server.url, server.accessToken, { name: 'public ' + server.serverNumber })
+      await server.videos.upload({ attributes: { name: 'public ' + server.serverNumber } })
 
       {
         const attributes = { name: 'unlisted ' + server.serverNumber, privacy: VideoPrivacy.UNLISTED }
-        await uploadVideo(server.url, server.accessToken, attributes)
+        await server.videos.upload({ attributes })
       }
 
       {
         const attributes = { name: 'private ' + server.serverNumber, privacy: VideoPrivacy.PRIVATE }
-        await uploadVideo(server.url, server.accessToken, attributes)
+        await server.videos.upload({ attributes })
       }
     }
 

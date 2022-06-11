@@ -87,21 +87,24 @@ export class VideoTables {
       'fps',
       'metadataUrl',
       'videoStreamingPlaylistId',
-      'videoId'
+      'videoId',
+      'storage'
     ]
   }
 
   getStreamingPlaylistAttributes () {
-    let playlistKeys = [ 'id', 'playlistUrl', 'type' ]
+    let playlistKeys = [ 'id', 'playlistUrl', 'playlistFilename', 'type' ]
 
     if (this.mode === 'get') {
       playlistKeys = playlistKeys.concat([
         'p2pMediaLoaderInfohashes',
         'p2pMediaLoaderPeerVersion',
+        'segmentsSha256Filename',
         'segmentsSha256Url',
         'videoId',
         'createdAt',
-        'updatedAt'
+        'updatedAt',
+        'storage'
       ])
     }
 
@@ -257,7 +260,8 @@ export class VideoTables {
       'originallyPublishedAt',
       'channelId',
       'createdAt',
-      'updatedAt'
+      'updatedAt',
+      'moveJobsRunning'
     ]
   }
 }

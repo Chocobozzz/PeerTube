@@ -1,5 +1,7 @@
 $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
+@use 'sass:math';
+
 @use '_variables' as *;
 @use '_mixins' as *;
 
@@ -123,10 +125,14 @@ code {
   vertical-align: middle;
 }
 
-.form-error {
+.form-error,
+.form-warning {
   display: block;
-  color: $red;
   margin-top: 5px;
+}
+
+.form-error {
+  color: $red;
 }
 
 .input-error,
@@ -349,11 +355,11 @@ ngx-loading-bar {
 
 @media screen and (max-width: #{breakpoint(xxl)}) {
   .main-col {
-    --horizontalMarginContent: #{$not-expanded-horizontal-margins / 2};
+    --horizontalMarginContent: #{math.div($not-expanded-horizontal-margins, 2)};
     --videosHorizontalMarginContent: 30px;
 
     &.expanded {
-      --horizontalMarginContent: #{$expanded-horizontal-margins / 2};
+      --horizontalMarginContent: #{math.div($expanded-horizontal-margins, 2)};
     }
   }
 }
@@ -366,7 +372,7 @@ ngx-loading-bar {
   /* the following applies from 500px to 900px and is partially overriden from 500px to 800px by changes below to $small-view */
   .main-col,
   .main-col.expanded {
-    --horizontalMarginContent: #{$expanded-horizontal-margins / 3};
+    --horizontalMarginContent: #{math.div($expanded-horizontal-margins, 3)};
 
     .sub-menu {
       padding: 0 50px;

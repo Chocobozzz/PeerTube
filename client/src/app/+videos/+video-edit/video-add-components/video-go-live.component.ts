@@ -8,7 +8,7 @@ import { FormValidatorService } from '@app/shared/shared-forms'
 import { Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, PeerTubeProblemDocument, ServerErrorCode, VideoPrivacy } from '@shared/models'
+import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
 import { VideoSend } from './video-send'
 
 @Component({
@@ -26,8 +26,11 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
   isInUpdateForm = false
 
   liveVideo: LiveVideo
+
   videoId: number
   videoUUID: string
+  videoShortUUID: string
+
   error: string
 
   constructor (
@@ -41,7 +44,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
     private liveVideoService: LiveVideoService,
     private router: Router,
     private hooks: HooksService
-    ) {
+  ) {
     super()
   }
 
@@ -74,33 +77,35 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
     const toPatch = Object.assign({}, video, { privacy: this.firstStepPrivacyId })
     this.form.patchValue(toPatch)
 
-    this.liveVideoService.goLive(video).subscribe(
-      res => {
-        this.videoId = res.video.id
-        this.videoUUID = res.video.uuid
-        this.isInUpdateForm = true
+    this.liveVideoService.goLive(video)
+      .subscribe({
+        next: res => {
+          this.videoId = res.video.id
+          this.videoUUID = res.video.uuid
+          this.videoShortUUID = res.video.shortUUID
+          this.isInUpdateForm = true
 
-        this.firstStepDone.emit(name)
+          this.firstStepDone.emit(name)
 
-        this.fetchVideoLive()
-      },
+          this.fetchVideoLive()
+        },
 
-      err => {
-        this.firstStepError.emit()
+        error: err => {
+          this.firstStepError.emit()
 
-        let message = err.message
+          let message = err.message
 
-        const error = err.body as PeerTubeProblemDocument
+          const error = err.body as PeerTubeProblemDocument
 
-        if (error?.code === ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED) {
-          message = $localize`Cannot create live because this instance have too many created lives`
-        } else if (error?.code === ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED) {
-          message = $localize`Cannot create live because you created too many lives`
+          if (error?.code === ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED) {
+            message = $localize`Cannot create live because this instance have too many created lives`
+          } else if (error?.code === ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED) {
+            message = $localize`Cannot create live because you created too many lives`
+          }
+
+          this.notifier.error(message)
         }
-
-        this.notifier.error(message)
-      }
-    )
+      })
   }
 
   updateSecondStep () {
@@ -112,6 +117,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
     video.patch(this.form.value)
     video.id = this.videoId
     video.uuid = this.videoUUID
+    video.shortUUID = this.videoShortUUID
 
     const liveVideoUpdate: LiveVideoUpdate = {
       saveReplay: this.form.value.saveReplay,
@@ -123,19 +129,19 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
       this.updateVideoAndCaptions(video),
 
       this.liveVideoService.updateLive(this.videoId, liveVideoUpdate)
-    ]).subscribe(
-      () => {
+    ]).subscribe({
+      next: () => {
         this.notifier.success($localize`Live published.`)
 
         this.router.navigateByUrl(Video.buildWatchUrl(video))
       },
 
-      err => {
+      error: err => {
         this.error = err.message
         scrollToTop()
         console.error(err)
       }
-    )
+    })
   }
 
   getMaxLiveDuration () {
@@ -148,15 +154,15 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
 
   private fetchVideoLive () {
     this.liveVideoService.getVideoLive(this.videoId)
-      .subscribe(
-        liveVideo => {
+      .subscribe({
+        next: liveVideo => {
           this.liveVideo = liveVideo
         },
 
-        err => {
+        error: err => {
           this.firstStepError.emit()
           this.notifier.error(err.message)
         }
-      )
+      })
   }
 }

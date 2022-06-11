@@ -1,18 +1,20 @@
 import { createWriteStream, remove } from 'fs-extra'
 import got, { CancelableRequest, Options as GotOptions, RequestError } from 'got'
+import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
 import { join } from 'path'
 import { CONFIG } from '../initializers/config'
 import { ACTIVITY_PUB, PEERTUBE_VERSION, REQUEST_TIMEOUT, WEBSERVER } from '../initializers/constants'
 import { pipelinePromise } from './core-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
+import { getProxy, isProxyEnabled } from './proxy'
+
+const httpSignature = require('http-signature')
 
 export interface PeerTubeRequestError extends Error {
   statusCode?: number
   responseBody?: any
 }
-
-const httpSignature = require('http-signature')
 
 type PeerTubeRequestOptions = {
   activityPub?: boolean
@@ -24,11 +26,12 @@ type PeerTubeRequestOptions = {
     key: string
     headers: string[]
   }
-  timeout?: number
   jsonResponse?: boolean
 } & Pick<GotOptions, 'headers' | 'json' | 'method' | 'searchParams'>
 
 const peertubeGot = got.extend({
+  ...getAgent(),
+
   headers: {
     'user-agent': getUserAgent()
   },
@@ -153,6 +156,30 @@ async function downloadImage (url: string, destDir: string, destName: string, si
   }
 }
 
+function getAgent () {
+  if (!isProxyEnabled()) return {}
+
+  const proxy = getProxy()
+
+  logger.info('Using proxy %s.', proxy)
+
+  const proxyAgentOptions = {
+    keepAlive: true,
+    keepAliveMsecs: 1000,
+    maxSockets: 256,
+    maxFreeSockets: 256,
+    scheduling: 'lifo' as 'lifo',
+    proxy
+  }
+
+  return {
+    agent: {
+      http: new HttpProxyAgent(proxyAgentOptions),
+      https: new HttpsProxyAgent(proxyAgentOptions)
+    }
+  }
+}
+
 function getUserAgent () {
   return `PeerTube/${PEERTUBE_VERSION} (+${WEBSERVER.URL})`
 }
@@ -188,7 +215,6 @@ function buildGotOptions (options: PeerTubeRequestOptions) {
     dnsCache: true,
     json: options.json,
     searchParams: options.searchParams,
-    timeout: options.timeout ?? REQUEST_TIMEOUT,
     headers,
     context
   }

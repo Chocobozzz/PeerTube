@@ -1,6 +1,6 @@
 <ng-template #modal>
   <div class="modal-header">
-    <h4 i18n class="modal-title">{{ action }}</h4>
+    <h4 class="modal-title">{{ action }}</h4>
 
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
@@ -11,15 +11,15 @@
         <label i18n for="hosts">1 host (without "http://") per line</label>
 
         <textarea
-          [placeholder]="placeholder" formControlName="domains" type="text" id="hosts" name="hosts"
-          class="form-control" [ngClass]="{ 'input-error': formErrors['domains'] }" ngbAutofocus
+          [placeholder]="placeholder" formControlName="hosts" type="text" id="hosts" name="hosts"
+          class="form-control" [ngClass]="{ 'input-error': formErrors['hosts'] }" ngbAutofocus
         ></textarea>
 
-        <div *ngIf="formErrors.domains" class="form-error">
-          {{ formErrors.domains }}
+        <div *ngIf="formErrors.hosts" class="form-error">
+          {{ formErrors.hosts }}
 
-          <div *ngIf="form.controls['domains'].errors.validDomains">
-            {{ form.controls['domains'].errors.validDomains.value }}
+          <div *ngIf="form.controls['hosts'].errors.validHosts">
+            {{ form.controls['hosts'].errors.validHosts.value }}
           </div>
         </div>
       </div>

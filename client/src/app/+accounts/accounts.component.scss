@@ -20,7 +20,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: $max-channels-width;
+
+  &.on-channel-page {
+    max-width: $max-channels-width;
+  }
 
   simple-search-input {
     @include margin-left(auto);

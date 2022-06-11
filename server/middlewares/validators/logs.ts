@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { query } from 'express-validator'
 import { isValidLogLevel } from '../../helpers/custom-validators/logs'
 import { isDateValid } from '../../helpers/custom-validators/misc'

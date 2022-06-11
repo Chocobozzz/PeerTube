@@ -1,4 +1,4 @@
-import { HttpStatusCode } from '../../core-utils'
+import { HttpStatusCode } from '../../models'
 import { OAuth2ErrorCode, ServerErrorCode } from './server-error-code.enum'
 
 export interface PeerTubeProblemDocumentData {

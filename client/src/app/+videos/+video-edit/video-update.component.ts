@@ -38,7 +38,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     private loadingBar: LoadingBarService,
     private videoCaptionService: VideoCaptionService,
     private liveVideoService: LiveVideoService
-    ) {
+  ) {
     super()
   }
 
@@ -47,34 +47,35 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
     this.route.data
         .pipe(map(data => data.videoData))
-        .subscribe(({ video, videoChannels, videoCaptions, liveVideo }) => {
-          this.video = new VideoEdit(video)
-          this.videoDetails = video
+        .subscribe({
+          next: ({ video, videoChannels, videoCaptions, liveVideo }) => {
+            this.video = new VideoEdit(video)
+            this.videoDetails = video
 
-          this.userVideoChannels = videoChannels
-          this.videoCaptions = videoCaptions
-          this.liveVideo = liveVideo
+            this.userVideoChannels = videoChannels
+            this.videoCaptions = videoCaptions
+            this.liveVideo = liveVideo
 
-          this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
+            this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
 
-          // FIXME: Angular does not detect the change inside this subscription, so use the patched setTimeout
-          setTimeout(() => {
-            hydrateFormFromVideo(this.form, this.video, true)
+            // FIXME: Angular does not detect the change inside this subscription, so use the patched setTimeout
+            setTimeout(() => {
+              hydrateFormFromVideo(this.form, this.video, true)
 
-            if (this.liveVideo) {
-              this.form.patchValue({
-                saveReplay: this.liveVideo.saveReplay,
-                permanentLive: this.liveVideo.permanentLive
-              })
-            }
-          })
-        },
+              if (this.liveVideo) {
+                this.form.patchValue({
+                  saveReplay: this.liveVideo.saveReplay,
+                  permanentLive: this.liveVideo.permanentLive
+                })
+              }
+            })
+          },
 
-        err => {
-          console.error(err)
-          this.notifier.error(err.message)
-        }
-      )
+          error: err => {
+            console.error(err)
+            this.notifier.error(err.message)
+          }
+        })
   }
 
   @HostListener('window:beforeunload', [ '$event' ])
@@ -118,8 +119,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   }
 
   update () {
-    if (this.checkForm() === false
-      || this.isUpdatingVideo === true) {
+    if (this.checkForm() === false || this.isUpdatingVideo === true) {
       return
     }
 
@@ -150,8 +150,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
             return this.liveVideoService.updateLive(this.video.id, liveVideoUpdate)
           })
         )
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.updateDone = true
             this.isUpdatingVideo = false
             this.loadingBar.useRef().complete()
@@ -159,13 +159,13 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
             this.router.navigateByUrl(Video.buildWatchUrl(this.video))
           },
 
-          err => {
+          error: err => {
             this.loadingBar.useRef().complete()
             this.isUpdatingVideo = false
             this.notifier.error(err.message)
             console.error(err)
           }
-        )
+        })
   }
 
   hydratePluginFieldsFromVideo () {

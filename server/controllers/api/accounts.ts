@@ -1,6 +1,6 @@
-import * as express from 'express'
+import express from 'express'
+import { pickCommonVideoQuery } from '@server/helpers/query'
 import { getServerActor } from '@server/models/application/application'
-import { VideosWithSearchCommonQuery } from '@shared/models'
 import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { getFormattedObjects } from '../../helpers/utils'
 import { JobQueue } from '../../lib/job-queue'
@@ -159,27 +159,19 @@ async function listAccountVideos (req: express.Request, res: express.Response) {
   const account = res.locals.account
   const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
   const countVideos = getCountVideos(req)
-  const query = req.query as VideosWithSearchCommonQuery
+  const query = pickCommonVideoQuery(req.query)
 
   const apiOptions = await Hooks.wrapObject({
+    ...query,
+
     followerActorId,
-    start: query.start,
-    count: query.count,
-    sort: query.sort,
+    search: req.query.search,
     includeLocalVideos: true,
-    categoryOneOf: query.categoryOneOf,
-    licenceOneOf: query.licenceOneOf,
-    languageOneOf: query.languageOneOf,
-    tagsOneOf: query.tagsOneOf,
-    tagsAllOf: query.tagsAllOf,
-    filter: query.filter,
-    isLive: query.isLive,
     nsfw: buildNSFWFilter(res, query.nsfw),
     withFiles: false,
     accountId: account.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
-    countVideos,
-    search: query.search
+    countVideos
   }, 'filter:api.accounts.videos.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(

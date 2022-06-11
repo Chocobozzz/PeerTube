@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { Video } from '@app/shared/shared-main'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
+import { secondsToTime } from '@shared/core-utils'
 import { HTMLServerConfig, VideoPlaylistElementType, VideoPlaylistElementUpdate } from '@shared/models'
-import { secondsToTime } from '../../../assets/player/utils'
 import { VideoPlaylistElement } from './video-playlist-element.model'
 import { VideoPlaylist } from './video-playlist.model'
 import { VideoPlaylistService } from './video-playlist.service'
@@ -88,14 +88,14 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     const videoId = this.playlistElement.video ? this.playlistElement.video.id : undefined
 
     this.videoPlaylistService.removeVideoFromPlaylist(this.playlist.id, playlistElement.id, videoId)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Video removed from ${this.playlist.displayName}`)
             this.elementRemoved.emit(playlistElement)
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
 
     this.moreDropdown.close()
   }
@@ -107,8 +107,8 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     body.stopTimestamp = this.timestampOptions.stopTimestampEnabled ? this.timestampOptions.stopTimestamp : null
 
     this.videoPlaylistService.updateVideoOfPlaylist(this.playlist.id, playlistElement.id, body, this.playlistElement.video.id)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Timestamps updated`)
 
             playlistElement.startTimestamp = body.startTimestamp
@@ -117,8 +117,8 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
             this.cdr.detectChanges()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
 
     this.moreDropdown.close()
   }

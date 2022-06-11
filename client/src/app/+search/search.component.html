@@ -1,4 +1,4 @@
-<div myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()" class="search-result">
+<div myInfiniteScroller (nearOfBottom)="onNearOfBottom()" class="search-result">
   <div class="results-header">
     <div class="first-line">
       <div class="results-counter" *ngIf="pagination.totalItems">
@@ -24,6 +24,8 @@
 
     <div class="results-filter collapse-transition" [ngbCollapse]="isSearchFilterCollapsed">
       <my-search-filters [advancedSearch]="advancedSearch" (filtered)="onFiltered()"></my-search-filters>
+
+      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
     </div>
   </div>
 

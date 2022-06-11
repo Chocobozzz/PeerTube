@@ -1,3 +1,4 @@
+import { ResultList } from '../../common'
 import { Account } from '../../actors'
 
 export interface VideoComment {
@@ -36,11 +37,9 @@ export interface VideoCommentAdmin {
   }
 }
 
+export type VideoCommentThreads = ResultList<VideoComment> & { totalNotDeletedComments: number }
+
 export interface VideoCommentThreadTree {
   comment: VideoComment
   children: VideoCommentThreadTree[]
-}
-
-export interface VideoCommentCreate {
-  text: string
 }

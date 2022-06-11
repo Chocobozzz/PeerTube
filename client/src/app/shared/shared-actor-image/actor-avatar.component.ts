@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core'
-import { SafeResourceUrl } from '@angular/platform-browser'
 import { VideoChannel } from '../shared-main'
 import { Account } from '../shared-main/account/account.model'
 
@@ -17,10 +16,12 @@ export type ActorAvatarSize = '18' | '25' | '32' | '34' | '36' | '40' | '100' | 
   templateUrl: './actor-avatar.component.html'
 })
 export class ActorAvatarComponent {
+  private _title: string
+
   @Input() account: ActorInput
   @Input() channel: ActorInput
 
-  @Input() previewImage: SafeResourceUrl
+  @Input() previewImage: string
 
   @Input() size: ActorAvatarSize
 
@@ -32,8 +33,6 @@ export class ActorAvatarComponent {
   @Input() set title (value) {
     this._title = value
   }
-
-  private _title: string
 
   get title () {
     if (this._title) return this._title
@@ -48,22 +47,6 @@ export class ActorAvatarComponent {
     if (this.channel) return $localize`Channel avatar`
 
     return ''
-  }
-
-  getClass (type: 'avatar' | 'initial') {
-    const base = [ 'avatar' ]
-
-    if (this.size) base.push(`avatar-${this.size}`)
-
-    if (this.channel) base.push('channel')
-    else base.push('account')
-
-    if (type === 'initial' && this.initial) {
-      base.push('initial')
-      base.push(this.getColorTheme())
-    }
-
-    return base
   }
 
   get defaultAvatarUrl () {
@@ -84,6 +67,22 @@ export class ActorAvatarComponent {
     if (!name) return ''
 
     return name.slice(0, 1)
+  }
+
+  getClass (type: 'avatar' | 'initial') {
+    const base = [ 'avatar' ]
+
+    if (this.size) base.push(`avatar-${this.size}`)
+
+    if (this.channel) base.push('channel')
+    else base.push('account')
+
+    if (type === 'initial' && this.initial) {
+      base.push('initial')
+      base.push(this.getColorTheme())
+    }
+
+    return base
   }
 
   hasActor () {

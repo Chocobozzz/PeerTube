@@ -1,22 +1,23 @@
-import * as Bull from 'bull'
+import { Job } from 'bull'
 import { pathExists, readdir, remove } from 'fs-extra'
 import { join } from 'path'
 import { ffprobePromise, getAudioStream, getDurationFromVideoFile, getVideoFileResolution } from '@server/helpers/ffprobe-utils'
 import { VIDEO_LIVE } from '@server/initializers/constants'
 import { buildConcatenatedName, cleanupLive, LiveSegmentShaStore } from '@server/lib/live'
+import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getLiveDirectory } from '@server/lib/paths'
 import { generateVideoMiniature } from '@server/lib/thumbnail'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/video-transcoding'
-import { publishAndFederateIfNeeded } from '@server/lib/video'
-import { getHLSDirectory } from '@server/lib/video-paths'
+import { VideoPathManager } from '@server/lib/video-path-manager'
+import { moveToNextState } from '@server/lib/video-state'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MVideo, MVideoLive } from '@server/types/models'
+import { MStreamingPlaylist, MVideo, MVideoLive } from '@server/types/models'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 
-async function processVideoLiveEnding (job: Bull.Job) {
+async function processVideoLiveEnding (job: Job) {
   const payload = job.data as VideoLiveEndingPayload
 
   function logError () {
@@ -43,7 +44,7 @@ async function processVideoLiveEnding (job: Bull.Job) {
     return cleanupLive(video, streamingPlaylist)
   }
 
-  return saveLive(video, live)
+  return saveLive(video, live, streamingPlaylist)
 }
 
 // ---------------------------------------------------------------------------
@@ -54,17 +55,16 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function saveLive (video: MVideo, live: MVideoLive) {
-  const hlsDirectory = getHLSDirectory(video, false)
-  const replayDirectory = join(hlsDirectory, VIDEO_LIVE.REPLAY_DIRECTORY)
+async function saveLive (video: MVideo, live: MVideoLive, streamingPlaylist: MStreamingPlaylist) {
+  const replayDirectory = VideoPathManager.Instance.getFSHLSOutputPath(video, VIDEO_LIVE.REPLAY_DIRECTORY)
 
-  const rootFiles = await readdir(hlsDirectory)
+  const rootFiles = await readdir(getLiveDirectory(video))
 
   const playlistFiles = rootFiles.filter(file => {
-    return file.endsWith('.m3u8') && file !== 'master.m3u8'
+    return file.endsWith('.m3u8') && file !== streamingPlaylist.playlistFilename
   })
 
-  await cleanupLiveFiles(hlsDirectory)
+  await cleanupTMPLiveFiles(getLiveDirectory(video))
 
   await live.destroy()
 
@@ -80,7 +80,12 @@ async function saveLive (video: MVideo, live: MVideoLive) {
 
   const hlsPlaylist = videoWithFiles.getHLSPlaylist()
   await VideoFileModel.removeHLSFilesOfVideoId(hlsPlaylist.id)
+
+  // Reset playlist
   hlsPlaylist.VideoFiles = []
+  hlsPlaylist.playlistFilename = generateHLSMasterPlaylistFilename()
+  hlsPlaylist.segmentsSha256Filename = generateHlsSha256SegmentsFilename()
+  await hlsPlaylist.save()
 
   let durationDone = false
 
@@ -91,12 +96,12 @@ async function saveLive (video: MVideo, live: MVideoLive) {
     const probe = await ffprobePromise(concatenatedTsFilePath)
     const { audioStream } = await getAudioStream(concatenatedTsFilePath, probe)
 
-    const { videoFileResolution, isPortraitMode } = await getVideoFileResolution(concatenatedTsFilePath, probe)
+    const { resolution, isPortraitMode } = await getVideoFileResolution(concatenatedTsFilePath, probe)
 
-    const outputPath = await generateHlsPlaylistResolutionFromTS({
+    const { resolutionPlaylistPath: outputPath } = await generateHlsPlaylistResolutionFromTS({
       video: videoWithFiles,
       concatenatedTsFilePath,
-      resolution: videoFileResolution,
+      resolution,
       isPortraitMode,
       isAAC: audioStream?.codec_name === 'aac'
     })
@@ -128,10 +133,10 @@ async function saveLive (video: MVideo, live: MVideoLive) {
     })
   }
 
-  await publishAndFederateIfNeeded(videoWithFiles, true)
+  await moveToNextState(videoWithFiles, false)
 }
 
-async function cleanupLiveFiles (hlsDirectory: string) {
+async function cleanupTMPLiveFiles (hlsDirectory: string) {
   if (!await pathExists(hlsDirectory)) return
 
   const files = await readdir(hlsDirectory)

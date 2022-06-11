@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import {
+  BooleanBothQuery,
   FeedFormat,
   NSFWPolicyType,
   ResultList,
@@ -28,19 +29,21 @@ import { VideoDetails } from './video-details.model'
 import { VideoEdit } from './video-edit.model'
 import { Video } from './video.model'
 
-export interface VideosProvider {
-  getVideos (parameters: {
-    videoPagination: ComponentPaginationLight,
-    sort: VideoSortField,
-    filter?: VideoFilter,
-    categoryOneOf?: number[],
-    languageOneOf?: string[]
-    nsfwPolicy: NSFWPolicyType
-  }): Observable<ResultList<Video>>
+export type CommonVideoParams = {
+  videoPagination: ComponentPaginationLight
+  sort: VideoSortField
+  filter?: VideoFilter
+  categoryOneOf?: number[]
+  languageOneOf?: string[]
+  isLive?: boolean
+  skipCount?: boolean
+  // FIXME: remove?
+  nsfwPolicy?: NSFWPolicyType
+  nsfw?: BooleanBothQuery
 }
 
 @Injectable()
-export class VideoService implements VideosProvider {
+export class VideoService {
   static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
   static BASE_SUBSCRIPTION_FEEDS_URL = environment.apiUrl + '/feeds/subscriptions.'
@@ -144,32 +147,16 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  getAccountVideos (parameters: {
-    account: Pick<Account, 'nameWithHost'>,
-    videoPagination: ComponentPaginationLight,
-    sort: VideoSortField
-    nsfwPolicy?: NSFWPolicyType
-    videoFilter?: VideoFilter
+  getAccountVideos (parameters: CommonVideoParams & {
+    account: Pick<Account, 'nameWithHost'>
     search?: string
   }): Observable<ResultList<Video>> {
-    const { account, videoPagination, sort, videoFilter, nsfwPolicy, search } = parameters
-
-    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+    const { account, search } = parameters
 
     let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination, sort)
+    params = this.buildCommonVideosParams({ params, ...parameters })
 
-    if (nsfwPolicy) {
-      params = params.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
-    }
-
-    if (videoFilter) {
-      params = params.set('filter', videoFilter)
-    }
-
-    if (search) {
-      params = params.set('search', search)
-    }
+    if (search) params = params.set('search', search)
 
     return this.authHttp
                .get<ResultList<Video>>(AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/videos', { params })
@@ -179,27 +166,13 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  getVideoChannelVideos (parameters: {
-    videoChannel: Pick<VideoChannel, 'nameWithHost'>,
-    videoPagination: ComponentPaginationLight,
-    sort: VideoSortField,
-    nsfwPolicy?: NSFWPolicyType
-    videoFilter?: VideoFilter
+  getVideoChannelVideos (parameters: CommonVideoParams & {
+    videoChannel: Pick<VideoChannel, 'nameWithHost'>
   }): Observable<ResultList<Video>> {
-    const { videoChannel, videoPagination, sort, nsfwPolicy, videoFilter } = parameters
-
-    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+    const { videoChannel } = parameters
 
     let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination, sort)
-
-    if (nsfwPolicy) {
-      params = params.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
-    }
-
-    if (videoFilter) {
-      params = params.set('filter', videoFilter)
-    }
+    params = this.buildCommonVideosParams({ params, ...parameters })
 
     return this.authHttp
                .get<ResultList<Video>>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/videos', { params })
@@ -209,40 +182,9 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  getVideos (parameters: {
-    videoPagination: ComponentPaginationLight,
-    sort: VideoSortField,
-    filter?: VideoFilter,
-    categoryOneOf?: number[],
-    languageOneOf?: string[],
-    skipCount?: boolean,
-    nsfwPolicy?: NSFWPolicyType
-  }): Observable<ResultList<Video>> {
-    const { videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount, nsfwPolicy } = parameters
-
-    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
-
+  getVideos (parameters: CommonVideoParams): Observable<ResultList<Video>> {
     let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination, sort)
-
-    if (filter) params = params.set('filter', filter)
-    if (skipCount) params = params.set('skipCount', skipCount + '')
-
-    if (nsfwPolicy) {
-      params = params.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
-    }
-
-    if (languageOneOf) {
-      for (const l of languageOneOf) {
-        params = params.append('languageOneOf[]', l)
-      }
-    }
-
-    if (categoryOneOf) {
-      for (const c of categoryOneOf) {
-        params = params.append('categoryOneOf[]', c + '')
-      }
-    }
+    params = this.buildCommonVideosParams({ params, ...parameters })
 
     return this.authHttp
                .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL, { params })
@@ -388,28 +330,24 @@ export class VideoService implements VideosProvider {
   }
 
   explainedPrivacyLabels (serverPrivacies: VideoConstant<VideoPrivacy>[], defaultPrivacyId = VideoPrivacy.PUBLIC) {
-    const descriptions = [
-      {
-        id: VideoPrivacy.PRIVATE,
-        description: $localize`Only I can see this video`
-      },
-      {
-        id: VideoPrivacy.UNLISTED,
-        description: $localize`Only shareable via a private link`
-      },
-      {
-        id: VideoPrivacy.PUBLIC,
-        description: $localize`Anyone can see this video`
-      },
-      {
-        id: VideoPrivacy.INTERNAL,
-        description: $localize`Only users of this instance can see this video`
+    const descriptions = {
+      [VideoPrivacy.PRIVATE]: $localize`Only I can see this video`,
+      [VideoPrivacy.UNLISTED]: $localize`Only shareable via a private link`,
+      [VideoPrivacy.PUBLIC]: $localize`Anyone can see this video`,
+      [VideoPrivacy.INTERNAL]: $localize`Only users of this instance can see this video`
+    }
+
+    const videoPrivacies = serverPrivacies.map(p => {
+      return {
+        ...p,
+
+        description: descriptions[p.id]
       }
-    ]
+    })
 
     return {
-      defaultPrivacyId: serverPrivacies.find(p => p.id === defaultPrivacyId)?.id || serverPrivacies[0].id,
-      videoPrivacies: serverPrivacies.map(p => ({ ...p, description: descriptions.find(p => p.id).description }))
+      videoPrivacies,
+      defaultPrivacyId: serverPrivacies.find(p => p.id === defaultPrivacyId)?.id || serverPrivacies[0].id
     }
   }
 
@@ -443,5 +381,23 @@ export class VideoService implements VideosProvider {
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
+  }
+
+  private buildCommonVideosParams (options: CommonVideoParams & { params: HttpParams }) {
+    const { params, videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount, nsfwPolicy, isLive, nsfw } = options
+
+    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+    let newParams = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (filter) newParams = newParams.set('filter', filter)
+    if (skipCount) newParams = newParams.set('skipCount', skipCount + '')
+
+    if (isLive) newParams = newParams.set('isLive', isLive)
+    if (nsfw) newParams = newParams.set('nsfw', nsfw)
+    if (nsfwPolicy) newParams = newParams.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
+    if (languageOneOf) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
+    if (categoryOneOf) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
+
+    return newParams
   }
 }

@@ -1,5 +1,5 @@
-import * as cors from 'cors'
-import * as express from 'express'
+import cors from 'cors'
+import express from 'express'
 import { getServerActor } from '@server/models/application/application'
 import { MAccountId, MActorId, MChannelId, MVideoId } from '@server/types/models'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
@@ -24,7 +24,7 @@ import {
   videosCustomGetValidator,
   videosShareValidator
 } from '../../middlewares'
-import { cacheRoute } from '../../middlewares/cache'
+import { cacheRoute } from '../../middlewares/cache/cache'
 import { getAccountVideoRateValidatorFactory, videoCommentGetValidator } from '../../middlewares/validators'
 import { videoFileRedundancyGetValidator, videoPlaylistRedundancyGetValidator } from '../../middlewares/validators/redundancy'
 import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists'
@@ -77,7 +77,7 @@ activityPubClientRouter.get('/accounts?/:name/dislikes/:videoId',
 activityPubClientRouter.get(
   [ '/videos/watch/:id', '/w/:id' ],
   executeIfActivityPub,
-  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS)),
+  cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
   asyncMiddleware(videosCustomGetValidator('all')),
   asyncMiddleware(videoController)
 )

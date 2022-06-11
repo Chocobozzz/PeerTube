@@ -1,12 +1,12 @@
-import * as retry from 'async/retry'
-import * as Bluebird from 'bluebird'
-import { QueryTypes, Transaction } from 'sequelize'
+import retry from 'async/retry'
+import Bluebird from 'bluebird'
+import { Transaction } from 'sequelize'
 import { Model } from 'sequelize-typescript'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { logger } from './logger'
 
 function retryTransactionWrapper <T, A, B, C, D> (
-  functionToRetry: (arg1: A, arg2: B, arg3: C, arg4: D) => Promise<T> | Bluebird<T>,
+  functionToRetry: (arg1: A, arg2: B, arg3: C, arg4: D) => Promise<T>,
   arg1: A,
   arg2: B,
   arg3: C,
@@ -14,20 +14,20 @@ function retryTransactionWrapper <T, A, B, C, D> (
 ): Promise<T>
 
 function retryTransactionWrapper <T, A, B, C> (
-  functionToRetry: (arg1: A, arg2: B, arg3: C) => Promise<T> | Bluebird<T>,
+  functionToRetry: (arg1: A, arg2: B, arg3: C) => Promise<T>,
   arg1: A,
   arg2: B,
   arg3: C
 ): Promise<T>
 
 function retryTransactionWrapper <T, A, B> (
-  functionToRetry: (arg1: A, arg2: B) => Promise<T> | Bluebird<T>,
+  functionToRetry: (arg1: A, arg2: B) => Promise<T>,
   arg1: A,
   arg2: B
 ): Promise<T>
 
 function retryTransactionWrapper <T, A> (
-  functionToRetry: (arg1: A) => Promise<T> | Bluebird<T>,
+  functionToRetry: (arg1: A) => Promise<T>,
   arg1: A
 ): Promise<T>
 
@@ -36,7 +36,7 @@ function retryTransactionWrapper <T> (
 ): Promise<T>
 
 function retryTransactionWrapper <T> (
-  functionToRetry: (...args: any[]) => Promise<T> | Bluebird<T>,
+  functionToRetry: (...args: any[]) => Promise<T>,
   ...args: any[]
 ): Promise<T> {
   return transactionRetryer<T>(callback => {
@@ -84,25 +84,15 @@ function resetSequelizeInstance (instance: Model<any>, savedFields: object) {
   })
 }
 
-function deleteNonExistingModels <T extends { hasSameUniqueKeysThan (other: T): boolean } & Pick<Model, 'destroy'>> (
+function filterNonExistingModels <T extends { hasSameUniqueKeysThan (other: T): boolean }> (
   fromDatabase: T[],
-  newModels: T[],
-  t: Transaction
+  newModels: T[]
 ) {
   return fromDatabase.filter(f => !newModels.find(newModel => newModel.hasSameUniqueKeysThan(f)))
-              .map(f => f.destroy({ transaction: t }))
 }
 
-// Sequelize always skip the update if we only update updatedAt field
-function setAsUpdated (table: string, id: number, transaction?: Transaction) {
-  return sequelizeTypescript.query(
-    `UPDATE "${table}" SET "updatedAt" = :updatedAt WHERE id = :id`,
-    {
-      replacements: { table, id, updatedAt: new Date() },
-      type: QueryTypes.UPDATE,
-      transaction
-    }
-  )
+function deleteAllModels <T extends Pick<Model, 'destroy'>> (models: T[], transaction: Transaction) {
+  return Promise.all(models.map(f => f.destroy({ transaction })))
 }
 
 // ---------------------------------------------------------------------------
@@ -127,7 +117,7 @@ export {
   transactionRetryer,
   updateInstanceWithAnother,
   afterCommitIfTransaction,
-  deleteNonExistingModels,
-  setAsUpdated,
+  filterNonExistingModels,
+  deleteAllModels,
   runInReadCommittedTransaction
 }

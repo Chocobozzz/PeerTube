@@ -50,15 +50,16 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
 
     this.error = null
 
-    this.userService.updateMyProfile({ displayName, description }).subscribe(
-      () => {
+    this.userService.updateMyProfile({ displayName, description })
+    .subscribe({
+      next: () => {
         this.user.account.displayName = displayName
         this.user.account.description = description
 
         this.notifier.success($localize`Profile updated.`)
       },
 
-      err => this.error = err.message
-    )
+      error: err => this.error = err.message
+    })
   }
 }

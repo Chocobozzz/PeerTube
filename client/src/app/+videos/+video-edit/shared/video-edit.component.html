@@ -45,7 +45,7 @@
                 </ng-template>
               </my-help>
 
-              <my-markdown-textarea [truncate]="250" formControlName="description" [markdownVideo]="true"></my-markdown-textarea>
+              <my-markdown-textarea [truncate]="250" formControlName="description" [markdownVideo]="videoToUpdate"></my-markdown-textarea>
 
               <div *ngIf="formErrors.description" class="form-error">
                 {{ formErrors.description }}

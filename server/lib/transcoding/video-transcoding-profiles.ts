@@ -1,30 +1,24 @@
 import { logger } from '@server/helpers/logger'
-import { AvailableEncoders, EncoderOptionsBuilder, getTargetBitrate, VideoResolution } from '../../../shared/models/videos'
+import { getAverageBitrate } from '@shared/core-utils'
+import { AvailableEncoders, EncoderOptionsBuilder, EncoderOptionsBuilderParams } from '../../../shared/models/videos'
 import { buildStreamSuffix, resetSupportedEncoders } from '../../helpers/ffmpeg-utils'
-import {
-  canDoQuickAudioTranscode,
-  ffprobePromise,
-  getAudioStream,
-  getMaxAudioBitrate,
-  getVideoFileBitrate,
-  getVideoStreamFromFile
-} from '../../helpers/ffprobe-utils'
-import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
+import { canDoQuickAudioTranscode, ffprobePromise, getAudioStream, getMaxAudioBitrate } from '../../helpers/ffprobe-utils'
 
 /**
  *
  * Available encoders and profiles for the transcoding jobs
  * These functions are used by ffmpeg-utils that will get the encoders and options depending on the chosen profile
  *
+ * Resources:
+ *  * https://slhck.info/video/2017/03/01/rate-control.html
+ *  * https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
  */
 
-// Resources:
-//  * https://slhck.info/video/2017/03/01/rate-control.html
-//  * https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
+const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOptionsBuilderParams) => {
+  const { fps, inputRatio, inputBitrate } = options
+  if (!fps) return { outputOptions: [ ] }
 
-const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = async ({ input, resolution, fps }) => {
-  const targetBitrate = await buildTargetBitrate({ input, resolution, fps })
-  if (!targetBitrate) return { outputOptions: [ ] }
+  const targetBitrate = capBitrate(inputBitrate, getAverageBitrate({ ...options, fps, ratio: inputRatio }))
 
   return {
     outputOptions: [
@@ -36,8 +30,10 @@ const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = async ({ input, reso
   }
 }
 
-const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = async ({ resolution, fps, streamNum }) => {
-  const targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
+const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOptionsBuilderParams) => {
+  const { streamNum, fps, inputBitrate, inputRatio } = options
+
+  const targetBitrate = capBitrate(inputBitrate, getAverageBitrate({ ...options, fps, ratio: inputRatio }))
 
   return {
     outputOptions: [
@@ -237,20 +233,9 @@ export {
 }
 
 // ---------------------------------------------------------------------------
-async function buildTargetBitrate (options: {
-  input: string
-  resolution: VideoResolution
-  fps: number
-}) {
-  const { input, resolution, fps } = options
-  const probe = await ffprobePromise(input)
 
-  const videoStream = await getVideoStreamFromFile(input, probe)
-  if (!videoStream) return undefined
+function capBitrate (inputBitrate: number, targetBitrate: number) {
+  if (!inputBitrate) return targetBitrate
 
-  const targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
-
-  // Don't transcode to an higher bitrate than the original file
-  const fileBitrate = await getVideoFileBitrate(input, probe)
-  return Math.min(targetBitrate, fileBitrate)
+  return Math.min(targetBitrate, inputBitrate)
 }

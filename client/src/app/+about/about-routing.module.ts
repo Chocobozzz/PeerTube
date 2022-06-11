@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router'
 import { AboutFollowsComponent } from '@app/+about/about-follows/about-follows.component'
 import { AboutInstanceComponent } from '@app/+about/about-instance/about-instance.component'
 import { AboutInstanceResolver } from '@app/+about/about-instance/about-instance.resolver'
-import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
 import { AboutPeertubeComponent } from '@app/+about/about-peertube/about-peertube.component'
 import { AboutComponent } from './about.component'
 

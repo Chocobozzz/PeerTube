@@ -22,10 +22,10 @@ export class DebugComponent implements OnInit {
 
   load () {
     this.debugService.getDebug()
-        .subscribe(
-          debug => this.debug = debug,
+        .subscribe({
+          next: debug => this.debug = debug,
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 }

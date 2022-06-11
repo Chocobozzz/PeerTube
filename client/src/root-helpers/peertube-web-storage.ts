@@ -5,20 +5,21 @@ const valuesMap = new Map()
 function proxify (instance: MemoryStorage) {
   return new Proxy(instance, {
     set: function (obj, prop: string | symbol, value) {
-      if (MemoryStorage.prototype.hasOwnProperty(prop)) {
-        // FIXME: symbol typing issue https://github.com/microsoft/TypeScript/issues/1863
+      if (Object.prototype.hasOwnProperty.call(MemoryStorage, prop)) {
+        // FIXME: remove cast on typescript upgrade
         instance[prop as any] = value
       } else {
         instance.setItem(prop, value)
       }
+
       return true
     },
     get: function (target, name: string | symbol | number) {
-      if (MemoryStorage.prototype.hasOwnProperty(name)) {
-        // FIXME: symbol typing issue https://github.com/microsoft/TypeScript/issues/1863
+      // FIXME: remove cast on typescript upgrade
+      if (typeof instance[name as any] === 'function') {
+        // FIXME: remove cast on typescript upgrade
         return instance[name as any]
-      }
-      if (valuesMap.has(name)) {
+      } else if (valuesMap.has(name)) {
         return instance.getItem(name)
       }
     }
@@ -83,7 +84,7 @@ try {
 }
 
 // support Brave and other browsers using null rather than an exception
-if (peertubeLocalStorage === null || peertubeSessionStorage === null) {
+if (!peertubeLocalStorage || !peertubeSessionStorage) {
   reinitStorage()
 }
 

@@ -18,7 +18,7 @@ export class VideoUpdateResolver implements Resolve<any> {
   }
 
   resolve (route: ActivatedRouteSnapshot) {
-    const uuid: string = route.params[ 'uuid' ]
+    const uuid: string = route.params['uuid']
 
     return this.videoService.getVideo({ videoId: uuid })
                .pipe(
@@ -42,8 +42,8 @@ export class VideoUpdateResolver implements Resolve<any> {
         ),
 
       video.isLive
-          ? this.liveVideoService.getVideoLive(video.id)
-          : of(undefined)
+        ? this.liveVideoService.getVideoLive(video.id)
+        : of(undefined)
     ]
   }
 }

@@ -7,12 +7,11 @@
   a {
     color: #000;
     display: block;
+    min-width: 100px;
   }
 }
 
 my-global-icon {
-  @include apply-svg-color(pvar(--mainForegroundColor));
-
   cursor: pointer;
   width: 100%;
 }

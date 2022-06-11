@@ -135,7 +135,7 @@
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "tsConfig": "tsconfig.app.json",
+            "tsConfig": "tsconfig.json",
             "polyfills": "src/polyfills.ts",
             "baseHref": "/",
             "deployUrl": "",
@@ -158,7 +158,7 @@
               "markdown-it-emoji/light",
               "sanitize-html",
               "debug",
-              "p2p-media-loader-hlsjs",
+              "@peertube/p2p-media-loader-hlsjs",
               "video.js",
               "sha.js/sha1",
               "postcss",
@@ -203,7 +203,9 @@
               ]
             },
             "ar-locale": {
-              "localize": ["ar"],
+              "localize": [
+                "ar"
+              ],
               "budgets": [
                 {
                   "type": "anyComponentStyle",
@@ -229,21 +231,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.hmr.ts"
-                }
-              ]
-            },
-            "e2e": {
-              "localize": false,
-              "budgets": [
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
-                }
-              ],
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.e2e.ts"
                 }
               ]
             }
@@ -264,10 +251,6 @@
             },
             "ar-locale": {
               "browserTarget": "PeerTube:build:ar-locale"
-            },
-            "e2e": {
-              "browserTarget": "PeerTube:build:e2e",
-              "proxyConfig": "e2e/proxy.config.json"
             }
           }
         },
@@ -295,13 +278,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "e2e/**/*.ts",
+              "src/**/*.ts",
+              "src/**/*.html"
             ]
           }
         },
@@ -358,36 +340,6 @@
                 "zh-Hant-TW"
               ]
             }
-          }
-        }
-      }
-    },
-    "PeerTube-e2e": {
-      "root": "e2e/",
-      "sourceRoot": "",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "PeerTube:serve:e2e"
-          },
-          "configurations": {
-            "local": {
-              "protractorConfig": "e2e/local-protractor.conf.js"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "e2e/tsconfig.e2e.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
           }
         }
       }

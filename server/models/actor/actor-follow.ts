@@ -20,7 +20,6 @@ import {
 } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
 import { getServerActor } from '@server/models/application/application'
-import { VideoModel } from '@server/models/video/video'
 import {
   MActorFollowActorsDefault,
   MActorFollowActorsDefaultSubscription,
@@ -36,6 +35,7 @@ import { logger } from '../../helpers/logger'
 import { ACTOR_FOLLOW_SCORE, CONSTRAINTS_FIELDS, FOLLOW_STATES, SERVER_ACTOR_NAME } from '../../initializers/constants'
 import { AccountModel } from '../account/account'
 import { ServerModel } from '../server/server'
+import { doesExist } from '../shared/query'
 import { createSafeIn, getFollowsSort, getSort, searchAttribute, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'
@@ -166,14 +166,8 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
 
   static isFollowedBy (actorId: number, followerActorId: number) {
     const query = 'SELECT 1 FROM "actorFollow" WHERE "actorId" = $followerActorId AND "targetActorId" = $actorId LIMIT 1'
-    const options = {
-      type: QueryTypes.SELECT as QueryTypes.SELECT,
-      bind: { actorId, followerActorId },
-      raw: true
-    }
 
-    return VideoModel.sequelize.query(query, options)
-                     .then(results => results.length === 1)
+    return doesExist(query, { actorId, followerActorId })
   }
 
   static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Transaction): Promise<MActorFollowActorsDefault> {
@@ -324,13 +318,13 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
 
     const followWhere = state ? { state } : {}
     const followingWhere: WhereOptions = {}
-    const followingServerWhere: WhereOptions = {}
 
     if (search) {
-      Object.assign(followingServerWhere, {
-        host: {
-          [Op.iLike]: '%' + search + '%'
-        }
+      Object.assign(followWhere, {
+        [Op.or]: [
+          searchAttribute(options.search, '$ActorFollowing.preferredUsername$'),
+          searchAttribute(options.search, '$ActorFollowing.Server.host$')
+        ]
       })
     }
 
@@ -361,8 +355,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
           include: [
             {
               model: ServerModel,
-              required: true,
-              where: followingServerWhere
+              required: true
             }
           ]
         }
@@ -391,13 +384,13 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
 
     const followWhere = state ? { state } : {}
     const followerWhere: WhereOptions = {}
-    const followerServerWhere: WhereOptions = {}
 
     if (search) {
-      Object.assign(followerServerWhere, {
-        host: {
-          [Op.iLike]: '%' + search + '%'
-        }
+      Object.assign(followWhere, {
+        [Op.or]: [
+          searchAttribute(search, '$ActorFollower.preferredUsername$'),
+          searchAttribute(search, '$ActorFollower.Server.host$')
+        ]
       })
     }
 
@@ -420,8 +413,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
           include: [
             {
               model: ServerModel,
-              required: true,
-              where: followerServerWhere
+              required: true
             }
           ]
         },

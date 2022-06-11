@@ -2,44 +2,65 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { searchVideoChannel, advancedVideoChannelSearch } from '@shared/extra-utils/search/video-channels'
 import {
-  addVideoChannel,
   cleanupTests,
-  createUser,
-  flushAndRunServer,
-  ServerInfo,
+  createSingleServer,
+  doubleFollow,
+  PeerTubeServer,
+  SearchCommand,
   setAccessTokensToServers
-} from '../../../../shared/extra-utils'
+} from '@shared/extra-utils'
 import { VideoChannel } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test channels search', function () {
-  let server: ServerInfo = null
+  let server: PeerTubeServer
+  let remoteServer: PeerTubeServer
+  let command: SearchCommand
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
-    server = await flushAndRunServer(1)
+    const servers = await Promise.all([
+      createSingleServer(1),
+      createSingleServer(2, { transcoding: { enabled: false } })
+    ])
+    server = servers[0]
+    remoteServer = servers[1]
 
-    await setAccessTokensToServers([ server ])
+    await setAccessTokensToServers([ server, remoteServer ])
 
     {
-      await createUser({ url: server.url, accessToken: server.accessToken, username: 'user1', password: 'password' })
+      await server.users.create({ username: 'user1' })
       const channel = {
         name: 'squall_channel',
         displayName: 'Squall channel'
       }
-      await addVideoChannel(server.url, server.accessToken, channel)
+      await server.channels.create({ attributes: channel })
     }
+
+    {
+      await remoteServer.users.create({ username: 'user1' })
+      const channel = {
+        name: 'zell_channel',
+        displayName: 'Zell channel'
+      }
+      const { id } = await remoteServer.channels.create({ attributes: channel })
+
+      await remoteServer.videos.upload({ attributes: { channelId: id } })
+    }
+
+    await doubleFollow(server, remoteServer)
+
+    command = server.search
   })
 
   it('Should make a simple search and not have results', async function () {
-    const res = await searchVideoChannel(server.url, 'abc')
+    const body = await command.searchChannels({ search: 'abc' })
 
-    expect(res.body.total).to.equal(0)
-    expect(res.body.data).to.have.lengthOf(0)
+    expect(body.total).to.equal(0)
+    expect(body.data).to.have.lengthOf(0)
   })
 
   it('Should make a search and have results', async function () {
@@ -49,11 +70,11 @@ describe('Test channels search', function () {
         start: 0,
         count: 1
       }
-      const res = await advancedVideoChannelSearch(server.url, search)
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.have.lengthOf(1)
+      const body = await command.advancedChannelSearch({ search })
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
 
-      const channel: VideoChannel = res.body.data[0]
+      const channel: VideoChannel = body.data[0]
       expect(channel.name).to.equal('squall_channel')
       expect(channel.displayName).to.equal('Squall channel')
     }
@@ -65,15 +86,71 @@ describe('Test channels search', function () {
         count: 1
       }
 
-      const res = await advancedVideoChannelSearch(server.url, search)
+      const body = await command.advancedChannelSearch({ search })
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(0)
+    }
+  })
 
-      expect(res.body.total).to.equal(1)
+  it('Should filter by host', async function () {
+    {
+      const search = { search: 'channel', host: remoteServer.host }
 
-      expect(res.body.data).to.have.lengthOf(0)
+      const body = await command.advancedChannelSearch({ search })
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
+      expect(body.data[0].displayName).to.equal('Zell channel')
+    }
+
+    {
+      const search = { search: 'Sq', host: server.host }
+
+      const body = await command.advancedChannelSearch({ search })
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
+      expect(body.data[0].displayName).to.equal('Squall channel')
+    }
+
+    {
+      const search = { search: 'Squall', host: 'example.com' }
+
+      const body = await command.advancedChannelSearch({ search })
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
+    }
+  })
+
+  it('Should filter by names', async function () {
+    {
+      const body = await command.advancedChannelSearch({ search: { handles: [ 'squall_channel', 'zell_channel' ] } })
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
+      expect(body.data[0].displayName).to.equal('Squall channel')
+    }
+
+    {
+      const body = await command.advancedChannelSearch({ search: { handles: [ 'squall_channel@' + server.host ] } })
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
+      expect(body.data[0].displayName).to.equal('Squall channel')
+    }
+
+    {
+      const body = await command.advancedChannelSearch({ search: { handles: [ 'chocobozzz_channel' ] } })
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
+    }
+
+    {
+      const body = await command.advancedChannelSearch({ search: { handles: [ 'squall_channel', 'zell_channel@' + remoteServer.host ] } })
+      expect(body.total).to.equal(2)
+      expect(body.data).to.have.lengthOf(2)
+      expect(body.data[0].displayName).to.equal('Squall channel')
+      expect(body.data[1].displayName).to.equal('Zell channel')
     }
   })
 
   after(async function () {
-    await cleanupTests([ server ])
+    await cleanupTests([ server, remoteServer ])
   })
 })

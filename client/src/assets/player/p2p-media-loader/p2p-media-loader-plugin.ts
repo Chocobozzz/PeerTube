@@ -1,9 +1,9 @@
-import * as Hlsjs from 'hls.js/dist/hls.light.js'
-import { Events, Segment } from 'p2p-media-loader-core'
-import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from 'p2p-media-loader-hlsjs'
+import Hlsjs from 'hls.js'
 import videojs from 'video.js'
+import { Events, Segment } from '@peertube/p2p-media-loader-core'
+import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from '@peertube/p2p-media-loader-hlsjs'
+import { timeToInt } from '@shared/core-utils'
 import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo } from '../peertube-videojs-typings'
-import { timeToInt } from '../utils'
 import { registerConfigPlugin, registerSourceHandler } from './hls-plugin'
 
 registerConfigPlugin(videojs)
@@ -35,9 +35,6 @@ class P2pMediaLoaderPlugin extends Plugin {
   private startTime: number
 
   private networkInfoInterval: any
-
-  private hlsjsCurrentLevel: number
-  private hlsjsLevels: Hlsjs.Level[]
 
   constructor (player: videojs.Player, options?: P2PMediaLoaderPluginOptions) {
     super(player)
@@ -88,13 +85,12 @@ class P2pMediaLoaderPlugin extends Plugin {
   }
 
   getCurrentLevel () {
-    return this.hlsjsLevels.find(l => l.level === this.hlsjsCurrentLevel)
+    return this.hlsjs.levels[this.hlsjs.currentLevel]
   }
 
   getLiveLatency () {
-    return undefined as number
-    // FIXME: Use latency when hls >= V1
-    // return this.hlsjs.latency
+    // FIXME: typings
+    return Math.round((this.hlsjs as any).latency)
   }
 
   getHLSJS () {
@@ -140,30 +136,22 @@ class P2pMediaLoaderPlugin extends Plugin {
   }
 
   private runStats () {
-    this.p2pEngine.on(Events.PieceBytesDownloaded, (method: string, size: number) => {
+    this.p2pEngine.on(Events.PieceBytesDownloaded, (method: string, _segment, bytes: number) => {
       const elem = method === 'p2p' ? this.statsP2PBytes : this.statsHTTPBytes
 
-      elem.pendingDownload.push(size)
-      elem.totalDownload += size
+      elem.pendingDownload.push(bytes)
+      elem.totalDownload += bytes
     })
 
-    this.p2pEngine.on(Events.PieceBytesUploaded, (method: string, size: number) => {
+    this.p2pEngine.on(Events.PieceBytesUploaded, (method: string, _segment, bytes: number) => {
       const elem = method === 'p2p' ? this.statsP2PBytes : this.statsHTTPBytes
 
-      elem.pendingUpload.push(size)
-      elem.totalUpload += size
+      elem.pendingUpload.push(bytes)
+      elem.totalUpload += bytes
     })
 
     this.p2pEngine.on(Events.PeerConnect, () => this.statsP2PBytes.numPeers++)
     this.p2pEngine.on(Events.PeerClose, () => this.statsP2PBytes.numPeers--)
-
-    this.hlsjs.on(Hlsjs.Events.MANIFEST_PARSED, (_e, manifest) => {
-      this.hlsjsCurrentLevel = manifest.firstLevel
-      this.hlsjsLevels = manifest.levels
-    })
-    this.hlsjs.on(Hlsjs.Events.LEVEL_LOADED, (_e, level) => {
-      this.hlsjsCurrentLevel = level.levelId || (level as any).id
-    })
 
     this.networkInfoInterval = setInterval(() => {
       const p2pDownloadSpeed = this.arraySum(this.statsP2PBytes.pendingDownload)

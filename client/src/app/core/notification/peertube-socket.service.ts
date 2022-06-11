@@ -38,7 +38,7 @@ export class PeerTubeSocket {
     this.liveVideosSocket.emit('subscribe', { videoId })
   }
 
-  async unsubscribeLiveVideos (videoId: number) {
+  unsubscribeLiveVideos (videoId: number) {
     if (!this.liveVideosSocket) return
 
     this.liveVideosSocket.emit('unsubscribe', { videoId })

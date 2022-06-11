@@ -21,8 +21,9 @@ export class PrivacyConcernsComponent implements OnInit {
     private serverService: ServerService
   ) { }
 
-  async ngOnInit () {
+  ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
+
     if (
       isWebRTCDisabled() ||
       this.serverConfig.tracker.enabled === false ||

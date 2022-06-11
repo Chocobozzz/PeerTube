@@ -23,6 +23,10 @@ function isNotEmptyIntArray (value: any) {
   return Array.isArray(value) && value.every(v => validator.isInt('' + v)) && value.length !== 0
 }
 
+function isNotEmptyStringArray (value: any) {
+  return Array.isArray(value) && value.every(v => typeof v === 'string' && v.length !== 0) && value.length !== 0
+}
+
 function isArrayOf (value: any, validator: (value: any) => boolean) {
   return isArray(value) && value.every(v => validator(v))
 }
@@ -37,6 +41,10 @@ function isIdValid (value: string) {
 
 function isUUIDValid (value: string) {
   return exists(value) && validator.isUUID('' + value, 4)
+}
+
+function areUUIDsValid (values: string[]) {
+  return isArray(values) && values.every(v => isUUIDValid(v))
 }
 
 function isIdOrUUIDValid (value: string) {
@@ -140,6 +148,10 @@ function toCompleteUUID (value: string) {
   return value
 }
 
+function toCompleteUUIDs (values: string[]) {
+  return values.map(v => toCompleteUUID(v))
+}
+
 function toIntOrNull (value: string) {
   const v = toValueOrNull(value)
 
@@ -188,7 +200,9 @@ export {
   isIntPercentage,
   isIdValid,
   isSafePath,
+  isNotEmptyStringArray,
   isUUIDValid,
+  toCompleteUUIDs,
   toCompleteUUID,
   isIdOrUUIDValid,
   isDateValid,
@@ -196,6 +210,7 @@ export {
   toBooleanOrNull,
   isBooleanValid,
   toIntOrNull,
+  areUUIDsValid,
   toArray,
   toIntArray,
   isFileFieldValid,

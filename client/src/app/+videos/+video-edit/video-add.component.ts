@@ -1,6 +1,13 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, AuthUser, CanComponentDeactivate, ServerService } from '@app/core'
+import {
+  AuthService,
+  AuthUser,
+  CanComponentDeactivate,
+  HooksService,
+  ServerService,
+  UserService
+} from '@app/core'
 import { HTMLServerConfig } from '@shared/models'
 import { VideoEditType } from './shared/video-edit.type'
 import { VideoGoLiveComponent } from './video-add-components/video-go-live.component'
@@ -26,14 +33,30 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
 
   activeNav: string
 
-  private serverConfig: HTMLServerConfig
+  uploadMessages: {
+    noQuota: string
+    autoBlock: string
+    quotaLeftDaily: string
+    quotaLeft: string
+  }
+
+  hasNoQuotaLeft = false
+  hasNoQuotaLeftDaily = false
+
+  serverConfig: HTMLServerConfig
 
   constructor (
     private auth: AuthService,
+    private userService: UserService,
+    private hooks: HooksService,
     private serverService: ServerService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
+
+  get isContactFormEnabled () {
+    return this.serverConfig.email.enabled && this.serverConfig.contactForm.enabled
+  }
 
   get userInformationLoaded () {
     return this.auth.userInformationLoaded
@@ -44,11 +67,54 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
 
     this.serverConfig = this.serverService.getHTMLConfig()
 
-    this.user = this.auth.getUser()
-
     if (this.route.snapshot.fragment) {
       this.onNavChange(this.route.snapshot.fragment)
     }
+
+    this.buildUploadMessages()
+
+    this.userService.getMyVideoQuotaUsed()
+      .subscribe(data => {
+        // videoQuota left lower than 10%
+        if (data.videoQuotaUsed > this.user.videoQuota * 0.9) {
+          this.hasNoQuotaLeft = true
+        }
+
+        // unlimited videoQuota
+        if (this.user.videoQuota === -1) {
+          this.hasNoQuotaLeft = false
+        }
+
+        // videoQuotaDaily left lower than 10%
+        if (data.videoQuotaUsedDaily > this.user.videoQuotaDaily * 0.9) {
+          this.hasNoQuotaLeftDaily = true
+        }
+
+        // unlimited videoQuotaDaily
+        if (this.user.videoQuotaDaily === -1) {
+          this.hasNoQuotaLeftDaily = false
+        }
+      })
+  }
+
+  private async buildUploadMessages () {
+    // eslint-disable-next-line max-len
+    const noQuota = $localize`Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.`
+    // eslint-disable-next-line max-len
+    const autoBlock = $localize`Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.`
+    // eslint-disable-next-line max-len
+    const quotaLeftDaily = $localize`Your daily video quota is insufficient. If you want to add more videos, you must wait for 24 hours or an admin must increase your daily quota.`
+    // eslint-disable-next-line max-len
+    const quotaLeft = $localize`Your video quota is insufficient. If you want to add more videos, an admin must increase your quota.`
+
+    const uploadMessages = {
+      noQuota,
+      autoBlock,
+      quotaLeftDaily,
+      quotaLeft
+    }
+
+    this.uploadMessages = await this.hooks.wrapObject(uploadMessages, 'common', 'filter:upload.messages.create.result')
   }
 
   onNavChange (newActiveNav: string) {

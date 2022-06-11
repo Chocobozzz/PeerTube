@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
 import { snakeCase } from 'lodash'
-import { objectConverter, parseBytes } from '../../helpers/core-utils'
 import validator from 'validator'
+import { getAverageBitrate, getMaxBitrate } from '@shared/core-utils'
+import { VideoResolution } from '@shared/models'
+import { objectConverter, parseBytes } from '../../helpers/core-utils'
 
 const expect = chai.expect
 
@@ -46,6 +48,9 @@ describe('Parse Bytes', function () {
   it('Should be invalid when given invalid value', async function () {
     expect(parseBytes('6GB 1GB')).to.be.eq(6)
   })
+})
+
+describe('Object', function () {
 
   it('Should convert an object', async function () {
     function keyConverter (k: string) {
@@ -92,5 +97,38 @@ describe('Parse Bytes', function () {
     // Immutable
     expect(res.mySuperKey).to.be.undefined
     expect(obj['my_super_key']).to.be.undefined
+  })
+})
+
+describe('Bitrate', function () {
+
+  it('Should get appropriate max bitrate', function () {
+    const tests = [
+      { resolution: VideoResolution.H_240P, ratio: 16 / 9, fps: 24, min: 600, max: 800 },
+      { resolution: VideoResolution.H_360P, ratio: 16 / 9, fps: 24, min: 1200, max: 1600 },
+      { resolution: VideoResolution.H_480P, ratio: 16 / 9, fps: 24, min: 2000, max: 2300 },
+      { resolution: VideoResolution.H_720P, ratio: 16 / 9, fps: 24, min: 4000, max: 4400 },
+      { resolution: VideoResolution.H_1080P, ratio: 16 / 9, fps: 24, min: 8000, max: 10000 },
+      { resolution: VideoResolution.H_4K, ratio: 16 / 9, fps: 24, min: 25000, max: 30000 }
+    ]
+
+    for (const test of tests) {
+      expect(getMaxBitrate(test)).to.be.above(test.min * 1000).and.below(test.max * 1000)
+    }
+  })
+
+  it('Should get appropriate average bitrate', function () {
+    const tests = [
+      { resolution: VideoResolution.H_240P, ratio: 16 / 9, fps: 24, min: 350, max: 450 },
+      { resolution: VideoResolution.H_360P, ratio: 16 / 9, fps: 24, min: 700, max: 900 },
+      { resolution: VideoResolution.H_480P, ratio: 16 / 9, fps: 24, min: 1100, max: 1300 },
+      { resolution: VideoResolution.H_720P, ratio: 16 / 9, fps: 24, min: 2300, max: 2500 },
+      { resolution: VideoResolution.H_1080P, ratio: 16 / 9, fps: 24, min: 4700, max: 5000 },
+      { resolution: VideoResolution.H_4K, ratio: 16 / 9, fps: 24, min: 15000, max: 17000 }
+    ]
+
+    for (const test of tests) {
+      expect(getAverageBitrate(test)).to.be.above(test.min * 1000).and.below(test.max * 1000)
+    }
   })
 })

@@ -63,7 +63,7 @@
         </div>
 
         <div class="peertube-radio-container" *ngFor="let date of publishedDateRanges">
-          <input type="radio" (change)="onInputUpdated()" name="publishedDateRange" [id]="date.id" [value]="date.id" [(ngModel)]="publishedDateRange">
+          <input type="radio" (change)="onDurationOrPublishedUpdated()" name="publishedDateRange" [id]="date.id" [value]="date.id" [(ngModel)]="publishedDateRange">
           <label [for]="date.id" class="radio">{{ date.label }}</label>
         </div>
       </div>
@@ -79,7 +79,7 @@
         <div class="row">
           <div class="pl-0 col-sm-6">
             <input
-              (change)="onInputUpdated()"
+              (change)="onDurationOrPublishedUpdated()"
               (keydown.enter)="$event.preventDefault()"
               type="text" id="original-publication-after" name="original-publication-after"
               i18n-placeholder placeholder="After..."
@@ -89,7 +89,7 @@
           </div>
           <div class="pr-0 col-sm-6">
             <input
-              (change)="onInputUpdated()"
+              (change)="onDurationOrPublishedUpdated()"
               (keydown.enter)="$event.preventDefault()"
               type="text" id="original-publication-before" name="original-publication-before"
               i18n-placeholder placeholder="Before..."
@@ -112,7 +112,7 @@
         </div>
 
         <div class="peertube-radio-container" *ngFor="let duration of durationRanges">
-          <input type="radio" (change)="onInputUpdated()" name="durationRange" [id]="duration.id" [value]="duration.id" [(ngModel)]="durationRange">
+          <input type="radio" (change)="onDurationOrPublishedUpdated()" name="durationRange" [id]="duration.id" [value]="duration.id" [(ngModel)]="durationRange">
           <label [for]="duration.id" class="radio">{{ duration.label }}</label>
         </div>
       </div>
@@ -172,6 +172,14 @@
           Reset
         </button>
         <my-select-tags name="tagsOneOf" labelForId="tagsOneOf" id="tagsOneOf" [(ngModel)]="advancedSearch.tagsOneOf"></my-select-tags>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="host">PeerTube instance host</label>
+
+        <input (change)="onDurationOrPublishedUpdated()" (keydown.enter)="$event.preventDefault()" type="text" id="host" name="host"
+          placeholder="example.com" [(ngModel)]="advancedSearch.host" class="form-control"
+        >
       </div>
 
       <div class="form-group" *ngIf="isSearchTargetEnabled()">

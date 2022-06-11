@@ -1,4 +1,7 @@
-import { Config, Level } from 'hls.js'
+// FIXME: lint
+/* eslint-disable @typescript-eslint/ban-types */
+
+import { HlsConfig, Level } from 'hls.js'
 import videojs from 'video.js'
 import { VideoFile, VideoPlaylist, VideoPlaylistElement } from '@shared/models'
 import { P2pMediaLoaderPlugin } from './p2p-media-loader/p2p-media-loader-plugin'
@@ -60,7 +63,7 @@ export interface VideoJSTechHLS extends videojs.Tech {
 }
 
 export interface HlsjsConfigHandlerOptions {
-  hlsjsConfig?: Config & { cueHandler: any }// FIXME: typings
+  hlsjsConfig?: HlsConfig & { cueHandler: any }// FIXME: typings
   captionConfig?: any // FIXME: typings
 
   levelLabelHandler?: (level: Level) => string
@@ -93,7 +96,7 @@ type VideoJSCaption = {
 }
 
 type UserWatching = {
-  url: string,
+  url: string
   authorizationHeader: string
 }
 
@@ -132,6 +135,10 @@ type NextPreviousVideoButtonOptions = {
   isDisabled: () => boolean
 }
 
+type PeerTubeLinkButtonOptions = {
+  shortUUID: string
+}
+
 type WebtorrentPluginOptions = {
   playerElement: HTMLVideoElement
 
@@ -162,7 +169,7 @@ type VideoJSPluginOptions = {
 }
 
 type LoadedQualityData = {
-  qualitySwitchCallback: Function,
+  qualitySwitchCallback: (resolutionId: number, type: 'video') => void
   qualityData: {
     video: {
       id: number
@@ -173,7 +180,7 @@ type LoadedQualityData = {
 }
 
 type ResolutionUpdateData = {
-  auto: boolean,
+  auto: boolean
   resolutionId: number
   id?: number
 }
@@ -225,5 +232,6 @@ export {
   VideoJSPluginOptions,
   LoadedQualityData,
   QualityLevelRepresentation,
+  PeerTubeLinkButtonOptions,
   QualityLevels
 }

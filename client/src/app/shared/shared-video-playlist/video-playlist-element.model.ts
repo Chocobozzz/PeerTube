@@ -11,7 +11,7 @@ export class VideoPlaylistElement implements ServerVideoPlaylistElement {
 
   video?: Video
 
-  constructor (hash: ServerVideoPlaylistElement, translations: {}) {
+  constructor (hash: ServerVideoPlaylistElement, translations: { [ id: string ]: string } = {}) {
     this.id = hash.id
     this.position = hash.position
     this.startTimestamp = hash.startTimestamp

@@ -1,23 +1,23 @@
-import { Server } from 'http'
-import * as SocketIO from 'socket.io'
+import { Server as HTTPServer } from 'http'
+import { Namespace, Server as SocketServer, Socket } from 'socket.io'
+import { isIdValid } from '@server/helpers/custom-validators/misc'
 import { MVideo } from '@server/types/models'
 import { UserNotificationModelForApi } from '@server/types/models/user'
 import { LiveVideoEventPayload, LiveVideoEventType } from '@shared/models'
 import { logger } from '../helpers/logger'
 import { authenticateSocket } from '../middlewares'
-import { isIdValid } from '@server/helpers/custom-validators/misc'
 
 class PeerTubeSocket {
 
   private static instance: PeerTubeSocket
 
-  private userNotificationSockets: { [ userId: number ]: SocketIO.Socket[] } = {}
-  private liveVideosNamespace: SocketIO.Namespace
+  private userNotificationSockets: { [ userId: number ]: Socket[] } = {}
+  private liveVideosNamespace: Namespace
 
   private constructor () {}
 
-  init (server: Server) {
-    const io = new SocketIO.Server(server)
+  init (server: HTTPServer) {
+    const io = new SocketServer(server)
 
     io.of('/user-notifications')
       .use(authenticateSocket)

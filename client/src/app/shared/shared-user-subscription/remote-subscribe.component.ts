@@ -6,7 +6,7 @@ import { USER_HANDLE_VALIDATOR } from '../form-validators/user-validators'
 @Component({
   selector: 'my-remote-subscribe',
   templateUrl: './remote-subscribe.component.html',
-  styleUrls: ['./remote-subscribe.component.scss']
+  styleUrls: [ './remote-subscribe.component.scss' ]
 })
 export class RemoteSubscribeComponent extends FormReactive implements OnInit {
   @Input() uri: string
@@ -42,17 +42,21 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
     // Should not have CORS error because https://tools.ietf.org/html/rfc7033#section-5
     fetch(`${protocol}//${hostname}/.well-known/webfinger?resource=acct:${username}@${hostname}`)
       .then(response => response.json())
-      .then(data => new Promise((res, rej) => {
-        if (!data || Array.isArray(data.links) === false) return rej()
+      .then(data => {
+        if (!data || Array.isArray(data.links) === false) {
+          throw new Error('Not links in webfinger response')
+        }
 
         const link: { template: string } = data.links.find((link: any) => {
           return link && typeof link.template === 'string' && link.rel === 'http://ostatus.org/schema/1.0/subscribe'
         })
 
-        if (link && link.template.includes('{uri}')) {
-          res(link.template.replace('{uri}', encodeURIComponent(this.uri)))
+        if (link?.template.includes('{uri}')) {
+          return link.template.replace('{uri}', encodeURIComponent(this.uri))
         }
-      }))
+
+        throw new Error('No subscribe template in webfinger response')
+      })
       .then(window.open)
       .catch(err => {
         console.error(err)

@@ -183,8 +183,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
     if (res === false) return
 
     this.videoBlocklistService.unblockVideo(this.video.id)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Video ${this.video.name} unblocked.`)
 
             this.video.blacklisted = false
@@ -193,8 +193,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
             this.videoUnblocked.emit()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   async removeVideo () {
@@ -209,40 +209,40 @@ export class VideoActionsDropdownComponent implements OnChanges {
     if (res === false) return
 
     this.videoService.removeVideo(this.video.id)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Video ${this.video.name} deleted.`)
             this.videoRemoved.emit()
           },
 
-          error => this.notifier.error(error.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   duplicateVideo () {
     this.redundancyService.addVideoRedundancy(this.video)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             const message = $localize`This video will be duplicated by your instance.`
             this.notifier.success(message)
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   muteVideoAccount () {
     const params = { nameWithHost: Actor.CREATE_BY_STRING(this.video.account.name, this.video.account.host) }
 
     this.blocklistService.blockAccountByUser(params)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.notifier.success($localize`Account ${params.nameWithHost} muted.`)
             this.videoAccountMuted.emit()
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   onVideoBlocked () {

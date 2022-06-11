@@ -90,8 +90,41 @@ storage:
   # Overridable client files : logo.svg, favicon.png and icons/*.png (PWA) in client/dist/assets/images
   # Could contain for example assets/images/favicon.png
   # If the file exists, peertube will serve it
-  # If not, peertube will fallback to the default fil
+  # If not, peertube will fallback to the default file
   client_overrides: '/var/www/peertube/storage/client-overrides/'
+
+object_storage:
+  enabled: false
+
+  # Without protocol, will default to HTTPS
+  endpoint: '' # 's3.amazonaws.com' or 's3.fr-par.scw.cloud' for example
+
+  region: 'us-east-1'
+
+  credentials:
+    # You can also use AWS_ACCESS_KEY_ID env variable
+    access_key_id: ''
+    # You can also use AWS_SECRET_ACCESS_KEY env variable
+    secret_access_key: ''
+
+  # Maximum amount to upload in one request to object storage
+  max_upload_part: 2GB
+
+  streaming_playlists:
+    bucket_name: 'streaming-playlists'
+
+    # Allows setting all buckets to the same value but with a different prefix
+    prefix: '' # Example: 'streaming-playlists:'
+
+    # Base url for object URL generation, scheme and host will be replaced by this URL
+    # Useful when you want to use a CDN/external proxy
+    base_url: '' # Example: 'https://mirror.example.com'
+
+  # Same settings but for webtorrent videos
+  videos:
+    bucket_name: 'videos'
+    prefix: ''
+    base_url: ''
 
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'

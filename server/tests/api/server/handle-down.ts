@@ -1,51 +1,31 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { JobState, Video } from '../../../../shared/models'
-import { VideoPrivacy } from '../../../../shared/models/videos'
-import { VideoCommentThreadTree } from '../../../../shared/models/videos/comment/video-comment.model'
-
+import * as chai from 'chai'
 import {
   cleanupTests,
-  closeAllSequelize,
+  CommentsCommand,
   completeVideoCheck,
-  flushAndRunMultipleServers,
-  getVideo,
-  getVideosList,
-  immutableAssign,
+  createMultipleServers,
   killallServers,
-  reRunServer,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
-  setActorFollowScores,
-  unfollow,
-  updateVideo,
-  uploadVideo,
-  uploadVideoAndGetId,
-  wait
-} from '../../../../shared/extra-utils'
-import { follow, getFollowersListPaginationAndSort } from '../../../../shared/extra-utils/server/follows'
-import { getJobsListPaginationAndSort, waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import {
-  addVideoCommentReply,
-  addVideoCommentThread,
-  getVideoCommentThreads,
-  getVideoThreadComments
-} from '../../../../shared/extra-utils/videos/video-comments'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+  wait,
+  waitJobs
+} from '@shared/extra-utils'
+import { HttpStatusCode, JobState, VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test handle downs', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let threadIdServer1: number
   let threadIdServer2: number
   let commentIdServer1: number
   let commentIdServer2: number
-  let missedVideo1: Video
-  let missedVideo2: Video
-  let unlistedVideo: Video
+  let missedVideo1: VideoCreateResult
+  let missedVideo2: VideoCreateResult
+  let unlistedVideo: VideoCreateResult
 
   const videoIdsServer1: string[] = []
 
@@ -62,17 +42,18 @@ describe('Test handle downs', function () {
     fixture: 'video_short1.webm'
   }
 
-  const unlistedVideoAttributes = immutableAssign(videoAttributes, {
-    privacy: VideoPrivacy.UNLISTED
-  })
+  const unlistedVideoAttributes = { ...videoAttributes, privacy: VideoPrivacy.UNLISTED }
 
   let checkAttributes: any
   let unlistedCheckAttributes: any
 
+  let commentCommands: CommentsCommand[]
+
   before(async function () {
     this.timeout(30000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
+    commentCommands = servers.map(s => s.comments)
 
     checkAttributes = {
       name: 'my super name for server 1',
@@ -106,9 +87,7 @@ describe('Test handle downs', function () {
         }
       ]
     }
-    unlistedCheckAttributes = immutableAssign(checkAttributes, {
-      privacy: VideoPrivacy.UNLISTED
-    })
+    unlistedCheckAttributes = { ...checkAttributes, privacy: VideoPrivacy.UNLISTED }
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -118,58 +97,53 @@ describe('Test handle downs', function () {
     this.timeout(240000)
 
     // Server 2 and 3 follow server 1
-    await follow(servers[1].url, [ servers[0].url ], servers[1].accessToken)
-    await follow(servers[2].url, [ servers[0].url ], servers[2].accessToken)
+    await servers[1].follows.follow({ hosts: [ servers[0].url ] })
+    await servers[2].follows.follow({ hosts: [ servers[0].url ] })
 
     await waitJobs(servers)
 
     // Upload a video to server 1
-    await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
+    await servers[0].videos.upload({ attributes: videoAttributes })
 
     await waitJobs(servers)
 
     // And check all servers have this video
     for (const server of servers) {
-      const res = await getVideosList(server.url)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(1)
+      const { data } = await server.videos.list()
+      expect(data).to.be.an('array')
+      expect(data).to.have.lengthOf(1)
     }
 
     // Kill server 2
-    killallServers([ servers[1] ])
+    await killallServers([ servers[1] ])
 
     // Remove server 2 follower
     for (let i = 0; i < 10; i++) {
-      await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
+      await servers[0].videos.upload({ attributes: videoAttributes })
     }
 
     await waitJobs([ servers[0], servers[2] ])
 
     // Kill server 3
-    killallServers([ servers[2] ])
+    await killallServers([ servers[2] ])
 
-    const resLastVideo1 = await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
-    missedVideo1 = resLastVideo1.body.video
+    missedVideo1 = await servers[0].videos.upload({ attributes: videoAttributes })
 
-    const resLastVideo2 = await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
-    missedVideo2 = resLastVideo2.body.video
+    missedVideo2 = await servers[0].videos.upload({ attributes: videoAttributes })
 
     // Unlisted video
-    const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, unlistedVideoAttributes)
-    unlistedVideo = resVideo.body.video
+    unlistedVideo = await servers[0].videos.upload({ attributes: unlistedVideoAttributes })
 
     // Add comments to video 2
     {
       const text = 'thread 1'
-      let resComment = await addVideoCommentThread(servers[0].url, servers[0].accessToken, missedVideo2.uuid, text)
-      let comment = resComment.body.comment
+      let comment = await commentCommands[0].createThread({ videoId: missedVideo2.uuid, text })
       threadIdServer1 = comment.id
 
-      resComment = await addVideoCommentReply(servers[0].url, servers[0].accessToken, missedVideo2.uuid, comment.id, 'comment 1-1')
-      comment = resComment.body.comment
+      comment = await commentCommands[0].addReply({ videoId: missedVideo2.uuid, toCommentId: comment.id, text: 'comment 1-1' })
 
-      resComment = await addVideoCommentReply(servers[0].url, servers[0].accessToken, missedVideo2.uuid, comment.id, 'comment 1-2')
-      commentIdServer1 = resComment.body.comment.id
+      const created = await commentCommands[0].addReply({ videoId: missedVideo2.uuid, toCommentId: comment.id, text: 'comment 1-2' })
+      commentIdServer1 = created.id
     }
 
     await waitJobs(servers[0])
@@ -177,90 +151,87 @@ describe('Test handle downs', function () {
     await wait(11000)
 
     // Only server 3 is still a follower of server 1
-    const res = await getFollowersListPaginationAndSort({ url: servers[0].url, start: 0, count: 2, sort: 'createdAt' })
-    expect(res.body.data).to.be.an('array')
-    expect(res.body.data).to.have.lengthOf(1)
-    expect(res.body.data[0].follower.host).to.equal('localhost:' + servers[2].port)
+    const body = await servers[0].follows.getFollowers({ start: 0, count: 2, sort: 'createdAt' })
+    expect(body.data).to.be.an('array')
+    expect(body.data).to.have.lengthOf(1)
+    expect(body.data[0].follower.host).to.equal('localhost:' + servers[2].port)
   })
 
   it('Should not have pending/processing jobs anymore', async function () {
     const states: JobState[] = [ 'waiting', 'active' ]
 
     for (const state of states) {
-      const res = await getJobsListPaginationAndSort({
-        url: servers[0].url,
-        accessToken: servers[0].accessToken,
+      const body = await servers[0].jobs.list({
         state: state,
         start: 0,
         count: 50,
         sort: '-createdAt'
       })
-      expect(res.body.data).to.have.length(0)
+      expect(body.data).to.have.length(0)
     }
   })
 
   it('Should re-follow server 1', async function () {
     this.timeout(35000)
 
-    await reRunServer(servers[1])
-    await reRunServer(servers[2])
+    await servers[1].run()
+    await servers[2].run()
 
-    await unfollow(servers[1].url, servers[1].accessToken, servers[0])
+    await servers[1].follows.unfollow({ target: servers[0] })
     await waitJobs(servers)
 
-    await follow(servers[1].url, [ servers[0].url ], servers[1].accessToken)
+    await servers[1].follows.follow({ hosts: [ servers[0].url ] })
 
     await waitJobs(servers)
 
-    const res = await getFollowersListPaginationAndSort({ url: servers[0].url, start: 0, count: 2, sort: 'createdAt' })
-    expect(res.body.data).to.be.an('array')
-    expect(res.body.data).to.have.lengthOf(2)
+    const body = await servers[0].follows.getFollowers({ start: 0, count: 2, sort: 'createdAt' })
+    expect(body.data).to.be.an('array')
+    expect(body.data).to.have.lengthOf(2)
   })
 
   it('Should send an update to server 3, and automatically fetch the video', async function () {
     this.timeout(15000)
 
-    const res1 = await getVideosList(servers[2].url)
-    expect(res1.body.data).to.be.an('array')
-    expect(res1.body.data).to.have.lengthOf(11)
+    {
+      const { data } = await servers[2].videos.list()
+      expect(data).to.be.an('array')
+      expect(data).to.have.lengthOf(11)
+    }
 
-    await updateVideo(servers[0].url, servers[0].accessToken, missedVideo1.uuid, {})
-    await updateVideo(servers[0].url, servers[0].accessToken, unlistedVideo.uuid, {})
+    await servers[0].videos.update({ id: missedVideo1.uuid })
+    await servers[0].videos.update({ id: unlistedVideo.uuid })
 
     await waitJobs(servers)
 
-    const res = await getVideosList(servers[2].url)
-    expect(res.body.data).to.be.an('array')
-    // 1 video is unlisted
-    expect(res.body.data).to.have.lengthOf(12)
+    {
+      const { data } = await servers[2].videos.list()
+      expect(data).to.be.an('array')
+      // 1 video is unlisted
+      expect(data).to.have.lengthOf(12)
+    }
 
     // Check unlisted video
-    const resVideo = await getVideo(servers[2].url, unlistedVideo.uuid)
-    expect(resVideo.body).not.to.be.undefined
-
-    await completeVideoCheck(servers[2].url, resVideo.body, unlistedCheckAttributes)
+    const video = await servers[2].videos.get({ id: unlistedVideo.uuid })
+    await completeVideoCheck(servers[2], video, unlistedCheckAttributes)
   })
 
   it('Should send comments on a video to server 3, and automatically fetch the video', async function () {
     this.timeout(25000)
 
-    await addVideoCommentReply(servers[0].url, servers[0].accessToken, missedVideo2.uuid, commentIdServer1, 'comment 1-3')
+    await commentCommands[0].addReply({ videoId: missedVideo2.uuid, toCommentId: commentIdServer1, text: 'comment 1-3' })
 
     await waitJobs(servers)
 
-    const resVideo = await getVideo(servers[2].url, missedVideo2.uuid)
-    expect(resVideo.body).not.to.be.undefined
+    await servers[2].videos.get({ id: missedVideo2.uuid })
 
     {
-      let resComment = await getVideoCommentThreads(servers[2].url, missedVideo2.uuid, 0, 5)
-      expect(resComment.body.data).to.be.an('array')
-      expect(resComment.body.data).to.have.lengthOf(1)
+      const { data } = await servers[2].comments.listThreads({ videoId: missedVideo2.uuid })
+      expect(data).to.be.an('array')
+      expect(data).to.have.lengthOf(1)
 
-      threadIdServer2 = resComment.body.data[0].id
+      threadIdServer2 = data[0].id
 
-      resComment = await getVideoThreadComments(servers[2].url, missedVideo2.uuid, threadIdServer2)
-
-      const tree: VideoCommentThreadTree = resComment.body
+      const tree = await servers[2].comments.getThread({ videoId: missedVideo2.uuid, threadId: threadIdServer2 })
       expect(tree.comment.text).equal('thread 1')
       expect(tree.children).to.have.lengthOf(1)
 
@@ -283,57 +254,54 @@ describe('Test handle downs', function () {
   it('Should correctly reply to the comment', async function () {
     this.timeout(15000)
 
-    await addVideoCommentReply(servers[2].url, servers[2].accessToken, missedVideo2.uuid, commentIdServer2, 'comment 1-4')
+    await servers[2].comments.addReply({ videoId: missedVideo2.uuid, toCommentId: commentIdServer2, text: 'comment 1-4' })
 
     await waitJobs(servers)
 
-    {
-      const resComment = await getVideoThreadComments(servers[0].url, missedVideo2.uuid, threadIdServer1)
+    const tree = await commentCommands[0].getThread({ videoId: missedVideo2.uuid, threadId: threadIdServer1 })
 
-      const tree: VideoCommentThreadTree = resComment.body
-      expect(tree.comment.text).equal('thread 1')
-      expect(tree.children).to.have.lengthOf(1)
+    expect(tree.comment.text).equal('thread 1')
+    expect(tree.children).to.have.lengthOf(1)
 
-      const firstChild = tree.children[0]
-      expect(firstChild.comment.text).to.equal('comment 1-1')
-      expect(firstChild.children).to.have.lengthOf(1)
+    const firstChild = tree.children[0]
+    expect(firstChild.comment.text).to.equal('comment 1-1')
+    expect(firstChild.children).to.have.lengthOf(1)
 
-      const childOfFirstChild = firstChild.children[0]
-      expect(childOfFirstChild.comment.text).to.equal('comment 1-2')
-      expect(childOfFirstChild.children).to.have.lengthOf(1)
+    const childOfFirstChild = firstChild.children[0]
+    expect(childOfFirstChild.comment.text).to.equal('comment 1-2')
+    expect(childOfFirstChild.children).to.have.lengthOf(1)
 
-      const childOfChildFirstChild = childOfFirstChild.children[0]
-      expect(childOfChildFirstChild.comment.text).to.equal('comment 1-3')
-      expect(childOfChildFirstChild.children).to.have.lengthOf(1)
+    const childOfChildFirstChild = childOfFirstChild.children[0]
+    expect(childOfChildFirstChild.comment.text).to.equal('comment 1-3')
+    expect(childOfChildFirstChild.children).to.have.lengthOf(1)
 
-      const childOfChildOfChildOfFirstChild = childOfChildFirstChild.children[0]
-      expect(childOfChildOfChildOfFirstChild.comment.text).to.equal('comment 1-4')
-      expect(childOfChildOfChildOfFirstChild.children).to.have.lengthOf(0)
-    }
+    const childOfChildOfChildOfFirstChild = childOfChildFirstChild.children[0]
+    expect(childOfChildOfChildOfFirstChild.comment.text).to.equal('comment 1-4')
+    expect(childOfChildOfChildOfFirstChild.children).to.have.lengthOf(0)
   })
 
   it('Should upload many videos on server 1', async function () {
     this.timeout(120000)
 
     for (let i = 0; i < 10; i++) {
-      const uuid = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video ' + i })).uuid
+      const uuid = (await servers[0].videos.quickUpload({ name: 'video ' + i })).uuid
       videoIdsServer1.push(uuid)
     }
 
     await waitJobs(servers)
 
     for (const id of videoIdsServer1) {
-      await getVideo(servers[1].url, id)
+      await servers[1].videos.get({ id })
     }
 
     await waitJobs(servers)
-    await setActorFollowScores(servers[1].internalServerNumber, 20)
+    await servers[1].sql.setActorFollowScores(20)
 
     // Wait video expiration
     await wait(11000)
 
     // Refresh video -> score + 10 = 30
-    await getVideo(servers[1].url, videoIdsServer1[0])
+    await servers[1].videos.get({ id: videoIdsServer1[0] })
 
     await waitJobs(servers)
   })
@@ -341,27 +309,25 @@ describe('Test handle downs', function () {
   it('Should remove followings that are down', async function () {
     this.timeout(120000)
 
-    killallServers([ servers[0] ])
+    await killallServers([ servers[0] ])
 
     // Wait video expiration
     await wait(11000)
 
     for (let i = 0; i < 5; i++) {
       try {
-        await getVideo(servers[1].url, videoIdsServer1[i])
+        await servers[1].videos.get({ id: videoIdsServer1[i] })
         await waitJobs([ servers[1] ])
         await wait(1500)
       } catch {}
     }
 
     for (const id of videoIdsServer1) {
-      await getVideo(servers[1].url, id, HttpStatusCode.FORBIDDEN_403)
+      await servers[1].videos.get({ id, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     }
   })
 
   after(async function () {
-    await closeAllSequelize([ servers[1] ])
-
     await cleanupTests(servers)
   })
 })

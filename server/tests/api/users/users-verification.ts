@@ -1,30 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import {
-  cleanupTests,
-  flushAndRunServer,
-  getMyUserInformation,
-  getUserInformation,
-  login,
-  registerUser,
-  ServerInfo,
-  updateCustomSubConfig,
-  updateMyUser,
-  userLogin,
-  verifyEmail
-} from '../../../../shared/extra-utils'
-import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
-import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { User } from '../../../../shared/models/users'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import * as chai from 'chai'
+import { cleanupTests, createSingleServer, MockSmtpServer, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test users account verification', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userId: number
   let userAccessToken: string
   let verificationString: string
@@ -50,7 +34,7 @@ describe('Test users account verification', function () {
         port
       }
     }
-    server = await flushAndRunServer(1, overrideConfig)
+    server = await createSingleServer(1, overrideConfig)
 
     await setAccessTokensToServers([ server ])
   })
@@ -58,15 +42,17 @@ describe('Test users account verification', function () {
   it('Should register user and send verification email if verification required', async function () {
     this.timeout(30000)
 
-    await updateCustomSubConfig(server.url, server.accessToken, {
-      signup: {
-        enabled: true,
-        requiresEmailVerification: true,
-        limit: 10
+    await server.config.updateCustomSubConfig({
+      newConfig: {
+        signup: {
+          enabled: true,
+          requiresEmailVerification: true,
+          limit: 10
+        }
       }
     })
 
-    await registerUser(server.url, user1.username, user1.password)
+    await server.users.register(user1)
 
     await waitJobs(server)
     expectedEmailsLength++
@@ -85,23 +71,23 @@ describe('Test users account verification', function () {
 
     userId = parseInt(userIdMatches[1], 10)
 
-    const resUserInfo = await getUserInformation(server.url, server.accessToken, userId)
-    expect(resUserInfo.body.emailVerified).to.be.false
+    const body = await server.users.get({ userId })
+    expect(body.emailVerified).to.be.false
   })
 
   it('Should not allow login for user with unverified email', async function () {
-    const resLogin = await login(server.url, server.client, user1, HttpStatusCode.BAD_REQUEST_400)
-    expect(resLogin.body.detail).to.contain('User email is not verified.')
+    const { detail } = await server.login.login({ user: user1, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    expect(detail).to.contain('User email is not verified.')
   })
 
   it('Should verify the user via email and allow login', async function () {
-    await verifyEmail(server.url, userId, verificationString)
+    await server.users.verifyEmail({ userId, verificationString })
 
-    const res = await login(server.url, server.client, user1)
-    userAccessToken = res.body.access_token
+    const body = await server.login.login({ user: user1 })
+    userAccessToken = body.access_token
 
-    const resUserVerified = await getUserInformation(server.url, server.accessToken, userId)
-    expect(resUserVerified.body.emailVerified).to.be.true
+    const user = await server.users.get({ userId })
+    expect(user.emailVerified).to.be.true
   })
 
   it('Should be able to change the user email', async function () {
@@ -110,9 +96,8 @@ describe('Test users account verification', function () {
     let updateVerificationString: string
 
     {
-      await updateMyUser({
-        url: server.url,
-        accessToken: userAccessToken,
+      await server.users.updateMe({
+        token: userAccessToken,
         email: 'updated@example.com',
         currentPassword: user1.password
       })
@@ -128,19 +113,15 @@ describe('Test users account verification', function () {
     }
 
     {
-      const res = await getMyUserInformation(server.url, userAccessToken)
-      const me: User = res.body
-
+      const me = await server.users.getMyInfo({ token: userAccessToken })
       expect(me.email).to.equal('user_1@example.com')
       expect(me.pendingEmail).to.equal('updated@example.com')
     }
 
     {
-      await verifyEmail(server.url, userId, updateVerificationString, true)
+      await server.users.verifyEmail({ userId, verificationString: updateVerificationString, isPendingEmail: true })
 
-      const res = await getMyUserInformation(server.url, userAccessToken)
-      const me: User = res.body
-
+      const me = await server.users.getMyInfo({ token: userAccessToken })
       expect(me.email).to.equal('updated@example.com')
       expect(me.pendingEmail).to.be.null
     }
@@ -148,35 +129,39 @@ describe('Test users account verification', function () {
 
   it('Should register user not requiring email verification if setting not enabled', async function () {
     this.timeout(5000)
-    await updateCustomSubConfig(server.url, server.accessToken, {
-      signup: {
-        enabled: true,
-        requiresEmailVerification: false,
-        limit: 10
+    await server.config.updateCustomSubConfig({
+      newConfig: {
+        signup: {
+          enabled: true,
+          requiresEmailVerification: false,
+          limit: 10
+        }
       }
     })
 
-    await registerUser(server.url, user2.username, user2.password)
+    await server.users.register(user2)
 
     await waitJobs(server)
     expect(emails).to.have.lengthOf(expectedEmailsLength)
 
-    const accessToken = await userLogin(server, user2)
+    const accessToken = await server.login.getAccessToken(user2)
 
-    const resMyUserInfo = await getMyUserInformation(server.url, accessToken)
-    expect(resMyUserInfo.body.emailVerified).to.be.null
+    const user = await server.users.getMyInfo({ token: accessToken })
+    expect(user.emailVerified).to.be.null
   })
 
   it('Should allow login for user with unverified email when setting later enabled', async function () {
-    await updateCustomSubConfig(server.url, server.accessToken, {
-      signup: {
-        enabled: true,
-        requiresEmailVerification: true,
-        limit: 10
+    await server.config.updateCustomSubConfig({
+      newConfig: {
+        signup: {
+          enabled: true,
+          requiresEmailVerification: true,
+          limit: 10
+        }
       }
     })
 
-    await userLogin(server, user2)
+    await server.login.getAccessToken(user2)
   })
 
   after(async function () {

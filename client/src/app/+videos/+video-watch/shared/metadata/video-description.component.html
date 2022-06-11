@@ -3,7 +3,7 @@
     class="video-info-description-html"
     [innerHTML]="videoHTMLDescription"
     (timestampClicked)="onTimestampClicked($event)"
-    timestampRouteTransformer
+    myTimestampRouteTransformer
   ></div>
 
   <div class="video-info-description-more" *ngIf="completeDescriptionShown === false && video.description?.length >= 250" (click)="showMoreDescription()">

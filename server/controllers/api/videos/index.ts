@@ -1,12 +1,12 @@
-import * as express from 'express'
+import express from 'express'
 import toInt from 'validator/lib/toInt'
+import { pickCommonVideoQuery } from '@server/helpers/query'
 import { doJSONRequest } from '@server/helpers/requests'
 import { LiveManager } from '@server/lib/live'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { getServerActor } from '@server/models/application/application'
 import { MVideoAccountLight } from '@server/types/models'
-import { VideosCommonQuery } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs'
+import { HttpStatusCode } from '../../../../shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { buildNSFWFilter, getCountVideos } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
@@ -102,7 +102,7 @@ videosRouter.get('/:id',
   optionalAuthenticate,
   asyncMiddleware(videosCustomGetValidator('for-api')),
   asyncMiddleware(checkVideoFollowConstraints),
-  asyncMiddleware(getVideo)
+  getVideo
 )
 videosRouter.post('/:id/views',
   openapiOperationDoc({ operationId: 'addView' }),
@@ -141,7 +141,7 @@ function listVideoPrivacies (_req: express.Request, res: express.Response) {
   res.json(VIDEO_PRIVACIES)
 }
 
-async function getVideo (_req: express.Request, res: express.Response) {
+function getVideo (_req: express.Request, res: express.Response) {
   const video = res.locals.videoAPI
 
   if (video.isOutdated()) {
@@ -211,22 +211,14 @@ async function getVideoFileMetadata (req: express.Request, res: express.Response
 }
 
 async function listVideos (req: express.Request, res: express.Response) {
-  const query = req.query as VideosCommonQuery
+  const query = pickCommonVideoQuery(req.query)
   const countVideos = getCountVideos(req)
 
   const apiOptions = await Hooks.wrapObject({
-    start: query.start,
-    count: query.count,
-    sort: query.sort,
+    ...query,
+
     includeLocalVideos: true,
-    categoryOneOf: query.categoryOneOf,
-    licenceOneOf: query.licenceOneOf,
-    languageOneOf: query.languageOneOf,
-    tagsOneOf: query.tagsOneOf,
-    tagsAllOf: query.tagsAllOf,
     nsfw: buildNSFWFilter(res, query.nsfw),
-    isLive: query.isLive,
-    filter: query.filter,
     withFiles: false,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos

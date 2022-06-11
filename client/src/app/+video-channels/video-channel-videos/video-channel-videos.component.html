@@ -1,0 +1,23 @@
+<my-videos-list
+  *ngIf="videoChannel"
+
+  [title]="title"
+  [displayTitle]="false"
+
+  [getVideosObservableFunction]="getVideosObservableFunction"
+  [getSyndicationItemsFunction]="getSyndicationItemsFunction"
+
+  [defaultSort]="defaultSort"
+
+  [displayFilters]="true"
+  [displayModerationBlock]="true"
+  [displayOptions]="displayOptions"
+  [displayAsRow]="displayAsRow()"
+
+  [hideScopeFilter]="true"
+
+  [loadUserVideoPreferences]="true"
+
+  [disabled]="disabled"
+>
+</my-videos-list>

@@ -1,10 +1,10 @@
-import * as express from 'express'
+import express from 'express'
 import { query } from 'express-validator'
 import { join } from 'path'
 import { loadVideo } from '@server/lib/model-loaders'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isTestInstance } from '../../helpers/core-utils'
 import { isIdOrUUIDValid, toCompleteUUID } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
@@ -62,12 +62,26 @@ const oembedValidator = [
 
     const url = req.query.url as string
 
+    let urlPath: string
+
+    try {
+      urlPath = new URL(url).pathname
+    } catch (err) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: err.message,
+        data: {
+          url
+        }
+      })
+    }
+
     const isPlaylist = startPlaylistURLs.some(u => url.startsWith(u))
     const isVideo = isPlaylist ? false : startVideoURLs.some(u => url.startsWith(u))
 
     const startIsOk = isVideo || isPlaylist
 
-    const matches = watchRegex.exec(url)
+    const matches = watchRegex.exec(urlPath)
 
     if (startIsOk === false || matches === null) {
       return res.fail({

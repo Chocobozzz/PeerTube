@@ -1,10 +1,8 @@
-import { Observable } from 'rxjs'
-import { catchError, map, switchMap } from 'rxjs/operators'
+import { catchError } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPagination, RestExtractor, RestService } from '@app/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
-import { peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   InstallOrUpdatePlugin,
   ManagePlugin,

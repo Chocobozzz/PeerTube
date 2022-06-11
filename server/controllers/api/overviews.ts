@@ -1,12 +1,13 @@
-import * as express from 'express'
+import express from 'express'
+import memoizee from 'memoizee'
+import { logger } from '@server/helpers/logger'
+import { Hooks } from '@server/lib/plugins/hooks'
+import { VideoModel } from '@server/models/video/video'
+import { CategoryOverview, ChannelOverview, TagOverview, VideosOverview } from '../../../shared/models/overviews'
 import { buildNSFWFilter } from '../../helpers/express-utils'
-import { VideoModel } from '../../models/video/video'
+import { MEMOIZE_TTL, OVERVIEWS } from '../../initializers/constants'
 import { asyncMiddleware, optionalAuthenticate, videosOverviewValidator } from '../../middlewares'
 import { TagModel } from '../../models/video/tag'
-import { CategoryOverview, ChannelOverview, TagOverview, VideosOverview } from '../../../shared/models/overviews'
-import { MEMOIZE_TTL, OVERVIEWS } from '../../initializers/constants'
-import * as memoizee from 'memoizee'
-import { logger } from '@server/helpers/logger'
 
 const overviewsRouter = express.Router()
 
@@ -108,7 +109,7 @@ async function getVideos (
   res: express.Response,
   where: { videoChannelId?: number, tagsOneOf?: string[], categoryOneOf?: number[] }
 ) {
-  const query = Object.assign({
+  const query = await Hooks.wrapObject({
     start: 0,
     count: 12,
     sort: '-createdAt',
@@ -116,10 +117,16 @@ async function getVideos (
     nsfw: buildNSFWFilter(res),
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     withFiles: false,
-    countVideos: false
-  }, where)
+    countVideos: false,
 
-  const { data } = await VideoModel.listForApi(query)
+    ...where
+  }, 'filter:api.overviews.videos.list.params')
+
+  const { data } = await Hooks.wrapPromiseFun(
+    VideoModel.listForApi,
+    query,
+    'filter:api.overviews.videos.list.result'
+  )
 
   return data.map(d => d.toFormattedJSON())
 }

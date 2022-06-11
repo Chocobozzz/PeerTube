@@ -1,5 +1,5 @@
 import decache from 'decache'
-import * as express from 'express'
+import express from 'express'
 import { createReadStream, createWriteStream } from 'fs'
 import { ensureDir, outputFile, readJSON } from 'fs-extra'
 import { basename, join } from 'path'

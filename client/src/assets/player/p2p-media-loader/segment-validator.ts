@@ -1,5 +1,5 @@
 import { wait } from '@root-helpers/utils'
-import { Segment } from 'p2p-media-loader-core'
+import { Segment } from '@peertube/p2p-media-loader-core'
 import { basename } from 'path'
 
 type SegmentsJSON = { [filename: string]: string | { [byterange: string]: string } }
@@ -85,7 +85,8 @@ async function sha256Hex (data?: ArrayBuffer) {
   }
 
   // Fallback for non HTTPS context
-  const shaModule = await import('sha.js')
+  const shaModule = (await import('sha.js') as any).default
+  // eslint-disable-next-line new-cap
   return new shaModule.sha256().update(Buffer.from(data)).digest('hex')
 }
 
@@ -97,7 +98,9 @@ function bufferToHex (buffer?: ArrayBuffer) {
   const h = '0123456789abcdef'
   const o = new Uint8Array(buffer)
 
-  o.forEach((v: any) => s += h[ v >> 4 ] + h[ v & 15 ])
+  o.forEach((v: any) => {
+    s += h[v >> 4] + h[v & 15]
+  })
 
   return s
 }

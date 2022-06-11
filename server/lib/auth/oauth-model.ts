@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { AccessDeniedError } from 'oauth2-server'
 import { PluginManager } from '@server/lib/plugins/plugin-manager'
 import { ActorModel } from '@server/models/actor/actor'

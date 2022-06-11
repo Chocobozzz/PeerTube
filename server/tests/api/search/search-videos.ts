@@ -2,40 +2,42 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoPrivacy } from '@shared/models'
 import {
-  advancedVideosSearch,
   cleanupTests,
-  createLive,
-  flushAndRunServer,
-  immutableAssign,
-  searchVideo,
-  sendRTMPStreamInVideo,
-  ServerInfo,
+  createSingleServer,
+  doubleFollow,
+  PeerTubeServer,
+  SearchCommand,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   stopFfmpeg,
-  updateCustomSubConfig,
-  uploadVideo,
-  wait,
-  waitUntilLivePublished
-} from '../../../../shared/extra-utils'
-import { createVideoCaption } from '../../../../shared/extra-utils/videos/video-captions'
+  wait
+} from '@shared/extra-utils'
+import { VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test videos search', function () {
-  let server: ServerInfo = null
+  let server: PeerTubeServer
+  let remoteServer: PeerTubeServer
   let startDate: string
   let videoUUID: string
+  let videoShortUUID: string
+
+  let command: SearchCommand
 
   before(async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
-    server = await flushAndRunServer(1)
+    const servers = await Promise.all([
+      createSingleServer(1),
+      createSingleServer(2)
+    ])
+    server = servers[0]
+    remoteServer = servers[1]
 
-    await setAccessTokensToServers([ server ])
-    await setDefaultVideoChannel([ server ])
+    await setAccessTokensToServers([ server, remoteServer ])
+    await setDefaultVideoChannel([ server, remoteServer ])
 
     {
       const attributes1 = {
@@ -46,57 +48,50 @@ describe('Test videos search', function () {
         nsfw: false,
         language: 'fr'
       }
-      await uploadVideo(server.url, server.accessToken, attributes1)
+      await server.videos.upload({ attributes: attributes1 })
 
-      const attributes2 = immutableAssign(attributes1, { name: attributes1.name + ' - 2', fixture: 'video_short.mp4' })
-      await uploadVideo(server.url, server.accessToken, attributes2)
+      const attributes2 = { ...attributes1, name: attributes1.name + ' - 2', fixture: 'video_short.mp4' }
+      await server.videos.upload({ attributes: attributes2 })
 
       {
-        const attributes3 = immutableAssign(attributes1, { name: attributes1.name + ' - 3', language: undefined })
-        const res = await uploadVideo(server.url, server.accessToken, attributes3)
-        const videoId = res.body.video.id
-        videoUUID = res.body.video.uuid
+        const attributes3 = { ...attributes1, name: attributes1.name + ' - 3', language: undefined }
+        const { id, uuid, shortUUID } = await server.videos.upload({ attributes: attributes3 })
+        videoUUID = uuid
+        videoShortUUID = shortUUID
 
-        await createVideoCaption({
-          url: server.url,
-          accessToken: server.accessToken,
+        await server.captions.add({
           language: 'en',
-          videoId,
+          videoId: id,
           fixture: 'subtitle-good2.vtt',
           mimeType: 'application/octet-stream'
         })
 
-        await createVideoCaption({
-          url: server.url,
-          accessToken: server.accessToken,
+        await server.captions.add({
           language: 'aa',
-          videoId,
+          videoId: id,
           fixture: 'subtitle-good2.vtt',
           mimeType: 'application/octet-stream'
         })
       }
 
-      const attributes4 = immutableAssign(attributes1, { name: attributes1.name + ' - 4', language: 'pl', nsfw: true })
-      await uploadVideo(server.url, server.accessToken, attributes4)
+      const attributes4 = { ...attributes1, name: attributes1.name + ' - 4', language: 'pl', nsfw: true }
+      await server.videos.upload({ attributes: attributes4 })
 
       await wait(1000)
 
       startDate = new Date().toISOString()
 
-      const attributes5 = immutableAssign(attributes1, { name: attributes1.name + ' - 5', licence: 2, language: undefined })
-      await uploadVideo(server.url, server.accessToken, attributes5)
+      const attributes5 = { ...attributes1, name: attributes1.name + ' - 5', licence: 2, language: undefined }
+      await server.videos.upload({ attributes: attributes5 })
 
-      const attributes6 = immutableAssign(attributes1, { name: attributes1.name + ' - 6', tags: [ 't1', 't2' ] })
-      await uploadVideo(server.url, server.accessToken, attributes6)
+      const attributes6 = { ...attributes1, name: attributes1.name + ' - 6', tags: [ 't1', 't2' ] }
+      await server.videos.upload({ attributes: attributes6 })
 
-      const attributes7 = immutableAssign(attributes1, {
-        name: attributes1.name + ' - 7',
-        originallyPublishedAt: '2019-02-12T09:58:08.286Z'
-      })
-      await uploadVideo(server.url, server.accessToken, attributes7)
+      const attributes7 = { ...attributes1, name: attributes1.name + ' - 7', originallyPublishedAt: '2019-02-12T09:58:08.286Z' }
+      await server.videos.upload({ attributes: attributes7 })
 
-      const attributes8 = immutableAssign(attributes1, { name: attributes1.name + ' - 8', licence: 4 })
-      await uploadVideo(server.url, server.accessToken, attributes8)
+      const attributes8 = { ...attributes1, name: attributes1.name + ' - 8', licence: 4 }
+      await server.videos.upload({ attributes: attributes8 })
     }
 
     {
@@ -107,9 +102,9 @@ describe('Test videos search', function () {
         licence: 2,
         language: 'en'
       }
-      await uploadVideo(server.url, server.accessToken, attributes)
+      await server.videos.upload({ attributes: attributes })
 
-      await uploadVideo(server.url, server.accessToken, immutableAssign(attributes, { name: attributes.name + ' duplicate' }))
+      await server.videos.upload({ attributes: { ...attributes, name: attributes.name + ' duplicate' } })
     }
 
     {
@@ -120,7 +115,7 @@ describe('Test videos search', function () {
         licence: 3,
         language: 'pl'
       }
-      await uploadVideo(server.url, server.accessToken, attributes)
+      await server.videos.upload({ attributes: attributes })
     }
 
     {
@@ -129,11 +124,11 @@ describe('Test videos search', function () {
         tags: [ 'aaaa', 'bbbb', 'cccc' ],
         category: 1
       }
-      await uploadVideo(server.url, server.accessToken, attributes1)
-      await uploadVideo(server.url, server.accessToken, immutableAssign(attributes1, { category: 2 }))
+      await server.videos.upload({ attributes: attributes1 })
+      await server.videos.upload({ attributes: { ...attributes1, category: 2 } })
 
-      await uploadVideo(server.url, server.accessToken, immutableAssign(attributes1, { tags: [ 'cccc', 'dddd' ] }))
-      await uploadVideo(server.url, server.accessToken, immutableAssign(attributes1, { tags: [ 'eeee', 'ffff' ] }))
+      await server.videos.upload({ attributes: { ...attributes1, tags: [ 'cccc', 'dddd' ] } })
+      await server.videos.upload({ attributes: { ...attributes1, tags: [ 'eeee', 'ffff' ] } })
     }
 
     {
@@ -141,24 +136,33 @@ describe('Test videos search', function () {
         name: 'aaaa 2',
         category: 1
       }
-      await uploadVideo(server.url, server.accessToken, attributes1)
-      await uploadVideo(server.url, server.accessToken, immutableAssign(attributes1, { category: 2 }))
+      await server.videos.upload({ attributes: attributes1 })
+      await server.videos.upload({ attributes: { ...attributes1, category: 2 } })
     }
+
+    {
+      await remoteServer.videos.upload({ attributes: { name: 'remote video 1' } })
+      await remoteServer.videos.upload({ attributes: { name: 'remote video 2' } })
+    }
+
+    await doubleFollow(server, remoteServer)
+
+    command = server.search
   })
 
   it('Should make a simple search and not have results', async function () {
-    const res = await searchVideo(server.url, 'abc')
+    const body = await command.searchVideos({ search: 'abc' })
 
-    expect(res.body.total).to.equal(0)
-    expect(res.body.data).to.have.lengthOf(0)
+    expect(body.total).to.equal(0)
+    expect(body.data).to.have.lengthOf(0)
   })
 
   it('Should make a simple search and have results', async function () {
-    const res = await searchVideo(server.url, '4444 5555 duplicate')
+    const body = await command.searchVideos({ search: '4444 5555 duplicate' })
 
-    expect(res.body.total).to.equal(2)
+    expect(body.total).to.equal(2)
 
-    const videos = res.body.data
+    const videos = body.data
     expect(videos).to.have.lengthOf(2)
 
     // bestmatch
@@ -167,15 +171,15 @@ describe('Test videos search', function () {
   })
 
   it('Should make a search on tags too, and have results', async function () {
-    const query = {
+    const search = {
       search: 'aaaa',
       categoryOneOf: [ 1 ]
     }
-    const res = await advancedVideosSearch(server.url, query)
+    const body = await command.advancedVideoSearch({ search })
 
-    expect(res.body.total).to.equal(2)
+    expect(body.total).to.equal(2)
 
-    const videos = res.body.data
+    const videos = body.data
     expect(videos).to.have.lengthOf(2)
 
     // bestmatch
@@ -184,14 +188,14 @@ describe('Test videos search', function () {
   })
 
   it('Should filter on tags without a search', async function () {
-    const query = {
+    const search = {
       tagsAllOf: [ 'bbbb' ]
     }
-    const res = await advancedVideosSearch(server.url, query)
+    const body = await command.advancedVideoSearch({ search })
 
-    expect(res.body.total).to.equal(2)
+    expect(body.total).to.equal(2)
 
-    const videos = res.body.data
+    const videos = body.data
     expect(videos).to.have.lengthOf(2)
 
     expect(videos[0].name).to.equal('9999')
@@ -199,14 +203,14 @@ describe('Test videos search', function () {
   })
 
   it('Should filter on category without a search', async function () {
-    const query = {
+    const search = {
       categoryOneOf: [ 3 ]
     }
-    const res = await advancedVideosSearch(server.url, query)
+    const body = await command.advancedVideoSearch({ search: search })
 
-    expect(res.body.total).to.equal(1)
+    expect(body.total).to.equal(1)
 
-    const videos = res.body.data
+    const videos = body.data
     expect(videos).to.have.lengthOf(1)
 
     expect(videos[0].name).to.equal('6666 7777 8888')
@@ -218,11 +222,16 @@ describe('Test videos search', function () {
       categoryOneOf: [ 1 ],
       tagsOneOf: [ 'aAaa', 'ffff' ]
     }
-    const res1 = await advancedVideosSearch(server.url, query)
-    expect(res1.body.total).to.equal(2)
 
-    const res2 = await advancedVideosSearch(server.url, immutableAssign(query, { tagsOneOf: [ 'blabla' ] }))
-    expect(res2.body.total).to.equal(0)
+    {
+      const body = await command.advancedVideoSearch({ search: query })
+      expect(body.total).to.equal(2)
+    }
+
+    {
+      const body = await command.advancedVideoSearch({ search: { ...query, tagsOneOf: [ 'blabla' ] } })
+      expect(body.total).to.equal(0)
+    }
   })
 
   it('Should search by tags (all of)', async function () {
@@ -231,14 +240,21 @@ describe('Test videos search', function () {
       categoryOneOf: [ 1 ],
       tagsAllOf: [ 'CCcc' ]
     }
-    const res1 = await advancedVideosSearch(server.url, query)
-    expect(res1.body.total).to.equal(2)
 
-    const res2 = await advancedVideosSearch(server.url, immutableAssign(query, { tagsAllOf: [ 'blAbla' ] }))
-    expect(res2.body.total).to.equal(0)
+    {
+      const body = await command.advancedVideoSearch({ search: query })
+      expect(body.total).to.equal(2)
+    }
 
-    const res3 = await advancedVideosSearch(server.url, immutableAssign(query, { tagsAllOf: [ 'bbbb', 'CCCC' ] }))
-    expect(res3.body.total).to.equal(1)
+    {
+      const body = await command.advancedVideoSearch({ search: { ...query, tagsAllOf: [ 'blAbla' ] } })
+      expect(body.total).to.equal(0)
+    }
+
+    {
+      const body = await command.advancedVideoSearch({ search: { ...query, tagsAllOf: [ 'bbbb', 'CCCC' ] } })
+      expect(body.total).to.equal(1)
+    }
   })
 
   it('Should search by category', async function () {
@@ -246,12 +262,17 @@ describe('Test videos search', function () {
       search: '6666',
       categoryOneOf: [ 3 ]
     }
-    const res1 = await advancedVideosSearch(server.url, query)
-    expect(res1.body.total).to.equal(1)
-    expect(res1.body.data[0].name).to.equal('6666 7777 8888')
 
-    const res2 = await advancedVideosSearch(server.url, immutableAssign(query, { categoryOneOf: [ 2 ] }))
-    expect(res2.body.total).to.equal(0)
+    {
+      const body = await command.advancedVideoSearch({ search: query })
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal('6666 7777 8888')
+    }
+
+    {
+      const body = await command.advancedVideoSearch({ search: { ...query, categoryOneOf: [ 2 ] } })
+      expect(body.total).to.equal(0)
+    }
   })
 
   it('Should search by licence', async function () {
@@ -259,13 +280,18 @@ describe('Test videos search', function () {
       search: '4444 5555',
       licenceOneOf: [ 2 ]
     }
-    const res1 = await advancedVideosSearch(server.url, query)
-    expect(res1.body.total).to.equal(2)
-    expect(res1.body.data[0].name).to.equal('3333 4444 5555')
-    expect(res1.body.data[1].name).to.equal('3333 4444 5555 duplicate')
 
-    const res2 = await advancedVideosSearch(server.url, immutableAssign(query, { licenceOneOf: [ 3 ] }))
-    expect(res2.body.total).to.equal(0)
+    {
+      const body = await command.advancedVideoSearch({ search: query })
+      expect(body.total).to.equal(2)
+      expect(body.data[0].name).to.equal('3333 4444 5555')
+      expect(body.data[1].name).to.equal('3333 4444 5555 duplicate')
+    }
+
+    {
+      const body = await command.advancedVideoSearch({ search: { ...query, licenceOneOf: [ 3 ] } })
+      expect(body.total).to.equal(0)
+    }
   })
 
   it('Should search by languages', async function () {
@@ -275,23 +301,23 @@ describe('Test videos search', function () {
     }
 
     {
-      const res = await advancedVideosSearch(server.url, query)
-      expect(res.body.total).to.equal(2)
-      expect(res.body.data[0].name).to.equal('1111 2222 3333 - 3')
-      expect(res.body.data[1].name).to.equal('1111 2222 3333 - 4')
+      const body = await command.advancedVideoSearch({ search: query })
+      expect(body.total).to.equal(2)
+      expect(body.data[0].name).to.equal('1111 2222 3333 - 3')
+      expect(body.data[1].name).to.equal('1111 2222 3333 - 4')
     }
 
     {
-      const res = await advancedVideosSearch(server.url, immutableAssign(query, { languageOneOf: [ 'pl', 'en', '_unknown' ] }))
-      expect(res.body.total).to.equal(3)
-      expect(res.body.data[0].name).to.equal('1111 2222 3333 - 3')
-      expect(res.body.data[1].name).to.equal('1111 2222 3333 - 4')
-      expect(res.body.data[2].name).to.equal('1111 2222 3333 - 5')
+      const body = await command.advancedVideoSearch({ search: { ...query, languageOneOf: [ 'pl', 'en', '_unknown' ] } })
+      expect(body.total).to.equal(3)
+      expect(body.data[0].name).to.equal('1111 2222 3333 - 3')
+      expect(body.data[1].name).to.equal('1111 2222 3333 - 4')
+      expect(body.data[2].name).to.equal('1111 2222 3333 - 5')
     }
 
     {
-      const res = await advancedVideosSearch(server.url, immutableAssign(query, { languageOneOf: [ 'eo' ] }))
-      expect(res.body.total).to.equal(0)
+      const body = await command.advancedVideoSearch({ search: { ...query, languageOneOf: [ 'eo' ] } })
+      expect(body.total).to.equal(0)
     }
   })
 
@@ -301,10 +327,10 @@ describe('Test videos search', function () {
       startDate
     }
 
-    const res = await advancedVideosSearch(server.url, query)
-    expect(res.body.total).to.equal(4)
+    const body = await command.advancedVideoSearch({ search: query })
+    expect(body.total).to.equal(4)
 
-    const videos = res.body.data
+    const videos = body.data
     expect(videos[0].name).to.equal('1111 2222 3333 - 5')
     expect(videos[1].name).to.equal('1111 2222 3333 - 6')
     expect(videos[2].name).to.equal('1111 2222 3333 - 7')
@@ -320,10 +346,10 @@ describe('Test videos search', function () {
       licenceOneOf: [ 1, 4 ]
     }
 
-    const res = await advancedVideosSearch(server.url, query)
-    expect(res.body.total).to.equal(4)
+    const body = await command.advancedVideoSearch({ search: query })
+    expect(body.total).to.equal(4)
 
-    const videos = res.body.data
+    const videos = body.data
     expect(videos[0].name).to.equal('1111 2222 3333')
     expect(videos[1].name).to.equal('1111 2222 3333 - 6')
     expect(videos[2].name).to.equal('1111 2222 3333 - 7')
@@ -340,10 +366,10 @@ describe('Test videos search', function () {
       sort: '-name'
     }
 
-    const res = await advancedVideosSearch(server.url, query)
-    expect(res.body.total).to.equal(4)
+    const body = await command.advancedVideoSearch({ search: query })
+    expect(body.total).to.equal(4)
 
-    const videos = res.body.data
+    const videos = body.data
     expect(videos[0].name).to.equal('1111 2222 3333 - 8')
     expect(videos[1].name).to.equal('1111 2222 3333 - 7')
     expect(videos[2].name).to.equal('1111 2222 3333 - 6')
@@ -362,10 +388,10 @@ describe('Test videos search', function () {
       count: 1
     }
 
-    const res = await advancedVideosSearch(server.url, query)
-    expect(res.body.total).to.equal(4)
+    const body = await command.advancedVideoSearch({ search: query })
+    expect(body.total).to.equal(4)
 
-    const videos = res.body.data
+    const videos = body.data
     expect(videos[0].name).to.equal('1111 2222 3333 - 8')
   })
 
@@ -381,10 +407,10 @@ describe('Test videos search', function () {
       count: 1
     }
 
-    const res = await advancedVideosSearch(server.url, query)
-    expect(res.body.total).to.equal(4)
+    const body = await command.advancedVideoSearch({ search: query })
+    expect(body.total).to.equal(4)
 
-    const videos = res.body.data
+    const videos = body.data
     expect(videos[0].name).to.equal('1111 2222 3333')
   })
 
@@ -398,99 +424,140 @@ describe('Test videos search', function () {
     }
 
     {
-      const query = immutableAssign(baseQuery, { originallyPublishedStartDate: '2019-02-11T09:58:08.286Z' })
-      const res = await advancedVideosSearch(server.url, query)
+      const query = { ...baseQuery, originallyPublishedStartDate: '2019-02-11T09:58:08.286Z' }
+      const body = await command.advancedVideoSearch({ search: query })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data[0].name).to.equal('1111 2222 3333 - 7')
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal('1111 2222 3333 - 7')
     }
 
     {
-      const query = immutableAssign(baseQuery, { originallyPublishedEndDate: '2019-03-11T09:58:08.286Z' })
-      const res = await advancedVideosSearch(server.url, query)
+      const query = { ...baseQuery, originallyPublishedEndDate: '2019-03-11T09:58:08.286Z' }
+      const body = await command.advancedVideoSearch({ search: query })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data[0].name).to.equal('1111 2222 3333 - 7')
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal('1111 2222 3333 - 7')
     }
 
     {
-      const query = immutableAssign(baseQuery, { originallyPublishedEndDate: '2019-01-11T09:58:08.286Z' })
-      const res = await advancedVideosSearch(server.url, query)
+      const query = { ...baseQuery, originallyPublishedEndDate: '2019-01-11T09:58:08.286Z' }
+      const body = await command.advancedVideoSearch({ search: query })
 
-      expect(res.body.total).to.equal(0)
+      expect(body.total).to.equal(0)
     }
 
     {
-      const query = immutableAssign(baseQuery, { originallyPublishedStartDate: '2019-03-11T09:58:08.286Z' })
-      const res = await advancedVideosSearch(server.url, query)
+      const query = { ...baseQuery, originallyPublishedStartDate: '2019-03-11T09:58:08.286Z' }
+      const body = await command.advancedVideoSearch({ search: query })
 
-      expect(res.body.total).to.equal(0)
+      expect(body.total).to.equal(0)
     }
 
     {
-      const query = immutableAssign(baseQuery, {
+      const query = {
+        ...baseQuery,
         originallyPublishedStartDate: '2019-01-11T09:58:08.286Z',
         originallyPublishedEndDate: '2019-01-10T09:58:08.286Z'
-      })
-      const res = await advancedVideosSearch(server.url, query)
+      }
+      const body = await command.advancedVideoSearch({ search: query })
 
-      expect(res.body.total).to.equal(0)
+      expect(body.total).to.equal(0)
     }
 
     {
-      const query = immutableAssign(baseQuery, {
+      const query = {
+        ...baseQuery,
         originallyPublishedStartDate: '2019-01-11T09:58:08.286Z',
         originallyPublishedEndDate: '2019-04-11T09:58:08.286Z'
-      })
-      const res = await advancedVideosSearch(server.url, query)
+      }
+      const body = await command.advancedVideoSearch({ search: query })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data[0].name).to.equal('1111 2222 3333 - 7')
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal('1111 2222 3333 - 7')
     }
   })
 
   it('Should search by UUID', async function () {
     const search = videoUUID
-    const res = await advancedVideosSearch(server.url, { search })
+    const body = await command.advancedVideoSearch({ search: { search } })
 
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data[0].name).to.equal('1111 2222 3333 - 3')
+    expect(body.total).to.equal(1)
+    expect(body.data[0].name).to.equal('1111 2222 3333 - 3')
+  })
+
+  it('Should filter by UUIDs', async function () {
+    for (const uuid of [ videoUUID, videoShortUUID ]) {
+      const body = await command.advancedVideoSearch({ search: { uuids: [ uuid ] } })
+
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal('1111 2222 3333 - 3')
+    }
+
+    {
+      const body = await command.advancedVideoSearch({ search: { uuids: [ 'dfd70b83-639f-4980-94af-304a56ab4b35' ] } })
+
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
+    }
+  })
+
+  it('Should search by host', async function () {
+    {
+      const body = await command.advancedVideoSearch({ search: { search: '6666 7777 8888', host: server.host } })
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal('6666 7777 8888')
+    }
+
+    {
+      const body = await command.advancedVideoSearch({ search: { search: '1111', host: 'example.com' } })
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
+    }
+
+    {
+      const body = await command.advancedVideoSearch({ search: { search: 'remote', host: remoteServer.host } })
+      expect(body.total).to.equal(2)
+      expect(body.data).to.have.lengthOf(2)
+      expect(body.data[0].name).to.equal('remote video 1')
+      expect(body.data[1].name).to.equal('remote video 2')
+    }
   })
 
   it('Should search by live', async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     {
-      const options = {
+      const newConfig = {
         search: {
           searchIndex: { enabled: false }
         },
         live: { enabled: true }
       }
-      await updateCustomSubConfig(server.url, server.accessToken, options)
+      await server.config.updateCustomSubConfig({ newConfig })
     }
 
     {
-      const res = await advancedVideosSearch(server.url, { isLive: true })
+      const body = await command.advancedVideoSearch({ search: { isLive: true } })
 
-      expect(res.body.total).to.equal(0)
-      expect(res.body.data).to.have.lengthOf(0)
+      expect(body.total).to.equal(0)
+      expect(body.data).to.have.lengthOf(0)
     }
 
     {
-      const liveOptions = { name: 'live', privacy: VideoPrivacy.PUBLIC, channelId: server.videoChannel.id }
-      const resLive = await createLive(server.url, server.accessToken, liveOptions)
-      const liveVideoId = resLive.body.video.uuid
+      const liveCommand = server.live
 
-      const command = await sendRTMPStreamInVideo(server.url, server.accessToken, liveVideoId)
-      await waitUntilLivePublished(server.url, server.accessToken, liveVideoId)
+      const liveAttributes = { name: 'live', privacy: VideoPrivacy.PUBLIC, channelId: server.store.channel.id }
+      const live = await liveCommand.create({ fields: liveAttributes })
 
-      const res = await advancedVideosSearch(server.url, { isLive: true })
+      const ffmpegCommand = await liveCommand.sendRTMPStreamInVideo({ videoId: live.id })
+      await liveCommand.waitUntilPublished({ videoId: live.id })
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data[0].name).to.equal('live')
+      const body = await command.advancedVideoSearch({ search: { isLive: true } })
 
-      await stopFfmpeg(command)
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal('live')
+
+      await stopFfmpeg(ffmpegCommand)
     }
   })
 

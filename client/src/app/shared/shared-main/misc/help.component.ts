@@ -71,18 +71,18 @@ export class HelpComponent implements OnInit, OnChanges, AfterContentInit {
   }
 
   private formatMarkdownSupport (rules: string[]) {
-    // tslint:disable:max-line-length
+    /* eslint-disable max-len */
     return $localize`<a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Markdown</a> compatible that supports:` +
       this.createMarkdownList(rules)
   }
 
   private createMarkdownList (rules: string[]) {
     const rulesToText = {
-      'emphasis': $localize`Emphasis`,
-      'link': $localize`Links`,
-      'newline': $localize`New lines`,
-      'list': $localize`Lists`,
-      'image': $localize`Images`
+      emphasis: $localize`Emphasis`,
+      link: $localize`Links`,
+      newline: $localize`New lines`,
+      list: $localize`Lists`,
+      image: $localize`Images`
     }
 
     const bullets = rules.map(r => rulesToText[r])

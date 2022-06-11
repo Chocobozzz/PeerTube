@@ -1,7 +1,7 @@
-import * as express from 'express'
+import express from 'express'
 import { UserRight } from '../../shared'
+import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { logger } from '../helpers/logger'
-import { HttpStatusCode } from '../../shared/core-utils/miscs/http-error-codes'
 
 function ensureUserHasRight (userRight: UserRight) {
   return function (req: express.Request, res: express.Response, next: express.NextFunction) {

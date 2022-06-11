@@ -1,6 +1,6 @@
 import { UploadFilesForCheck } from 'express'
 import { values } from 'lodash'
-import * as magnetUtil from 'magnet-uri'
+import magnetUtil from 'magnet-uri'
 import validator from 'validator'
 import { VideoFilter, VideoPrivacy, VideoRateType } from '../../../shared'
 import {

@@ -22,24 +22,28 @@ import './videojs-components/settings-panel-child'
 import './videojs-components/theater-button'
 import './playlist/playlist-plugin'
 import videojs from 'video.js'
+import { HlsJsEngineSettings } from '@peertube/p2p-media-loader-hlsjs'
 import { PluginsManager } from '@root-helpers/plugins-manager'
+import { buildVideoLink, decorateVideoLink } from '@shared/core-utils'
 import { isDefaultLocale } from '@shared/core-utils/i18n'
 import { VideoFile } from '@shared/models'
 import { copyToClipboard } from '../../root-helpers/utils'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
 import { segmentUrlBuilderFactory } from './p2p-media-loader/segment-url-builder'
 import { segmentValidatorFactory } from './p2p-media-loader/segment-validator'
-import { getStoredP2PEnabled } from './peertube-player-local-storage'
+import { getAverageBandwidthInStore, getStoredP2PEnabled, saveAverageBandwidth } from './peertube-player-local-storage'
 import {
   NextPreviousVideoButtonOptions,
   P2PMediaLoaderPluginOptions,
+  PeerTubeLinkButtonOptions,
+  PlayerNetworkInfo,
   PlaylistPluginOptions,
   UserWatching,
   VideoJSCaption,
   VideoJSPluginOptions
 } from './peertube-videojs-typings'
 import { TranslationsManager } from './translations-manager'
-import { buildVideoLink, buildVideoOrPlaylistEmbed, getRtcConfig, isIOS, isSafari } from './utils'
+import { buildVideoOrPlaylistEmbed, getRtcConfig, isIOS, isSafari } from './utils'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 (videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
@@ -110,6 +114,7 @@ export interface CommonOptions extends CustomizationOptions {
   videoCaptions: VideoJSCaption[]
 
   videoUUID: string
+  videoShortUUID: string
 
   userWatching?: UserWatching
 
@@ -145,7 +150,7 @@ export class PeertubePlayerManager {
     if (mode === 'webtorrent') await import('./webtorrent/webtorrent-plugin')
     if (mode === 'p2p-media-loader') {
       [ p2pMediaLoader ] = await Promise.all([
-        import('p2p-media-loader-hlsjs'),
+        import('@peertube/p2p-media-loader-hlsjs'),
         import('./p2p-media-loader/p2p-media-loader-plugin')
       ])
     }
@@ -175,13 +180,25 @@ export class PeertubePlayerManager {
           PeertubePlayerManager.alreadyPlayed = true
         })
 
-        self.addContextMenu(mode, player, options.common.embedUrl, options.common.embedTitle)
+        self.addContextMenu({
+          mode,
+          player,
+          videoShortUUID: options.common.videoShortUUID,
+          videoEmbedUrl: options.common.embedUrl,
+          videoEmbedTitle: options.common.embedTitle
+        })
 
         player.bezels()
         player.stats({
           videoUUID: options.common.videoUUID,
           videoIsLive: options.common.isLive,
           mode
+        })
+
+        player.on('p2pInfo', (_, data: PlayerNetworkInfo) => {
+          if (data.source !== 'p2p-media-loader' || isNaN(data.bandwidthEstimate)) return
+
+          saveAverageBandwidth(data.bandwidthEstimate)
         })
 
         return res(player)
@@ -218,7 +235,13 @@ export class PeertubePlayerManager {
     videojs(newVideoElement, videojsOptions, function (this: videojs.Player) {
       const player = this
 
-      self.addContextMenu(mode, player, options.common.embedUrl, options.common.embedTitle)
+      self.addContextMenu({
+        mode,
+        player,
+        videoShortUUID: options.common.videoShortUUID,
+        videoEmbedUrl: options.common.embedUrl,
+        videoEmbedTitle: options.common.embedTitle
+      })
 
       PeertubePlayerManager.onPlayerChange(player)
     })
@@ -295,6 +318,8 @@ export class PeertubePlayerManager {
 
       controlBar: {
         children: this.getControlBarChildren(mode, {
+          videoShortUUID: commonOptions.videoShortUUID,
+
           captions: commonOptions.captions,
           peertubeLink: commonOptions.peertubeLink,
           theaterButton: commonOptions.theaterButton,
@@ -342,12 +367,13 @@ export class PeertubePlayerManager {
       consumeOnly = true
     }
 
-    const p2pMediaLoaderConfig = {
+    const p2pMediaLoaderConfig: HlsJsEngineSettings = {
       loader: {
         trackerAnnounce,
         segmentValidator: segmentValidatorFactory(options.p2pMediaLoader.segmentsSha256Url, options.common.isLive),
         rtcConfig: getRtcConfig(),
         requiredSegmentsPriority: 1,
+        simultaneousHttpDownloads: 1,
         segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager),
         useP2P: getStoredP2PEnabled(),
         consumeOnly
@@ -356,6 +382,7 @@ export class PeertubePlayerManager {
         swarmId: p2pMediaLoaderOptions.playlistUrl
       }
     }
+
     const hlsjs = {
       levelLabelHandler: (level: { height: number, width: number }) => {
         const resolution = Math.min(level.height || 0, level.width || 0)
@@ -370,12 +397,7 @@ export class PeertubePlayerManager {
         return label
       },
       html5: {
-        hlsjsConfig: {
-          capLevelToPlayerSize: true,
-          autoStartLoad: false,
-          liveSyncDurationCount: 5,
-          loader: new p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass()
-        }
+        hlsjsConfig: this.getHLSOptions(p2pMediaLoaderModule, p2pMediaLoaderConfig)
       }
     }
 
@@ -385,14 +407,34 @@ export class PeertubePlayerManager {
     return toAssign
   }
 
+  private static getHLSOptions (p2pMediaLoaderModule: any, p2pMediaLoaderConfig: HlsJsEngineSettings) {
+    const base = {
+      capLevelToPlayerSize: true,
+      autoStartLoad: false,
+      liveSyncDurationCount: 5,
+
+      loader: new p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass()
+    }
+
+    const averageBandwidth = getAverageBandwidthInStore()
+    if (!averageBandwidth) return base
+
+    return {
+      ...base,
+
+      abrEwmaDefaultEstimate: averageBandwidth * 8, // We want bit/s
+      startLevel: -1,
+      testBandwidth: false,
+      debug: false
+    }
+  }
+
   private static addWebTorrentOptions (plugins: VideoJSPluginOptions, options: PeertubePlayerManagerOptions) {
     const commonOptions = options.common
     const webtorrentOptions = options.webtorrent
     const p2pMediaLoaderOptions = options.p2pMediaLoader
 
     const autoplay = this.getAutoPlayValue(commonOptions.autoplay) === 'play'
-      ? true
-      : false
 
     const webtorrent = {
       autoplay,
@@ -409,14 +451,16 @@ export class PeertubePlayerManager {
   }
 
   private static getControlBarChildren (mode: PlayerMode, options: {
+    videoShortUUID: string
+
     peertubeLink: boolean
     theaterButton: boolean
     captions: boolean
 
-    nextVideo?: Function
+    nextVideo?: () => void
     hasNextVideo?: () => boolean
 
-    previousVideo?: Function
+    previousVideo?: () => void
     hasPreviousVideo?: () => boolean
   }) {
     const settingEntries = []
@@ -441,7 +485,7 @@ export class PeertubePlayerManager {
       }
 
       Object.assign(children, {
-        'previousVideoButton': buttonOptions
+        previousVideoButton: buttonOptions
       })
     }
 
@@ -459,35 +503,35 @@ export class PeertubePlayerManager {
       }
 
       Object.assign(children, {
-        'nextVideoButton': buttonOptions
+        nextVideoButton: buttonOptions
       })
     }
 
     Object.assign(children, {
-      'currentTimeDisplay': {},
-      'timeDivider': {},
-      'durationDisplay': {},
-      'liveDisplay': {},
+      currentTimeDisplay: {},
+      timeDivider: {},
+      durationDisplay: {},
+      liveDisplay: {},
 
-      'flexibleWidthSpacer': {},
-      'progressControl': {
+      flexibleWidthSpacer: {},
+      progressControl: {
         children: {
-          'seekBar': {
+          seekBar: {
             children: {
               [loadProgressBar]: {},
-              'mouseTimeDisplay': {},
-              'playProgressBar': {}
+              mouseTimeDisplay: {},
+              playProgressBar: {}
             }
           }
         }
       },
 
-      'p2PInfoButton': {},
+      p2PInfoButton: {},
 
-      'muteToggle': {},
-      'volumeControl': {},
+      muteToggle: {},
+      volumeControl: {},
 
-      'settingsButton': {
+      settingsButton: {
         setup: {
           maxHeightOffset: 40
         },
@@ -497,24 +541,32 @@ export class PeertubePlayerManager {
 
     if (options.peertubeLink === true) {
       Object.assign(children, {
-        'peerTubeLinkButton': {}
+        peerTubeLinkButton: { shortUUID: options.videoShortUUID } as PeerTubeLinkButtonOptions
       })
     }
 
     if (options.theaterButton === true) {
       Object.assign(children, {
-        'theaterButton': {}
+        theaterButton: {}
       })
     }
 
     Object.assign(children, {
-      'fullscreenToggle': {}
+      fullscreenToggle: {}
     })
 
     return children
   }
 
-  private static addContextMenu (mode: PlayerMode, player: videojs.Player, videoEmbedUrl: string, videoEmbedTitle: string) {
+  private static addContextMenu (options: {
+    mode: PlayerMode
+    player: videojs.Player
+    videoShortUUID: string
+    videoEmbedUrl: string
+    videoEmbedTitle: string
+  }) {
+    const { mode, player, videoEmbedTitle, videoEmbedUrl, videoShortUUID } = options
+
     const content = () => {
       const isLoopEnabled = player.options_['loop']
       const items = [
@@ -528,13 +580,15 @@ export class PeertubePlayerManager {
         {
           label: player.localize('Copy the video URL'),
           listener: function () {
-            copyToClipboard(buildVideoLink())
+            copyToClipboard(buildVideoLink({ shortUUID: videoShortUUID }))
           }
         },
         {
           label: player.localize('Copy the video URL at the current time'),
           listener: function (this: videojs.Player) {
-            copyToClipboard(buildVideoLink({ startTime: this.currentTime() }))
+            const url = buildVideoLink({ shortUUID: videoShortUUID })
+
+            copyToClipboard(decorateVideoLink({ url, startTime: this.currentTime() }))
           }
         },
         {

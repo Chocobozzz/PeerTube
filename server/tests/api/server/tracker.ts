@@ -1,36 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await,@typescript-eslint/no-floating-promises */
 
-import * as magnetUtil from 'magnet-uri'
 import 'mocha'
-import {
-  cleanupTests,
-  flushAndRunServer,
-  getVideo,
-  killallServers,
-  reRunServer,
-  ServerInfo,
-  uploadVideo
-} from '../../../../shared/extra-utils'
-import { setAccessTokensToServers } from '../../../../shared/extra-utils/index'
-import { VideoDetails } from '../../../../shared/models/videos'
-import * as WebTorrent from 'webtorrent'
+import magnetUtil from 'magnet-uri'
+import WebTorrent from 'webtorrent'
+import { cleanupTests, createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
 
 describe('Test tracker', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let badMagnet: string
   let goodMagnet: string
 
   before(async function () {
     this.timeout(60000)
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     {
-      const res = await uploadVideo(server.url, server.accessToken, {})
-      const videoUUID = res.body.video.uuid
-
-      const resGet = await getVideo(server.url, videoUUID)
-      const video: VideoDetails = resGet.body
+      const { uuid } = await server.videos.upload()
+      const video = await server.videos.get({ id: uuid })
       goodMagnet = video.files[0].magnetUri
 
       const parsed = magnetUtil.decode(goodMagnet)
@@ -61,8 +48,7 @@ describe('Test tracker', function () {
     const errCb = () => done(new Error('Tracker is enabled'))
 
     killallServers([ server ])
-
-    reRunServer(server, { tracker: { enabled: false } })
+      .then(() => server.run({ tracker: { enabled: false } }))
       .then(() => {
         const webtorrent = new WebTorrent()
 
@@ -86,8 +72,7 @@ describe('Test tracker', function () {
     this.timeout(20000)
 
     killallServers([ server ])
-
-    reRunServer(server)
+      .then(() => server.run())
       .then(() => {
         const webtorrent = new WebTorrent()
 

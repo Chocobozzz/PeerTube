@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ComponentPagination, hasMoreItems, Notifier } from '@app/core'
-import { UserNotificationType, AbuseState } from '@shared/models'
+import { AbuseState } from '@shared/models'
 import { UserNotification } from './user-notification.model'
 import { UserNotificationService } from './user-notification.service'
 
@@ -56,8 +56,8 @@ export class UserNotificationsComponent implements OnInit {
     }
 
     this.userNotificationService.listMyNotifications(options)
-        .subscribe(
-          result => {
+        .subscribe({
+          next: result => {
             this.notifications = reset ? result.data : this.notifications.concat(result.data)
             this.componentPagination.totalItems = result.total
 
@@ -66,8 +66,8 @@ export class UserNotificationsComponent implements OnInit {
             this.onDataSubject.next(result.data)
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   onNearOfBottom () {
@@ -84,26 +84,26 @@ export class UserNotificationsComponent implements OnInit {
     if (notification.read) return
 
     this.userNotificationService.markAsRead(notification)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             notification.read = true
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   markAllAsRead () {
     this.userNotificationService.markAllAsRead()
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             for (const notification of this.notifications) {
               notification.read = true
             }
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 
   changeSortColumn (column: string) {

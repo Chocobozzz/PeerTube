@@ -1,4 +1,4 @@
-import { Observable, of } from 'rxjs'
+import { firstValueFrom, Observable, of } from 'rxjs'
 import { catchError, map, shareReplay } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID, NgZone } from '@angular/core'
@@ -164,18 +164,20 @@ export class PluginService implements ClientHook {
       getSettings: () => {
         const path = PluginService.BASE_PLUGIN_API_URL + '/' + npmName + '/public-settings'
 
-        return this.authHttp.get<PublicServerSetting>(path)
+        const obs = this.authHttp.get<PublicServerSetting>(path)
                    .pipe(
                      map(p => p.publicSettings),
                      catchError(res => this.restExtractor.handleError(res))
                    )
-                   .toPromise()
+
+        return firstValueFrom(obs)
       },
 
       getServerConfig: () => {
-        return this.server.getConfig()
+        const obs = this.server.getConfig()
           .pipe(catchError(res => this.restExtractor.handleError(res)))
-          .toPromise()
+
+        return firstValueFrom(obs)
       },
 
       isLoggedIn: () => {
@@ -186,7 +188,7 @@ export class PluginService implements ClientHook {
         if (!this.authService.isLoggedIn()) return undefined
 
         const value = this.authService.getRequestHeaderValue()
-        return { 'Authorization': value }
+        return { Authorization: value }
       },
 
       notifier: {
@@ -196,10 +198,10 @@ export class PluginService implements ClientHook {
       },
 
       showModal: (input: {
-        title: string,
-        content: string,
-        close?: boolean,
-        cancel?: { value: string, action?: () => void },
+        title: string
+        content: string
+        close?: boolean
+        cancel?: { value: string, action?: () => void }
         confirm?: { value: string, action?: () => void }
       }) => {
         this.zone.run(() => this.customModal.show(input))
@@ -216,10 +218,11 @@ export class PluginService implements ClientHook {
       },
 
       translate: (value: string) => {
-        return this.translationsObservable
+        const obs = this.translationsObservable
             .pipe(map(allTranslations => allTranslations[npmName]))
             .pipe(map(translations => peertubeTranslate(value, translations)))
-            .toPromise()
+
+        return firstValueFrom(obs)
       }
     }
   }

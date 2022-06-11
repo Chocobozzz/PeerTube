@@ -1,20 +1,20 @@
-import * as express from 'express'
-import { asyncMiddleware } from '../middlewares'
-import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
+import express from 'express'
+import { truncate } from 'lodash'
 import { SitemapStream, streamToPromise } from 'sitemap'
+import { buildNSFWFilter } from '../helpers/express-utils'
+import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
+import { asyncMiddleware } from '../middlewares'
+import { cacheRoute } from '../middlewares/cache/cache'
+import { AccountModel } from '../models/account/account'
 import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
-import { AccountModel } from '../models/account/account'
-import { cacheRoute } from '../middlewares/cache'
-import { buildNSFWFilter } from '../helpers/express-utils'
-import { truncate } from 'lodash'
 
 const botsRouter = express.Router()
 
 // Special route that add OpenGraph and oEmbed tags
 // Do not use a template engine for a so little thing
 botsRouter.use('/sitemap.xml',
-  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.SITEMAP)),
+  cacheRoute(ROUTE_CACHE_LIFETIME.SITEMAP),
   asyncMiddleware(getSitemap)
 )
 
@@ -75,13 +75,13 @@ async function getSitemapLocalVideoUrls () {
   })
 
   return data.map(v => ({
-    url: WEBSERVER.URL + '/w/' + v.uuid,
+    url: WEBSERVER.URL + v.getWatchStaticPath(),
     video: [
       {
         title: v.name,
         // Sitemap description should be < 2000 characters
         description: truncate(v.description || v.name, { length: 2000, omission: '...' }),
-        player_loc: WEBSERVER.URL + '/videos/embed/' + v.uuid,
+        player_loc: WEBSERVER.URL + v.getEmbedStaticPath(),
         thumbnail_loc: WEBSERVER.URL + v.getMiniatureStaticPath()
       }
     ]

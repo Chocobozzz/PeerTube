@@ -1,4 +1,4 @@
-import * as Bluebird from 'bluebird'
+import { map } from 'bluebird'
 import { getAPId } from '@server/helpers/activitypub'
 import { isArray } from '@server/helpers/custom-validators/misc'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
@@ -24,7 +24,7 @@ import {
 const lTags = loggerTagsFactory('ap', 'video-playlist')
 
 async function createAccountPlaylists (playlistUrls: string[]) {
-  await Bluebird.map(playlistUrls, async playlistUrl => {
+  await map(playlistUrls, async playlistUrl => {
     try {
       const exists = await VideoPlaylistModel.doesPlaylistExist(playlistUrl)
       if (exists === true) return
@@ -140,7 +140,7 @@ async function rebuildVideoPlaylistElements (elementUrls: string[], playlist: MV
 async function buildElementsDBAttributes (elementUrls: string[], playlist: MVideoPlaylist) {
   const elementsToCreate: FilteredModelAttributes<VideoPlaylistElementModel>[] = []
 
-  await Bluebird.map(elementUrls, async elementUrl => {
+  await map(elementUrls, async elementUrl => {
     try {
       const { elementObject } = await fetchRemotePlaylistElement(elementUrl)
 

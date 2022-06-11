@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs'
 import { catchError, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, MarkdownService, Notifier, RedirectService, RestExtractor, ScreenService, UserService } from '@app/core'
 import {
   Account,
@@ -13,9 +13,7 @@ import {
   VideoService
 } from '@app/shared/shared-main'
 import { AccountReportComponent } from '@app/shared/shared-moderation'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
-import { User, UserRight } from '@shared/models'
-import { AccountSearchComponent } from './account-search/account-search.component'
+import { HttpStatusCode, User, UserRight } from '@shared/models'
 
 @Component({
   templateUrl: './accounts.component.html',
@@ -23,8 +21,6 @@ import { AccountSearchComponent } from './account-search/account-search.componen
 })
 export class AccountsComponent implements OnInit, OnDestroy {
   @ViewChild('accountReportModal') accountReportModal: AccountReportComponent
-
-  accountSearch: AccountSearchComponent
 
   account: Account
   accountUser: User
@@ -46,6 +42,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
   constructor (
     private route: ActivatedRoute,
+    private router: Router,
     private userService: UserService,
     private accountService: AccountService,
     private videoChannelService: VideoChannelService,
@@ -62,7 +59,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   ngOnInit () {
     this.routeSub = this.route.params
                         .pipe(
-                          map(params => params[ 'accountId' ]),
+                          map(params => params['accountId']),
                           distinctUntilChanged(),
                           switchMap(accountId => this.accountService.getAccount(accountId)),
                           tap(account => this.onAccount(account)),
@@ -72,11 +69,13 @@ export class AccountsComponent implements OnInit, OnDestroy {
                             HttpStatusCode.NOT_FOUND_404
                           ]))
                         )
-                        .subscribe(
-                          videoChannels => this.videoChannels = videoChannels.data,
+                        .subscribe({
+                          next: videoChannels => {
+                            this.videoChannels = videoChannels.data
+                          },
 
-                          err => this.notifier.error(err.message)
-                        )
+                          error: err => this.notifier.error(err.message)
+                        })
 
     this.links = [
       { label: $localize`CHANNELS`, routerLink: 'video-channels' },
@@ -127,16 +126,10 @@ export class AccountsComponent implements OnInit, OnDestroy {
     return $localize`${count} subscribers`
   }
 
-  onOutletLoaded (component: Component) {
-    if (component instanceof AccountSearchComponent) {
-      this.accountSearch = component
-    } else {
-      this.accountSearch = undefined
-    }
-  }
-
   searchChanged (search: string) {
-    if (this.accountSearch) this.accountSearch.updateSearch(search)
+    const queryParams = { search }
+
+    this.router.navigate([ './videos' ], { queryParams, relativeTo: this.route, queryParamsHandling: 'merge' })
   }
 
   onSearchInputDisplayChanged (displayed: boolean) {
@@ -149,6 +142,10 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
   hasShowMoreDescription () {
     return !this.accountDescriptionExpanded && this.accountDescriptionHTML.length > 100
+  }
+
+  isOnChannelPage () {
+    return this.route.children[0].snapshot.url[0].path === 'video-channels'
   }
 
   private async onAccount (account: Account) {
@@ -175,11 +172,14 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
     const user = this.authService.getUser()
     if (user.hasRight(UserRight.MANAGE_USERS)) {
-      this.userService.getUser(account.userId).subscribe(
-        accountUser => this.accountUser = accountUser,
+      this.userService.getUser(account.userId)
+        .subscribe({
+          next: accountUser => {
+            this.accountUser = accountUser
+          },
 
-        err => this.notifier.error(err.message)
-      )
+          error: err => this.notifier.error(err.message)
+        })
     }
   }
 
@@ -209,6 +209,8 @@ export class AccountsComponent implements OnInit, OnDestroy {
         itemsPerPage: 0
       },
       sort: '-publishedAt'
-    }).subscribe(res => this.accountVideosCount = res.total)
+    }).subscribe(res => {
+      this.accountVideosCount = res.total
+    })
   }
 }

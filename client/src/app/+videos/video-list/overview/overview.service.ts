@@ -43,7 +43,7 @@ export class OverviewService {
 
     // Build videos objects
     for (const key of Object.keys(serverVideosOverview)) {
-      for (const object of serverVideosOverview[ key ]) {
+      for (const object of serverVideosOverview[key]) {
         observables.push(
           of(object.videos)
             .pipe(

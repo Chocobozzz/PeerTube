@@ -1,7 +1,8 @@
 import { finalize } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
-import { Video, VideoService } from '../../shared-main'
+import { FindInBulkService } from '@app/shared/shared-search'
+import { Video } from '../../shared-main'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
 import { CustomMarkupComponent } from './shared'
 
@@ -35,7 +36,7 @@ export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnI
 
   constructor (
     private auth: AuthService,
-    private videoService: VideoService,
+    private findInBulk: FindInBulkService,
     private notifier: Notifier
   ) { }
 
@@ -50,12 +51,12 @@ export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnI
       }
     }
 
-    this.videoService.getVideo({ videoId: this.uuid })
+    this.findInBulk.getVideo(this.uuid)
       .pipe(finalize(() => this.loaded.emit(true)))
-      .subscribe(
-        video => this.video = video,
+      .subscribe({
+        next: video => this.video = video,
 
-        err => this.notifier.error('Error in video miniature component: ' + err.message)
-      )
+        error: err => this.notifier.error($localize`Error in video miniature component: ${err.message}`)
+      })
   }
 }

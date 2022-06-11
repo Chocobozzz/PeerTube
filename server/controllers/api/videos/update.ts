@@ -1,11 +1,12 @@
-import * as express from 'express'
+import express from 'express'
 import { Transaction } from 'sequelize/types'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share'
 import { buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
+import { openapiOperationDoc } from '@server/middlewares/doc'
 import { FilteredModelAttributes } from '@server/types'
 import { MVideoFullLight } from '@server/types/models'
 import { VideoUpdate } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs'
+import { HttpStatusCode } from '../../../../shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
 import { createReqFiles } from '../../../helpers/express-utils'
@@ -20,7 +21,6 @@ import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videosUpdateValidator } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
-import { openapiOperationDoc } from '@server/middlewares/doc'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')

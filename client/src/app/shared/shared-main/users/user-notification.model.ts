@@ -47,11 +47,7 @@ export class UserNotification implements UserNotificationServer {
     comment?: {
       threadId: number
 
-      video: {
-        id: number
-        uuid: string
-        name: string
-      }
+      video: VideoInfo
     }
 
     account?: ActorInfo

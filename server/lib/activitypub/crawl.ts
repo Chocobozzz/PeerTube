@@ -1,12 +1,13 @@
-import * as Bluebird from 'bluebird'
+import Bluebird from 'bluebird'
 import { URL } from 'url'
+import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { ActivityPubOrderedCollection } from '../../../shared/models/activitypub'
 import { logger } from '../../helpers/logger'
 import { doJSONRequest } from '../../helpers/requests'
 import { ACTIVITY_PUB, WEBSERVER } from '../../initializers/constants'
 
 type HandlerFunction<T> = (items: T[]) => (Promise<any> | Bluebird<any>)
-type CleanerFunction = (startedDate: Date) => (Promise<any> | Bluebird<any>)
+type CleanerFunction = (startedDate: Date) => Promise<any>
 
 async function crawlCollectionPage <T> (argUrl: string, handler: HandlerFunction<T>, cleaner?: CleanerFunction) {
   let url = argUrl
@@ -51,7 +52,7 @@ async function crawlCollectionPage <T> (argUrl: string, handler: HandlerFunction
     }
   }
 
-  if (cleaner) await cleaner(startDate)
+  if (cleaner) await retryTransactionWrapper(cleaner, startDate)
 }
 
 export {

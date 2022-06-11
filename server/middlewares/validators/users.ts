@@ -1,23 +1,21 @@
-import * as express from 'express'
+import express from 'express'
 import { body, param, query } from 'express-validator'
 import { omit } from 'lodash'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { MUserDefault } from '@server/types/models'
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { UserRole } from '../../../shared/models/users'
 import { UserRegister } from '../../../shared/models/users/user-register.model'
-import { isActorPreferredUsernameValid } from '../../helpers/custom-validators/activitypub/actor'
 import { toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
-  isNoInstanceConfigWarningModal,
-  isNoWelcomeModal,
   isUserAdminFlagsValid,
   isUserAutoPlayNextVideoValid,
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
   isUserDescriptionValid,
   isUserDisplayNameValid,
+  isUserNoModal,
   isUserNSFWPolicyValid,
   isUserPasswordValid,
   isUserPasswordValidOrEmpty,
@@ -28,7 +26,7 @@ import {
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid
 } from '../../helpers/custom-validators/users'
-import { isVideoChannelNameValid } from '../../helpers/custom-validators/video-channels'
+import { isVideoChannelDisplayNameValid, isVideoChannelUsernameValid } from '../../helpers/custom-validators/video-channels'
 import { logger } from '../../helpers/logger'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { Redis } from '../../lib/redis'
@@ -56,9 +54,12 @@ const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
   body('password').custom(isUserPasswordValidOrEmpty).withMessage('Should have a valid password'),
   body('email').isEmail().withMessage('Should have a valid email'),
-  body('channelName').optional().custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
+
+  body('channelName').optional().custom(isVideoChannelUsernameValid).withMessage('Should have a valid channel name'),
+
   body('videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
   body('videoQuotaDaily').custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
+
   body('role')
     .customSanitizer(toIntOrNull)
     .custom(isUserRoleValid).withMessage('Should have a valid role'),
@@ -106,10 +107,10 @@ const usersRegisterValidator = [
 
   body('channel.name')
     .optional()
-    .custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
+    .custom(isVideoChannelUsernameValid).withMessage('Should have a valid channel name'),
   body('channel.displayName')
     .optional()
-    .custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
+    .custom(isVideoChannelDisplayNameValid).withMessage('Should have a valid display name'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersRegister parameters', { parameters: omit(req.body, 'password') })
@@ -249,12 +250,17 @@ const usersUpdateMeValidator = [
   body('theme')
     .optional()
     .custom(v => isThemeNameValid(v) && isThemeRegistered(v)).withMessage('Should have a valid theme'),
+
   body('noInstanceConfigWarningModal')
     .optional()
-    .custom(v => isNoInstanceConfigWarningModal(v)).withMessage('Should have a valid noInstanceConfigWarningModal boolean'),
+    .custom(v => isUserNoModal(v)).withMessage('Should have a valid noInstanceConfigWarningModal boolean'),
   body('noWelcomeModal')
     .optional()
-    .custom(v => isNoWelcomeModal(v)).withMessage('Should have a valid noWelcomeModal boolean'),
+    .custom(v => isUserNoModal(v)).withMessage('Should have a valid noWelcomeModal boolean'),
+  body('noAccountSetupWarningModal')
+    .optional()
+    .custom(v => isUserNoModal(v)).withMessage('Should have a valid noAccountSetupWarningModal boolean'),
+
   body('autoPlayNextVideo')
     .optional()
     .custom(v => isUserAutoPlayNextVideoValid(v)).withMessage('Should have a valid autoPlayNextVideo boolean'),

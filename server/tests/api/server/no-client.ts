@@ -1,16 +1,15 @@
 import 'mocha'
-import * as request from 'supertest'
-import { ServerInfo } from '../../../../shared/extra-utils'
-import { cleanupTests, flushAndRunServer } from '../../../../shared/extra-utils/server/servers'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import request from 'supertest'
+import { cleanupTests, createSingleServer, PeerTubeServer } from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
 describe('Start and stop server without web client routes', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1, {}, [ '--no-client' ])
+    server = await createSingleServer(1, {}, { peertubeArgs: [ '--no-client' ] })
   })
 
   it('Should fail getting the client', function () {

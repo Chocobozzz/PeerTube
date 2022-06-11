@@ -1,4 +1,3 @@
-
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, ComponentPagination, LocalStorageService, Notifier, SessionStorageService, UserService } from '@app/core'
@@ -40,7 +39,7 @@ export class VideoWatchPlaylistComponent {
     private notifier: Notifier,
     private videoPlaylist: VideoPlaylistService,
     private localStorageService: LocalStorageService,
-    private sessionStorageService: SessionStorageService,
+    private sessionStorage: SessionStorageService,
     private router: Router
   ) {
     // defaults to true
@@ -51,7 +50,7 @@ export class VideoWatchPlaylistComponent {
     this.setAutoPlayNextVideoPlaylistSwitchText()
 
     // defaults to false
-    this.loopPlaylist = this.sessionStorageService.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
+    this.loopPlaylist = this.sessionStorage.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
     this.setLoopPlaylistSwitchText()
   }
 
@@ -146,7 +145,7 @@ export class VideoWatchPlaylistComponent {
 
     const start = previous.startTimestamp
     const stop = previous.stopTimestamp
-    this.router.navigate([],{ queryParams: { playlistPosition: previous.position, start, stop } })
+    this.router.navigate([], { queryParams: { playlistPosition: previous.position, start, stop } })
   }
 
   findPlaylistVideo (position: number, type: 'previous' | 'next'): VideoPlaylistElement {
@@ -164,7 +163,7 @@ export class VideoWatchPlaylistComponent {
     }
 
     const found = this.playlistElements.find(e => e.position === position)
-    if (found && found.video) return found
+    if (found?.video) return found
 
     const newPosition = type === 'previous'
       ? position - 1
@@ -179,7 +178,7 @@ export class VideoWatchPlaylistComponent {
 
     const start = next.startTimestamp
     const stop = next.stopTimestamp
-    this.router.navigate([],{ queryParams: { playlistPosition: next.position, start, stop } })
+    this.router.navigate([], { queryParams: { playlistPosition: next.position, start, stop } })
   }
 
   switchAutoPlayNextVideoPlaylist () {
@@ -196,12 +195,14 @@ export class VideoWatchPlaylistComponent {
         autoPlayNextVideoPlaylist: this.autoPlayNextVideoPlaylist
       }
 
-      this.userService.updateMyProfile(details).subscribe(
-        () => {
-          this.auth.refreshUserInformation()
-        },
-        err => this.notifier.error(err.message)
-      )
+      this.userService.updateMyProfile(details)
+        .subscribe({
+          next: () => {
+            this.auth.refreshUserInformation()
+          },
+
+          error: err => this.notifier.error(err.message)
+        })
     }
   }
 

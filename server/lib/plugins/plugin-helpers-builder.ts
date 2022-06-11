@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { join } from 'path'
 import { buildLogger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'

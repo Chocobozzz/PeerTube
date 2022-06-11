@@ -51,7 +51,7 @@ export class RecommendedVideosComponent implements OnInit, OnChanges {
     } else {
       this.autoPlayNextVideo = this.sessionStorageService.getItem(UserLocalStorageKeys.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
 
-      this.sessionStorageService.watch([UserLocalStorageKeys.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO]).subscribe(
+      this.sessionStorageService.watch([ UserLocalStorageKeys.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO ]).subscribe(
         () => {
           this.autoPlayNextVideo = this.sessionStorageService.getItem(UserLocalStorageKeys.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
         }
@@ -84,12 +84,14 @@ export class RecommendedVideosComponent implements OnInit, OnChanges {
         autoPlayNextVideo: this.autoPlayNextVideo
       }
 
-      this.userService.updateMyProfile(details).subscribe(
-        () => {
-          this.authService.refreshUserInformation()
-        },
-        err => this.notifier.error(err.message)
-      )
+      this.userService.updateMyProfile(details)
+        .subscribe({
+          next: () => {
+            this.authService.refreshUserInformation()
+          },
+
+          error: err => this.notifier.error(err.message)
+        })
     }
   }
 }

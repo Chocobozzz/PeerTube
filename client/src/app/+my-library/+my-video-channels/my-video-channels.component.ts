@@ -1,4 +1,4 @@
-import { ChartData } from 'chart.js'
+import { ChartData, ChartOptions, TooltipItem, TooltipModel } from 'chart.js'
 import { max, maxBy, min, minBy } from 'lodash-es'
 import { mergeMap } from 'rxjs/operators'
 import { Component } from '@angular/core'
@@ -18,7 +18,7 @@ export class MyVideoChannelsComponent {
   videoChannelsMinimumDailyViews = 0
   videoChannelsMaximumDailyViews: number
 
-  chartOptions: any
+  chartOptions: ChartOptions
 
   search: string
 
@@ -45,23 +45,23 @@ export class MyVideoChannelsComponent {
 It will delete ${videoChannel.videosCount} videos uploaded in this channel, and you will not be able to create another
 channel with the same name (${videoChannel.name})!`,
 
-      $localize`Please type the display name of the video channel (${videoChannel.displayName}) to confirm`,
+      $localize`Please type the name of the video channel (${videoChannel.name}) to confirm`,
 
-      videoChannel.displayName,
+      videoChannel.name,
 
       $localize`Delete`
     )
     if (res === false) return
 
     this.videoChannelService.removeVideoChannel(videoChannel)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.loadVideoChannels()
           this.notifier.success($localize`Video channel ${videoChannel.displayName} deleted.`)
         },
 
-        error => this.notifier.error(error.message)
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   private loadVideoChannels () {
@@ -117,20 +117,33 @@ channel with the same name (${videoChannel.name})!`,
 
   private buildChartOptions () {
     this.chartOptions = {
-      legend: {
-        display: false
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          external: function ({ tooltip }: { tooltip: TooltipModel<any> }) {
+            if (!tooltip) return
+
+            // disable displaying the color box
+            tooltip.options.displayColors = false
+          },
+          callbacks: {
+            label: (tooltip: TooltipItem<any>) => `${tooltip.formattedValue} views`
+          }
+        }
       },
       scales: {
-        xAxes: [{
+        x: {
           display: false
-        }],
-        yAxes: [{
+        },
+        y: {
           display: false,
-          ticks: {
-            min: Math.max(0, this.videoChannelsMinimumDailyViews - (3 * this.videoChannelsMaximumDailyViews / 100)),
-            max: Math.max(1, this.videoChannelsMaximumDailyViews)
-          }
-        }]
+          min: Math.max(0, this.videoChannelsMinimumDailyViews - (3 * this.videoChannelsMaximumDailyViews / 100)),
+          max: Math.max(1, this.videoChannelsMaximumDailyViews)
+        }
       },
       layout: {
         padding: {
@@ -143,18 +156,6 @@ channel with the same name (${videoChannel.name})!`,
       elements: {
         point: {
           radius: 0
-        }
-      },
-      tooltips: {
-        mode: 'index',
-        intersect: false,
-        custom: function (tooltip: any) {
-          if (!tooltip) return
-          // disable displaying the color box
-          tooltip.displayColors = false
-        },
-        callbacks: {
-          label: (tooltip: any, data: any) => `${tooltip.value} views`
         }
       },
       hover: {

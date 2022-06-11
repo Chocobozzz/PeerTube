@@ -1,45 +1,54 @@
-import { browser, by, element } from 'protractor'
 import { browserSleep, isIOS, isMobileDevice, isSafari } from '../utils'
 
 export class PlayerPage {
 
-  async getWatchVideoPlayerCurrentTime () {
-    const elem = element(by.css('video'))
+  getWatchVideoPlayerCurrentTime () {
+    const elem = $('video')
 
-    return elem.getAttribute('currentTime')
+    const p = isIOS()
+      ? elem.getAttribute('currentTime')
+      : elem.getProperty('currentTime')
+
+    return p.then(t => parseInt(t + '', 10))
+            .then(t => Math.ceil(t))
   }
 
-  waitUntilPlaylistInfo (text: string) {
-    const elem = element(by.css('.video-js .vjs-playlist-info'))
+  waitUntilPlaylistInfo (text: string, maxTime: number) {
+    return browser.waitUntil(async () => {
+      // Without this we have issues on iphone
+      await $('.video-js').click()
 
-    return browser.wait(browser.ExpectedConditions.textToBePresentInElement(elem, text))
+      return (await $('.video-js .vjs-playlist-info').getText()).includes(text)
+    }, { timeout: maxTime })
   }
 
   waitUntilPlayerWrapper () {
-    const elem = element(by.css('#placeholder-preview'))
-
-    return browser.wait(browser.ExpectedConditions.presenceOf(elem))
+    return browser.waitUntil(async () => {
+      return !!(await $('#placeholder-preview'))
+    })
   }
 
-  async playAndPauseVideo (isAutoplay: boolean) {
-    const videojsEl = element(by.css('div.video-js'))
-    await browser.wait(browser.ExpectedConditions.elementToBeClickable(videojsEl))
+  async playAndPauseVideo (isAutoplay: boolean, waitUntilSec: number) {
+    const videojsElem = () => $('div.video-js')
+
+    await videojsElem().waitForExist()
 
     // Autoplay is disabled on iOS and Safari
-    if (await isIOS() || await isSafari() || await isMobileDevice()) {
+    if (isIOS() || isSafari() || isMobileDevice()) {
       // We can't play the video using protractor if it is not muted
-      await browser.executeScript(`document.querySelector('video').muted = true`)
+      await browser.execute(`document.querySelector('video').muted = true`)
       await this.clickOnPlayButton()
     } else if (isAutoplay === false) {
       await this.clickOnPlayButton()
     }
 
     await browserSleep(2000)
-    await browser.wait(browser.ExpectedConditions.invisibilityOf(element(by.css('.vjs-loading-spinner'))))
 
-    await browserSleep(2000)
+    await browser.waitUntil(async () => {
+      return (await this.getWatchVideoPlayerCurrentTime()) >= waitUntilSec
+    })
 
-    await videojsEl.click()
+    await videojsElem().click()
   }
 
   async playVideo () {
@@ -47,8 +56,9 @@ export class PlayerPage {
   }
 
   private async clickOnPlayButton () {
-    const playButton = element(by.css('.vjs-big-play-button'))
-    await browser.wait(browser.ExpectedConditions.elementToBeClickable(playButton))
-    await playButton.click()
+    const playButton = () => $('.vjs-big-play-button')
+
+    await playButton().waitForClickable()
+    await playButton().click()
   }
 }

@@ -2,23 +2,13 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers, setDefaultVideoChannel } from '@shared/extra-utils'
 import { Video, VideoPlaylistPrivacy } from '@shared/models'
-import {
-  addVideoInPlaylist,
-  createVideoPlaylist,
-  getOEmbed,
-  getVideosList,
-  ServerInfo,
-  setAccessTokensToServers,
-  setDefaultVideoChannel,
-  uploadVideo
-} from '../../../../shared/extra-utils'
-import { cleanupTests, flushAndRunServer } from '../../../../shared/extra-utils/server/servers'
 
 const expect = chai.expect
 
 describe('Test services', function () {
-  let server: ServerInfo = null
+  let server: PeerTubeServer = null
   let playlistUUID: string
   let playlistDisplayName: string
   let video: Video
@@ -26,40 +16,34 @@ describe('Test services', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
     {
-      const videoAttributes = {
-        name: 'my super name'
-      }
-      await uploadVideo(server.url, server.accessToken, videoAttributes)
+      const attributes = { name: 'my super name' }
+      await server.videos.upload({ attributes })
 
-      const res = await getVideosList(server.url)
-      video = res.body.data[0]
+      const { data } = await server.videos.list()
+      video = data[0]
     }
 
     {
-      const res = await createVideoPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistAttrs: {
+      const created = await server.playlists.create({
+        attributes: {
           displayName: 'The Life and Times of Scrooge McDuck',
           privacy: VideoPlaylistPrivacy.PUBLIC,
-          videoChannelId: server.videoChannel.id
+          videoChannelId: server.store.channel.id
         }
       })
 
-      playlistUUID = res.body.videoPlaylist.uuid
+      playlistUUID = created.uuid
       playlistDisplayName = 'The Life and Times of Scrooge McDuck'
 
-      await addVideoInPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: res.body.videoPlaylist.id,
-        elementAttrs: {
+      await server.playlists.addElement({
+        playlistId: created.id,
+        attributes: {
           videoId: video.id
         }
       })
@@ -68,42 +52,46 @@ describe('Test services', function () {
 
   it('Should have a valid oEmbed video response', async function () {
     for (const basePath of [ '/videos/watch/', '/w/' ]) {
-      const oembedUrl = 'http://localhost:' + server.port + basePath + video.uuid
+      for (const suffix of [ '', '?param=1' ]) {
+        const oembedUrl = server.url + basePath + video.uuid + suffix
 
-      const res = await getOEmbed(server.url, oembedUrl)
-      const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" ' +
-        `title="${video.name}" src="http://localhost:${server.port}/videos/embed/${video.uuid}" ` +
-        'frameborder="0" allowfullscreen></iframe>'
-      const expectedThumbnailUrl = 'http://localhost:' + server.port + video.previewPath
+        const res = await server.services.getOEmbed({ oembedUrl })
+        const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" ' +
+          `title="${video.name}" src="http://localhost:${server.port}/videos/embed/${video.uuid}" ` +
+          'frameborder="0" allowfullscreen></iframe>'
+        const expectedThumbnailUrl = 'http://localhost:' + server.port + video.previewPath
 
-      expect(res.body.html).to.equal(expectedHtml)
-      expect(res.body.title).to.equal(video.name)
-      expect(res.body.author_name).to.equal(server.videoChannel.displayName)
-      expect(res.body.width).to.equal(560)
-      expect(res.body.height).to.equal(315)
-      expect(res.body.thumbnail_url).to.equal(expectedThumbnailUrl)
-      expect(res.body.thumbnail_width).to.equal(850)
-      expect(res.body.thumbnail_height).to.equal(480)
+        expect(res.body.html).to.equal(expectedHtml)
+        expect(res.body.title).to.equal(video.name)
+        expect(res.body.author_name).to.equal(server.store.channel.displayName)
+        expect(res.body.width).to.equal(560)
+        expect(res.body.height).to.equal(315)
+        expect(res.body.thumbnail_url).to.equal(expectedThumbnailUrl)
+        expect(res.body.thumbnail_width).to.equal(850)
+        expect(res.body.thumbnail_height).to.equal(480)
+      }
     }
   })
 
   it('Should have a valid playlist oEmbed response', async function () {
     for (const basePath of [ '/videos/watch/playlist/', '/w/p/' ]) {
-      const oembedUrl = 'http://localhost:' + server.port + basePath + playlistUUID
+      for (const suffix of [ '', '?param=1' ]) {
+        const oembedUrl = server.url + basePath + playlistUUID + suffix
 
-      const res = await getOEmbed(server.url, oembedUrl)
-      const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" ' +
-        `title="${playlistDisplayName}" src="http://localhost:${server.port}/video-playlists/embed/${playlistUUID}" ` +
-        'frameborder="0" allowfullscreen></iframe>'
+        const res = await server.services.getOEmbed({ oembedUrl })
+        const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" ' +
+          `title="${playlistDisplayName}" src="http://localhost:${server.port}/video-playlists/embed/${playlistUUID}" ` +
+          'frameborder="0" allowfullscreen></iframe>'
 
-      expect(res.body.html).to.equal(expectedHtml)
-      expect(res.body.title).to.equal('The Life and Times of Scrooge McDuck')
-      expect(res.body.author_name).to.equal(server.videoChannel.displayName)
-      expect(res.body.width).to.equal(560)
-      expect(res.body.height).to.equal(315)
-      expect(res.body.thumbnail_url).exist
-      expect(res.body.thumbnail_width).to.equal(280)
-      expect(res.body.thumbnail_height).to.equal(157)
+        expect(res.body.html).to.equal(expectedHtml)
+        expect(res.body.title).to.equal('The Life and Times of Scrooge McDuck')
+        expect(res.body.author_name).to.equal(server.store.channel.displayName)
+        expect(res.body.width).to.equal(560)
+        expect(res.body.height).to.equal(315)
+        expect(res.body.thumbnail_url).exist
+        expect(res.body.thumbnail_width).to.equal(280)
+        expect(res.body.thumbnail_height).to.equal(157)
+      }
     }
   })
 
@@ -114,14 +102,14 @@ describe('Test services', function () {
       const maxHeight = 50
       const maxWidth = 50
 
-      const res = await getOEmbed(server.url, oembedUrl, format, maxHeight, maxWidth)
+      const res = await server.services.getOEmbed({ oembedUrl, format, maxHeight, maxWidth })
       const expectedHtml = '<iframe width="50" height="50" sandbox="allow-same-origin allow-scripts" ' +
         `title="${video.name}" src="http://localhost:${server.port}/videos/embed/${video.uuid}" ` +
         'frameborder="0" allowfullscreen></iframe>'
 
       expect(res.body.html).to.equal(expectedHtml)
       expect(res.body.title).to.equal(video.name)
-      expect(res.body.author_name).to.equal(server.videoChannel.displayName)
+      expect(res.body.author_name).to.equal(server.store.channel.displayName)
       expect(res.body.height).to.equal(50)
       expect(res.body.width).to.equal(50)
       expect(res.body).to.not.have.property('thumbnail_url')

@@ -1,7 +1,7 @@
 import videojs from 'video.js'
+import { secondsToTime } from '@shared/core-utils'
 import { VideoPlaylistElement } from '@shared/models'
 import { PlaylistItemOptions } from '../peertube-videojs-typings'
-import { secondsToTime } from '../utils'
 
 const Component = videojs.getComponent('Component')
 

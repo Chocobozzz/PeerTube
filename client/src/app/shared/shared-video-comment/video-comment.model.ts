@@ -1,6 +1,10 @@
 import { getAbsoluteAPIUrl } from '@app/helpers'
-import { Account, Actor, Video } from '@app/shared/shared-main'
-import { Account as AccountInterface, VideoComment as VideoCommentServerModel, VideoCommentAdmin as VideoCommentAdminServerModel } from '@shared/models'
+import { Actor, Video } from '@app/shared/shared-main'
+import {
+  Account as AccountInterface,
+  VideoComment as VideoCommentServerModel,
+  VideoCommentAdmin as VideoCommentAdminServerModel
+} from '@shared/models'
 
 export class VideoComment implements VideoCommentServerModel {
   id: number

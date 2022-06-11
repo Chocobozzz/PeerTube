@@ -1,6 +1,6 @@
 import { SortMeta } from 'primeng/api'
 import { from, Observable, of } from 'rxjs'
-import { catchError, concatMap, filter, first, map, shareReplay, throttleTime, toArray } from 'rxjs/operators'
+import { catchError, concatMap, filter, first, map, shareReplay, tap, throttleTime, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthService } from '@app/core/auth'
@@ -17,6 +17,7 @@ import {
   UserUpdateMe,
   UserVideoQuota
 } from '@shared/models'
+import { ServerService } from '../'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
 import { LocalStorageService, SessionStorageService } from '../wrappers/storage.service'
@@ -28,14 +29,21 @@ export class UserService {
 
   private userCache: { [ id: number ]: Observable<UserServerModel> } = {}
 
+  private signupInThisSession = false
+
   constructor (
     private authHttp: HttpClient,
+    private server: ServerService,
     private authService: AuthService,
     private restExtractor: RestExtractor,
     private restService: RestService,
     private localStorageService: LocalStorageService,
     private sessionStorageService: SessionStorageService
-    ) { }
+  ) { }
+
+  hasSignupInThisSession () {
+    return this.signupInThisSession
+  }
 
   changePassword (currentPassword: string, newPassword: string) {
     const url = UserService.BASE_USERS_URL + 'me'
@@ -153,6 +161,7 @@ export class UserService {
     return this.authHttp.post(UserService.BASE_USERS_URL + 'register', userCreate)
                .pipe(
                  map(this.restExtractor.extractDataBool),
+                 tap(() => this.signupInThisSession = true),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }
@@ -266,7 +275,7 @@ export class UserService {
 
   getUserWithCache (userId: number) {
     if (!this.userCache[userId]) {
-      this.userCache[ userId ] = this.getUser(userId).pipe(shareReplay())
+      this.userCache[userId] = this.getUser(userId).pipe(shareReplay())
     }
 
     return this.userCache[userId]
@@ -291,9 +300,11 @@ export class UserService {
       console.error('Cannot parse desired video languages from localStorage.', err)
     }
 
+    const defaultNSFWPolicy = this.server.getHTMLConfig().instance.defaultNSFWPolicy
+
     return new User({
       // local storage keys
-      nsfwPolicy: this.localStorageService.getItem(UserLocalStorageKeys.NSFW_POLICY),
+      nsfwPolicy: this.localStorageService.getItem(UserLocalStorageKeys.NSFW_POLICY) || defaultNSFWPolicy,
       webTorrentEnabled: this.localStorageService.getItem(UserLocalStorageKeys.WEBTORRENT_ENABLED) !== 'false',
       theme: this.localStorageService.getItem(UserLocalStorageKeys.THEME) || 'instance-default',
       videoLanguages,

@@ -18,6 +18,7 @@ const logger = debug('peertube:AdvancedInputFilterComponent')
 })
 export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
   @Input() filters: AdvancedInputFilter[] = []
+  @Input() emitOnInit = true
 
   @Output() search = new EventEmitter<string>()
 
@@ -42,7 +43,7 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
     this.viewInitialized = true
 
     // Init after view init to not send an event too early
-    if (this.emitSearchAfterViewInit) this.emitSearch()
+    if (this.emitOnInit && this.emitSearchAfterViewInit) this.emitSearch()
   }
 
   onInputSearch (event: Event) {

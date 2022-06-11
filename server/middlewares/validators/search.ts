@@ -1,12 +1,17 @@
-import * as express from 'express'
+import express from 'express'
 import { query } from 'express-validator'
 import { isSearchTargetValid } from '@server/helpers/custom-validators/search'
-import { isDateValid } from '../../helpers/custom-validators/misc'
+import { isHostValid } from '@server/helpers/custom-validators/servers'
+import { areUUIDsValid, isDateValid, isNotEmptyStringArray, toCompleteUUIDs } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './shared'
 
 const videosSearchValidator = [
   query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
+
+  query('host')
+    .optional()
+    .custom(isHostValid).withMessage('Should have a valid host'),
 
   query('startDate')
     .optional()
@@ -22,8 +27,18 @@ const videosSearchValidator = [
     .optional()
     .custom(isDateValid).withMessage('Should have a published end date that conforms to ISO 8601'),
 
-  query('durationMin').optional().isInt().withMessage('Should have a valid min duration'),
-  query('durationMax').optional().isInt().withMessage('Should have a valid max duration'),
+  query('durationMin')
+    .optional()
+    .isInt().withMessage('Should have a valid min duration'),
+  query('durationMax')
+    .optional()
+    .isInt().withMessage('Should have a valid max duration'),
+
+  query('uuids')
+    .optional()
+    .toArray()
+    .customSanitizer(toCompleteUUIDs)
+    .custom(areUUIDsValid).withMessage('Should have valid uuids'),
 
   query('searchTarget').optional().custom(isSearchTargetValid).withMessage('Should have a valid search target'),
 
@@ -37,8 +52,22 @@ const videosSearchValidator = [
 ]
 
 const videoChannelsListSearchValidator = [
-  query('search').not().isEmpty().withMessage('Should have a valid search'),
-  query('searchTarget').optional().custom(isSearchTargetValid).withMessage('Should have a valid search target'),
+  query('search')
+    .optional()
+    .not().isEmpty().withMessage('Should have a valid search'),
+
+  query('host')
+    .optional()
+    .custom(isHostValid).withMessage('Should have a valid host'),
+
+  query('searchTarget')
+    .optional()
+    .custom(isSearchTargetValid).withMessage('Should have a valid search target'),
+
+  query('handles')
+    .optional()
+    .toArray()
+    .custom(isNotEmptyStringArray).withMessage('Should have valid handles'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking video channels search query', { parameters: req.query })
@@ -50,8 +79,23 @@ const videoChannelsListSearchValidator = [
 ]
 
 const videoPlaylistsListSearchValidator = [
-  query('search').not().isEmpty().withMessage('Should have a valid search'),
-  query('searchTarget').optional().custom(isSearchTargetValid).withMessage('Should have a valid search target'),
+  query('search')
+    .optional()
+    .not().isEmpty().withMessage('Should have a valid search'),
+
+  query('host')
+    .optional()
+    .custom(isHostValid).withMessage('Should have a valid host'),
+
+  query('searchTarget')
+    .optional()
+    .custom(isSearchTargetValid).withMessage('Should have a valid search target'),
+
+  query('uuids')
+    .optional()
+    .toArray()
+    .customSanitizer(toCompleteUUIDs)
+    .custom(areUUIDsValid).withMessage('Should have valid uuids'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking video playlists search query', { parameters: req.query })

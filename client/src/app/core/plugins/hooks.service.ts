@@ -27,9 +27,8 @@ export class HooksService {
     })
   }
 
-  wrapObsFun
-    <P, R, H1 extends ClientFilterHookName, H2 extends ClientFilterHookName>
-    (fun: ObservableFunction<P, R>, params: P, scope: PluginClientScope, hookParamName: H1, hookResultName: H2) {
+  wrapObsFun <P, R, H1 extends ClientFilterHookName, H2 extends ClientFilterHookName>
+  (fun: ObservableFunction<P, R>, params: P, scope: PluginClientScope, hookParamName: H1, hookResultName: H2) {
     return from(this.pluginService.ensurePluginsAreLoaded(scope))
       .pipe(
         mergeMap(() => this.wrapObjectWithoutScopeLoad(params, hookParamName)),
@@ -38,9 +37,8 @@ export class HooksService {
       )
   }
 
-  async wrapFun
-    <P, R, H1 extends ClientFilterHookName, H2 extends ClientFilterHookName>
-    (fun: RawFunction<P, R>, params: P, scope: PluginClientScope, hookParamName: H1, hookResultName: H2) {
+  async wrapFun <P, R, H1 extends ClientFilterHookName, H2 extends ClientFilterHookName>
+  (fun: RawFunction<P, R>, params: P, scope: PluginClientScope, hookParamName: H1, hookResultName: H2) {
     await this.pluginService.ensurePluginsAreLoaded(scope)
 
     const newParams = await this.wrapObjectWithoutScopeLoad(params, hookParamName)

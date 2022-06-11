@@ -114,7 +114,7 @@
       <a [routerLink]="item.routerLink" routerLinkActive="active" class="title-page">{{ item.label }}</a>
     </ng-template>
 
-    <list-overflow [items]="links" [itemTemplate]="linkTemplate"></list-overflow>
+    <my-list-overflow [items]="links" [itemTemplate]="linkTemplate"></my-list-overflow>
   </div>
 
   <router-outlet></router-outlet>

@@ -1,6 +1,7 @@
-import { buildPlaylistLink, buildVideoLink, buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
+import { buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
 import { Component, ElementRef, Input, OnInit } from '@angular/core'
+import { buildPlaylistEmbedLink, buildVideoEmbedLink } from '@shared/core-utils'
 import { CustomMarkupComponent } from './shared'
 
 @Component({
@@ -17,8 +18,8 @@ export class EmbedMarkupComponent implements CustomMarkupComponent, OnInit {
 
   ngOnInit () {
     const link = this.type === 'video'
-      ? buildVideoLink({ baseUrl: `${environment.originServerUrl}/videos/embed/${this.uuid}` })
-      : buildPlaylistLink({ baseUrl: `${environment.originServerUrl}/video-playlists/embed/${this.uuid}` })
+      ? buildVideoEmbedLink({ uuid: this.uuid }, environment.originServerUrl)
+      : buildPlaylistEmbedLink({ uuid: this.uuid }, environment.originServerUrl)
 
     this.el.nativeElement.innerHTML = buildVideoOrPlaylistEmbed(link, this.uuid)
   }

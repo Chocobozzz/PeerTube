@@ -1,19 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import {
-  cleanupTests,
-  createUser,
-  flushAndRunServer,
-  ServerInfo,
-  setAccessTokensToServers,
-  userLogin
-} from '../../../../shared/extra-utils'
-import { makePostBodyRequest } from '../../../../shared/extra-utils/requests/requests'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+import { cleanupTests, createSingleServer, makePostBodyRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
 
 describe('Test bulk API validators', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let userAccessToken: string
 
   // ---------------------------------------------------------------
@@ -21,13 +13,13 @@ describe('Test bulk API validators', function () {
   before(async function () {
     this.timeout(120000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
     const user = { username: 'user1', password: 'password' }
-    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
+    await server.users.create({ username: user.username, password: user.password })
 
-    userAccessToken = await userLogin(server, user)
+    userAccessToken = await server.login.getAccessToken(user)
   })
 
   describe('When removing comments of', function () {
@@ -38,7 +30,7 @@ describe('Test bulk API validators', function () {
         url: server.url,
         path,
         fields: { accountName: 'user1', scope: 'my-videos' },
-        statusCodeExpected: HttpStatusCode.UNAUTHORIZED_401
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
 
@@ -48,7 +40,7 @@ describe('Test bulk API validators', function () {
         token: server.accessToken,
         path,
         fields: { accountName: 'user2', scope: 'my-videos' },
-        statusCodeExpected: HttpStatusCode.NOT_FOUND_404
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
     })
 
@@ -58,7 +50,7 @@ describe('Test bulk API validators', function () {
         token: server.accessToken,
         path,
         fields: { accountName: 'user1', scope: 'my-videoss' },
-        statusCodeExpected: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 
@@ -68,7 +60,7 @@ describe('Test bulk API validators', function () {
         token: userAccessToken,
         path,
         fields: { accountName: 'user1', scope: 'instance' },
-        statusCodeExpected: HttpStatusCode.FORBIDDEN_403
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 
@@ -78,7 +70,7 @@ describe('Test bulk API validators', function () {
         token: server.accessToken,
         path,
         fields: { accountName: 'user1', scope: 'instance' },
-        statusCodeExpected: HttpStatusCode.NO_CONTENT_204
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })

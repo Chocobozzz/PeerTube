@@ -21,7 +21,7 @@ export class BlocklistService {
     private restService: RestService
   ) { }
 
-  /*********************** User -> Account blocklist ***********************/
+  /** ********************* User -> Account blocklist ***********************/
 
   getUserAccountBlocklist (options: { pagination: RestPagination, sort: SortMeta, search?: string }) {
     const { pagination, sort, search } = options
@@ -53,7 +53,7 @@ export class BlocklistService {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  /*********************** User -> Server blocklist ***********************/
+  /** ********************* User -> Server blocklist ***********************/
 
   getUserServerBlocklist (options: { pagination: RestPagination, sort: SortMeta, search?: string }) {
     const { pagination, sort, search } = options
@@ -84,7 +84,7 @@ export class BlocklistService {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  /*********************** Instance -> Account blocklist ***********************/
+  /** ********************* Instance -> Account blocklist ***********************/
 
   getInstanceAccountBlocklist (options: { pagination: RestPagination, sort: SortMeta, search?: string }) {
     const { pagination, sort, search } = options
@@ -116,7 +116,7 @@ export class BlocklistService {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  /*********************** Instance -> Server blocklist ***********************/
+  /** ********************* Instance -> Server blocklist ***********************/
 
   getInstanceServerBlocklist (options: { pagination: RestPagination, sort: SortMeta, search?: string }) {
     const { pagination, sort, search } = options

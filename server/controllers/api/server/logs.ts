@@ -1,14 +1,13 @@
-import * as express from 'express'
-import { UserRight } from '../../../../shared/models/users'
-import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../../middlewares'
-import { mtimeSortFilesDesc } from '../../../../shared/core-utils/logs/logs'
+import express from 'express'
 import { readdir, readFile } from 'fs-extra'
-import { AUDIT_LOG_FILENAME, MAX_LOGS_OUTPUT_CHARACTERS, LOG_FILENAME } from '../../../initializers/constants'
 import { join } from 'path'
-import { getAuditLogsValidator, getLogsValidator } from '../../../middlewares/validators/logs'
+import { logger, mtimeSortFilesDesc } from '@server/helpers/logger'
 import { LogLevel } from '../../../../shared/models/server/log-level.type'
+import { UserRight } from '../../../../shared/models/users'
 import { CONFIG } from '../../../initializers/config'
-import { logger } from '@server/helpers/logger'
+import { AUDIT_LOG_FILENAME, LOG_FILENAME, MAX_LOGS_OUTPUT_CHARACTERS } from '../../../initializers/constants'
+import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../../middlewares'
+import { getAuditLogsValidator, getLogsValidator } from '../../../middlewares/validators/logs'
 
 const logsRouter = express.Router()
 

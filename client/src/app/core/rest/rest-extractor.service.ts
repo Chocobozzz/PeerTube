@@ -2,8 +2,7 @@ import { throwError as observableThrowError } from 'rxjs'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { dateToHuman } from '@app/helpers'
-import { ResultList } from '@shared/models'
-import { HttpStatusCode } from '@shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode, ResultList } from '@shared/models'
 
 @Injectable()
 export class RestExtractor {
@@ -14,15 +13,16 @@ export class RestExtractor {
     return true
   }
 
-  applyToResultListData <T> (result: ResultList<T>, fun: Function, additionalArgs?: any[]): ResultList<T> {
+  applyToResultListData <T, A, U> (
+    result: ResultList<T>,
+    fun: (data: T, ...args: A[]) => U,
+    additionalArgs: A[] = []
+  ): ResultList<U> {
     const data: T[] = result.data
-    const newData: T[] = []
-
-    data.forEach(d => newData.push(fun.apply(this, [ d ].concat(additionalArgs))))
 
     return {
       total: result.total,
-      data: newData
+      data: data.map(d => fun.apply(this, [ d, ...additionalArgs ]))
     }
   }
 
@@ -30,8 +30,10 @@ export class RestExtractor {
     return this.applyToResultListData(result, this.convertDateToHuman, [ fieldsToConvert ])
   }
 
-  convertDateToHuman (target: { [ id: string ]: string }, fieldsToConvert: string[]) {
-    fieldsToConvert.forEach(field => target[field] = dateToHuman(target[field]))
+  convertDateToHuman (target: any, fieldsToConvert: string[]) {
+    fieldsToConvert.forEach(field => {
+      target[field] = dateToHuman(target[field])
+    })
 
     return target
   }
@@ -47,7 +49,7 @@ export class RestExtractor {
       errorMessage = err.error
     } else if (err.status !== undefined) {
       // A server-side error occurred.
-      if (err.error && err.error.errors) {
+      if (err.error?.errors) {
         const errors = err.error.errors
         const errorsArray: string[] = []
 
@@ -56,9 +58,10 @@ export class RestExtractor {
         })
 
         errorMessage = errorsArray.join('. ')
-      } else if (err.error && err.error.error) {
+      } else if (err.error?.error) {
         errorMessage = err.error.error
       } else if (err.status === HttpStatusCode.PAYLOAD_TOO_LARGE_413) {
+        // eslint-disable-next-line max-len
         errorMessage = $localize`Media is too large for the server. Please contact you administrator if you want to increase the limit size.`
       } else if (err.status === HttpStatusCode.TOO_MANY_REQUESTS_429) {
         const secondsLeft = err.headers.get('retry-after')
@@ -72,7 +75,7 @@ export class RestExtractor {
         errorMessage = $localize`Server error. Please retry later.`
       }
 
-      errorMessage = errorMessage ? errorMessage : 'Unknown error.'
+      errorMessage = errorMessage || 'Unknown error.'
       console.error(`Backend returned code ${err.status}, errorMessage is: ${errorMessage}`)
     } else {
       console.error(err)
@@ -90,15 +93,15 @@ export class RestExtractor {
       errorObj.body = err.error
     }
 
-    return observableThrowError(errorObj)
+    return observableThrowError(() => errorObj)
   }
 
   redirectTo404IfNotFound (obj: { status: number }, type: 'video' | 'other', status = [ HttpStatusCode.NOT_FOUND_404 ]) {
-    if (obj && obj.status && status.indexOf(obj.status) !== -1) {
+    if (obj?.status && status.includes(obj.status)) {
       // Do not use redirectService to avoid circular dependencies
       this.router.navigate([ '/404' ], { state: { type, obj }, skipLocationChange: true })
     }
 
-    return observableThrowError(obj)
+    return observableThrowError(() => obj)
   }
 }

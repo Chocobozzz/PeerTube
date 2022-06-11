@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from 'express'
 import { logger } from '@server/helpers/logger'
 import { getFormattedObjects } from '@server/helpers/utils'
 import { listAvailablePluginsFromIndex } from '@server/lib/plugins/plugin-index'
@@ -23,8 +23,8 @@ import {
   updatePluginSettingsValidator
 } from '@server/middlewares/validators/plugins'
 import { PluginModel } from '@server/models/server/plugin'
-import { HttpStatusCode } from '@shared/core-utils'
 import {
+  HttpStatusCode,
   InstallOrUpdatePlugin,
   ManagePlugin,
   PeertubePluginIndexList,

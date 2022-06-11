@@ -1,11 +1,10 @@
 import * as debug from 'debug'
-import { uniq } from 'lodash-es'
-import { asyncScheduler, merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
-import { bufferTime, catchError, filter, map, observeOn, share, switchMap, tap } from 'rxjs/operators'
+import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
+import { catchError, filter, map, switchMap, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, NgZone } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
-import { enterZone, leaveZone } from '@app/helpers'
+import { buildBulkObservable } from '@app/helpers'
 import { Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
 import { ResultList, VideoChannel as VideoChannelServer, VideoSortField } from '@shared/models'
 import { environment } from '../../../environments/environment'
@@ -35,23 +34,20 @@ export class UserSubscriptionService {
     private ngZone: NgZone
   ) {
     this.existsObservable = merge(
-      this.existsSubject.pipe(
-        // We leave Angular zone so Protractor does not get stuck
-        bufferTime(500, leaveZone(this.ngZone, asyncScheduler)),
-        filter(uris => uris.length !== 0),
-        map(uris => uniq(uris)),
-        observeOn(enterZone(this.ngZone, asyncScheduler)),
-        switchMap(uris => this.doSubscriptionsExist(uris)),
-        share()
-      ),
+      buildBulkObservable({
+        time: 500,
+        ngZone: this.ngZone,
+        notifierObservable: this.existsSubject,
+        bulkGet: this.doSubscriptionsExist.bind(this)
+      }),
 
       this.myAccountSubscriptionCacheSubject
     )
   }
 
   getUserSubscriptionVideos (parameters: {
-    videoPagination: ComponentPaginationLight,
-    sort: VideoSortField,
+    videoPagination: ComponentPaginationLight
+    sort: VideoSortField
     skipCount?: boolean
   }): Observable<ResultList<Video>> {
     const { videoPagination, sort, skipCount } = parameters
@@ -135,16 +131,16 @@ export class UserSubscriptionService {
 
   listenToSubscriptionCacheChange (nameWithHost: string) {
     if (nameWithHost in this.myAccountSubscriptionCacheObservable) {
-      return this.myAccountSubscriptionCacheObservable[ nameWithHost ]
+      return this.myAccountSubscriptionCacheObservable[nameWithHost]
     }
 
     const obs = this.existsObservable
                     .pipe(
-                      filter(existsResult => existsResult[ nameWithHost ] !== undefined),
-                      map(existsResult => existsResult[ nameWithHost ])
+                      filter(existsResult => existsResult[nameWithHost] !== undefined),
+                      map(existsResult => existsResult[nameWithHost])
                     )
 
-    this.myAccountSubscriptionCacheObservable[ nameWithHost ] = obs
+    this.myAccountSubscriptionCacheObservable[nameWithHost] = obs
     return obs
   }
 
@@ -154,16 +150,16 @@ export class UserSubscriptionService {
     if (nameWithHost in this.myAccountSubscriptionCache) {
       logger('Found cache for %d.', nameWithHost)
 
-      return of(this.myAccountSubscriptionCache[ nameWithHost ])
+      return of(this.myAccountSubscriptionCache[nameWithHost])
     }
 
     this.existsSubject.next(nameWithHost)
 
     logger('Fetching from network for %d.', nameWithHost)
     return this.existsObservable.pipe(
-      filter(existsResult => existsResult[ nameWithHost ] !== undefined),
-      map(existsResult => existsResult[ nameWithHost ]),
-      tap(result => this.myAccountSubscriptionCache[ nameWithHost ] = result)
+      filter(existsResult => existsResult[nameWithHost] !== undefined),
+      map(existsResult => existsResult[nameWithHost]),
+      tap(result => this.myAccountSubscriptionCache[nameWithHost] = result)
     )
   }
 

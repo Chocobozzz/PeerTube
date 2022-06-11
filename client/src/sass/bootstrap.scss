@@ -59,13 +59,14 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 }
 
 /* rules for dropdowns excepts when in button group, to avoid impacting the dropdown-toggle */
-.dropdown {
+.dropdown,
+.dropup {
   z-index: z(dropdown) !important;
 }
 
 .list-overflow-menu,
 .parent-entry {
-  z-index: z(header) - 1 !important;
+  z-index: z(menu) - 1 !important;
 }
 
 .btn-group,
@@ -213,7 +214,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
         content: '';
         display: block;
         position: fixed;
-        z-index: z('menu') - 1;
+        z-index: z(overlay);
       }
     }
   }
@@ -286,6 +287,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
   &.show {
     max-height: 1500px;
+    overflow: inherit !important;
   }
 }
 

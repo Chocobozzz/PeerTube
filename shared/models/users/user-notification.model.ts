@@ -36,6 +36,7 @@ export const enum UserNotificationType {
 export interface VideoInfo {
   id: number
   uuid: string
+  shortUUID: string
   name: string
 }
 
@@ -82,11 +83,7 @@ export interface UserNotification {
     comment?: {
       threadId: number
 
-      video: {
-        id: number
-        uuid: string
-        name: string
-      }
+      video: VideoInfo
     }
 
     account?: ActorInfo

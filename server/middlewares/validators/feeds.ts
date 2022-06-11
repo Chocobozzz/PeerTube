@@ -1,7 +1,6 @@
-import * as express from 'express'
+import express from 'express'
 import { param, query } from 'express-validator'
-
-import { HttpStatusCode } from '../../../shared/core-utils/miscs/http-error-codes'
+import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isValidRSSFeed } from '../../helpers/custom-validators/feeds'
 import { exists, isIdOrUUIDValid, isIdValid, toCompleteUUID } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'

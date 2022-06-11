@@ -2,24 +2,21 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoPlaylistPrivacy } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
 import {
   cleanupTests,
-  createVideoPlaylist,
+  createMultipleServers,
   doubleFollow,
-  flushAndRunMultipleServers,
   makeActivityPubGetRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
-  setDefaultVideoChannel,
-  uploadVideoAndGetId
-} from '../../../../shared/extra-utils'
+  setDefaultVideoChannel
+} from '@shared/extra-utils'
+import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test activitypub', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
   let video: { id: number, uuid: string, shortUUID: string }
   let playlist: { id: number, uuid: string, shortUUID: string }
 
@@ -64,19 +61,18 @@ describe('Test activitypub', function () {
   before(async function () {
     this.timeout(30000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
 
     {
-      video = await uploadVideoAndGetId({ server: servers[0], videoName: 'video' })
+      video = await servers[0].videos.quickUpload({ name: 'video' })
     }
 
     {
-      const playlistAttrs = { displayName: 'playlist', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[0].videoChannel.id }
-      const resCreate = await createVideoPlaylist({ url: servers[0].url, token: servers[0].accessToken, playlistAttrs })
-      playlist = resCreate.body.videoPlaylist
+      const attributes = { displayName: 'playlist', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[0].store.channel.id }
+      playlist = await servers[0].playlists.create({ attributes })
     }
 
     await doubleFollow(servers[0], servers[1])

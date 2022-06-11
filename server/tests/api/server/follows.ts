@@ -3,325 +3,374 @@
 import 'mocha'
 import * as chai from 'chai'
 import {
-  addVideoCommentReply,
-  addVideoCommentThread,
   cleanupTests,
   completeVideoCheck,
-  createUser,
-  createVideoCaption,
+  createMultipleServers,
   dateIsValid,
-  deleteVideoComment,
   expectAccountFollows,
-  flushAndRunMultipleServers,
-  follow,
-  getFollowersListPaginationAndSort,
-  getFollowingListPaginationAndSort,
-  getVideoCommentThreads,
-  getVideosList,
-  getVideoThreadComments,
-  listVideoCaptions,
-  rateVideo,
-  ServerInfo,
+  expectChannelsFollows,
+  PeerTubeServer,
   setAccessTokensToServers,
   testCaptionFile,
-  unfollow,
-  uploadVideo,
-  userLogin,
   waitJobs
 } from '@shared/extra-utils'
-import { Video, VideoCaption, VideoComment, VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
+import { VideoCreateResult, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test follows', function () {
-  let servers: ServerInfo[] = []
+  let servers: PeerTubeServer[] = []
 
   before(async function () {
     this.timeout(30000)
 
-    servers = await flushAndRunMultipleServers(3)
+    servers = await createMultipleServers(3)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
   })
 
-  it('Should not have followers', async function () {
-    for (const server of servers) {
-      const res = await getFollowersListPaginationAndSort({ url: server.url, start: 0, count: 5, sort: 'createdAt' })
-      const follows = res.body.data
+  describe('Data propagation after follow', function () {
 
-      expect(res.body.total).to.equal(0)
+    it('Should not have followers/followings', async function () {
+      for (const server of servers) {
+        const bodies = await Promise.all([
+          server.follows.getFollowers({ start: 0, count: 5, sort: 'createdAt' }),
+          server.follows.getFollowings({ start: 0, count: 5, sort: 'createdAt' })
+        ])
+
+        for (const body of bodies) {
+          expect(body.total).to.equal(0)
+
+          const follows = body.data
+          expect(follows).to.be.an('array')
+          expect(follows).to.have.lengthOf(0)
+        }
+      }
+    })
+
+    it('Should have server 1 following root account of server 2 and server 3', async function () {
+      this.timeout(30000)
+
+      await servers[0].follows.follow({
+        hosts: [ servers[2].url ],
+        handles: [ 'root@' + servers[1].host ]
+      })
+
+      await waitJobs(servers)
+    })
+
+    it('Should have 2 followings on server 1', async function () {
+      const body = await servers[0].follows.getFollowings({ start: 0, count: 1, sort: 'createdAt' })
+      expect(body.total).to.equal(2)
+
+      let follows = body.data
       expect(follows).to.be.an('array')
-      expect(follows.length).to.equal(0)
-    }
-  })
+      expect(follows).to.have.lengthOf(1)
 
-  it('Should not have following', async function () {
-    for (const server of servers) {
-      const res = await getFollowingListPaginationAndSort({ url: server.url, start: 0, count: 5, sort: 'createdAt' })
-      const follows = res.body.data
+      const body2 = await servers[0].follows.getFollowings({ start: 1, count: 1, sort: 'createdAt' })
+      follows = follows.concat(body2.data)
 
-      expect(res.body.total).to.equal(0)
+      const server2Follow = follows.find(f => f.following.host === servers[1].host)
+      const server3Follow = follows.find(f => f.following.host === servers[2].host)
+
+      expect(server2Follow).to.not.be.undefined
+      expect(server2Follow.following.name).to.equal('root')
+      expect(server2Follow.state).to.equal('accepted')
+
+      expect(server3Follow).to.not.be.undefined
+      expect(server3Follow.following.name).to.equal('peertube')
+      expect(server3Follow.state).to.equal('accepted')
+    })
+
+    it('Should have 0 followings on server 2 and 3', async function () {
+      for (const server of [ servers[1], servers[2] ]) {
+        const body = await server.follows.getFollowings({ start: 0, count: 5, sort: 'createdAt' })
+        expect(body.total).to.equal(0)
+
+        const follows = body.data
+        expect(follows).to.be.an('array')
+        expect(follows).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should have 1 followers on server 3', async function () {
+      const body = await servers[2].follows.getFollowers({ start: 0, count: 1, sort: 'createdAt' })
+      expect(body.total).to.equal(1)
+
+      const follows = body.data
       expect(follows).to.be.an('array')
-      expect(follows.length).to.equal(0)
-    }
-  })
-
-  it('Should have server 1 following server 2 and 3', async function () {
-    this.timeout(30000)
-
-    await follow(servers[0].url, [ servers[1].url, servers[2].url ], servers[0].accessToken)
-
-    await waitJobs(servers)
-  })
-
-  it('Should have 2 followings on server 1', async function () {
-    let res = await getFollowingListPaginationAndSort({ url: servers[0].url, start: 0, count: 1, sort: 'createdAt' })
-    let follows = res.body.data
-
-    expect(res.body.total).to.equal(2)
-    expect(follows).to.be.an('array')
-    expect(follows.length).to.equal(1)
-
-    res = await getFollowingListPaginationAndSort({ url: servers[0].url, start: 1, count: 1, sort: 'createdAt' })
-    follows = follows.concat(res.body.data)
-
-    const server2Follow = follows.find(f => f.following.host === 'localhost:' + servers[1].port)
-    const server3Follow = follows.find(f => f.following.host === 'localhost:' + servers[2].port)
-
-    expect(server2Follow).to.not.be.undefined
-    expect(server3Follow).to.not.be.undefined
-    expect(server2Follow.state).to.equal('accepted')
-    expect(server3Follow.state).to.equal('accepted')
-  })
-
-  it('Should search/filter followings on server 1', async function () {
-    const sort = 'createdAt'
-    const start = 0
-    const count = 1
-    const url = servers[0].url
-
-    {
-      const search = ':' + servers[1].port
-
-      {
-        const res = await getFollowingListPaginationAndSort({ url, start, count, sort, search })
-        const follows = res.body.data
-
-        expect(res.body.total).to.equal(1)
-        expect(follows.length).to.equal(1)
-        expect(follows[0].following.host).to.equal('localhost:' + servers[1].port)
-      }
-
-      {
-        const res = await getFollowingListPaginationAndSort({ url, start, count, sort, search, state: 'accepted' })
-        expect(res.body.total).to.equal(1)
-        expect(res.body.data).to.have.lengthOf(1)
-      }
-
-      {
-        const res = await getFollowingListPaginationAndSort({ url, start, count, sort, search, state: 'accepted', actorType: 'Person' })
-        expect(res.body.total).to.equal(0)
-        expect(res.body.data).to.have.lengthOf(0)
-      }
-
-      {
-        const res = await getFollowingListPaginationAndSort({
-          url,
-          start,
-          count,
-          sort,
-          search,
-          state: 'accepted',
-          actorType: 'Application'
-        })
-        expect(res.body.total).to.equal(1)
-        expect(res.body.data).to.have.lengthOf(1)
-      }
-
-      {
-        const res = await getFollowingListPaginationAndSort({ url, start, count, sort, search, state: 'pending' })
-        expect(res.body.total).to.equal(0)
-        expect(res.body.data).to.have.lengthOf(0)
-      }
-    }
-
-    {
-      const res = await getFollowingListPaginationAndSort({ url, start, count, sort, search: 'bla' })
-      const follows = res.body.data
-
-      expect(res.body.total).to.equal(0)
-      expect(follows.length).to.equal(0)
-    }
-  })
-
-  it('Should have 0 followings on server 2 and 3', async function () {
-    for (const server of [ servers[1], servers[2] ]) {
-      const res = await getFollowingListPaginationAndSort({ url: server.url, start: 0, count: 5, sort: 'createdAt' })
-      const follows = res.body.data
-
-      expect(res.body.total).to.equal(0)
-      expect(follows).to.be.an('array')
-      expect(follows.length).to.equal(0)
-    }
-  })
-
-  it('Should have 1 followers on server 2 and 3', async function () {
-    for (const server of [ servers[1], servers[2] ]) {
-      const res = await getFollowersListPaginationAndSort({ url: server.url, start: 0, count: 1, sort: 'createdAt' })
-
-      const follows = res.body.data
-      expect(res.body.total).to.equal(1)
-      expect(follows).to.be.an('array')
-      expect(follows.length).to.equal(1)
+      expect(follows).to.have.lengthOf(1)
       expect(follows[0].follower.host).to.equal('localhost:' + servers[0].port)
-    }
-  })
+    })
 
-  it('Should search/filter followers on server 2', async function () {
-    const url = servers[2].url
-    const start = 0
-    const count = 5
-    const sort = 'createdAt'
+    it('Should have 0 followers on server 1 and 2', async function () {
+      for (const server of [ servers[0], servers[1] ]) {
+        const body = await server.follows.getFollowers({ start: 0, count: 5, sort: 'createdAt' })
+        expect(body.total).to.equal(0)
 
-    {
-      const search = servers[0].port + ''
+        const follows = body.data
+        expect(follows).to.be.an('array')
+        expect(follows).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should search/filter followings on server 1', async function () {
+      const sort = 'createdAt'
+      const start = 0
+      const count = 1
 
       {
-        const res = await getFollowersListPaginationAndSort({ url, start, count, sort, search })
-        const follows = res.body.data
+        const search = ':' + servers[1].port
 
-        expect(res.body.total).to.equal(1)
-        expect(follows.length).to.equal(1)
-        expect(follows[0].following.host).to.equal('localhost:' + servers[2].port)
+        {
+          const body = await servers[0].follows.getFollowings({ start, count, sort, search })
+          expect(body.total).to.equal(1)
+
+          const follows = body.data
+          expect(follows).to.have.lengthOf(1)
+          expect(follows[0].following.host).to.equal(servers[1].host)
+        }
+
+        {
+          const body = await servers[0].follows.getFollowings({ start, count, sort, search, state: 'accepted' })
+          expect(body.total).to.equal(1)
+          expect(body.data).to.have.lengthOf(1)
+        }
+
+        {
+          const body = await servers[0].follows.getFollowings({ start, count, sort, search, state: 'accepted', actorType: 'Person' })
+          expect(body.total).to.equal(1)
+          expect(body.data).to.have.lengthOf(1)
+        }
+
+        {
+          const body = await servers[0].follows.getFollowings({
+            start,
+            count,
+            sort,
+            search,
+            state: 'accepted',
+            actorType: 'Application'
+          })
+          expect(body.total).to.equal(0)
+          expect(body.data).to.have.lengthOf(0)
+        }
+
+        {
+          const body = await servers[0].follows.getFollowings({ start, count, sort, search, state: 'pending' })
+          expect(body.total).to.equal(0)
+          expect(body.data).to.have.lengthOf(0)
+        }
       }
 
       {
-        const res = await getFollowersListPaginationAndSort({ url, start, count, sort, search, state: 'accepted' })
-        expect(res.body.total).to.equal(1)
-        expect(res.body.data).to.have.lengthOf(1)
+        const body = await servers[0].follows.getFollowings({ start, count, sort, search: 'root' })
+        expect(body.total).to.equal(1)
+        expect(body.data).to.have.lengthOf(1)
       }
 
       {
-        const res = await getFollowersListPaginationAndSort({ url, start, count, sort, search, state: 'accepted', actorType: 'Person' })
-        expect(res.body.total).to.equal(0)
-        expect(res.body.data).to.have.lengthOf(0)
+        const body = await servers[0].follows.getFollowings({ start, count, sort, search: 'bla' })
+        expect(body.total).to.equal(0)
+
+        expect(body.data).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should search/filter followers on server 2', async function () {
+      const start = 0
+      const count = 5
+      const sort = 'createdAt'
+
+      {
+        const search = servers[0].port + ''
+
+        {
+          const body = await servers[2].follows.getFollowers({ start, count, sort, search })
+          expect(body.total).to.equal(1)
+
+          const follows = body.data
+          expect(follows).to.have.lengthOf(1)
+          expect(follows[0].following.host).to.equal(servers[2].host)
+        }
+
+        {
+          const body = await servers[2].follows.getFollowers({ start, count, sort, search, state: 'accepted' })
+          expect(body.total).to.equal(1)
+          expect(body.data).to.have.lengthOf(1)
+        }
+
+        {
+          const body = await servers[2].follows.getFollowers({ start, count, sort, search, state: 'accepted', actorType: 'Person' })
+          expect(body.total).to.equal(0)
+          expect(body.data).to.have.lengthOf(0)
+        }
+
+        {
+          const body = await servers[2].follows.getFollowers({
+            start,
+            count,
+            sort,
+            search,
+            state: 'accepted',
+            actorType: 'Application'
+          })
+          expect(body.total).to.equal(1)
+          expect(body.data).to.have.lengthOf(1)
+        }
+
+        {
+          const body = await servers[2].follows.getFollowers({ start, count, sort, search, state: 'pending' })
+          expect(body.total).to.equal(0)
+          expect(body.data).to.have.lengthOf(0)
+        }
       }
 
       {
-        const res = await getFollowersListPaginationAndSort({
-          url,
-          start,
-          count,
-          sort,
-          search,
-          state: 'accepted',
-          actorType: 'Application'
-        })
-        expect(res.body.total).to.equal(1)
-        expect(res.body.data).to.have.lengthOf(1)
+        const body = await servers[2].follows.getFollowers({ start, count, sort, search: 'bla' })
+        expect(body.total).to.equal(0)
+
+        const follows = body.data
+        expect(follows).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should have the correct follows counts', async function () {
+      await expectAccountFollows({ server: servers[0], handle: 'peertube@' + servers[0].host, followers: 0, following: 2 })
+      await expectAccountFollows({ server: servers[0], handle: 'root@' + servers[1].host, followers: 1, following: 0 })
+      await expectAccountFollows({ server: servers[0], handle: 'peertube@' + servers[2].host, followers: 1, following: 0 })
+
+      // Server 2 and 3 does not know server 1 follow another server (there was not a refresh)
+      await expectAccountFollows({ server: servers[1], handle: 'peertube@' + servers[0].host, followers: 0, following: 1 })
+      await expectAccountFollows({ server: servers[1], handle: 'root@' + servers[1].host, followers: 1, following: 0 })
+      await expectAccountFollows({ server: servers[1], handle: 'peertube@' + servers[1].host, followers: 0, following: 0 })
+
+      await expectAccountFollows({ server: servers[2], handle: 'peertube@' + servers[0].host, followers: 0, following: 1 })
+      await expectAccountFollows({ server: servers[2], handle: 'peertube@' + servers[2].host, followers: 1, following: 0 })
+    })
+
+    it('Should unfollow server 3 on server 1', async function () {
+      this.timeout(15000)
+
+      await servers[0].follows.unfollow({ target: servers[2] })
+
+      await waitJobs(servers)
+    })
+
+    it('Should not follow server 3 on server 1 anymore', async function () {
+      const body = await servers[0].follows.getFollowings({ start: 0, count: 2, sort: 'createdAt' })
+      expect(body.total).to.equal(1)
+
+      const follows = body.data
+      expect(follows).to.be.an('array')
+      expect(follows).to.have.lengthOf(1)
+
+      expect(follows[0].following.host).to.equal(servers[1].host)
+    })
+
+    it('Should not have server 1 as follower on server 3 anymore', async function () {
+      const body = await servers[2].follows.getFollowers({ start: 0, count: 1, sort: 'createdAt' })
+      expect(body.total).to.equal(0)
+
+      const follows = body.data
+      expect(follows).to.be.an('array')
+      expect(follows).to.have.lengthOf(0)
+    })
+
+    it('Should have the correct follows counts after the unfollow', async function () {
+      await expectAccountFollows({ server: servers[0], handle: 'peertube@' + servers[0].host, followers: 0, following: 1 })
+      await expectAccountFollows({ server: servers[0], handle: 'root@' + servers[1].host, followers: 1, following: 0 })
+      await expectAccountFollows({ server: servers[0], handle: 'peertube@' + servers[2].host, followers: 0, following: 0 })
+
+      await expectAccountFollows({ server: servers[1], handle: 'peertube@' + servers[0].host, followers: 0, following: 1 })
+      await expectAccountFollows({ server: servers[1], handle: 'root@' + servers[1].host, followers: 1, following: 0 })
+      await expectAccountFollows({ server: servers[1], handle: 'peertube@' + servers[1].host, followers: 0, following: 0 })
+
+      await expectAccountFollows({ server: servers[2], handle: 'peertube@' + servers[0].host, followers: 0, following: 0 })
+      await expectAccountFollows({ server: servers[2], handle: 'peertube@' + servers[2].host, followers: 0, following: 0 })
+    })
+
+    it('Should upload a video on server 2 and 3 and propagate only the video of server 2', async function () {
+      this.timeout(60000)
+
+      await servers[1].videos.upload({ attributes: { name: 'server2' } })
+      await servers[2].videos.upload({ attributes: { name: 'server3' } })
+
+      await waitJobs(servers)
+
+      {
+        const { total, data } = await servers[0].videos.list()
+        expect(total).to.equal(1)
+        expect(data[0].name).to.equal('server2')
       }
 
       {
-        const res = await getFollowersListPaginationAndSort({ url, start, count, sort, search, state: 'pending' })
-        expect(res.body.total).to.equal(0)
-        expect(res.body.data).to.have.lengthOf(0)
+        const { total, data } = await servers[1].videos.list()
+        expect(total).to.equal(1)
+        expect(data[0].name).to.equal('server2')
       }
-    }
 
-    {
-      const res = await getFollowersListPaginationAndSort({ url, start, count, sort, search: 'bla' })
-      const follows = res.body.data
+      {
+        const { total, data } = await servers[2].videos.list()
+        expect(total).to.equal(1)
+        expect(data[0].name).to.equal('server3')
+      }
+    })
 
-      expect(res.body.total).to.equal(0)
-      expect(follows.length).to.equal(0)
-    }
+    it('Should remove account follow', async function () {
+      this.timeout(15000)
+
+      await servers[0].follows.unfollow({ target: 'root@' + servers[1].host })
+
+      await waitJobs(servers)
+    })
+
+    it('Should have removed the account follow', async function () {
+      await expectAccountFollows({ server: servers[0], handle: 'root@' + servers[1].host, followers: 0, following: 0 })
+      await expectAccountFollows({ server: servers[1], handle: 'root@' + servers[1].host, followers: 0, following: 0 })
+
+      {
+        const { total, data } = await servers[0].follows.getFollowings()
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
+
+      {
+        const { total, data } = await servers[0].videos.list()
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should follow a channel', async function () {
+      this.timeout(15000)
+
+      await servers[0].follows.follow({
+        handles: [ 'root_channel@' + servers[1].host ]
+      })
+
+      await waitJobs(servers)
+
+      await expectChannelsFollows({ server: servers[0], handle: 'root_channel@' + servers[1].host, followers: 1, following: 0 })
+      await expectChannelsFollows({ server: servers[1], handle: 'root_channel@' + servers[1].host, followers: 1, following: 0 })
+
+      {
+        const { total, data } = await servers[0].follows.getFollowings()
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
+      }
+
+      {
+        const { total, data } = await servers[0].videos.list()
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
+      }
+    })
   })
 
-  it('Should have 0 followers on server 1', async function () {
-    const res = await getFollowersListPaginationAndSort({ url: servers[0].url, start: 0, count: 5, sort: 'createdAt' })
-    const follows = res.body.data
-
-    expect(res.body.total).to.equal(0)
-    expect(follows).to.be.an('array')
-    expect(follows.length).to.equal(0)
-  })
-
-  it('Should have the correct follows counts', async function () {
-    await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[0].port, 0, 2)
-    await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[1].port, 1, 0)
-    await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[2].port, 1, 0)
-
-    // Server 2 and 3 does not know server 1 follow another server (there was not a refresh)
-    await expectAccountFollows(servers[1].url, 'peertube@localhost:' + servers[0].port, 0, 1)
-    await expectAccountFollows(servers[1].url, 'peertube@localhost:' + servers[1].port, 1, 0)
-
-    await expectAccountFollows(servers[2].url, 'peertube@localhost:' + servers[0].port, 0, 1)
-    await expectAccountFollows(servers[2].url, 'peertube@localhost:' + servers[2].port, 1, 0)
-  })
-
-  it('Should unfollow server 3 on server 1', async function () {
-    this.timeout(5000)
-
-    await unfollow(servers[0].url, servers[0].accessToken, servers[2])
-
-    await waitJobs(servers)
-  })
-
-  it('Should not follow server 3 on server 1 anymore', async function () {
-    const res = await getFollowingListPaginationAndSort({ url: servers[0].url, start: 0, count: 2, sort: 'createdAt' })
-    const follows = res.body.data
-
-    expect(res.body.total).to.equal(1)
-    expect(follows).to.be.an('array')
-    expect(follows.length).to.equal(1)
-
-    expect(follows[0].following.host).to.equal('localhost:' + servers[1].port)
-  })
-
-  it('Should not have server 1 as follower on server 3 anymore', async function () {
-    const res = await getFollowersListPaginationAndSort({ url: servers[2].url, start: 0, count: 1, sort: 'createdAt' })
-
-    const follows = res.body.data
-    expect(res.body.total).to.equal(0)
-    expect(follows).to.be.an('array')
-    expect(follows.length).to.equal(0)
-  })
-
-  it('Should have the correct follows counts 2', async function () {
-    await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[0].port, 0, 1)
-    await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[1].port, 1, 0)
-
-    await expectAccountFollows(servers[1].url, 'peertube@localhost:' + servers[0].port, 0, 1)
-    await expectAccountFollows(servers[1].url, 'peertube@localhost:' + servers[1].port, 1, 0)
-
-    await expectAccountFollows(servers[2].url, 'peertube@localhost:' + servers[0].port, 0, 0)
-    await expectAccountFollows(servers[2].url, 'peertube@localhost:' + servers[2].port, 0, 0)
-  })
-
-  it('Should upload a video on server 2 and 3 and propagate only the video of server 2', async function () {
-    this.timeout(60000)
-
-    await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'server2' })
-    await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3' })
-
-    await waitJobs(servers)
-
-    let res = await getVideosList(servers[0].url)
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data[0].name).to.equal('server2')
-
-    res = await getVideosList(servers[1].url)
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data[0].name).to.equal('server2')
-
-    res = await getVideosList(servers[2].url)
-    expect(res.body.total).to.equal(1)
-    expect(res.body.data[0].name).to.equal('server3')
-  })
-
-  describe('Should propagate data on a new following', function () {
-    let video4: Video
+  describe('Should propagate data on a new server follow', function () {
+    let video4: VideoCreateResult
 
     before(async function () {
       this.timeout(50000)
@@ -334,100 +383,75 @@ describe('Test follows', function () {
         tags: [ 'tag1', 'tag2', 'tag3' ]
       }
 
-      await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-2' })
-      await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-3' })
-      await uploadVideo(servers[2].url, servers[2].accessToken, video4Attributes)
-      await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-5' })
-      await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-6' })
+      await servers[2].videos.upload({ attributes: { name: 'server3-2' } })
+      await servers[2].videos.upload({ attributes: { name: 'server3-3' } })
+      video4 = await servers[2].videos.upload({ attributes: video4Attributes })
+      await servers[2].videos.upload({ attributes: { name: 'server3-5' } })
+      await servers[2].videos.upload({ attributes: { name: 'server3-6' } })
 
       {
-        const user = { username: 'captain', password: 'password' }
-        await createUser({ url: servers[2].url, accessToken: servers[2].accessToken, username: user.username, password: user.password })
-        const userAccessToken = await userLogin(servers[2], user)
+        const userAccessToken = await servers[2].users.generateUserAndToken('captain')
 
-        const resVideos = await getVideosList(servers[2].url)
-        video4 = resVideos.body.data.find(v => v.name === 'server3-4')
-
-        {
-          await rateVideo(servers[2].url, servers[2].accessToken, video4.id, 'like')
-          await rateVideo(servers[2].url, userAccessToken, video4.id, 'dislike')
-        }
-
-        {
-          {
-            const text = 'my super first comment'
-            const res = await addVideoCommentThread(servers[2].url, servers[2].accessToken, video4.id, text)
-            const threadId = res.body.comment.id
-
-            const text1 = 'my super answer to thread 1'
-            const childCommentRes = await addVideoCommentReply(servers[2].url, servers[2].accessToken, video4.id, threadId, text1)
-            const childCommentId = childCommentRes.body.comment.id
-
-            const text2 = 'my super answer to answer of thread 1'
-            await addVideoCommentReply(servers[2].url, servers[2].accessToken, video4.id, childCommentId, text2)
-
-            const text3 = 'my second answer to thread 1'
-            await addVideoCommentReply(servers[2].url, servers[2].accessToken, video4.id, threadId, text3)
-          }
-
-          {
-            const text = 'will be deleted'
-            const res = await addVideoCommentThread(servers[2].url, servers[2].accessToken, video4.id, text)
-            const threadId = res.body.comment.id
-
-            const text1 = 'answer to deleted'
-            await addVideoCommentReply(servers[2].url, servers[2].accessToken, video4.id, threadId, text1)
-
-            const text2 = 'will also be deleted'
-            const childCommentRes = await addVideoCommentReply(servers[2].url, servers[2].accessToken, video4.id, threadId, text2)
-            const childCommentId = childCommentRes.body.comment.id
-
-            const text3 = 'my second answer to deleted'
-            await addVideoCommentReply(servers[2].url, servers[2].accessToken, video4.id, childCommentId, text3)
-
-            await deleteVideoComment(servers[2].url, servers[2].accessToken, video4.id, threadId)
-            await deleteVideoComment(servers[2].url, servers[2].accessToken, video4.id, childCommentId)
-          }
-        }
-
-        {
-          await createVideoCaption({
-            url: servers[2].url,
-            accessToken: servers[2].accessToken,
-            language: 'ar',
-            videoId: video4.id,
-            fixture: 'subtitle-good2.vtt'
-          })
-        }
+        await servers[2].videos.rate({ id: video4.id, rating: 'like' })
+        await servers[2].videos.rate({ token: userAccessToken, id: video4.id, rating: 'dislike' })
       }
+
+      {
+        await servers[2].comments.createThread({ videoId: video4.id, text: 'my super first comment' })
+
+        await servers[2].comments.addReplyToLastThread({ text: 'my super answer to thread 1' })
+        await servers[2].comments.addReplyToLastReply({ text: 'my super answer to answer of thread 1' })
+        await servers[2].comments.addReplyToLastThread({ text: 'my second answer to thread 1' })
+      }
+
+      {
+        const { id: threadId } = await servers[2].comments.createThread({ videoId: video4.id, text: 'will be deleted' })
+        await servers[2].comments.addReplyToLastThread({ text: 'answer to deleted' })
+
+        const { id: replyId } = await servers[2].comments.addReplyToLastThread({ text: 'will also be deleted' })
+
+        await servers[2].comments.addReplyToLastReply({ text: 'my second answer to deleted' })
+
+        await servers[2].comments.delete({ videoId: video4.id, commentId: threadId })
+        await servers[2].comments.delete({ videoId: video4.id, commentId: replyId })
+      }
+
+      await servers[2].captions.add({
+        language: 'ar',
+        videoId: video4.id,
+        fixture: 'subtitle-good2.vtt'
+      })
 
       await waitJobs(servers)
 
       // Server 1 follows server 3
-      await follow(servers[0].url, [ servers[2].url ], servers[0].accessToken)
+      await servers[0].follows.follow({ hosts: [ servers[2].url ] })
 
       await waitJobs(servers)
     })
 
-    it('Should have the correct follows counts 3', async function () {
-      await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[0].port, 0, 2)
-      await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[1].port, 1, 0)
-      await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[2].port, 1, 0)
+    it('Should have the correct follows counts', async function () {
+      await expectAccountFollows({ server: servers[0], handle: 'peertube@' + servers[0].host, followers: 0, following: 2 })
+      await expectAccountFollows({ server: servers[0], handle: 'root@' + servers[1].host, followers: 0, following: 0 })
+      await expectChannelsFollows({ server: servers[0], handle: 'root_channel@' + servers[1].host, followers: 1, following: 0 })
+      await expectAccountFollows({ server: servers[0], handle: 'peertube@' + servers[2].host, followers: 1, following: 0 })
 
-      await expectAccountFollows(servers[1].url, 'peertube@localhost:' + servers[0].port, 0, 1)
-      await expectAccountFollows(servers[1].url, 'peertube@localhost:' + servers[1].port, 1, 0)
+      await expectAccountFollows({ server: servers[1], handle: 'peertube@' + servers[0].host, followers: 0, following: 1 })
+      await expectAccountFollows({ server: servers[1], handle: 'peertube@' + servers[1].host, followers: 0, following: 0 })
+      await expectAccountFollows({ server: servers[1], handle: 'root@' + servers[1].host, followers: 0, following: 0 })
+      await expectChannelsFollows({ server: servers[1], handle: 'root_channel@' + servers[1].host, followers: 1, following: 0 })
 
-      await expectAccountFollows(servers[2].url, 'peertube@localhost:' + servers[0].port, 0, 1)
-      await expectAccountFollows(servers[2].url, 'peertube@localhost:' + servers[2].port, 1, 0)
+      await expectAccountFollows({ server: servers[2], handle: 'peertube@' + servers[0].host, followers: 0, following: 1 })
+      await expectAccountFollows({ server: servers[2], handle: 'peertube@' + servers[2].host, followers: 1, following: 0 })
     })
 
     it('Should have propagated videos', async function () {
-      const res = await getVideosList(servers[0].url)
-      expect(res.body.total).to.equal(7)
+      const { total, data } = await servers[0].videos.list()
+      expect(total).to.equal(7)
 
-      const video2 = res.body.data.find(v => v.name === 'server3-2')
-      video4 = res.body.data.find(v => v.name === 'server3-4')
-      const video6 = res.body.data.find(v => v.name === 'server3-6')
+      const video2 = data.find(v => v.name === 'server3-2')
+      video4 = data.find(v => v.name === 'server3-4')
+      const video6 = data.find(v => v.name === 'server3-6')
 
       expect(video2).to.not.be.undefined
       expect(video4).to.not.be.undefined
@@ -444,7 +468,7 @@ describe('Test follows', function () {
         support: 'my super support text',
         account: {
           name: 'root',
-          host: 'localhost:' + servers[2].port
+          host: servers[2].host
         },
         isLocal,
         commentsEnabled: true,
@@ -468,33 +492,31 @@ describe('Test follows', function () {
           }
         ]
       }
-      await completeVideoCheck(servers[0].url, video4, checkAttributes)
+      await completeVideoCheck(servers[0], video4, checkAttributes)
     })
 
     it('Should have propagated comments', async function () {
-      const res1 = await getVideoCommentThreads(servers[0].url, video4.id, 0, 5, 'createdAt')
+      const { total, data } = await servers[0].comments.listThreads({ videoId: video4.id, sort: 'createdAt' })
 
-      expect(res1.body.total).to.equal(2)
-      expect(res1.body.data).to.be.an('array')
-      expect(res1.body.data).to.have.lengthOf(2)
+      expect(total).to.equal(2)
+      expect(data).to.be.an('array')
+      expect(data).to.have.lengthOf(2)
 
       {
-        const comment: VideoComment = res1.body.data[0]
+        const comment = data[0]
         expect(comment.inReplyToCommentId).to.be.null
         expect(comment.text).equal('my super first comment')
         expect(comment.videoId).to.equal(video4.id)
         expect(comment.id).to.equal(comment.threadId)
         expect(comment.account.name).to.equal('root')
-        expect(comment.account.host).to.equal('localhost:' + servers[2].port)
+        expect(comment.account.host).to.equal(servers[2].host)
         expect(comment.totalReplies).to.equal(3)
         expect(dateIsValid(comment.createdAt as string)).to.be.true
         expect(dateIsValid(comment.updatedAt as string)).to.be.true
 
         const threadId = comment.threadId
 
-        const res2 = await getVideoThreadComments(servers[0].url, video4.id, threadId)
-
-        const tree: VideoCommentThreadTree = res2.body
+        const tree = await servers[0].comments.getThread({ videoId: video4.id, threadId })
         expect(tree.comment.text).equal('my super first comment')
         expect(tree.children).to.have.lengthOf(2)
 
@@ -512,7 +534,7 @@ describe('Test follows', function () {
       }
 
       {
-        const deletedComment: VideoComment = res1.body.data[1]
+        const deletedComment = data[1]
         expect(deletedComment).to.not.be.undefined
         expect(deletedComment.isDeleted).to.be.true
         expect(deletedComment.deletedAt).to.not.be.null
@@ -522,9 +544,7 @@ describe('Test follows', function () {
         expect(deletedComment.totalReplies).to.equal(2)
         expect(dateIsValid(deletedComment.deletedAt as string)).to.be.true
 
-        const res2 = await getVideoThreadComments(servers[0].url, video4.id, deletedComment.threadId)
-
-        const tree: VideoCommentThreadTree = res2.body
+        const tree = await servers[0].comments.getThread({ videoId: video4.id, threadId: deletedComment.threadId })
         const [ commentRoot, deletedChildRoot ] = tree.children
 
         expect(deletedChildRoot).to.not.be.undefined
@@ -549,11 +569,11 @@ describe('Test follows', function () {
     })
 
     it('Should have propagated captions', async function () {
-      const res = await listVideoCaptions(servers[0].url, video4.id)
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.have.lengthOf(1)
+      const body = await servers[0].captions.list({ videoId: video4.id })
+      expect(body.total).to.equal(1)
+      expect(body.data).to.have.lengthOf(1)
 
-      const caption1: VideoCaption = res.body.data[0]
+      const caption1 = body.data[0]
       expect(caption1.language.id).to.equal('ar')
       expect(caption1.language.label).to.equal('Arabic')
       expect(caption1.captionPath).to.match(new RegExp('^/lazy-static/video-captions/.+-ar.vtt$'))
@@ -563,14 +583,39 @@ describe('Test follows', function () {
     it('Should unfollow server 3 on server 1 and does not list server 3 videos', async function () {
       this.timeout(5000)
 
-      await unfollow(servers[0].url, servers[0].accessToken, servers[2])
+      await servers[0].follows.unfollow({ target: servers[2] })
 
       await waitJobs(servers)
 
-      const res = await getVideosList(servers[0].url)
-      expect(res.body.total).to.equal(1)
+      const { total } = await servers[0].videos.list()
+      expect(total).to.equal(1)
+    })
+  })
+
+  describe('Should propagate data on a new channel follow', function () {
+
+    before(async function () {
+      this.timeout(60000)
+
+      await servers[2].videos.upload({ attributes: { name: 'server3-7' } })
+
+      await waitJobs(servers)
+
+      const video = await servers[0].videos.find({ name: 'server3-7' })
+      expect(video).to.not.exist
     })
 
+    it('Should have propagated channel video', async function () {
+      this.timeout(60000)
+
+      await servers[0].follows.follow({ handles: [ 'root_channel@' + servers[2].host ] })
+
+      await waitJobs(servers)
+
+      const video = await servers[0].videos.find({ name: 'server3-7' })
+
+      expect(video).to.exist
+    })
   })
 
   after(async function () {

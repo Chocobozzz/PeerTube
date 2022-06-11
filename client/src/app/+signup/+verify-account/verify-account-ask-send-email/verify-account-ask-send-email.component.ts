@@ -34,15 +34,13 @@ export class VerifyAccountAskSendEmailComponent extends FormReactive implements 
   askSendVerifyEmail () {
     const email = this.form.value['verify-email-email']
     this.userService.askSendVerifyEmail(email)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.notifier.success($localize`An email with verification link will be sent to ${email}.`)
           this.redirectService.redirectToHomepage()
         },
 
-        err => {
-          this.notifier.error(err.message)
-        }
-      )
+        error: err => this.notifier.error(err.message)
+      })
   }
 }

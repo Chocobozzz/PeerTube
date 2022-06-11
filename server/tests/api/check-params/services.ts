@@ -1,22 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
 import {
   cleanupTests,
-  flushAndRunServer,
+  createSingleServer,
   makeGetRequest,
-  ServerInfo,
+  PeerTubeServer,
   setAccessTokensToServers,
-  uploadVideo,
-  createVideoPlaylist,
   setDefaultVideoChannel
-} from '../../../../shared/extra-utils'
-import { VideoPlaylistPrivacy } from '@shared/models'
-import { HttpStatusCode } from '../../../../shared/core-utils/miscs/http-error-codes'
+} from '@shared/extra-utils'
+import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
 
 describe('Test services API validators', function () {
-  let server: ServerInfo
+  let server: PeerTubeServer
   let playlistUUID: string
 
   // ---------------------------------------------------------------
@@ -24,27 +20,22 @@ describe('Test services API validators', function () {
   before(async function () {
     this.timeout(60000)
 
-    server = await flushAndRunServer(1)
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
-    {
-      const res = await uploadVideo(server.url, server.accessToken, { name: 'my super name' })
-      server.video = res.body.video
-    }
+    server.store.videoCreated = await server.videos.upload({ attributes: { name: 'my super name' } })
 
     {
-      const res = await createVideoPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistAttrs: {
+      const created = await server.playlists.create({
+        attributes: {
           displayName: 'super playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
-          videoChannelId: server.videoChannel.id
+          videoChannelId: server.store.channel.id
         }
       })
 
-      playlistUUID = res.body.videoPlaylist.uuid
+      playlistUUID = created.uuid
     }
   })
 
@@ -56,7 +47,7 @@ describe('Test services API validators', function () {
     })
 
     it('Should fail with an invalid host', async function () {
-      const embedUrl = 'http://hello.com/videos/watch/' + server.video.uuid
+      const embedUrl = 'http://hello.com/videos/watch/' + server.store.videoCreated.uuid
       await checkParamEmbed(server, embedUrl)
     })
 
@@ -71,37 +62,37 @@ describe('Test services API validators', function () {
     })
 
     it('Should fail with an invalid path', async function () {
-      const embedUrl = `http://localhost:${server.port}/videos/watchs/${server.video.uuid}`
+      const embedUrl = `http://localhost:${server.port}/videos/watchs/${server.store.videoCreated.uuid}`
 
       await checkParamEmbed(server, embedUrl)
     })
 
     it('Should fail with an invalid max height', async function () {
-      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
+      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.store.videoCreated.uuid}`
 
       await checkParamEmbed(server, embedUrl, HttpStatusCode.BAD_REQUEST_400, { maxheight: 'hello' })
     })
 
     it('Should fail with an invalid max width', async function () {
-      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
+      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.store.videoCreated.uuid}`
 
       await checkParamEmbed(server, embedUrl, HttpStatusCode.BAD_REQUEST_400, { maxwidth: 'hello' })
     })
 
     it('Should fail with an invalid format', async function () {
-      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
+      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.store.videoCreated.uuid}`
 
       await checkParamEmbed(server, embedUrl, HttpStatusCode.BAD_REQUEST_400, { format: 'blabla' })
     })
 
     it('Should fail with a non supported format', async function () {
-      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
+      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.store.videoCreated.uuid}`
 
       await checkParamEmbed(server, embedUrl, HttpStatusCode.NOT_IMPLEMENTED_501, { format: 'xml' })
     })
 
     it('Should succeed with the correct params with a video', async function () {
-      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
+      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.store.videoCreated.uuid}`
       const query = {
         format: 'json',
         maxheight: 400,
@@ -128,13 +119,13 @@ describe('Test services API validators', function () {
   })
 })
 
-function checkParamEmbed (server: ServerInfo, embedUrl: string, statusCodeExpected = HttpStatusCode.BAD_REQUEST_400, query = {}) {
+function checkParamEmbed (server: PeerTubeServer, embedUrl: string, expectedStatus = HttpStatusCode.BAD_REQUEST_400, query = {}) {
   const path = '/services/oembed'
 
   return makeGetRequest({
     url: server.url,
     path,
     query: Object.assign(query, { url: embedUrl }),
-    statusCodeExpected
+    expectedStatus
   })
 }

@@ -64,13 +64,13 @@ export class MyVideoImportsComponent extends RestTable implements OnInit {
 
   protected reloadData () {
     this.videoImportService.getMyVideoImports(this.pagination, this.sort)
-        .subscribe(
-          resultList => {
+        .subscribe({
+          next: resultList => {
             this.videoImports = resultList.data
             this.totalRecords = resultList.total
           },
 
-          err => this.notifier.error(err.message)
-        )
+          error: err => this.notifier.error(err.message)
+        })
   }
 }
