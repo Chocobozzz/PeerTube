@@ -24,11 +24,10 @@ function cacheRouteFactory (options: APICacheOptions) {
   return instance.buildMiddleware.bind(instance)
 }
 
-// TODO: Refactor this to use new Apicache class
 const clearCacheRoute = (target: string) => {
-  const redisClient = Redis.Instance.getClient()
-  const appendKey = Redis.Instance.getPrefix()
-  redisClient.del(`${target}$$appendKey=${appendKey}`)
+  const instance = new ApiCache(defaultOptions)
+
+  instance.clearRoute(target)
 }
 
 // ---------------------------------------------------------------------------

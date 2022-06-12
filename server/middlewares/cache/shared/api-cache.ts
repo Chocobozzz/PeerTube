@@ -41,7 +41,7 @@ export class ApiCache {
     const duration = parseDurationToMs(strDuration)
 
     return (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const key = Redis.Instance.getPrefix() + 'api-cache-' + req.originalUrl
+      const key = this.getCacheKey(req.originalUrl)
       const redis = Redis.Instance.getClient()
 
       if (!redis.connected) return this.makeResponseCacheable(res, next, key, duration)
@@ -58,6 +58,15 @@ export class ApiCache {
         return this.makeResponseCacheable(res, next, key, duration)
       }
     }
+  }
+
+  clearRoute (route: string) {
+    const key = this.getCacheKey(route)
+    this.clear(key)
+  }
+
+  getCacheKey (route: string) {
+    return Redis.Instance.getPrefix() + 'api-cache-' + route
   }
 
   private shouldCacheResponse (response: express.Response) {
