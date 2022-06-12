@@ -342,7 +342,7 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         if (videoGroup.length === 1) {
           return videoGroup[0]
         }
-        return videoGroup.find(v => v.sources.some(s => s.uri.includes("/webseed/")))
+        return videoGroup.find(v => v.sources.some(s => s.uri.includes("/webseed/") || s.uri.includes("/videos")))
       })
 
       const sortedVideos = orderBy(preferredVideos, [ 'bitrate' ], [ 'desc' ])
