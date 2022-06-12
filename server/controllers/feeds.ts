@@ -359,7 +359,7 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
             type,
             title: "HLS",
             sources: [
-              { uri: streamingPlaylist.playlistUrl }
+              { uri: streamingPlaylist.getMasterPlaylistUrl(video) }
             ]
           }
 
@@ -395,7 +395,7 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         }
         if (!type) return {}
         return {
-          url: WEBSERVER.URL + "/lazy-static/video-captions/" + caption.filename,
+          url: caption.getFileUrl(video),
           language: caption.language,
           type,
           rel: "captions"
@@ -455,7 +455,7 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
             type,
             title: `Live Stream ${index + 1}`,
             sources: [
-              { uri: streamingPlaylist.playlistUrl }
+              { uri: streamingPlaylist.getMasterPlaylistUrl(video) }
             ]
           }
 
