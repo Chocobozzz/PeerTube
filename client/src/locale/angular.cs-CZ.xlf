@@ -364,7 +364,7 @@
       </trans-unit>
       <trans-unit id="906167214730624194" datatype="html">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="translated">{views, plural, =0 {Bez zhlédnutí} =1 {1 view} další {<x id="views"/> zhlédnutí}}</target>
+        <target state="translated">{views, plural, =0 {Bez zhlédnutí} =1 {1 view} other {<x id="views"/> zhlédnutí}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">22</context>
@@ -372,7 +372,7 @@
       </trans-unit>
       <trans-unit id="4873265433447388314" datatype="html">
         <source>{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</source>
-        <target state="translated">{viewers, plural, =0 {žádní diváci} =1 {1 viewer} další {<x id="viewers"/> diváci}}</target>
+        <target state="translated">{viewers, plural, =0 {žádní diváci} =1 {1 viewer} other {<x id="viewers"/> diváci}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">23</context>
@@ -561,7 +561,7 @@
       </trans-unit>
       <trans-unit id="8772888533606382617" datatype="html">
         <source>{count, plural, =1 {1 user} other {<x id="count"/> users}} banned.</source>
-        <target state="translated">{count, plural, =1 {1 user} další {<x id="count"/> uživatelé}} blokováni.</target>
+        <target state="translated">{count, plural, =1 {1 user} other {<x id="count"/> uživatelé}} blokováni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -653,7 +653,7 @@
       </trans-unit>
       <trans-unit id="5779580280418408097" datatype="html">
         <source>Deleted {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="translated">Smazány {count, plural, =1 {1 video} další {<x id="count"/> videa}}.</target>
+        <target state="translated">Smazány {count, plural, =1 {1 video} other {<x id="count"/> videa}}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">212</context>
@@ -666,7 +666,7 @@
       </trans-unit>
       <trans-unit id="9164541937317586242" datatype="html">
         <source>Unblocked {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="translated">Odblokováno {count, plural, =1 {1 video} dalších {<x id="count"/> videí}}.</target>
+        <target state="translated">Odblokováno {count, plural, =1 {1 video} other {<x id="count"/> videí}}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">230</context>
@@ -679,7 +679,7 @@
       </trans-unit>
       <trans-unit id="6228449077605046873" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</source>
-        <target state="new">Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</target>
+        <target state="translated">Určitě chcete odstranit {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> streamingové seznamy HLS?}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">248</context>
@@ -692,7 +692,7 @@
       </trans-unit>
       <trans-unit id="653148876380254581" datatype="html">
         <source>Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</source>
-        <target state="new">Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</target>
+        <target state="translated">Určitě chcete odstranit soubory WebTorrent z {count, plural, =1 {1 video} other {<x id="count"/> videí}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">254</context>
@@ -773,7 +773,7 @@
       </trans-unit>
       <trans-unit id="9157178301885999151" datatype="html">
         <source>Do you really want to delete {length, plural, =1 {this video} other {<x id="length"/> videos}}?</source>
-        <target state="new">Do you really want to delete {length, plural, =1 {this video} other {<x id="length"/> videos}}?</target>
+        <target state="translated">Opravdu chcete odstranit {length, plural, =1 {this video} other {<x id="length"/> videa}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">170</context>
@@ -1095,7 +1095,7 @@
       </trans-unit>
       <trans-unit id="732935381486595265" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</target>
+        <target state="translated">Váš <x id="PH" equiv-text="name"/> soubor nemohl být přenesen před vypršením časového limitu serveru proxy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">35</context>
@@ -1162,7 +1162,7 @@
       </trans-unit>
       <trans-unit id="6067499009042966763" datatype="html">
         <source>{count, plural, =1 {Blocked <x id="videoName"/>} other {Blocked <x id="count"/> videos}}.</source>
-        <target state="new">{count, plural, =1 {Blocked <x id="videoName"/>} other {Blocked <x id="count"/> videos}}.</target>
+        <target state="translated">{count, plural, =1 {Blokováno <x id="videoName"/>} other {Blocked <x id="count"/> videí}}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.ts</context>
           <context context-type="linenumber">84</context>
@@ -1957,7 +1957,7 @@
       </trans-unit>
       <trans-unit id="8151924435547335490" datatype="html">
         <source>Upload failed</source>
-        <target state="new">Upload failed</target>
+        <target state="translated">Nahrávání se nezdařilo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">12</context>
@@ -3226,8 +3226,7 @@
       </trans-unit>
       <trans-unit id="7365478703093390233" datatype="html">
         <source>There are no videos available in this playlist.</source>
-        <target state="new"> There are no videos available in this playlist.
-</target>
+        <target state="translated">V tomto playlistu nejsou k dispozici žádná videa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">37,39</context>
@@ -4150,7 +4149,7 @@
       </trans-unit>
       <trans-unit id="7029332470723352423" datatype="html">
         <source>{count, plural, =1 {Follow request} other {Follow requests}} sent!</source>
-        <target state="new">{count, plural, =1 {Follow request} other {Follow requests}} sent!</target>
+        <target state="translated">{count, plural, =1 {Follow request} other {Follow requests}} odeslán!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -4355,7 +4354,7 @@
       </trans-unit>
       <trans-unit id="376263430267358024" datatype="html">
         <source>{count, plural, =1 {1 comment} other {<x id="count"/> comments}} deleted.</source>
-        <target state="new">{count, plural, =1 {1 comment} other {<x id="count"/> comments}} deleted.</target>
+        <target state="translated">{count, plural, =1 {1 comment} other {<x id="count"/> komentářů}} smazáno.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context>
           <context context-type="linenumber">150</context>
@@ -4363,7 +4362,7 @@
       </trans-unit>
       <trans-unit id="264978617337249011" datatype="html">
         <source><x id="PH" equiv-text="commentArgs.length"/> comment(s) deleted.</source>
-        <target state="new"><x id="PH" equiv-text="commentArgs.length"/> comment(s) deleted.</target>
+        <target state="translated"><x id="PH" equiv-text="commentArgs.length"/> komentář(ů) smazáno.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context>
           <context context-type="linenumber">152,150</context>
@@ -5592,7 +5591,7 @@
       </trans-unit>
       <trans-unit id="762510264401369759" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Original Publication Date"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Original Publication Date"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Řadit podle <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"původního data vydání"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">47</context>
@@ -5920,7 +5919,7 @@
       </trans-unit>
       <trans-unit id="6500762313951857695" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> zobrazení}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">39</context>
@@ -5951,7 +5950,7 @@
       </trans-unit>
       <trans-unit id="111295045776045026" datatype="html">
         <source>Video history is enabled</source>
-        <target state="new">Video history is enabled</target>
+        <target state="translated">Historie videa je povolena</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">96,95</context>
@@ -5959,7 +5958,7 @@
       </trans-unit>
       <trans-unit id="1869266307786648674" datatype="html">
         <source>Video history is disabled</source>
-        <target state="new">Video history is disabled</target>
+        <target state="translated">Historie videa je zakázána</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">97,95</context>
@@ -5967,7 +5966,7 @@
       </trans-unit>
       <trans-unit id="7505147502630555700" datatype="html">
         <source>Delete video history</source>
-        <target state="new">Delete video history</target>
+        <target state="translated">Smazat historii videí</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -5975,7 +5974,7 @@
       </trans-unit>
       <trans-unit id="8676027102068252963" datatype="html">
         <source>Are you sure you want to delete all your video history?</source>
-        <target state="new">Are you sure you want to delete all your video history?</target>
+        <target state="translated">Opravdu chcete odstranit celou historii videí?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">121</context>
@@ -5983,7 +5982,7 @@
       </trans-unit>
       <trans-unit id="7708910304029766516" datatype="html">
         <source>Video history deleted</source>
-        <target state="new">Video history deleted</target>
+        <target state="translated">Historie videa smazána</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">129</context>
@@ -6350,12 +6349,12 @@
       </trans-unit>
       <trans-unit id="3068011377000255023" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 videos} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 video} ostatních {<x id="INTERPOLATION"/> videí}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 video} other {<x id="INTERPOLATION"/> videí}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
         <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
-        <target state="translated"><x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 video} ostatní {{{ getTotalVideosOf(videoChannel) }} videa}}"/> </target>
+        <target state="translated"><x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videa}}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">29</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">39</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">34</context></context-group>
@@ -6407,7 +6406,7 @@
       </trans-unit>
       <trans-unit id="6591746065516872491" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No subscribers} =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No subscribers} =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {No subscribers} =1 {1 subscriber} other {<x id="INTERPOLATION"/> odběratelé}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">26</context>
@@ -7093,7 +7092,7 @@
       </trans-unit>
       <trans-unit id="5921284055608402352" datatype="html">
         <source>{value, plural, =1 {thread} other {threads}}</source>
-        <target state="new">{value, plural, =1 {thread} other {threads}}</target>
+        <target state="translated">{value, plural, =1 {vlákno} other {vláken}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">90</context>
@@ -8138,7 +8137,7 @@
       </trans-unit>
       <trans-unit id="7634059432691079352" datatype="html">
         <source>Do you really want to unban {count, plural, =1 {1 user} other {<x id="count"/> users}}?</source>
-        <target state="new">Do you really want to unban {count, plural, =1 {1 user} other {<x id="count"/> users}}?</target>
+        <target state="translated">Opravdu chcete zrušit zákaz {count, plural, =1 {1 uživateli} other {<x id="count"/> uživatelům}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">213</context>
@@ -8151,7 +8150,7 @@
       </trans-unit>
       <trans-unit id="5100564023837126301" datatype="html">
         <source>{count, plural, =1 {1 user} other {<x id="count"/> users}} unbanned.</source>
-        <target state="new">{count, plural, =1 {1 user} other {<x id="count"/> users}} unbanned.</target>
+        <target state="translated">{count, plural, =1 {1 uživatel} other {<x id="count"/> uživatelé}} odblokováni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">226</context>
@@ -8172,7 +8171,7 @@
       </trans-unit>
       <trans-unit id="5945924096465496818" datatype="html">
         <source>&lt;p&gt;You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p&gt;</source>
-        <target state="new">&lt;p&gt;You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p&gt;</target>
+        <target state="translated">&lt;p&gt;Nelze vytvořit uživatele nebo kanál s uživatelským jménem, které již používá smazaný uživatel/kanál.&lt;/p&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">244</context>
@@ -8180,7 +8179,7 @@
       </trans-unit>
       <trans-unit id="5643060985393782358" datatype="html">
         <source>It means the following usernames will be permanently deleted and cannot be recovered:</source>
-        <target state="new">It means the following usernames will be permanently deleted and cannot be recovered:</target>
+        <target state="translated">To znamená, že následující uživatelská jména budou trvale odstraněna a nebude možné je obnovit:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">245,244</context>
@@ -8188,7 +8187,7 @@
       </trans-unit>
       <trans-unit id="6671164504886206452" datatype="html">
         <source>{count, plural, =1 {1 user} other {<x id="count"/> users}} deleted.</source>
-        <target state="new">{count, plural, =1 {1 user} other {<x id="count"/> users}} deleted.</target>
+        <target state="translated">{count, plural, =1 {1 uživatel} other {<x id="count"/> uživatelé}} smazáni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">255</context>
@@ -8201,7 +8200,7 @@
       </trans-unit>
       <trans-unit id="8715967024202302349" datatype="html">
         <source>{count, plural, =1 {1 user} other {<x id="count"/> users}} email set as verified.</source>
-        <target state="new">{count, plural, =1 {1 user} other {<x id="count"/> users}} email set as verified.</target>
+        <target state="translated">{count, plural, =1 {1 e-mail uživatele} other {<x id="count"/> uživatelské}} e-maily nastaveny jako ověřené.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">273</context>
@@ -8370,7 +8369,7 @@
       </trans-unit>
       <trans-unit id="5935212402338564229" datatype="html">
         <source>You or one of your channels has a new follower</source>
-        <target state="new">You or one of your channels has a new follower</target>
+        <target state="translated">Vy nebo jeden z vašich kanálů má nového sledujícího</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -8697,7 +8696,7 @@
       </trans-unit>
       <trans-unit id="696910741870112536" datatype="html">
         <source>{length, plural, =1 {Video has been deleted} other {<x id="length"/> videos have been deleted}}</source>
-        <target state="new">{length, plural, =1 {Video has been deleted} other {<x id="length"/> videos have been deleted}}</target>
+        <target state="translated">{length, plural, =1 {Video bylo smazáno} other {<x id="length"/> videa byla smazána}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">191</context>
@@ -8705,7 +8704,7 @@
       </trans-unit>
       <trans-unit id="3255171236149541417" datatype="html">
         <source><x id="PH" equiv-text="toDeleteVideosIds.length"/> have been deleted.</source>
-        <target state="new"><x id="PH" equiv-text="toDeleteVideosIds.length"/> have been deleted.</target>
+        <target state="translated"><x id="PH" equiv-text="toDeleteVideosIds.length"/> bylo smazáno.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">193,191</context>
@@ -9042,7 +9041,7 @@
       </trans-unit>
       <trans-unit id="8093156107152165809" datatype="html">
         <source>Show/hide this help menu</source>
-        <target state="new">Show/hide this help menu</target>
+        <target state="translated">Zobrazit/skrýt tuto nápovědu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/core.module.ts</context>
           <context context-type="linenumber">45</context>
@@ -9050,7 +9049,7 @@
       </trans-unit>
       <trans-unit id="3314265031897048047" datatype="html">
         <source>Hide this help menu</source>
-        <target state="new">Hide this help menu</target>
+        <target state="translated">Skrýt tuto nabídku nápovědy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/core.module.ts</context>
           <context context-type="linenumber">46</context>
@@ -9253,7 +9252,7 @@
       </trans-unit>
       <trans-unit id="6183000905044663854" datatype="html">
         <source>Search <x id="PH" equiv-text="this.currentSearch"/></source>
-        <target state="new">Search <x id="PH" equiv-text="this.currentSearch"/></target>
+        <target state="translated">Hledat <x id="PH" equiv-text="this.currentSearch"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">252</context>
@@ -9298,7 +9297,7 @@
       </trans-unit>
       <trans-unit id="1995871740249853660" datatype="html">
         <source><x id="PH" equiv-text="interval"/> month(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> month(s) ago</target>
+        <target state="translated"><x id="PH" equiv-text="interval"/> měsíc(ů) staré</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">28</context>
@@ -9311,7 +9310,7 @@
       </trans-unit>
       <trans-unit id="3626585509896494177" datatype="html">
         <source><x id="PH" equiv-text="interval"/> week(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> week(s) ago</target>
+        <target state="translated"><x id="PH" equiv-text="interval"/> týden (týdnů) staré</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">37</context>
@@ -9319,7 +9318,7 @@
       </trans-unit>
       <trans-unit id="4853543308896023917" datatype="html">
         <source><x id="PH" equiv-text="interval"/> day(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> day(s) ago</target>
+        <target state="translated"><x id="PH" equiv-text="interval"/> den (dnů) staré</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">42</context>
@@ -9327,7 +9326,7 @@
       </trans-unit>
       <trans-unit id="1345947856864087664" datatype="html">
         <source><x id="PH" equiv-text="interval"/> hour(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> hour(s) ago</target>
+        <target state="translated"><x id="PH" equiv-text="interval"/> hodinu(y) staré</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">47</context>
@@ -9352,7 +9351,7 @@
       </trans-unit>
       <trans-unit id="8489397598480880903" datatype="html">
         <source>{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</source>
-        <target state="new">{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</target>
+        <target state="translated">{interval, plural, =1 {1 rok staré} other {<x id="interval"/> roky staré}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">7</context>
@@ -9360,7 +9359,7 @@
       </trans-unit>
       <trans-unit id="599762045687999334" datatype="html">
         <source>{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</source>
-        <target state="new">{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</target>
+        <target state="translated">{interval, plural, =1 {1 měsíc staré} other {<x id="interval"/> měsíce staré}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">8</context>
@@ -9368,7 +9367,7 @@
       </trans-unit>
       <trans-unit id="4951459525104027759" datatype="html">
         <source>{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</source>
-        <target state="new">{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</target>
+        <target state="translated">{interval, plural, =1 {1 týden staré} other {<x id="interval"/> týdny staré}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">9</context>
@@ -9376,7 +9375,7 @@
       </trans-unit>
       <trans-unit id="2471141982657856893" datatype="html">
         <source>{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</source>
-        <target state="new">{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</target>
+        <target state="translated">{interval, plural, =1 {1 den staré} other {<x id="interval"/> dny staré}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">10</context>
@@ -9384,7 +9383,7 @@
       </trans-unit>
       <trans-unit id="8562677309401914974" datatype="html">
         <source>{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</source>
-        <target state="new">{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</target>
+        <target state="translated">{interval, plural, =1 {1 hodinu staré} other {<x id="interval"/> hodiny staré}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">11</context>
@@ -9392,7 +9391,7 @@
       </trans-unit>
       <trans-unit id="3613007385964514320" datatype="html">
         <source><x id="PH" equiv-text="interval"/> year(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> year(s) ago</target>
+        <target state="translated"><x id="PH" equiv-text="interval"/> rok(ů) staré</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">19</context>
@@ -10143,7 +10142,7 @@
       </trans-unit>
       <trans-unit id="5604677701754367707" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</source>
-        <target state="new">PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
+        <target state="translated">PeerTube si s tímto typem souboru neporadí. Akceptované přípony jsou <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -10159,7 +10158,7 @@
       </trans-unit>
       <trans-unit id="8280589137189201687" datatype="html">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
-        <target state="new">You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</target>
+        <target state="translated">Nemůžete vybrat více než {maxItems, plural, =1 {1 položku} other {<x id="maxItems"/> položky}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -10580,7 +10579,7 @@
       </trans-unit>
       <trans-unit id="3911025298999036211" datatype="html">
         <source>~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</source>
-        <target state="new">~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</target>
+        <target state="translated">~ {hours, plural, =1 {1 hodina} other {<x id="hours"/> hodiny}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">71</context>
@@ -10588,7 +10587,7 @@
       </trans-unit>
       <trans-unit id="8587199198938218660" datatype="html">
         <source>~ <x id="PH" equiv-text="hours"/> hours</source>
-        <target state="new">~ <x id="PH" equiv-text="hours"/> hours</target>
+        <target state="translated">~ <x id="PH" equiv-text="hours"/> hodin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -10596,7 +10595,7 @@
       </trans-unit>
       <trans-unit id="2819927377059070056" datatype="html">
         <source>~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</source>
-        <target state="new">~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</target>
+        <target state="translated">~ {minutes, plural, =1 {1 minutu} other {<x id="minutes"/> minuty}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -10687,7 +10686,7 @@
       </trans-unit>
       <trans-unit id="2836537219160375057" datatype="html">
         <source>Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</source>
-        <target state="new">Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</target>
+        <target state="translated">Ban {count, plural, =1 {1 uživatel} other {<x id="count"/> uživatele}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -10715,7 +10714,7 @@
       </trans-unit>
       <trans-unit id="4350392487994839749" datatype="html">
         <source>If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</source>
-        <target state="new">If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</target>
+        <target state="translated">Pokud tohoto uživatele odstraníte, nebudete moci vytvořit dalšího uživatele nebo kanál s tímto &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; uživatelským jménem!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -11025,7 +11024,7 @@
       </trans-unit>
       <trans-unit id="7436975022198908854" datatype="html">
         <source>Unknown server error</source>
-        <target state="new">Unknown server error</target>
+        <target state="translated">Neznámá chyba serveru</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">120</context>
@@ -11280,7 +11279,7 @@
       </trans-unit>
       <trans-unit id="1314383205093440631" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</source>
-        <target state="new">Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</target>
+        <target state="translated">Opravdu chcete odstranit {count, plural, =1 {toto video} other {these <x id="count"/> videa}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">200</context>
@@ -11420,7 +11419,7 @@
       </trans-unit>
       <trans-unit id="7657908235362559477" datatype="html">
         <source>Publication scheduled on <x id="PH" equiv-text="updateAt"/></source>
-        <target state="new">Publication scheduled on <x id="PH" equiv-text="updateAt"/></target>
+        <target state="translated">Zveřejnění naplánováno na <x id="PH" equiv-text="updateAt"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">178</context>
