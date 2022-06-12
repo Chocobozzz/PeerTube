@@ -372,7 +372,7 @@
       </trans-unit>
       <trans-unit id="4873265433447388314" datatype="html">
         <source>{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</source>
-        <target state="new">{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</target>
+        <target state="translated">{viewers, plural, =0 {Aucun spectateur} =1 {1 spectateur} other {<x id="viewers"/> spectateurs}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">23</context>
@@ -380,7 +380,7 @@
       </trans-unit>
       <trans-unit id="4763067539652050249" datatype="html">
         <source><x id="PH" equiv-text="this.viewers"/> viewer(s)</source>
-        <target state="new"><x id="PH" equiv-text="this.viewers"/> viewer(s)</target>
+        <target state="translated"><x id="PH" equiv-text="this.viewers"/> spectateur(s)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">276</context>
@@ -388,7 +388,7 @@
       </trans-unit>
       <trans-unit id="8622604868434380566" datatype="html">
         <source>{<x id="PH" equiv-text="this.views"/> view(s)}</source>
-        <target state="new">{<x id="PH" equiv-text="this.views"/> view(s)}</target>
+        <target state="translated">{<x id="PH" equiv-text="this.views"/> spectateur(s)}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">279</context>
@@ -561,7 +561,7 @@
       </trans-unit>
       <trans-unit id="8772888533606382617" datatype="html">
         <source>{count, plural, =1 {1 user} other {<x id="count"/> users}} banned.</source>
-        <target state="new">{count, plural, =1 {1 user} other {<x id="count"/> users}} banned.</target>
+        <target state="translated">{count, plural, =1 {1 utilisateur banni} other {<x id="count"/> utilisateurs bannis}}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -653,7 +653,7 @@
       </trans-unit>
       <trans-unit id="5779580280418408097" datatype="html">
         <source>Deleted {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="new">Deleted {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</target>
+        <target state="translated">{count, plural, =1 {1 vidéo supprimée} other {<x id="count"/> vidéos supprimées}}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">212</context>
@@ -666,7 +666,7 @@
       </trans-unit>
       <trans-unit id="9164541937317586242" datatype="html">
         <source>Unblocked {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="new">Unblocked {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</target>
+        <target state="translated">{count, plural, =1 {1 vidéo débloquées} other {<x id="count"/> vidéos débloquées}}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">230</context>
@@ -679,7 +679,7 @@
       </trans-unit>
       <trans-unit id="6228449077605046873" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</source>
-        <target state="new">Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</target>
+        <target state="translated">Êtes-vous sûr·e de vouloir supprimer {count, plural, =1 {1 liste de lecture HLS en continu} other {<x id="count"/> listes de lecture HLS en continu}} ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">248</context>
@@ -692,7 +692,7 @@
       </trans-unit>
       <trans-unit id="653148876380254581" datatype="html">
         <source>Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</source>
-        <target state="new">Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</target>
+        <target state="translated">Êtes-vous sûr·e de vouloir supprimer les fichiers WebTorrent de {count, plural, =1 {1 vidéo} other {<x id="count"/> vidéos}} ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">254</context>
