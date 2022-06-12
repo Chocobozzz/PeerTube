@@ -55,7 +55,7 @@
     margin-top: 5px;
     font-size: 13px;
 
-    .video-info-privacy {
+    .privacy {
       font-weight: $font-semibold;
 
       &::after {
@@ -65,7 +65,9 @@
     }
   }
 
-  .video-info-description {
+  .description {
+    @include peertube-word-wrap;
+
     margin-top: 10px;
     color: pvar(--greyForegroundColor);
   }
@@ -99,7 +101,8 @@
   .miniature-thumbnail {
     @include margin-right(10px);
 
-    width: var(--rowThumbnailWidth);
+    min-width: var(--rowThumbnailWidth);
+    max-width: var(--rowThumbnailWidth);
     height: var(--rowThumbnailHeight);
   }
 }

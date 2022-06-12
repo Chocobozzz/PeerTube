@@ -12,7 +12,7 @@ export class PluginsCheckScheduler extends AbstractScheduler {
 
   private static instance: AbstractScheduler
 
-  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.checkPlugins
+  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.CHECK_PLUGINS
 
   private constructor () {
     super()

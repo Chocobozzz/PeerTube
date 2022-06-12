@@ -80,6 +80,7 @@ transcoding:
   concurrency: 2
   resolutions:
     0p: false
+    144p: false
     240p: true
     360p: true
     480p: true
@@ -105,6 +106,7 @@ live:
     threads: 2
 
     resolutions:
+      144p: false
       240p: false
       360p: false
       480p: false
@@ -118,9 +120,6 @@ import:
     concurrency: 2
     http:
       enabled: true
-      proxy:
-        enabled: false
-        url: ""
     torrent:
       enabled: true
 
@@ -175,3 +174,6 @@ views:
   videos:
     remote:
       max_age: -1
+
+    local_buffer_update_interval: '5 seconds'
+    ip_view_expiration: '1 second'

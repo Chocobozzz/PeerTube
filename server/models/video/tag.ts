@@ -18,7 +18,7 @@ import { VideoTagModel } from './video-tag'
     },
     {
       name: 'tag_lower_name',
-      fields: [ fn('lower', col('name')) ] as any // FIXME: typings
+      fields: [ fn('lower', col('name')) ]
     }
   ]
 })

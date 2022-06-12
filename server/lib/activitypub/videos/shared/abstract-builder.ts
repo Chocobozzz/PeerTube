@@ -119,7 +119,7 @@ export abstract class APVideoAbstractBuilder {
   }
 
   protected async setStreamingPlaylists (video: MVideoFullLight, t: Transaction) {
-    const streamingPlaylistAttributes = getStreamingPlaylistAttributesFromObject(video, this.videoObject, video.VideoFiles || [])
+    const streamingPlaylistAttributes = getStreamingPlaylistAttributesFromObject(video, this.videoObject)
     const newStreamingPlaylists = streamingPlaylistAttributes.map(a => new VideoStreamingPlaylistModel(a))
 
     // Remove video playlists that do not exist anymore

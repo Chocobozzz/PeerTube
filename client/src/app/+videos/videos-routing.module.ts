@@ -4,12 +4,10 @@ import { LoginGuard } from '@app/core'
 import { VideosListCommonPageComponent } from './video-list'
 import { VideoOverviewComponent } from './video-list/overview/video-overview.component'
 import { VideoUserSubscriptionsComponent } from './video-list/video-user-subscriptions.component'
-import { VideosComponent } from './videos.component'
 
 const videosRoutes: Routes = [
   {
     path: '',
-    component: VideosComponent,
     children: [
       {
         path: 'overview',

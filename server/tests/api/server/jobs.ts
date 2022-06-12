@@ -56,7 +56,7 @@ describe('Test jobs', function () {
 
       let job = body.data[0]
       // Skip repeat jobs
-      if (job.type === 'videos-views') job = body.data[1]
+      if (job.type === 'videos-views-stats') job = body.data[1]
 
       expect(job.state).to.equal('completed')
       expect(job.type.startsWith('activitypub-')).to.be.true
@@ -88,8 +88,6 @@ describe('Test jobs', function () {
     const jobs = body.data
     expect(jobs).to.have.length.above(2)
 
-    // We know there are a least 1 delayed job (video views) and 1 completed job (broadcast)
-    expect(jobs.find(j => j.state === 'delayed')).to.not.be.undefined
     expect(jobs.find(j => j.state === 'completed')).to.not.be.undefined
   })
 

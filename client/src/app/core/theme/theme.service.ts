@@ -1,4 +1,3 @@
-import { first } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { UserLocalStorageKeys } from '@root-helpers/users'
 import { HTMLServerConfig, ServerConfigTheme } from '@shared/models'
@@ -141,7 +140,6 @@ export class ThemeService {
     }
 
     this.auth.userInformationLoaded
-      .pipe(first())
       .subscribe(() => this.updateCurrentTheme())
   }
 

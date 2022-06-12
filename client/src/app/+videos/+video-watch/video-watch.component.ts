@@ -288,7 +288,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private async handleRequestError (err: any) {
     const errorBody = err.body as PeerTubeProblemDocument
 
-    if (errorBody.code === ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS && errorBody.originUrl) {
+    if (errorBody?.code === ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS && errorBody.originUrl) {
       const originUrl = errorBody.originUrl + (window.location.search ?? '')
 
       const res = await this.confirmService.confirm(
@@ -455,7 +455,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         this.zone.run(() => this.theaterEnabled = enabled)
       })
 
-      this.hooks.runAction('action:video-watch.player.loaded', 'video-watch', { player: this.player, videojs, video: this.video })
+      this.hooks.runAction('action:video-watch.player.loaded', 'video-watch', {
+        player: this.player,
+        playlist: this.playlist,
+        playlistPosition: this.playlistPosition,
+        videojs,
+        video: this.video
+      })
     })
   }
 
@@ -652,7 +658,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.peertubeSocket.getLiveVideosObservable()
       .subscribe(({ type, payload }) => {
         if (type === 'state-change') return this.handleLiveStateChange(payload.state)
-        if (type === 'views-change') return this.handleLiveViewsChange(payload.views)
+        if (type === 'views-change') return this.handleLiveViewsChange(payload.viewers)
       })
   }
 
@@ -671,7 +677,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.loadVideo(videoUUID)
   }
 
-  private handleLiveViewsChange (newViews: number) {
+  private handleLiveViewsChange (newViewers: number) {
     if (!this.video) {
       console.error('Cannot update video live views because video is no defined.')
       return
@@ -679,7 +685,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     console.log('Updating live views.')
 
-    this.video.views = newViews
+    this.video.viewers = newViewers
   }
 
   private initHotkeys () {

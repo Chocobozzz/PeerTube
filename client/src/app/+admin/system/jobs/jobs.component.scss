@@ -5,18 +5,20 @@
   min-width: 120px;
 }
 
-.job-id {
-  max-width: 30vw !important;
-}
+@media screen and (min-width: $primeng-breakpoint) {
+  .job-id {
+    max-width: 30vw !important;
+  }
 
-.job-type,
-.job-state,
-.job-priority {
-  width: 150px !important;
-}
+  .job-type,
+  .job-state,
+  .job-priority {
+    width: 150px !important;
+  }
 
-.job-date {
-  width: 170px !important;
+  .job-date {
+    width: 170px !important;
+  }
 }
 
 .admin-sub-header {
@@ -54,6 +56,6 @@ pre {
   color: #ff0000;
 }
 
-.badge {
-  @include table-badge;
+.select-filter-block .badge {
+  @include peertube-badge;
 }

@@ -3,10 +3,8 @@ import { body, param, query } from 'express-validator'
 import { omit } from 'lodash'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { MUserDefault } from '@server/types/models'
-import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
-import { UserRole } from '../../../shared/models/users'
-import { UserRegister } from '../../../shared/models/users/user-register.model'
-import { toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import { HttpStatusCode, UserRegister, UserRole } from '@shared/models'
+import { isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
   isUserAdminFlagsValid,
@@ -33,7 +31,7 @@ import { Redis } from '../../lib/redis'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../lib/signup'
 import { ActorModel } from '../../models/actor/actor'
 import { UserModel } from '../../models/user/user'
-import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from './shared'
+import { areValidationErrors, doesVideoChannelIdExist, doesVideoExist, isValidVideoIdParam } from './shared'
 
 const usersListValidator = [
   query('blocked')
@@ -320,6 +318,28 @@ const usersVideoRatingValidator = [
   }
 ]
 
+const usersVideosValidator = [
+  query('isLive')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid).withMessage('Should have a valid live boolean'),
+
+  query('channelId')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isIdValid).withMessage('Should have a valid channel id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking usersVideosValidator parameters', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    if (req.query.channelId && !await doesVideoChannelIdExist(req.query.channelId, res)) return
+
+    return next()
+  }
+]
+
 const ensureUserRegistrationAllowed = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const allowedParams = {
@@ -462,7 +482,22 @@ const ensureAuthUserOwnsAccountValidator = [
     if (res.locals.account.id !== user.Account.id) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Only owner can access ratings list.'
+        message: 'Only owner of this account can access this ressource.'
+      })
+    }
+
+    return next()
+  }
+]
+
+const ensureAuthUserOwnsChannelValidator = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const user = res.locals.oauth.token.User
+
+    if (res.locals.videoChannel.Account.userId !== user.id) {
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Only owner of this video channel can access this ressource'
       })
     }
 
@@ -500,12 +535,14 @@ export {
   ensureUserRegistrationAllowed,
   ensureUserRegistrationAllowedForIP,
   usersGetValidator,
+  usersVideosValidator,
   usersAskResetPasswordValidator,
   usersResetPasswordValidator,
   usersAskSendVerifyEmailValidator,
   usersVerifyEmailValidator,
   userAutocompleteValidator,
   ensureAuthUserOwnsAccountValidator,
+  ensureAuthUserOwnsChannelValidator,
   ensureCanManageUser
 }
 

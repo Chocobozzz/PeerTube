@@ -43,11 +43,11 @@ export {
 // ---------------------------------------------------------------------------
 
 async function jimpProcessor (path: string, destination: string, newSize: { width: number, height: number }, inputExt: string) {
-  let jimpInstance: Jimp
+  let sourceImage: Jimp
   const inputBuffer = await readFile(path)
 
   try {
-    jimpInstance = await read(inputBuffer)
+    sourceImage = await read(inputBuffer)
   } catch (err) {
     logger.debug('Cannot read %s with jimp. Try to convert the image using ffmpeg first.', path, { err })
 
@@ -55,34 +55,58 @@ async function jimpProcessor (path: string, destination: string, newSize: { widt
     await convertWebPToJPG(path, newName)
     await rename(newName, path)
 
-    jimpInstance = await read(path)
+    sourceImage = await read(path)
   }
 
   await remove(destination)
 
   // Optimization if the source file has the appropriate size
   const outputExt = getLowercaseExtension(destination)
-  if (skipProcessing({ jimpInstance, newSize, imageBytes: inputBuffer.byteLength, inputExt, outputExt })) {
+  if (skipProcessing({ sourceImage, newSize, imageBytes: inputBuffer.byteLength, inputExt, outputExt })) {
     return copy(path, destination)
   }
 
-  await jimpInstance
-    .resize(newSize.width, newSize.height)
-    .quality(80)
-    .writeAsync(destination)
+  await autoResize({ sourceImage, newSize, destination })
+}
+
+async function autoResize (options: {
+  sourceImage: Jimp
+  newSize: { width: number, height: number }
+  destination: string
+}) {
+  const { sourceImage, newSize, destination } = options
+
+  // Portrait mode targetting a landscape, apply some effect on the image
+  const sourceIsPortrait = sourceImage.getWidth() < sourceImage.getHeight()
+  const destIsPortraitOrSquare = newSize.width <= newSize.height
+
+  if (sourceIsPortrait && !destIsPortraitOrSquare) {
+    const baseImage = sourceImage.cloneQuiet().cover(newSize.width, newSize.height)
+                                              .color([ { apply: 'shade', params: [ 50 ] } ])
+
+    const topImage = sourceImage.cloneQuiet().contain(newSize.width, newSize.height)
+
+    return write(baseImage.blit(topImage, 0, 0), destination)
+  }
+
+  return write(sourceImage.cover(newSize.width, newSize.height), destination)
+}
+
+function write (image: Jimp, destination: string) {
+  return image.quality(80).writeAsync(destination)
 }
 
 function skipProcessing (options: {
-  jimpInstance: Jimp
+  sourceImage: Jimp
   newSize: { width: number, height: number }
   imageBytes: number
   inputExt: string
   outputExt: string
 }) {
-  const { jimpInstance, newSize, imageBytes, inputExt, outputExt } = options
+  const { sourceImage, newSize, imageBytes, inputExt, outputExt } = options
   const { width, height } = newSize
 
-  if (jimpInstance.getWidth() > width || jimpInstance.getHeight() > height) return false
+  if (sourceImage.getWidth() > width || sourceImage.getHeight() > height) return false
   if (inputExt !== outputExt) return false
 
   const kB = 1000

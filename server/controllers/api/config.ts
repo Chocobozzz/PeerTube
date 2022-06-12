@@ -11,7 +11,7 @@ import { objectConverter } from '../../helpers/core-utils'
 import { CONFIG, reloadConfig } from '../../initializers/config'
 import { ClientHtml } from '../../lib/client-html'
 import { asyncMiddleware, authenticate, ensureUserHasRight, openapiOperationDoc } from '../../middlewares'
-import { customConfigUpdateValidator } from '../../middlewares/validators/config'
+import { customConfigUpdateValidator, ensureConfigIsEditable } from '../../middlewares/validators/config'
 
 const configRouter = express.Router()
 
@@ -38,6 +38,7 @@ configRouter.put('/custom',
   openapiOperationDoc({ operationId: 'putCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  ensureConfigIsEditable,
   customConfigUpdateValidator,
   asyncMiddleware(updateCustomConfig)
 )
@@ -46,6 +47,7 @@ configRouter.delete('/custom',
   openapiOperationDoc({ operationId: 'delCustomConfig' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  ensureConfigIsEditable,
   asyncMiddleware(deleteCustomConfig)
 )
 
@@ -194,6 +196,9 @@ function customConfig (): CustomConfig {
       videoQuota: CONFIG.USER.VIDEO_QUOTA,
       videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
     },
+    videoChannels: {
+      maxPerUser: CONFIG.VIDEO_CHANNELS.MAX_PER_USER
+    },
     transcoding: {
       enabled: CONFIG.TRANSCODING.ENABLED,
       allowAdditionalExtensions: CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS,
@@ -203,6 +208,7 @@ function customConfig (): CustomConfig {
       profile: CONFIG.TRANSCODING.PROFILE,
       resolutions: {
         '0p': CONFIG.TRANSCODING.RESOLUTIONS['0p'],
+        '144p': CONFIG.TRANSCODING.RESOLUTIONS['144p'],
         '240p': CONFIG.TRANSCODING.RESOLUTIONS['240p'],
         '360p': CONFIG.TRANSCODING.RESOLUTIONS['360p'],
         '480p': CONFIG.TRANSCODING.RESOLUTIONS['480p'],
@@ -229,6 +235,7 @@ function customConfig (): CustomConfig {
         threads: CONFIG.LIVE.TRANSCODING.THREADS,
         profile: CONFIG.LIVE.TRANSCODING.PROFILE,
         resolutions: {
+          '144p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['144p'],
           '240p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['240p'],
           '360p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['360p'],
           '480p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['480p'],
@@ -299,14 +306,6 @@ function customConfig (): CustomConfig {
         url: CONFIG.SEARCH.SEARCH_INDEX.URL,
         disableLocalSearch: CONFIG.SEARCH.SEARCH_INDEX.DISABLE_LOCAL_SEARCH,
         isDefaultSearch: CONFIG.SEARCH.SEARCH_INDEX.IS_DEFAULT_SEARCH
-      }
-    },
-    podcast: {
-      instanceFee: CONFIG.PODCAST.INSTANCE_FEE,
-      lightning: {
-        nodeAddress: CONFIG.PODCAST.LIGHTNING.NODE_ADDRESS,
-        customKey: CONFIG.PODCAST.LIGHTNING.CUSTOM_KEY,
-        customValue: CONFIG.PODCAST.LIGHTNING.CUSTOM_VALUE
       }
     }
   }

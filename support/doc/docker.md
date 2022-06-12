@@ -19,18 +19,18 @@ cd /your/peertube/directory
 #### Get the latest Compose file
 
 ```shell
-curl https://raw.githubusercontent.com/chocobozzz/PeerTube/develop/support/docker/production/docker-compose.yml > docker-compose.yml
+curl https://raw.githubusercontent.com/chocobozzz/PeerTube/master/support/docker/production/docker-compose.yml > docker-compose.yml
 ```
 
-View the source of the file you're about to download: [docker-compose.yml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml)
+View the source of the file you're about to download: [docker-compose.yml](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/docker-compose.yml)
 
 #### Get the latest env_file
 
 ```shell
-curl https://raw.githubusercontent.com/Chocobozzz/PeerTube/develop/support/docker/production/.env > .env
+curl https://raw.githubusercontent.com/Chocobozzz/PeerTube/master/support/docker/production/.env > .env
 ```
 
-View the source of the file you're about to download: [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/.env)
+View the source of the file you're about to download: [.env](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/.env)
 
 #### Tweak the `docker-compose.yml` file there according to your needs
 
@@ -44,14 +44,14 @@ $EDITOR ./docker-compose.yml
 $EDITOR ./.env
 ```
 
-In the downloaded example [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/.env), you must replace:
+In the downloaded example [.env](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/.env), you must replace:
 - `<MY POSTGRES USERNAME>`
 - `<MY POSTGRES PASSWORD>`
 - `<MY DOMAIN>` without 'https://'
 - `<MY EMAIL ADDRESS>`
 
 Other environment variables are used in
-[/support/docker/production/config/custom-environment-variables.yaml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/custom-environment-variables.yaml) and can be
+[/support/docker/production/config/custom-environment-variables.yaml](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/config/custom-environment-variables.yaml) and can be
 intuited from usage.
 
 #### Webserver
@@ -63,7 +63,7 @@ The container will generate the configuration by replacing `${WEBSERVER_HOST}` a
 
 ```shell
 mkdir -p docker-volume/nginx
-curl https://raw.githubusercontent.com/Chocobozzz/PeerTube/develop/support/nginx/peertube > docker-volume/nginx/peertube
+curl https://raw.githubusercontent.com/Chocobozzz/PeerTube/master/support/nginx/peertube > docker-volume/nginx/peertube
 ```
 
 You need to manually generate the first SSL/TLS certificate using Let's Encrypt:
@@ -119,7 +119,7 @@ See the production guide ["What now" section](https://docs.joinpeertube.org/inst
 
 ## Upgrade
 
-**Important:** Before upgrading, check you have all the `storage` fields in your [production.yaml file](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/production.yaml).
+**Important:** Before upgrading, check you have all the `storage` fields in your [production.yaml file](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/config/production.yaml).
 
 Pull the latest images:
 
@@ -147,7 +147,7 @@ $ docker-compose up -d
 ```shell
 $ git clone https://github.com/chocobozzz/PeerTube /tmp/peertube
 $ cd /tmp/peertube
-$ docker build . -f ./support/docker/production/Dockerfile.buster
+$ docker build . -f ./support/docker/production/Dockerfile.bullseye
 ```
 
 ### Development

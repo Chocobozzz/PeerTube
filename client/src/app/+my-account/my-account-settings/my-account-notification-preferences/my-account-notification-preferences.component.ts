@@ -11,14 +11,14 @@ import { UserNotificationSetting, UserNotificationSettingValue, UserRight } from
   styleUrls: [ './my-account-notification-preferences.component.scss' ]
 })
 export class MyAccountNotificationPreferencesComponent implements OnInit {
-  @Input() user: User = null
+  @Input() user: User
   @Input() userInformationLoaded: Subject<any>
 
-  notificationSettingKeys: (keyof UserNotificationSetting)[] = []
-  emailNotifications: { [ id in keyof UserNotificationSetting ]: boolean } = {} as any
-  webNotifications: { [ id in keyof UserNotificationSetting ]: boolean } = {} as any
-  labelNotifications: { [ id in keyof UserNotificationSetting ]: string } = {} as any
-  rightNotifications: { [ id in keyof Partial<UserNotificationSetting> ]: UserRight } = {} as any
+  notificationSettingGroups: { label: string, keys: (keyof UserNotificationSetting)[] }[] = []
+  emailNotifications: { [ id in keyof UserNotificationSetting ]?: boolean } = {}
+  webNotifications: { [ id in keyof UserNotificationSetting ]?: boolean } = {}
+  labelNotifications: { [ id in keyof UserNotificationSetting ]?: string } = {}
+  rightNotifications: { [ id in keyof Partial<UserNotificationSetting> ]?: UserRight } = {}
   emailEnabled = false
 
   private savePreferences = debounce(this.savePreferencesImpl.bind(this), 500)
@@ -32,7 +32,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       newVideoFromSubscription: $localize`New video from your subscriptions`,
       newCommentOnMyVideo: $localize`New comment on your video`,
       abuseAsModerator: $localize`New abuse`,
-      videoAutoBlacklistAsModerator: $localize`Video blocked automatically waiting review`,
+      videoAutoBlacklistAsModerator: $localize`An automatically blocked video is awaiting review`,
       blacklistOnMyVideo: $localize`One of your video is blocked/unblocked`,
       myVideoPublished: $localize`Video published (after transcoding/scheduled update)`,
       myVideoImportFinished: $localize`Video import finished`,
@@ -46,7 +46,47 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       newPeerTubeVersion: $localize`A new PeerTube version is available`,
       newPluginVersion: $localize`One of your plugin/theme has a new available version`
     }
-    this.notificationSettingKeys = Object.keys(this.labelNotifications) as (keyof UserNotificationSetting)[]
+    this.notificationSettingGroups = [
+      {
+        label: $localize`Social`,
+        keys: [
+          'newVideoFromSubscription',
+          'newFollow',
+          'commentMention'
+        ]
+      },
+
+      {
+        label: $localize`Your videos`,
+        keys: [
+          'newCommentOnMyVideo',
+          'blacklistOnMyVideo',
+          'myVideoPublished',
+          'myVideoImportFinished'
+        ]
+      },
+
+      {
+        label: $localize`Moderation`,
+        keys: [
+          'abuseStateChange',
+          'abuseNewMessage',
+          'abuseAsModerator',
+          'videoAutoBlacklistAsModerator'
+        ]
+      },
+
+      {
+        label: $localize`Administration`,
+        keys: [
+          'newUserRegistration',
+          'newInstanceFollower',
+          'autoInstanceFollowing',
+          'newPeerTubeVersion',
+          'newPluginVersion'
+        ]
+      }
+    ]
 
     this.rightNotifications = {
       abuseAsModerator: UserRight.MANAGE_ABUSES,

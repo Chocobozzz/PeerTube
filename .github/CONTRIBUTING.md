@@ -7,7 +7,6 @@ Interested in contributing? Awesome!
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Translate](#translate)
 - [Give your feedback](#give-your-feedback)
 - [Write documentation](#write-documentation)
@@ -20,7 +19,7 @@ Interested in contributing? Awesome!
   - [Client and server side](#client-and-server-side)
   - [RTL layout](#rtl-layout)
   - [Testing](#testing)
-    - [Unit tests](#unit-tests)
+    - [Unit/integration tests](#unitintegration-tests)
     - [Testing the federation of PeerTube servers](#testing-the-federation-of-peertube-servers)
   - [Emails](#emails)
 - [Plugins & Themes](#plugins--themes)
@@ -175,43 +174,12 @@ $ npm run dev -- --ar-locale
 
 ### Testing
 
+#### Unit/integration tests
+
 Your code contributions must pass the tests before they can be merged. Tests ensure most of the application behaves
 as expected and respect the syntax conventions. They will run upon PR submission as part of our CI, but running them beforehand yourself will get you faster feedback and save CI runner time for others.
 
-PeerTube mainly features backend and plugin tests, found in `server/tests`.
-
-#### Unit tests
-
-Create a PostgreSQL user **with the same name as your username** in order to avoid using the *postgres* user.
-
-Then, we can create the databases (if they don't already exist):
-
-```
-$ sudo -u postgres createuser you_username --createdb --superuser
-$ npm run clean:server:test
-```
-
-Build the application and run the unit/integration tests:
-
-```
-$ npm run build -- --light
-$ npm test
-```
-
-If you just want to run 1 test (which is what you want to debug a specific test rapidly):
-
-```
-$ TS_NODE_FILES=true npm run mocha -- --exit -r ts-node/register -r tsconfig-paths/register --bail server/tests/api/videos/single-server.ts
-```
-
-While testing, you might want to display a server's logs:
-
-```
-NODE_APP_INSTANCE=1 NODE_ENV=test npm run parse-log -- --level debug | less +GF
-```
-
-Instance configurations are in `config/test-{1,2,3,4,5,6}.yaml`.
-Note that only instance 2 has transcoding enabled.
+See the [dedicated documentation](/support/doc/development/tests.md) to run tests locally.
 
 #### Testing the federation of PeerTube servers
 

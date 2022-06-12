@@ -191,9 +191,9 @@ export class UsersCommand extends AbstractCommand {
     })).then(res => res.user)
   }
 
-  async generate (username: string) {
+  async generate (username: string, role?: UserRole) {
     const password = 'password'
-    const user = await this.create({ username, password })
+    const user = await this.create({ username, password, role })
 
     const token = await this.server.login.getAccessToken({ username, password })
 
@@ -206,9 +206,9 @@ export class UsersCommand extends AbstractCommand {
     }
   }
 
-  async generateUserAndToken (username: string) {
+  async generateUserAndToken (username: string, role?: UserRole) {
     const password = 'password'
-    await this.create({ username, password })
+    await this.create({ username, password, role })
 
     return this.server.login.getAccessToken({ username, password })
   }

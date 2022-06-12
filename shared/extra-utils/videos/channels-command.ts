@@ -1,5 +1,5 @@
 import { pick } from '@shared/core-utils'
-import { HttpStatusCode, ResultList, VideoChannel, VideoChannelCreateResult } from '@shared/models'
+import { ActorFollow, HttpStatusCode, ResultList, VideoChannel, VideoChannelCreateResult } from '@shared/models'
 import { VideoChannelCreate } from '../../models/videos/channel/video-channel-create.model'
 import { VideoChannelUpdate } from '../../models/videos/channel/video-channel-update.model'
 import { unwrapBody } from '../requests'
@@ -47,7 +47,7 @@ export class ChannelsCommand extends AbstractCommand {
   }
 
   async create (options: OverrideCommandOptions & {
-    attributes: VideoChannelCreate
+    attributes: Partial<VideoChannelCreate>
   }) {
     const path = '/api/v1/video-channels/'
 
@@ -151,6 +151,28 @@ export class ChannelsCommand extends AbstractCommand {
       path,
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  listFollowers (options: OverrideCommandOptions & {
+    channelName: string
+    start?: number
+    count?: number
+    sort?: string
+    search?: string
+  }) {
+    const { channelName, start, count, sort, search } = options
+    const path = '/api/v1/video-channels/' + channelName + '/followers'
+
+    const query = { start, count, sort, search }
+
+    return this.getRequestBody<ResultList<ActorFollow>>({
+      ...options,
+
+      path,
+      query,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
 }

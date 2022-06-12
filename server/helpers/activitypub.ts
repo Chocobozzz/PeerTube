@@ -187,10 +187,10 @@ function buildSignedActivity <T> (byActor: MActor, data: T, contextType?: Contex
   return signJsonLDObject(byActor, activity)
 }
 
-function getAPId (activity: string | { id: string }) {
-  if (typeof activity === 'string') return activity
+function getAPId (object: string | { id: string }) {
+  if (typeof object === 'string') return object
 
-  return activity.id
+  return object.id
 }
 
 function checkUrlsSameHost (url1: string, url2: string) {

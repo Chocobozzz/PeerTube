@@ -272,6 +272,28 @@
     </div>
   </div>
 
+  <div class="form-row mt-4"> <!-- video channels grid -->
+    <div class="form-group col-12 col-lg-4 col-xl-3">
+      <div i18n class="inner-form-title">VIDEO CHANNELS</div>
+    </div>
+    
+    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+      <div class="form-group" formGroupName="videoChannels">
+        <label i18n for="videoChannelsMaxPerUser">Max video channels per user</label>
+
+        <div class="number-with-unit">
+          <input
+            type="number" min="1" id="videoChannelsMaxPerUser" class="form-control"
+            formControlName="maxPerUser" [ngClass]="{ 'input-error': formErrors['videoChannels.maxPerUser'] }"
+          >
+          <span i18n>{form.value['videoChannels']['maxPerUser'], plural, =1 {channel} other {channels}}</span>
+        </div>
+
+        <div *ngIf="formErrors.videoChannels.maxPerUser" class="form-error">{{ formErrors.videoChannels.maxPerUser }}</div>
+      </div>
+    </div>
+  </div>
+
   <div class="form-row mt-4"> <!-- search grid -->
     <div class="form-group col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">SEARCH</div>
@@ -416,7 +438,7 @@
                   <p i18n>⚠️ This functionality requires a lot of attention and extra moderation.</p>
 
                   <span i18n>
-                    See <a href="https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances" rel="noopener noreferer" target="_blank">the documentation</a> for more information about the expected URL
+                    See <a href="https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances" rel="noopener noreferrer" target="_blank">the documentation</a> for more information about the expected URL
                   </span>
                 </ng-container>
 
@@ -434,60 +456,6 @@
             </div>
 
           </ng-container>
-        </ng-container>
-      </ng-container>
-
-    </div>
-  </div>
-
-  <div class="form-row mt-4"> <!-- podcast grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
-      <div i18n class="inner-form-title">PODCAST</div>
-    </div>
-
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
-
-      <ng-container formGroupName="podcast">
-        <label i18n for="podcastInstanceFee">Instance Fee Percentage</label>
-        <input
-          type="number" min="0" max="100" id="podcastInstanceFee" class="form-control"
-          formControlName="instanceFee"
-          [ngClass]="{ 'input-error': formErrors['podcast.instanceFee'] }"
-        >
-        <div *ngIf="formErrors.podcast.instanceFee" class="form-error">
-          {{ formErrors.podcast.instanceFee }}
-        </div>
-        
-        <ng-container formGroupName="lightning">
-          <label i18n for="podcastLightningNodeAddress">Lightning Node Address</label>
-          <input
-            type="text" id="podcastLightningNodeAddress" class="form-control"
-            formControlName="nodeAddress"
-            [ngClass]="{ 'input-error': formErrors['podcast.lightning.nodeAddress'] }"
-          >
-          <div *ngIf="formErrors.podcast.lightning.nodeAddress" class="form-error">
-            {{ formErrors.podcast.lightning.nodeAddress }}
-          </div>
-
-          <label i18n for="podcastLightningCustomKey">Lightning Custom Key</label>
-          <input
-            type="text" id="podcastLightningCustomKey" class="form-control"
-            formControlName="customKey"
-            [ngClass]="{ 'input-error': formErrors['podcast.lightning.customKey'] }"
-          >
-          <div *ngIf="formErrors.podcast.lightning.customKey" class="form-error">
-            {{ formErrors.podcast.lightning.customKey }}
-          </div>
-
-          <label i18n for="podcastLightningCustomValue">Lightning Custom Value</label>
-          <input
-            type="text" id="podcastLightningCustomValue" class="form-control"
-            formControlName="customValue"
-            [ngClass]="{ 'input-error': formErrors['podcast.lightning.customValue'] }"
-          >
-          <div *ngIf="formErrors.podcast.lightning.customValue" class="form-error">
-            {{ formErrors.podcast.lightning.customValue }}
-          </div>
         </ng-container>
       </ng-container>
 

@@ -1,13 +1,13 @@
-import { getOrCreateAPVideo } from '../videos'
-import { forwardVideoRelatedActivity } from '../send/utils'
-import { Redis } from '../../redis'
-import { ActivityCreate, ActivityView, ViewObject } from '../../../../shared/models/activitypub'
+import { VideoViews } from '@server/lib/video-views'
+import { ActivityView } from '../../../../shared/models/activitypub'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
-import { LiveManager } from '@server/lib/live/live-manager'
+import { forwardVideoRelatedActivity } from '../send/utils'
+import { getOrCreateAPVideo } from '../videos'
 
-async function processViewActivity (options: APProcessorOptions<ActivityCreate | ActivityView>) {
+async function processViewActivity (options: APProcessorOptions<ActivityView>) {
   const { activity, byActor } = options
+
   return processCreateView(activity, byActor)
 }
 
@@ -19,10 +19,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processCreateView (activity: ActivityView | ActivityCreate, byActor: MActorSignature) {
-  const videoObject = activity.type === 'View'
-    ? activity.object
-    : (activity.object as ViewObject).object
+async function processCreateView (activity: ActivityView, byActor: MActorSignature) {
+  const videoObject = activity.object
 
   const { video } = await getOrCreateAPVideo({
     videoObject,
@@ -30,17 +28,13 @@ async function processCreateView (activity: ActivityView | ActivityCreate, byAct
     allowRefresh: false
   })
 
-  if (!video.isLive) {
-    await Redis.Instance.addVideoView(video.id)
-  }
+  const viewerExpires = activity.expires
+    ? new Date(activity.expires)
+    : undefined
+
+  await VideoViews.Instance.processView({ video, ip: null, viewerExpires })
 
   if (video.isOwned()) {
-    // Our live manager will increment the counter and send the view to followers
-    if (video.isLive) {
-      LiveManager.Instance.addViewTo(video.id)
-      return
-    }
-
     // Forward the view but don't resend the activity to the sender
     const exceptions = [ byActor ]
     await forwardVideoRelatedActivity(activity, undefined, exceptions, video)

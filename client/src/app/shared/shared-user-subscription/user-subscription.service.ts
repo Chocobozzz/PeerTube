@@ -2,11 +2,11 @@ import * as debug from 'debug'
 import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
 import { catchError, filter, map, switchMap, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable, NgZone } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
 import { buildBulkObservable } from '@app/helpers'
 import { Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
-import { ResultList, VideoChannel as VideoChannelServer, VideoSortField } from '@shared/models'
+import { ActorFollow, ResultList, VideoChannel as VideoChannelServer, VideoSortField } from '@shared/models'
 import { environment } from '../../../environments/environment'
 
 const logger = debug('peertube:subscriptions:UserSubscriptionService')
@@ -17,6 +17,8 @@ type SubscriptionExistResultObservable = { [ uri: string ]: Observable<boolean> 
 @Injectable()
 export class UserSubscriptionService {
   static BASE_USER_SUBSCRIPTIONS_URL = environment.apiUrl + '/api/v1/users/me/subscriptions'
+  static BASE_VIDEO_CHANNELS_URL = environment.apiUrl + '/api/v1/video-channels'
+  static BASE_ACCOUNTS_URL = environment.apiUrl + '/api/v1/accounts'
 
   // Use a replay subject because we "next" a value before subscribing
   private existsSubject = new ReplaySubject<string>(1)
@@ -30,19 +32,50 @@ export class UserSubscriptionService {
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private videoService: VideoService,
-    private restService: RestService,
-    private ngZone: NgZone
+    private restService: RestService
   ) {
     this.existsObservable = merge(
       buildBulkObservable({
         time: 500,
-        ngZone: this.ngZone,
         notifierObservable: this.existsSubject,
         bulkGet: this.doSubscriptionsExist.bind(this)
-      }),
+      }).pipe(map(r => r.response)),
 
       this.myAccountSubscriptionCacheSubject
     )
+  }
+
+  listFollowers (parameters: {
+    pagination: ComponentPaginationLight
+    nameWithHost: string
+    search?: string
+  }) {
+    const { pagination, nameWithHost, search } = parameters
+
+    let url = `${UserSubscriptionService.BASE_ACCOUNTS_URL}/${nameWithHost}/followers`
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, this.restService.componentToRestPagination(pagination), '-createdAt')
+
+    if (search) {
+      const filters = this.restService.parseQueryStringFilter(search, {
+        channel: {
+          prefix: 'channel:'
+        }
+      })
+
+      if (filters.channel) {
+        url = `${UserSubscriptionService.BASE_VIDEO_CHANNELS_URL}/${filters.channel}/followers`
+      }
+
+      params = this.restService.addObjectParams(params, { search: filters.search })
+    }
+
+    return this.authHttp
+      .get<ResultList<ActorFollow>>(url, { params })
+      .pipe(
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   getUserSubscriptionVideos (parameters: {
@@ -51,7 +84,7 @@ export class UserSubscriptionService {
     skipCount?: boolean
   }): Observable<ResultList<Video>> {
     const { videoPagination, sort, skipCount } = parameters
-    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+    const pagination = this.restService.componentToRestPagination(videoPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
@@ -108,7 +141,7 @@ export class UserSubscriptionService {
     const { pagination, search } = parameters
     const url = UserSubscriptionService.BASE_USER_SUBSCRIPTIONS_URL
 
-    const restPagination = this.restService.componentPaginationToRestPagination(pagination)
+    const restPagination = this.restService.componentToRestPagination(pagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, restPagination)

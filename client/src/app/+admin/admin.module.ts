@@ -10,11 +10,12 @@ import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
+import { SharedTablesModule } from '@app/shared/shared-tables'
 import { SharedVideoCommentModule } from '@app/shared/shared-video-comment'
+import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
 import { AdminRoutingModule } from './admin-routing.module'
 import { AdminComponent } from './admin.component'
 import {
-  ConfigComponent,
   EditAdvancedConfigurationComponent,
   EditBasicConfigurationComponent,
   EditConfigurationService,
@@ -25,23 +26,29 @@ import {
   EditVODTranscodingComponent
 } from './config'
 import { ConfigService } from './config/shared/config.service'
-import { FollowersListComponent, FollowModalComponent, FollowsComponent, VideoRedundanciesListComponent } from './follows'
+import { FollowersListComponent, FollowModalComponent, VideoRedundanciesListComponent } from './follows'
 import { FollowingListComponent } from './follows/following-list/following-list.component'
 import { RedundancyCheckboxComponent } from './follows/shared/redundancy-checkbox.component'
 import { VideoRedundancyInformationComponent } from './follows/video-redundancies-list/video-redundancy-information.component'
 import { AbuseListComponent, VideoBlockListComponent } from './moderation'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from './moderation/instance-blocklist'
-import { ModerationComponent } from './moderation/moderation.component'
 import { VideoCommentListComponent } from './moderation/video-comment-list'
+import {
+  UserCreateComponent,
+  UserListComponent,
+  UserPasswordComponent,
+  UserUpdateComponent,
+  VideoAdminService,
+  VideoListComponent
+} from './overview'
 import { PluginListInstalledComponent } from './plugins/plugin-list-installed/plugin-list-installed.component'
 import { PluginSearchComponent } from './plugins/plugin-search/plugin-search.component'
 import { PluginShowInstalledComponent } from './plugins/plugin-show-installed/plugin-show-installed.component'
 import { PluginsComponent } from './plugins/plugins.component'
 import { PluginApiService } from './plugins/shared/plugin-api.service'
-import { JobService, LogsComponent, LogsService, SystemComponent } from './system'
+import { JobService, LogsComponent, LogsService } from './system'
 import { DebugComponent, DebugService } from './system/debug'
 import { JobsComponent } from './system/jobs/jobs.component'
-import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersComponent, UserUpdateComponent } from './users'
 
 @NgModule({
   imports: [
@@ -56,6 +63,8 @@ import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersCom
     SharedActorImageModule,
     SharedActorImageEditModule,
     SharedCustomMarkupModule,
+    SharedVideoMiniatureModule,
+    SharedTablesModule,
 
     TableModule,
     SelectButtonModule,
@@ -65,7 +74,8 @@ import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersCom
   declarations: [
     AdminComponent,
 
-    FollowsComponent,
+    VideoListComponent,
+
     FollowersListComponent,
     FollowingListComponent,
     FollowModalComponent,
@@ -73,13 +83,11 @@ import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersCom
     VideoRedundanciesListComponent,
     VideoRedundancyInformationComponent,
 
-    UsersComponent,
     UserCreateComponent,
     UserUpdateComponent,
     UserPasswordComponent,
     UserListComponent,
 
-    ModerationComponent,
     VideoBlockListComponent,
     AbuseListComponent,
     VideoCommentListComponent,
@@ -92,12 +100,9 @@ import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersCom
     PluginSearchComponent,
     PluginShowInstalledComponent,
 
-    SystemComponent,
     JobsComponent,
     LogsComponent,
     DebugComponent,
-
-    ConfigComponent,
 
     EditCustomConfigComponent,
     EditBasicConfigurationComponent,
@@ -118,7 +123,8 @@ import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersCom
     DebugService,
     ConfigService,
     PluginApiService,
-    EditConfigurationService
+    EditConfigurationService,
+    VideoAdminService
   ]
 })
 export class AdminModule { }

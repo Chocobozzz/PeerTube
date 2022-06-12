@@ -2,7 +2,9 @@ import express from 'express'
 import Feed from 'pfeed-podcast'
 import showdown from 'showdown'
 import { groupBy, isNull, last, map, orderBy } from 'lodash'
+import { getServerActor } from '@server/models/application/application'
 import { getCategoryLabel } from '@server/models/video/formatter/video-format-utils'
+import { VideoInclude, VideoResolution, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
 import { FEEDS, PREVIEWS_SIZE, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
@@ -21,7 +23,6 @@ import { cacheRouteFactory } from '../middlewares/cache/cache'
 import { VideoModel } from '../models/video/video'
 import { VideoCaptionModel } from '../models/video/video-caption'
 import { VideoCommentModel } from '../models/video/video-comment'
-import { VideoFilter, VideoResolution, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 
 const feedsRouter = express.Router()
 
@@ -180,15 +181,19 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     videoChannelId: videoChannel ? videoChannel.id : null
   }
 
+  const server = await getServerActor()
   const { data } = await VideoModel.listForApi({
     start,
     count: FEEDS.COUNT,
     sort: '-publishedAt',
-    includeLocalVideos: true,
+    displayOnlyForFollower: {
+      actorId: server.id,
+      orLocalVideos: true
+    },
     nsfw,
-    filter: req.query.filter as VideoFilter,
-    withFiles: true,
-    withCaptions: true,
+    isLocal: true,
+    include: req.query.include | VideoInclude.FILES,
+    hasFiles: true,
     countVideos: false,
     ...options
   })
@@ -234,15 +239,19 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
     start,
     count: FEEDS.COUNT,
     sort: req.query.sort,
-    includeLocalVideos: false,
     nsfw,
-    filter: req.query.filter as VideoFilter,
 
-    withFiles: true,
-    withCaptions: true,
+    isLocal: req.query.isLocal,
+
+    hasFiles: true,
+    include: req.query.include | VideoInclude.FILES,
+
     countVideos: false,
 
-    followerActorId: res.locals.user.Account.Actor.id,
+    displayOnlyForFollower: {
+      actorId: res.locals.user.Account.Actor.id,
+      orLocalVideos: false
+    },
     user: res.locals.user
   })
 

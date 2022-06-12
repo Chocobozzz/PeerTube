@@ -1,13 +1,14 @@
 import express from 'express'
 import { body } from 'express-validator'
-import { isIntOrNull, isIntPercentage } from '@server/helpers/custom-validators/misc'
-import { isEmailEnabled } from '@server/initializers/config'
+import { isIntOrNull } from '@server/helpers/custom-validators/misc'
+import { CONFIG, isEmailEnabled } from '@server/initializers/config'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users'
 import { logger } from '../../helpers/logger'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { areValidationErrors } from './shared'
+import { HttpStatusCode } from '@shared/models/http/http-error-codes'
 
 const customConfigUpdateValidator = [
   body('instance.name').exists().withMessage('Should have a valid instance name'),
@@ -37,11 +38,14 @@ const customConfigUpdateValidator = [
   body('user.videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid video quota'),
   body('user.videoQuotaDaily').custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily video quota'),
 
+  body('videoChannels.maxPerUser').isInt().withMessage("Should have a valid maximum amount of video channels per user"),
+
   body('transcoding.enabled').isBoolean().withMessage('Should have a valid transcoding enabled boolean'),
   body('transcoding.allowAdditionalExtensions').isBoolean().withMessage('Should have a valid additional extensions boolean'),
   body('transcoding.threads').isInt().withMessage('Should have a valid transcoding threads number'),
   body('transcoding.concurrency').isInt({ min: 1 }).withMessage('Should have a valid transcoding concurrency number'),
   body('transcoding.resolutions.0p').isBoolean().withMessage('Should have a valid transcoding 0p resolution enabled boolean'),
+  body('transcoding.resolutions.144p').isBoolean().withMessage('Should have a valid transcoding 144p resolution enabled boolean'),
   body('transcoding.resolutions.240p').isBoolean().withMessage('Should have a valid transcoding 240p resolution enabled boolean'),
   body('transcoding.resolutions.360p').isBoolean().withMessage('Should have a valid transcoding 360p resolution enabled boolean'),
   body('transcoding.resolutions.480p').isBoolean().withMessage('Should have a valid transcoding 480p resolution enabled boolean'),
@@ -77,6 +81,7 @@ const customConfigUpdateValidator = [
   body('live.maxUserLives').custom(isIntOrNull).withMessage('Should have a valid max user lives'),
   body('live.transcoding.enabled').isBoolean().withMessage('Should have a valid live transcoding enabled boolean'),
   body('live.transcoding.threads').isInt().withMessage('Should have a valid live transcoding threads'),
+  body('live.transcoding.resolutions.144p').isBoolean().withMessage('Should have a valid transcoding 144p resolution enabled boolean'),
   body('live.transcoding.resolutions.240p').isBoolean().withMessage('Should have a valid transcoding 240p resolution enabled boolean'),
   body('live.transcoding.resolutions.360p').isBoolean().withMessage('Should have a valid transcoding 360p resolution enabled boolean'),
   body('live.transcoding.resolutions.480p').isBoolean().withMessage('Should have a valid transcoding 480p resolution enabled boolean'),
@@ -92,11 +97,6 @@ const customConfigUpdateValidator = [
   body('search.searchIndex.disableLocalSearch').isBoolean().withMessage('Should have a valid search index disable local search boolean'),
   body('search.searchIndex.isDefaultSearch').isBoolean().withMessage('Should have a valid search index default enabled boolean'),
 
-  body('podcast.instanceFee').custom(isIntPercentage).withMessage('Should have a valid podcast instance fee percentage'),
-  body('podcast.lightning.nodeAddress').exists().withMessage('Should have a valid podcast lightning node address'),
-  body('podcast.lightning.customKey').exists().withMessage('Should have a valid podcast lightning custom key'),
-  body('podcast.lightning.customValue').exists().withMessage('Should have a valid podcast lightning custom value'),
-
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking customConfigUpdateValidator parameters', { parameters: req.body })
 
@@ -109,10 +109,22 @@ const customConfigUpdateValidator = [
   }
 ]
 
+function ensureConfigIsEditable (req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!CONFIG.WEBADMIN.CONFIGURATION.EDITION.ALLOWED) {
+    return res.fail({
+      status: HttpStatusCode.METHOD_NOT_ALLOWED_405,
+      message: 'Server configuration is static and cannot be edited'
+    })
+  }
+
+  return next()
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  customConfigUpdateValidator
+  customConfigUpdateValidator,
+  ensureConfigIsEditable
 }
 
 function checkInvalidConfigIfEmailDisabled (customConfig: CustomConfig, res: express.Response) {

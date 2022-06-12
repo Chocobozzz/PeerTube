@@ -147,15 +147,22 @@ class SettingsButton extends Button {
     this.player().peertube().onMenuOpen();
 
     (this.menu.el() as HTMLElement).style.opacity = '1'
+
     this.dialog.show()
+    this.el().setAttribute('aria-expanded', 'true')
 
     this.setDialogSize(this.getComponentSize(this.menu))
+
+    const firstChild = this.menu.children()[0]
+    if (firstChild) firstChild.focus()
   }
 
   hideDialog () {
     this.player_.peertube().onMenuClosed()
 
     this.dialog.hide()
+    this.el().setAttribute('aria-expanded', 'false')
+
     this.setDialogSize(this.getComponentSize(this.menu));
     (this.menu.el() as HTMLElement).style.opacity = '1'
     this.resetChildren()

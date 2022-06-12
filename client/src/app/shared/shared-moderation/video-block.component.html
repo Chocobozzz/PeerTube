@@ -1,7 +1,14 @@
 <ng-template #modal>
   <div class="modal-header">
-    <h4 i18n class="modal-title" *ngIf="!video.isLive">Block video "{{ video.name }}"</h4>
-    <h4 i18n class="modal-title" *ngIf="video.isLive">Block live "{{ video.name }}"</h4>
+    <ng-container *ngIf="isMultiple()">
+      <h4 i18n class="modal-title">Block {{ videos.length }} videos</h4>
+    </ng-container>
+
+    <ng-container *ngIf="!isMultiple()">
+      <h4 i18n class="modal-title" *ngIf="!getSingleVideo().isLive">Block video "{{ getSingleVideo().name }}"</h4>
+      <h4 i18n class="modal-title" *ngIf="getSingleVideo().isLive">Block live "{{ getSingleVideo().name }}"</h4>
+    </ng-container>
+
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
 
@@ -18,19 +25,20 @@
         </div>
       </div>
 
-      <div class="form-group" *ngIf="video.isLocal">
+      <div class="form-group" *ngIf="hasLocal()">
         <my-peertube-checkbox
           inputName="unfederate" formControlName="unfederate"
-          i18n-labelText labelText="Unfederate the video"
+          i18n-labelText labelText="Unfederate"
         >
           <ng-container ngProjectAs="description">
-            <span i18n>This will ask remote instances to delete it</span>
+            <span *ngIf="isMultiple()" i18n>This will ask remote instances to delete local videos</span>
+            <span *ngIf="!isMultiple()" i18n>This will ask remote instances to delete this video</span>
           </ng-container>
         </my-peertube-checkbox>
       </div>
 
-      <strong class="live-info" *ngIf="video.isLive" i18n>
-        Blocking this live will automatically terminate the live stream.
+      <strong class="live-info" *ngIf="hasLive()" i18n>
+        Blocking a live will automatically terminate the live stream.
       </strong>
 
       <div class="form-group inputs">
@@ -39,7 +47,7 @@
           (click)="hide()" (key.enter)="hide()"
         >
 
-        <input type="submit" i18n-value value="Submit" class="peertube-button orange-button" [disabled]="!form.valid" />
+        <input type="submit" i18n-value value="Block" class="peertube-button orange-button" [disabled]="!form.valid" />
       </div>
     </form>
 

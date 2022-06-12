@@ -7,7 +7,7 @@ import { FollowModalComponent } from './follow-modal.component'
 
 @Component({
   templateUrl: './following-list.component.html',
-  styleUrls: [ '../follows.component.scss', './following-list.component.scss' ]
+  styleUrls: [ './following-list.component.scss' ]
 })
 export class FollowingListComponent extends RestTable implements OnInit {
   @ViewChild('followModal') followModal: FollowModalComponent

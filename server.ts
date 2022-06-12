@@ -117,6 +117,7 @@ import { VideosRedundancyScheduler } from './server/lib/schedulers/videos-redund
 import { RemoveOldHistoryScheduler } from './server/lib/schedulers/remove-old-history-scheduler'
 import { AutoFollowIndexInstances } from './server/lib/schedulers/auto-follow-index-instances'
 import { RemoveDanglingResumableUploadsScheduler } from './server/lib/schedulers/remove-dangling-resumable-uploads-scheduler'
+import { VideoViewsBufferScheduler } from './server/lib/schedulers/video-views-buffer-scheduler'
 import { isHTTPSignatureDigestValid } from './server/helpers/peertube-crypto'
 import { PeerTubeSocket } from './server/lib/peertube-socket'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './server/lib/hls'
@@ -128,12 +129,14 @@ import { LiveManager } from './server/lib/live'
 import { HttpStatusCode } from './shared/models/http/http-error-codes'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
+import { VideoViews } from '@server/lib/video-views'
 
 // ----------- Command line -----------
 
 cli
   .option('--no-client', 'Start PeerTube without client interface')
   .option('--no-plugins', 'Start PeerTube without plugins/themes enabled')
+  .option('--benchmark-startup', 'Automatically stop server when initialized')
   .parse(process.argv)
 
 // ----------- App -----------
@@ -296,17 +299,17 @@ async function startApplication () {
   PeerTubeVersionCheckScheduler.Instance.enable()
   AutoFollowIndexInstances.Instance.enable()
   RemoveDanglingResumableUploadsScheduler.Instance.enable()
+  VideoViewsBufferScheduler.Instance.enable()
 
-  // Redis initialization
   Redis.Instance.init()
-
   PeerTubeSocket.Instance.init(server)
+  VideoViews.Instance.init()
 
   updateStreamingPlaylistsInfohashesIfNeeded()
     .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
 
   LiveManager.Instance.init()
-  if (CONFIG.LIVE.ENABLED) LiveManager.Instance.run()
+  if (CONFIG.LIVE.ENABLED) await LiveManager.Instance.run()
 
   // Make server listening
   server.listen(port, hostname, async () => {
@@ -322,6 +325,8 @@ async function startApplication () {
     logger.info('Web server: %s', WEBSERVER.URL)
 
     Hooks.runAction('action:application.listening')
+
+    if (cliOptions['benchmarkStartup']) process.exit(0)
   })
 
   process.on('exit', () => {

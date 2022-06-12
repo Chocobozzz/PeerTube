@@ -81,6 +81,9 @@ describe('Test config API validators', function () {
       videoQuota: 5242881,
       videoQuotaDaily: 318742
     },
+    videoChannels: {
+      maxPerUser: 20
+    },
     transcoding: {
       enabled: true,
       allowAdditionalExtensions: true,
@@ -90,6 +93,7 @@ describe('Test config API validators', function () {
       profile: 'vod_profile',
       resolutions: {
         '0p': false,
+        '144p': false,
         '240p': false,
         '360p': true,
         '480p': true,
@@ -118,6 +122,7 @@ describe('Test config API validators', function () {
         threads: 4,
         profile: 'live_profile',
         resolutions: {
+          '144p': true,
           '240p': true,
           '360p': true,
           '480p': true,
@@ -187,14 +192,6 @@ describe('Test config API validators', function () {
         url: 'https://search.joinpeertube.org',
         disableLocalSearch: true,
         isDefaultSearch: true
-      }
-    },
-    podcast: {
-      instanceFee: 1,
-      lightning: {
-        nodeAddress: "fake address",
-        customKey: "custom key",
-        customValue: "custom value"
       }
     }
   }

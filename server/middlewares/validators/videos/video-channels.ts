@@ -1,6 +1,5 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { VIDEO_CHANNELS } from '@server/initializers/constants'
 import { MChannelAccountDefault, MUser } from '@server/types/models'
 import { UserRight } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
@@ -15,6 +14,7 @@ import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/actor/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { areValidationErrors, doesLocalVideoChannelNameExist, doesVideoChannelNameWithHostExist } from '../shared'
+import { CONFIG } from '@server/initializers/config'
 
 const videoChannelsAddValidator = [
   body('name').custom(isVideoChannelUsernameValid).withMessage('Should have a valid channel name'),
@@ -37,8 +37,8 @@ const videoChannelsAddValidator = [
     }
 
     const count = await VideoChannelModel.countByAccount(res.locals.oauth.token.User.Account.id)
-    if (count >= VIDEO_CHANNELS.MAX_PER_USER) {
-      res.fail({ message: `You cannot create more than ${VIDEO_CHANNELS.MAX_PER_USER} channels` })
+    if (count >= CONFIG.VIDEO_CHANNELS.MAX_PER_USER) {
+      res.fail({ message: `You cannot create more than ${CONFIG.VIDEO_CHANNELS.MAX_PER_USER} channels` })
       return false
     }
 
@@ -61,26 +61,10 @@ const videoChannelsUpdateValidator = [
     .optional()
     .custom(isBooleanValid).withMessage('Should have a valid bulkVideosSupportUpdate boolean field'),
 
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsUpdate parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoChannelNameWithHostExist(req.params.nameWithHost, res)) return
-
-    // We need to make additional checks
-    if (res.locals.videoChannel.Actor.isOwned() === false) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Cannot update video channel of another server'
-      })
-    }
-
-    if (res.locals.videoChannel.Account.userId !== res.locals.oauth.token.User.id) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Cannot update video channel of another user'
-      })
-    }
 
     return next()
   }

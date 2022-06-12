@@ -192,7 +192,7 @@ async function addVideoCommentThread (req: express.Request, res: express.Respons
   Notifier.Instance.notifyOnNewComment(comment)
   auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
 
-  Hooks.runAction('action:api.video-thread.created', { comment })
+  Hooks.runAction('action:api.video-thread.created', { comment, req, res })
 
   return res.json({ comment: comment.toFormattedJSON() })
 }
@@ -214,7 +214,7 @@ async function addVideoCommentReply (req: express.Request, res: express.Response
   Notifier.Instance.notifyOnNewComment(comment)
   auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
 
-  Hooks.runAction('action:api.video-comment-reply.created', { comment })
+  Hooks.runAction('action:api.video-comment-reply.created', { comment, req, res })
 
   return res.json({ comment: comment.toFormattedJSON() })
 }
@@ -222,7 +222,7 @@ async function addVideoCommentReply (req: express.Request, res: express.Response
 async function removeVideoComment (req: express.Request, res: express.Response) {
   const videoCommentInstance = res.locals.videoCommentFull
 
-  await removeComment(videoCommentInstance)
+  await removeComment(videoCommentInstance, req, res)
 
   auditLogger.delete(getAuditIdFromRes(res), new CommentAuditView(videoCommentInstance.toFormattedJSON()))
 

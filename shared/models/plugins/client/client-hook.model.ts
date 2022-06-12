@@ -26,6 +26,10 @@ export const clientFilterHookObject = {
   'filter:api.video-watch.video.get.params': true,
   'filter:api.video-watch.video.get.result': true,
 
+  // Filter params/result of the function that fetch video playlist elements of the video-watch page
+  'filter:api.video-watch.video-playlist-elements.get.params': true,
+  'filter:api.video-watch.video-playlist-elements.get.result': true,
+
   // Filter params/result of the function that fetch the threads of the video-watch page
   'filter:api.video-watch.video-threads.list.params': true,
   'filter:api.video-watch.video-threads.list.result': true,

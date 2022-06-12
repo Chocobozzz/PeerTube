@@ -3,76 +3,79 @@
  * Chocobozzz
  * Rigel Kent
  * Filip Bengtsson
- * josé m
  * Александр
+ * josé m
  * Simon Brosdetzko
- * kimsible
- * Berto Te
  * Jeff Huang
+ * Berto Te
+ * kimsible
  * kontrollanten
  * Laurent Ettouati
- * Clemens Schielicke
  * Phongpanot
+ * Clemens Schielicke
  * Racida S
  * Marcin Mikołajczak
- * Kim
  * GunChleoc
+ * Zet
+ * Kim
  * Tirifto
  * Vodoyo Kamal
+ * Ihor Hordiichuk
  * Kimsible
  * Felix Ableitner
  * Frank Sträter
+ * Hồ Nhất Duy
  * Gérald Niel
  * Duy
  * Slimane Selyan AMIRI
- * Zet
  * Mark Van den Borre
  * x
  * John Livingston
  * Julien Maulny
- * Hồ Nhất Duy
+ * Eivind Ødegård
  * Jorropo
  * Josh Morel
  * BO41
  * Balázs Meskó
- * Eivind Ødegård
+ * vachan
  * Francesc
  * Quentin PAGÈS
  * mando laress
- * vachan
  * Cedric F
  * Marc Strange
  * Besnik Bleta
- * Ihor Hordiichuk
  * ButterflyOfFire
+ * DignifiedSilence
+ * Florian CUNY
  * Martin Hoefler
  * Xabi
  * buoyantair
  * Balázs Úr
- * DignifiedSilence
  * Jan Keromnes
  * Luca Calcaterra
  * Attila F
  * Caroline Chuong
+ * Manuel Viens
  * Porrumentzio
  * Siourdakis Thanos
  * Thomas Citharel
+ * knuxify
  * Agron Selimaj
  * Benjamin Bouvier
  * Joe Bill
  * Kemal Oktay Aktoğan
  * Luc Didry
  * Lucas Declercq
+ * Ms Kimsible
+ * Poslovitch
  * chris@famichiki.tube
- * knuxify
  * matograine
  * Alexander Ivanov
  * Daniel Santos
  * David Libeau
  * Ewald Arnold
  * Florent F
- * Florian CUNY
- * Manuel Viens
+ * Kempelen
  * Nassim Bounouas
  * NorbiPeti
  * Rafael Fontenelle
@@ -92,20 +95,22 @@
  * Frank Chang
  * Green-Star
  * Micah Elizabeth Scott
- * Poslovitch
  * SVNET Libre
  * Thomas Kuntz
  * William Lahti
  * Wirebrass
  * Yury Bulka
  * boris joeson
+ * frankstrater
  * test2a
+ * think4web
  * 路过是好事
  * Ajeje Brazorf
  * Andrey
  * Angristan
  * Ch
  * Chris Sakura 佐倉くりす on Youtube
+ * Diazepan Medina
  * DontUseGithub
  * MahdiTurki
  * Maxime Louet
@@ -119,6 +124,7 @@
  * aschaap
  * clementbrizard
  * gohoso9454
+ * helabasa
  * kaiyou
  * roberto marcolin
  * Ahsan Haris Ahmed
@@ -151,8 +157,10 @@
  * Manuela Silva
  * Mélanie Chauvel
  * Pedro
+ * Petr Balíček
  * Piotr Sikora
  * Sergey Zigachev
+ * Stefan Keks
  * Waazdakka
  * Yohan Boniface
  * am97
@@ -176,7 +184,6 @@
  * BitTube
  * Boo Teille
  * Dashie
- * Diazepan Medina
  * EndoGai
  * Florent Fayolle
  * Florian
@@ -187,14 +194,15 @@
  * HHY
  * Hange
  * Hjalte
+ * Hugo Peixoto
+ * Jelle Besseling
  * Jocelyn Jaubert
  * Julien Lemaire
  * Lucas Teixeira
- * Marcel Cramm
  * Millicent Billette
  * Mondo Xíbaro
  * Moritz Warning
- * Ms Kimsible
+ * Mostafa Ahangarha
  * Nicolai Larsen
  * Nojus
  * Pierre Jaury
@@ -211,7 +219,6 @@
  * ahmadsharifian
  * bopol
  * framail
- * frankstrater
  * les
  * libertas
  * lutangar
@@ -242,6 +249,7 @@
  * Antoine Millet
  * Anton Latukha
  * Armando Lüscher
+ * Armin Kunkel
  * Artem Prosvetov
  * Arthur Lutz
  * Asier Iturralde Sarasola
@@ -294,14 +302,15 @@
  * Janey Muñoz
  * Jarosław Maciejewski
  * Jeena
- * Jelle Besseling
  * Jessica Fairchild
  * Jinn Koriech
  * Jonas Sulzer
+ * Jonatan Nyberg
  * Jorge Silva
  * Jos
  * Julien Le Bras
  * Juraj Liso
+ * JustAnotherArchivist
  * Knackie
  * Kody
  * Konstantinos Agiannis
@@ -330,6 +339,7 @@
  * Mike
  * MrGiga
  * Mélanie Pin
+ * Nataly Rocha
  * Nathanaël J
  * Net
  * Nicolas Fortin
@@ -356,6 +366,7 @@
  * Rep Dolsay
  * Robin
  * Sankar
+ * SansPseudoFix
  * Sebastian Paweł Wolski
  * Simon Gilliot
  * Simounet

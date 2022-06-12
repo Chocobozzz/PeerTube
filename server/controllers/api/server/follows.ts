@@ -21,8 +21,8 @@ import {
 } from '../../../middlewares'
 import {
   acceptOrRejectFollowerValidator,
-  followersSortValidator,
-  followingSortValidator,
+  instanceFollowersSortValidator,
+  instanceFollowingSortValidator,
   followValidator,
   getFollowerValidator,
   listFollowsValidator,
@@ -35,7 +35,7 @@ const serverFollowsRouter = express.Router()
 serverFollowsRouter.get('/following',
   listFollowsValidator,
   paginationValidator,
-  followingSortValidator,
+  instanceFollowingSortValidator,
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listFollowing)
@@ -59,7 +59,7 @@ serverFollowsRouter.delete('/following/:hostOrHandle',
 serverFollowsRouter.get('/followers',
   listFollowsValidator,
   paginationValidator,
-  followersSortValidator,
+  instanceFollowersSortValidator,
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listFollowers)
@@ -98,7 +98,7 @@ export {
 
 async function listFollowing (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
-  const resultList = await ActorFollowModel.listFollowingForApi({
+  const resultList = await ActorFollowModel.listInstanceFollowingForApi({
     id: serverActor.id,
     start: req.query.start,
     count: req.query.count,
@@ -114,7 +114,7 @@ async function listFollowing (req: express.Request, res: express.Response) {
 async function listFollowers (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
   const resultList = await ActorFollowModel.listFollowersForApi({
-    actorId: serverActor.id,
+    actorIds: [ serverActor.id ],
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,

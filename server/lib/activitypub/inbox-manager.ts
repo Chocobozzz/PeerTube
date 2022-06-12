@@ -32,7 +32,7 @@ class InboxManager {
 
     setInterval(() => {
       StatsManager.Instance.updateInboxWaiting(this.getActivityPubMessagesWaiting())
-    }, SCHEDULER_INTERVALS_MS.updateInboxStats)
+    }, SCHEDULER_INTERVALS_MS.UPDATE_INBOX_STATS)
   }
 
   addInboxMessage (options: QueueParam) {

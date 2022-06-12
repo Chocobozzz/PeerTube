@@ -60,7 +60,7 @@
 
           <div class="pt-3 border-top video-info-channel d-flex">
             <div class="video-info-channel-left d-flex">
-              <my-video-avatar-channel [video]="video" [genericChannel]="isChannelDisplayNameGeneric()"></my-video-avatar-channel>
+              <my-video-avatar-channel [video]="video" [showChannel]="!isChannelDisplayNameGeneric()"></my-video-avatar-channel>
 
               <div class="video-info-channel-left-links ml-1">
                 <ng-container *ngIf="!isChannelDisplayNameGeneric()">
@@ -106,7 +106,7 @@
     ></my-recommended-videos>
   </div>
 
-  <my-privacy-concerns></my-privacy-concerns>
+  <my-privacy-concerns *ngIf="video" [video]="video"></my-privacy-concerns>
 </div>
 
 <my-player-styles></my-player-styles>

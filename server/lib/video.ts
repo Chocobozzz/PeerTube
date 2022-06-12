@@ -105,7 +105,7 @@ async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoF
   return addTranscodingJob(dataInput, jobOptions)
 }
 
-async function addTranscodingJob (payload: VideoTranscodingPayload, options: CreateJobOptions) {
+async function addTranscodingJob (payload: VideoTranscodingPayload, options: CreateJobOptions = {}) {
   await VideoJobInfoModel.increaseOrCreate(payload.videoUUID, 'pendingTranscode')
 
   return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: payload }, options)

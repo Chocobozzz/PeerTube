@@ -101,6 +101,7 @@ describe('Permanent live', function () {
   it('Should stream into this permanent live', async function () {
     this.timeout(120000)
 
+    const beforePublication = new Date()
     const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUID })
 
     for (const server of servers) {
@@ -108,6 +109,11 @@ describe('Permanent live', function () {
     }
 
     await checkVideoState(videoUUID, VideoState.PUBLISHED)
+
+    for (const server of servers) {
+      const video = await server.videos.get({ id: videoUUID })
+      expect(new Date(video.publishedAt)).greaterThan(beforePublication)
+    }
 
     await stopFfmpeg(ffmpegCommand)
     await servers[0].live.waitUntilWaiting({ videoId: videoUUID })

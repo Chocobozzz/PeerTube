@@ -36,7 +36,7 @@ export class JobsComponent extends RestTable implements OnInit {
     'video-live-ending',
     'video-redundancy',
     'video-transcoding',
-    'videos-views',
+    'videos-views-stats',
     'move-to-object-storage'
   ]
 
@@ -77,9 +77,9 @@ export class JobsComponent extends RestTable implements OnInit {
   }
 
   getColspan () {
-    if (this.jobState === 'all' && this.hasProgress()) return 7
+    if (this.jobState === 'all' && this.hasGlobalProgress()) return 7
 
-    if (this.jobState === 'all' || this.hasProgress()) return 6
+    if (this.jobState === 'all' || this.hasGlobalProgress()) return 6
 
     return 5
   }
@@ -91,8 +91,12 @@ export class JobsComponent extends RestTable implements OnInit {
     this.saveJobStateAndType()
   }
 
-  hasProgress () {
+  hasGlobalProgress () {
     return this.jobType === 'all' || this.jobType === 'video-transcoding'
+  }
+
+  hasProgress (job: Job) {
+    return job.type === 'video-transcoding'
   }
 
   getProgress (job: Job) {

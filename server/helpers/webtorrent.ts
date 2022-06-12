@@ -100,7 +100,7 @@ function createTorrentAndSetInfoHash (videoOrPlaylist: MVideo | MStreamingPlayli
     urlList: buildUrlList(video, videoFile)
   }
 
-  return VideoPathManager.Instance.makeAvailableVideoFile(videoOrPlaylist, videoFile, async videoPath => {
+  return VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(videoOrPlaylist), async videoPath => {
     const torrentContent = await createTorrentPromise(videoPath, options)
 
     const torrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)

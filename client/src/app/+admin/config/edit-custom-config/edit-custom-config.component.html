@@ -1,4 +1,9 @@
 <h1 class="sr-only" i18n>Configuration</h1>
+
+<div class="alert alert-warning" *ngIf="!isUpdateAllowed()" i18n>
+  Updating instance configuration from the web interface is disabled by the system administrator.
+</div>
+
 <form role="form" [formGroup]="form">
 
   <div ngbNav #nav="ngbNav" [activeId]="activeNav" (activeIdChange)="onNavChange($event)" class="nav-tabs">
@@ -63,7 +68,7 @@
     <div class="col-md-7 col-xl-5"></div>
     <div class="col-md-5 col-xl-5">
 
-      <div class="form-error submit-error" i18n *ngIf="!form.valid">
+      <div class="form-error submit-error" i18n *ngIf="!form.valid && isUpdateAllowed()">
         There are errors in the form:
 
         <ul>
@@ -77,7 +82,14 @@
         You cannot allow live replay if you don't enable transcoding.
       </span>
 
-      <input (click)="formValidated()" type="submit" i18n-value value="Update configuration" [disabled]="!form.valid || !hasConsistentOptions()">
+      <span i18n *ngIf="!isUpdateAllowed()">
+        You cannot change the server configuration because it's managed externally.
+      </span>
+
+      <input
+        (click)="formValidated()" type="submit" i18n-value value="Update configuration"
+        [disabled]="!form.valid || !hasConsistentOptions() || !isUpdateAllowed()"
+      >
     </div>
   </div>
 </form>

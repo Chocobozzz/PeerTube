@@ -75,7 +75,7 @@ module.exports = function () {
           ]
         },
         {
-          test: /\.js$/,
+          test: /\.m?js$/,
           use: [
             {
               loader: 'babel-loader',

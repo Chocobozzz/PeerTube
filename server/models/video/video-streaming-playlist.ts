@@ -239,6 +239,10 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
       this.videoId === other.videoId
   }
 
+  withVideo (video: MVideo) {
+    return Object.assign(this, { Video: video })
+  }
+
   private getMasterPlaylistStaticPath (videoUUID: string) {
     return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, videoUUID, this.playlistFilename)
   }

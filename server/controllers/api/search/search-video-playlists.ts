@@ -3,7 +3,7 @@ import { sanitizeUrl } from '@server/helpers/core-utils'
 import { isUserAbleToSearchRemoteURI } from '@server/helpers/express-utils'
 import { logger } from '@server/helpers/logger'
 import { pickSearchPlaylistQuery } from '@server/helpers/query'
-import { doJSONRequest } from '@server/helpers/requests'
+import { doJSONRequest, findLatestRedirection } from '@server/helpers/requests'
 import { getFormattedObjects } from '@server/helpers/utils'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
@@ -24,6 +24,7 @@ import {
   videoPlaylistsListSearchValidator,
   videoPlaylistsSearchSortValidator
 } from '../../../middlewares'
+import { searchLocalUrl } from './shared'
 
 const searchPlaylistsRouter = express.Router()
 
@@ -104,12 +105,14 @@ async function searchVideoPlaylistsURI (search: string, res: express.Response) {
 
   if (isUserAbleToSearchRemoteURI(res)) {
     try {
-      videoPlaylist = await getOrCreateAPVideoPlaylist(search)
+      const url = await findLatestRedirection(search, { activityPub: true })
+
+      videoPlaylist = await getOrCreateAPVideoPlaylist(url)
     } catch (err) {
       logger.info('Cannot search remote video playlist %s.', search, { err })
     }
   } else {
-    videoPlaylist = await VideoPlaylistModel.loadByUrlWithAccountAndChannelSummary(sanitizeLocalUrl(search))
+    videoPlaylist = await searchLocalUrl(sanitizeLocalUrl(search), url => VideoPlaylistModel.loadByUrlWithAccountAndChannelSummary(url))
   }
 
   return res.json({

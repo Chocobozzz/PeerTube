@@ -86,8 +86,6 @@ window.addEventListener('load', async () => {
     captionEl.innerHTML = ''
 
     captions.forEach(c => {
-      console.log(c)
-
       if (c.mode === 'showing') {
         const itemEl = document.createElement('strong')
         itemEl.innerText = `${c.label} (active)`

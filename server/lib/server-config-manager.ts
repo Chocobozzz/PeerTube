@@ -42,6 +42,22 @@ class ServerConfigManager {
     const defaultTheme = getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
 
     return {
+      client: {
+        videos: {
+          miniature: {
+            preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME
+          }
+        }
+      },
+
+      webadmin: {
+        configuration: {
+          edition: {
+            allowed: CONFIG.WEBADMIN.CONFIGURATION.EDITION.ALLOWED
+          }
+        }
+      },
+
       instance: {
         name: CONFIG.INSTANCE.NAME,
         shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
@@ -167,6 +183,9 @@ class ServerConfigManager {
       user: {
         videoQuota: CONFIG.USER.VIDEO_QUOTA,
         videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
+      },
+      videoChannels: {
+        maxPerUser: CONFIG.VIDEO_CHANNELS.MAX_PER_USER
       },
       trending: {
         videos: {

@@ -1,9 +1,9 @@
 // Thanks https://github.com/streamroot/videojs-hlsjs-plugin
 // We duplicated this plugin to choose the hls.js version we want, because streamroot only provide a bundled file
 
-import Hlsjs, { ErrorData, HlsConfig, Level, ManifestLoadedData } from 'hls.js'
+import Hlsjs, { ErrorData, HlsConfig, Level, LevelSwitchingData, ManifestParsedData } from 'hls.js'
 import videojs from 'video.js'
-import { HlsjsConfigHandlerOptions, QualityLevelRepresentation, QualityLevels, VideoJSTechHLS } from '../peertube-videojs-typings'
+import { HlsjsConfigHandlerOptions, PeerTubeResolution, VideoJSTechHLS } from '../peertube-videojs-typings'
 
 type ErrorCounts = {
   [ type: string ]: number
@@ -68,10 +68,6 @@ function hlsjsConfigHandler (this: videojs.Player, options: HlsjsConfigHandlerOp
     player.srOptions_.hlsjsConfig = options.hlsjsConfig
   }
 
-  if (!player.srOptions_.captionConfig) {
-    player.srOptions_.captionConfig = options.captionConfig
-  }
-
   if (options.levelLabelHandler && !player.srOptions_.levelLabelHandler) {
     player.srOptions_.levelLabelHandler = options.levelLabelHandler
   }
@@ -102,14 +98,9 @@ class Html5Hlsjs {
   private dvrDuration: number = null
   private edgeMargin: number = null
 
-  private handlers: { [ id in 'play' | 'playing' | 'textTracksChange' | 'audioTracksChange' ]: EventListener } = {
-    play: null,
-    playing: null,
-    textTracksChange: null,
-    audioTracksChange: null
+  private handlers: { [ id in 'play' ]: EventListener } = {
+    play: null
   }
-
-  private uiTextTrackHandled = false
 
   constructor (vjs: typeof videojs, source: videojs.Tech.SourceObject, tech: videojs.Tech) {
     this.vjs = vjs
@@ -177,10 +168,6 @@ class Html5Hlsjs {
   // See comment for `initialize` method.
   dispose () {
     this.videoElement.removeEventListener('play', this.handlers.play)
-    this.videoElement.removeEventListener('playing', this.handlers.playing)
-
-    this.player.textTracks().removeEventListener('change', this.handlers.textTracksChange)
-    this.uiTextTrackHandled = false
 
     this.hls.destroy()
   }
@@ -281,11 +268,7 @@ class Html5Hlsjs {
     }
   }
 
-  private switchQuality (qualityId: number) {
-    this.hls.currentLevel = qualityId
-  }
-
-  private _levelLabel (level: Level) {
+  private buildLevelLabel (level: Level) {
     if (this.player.srOptions_.levelLabelHandler) {
       return this.player.srOptions_.levelLabelHandler(level as any)
     }
@@ -294,167 +277,37 @@ class Html5Hlsjs {
     if (level.width) return Math.round(level.width * 9 / 16) + 'p'
     if (level.bitrate) return (level.bitrate / 1000) + 'kbps'
 
-    return 0
-  }
-
-  private _relayQualityChange (qualityLevels: QualityLevels) {
-    // Determine if it is "Auto" (all tracks enabled)
-    let isAuto = true
-
-    for (let i = 0; i < qualityLevels.length; i++) {
-      if (!qualityLevels[i]._enabled) {
-        isAuto = false
-        break
-      }
-    }
-
-    // Interact with ME
-    if (isAuto) {
-      this.hls.currentLevel = -1
-      return
-    }
-
-    // Find ID of highest enabled track
-    let selectedTrack: number
-
-    for (selectedTrack = qualityLevels.length - 1; selectedTrack >= 0; selectedTrack--) {
-      if (qualityLevels[selectedTrack]._enabled) {
-        break
-      }
-    }
-
-    this.hls.currentLevel = selectedTrack
-  }
-
-  private _handleQualityLevels () {
-    if (!this.metadata) return
-
-    const qualityLevels = this.player.qualityLevels?.()
-    if (!qualityLevels) return
-
-    for (let i = 0; i < this.metadata.levels.length; i++) {
-      const details = this.metadata.levels[i]
-      const representation: QualityLevelRepresentation = {
-        id: i,
-        width: details.width,
-        height: details.height,
-        bandwidth: details.bitrate,
-        bitrate: details.bitrate,
-        _enabled: true
-      }
-
-      const self = this
-      representation.enabled = function (this: QualityLevels, level: number, toggle?: boolean) {
-        // Brightcove switcher works TextTracks-style (enable tracks that it wants to ABR on)
-        if (typeof toggle === 'boolean') {
-          this[level]._enabled = toggle
-          self._relayQualityChange(this)
-        }
-
-        return this[level]._enabled
-      }
-
-      qualityLevels.addQualityLevel(representation)
-    }
+    return '0'
   }
 
   private _notifyVideoQualities () {
     if (!this.metadata) return
-    const cleanTracklist = []
 
-    if (this.metadata.levels.length > 1) {
-      const autoLevel = {
-        id: -1,
-        label: 'auto',
-        selected: this.hls.manualLevel === -1
-      }
-      cleanTracklist.push(autoLevel)
-    }
+    const resolutions: PeerTubeResolution[] = []
 
     this.metadata.levels.forEach((level, index) => {
-      // Don't write in level (shared reference with Hls.js)
-      const quality = {
+      resolutions.push({
         id: index,
-        selected: index === this.hls.manualLevel,
-        label: this._levelLabel(level)
-      }
+        height: level.height,
+        width: level.width,
+        bitrate: level.bitrate,
+        label: this.buildLevelLabel(level),
+        selected: level.id === this.hls.manualLevel,
 
-      cleanTracklist.push(quality)
+        selectCallback: () => {
+          this.hls.currentLevel = index
+        }
+      })
     })
 
-    const payload = {
-      qualityData: { video: cleanTracklist },
-      qualitySwitchCallback: this.switchQuality.bind(this)
-    }
+    resolutions.push({
+      id: -1,
+      label: this.player.localize('Auto'),
+      selected: true,
+      selectCallback: () => this.hls.currentLevel = -1
+    })
 
-    this.tech.trigger('loadedqualitydata', payload)
-
-    // Self-de-register so we don't raise the payload multiple times
-    this.videoElement.removeEventListener('playing', this.handlers.playing)
-  }
-
-  private _updateSelectedAudioTrack () {
-    const playerAudioTracks = this.tech.audioTracks()
-    for (let j = 0; j < playerAudioTracks.length; j++) {
-      // FIXME: typings
-      if ((playerAudioTracks[j] as any).enabled) {
-        this.hls.audioTrack = j
-        break
-      }
-    }
-  }
-
-  private _onAudioTracks () {
-    const hlsAudioTracks = this.hls.audioTracks
-    const playerAudioTracks = this.tech.audioTracks()
-
-    if (hlsAudioTracks.length > 1 && playerAudioTracks.length === 0) {
-      // Add Hls.js audio tracks if not added yet
-      for (let i = 0; i < hlsAudioTracks.length; i++) {
-        playerAudioTracks.addTrack(new this.vjs.AudioTrack({
-          id: i.toString(),
-          kind: 'alternative',
-          label: hlsAudioTracks[i].name || hlsAudioTracks[i].lang,
-          language: hlsAudioTracks[i].lang,
-          enabled: i === this.hls.audioTrack
-        }))
-      }
-
-      // Handle audio track change event
-      this.handlers.audioTracksChange = this._updateSelectedAudioTrack.bind(this)
-      playerAudioTracks.addEventListener('change', this.handlers.audioTracksChange)
-    }
-  }
-
-  private _getTextTrackLabel (textTrack: TextTrack) {
-    // Label here is readable label and is optional (used in the UI so if it is there it should be different)
-    return textTrack.label ? textTrack.label : textTrack.language
-  }
-
-  private _isSameTextTrack (track1: TextTrack, track2: TextTrack) {
-    return this._getTextTrackLabel(track1) === this._getTextTrackLabel(track2) &&
-           track1.kind === track2.kind
-  }
-
-  private _updateSelectedTextTrack () {
-    const playerTextTracks = this.player.textTracks()
-    let activeTrack: TextTrack = null
-
-    for (let j = 0; j < playerTextTracks.length; j++) {
-      if (playerTextTracks[j].mode === 'showing') {
-        activeTrack = playerTextTracks[j]
-        break
-      }
-    }
-
-    const hlsjsTracks = this.videoElement.textTracks
-    for (let k = 0; k < hlsjsTracks.length; k++) {
-      if (hlsjsTracks[k].kind === 'subtitles' || hlsjsTracks[k].kind === 'captions') {
-        hlsjsTracks[k].mode = activeTrack && this._isSameTextTrack(hlsjsTracks[k], activeTrack)
-          ? 'showing'
-          : 'disabled'
-      }
-    }
+    this.player.peertubeResolutions().add(resolutions)
   }
 
   private _startLoad () {
@@ -472,97 +325,10 @@ class Html5Hlsjs {
     return result
   }
 
-  private _filterDisplayableTextTracks (textTracks: TextTrackList) {
-    const displayableTracks = []
-
-    // Filter out tracks that is displayable (captions or subtitles)
-    for (let idx = 0; idx < textTracks.length; idx++) {
-      if (textTracks[idx].kind === 'subtitles' || textTracks[idx].kind === 'captions') {
-        displayableTracks.push(textTracks[idx])
-      }
-    }
-
-    return displayableTracks
-  }
-
-  private _updateTextTrackList () {
-    const displayableTracks = this._filterDisplayableTextTracks(this.videoElement.textTracks)
-    const playerTextTracks = this.player.textTracks()
-
-    // Add stubs to make the caption switcher shows up
-    // Adding the Hls.js text track in will make us have double captions
-    for (let idx = 0; idx < displayableTracks.length; idx++) {
-      let isAdded = false
-
-      for (let jdx = 0; jdx < playerTextTracks.length; jdx++) {
-        if (this._isSameTextTrack(displayableTracks[idx], playerTextTracks[jdx])) {
-          isAdded = true
-          break
-        }
-      }
-
-      if (!isAdded) {
-        const hlsjsTextTrack = displayableTracks[idx]
-        this.player.addRemoteTextTrack({
-          kind: hlsjsTextTrack.kind as videojs.TextTrack.Kind,
-          label: this._getTextTrackLabel(hlsjsTextTrack),
-          language: hlsjsTextTrack.language,
-          srclang: hlsjsTextTrack.language
-        }, false)
-      }
-    }
-
-    // Handle UI switching
-    this._updateSelectedTextTrack()
-
-    if (!this.uiTextTrackHandled) {
-      this.handlers.textTracksChange = this._updateSelectedTextTrack.bind(this)
-      playerTextTracks.addEventListener('change', this.handlers.textTracksChange)
-
-      this.uiTextTrackHandled = true
-    }
-  }
-
-  private _onMetaData (_event: any, data: ManifestLoadedData) {
+  private _onMetaData (_event: any, data: ManifestParsedData) {
     // This could arrive before 'loadedqualitydata' handlers is registered, remember it so we can raise it later
-    this.metadata = data as any
-    this._handleQualityLevels()
-  }
-
-  private _createCueHandler (captionConfig: any) {
-    return {
-      newCue: (track: any, startTime: number, endTime: number, captionScreen: { rows: any[] }) => {
-        let row: any
-        let cue: VTTCue
-        let text: string
-        const VTTCue = (window as any).VTTCue || (window as any).TextTrackCue
-
-        for (let r = 0; r < captionScreen.rows.length; r++) {
-          row = captionScreen.rows[r]
-          text = ''
-
-          if (!row.isEmpty()) {
-            for (let c = 0; c < row.chars.length; c++) {
-              text += row.chars[c].ucharj
-            }
-
-            cue = new VTTCue(startTime, endTime, text.trim())
-
-            // typeof null === 'object'
-            if (captionConfig != null && typeof captionConfig === 'object') {
-              // Copy client overridden property into the cue object
-              const configKeys = Object.keys(captionConfig)
-
-              for (let k = 0; k < configKeys.length; k++) {
-                cue[configKeys[k]] = captionConfig[configKeys[k]]
-              }
-            }
-            track.addCue(cue)
-            if (endTime === startTime) track.addCue(new VTTCue(endTime + 5, ''))
-          }
-        }
-      }
-    }
+    this.metadata = data
+    this._notifyVideoQualities()
   }
 
   private _initHlsjs () {
@@ -577,11 +343,6 @@ class Html5Hlsjs {
       this.hlsjsConfig.autoStartLoad = false
     }
 
-    const captionConfig = srOptions_?.captionConfig || techOptions.captionConfig
-    if (captionConfig) {
-      this.hlsjsConfig.cueHandler = this._createCueHandler(captionConfig)
-    }
-
     // If the user explicitly sets autoStartLoad to false, we're not going to enter the if block above
     // That's why we have a separate if block here to set the 'play' listener
     if (this.hlsjsConfig.autoStartLoad === false) {
@@ -589,17 +350,12 @@ class Html5Hlsjs {
       this.videoElement.addEventListener('play', this.handlers.play)
     }
 
-    // _notifyVideoQualities sometimes runs before the quality picker event handler is registered -> no video switcher
-    this.handlers.playing = this._notifyVideoQualities.bind(this)
-    this.videoElement.addEventListener('playing', this.handlers.playing)
-
     this.hls = new Hlsjs(this.hlsjsConfig)
 
     this._executeHooksFor('beforeinitialize')
 
     this.hls.on(Hlsjs.Events.ERROR, (event, data) => this._onError(event, data))
-    this.hls.on(Hlsjs.Events.AUDIO_TRACKS_UPDATED, () => this._onAudioTracks())
-    this.hls.on(Hlsjs.Events.MANIFEST_PARSED, (event, data) => this._onMetaData(event, data as any)) // FIXME: typings
+    this.hls.on(Hlsjs.Events.MANIFEST_PARSED, (event, data) => this._onMetaData(event, data))
     this.hls.on(Hlsjs.Events.LEVEL_LOADED, (event, data) => {
       // The DVR plugin will auto seek to "live edge" on start up
       if (this.hlsjsConfig.liveSyncDuration) {
@@ -612,10 +368,23 @@ class Html5Hlsjs {
       this.dvrDuration = data.details.totalduration
       this._duration = this.isLive ? Infinity : data.details.totalduration
     })
+
     this.hls.once(Hlsjs.Events.FRAG_LOADED, () => {
       // Emit custom 'loadedmetadata' event for parity with `videojs-contrib-hls`
       // Ref: https://github.com/videojs/videojs-contrib-hls#loadedmetadata
       this.tech.trigger('loadedmetadata')
+    })
+
+    this.hls.on(Hlsjs.Events.LEVEL_SWITCHING, (_e, data: LevelSwitchingData) => {
+      const resolutionId = this.hls.autoLevelEnabled
+        ? -1
+        : data.level
+
+      const autoResolutionChosenId = this.hls.autoLevelEnabled
+        ? data.level
+        : -1
+
+      this.player.peertubeResolutions().select({ id: resolutionId, autoResolutionChosenId, byEngine: true })
     })
 
     this.hls.attachMedia(this.videoElement)

@@ -1,13 +1,11 @@
 import { mapValues, pickBy } from 'lodash-es'
-import { buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
+import { DomSanitizer } from '@angular/platform-browser'
 import { Notifier } from '@app/core'
 import { ABUSE_REASON_VALIDATOR } from '@app/shared/form-validators/abuse-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { decorateVideoLink } from '@shared/core-utils'
 import { abusePredefinedReasonsMap } from '@shared/core-utils/abuse'
 import { AbusePredefinedReasonsString } from '@shared/models'
 import { Video } from '../../shared-main'
@@ -25,7 +23,6 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
   error: string = null
   predefinedReasons: { id: AbusePredefinedReasonsString, label: string, description?: string, help?: string }[] = []
-  embedHtml: SafeHtml
 
   private openedModal: NgbModalRef
 
@@ -55,20 +52,6 @@ export class VideoReportComponent extends FormReactive implements OnInit {
     return this.form.get('timestamp').value
   }
 
-  getVideoEmbed () {
-    return this.sanitizer.bypassSecurityTrustHtml(
-      buildVideoOrPlaylistEmbed(
-        decorateVideoLink({
-          url: this.video.embedUrl,
-          title: false,
-          warningTitle: false
-        }),
-
-        this.video.name
-      )
-    )
-  }
-
   ngOnInit () {
     this.buildForm({
       reason: ABUSE_REASON_VALIDATOR,
@@ -82,8 +65,6 @@ export class VideoReportComponent extends FormReactive implements OnInit {
     })
 
     this.predefinedReasons = this.abuseService.getPrefefinedReasons('video')
-
-    this.embedHtml = this.getVideoEmbed()
   }
 
   show () {

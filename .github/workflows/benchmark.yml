@@ -86,13 +86,29 @@ jobs:
 
           echo '{"clientBuildTime":'$clientBuildTime',"serverBuildTime":'$serverBuildTime'}'> build-time.json
 
+      - name: Startup
+        run: |
+          npm run clean:server:test
+
+          startCold=`date +%s%3N`
+          NODE_APP_INSTANCE=1 NODE_ENV=test node dist/server --benchmark-startup
+          endCold=`date +%s%3N`
+          coldStartupTime=$(echo "scale=2; ($endCold-$startCold)/1000" | bc)
+
+          startHot=`date +%s%3N`
+          NODE_APP_INSTANCE=1 NODE_ENV=test node dist/server --benchmark-startup
+          endHot=`date +%s%3N`
+          hotStartupTime=$(echo "scale=2; ($endHot-$startHot)/1000" | bc)
+
+          echo '{"coldStartupTime":'$coldStartupTime',"hotStartupTime":'$hotStartupTime'}'> startup-time.json
+
       - name: Run benchmark
         run: |
           node dist/scripts/benchmark.js benchmark.json
 
       - name: Display result
         run: |
-          cat benchmark.json build-time.json
+          cat benchmark.json build-time.json startup-time.json
 
       - name: Upload benchmark result
         env:
@@ -117,5 +133,5 @@ jobs:
 
           if [ ! -z ${STATS_DEPLOYEMENT_KEY+x} ]; then
             echo "Uploading files"
-            scp benchmark.json build-time.json ${STATS_DEPLOYEMENT_USER}@${STATS_DEPLOYEMENT_HOST}:../../web/peertube-stats;
+            scp benchmark.json build-time.json startup-time.json ${STATS_DEPLOYEMENT_USER}@${STATS_DEPLOYEMENT_HOST}:../../web/peertube-stats;
           fi

@@ -206,7 +206,7 @@ async function getVideoStreamFromFile (path: string, existingProbe?: FfprobeData
   return metadata.streams.find(s => s.codec_type === 'video') || null
 }
 
-function computeResolutionsToTranscode (videoFileResolution: number, type: 'vod' | 'live') {
+function computeLowerResolutionsToTranscode (videoFileResolution: number, type: 'vod' | 'live') {
   const configResolutions = type === 'vod'
     ? CONFIG.TRANSCODING.RESOLUTIONS
     : CONFIG.LIVE.TRANSCODING.RESOLUTIONS
@@ -214,12 +214,13 @@ function computeResolutionsToTranscode (videoFileResolution: number, type: 'vod'
   const resolutionsEnabled: number[] = []
 
   // Put in the order we want to proceed jobs
-  const resolutions = [
+  const resolutions: VideoResolution[] = [
     VideoResolution.H_NOVIDEO,
     VideoResolution.H_480P,
     VideoResolution.H_360P,
     VideoResolution.H_720P,
     VideoResolution.H_240P,
+    VideoResolution.H_144P,
     VideoResolution.H_1080P,
     VideoResolution.H_1440P,
     VideoResolution.H_4K
@@ -302,7 +303,10 @@ function computeFPS (fpsArg: number, resolution: VideoResolution) {
 
   // Hard FPS limits
   if (fps > VIDEO_TRANSCODING_FPS.MAX) fps = getClosestFramerateStandard(fps, 'HD_STANDARD')
-  else if (fps < VIDEO_TRANSCODING_FPS.MIN) fps = VIDEO_TRANSCODING_FPS.MIN
+
+  if (fps < VIDEO_TRANSCODING_FPS.MIN) {
+    throw new Error(`Cannot compute FPS because ${fps} is lower than our minimum value ${VIDEO_TRANSCODING_FPS.MIN}`)
+  }
 
   return fps
 }
@@ -323,7 +327,7 @@ export {
   getVideoFileFPS,
   ffprobePromise,
   getClosestFramerateStandard,
-  computeResolutionsToTranscode,
+  computeLowerResolutionsToTranscode,
   getVideoFileBitrate,
   canDoQuickTranscode,
   canDoQuickVideoTranscode,

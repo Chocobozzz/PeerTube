@@ -267,6 +267,10 @@ tags:
     description: Like/dislike a video.
   - name: Video Playlists
     description: Operations dealing with playlists of videos. Playlists are bound to users and/or channels.
+  - name: Video Files
+    description: Operations on video files
+  - name: Video Transcoding
+    description: Video transcoding related operations
   - name: Feeds
     description: Server syndication feeds
   - name: Search
@@ -309,6 +313,8 @@ x-tagGroups:
       - Video Playlists
       - Video Ownership Change
       - Video Mirroring
+      - Video Files
+      - Video Transcoding
       - Live Videos
       - Feeds
   - name: Search
@@ -367,7 +373,11 @@ paths:
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -413,6 +423,36 @@ paths:
             json = r.json()
 
             print(json)
+
+  '/accounts/{name}/followers':
+    get:
+      tags:
+        - Accounts
+      summary: 'List followers of an account'
+      security:
+        - OAuth2: []
+      operationId: getAccountFollowers
+      parameters:
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/followersSort'
+        - $ref: '#/components/parameters/search'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Follow'
 
   /accounts:
     get:
@@ -1270,7 +1310,11 @@ paths:
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -1590,7 +1634,11 @@ paths:
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -2051,6 +2099,13 @@ paths:
           description: video unreadable
         '429':
           description: too many concurrent requests
+        '503':
+          description: upload is already being processed
+          headers:
+            'Retry-After':
+              schema:
+                type: number
+                example: 300
     delete:
       summary: Cancel the resumable upload of a video, deleting any data uploaded so far
       description: Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the upload of a video
@@ -2819,7 +2874,11 @@ paths:
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -2831,6 +2890,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
+
+  '/video-channels/{channelHandle}/followers':
+    get:
+      tags:
+        - Video Channels
+      summary: 'List followers of a video channel'
+      security:
+        - OAuth2: []
+      operationId: getVideoChannelFollowers
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/followersSort'
+        - $ref: '#/components/parameters/search'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Follow'
 
   '/video-channels/{channelHandle}/avatar/pick':
     post:
@@ -3115,6 +3204,8 @@ paths:
         - Video Playlists
       parameters:
         - $ref: '#/components/parameters/playlistId'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
       responses:
         '200':
           description: successful operation
@@ -3483,6 +3574,69 @@ paths:
         '404':
           description: video does not exist
 
+  '/videos/{id}/hls':
+    delete:
+      summary: Delete video HLS files
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Video Files
+      operationId: delVideoHLS
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: video does not exist
+  '/videos/{id}/webtorrent':
+    delete:
+      summary: Delete video WebTorrent files
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Video Files
+      operationId: delVideoWebTorrent
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: video does not exist
+
+  '/videos/{id}/transcoding':
+    post:
+      summary: Create a transcoding job
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Video Transcoding
+      operationId: createVideoTranscoding
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transcodingType:
+                    type: string
+                    enum:
+                      - hls
+                      - webtorrent
+                required:
+                  - transcodingType
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: video does not exist
+
   /search/videos:
     get:
       tags:
@@ -3507,7 +3661,11 @@ paths:
         - $ref: '#/components/parameters/licenceOneOf'
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -4009,7 +4167,11 @@ paths:
             type: string
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
       responses:
         '204':
           description: successful operation
@@ -4090,7 +4252,11 @@ paths:
           required: true
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/nsfw'
-        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/privacyOneOf'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebtorrentFiles'
       responses:
         '204':
           description: successful operation
@@ -4530,6 +4696,15 @@ components:
         type: string
         enum:
         - name
+    followersSort:
+      name: sort
+      in: query
+      required: false
+      description: Sort followers by criteria
+      schema:
+        type: string
+        enum:
+        - createdAt
     name:
       name: name
       in: path
@@ -4714,20 +4889,58 @@ components:
         enum:
         - 'true'
         - 'false'
-    filter:
-      name: filter
+    isLocal:
+      name: isLocal
       in: query
       required: false
-      description: >
-        Special filters which might require special rights:
-         * `local` - only videos local to the instance
-         * `all-local` - only videos local to the instance, but showing private and unlisted videos (requires Admin privileges)
-         * `all` - all videos, showing private and unlisted videos (requires Admin privileges)
       schema:
-        type: string
+        type: boolean
+      description: '**PeerTube >= 4.0** Display only local or remote videos'
+    hasHLSFiles:
+      name: hasHLSFiles
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: '**PeerTube >= 4.0** Display only videos that have HLS files'
+    hasWebtorrentFiles:
+      name: hasWebtorrentFiles
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description: '**PeerTube >= 4.0** Display only videos that have WebTorrent files'
+    privacyOneOf:
+      name: privacyOneOf
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/VideoPrivacySet'
+      description: '**PeerTube >= 4.0** Display only videos in this specific privacy/privacies'
+    include:
+      name: include
+      in: query
+      required: false
+      schema:
+        type: integer
         enum:
-        - local
-        - all-local
+        - 0
+        - 1
+        - 2
+        - 4
+        - 8
+      description: >
+        **PeerTube >= 4.0** Include additional videos in results (can be combined using bitwise or operator)
+
+        - `0` NONE
+
+        - `1` NOT_PUBLISHED_STATE
+
+        - `2` BLACKLISTED
+
+        - `4` BLOCKED_OWNER
+
+        - `8` FILES
     subscriptionsUris:
       name: uris
       in: query
@@ -4762,7 +4975,7 @@ components:
           - video-transcoding
           - video-file-import
           - video-import
-          - videos-views
+          - videos-views-stats
           - activitypub-refresher
           - video-redundancy
           - video-live-ending
@@ -5066,7 +5279,6 @@ components:
           type: string
           format: uri
           description: magnet URI allowing to resolve the video via BitTorrent without a metainfo file
-          example: magnet:?xs=https%3A%2F%2Fframatube.org%2Fstatic%2Ftorrents%2F9c9de5e8-0a1e-484a-b099-e80766180a6d-240.torrent&xt=urn:btih:38b4747ff788b30bf61f59d1965cd38f9e48e01f&dn=What+is+PeerTube%3F&tr=wss%3A%2F%2Fframatube.org%2Ftracker%2Fsocket&tr=https%3A%2F%2Fframatube.org%2Ftracker%2Fannounce&ws=https%3A%2F%2Fframatube.org%2Fstatic%2Fwebseed%2F9c9de5e8-0a1e-484a-b099-e80766180a6d-240.mp4
           pattern: /magnet:\?xt=urn:[a-z0-9]+:[a-z0-9]{32}/i
         resolution:
           $ref: '#/components/schemas/VideoResolutionConstant'
@@ -5268,6 +5480,9 @@ components:
         - $ref: '#/components/schemas/Video'
         - type: object
           properties:
+            viewers:
+              type: integer
+              description: If the video is a live, you have the amount of current viewers
             descriptionPath:
               type: string
               example: /api/v1/videos/9c9de5e8-0a1e-484a-b099-e80766180a6d/description
@@ -5416,7 +5631,6 @@ components:
           type: string
           format: uri
           description: magnet URI allowing to resolve the import's source video
-          example: magnet:?xs=https%3A%2F%2Fframatube.org%2Fstatic%2Ftorrents%2F9c9de5e8-0a1e-484a-b099-e80766180a6d-240.torrent&xt=urn:btih:38b4747ff788b30bf61f59d1965cd38f9e48e01f&dn=What+is+PeerTube%3F&tr=wss%3A%2F%2Fframatube.org%2Ftracker%2Fsocket&tr=https%3A%2F%2Fframatube.org%2Ftracker%2Fannounce&ws=https%3A%2F%2Fframatube.org%2Fstatic%2Fwebseed%2F9c9de5e8-0a1e-484a-b099-e80766180a6d-240.mp4
           pattern: /magnet:\?xt=urn:[a-z0-9]+:[a-z0-9]{32}/i
         torrentfile:
           writeOnly: true
@@ -6039,6 +6253,8 @@ components:
               properties:
                 0p:
                   type: boolean
+                144p:
+                  type: boolean
                 240p:
                   type: boolean
                 360p:
@@ -6170,7 +6386,7 @@ components:
             - video-transcoding
             - email
             - video-import
-            - videos-views
+            - videos-views-stats
             - activitypub-refresher
             - video-redundancy
         data:
@@ -6919,7 +7135,7 @@ components:
       enum:
         - 0
         - 1
-        - 3
+        - 2
     Notification:
       properties:
         id:
@@ -7127,6 +7343,8 @@ components:
     LiveVideoResponse:
       properties:
         rtmpUrl:
+          type: string
+        rtmpsUrl:
           type: string
         streamKey:
           type: string

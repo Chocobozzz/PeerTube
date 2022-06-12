@@ -29,10 +29,8 @@
 
   <ng-template pTemplate="body" let-expanded="expanded" let-abuse>
     <tr>
-      <td class="expand-cell c-hand" [pRowToggler]="abuse" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
-        <span class="expander">
-          <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
-        </span>
+      <td class="expand-cell" [pRowToggler]="abuse">
+        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">
@@ -61,36 +59,24 @@
       <ng-container *ngIf="abuse.video">
 
         <td *ngIf="!abuse.video.deleted">
-          <a [href]="getVideoUrl(abuse)" class="table-video-link" [title]="abuse.video.name" target="_blank" rel="noopener noreferrer">
-            <div class="table-video">
-              <div class="table-video-image">
-                <img [src]="abuse.video.thumbnailPath">
-                <span
-                  class="table-video-image-label" *ngIf="abuse.count > 1"
-                  i18n-title title="This video has been reported multiple times."
-                >
-                  {{ abuse.nth }}/{{ abuse.count }}
-                </span>
-              </div>
+          <my-video-cell [video]="abuse.video">
+            <span image>
+              <span
+                class="table-video-image-label" *ngIf="abuse.count > 1"
+                i18n-title title="This video has been reported multiple times."
+              >
+                {{ abuse.nth }}/{{ abuse.count }}
+              </span>
+            </span>
 
-              <div class="table-video-text">
-                <div>
-                  <span *ngIf="!abuse.video.blacklisted" class="glyphicon glyphicon-new-window"></span>
-                  <span *ngIf="abuse.video.blacklisted" i18n-title title="The video was blocked" class="glyphicon glyphicon-ban-circle"></span>
-                  {{ abuse.video.name }}
-                </div>
-                <div i18n>by {{ abuse.video.channel?.displayName }} on {{ abuse.video.channel?.host }} </div>
-              </div>
-            </div>
-          </a>
+            <span name>
+              <span *ngIf="abuse.video.blacklisted" i18n-title title="The video was blocked" class="glyphicon glyphicon-ban-circle"></span>
+            </span>
+          </my-video-cell>
         </td>
 
         <td *ngIf="abuse.video.deleted" class="c-hand" [pRowToggler]="abuse">
           <div class="table-video" i18n-title title="Video was deleted">
-            <div class="table-video-image">
-              <span i18n>Deleted</span>
-            </div>
-
             <div class="table-video-text">
               <div>
                 {{ abuse.video.name }}

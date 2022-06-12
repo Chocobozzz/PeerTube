@@ -1,4 +1,3 @@
-import './videojs-components/settings-menu-button'
 import videojs from 'video.js'
 import { timeToInt } from '@shared/core-utils'
 import {
@@ -10,7 +9,7 @@ import {
   saveVideoWatchHistory,
   saveVolumeInStore
 } from './peertube-player-local-storage'
-import { PeerTubePluginOptions, ResolutionUpdateData, UserWatching, VideoJSCaption } from './peertube-videojs-typings'
+import { PeerTubePluginOptions, UserWatching, VideoJSCaption } from './peertube-videojs-typings'
 import { isMobile } from './utils'
 
 const Plugin = videojs.getPlugin('plugin')
@@ -27,7 +26,6 @@ class PeerTubePlugin extends Plugin {
 
   private videoViewInterval: any
   private userWatchingVideoInterval: any
-  private lastResolutionChange: ResolutionUpdateData
 
   private isLive: boolean
 
@@ -53,22 +51,6 @@ class PeerTubePlugin extends Plugin {
 
     this.player.ready(() => {
       const playerOptions = this.player.options_
-
-      if (options.mode === 'webtorrent') {
-        this.player.webtorrent().on('resolutionChange', (_: any, d: any) => this.handleResolutionChange(d))
-        this.player.webtorrent().on('autoResolutionChange', (_: any, d: any) => this.trigger('autoResolutionChange', d))
-      }
-
-      if (options.mode === 'p2p-media-loader') {
-        this.player.p2pMediaLoader().on('resolutionChange', (_: any, d: any) => this.handleResolutionChange(d))
-      }
-
-      this.player.tech(true).on('loadedqualitydata', () => {
-        setTimeout(() => {
-          // Replay a resolution change, now we loaded all quality data
-          if (this.lastResolutionChange) this.handleResolutionChange(this.lastResolutionChange)
-        }, 0)
-      })
 
       const volume = getStoredVolume()
       if (volume !== undefined) this.player.volume(volume)
@@ -97,7 +79,7 @@ class PeerTubePlugin extends Plugin {
         })
       }
 
-      this.player.textTracks().on('change', () => {
+      this.player.textTracks().addEventListener('change', () => {
         const showing = this.player.textTracks().tracks_.find(t => {
           return t.kind === 'captions' && t.mode === 'showing'
         })
@@ -216,22 +198,6 @@ class PeerTubePlugin extends Plugin {
     return fetch(url, { method: 'PUT', body, headers })
   }
 
-  private handleResolutionChange (data: ResolutionUpdateData) {
-    this.lastResolutionChange = data
-
-    const qualityLevels = this.player.qualityLevels()
-
-    for (let i = 0; i < qualityLevels.length; i++) {
-      if (qualityLevels[i].height === data.resolutionId) {
-        data.id = qualityLevels[i].id
-        break
-      }
-    }
-
-    console.log('Resolution changed.', data)
-    this.trigger('resolutionChange', data)
-  }
-
   private listenControlBarMouse () {
     this.player.controlBar.on('mouseenter', () => {
       this.mouseInControlBar = true
@@ -258,7 +224,7 @@ class PeerTubePlugin extends Plugin {
   private isTouchEnabled () {
     return ('ontouchstart' in window) ||
       navigator.maxTouchPoints > 0 ||
-      navigator.msMaxTouchPoints > 0
+      (navigator as any).msMaxTouchPoints > 0
   }
 
   private initCaptions () {

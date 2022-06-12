@@ -1,0 +1,19 @@
+<a [href]="getVideoUrl()" class="table-video-link" [title]="video.name" target="_blank" rel="noopener noreferrer">
+  <div class="table-video">
+    <div class="table-video-image">
+      <img [src]="video.thumbnailPath">
+
+      <ng-content select="[image]"></ng-content>
+    </div>
+
+    <div class="table-video-text">
+      <div>
+        <ng-content select="[name]"></ng-content>
+
+        {{ video.name }}
+      </div>
+
+      <div class="text-muted">by {{ video.channel?.displayName }} on {{ video.channel?.host }} </div>
+    </div>
+  </div>
+</a>

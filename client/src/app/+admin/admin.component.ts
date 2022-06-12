@@ -22,7 +22,45 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit () {
-    const federationItems: TopMenuDropdownParam = {
+    this.buildOverviewItems()
+    this.buildFederationItems()
+    this.buildModerationItems()
+    this.buildConfigurationItems()
+    this.buildPluginItems()
+    this.buildSystemItems()
+  }
+
+  private buildOverviewItems () {
+    const overviewItems: TopMenuDropdownParam = {
+      label: $localize`Overview`,
+      children: []
+    }
+
+    if (this.hasUsersRight()) {
+      overviewItems.children.push({
+        label: $localize`Users`,
+        routerLink: '/admin/users',
+        iconName: 'user'
+      })
+    }
+
+    if (this.hasVideosRight()) {
+      overviewItems.children.push({
+        label: $localize`Videos`,
+        routerLink: '/admin/videos',
+        iconName: 'videos'
+      })
+    }
+
+    if (overviewItems.children.length !== 0) {
+      this.menuEntries.push(overviewItems)
+    }
+  }
+
+  private buildFederationItems () {
+    if (!this.hasServerFollowRight()) return
+
+    this.menuEntries.push({
       label: $localize`Federation`,
       children: [
         {
@@ -41,8 +79,10 @@ export class AdminComponent implements OnInit {
           iconName: 'videos'
         }
       ]
-    }
+    })
+  }
 
+  private buildModerationItems () {
     const moderationItems: TopMenuDropdownParam = {
       label: $localize`Moderation`,
       children: []
@@ -55,6 +95,7 @@ export class AdminComponent implements OnInit {
         iconName: 'flag'
       })
     }
+
     if (this.hasVideoBlocklistRight()) {
       moderationItems.children.push({
         label: $localize`Video blocks`,
@@ -62,6 +103,7 @@ export class AdminComponent implements OnInit {
         iconName: 'cross'
       })
     }
+
     if (this.hasVideoCommentsRight()) {
       moderationItems.children.push({
         label: $localize`Video comments`,
@@ -69,6 +111,7 @@ export class AdminComponent implements OnInit {
         iconName: 'message-circle'
       })
     }
+
     if (this.hasAccountsBlocklistRight()) {
       moderationItems.children.push({
         label: $localize`Muted accounts`,
@@ -76,6 +119,7 @@ export class AdminComponent implements OnInit {
         iconName: 'user-x'
       })
     }
+
     if (this.hasServersBlocklistRight()) {
       moderationItems.children.push({
         label: $localize`Muted servers`,
@@ -84,71 +128,105 @@ export class AdminComponent implements OnInit {
       })
     }
 
-    if (this.hasUsersRight()) {
-      this.menuEntries.push({ label: $localize`Users`, routerLink: '/admin/users' })
-    }
+    if (moderationItems.children.length !== 0) this.menuEntries.push(moderationItems)
+  }
 
-    if (this.hasServerFollowRight()) this.menuEntries.push(federationItems)
-    if (this.hasAbusesRight() || this.hasVideoBlocklistRight()) this.menuEntries.push(moderationItems)
-
+  private buildConfigurationItems () {
     if (this.hasConfigRight()) {
       this.menuEntries.push({ label: $localize`Configuration`, routerLink: '/admin/config' })
     }
+  }
 
+  private buildPluginItems () {
     if (this.hasPluginsRight()) {
       this.menuEntries.push({ label: $localize`Plugins/Themes`, routerLink: '/admin/plugins' })
     }
+  }
 
-    if (this.hasJobsRight() || this.hasLogsRight() || this.hasDebugRight()) {
-      this.menuEntries.push({ label: $localize`System`, routerLink: '/admin/system' })
+  private buildSystemItems () {
+    const systemItems: TopMenuDropdownParam = {
+      label: $localize`System`,
+      children: []
+    }
+
+    if (this.hasJobsRight()) {
+      systemItems.children.push({
+        label: $localize`Jobs`,
+        iconName: 'circle-tick',
+        routerLink: '/admin/system/jobs'
+      })
+    }
+
+    if (this.hasLogsRight()) {
+      systemItems.children.push({
+        label: $localize`Logs`,
+        iconName: 'playlists',
+        routerLink: '/admin/system/logs'
+      })
+    }
+
+    if (this.hasDebugRight()) {
+      systemItems.children.push({
+        label: $localize`Debug`,
+        iconName: 'cog',
+        routerLink: '/admin/system/debug'
+      })
+    }
+
+    if (systemItems.children.length !== 0) {
+      this.menuEntries.push(systemItems)
     }
   }
 
-  hasUsersRight () {
+  private hasUsersRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_USERS)
   }
 
-  hasServerFollowRight () {
+  private hasServerFollowRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_SERVER_FOLLOW)
   }
 
-  hasAbusesRight () {
+  private hasAbusesRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_ABUSES)
   }
 
-  hasVideoBlocklistRight () {
+  private hasVideoBlocklistRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
   }
 
-  hasAccountsBlocklistRight () {
+  private hasAccountsBlocklistRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST)
   }
 
-  hasServersBlocklistRight () {
+  private hasServersBlocklistRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)
   }
 
-  hasConfigRight () {
+  private hasConfigRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_CONFIGURATION)
   }
 
-  hasPluginsRight () {
+  private hasPluginsRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_PLUGINS)
   }
 
-  hasLogsRight () {
+  private hasLogsRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_LOGS)
   }
 
-  hasJobsRight () {
+  private hasJobsRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_JOBS)
   }
 
-  hasDebugRight () {
+  private hasDebugRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_DEBUG)
   }
 
-  hasVideoCommentsRight () {
+  private hasVideoCommentsRight () {
     return this.auth.getUser().hasRight(UserRight.SEE_ALL_COMMENTS)
+  }
+
+  private hasVideosRight () {
+    return this.auth.getUser().hasRight(UserRight.SEE_ALL_VIDEOS)
   }
 }

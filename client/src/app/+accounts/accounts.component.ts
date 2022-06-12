@@ -36,7 +36,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   accountDescriptionHTML = ''
   accountDescriptionExpanded = false
 
-  prependModerationActions: DropdownAction<any>[]
+  prependModerationActions: DropdownAction<any>[] = []
 
   private routeSub: Subscription
 
@@ -151,8 +151,6 @@ export class AccountsComponent implements OnInit, OnDestroy {
   private async onAccount (account: Account) {
     this.accountFollowerTitle = $localize`${account.followersCount} direct account followers`
 
-    this.prependModerationActions = undefined
-
     this.accountDescriptionHTML = await this.markdown.textMarkdownToHTML(account.description)
 
     // After the markdown renderer to avoid layout changes
@@ -164,7 +162,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   }
 
   private showReportModal () {
-    this.accountReportModal.show()
+    this.accountReportModal.show(this.account)
   }
 
   private loadUserIfNeeded (account: Account) {
@@ -184,6 +182,8 @@ export class AccountsComponent implements OnInit, OnDestroy {
   }
 
   private updateModerationActions () {
+    this.prependModerationActions = []
+
     if (!this.authService.isLoggedIn()) return
 
     this.authService.userInformationLoaded.subscribe(
@@ -192,6 +192,10 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
         // It's not our account, we can report it
         this.prependModerationActions = [
+          {
+            label: $localize`Report`,
+            isHeader: true
+          },
           {
             label: $localize`Report this account`,
             handler: () => this.showReportModal()

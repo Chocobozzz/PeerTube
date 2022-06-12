@@ -1,8 +1,8 @@
 import { Sequelize, Transaction } from 'sequelize'
-import { AbstractVideosModelQueryBuilder } from './shared/abstract-videos-model-query-builder'
+import { AbstractVideoQueryBuilder } from './shared/abstract-video-query-builder'
 import { VideoFileQueryBuilder } from './shared/video-file-query-builder'
 import { VideoModelBuilder } from './shared/video-model-builder'
-import { VideoTables } from './shared/video-tables'
+import { VideoTableAttributes } from './shared/video-table-attributes'
 
 /**
  *
@@ -32,7 +32,7 @@ export type BuildVideoGetQueryOptions = {
   logging?: boolean
 }
 
-export class VideosModelGetQueryBuilder {
+export class VideoModelGetQueryBuilder {
   videoQueryBuilder: VideosModelGetQuerySubBuilder
   webtorrentFilesQueryBuilder: VideoFileQueryBuilder
   streamingPlaylistFilesQueryBuilder: VideoFileQueryBuilder
@@ -46,34 +46,39 @@ export class VideosModelGetQueryBuilder {
     this.webtorrentFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
     this.streamingPlaylistFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
 
-    this.videoModelBuilder = new VideoModelBuilder('get', new VideoTables('get'))
+    this.videoModelBuilder = new VideoModelBuilder('get', new VideoTableAttributes('get'))
   }
 
   async queryVideo (options: BuildVideoGetQueryOptions) {
     const [ videoRows, webtorrentFilesRows, streamingPlaylistFilesRows ] = await Promise.all([
       this.videoQueryBuilder.queryVideos(options),
 
-      VideosModelGetQueryBuilder.videoFilesInclude.has(options.type)
+      VideoModelGetQueryBuilder.videoFilesInclude.has(options.type)
         ? this.webtorrentFilesQueryBuilder.queryWebTorrentVideos(options)
         : Promise.resolve(undefined),
 
-      VideosModelGetQueryBuilder.videoFilesInclude.has(options.type)
+      VideoModelGetQueryBuilder.videoFilesInclude.has(options.type)
         ? this.streamingPlaylistFilesQueryBuilder.queryStreamingPlaylistVideos(options)
         : Promise.resolve(undefined)
     ])
 
-    const videos = this.videoModelBuilder.buildVideosFromRows(videoRows, webtorrentFilesRows, streamingPlaylistFilesRows)
+    const videos = this.videoModelBuilder.buildVideosFromRows({
+      rows: videoRows,
+      rowsWebTorrentFiles: webtorrentFilesRows,
+      rowsStreamingPlaylist: streamingPlaylistFilesRows
+    })
 
     if (videos.length > 1) {
-      throw new Error('Video results is more than ')
+      throw new Error('Video results is more than 1')
     }
 
     if (videos.length === 0) return null
+
     return videos[0]
   }
 }
 
-export class VideosModelGetQuerySubBuilder extends AbstractVideosModelQueryBuilder {
+export class VideosModelGetQuerySubBuilder extends AbstractVideoQueryBuilder {
   protected attributes: { [key: string]: string }
 
   protected webtorrentFilesQuery: string

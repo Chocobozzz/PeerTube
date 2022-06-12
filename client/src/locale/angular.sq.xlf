@@ -7800,7 +7800,7 @@
       </trans-unit>
       <trans-unit id="60534abbe922bf9da7284c1c84d26315d695a5b7" datatype="html">
         <source>Channel name cannot be the same than your account name. You can click on the first step to update your account name.</source>
-        <target/>
+        <target>Emri i kanalit s’mund të jetë i njëjtë me emrin e llogarisë tuaj. Mund të klikoni te hapi i parë për të përditësuar emrin e llogarisë tuaj.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">50</context>
@@ -8052,7 +8052,7 @@
       </trans-unit>
       <trans-unit id="67e703146fe9f6fa41250bbdf27db405cee57607" datatype="html">
         <source>Process domains</source>
-        <target/>
+        <target>Përpuno përkatësi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/batch-domains-modal.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8212,7 +8212,7 @@
       </trans-unit>
       <trans-unit id="44e174dd30570e69f7cbf216477a01f956ce058b" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{handle}}"/> accepted in instance followers</source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{handle}}"/> u pranua në ndjekës të instancës</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8236,7 +8236,7 @@
       </trans-unit>
       <trans-unit id="7faa627518f768d9ea813d018c121608af5cbd79" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{handle}}"/> rejected from instance followers</source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{handle}}"/> s’u pranua si ndjekës instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8252,7 +8252,7 @@
       </trans-unit>
       <trans-unit id="53fb638407fb04c8b403fa392cc628a699e2c0bc" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{handle}}"/> removed from instance followers</source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{handle}}"/> u hoq nga ndjekës instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8332,7 +8332,7 @@
       </trans-unit>
       <trans-unit id="aea95ff7fb86826539cc9c81c90e766d82f9cbb5" datatype="html">
         <source>Do you really want to remove this video redundancy?</source>
-        <target/>
+        <target>Doni vërtet të hiqet përsëritja e panevojshme e kësaj videoje?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8340,7 +8340,7 @@
       </trans-unit>
       <trans-unit id="9eef7dd291945247d4aefb3994b617d73a0c96e2" datatype="html">
         <source>Remove redundancy</source>
-        <target/>
+        <target>Hiqe përsëritjen e panevojshme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8348,7 +8348,7 @@
       </trans-unit>
       <trans-unit id="1009a5a3eab4ef49f45fe10392d8685c1ff03df9" datatype="html">
         <source>Video redundancies removed!</source>
-        <target/>
+        <target>Përsëritja e panevojshme e videos u hoq!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10752,7 +10752,7 @@
       </trans-unit>
       <trans-unit id="665092574f9af9fec262f8349b67b14192391ae6" datatype="html">
         <source>Video support must be at least 3 characters long.</source>
-        <target/>
+        <target>Mbulimi video duhet të jetë të paktën 3 shenja i gjatë.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10760,7 +10760,7 @@
       </trans-unit>
       <trans-unit id="f17de746af56840511cae11559539b6d8b6955ad" datatype="html">
         <source>Video support cannot be more than 1000 characters long.</source>
-        <target/>
+        <target>Mbulimi për video s’mund të jetë më tepër se 1000 shenja i gjatë.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -11201,7 +11201,7 @@
       </trans-unit>
       <trans-unit id="8fb519ba47ea7806beeacdcd44829d85a2aa0cc5" datatype="html">
         <source>yy-mm-dd</source>
-        <target/>
+        <target>dd-mm-yy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -11234,7 +11234,7 @@
       </trans-unit>
       <trans-unit id="7296e9f7cc4956b6d57c541728b0826e76d108ba" datatype="html">
         <source>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></source>
-        <target/>
+        <target state="needs-translation">~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11882,7 +11882,7 @@
       </trans-unit>
       <trans-unit id="5bad8678a5115610ba1bf56a35256a13e6b07a7b" datatype="html">
         <source>Mirror</source>
-        <target/>
+        <target>Pasqyrë</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>

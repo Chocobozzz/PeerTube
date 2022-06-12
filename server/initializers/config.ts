@@ -6,7 +6,6 @@ import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-red
 import { BroadcastMessageLevel } from '@shared/models/server'
 import { VideosRedundancyStrategy } from '../../shared/models'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
-// Do not use barrels, remain constants as independent as possible
 import { buildPath, parseBytes, parseDurationToMs, root } from '../helpers/core-utils'
 
 // Use a variable to reload the configuration if we need
@@ -58,8 +57,18 @@ const CONFIG = {
       PREFIX: config.get<string>('email.subject.prefix') + ' '
     }
   },
+
+  CLIENT: {
+    VIDEOS: {
+      MINIATURE: {
+        get PREFER_AUTHOR_DISPLAY_NAME () { return config.get<boolean>('client.videos.miniature.prefer_author_display_name') }
+      }
+    }
+  },
+
   STORAGE: {
     TMP_DIR: buildPath(config.get<string>('storage.tmp')),
+    BIN_DIR: buildPath(config.get<string>('storage.bin')),
     ACTOR_IMAGES: buildPath(config.get<string>('storage.avatars')),
     LOG_DIR: buildPath(config.get<string>('storage.logs')),
     VIDEOS_DIR: buildPath(config.get<string>('storage.videos')),
@@ -122,10 +131,10 @@ const CONFIG = {
     LEVEL: config.get<string>('log.level'),
     ROTATION: {
       ENABLED: config.get<boolean>('log.rotation.enabled'),
-      MAX_FILE_SIZE: bytes.parse(config.get<string>('log.rotation.maxFileSize')),
-      MAX_FILES: config.get<number>('log.rotation.maxFiles')
+      MAX_FILE_SIZE: bytes.parse(config.get<string>('log.rotation.max_file_size')),
+      MAX_FILES: config.get<number>('log.rotation.max_files')
     },
-    ANONYMIZE_IP: config.get<boolean>('log.anonymizeIP'),
+    ANONYMIZE_IP: config.get<boolean>('log.anonymize_ip'),
     LOG_PING_REQUESTS: config.get<boolean>('log.log_ping_requests'),
     PRETTIFY_SQL: config.get<boolean>('log.prettify_sql')
   },
@@ -173,7 +182,9 @@ const CONFIG = {
     VIDEOS: {
       REMOTE: {
         MAX_AGE: parseDurationToMs(config.get('views.videos.remote.max_age'))
-      }
+      },
+      LOCAL_BUFFER_UPDATE_INTERVAL: parseDurationToMs(config.get('views.videos.local_buffer_update_interval')),
+      IP_VIEW_EXPIRATION: parseDurationToMs(config.get('views.videos.ip_view_expiration'))
     }
   },
   PLUGINS: {
@@ -193,6 +204,13 @@ const CONFIG = {
     CHECK_LATEST_VERSION: {
       ENABLED: config.get<boolean>('peertube.check_latest_version.enabled'),
       URL: config.get<string>('peertube.check_latest_version.url')
+    }
+  },
+  WEBADMIN: {
+    CONFIGURATION: {
+      EDITION: {
+        ALLOWED: config.get<boolean>('webadmin.configuration.edition.allowed')
+      }
     }
   },
   ADMIN: {
@@ -217,6 +235,9 @@ const CONFIG = {
     get VIDEO_QUOTA () { return parseBytes(config.get<number>('user.video_quota')) },
     get VIDEO_QUOTA_DAILY () { return parseBytes(config.get<number>('user.video_quota_daily')) }
   },
+  VIDEO_CHANNELS: {
+    get MAX_PER_USER () { return config.get<number>('video_channels.max_per_user') }
+  },
   TRANSCODING: {
     get ENABLED () { return config.get<boolean>('transcoding.enabled') },
     get ALLOW_ADDITIONAL_EXTENSIONS () { return config.get<boolean>('transcoding.allow_additional_extensions') },
@@ -226,6 +247,7 @@ const CONFIG = {
     get PROFILE () { return config.get<string>('transcoding.profile') },
     RESOLUTIONS: {
       get '0p' () { return config.get<boolean>('transcoding.resolutions.0p') },
+      get '144p' () { return config.get<boolean>('transcoding.resolutions.144p') },
       get '240p' () { return config.get<boolean>('transcoding.resolutions.240p') },
       get '360p' () { return config.get<boolean>('transcoding.resolutions.360p') },
       get '480p' () { return config.get<boolean>('transcoding.resolutions.480p') },
@@ -251,7 +273,15 @@ const CONFIG = {
     get ALLOW_REPLAY () { return config.get<boolean>('live.allow_replay') },
 
     RTMP: {
+      get ENABLED () { return config.get<boolean>('live.rtmp.enabled') },
       get PORT () { return config.get<number>('live.rtmp.port') }
+    },
+
+    RTMPS: {
+      get ENABLED () { return config.get<boolean>('live.rtmps.enabled') },
+      get PORT () { return config.get<number>('live.rtmps.port') },
+      get KEY_FILE () { return config.get<string>('live.rtmps.key_file') },
+      get CERT_FILE () { return config.get<string>('live.rtmps.cert_file') }
     },
 
     TRANSCODING: {
@@ -260,6 +290,7 @@ const CONFIG = {
       get PROFILE () { return config.get<string>('live.transcoding.profile') },
 
       RESOLUTIONS: {
+        get '144p' () { return config.get<boolean>('live.transcoding.resolutions.144p') },
         get '240p' () { return config.get<boolean>('live.transcoding.resolutions.240p') },
         get '360p' () { return config.get<boolean>('live.transcoding.resolutions.360p') },
         get '480p' () { return config.get<boolean>('live.transcoding.resolutions.480p') },
@@ -276,11 +307,13 @@ const CONFIG = {
 
       HTTP: {
         get ENABLED () { return config.get<boolean>('import.videos.http.enabled') },
-        get FORCE_IPV4 () { return config.get<boolean>('import.videos.http.force_ipv4') },
-        PROXY: {
-          get ENABLED () { return config.get<boolean>('import.videos.http.proxy.enabled') },
-          get URL () { return config.get<string>('import.videos.http.proxy.url') }
-        }
+
+        YOUTUBE_DL_RELEASE: {
+          get URL () { return config.get<string>('import.videos.http.youtube_dl_release.url') },
+          get NAME () { return config.get<string>('import.videos.http.youtube_dl_release.name') }
+        },
+
+        get FORCE_IPV4 () { return config.get<boolean>('import.videos.http.force_ipv4') }
       },
       TORRENT: {
         get ENABLED () { return config.get<boolean>('import.videos.torrent.enabled') }
@@ -419,14 +452,22 @@ export {
 // ---------------------------------------------------------------------------
 
 function getLocalConfigFilePath () {
-  const configSources = config.util.getConfigSources()
-  if (configSources.length === 0) throw new Error('Invalid config source.')
+  const localConfigDir = getLocalConfigDir()
 
   let filename = 'local'
   if (process.env.NODE_ENV) filename += `-${process.env.NODE_ENV}`
   if (process.env.NODE_APP_INSTANCE) filename += `-${process.env.NODE_APP_INSTANCE}`
 
-  return join(dirname(configSources[0].name), filename + '.json')
+  return join(localConfigDir, filename + '.json')
+}
+
+function getLocalConfigDir () {
+  if (process.env.PEERTUBE_LOCAL_CONFIG) return process.env.PEERTUBE_LOCAL_CONFIG
+
+  const configSources = config.util.getConfigSources()
+  if (configSources.length === 0) throw new Error('Invalid config source.')
+
+  return dirname(configSources[0].name)
 }
 
 function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {
@@ -445,19 +486,19 @@ function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {
 
 export function reloadConfig () {
 
-  function getConfigDirectory () {
+  function getConfigDirectories () {
     if (process.env.NODE_CONFIG_DIR) {
-      return process.env.NODE_CONFIG_DIR
+      return process.env.NODE_CONFIG_DIR.split(':')
     }
 
-    return join(root(), 'config')
+    return [ join(root(), 'config') ]
   }
 
   function purge () {
-    const directory = getConfigDirectory()
+    const directories = getConfigDirectories()
 
     for (const fileName in require.cache) {
-      if (fileName.includes(directory) === false) {
+      if (directories.some((dir) => fileName.includes(dir)) === false) {
         continue
       }
 

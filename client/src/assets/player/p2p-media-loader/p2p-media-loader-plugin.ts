@@ -89,8 +89,7 @@ class P2pMediaLoaderPlugin extends Plugin {
   }
 
   getLiveLatency () {
-    // FIXME: typings
-    return Math.round((this.hlsjs as any).latency)
+    return Math.round(this.hlsjs.latency)
   }
 
   getHLSJS () {
@@ -113,16 +112,8 @@ class P2pMediaLoaderPlugin extends Plugin {
     initHlsJsPlayer(this.hlsjs)
 
     // FIXME: typings
-    const options = this.player.tech(true).options_ as any
+    const options = (this.player.tech(true).options_ as any)
     this.p2pEngine = options.hlsjsConfig.loader.getEngine()
-
-    this.hlsjs.on(Hlsjs.Events.LEVEL_SWITCHING, (_: any, data: any) => {
-      this.trigger('resolutionChange', { auto: this.hlsjs.autoLevelEnabled, resolutionId: data.height })
-    })
-
-    this.hlsjs.on(Hlsjs.Events.MANIFEST_LOADED, (_: any, data: any) => {
-      this.trigger('resolutionsLoaded')
-    })
 
     this.p2pEngine.on(Events.SegmentError, (segment: Segment, err) => {
       console.error('Segment error.', segment, err)

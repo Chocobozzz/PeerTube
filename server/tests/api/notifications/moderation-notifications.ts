@@ -487,7 +487,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send notification to moderators on new video with auto-blacklist', async function () {
-      this.timeout(40000)
+      this.timeout(120000)
 
       videoName = 'video with auto-blacklist ' + buildUUID()
       const video = await servers[0].videos.upload({ token: userAccessToken, attributes: { name: videoName } })

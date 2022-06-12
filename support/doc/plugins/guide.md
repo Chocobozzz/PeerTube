@@ -3,7 +3,6 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Concepts](#concepts)
   - [Hooks](#hooks)
   - [Static files](#static-files)
@@ -28,6 +27,7 @@
     - [Get server config](#get-server-config)
     - [Add custom fields to video form](#add-custom-fields-to-video-form)
     - [Register settings script](#register-settings-script)
+    - [Plugin selector on HTML elements](#plugin-selector-on-html-elements)
     - [HTML placeholder elements](#html-placeholder-elements)
     - [Add/remove left menu links](#addremove-left-menu-links)
   - [Publishing](#publishing)
@@ -104,6 +104,20 @@ async function register ({
   registerHook({
     target: 'action:application.listening',
     handler: () => displayHelloWorld()
+  })
+}
+```
+
+Hooks prefixed by `action:api` also give access the original **express** [Request](http://expressjs.com/en/api.html#req) and [Response](http://expressjs.com/en/api.html#res):
+
+```js
+async function register ({
+  registerHook,
+  peertubeHelpers: { logger }
+}) {
+  registerHook({
+    target: 'action:api.video.updated',
+    handler: ({ req, res }) => logger.debug('original request parameters', { params: req.params })
   })
 }
 ```
@@ -745,6 +759,13 @@ async function register ({ registerSettingsScript }) {
   })
 }
 ```
+#### Plugin selector on HTML elements
+
+PeerTube provides some selectors (using `id` HTML attribute) on important blocks so plugins can easily change their style.
+
+For example `#plugin-selector-login-form` could be used to hide the login form.
+
+See the complete list on https://docs.joinpeertube.org/api-plugins
 
 #### HTML placeholder elements
 

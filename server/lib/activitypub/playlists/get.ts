@@ -20,7 +20,7 @@ async function getOrCreateAPVideoPlaylist (playlistObjectArg: APObject): Promise
   const { playlistObject } = await fetchRemoteVideoPlaylist(playlistUrl)
   if (!playlistObject) throw new Error('Cannot fetch remote playlist with url: ' + playlistUrl)
 
-  // playlistUrl is just an alias/rediraction, so process object id instead
+  // playlistUrl is just an alias/redirection, so process object id instead
   if (playlistObject.id !== playlistUrl) return getOrCreateAPVideoPlaylist(playlistObject)
 
   const playlistCreated = await createOrUpdateVideoPlaylist(playlistObject)

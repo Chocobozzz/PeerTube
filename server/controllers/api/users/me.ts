@@ -25,7 +25,7 @@ import {
   usersUpdateMeValidator,
   usersVideoRatingValidator
 } from '../../../middlewares'
-import { deleteMeValidator, videoImportsSortValidator, videosSortValidator } from '../../../middlewares/validators'
+import { deleteMeValidator, usersVideosValidator, videoImportsSortValidator, videosSortValidator } from '../../../middlewares/validators'
 import { updateAvatarValidator } from '../../../middlewares/validators/actor-image'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
@@ -69,6 +69,7 @@ meRouter.get('/me/videos',
   videosSortValidator,
   setDefaultVideosSort,
   setDefaultPagination,
+  asyncMiddleware(usersVideosValidator),
   asyncMiddleware(getUserVideos)
 )
 
@@ -113,6 +114,7 @@ async function getUserVideos (req: express.Request, res: express.Response) {
     count: req.query.count,
     sort: req.query.sort,
     search: req.query.search,
+    channelId: res.locals.videoChannel?.id,
     isLive: req.query.isLive
   }, 'filter:api.user.me.videos.list.params')
 

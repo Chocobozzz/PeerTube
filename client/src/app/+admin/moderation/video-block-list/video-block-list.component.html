@@ -33,34 +33,23 @@
   <ng-template pTemplate="body" let-videoBlock let-expanded="expanded">
     <tr>
       <td *ngIf="!videoBlock.reason"></td>
-      <td *ngIf="videoBlock.reason" class="expand-cell c-hand" [pRowToggler]="videoBlock" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
-        <span class="expander">
-          <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
-        </span>
+      <td class="expand-cell" *ngIf="videoBlock.reason" [pRowToggler]="videoBlock">
+        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">
         <my-action-dropdown
-          [ngClass]="{ 'show': expanded }" placement="bottom-right" container="body"
+          [ngClass]="{ 'show': expanded }" placement="bottom-right auto" container="body"
           i18n-label label="Actions" [actions]="videoBlocklistActions" [entry]="videoBlock"
         ></my-action-dropdown>
       </td>
 
       <td>
-        <a [href]="getVideoUrl(videoBlock)" class="table-video-link" [title]="videoBlock.video.name" target="_blank" rel="noopener noreferrer">
-          <div class="table-video">
-            <div class="table-video-image">
-              <img [src]="videoBlock.video.thumbnailPath">
-            </div>
-            <div class="table-video-text">
-              <div>
-                <my-global-icon i18n-title title="The video was blocked due to automatic blocking of new videos" *ngIf="videoBlock.type === 2" iconName="robot"></my-global-icon>
-                {{ videoBlock.video.name }}
-              </div>
-              <div class="text-muted">by {{ videoBlock.video.channel?.displayName }} on {{ videoBlock.video.channel?.host }} </div>
-            </div>
-          </div>
-        </a>
+        <my-video-cell [video]="videoBlock.video">
+          <span name>
+            <my-global-icon *ngIf="videoBlock.type === 2" i18n-title title="The video was blocked due to automatic blocking of new videos" iconName="robot"></my-global-icon>
+          </span>
+        </my-video-cell>
       </td>
 
       <td>
@@ -82,17 +71,13 @@
       <td class="expand-cell" colspan="6">
         <div class="d-flex moderation-expanded">
 
-          <!-- block right part (block details) -->
-          <div class="col-8">
-            <span class="col-3 moderation-expanded-label" i18n>Block reason:</span>
-            <span class="col-9 moderation-expanded-text" [innerHTML]="videoBlock.reasonHtml"></span>
+          <div class="left">
+            <span class="moderation-expanded-label" i18n>Block reason:</span>
+            <span class="moderation-expanded-text" [innerHTML]="videoBlock.reasonHtml"></span>
           </div>
 
-          <!-- block right part (video embed) -->
-          <div class="col-4">
-            <div class="screenratio">
-              <div [innerHTML]="videoBlock.embedHtml"></div>
-            </div>
+          <div class="right">
+            <my-embed [video]="videoBlock.video"></my-embed>
           </div>
 
         </div>

@@ -71,7 +71,7 @@ export class NotificationsCommand extends AbstractCommand {
     })
   }
 
-  async getLastest (options: OverrideCommandOptions = {}) {
+  async getLatest (options: OverrideCommandOptions = {}) {
     const { total, data } = await this.list({
       ...options,
       start: 0,

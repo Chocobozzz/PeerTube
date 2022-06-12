@@ -1,17 +1,17 @@
 import { join } from 'path'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
-import { MStreamingPlaylist, MVideoFile, MVideoUUID } from '@server/types/models'
+import { MStreamingPlaylistVideo, MVideoFile } from '@server/types/models'
 import { getHLSDirectory } from '../paths'
 import { generateHLSObjectBaseStorageKey, generateHLSObjectStorageKey, generateWebTorrentObjectStorageKey } from './keys'
 import { lTags, makeAvailable, removeObject, removePrefix, storeObject } from './shared'
 
-function storeHLSFile (playlist: MStreamingPlaylist, video: MVideoUUID, filename: string) {
-  const baseHlsDirectory = getHLSDirectory(video)
+function storeHLSFile (playlist: MStreamingPlaylistVideo, filename: string) {
+  const baseHlsDirectory = getHLSDirectory(playlist.Video)
 
   return storeObject({
     inputPath: join(baseHlsDirectory, filename),
-    objectStorageKey: generateHLSObjectStorageKey(playlist, video, filename),
+    objectStorageKey: generateHLSObjectStorageKey(playlist, filename),
     bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
   })
 }
@@ -24,16 +24,16 @@ function storeWebTorrentFile (filename: string) {
   })
 }
 
-function removeHLSObjectStorage (playlist: MStreamingPlaylist, video: MVideoUUID) {
-  return removePrefix(generateHLSObjectBaseStorageKey(playlist, video), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+function removeHLSObjectStorage (playlist: MStreamingPlaylistVideo) {
+  return removePrefix(generateHLSObjectBaseStorageKey(playlist), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
 function removeWebTorrentObjectStorage (videoFile: MVideoFile) {
   return removeObject(generateWebTorrentObjectStorageKey(videoFile.filename), CONFIG.OBJECT_STORAGE.VIDEOS)
 }
 
-async function makeHLSFileAvailable (playlist: MStreamingPlaylist, video: MVideoUUID, filename: string, destination: string) {
-  const key = generateHLSObjectStorageKey(playlist, video, filename)
+async function makeHLSFileAvailable (playlist: MStreamingPlaylistVideo, filename: string, destination: string) {
+  const key = generateHLSObjectStorageKey(playlist, filename)
 
   logger.info('Fetching HLS file %s from object storage to %s.', key, destination, lTags())
 

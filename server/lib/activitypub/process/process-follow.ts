@@ -48,20 +48,13 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
       return { actorFollow: undefined as MActorFollowActors }
     }
 
-    const [ actorFollow, created ] = await ActorFollowModel.findOrCreate<MActorFollowActors>({
-      where: {
-        actorId: byActor.id,
-        targetActorId: targetActor.id
-      },
-      defaults: {
-        actorId: byActor.id,
-        targetActorId: targetActor.id,
-        url: activityId,
-
-        state: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL
-          ? 'pending'
-          : 'accepted'
-      },
+    const [ actorFollow, created ] = await ActorFollowModel.findOrCreateCustom({
+      byActor,
+      targetActor,
+      activityId,
+      state: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL
+        ? 'pending'
+        : 'accepted',
       transaction: t
     })
 

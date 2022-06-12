@@ -1,6 +1,8 @@
 import express from 'express'
 import { pickCommonVideoQuery } from '@server/helpers/query'
+import { ActorFollowModel } from '@server/models/actor/actor-follow'
 import { getServerActor } from '@server/models/application/application'
+import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
 import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { getFormattedObjects } from '../../helpers/utils'
 import { JobQueue } from '../../lib/job-queue'
@@ -20,6 +22,7 @@ import {
 } from '../../middlewares'
 import {
   accountNameWithHostGetValidator,
+  accountsFollowersSortValidator,
   accountsSortValidator,
   ensureAuthUserOwnsAccountValidator,
   videoChannelsSortValidator,
@@ -93,6 +96,17 @@ accountsRouter.get('/:accountName/ratings',
   asyncMiddleware(listAccountRatings)
 )
 
+accountsRouter.get('/:accountName/followers',
+  authenticate,
+  asyncMiddleware(accountNameWithHostGetValidator),
+  ensureAuthUserOwnsAccountValidator,
+  paginationValidator,
+  accountsFollowersSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(listAccountFollowers)
+)
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -127,7 +141,7 @@ async function listAccountChannels (req: express.Request, res: express.Response)
     search: req.query.search
   }
 
-  const resultList = await VideoChannelModel.listByAccount(options)
+  const resultList = await VideoChannelModel.listByAccountForAPI(options)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -156,19 +170,25 @@ async function listAccountPlaylists (req: express.Request, res: express.Response
 }
 
 async function listAccountVideos (req: express.Request, res: express.Response) {
+  const serverActor = await getServerActor()
+
   const account = res.locals.account
-  const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
+
+  const displayOnlyForFollower = isUserAbleToSearchRemoteURI(res)
+    ? null
+    : {
+      actorId: serverActor.id,
+      orLocalVideos: true
+    }
+
   const countVideos = getCountVideos(req)
   const query = pickCommonVideoQuery(req.query)
 
   const apiOptions = await Hooks.wrapObject({
     ...query,
 
-    followerActorId,
-    search: req.query.search,
-    includeLocalVideos: true,
+    displayOnlyForFollower,
     nsfw: buildNSFWFilter(res, query.nsfw),
-    withFiles: false,
     accountId: account.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos
@@ -180,7 +200,7 @@ async function listAccountVideos (req: express.Request, res: express.Response) {
     'filter:api.accounts.videos.list.result'
   )
 
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
+  return res.json(getFormattedObjects(resultList.data, resultList.total, guessAdditionalAttributesFromQuery(query)))
 }
 
 async function listAccountRatings (req: express.Request, res: express.Response) {
@@ -194,4 +214,22 @@ async function listAccountRatings (req: express.Request, res: express.Response) 
     type: req.query.rating
   })
   return res.json(getFormattedObjects(resultList.rows, resultList.count))
+}
+
+async function listAccountFollowers (req: express.Request, res: express.Response) {
+  const account = res.locals.account
+
+  const channels = await VideoChannelModel.listAllByAccount(account.id)
+  const actorIds = [ account.actorId ].concat(channels.map(c => c.actorId))
+
+  const resultList = await ActorFollowModel.listFollowersForApi({
+    actorIds,
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    search: req.query.search,
+    state: 'accepted'
+  })
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

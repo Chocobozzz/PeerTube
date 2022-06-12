@@ -7,6 +7,7 @@ import { uuidToShort } from '@server/helpers/uuid'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
+import { Redis } from '@server/lib/redis'
 import {
   addMoveToObjectStorageJob,
   addOptimizeOrMergeAudioJob,
@@ -18,7 +19,7 @@ import { VideoPathManager } from '@server/lib/video-path-manager'
 import { buildNextVideoState } from '@server/lib/video-state'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
-import { uploadx } from '@uploadx/core'
+import { Uploadx } from '@uploadx/core'
 import { VideoCreate, VideoState } from '../../../../shared'
 import { HttpStatusCode } from '../../../../shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
@@ -40,6 +41,7 @@ import {
   authenticate,
   videosAddLegacyValidator,
   videosAddResumableInitValidator,
+  videosResumableUploadIdValidator,
   videosAddResumableValidator
 } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
@@ -49,7 +51,9 @@ import { VideoFileModel } from '../../../models/video/video-file'
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
 const uploadRouter = express.Router()
-const uploadxMiddleware = uploadx.upload({ directory: getResumableUploadPath() })
+
+const uploadx = new Uploadx({ directory: getResumableUploadPath() })
+uploadx.getUserId = (_, res: express.Response) => res.locals.oauth?.token.user.id
 
 const reqVideoFileAdd = createReqFiles(
   [ 'videofile', 'thumbnailfile', 'previewfile' ],
@@ -83,18 +87,21 @@ uploadRouter.post('/upload-resumable',
   authenticate,
   reqVideoFileAddResumable,
   asyncMiddleware(videosAddResumableInitValidator),
-  uploadxMiddleware
+  uploadx.upload
 )
 
 uploadRouter.delete('/upload-resumable',
   authenticate,
-  uploadxMiddleware
+  videosResumableUploadIdValidator,
+  asyncMiddleware(deleteUploadResumableCache),
+  uploadx.upload
 )
 
 uploadRouter.put('/upload-resumable',
   openapiOperationDoc({ operationId: 'uploadResumable' }),
   authenticate,
-  uploadxMiddleware, // uploadx doesn't use call next() before the file upload completes
+  videosResumableUploadIdValidator,
+  uploadx.upload, // uploadx doesn't next() before the file upload completes
   asyncMiddleware(videosAddResumableValidator),
   asyncMiddleware(addVideoResumable)
 )
@@ -107,7 +114,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-export async function addVideoLegacy (req: express.Request, res: express.Response) {
+async function addVideoLegacy (req: express.Request, res: express.Response) {
   // Uploading the video could be long
   // Set timeout to 10 minutes, as Express's default is 2 minutes
   req.setTimeout(1000 * 60 * 10, () => {
@@ -122,24 +129,30 @@ export async function addVideoLegacy (req: express.Request, res: express.Respons
   const videoInfo: VideoCreate = req.body
   const files = req.files
 
-  return addVideo({ res, videoPhysicalFile, videoInfo, files })
+  const response = await addVideo({ req, res, videoPhysicalFile, videoInfo, files })
+
+  return res.json(response)
 }
 
-export async function addVideoResumable (_req: express.Request, res: express.Response) {
+async function addVideoResumable (req: express.Request, res: express.Response) {
   const videoPhysicalFile = res.locals.videoFileResumable
   const videoInfo = videoPhysicalFile.metadata
   const files = { previewfile: videoInfo.previewfile }
 
-  return addVideo({ res, videoPhysicalFile, videoInfo, files })
+  const response = await addVideo({ req, res, videoPhysicalFile, videoInfo, files })
+  await Redis.Instance.setUploadSession(req.query.upload_id, response)
+
+  return res.json(response)
 }
 
 async function addVideo (options: {
+  req: express.Request
   res: express.Response
   videoPhysicalFile: express.VideoUploadFile
   videoInfo: VideoCreate
   files: express.UploadFiles
 }) {
-  const { res, videoPhysicalFile, videoInfo, files } = options
+  const { req, res, videoPhysicalFile, videoInfo, files } = options
   const videoChannel = res.locals.videoChannel
   const user = res.locals.oauth.token.User
 
@@ -223,15 +236,15 @@ async function addVideo (options: {
     })
     .catch(err => logger.error('Cannot add optimize/merge audio job for %s.', videoCreated.uuid, { err, ...lTags(videoCreated.uuid) }))
 
-  Hooks.runAction('action:api.video.uploaded', { video: videoCreated })
+  Hooks.runAction('action:api.video.uploaded', { video: videoCreated, req, res })
 
-  return res.json({
+  return {
     video: {
       id: videoCreated.id,
       shortUUID: uuidToShort(videoCreated.uuid),
       uuid: videoCreated.uuid
     }
-  })
+  }
 }
 
 async function buildNewFile (videoPhysicalFile: express.VideoUploadFile) {
@@ -284,4 +297,10 @@ function createTorrentFederate (video: MVideoFullLight, videoFile: MVideoFile) {
       })
     })
     .catch(err => logger.error('Cannot federate or notify video creation %s', video.url, { err, ...lTags(video.uuid) }))
+}
+
+async function deleteUploadResumableCache (req: express.Request, res: express.Response, next: express.NextFunction) {
+  await Redis.Instance.deleteUploadSession(req.query.upload_id)
+
+  return next()
 }

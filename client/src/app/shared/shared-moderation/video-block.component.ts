@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { Video } from '@app/shared/shared-main'
@@ -13,11 +13,11 @@ import { VideoBlockService } from './video-block.service'
   styleUrls: [ './video-block.component.scss' ]
 })
 export class VideoBlockComponent extends FormReactive implements OnInit {
-  @Input() video: Video = null
-
   @ViewChild('modal', { static: true }) modal: NgbModal
 
   @Output() videoBlocked = new EventEmitter()
+
+  videos: Video[]
 
   error: string = null
 
@@ -41,7 +41,25 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
     }, defaultValues)
   }
 
-  show () {
+  isMultiple () {
+    return this.videos.length > 1
+  }
+
+  getSingleVideo () {
+    return this.videos[0]
+  }
+
+  hasLive () {
+    return this.videos.some(v => v.isLive)
+  }
+
+  hasLocal () {
+    return this.videos.some(v => v.isLocal)
+  }
+
+  show (videos: Video[]) {
+    this.videos = videos
+
     this.openedModal = this.modalService.open(this.modal, { centered: true, keyboard: false })
   }
 
@@ -51,17 +69,30 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
   }
 
   block () {
-    const reason = this.form.value['reason'] || undefined
-    const unfederate = this.video.isLocal ? this.form.value['unfederate'] : undefined
+    const options = this.videos.map(v => ({
+      videoId: v.id,
+      reason: this.form.value['reason'] || undefined,
+      unfederate: v.isLocal
+        ? this.form.value['unfederate']
+        : undefined
+    }))
 
-    this.videoBlocklistService.blockVideo(this.video.id, reason, unfederate)
+    this.videoBlocklistService.blockVideo(options)
         .subscribe({
           next: () => {
-            this.notifier.success($localize`Video blocked.`)
+            const message = this.isMultiple
+              ? $localize`Blocked ${this.videos.length} videos.`
+              : $localize`Blocked ${this.getSingleVideo().name}`
+
+            this.notifier.success(message)
             this.hide()
 
-            this.video.blacklisted = true
-            this.video.blockedReason = reason
+            for (const o of options) {
+              const video = this.videos.find(v => v.id === o.videoId)
+
+              video.blacklisted = true
+              video.blacklistedReason = o.reason
+            }
 
             this.videoBlocked.emit()
           },

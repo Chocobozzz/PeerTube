@@ -22,7 +22,8 @@ import {
   SERVICES_TWITTER_USERNAME_VALIDATOR,
   SIGNUP_LIMIT_VALIDATOR,
   SIGNUP_MINIMUM_AGE_VALIDATOR,
-  TRANSCODING_THREADS_VALIDATOR
+  TRANSCODING_THREADS_VALIDATOR,
+  MAX_VIDEO_CHANNELS_PER_USER_VALIDATOR
 } from '@app/shared/form-validators/custom-config-validators'
 import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
@@ -151,6 +152,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         videoQuota: USER_VIDEO_QUOTA_VALIDATOR,
         videoQuotaDaily: USER_VIDEO_QUOTA_DAILY_VALIDATOR
       },
+      videoChannels: {
+        maxPerUser: MAX_VIDEO_CHANNELS_PER_USER_VALIDATOR
+      },
       transcoding: {
         enabled: null,
         threads: TRANSCODING_THREADS_VALIDATOR,
@@ -223,14 +227,6 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           isDefaultSearch: null
         }
       },
-      podcast: {
-        instanceFee: null,
-        lightning: {
-          nodeAddress: null,
-          customKey: null,
-          customValue: null
-        }
-      },
 
       instanceCustomHomepage: {
         content: null
@@ -266,6 +262,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
     this.loadConfigAndUpdateForm()
     this.loadCategoriesAndLanguages()
+
+    if (!this.isUpdateAllowed()) {
+      this.form.disable()
+    }
   }
 
   formValidated () {
@@ -296,6 +296,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
         error: err => this.notifier.error(err.message)
       })
+  }
+
+  isUpdateAllowed () {
+    return this.serverConfig.webadmin.configuration.edition.allowed === true
   }
 
   hasConsistentOptions () {

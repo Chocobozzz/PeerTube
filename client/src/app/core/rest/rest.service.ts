@@ -1,21 +1,23 @@
+import * as debug from 'debug'
 import { SortMeta } from 'primeng/api'
 import { HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight } from './component-pagination.model'
 import { RestPagination } from './rest-pagination'
 
+const logger = debug('peertube:rest')
+
 interface QueryStringFilterPrefixes {
   [key: string]: {
     prefix: string
-    handler?: (v: string) => string | number
+    handler?: (v: string) => string | number | boolean
     multiple?: boolean
     isBoolean?: boolean
   }
 }
 
-type ParseQueryStringFilterResult = {
-  [key: string]: string | number | boolean | (string | number | boolean)[]
-}
+type ParseQueryStringFilters <K extends keyof any> = Partial<Record<K, string | number | boolean | (string | number | boolean)[]>>
+type ParseQueryStringFiltersResult <K extends keyof any> = ParseQueryStringFilters<K> & { search?: string }
 
 @Injectable()
 export class RestService {
@@ -67,32 +69,35 @@ export class RestService {
     return params
   }
 
-  componentPaginationToRestPagination (componentPagination: ComponentPaginationLight): RestPagination {
+  componentToRestPagination (componentPagination: ComponentPaginationLight): RestPagination {
     const start: number = (componentPagination.currentPage - 1) * componentPagination.itemsPerPage
     const count: number = componentPagination.itemsPerPage
 
     return { start, count }
   }
 
-  parseQueryStringFilter (q: string, prefixes: QueryStringFilterPrefixes): ParseQueryStringFilterResult {
+  /*
+  * Returns an object containing the filters and the remaining search
+  */
+  parseQueryStringFilter <T extends QueryStringFilterPrefixes> (q: string, prefixes: T): ParseQueryStringFiltersResult<keyof T> {
     if (!q) return {}
 
-    // Tokenize the strings using spaces that are not in quotes
-    const tokens = q.match(/(?:[^\s"]+|"[^"]*")+/g)
-                    .filter(token => !!token)
+    const tokens = this.tokenizeString(q)
 
     // Build prefix array
     const prefixeStrings = Object.values(prefixes)
-                           .map(p => p.prefix)
+                                 .map(p => p.prefix)
+
+    logger(`Built tokens "${tokens.join(', ')}" for prefixes "${prefixeStrings.join(', ')}"`)
 
     // Search is the querystring minus defined filters
     const searchTokens = tokens.filter(t => {
       return prefixeStrings.every(prefixString => t.startsWith(prefixString) === false)
     })
 
-    const additionalFilters: ParseQueryStringFilterResult = {}
+    const additionalFilters: ParseQueryStringFilters<keyof T> = {}
 
-    for (const prefixKey of Object.keys(prefixes)) {
+    for (const prefixKey of Object.keys(prefixes) as (keyof T)[]) {
       const prefixObj = prefixes[prefixKey]
       const prefix = prefixObj.prefix
 
@@ -120,10 +125,22 @@ export class RestService {
         : matchedTokens[0]
     }
 
+    const search = searchTokens.join(' ') || undefined
+
+    logger('Built search: ' + search, additionalFilters)
+
     return {
-      search: searchTokens.join(' ') || undefined,
+      search,
 
       ...additionalFilters
     }
+  }
+
+  tokenizeString (q: string) {
+    if (!q) return []
+
+    // Tokenize the strings using spaces that are not in quotes
+    return q.match(/(?:[^\s"]+|"[^"]*")+/g)
+            .filter(token => !!token)
   }
 }

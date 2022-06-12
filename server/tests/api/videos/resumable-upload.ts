@@ -22,6 +22,8 @@ describe('Test resumable upload', function () {
   const defaultFixture = 'video_short.mp4'
   let server: PeerTubeServer
   let rootId: number
+  let userAccessToken: string
+  let userChannelId: number
 
   async function buildSize (fixture: string, size?: number) {
     if (size !== undefined) return size
@@ -30,24 +32,33 @@ describe('Test resumable upload', function () {
     return (await stat(baseFixture)).size
   }
 
-  async function prepareUpload (sizeArg?: number) {
-    const size = await buildSize(defaultFixture, sizeArg)
+  async function prepareUpload (options: {
+    channelId?: number
+    token?: string
+    size?: number
+    originalName?: string
+    lastModified?: number
+  } = {}) {
+    const { token, originalName, lastModified } = options
+
+    const size = await buildSize(defaultFixture, options.size)
 
     const attributes = {
       name: 'video',
-      channelId: server.store.channel.id,
+      channelId: options.channelId ?? server.store.channel.id,
       privacy: VideoPrivacy.PUBLIC,
       fixture: defaultFixture
     }
 
     const mimetype = 'video/mp4'
 
-    const res = await server.videos.prepareResumableUpload({ attributes, size, mimetype })
+    const res = await server.videos.prepareResumableUpload({ token, attributes, size, mimetype, originalName, lastModified })
 
     return res.header['location'].split('?')[1]
   }
 
   async function sendChunks (options: {
+    token?: string
     pathUploadId: string
     size?: number
     expectedStatus?: HttpStatusCode
@@ -55,12 +66,13 @@ describe('Test resumable upload', function () {
     contentRange?: string
     contentRangeBuilder?: (start: number, chunk: any) => string
   }) {
-    const { pathUploadId, expectedStatus, contentLength, contentRangeBuilder } = options
+    const { token, pathUploadId, expectedStatus, contentLength, contentRangeBuilder } = options
 
     const size = await buildSize(defaultFixture, options.size)
     const absoluteFilePath = buildAbsoluteFixturePath(defaultFixture)
 
     return server.videos.sendResumableChunks({
+      token,
       pathUploadId,
       videoFilePath: absoluteFilePath,
       size,
@@ -105,6 +117,12 @@ describe('Test resumable upload', function () {
     const body = await server.users.getMyInfo()
     rootId = body.id
 
+    {
+      userAccessToken = await server.users.generateUserAndToken('user1')
+      const { videoChannels } = await server.users.getMyInfo({ token: userAccessToken })
+      userChannelId = videoChannels[0].id
+    }
+
     await server.users.update({ userId: rootId, videoQuota: 10_000_000 })
   })
 
@@ -147,14 +165,14 @@ describe('Test resumable upload', function () {
     })
 
     it('Should not accept more chunks than expected', async function () {
-      const uploadId = await prepareUpload(100)
+      const uploadId = await prepareUpload({ size: 100 })
 
       await sendChunks({ pathUploadId: uploadId, expectedStatus: HttpStatusCode.CONFLICT_409 })
       await checkFileSize(uploadId, 0)
     })
 
     it('Should not accept more chunks than expected with an invalid content length/content range', async function () {
-      const uploadId = await prepareUpload(1500)
+      const uploadId = await prepareUpload({ size: 1500 })
 
       // Content length check seems to have changed in v16
       if (process.version.startsWith('v16')) {
@@ -167,7 +185,7 @@ describe('Test resumable upload', function () {
     })
 
     it('Should not accept more chunks than expected with an invalid content length', async function () {
-      const uploadId = await prepareUpload(500)
+      const uploadId = await prepareUpload({ size: 500 })
 
       const size = 1000
 
@@ -179,6 +197,66 @@ describe('Test resumable upload', function () {
       const contentRangeBuilder = (start: number) => `bytes ${start}-${start + size - 1}/${size}`
       await sendChunks({ pathUploadId: uploadId, expectedStatus, contentRangeBuilder, contentLength: size })
       await checkFileSize(uploadId, 0)
+    })
+
+    it('Should be able to accept 2 PUT requests', async function () {
+      const uploadId = await prepareUpload()
+
+      const result1 = await sendChunks({ pathUploadId: uploadId })
+      const result2 = await sendChunks({ pathUploadId: uploadId })
+
+      expect(result1.body.video.uuid).to.exist
+      expect(result1.body.video.uuid).to.equal(result2.body.video.uuid)
+
+      expect(result1.headers['x-resumable-upload-cached']).to.not.exist
+      expect(result2.headers['x-resumable-upload-cached']).to.equal('true')
+
+      await checkFileSize(uploadId, null)
+    })
+
+    it('Should not have the same upload id with 2 different users', async function () {
+      const originalName = 'toto.mp4'
+      const lastModified = new Date().getTime()
+
+      const uploadId1 = await prepareUpload({ originalName, lastModified, token: server.accessToken })
+      const uploadId2 = await prepareUpload({ originalName, lastModified, channelId: userChannelId, token: userAccessToken })
+
+      expect(uploadId1).to.not.equal(uploadId2)
+    })
+
+    it('Should have the same upload id with the same user', async function () {
+      const originalName = 'toto.mp4'
+      const lastModified = new Date().getTime()
+
+      const uploadId1 = await prepareUpload({ originalName, lastModified })
+      const uploadId2 = await prepareUpload({ originalName, lastModified })
+
+      expect(uploadId1).to.equal(uploadId2)
+    })
+
+    it('Should not cache a request with 2 different users', async function () {
+      const originalName = 'toto.mp4'
+      const lastModified = new Date().getTime()
+
+      const uploadId = await prepareUpload({ originalName, lastModified, token: server.accessToken })
+
+      await sendChunks({ pathUploadId: uploadId, token: server.accessToken })
+      await sendChunks({ pathUploadId: uploadId, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should not cache a request after a delete', async function () {
+      const originalName = 'toto.mp4'
+      const lastModified = new Date().getTime()
+      const uploadId1 = await prepareUpload({ originalName, lastModified, token: server.accessToken })
+
+      await sendChunks({ pathUploadId: uploadId1 })
+      await server.videos.endResumableUpload({ pathUploadId: uploadId1 })
+
+      const uploadId2 = await prepareUpload({ originalName, lastModified, token: server.accessToken })
+      expect(uploadId1).to.equal(uploadId2)
+
+      const result2 = await sendChunks({ pathUploadId: uploadId1 })
+      expect(result2.headers['x-resumable-upload-cached']).to.not.exist
     })
   })
 

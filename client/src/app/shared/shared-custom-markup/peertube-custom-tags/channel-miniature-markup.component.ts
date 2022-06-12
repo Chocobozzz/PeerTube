@@ -3,8 +3,8 @@ import { finalize, map, switchMap, tap } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { MarkdownService, Notifier, UserService } from '@app/core'
 import { FindInBulkService } from '@app/shared/shared-search'
-import { Video, VideoSortField } from '@shared/models/videos'
-import { VideoChannel, VideoService } from '../../shared-main'
+import { VideoSortField } from '@shared/models'
+import { Video, VideoChannel, VideoService } from '../../shared-main'
 import { CustomMarkupComponent } from './shared'
 
 /*

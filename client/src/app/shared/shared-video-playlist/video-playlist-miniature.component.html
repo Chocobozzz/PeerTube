@@ -27,11 +27,11 @@
     </a>
 
     <div class="privacy-date">
-      <span class="video-info-privacy" *ngIf="displayPrivacy">{{ playlist.privacy.label }}</span>
+      <span class="privacy" *ngIf="displayPrivacy">{{ playlist.privacy.label }}</span>
 
       <span i18n class="updated-at">Updated {{ playlist.updatedAt | myFromNow }}</span>
     </div>
 
-    <div *ngIf="displayDescription" class="video-info-description">{{ playlist.description }}</div>
+    <div *ngIf="displayDescription" class="description" [innerHTML]="playlistDescription"></div>
   </div>
 </div>

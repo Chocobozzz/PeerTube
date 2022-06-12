@@ -182,7 +182,7 @@ function runTestSuite (options: {
   })
 
   it('Should upload a video and move it to the object storage without transcoding', async function () {
-    this.timeout(20000)
+    this.timeout(40000)
 
     const { uuid } = await servers[0].videos.quickUpload({ name: 'video 1' })
     uuidsToDelete.push(uuid)
@@ -198,7 +198,7 @@ function runTestSuite (options: {
   })
 
   it('Should upload a video and move it to the object storage with transcoding', async function () {
-    this.timeout(40000)
+    this.timeout(120000)
 
     const { uuid } = await servers[1].videos.quickUpload({ name: 'video 2' })
     uuidsToDelete.push(uuid)
@@ -210,6 +210,12 @@ function runTestSuite (options: {
       const files = await checkFiles({ ...options, video, baseMockUrl })
 
       deletedUrls = deletedUrls.concat(files)
+    }
+  })
+
+  it('Should fetch correctly all the files', async function () {
+    for (const url of deletedUrls.concat(keptUrls)) {
+      await makeRawRequest(url, HttpStatusCode.OK_200)
     }
   })
 

@@ -1,10 +1,10 @@
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { PeerTubeRequestError } from '@server/helpers/requests'
-import { ActorFollowScoreCache } from '@server/lib/files-cache'
 import { VideoLoadByUrlType } from '@server/lib/model-loaders'
 import { VideoModel } from '@server/models/video/video'
 import { MVideoAccountLightBlacklistAllFiles, MVideoThumbnail } from '@server/types/models'
 import { HttpStatusCode } from '@shared/models'
+import { ActorFollowHealthCache } from '../../actor-follow-health-cache'
 import { fetchRemoteVideo, SyncParam, syncVideoExternalAttributes } from './shared'
 import { APVideoUpdater } from './updater'
 
@@ -39,7 +39,7 @@ async function refreshVideoIfNeeded (options: {
 
     await syncVideoExternalAttributes(video, videoObject, options.syncParam)
 
-    ActorFollowScoreCache.Instance.addGoodServerId(video.VideoChannel.Actor.serverId)
+    ActorFollowHealthCache.Instance.addGoodServerId(video.VideoChannel.Actor.serverId)
 
     return video
   } catch (err) {
@@ -53,7 +53,7 @@ async function refreshVideoIfNeeded (options: {
 
     logger.warn('Cannot refresh video %s.', options.video.url, { err, ...lTags() })
 
-    ActorFollowScoreCache.Instance.addBadServerId(video.VideoChannel.Actor.serverId)
+    ActorFollowHealthCache.Instance.addBadServerId(video.VideoChannel.Actor.serverId)
 
     // Don't refresh in loop
     await video.setAsRefreshed()

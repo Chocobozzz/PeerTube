@@ -7,7 +7,7 @@
 
   <div class="modal-body" *ngIf="live">
     <div>
-      <div class="badge badge-info" *ngIf="live.permanentLive" i18n>Permanent live</div>
+      <div class="badge badge-info" *ngIf="live.permanentLive" i18n>Permanent/Recurring live</div>
       <div class="badge badge-info" *ngIf="live.saveReplay" i18n>Replay will be saved</div>
     </div>
 
@@ -15,9 +15,14 @@
       <my-live-documentation-link></my-live-documentation-link>
     </div>
 
-    <div class="form-group">
+    <div *ngIf="live.rtmpUrl" class="form-group">
       <label for="liveVideoRTMPUrl" i18n>Live RTMP Url</label>
       <my-input-toggle-hidden inputId="liveVideoRTMPUrl" [value]="live.rtmpUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+    </div>
+
+    <div *ngIf="live.rtmpsUrl" class="form-group">
+      <label for="liveVideoRTMPSUrl" i18n>Live RTMPS Url</label>
+      <my-input-toggle-hidden inputId="liveVideoRTMPSUrl" [value]="live.rtmpsUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
     </div>
 
     <div class="form-group">

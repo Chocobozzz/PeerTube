@@ -42,6 +42,8 @@ export class RegisterComponent implements OnInit {
   defaultNextStepButtonLabel = $localize`:Button on the registration form to go to the previous step:Next`
   stepUserButtonLabel = this.defaultNextStepButtonLabel
 
+  signupDisabled = false
+
   private serverConfig: ServerConfig
 
   constructor (
@@ -61,6 +63,11 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit (): void {
     this.serverConfig = this.route.snapshot.data.serverConfig
+
+    if (this.serverConfig.signup.allowed === false || this.serverConfig.signup.allowedForCurrentIP === false) {
+      this.signupDisabled = true
+      return
+    }
 
     this.videoUploadDisabled = this.serverConfig.user.videoQuota === 0
     this.stepUserButtonLabel = this.videoUploadDisabled

@@ -1,9 +1,10 @@
 import { uuidToShort } from '@server/helpers/uuid'
 import { generateMagnetUri } from '@server/helpers/webtorrent'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls'
-import { VideoFile } from '@shared/models/videos/video-file.model'
+import { VideoViews } from '@server/lib/video-views'
+import { VideoFile, VideosCommonQueryAfterSanitize } from '@shared/models'
 import { ActivityTagObject, ActivityUrlObject, VideoObject } from '../../../../shared/models/activitypub/objects'
-import { Video, VideoDetails } from '../../../../shared/models/videos'
+import { Video, VideoDetails, VideoInclude } from '../../../../shared/models/videos'
 import { VideoStreamingPlaylist } from '../../../../shared/models/videos/video-streaming-playlist.model'
 import { isArray } from '../../../helpers/custom-validators/misc'
 import {
@@ -22,6 +23,7 @@ import {
   getLocalVideoSharesActivityPubUrl
 } from '../../../lib/activitypub/url'
 import {
+  MServer,
   MStreamingPlaylistRedundanciesOpt,
   MVideo,
   MVideoAP,
@@ -34,21 +36,41 @@ import { VideoCaptionModel } from '../video-caption'
 
 export type VideoFormattingJSONOptions = {
   completeDescription?: boolean
-  additionalAttributes: {
+
+  additionalAttributes?: {
     state?: boolean
     waitTranscoding?: boolean
     scheduledUpdate?: boolean
     blacklistInfo?: boolean
+    files?: boolean
+    blockedOwner?: boolean
   }
 }
 
-function videoModelToFormattedJSON (video: MVideoFormattable, options?: VideoFormattingJSONOptions): Video {
+function guessAdditionalAttributesFromQuery (query: VideosCommonQueryAfterSanitize): VideoFormattingJSONOptions {
+  if (!query || !query.include) return {}
+
+  return {
+    additionalAttributes: {
+      state: !!(query.include & VideoInclude.NOT_PUBLISHED_STATE),
+      waitTranscoding: !!(query.include & VideoInclude.NOT_PUBLISHED_STATE),
+      scheduledUpdate: !!(query.include & VideoInclude.NOT_PUBLISHED_STATE),
+      blacklistInfo: !!(query.include & VideoInclude.BLACKLISTED),
+      files: !!(query.include & VideoInclude.FILES),
+      blockedOwner: !!(query.include & VideoInclude.BLOCKED_OWNER)
+    }
+  }
+}
+
+function videoModelToFormattedJSON (video: MVideoFormattable, options: VideoFormattingJSONOptions = {}): Video {
   const userHistory = isArray(video.UserVideoHistories) ? video.UserVideoHistories[0] : undefined
 
   const videoObject: Video = {
     id: video.id,
     uuid: video.uuid,
     shortUUID: uuidToShort(video.uuid),
+
+    url: video.url,
 
     name: video.name,
     category: {
@@ -99,47 +121,61 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options?: VideoFor
     pluginData: (video as any).pluginData
   }
 
-  if (options) {
-    if (options.additionalAttributes.state === true) {
-      videoObject.state = {
-        id: video.state,
-        label: getStateLabel(video.state)
-      }
-    }
+  if (video.isLive) {
+    videoObject.viewers = VideoViews.Instance.getViewers(video)
+  }
 
-    if (options.additionalAttributes.waitTranscoding === true) {
-      videoObject.waitTranscoding = video.waitTranscoding
+  const add = options.additionalAttributes
+  if (add?.state === true) {
+    videoObject.state = {
+      id: video.state,
+      label: getStateLabel(video.state)
     }
+  }
 
-    if (options.additionalAttributes.scheduledUpdate === true && video.ScheduleVideoUpdate) {
-      videoObject.scheduledUpdate = {
-        updateAt: video.ScheduleVideoUpdate.updateAt,
-        privacy: video.ScheduleVideoUpdate.privacy || undefined
-      }
-    }
+  if (add?.waitTranscoding === true) {
+    videoObject.waitTranscoding = video.waitTranscoding
+  }
 
-    if (options.additionalAttributes.blacklistInfo === true) {
-      videoObject.blacklisted = !!video.VideoBlacklist
-      videoObject.blacklistedReason = video.VideoBlacklist ? video.VideoBlacklist.reason : null
+  if (add?.scheduledUpdate === true && video.ScheduleVideoUpdate) {
+    videoObject.scheduledUpdate = {
+      updateAt: video.ScheduleVideoUpdate.updateAt,
+      privacy: video.ScheduleVideoUpdate.privacy || undefined
     }
+  }
+
+  if (add?.blacklistInfo === true) {
+    videoObject.blacklisted = !!video.VideoBlacklist
+    videoObject.blacklistedReason = video.VideoBlacklist ? video.VideoBlacklist.reason : null
+  }
+
+  if (add?.blockedOwner === true) {
+    videoObject.blockedOwner = video.VideoChannel.Account.isBlocked()
+
+    const server = video.VideoChannel.Account.Actor.Server as MServer
+    videoObject.blockedServer = !!(server?.isBlocked())
+  }
+
+  if (add?.files === true) {
+    videoObject.streamingPlaylists = streamingPlaylistsModelToFormattedJSON(video, video.VideoStreamingPlaylists)
+    videoObject.files = videoFilesModelToFormattedJSON(video, video.VideoFiles)
   }
 
   return videoObject
 }
 
 function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): VideoDetails {
-  const formattedJson = video.toFormattedJSON({
+  const videoJSON = video.toFormattedJSON({
     additionalAttributes: {
       scheduledUpdate: true,
-      blacklistInfo: true
+      blacklistInfo: true,
+      files: true
     }
-  })
+  }) as Video & Required<Pick<Video, 'files' | 'streamingPlaylists'>>
 
   const tags = video.Tags ? video.Tags.map(t => t.name) : []
 
-  const streamingPlaylists = streamingPlaylistsModelToFormattedJSON(video, video.VideoStreamingPlaylists)
-
-  const detailsJson = {
+  const detailsJSON = {
     support: video.support,
     descriptionPath: video.getDescriptionAPIPath(),
     channel: video.VideoChannel.toFormattedJSON(),
@@ -153,20 +189,14 @@ function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): Vid
       label: getStateLabel(video.state)
     },
 
-    trackerUrls: video.getTrackerUrls(),
-
-    files: [],
-    streamingPlaylists
+    trackerUrls: video.getTrackerUrls()
   }
 
-  // Format and sort video files
-  detailsJson.files = videoFilesModelToFormattedJSON(video, video.VideoFiles)
-
-  return Object.assign(formattedJson, detailsJson)
+  return Object.assign(videoJSON, detailsJSON)
 }
 
 function streamingPlaylistsModelToFormattedJSON (
-  video: MVideoFormattableDetails,
+  video: MVideoFormattable,
   playlists: MStreamingPlaylistRedundanciesOpt[]
 ): VideoStreamingPlaylist[] {
   if (isArray(playlists) === false) return []
@@ -197,7 +227,7 @@ function sortByResolutionDesc (fileA: MVideoFile, fileB: MVideoFile) {
 }
 
 function videoFilesModelToFormattedJSON (
-  video: MVideoFormattableDetails,
+  video: MVideoFormattable,
   videoFiles: MVideoFileRedundanciesOpt[],
   includeMagnet = true
 ): VideoFile[] {
@@ -461,6 +491,8 @@ export {
   videoFilesModelToFormattedJSON,
   videoModelToActivityPubObject,
   getActivityStreamDuration,
+
+  guessAdditionalAttributesFromQuery,
 
   getCategoryLabel,
   getLicenceLabel,

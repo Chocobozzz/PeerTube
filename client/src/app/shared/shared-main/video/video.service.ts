@@ -1,5 +1,6 @@
-import { Observable } from 'rxjs'
-import { catchError, map, switchMap } from 'rxjs/operators'
+import { SortMeta } from 'primeng/api'
+import { from, Observable } from 'rxjs'
+import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
@@ -13,12 +14,14 @@ import {
   UserVideoRateType,
   UserVideoRateUpdate,
   Video as VideoServerModel,
+  VideoChannel as VideoChannelServerModel,
   VideoConstant,
   VideoDetails as VideoDetailsServerModel,
   VideoFileMetadata,
-  VideoFilter,
+  VideoInclude,
   VideoPrivacy,
   VideoSortField,
+  VideoTranscodingCreate,
   VideoUpdate
 } from '@shared/models'
 import { environment } from '../../../../environments/environment'
@@ -30,13 +33,16 @@ import { VideoEdit } from './video-edit.model'
 import { Video } from './video.model'
 
 export type CommonVideoParams = {
-  videoPagination: ComponentPaginationLight
-  sort: VideoSortField
-  filter?: VideoFilter
+  videoPagination?: ComponentPaginationLight
+  sort: VideoSortField | SortMeta
+  include?: VideoInclude
+  isLocal?: boolean
   categoryOneOf?: number[]
   languageOneOf?: string[]
+  privacyOneOf?: VideoPrivacy[]
   isLive?: boolean
   skipCount?: boolean
+
   // FIXME: remove?
   nsfwPolicy?: NSFWPolicyType
   nsfw?: BooleanBothQuery
@@ -44,7 +50,7 @@ export type CommonVideoParams = {
 
 @Injectable()
 export class VideoService {
-  static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
+  static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos'
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
   static BASE_SUBSCRIPTION_FEEDS_URL = environment.apiUrl + '/feeds/subscriptions.'
 
@@ -56,18 +62,18 @@ export class VideoService {
   ) {}
 
   getVideoViewUrl (uuid: string) {
-    return VideoService.BASE_VIDEO_URL + uuid + '/views'
+    return `${VideoService.BASE_VIDEO_URL}/${uuid}/views`
   }
 
   getUserWatchingVideoUrl (uuid: string) {
-    return VideoService.BASE_VIDEO_URL + uuid + '/watching'
+    return `${VideoService.BASE_VIDEO_URL}/${uuid}/watching`
   }
 
   getVideo (options: { videoId: string }): Observable<VideoDetails> {
     return this.serverService.getServerLocale()
                .pipe(
                  switchMap(translations => {
-                   return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + options.videoId)
+                   return this.authHttp.get<VideoDetailsServerModel>(`${VideoService.BASE_VIDEO_URL}/${options.videoId}`)
                               .pipe(map(videoHash => ({ videoHash, translations })))
                  }),
                  map(({ videoHash, translations }) => new VideoDetails(videoHash, translations)),
@@ -107,7 +113,7 @@ export class VideoService {
 
     const data = objectToFormData(body)
 
-    return this.authHttp.put(VideoService.BASE_VIDEO_URL + video.id, data)
+    return this.authHttp.put(`${VideoService.BASE_VIDEO_URL}/${video.id}`, data)
                .pipe(
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
@@ -115,15 +121,22 @@ export class VideoService {
   }
 
   uploadVideo (video: FormData) {
-    const req = new HttpRequest('POST', VideoService.BASE_VIDEO_URL + 'upload', video, { reportProgress: true })
+    const req = new HttpRequest('POST', `${VideoService.BASE_VIDEO_URL}/upload`, video, { reportProgress: true })
 
     return this.authHttp
                .request<{ video: { id: number, uuid: string } }>(req)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  getMyVideos (videoPagination: ComponentPaginationLight, sort: VideoSortField, search?: string): Observable<ResultList<Video>> {
-    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+  getMyVideos (options: {
+    videoPagination: ComponentPaginationLight
+    sort: VideoSortField
+    userChannels?: VideoChannelServerModel[]
+    search?: string
+  }): Observable<ResultList<Video>> {
+    const { videoPagination, sort, userChannels = [], search } = options
+
+    const pagination = this.restService.componentToRestPagination(videoPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
@@ -133,6 +146,16 @@ export class VideoService {
         isLive: {
           prefix: 'isLive:',
           isBoolean: true
+        },
+        channelId: {
+          prefix: 'channel:',
+          handler: (name: string) => {
+            const channel = userChannels.find(c => c.name === name)
+
+            if (channel) return channel.id
+
+            return undefined
+          }
         }
       })
 
@@ -231,10 +254,10 @@ export class VideoService {
     return feeds
   }
 
-  getVideoFeedUrls (sort: VideoSortField, filter?: VideoFilter, categoryOneOf?: number[]) {
+  getVideoFeedUrls (sort: VideoSortField, isLocal: boolean, categoryOneOf?: number[]) {
     let params = this.restService.addRestGetParams(new HttpParams(), undefined, sort)
 
-    if (filter) params = params.set('filter', filter)
+    if (isLocal) params = params.set('isLocal', isLocal)
 
     if (categoryOneOf) {
       for (const c of categoryOneOf) {
@@ -275,13 +298,35 @@ export class VideoService {
                )
   }
 
-  removeVideo (id: number) {
-    return this.authHttp
-               .delete(VideoService.BASE_VIDEO_URL + id)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+  removeVideo (idArg: number | number[]) {
+    const ids = Array.isArray(idArg) ? idArg : [ idArg ]
+
+    return from(ids)
+      .pipe(
+        concatMap(id => this.authHttp.delete(`${VideoService.BASE_VIDEO_URL}/${id}`)),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
+  }
+
+  removeVideoFiles (videoIds: (number | string)[], type: 'hls' | 'webtorrent') {
+    return from(videoIds)
+      .pipe(
+        concatMap(id => this.authHttp.delete(VideoService.BASE_VIDEO_URL + '/' + id + '/' + type)),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
+  }
+
+  runTranscoding (videoIds: (number | string)[], type: 'hls' | 'webtorrent') {
+    const body: VideoTranscodingCreate = { transcodingType: type }
+
+    return from(videoIds)
+      .pipe(
+        concatMap(id => this.authHttp.post(VideoService.BASE_VIDEO_URL + '/' + id + '/transcoding', body)),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   loadCompleteDescription (descriptionPath: string) {
@@ -369,8 +414,44 @@ export class VideoService {
       : 'both'
   }
 
+  buildCommonVideosParams (options: CommonVideoParams & { params: HttpParams }) {
+    const {
+      params,
+      videoPagination,
+      sort,
+      isLocal,
+      include,
+      categoryOneOf,
+      languageOneOf,
+      privacyOneOf,
+      skipCount,
+      nsfwPolicy,
+      isLive,
+      nsfw
+    } = options
+
+    const pagination = videoPagination
+      ? this.restService.componentToRestPagination(videoPagination)
+      : undefined
+
+    let newParams = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (skipCount) newParams = newParams.set('skipCount', skipCount + '')
+
+    if (isLocal) newParams = newParams.set('isLocal', isLocal)
+    if (include) newParams = newParams.set('include', include)
+    if (isLive) newParams = newParams.set('isLive', isLive)
+    if (nsfw) newParams = newParams.set('nsfw', nsfw)
+    if (nsfwPolicy) newParams = newParams.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
+    if (languageOneOf) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
+    if (categoryOneOf) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
+    if (privacyOneOf) newParams = this.restService.addArrayParams(newParams, 'privacyOneOf', privacyOneOf)
+
+    return newParams
+  }
+
   private setVideoRate (id: number, rateType: UserVideoRateType) {
-    const url = VideoService.BASE_VIDEO_URL + id + '/rate'
+    const url = `${VideoService.BASE_VIDEO_URL}/${id}/rate`
     const body: UserVideoRateUpdate = {
       rating: rateType
     }
@@ -381,23 +462,5 @@ export class VideoService {
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
-  }
-
-  private buildCommonVideosParams (options: CommonVideoParams & { params: HttpParams }) {
-    const { params, videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount, nsfwPolicy, isLive, nsfw } = options
-
-    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
-    let newParams = this.restService.addRestGetParams(params, pagination, sort)
-
-    if (filter) newParams = newParams.set('filter', filter)
-    if (skipCount) newParams = newParams.set('skipCount', skipCount + '')
-
-    if (isLive) newParams = newParams.set('isLive', isLive)
-    if (nsfw) newParams = newParams.set('nsfw', nsfw)
-    if (nsfwPolicy) newParams = newParams.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
-    if (languageOneOf) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
-    if (categoryOneOf) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
-
-    return newParams
   }
 }

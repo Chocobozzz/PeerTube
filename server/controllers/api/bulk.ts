@@ -37,6 +37,6 @@ async function bulkRemoveCommentsOf (req: express.Request, res: express.Response
   res.status(HttpStatusCode.NO_CONTENT_204).end()
 
   for (const comment of comments) {
-    await removeComment(comment)
+    await removeComment(comment, req, res)
   }
 }

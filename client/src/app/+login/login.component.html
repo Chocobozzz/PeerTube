@@ -15,7 +15,7 @@
     <div class="wrapper">
       <div class="login-form-and-externals">
 
-        <form role="form" (ngSubmit)="login()" [formGroup]="form">
+        <form myPluginSelector pluginSelectorId="login-form" role="form" (ngSubmit)="login()" [formGroup]="form">
           <div class="form-group">
             <div>
               <label i18n for="username">User</label>

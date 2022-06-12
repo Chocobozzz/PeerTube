@@ -1,12 +1,14 @@
 import express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils'
 import { pickSearchVideoQuery } from '@server/helpers/query'
-import { doJSONRequest } from '@server/helpers/requests'
+import { doJSONRequest, findLatestRedirection } from '@server/helpers/requests'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
 import { getOrCreateAPVideo } from '@server/lib/activitypub/videos'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search'
+import { getServerActor } from '@server/models/application/application'
+import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
 import { HttpStatusCode, ResultList, Video } from '@shared/models'
 import { VideosSearchQueryAfterSanitize } from '../../../../shared/models/search'
 import { buildNSFWFilter, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils'
@@ -25,6 +27,7 @@ import {
 } from '../../../middlewares'
 import { VideoModel } from '../../../models/video/video'
 import { MVideoAccountLightBlacklistAllFiles } from '../../../types/models'
+import { searchLocalUrl } from './shared'
 
 const searchVideosRouter = express.Router()
 
@@ -99,11 +102,15 @@ async function searchVideosIndex (query: VideosSearchQueryAfterSanitize, res: ex
 }
 
 async function searchVideosDB (query: VideosSearchQueryAfterSanitize, res: express.Response) {
+  const serverActor = await getServerActor()
+
   const apiOptions = await Hooks.wrapObject({
     ...query,
 
-    includeLocalVideos: true,
-    filter: query.filter,
+    displayOnlyForFollower: {
+      actorId: serverActor.id,
+      orLocalVideos: true
+    },
 
     nsfw: buildNSFWFilter(res, query.nsfw),
     user: res.locals.oauth
@@ -117,7 +124,7 @@ async function searchVideosDB (query: VideosSearchQueryAfterSanitize, res: expre
     'filter:api.search.videos.local.list.result'
   )
 
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
+  return res.json(getFormattedObjects(resultList.data, resultList.total, guessAdditionalAttributesFromQuery(query)))
 }
 
 async function searchVideoURI (url: string, res: express.Response) {
@@ -135,13 +142,16 @@ async function searchVideoURI (url: string, res: express.Response) {
         refreshVideo: false
       }
 
-      const result = await getOrCreateAPVideo({ videoObject: url, syncParam })
+      const result = await getOrCreateAPVideo({
+        videoObject: await findLatestRedirection(url, { activityPub: true }),
+        syncParam
+      })
       video = result ? result.video : undefined
     } catch (err) {
       logger.info('Cannot search remote video %s.', url, { err })
     }
   } else {
-    video = await VideoModel.loadByUrlAndPopulateAccount(sanitizeLocalUrl(url))
+    video = await searchLocalUrl(sanitizeLocalUrl(url), url => VideoModel.loadByUrlAndPopulateAccount(url))
   }
 
   return res.json({

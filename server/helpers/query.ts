@@ -16,10 +16,15 @@ function pickCommonVideoQuery (query: VideosCommonQueryAfterSanitize) {
     'categoryOneOf',
     'licenceOneOf',
     'languageOneOf',
+    'privacyOneOf',
     'tagsOneOf',
     'tagsAllOf',
-    'filter',
-    'skipCount'
+    'isLocal',
+    'include',
+    'skipCount',
+    'hasHLSFiles',
+    'hasWebtorrentFiles',
+    'search'
   ])
 }
 
@@ -29,7 +34,6 @@ function pickSearchVideoQuery (query: VideosSearchQueryAfterSanitize) {
 
     ...pick(query, [
       'searchTarget',
-      'search',
       'host',
       'startDate',
       'endDate',

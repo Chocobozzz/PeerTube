@@ -9,14 +9,6 @@ import { VideoDetails } from '@app/shared/shared-main'
 export class VideoAttributesComponent {
   @Input() video: VideoDetails
 
-  getVideoUrl () {
-    if (!this.video.url) {
-      return this.video.originInstanceUrl + VideoDetails.buildWatchUrl(this.video)
-    }
-
-    return this.video.url
-  }
-
   getVideoHost () {
     return this.video.channel.host
   }

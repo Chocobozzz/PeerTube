@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-/* eslint-disable no-useless-escape */
-
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
@@ -18,8 +16,6 @@ program
   .command('upload', 'upload a video').alias('up')
   .command('import-videos', 'import a video from a streaming platform').alias('import')
   .command('get-access-token', 'get a peertube access token', { noHelp: true }).alias('token')
-  .command('watch', 'watch a video in the terminal ✩°｡⋆').alias('w')
-  .command('repl', 'initiate a REPL to access internals')
   .command('plugins [action]', 'manage instance plugins/themes').alias('p')
   .command('redundancy [action]', 'manage instance redundancies').alias('r')
 
@@ -47,7 +43,7 @@ if (!process.argv.slice(2).length) {
      /   /                -" _/"/
     /   |    ._\\\\ |\\  |_.".-"  /
    /    |   __\\)|)|),/|_." _,."
-  /     \_."   " ") | ).-""---''--
+  /     \\_."   " ") | ).-""---''--
  (                  "/.""7__-""''
  |                   " ."._--._
  \\       \\ (_    __   ""   ".,_
@@ -72,8 +68,7 @@ getSettings()
       .addHelpText('after', '\n\n  State: ' + state + '\n\n' +
         '  Examples:\n\n' +
         '    $ peertube auth add -u "PEERTUBE_URL" -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"\n' +
-        '    $ peertube up <videoFile>\n' +
-        '    $ peertube watch https://peertube.cpy.re/videos/watch/e8a1af4e-414a-4d58-bfe6-2146eed06d10\n'
+        '    $ peertube up <videoFile>\n'
       )
       .parse(process.argv)
   })

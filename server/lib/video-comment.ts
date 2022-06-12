@@ -1,5 +1,6 @@
 import { cloneDeep } from 'lodash'
 import * as Sequelize from 'sequelize'
+import express from 'express'
 import { logger } from '@server/helpers/logger'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { ResultList } from '../../shared/models'
@@ -10,7 +11,7 @@ import { sendCreateVideoComment, sendDeleteVideoComment } from './activitypub/se
 import { getLocalVideoCommentActivityPubUrl } from './activitypub/url'
 import { Hooks } from './plugins/hooks'
 
-async function removeComment (videoCommentInstance: MCommentOwnerVideo) {
+async function removeComment (videoCommentInstance: MCommentOwnerVideo, req: express.Request, res: express.Response) {
   const videoCommentInstanceBefore = cloneDeep(videoCommentInstance)
 
   await sequelizeTypescript.transaction(async t => {
@@ -25,7 +26,7 @@ async function removeComment (videoCommentInstance: MCommentOwnerVideo) {
 
   logger.info('Video comment %d deleted.', videoCommentInstance.id)
 
-  Hooks.runAction('action:api.video-comment.deleted', { comment: videoCommentInstanceBefore })
+  Hooks.runAction('action:api.video-comment.deleted', { comment: videoCommentInstanceBefore, req, res })
 }
 
 async function createVideoComment (obj: {

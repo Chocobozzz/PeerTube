@@ -56,7 +56,7 @@ class SettingsMenuItem extends MenuItem {
 
     const newOptions = Object.assign({}, options, { entry: options.menuButton, menuButton: this })
 
-    this.subMenu = new SubMenuComponent(this.player(), newOptions) as any // FIXME: typings
+    this.subMenu = new SubMenuComponent(this.player(), newOptions) as SettingsButton
     const subMenuClass = this.subMenu.buildCSSClass().split(' ')[0]
     this.settingsSubMenuEl_.className += ' ' + subMenuClass
 
@@ -101,7 +101,7 @@ class SettingsMenuItem extends MenuItem {
     if (event.type === 'tap') {
       target = event.target
     } else {
-      target = event.currentTarget
+      target = event.currentTarget || event.target
     }
 
     if (target?.classList.contains('vjs-back-button')) {
@@ -124,7 +124,8 @@ class SettingsMenuItem extends MenuItem {
    */
   createEl () {
     const el = videojs.dom.createEl('li', {
-      className: 'vjs-menu-item'
+      className: 'vjs-menu-item',
+      tabIndex: -1
     })
 
     this.settingsSubMenuTitleEl_ = videojs.dom.createEl('div', {
@@ -170,6 +171,9 @@ class SettingsMenuItem extends MenuItem {
       }, 0)
 
       this.settingsButton.setDialogSize(this.size)
+
+      const firstChild = this.subMenu.menu.children()[0]
+      if (firstChild) firstChild.focus()
     } else {
       videojs.dom.addClass(this.settingsSubMenuEl_, 'vjs-hidden')
     }
@@ -244,11 +248,14 @@ class SettingsMenuItem extends MenuItem {
       // this triggers CSS Transition event
       this.setMargin()
       mainMenuEl.style.opacity = '1'
+
+      const firstChild = this.mainMenu.children()[0]
+      if (firstChild) firstChild.focus()
     }, 0)
   }
 
   build () {
-    this.subMenu.on('updateLabel', () => {
+    this.subMenu.on('labelUpdated', () => {
       this.update()
     })
     this.subMenu.on('menuChanged', () => {
@@ -310,7 +317,7 @@ class SettingsMenuItem extends MenuItem {
             break
           }
 
-          this.settingsSubMenuValueEl_.innerHTML = subMenuItemUntyped.options_.label
+          this.settingsSubMenuValueEl_.innerHTML = this.player().localize(subMenuItemUntyped.options_.label)
         }
       }
     }

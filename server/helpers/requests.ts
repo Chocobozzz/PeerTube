@@ -1,22 +1,26 @@
 import { createWriteStream, remove } from 'fs-extra'
-import got, { CancelableRequest, Options as GotOptions, RequestError } from 'got'
+import got, { CancelableRequest, NormalizedOptions, Options as GotOptions, RequestError, Response } from 'got'
 import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
 import { join } from 'path'
 import { CONFIG } from '../initializers/config'
-import { ACTIVITY_PUB, PEERTUBE_VERSION, REQUEST_TIMEOUT, WEBSERVER } from '../initializers/constants'
+import { ACTIVITY_PUB, BINARY_CONTENT_TYPES, PEERTUBE_VERSION, REQUEST_TIMEOUTS, WEBSERVER } from '../initializers/constants'
 import { pipelinePromise } from './core-utils'
 import { processImage } from './image-utils'
-import { logger } from './logger'
+import { logger, loggerTagsFactory } from './logger'
 import { getProxy, isProxyEnabled } from './proxy'
 
-const httpSignature = require('http-signature')
+const lTags = loggerTagsFactory('request')
+
+const httpSignature = require('@peertube/http-signature')
 
 export interface PeerTubeRequestError extends Error {
   statusCode?: number
   responseBody?: any
+  responseHeaders?: any
 }
 
 type PeerTubeRequestOptions = {
+  timeout?: number
   activityPub?: boolean
   bodyKBLimit?: number // 1MB
   httpSignature?: {
@@ -48,7 +52,7 @@ const peertubeGot = got.extend({
       promiseOrStream.on('downloadProgress', progress => {
         if (progress.transferred > bodyLimit && progress.percent !== 1) {
           const message = `Exceeded the download limit of ${bodyLimit} B`
-          logger.warn(message)
+          logger.warn(message, lTags())
 
           // CancelableRequest
           if (promiseOrStream.cancel) {
@@ -96,10 +100,12 @@ const peertubeGot = got.extend({
             path
           }, httpSignatureOptions)
         }
-      },
+      }
+    ],
 
-      (options: GotOptions) => {
-        options.timeout = REQUEST_TIMEOUT
+    beforeRetry: [
+      (_options: NormalizedOptions, error: RequestError, retryCount: number) => {
+        logger.debug('Retrying request to %s.', error.request.requestUrl, { retryCount, error: buildRequestError(error), ...lTags() })
       }
     ]
   }
@@ -124,7 +130,7 @@ async function doRequestAndSaveToFile (
   destPath: string,
   options: PeerTubeRequestOptions = {}
 ) {
-  const gotOptions = buildGotOptions(options)
+  const gotOptions = buildGotOptions({ ...options, timeout: options.timeout ?? REQUEST_TIMEOUTS.FILE })
 
   const outFile = createWriteStream(destPath)
 
@@ -135,7 +141,7 @@ async function doRequestAndSaveToFile (
     )
   } catch (err) {
     remove(destPath)
-      .catch(err => logger.error('Cannot remove %s after request failure.', destPath, { err }))
+      .catch(err => logger.error('Cannot remove %s after request failure.', destPath, { err, ...lTags() }))
 
     throw buildRequestError(err)
   }
@@ -161,7 +167,7 @@ function getAgent () {
 
   const proxy = getProxy()
 
-  logger.info('Using proxy %s.', proxy)
+  logger.info('Using proxy %s.', proxy, lTags())
 
   const proxyAgentOptions = {
     keepAlive: true,
@@ -184,13 +190,30 @@ function getUserAgent () {
   return `PeerTube/${PEERTUBE_VERSION} (+${WEBSERVER.URL})`
 }
 
+function isBinaryResponse (result: Response<any>) {
+  return BINARY_CONTENT_TYPES.has(result.headers['content-type'])
+}
+
+async function findLatestRedirection (url: string, options: PeerTubeRequestOptions, iteration = 1) {
+  if (iteration > 10) throw new Error('Too much iterations to find final URL ' + url)
+
+  const { headers } = await peertubeGot(url, { followRedirect: false, ...buildGotOptions(options) })
+
+  if (headers.location) return findLatestRedirection(headers.location, options, iteration + 1)
+
+  return url
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   doRequest,
   doJSONRequest,
   doRequestAndSaveToFile,
-  downloadImage
+  isBinaryResponse,
+  downloadImage,
+  findLatestRedirection,
+  peertubeGot
 }
 
 // ---------------------------------------------------------------------------
@@ -213,8 +236,10 @@ function buildGotOptions (options: PeerTubeRequestOptions) {
   return {
     method: options.method,
     dnsCache: true,
+    timeout: options.timeout ?? REQUEST_TIMEOUTS.DEFAULT,
     json: options.json,
     searchParams: options.searchParams,
+    retry: 2,
     headers,
     context
   }
@@ -227,6 +252,7 @@ function buildRequestError (error: RequestError) {
 
   if (error.response) {
     newError.responseBody = error.response.body
+    newError.responseHeaders = error.response.headers
     newError.statusCode = error.response.statusCode
   }
 

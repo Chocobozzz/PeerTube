@@ -9,7 +9,7 @@ import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { LiveStreamInformationComponent } from '@app/shared/shared-video-live'
 import { MiniatureDisplayOptions, SelectionType, VideosSelectionComponent } from '@app/shared/shared-video-miniature'
-import { VideoSortField } from '@shared/models'
+import { VideoChannel, VideoSortField } from '@shared/models'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
 @Component({
@@ -47,16 +47,12 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
   user: User
 
-  inputFilters: AdvancedInputFilter[] = [
-    {
-      queryParams: { search: 'isLive:true' },
-      label: $localize`Only live videos`
-    }
-  ]
+  inputFilters: AdvancedInputFilter[]
 
   disabled = false
 
   private search: string
+  private userChannels: VideoChannel[] = []
 
   constructor (
     protected router: Router,
@@ -75,6 +71,39 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     this.buildActions()
 
     this.user = this.authService.getUser()
+
+    if (this.route.snapshot.queryParams['search']) {
+      this.search = this.route.snapshot.queryParams['search']
+    }
+
+    this.authService.userInformationLoaded.subscribe(() => {
+      this.user = this.authService.getUser()
+      this.userChannels = this.user.videoChannels
+
+      const channelFilters = this.userChannels.map(c => {
+        return {
+          value: 'channel:' + c.name,
+          label: c.name
+        }
+      })
+
+      this.inputFilters = [
+        {
+          title: $localize`Advanced filters`,
+          children: [
+            {
+              value: 'isLive:true',
+              label: $localize`Only live videos`
+            }
+          ]
+        },
+
+        {
+          title: $localize`Channel filters`,
+          children: channelFilters
+        }
+      ]
+    })
   }
 
   onSearch (search: string) {
@@ -101,7 +130,12 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getMyVideos(newPagination, this.sort, this.search)
+    return this.videoService.getMyVideos({
+      videoPagination: newPagination,
+      sort: this.sort,
+      userChannels: this.userChannels,
+      search: this.search
+    })
       .pipe(
         tap(res => this.pagination.totalItems = res.total)
       )

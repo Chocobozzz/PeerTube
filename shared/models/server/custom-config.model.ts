@@ -2,6 +2,7 @@ import { NSFWPolicyType } from '../videos/nsfw-policy.type'
 import { BroadcastMessageLevel } from './broadcast-message-level.type'
 
 export type ConfigResolutions = {
+  '144p': boolean
   '240p': boolean
   '360p': boolean
   '480p': boolean
@@ -83,6 +84,10 @@ export interface CustomConfig {
   user: {
     videoQuota: number
     videoQuotaDaily: number
+  }
+
+  videoChannels: {
+    maxPerUser: number
   }
 
   transcoding: {
@@ -195,12 +200,4 @@ export interface CustomConfig {
     }
   }
 
-  podcast: {
-    instanceFee: number
-    lightning: {
-      nodeAddress: string
-      customKey: string
-      customValue: string
-    }
-  }
 }

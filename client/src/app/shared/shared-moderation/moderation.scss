@@ -5,12 +5,18 @@
 
 .moderation-expanded {
   font-size: 90%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 
   .moderation-expanded-label {
+    @include margin-right(5px);
+
     font-weight: $font-semibold;
     display: inline-block;
     vertical-align: top;
     text-align: end;
+    min-width: 100px;
   }
 
   .moderation-expanded-text {
@@ -21,14 +27,17 @@
       margin-bottom: 0 !important;
     }
   }
-}
 
-.screenratio {
-  @include block-ratio($selector: 'div, ::ng-deep iframe') {
-    width: 100% !important;
-    height: 100% !important;
-    left: 0;
-  };
+  .right {
+    width: 50%;
+    max-width: 500px;
+  }
+
+  @media screen and (max-width: $primeng-breakpoint) {
+    .right {
+      width: 100%;
+    }
+  }
 }
 
 .chip {
@@ -39,13 +48,6 @@ my-action-dropdown.show {
   ::ng-deep .dropdown-root {
     display: block !important;
   }
-}
-
-.table-video-link {
-  @include disable-outline;
-
-  position: relative;
-  top: 3px;
 }
 
 .table-comment-link,
@@ -64,64 +66,12 @@ my-action-dropdown.show {
   flex-direction: column;
 }
 
-.table-video {
-  display: inline-flex;
+my-abuse-details {
+  width: 100%;
+}
 
-  .table-video-image {
-    $image-height: 45px;
-
-    @include miniature-thumbnail;
-    @include margin-right(0.5rem);
-
-    height: $image-height;
-    width: #{math.div(16, 9) * $image-height};
-    border-radius: 2px;
-    border: 0;
-    background: transparent;
-    display: inline-flex;
-    justify-content: center;
-    position: relative;
-
-    img {
-      height: 100%;
-      width: 100%;
-      border-radius: 2px;
-    }
-
-    span {
-      color: pvar(--inputPlaceholderColor);
-    }
-
-    .table-video-image-label {
-      @include static-thumbnail-overlay;
-      position: absolute;
-      border-radius: 3px;
-      font-size: 10px;
-      padding: 0 3px;
-      line-height: 1.3;
-      bottom: 2px;
-      right: 2px;
-    }
-  }
-
-  .table-video-text {
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: center;
-    font-size: 90%;
-    color: pvar(--mainForegroundColor);
-    line-height: 1rem;
-
-    div .glyphicon {
-      @include margin-left(0.1rem);
-
-      font-size: 80%;
-      color: #808080;
-    }
-
-    div + div {
-      color: var(--greyForegroundColor);
-      font-size: 11px;
-    }
+@media screen and (max-width: $primeng-breakpoint) {
+  .abuse-messages {
+    justify-content: flex-start !important;
   }
 }

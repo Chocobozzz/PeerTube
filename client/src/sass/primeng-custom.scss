@@ -2,7 +2,7 @@
 @use '_mixins' as *;
 
 /* stylelint-disable */
-@use 'primeng/resources/primeng';
+@import '~primeng/resources/primeng.css';
 
 // Override primeng style we don't want
 input[type=button] {
@@ -495,7 +495,7 @@ body p-selectbutton.ng-dirty.ng-invalid .p-button {
   border: 1px solid #a80000;
 }
 
-//
+// data table customizations
 
 @mixin glyphicon-light {
   font-family: 'Glyphicons Halflings';
@@ -504,7 +504,6 @@ body p-selectbutton.ng-dirty.ng-invalid .p-button {
   font-display: swap;
 }
 
-// data table customizations
 p-table {
   .p-datatable-header {
     border: none !important;
@@ -759,6 +758,10 @@ p-table {
       }
     }
   }
+
+  .badge {
+    @include peertube-badge;
+  }
 }
 
 // overflow data table
@@ -768,7 +771,7 @@ p-table {
     max-width: 100%;
 
     table {
-      min-width: breakpoint(lg);
+      width: 100%;
     }
   }
 
@@ -977,5 +980,42 @@ p-toast {
     padding: 5px 15px;
     font-size: 15px;
     font-weight: 600;
+  }
+}
+
+@media screen and (max-width: $primeng-breakpoint) {
+  p-table {
+    td {
+      padding: 3px 0;
+
+      &.expand-cell {
+        padding: 5px;
+      }
+    }
+
+    .p-datatable-tbody {
+
+      td:last-child {
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid $separator-border-color !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  p-table {
+    .p-datatable-header {
+      .caption {
+        flex-wrap: wrap;
+
+        > div {
+          width: 100%;
+          padding: 0 !important;
+          margin-bottom: 5px;
+        }
+      }
+    }
   }
 }

@@ -23,6 +23,6 @@
   <div class="video" *ngIf="video && displayLatestVideo">
     <div i18n class="video-label">Latest published video</div>
 
-    <my-video-miniature-markup [uuid]="video.uuid" [onlyDisplayTitle]="true"></my-video-miniature-markup>
+    <my-video-miniature-markup [video]="video" [onlyDisplayTitle]="true"></my-video-miniature-markup>
   </div>
 </div>

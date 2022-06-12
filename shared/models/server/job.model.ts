@@ -1,5 +1,5 @@
 import { ContextType } from '../activitypub/context'
-import { VideoResolution } from '../videos/video-resolution.enum'
+import { VideoResolution } from '../videos/file/video-resolution.enum'
 import { SendEmailOptions } from './emailer.model'
 
 export type JobState = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed' | 'paused'
@@ -14,7 +14,7 @@ export type JobType =
   | 'video-transcoding'
   | 'email'
   | 'video-import'
-  | 'videos-views'
+  | 'videos-views-stats'
   | 'activitypub-refresher'
   | 'video-redundancy'
   | 'video-live-ending'
@@ -106,6 +106,8 @@ export interface HLSTranscodingPayload extends BaseTranscodingPayload {
   isPortraitMode?: boolean
   resolution: VideoResolution
   copyCodecs: boolean
+
+  autoDeleteWebTorrentIfNeeded: boolean
   isMaxQuality: boolean
 }
 
@@ -136,6 +138,10 @@ export interface VideoLiveEndingPayload {
 
 export interface ActorKeysPayload {
   actorId: number
+}
+
+export interface DeleteResumableUploadMetaFilePayload {
+  filepath: string
 }
 
 export interface MoveObjectStoragePayload {

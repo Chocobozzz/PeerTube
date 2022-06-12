@@ -23,6 +23,7 @@ $ng-select-value-font-size: 15px;
   &.ng-select-focused {
     &:not(.ng-select-opened) > .ng-select-container {
       border-color: #ccc !important;
+      box-shadow: none !important;
     }
   }
 

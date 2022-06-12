@@ -2,8 +2,18 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, createMultipleServers, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import {
+  cleanupTests,
+  createMultipleServers,
+  doubleFollow,
+  FIXTURE_URLS,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  setDefaultVideoChannel,
+  waitJobs
+} from '@shared/extra-utils'
 import { MockProxy } from '@shared/extra-utils/mock-servers/mock-proxy'
+import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 
 const expect = chai.expect
 
@@ -25,43 +35,90 @@ describe('Test proxy', function () {
     goodEnv.HTTP_PROXY = 'http://localhost:' + proxyPort
 
     await setAccessTokensToServers(servers)
+    await setDefaultVideoChannel(servers)
     await doubleFollow(servers[0], servers[1])
   })
 
-  it('Should succeed federation with the appropriate proxy config', async function () {
-    await servers[0].kill()
-    await servers[0].run({}, { env: goodEnv })
+  describe('Federation', function () {
 
-    await servers[0].videos.quickUpload({ name: 'video 1' })
+    it('Should succeed federation with the appropriate proxy config', async function () {
+      this.timeout(40000)
 
-    await waitJobs(servers)
+      await servers[0].kill()
+      await servers[0].run({}, { env: goodEnv })
 
-    for (const server of servers) {
-      const { total, data } = await server.videos.list()
-      expect(total).to.equal(1)
-      expect(data).to.have.lengthOf(1)
-    }
+      await servers[0].videos.quickUpload({ name: 'video 1' })
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const { total, data } = await server.videos.list()
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
+      }
+    })
+
+    it('Should fail federation with a wrong proxy config', async function () {
+      this.timeout(40000)
+
+      await servers[0].kill()
+      await servers[0].run({}, { env: badEnv })
+
+      await servers[0].videos.quickUpload({ name: 'video 2' })
+
+      await waitJobs(servers)
+
+      {
+        const { total, data } = await servers[0].videos.list()
+        expect(total).to.equal(2)
+        expect(data).to.have.lengthOf(2)
+      }
+
+      {
+        const { total, data } = await servers[1].videos.list()
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
+      }
+    })
   })
 
-  it('Should fail federation with a wrong proxy config', async function () {
-    await servers[0].kill()
-    await servers[0].run({}, { env: badEnv })
+  describe('Videos import', async function () {
 
-    await servers[0].videos.quickUpload({ name: 'video 2' })
+    function quickImport (expectedStatus: HttpStatusCode = HttpStatusCode.OK_200) {
+      return servers[0].imports.importVideo({
+        attributes: {
+          name: 'video import',
+          channelId: servers[0].store.channel.id,
+          privacy: VideoPrivacy.PUBLIC,
+          targetUrl: FIXTURE_URLS.peertube_long
+        },
+        expectedStatus
+      })
+    }
 
-    await waitJobs(servers)
+    it('Should succeed import with the appropriate proxy config', async function () {
+      this.timeout(40000)
 
-    {
+      await servers[0].kill()
+      await servers[0].run({}, { env: goodEnv })
+
+      await quickImport()
+
+      await waitJobs(servers)
+
       const { total, data } = await servers[0].videos.list()
-      expect(total).to.equal(2)
-      expect(data).to.have.lengthOf(2)
-    }
+      expect(total).to.equal(3)
+      expect(data).to.have.lengthOf(3)
+    })
 
-    {
-      const { total, data } = await servers[1].videos.list()
-      expect(total).to.equal(1)
-      expect(data).to.have.lengthOf(1)
-    }
+    it('Should fail import with a wrong proxy config', async function () {
+      this.timeout(40000)
+
+      await servers[0].kill()
+      await servers[0].run({}, { env: badEnv })
+
+      await quickImport(HttpStatusCode.BAD_REQUEST_400)
+    })
   })
 
   after(async function () {

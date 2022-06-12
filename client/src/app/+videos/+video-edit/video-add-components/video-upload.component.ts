@@ -1,4 +1,6 @@
+import { truncate } from 'lodash-es'
 import { UploadState, UploadxOptions, UploadxService } from 'ngx-uploadx'
+import { isIOS } from 'src/assets/player/utils'
 import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
@@ -10,7 +12,6 @@ import { LoadingBarService } from '@ngx-loading-bar/core'
 import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import { UploaderXFormData } from './uploaderx-form-data'
 import { VideoSend } from './video-send'
-import { isIOS } from 'src/assets/player/utils'
 
 @Component({
   selector: 'my-video-upload',
@@ -49,7 +50,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   schedulePublicationPossible = false
 
   // So that it can be accessed in the template
-  protected readonly BASE_VIDEO_UPLOAD_URL = VideoService.BASE_VIDEO_URL + 'upload-resumable'
+  protected readonly BASE_VIDEO_UPLOAD_URL = VideoService.BASE_VIDEO_URL + '/upload-resumable'
 
   private uploadxOptions: UploadxOptions
   private isUpdatingVideo = false
@@ -82,9 +83,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       uploaderClass: UploaderXFormData,
       chunkSize,
       retryConfig: {
-        maxAttempts: 6,
-        shouldRetry: (code: number) => {
-          return code < 400 || code >= 501
+        maxAttempts: 30, // maximum attempts for 503 codes, otherwise set to 6, see below
+        maxDelay: 120_000, // 2 min
+        shouldRetry: (code: number, attempts: number) => {
+          return code === HttpStatusCode.SERVICE_UNAVAILABLE_503 || ((code < 400 || code > 500) && attempts < 6)
         }
       }
     }
@@ -121,7 +123,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     let text = ''
 
     if (this.videoUploaded === true) {
-      // FIXME: cannot concatenate strings using $localize
+      // We can't concatenate strings using $localize
       text = $localize`Your video was uploaded to your account and is private.` + ' ' +
         $localize`But associated data (tags, description...) will be lost, are you sure you want to leave this page?`
     } else {
@@ -160,6 +162,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         this.firstStepError.emit()
         this.enableRetryAfterError = false
         this.error = ''
+        this.isUploadingAudioFile = false
         break
 
       case 'queue':
@@ -279,6 +282,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       channelId: this.firstStepChannelId,
       nsfw: this.serverConfig.instance.isNSFW,
       privacy: this.highestPrivacy.toString(),
+      name: this.buildVideoFilename(file.name),
       filename: file.name,
       previewfile: previewfile as any
     }
@@ -309,8 +313,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   private closeFirstStep (filename: string) {
-    const nameWithoutExtension = filename.replace(/\.[^/.]+$/, '')
-    const name = nameWithoutExtension.length < 3 ? filename : nameWithoutExtension
+    const name = this.buildVideoFilename(filename)
 
     this.form.patchValue({
       name,
@@ -366,5 +369,19 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     const extensions = [ '.mp3', '.flac', '.ogg', '.wma', '.wav' ]
 
     return extensions.some(e => filename.endsWith(e))
+  }
+
+  private buildVideoFilename (filename: string) {
+    const nameWithoutExtension = filename.replace(/\.[^/.]+$/, '')
+    let name = nameWithoutExtension.length < 3
+      ? filename
+      : nameWithoutExtension
+
+    const videoNameMaxSize = 110
+    if (name.length > videoNameMaxSize) {
+      name = truncate(name, { length: videoNameMaxSize, omission: '' })
+    }
+
+    return name
   }
 }

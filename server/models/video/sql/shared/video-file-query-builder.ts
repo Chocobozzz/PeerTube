@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize'
 import { BuildVideoGetQueryOptions } from '../video-model-get-query-builder'
-import { AbstractVideosModelQueryBuilder } from './abstract-videos-model-query-builder'
+import { AbstractVideoQueryBuilder } from './abstract-video-query-builder'
 
 /**
  *
@@ -8,7 +8,7 @@ import { AbstractVideosModelQueryBuilder } from './abstract-videos-model-query-b
  *
  */
 
-export class VideoFileQueryBuilder extends AbstractVideosModelQueryBuilder {
+export class VideoFileQueryBuilder extends AbstractVideoQueryBuilder {
   protected attributes: { [key: string]: string }
 
   constructor (protected readonly sequelize: Sequelize) {

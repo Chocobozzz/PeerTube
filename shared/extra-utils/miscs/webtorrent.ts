@@ -10,8 +10,8 @@ let webtorrent: WebTorrent.Instance
 function webtorrentAdd (torrentId: string, refreshWebTorrent = false) {
   const WebTorrent = require('webtorrent')
 
-  if (!webtorrent) webtorrent = new WebTorrent()
-  if (refreshWebTorrent === true) webtorrent = new WebTorrent()
+  if (webtorrent && refreshWebTorrent) webtorrent.destroy()
+  if (!webtorrent || refreshWebTorrent) webtorrent = new WebTorrent()
 
   webtorrent.on('error', err => console.error('Error in webtorrent', err))
 

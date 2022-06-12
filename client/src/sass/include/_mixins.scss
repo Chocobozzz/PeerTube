@@ -264,8 +264,10 @@
   font-size: 15px;
   height: $button-height;
   line-height: $button-height;
-  // FIXME: because of primeng that redefines border-radius of all input[type="..."]
+
+  // Because of primeng that redefines border-radius of all input[type="..."]
   border-radius: 3px !important;
+
   text-align: center;
   cursor: pointer;
 }
@@ -356,6 +358,7 @@
   background: pvar(--inputBackgroundColor);
   position: relative;
   font-size: 15px;
+  height: min-content;
 
   &.disabled {
     background-color: #E5E5E5;
@@ -363,6 +366,9 @@
     select {
       cursor: default;
     }
+  }
+  select[disabled] {
+    background-color: #f9f9f9;
   }
 
   @media screen and (max-width: $width) {
@@ -435,6 +441,8 @@
     cursor: pointer;
     line-height: 20px;
     display: inline-block;
+    font-size: 15px;
+    font-weight: $font-regular;
   }
 
   [type=radio]:checked + label::before,
@@ -469,6 +477,13 @@
   [type=radio]:checked + label::after {
     opacity: 1;
     transform: scale(1);
+  }
+
+  .form-group-description {
+    display: block;
+    margin-top: -7px;
+    margin-bottom: 10px;
+    margin-left: 29px;
   }
 }
 
@@ -531,7 +546,7 @@
   }
 }
 
-@mixin table-badge {
+@mixin peertube-badge {
   border-radius: 2px;
   padding: 1/4em 1/2em;
   text-transform: uppercase;
@@ -641,12 +656,15 @@
   @include button-with-icon(20px, 5px, -1px);
 }
 
-@mixin row-blocks ($column-responsive: true) {
+@mixin row-blocks ($column-responsive: true, $min-height: 130px, $separator: true) {
   display: flex;
-  min-height: 130px;
+  min-height: $min-height;
   padding-bottom: 20px;
   margin-bottom: 20px;
-  border-bottom: 1px solid #C6C6C6;
+
+  @if $separator {
+    border-bottom: 1px solid #C6C6C6;
+  }
 
   @media screen and (max-width: $small-view) {
     @if $column-responsive {
@@ -686,6 +704,7 @@
   span {
     position: absolute;
     color: $grey-foreground-color;
+
     @if $small {
       top: -1px;
     }

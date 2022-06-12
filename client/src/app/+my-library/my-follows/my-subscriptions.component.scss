@@ -1,0 +1,16 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+@use '_actor' as *;
+
+.video-subscriptions-header {
+  margin-bottom: 30px;
+  display: flex;
+}
+
+input[type=text] {
+  @include peertube-input-text(300px);
+}
+
+.actor {
+  @include actor-row;
+}

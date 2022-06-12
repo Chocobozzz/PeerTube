@@ -27,6 +27,8 @@ export type VideoActionsDisplayType = {
   duplicate?: boolean
   mute?: boolean
   liveInfo?: boolean
+  removeFiles?: boolean
+  transcoding?: boolean
 }
 
 @Component({
@@ -55,7 +57,9 @@ export class VideoActionsDropdownComponent implements OnChanges {
     report: true,
     duplicate: true,
     mute: true,
-    liveInfo: false
+    liveInfo: false,
+    removeFiles: false,
+    transcoding: false
   }
   @Input() placement = 'left'
 
@@ -65,10 +69,12 @@ export class VideoActionsDropdownComponent implements OnChanges {
   @Input() buttonSize: DropdownButtonSize = 'normal'
   @Input() buttonDirection: DropdownDirection = 'vertical'
 
+  @Output() videoFilesRemoved = new EventEmitter()
   @Output() videoRemoved = new EventEmitter()
   @Output() videoUnblocked = new EventEmitter()
   @Output() videoBlocked = new EventEmitter()
   @Output() videoAccountMuted = new EventEmitter()
+  @Output() transcodingCreated = new EventEmitter()
   @Output() modalOpened = new EventEmitter()
 
   videoActions: DropdownAction<{ video: Video }>[][] = []
@@ -128,7 +134,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   showBlockModal () {
     this.modalOpened.emit()
 
-    this.videoBlockModal.show()
+    this.videoBlockModal.show([ this.video ])
   }
 
   showLiveInfoModal (video: Video) {
@@ -174,12 +180,20 @@ export class VideoActionsDropdownComponent implements OnChanges {
     return this.video.account.id !== this.user.account.id
   }
 
+  canRemoveVideoFiles () {
+    return this.video.canRemoveFiles(this.user)
+  }
+
+  canRunTranscoding () {
+    return this.video.canRunTranscoding(this.user)
+  }
+
   /* Action handlers */
 
   async unblockVideo () {
-    const confirmMessage = $localize`Do you really want to unblock this video? It will be available again in the videos list.`
+    const confirmMessage = $localize`Do you really want to unblock ${this.video.name}? It will be available again in the videos list.`
 
-    const res = await this.confirmService.confirm(confirmMessage, $localize`Unblock`)
+    const res = await this.confirmService.confirm(confirmMessage, $localize`Unblock ${this.video.name}`)
     if (res === false) return
 
     this.videoBlocklistService.unblockVideo(this.video.id)
@@ -188,7 +202,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
             this.notifier.success($localize`Video ${this.video.name} unblocked.`)
 
             this.video.blacklisted = false
-            this.video.blockedReason = null
+            this.video.blacklistedReason = null
 
             this.videoUnblocked.emit()
           },
@@ -200,12 +214,12 @@ export class VideoActionsDropdownComponent implements OnChanges {
   async removeVideo () {
     this.modalOpened.emit()
 
-    let message = $localize`Do you really want to delete this video?`
+    let message = $localize`Do you really want to delete ${this.video.name}?`
     if (this.video.isLive) {
       message += ' ' + $localize`The live stream will be automatically terminated.`
     }
 
-    const res = await this.confirmService.confirm(message, $localize`Delete`)
+    const res = await this.confirmService.confirm(message, $localize`Delete ${this.video.name}`)
     if (res === false) return
 
     this.videoService.removeVideo(this.video.id)
@@ -223,7 +237,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     this.redundancyService.addVideoRedundancy(this.video)
         .subscribe({
           next: () => {
-            const message = $localize`This video will be duplicated by your instance.`
+            const message = $localize`${this.video.name} will be duplicated by your instance.`
             this.notifier.success(message)
           },
 
@@ -243,6 +257,35 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
           error: err => this.notifier.error(err.message)
         })
+  }
+
+  async removeVideoFiles (video: Video, type: 'hls' | 'webtorrent') {
+    const confirmMessage = $localize`Do you really want to remove "${this.video.name}" files?`
+
+    const res = await this.confirmService.confirm(confirmMessage, $localize`Remove "${this.video.name}" files`)
+    if (res === false) return
+
+    this.videoService.removeVideoFiles([ video.id ], type)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Removed files of ${video.name}.`)
+          this.videoFilesRemoved.emit()
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  runTranscoding (video: Video, type: 'hls' | 'webtorrent') {
+    this.videoService.runTranscoding([ video.id ], type)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Transcoding jobs created for ${video.name}.`)
+          this.transcodingCreated.emit()
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   onVideoBlocked () {
@@ -315,6 +358,32 @@ export class VideoActionsDropdownComponent implements OnChanges {
           handler: () => this.showReportModal(),
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.report,
           iconName: 'flag'
+        }
+      ],
+      [
+        {
+          label: $localize`Run HLS transcoding`,
+          handler: ({ video }) => this.runTranscoding(video, 'hls'),
+          isDisplayed: () => this.displayOptions.transcoding && this.canRunTranscoding(),
+          iconName: 'cog'
+        },
+        {
+          label: $localize`Run WebTorrent transcoding`,
+          handler: ({ video }) => this.runTranscoding(video, 'webtorrent'),
+          isDisplayed: () => this.displayOptions.transcoding && this.canRunTranscoding(),
+          iconName: 'cog'
+        },
+        {
+          label: $localize`Delete HLS files`,
+          handler: ({ video }) => this.removeVideoFiles(video, 'hls'),
+          isDisplayed: () => this.displayOptions.removeFiles && this.canRemoveVideoFiles(),
+          iconName: 'delete'
+        },
+        {
+          label: $localize`Delete WebTorrent files`,
+          handler: ({ video }) => this.removeVideoFiles(video, 'webtorrent'),
+          isDisplayed: () => this.displayOptions.removeFiles && this.canRemoveVideoFiles(),
+          iconName: 'delete'
         }
       ],
       [ // actions regarding the account/its server

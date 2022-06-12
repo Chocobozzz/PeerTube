@@ -1,7 +1,7 @@
 import express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils'
 import { pickSearchChannelQuery } from '@server/helpers/query'
-import { doJSONRequest } from '@server/helpers/requests'
+import { doJSONRequest, findLatestRedirection } from '@server/helpers/requests'
 import { CONFIG } from '@server/initializers/config'
 import { WEBSERVER } from '@server/initializers/constants'
 import { Hooks } from '@server/lib/plugins/hooks'
@@ -25,6 +25,7 @@ import {
 } from '../../../middlewares'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { MChannelAccountDefault } from '../../../types/models'
+import { searchLocalUrl } from './shared'
 
 const searchChannelsRouter = express.Router()
 
@@ -47,7 +48,7 @@ export { searchChannelsRouter }
 
 function searchVideoChannels (req: express.Request, res: express.Response) {
   const query = pickSearchChannelQuery(req.query)
-  let search = query.search || ''
+  const search = query.search || ''
 
   const parts = search.split('@')
 
@@ -55,10 +56,10 @@ function searchVideoChannels (req: express.Request, res: express.Response) {
   if (parts.length === 3 && parts[0].length === 0) parts.shift()
   const isWebfingerSearch = parts.length === 2 && parts.every(p => p && !p.includes(' '))
 
-  if (isURISearch(search) || isWebfingerSearch) return searchVideoChannelURI(search, isWebfingerSearch, res)
+  if (isURISearch(search) || isWebfingerSearch) return searchVideoChannelURI(search, res)
 
   // @username -> username to search in DB
-  if (search.startsWith('@')) search = search.replace(/^@/, '')
+  if (search.startsWith('@')) query.search = search.replace(/^@/, '')
 
   if (isSearchIndexSearch(query)) {
     return searchVideoChannelsIndex(query, res)
@@ -109,11 +110,11 @@ async function searchVideoChannelsDB (query: VideoChannelsSearchQueryAfterSaniti
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function searchVideoChannelURI (search: string, isWebfingerSearch: boolean, res: express.Response) {
+async function searchVideoChannelURI (search: string, res: express.Response) {
   let videoChannel: MChannelAccountDefault
   let uri = search
 
-  if (isWebfingerSearch) {
+  if (!isURISearch(search)) {
     try {
       uri = await loadActorUrlOrGetFromWebfinger(search)
     } catch (err) {
@@ -125,13 +126,15 @@ async function searchVideoChannelURI (search: string, isWebfingerSearch: boolean
 
   if (isUserAbleToSearchRemoteURI(res)) {
     try {
-      const actor = await getOrCreateAPActor(uri, 'all', true, true)
+      const latestUri = await findLatestRedirection(uri, { activityPub: true })
+
+      const actor = await getOrCreateAPActor(latestUri, 'all', true, true)
       videoChannel = actor.VideoChannel
     } catch (err) {
       logger.info('Cannot search remote video channel %s.', uri, { err })
     }
   } else {
-    videoChannel = await VideoChannelModel.loadByUrlAndPopulateAccount(sanitizeLocalUrl(uri))
+    videoChannel = await searchLocalUrl(sanitizeLocalUrl(uri), url => VideoChannelModel.loadByUrlAndPopulateAccount(url))
   }
 
   return res.json({

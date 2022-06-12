@@ -7,8 +7,8 @@
 <p align=center>
   <strong><a href="https://joinpeertube.org">Website</a></strong>
   | <strong><a href="https://joinpeertube.org/instances">Join an instance</a></strong>
-  | <strong><a href="#package-create-your-own-instance">Create an instance</a></strong>
-  | <strong><a href="#contact">Chat with us</a></strong>
+  | <strong><a href="https://github.com/Chocobozzz/PeerTube/blob/develop/README.md#package-create-your-own-instance">Create an instance</a></strong>
+  | <strong><a href="https://github.com/Chocobozzz/PeerTube/blob/develop/README.md#contact">Chat with us</a></strong>
   | <strong><a href="https://framasoft.org/en/#soutenir">Donate</a></strong>
 </p>
 

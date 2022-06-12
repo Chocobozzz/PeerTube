@@ -669,7 +669,7 @@ export class PeerTubeEmbed {
 
     const title = this.title ? videoInfo.name : undefined
 
-    const description = this.config.tracker.enabled && this.warningTitle
+    const description = this.warningTitle && (!videoInfo.isLocal || this.config.tracker.enabled)
       ? '<span class="text">' + peertubeTranslate('Watching this video may reveal your IP address to others.') + '</span>'
       : undefined
 

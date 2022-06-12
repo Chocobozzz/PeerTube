@@ -1,9 +1,10 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core'
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { VideoDetails } from '@app/shared/shared-main'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { buildPlaylistLink, buildVideoLink, decoratePlaylistLink, decorateVideoLink } from '@shared/core-utils'
-import { VideoCaption } from '@shared/models'
+import { VideoCaption, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import { buildVideoOrPlaylistEmbed } from '../../../assets/player/utils'
 
 type Customizations = {
@@ -48,7 +49,13 @@ export class VideoShareComponent {
   isAdvancedCustomizationCollapsed = true
   includeVideoInPlaylist = false
 
-  constructor (private modalService: NgbModal) { }
+  playlistEmbedHTML: SafeHtml
+  videoEmbedHTML: SafeHtml
+
+  constructor (
+    private modalService: NgbModal,
+    private sanitizer: DomSanitizer
+  ) { }
 
   show (currentVideoTimestamp?: number, currentPlaylistPosition?: number) {
     let subtitle: string
@@ -56,7 +63,7 @@ export class VideoShareComponent {
       subtitle = this.videoCaptions[0].language.id
     }
 
-    this.customizations = {
+    this.customizations = new Proxy({
       startAtCheckbox: false,
       startAt: currentVideoTimestamp ? Math.floor(currentVideoTimestamp) : 0,
 
@@ -76,9 +83,19 @@ export class VideoShareComponent {
       warningTitle: true,
       controls: true,
       peertubeLink: true
-    }
+    }, {
+      set: (target, prop, value) => {
+        target[prop] = value
+
+        this.updateEmbedCode()
+
+        return true
+      }
+    })
 
     this.playlistPosition = currentPlaylistPosition
+
+    this.updateEmbedCode()
 
     this.modalService.open(this.modal, { centered: true })
   }
@@ -96,12 +113,12 @@ export class VideoShareComponent {
   }
 
   getVideoUrl () {
-    const baseUrl = this.customizations.originUrl
-      ? this.video.originInstanceUrl
-      : window.location.origin
+    const url = this.customizations.originUrl
+      ? this.video.url
+      : buildVideoLink(this.video, window.location.origin)
 
     return decorateVideoLink({
-      url: buildVideoLink(this.video, baseUrl),
+      url,
 
       ...this.getVideoOptions()
     })
@@ -114,6 +131,12 @@ export class VideoShareComponent {
     return decoratePlaylistLink({ url, playlistPosition: this.playlistPosition })
   }
 
+  updateEmbedCode () {
+    if (this.playlist) this.playlistEmbedHTML = this.sanitizer.bypassSecurityTrustHtml(this.getPlaylistIframeCode())
+
+    if (this.video) this.videoEmbedHTML = this.sanitizer.bypassSecurityTrustHtml(this.getVideoIframeCode())
+  }
+
   notSecure () {
     return window.location.protocol === 'http:'
   }
@@ -124,6 +147,14 @@ export class VideoShareComponent {
 
   isLocalVideo () {
     return this.video.isLocal
+  }
+
+  isPrivateVideo () {
+    return this.video.privacy.id === VideoPrivacy.PRIVATE
+  }
+
+  isPrivatePlaylist () {
+    return this.playlist.privacy.id === VideoPlaylistPrivacy.PRIVATE
   }
 
   private getPlaylistOptions (baseUrl?: string) {

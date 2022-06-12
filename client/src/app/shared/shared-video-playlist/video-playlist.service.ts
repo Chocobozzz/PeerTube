@@ -2,7 +2,7 @@ import * as debug from 'debug'
 import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
 import { catchError, filter, map, share, switchMap, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable, NgZone } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { AuthUser, ComponentPaginationLight, RestExtractor, RestService, ServerService } from '@app/core'
 import { buildBulkObservable, objectToFormData } from '@app/helpers'
 import { Account, AccountService, VideoChannel, VideoChannelService } from '@app/shared/shared-main'
@@ -47,16 +47,14 @@ export class VideoPlaylistService {
     private authHttp: HttpClient,
     private serverService: ServerService,
     private restExtractor: RestExtractor,
-    private restService: RestService,
-    private ngZone: NgZone
+    private restService: RestService
   ) {
     this.videoExistsInPlaylistObservable = merge(
       buildBulkObservable({
         time: 500,
-        ngZone: this.ngZone,
         bulkGet: this.doVideosExistInPlaylist.bind(this),
         notifierObservable: this.videoExistsInPlaylistNotifier
-      }),
+      }).pipe(map(({ response }) => response)),
 
       this.videoExistsInPlaylistCacheSubject
     )
@@ -64,7 +62,7 @@ export class VideoPlaylistService {
 
   listChannelPlaylists (videoChannel: VideoChannel, componentPagination: ComponentPaginationLight): Observable<ResultList<VideoPlaylist>> {
     const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/video-playlists'
-    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+    const pagination = this.restService.componentToRestPagination(componentPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination)
@@ -105,7 +103,7 @@ export class VideoPlaylistService {
   ): Observable<ResultList<VideoPlaylist>> {
     const url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-playlists'
     const pagination = componentPagination
-      ? this.restService.componentPaginationToRestPagination(componentPagination)
+      ? this.restService.componentToRestPagination(componentPagination)
       : undefined
 
     let params = new HttpParams()
@@ -256,12 +254,12 @@ export class VideoPlaylistService {
                )
   }
 
-  getPlaylistVideos (
-    videoPlaylistId: number | string,
+  getPlaylistVideos (options: {
+    videoPlaylistId: number | string
     componentPagination: ComponentPaginationLight
-  ): Observable<ResultList<VideoPlaylistElement>> {
-    const path = VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + videoPlaylistId + '/videos'
-    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+  }): Observable<ResultList<VideoPlaylistElement>> {
+    const path = VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + options.videoPlaylistId + '/videos'
+    const pagination = this.restService.componentToRestPagination(options.componentPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination)

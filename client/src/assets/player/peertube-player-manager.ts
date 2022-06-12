@@ -1,13 +1,13 @@
 import 'videojs-hotkeys/videojs.hotkeys'
 import 'videojs-dock'
-import 'videojs-contextmenu-pt'
-import 'videojs-contrib-quality-levels'
+import '@peertube/videojs-contextmenu'
 import './upnext/end-card'
 import './upnext/upnext-plugin'
 import './stats/stats-card'
 import './stats/stats-plugin'
 import './bezels/bezels-plugin'
 import './peertube-plugin'
+import './peertube-resolutions-plugin'
 import './videojs-components/next-previous-video-button'
 import './videojs-components/p2p-info-button'
 import './videojs-components/peertube-link-button'
@@ -361,8 +361,7 @@ export class PeertubePlayerManager {
     }
 
     let consumeOnly = false
-    // FIXME: typings
-    if (navigator && (navigator as any).connection && (navigator as any).connection.type === 'cellular') {
+    if ((navigator as any)?.connection?.type === 'cellular') {
       console.log('We are on a cellular connection: disabling seeding.')
       consumeOnly = true
     }
@@ -374,7 +373,7 @@ export class PeertubePlayerManager {
         rtcConfig: getRtcConfig(),
         requiredSegmentsPriority: 1,
         simultaneousHttpDownloads: 1,
-        segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager),
+        segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager, 1),
         useP2P: getStoredP2PEnabled(),
         consumeOnly
       },

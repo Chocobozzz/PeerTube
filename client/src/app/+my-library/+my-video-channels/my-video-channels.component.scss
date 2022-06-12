@@ -54,6 +54,10 @@ my-edit-button {
   color: $grey-actor-name;
 }
 
+.video-channel-followers {
+  color: pvar(--mainForegroundColor);
+}
+
 .video-channel-buttons {
   margin-top: 10px;
   min-width: 190px;

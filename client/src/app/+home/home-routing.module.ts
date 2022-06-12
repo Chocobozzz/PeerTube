@@ -5,7 +5,12 @@ import { HomeComponent } from './home.component'
 const homeRoutes: Routes = [
   {
     path: '',
-    component: HomeComponent
+    component: HomeComponent,
+    data: {
+      meta: {
+        title: $localize`Homepage`
+      }
+    }
   }
 ]
 

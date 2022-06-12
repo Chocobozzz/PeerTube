@@ -5,11 +5,15 @@
     </div>
 
     <div role="menu" ngbDropdownMenu>
-      <h6 class="dropdown-header" i18n>Advanced filters</h6>
+      <ng-container *ngFor="let group of filters">
+        <h6 class="dropdown-header">{{ group.title }}</h6>
 
-      <a *ngFor="let filter of filters" [routerLink]="[ '.' ]" [queryParams]="filter.queryParams" class="dropdown-item">
-        {{ filter.label }}
-      </a>
+        <button *ngFor="let filter of group.children" (click)="onFilterClick(filter)" class="dropdown-item">
+          <my-global-icon [ngClass]="{ 'no-visible': !isFilterEnabled(filter) }" iconName="tick"></my-global-icon>
+
+          {{ filter.label }}
+        </button>
+      </ng-container>
     </div>
   </div>
 

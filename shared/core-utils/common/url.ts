@@ -53,7 +53,7 @@ function decorateVideoLink (options: {
 }) {
   const { url } = options
 
-  const params = generateParams(window.location.search)
+  const params = new URLSearchParams()
 
   if (options.startTime !== undefined && options.startTime !== null) {
     const startTimeInt = Math.floor(options.startTime)
@@ -85,7 +85,7 @@ function decoratePlaylistLink (options: {
 }) {
   const { url } = options
 
-  const params = generateParams(window.location.search)
+  const params = new URLSearchParams()
 
   if (options.playlistPosition) params.set('playlistPosition', '' + options.playlistPosition)
 
@@ -118,13 +118,4 @@ function buildUrl (url: string, params: URLSearchParams) {
   if (hasParams) return url + '?' + params.toString()
 
   return url
-}
-
-function generateParams (url: string) {
-  const params = new URLSearchParams(window.location.search)
-  // Unused parameters in embed
-  params.delete('videoId')
-  params.delete('resume')
-
-  return params
 }

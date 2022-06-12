@@ -1,0 +1,61 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.add-button {
+  @include create-button;
+}
+
+tr.banned > td {
+  background-color: lighten($color: $red, $amount: 40) !important;
+}
+
+.table-email {
+  @include disable-default-a-behaviour;
+
+  color: pvar(--mainForegroundColor);
+}
+
+.banned-info {
+  font-style: italic;
+}
+
+.ban-reason-label {
+  font-weight: $font-semibold;
+}
+
+.user-table-primary-text .glyphicon {
+  @include margin-left(0.1rem);
+
+  font-size: 80%;
+  color: #808080;
+}
+
+p-tableCheckbox {
+  position: relative;
+  top: -2.5px;
+}
+
+my-global-icon {
+  width: 18px;
+}
+
+.chip {
+  @include chip;
+}
+
+.progress {
+  @include progressbar($small: true);
+
+  width: auto;
+  max-width: 100%;
+}
+
+@media screen and (max-width: $primeng-breakpoint) {
+  .progress {
+    width: 100%;
+  }
+
+  .empty-cell {
+    padding: 0;
+  }
+}

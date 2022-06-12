@@ -100,6 +100,18 @@ export class VideoMiniatureComponent implements OnInit {
     @Inject(LOCALE_ID) private localeId: string
   ) {}
 
+  get authorAccount () {
+    return this.serverConfig.client.videos.miniature.preferAuthorDisplayName
+      ? this.video.account.displayName
+      : this.video.byAccount
+  }
+
+  get authorChannel () {
+    return this.serverConfig.client.videos.miniature.preferAuthorDisplayName
+      ? this.video.channel.displayName
+      : this.video.byVideoChannel
+  }
+
   get isVideoBlur () {
     return this.video.isVideoNSFWForUser(this.user, this.serverConfig)
   }
@@ -161,6 +173,10 @@ export class VideoMiniatureComponent implements OnInit {
     if (video.scheduledUpdate) {
       const updateAt = new Date(video.scheduledUpdate.updateAt.toString()).toLocaleString(this.localeId)
       return $localize`Publication scheduled on ` + updateAt
+    }
+
+    if (video.state.id === VideoState.TRANSCODING_FAILED) {
+      return $localize`Transcoding failed`
     }
 
     if (video.state.id === VideoState.TO_TRANSCODE && video.waitTranscoding === true) {

@@ -1,7 +1,7 @@
 import * as debug from 'debug'
 import { Observable, Subject } from 'rxjs'
-import { first, map } from 'rxjs/operators'
-import { Injectable, NgZone } from '@angular/core'
+import { filter, first, map } from 'rxjs/operators'
+import { Injectable } from '@angular/core'
 import { buildBulkObservable } from '@app/helpers'
 import { ResultList } from '@shared/models/common'
 import { Video, VideoChannel } from '../shared-main'
@@ -12,7 +12,7 @@ const logger = debug('peertube:search:FindInBulkService')
 
 type BulkObservables <P extends number | string, R> = {
   notifier: Subject<P>
-  result: Observable<R>
+  result: Observable<{ params: P[], response: R }>
 }
 
 @Injectable()
@@ -23,8 +23,7 @@ export class FindInBulkService {
   private getPlaylistInBulk: BulkObservables<string, ResultList<VideoPlaylist>>
 
   constructor (
-    private searchService: SearchService,
-    private ngZone: NgZone
+    private searchService: SearchService
   ) {
     this.getVideoInBulk = this.buildBulkObservableObject(this.getVideosInBulk.bind(this))
     this.getChannelInBulk = this.buildBulkObservableObject(this.getChannelsInBulk.bind(this))
@@ -71,8 +70,9 @@ export class FindInBulkService {
     return new Observable<R>(obs => {
       observableObject.result
         .pipe(
+          filter(result => result.params.includes(param)),
           first(),
-          map(({ data }) => data),
+          map(result => result.response.data),
           map(data => data.find(finder))
         )
         .subscribe(result => {
@@ -91,23 +91,23 @@ export class FindInBulkService {
   private getVideosInBulk (uuids: string[]) {
     logger('Fetching videos %s.', uuids.join(', '))
 
-    return this.searchService.searchVideos({ uuids })
+    return this.searchService.searchVideos({ uuids, componentPagination: { itemsPerPage: uuids.length, currentPage: 1 } })
   }
 
   private getChannelsInBulk (handles: string[]) {
     logger('Fetching channels %s.', handles.join(', '))
 
-    return this.searchService.searchVideoChannels({ handles })
+    return this.searchService.searchVideoChannels({ handles, componentPagination: { itemsPerPage: handles.length, currentPage: 1 } })
   }
 
   private getPlaylistsInBulk (uuids: string[]) {
     logger('Fetching playlists %s.', uuids.join(', '))
 
-    return this.searchService.searchVideoPlaylists({ uuids })
+    return this.searchService.searchVideoPlaylists({ uuids, componentPagination: { itemsPerPage: uuids.length, currentPage: 1 } })
   }
 
-  private buildBulkObservableObject <T extends number | string, R> (bulkGet: (params: T[]) => Observable<R>) {
-    const notifier = new Subject<T>()
+  private buildBulkObservableObject <P extends number | string, R> (bulkGet: (params: P[]) => Observable<R>) {
+    const notifier = new Subject<P>()
 
     return {
       notifier,
@@ -115,7 +115,6 @@ export class FindInBulkService {
       result: buildBulkObservable({
         time: 500,
         bulkGet,
-        ngZone: this.ngZone,
         notifierObservable: notifier.asObservable()
       })
     }

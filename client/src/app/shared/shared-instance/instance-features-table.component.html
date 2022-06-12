@@ -74,14 +74,14 @@
       </td>
     </tr>
 
-    <tr>
+    <tr *ngIf="serverConfig.live.enabled">
       <th i18n class="sub-label" scope="row">Transcode live video in multiple resolutions</th>
       <td>
         <my-feature-boolean [value]="serverConfig.live.transcoding.enabled && serverConfig.live.transcoding.enabledResolutions.length > 1"></my-feature-boolean>
       </td>
     </tr>
 
-    <tr>
+    <tr *ngIf="serverConfig.live.enabled">
       <th i18n class="sub-label" scope="row">Max parallel lives</th>
       <td i18n>
         {{ maxUserLives }} per user / {{ maxInstanceLives }} per instance
@@ -126,6 +126,28 @@
       <th i18n class="sub-label" scope="row">Users can resolve distant content</th>
       <td>
         <my-feature-boolean [value]="serverConfig.search.remoteUri.users"></my-feature-boolean>
+      </td>
+    </tr>
+
+    <tr>
+      <th i18n class="label" colspan="2">Plugins & Themes</th>
+    </tr>
+
+    <tr>
+      <th i18n class="sub-label" scope="row">Available themes</th>
+      <td>
+        <span class="theme" *ngFor="let theme of serverConfig.theme.registered">
+          {{ theme.name }}
+        </span>
+      </td>
+    </tr>
+
+    <tr>
+      <th i18n class="sub-label" scope="row">Plugins enabled</th>
+      <td>
+        <span class="plugin" *ngFor="let plugin of serverConfig.plugin.registered">
+          {{ plugin.name }}
+        </span>
       </td>
     </tr>
   </table>

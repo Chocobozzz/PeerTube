@@ -81,7 +81,7 @@ export class VideoCommentService {
   }): Observable<ThreadsResultList<VideoComment>> {
     const { videoId, componentPagination, sort } = parameters
 
-    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+    const pagination = this.restService.componentToRestPagination(componentPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)

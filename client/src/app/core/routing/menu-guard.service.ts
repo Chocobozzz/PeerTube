@@ -4,11 +4,10 @@ import { MenuService } from '../menu'
 import { ScreenService } from '../wrappers'
 
 abstract class MenuGuard implements CanActivate, CanDeactivate<any> {
-  display = true
   canDeactivate = this.canActivate
 
-  constructor (protected menu: MenuService, protected screen: ScreenService, display: boolean) {
-    this.display = display
+  constructor (protected menu: MenuService, protected screen: ScreenService, protected display: boolean) {
+
   }
 
   canActivate (): boolean {

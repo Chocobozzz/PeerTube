@@ -44,6 +44,7 @@ import { setAsUpdated } from '../shared'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
+import { CONFIG } from '@server/initializers/config'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -527,7 +528,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       })
   }
 
-  static listByAccount (options: {
+  static listByAccountForAPI (options: {
     accountId: number
     start: number
     count: number
@@ -580,6 +581,24 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       .then(({ rows, count }) => {
         return { total: count, data: rows }
       })
+  }
+
+  static listAllByAccount (accountId: number) {
+    const query = {
+      limit: CONFIG.VIDEO_CHANNELS.MAX_PER_USER,
+      include: [
+        {
+          attributes: [],
+          model: AccountModel,
+          where: {
+            id: accountId
+          },
+          required: true
+        }
+      ]
+    }
+
+    return VideoChannelModel.findAll(query)
   }
 
   static loadAndPopulateAccount (id: number, transaction?: Transaction): Promise<MChannelBannerAccountDefault> {

@@ -8,15 +8,16 @@ export class LogsCommand extends AbstractCommand {
     startDate: Date
     endDate?: Date
     level?: LogLevel
+    tagsOneOf?: string[]
   }) {
-    const { startDate, endDate, level } = options
+    const { startDate, endDate, tagsOneOf, level } = options
     const path = '/api/v1/server/logs'
 
-    return this.getRequestBody({
+    return this.getRequestBody<any[]>({
       ...options,
 
       path,
-      query: { startDate, endDate, level },
+      query: { startDate, endDate, level, tagsOneOf },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

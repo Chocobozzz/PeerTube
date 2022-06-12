@@ -1,5 +1,5 @@
 import { VideoStreamingPlaylistType } from './video-streaming-playlist.type'
-import { VideoFile } from './video-file.model'
+import { VideoFile } from './file'
 
 export interface VideoStreamingPlaylist {
   id: number

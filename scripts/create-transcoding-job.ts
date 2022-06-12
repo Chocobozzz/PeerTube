@@ -5,7 +5,7 @@ import { program } from 'commander'
 import { VideoModel } from '../server/models/video/video'
 import { initDatabaseModels } from '../server/initializers/database'
 import { JobQueue } from '../server/lib/job-queue'
-import { computeResolutionsToTranscode } from '@server/helpers/ffprobe-utils'
+import { computeLowerResolutionsToTranscode } from '@server/helpers/ffprobe-utils'
 import { VideoState, VideoTranscodingPayload } from '@shared/models'
 import { CONFIG } from '@server/initializers/config'
 import { isUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
@@ -50,13 +50,13 @@ async function run () {
   if (!video) throw new Error('Video not found.')
 
   const dataInput: VideoTranscodingPayload[] = []
-  const resolution = video.getMaxQualityFile().resolution
+  const maxResolution = video.getMaxQualityFile().resolution
 
   // Generate HLS files
   if (options.generateHls || CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
     const resolutionsEnabled = options.resolution
-      ? [ options.resolution ]
-      : computeResolutionsToTranscode(resolution, 'vod').concat([ resolution ])
+      ? [ parseInt(options.resolution) ]
+      : computeLowerResolutionsToTranscode(maxResolution, 'vod').concat([ maxResolution ])
 
     for (const resolution of resolutionsEnabled) {
       dataInput.push({
@@ -66,7 +66,8 @@ async function run () {
         isPortraitMode: false,
         copyCodecs: false,
         isNewVideo: false,
-        isMaxQuality: false
+        isMaxQuality: maxResolution === resolution,
+        autoDeleteWebTorrentIfNeeded: false
       })
     }
   } else {
@@ -75,7 +76,7 @@ async function run () {
         type: 'new-resolution-to-webtorrent',
         videoUUID: video.uuid,
         isNewVideo: false,
-        resolution: options.resolution
+        resolution: parseInt(options.resolution)
       })
     } else {
       if (video.VideoFiles.length === 0) {
@@ -91,7 +92,7 @@ async function run () {
     }
   }
 
-  JobQueue.Instance.init()
+  JobQueue.Instance.init(true)
 
   video.state = VideoState.TO_TRANSCODE
   await video.save()

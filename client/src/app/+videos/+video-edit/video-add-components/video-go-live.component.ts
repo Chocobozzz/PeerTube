@@ -1,4 +1,3 @@
-
 import { forkJoin } from 'rxjs'
 import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core'
 import { Router } from '@angular/router'
@@ -16,12 +15,15 @@ import { VideoSend } from './video-send'
   templateUrl: './video-go-live.component.html',
   styleUrls: [
     '../shared/video-edit.component.scss',
+    './video-go-live.component.scss',
     './video-send.scss'
   ]
 })
 export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterViewInit, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
   @Output() firstStepError = new EventEmitter<void>()
+
+  firstStepPermanentLive: boolean
 
   isInUpdateForm = false
 
@@ -70,6 +72,8 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
       waitTranscoding: true,
       commentsEnabled: true,
       downloadEnabled: true,
+      permanentLive: this.firstStepPermanentLive,
+      saveReplay: this.firstStepPermanentLive === false && this.isReplayAllowed(),
       channelId: this.firstStepChannelId
     }
 
@@ -150,6 +154,26 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
 
   isWaitTranscodingEnabled () {
     return this.form.value['saveReplay'] === true
+  }
+
+  getNormalLiveDescription () {
+    if (this.isReplayAllowed()) {
+      return $localize`Stream only once and save a replay of your live`
+    }
+
+    return $localize`Stream only once`
+  }
+
+  getPermanentLiveDescription () {
+    if (this.isReplayAllowed()) {
+      return $localize`Stream multiple times, replays can't be saved`
+    }
+
+    return $localize`Stream multiple times using the same URL`
+  }
+
+  private isReplayAllowed () {
+    return this.serverConfig.live.allowReplay
   }
 
   private fetchVideoLive () {

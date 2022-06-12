@@ -212,7 +212,7 @@ async function createUser (req: express.Request, res: express.Response) {
     await Emailer.Instance.addPasswordCreateEmailJob(userToCreate.username, user.email, url)
   }
 
-  Hooks.runAction('action:api.user.created', { body, user, account, videoChannel })
+  Hooks.runAction('action:api.user.created', { body, user, account, videoChannel, req, res })
 
   return res.json({
     user: {
@@ -254,7 +254,7 @@ async function registerUser (req: express.Request, res: express.Response) {
 
   Notifier.Instance.notifyOnNewUserRegistration(user)
 
-  Hooks.runAction('action:api.user.registered', { body, user, account, videoChannel })
+  Hooks.runAction('action:api.user.registered', { body, user, account, videoChannel, req, res })
 
   return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
@@ -264,7 +264,7 @@ async function unblockUser (req: express.Request, res: express.Response) {
 
   await changeUserBlock(res, user, false)
 
-  Hooks.runAction('action:api.user.unblocked', { user })
+  Hooks.runAction('action:api.user.unblocked', { user, req, res })
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
@@ -275,7 +275,7 @@ async function blockUser (req: express.Request, res: express.Response) {
 
   await changeUserBlock(res, user, true, reason)
 
-  Hooks.runAction('action:api.user.blocked', { user })
+  Hooks.runAction('action:api.user.blocked', { user, req, res })
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
@@ -312,7 +312,7 @@ async function removeUser (req: express.Request, res: express.Response) {
     await user.destroy({ transaction: t })
   })
 
-  Hooks.runAction('action:api.user.deleted', { user })
+  Hooks.runAction('action:api.user.deleted', { user, req, res })
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
@@ -345,7 +345,7 @@ async function updateUser (req: express.Request, res: express.Response) {
 
   auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
 
-  Hooks.runAction('action:api.user.updated', { user })
+  Hooks.runAction('action:api.user.updated', { user, req, res })
 
   // Don't need to send this update to followers, these attributes are not federated
 

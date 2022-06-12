@@ -13,7 +13,7 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
   private lastExecutionTimeMs: number
 
-  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.removeDanglingResumableUploads
+  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.REMOVE_DANGLING_RESUMABLE_UPLOADS
 
   private constructor () {
     super()

@@ -1,4 +1,4 @@
-import { util, has, get } from 'config'
+import config from 'config'
 import { uniq } from 'lodash'
 import { URL } from 'url'
 import { getFFmpegVersion } from '@server/helpers/ffmpeg-utils'
@@ -7,9 +7,9 @@ import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
 import { isProdInstance, isTestInstance, parseSemVersion } from '../helpers/core-utils'
 import { isArray } from '../helpers/custom-validators/misc'
 import { logger } from '../helpers/logger'
-import { UserModel } from '../models/user/user'
 import { ApplicationModel, getServerActor } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
+import { UserModel } from '../models/user/user'
 import { CONFIG, isEmailEnabled } from './config'
 import { WEBSERVER } from './constants'
 
@@ -18,8 +18,8 @@ async function checkActivityPubUrls () {
 
   const parsed = new URL(actor.url)
   if (WEBSERVER.HOST !== parsed.host) {
-    const NODE_ENV = util.getEnv('NODE_ENV')
-    const NODE_CONFIG_DIR = util.getEnv('NODE_CONFIG_DIR')
+    const NODE_ENV = config.util.getEnv('NODE_ENV')
+    const NODE_CONFIG_DIR = config.util.getEnv('NODE_CONFIG_DIR')
 
     logger.warn(
       'It seems PeerTube was started (and created some data) with another domain name. ' +
@@ -36,7 +36,7 @@ async function checkActivityPubUrls () {
 function checkConfig () {
 
   // Moved configuration keys
-  if (has('services.csp-logger')) {
+  if (config.has('services.csp-logger')) {
     logger.warn('services.csp-logger configuration has been renamed to csp.report_uri. Please update your configuration file.')
   }
 
@@ -97,7 +97,7 @@ function checkConfig () {
 
   // Check storage directory locations
   if (isProdInstance()) {
-    const configStorage = get('storage')
+    const configStorage = config.get('storage')
     for (const key of Object.keys(configStorage)) {
       if (configStorage[key].startsWith('storage/')) {
         logger.warn(
@@ -150,6 +150,20 @@ function checkConfig () {
   if (CONFIG.LIVE.ENABLED === true) {
     if (CONFIG.LIVE.ALLOW_REPLAY === true && CONFIG.TRANSCODING.ENABLED === false) {
       return 'Live allow replay cannot be enabled if transcoding is not enabled.'
+    }
+
+    if (CONFIG.LIVE.RTMP.ENABLED === false && CONFIG.LIVE.RTMPS.ENABLED === false) {
+      return 'You must enable at least RTMP or RTMPS'
+    }
+
+    if (CONFIG.LIVE.RTMPS.ENABLED) {
+      if (!CONFIG.LIVE.RTMPS.KEY_FILE) {
+        return 'You must specify a key file to enabled RTMPS'
+      }
+
+      if (!CONFIG.LIVE.RTMPS.CERT_FILE) {
+        return 'You must specify a cert file to enable RTMPS'
+      }
     }
   }
 

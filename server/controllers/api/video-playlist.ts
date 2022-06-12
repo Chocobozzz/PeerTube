@@ -334,7 +334,7 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
 
   logger.info('Video added in playlist %s at position %d.', videoPlaylist.uuid, playlistElement.position)
 
-  Hooks.runAction('action:api.video-playlist-element.created', { playlistElement })
+  Hooks.runAction('action:api.video-playlist-element.created', { playlistElement, req, res })
 
   return res.json({
     videoPlaylistElement: {
@@ -376,7 +376,7 @@ async function removeVideoFromPlaylist (req: express.Request, res: express.Respo
     await videoPlaylistElement.destroy({ transaction: t })
 
     // Decrease position of the next elements
-    await VideoPlaylistElementModel.increasePositionOf(videoPlaylist.id, positionToDelete, null, -1, t)
+    await VideoPlaylistElementModel.increasePositionOf(videoPlaylist.id, positionToDelete, -1, t)
 
     videoPlaylist.changed('updatedAt', true)
     await videoPlaylist.save({ transaction: t })
@@ -415,7 +415,7 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
     const newPosition = insertAfter + 1
 
     // Add space after the position when we want to insert our reordered elements (increase)
-    await VideoPlaylistElementModel.increasePositionOf(videoPlaylist.id, newPosition, null, reorderLength, t)
+    await VideoPlaylistElementModel.increasePositionOf(videoPlaylist.id, newPosition, reorderLength, t)
 
     let oldPosition = start
 
@@ -427,7 +427,7 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
     await VideoPlaylistElementModel.reassignPositionOf(videoPlaylist.id, oldPosition, endOldPosition, newPosition, t)
 
     // Decrease positions of elements after the old position of our ordered elements (decrease)
-    await VideoPlaylistElementModel.increasePositionOf(videoPlaylist.id, oldPosition, null, -reorderLength, t)
+    await VideoPlaylistElementModel.increasePositionOf(videoPlaylist.id, oldPosition, -reorderLength, t)
 
     videoPlaylist.changed('updatedAt', true)
     await videoPlaylist.save({ transaction: t })

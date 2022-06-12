@@ -19,7 +19,7 @@ import {
   VideoFileMetadata,
   VideoPrivacy,
   VideosCommonQuery,
-  VideosWithSearchCommonQuery
+  VideoTranscodingCreate
 } from '@shared/models'
 import { buildAbsoluteFixturePath, wait } from '../miscs'
 import { unwrapBody } from '../requests'
@@ -207,6 +207,7 @@ export class VideosCommand extends AbstractCommand {
     sort?: string
     search?: string
     isLive?: boolean
+    channelId?: number
   } = {}) {
     const path = '/api/v1/users/me/videos'
 
@@ -214,7 +215,7 @@ export class VideosCommand extends AbstractCommand {
       ...options,
 
       path,
-      query: pick(options, [ 'start', 'count', 'sort', 'search', 'isLive' ]),
+      query: pick(options, [ 'start', 'count', 'sort', 'search', 'isLive', 'channelId' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
@@ -245,7 +246,7 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  listByAccount (options: OverrideCommandOptions & VideosWithSearchCommonQuery & {
+  listByAccount (options: OverrideCommandOptions & VideosCommonQuery & {
     handle: string
   }) {
     const { handle, search } = options
@@ -261,7 +262,7 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  listByChannel (options: OverrideCommandOptions & VideosWithSearchCommonQuery & {
+  listByChannel (options: OverrideCommandOptions & VideosCommonQuery & {
     handle: string
   }) {
     const { handle } = options
@@ -469,8 +470,11 @@ export class VideosCommand extends AbstractCommand {
     attributes: VideoEdit
     size: number
     mimetype: string
+
+    originalName?: string
+    lastModified?: number
   }) {
-    const { attributes, size, mimetype } = options
+    const { attributes, originalName, lastModified, size, mimetype } = options
 
     const path = '/api/v1/videos/upload-resumable'
 
@@ -482,7 +486,14 @@ export class VideosCommand extends AbstractCommand {
         'X-Upload-Content-Type': mimetype,
         'X-Upload-Content-Length': size.toString()
       },
-      fields: { filename: attributes.fixture, ...this.buildUploadFields(options.attributes) },
+      fields: {
+        filename: attributes.fixture,
+        originalName,
+        lastModified,
+
+        ...this.buildUploadFields(options.attributes)
+      },
+
       // Fixture will be sent later
       attaches: this.buildUploadAttaches(omit(options.attributes, 'fixture')),
       implicitToken: true,
@@ -592,6 +603,54 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
+  removeHLSFiles (options: OverrideCommandOptions & {
+    videoId: number | string
+  }) {
+    const path = '/api/v1/videos/' + options.videoId + '/hls'
+
+    return this.deleteRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  removeWebTorrentFiles (options: OverrideCommandOptions & {
+    videoId: number | string
+  }) {
+    const path = '/api/v1/videos/' + options.videoId + '/webtorrent'
+
+    return this.deleteRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  runTranscoding (options: OverrideCommandOptions & {
+    videoId: number | string
+    transcodingType: 'hls' | 'webtorrent'
+  }) {
+    const path = '/api/v1/videos/' + options.videoId + '/transcoding'
+
+    const fields: VideoTranscodingCreate = pick(options, [ 'transcodingType' ])
+
+    return this.postBodyRequest({
+      ...options,
+
+      path,
+      fields,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
   private buildListQuery (options: VideosCommonQuery) {
     return pick(options, [
       'start',
@@ -604,7 +663,8 @@ export class VideosCommand extends AbstractCommand {
       'languageOneOf',
       'tagsOneOf',
       'tagsAllOf',
-      'filter',
+      'isLocal',
+      'include',
       'skipCount'
     ])
   }

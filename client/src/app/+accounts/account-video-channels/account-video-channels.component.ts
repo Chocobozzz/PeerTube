@@ -62,6 +62,7 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
     this.accountSub = this.accountService.accountLoaded
         .subscribe(account => {
           this.account = account
+          this.videoChannels = []
 
           this.loadMoreChannels()
         })

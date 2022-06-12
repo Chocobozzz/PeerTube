@@ -9,9 +9,11 @@ import {
   USER_PASSWORD_CREATE_LIFETIME,
   VIEW_LIFETIME,
   WEBSERVER,
-  TRACKER_RATE_LIMITS
+  TRACKER_RATE_LIMITS,
+  RESUMABLE_UPLOAD_SESSION_LIFETIME
 } from '../initializers/constants'
 import { CONFIG } from '../initializers/config'
+import { exists } from '@server/helpers/custom-validators/misc'
 
 type CachedRoute = {
   body: string
@@ -118,16 +120,20 @@ class Redis {
 
   /* ************ Views per IP ************ */
 
-  setIPVideoView (ip: string, videoUUID: string, isLive: boolean) {
-    const lifetime = isLive
-      ? VIEW_LIFETIME.LIVE
-      : VIEW_LIFETIME.VIDEO
+  setIPVideoView (ip: string, videoUUID: string) {
+    return this.setValue(this.generateIPViewKey(ip, videoUUID), '1', VIEW_LIFETIME.VIEW)
+  }
 
-    return this.setValue(this.generateViewKey(ip, videoUUID), '1', lifetime)
+  setIPVideoViewer (ip: string, videoUUID: string) {
+    return this.setValue(this.generateIPViewerKey(ip, videoUUID), '1', VIEW_LIFETIME.VIEWER)
   }
 
   async doesVideoIPViewExist (ip: string, videoUUID: string) {
-    return this.exists(this.generateViewKey(ip, videoUUID))
+    return this.exists(this.generateIPViewKey(ip, videoUUID))
+  }
+
+  async doesVideoIPViewerExist (ip: string, videoUUID: string) {
+    return this.exists(this.generateIPViewerKey(ip, videoUUID))
   }
 
   /* ************ Tracker IP block ************ */
@@ -159,47 +165,114 @@ class Redis {
     return this.setObject(this.generateCachedRouteKey(req), cached, lifetime)
   }
 
-  /* ************ Video views ************ */
+  /* ************ Video views stats ************ */
 
-  addVideoView (videoId: number) {
-    const keyIncr = this.generateVideoViewKey(videoId)
-    const keySet = this.generateVideosViewKey()
+  addVideoViewStats (videoId: number) {
+    const { videoKey, setKey } = this.generateVideoViewStatsKeys({ videoId })
 
     return Promise.all([
-      this.addToSet(keySet, videoId.toString()),
-      this.increment(keyIncr)
+      this.addToSet(setKey, videoId.toString()),
+      this.increment(videoKey)
     ])
   }
 
-  async getVideoViews (videoId: number, hour: number) {
-    const key = this.generateVideoViewKey(videoId, hour)
+  async getVideoViewsStats (videoId: number, hour: number) {
+    const { videoKey } = this.generateVideoViewStatsKeys({ videoId, hour })
 
-    const valueString = await this.getValue(key)
+    const valueString = await this.getValue(videoKey)
     const valueInt = parseInt(valueString, 10)
 
     if (isNaN(valueInt)) {
-      logger.error('Cannot get videos views of video %d in hour %d: views number is NaN (%s).', videoId, hour, valueString)
+      logger.error('Cannot get videos views stats of video %d in hour %d: views number is NaN (%s).', videoId, hour, valueString)
       return undefined
     }
 
     return valueInt
   }
 
-  async getVideosIdViewed (hour: number) {
-    const key = this.generateVideosViewKey(hour)
+  async listVideosViewedForStats (hour: number) {
+    const { setKey } = this.generateVideoViewStatsKeys({ hour })
 
-    const stringIds = await this.getSet(key)
+    const stringIds = await this.getSet(setKey)
     return stringIds.map(s => parseInt(s, 10))
   }
 
-  deleteVideoViews (videoId: number, hour: number) {
-    const keySet = this.generateVideosViewKey(hour)
-    const keyIncr = this.generateVideoViewKey(videoId, hour)
+  deleteVideoViewsStats (videoId: number, hour: number) {
+    const { setKey, videoKey } = this.generateVideoViewStatsKeys({ videoId, hour })
 
     return Promise.all([
-      this.deleteFromSet(keySet, videoId.toString()),
-      this.deleteKey(keyIncr)
+      this.deleteFromSet(setKey, videoId.toString()),
+      this.deleteKey(videoKey)
     ])
+  }
+
+  /* ************ Local video views buffer ************ */
+
+  addLocalVideoView (videoId: number) {
+    const { videoKey, setKey } = this.generateLocalVideoViewsKeys(videoId)
+
+    return Promise.all([
+      this.addToSet(setKey, videoId.toString()),
+      this.increment(videoKey)
+    ])
+  }
+
+  async getLocalVideoViews (videoId: number) {
+    const { videoKey } = this.generateLocalVideoViewsKeys(videoId)
+
+    const valueString = await this.getValue(videoKey)
+    const valueInt = parseInt(valueString, 10)
+
+    if (isNaN(valueInt)) {
+      logger.error('Cannot get videos views of video %d: views number is NaN (%s).', videoId, valueString)
+      return undefined
+    }
+
+    return valueInt
+  }
+
+  async listLocalVideosViewed () {
+    const { setKey } = this.generateLocalVideoViewsKeys()
+
+    const stringIds = await this.getSet(setKey)
+    return stringIds.map(s => parseInt(s, 10))
+  }
+
+  deleteLocalVideoViews (videoId: number) {
+    const { setKey, videoKey } = this.generateLocalVideoViewsKeys(videoId)
+
+    return Promise.all([
+      this.deleteFromSet(setKey, videoId.toString()),
+      this.deleteKey(videoKey)
+    ])
+  }
+
+  /* ************ Resumable uploads final responses ************ */
+
+  setUploadSession (uploadId: string, response?: { video: { id: number, shortUUID: string, uuid: string } }) {
+    return this.setValue(
+      'resumable-upload-' + uploadId,
+      response
+        ? JSON.stringify(response)
+        : '',
+      RESUMABLE_UPLOAD_SESSION_LIFETIME
+    )
+  }
+
+  doesUploadSessionExist (uploadId: string) {
+    return this.exists('resumable-upload-' + uploadId)
+  }
+
+  async getUploadSession (uploadId: string) {
+    const value = await this.getValue('resumable-upload-' + uploadId)
+
+    return value
+      ? JSON.parse(value)
+      : ''
+  }
+
+  deleteUploadSession (uploadId: string) {
+    return this.deleteKey('resumable-upload-' + uploadId)
   }
 
   /* ************ Keys generation ************ */
@@ -208,16 +281,16 @@ class Redis {
     return req.method + '-' + req.originalUrl
   }
 
-  private generateVideosViewKey (hour?: number) {
-    if (!hour) hour = new Date().getHours()
-
-    return `videos-view-h${hour}`
+  private generateLocalVideoViewsKeys (videoId?: Number) {
+    return { setKey: `local-video-views-buffer`, videoKey: `local-video-views-buffer-${videoId}` }
   }
 
-  private generateVideoViewKey (videoId: number, hour?: number) {
-    if (hour === undefined || hour === null) hour = new Date().getHours()
+  private generateVideoViewStatsKeys (options: { videoId?: number, hour?: number }) {
+    const hour = exists(options.hour)
+      ? options.hour
+      : new Date().getHours()
 
-    return `video-view-${videoId}-h${hour}`
+    return { setKey: `videos-view-h${hour}`, videoKey: `video-view-${options.videoId}-h${hour}` }
   }
 
   private generateResetPasswordKey (userId: number) {
@@ -228,8 +301,12 @@ class Redis {
     return 'verify-email-' + userId
   }
 
-  private generateViewKey (ip: string, videoUUID: string) {
+  private generateIPViewKey (ip: string, videoUUID: string) {
     return `views-${videoUUID}-${ip}`
+  }
+
+  private generateIPViewerKey (ip: string, videoUUID: string) {
+    return `viewer-${videoUUID}-${ip}`
   }
 
   private generateTrackerBlockIPKey (ip: string) {

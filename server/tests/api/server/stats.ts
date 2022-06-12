@@ -198,6 +198,7 @@ describe('Test stats (excluding redundancy)', function () {
           },
           resolutions: {
             '0p': false,
+            '144p': false,
             '240p': false,
             '360p': false,
             '480p': false,

@@ -1,7 +1,7 @@
 import WebFinger from 'webfinger.js'
 import { isProdInstance } from '@server/helpers/core-utils'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
-import { REQUEST_TIMEOUT, WEBSERVER } from '@server/initializers/constants'
+import { REQUEST_TIMEOUTS, WEBSERVER } from '@server/initializers/constants'
 import { ActorModel } from '@server/models/actor/actor'
 import { MActorFull } from '@server/types/models'
 import { WebFingerData } from '@shared/models'
@@ -10,7 +10,7 @@ const webfinger = new WebFinger({
   webfist_fallback: false,
   tls_only: isProdInstance(),
   uri_fallback: false,
-  request_timeout: REQUEST_TIMEOUT
+  request_timeout: REQUEST_TIMEOUTS.DEFAULT
 })
 
 async function loadActorUrlOrGetFromWebfinger (uriArg: string) {

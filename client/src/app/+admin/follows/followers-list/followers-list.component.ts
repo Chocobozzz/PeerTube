@@ -7,7 +7,7 @@ import { ActorFollow } from '@shared/models'
 @Component({
   selector: 'my-followers-list',
   templateUrl: './followers-list.component.html',
-  styleUrls: [ '../follows.component.scss', './followers-list.component.scss' ]
+  styleUrls: [ './followers-list.component.scss' ]
 })
 export class FollowersListComponent extends RestTable implements OnInit {
   followers: ActorFollow[] = []

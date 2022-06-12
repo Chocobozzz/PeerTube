@@ -43,7 +43,7 @@ export class SearchService {
     let pagination: RestPagination
 
     if (componentPagination) {
-      pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+      pagination = this.restService.componentToRestPagination(componentPagination)
     }
 
     let params = new HttpParams()
@@ -77,7 +77,7 @@ export class SearchService {
 
     let pagination: RestPagination
     if (componentPagination) {
-      pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+      pagination = this.restService.componentToRestPagination(componentPagination)
     }
 
     let params = new HttpParams()
@@ -111,7 +111,7 @@ export class SearchService {
 
     let pagination: RestPagination
     if (componentPagination) {
-      pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+      pagination = this.restService.componentToRestPagination(componentPagination)
     }
 
     let params = new HttpParams()
