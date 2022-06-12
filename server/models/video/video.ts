@@ -59,7 +59,6 @@ import { ACTIVITY_PUB, API_VERSION, CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, STATI
 import { sendDeleteVideo } from '../../lib/activitypub/send'
 import {
   MChannel,
-  MChannelAccountDefault,
   MChannelId,
   MStreamingPlaylist,
   MStreamingPlaylistFilesVideo,
@@ -756,7 +755,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
           AccountModel
         ],
         transaction: options.transaction
-      }) as MChannelAccountDefault
+      })
     }
 
     return sendDeleteVideo(instance, options.transaction)
