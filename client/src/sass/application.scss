@@ -202,15 +202,6 @@ table {
   }
 }
 
-.dropdown-item {
-  @include dropdown-with-icon-item;
-
-  my-global-icon {
-    width: 22px;
-    height: 22px;
-  }
-}
-
 my-global-icon[iconName=external-link] {
   margin: 0 3px;
   width: 13px;

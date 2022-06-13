@@ -8,9 +8,9 @@ input {
 }
 
 .btn {
-  font-size: 15px;
-
   @include button-with-icon(18px);
+
+  font-size: 15px;
 }
 
 .copy-text {

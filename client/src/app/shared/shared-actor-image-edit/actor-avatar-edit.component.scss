@@ -44,3 +44,7 @@ my-actor-avatar {
   right: 45px;
   border-radius: 50%;
 }
+
+.dropdown-item {
+  @include dropdown-with-icon-item;
+}
