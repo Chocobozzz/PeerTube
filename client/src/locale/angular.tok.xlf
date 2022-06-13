@@ -4205,7 +4205,7 @@
       </trans-unit>
       <trans-unit id="1465291804668949243" datatype="html">
         <source>NSFW</source>
-        <target>unpa</target>
+        <target>ijo pi ken ike</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">56</context>
@@ -4217,6 +4217,7 @@
       </trans-unit>
       <trans-unit id="4678289986918934018" datatype="html">
         <source>Block reason:</source>
+        <target>ona li len tan ni:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">75</context>
@@ -4224,6 +4225,7 @@
       </trans-unit>
       <trans-unit id="8390860433951751429" datatype="html">
         <source>No blocked video found matching current filters.</source>
+        <target>sitelen len pi wile ni li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">92</context>
@@ -4231,6 +4233,7 @@
       </trans-unit>
       <trans-unit id="5030329587275248535" datatype="html">
         <source>No blocked video found.</source>
+        <target>sitelen len li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">93</context>
@@ -4238,6 +4241,7 @@
       </trans-unit>
       <trans-unit id="1460134385691851101" datatype="html">
         <source>Advanced filters</source>
+        <target>wile wawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">30</context>
@@ -4261,6 +4265,7 @@
       </trans-unit>
       <trans-unit id="7755288609601798418" datatype="html">
         <source>Automatic blocks</source>
+        <target>len tan ilo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">34</context>
@@ -4268,6 +4273,7 @@
       </trans-unit>
       <trans-unit id="6510868134640657079" datatype="html">
         <source>Manual blocks</source>
+        <target>len tan jan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -4275,6 +4281,7 @@
       </trans-unit>
       <trans-unit id="6473213678768782133" datatype="html">
         <source>Internal actions</source>
+        <target>ijo pi ma ni taso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">59</context>
@@ -4286,6 +4293,7 @@
       </trans-unit>
       <trans-unit id="3962242315365992494" datatype="html">
         <source>Switch video block to manual</source>
+        <target>len ni o tan jan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">64</context>
@@ -4293,6 +4301,7 @@
       </trans-unit>
       <trans-unit id="6906423861055262169" datatype="html">
         <source>Video <x id="PH" equiv-text="videoBlock.video.name"/> switched to manual block.</source>
+        <target>mi sitelen e ni: sitelen "<x id="PH" equiv-text="videoBlock.video.name"/>" li len tan jan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -4300,6 +4309,7 @@
       </trans-unit>
       <trans-unit id="296166371893775555" datatype="html">
         <source>Actions for the video</source>
+        <target>pali sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -4311,6 +4321,7 @@
       </trans-unit>
       <trans-unit id="4859202148272511129" datatype="html">
         <source>Unblock</source>
+        <target>o weka e len</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -4354,6 +4365,7 @@
       </trans-unit>
       <trans-unit id="7293356040886494773" datatype="html">
         <source>Do you really want to unblock this video? It will be available again in the videos list.</source>
+        <target>sina wile ala wile weka e len tan sitelen ni? ni la ona li kama lon lipu sitelen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">131</context>
@@ -4361,6 +4373,7 @@
       </trans-unit>
       <trans-unit id="4922469417589203720" datatype="html">
         <source>Video <x id="PH" equiv-text="entry.video.name"/> unblocked.</source>
+        <target>mi weka e len tan sitelen "<x id="PH" equiv-text="entry.video.name"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -4372,6 +4385,7 @@
       </trans-unit>
       <trans-unit id="7427986413651551775" datatype="html">
         <source>Video comments</source>
+        <target>toki anpa sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -4379,6 +4393,7 @@
       </trans-unit>
       <trans-unit id="289582790179344391" datatype="html">
         <source>This view also shows comments from muted accounts.</source>
+        <target>mi pana lukin e toki tan sijelo len kin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context>
           <context context-type="linenumber">8</context>
@@ -4394,6 +4409,7 @@
       </trans-unit>
       <trans-unit id="7049348886126005391" datatype="html">
         <source>Batch actions</source>
+        <target>pali pi ijo mute</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context>
           <context context-type="linenumber">22</context>
@@ -4409,6 +4425,7 @@
       </trans-unit>
       <trans-unit id="1102717806459547726" datatype="html">
         <source>Refresh</source>
+        <target>o pana lukin sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context>
           <context context-type="linenumber">31</context>
@@ -4428,6 +4445,7 @@
       </trans-unit>
       <trans-unit id="6110554376228744887" datatype="html">
         <source>Select all rows</source>
+        <target>o luka e ale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context>
           <context context-type="linenumber">39</context>
@@ -4495,6 +4513,7 @@
       </trans-unit>
       <trans-unit id="1451763834047485033" datatype="html">
         <source>Select this row</source>
+        <target>o luka e ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context>
           <context context-type="linenumber">54</context>
@@ -4546,6 +4565,7 @@
       </trans-unit>
       <trans-unit id="4691552465058437520" datatype="html">
         <source>Commented video</source>
+        <target>sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context>
           <context context-type="linenumber">81</context>
@@ -4553,6 +4573,7 @@
       </trans-unit>
       <trans-unit id="7266085473379376028" datatype="html">
         <source>No comments found matching current filters.</source>
+        <target>toki pi wile ni li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context>
           <context context-type="linenumber">106</context>
@@ -4560,6 +4581,7 @@
       </trans-unit>
       <trans-unit id="2398388496754671928" datatype="html">
         <source>No comments found.</source>
+        <target>toki li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context>
           <context context-type="linenumber">107</context>
@@ -4567,7 +4589,7 @@
       </trans-unit>
       <trans-unit id="4604870995665811499" datatype="html">
         <source>Local comments</source>
-        <target>toki tan ma ni</target>
+        <target>toki pi ma ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -4575,7 +4597,7 @@
       </trans-unit>
       <trans-unit id="2721988499779041837" datatype="html">
         <source>Remote comments</source>
-        <target>toki tan ma ante</target>
+        <target>toki pi ma ante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -5191,6 +5213,7 @@
       </trans-unit>
       <trans-unit id="8363291180171434623" datatype="html">
         <source>Table parameters</source>
+        <target>mi o pana lukin e sona seme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">47</context>
@@ -5198,6 +5221,7 @@
       </trans-unit>
       <trans-unit id="5230110096688656830" datatype="html">
         <source>Select columns</source>
+        <target>sina wile e seme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">53</context>
@@ -5205,6 +5229,7 @@
       </trans-unit>
       <trans-unit id="5893518121808195081" datatype="html">
         <source>Highlight banned users</source>
+        <target>o kule e sijelo pini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">59</context>
@@ -5212,6 +5237,7 @@
       </trans-unit>
       <trans-unit id="3959826834147169200" datatype="html">
         <source>Muted</source>
+        <target>len</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">104</context>
@@ -5227,6 +5253,7 @@
       </trans-unit>
       <trans-unit id="675721269041534709" datatype="html">
         <source>The user was banned</source>
+        <target>lawa li weka e jan ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">109</context>
@@ -5234,6 +5261,7 @@
       </trans-unit>
       <trans-unit id="3254358851993549668" datatype="html">
         <source>User's email must be verified to login</source>
+        <target>jan ni o lukin e poki Email ona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">120</context>
@@ -5241,6 +5269,7 @@
       </trans-unit>
       <trans-unit id="3939342579126794385" datatype="html">
         <source>User's email is verified / User can login without email verification</source>
+        <target>nimi Email pi jan ni la ale li pona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">124</context>
@@ -5248,6 +5277,7 @@
       </trans-unit>
       <trans-unit id="2127094963121208963" datatype="html">
         <source>Total video quota</source>
+        <target>ken pi pana sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">131</context>
@@ -5259,6 +5289,7 @@
       </trans-unit>
       <trans-unit id="242888077027281874" datatype="html">
         <source>Total daily video quota</source>
+        <target>ken suno pi pana sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">141</context>
@@ -5266,6 +5297,7 @@
       </trans-unit>
       <trans-unit id="1242902302929086301" datatype="html">
         <source>Ban reason:</source>
+        <target>ona li pini tan ni:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">163</context>
@@ -5273,6 +5305,7 @@
       </trans-unit>
       <trans-unit id="6124612368324200166" datatype="html">
         <source>Banned users</source>
+        <target>jan pini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -5280,7 +5313,7 @@
       </trans-unit>
       <trans-unit id="3767259920053407667" datatype="html">
         <source>Videos will be deleted, comments will be tombstoned.</source>
-        <target state="needs-translation">mi weka e sitelen ona li len e toki ona.</target>
+        <target state="translated">mi weka e sitelen ona li len e toki ona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">96</context>
@@ -5292,6 +5325,7 @@
       </trans-unit>
       <trans-unit id="4209525355702493436" datatype="html">
         <source>Ban</source>
+        <target>o pini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -5315,6 +5349,7 @@
       </trans-unit>
       <trans-unit id="4451482225013335720" datatype="html">
         <source>Unban</source>
+        <target>o weka e pini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">107</context>
@@ -5330,6 +5365,7 @@
       </trans-unit>
       <trans-unit id="7210277223053877333" datatype="html">
         <source>Set Email as Verified</source>
+        <target>nimi Email pi jan ni li pona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -5341,6 +5377,7 @@
       </trans-unit>
       <trans-unit id="4207916966377787111" datatype="html">
         <source>Created</source>
+        <target>tenpo pali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">129</context>
@@ -5364,6 +5401,7 @@
       </trans-unit>
       <trans-unit id="3403978719736970622" datatype="html">
         <source>You cannot ban root.</source>
+        <target>sina ken ala weka e sijelo mama.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">173</context>
@@ -5375,6 +5413,7 @@
       </trans-unit>
       <trans-unit id="4884272193574287483" datatype="html">
         <source>Do you really want to unban <x id="PH" equiv-text="users.length"/> users?</source>
+        <target>sina wile ala wile weka e pini pi jan <x id="PH" equiv-text="users.length"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">186</context>
@@ -5382,6 +5421,7 @@
       </trans-unit>
       <trans-unit id="8712248120167780385" datatype="html">
         <source><x id="PH" equiv-text="users.length"/> users unbanned.</source>
+        <target>mi weka e pini pi jan <x id="PH" equiv-text="users.length"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">192</context>
@@ -5389,7 +5429,7 @@
       </trans-unit>
       <trans-unit id="5325873477837320044" datatype="html">
         <source>You cannot delete root.</source>
-        <target>sina ken ala weka e sijelo lawa.</target>
+        <target>sina ken ala weka e sijelo mama.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">203</context>
@@ -5417,6 +5457,7 @@
       </trans-unit>
       <trans-unit id="8360664597512051242" datatype="html">
         <source><x id="PH" equiv-text="users.length"/> users email set as verified.</source>
+        <target>mi sitelen e ni: nimi Email pi jan <x id="PH" equiv-text="users.length"/> li pona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">227</context>
@@ -5448,7 +5489,7 @@
       </trans-unit>
       <trans-unit id="2005509140164856243" datatype="html">
         <source>Video type</source>
-        <target>nasin tenpo sitelen</target>
+        <target>nasin tenpo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">45</context>
@@ -5472,7 +5513,7 @@
       </trans-unit>
       <trans-unit id="545237611115823456" datatype="html">
         <source>Video files</source>
-        <target state="needs-translation">ijo sitelen</target>
+        <target state="translated">nasin sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">59</context>
@@ -5512,6 +5553,7 @@
       </trans-unit>
       <trans-unit id="7091163288887549392" datatype="html">
         <source>Videos scope</source>
+        <target>ma sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">81</context>
@@ -5519,7 +5561,7 @@
       </trans-unit>
       <trans-unit id="1144415254281227966" datatype="html">
         <source>Remote videos</source>
-        <target>sitelen pi ma ante</target>
+        <target>ma ante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">85</context>
@@ -5527,7 +5569,7 @@
       </trans-unit>
       <trans-unit id="8681933925782924101" datatype="html">
         <source>Local videos</source>
-        <target>sitelen pi ma ni</target>
+        <target>ma ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">89</context>
@@ -5547,6 +5589,7 @@
       </trans-unit>
       <trans-unit id="5668077948386857930" datatype="html">
         <source>Exclude</source>
+        <target>pana ala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">95</context>
@@ -5554,6 +5597,7 @@
       </trans-unit>
       <trans-unit id="7147755274837297932" datatype="html">
         <source>Exclude muted accounts</source>
+        <target>o pana ala tan sijelo len</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">99</context>
@@ -5561,6 +5605,7 @@
       </trans-unit>
       <trans-unit id="8397092871503752085" datatype="html">
         <source>Exclude public videos</source>
+        <target>o pana ala e sitelen pi pana ale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context>
           <context context-type="linenumber">103</context>
@@ -5588,6 +5633,7 @@
       </trans-unit>
       <trans-unit id="4116911651502837995" datatype="html">
         <source>Files</source>
+        <target>nasin en suli</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">42</context>
@@ -5595,6 +5641,7 @@
       </trans-unit>
       <trans-unit id="4767765747214995164" datatype="html">
         <source>Published <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target>tenpo pana <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">43</context>
@@ -5674,6 +5721,7 @@
       </trans-unit>
       <trans-unit id="8817917090143649804" datatype="html">
         <source>Account muted</source>
+        <target>sijelo li len</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">79</context>
@@ -5681,6 +5729,7 @@
       </trans-unit>
       <trans-unit id="1684597533616494551" datatype="html">
         <source>Server muted</source>
+        <target>ma li len</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">80</context>
@@ -5688,6 +5737,7 @@
       </trans-unit>
       <trans-unit id="9081463435738465430" datatype="html">
         <source>Blocked</source>
+        <target>len</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">82</context>
@@ -5699,6 +5749,7 @@
       </trans-unit>
       <trans-unit id="420763834450076269" datatype="html">
         <source>Block</source>
+        <target>o len</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -5778,6 +5829,7 @@
       </trans-unit>
       <trans-unit id="2870417795706430145" datatype="html">
         <source>Unblocked <x id="PH" equiv-text="videos.length"/> videos.</source>
+        <target>mi weka e len tan sitelen <x id="PH" equiv-text="videos.length"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">218</context>
@@ -5809,6 +5861,7 @@
       </trans-unit>
       <trans-unit id="7054344823477412274" datatype="html">
         <source>Transcoding jobs created.</source>
+        <target>mi sitelen e pali.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">249</context>
@@ -5816,6 +5869,7 @@
       </trans-unit>
       <trans-unit id="2591467977473302125" datatype="html">
         <source>Videos list</source>
+        <target>sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video.routes.ts</context>
           <context context-type="linenumber">24</context>
@@ -5823,6 +5877,7 @@
       </trans-unit>
       <trans-unit id="4930506384627295710" datatype="html">
         <source>Settings</source>
+        <target>wile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.html</context>
           <context context-type="linenumber">12</context>
@@ -5842,6 +5897,7 @@
       </trans-unit>
       <trans-unit id="4474510732215437338" datatype="html">
         <source>Uninstall</source>
+        <target>o weka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.html</context>
           <context context-type="linenumber">21</context>
@@ -5869,6 +5925,7 @@
       </trans-unit>
       <trans-unit id="931472057457682240" datatype="html">
         <source>Update to <x id="PH" equiv-text="plugin.latestVersion"/></source>
+        <target>o kama jo e ona sin nanpa <x id="PH" equiv-text="plugin.latestVersion"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">98</context>
@@ -5876,6 +5933,7 @@
       </trans-unit>
       <trans-unit id="9107383323119159110" datatype="html">
         <source>Do you really want to uninstall <x id="PH" equiv-text="plugin.name"/>?</source>
+        <target>sina wile ala wile weka e ilo "<x id="PH" equiv-text="plugin.name"/>"?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">111</context>
@@ -5883,6 +5941,7 @@
       </trans-unit>
       <trans-unit id="3773378957693174719" datatype="html">
         <source><x id="PH" equiv-text="plugin.name"/> uninstalled.</source>
+        <target>mi weka e ilo "<x id="PH" equiv-text="plugin.name"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">119</context>
@@ -5890,6 +5949,7 @@
       </trans-unit>
       <trans-unit id="7914215986085479339" datatype="html">
         <source>This is a major plugin upgrade. Please go on the plugin homepage to check potential release notes.</source>
+        <target>ante pi ona sin li suli. o lukin e lipu pi ilo ni o sona e ante.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -5897,6 +5957,7 @@
       </trans-unit>
       <trans-unit id="2849750161085431718" datatype="html">
         <source>Upgrade</source>
+        <target>o sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">136</context>
@@ -5904,6 +5965,7 @@
       </trans-unit>
       <trans-unit id="7686590072950686188" datatype="html">
         <source>Proceed upgrade</source>
+        <target>o sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">137</context>
@@ -5911,6 +5973,7 @@
       </trans-unit>
       <trans-unit id="7830308409197461339" datatype="html">
         <source><x id="PH" equiv-text="plugin.name"/> updated.</source>
+        <target>mi sin e ilo "<x id="PH" equiv-text="plugin.name"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">151</context>
@@ -5918,6 +5981,7 @@
       </trans-unit>
       <trans-unit id="2006841089844688970" datatype="html">
         <source>To load your new installed plugins or themes, refresh the page.</source>
+        <target>sina wile lukin e ilo sin anu selo sin la o sin e lipu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -5925,7 +5989,7 @@
       </trans-unit>
       <trans-unit id="7577430199525157466" datatype="html">
         <source>Popular plugins</source>
-        <target>ilo pona</target>
+        <target>ma mute li kepeken ilo ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">10</context>
@@ -5933,7 +5997,7 @@
       </trans-unit>
       <trans-unit id="830877982972543118" datatype="html">
         <source>Popular themes</source>
-        <target>selo pona</target>
+        <target>ma mute li kepeken selo ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">11</context>
@@ -5969,6 +6033,7 @@
       </trans-unit>
       <trans-unit id="2722270956157821098" datatype="html">
         <source>No results.</source>
+        <target>ala li lon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">27,29</context>
@@ -5996,6 +6061,7 @@
       </trans-unit>
       <trans-unit id="8336721444092720377" datatype="html">
         <source>Official</source>
+        <target>tan kulupu Framasoft</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">37,39</context>
@@ -6035,7 +6101,7 @@
       </trans-unit>
       <trans-unit id="2601639465696257054" datatype="html">
         <source>This <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> does not have settings. </source>
-        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> ni la sina ken ala toki e wile. </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> ni la sina ken ala toki e wile. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context>
           <context context-type="linenumber">16,18</context>
@@ -6091,6 +6157,7 @@
       </trans-unit>
       <trans-unit id="7002061007877950198" datatype="html">
         <source>Plugin homepage (new window)</source>
+        <target>lipu pi ilo ni (ona li open lon poki sin)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-card.component.html</context>
           <context context-type="linenumber">8</context>
@@ -6102,6 +6169,7 @@
       </trans-unit>
       <trans-unit id="3981257963098530375" datatype="html">
         <source>Navigate between installed plugins and themes or find new ones</source>
+        <target>sina wile lukin e ilo lon e sitelen lon anu wile alasa e ona sin?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-navigation.component.html</context>
           <context context-type="linenumber">2</context>
@@ -6141,6 +6209,7 @@
       </trans-unit>
       <trans-unit id="320689395528621696" datatype="html">
         <source>Navigate between plugins and themes</source>
+        <target>sina wile lukin e ilo anu selo?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-navigation.component.html</context>
           <context context-type="linenumber">7</context>
@@ -6204,6 +6273,7 @@
       </trans-unit>
       <trans-unit id="1285026053775066761" datatype="html">
         <source>Check the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>trust_proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> configuration key</source>
+        <target>o lukin e wile ilo <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>trust_proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">15</context>
@@ -6211,6 +6281,7 @@
       </trans-unit>
       <trans-unit id="7014275542536964627" datatype="html">
         <source>If you run PeerTube using Docker, check you run the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> (see <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>issue 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</source>
+        <target>ilo PeerTube sina li lon ilo Docker la, o lukin e <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> o lukin e ni: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> li lon ala lon (sina wile sona mute la o lukin e <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>toki pakala nanpa 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">16,17</context>
@@ -6218,6 +6289,7 @@
       </trans-unit>
       <trans-unit id="2719284837486030903" datatype="html">
         <source>Job type</source>
+        <target>pali li seme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6225,6 +6297,7 @@
       </trans-unit>
       <trans-unit id="6170245880855918780" datatype="html">
         <source>Job state</source>
+        <target>pali li awen anu pini anu seme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">12</context>
@@ -6232,6 +6305,7 @@
       </trans-unit>
       <trans-unit id="2296681895307893686" datatype="html">
         <source>any</source>
+        <target>ale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">21</context>
@@ -6248,6 +6322,7 @@
       </trans-unit>
       <trans-unit id="8040881171107393560" datatype="html">
         <source>ID</source>
+        <target>nanpa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">45</context>
@@ -6255,6 +6330,7 @@
       </trans-unit>
       <trans-unit id="8650499415827640724" datatype="html">
         <source>Type</source>
+        <target>pali li seme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">46</context>
@@ -6270,6 +6346,7 @@
       </trans-unit>
       <trans-unit id="5911214550882917183" datatype="html">
         <source>State</source>
+        <target>pali li awen anu pini anu seme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">48</context>
@@ -6281,6 +6358,7 @@
       </trans-unit>
       <trans-unit id="3419681791450150574" datatype="html">
         <source>Progress</source>
+        <target>mute pini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">49</context>
@@ -6288,6 +6366,7 @@
       </trans-unit>
       <trans-unit id="914197284349366734" datatype="html">
         <source>No jobs found.</source>
+        <target>pali li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">105</context>
@@ -6295,6 +6374,7 @@
       </trans-unit>
       <trans-unit id="2713421326605345655" datatype="html">
         <source>No <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> jobs found.</source>
+        <target>pali <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">106</context>
@@ -6302,6 +6382,7 @@
       </trans-unit>
       <trans-unit id="2384897339170501794" datatype="html">
         <source>No <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;badge&quot; [ngClass]=&quot;getJobStateClass(jobState)&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobState }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> jobs found.</source>
+        <target>pali <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;badge&quot; [ngClass]=&quot;getJobStateClass(jobState)&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobState }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">110</context>
@@ -6309,6 +6390,7 @@
       </trans-unit>
       <trans-unit id="4457061340457477073" datatype="html">
         <source>No <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> jobs found that are <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;badge&quot; [ngClass]=&quot;getJobStateClass(jobState)&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ jobState }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>.</source>
+        <target>pali <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;badge&quot; [ngClass]=&quot;getJobStateClass(jobState)&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ jobState }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">111</context>
@@ -6316,6 +6398,7 @@
       </trans-unit>
       <trans-unit id="6052766076365105714" datatype="html">
         <source>now</source>
+        <target>tenpo ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">15</context>
@@ -6323,6 +6406,7 @@
       </trans-unit>
       <trans-unit id="8984988128489304664" datatype="html">
         <source>Filter logs by tags</source>
+        <target>o lukin e toki pali pi ijo ni taso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">31</context>
@@ -6330,6 +6414,7 @@
       </trans-unit>
       <trans-unit id="3894950702316166331" datatype="html">
         <source>Loading...</source>
+        <target>o awen...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">37</context>
@@ -6337,6 +6422,7 @@
       </trans-unit>
       <trans-unit id="1570003374195931619" datatype="html">
         <source>No log.</source>
+        <target>toki li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">40</context>
@@ -6344,6 +6430,7 @@
       </trans-unit>
       <trans-unit id="2232767208623640457" datatype="html">
         <source>By <x id="INTERPOLATION" equiv-text="{{ log.by }}"/> -&gt;</source>
+        <target>tan sijelo "<x id="INTERPOLATION" equiv-text="{{ log.by }}"/>" -&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">47</context>
@@ -6375,6 +6462,7 @@
       </trans-unit>
       <trans-unit id="3164845764519833078" datatype="html">
         <source>debug</source>
+        <target>sona lili</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">118</context>
@@ -6382,6 +6470,7 @@
       </trans-unit>
       <trans-unit id="4279081882680795350" datatype="html">
         <source>info</source>
+        <target>sona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">122</context>
@@ -6389,6 +6478,7 @@
       </trans-unit>
       <trans-unit id="3379167598974960777" datatype="html">
         <source>warning</source>
+        <target>pakala lili</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">126</context>
@@ -6396,6 +6486,7 @@
       </trans-unit>
       <trans-unit id="8772116786769251214" datatype="html">
         <source>error</source>
+        <target>pakala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">130</context>
@@ -6403,6 +6494,7 @@
       </trans-unit>
       <trans-unit id="5076187961693950167" datatype="html">
         <source>Standard logs</source>
+        <target>toki pi pali ilo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">141</context>
@@ -6410,6 +6502,7 @@
       </trans-unit>
       <trans-unit id="4737341634746310376" datatype="html">
         <source>Audit logs</source>
+        <target>toki pi pali jan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">145</context>
@@ -6417,6 +6510,7 @@
       </trans-unit>
       <trans-unit id="2454050363478003966" datatype="html">
         <source>Login</source>
+        <target>o kama lon sijelo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login-routing.module.ts</context>
           <context context-type="linenumber">12</context>
@@ -6436,6 +6530,7 @@
       </trans-unit>
       <trans-unit id="1908285951500318953" datatype="html">
         <source>Login</source>
+        <target>o kama lon sijelo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -6443,6 +6538,7 @@
       </trans-unit>
       <trans-unit id="1909492071130899005" datatype="html">
         <source>Sorry but there was an issue with the external login process. Please <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about&quot;&gt;"/>contact an administrator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+        <target>ike la, ilo sijelo li pakala. o <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about&quot;&gt;"/>toki tawa lawa<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -6450,6 +6546,7 @@
       </trans-unit>
       <trans-unit id="8390073108781420493" datatype="html">
         <source>Request new verification email.</source>
+        <target>o wile e lipu Email sin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">12</context>
@@ -6461,6 +6558,7 @@
       </trans-unit>
       <trans-unit id="2392488717875840729" datatype="html">
         <source>User</source>
+        <target>sijelo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">21</context>
@@ -6476,6 +6574,7 @@
       </trans-unit>
       <trans-unit id="3997350348765083892" datatype="html">
         <source>Username or email address</source>
+        <target>nimi ilo anu nimi Email</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">23</context>
@@ -6483,6 +6582,7 @@
       </trans-unit>
       <trans-unit id="1758058452376026925" datatype="html">
         <source>⚠️ Most email addresses do not include capital letters.</source>
+        <target>⚠️ nimi Email mute mute la sitelen suli li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">32,34</context>
@@ -6490,6 +6590,7 @@
       </trans-unit>
       <trans-unit id="8715156686857791956" datatype="html">
         <source>Click here to reset your password</source>
+        <target>sina wile e nimi wawa sin la o luka e ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">51</context>
@@ -6497,6 +6598,7 @@
       </trans-unit>
       <trans-unit id="892063502898494584" datatype="html">
         <source>I forgot my password</source>
+        <target>mi sona ala e nimi wawa mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">51</context>
