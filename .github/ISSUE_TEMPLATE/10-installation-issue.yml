@@ -1,0 +1,39 @@
+name: 🚀 Installation/Upgrade Issue
+description: Use this template for build/installation/upgrade issues
+body:
+  - type: checkboxes
+    attributes:
+      label: Have you read the documentation?
+      description: |
+        Please check the official documentation first
+          - Classic installation: https://docs.joinpeertube.org/install-any-os
+          - Docker installation: https://docs.joinpeertube.org/install-docker
+      options:
+        - label: I have read the documentation
+          required: true
+
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: |
+        Please search among past open/closed issues for a similar one beforehand:
+          - https://github.com/Chocobozzz/PeerTube/issues?q=
+          - https://framacolibri.org/c/peertube
+      options:
+        - label: I have searched existing issues
+          required: true
+
+  - type: textarea
+    attributes:
+      label: Describe the problem
+
+  - type: textarea
+    attributes:
+      label: Additional information
+      value: |
+          * PeerTube instance URL:
+          * PeerTube version:
+          * NodeJS version:
+          * Ffmpeg version:
+          * Redis version:
+          * PostgreSQL version:
