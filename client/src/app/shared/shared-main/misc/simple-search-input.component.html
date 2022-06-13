@@ -10,7 +10,7 @@
       [placeholder]="placeholder"
     >
 
-    <a class="glyphicon glyphicon-remove-sign form-control-clear" title="Clear filter" i18n-title (click)="onResetFilter()"></a>
+    <my-global-icon iconName="cross" role="button" class="form-control-clear" title="Clear filter" i18n-title (click)="onResetFilter()"></my-global-icon>
   </div>
 
   <my-global-icon iconName="search" aria-label="Search" role="button" (click)="onIconClick()" [title]="iconTitle"></my-global-icon>

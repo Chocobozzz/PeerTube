@@ -19,7 +19,8 @@
         <a [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse.reporterAccount.displayName + '&quot;' }"
           class="ms-auto muted abuse-details-links" i18n
         >
-          {abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}<span class="ms-1 glyphicon glyphicon-flag"></span>
+          {abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}
+          <my-global-icon iconName="flag"></my-global-icon>
         </a>
       </span>
     </div>
@@ -39,7 +40,8 @@
         <a *ngIf="isAdminView" [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse.flaggedAccount.displayName + '&quot;' }"
           class="ms-auto muted abuse-details-links" i18n
         >
-          {abuse.countReportsForReportee, plural, =1 {1 report} other {{{ abuse.countReportsForReportee }} reports}}<span class="ms-1 glyphicon glyphicon-flag"></span>
+          {abuse.countReportsForReportee, plural, =1 {1 report} other {{{ abuse.countReportsForReportee }} reports}}
+          <my-global-icon iconName="flag"></my-global-icon>
         </a>
       </span>
     </div>

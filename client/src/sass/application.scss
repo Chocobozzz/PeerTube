@@ -1,19 +1,15 @@
-$icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
-
 @use 'sass:math';
 
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_icons' as *;
 
 @use '_fonts';
 
 @use './classes';
-
 @use './custom-markup';
-
 @use './ng-select';
 
-// Needs an import because we extends glyphicon icons in primeng
 @import './bootstrap';
 @import './primeng-custom';
 
@@ -316,15 +312,27 @@ my-global-icon[iconName=external-link] {
 }
 
 .chevron-down {
-  @include chevron-down(0.55rem, 0.20em);
+  @include chevron-down(0.55rem, 0.15rem);
 
-  margin: 0 5px;
+  margin: 0 8px;
 }
 
 .chevron-up {
-  @include chevron-up(0.55rem, 0.20em);
+  @include chevron-up(0.55rem, 0.15rem);
 
-  margin: 0 5px;
+  margin: 0 8px;
+}
+
+.chevron-right {
+  @include chevron-right(0.55rem, 0.15rem);
+
+  margin: 0 8px;
+}
+
+.chevron-left {
+  @include chevron-left(0.55rem, 0.15rem);
+
+  margin: 0 8px;
 }
 
 /* offsetTop for scrollToAnchor */

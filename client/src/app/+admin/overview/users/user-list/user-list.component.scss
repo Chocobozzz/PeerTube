@@ -28,13 +28,6 @@ tr.banned > td {
   @include margin-left(15px);
 }
 
-.user-table-primary-text .glyphicon {
-  @include margin-left(0.1rem);
-
-  font-size: 80%;
-  color: #808080;
-}
-
 p-tableCheckbox {
   position: relative;
   top: -2.5px;

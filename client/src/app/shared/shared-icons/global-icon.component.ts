@@ -91,6 +91,7 @@ export type GlobalIconName = keyof typeof icons
 })
 export class GlobalIconComponent implements OnInit {
   @Input() iconName: GlobalIconName
+  @Input() width: string
 
   constructor (
     private el: ElementRef,
@@ -106,6 +107,10 @@ export class GlobalIconComponent implements OnInit {
       'filter:internal.common.svg-icons.get-content.params',
       'filter:internal.common.svg-icons.get-content.result'
     )
+
+    if (this.width) {
+      nativeElement.style.width = this.width
+    }
   }
 
   private getSVGContent (options: { name: string }) {

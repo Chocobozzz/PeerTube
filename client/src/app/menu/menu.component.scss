@@ -352,10 +352,6 @@ my-actor-avatar {
   display: flex;
   align-items: center;
 
-  i.glyphicon-menu-right {
-    opacity: .4;
-  }
-
   &:hover {
     .hover-display-toggle {
       display: none;

@@ -47,7 +47,6 @@
     "@angular/service-worker": "^13.0.0",
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
-    "@neos21/bootstrap3-glyphicons": "^1.0.1",
     "@ng-bootstrap/ng-bootstrap": "^12.1.2",
     "@ng-select/ng-select": "^8.1.1",
     "@ngx-loading-bar/core": "^6.0.0",

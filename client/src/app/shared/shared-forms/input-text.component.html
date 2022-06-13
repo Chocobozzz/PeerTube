@@ -5,8 +5,9 @@
     #input (click)="input.select()" (input)="update()" (change)="update()" [type]="inputType" class="form-control"
   />
 
-  <button *ngIf="withToggle" (click)="toggle()" type="button" class="btn btn-outline-secondary eye-button" [title]="toggleTitle">
-    <span class="glyphicon glyphicon-eye-{{ show ? 'open' : 'close' }}"></span>
+  <button *ngIf="withToggle" (click)="toggle()" type="button" class="btn btn-outline-secondary" [title]="toggleTitle">
+    <my-global-icon *ngIf="show" iconName="sensitive"></my-global-icon>
+    <my-global-icon *ngIf="!show" iconName="unsensitive"></my-global-icon>
   </button>
 
   <button

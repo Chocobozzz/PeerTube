@@ -70,7 +70,7 @@
             </span>
 
             <span name>
-              <span *ngIf="abuse.video.blacklisted" i18n-title title="The video was blocked" class="glyphicon glyphicon-ban-circle"></span>
+              <my-global-icon *ngIf="abuse.video.blacklisted" iconName="no" i18n-title title="The video was blocked"></my-global-icon>
             </span>
           </my-video-cell>
         </td>
@@ -80,7 +80,7 @@
             <div class="table-video-text">
               <div>
                 {{ abuse.video.name }}
-                <span class="glyphicon glyphicon-trash"></span>
+                <my-global-icon iconName="delete"></my-global-icon>
               </div>
               <div i18n>by {{ abuse.video.channel?.displayName }} on {{ abuse.video.channel?.host }} </div>
             </div>
@@ -116,8 +116,8 @@
       <td class="c-hand" [pRowToggler]="abuse">{{ abuse.createdAt | date: 'short'  }}</td>
 
       <td class="c-hand abuse-states" [pRowToggler]="abuse">
-        <span *ngIf="isAbuseAccepted(abuse)" [title]="abuse.state.label" class="glyphicon glyphicon-ok"></span>
-        <span *ngIf="isAbuseRejected(abuse)" [title]="abuse.state.label" class="glyphicon glyphicon-remove"></span>
+        <my-global-icon *ngIf="isAbuseAccepted(abuse)" [title]="abuse.state.label" iconName="tick"></my-global-icon>
+        <my-global-icon *ngIf="isAbuseRejected(abuse)" [title]="abuse.state.label" iconName="cross"></my-global-icon>
       </td>
 
       <td class="c-hand abuse-messages" (click)="openAbuseMessagesModal(abuse)">

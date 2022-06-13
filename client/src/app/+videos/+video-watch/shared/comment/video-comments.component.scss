@@ -11,14 +11,6 @@
   cursor: pointer;
 }
 
-.glyphicon,
-.comment-thread-loading {
-  @include margin-right(5px);
-
-  display: inline-block;
-  font-size: 13px;
-}
-
 .title-block {
   .title-page {
     @include margin-right(0);

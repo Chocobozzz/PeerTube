@@ -12,7 +12,7 @@ export class LoaderComponent {
     sm: {
       width: '1rem',
       height: '1rem',
-      'border-width': '.2em'
+      'border-width': '0.15rem'
     },
     xl: {
       width: '3rem',

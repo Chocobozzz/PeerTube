@@ -1,5 +1,3 @@
-$icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
-
 @use '_variables' as *;
 @use '_mixins' as *;
 
@@ -30,8 +28,6 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 @import '~bootstrap/scss/helpers';
 @import '~bootstrap/scss/utilities/api';
-
-@import '~@neos21/bootstrap3-glyphicons/assets/stylesheets/bootstrap3-glyphicons';
 
 .flex-auto {
   flex: auto;

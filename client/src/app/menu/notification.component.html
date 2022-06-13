@@ -24,14 +24,19 @@
       <div>
         <button
           *ngIf="unreadNotifications"
-          i18n-title title="Mark all as read" class="glyphicon glyphicon-ok me-2"
+          i18n-title title="Mark all as read" class="me-2"
           (click)="markAllAsRead()"
-        ></button>
+        >
+          <my-global-icon iconName="tick"></my-global-icon>
+        </button>
+
         <a
-          i18n-title title="Update your notification preferences" class="glyphicon glyphicon-cog"
+          i18n-title title="Update your notification preferences"
           routerLink="/my-account/settings" fragment="notifications"
           #settingsNotifications (click)="onNavigate(settingsNotifications)"
-        ></a>
+        >
+          <my-global-icon iconName="cog"></my-global-icon>
+        </a>
       </div>
     </div>
 

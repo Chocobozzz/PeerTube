@@ -26,7 +26,6 @@
         <label class="small-title" i18n>GLOBAL SEARCH</label>
         <div class="advanced-search-status muted">
           <span *ngIf="serverConfig" class="me-1" i18n>using {{ serverConfig.search.searchIndex.url }}</span>
-          <i class="glyphicon glyphicon-globe"></i>
         </div>
       </div>
       <div class="muted" i18n>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</div>
@@ -41,7 +40,6 @@
           <span [ngClass]="canSearchAnyURI ? 'text-success' : 'muted'" i18n-title title="Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.">
             <span *ngIf="canSearchAnyURI()" class="me-1" i18n>any instance</span>
             <span *ngIf="!canSearchAnyURI()" class="me-1" i18n>only followed instances</span>
-            <i [ngClass]="canSearchAnyURI() ? 'glyphicon glyphicon-ok-sign' : 'glyphicon glyphicon-exclamation-sign'"></i>
           </span>
         </div>
       </div>

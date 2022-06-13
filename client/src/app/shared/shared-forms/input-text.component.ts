@@ -1,6 +1,7 @@
 import { Component, forwardRef, Input } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Notifier } from '@app/core'
+import { GlobalIconName } from '../shared-icons'
 
 @Component({
   selector: 'my-input-text',
@@ -45,6 +46,12 @@ export class InputTextComponent implements ControlValueAccessor {
 
   activateCopiedMessage () {
     this.notifier.success($localize`Copied`)
+  }
+
+  getEyeIcon (): GlobalIconName {
+    if (this.show) return 'sensitive'
+
+    return 'unsensitive'
   }
 
   propagateChange = (_: any) => { /* empty */ }

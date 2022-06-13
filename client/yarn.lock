@@ -1456,11 +1456,6 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@neos21/bootstrap3-glyphicons@^1.0.1":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@neos21/bootstrap3-glyphicons/-/bootstrap3-glyphicons-1.0.7.tgz#b3f62f0dc54b383afcc26d44fcb3bb0ca1bd4de2"
-  integrity sha512-JfvPdx8W2+kVhW+8fj2kIJNS0tesU21hrWF7TBHtYDHpVfcFGU/yn3Eh02sJiNfZABkutP3oU0Ftw8LGF43Jng==
-
 "@ng-bootstrap/ng-bootstrap@^12.1.2":
   version "12.1.2"
   resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-12.1.2.tgz#19f21313234fe21090ba50a7721046ed5d9928e1"
