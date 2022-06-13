@@ -445,57 +445,6 @@ body p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
   border: 1px solid #a80000;
 }
 
-// select button
-body .p-selectbutton .p-button {
-  background-color: #dadada;
-  border: 1px solid #dadada;
-  color: #333333;
-  overflow: hidden;
-  transition: background-color 0.2s, box-shadow 0.2s;
-}
-body .p-selectbutton .p-button .p-button-icon-left {
-  color: #666666;
-}
-body .p-selectbutton .p-button:not(.p-disabled):not(.p-highlight):hover {
-  background-color: #c8c8c8;
-  border-color: #c8c8c8;
-  color: #333333;
-}
-body .p-selectbutton .p-button:not(.p-disabled):not(.p-highlight):hover .p-button-icon-left {
-  color: #212121;
-}
-body .p-selectbutton .p-button:not(.p-disabled):not(.p-highlight).ui-state-focus {
-  box-shadow: 0 0 0 0.2em #8dcdff;
-  z-index: 1;
-}
-body .p-selectbutton .p-button.p-highlight {
-  background-color: pvar(--mainColor);
-  border-color: pvar(--mainColor);
-  color: #ffffff;
-}
-body .p-selectbutton .p-button.p-highlight .p-button-icon-left {
-  color: #ffffff;
-}
-body .p-selectbutton .p-button.p-highlight:not(.p-disabled):hover {
-  background-color: pvar(--mainColorLighter);
-  border-color: pvar(--mainColorLighter);
-  color: #ffffff;
-}
-body .p-selectbutton .p-button.p-highlight:not(.p-disabled):hover .p-button-icon-left {
-  color: #ffffff;
-}
-body .p-selectbutton .p-button:first-child {
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-}
-body .p-selectbutton .p-button:last-child {
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-}
-body p-selectbutton.ng-dirty.ng-invalid .p-button {
-  border: 1px solid #a80000;
-}
-
 // ---------------------------------------------------------------------------
 // PeerTube customizations
 // ---------------------------------------------------------------------------
@@ -709,19 +658,19 @@ p-table {
         }
 
         &.p-paginator-prev {
+          @include margin-right(10px);
+
           .p-paginator-icon {
             @extend .chevron-left !optional;
           }
-
-          @include margin-right(10px);
         }
 
         &.p-paginator-next {
+          @include margin-left(10px);
+
           .p-paginator-icon {
             @extend .chevron-right !optional;
           }
-
-          @include margin-left(10px);
         }
 
         &.p-paginator-last {
@@ -962,18 +911,6 @@ p-toast {
 
   .p-toast-message-info my-global-icon {
     color: #03A9F4 !important;
-  }
-}
-
-.p-selectbutton {
-  .p-button:focus {
-    outline: none;
-  }
-
-  .p-button-label {
-    padding: 5px 15px;
-    font-size: 15px;
-    font-weight: 600;
   }
 }
 
