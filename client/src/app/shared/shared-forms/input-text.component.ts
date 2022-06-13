@@ -2,7 +2,6 @@ import { Component, forwardRef, Input } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Notifier } from '@app/core'
 
-
 @Component({
   selector: 'my-input-text',
   templateUrl: './input-text.component.html',
