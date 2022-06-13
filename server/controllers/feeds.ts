@@ -339,10 +339,9 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
       // standard files for webtorrent are regular MP4s
       const groupedVideos = groupBy(videos, video => video.title)
       const preferredVideos = map(groupedVideos, videoGroup => {
-        if (videoGroup.length === 1) {
-          return videoGroup[0]
-        }
-        return videoGroup.find(v => v.sources.some(s => s.uri.includes("/webseed/") || !s.uri.includes("-fragmented")))
+        return videoGroup.find(v => {
+          return v.sources.some(s => s.uri.includes("/webseed/") || (!s.uri.includes("-fragmented") && !s.uri.includes("-hls")))
+        })
       })
 
       const sortedVideos = orderBy(preferredVideos, [ 'bitrate' ], [ 'desc' ])
@@ -368,7 +367,7 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
           return result
         })
 
-      const media = [ ...sortedVideos, ...streamingPlaylists ]
+      const media = [ ...sortedVideos, ...streamingPlaylists ].filter(m => m)
 
       const categories: { value: number, label: string }[] = []
       if (video.Tags) {
