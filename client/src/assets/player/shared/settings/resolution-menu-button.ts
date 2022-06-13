@@ -68,7 +68,8 @@ class ResolutionMenuButton extends MenuButton {
       this.menu.addChild(new ResolutionMenuItem(
         this.player_,
         {
-          id: d.id,
+          id: d.id + '',
+          resolutionId: d.id,
           label,
           selected: d.selected
         })

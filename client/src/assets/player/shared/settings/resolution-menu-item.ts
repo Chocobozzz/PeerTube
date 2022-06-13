@@ -3,7 +3,7 @@ import videojs from 'video.js'
 const MenuItem = videojs.getComponent('MenuItem')
 
 export interface ResolutionMenuItemOptions extends videojs.MenuItemOptions {
-  id: number
+  resolutionId: number
 }
 
 class ResolutionMenuItem extends MenuItem {
@@ -21,7 +21,7 @@ class ResolutionMenuItem extends MenuItem {
     this.autoResolutionEnabled = true
     this.autoResolutionChosen = ''
 
-    this.resolutionId = options.id
+    this.resolutionId = options.resolutionId
     this.label = options.label
 
     player.peertubeResolutions().on('resolutionChanged', () => this.updateSelection())
