@@ -1,4 +1,5 @@
 @use 'sass:math';
+@use 'sass:color';
 @use '~bootstrap/scss/functions' as *;
 
 $small-view: 800px;
@@ -14,11 +15,12 @@ $grey-background-color: #E5E5E5;
 $grey-background-hover-color: #EFEFEF;
 $grey-foreground-color: #585858;
 $grey-foreground-hover-color: #303030;
-$grey-button-outline-color: scale-color($grey-foreground-color, $alpha: -95%);
+$grey-button-outline-color: color.scale($grey-foreground-color, $alpha: -95%);
 
 $main-color: hsl(24, 90%, 50%);
 $main-color-lighter: lighten($main-color, 10%);
 $main-color-lightest: lighten($main-color, 40%);
+$main-color-very-light: #fff5eb;
 
 $main-hover-color: lighten($main-color, 5%);
 $main-background-hover-color: #e9ecef;
@@ -109,6 +111,7 @@ $variables: (
   --mainColor: var(--mainColor),
   --mainColorLighter: var(--mainColorLighter),
   --mainColorLightest: var(--mainColorLightest),
+  --mainColorVeryLight: var(--mainColorVeryLight),
 
   --mainHoverColor: var(--mainHoverColor),
   --mainBackgroundHoverColor: var(--mainBackgroundHoverColor),

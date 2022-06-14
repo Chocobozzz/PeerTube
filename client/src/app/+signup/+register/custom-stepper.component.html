@@ -1,24 +1,29 @@
-<section class="container">
+<section>
   <header *ngIf="steps.length > 2">
-    <ng-container *ngFor="let step of steps; let i = index; let isLast = last;">
-      <div
-        class="step-info" [ngClass]="{ active: selectedIndex === i, completed: isCompleted(step), 'c-hand': isAccessible(i) }" [attr.aria-current]="selectedIndex === i"
-        (click)="onClick(i)"
-      >
-        <div class="step-index">
-          <ng-container *ngIf="!isCompleted(step)"><span class="visually-hidden" i18n>Step</span> {{ i + 1 }}</ng-container>
-          <my-global-icon *ngIf="isCompleted(step)" iconName="tick"></my-global-icon>
+    <div class="header-steps">
+      <ng-container *ngFor="let step of steps; let i = index; let isLast = last;">
+        <div
+          class="step-info" [ngClass]="{ active: selectedIndex === i, completed: isCompleted(step), 'c-hand': isAccessible(step) }" [attr.aria-current]="selectedIndex === i"
+          (click)="onClick(i)"
+        >
+          <div class="step-index">
+            <span class="visually-hidden" i18n>Step</span> {{ i + 1 }}
+
+            <div class="completed-icon" *ngIf="isCompleted(step)">
+              <my-global-icon iconName="tick"></my-global-icon>
+            </div>
+          </div>
+
+          <div class="step-label">{{ step.label }}</div>
         </div>
 
-        <div class="step-label">{{ step.label }}</div>
-      </div>
-
-      <!-- Do no display if this is the last child -->
-      <div *ngIf="!isLast" class="connector"></div>
-    </ng-container>
+        <!-- Do no display if this is the last child -->
+        <div *ngIf="!isLast" class="connector"></div>
+      </ng-container>
+    </div>
   </header>
 
-  <div [style.display]="selected ? 'block' : 'none'">
+  <div class="margin-content" [style.display]="selected ? 'block' : 'none'">
     <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
   </div>
 

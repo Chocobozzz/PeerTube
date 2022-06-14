@@ -1,6 +1,6 @@
-<h2 class="instance-name">{{ about?.instance.name }}</h2>
+<h2 *ngIf="displayInstanceName" class="instance-name">{{ about?.instance.name }}</h2>
 
-<div class="instance-short-description">{{ about?.instance.shortDescription }}</div>
+<div *ngIf="displayInstanceShortDescription" class="instance-short-description">{{ about?.instance.shortDescription }}</div>
 
 <ngb-accordion #accordion="ngbAccordion" [closeOthers]="true">
   <ngb-panel *ngIf="panels.features" id="instance-features" i18n-title title="Features found on this instance">
@@ -32,7 +32,7 @@
       </ng-template>
     </ngb-panel>
 
-    <ngb-panel *ngIf="termsPanel" id="terms" i18n-title title="Terms">
+    <ngb-panel *ngIf="termsPanel" id="terms" [title]="getTermsTitle()">
       <ng-template ngbPanelContent>
         <div class="block" [innerHTML]="aboutHtml.terms"></div>
       </ng-template>

@@ -2,12 +2,12 @@ import { Component, Input } from '@angular/core'
 import { ServerService } from '@app/core'
 
 @Component({
-  selector: 'my-signup-success',
-  templateUrl: './signup-success.component.html',
-  styleUrls: [ './signup-success.component.scss' ]
+  selector: 'my-register-step-about',
+  templateUrl: './register-step-about.component.html',
+  styleUrls: [ './register-step-about.component.scss' ]
 })
-export class SignupSuccessComponent {
-  @Input() requiresEmailVerification: boolean
+export class RegisterStepAboutComponent {
+  @Input() videoUploadDisabled: boolean
 
   constructor (private serverService: ServerService) {
 

@@ -8,7 +8,7 @@ import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 @Component({
   selector: 'my-register-step-terms',
   templateUrl: './register-step-terms.component.html',
-  styleUrls: [ './register.component.scss' ]
+  styleUrls: [ './step.component.scss' ]
 })
 export class RegisterStepTermsComponent extends FormReactive implements OnInit {
   @Input() hasCodeOfConduct = false

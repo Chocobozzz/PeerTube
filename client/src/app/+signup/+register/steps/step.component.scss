@@ -1,0 +1,27 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+input:not([type=submit]) {
+  @include peertube-input-text(100%);
+  display: block;
+
+  &#username,
+  &#name {
+    width: auto !important;
+    flex-grow: 1;
+  }
+}
+
+input[type=submit],
+button {
+  @include peertube-button;
+}
+
+label {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.row {
+  margin-bottom: 30px;
+}

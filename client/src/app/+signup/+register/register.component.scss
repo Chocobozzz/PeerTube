@@ -2,7 +2,7 @@
 @use '_mixins' as *;
 
 .alert {
-  font-size: 15px;
+  font-size: 16px;
   text-align: center;
 }
 
@@ -10,59 +10,73 @@
   padding-top: 30vh;
 }
 
-.wrapper {
-  display: flex;
-  flex-direction: column;
-
-  .register-form {
-    max-width: 600px;
-    align-self: center;
-  }
-
-  .register-form,
-  .instance-information {
-    width: 100%;
-  }
-
-  .instance-information {
-    margin-bottom: 15px;
-  }
+.header-title {
+  font-weight: normal;
+  font-size: 15px;
+  background-color: pvar(--mainColorVeryLight);
+  padding: 35px 25px 15px 25px;
+  margin: 0;
 }
 
-input:not([type=submit]) {
-  @include peertube-input-text(100%);
+.register-content {
+  font-size: 16px;
+}
+
+my-instance-about-accordion {
   display: block;
+  margin-bottom: 25px;
+}
 
-  &#username,
-  &#name {
-    width: auto !important;
-    flex-grow: 1;
+.step-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  .skip-step {
+    @include margin-right(30px);
+
+    display: inline-block;
+  }
+
+  .skip-step-description {
+    margin-top: 5px;
+    font-size: 14px;
+  }
+
+  .underline-orange {
+    color: pvar(--mainForegroundColor);
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  button,
+  .skip-step {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .skip-step,
+  button[cdkStepperNext] {
+    @include margin-left(auto);
+  }
+
+  .skip-step + button[cdkStepperNext] {
+    @include margin-left(0);
   }
 }
 
-input[type=submit],
 button {
-  @include peertube-button;
+  @include peertube-button-big;
 
   &[cdkStepperNext] {
     @include orange-button;
-
-    // Chrome does not support inline-end
-    float: right;
-    float: inline-end;
   }
 
   &[cdkStepperPrevious] {
     @include grey-button;
-
-    // Chrome does not support inline-start
-    float: left;
-    float: inline-start;
   }
-}
-
-.name-information {
-  margin-top: 10px;
 }
 
 .done-loader {
@@ -73,13 +87,16 @@ button {
 
   my-loader {
     margin-bottom: 20px;
+  }
+}
 
-    ::ng-deep .loader div {
-      border-color: pvar(--mainColor) transparent transparent transparent;
-    }
+@media screen and (max-width: $small-view) {
+  .step-buttons {
+    justify-content: space-between;
 
-    + div {
-      font-size: 15px;
+    .skip-step,
+    button[cdkStepperNext] {
+      @include margin-left(0);
     }
   }
 }

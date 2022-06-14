@@ -3,6 +3,24 @@
 @use '_badges' as *;
 @use '_icons' as *;
 
+.link-orange {
+  color: pvar(--mainForegroundColor);
+  font-weight: $font-bold;
+  border-bottom: 3px solid pvar(--mainColor);
+
+  &:hover {
+    color: pvar(--mainForegroundColor);
+    opacity: 0.8;
+  }
+}
+
+.underline-orange {
+  display: inline-block;
+  border-bottom: 3px solid pvar(--mainColor);
+}
+
+// ---------------------------------------------------------------------------
+
 .peertube-button {
   @include peertube-button;
 }
@@ -68,6 +86,11 @@
 
   font-size: 90%;
   margin-top: 10px;
+}
+
+label + .form-group-description {
+  margin-bottom: 10px;
+  margin-top: 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -192,9 +215,12 @@
     border-left-width: .25rem;
   }
 
-  &.callout-info {
+  &.callout-orange {
     border-color: pvar(--mainColorLightest);
-    border-left-color: pvar(--mainColor);
+
+    &:not(.callout-light) {
+      border-left-color: pvar(--mainColor);
+    }
   }
 }
 
@@ -208,5 +234,18 @@
 .offset-content { // if sub-menu fixed
   .anchor {
     top: #{-($header-height + $sub-menu-height + 20px)};
+  }
+}
+
+// ---------------------------------------------------------------------------
+
+.alert {
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  &.pt-alert-primary {
+    background-color: pvar(--mainColorVeryLight);
+    border: 2px solid pvar(--mainColorLightest);
   }
 }

@@ -61,7 +61,7 @@ export const USER_EXISTING_PASSWORD_VALIDATOR: BuildFormValidator = {
   }
 }
 
-export const USER_PASSWORD_VALIDATOR: BuildFormValidator = {
+export const USER_PASSWORD_VALIDATOR = {
   VALIDATORS: [
     Validators.required,
     Validators.minLength(6),

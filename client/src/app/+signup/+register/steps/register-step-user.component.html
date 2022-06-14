@@ -1,0 +1,73 @@
+<div class="alert pt-alert-primary" i18n *ngIf="videoUploadDisabled">
+  Video uploads are disabled on this instance, hence your account won't be able to upload videos.
+</div>
+
+<form role="form" [formGroup]="form">
+  <div class="row">
+
+    <div class="col-md-12 col-xl-6 form-group">
+      <label for="displayName" i18n>Public name</label>
+
+      <div class="form-group-description" i18n>
+        This is the name that will be publicly visible by other users.
+      </div>
+
+      <div class="input-group">
+        <input
+          type="text" id="displayName" i18n-placeholder placeholder="Example: John Doe"
+          formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
+        >
+      </div>
+
+      <div *ngIf="formErrors.displayName" class="form-error">{{ formErrors.displayName }}</div>
+    </div>
+
+    <div class="col-md-12 col-xl-6 form-group">
+      <label for="username" i18n>Username</label>
+
+      <div class="form-group-description" i18n>
+        This is the name that will be displayed in your profile URL.
+      </div>
+
+      <div class="input-group">
+        <input
+          type="text" id="username" i18n-placeholder placeholder="Example: john_doe58"
+          formControlName="username" class="form-control" [ngClass]="{ 'input-error': formErrors['username'] }"
+        >
+        <span class="input-group-text">@{{ instanceHost }}</span>
+      </div>
+
+      <div *ngIf="formErrors.username" class="form-error">{{ formErrors.username }}</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 col-xl-6 form-group">
+      <label for="email" i18n>Email</label>
+
+      <div *ngIf="requiresEmailVerification" class="form-group-description" i18n>
+        This email address will be used to validate your account.
+      </div>
+
+      <input
+        type="text" id="email" i18n-placeholder placeholder="Example: john@example.com"
+        formControlName="email" class="form-control" [ngClass]="{ 'input-error': formErrors['email'] }"
+      >
+
+      <div *ngIf="formErrors.email" class="form-error">{{ formErrors.email }}</div>
+    </div>
+
+    <div class="col-md-12 col-xl-6 form-group">
+      <label for="password" i18n>Password</label>
+
+      <div class="form-group-description">{{ getMinPasswordLengthMessage() }}</div>
+
+      <my-input-text
+        formControlName="password" inputId="password"
+        [ngClass]="{ 'input-error': formErrors['password'] }" autocomplete="new-password"
+      ></my-input-text>
+
+      <div *ngIf="formErrors.password" class="form-error">{{ formErrors.password }}</div>
+    </div>
+  </div>
+</form>

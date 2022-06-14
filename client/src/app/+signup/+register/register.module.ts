@@ -2,15 +2,15 @@ import { CdkStepperModule } from '@angular/cdk/stepper'
 import { NgModule } from '@angular/core'
 import { SharedSignupModule } from '@app/+signup/shared/shared-signup.module'
 import { SharedInstanceModule } from '@app/shared/shared-instance'
+import { SharedMainModule } from '@app/shared/shared-main'
 import { CustomStepperComponent } from './custom-stepper.component'
 import { RegisterRoutingModule } from './register-routing.module'
-import { RegisterStepChannelComponent } from './register-step-channel.component'
-import { RegisterStepTermsComponent } from './register-step-terms.component'
-import { RegisterStepUserComponent } from './register-step-user.component'
 import { RegisterComponent } from './register.component'
+import { RegisterStepAboutComponent, RegisterStepChannelComponent, RegisterStepTermsComponent, RegisterStepUserComponent } from './steps'
 
 @NgModule({
   imports: [
+    SharedMainModule,
     RegisterRoutingModule,
 
     CdkStepperModule,
@@ -25,7 +25,8 @@ import { RegisterComponent } from './register.component'
     CustomStepperComponent,
     RegisterStepChannelComponent,
     RegisterStepTermsComponent,
-    RegisterStepUserComponent
+    RegisterStepUserComponent,
+    RegisterStepAboutComponent
   ],
 
   exports: [
