@@ -192,7 +192,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     },
     nsfw,
     isLocal: true,
-    include: req.query.include | VideoInclude.FILES,
+    include: req.query.include | VideoInclude.FILES | VideoInclude.TAGS,
     hasFiles: true,
     countVideos: false,
     ...options
@@ -211,7 +211,8 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     author,
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search,
-    medium: isFilm ? 'film' : 'video'
+    medium: isFilm ? 'film' : 'video',
+    tagDelimiter: '\t'
   })
 
   await addVideosToFeed(feed, videos, format)
@@ -274,9 +275,10 @@ function initFeed (parameters: {
   resourceType?: 'videos' | 'video-comments'
   queryString?: string
   medium?: string
+  tagDelimiter?: string
 }) {
   const webserverUrl = WEBSERVER.URL
-  const { name, description, link, image, author, resourceType, queryString, medium } = parameters
+  const { name, description, link, image, author, resourceType, queryString, medium, tagDelimiter } = parameters
 
   return new Feed({
     title: name,
@@ -290,6 +292,7 @@ function initFeed (parameters: {
     ` and potential licenses granted by each content's rightholder.`,
     generator: `Toraifōsu`, // ^.~
     medium: medium || 'video',
+    tagDelimiter: tagDelimiter || ',',
     feedLinks: {
       json: `${webserverUrl}/feeds/${resourceType}.json${queryString}`,
       atom: `${webserverUrl}/feeds/${resourceType}.atom${queryString}`,
@@ -369,16 +372,14 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
 
       const media = [ ...sortedVideos, ...streamingPlaylists ].filter(m => m)
 
-      const categories: { value: number, label: string }[] = []
-      if (video.Tags) {
-        video.Tags.forEach((tag, index) => {
-          categories.push({ value: index, label: tag.name })
-        })
-      }
+      const categories: string[] = []
       if (video.category) {
-        categories.push({
-          value: video.category,
-          label: getCategoryLabel(video.category)
+        categories.push(getCategoryLabel(video.category))
+      }
+
+      if (video.Tags) {
+        video.Tags.forEach(tag => {
+          categories.push(tag.name)
         })
       }
 
@@ -463,16 +464,14 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
           return result
         })
 
-      const categories: { value: number, label: string }[] = []
-      if (video.Tags) {
-        video.Tags.forEach((tag, index) => {
-          categories.push({ value: index, label: tag.name })
-        })
-      }
+      const categories: string[] = []
       if (video.category) {
-        categories.push({
-          value: video.category,
-          label: getCategoryLabel(video.category)
+        categories.push(getCategoryLabel(video.category))
+      }
+
+      if (video.Tags) {
+        video.Tags.forEach(tag => {
+          categories.push(tag.name)
         })
       }
 
