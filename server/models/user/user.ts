@@ -387,6 +387,11 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   @Column
   lastLoginDate: Date
 
+  @AllowNull(false)
+  @Default(false)
+  @Column
+  isEmailPublic: boolean
+
   @CreatedAt
   createdAt: Date
 
@@ -889,6 +894,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
       theme: getThemeOrDefault(this.theme, DEFAULT_USER_THEME_NAME),
 
       pendingEmail: this.pendingEmail,
+      isEmailPublic: this.isEmailPublic,
       emailVerified: this.emailVerified,
 
       nsfwPolicy: this.nsfwPolicy,

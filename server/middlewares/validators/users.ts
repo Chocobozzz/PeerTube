@@ -13,6 +13,7 @@ import {
   isUserBlockedReasonValid,
   isUserDescriptionValid,
   isUserDisplayNameValid,
+  isUserIsEmailPublic,
   isUserNoModal,
   isUserNSFWPolicyValid,
   isUserPasswordValid,
@@ -230,6 +231,9 @@ const usersUpdateMeValidator = [
   body('password')
     .optional()
     .custom(isUserPasswordValid).withMessage('Should have a valid password'),
+  body('isEmailPublic')
+    .optional()
+    .custom(v => isUserIsEmailPublic(v)).withMessage('Should have a valid isEmailPublic boolean'),
   body('email')
     .optional()
     .isEmail().withMessage('Should have a valid email attribute'),

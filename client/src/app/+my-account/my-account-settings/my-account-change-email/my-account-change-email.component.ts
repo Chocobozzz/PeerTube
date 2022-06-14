@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core'
 import { AuthService, ServerService, UserService } from '@app/core'
 import { USER_EMAIL_VALIDATOR, USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { User } from '@shared/models'
+import { User, UserUpdateMe } from '@shared/models'
 
 @Component({
   selector: 'my-account-change-email',
@@ -15,6 +15,8 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
   error: string = null
   success: string = null
   user: User = null
+
+  emailPreferences = { 'isEmailPublic': false }
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -32,6 +34,25 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
     })
 
     this.user = this.authService.getUser()
+    this.emailPreferences['isEmailPublic'] = this.user.isEmailPublic
+  }
+
+  updateIsEmailPublic () {
+    console.log("model changed")
+    const details: UserUpdateMe = {
+      isEmailPublic: this.emailPreferences['isEmailPublic']
+    }
+
+    this.userService.updateMyProfile(details)
+      .subscribe({
+        next: () => {
+          this.authService.refreshUserInformation()
+
+          //if (this.notifyOnUpdate) this.notifier.success($localize`Interface settings updated.`)
+        },
+
+        error: err => console.log(err.message)
+      })
   }
 
   changeEmail () {

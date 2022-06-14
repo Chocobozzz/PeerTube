@@ -23,6 +23,8 @@ import { cacheRouteFactory } from '../middlewares/cache/cache'
 import { VideoModel } from '../models/video/video'
 import { VideoCaptionModel } from '../models/video/video-caption'
 import { VideoCommentModel } from '../models/video/video-comment'
+import { AccountModel } from '@server/models/account/account'
+import { UserModel } from '@server/models/user/user'
 
 const feedsRouter = express.Router()
 
@@ -155,6 +157,17 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     link = videoChannel.getLocalUrl()
 
     author.name = videoChannel.Account.getDisplayName()
+
+    const user = await UserModel.loadById(videoChannel.Account.userId)
+
+    // TODO: Add column to SQL table/user model to indicate the user
+    // is willing to have their email address publicly displayed
+
+    // Only allow local users for now
+    if (isNull(user.pluginAuth) && user.emailVerified && user.isEmailPublic) {
+      author.email = user.email
+    }
+
     if (!isNull(videoChannel.Actor.Avatar)) {
       image = WEBSERVER.URL + videoChannel.Actor.Avatar.getStaticPath()
     }
@@ -165,7 +178,19 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     name = account.getDisplayName()
     description = account.description
     link = account.getLocalUrl()
+
     author.name = name
+
+    const user = await UserModel.loadById(videoChannel.Account.userId)
+
+    // TODO: Add column to SQL table/user model to indicate the user
+    // is willing to have their email address publicly displayed
+
+    // Only allow local users for now
+    if (isNull(user.pluginAuth) && user.emailVerified && user.isEmailPublic) {
+      author.email = user.email
+    }
+
     if (!isNull(account.Actor.Avatar)) {
       image = WEBSERVER.URL + account.Actor.Avatar.getStaticPath()
       author.img = image
@@ -208,6 +233,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     description: isFilm ? videos[0].description : description,
     link: isFilm ? videos[0].url : link,
     image: isFilm ? WEBSERVER.URL + videos[0].getPreviewStaticPath() : image,
+    locked: 'yes', // Default to yes because we have no way of offering a redirect etc
     author,
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search,
@@ -267,6 +293,7 @@ function initFeed (parameters: {
   description: string
   link?: string
   image?: string
+  locked?: string
   author?: {
     name: string
     email: string
@@ -278,7 +305,7 @@ function initFeed (parameters: {
   tagDelimiter?: string
 }) {
   const webserverUrl = WEBSERVER.URL
-  const { name, description, link, image, author, resourceType, queryString, medium, tagDelimiter } = parameters
+  const { name, description, link, image, locked, author, resourceType, queryString, medium, tagDelimiter } = parameters
 
   return new Feed({
     title: name,
@@ -293,6 +320,7 @@ function initFeed (parameters: {
     generator: `Toraifōsu`, // ^.~
     medium: medium || 'video',
     tagDelimiter: tagDelimiter || ',',
+    locked,
     feedLinks: {
       json: `${webserverUrl}/feeds/${resourceType}.json${queryString}`,
       atom: `${webserverUrl}/feeds/${resourceType}.atom${queryString}`,
@@ -302,7 +330,8 @@ function initFeed (parameters: {
       name: 'Instance admin of ' + CONFIG.INSTANCE.NAME,
       email: CONFIG.ADMIN.EMAIL,
       link: `${webserverUrl}/about`
-    }
+    },
+    owner: author ? { name: author.name, email: author.email } : null
   })
 }
 

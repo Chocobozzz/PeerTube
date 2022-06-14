@@ -10,6 +10,17 @@
   <span class="email">{{ user.pendingEmail }}</span> is awaiting email verification
 </div>
 
+<div class="row">
+  <div>Allow email to be publicly displayed (necessary to claim podcast RSS feeds)</div>
+
+  <div>
+    <my-input-switch
+      [(ngModel)]="emailPreferences['isEmailPublic']"
+      (ngModelChange)="updateIsEmailPublic()"
+    ></my-input-switch>
+  </div>
+</div>
+
 <form role="form" class="change-email" (ngSubmit)="changeEmail()" [formGroup]="form" *ngIf="user.pluginAuth === null">
 
   <div class="form-group">
