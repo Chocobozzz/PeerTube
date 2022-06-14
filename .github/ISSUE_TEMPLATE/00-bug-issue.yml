@@ -1,16 +1,12 @@
 name: 🐛 Bug Report
 description: Use this template for reporting a bug
 body:
-  - type: checkboxes
+  - type: markdown
     attributes:
-      label: Is there an existing issue for this?
-      description: |
+      value: |
         Please search among past open/closed issues for a similar one beforehand:
           - https://github.com/Chocobozzz/PeerTube/issues?q=
           - https://framacolibri.org/c/peertube
-      options:
-        - label: I have searched existing issues
-          required: true
 
   - type: textarea
     attributes:

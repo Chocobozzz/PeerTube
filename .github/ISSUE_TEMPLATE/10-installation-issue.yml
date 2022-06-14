@@ -1,16 +1,12 @@
 name: 🚀 Installation/Upgrade Issue
 description: Use this template for build/installation/upgrade issues
 body:
-  - type: checkboxes
+  - type: markdown
     attributes:
-      label: Have you read the documentation?
-      description: |
+      value: |
         Please check the official documentation first
           - Classic installation: https://docs.joinpeertube.org/install-any-os
           - Docker installation: https://docs.joinpeertube.org/install-docker
-      options:
-        - label: I have read the documentation
-          required: true
 
   - type: checkboxes
     attributes:
