@@ -200,7 +200,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
 
   // If the first video in the channel is a film, that will be the only video in the feed
   // Yes, this is a hack :)
-  const isFilm: boolean = data[data.length - 1].category === 2
+  const isFilm: boolean = data.length > 0 && data[data.length - 1].category === 2
   const videos = isFilm ? [ data[data.length - 1] ] : data
 
   const feed = initFeed({
