@@ -49,7 +49,7 @@ rm -rf ./dist
 if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); then
     additionalParams=""
     if [ ! -z ${1+x} ] && [ "$1" == "--source-map" ]; then
-        additionalParams="--sourceMap=true"
+        additionalParams="--source-map=true"
     fi
 
     node --max_old_space_size=8192 node_modules/.bin/ng build --configuration production --output-path "dist/build" $additionalParams
