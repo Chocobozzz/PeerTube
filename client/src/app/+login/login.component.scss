@@ -10,7 +10,7 @@ label {
 
 input[type=text],
 input[type=email] {
-  @include peertube-input-text(340px);
+  @include peertube-input-text(100%);
 }
 
 .modal-body {
