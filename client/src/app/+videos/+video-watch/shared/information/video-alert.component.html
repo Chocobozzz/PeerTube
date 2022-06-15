@@ -22,15 +22,15 @@
   The video is being moved to an external server, it may not work properly.
 </div>
 
-<div i18n class="alert alert-info" *ngIf="hasVideoScheduledPublication()">
+<div i18n class="alert pt-alert-primary" *ngIf="hasVideoScheduledPublication()">
   This video will be published on {{ video.scheduledUpdate.updateAt | date: 'full' }}.
 </div>
 
-<div i18n class="alert alert-info" *ngIf="isWaitingForLive()">
+<div i18n class="alert pt-alert-primary" *ngIf="isWaitingForLive()">
   This live has not started yet.
 </div>
 
-<div i18n class="alert alert-info" *ngIf="isLiveEnded()">
+<div i18n class="alert pt-alert-primary" *ngIf="isLiveEnded()">
   This live has ended.
 </div>
 
