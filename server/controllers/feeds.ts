@@ -23,7 +23,6 @@ import { cacheRouteFactory } from '../middlewares/cache/cache'
 import { VideoModel } from '../models/video/video'
 import { VideoCaptionModel } from '../models/video/video-caption'
 import { VideoCommentModel } from '../models/video/video-comment'
-import { AccountModel } from '@server/models/account/account'
 import { UserModel } from '@server/models/user/user'
 
 const feedsRouter = express.Router()
@@ -228,6 +227,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   const isFilm: boolean = data.length > 0 && data[data.length - 1].category === 2
   const videos = isFilm ? [ data[data.length - 1] ] : data
 
+  // TODO: Find a way to allow plugins to add their own fields to a channel
   const feed = initFeed({
     name: isFilm ? videos[0].name : name,
     description: isFilm ? videos[0].description : description,
@@ -238,9 +238,10 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search,
     medium: isFilm ? 'film' : 'video',
-    tagDelimiter: '\t'
+    tagDelimiter: ','
   })
 
+  // TODO: Find a way to allow plugins to add their own fields to an item
   await addVideosToFeed(feed, videos, format)
 
   // Now the feed generation is done, let's send it!
