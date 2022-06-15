@@ -8067,7 +8067,7 @@
       </trans-unit>
       <trans-unit id="5611592591303869712" datatype="html">
         <source>Status</source>
-        <target state="needs-translation">pini ala pini</target>
+        <target state="translated">pini ala pini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context>
           <context context-type="linenumber">25</context>
@@ -8103,7 +8103,7 @@
       </trans-unit>
       <trans-unit id="4854396465510517671" datatype="html">
         <source>Target</source>
-        <target>pini</target>
+        <target>tan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
           <context context-type="linenumber">17</context>
@@ -8562,6 +8562,7 @@
       </trans-unit>
       <trans-unit id="3851357780293085233" datatype="html">
         <source>Remote interaction</source>
+        <target>ijo pi ma ante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction-routing.module.ts</context>
           <context context-type="linenumber">13</context>
@@ -8569,6 +8570,7 @@
       </trans-unit>
       <trans-unit id="1009095940160473792" datatype="html">
         <source>URL parameter is missing in URL parameters</source>
+        <target>ijo li lon ala nimi linluwi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -8576,6 +8578,7 @@
       </trans-unit>
       <trans-unit id="7553172329217243895" datatype="html">
         <source>Cannot access to the remote resource</source>
+        <target>mi ken ala lukin e ijo ni pi ma ante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -8623,7 +8626,7 @@
       </trans-unit>
       <trans-unit id="4180693983967989981" datatype="html">
         <source>Unable to find user id or verification string.</source>
-        <target state="needs-translation">mi ken ala lukin e nanpa sijelo anu nanpa open.</target>
+        <target state="translated">mi ken ala lukin e nimi sijelo anu nimi wawa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+reset-password/reset-password.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -8911,6 +8914,7 @@
       </trans-unit>
       <trans-unit id="5143793904897598509" datatype="html">
         <source>PeerTube instance host</source>
+        <target>nimi linluwi ma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">178</context>
@@ -8926,6 +8930,7 @@
       </trans-unit>
       <trans-unit id="283421392567624698" datatype="html">
         <source>Search target</source>
+        <target>ma alasa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">212</context>
@@ -8989,6 +8994,7 @@
       </trans-unit>
       <trans-unit id="8487565500496466433" datatype="html">
         <source>Short (&lt; 4 min)</source>
+        <target>lili (tawa tenpo suli 4)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">59</context>
@@ -8996,6 +9002,7 @@
       </trans-unit>
       <trans-unit id="3642535017283477339" datatype="html">
         <source>Medium (4-10 min)</source>
+        <target>insa (suli tawa tenpo suli 4, lili tawa tenpo suli 10)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -9003,6 +9010,7 @@
       </trans-unit>
       <trans-unit id="6613870447286561244" datatype="html">
         <source>Long (&gt; 10 min)</source>
+        <target>suli (tawa tenpo suli 10)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -9062,6 +9070,7 @@
       </trans-unit>
       <trans-unit id="8434369348784683733" datatype="html">
         <source>for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
+        <target>la nimi "<x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>" li lon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">10</context>
@@ -9069,6 +9078,7 @@
       </trans-unit>
       <trans-unit id="5340005218109333045" datatype="html">
         <source>Filters <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span *ngIf=&quot;numberOfFilters() &gt; 0&quot; class=&quot;badge badge-secondary&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
+        <target>wile <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span *ngIf=&quot;numberOfFilters() &gt; 0&quot; class=&quot;badge badge-secondary&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">18,20</context>
@@ -9076,6 +9086,7 @@
       </trans-unit>
       <trans-unit id="2236371857137398396" datatype="html">
         <source>No results found</source>
+        <target>ijo pi wile ni li lon ala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">32,34</context>
@@ -9083,6 +9094,7 @@
       </trans-unit>
       <trans-unit id="3208627574396957172" datatype="html">
         <source>Search index is unavailable. Retrying with instance results instead.</source>
+        <target>ilo alasa pi ma ale li pakala. ni la mi alasa lon ma ni lon ma pi lukin ona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">159</context>
@@ -9098,6 +9110,7 @@
       </trans-unit>
       <trans-unit id="8491751845906232809" datatype="html">
         <source>PeerTube instance host filter is invalid</source>
+        <target>nimi linluwi ma li pakala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">327</context>
@@ -9105,6 +9118,7 @@
       </trans-unit>
       <trans-unit id="8980375993935541237" datatype="html">
         <source>Step</source>
+        <target>nanpa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/custom-stepper.component.html</context>
           <context context-type="linenumber">9</context>
@@ -9128,6 +9142,7 @@
       </trans-unit>
       <trans-unit id="2254156021453506528" datatype="html">
         <source>Other users can decide to subscribe any channel they want, to be notified when you publish a new video.</source>
+        <target>jan ante li ken "lukin" e lipu pi wile ona. sina pana e sitelen sin la, ilo li toki e ni tawa ona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">9,11</context>
@@ -9135,6 +9150,7 @@
       </trans-unit>
       <trans-unit id="8583412279916132438" datatype="html">
         <source>Channel display name</source>
+        <target>nimi lipu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">15</context>
@@ -9150,6 +9166,7 @@
       </trans-unit>
       <trans-unit id="7981235640417633362" datatype="html">
         <source>The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
+        <target>nimi ilo wan li tawa lipu wan taso lon ma ale. ni la ona li sama nimi Email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">42,44</context>
@@ -9157,6 +9174,7 @@
       </trans-unit>
       <trans-unit id="5203776997447520497" datatype="html">
         <source>Channel name cannot be the same as your account name. You can click on the first step to update your account name.</source>
+        <target>nimi ilo pi lipu sina li ken ala sama nimi ilo pi sijelo sina. sina wile ante e nimi sijelo la o tawa open.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">50,52</context>
@@ -9164,6 +9182,7 @@
       </trans-unit>
       <trans-unit id="7440807341905682986" datatype="html">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> and to the <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> of this instance </source>
+        <target>mi sike <x id="INTERPOLATION" equiv-text="{{ minimumAge }}"/> e suno. <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;terms-anchor&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>lipu lawa<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;hasCodeOfConduct&quot;&gt;"/> en <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>lipu pi nasin pona<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/> li pona tawa mi. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-terms.component.html</context>
           <context context-type="linenumber">5,10</context>
@@ -9171,6 +9190,7 @@
       </trans-unit>
       <trans-unit id="198278273748445199" datatype="html">
         <source>Video uploads are disabled on this instance, hence your account won't be able to upload videos.</source>
+        <target>ma ni la jan li ken ala pana e sitelen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -9187,6 +9207,7 @@
       </trans-unit>
       <trans-unit id="7326471570669373149" datatype="html">
         <source>The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
+        <target>nimi ilo wan li tawa sijelo wan taso lon ma ale. ni la ona li sama nimi Email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context>
           <context context-type="linenumber">35,37</context>
@@ -9194,6 +9215,7 @@
       </trans-unit>
       <trans-unit id="2770947245861951784" datatype="html">
         <source>Signup is not enabled on this instance.</source>
+        <target>ma ni la jan li ken ala pali e sijelo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">4</context>
@@ -9201,6 +9223,7 @@
       </trans-unit>
       <trans-unit id="5579867071769973287" datatype="html">
         <source>Create an account</source>
+        <target>o pali e sijelo ilo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">8,10</context>
@@ -9208,6 +9231,7 @@
       </trans-unit>
       <trans-unit id="6386856862203107763" datatype="html">
         <source>Create my account</source>
+        <target>o pali e sijelo mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">46,48</context>
@@ -9215,6 +9239,7 @@
       </trans-unit>
       <trans-unit id="397098723873502323" datatype="html">
         <source>Done</source>
+        <target>pini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">51</context>
@@ -9222,6 +9247,7 @@
       </trans-unit>
       <trans-unit id="220345070199640496" datatype="html">
         <source>PeerTube is creating your account...</source>
+        <target>mi pali e sijelo sina...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">55</context>
@@ -9229,6 +9255,7 @@
       </trans-unit>
       <trans-unit id="8890553633144307762" datatype="html">
         <source>Back</source>
+        <target>o tawa open</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -9237,6 +9264,7 @@
       </trans-unit>
       <trans-unit id="3885497195825665706" datatype="html">
         <source>Next</source>
+        <target>o tawa kama</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">43</context>
@@ -9245,6 +9273,7 @@
       </trans-unit>
       <trans-unit id="5018804994794983050" datatype="html">
         <source>Signup</source>
+        <target>o pali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">75</context>
@@ -9253,6 +9282,7 @@
       </trans-unit>
       <trans-unit id="6537885755702623401" datatype="html">
         <source>Now please check your emails to verify your account and complete signup.</source>
+        <target>tenpo ni la o lukin e poki Email sina o pana e sona ni: sina pana e nimi Email pona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">137</context>
@@ -9260,6 +9290,7 @@
       </trans-unit>
       <trans-unit id="2847376451647729886" datatype="html">
         <source>You are now logged in as <x id="PH" equiv-text="body.username"/>!</source>
+        <target>ni la sina lon sijelo "<x id="PH" equiv-text="body.username"/>"!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">145</context>
@@ -9267,6 +9298,7 @@
       </trans-unit>
       <trans-unit id="4302331889176439801" datatype="html">
         <source>Request email for account verification</source>
+        <target state="needs-translation">o pana e lipu Email sin la mi ken luka e ona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -9274,6 +9306,7 @@
       </trans-unit>
       <trans-unit id="4027779086550572813" datatype="html">
         <source>Send verification email</source>
+        <target state="needs-translation">o pana e lipu sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context>
           <context context-type="linenumber">17</context>
@@ -9281,6 +9314,7 @@
       </trans-unit>
       <trans-unit id="8610022770999239699" datatype="html">
         <source>This instance does not require email verification.</source>
+        <target state="needs-translation">ma ni la nimi Email sina li ike la sina awen ken kepeken sijelo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context>
           <context context-type="linenumber">20</context>
@@ -9288,6 +9322,7 @@
       </trans-unit>
       <trans-unit id="2687679787442328897" datatype="html">
         <source>An email with verification link will be sent to <x id="PH" equiv-text="email"/>.</source>
+        <target>mi pana e lipu tawa poki "<x id="PH" equiv-text="email"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -9302,6 +9337,7 @@
       </trans-unit>
       <trans-unit id="5705969545943613067" datatype="html">
         <source>Email updated.</source>
+        <target>mi ante e nimi Email sina.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">9,11</context>
@@ -9309,6 +9345,7 @@
       </trans-unit>
       <trans-unit id="5321335688371682440" datatype="html">
         <source>An error occurred.</source>
+        <target>pakala li kama.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">14</context>
@@ -9330,6 +9367,7 @@
       </trans-unit>
       <trans-unit id="5904811038805050477" datatype="html">
         <source>Welcome to PeerTube!</source>
+        <target>kama pona lon ilo PeerTube!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context>
           <context context-type="linenumber">8</context>
@@ -9337,6 +9375,7 @@
       </trans-unit>
       <trans-unit id="3461985498881453026" datatype="html">
         <source>If you need help to use PeerTube, you can have a look at the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/use-setup-account&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+        <target>sina wile sona e nasin kepeken pi ilo Peertube la o lukin e <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/use-setup-account&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>lipu sona<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context>
           <context context-type="linenumber">13,15</context>
@@ -9344,6 +9383,7 @@
       </trans-unit>
       <trans-unit id="8844610145426272276" datatype="html">
         <source>To help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, don't forget to <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot;&gt;"/>set up your account profile<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> by adding an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
+        <target>o pana e sona ni tawa jan ante: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>sina seme<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot;&gt;"/>o pona e lipu sijelo sina<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, o pana e <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>sitelen sinpin<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> e <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>toki<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context>
           <context context-type="linenumber">17,19</context>
@@ -9351,6 +9391,7 @@
       </trans-unit>
       <trans-unit id="8479900728400966992" datatype="html">
         <source>Video stats</source>
+        <target>nanpa sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/stats-routing.module.ts</context>
           <context context-type="linenumber">14</context>
