@@ -785,7 +785,7 @@
       </trans-unit>
       <trans-unit id="4093735071527927163" datatype="html">
         <source>Contribute on PeerTube</source>
-        <target>o pana pali lon ilo Pitu</target>
+        <target>o pali pi ilo PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">54,55</context>
@@ -2349,7 +2349,7 @@
       </trans-unit>
       <trans-unit id="2076338542820061819" datatype="html">
         <source>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/w/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to see if you instance is allowed. </source>
-        <target>ma ni li pona tawa ilo Twitter la jan li ken lukin e sitelen pi ma ni li lon ona.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> ala la mi pana e sitelen wan taso.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> sina wile sona e pona pi ma ni tawa ilo Twitter la, o luka e poki wile ni, o awen e wile, o pana e nimi linluwi sitelen (https://nimi.com/w/mumumu) tan ma ni lon ilo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target>ma ni li pona tawa ilo Twitter la jan li ken lukin e sitelen pi ma ni li lon ona.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> ala la mi pana e sitelen wan taso.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> sina wile sona e pona pi ma ni tawa ilo Twitter la o luka e poki wile ni o awen e wile o pana e nimi linluwi sitelen (https://nimi.com/w/mumumu) tan ma ni lon ilo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">562,568</context>
@@ -3545,7 +3545,7 @@
       </trans-unit>
       <trans-unit id="8390803680962035202" datatype="html">
         <source>Follower</source>
-        <target>ma lukin</target>
+        <target>sijelo lukin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">24</context>
@@ -3661,7 +3661,7 @@
       </trans-unit>
       <trans-unit id="6961112234462008319" datatype="html">
         <source>No follower found matching current filters.</source>
-        <target>ma pi wile sina li lon ala.</target>
+        <target>sijelo pi wile sina li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">64</context>
@@ -6233,7 +6233,7 @@
       </trans-unit>
       <trans-unit id="722088235348685072" datatype="html">
         <source>If this is not your correct public IP, please consider fixing it because:</source>
-        <target>ni li lon ala la, o pona e ni. sina pona ala e ni la ni li ken:</target>
+        <target>ni li lon ala la o pona e ni. sina pona ala e ni la ni li ken:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">6</context>
@@ -6281,7 +6281,7 @@
       </trans-unit>
       <trans-unit id="7014275542536964627" datatype="html">
         <source>If you run PeerTube using Docker, check you run the <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> with <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> (see <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>issue 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</source>
-        <target>ilo PeerTube sina li lon ilo Docker la, o lukin e <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> o lukin e ni: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> li lon ala lon (sina wile sona mute la o lukin e <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>toki pakala nanpa 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</target>
+        <target>ilo PeerTube sina li lon ilo Docker la o lukin e <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>reverse-proxy<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> o lukin e ni: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>network_mode: "host"<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> li lon ala lon (sina wile sona mute la o lukin e <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666&quot;&gt;"/>toki pakala nanpa 1643<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/debug/debug.component.html</context>
           <context context-type="linenumber">16,17</context>
@@ -6538,7 +6538,7 @@
       </trans-unit>
       <trans-unit id="1909492071130899005" datatype="html">
         <source>Sorry but there was an issue with the external login process. Please <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about&quot;&gt;"/>contact an administrator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target>ike la, ilo sijelo li pakala. o <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about&quot;&gt;"/>toki tawa lawa<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target>ike la ilo sijelo li pakala. o <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about&quot;&gt;"/>toki tawa lawa<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -6658,7 +6658,7 @@
       </trans-unit>
       <trans-unit id="87327320394367488" datatype="html">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target>ike la, sina ken ala kama jo e nimi wawa sin tan ni: lawa pi ma ni li open ala e nasin Email tawa ilo PeerTube.</target>
+        <target>ike la sina ken ala kama jo e nimi wawa sin tan ni: lawa pi ma ni li open ala e nasin Email tawa ilo PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">106,108</context>
@@ -6831,7 +6831,7 @@
       </trans-unit>
       <trans-unit id="2193037168694505715" datatype="html">
         <source>Short text to tell people how they can support the channel (membership platform...).&lt;br /&gt;&lt;br /&gt; When a video is uploaded in this channel, the video support field will be automatically filled by this text.</source>
-        <target>o pana e toki lili ni: jan li ken pana e mani tawa lipu ni kepeken nasin seme.&lt;br /&gt;&lt;br /&gt; sina pana e sitelen lon lipu ni la, mi pana e ni lon poki ona pi sona ni.</target>
+        <target>o pana e toki lili ni: jan li ken pana e mani tawa lipu ni kepeken nasin seme.&lt;br /&gt;&lt;br /&gt; sina pana e sitelen lon lipu ni la mi pana e ni lon poki ona pi sona ni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">67,68</context>
@@ -9142,7 +9142,7 @@
       </trans-unit>
       <trans-unit id="2254156021453506528" datatype="html">
         <source>Other users can decide to subscribe any channel they want, to be notified when you publish a new video.</source>
-        <target>jan ante li ken "lukin" e lipu pi wile ona. sina pana e sitelen sin la, ilo li toki e ni tawa ona.</target>
+        <target>jan ante li ken "lukin" e lipu pi wile ona. sina pana e sitelen sin la ilo li toki e ni tawa ona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">9,11</context>
@@ -11114,6 +11114,7 @@
       </trans-unit>
       <trans-unit id="4626927731329688072" datatype="html">
         <source>Total video uploaded</source>
+        <target>mute pana sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">63</context>
@@ -11121,6 +11122,7 @@
       </trans-unit>
       <trans-unit id="1185207825965405436" datatype="html">
         <source>Processing…</source>
+        <target>o awen…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">65</context>
@@ -11137,6 +11139,7 @@
       </trans-unit>
       <trans-unit id="1522676094837508187" datatype="html">
         <source>Congratulations! Your video is now available in your private library.</source>
+        <target>pona a! tenpo ni la li lon lipu sitelen pi sina taso.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">90,92</context>
@@ -11144,6 +11147,7 @@
       </trans-unit>
       <trans-unit id="3768339632235914548" datatype="html">
         <source>Publish will be available when upload is finished</source>
+        <target>sina pana e ale ona tawa mi la sina ken pana tawa ale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">104</context>
@@ -11151,6 +11155,7 @@
       </trans-unit>
       <trans-unit id="7430416142942514215" datatype="html">
         <source>Publish</source>
+        <target>o pana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">106</context>
@@ -11162,6 +11167,7 @@
       </trans-unit>
       <trans-unit id="3284171506518522275" datatype="html">
         <source>Your video was uploaded to your account and is private.</source>
+        <target>sitelen li kama lon sijelo sina. jan ante li ken ala lukin e ona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">106</context>
@@ -11169,6 +11175,7 @@
       </trans-unit>
       <trans-unit id="5699822024600815733" datatype="html">
         <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
+        <target>taso sina weka e lipu ni la sona pi pana sina li kama weka kin. ni la sina wile ala wile ni?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">107</context>
@@ -11176,6 +11183,7 @@
       </trans-unit>
       <trans-unit id="1219739004043110649" datatype="html">
         <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
+        <target>ilo sina li awen pana e sitelen. ni la sina wile ala wile weka e lipu ni?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">109</context>
@@ -11183,6 +11191,7 @@
       </trans-unit>
       <trans-unit id="1830802698757049943" datatype="html">
         <source>Publish <x id="PH" equiv-text="videoName"/></source>
+        <target>o pana e sitelen "<x id="PH" equiv-text="videoName"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">122</context>
@@ -11190,6 +11199,7 @@
       </trans-unit>
       <trans-unit id="6161604372916832458" datatype="html">
         <source>Upload on hold</source>
+        <target>pana ala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">175</context>
@@ -11197,6 +11207,7 @@
       </trans-unit>
       <trans-unit id="6932865105766151309" datatype="html">
         <source>Upload</source>
+        <target>o pana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">237</context>
@@ -11204,6 +11215,7 @@
       </trans-unit>
       <trans-unit id="8278735427925094503" datatype="html">
         <source>Upload <x id="PH" equiv-text="videofile.name"/></source>
+        <target>o pana e sitelen "<x id="PH" equiv-text="videofile.name"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">239</context>
@@ -11211,6 +11223,7 @@
       </trans-unit>
       <trans-unit id="5981816353437801748" datatype="html">
         <source>Video published.</source>
+        <target>mi pana e sitelen tawa ale.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">260</context>
@@ -11230,6 +11243,7 @@
       </trans-unit>
       <trans-unit id="6995024616159044376" datatype="html">
         <source>Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
+        <target>sina ken ala pana e sitelen ni tan suli ona. (sitelen ni li suli <x id="PH" equiv-text="videoSizeBytes"/>. sitelen ale sina li suli <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>. sina ken pana e sitelen pi suli <x id="PH_2" equiv-text="videoQuotaBytes"/>.)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">339</context>
@@ -11237,6 +11251,7 @@
       </trans-unit>
       <trans-unit id="7873395933409147217" datatype="html">
         <source>Your daily video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</source>
+        <target>sina ken ala pana e sitelen ni lon tenpo suno ni tan suli ona. (sitelen ni li suli <x id="PH" equiv-text="videoSizeBytes"/>. sitelen ale sina pi tenpo suno ni li suli <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>. sina ken pana e sitelen pi suli <x id="PH_2" equiv-text="quotaDailyBytes"/> lon tenpo suno ni.)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">358</context>
@@ -11244,6 +11259,7 @@
       </trans-unit>
       <trans-unit id="2587226585711833549" datatype="html">
         <source>Read instance rules for help</source>
+        <target>sina wile sona mute la o lukin e lawa pi ma ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">2</context>
@@ -11251,6 +11267,7 @@
       </trans-unit>
       <trans-unit id="2993949426196989262" datatype="html">
         <source>We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos. </source>
+        <target>o pana ala e sitelen kepeken sijelo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tan ni: ona li sijelo nanpa wan li lawa e ale.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>o pali e sijelo sin<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> o pana e sitelen lon ona. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">33,37</context>
@@ -11258,6 +11275,7 @@
       </trans-unit>
       <trans-unit id="293476877021544115" datatype="html">
         <source>Import <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></source>
+        <target>o kama jo e sitelen "<x id="INTERPOLATION" equiv-text="{{ videoName }}"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">44</context>
@@ -11265,6 +11283,7 @@
       </trans-unit>
       <trans-unit id="4766833966971572147" datatype="html">
         <source>Upload <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></source>
+        <target>o pana e sitelen "<x id="INTERPOLATION" equiv-text="{{ videoName }}"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">45</context>
@@ -11272,6 +11291,7 @@
       </trans-unit>
       <trans-unit id="7003826819757856838" datatype="html">
         <source>Upload a file</source>
+        <target>o pana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">53</context>
@@ -11295,6 +11315,7 @@
       </trans-unit>
       <trans-unit id="6066940329544282265" datatype="html">
         <source>Go live</source>
+        <target>o pana pi tenpo sama</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">83</context>
@@ -11302,6 +11323,7 @@
       </trans-unit>
       <trans-unit id="285180972645018518" datatype="html">
         <source>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</source>
+        <target>ike la sijelo ni li ken ala pana e sitelen. sina wile ni la lawa o ken e ni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -17081,7 +17103,7 @@
       </trans-unit>
       <trans-unit id="9201562016527884133" datatype="html">
         <source>Unsubscribed from <x id="PH" equiv-text="this.videoChannels[0].nameWithHost"/></source>
-        <target>sitelen sin li lon lipu "<x id="PH" equiv-text="this.videoChannels[0].nameWithHost"/>" la mi toki ala e ni tawa sina.</target>
+        <target>sitelen sin li lon lipu "<x id="PH" equiv-text="this.videoChannels[0].nameWithHost"/>" la mi toki ala e ni tawa sina</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">140</context>
