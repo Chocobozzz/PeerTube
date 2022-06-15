@@ -6,7 +6,7 @@
 .link-orange {
   color: pvar(--mainForegroundColor);
   font-weight: $font-bold;
-  border-bottom: 3px solid pvar(--mainColor);
+  border-bottom: 0.20em solid pvar(--mainColor);
 
   &:hover {
     color: pvar(--mainForegroundColor);
@@ -16,7 +16,7 @@
 
 .underline-orange {
   display: inline-block;
-  border-bottom: 3px solid pvar(--mainColor);
+  border-bottom: 0.20em solid pvar(--mainColor);
 }
 
 // ---------------------------------------------------------------------------
@@ -140,6 +140,12 @@ label + .form-group-description {
   }
 }
 
+.title-page-v2 {
+  font-weight: normal;
+  font-size: 15px;
+  padding: 35px 25px;
+}
+
 .title-page-about,
 .title-page-settings {
   white-space: nowrap;
@@ -240,6 +246,10 @@ label + .form-group-description {
 // ---------------------------------------------------------------------------
 
 .alert {
+  p {
+    font-size: 16px;
+  }
+
   p:last-child {
     margin-bottom: 0;
   }

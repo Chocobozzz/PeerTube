@@ -59,6 +59,10 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     return this.serverConfig.signup.allowed === true
   }
 
+  get instanceName () {
+    return this.serverConfig.instance.name
+  }
+
   onTermsClick (event: Event, instanceInformation: HTMLElement) {
     event.preventDefault()
 
