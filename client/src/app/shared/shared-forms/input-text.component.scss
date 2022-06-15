@@ -9,8 +9,6 @@ input {
 
 .btn {
   @include button-with-icon(18px);
-
-  font-size: 15px;
 }
 
 .copy-text {

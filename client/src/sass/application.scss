@@ -64,7 +64,7 @@ body {
   font-weight: $font-regular;
   color: pvar(--mainForegroundColor);
   background-color: pvar(--mainBackgroundColor);
-  font-size: 14px;
+  font-size: 1rem;
   // On desktop browsers, make sure vertical scroll bar is always visible
   // Allow to disable the scrollbar instead of hide it when the content fit the body
   // And not move the content and header horizontally sticked to right when the content is updating
@@ -114,7 +114,6 @@ button {
 
 label {
   font-weight: $font-bold;
-  font-size: 15px;
   margin-bottom: 0.5rem;
 }
 
@@ -200,10 +199,13 @@ table {
 }
 
 my-global-icon[iconName=external-link] {
-  margin: 0 3px;
-  width: 13px;
-  vertical-align: text-bottom;
+  margin: 0 0.3em;
+  width: 0.9em;
+  height: 0.9em;
+  display: inline-block;
   color: pvar(--inputPlaceholderColor);
+  position: relative;
+  top: -0.1em;
 }
 
 @media screen and (max-width: #{breakpoint(xxl)}) {

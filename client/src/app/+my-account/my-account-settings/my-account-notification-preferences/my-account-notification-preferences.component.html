@@ -1,13 +1,13 @@
 <div *ngIf="webNotifications">
   <ng-container *ngFor="let group of notificationSettingGroups">
-    <div class="header custom-row">
+    <div class="header notification-row">
       <div i18n>{{ group.label }}</div>
       <div i18n>Web</div>
       <div i18n *ngIf="emailEnabled">Email</div>
     </div>
 
     <ng-container *ngFor="let notificationType of group.keys">
-      <div class="custom-row" *ngIf="hasUserRight(notificationType)">
+      <div class="small notification-row" *ngIf="hasUserRight(notificationType)">
         <div>{{ labelNotifications[notificationType] }}</div>
 
         <div>

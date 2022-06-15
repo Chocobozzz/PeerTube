@@ -6,7 +6,6 @@
   justify-content: center;
   margin-top: 50px;
   font-weight: $font-semibold;
-  font-size: 16px;
 }
 
 .top-buttons {
@@ -29,11 +28,11 @@
 
     grid-column: 3;
     display: flex;
+    align-items: center;
 
     label {
       margin: 0 0 0 5px;
       color: var(--greyForegroundColor);
-      font-size: 15px;
       font-weight: $font-semibold;
     }
   }
@@ -44,8 +43,6 @@
     @include button-with-icon;
 
     grid-column: 4;
-
-    font-size: 15px;
   }
 }
 

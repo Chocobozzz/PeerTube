@@ -6,7 +6,9 @@
 .link-orange {
   color: pvar(--mainForegroundColor);
   font-weight: $font-bold;
-  border-bottom: 0.20em solid pvar(--mainColor);
+  border-bottom: 0.19em solid pvar(--mainColor);
+  display: inline-block;
+  line-height: 1.2;
 
   &:hover {
     color: pvar(--mainForegroundColor);
@@ -16,7 +18,7 @@
 
 .underline-orange {
   display: inline-block;
-  border-bottom: 0.20em solid pvar(--mainColor);
+  border-bottom: 0.19em solid pvar(--mainColor);
 }
 
 // ---------------------------------------------------------------------------
@@ -84,7 +86,7 @@
 .form-group-description {
   @extend .muted !optional;
 
-  font-size: 90%;
+  font-size: 14px;
   margin-top: 10px;
 }
 
@@ -102,7 +104,6 @@ label + .form-group-description {
 
   opacity: 0.6;
   color: pvar(--mainForegroundColor);
-  font-size: 16px;
   display: inline-block;
   font-weight: $font-semibold;
   border-bottom: 2px solid transparent;
@@ -149,7 +150,7 @@ label + .form-group-description {
 .title-page-about,
 .title-page-settings {
   white-space: nowrap;
-  font-size: 115%;
+  font-size: 1rem;
 }
 
 .admin-sub-header {
@@ -172,7 +173,6 @@ label + .form-group-description {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
   font-weight: $font-semibold;
 }
 
@@ -246,10 +246,6 @@ label + .form-group-description {
 // ---------------------------------------------------------------------------
 
 .alert {
-  p:last-child {
-    margin-bottom: 0;
-  }
-
   &.pt-alert-primary {
     background-color: pvar(--mainColorVeryLight);
     border: 2px solid pvar(--mainColorLightest);

@@ -37,18 +37,6 @@
   .card {
     margin: 30px;
     flex-basis: 300px;
-    font-size: 15px;
-  }
-}
-
-.description,
-.p2p-privacy,
-my-about-peertube-contributors {
-  ::ng-deep {
-    p,
-    li {
-      font-size: 15px;
-    }
   }
 }
 
@@ -70,7 +58,9 @@ my-about-peertube-contributors {
 }
 
 .card-title {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 .p2p-privacy-title {

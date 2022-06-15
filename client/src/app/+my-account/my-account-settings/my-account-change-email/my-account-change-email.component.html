@@ -1,18 +1,20 @@
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 <div *ngIf="success" class="alert alert-success">{{ success }}</div>
 
-<div i18n class="current-email">
-  Your current email is <span class="email">{{ user.email }}</span>.
-  It is never shown to the public.
-</div>
-
 <div i18n class="pending-email" *ngIf="user.pendingEmail">
-  <span class="email">{{ user.pendingEmail }}</span> is awaiting email verification
+  <strong>{{ user.pendingEmail }}</strong> is awaiting email verification
 </div>
 
 <form role="form" class="change-email" (ngSubmit)="changeEmail()" [formGroup]="form" *ngIf="user.pluginAuth === null">
 
   <div class="form-group">
+    <label i18n for="new-email">Change your email</label>
+
+    <div i18n class="form-group-description">
+      Your current email is <strong>{{ user.email }}</strong>.
+      It is never shown to the public.
+    </div>
+
     <input
       type="email" id="new-email" i18n-placeholder placeholder="New email" class="form-control"
       formControlName="new-email" [ngClass]="{ 'input-error': formErrors['new-email'] }"

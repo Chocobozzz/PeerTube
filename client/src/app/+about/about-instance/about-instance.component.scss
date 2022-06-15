@@ -20,7 +20,6 @@
 
 .instance-badges {
   margin-bottom: 20px;
-  font-size: 16px;
 
   .pt-badge {
     @include margin-right(5px);
@@ -29,10 +28,10 @@
 
 .section-title {
   font-weight: $font-semibold;
-  font-size: 16px;
   margin-bottom: 5px;
   display: flex;
   align-items: center;
+  font-size: 1rem;
 }
 
 .middle-title {
@@ -44,7 +43,6 @@
 
 .block {
   margin-bottom: 75px;
-  font-size: 15px;
 }
 
 .short-description {

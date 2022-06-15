@@ -16,7 +16,6 @@ $footer-links-base-opacity: .8;
 
   color: pvar(--menuForegroundColor);
   cursor: pointer;
-  font-size: 16px;
   white-space: normal;
   word-break: break-word;
   transition: background-color .1s ease-in-out;
@@ -195,7 +194,6 @@ my-actor-avatar {
 .logged-in-display-name {
   @include disable-default-a-behaviour;
 
-  font-size: 16px;
   font-weight: $font-semibold;
   color: pvar(--menuForegroundColor);
 }
@@ -319,7 +317,7 @@ my-actor-avatar {
     color: pvar(--menuForegroundColor);
     opacity: $footer-links-base-opacity;
     white-space: nowrap;
-    font-size: 90%;
+    font-size: 0.75rem;
     font-weight: 500;
     line-height: 1.4rem;
   }

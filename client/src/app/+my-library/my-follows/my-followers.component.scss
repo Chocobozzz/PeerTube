@@ -13,8 +13,4 @@ input[type=text] {
 
 .actor {
   @include actor-row($min-height: auto, $separator: true);
-
-  .actor-display-name {
-    font-size: 16px;
-  }
 }

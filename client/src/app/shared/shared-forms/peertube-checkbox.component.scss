@@ -6,12 +6,7 @@
 
   label {
     display: flex;
-    align-items: center;
-
-    .label-text {
-      font-weight: $font-regular;
-      margin: 0;
-    }
+    font-size: $form-input-font-size;
 
     input {
       @include peertube-checkbox(1px);
@@ -23,12 +18,11 @@
   }
 
   my-help {
-    position: relative;
-    top: 2px;
+    line-height: 17px;
   }
 
-  small {
-    font-size: 90%;
+  .form-group-description {
+    margin-top: 2px;
   }
 
   .wrapper:empty {

@@ -3,14 +3,10 @@
 
 .btn-group-subscribe {
   @include peertube-button;
-  @include disable-default-a-behaviour;
 
-  float: right;
-  padding: 0;
-
-  > .btn,
-  > .dropdown > .dropdown-toggle {
-    font-size: 15px;
+  button.dropdown-toggle {
+    font-size: $button-font-size;
+    line-height: 1.2;
   }
 
   &:not(.big) {
@@ -38,7 +34,7 @@
 
   // Unlogged
   > .dropdown > .dropdown-toggle span {
-    @include padding-right(3px);
+    @include padding-right(5px);
   }
 
   // Logged
@@ -65,9 +61,11 @@
       @include padding-left(5px);
     }
   }
+
   &.unsubscribe-button {
     .btn {
       @include grey-button;
+
       font-weight: 600;
     }
   }

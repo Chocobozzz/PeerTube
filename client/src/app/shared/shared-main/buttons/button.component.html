@@ -1,8 +1,8 @@
-<span *ngIf="!routerLink" class="action-button" [ngClass]="getClasses()" [ngbTooltip]="title" tabindex="0">
+<div *ngIf="!routerLink" class="action-button" [ngClass]="classes" [ngbTooltip]="title" tabindex="0">
   <ng-container *ngTemplateOutlet="content"></ng-container>
-</span>
+</div>
 
-<a *ngIf="routerLink" class="action-button" [ngClass]="getClasses()" [ngbTooltip]="title" [routerLink]="routerLink">
+<a *ngIf="routerLink" class="action-button" [ngClass]="classes" [ngbTooltip]="title" [routerLink]="routerLink">
   <ng-container *ngTemplateOutlet="content"></ng-container>
 </a>
 

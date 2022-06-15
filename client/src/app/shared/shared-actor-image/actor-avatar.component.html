@@ -1,7 +1,7 @@
 <ng-template #img>
-  <img *ngIf="previewImage || avatarUrl || !initial" [class]="getClass('avatar')" [src]="previewImage || avatarUrl || defaultAvatarUrl" [alt]="alt" />
+  <img *ngIf="previewImage || avatarUrl || !initial" [class]="classes" [src]="previewImage || avatarUrl || defaultAvatarUrl" [alt]="alt" />
 
-  <div *ngIf="!avatarUrl && initial" [ngClass]="getClass('initial')">
+  <div *ngIf="!avatarUrl && initial" [ngClass]="classes">
     <span>{{ initial }}</span>
   </div>
 </ng-template>

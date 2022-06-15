@@ -476,7 +476,7 @@ p-table {
 
   td, th {
     font-family: $main-fonts;
-    font-size: 15px !important;
+    font-size: 15px;
     color: pvar(--mainForegroundColor) !important;
   }
 
@@ -890,7 +890,7 @@ p-toast {
         }
 
         p {
-          font-size: 15px;
+          font-size: 16px;
           margin-bottom: 0;
         }
       }

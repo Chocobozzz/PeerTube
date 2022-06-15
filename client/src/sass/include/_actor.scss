@@ -36,18 +36,16 @@
   .actor-owner {
     @include disable-default-a-behaviour;
 
-    font-size: 13px;
     color: pvar(--mainForegroundColor);
+    display: flex;
+    align-items: center;
 
     span:hover {
       opacity: 0.8;
     }
 
     my-actor-avatar {
-      @include margin-left(7px);
-
-      display: inline-block;
-      vertical-align: top;
+      @include margin-left(5px);
     }
   }
 

@@ -34,6 +34,10 @@ my-input-text {
   margin-top: 20px;
 }
 
+.alert-private {
+  margin-top: 0;
+}
+
 .filters {
   margin-top: 30px;
 
@@ -46,7 +50,6 @@ my-input-text {
     justify-content: center;
     align-items: center;
     margin-top: 20px;
-    font-size: 16px;
     font-weight: $font-semibold;
     cursor: pointer;
   }

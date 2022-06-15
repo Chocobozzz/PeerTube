@@ -7,7 +7,6 @@
 
 .view-replies {
   font-weight: $font-semibold;
-  font-size: 15px;
   cursor: pointer;
 }
 
@@ -33,10 +32,9 @@
 }
 
 #dropdown-sort-comments {
-  font-weight: 600;
+  font-weight: $font-semibold;
   text-transform: uppercase;
   border: 0;
-  transform: translateY(-7%);
 }
 
 @media screen and (max-width: 600px) {

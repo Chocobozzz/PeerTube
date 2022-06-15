@@ -1,18 +1,17 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-label {
-  font-weight: $font-regular;
-  font-size: 100%;
+form {
+  max-width: 340px;
 }
 
 my-input-text {
-  width: 340px;
   display: block;
+  width: 100%;
 }
 
 input[type=email] {
-  @include peertube-input-text(340px);
+  @include peertube-input-text(100%);
 
   display: block;
 }
@@ -22,15 +21,6 @@ input[type=submit] {
   @include orange-button;
 }
 
-.current-email,
 .pending-email {
   margin-bottom: 15px;
-
-  .email {
-    font-weight: $font-semibold;
-  }
-}
-
-.form-group {
-  width: max-content;
 }

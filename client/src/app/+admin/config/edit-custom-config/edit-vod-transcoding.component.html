@@ -8,15 +8,10 @@
         <span i18n>
           Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically.
         </span>
-        <span i18n>
-          However, you may want to read our guidelines before tweaking the following values.
-        </span>
 
-        <div class="callout-container">
-          <a class="callout-link" target="_blank" rel="noopener noreferrer" href="https://docs.joinpeertube.org/admin-configuration?id=transcoding" i18n>
-            Read guidelines
-          </a>
-        </div>
+        <span i18n>
+          However, you may want to read <a class="link-orange" target="_blank" rel="noopener noreferrer" href="https://docs.joinpeertube.org/admin-configuration?id=transcoding">our guidelines</a> before tweaking the following values.
+        </span>
       </div>
     </div>
   </div>
@@ -115,7 +110,11 @@
                 <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
                   <label i18n>Resolutions to generate per enabled format</label>
 
-                  <div class="ms-2 mt-2 d-flex flex-column">
+                  <div class="ms-2 d-flex flex-column">
+                    <span class="mb-3 small muted" i18n>
+                      The original file resolution will be the default target if no option is selected.
+                    </span>
+
                     <ng-container formGroupName="resolutions">
                       <div class="form-group" *ngFor="let resolution of resolutions">
                         <my-peertube-checkbox
@@ -127,10 +126,6 @@
                           </ng-template>
                         </my-peertube-checkbox>
                       </div>
-
-                      <span class="mb-2 muted" i18n>
-                        The original file resolution will be the default target if no option is selected.
-                      </span>
                     </ng-container>
                   </div>
                 </div>
@@ -142,7 +137,8 @@
 
         <div class="form-group mt-4" [ngClass]="getTranscodingDisabledClass()">
           <label i18n for="transcodingThreads">Transcoding threads</label>
-          <span class="muted ms-1">
+
+          <span class="small muted ms-1">
             <ng-container *ngIf="getTotalTranscodingThreads().atMost" i18n>
               will claim at most {{ getTotalTranscodingThreads().value }} {{ getTotalTranscodingThreads().unit }} with live transcoding
             </ng-container>
@@ -164,7 +160,7 @@
 
         <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
           <label i18n for="transcodingConcurrency">Transcoding jobs concurrency</label>
-          <span class="muted ms-1" i18n>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</span>
+          <span class="small muted ms-1" i18n>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</span>
 
           <div class="number-with-unit">
             <input type="number" name="transcodingConcurrency" formControlName="concurrency" />
@@ -176,7 +172,7 @@
 
         <div class="form-group" [ngClass]="getTranscodingDisabledClass()">
           <label i18n for="transcodingProfile">Transcoding profile</label>
-          <span class="muted ms-1" i18n>new transcoding profiles can be added by PeerTube plugins</span>
+          <span class="small muted ms-1" i18n>new transcoding profiles can be added by PeerTube plugins</span>
 
           <my-select-options
             id="transcodingProfile"

@@ -25,10 +25,6 @@ export class EditButtonComponent implements OnInit {
     // <my-edit-button label /> Use default label
     if (this.label === '') {
       this.label = $localize`Update`
-
-      if (!this.title) {
-        this.title = this.label
-      }
     }
   }
 }

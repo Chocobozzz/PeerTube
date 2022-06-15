@@ -4,6 +4,10 @@
 
 $more-button-width: 40px;
 
+.video-miniature {
+  font-size: 14px;
+}
+
 .video-miniature-name {
   @include miniature-name;
 }

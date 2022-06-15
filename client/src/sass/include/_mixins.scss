@@ -94,7 +94,8 @@
   background-color: pvar(--inputBackgroundColor);
   border: 1px solid $input-border-color;
   border-radius: 3px;
-  font-size: 15px;
+  font-size: $form-input-font-size;
+  line-height: $form-input-line-height;
 
   &::placeholder {
     color: pvar(--inputPlaceholderColor);
@@ -116,7 +117,6 @@
   background-color: pvar(--textareaBackgroundColor) !important;
   height: $height;
   padding: 5px 15px;
-  font-size: 15px;
 }
 
 @mixin orange-button {
@@ -249,7 +249,6 @@
 
   border: 0;
   font-weight: $font-semibold;
-  font-size: 15px;
   height: $button-height;
   line-height: $button-height;
 
@@ -258,6 +257,8 @@
 
   text-align: center;
   cursor: pointer;
+
+  font-size: $button-font-size;
 
   my-global-icon + * {
     @include margin-right(4px);
@@ -292,10 +293,6 @@
 }
 
 @mixin button-with-icon($width: 20px, $margin-right: 3px, $top: -1px) {
-  display: inline-flex;
-  align-items: center;
-  line-height: normal !important;
-
   my-global-icon {
     @include margin-right($margin-right);
 
@@ -361,7 +358,6 @@
   color: pvar(--inputForegroundColor);
   background: pvar(--inputBackgroundColor);
   position: relative;
-  font-size: 15px;
   height: min-content;
 
   &.disabled {
@@ -403,6 +399,8 @@
     height: $button-height;
     text-overflow: ellipsis;
     color: pvar(--mainForegroundColor);
+    font-size: $form-input-font-size;
+    line-height: $form-input-line-height;
 
     &:focus {
       outline: none;
@@ -435,6 +433,10 @@
 
 // Thanks: https://codepen.io/manabox/pen/raQmpL
 @mixin peertube-radio-container {
+  label {
+    font-size: $form-input-font-size;
+  }
+
   [type=radio]:checked,
   [type=radio]:not(:checked) {
     position: absolute;
@@ -448,7 +450,6 @@
     cursor: pointer;
     line-height: 20px;
     display: inline-block;
-    font-size: 15px;
     font-weight: $font-regular;
   }
 
@@ -540,7 +541,6 @@
   + span + span {
     @include margin-left(5px);
 
-    font-size: 15px;
     font-weight: $font-regular;
     cursor: pointer;
     display: inline;
@@ -563,7 +563,6 @@
 
 @mixin actor-counters ($separator-margin: 10px) {
   color: pvar(--greyForegroundColor);
-  font-size: 16px;
   display: flex;
   align-items: center;
 
@@ -585,7 +584,7 @@
   text-transform: uppercase;
   color: pvar(--mainColor);
   font-weight: $font-bold;
-  font-size: 110%;
+  font-size: 1rem;
   margin-bottom: 10px;
 }
 
@@ -675,11 +674,10 @@
 @mixin breadcrumb {
   display: flex;
   flex-wrap: wrap;
-  padding: 0.75rem 1rem;
+  padding: 0;
   margin-bottom: 1rem;
   list-style: none;
-  background-color: pvar(--submenuBackgroundColor);
-  border-radius: 0.25rem;
+  font-weight: $font-semibold;
 
   .breadcrumb-item {
     display: flex;

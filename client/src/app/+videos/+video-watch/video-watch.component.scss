@@ -112,7 +112,6 @@ $video-height: 66vh;
   margin-top: 50px;
   text-align: center;
   font-weight: $font-semibold;
-  font-size: 15px;
 }
 
 .video-bottom {
@@ -158,12 +157,11 @@ $video-height: 66vh;
 
   margin-bottom: 10px;
   align-self: start;
-  font-size: 1em;
+  font-size: 14px;
 }
 
 .video-info-channel {
   font-weight: $font-semibold;
-  font-size: 15px;
 
   a {
     @include disable-default-a-behaviour;

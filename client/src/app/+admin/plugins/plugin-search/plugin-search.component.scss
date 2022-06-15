@@ -17,8 +17,6 @@
 
   input {
     @include peertube-input-text(500px);
-
-    height: 35px;
   }
 }
 

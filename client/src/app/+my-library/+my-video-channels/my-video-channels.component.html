@@ -34,9 +34,11 @@
         {videoChannel.followersCount, plural, =0 {No subscribers} =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}
       </a>
 
-      <div i18n class="video-channel-videos">{videoChannel.videosCount, plural, =0 {No videos} =1 {1 video} other {{{ videoChannel.videosCount }} videos}}</div>
-
-      <div i18n class="video-channel-views">{videoChannel.totalViews, plural, =0 {No views} =1 {1 view} other {{{ videoChannel.totalViews }} views}}</div>
+      <div class="d-flex">
+        <span i18n>{videoChannel.videosCount, plural, =0 {No videos} =1 {1 video} other {{{ videoChannel.videosCount }} videos}}</span>
+        <span class="mx-1">·</span>
+        <span i18n>{videoChannel.totalViews, plural, =0 {No views} =1 {1 view} other {{{ videoChannel.totalViews | myNumberFormatter }} views}}</span>
+      </div>
 
       <div class="video-channel-buttons">
         <my-edit-button label [routerLink]="[ '/manage/update', videoChannel.nameWithHost ]"></my-edit-button>

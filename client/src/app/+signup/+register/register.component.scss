@@ -1,11 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.alert {
-  font-size: 16px;
-  text-align: center;
-}
-
 .signup-disabled {
   padding-top: 30vh;
 }
@@ -13,10 +8,6 @@
 .title-page-v2 {
   background-color: pvar(--mainColorVeryLight);
   margin: 0;
-}
-
-.register-content {
-  font-size: 16px;
 }
 
 my-instance-about-accordion {

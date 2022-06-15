@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input, OnChanges } from '@angular/core'
 import { GlobalIconName } from '@app/shared/shared-icons'
 
 @Component({
@@ -7,7 +7,7 @@ import { GlobalIconName } from '@app/shared/shared-icons'
   templateUrl: './button.component.html'
 })
 
-export class ButtonComponent {
+export class ButtonComponent implements OnChanges {
   @Input() label = ''
   @Input() className = 'grey-button'
   @Input() icon: GlobalIconName = undefined
@@ -17,8 +17,10 @@ export class ButtonComponent {
   @Input() disabled = false
   @Input() responsiveLabel = false
 
-  getClasses () {
-    return {
+  classes: { [id: string]: boolean } = {}
+
+  ngOnChanges () {
+    this.classes = {
       [this.className]: true,
       disabled: this.disabled,
       'icon-only': !this.label,

@@ -10,7 +10,7 @@
 
       <div class="section videos" *ngFor="let object of overview.categories">
         <h1 class="section-title">
-          <a routerLink="/search" [queryParams]="{ categoryOneOf: [ object.category.id ] }">{{ object.category.label }}</a>
+          <a class="link-orange" routerLink="/search" [queryParams]="{ categoryOneOf: [ object.category.id ] }">{{ object.category.label }}</a>
         </h1>
 
         <div class="video-wrapper" *ngFor="let video of buildVideos(object.videos)">
@@ -21,7 +21,7 @@
 
       <div class="section videos" *ngFor="let object of overview.tags">
         <h2 class="section-title">
-          <a routerLink="/search" [queryParams]="{ tagsOneOf: [ object.tag ] }">#{{ object.tag }}</a>
+          <a class="link-orange" routerLink="/search" [queryParams]="{ tagsOneOf: [ object.tag ] }">#{{ object.tag }}</a>
         </h2>
 
         <div class="video-wrapper" *ngFor="let video of buildVideos(object.videos)">
@@ -32,7 +32,7 @@
 
       <div class="section channel videos" *ngFor="let object of overview.channels">
         <div class="section-title">
-          <a [routerLink]="[ '/c', buildVideoChannelBy(object) ]">
+          <a class="link-orange" [routerLink]="[ '/c', buildVideoChannelBy(object) ]">
             <my-actor-avatar [channel]="buildVideoChannel(object)" size="28"></my-actor-avatar>
 
             <h2 class="section-title">{{ object.channel.displayName }}</h2>

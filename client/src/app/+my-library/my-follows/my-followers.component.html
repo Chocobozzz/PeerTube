@@ -22,7 +22,7 @@
         <my-global-icon iconName="external-link"></my-global-icon>
       </a>
 
-      <div class="muted">
+      <div class="small muted">
         <ng-container *ngIf="isFollowingAccount(follow)" i18n>Is following all your channels</ng-container>
         <ng-container *ngIf="!isFollowingAccount(follow)" i18n>Is following your channel {{ follow.following.name }}</ng-container>
       </div>

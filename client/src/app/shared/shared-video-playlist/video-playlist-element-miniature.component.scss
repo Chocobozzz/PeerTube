@@ -75,40 +75,6 @@ my-video-thumbnail,
         left: -2px;
       }
     }
-
-    .video-info {
-      display: flex;
-      flex-direction: column;
-      align-self: flex-start;
-      min-width: 0;
-
-      .video-info-header {
-        display: flex;
-        align-items: baseline;
-
-        a {
-          width: auto;
-          padding-right: 5px;
-        }
-
-        .pt-badge {
-          @include margin-right(5px);
-        }
-      }
-
-      .video-info-account,
-      .video-info-timestamp {
-        color: pvar(--greyForegroundColor);
-      }
-    }
-  }
-
-  .video-info-name {
-    @include ellipsis;
-
-    font-size: 18px;
-    font-weight: $font-semibold;
-    display: inline-block;
   }
 
   .more,
@@ -137,6 +103,45 @@ my-video-thumbnail,
       }
     }
   }
+}
+
+.video-info-name {
+  @include ellipsis;
+
+  font-size: 18px;
+  font-weight: $font-semibold;
+  display: inline-block;
+}
+
+.video-info {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  min-width: 0;
+
+  .video-info-header {
+    display: flex;
+    align-items: baseline;
+
+    a {
+      width: auto;
+      padding-right: 5px;
+    }
+
+    .pt-badge {
+      @include margin-right(5px);
+    }
+  }
+
+  .video-info-account,
+  .video-info-timestamp {
+    color: pvar(--greyForegroundColor);
+  }
+}
+
+.video-info-account,
+.video-miniature-created-at-views {
+  font-size: 14px;
 }
 
 .dropdown-menu {

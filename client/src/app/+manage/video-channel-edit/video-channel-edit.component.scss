@@ -5,11 +5,6 @@
   padding-top: 20px;
 }
 
-label {
-  font-weight: $font-regular;
-  font-size: 100%;
-}
-
 .video-channel-title {
   @include settings-big-title;
 }

@@ -4,11 +4,6 @@
 
 $form-base-input-width: 340px;
 
-label {
-  font-weight: $font-regular;
-  font-size: 100%;
-}
-
 .account-title {
   @include settings-big-title;
 

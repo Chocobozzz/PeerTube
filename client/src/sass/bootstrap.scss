@@ -42,7 +42,6 @@
 // ---------------------------------------------------------------------------
 
 .dropdown-menu {
-  font-size: 15px;
   color: pvar(--mainForegroundColor);
   background-color: pvar(--mainBackgroundColor);
 
@@ -71,6 +70,16 @@
 
 .dropdown-divider {
   margin: 0.3rem 0;
+}
+
+// ---------------------------------------------------------------------------
+// Alert
+// ---------------------------------------------------------------------------
+
+.alert {
+  p:last-child {
+    margin-bottom: 0;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -115,18 +124,10 @@
     my-global-icon {
       @include icon(22px);
 
-      position: relative;
-      top: 5px;
-      float: right;
-
-      margin: 0;
-      padding: 0;
       opacity: 0.5;
 
-      &[iconName=cross] { /* stylelint-disable-line selector-max-compound-selectors */
-        @include icon(16px);
-
-        top: -3px;
+      &:hover {
+        opacity: 0.8;
       }
     }
   }
@@ -165,8 +166,6 @@
         opacity: 0.75;
         content: '';
         display: block;
-        position: fixed;
-        z-index: z(overlay);
       }
     }
   }
@@ -254,6 +253,11 @@
 // Buttons & form controls
 // ---------------------------------------------------------------------------
 
+.btn:not(.btn-sm) {
+  font-size: $button-font-size;
+  line-height: 1.2;
+}
+
 .btn-outline-secondary {
   border-color: $input-border-color;
 
@@ -294,7 +298,6 @@
 }
 
 .form-control {
-  font-size: 15px;
   color: pvar(--mainForegroundColor);
   background-color: pvar(--inputBackgroundColor);
   outline: none;
@@ -317,7 +320,6 @@
   }
 
   > .input-group-text {
-    font-size: 15px;
     line-height: normal;
     opacity: 0.9;
   }
@@ -333,8 +335,6 @@
 }
 
 .has-clear {
-  position: relative;
-
   input {
     @include padding-right(1.5rem !important);
   }
@@ -344,10 +344,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
-    right: .5rem;
     height: 95%;
     font-size: 14px;
+    position: absolute;
+    right: .5rem;
 
     &:hover {
       color: rgba(0, 0, 0, 0.7);
