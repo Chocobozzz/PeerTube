@@ -15,10 +15,6 @@
 
 @import './z-index';
 
-[hidden] {
-  display: none !important;
-}
-
 body {
   /*** theme ***/
   // now beware sass requires interpolation
