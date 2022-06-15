@@ -2,7 +2,11 @@
 @use '_mixins' as *;
 
 my-search-typeahead {
-  @include margin-right(15px);
+  @include margin-right(80px);
+
+  @media screen and (max-width: $small-view) {
+    @include margin-right(15px);
+  }
 }
 
 .publish-button {
@@ -11,7 +15,7 @@ my-search-typeahead {
   @include button-with-icon(22px, 3px, -1px);
   @include margin-right(25px);
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: $mobile-view) {
     @include margin-right(10px);
 
     padding: 0 10px;
