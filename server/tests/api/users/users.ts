@@ -380,7 +380,7 @@ describe('Test users', function () {
     })
 
     it('Should disable webtorrent, enable HLS, and update my quota', async function () {
-      this.timeout(60000)
+      this.timeout(160000)
 
       {
         const config = await server.config.getCustomConfig()
