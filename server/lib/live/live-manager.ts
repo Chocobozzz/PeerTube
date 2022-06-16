@@ -416,6 +416,7 @@ class LiveManager {
             : undefined,
 
           liveSessionId: liveSession.id,
+          streamingPlaylistId: fullVideo.getHLSPlaylist()?.id,
 
           publishedAt: fullVideo.publishedAt.toISOString()
         }

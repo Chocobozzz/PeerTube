@@ -161,6 +161,7 @@ export interface VideoLiveEndingPayload {
   videoId: number
   publishedAt: string
   liveSessionId: number
+  streamingPlaylistId: number
 
   replayDirectory?: string
 }

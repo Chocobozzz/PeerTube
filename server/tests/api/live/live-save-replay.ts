@@ -12,6 +12,7 @@ import {
   createMultipleServers,
   doubleFollow,
   findExternalSavedVideo,
+  makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -457,6 +458,12 @@ describe('Save replay setting', function () {
       // Streaming session #2
       ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
       await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
+
+      await wait(5000)
+      const video = await servers[0].videos.get({ id: liveVideoUUID })
+      expect(video.streamingPlaylists).to.have.lengthOf(1)
+      await makeRawRequest(video.streamingPlaylists[0].playlistUrl)
+
       await stopFfmpeg(ffmpegCommand)
       await waitUntilLiveWaitingOnAllServers(servers, liveVideoUUID)
 
