@@ -187,7 +187,7 @@
   font-weight: $font-semibold !important;
 
   .nav-link {
-    opacity: 0.6 !important;
+    opacity: 0.7 !important;
 
     &.active,
     &:hover,
@@ -211,7 +211,7 @@
   font-weight: $font-semibold;
   border: 0;
   border-bottom: 2px solid transparent;
-  opacity: 0.6;
+  opacity: 0.7;
 
   &.active {
     color: pvar(--mainForegroundColor);
