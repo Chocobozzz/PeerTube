@@ -147,7 +147,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
       .subscribe({
         next: () => {
           this.notifier.success(
-            prepareIcu($localize`{count, plural, =1 {1 comment} other {{count} comments}} deleted.`)(
+            prepareIcu($localize`{count, plural, =1 {1 comment deleted.} other {{count} comments deleted.}}`)(
               { count: commentArgs.length },
               $localize`${commentArgs.length} comment(s) deleted.`
             )

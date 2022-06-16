@@ -67,7 +67,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
           let message: string
 
           if (Array.isArray(this.usersToBan)) {
-            message = prepareIcu($localize`{count, plural, =1 {1 user} other {{count} users}} banned.`)(
+            message = prepareIcu($localize`{count, plural, =1 {1 user banned.} other {{count} users banned.}}`)(
               { count: this.usersToBan.length },
               $localize`${this.usersToBan.length} users banned.`
             )

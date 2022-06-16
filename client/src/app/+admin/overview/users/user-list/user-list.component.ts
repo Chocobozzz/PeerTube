@@ -224,7 +224,7 @@ export class UserListComponent extends RestTable implements OnInit {
         .subscribe({
           next: () => {
             this.notifier.success(
-              prepareIcu($localize`{count, plural, =1 {1 user} other {{count} users}} unbanned.`)(
+              prepareIcu($localize`{count, plural, =1 {1 user unbanned.} other {{count} users unbanned.}}`)(
                 { count: users.length },
                 $localize`${users.length} users unbanned.`
               )
@@ -253,7 +253,7 @@ export class UserListComponent extends RestTable implements OnInit {
       .subscribe({
         next: () => {
           this.notifier.success(
-            prepareIcu($localize`{count, plural, =1 {1 user} other {{count} users}} deleted.`)(
+            prepareIcu($localize`{count, plural, =1 {1 user deleted.} other {{count} users deleted.}}`)(
               { count: users.length },
               $localize`${users.length} users deleted.`
             )
@@ -271,7 +271,7 @@ export class UserListComponent extends RestTable implements OnInit {
       .subscribe({
         next: () => {
           this.notifier.success(
-            prepareIcu($localize`{count, plural, =1 {1 user} other {{count} users}} email set as verified.`)(
+            prepareIcu($localize`{count, plural, =1 {1 user email set as verified.} other {{count} user emails set as verified.}}`)(
               { count: users.length },
               $localize`${users.length} users email set as verified.`
             )
