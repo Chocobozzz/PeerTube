@@ -15,7 +15,7 @@
 
           <div class="peertube-select-container">
             <select formControlName="default" id="themeDefault" class="form-control">
-              <option i18n value="default">default</option>
+              <option i18n value="default">{{ getDefaultThemeLabel() }}</option>
 
               <option *ngFor="let theme of getAvailableThemes()" [value]="theme">{{ theme }}</option>
             </select>

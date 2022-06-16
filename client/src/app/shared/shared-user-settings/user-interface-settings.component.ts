@@ -1,8 +1,7 @@
 import { Subject, Subscription } from 'rxjs'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
-import { AuthService, Notifier, ServerService, UserService } from '@app/core'
+import { AuthService, Notifier, ServerService, ThemeService, UserService } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { capitalizeFirstLetter } from '@root-helpers/string'
 import { HTMLServerConfig, User, UserUpdateMe } from '@shared/models'
 
 @Component({
@@ -18,8 +17,6 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
 
   formValuesWatcher: Subscription
 
-  defaultThemeLabel = $localize`Light/Orange`
-
   private serverConfig: HTMLServerConfig
 
   constructor (
@@ -27,14 +24,14 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
     private authService: AuthService,
     private notifier: Notifier,
     private userService: UserService,
+    private themeService: ThemeService,
     private serverService: ServerService
   ) {
     super()
   }
 
-  get availableThemes () {
-    return this.serverConfig.theme.registered
-               .map(t => t.name)
+  get instanceName () {
+    return this.serverConfig.instance.name
   }
 
   ngOnInit () {
@@ -61,15 +58,21 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
   }
 
   getDefaultThemeLabel () {
-    const theme = this.serverConfig.theme.default
-
-    if (theme === 'default') return this.defaultThemeLabel
-
-    return theme
+    return this.themeService.getDefaultThemeLabel()
   }
 
-  capitalizeFirstLetter (str: string) {
-    return capitalizeFirstLetter(str)
+  getAvailableThemes () {
+    return this.themeService.getAvailableThemeLabels()
+  }
+
+  getDefaultInstanceThemeLabel () {
+    const theme = this.serverConfig.theme.default
+
+    if (theme === 'default') {
+      return this.getDefaultThemeLabel()
+    }
+
+    return theme
   }
 
   updateInterfaceSettings () {

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'
+import { capitalizeFirstLetter } from '@root-helpers/string'
 import { UserLocalStorageKeys } from '@root-helpers/users'
 import { HTMLServerConfig, ServerConfigTheme } from '@shared/models'
 import { environment } from '../../../environments/environment'
@@ -38,6 +39,19 @@ export class ThemeService {
     this.injectThemes(themes)
 
     this.listenUserTheme()
+  }
+
+  getDefaultThemeLabel () {
+    if (this.hasDarkTheme()) {
+      return $localize`Light/Orange or Dark`
+    }
+
+    return $localize`Light/Orange`
+  }
+
+  getAvailableThemeLabels () {
+    return this.serverConfig.theme.registered
+               .map(t => capitalizeFirstLetter(t.name))
   }
 
   private injectThemes (themes: ServerConfigTheme[], fromLocalStorage = false) {
@@ -81,10 +95,7 @@ export class ThemeService {
     if (instanceTheme !== 'default') return instanceTheme
 
     // Default to dark theme if available and wanted by the user
-    if (
-      this.themes.find(t => t.name === 'dark') &&
-      window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-    ) {
+    if (this.hasDarkTheme() && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       return 'dark'
     }
 
@@ -192,5 +203,9 @@ export class ThemeService {
 
   private getTheme (name: string) {
     return this.themes.find(t => t.name === name)
+  }
+
+  private hasDarkTheme () {
+    return this.serverConfig.theme.registered.some(t => t.name === 'dark')
   }
 }
