@@ -33,7 +33,7 @@ import { refreshAPObject } from './handlers/activitypub-refresher'
 import { processActorKeys } from './handlers/actor-keys'
 import { processEmail } from './handlers/email'
 import { processManageVideoTorrent } from './handlers/manage-video-torrent'
-import { processMoveToObjectStorage } from './handlers/move-to-object-storage'
+import { onMoveToObjectStorageFailure, processMoveToObjectStorage } from './handlers/move-to-object-storage'
 import { processVideoFileImport } from './handlers/video-file-import'
 import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
@@ -84,6 +84,10 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'move-to-object-storage': processMoveToObjectStorage,
   'manage-video-torrent': processManageVideoTorrent,
   'video-studio-edition': processVideoStudioEdition
+}
+
+const errorHandlers: { [id in JobType]?: (job: Job, err: any) => Promise<any> } = {
+  'move-to-object-storage': onMoveToObjectStorageFailure
 }
 
 const jobTypes: JobType[] = [
@@ -159,6 +163,11 @@ class JobQueue {
           : 'error'
 
         logger.log(logLevel, 'Cannot execute job %d in queue %s.', job.id, handlerName, { payload: job.data, err })
+
+        if (errorHandlers[job.name]) {
+          errorHandlers[job.name](job, err)
+            .catch(err => logger.error('Cannot run error handler for job failure %d in queue %s.', job.id, handlerName, { err }))
+        }
       })
 
       queue.on('error', err => {
