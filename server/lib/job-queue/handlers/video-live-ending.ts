@@ -45,13 +45,13 @@ async function processVideoLiveEnding (job: Job) {
   LiveSegmentShaStore.Instance.cleanupShaSegments(liveVideo.uuid)
 
   if (live.saveReplay !== true) {
-    return cleanupLiveAndFederate({ live, video: liveVideo })
+    return cleanupLiveAndFederate({ live, video: liveVideo, streamingPlaylistId: payload.streamingPlaylistId })
   }
 
   if (live.permanentLive) {
     await saveReplayToExternalVideo({ liveVideo, liveSession, publishedAt: payload.publishedAt, replayDirectory: payload.replayDirectory })
 
-    return cleanupLiveAndFederate({ live, video: liveVideo })
+    return cleanupLiveAndFederate({ live, video: liveVideo, streamingPlaylistId: payload.streamingPlaylistId })
   }
 
   return replaceLiveByReplay({ liveVideo, live, liveSession, replayDirectory: payload.replayDirectory })
@@ -233,15 +233,18 @@ async function assignReplayFilesToVideo (options: {
 async function cleanupLiveAndFederate (options: {
   live: MVideoLive
   video: MVideo
+  streamingPlaylistId: number
 }) {
-  const { live, video } = options
+  const { live, video, streamingPlaylistId } = options
 
-  const streamingPlaylist = await VideoStreamingPlaylistModel.loadHLSPlaylistByVideo(video.id)
+  const streamingPlaylist = await VideoStreamingPlaylistModel.loadWithVideo(streamingPlaylistId)
 
-  if (live.permanentLive) {
-    await cleanupPermanentLive(video, streamingPlaylist)
-  } else {
-    await cleanupNormalLive(video, streamingPlaylist)
+  if (streamingPlaylist) {
+    if (live.permanentLive) {
+      await cleanupPermanentLive(video, streamingPlaylist)
+    } else {
+      await cleanupNormalLive(video, streamingPlaylist)
+    }
   }
 
   try {
