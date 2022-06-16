@@ -99,11 +99,5 @@ $margin-top: 30px;
     align-items: center;
     height: auto;
     margin-bottom: 10px;
-
-    .title-page {
-      @include margin-right(0);
-
-      margin-bottom: 10px;
-    }
   }
 }

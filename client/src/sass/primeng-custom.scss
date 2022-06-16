@@ -882,15 +882,17 @@ p-toast {
       padding: 10px 20px;
 
       .message {
-        flex-grow: 1;
         @include margin-right(20px);
+
+        flex-grow: 1;
 
         h3 {
           font-size: 21px;
         }
 
         p {
-          font-size: 16px;
+          @include peertube-word-wrap;
+
           margin-bottom: 0;
         }
       }

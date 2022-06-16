@@ -113,7 +113,7 @@
 
   <div class="links">
     <ng-template #linkTemplate let-item="item">
-      <a [routerLink]="item.routerLink" routerLinkActive="active" class="title-page">{{ item.label }}</a>
+      <a [routerLink]="item.routerLink" routerLinkActive="active" class="sub-menu-entry">{{ item.label }}</a>
     </ng-template>
 
     <my-list-overflow [items]="links" [itemTemplate]="linkTemplate"></my-list-overflow>

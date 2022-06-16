@@ -5,15 +5,6 @@
   @include peertube-select-container(auto);
 }
 
-.title-page a {
-  color: pvar(--mainForegroundColor);
-
-  &:hover {
-    text-decoration: none;
-    opacity: .8;
-  }
-}
-
 my-peertube-checkbox {
   display: block;
   margin-bottom: 1rem;

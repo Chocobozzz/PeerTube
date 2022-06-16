@@ -98,7 +98,7 @@ label + .form-group-description {
 // ---------------------------------------------------------------------------
 
 
-.title-page {
+.sub-menu-entry {
   @include disable-default-a-behaviour;
   @include margin-right(55px);
 
@@ -107,18 +107,11 @@ label + .form-group-description {
   display: inline-block;
   font-weight: $font-semibold;
   border-bottom: 2px solid transparent;
-
-  &.title-page-single {
-    margin-top: 30px;
-    margin-bottom: 25px;
-  }
+  white-space: nowrap;
+  font-size: 1rem;
 
   &.active {
     border-bottom-color: pvar(--mainColor);
-  }
-
-  &.title-page-single {
-    font-size: 125%;
   }
 
   &:hover,
@@ -130,8 +123,7 @@ label + .form-group-description {
   &.active,
   &:hover,
   &:active,
-  &:focus,
-  &.title-page-single {
+  &:focus {
     opacity: 1;
     outline: 0 hidden !important;
   }
@@ -147,10 +139,31 @@ label + .form-group-description {
   padding: 35px 25px;
 }
 
-.title-page-about,
-.title-page-settings {
-  white-space: nowrap;
-  font-size: 1rem;
+.title-page {
+  @include margin-right(55px);
+
+  margin-top: 30px;
+  margin-bottom: 25px;
+
+  color: pvar(--mainForegroundColor);
+  display: inline-block;
+  font-weight: $font-semibold;
+  font-size: 1.25rem;
+
+  a {
+    @include disable-default-a-behaviour;
+
+    color: inherit;
+
+    &:hover {
+      color: inherit;
+      opacity: 0.8;
+    }
+  }
+
+  @media screen and (max-width: $mobile-view) {
+    @include margin-left(15px);
+  }
 }
 
 .admin-sub-header {
