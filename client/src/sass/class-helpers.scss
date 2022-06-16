@@ -69,6 +69,10 @@
   margin-bottom: 1rem;
 }
 
+.input-error:not(:focus) {
+  border-color: $red !important;
+}
+
 .form-error,
 .form-warning {
   display: block;
@@ -79,8 +83,8 @@
   color: $red;
 }
 
-.input-error {
-  border-color: $red !important;
+.input-error:focus + .form-error {
+  color: pvar(--mainForegroundColor);
 }
 
 .form-group-description {

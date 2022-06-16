@@ -301,16 +301,6 @@
   color: pvar(--mainForegroundColor);
   background-color: pvar(--inputBackgroundColor);
   outline: none;
-
-  // Input box-shadow on focus
-  &:focus-within,
-  &:focus {
-    box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
-
-    &.input-error {
-      box-shadow: #{$focus-box-shadow-form} #{scale-color($red, $alpha: -75%)};
-    }
-  }
 }
 
 .input-group {
