@@ -1,6 +1,13 @@
 import Bluebird from 'bluebird'
 import { wait } from '@shared/core-utils'
-import { createSingleServer, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/server-commands'
+import {
+  createSingleServer,
+  doubleFollow,
+  killallServers,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  waitJobs
+} from '@shared/server-commands'
 
 let servers: PeerTubeServer[]
 const viewers: { xForwardedFor: string }[] = []
@@ -9,6 +16,7 @@ let videoId: string
 run()
   .then(() => process.exit(0))
   .catch(err => console.error(err))
+  .finally(() => killallServers(servers))
 
 async function run () {
   await prepare()
@@ -69,9 +77,13 @@ async function prepare () {
 async function runViewers () {
   console.log('Will run views of %d viewers.', viewers.length)
 
+  const before = new Date().getTime()
+
   await Bluebird.map(viewers, viewer => {
     return servers[0].views.simulateView({ id: videoId, xForwardedFor: viewer.xForwardedFor })
   }, { concurrency: 100 })
+
+  console.log('Finished to run views in %d seconds.', (new Date().getTime() - before) / 1000)
 
   await wait(5000)
 }

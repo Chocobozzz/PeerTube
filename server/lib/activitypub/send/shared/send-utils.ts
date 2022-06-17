@@ -19,12 +19,12 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
 }) {
   const { byActor, video, transaction, contextType } = options
 
-  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, transaction)
-
   // Send to origin
   if (video.isOwned() === false) {
     return sendVideoActivityToOrigin(activityBuilder, options)
   }
+
+  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, transaction)
 
   // Send to followers
   const audience = getAudienceFromFollowersOf(actorsInvolvedInVideo)
