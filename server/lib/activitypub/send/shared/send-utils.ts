@@ -15,16 +15,17 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
   byActor: MActorLight
   video: MVideoImmutable | MVideoAccountLight
   contextType: ContextType
+  parallelizable?: boolean
   transaction?: Transaction
 }) {
-  const { byActor, video, transaction, contextType } = options
-
-  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, transaction)
+  const { byActor, video, transaction, contextType, parallelizable } = options
 
   // Send to origin
   if (video.isOwned() === false) {
     return sendVideoActivityToOrigin(activityBuilder, options)
   }
+
+  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, transaction)
 
   // Send to followers
   const audience = getAudienceFromFollowersOf(actorsInvolvedInVideo)
@@ -38,6 +39,7 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
     toFollowersOf: actorsInvolvedInVideo,
     transaction,
     actorsException,
+    parallelizable,
     contextType
   })
 }
@@ -130,9 +132,10 @@ async function broadcastToFollowers (options: {
   transaction: Transaction
   contextType: ContextType
 
+  parallelizable?: boolean
   actorsException?: MActorWithInboxes[]
 }) {
-  const { data, byActor, toFollowersOf, transaction, contextType, actorsException = [] } = options
+  const { data, byActor, toFollowersOf, transaction, contextType, actorsException = [], parallelizable } = options
 
   const uris = await computeFollowerUris(toFollowersOf, actorsException, transaction)
 
@@ -141,6 +144,7 @@ async function broadcastToFollowers (options: {
       uris,
       data,
       byActor,
+      parallelizable,
       contextType
     })
   })
@@ -173,8 +177,9 @@ function broadcastTo (options: {
   data: any
   byActor: MActorId
   contextType: ContextType
+  parallelizable?: boolean // default to false
 }) {
-  const { uris, data, byActor, contextType } = options
+  const { uris, data, byActor, contextType, parallelizable } = options
 
   if (uris.length === 0) return undefined
 
@@ -200,7 +205,13 @@ function broadcastTo (options: {
       contextType
     }
 
-    JobQueue.Instance.createJob({ type: 'activitypub-http-broadcast', payload })
+    JobQueue.Instance.createJob({
+      type: parallelizable
+        ? 'activitypub-http-broadcast-parallel'
+        : 'activitypub-http-broadcast',
+
+      payload
+    })
   }
 
   for (const unicastUri of unicastUris) {

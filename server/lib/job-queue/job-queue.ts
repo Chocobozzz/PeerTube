@@ -43,6 +43,7 @@ import { processVideosViewsStats } from './handlers/video-views-stats'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
+  { type: 'activitypub-http-broadcast-parallel', payload: ActivitypubHttpBroadcastPayload } |
   { type: 'activitypub-http-unicast', payload: ActivitypubHttpUnicastPayload } |
   { type: 'activitypub-http-fetcher', payload: ActivitypubHttpFetcherPayload } |
   { type: 'activitypub-http-cleaner', payload: {} } |
@@ -68,6 +69,7 @@ export type CreateJobOptions = {
 
 const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'activitypub-http-broadcast': processActivityPubHttpBroadcast,
+  'activitypub-http-broadcast-parallel': processActivityPubHttpBroadcast,
   'activitypub-http-unicast': processActivityPubHttpUnicast,
   'activitypub-http-fetcher': processActivityPubHttpFetcher,
   'activitypub-cleaner': processActivityPubCleaner,
@@ -93,6 +95,7 @@ const errorHandlers: { [id in JobType]?: (job: Job, err: any) => Promise<any> } 
 const jobTypes: JobType[] = [
   'activitypub-follow',
   'activitypub-http-broadcast',
+  'activitypub-http-broadcast-parallel',
   'activitypub-http-fetcher',
   'activitypub-http-unicast',
   'activitypub-cleaner',

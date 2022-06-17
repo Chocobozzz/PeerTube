@@ -26,7 +26,7 @@ async function sendView (options: {
     return buildViewActivity({ url, byActor, video, audience, type })
   }
 
-  return sendVideoRelatedActivity(activityBuilder, { byActor, video, transaction, contextType: 'View' })
+  return sendVideoRelatedActivity(activityBuilder, { byActor, video, transaction, contextType: 'View', parallelizable: true })
 }
 
 // ---------------------------------------------------------------------------

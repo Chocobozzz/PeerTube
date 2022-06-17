@@ -3,7 +3,7 @@ import { ACTIVITY_PUB } from '@server/initializers/constants'
 import { ActorModel } from '@server/models/actor/actor'
 import { VideoModel } from '@server/models/video/video'
 import { VideoShareModel } from '@server/models/video/video-share'
-import { MActorFollowersUrl, MActorLight, MActorUrl, MCommentOwner, MCommentOwnerVideo, MVideoId } from '@server/types/models'
+import { MActorFollowersUrl, MActorUrl, MCommentOwner, MCommentOwnerVideo, MVideoId } from '@server/types/models'
 import { ActivityAudience } from '@shared/models'
 
 function getOriginVideoAudience (accountActor: MActorUrl, actorsInvolvedInVideo: MActorFollowersUrl[] = []): ActivityAudience {
@@ -51,13 +51,13 @@ function getAudienceFromFollowersOf (actorsInvolvedInObject: MActorFollowersUrl[
 }
 
 async function getActorsInvolvedInVideo (video: MVideoId, t: Transaction) {
-  const actors: MActorLight[] = await VideoShareModel.loadActorsByShare(video.id, t)
+  const actors = await VideoShareModel.listActorIdsAndFollowerUrlsByShare(video.id, t)
 
   const videoAll = video as VideoModel
 
   const videoActor = videoAll.VideoChannel?.Account
     ? videoAll.VideoChannel.Account.Actor
-    : await ActorModel.loadFromAccountByVideoId(video.id, t)
+    : await ActorModel.loadAccountActorFollowerUrlByVideoId(video.id, t)
 
   actors.push(videoActor)
 
