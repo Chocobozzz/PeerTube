@@ -1,6 +1,6 @@
 import { UploadFiles } from 'express'
 import { Transaction } from 'sequelize/types'
-import { DEFAULT_AUDIO_RESOLUTION, JOB_PRIORITY } from '@server/initializers/constants'
+import { DEFAULT_AUDIO_RESOLUTION, JOB_PRIORITY, MEMOIZE_LENGTH, MEMOIZE_TTL } from '@server/initializers/constants'
 import { TagModel } from '@server/models/video/tag'
 import { VideoModel } from '@server/models/video/video'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
@@ -10,6 +10,7 @@ import { ThumbnailType, VideoCreate, VideoPrivacy, VideoState, VideoTranscodingP
 import { CreateJobOptions, JobQueue } from './job-queue/job-queue'
 import { updateVideoMiniatureFromExisting } from './thumbnail'
 import { CONFIG } from '@server/initializers/config'
+import memoizee from 'memoizee'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
   return {
@@ -150,6 +151,24 @@ async function addMoveToObjectStorageJob (options: {
 
 // ---------------------------------------------------------------------------
 
+async function getVideoDuration (videoId: number | string) {
+  const video = await VideoModel.load(videoId)
+
+  const duration = video.isLive
+    ? undefined
+    : video.duration
+
+  return { duration, isLive: video.isLive }
+}
+
+const getCachedVideoDuration = memoizee(getVideoDuration, {
+  promise: true,
+  max: MEMOIZE_LENGTH.VIDEO_DURATION,
+  maxAge: MEMOIZE_TTL.VIDEO_DURATION
+})
+
+// ---------------------------------------------------------------------------
+
 export {
   buildLocalVideoFromReq,
   buildVideoThumbnailsFromReq,
@@ -157,5 +176,6 @@ export {
   addOptimizeOrMergeAudioJob,
   addTranscodingJob,
   addMoveToObjectStorageJob,
-  getTranscodingJobPriority
+  getTranscodingJobPriority,
+  getCachedVideoDuration
 }

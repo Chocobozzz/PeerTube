@@ -46,10 +46,12 @@ async function prepare () {
     }
   }
 
+  const env = { PRODUCTION_CONSTANTS: 'true' }
+
   servers = await Promise.all([
-    createSingleServer(1, config, { nodeArgs: [ '--inspect' ] }),
-    createSingleServer(2, config),
-    createSingleServer(3, config)
+    createSingleServer(1, config, { env, nodeArgs: [ '--inspect' ] }),
+    createSingleServer(2, config, { env }),
+    createSingleServer(3, config, { env })
   ])
 
   await setAccessTokensToServers(servers)
@@ -81,7 +83,7 @@ async function runViewers () {
 
   await Bluebird.map(viewers, viewer => {
     return servers[0].views.simulateView({ id: videoId, xForwardedFor: viewer.xForwardedFor })
-  }, { concurrency: 100 })
+  }, { concurrency: 500 })
 
   console.log('Finished to run views in %d seconds.', (new Date().getTime() - before) / 1000)
 

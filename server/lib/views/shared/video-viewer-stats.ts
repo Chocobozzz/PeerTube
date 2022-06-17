@@ -10,7 +10,7 @@ import { Redis } from '@server/lib/redis'
 import { VideoModel } from '@server/models/video/video'
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer'
 import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-video-viewer-watch-section'
-import { MVideo } from '@server/types/models'
+import { MVideo, MVideoImmutable } from '@server/types/models'
 import { VideoViewEvent } from '@shared/models'
 
 const lTags = loggerTagsFactory('views')
@@ -41,7 +41,7 @@ export class VideoViewerStats {
   // ---------------------------------------------------------------------------
 
   async addLocalViewer (options: {
-    video: MVideo
+    video: MVideoImmutable
     currentTime: number
     ip: string
     viewEvent?: VideoViewEvent
@@ -64,7 +64,7 @@ export class VideoViewerStats {
   // ---------------------------------------------------------------------------
 
   private async updateLocalViewerStats (options: {
-    video: MVideo
+    video: MVideoImmutable
     ip: string
     currentTime: number
     viewEvent?: VideoViewEvent

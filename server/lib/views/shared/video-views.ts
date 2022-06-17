@@ -1,7 +1,8 @@
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { sendView } from '@server/lib/activitypub/send/send-view'
+import { getCachedVideoDuration } from '@server/lib/video'
 import { getServerActor } from '@server/models/application/application'
-import { MVideo } from '@server/types/models'
+import { MVideo, MVideoImmutable } from '@server/types/models'
 import { buildUUID } from '@shared/extra-utils'
 import { Redis } from '../../redis'
 
@@ -10,7 +11,7 @@ const lTags = loggerTagsFactory('views')
 export class VideoViews {
 
   async addLocalView (options: {
-    video: MVideo
+    video: MVideoImmutable
     ip: string
     watchTime: number
   }) {
@@ -18,7 +19,7 @@ export class VideoViews {
 
     logger.debug('Adding local view to video %s.', video.uuid, { watchTime, ...lTags(video.uuid) })
 
-    if (!this.hasEnoughWatchTime(video, watchTime)) return false
+    if (!await this.hasEnoughWatchTime(video, watchTime)) return false
 
     const viewExists = await Redis.Instance.doesVideoIPViewExist(ip, video.uuid)
     if (viewExists) return false
@@ -46,7 +47,7 @@ export class VideoViews {
 
   // ---------------------------------------------------------------------------
 
-  private async addView (video: MVideo) {
+  private async addView (video: MVideoImmutable) {
     const promises: Promise<any>[] = []
 
     if (video.isOwned()) {
@@ -58,10 +59,12 @@ export class VideoViews {
     await Promise.all(promises)
   }
 
-  private hasEnoughWatchTime (video: MVideo, watchTime: number) {
-    if (video.isLive || video.duration >= 30) return watchTime >= 30
+  private async hasEnoughWatchTime (video: MVideoImmutable, watchTime: number) {
+    const { duration, isLive } = await getCachedVideoDuration(video.id)
+
+    if (isLive || duration >= 30) return watchTime >= 30
 
     // Check more than 50% of the video is watched
-    return video.duration / watchTime < 2
+    return duration / watchTime < 2
   }
 }
