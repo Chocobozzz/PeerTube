@@ -9,6 +9,7 @@ export type JobState = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed'
 export type JobType =
   | 'activitypub-http-unicast'
   | 'activitypub-http-broadcast'
+  | 'activitypub-http-broadcast-parallel'
   | 'activitypub-http-fetcher'
   | 'activitypub-cleaner'
   | 'activitypub-follow'

@@ -139,6 +139,7 @@ const REMOTE_SCHEME = {
 
 const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 1,
+  'activitypub-http-broadcast-parallel': 1,
   'activitypub-http-unicast': 1,
   'activitypub-http-fetcher': 2,
   'activitypub-follow': 5,
@@ -159,6 +160,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
 // Excluded keys are jobs that can be configured by admins
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
   'activitypub-http-broadcast': 1,
+  'activitypub-http-broadcast-parallel': 30,
   'activitypub-http-unicast': 10,
   'activitypub-http-fetcher': 3,
   'activitypub-cleaner': 1,
@@ -176,6 +178,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
+  'activitypub-http-broadcast-parallel': 60000 * 10, // 10 minutes
   'activitypub-http-unicast': 60000 * 10, // 10 minutes
   'activitypub-http-fetcher': 1000 * 3600 * 10, // 10 hours
   'activitypub-follow': 60000 * 10, // 10 minutes
