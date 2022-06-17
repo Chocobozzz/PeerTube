@@ -4,7 +4,7 @@ import { asyncMiddleware, oembedValidator } from '../middlewares'
 import { accountNameWithHostGetValidator } from '../middlewares/validators'
 import { MChannelSummary } from '@server/types/models'
 import { escapeHTML } from '@shared/core-utils/renderer'
-import { logger } from '@server/helpers/logger'
+import { pick } from '@shared/core-utils'
 
 const servicesRouter = express.Router()
 
@@ -48,14 +48,23 @@ function generatePlaylistOEmbed (req: express.Request, res: express.Response) {
 
 function generateVideoOEmbed (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
-
-  const regex = /\?[^?]*$/
-  const params = regex.test(req.query.url) ? req.query.url.match(regex) : ''
+  let parameter = ''
+  const params = new URLSearchParams()
+  new URL(req.query.url).searchParams.forEach((v, p) => {
+    const { url, ...queryParams } = req.query
+    const options = pick({ [p]: v, ...queryParams }, [ 'start', 'stop', 'loop', 'autoplay', 'muted' ])
+    Object.keys(options).forEach(key => {
+      if (options[key] !== '' && options[key] !== undefined && options[key] !== null) {
+        params.set(key, options[key])
+        parameter = '?' + params.toString()
+      }
+    })
+  })
 
   const json = buildOEmbed({
     channel: video.VideoChannel,
     title: video.name,
-    embedPath: video.getEmbedStaticPath() + params,
+    embedPath: video.getEmbedStaticPath() + parameter,
     previewPath: video.getPreviewStaticPath(),
     previewSize: PREVIEWS_SIZE,
     req
