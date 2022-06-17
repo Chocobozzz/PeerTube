@@ -819,10 +819,10 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
         }
       }
 
-      return UserModel.count(query)
+      return UserModel.unscoped().count(query)
     }
 
-    const totalUsers = await UserModel.count()
+    const totalUsers = await UserModel.unscoped().count()
     const totalDailyActiveUsers = await getActiveUsers(1)
     const totalWeeklyActiveUsers = await getActiveUsers(7)
     const totalMonthlyActiveUsers = await getActiveUsers(30)
