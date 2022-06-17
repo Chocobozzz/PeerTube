@@ -73,6 +73,7 @@
     @include ellipsis;
 
     width: 100%;
+    color:rgba(16, 173, 165, 0.733);
 
     @media screen and (max-width: $mobile-view) {
       display: none;

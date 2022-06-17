@@ -126,12 +126,12 @@
   &:active,
   &:focus {
     color: #fff;
-    background-color: pvar(--mainColor);
+    background-color: rgba(20, 211, 201, 0.733);
   }
 
   &:hover {
     color: #fff;
-    background-color: pvar(--mainHoverColor);
+    background-color: rgba(19, 153, 146, 0.733);
   }
 
   &[disabled],
