@@ -9330,6 +9330,7 @@
       </trans-unit>
       <trans-unit id="8746826171043347689" datatype="html">
         <source>Verify account email confirmation</source>
+        <target>nimi Email sina li pona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -9353,7 +9354,7 @@
       </trans-unit>
       <trans-unit id="248731258067914565" datatype="html">
         <source>Verify account via email</source>
-        <target state="needs-translation">o lukin e poki Email sina</target>
+        <target state="translated">nimi Email li pona ala pona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">15</context>
@@ -9361,7 +9362,7 @@
       </trans-unit>
       <trans-unit id="9197112111252826229" datatype="html">
         <source>Ask to send an email to verify you account</source>
-        <target state="needs-translation">mi wile pana e sona ni: poki Email mi li ijo mi</target>
+        <target state="needs-translation">sina wile pana e sona ni: poki Email ni li ijo sina</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">24</context>
@@ -10530,7 +10531,7 @@
       </trans-unit>
       <trans-unit id="5600963353867835532" datatype="html">
         <source>Already uploaded ✔</source>
-        <target state="needs-translation">lon ✔</target>
+        <target state="translated">lon ✔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">187</context>
@@ -12087,7 +12088,7 @@
       </trans-unit>
       <trans-unit id="2913936134410914576" datatype="html">
         <source>AUTOPLAY</source>
-        <target state="needs-translation">TAWA ILO</target>
+        <target state="translated">TAWA LON OPEN</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">10</context>
@@ -12111,6 +12112,7 @@
       </trans-unit>
       <trans-unit id="3704292036525161260" datatype="html">
         <source>Placeholder image</source>
+        <target>sitelen sinpin pi sitelen ala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">11</context>
@@ -12154,6 +12156,7 @@
       </trans-unit>
       <trans-unit id="5761611056224181752" datatype="html">
         <source>Redirection</source>
+        <target>tawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">316</context>
@@ -12217,6 +12220,7 @@
       </trans-unit>
       <trans-unit id="4791956574676305640" datatype="html">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90%</source>
+        <target>o tawa kipisi sitelen. 0 la mi tawa open. 9 la mi tawa kipisi nanpa 9 pi kipisi 10</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">738</context>
@@ -12296,6 +12300,7 @@
       </trans-unit>
       <trans-unit id="7627544798203088407" datatype="html">
         <source>Discover</source>
+        <target>kulupu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.html</context>
           <context context-type="linenumber">1</context>
@@ -12307,6 +12312,7 @@
       </trans-unit>
       <trans-unit id="834805431202576194" datatype="html">
         <source>No results.</source>
+        <target>ala li lon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.html</context>
           <context context-type="linenumber">4</context>
@@ -12322,6 +12328,7 @@
       </trans-unit>
       <trans-unit id="12646164819555880" datatype="html">
         <source>Videos from your subscriptions</source>
+        <target>sitelen tan lipu pi lukin sina</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/video-user-subscriptions.component.ts</context>
           <context context-type="linenumber">30</context>
@@ -12329,6 +12336,7 @@
       </trans-unit>
       <trans-unit id="3037358578603095196" datatype="html">
         <source>Only videos uploaded on this instance are displayed</source>
+        <target>mi pana lukin e sitelen pi ma ni taso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context>
           <context context-type="linenumber">190</context>
@@ -12336,6 +12344,7 @@
       </trans-unit>
       <trans-unit id="2431286785954354122" datatype="html">
         <source>Recently added</source>
+        <target>sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context>
           <context context-type="linenumber">195</context>
@@ -12391,7 +12400,7 @@
       </trans-unit>
       <trans-unit id="4668975178372693951" datatype="html">
         <source>Discover videos</source>
-        <target state="needs-translation">o pana e sitelen pona</target>
+        <target state="translated">kulupu sitelen pi ken pona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/videos-routing.module.ts</context>
           <context context-type="linenumber">17</context>
@@ -12427,6 +12436,7 @@
       </trans-unit>
       <trans-unit id="219462505467671767" datatype="html">
         <source>Close the left menu</source>
+        <target>o weka e poki poka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">137</context>
@@ -12434,6 +12444,7 @@
       </trans-unit>
       <trans-unit id="3455550526898419928" datatype="html">
         <source>Open the left menu</source>
+        <target>o pana e poki poka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -12441,6 +12452,7 @@
       </trans-unit>
       <trans-unit id="7709367721354853232" datatype="html">
         <source>Focus the search bar</source>
+        <target>o tawa poki alasa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">274</context>
@@ -12448,6 +12460,7 @@
       </trans-unit>
       <trans-unit id="4049262826107502276" datatype="html">
         <source>Toggle the left menu</source>
+        <target>o weka/pana e poki poka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">279</context>
@@ -12455,6 +12468,7 @@
       </trans-unit>
       <trans-unit id="5409372033656550095" datatype="html">
         <source>Go to the discover videos page</source>
+        <target>o tawa kulupu sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">284</context>
@@ -12462,6 +12476,7 @@
       </trans-unit>
       <trans-unit id="4278050445961255445" datatype="html">
         <source>Go to the trending videos page</source>
+        <target>o tawa sitelen wawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">289</context>
@@ -12469,6 +12484,7 @@
       </trans-unit>
       <trans-unit id="3242234958443825475" datatype="html">
         <source>Go to the recently added videos page</source>
+        <target>o tawa sitelen sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">294</context>
@@ -12476,7 +12492,7 @@
       </trans-unit>
       <trans-unit id="2887122197778293919" datatype="html">
         <source>Go to the local videos page</source>
-        <target>o tawa lipu "sitelen pi ma ni"</target>
+        <target>o tawa sitelen pi ma ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">299</context>
@@ -12484,6 +12500,7 @@
       </trans-unit>
       <trans-unit id="8009065619559214982" datatype="html">
         <source>Go to the videos upload page</source>
+        <target>o tawa pana sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">304</context>
@@ -12491,6 +12508,7 @@
       </trans-unit>
       <trans-unit id="3779524668013120370" datatype="html">
         <source>Go to my subscriptions</source>
+        <target>o tawa lukin mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">61</context>
@@ -12498,6 +12516,7 @@
       </trans-unit>
       <trans-unit id="1136469849928650779" datatype="html">
         <source>Go to my videos</source>
+        <target>o tawa sitelen mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">65</context>
@@ -12505,6 +12524,7 @@
       </trans-unit>
       <trans-unit id="7836683738999600376" datatype="html">
         <source>Go to my imports</source>
+        <target>o tawa kama jo mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">69</context>
@@ -12512,6 +12532,7 @@
       </trans-unit>
       <trans-unit id="7511292153332773503" datatype="html">
         <source>Go to my channels</source>
+        <target>o tawa lipu pi lipu mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">73</context>
@@ -12519,6 +12540,7 @@
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
         <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.text"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <target>mi ken ala kama jo e nimi wawa pi nasin OAuth. pakala li ni: <x id="PH" equiv-text="err.text"/>. o lukin e wile sina pi ilo PeerTube (lon poki config/). suli la o lukin e wan "webserver".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">100,101</context>
@@ -12538,6 +12560,7 @@
       </trans-unit>
       <trans-unit id="375263728166936544" datatype="html">
         <source>You need to reconnect.</source>
+        <target>o linja sin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">221</context>
@@ -12545,6 +12568,7 @@
       </trans-unit>
       <trans-unit id="2206638022166154361" datatype="html">
         <source>Keyboard Shortcuts:</source>
+        <target>nasin tawa pi nena mute:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/hotkeys/hotkeys.component.ts</context>
           <context context-type="linenumber">11</context>
@@ -12552,6 +12576,7 @@
       </trans-unit>
       <trans-unit id="3608407683173066091" datatype="html">
         <source>My history</source>
+        <target>lukin sina pi tenpo pini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/menu/menu.service.ts</context>
           <context context-type="linenumber">98</context>
@@ -12559,6 +12584,7 @@
       </trans-unit>
       <trans-unit id="4024404994702813072" datatype="html">
         <source>In my library</source>
+        <target>lon tomo sina</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/menu/menu.service.ts</context>
           <context context-type="linenumber">104</context>
@@ -12566,6 +12592,7 @@
       </trans-unit>
       <trans-unit id="2821179408673282599" datatype="html">
         <source>Home</source>
+        <target>open</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/menu/menu.service.ts</context>
           <context context-type="linenumber">115</context>
@@ -12577,6 +12604,7 @@
       </trans-unit>
       <trans-unit id="8067135025051844577" datatype="html">
         <source>Trending videos</source>
+        <target>sitelen wawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/menu/menu.service.ts</context>
           <context context-type="linenumber">130</context>
@@ -12584,6 +12612,7 @@
       </trans-unit>
       <trans-unit id="664221386829541948" datatype="html">
         <source>Recently added videos</source>
+        <target>sitelen sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/menu/menu.service.ts</context>
           <context context-type="linenumber">136</context>
@@ -12599,6 +12628,7 @@
       </trans-unit>
       <trans-unit id="4648900870671159218" datatype="html">
         <source>Success</source>
+        <target>pona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/notification/notifier.service.ts</context>
           <context context-type="linenumber">25</context>
@@ -12610,6 +12640,7 @@
       </trans-unit>
       <trans-unit id="2971365540217107489" datatype="html">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
+        <target>ni li suli ike tawa ilo ni. sina wile pana e ijo pi suli ni la o toki tawa lawa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">61</context>
@@ -12617,6 +12648,7 @@
       </trans-unit>
       <trans-unit id="968295009933361070" datatype="html">
         <source>Too many attempts, please try again after <x id="PH" equiv-text="minutesLeft"/> minutes.</source>
+        <target>sina ni pi mute ike. o awen kepeken tenpo suli <x id="PH" equiv-text="minutesLeft"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">66</context>
@@ -12624,6 +12656,7 @@
       </trans-unit>
       <trans-unit id="4965472196059235310" datatype="html">
         <source>Too many attempts, please try again later.</source>
+        <target>sina ni pi mute ike. o awen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">68</context>
@@ -12639,6 +12672,7 @@
       </trans-unit>
       <trans-unit id="4670312387769733978" datatype="html">
         <source>All unsaved data will be lost, are you sure you want to leave this page?</source>
+        <target>sina awen ala e ante la ona li kama weka lon weka sina. ni la sina wile ala wile weka?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/routing/can-deactivate-guard.service.ts</context>
           <context context-type="linenumber">19</context>
@@ -12646,6 +12680,7 @@
       </trans-unit>
       <trans-unit id="6759205696902713848" datatype="html">
         <source>Warning</source>
+        <target>o lukin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/routing/can-deactivate-guard.service.ts</context>
           <context context-type="linenumber">23</context>
@@ -12669,6 +12704,7 @@
       </trans-unit>
       <trans-unit id="1843010981261389722" datatype="html">
         <source>using <x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/></source>
+        <target>kepeken <x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">28</context>
@@ -12676,6 +12712,7 @@
       </trans-unit>
       <trans-unit id="4070041848101291003" datatype="html">
         <source>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</source>
+        <target>alasa ni li kepeken ilo ante. mi pana e sona ni taso tawa ona: ona li ken ala alasa kepeken ala ona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">32</context>
@@ -12683,6 +12720,7 @@
       </trans-unit>
       <trans-unit id="2807610143550376912" datatype="html">
         <source>Your query will be matched against video names or descriptions, channel names.</source>
+        <target>mi alasa e ni lon nimi sitelen lon toki sitelen lon nimi lipu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">37</context>
@@ -12698,6 +12736,7 @@
       </trans-unit>
       <trans-unit id="6462732349450217281" datatype="html">
         <source>Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</source>
+        <target>ni la sina sona e ni: sina ken alasa lon ma ale anu ma ni taso: mi lukin e ona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">41</context>
@@ -12705,6 +12744,7 @@
       </trans-unit>
       <trans-unit id="3416071273413341159" datatype="html">
         <source>any instance</source>
+        <target>ma ale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">42</context>
@@ -12712,6 +12752,7 @@
       </trans-unit>
       <trans-unit id="1764675694412365696" datatype="html">
         <source>only followed instances</source>
+        <target>ma lukin taso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">43</context>
@@ -12719,6 +12760,7 @@
       </trans-unit>
       <trans-unit id="3710530516408401495" datatype="html">
         <source>will list the matching channel</source>
+        <target>la mi pana e lipu ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">50</context>
@@ -12730,6 +12772,7 @@
       </trans-unit>
       <trans-unit id="6913541939335935215" datatype="html">
         <source>will list the matching video</source>
+        <target>la mi pana e sitelen ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">56</context>
@@ -12737,6 +12780,7 @@
       </trans-unit>
       <trans-unit id="2468689683507870964" datatype="html">
         <source>In this instance's network</source>
+        <target>lon ma poka pi ma ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">14</context>
@@ -12744,6 +12788,7 @@
       </trans-unit>
       <trans-unit id="4494942989613184609" datatype="html">
         <source>In the vidiverse</source>
+        <target>lon ma ale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">15</context>
@@ -12751,6 +12796,7 @@
       </trans-unit>
       <trans-unit id="2605931708025789621" datatype="html">
         <source>The upload failed</source>
+        <target>pana li pakala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">12</context>
@@ -12758,6 +12804,7 @@
       </trans-unit>
       <trans-unit id="1447760976255144968" datatype="html">
         <source>The connection was interrupted</source>
+        <target>linja linluwi li pakala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">16</context>
@@ -12765,6 +12812,7 @@
       </trans-unit>
       <trans-unit id="4499233456830047129" datatype="html">
         <source>The server encountered an error</source>
+        <target>ilo suli li pakala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">19</context>
@@ -12772,6 +12820,7 @@
       </trans-unit>
       <trans-unit id="3334825601859787496" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the set timeout (usually 10min)</source>
+        <target>mi ken ala pana e ijo "<x id="PH" equiv-text="name"/>" sina kepeken tenpo pi lili pona (mute la ni li tenpo suli 10)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">22</context>
@@ -12779,6 +12828,7 @@
       </trans-unit>
       <trans-unit id="8530934870279569179" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file was too large (max. size: <x id="PH_1" equiv-text="maxFileSize"/>)</source>
+        <target>ijo "<x id="PH" equiv-text="name"/>" sina li suli ike (suli ken li <x id="PH_1" equiv-text="maxFileSize"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">26</context>
@@ -12786,6 +12836,7 @@
       </trans-unit>
       <trans-unit id="742596572641738016" datatype="html">
         <source>Change the language</source>
+        <target>o ante e toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/language-chooser.component.html</context>
           <context context-type="linenumber">3</context>
@@ -12793,6 +12844,7 @@
       </trans-unit>
       <trans-unit id="2964653499524716819" datatype="html">
         <source>Help to translate PeerTube!</source>
+        <target>o pali e ilo PeerTube pi toki ante!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/language-chooser.component.html</context>
           <context context-type="linenumber">8,10</context>
@@ -12800,6 +12852,7 @@
       </trans-unit>
       <trans-unit id="5464118521750361406" datatype="html">
         <source>Public profile</source>
+        <target>lipu sijelo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">28</context>
@@ -12807,6 +12860,7 @@
       </trans-unit>
       <trans-unit id="7773271640656013365" datatype="html">
         <source>Interface:</source>
+        <target>toki ilo:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">38</context>
@@ -12814,6 +12868,7 @@
       </trans-unit>
       <trans-unit id="1674139713929545659" datatype="html">
         <source>Videos:</source>
+        <target>toki sitelen:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">45</context>
@@ -12821,7 +12876,7 @@
       </trans-unit>
       <trans-unit id="9156407045661257130" datatype="html">
         <source>Sensitive:</source>
-        <target>ijo pi ken ike:</target>
+        <target>ijo pi ken ike la:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">55</context>
@@ -12829,6 +12884,7 @@
       </trans-unit>
       <trans-unit id="3430483831942247060" datatype="html">
         <source>Help share videos</source>
+        <target>o pana tawa ilo ante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">61</context>
@@ -12836,6 +12892,7 @@
       </trans-unit>
       <trans-unit id="7005745151564974365" datatype="html">
         <source>Keyboard shortcuts</source>
+        <target>nasin tawa pi nena mute</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">70</context>
