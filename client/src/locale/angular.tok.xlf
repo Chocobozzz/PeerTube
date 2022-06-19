@@ -569,7 +569,7 @@
       </trans-unit>
       <trans-unit id="9127604588498960753" datatype="html">
         <source>Subject</source>
-        <target>open</target>
+        <target>toki suli</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context>
           <context context-type="linenumber">29</context>
@@ -9362,7 +9362,7 @@
       </trans-unit>
       <trans-unit id="9197112111252826229" datatype="html">
         <source>Ask to send an email to verify you account</source>
-        <target state="needs-translation">sina wile pana e sona ni: poki Email ni li ijo sina</target>
+        <target state="translated">sina wile pana e sona ni: poki Email ni li ijo sina</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">24</context>
@@ -10423,7 +10423,7 @@
       </trans-unit>
       <trans-unit id="7886570921510760899" datatype="html">
         <source>Tags</source>
-        <target>poki sitelen lili</target>
+        <target>nimi poki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">25</context>
@@ -10435,7 +10435,7 @@
       </trans-unit>
       <trans-unit id="354332809647287722" datatype="html">
         <source>Tags could be used to suggest relevant recommendations. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> There is a maximum of 5 tags. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Press <x id="START_TAG_KBD" ctype="x-kbd" equiv-text="&lt;kbd&gt;"/>Enter<x id="CLOSE_TAG_KBD" ctype="x-kbd" equiv-text="&lt;/kbd&gt;"/> to add a new tag. </source>
-        <target>poki lili la jan li ken kama sona e sitelen pi ijo sama. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> sina ken pana e poki 5. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> sina wile pana e poki sin la o kepeken nena <x id="START_TAG_KBD" ctype="x-kbd" equiv-text="&lt;kbd&gt;"/>Enter<x id="CLOSE_TAG_KBD" ctype="x-kbd" equiv-text="&lt;/kbd&gt;"/>. </target>
+        <target>nimi poki la jan li ken kama sona e sitelen pi ijo sama. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> sina ken pana e nimi poki 5. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> sina wile pana e nimi sin la o kepeken nena <x id="START_TAG_KBD" ctype="x-kbd" equiv-text="&lt;kbd&gt;"/>Enter<x id="CLOSE_TAG_KBD" ctype="x-kbd" equiv-text="&lt;/kbd&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">29,33</context>
@@ -12920,6 +12920,7 @@
       </trans-unit>
       <trans-unit id="6371572688505952303" datatype="html">
         <source>My library</source>
+        <target>tomo mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">91</context>
@@ -12939,6 +12940,7 @@
       </trans-unit>
       <trans-unit id="1726363342938046830" datatype="html">
         <source>About</source>
+        <target>sona pi ma ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">129</context>
@@ -12946,6 +12948,7 @@
       </trans-unit>
       <trans-unit id="2689878465089314112" datatype="html">
         <source>Interface: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></source>
+        <target>toki ilo: <x id="INTERPOLATION" equiv-text="{{ currentInterfaceLanguage }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">137</context>
@@ -12953,6 +12956,7 @@
       </trans-unit>
       <trans-unit id="8378304669563824772" datatype="html">
         <source>Get help using PeerTube</source>
+        <target>o kama sona e ilo PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">142</context>
@@ -12960,6 +12964,7 @@
       </trans-unit>
       <trans-unit id="7911416166208830577" datatype="html">
         <source>Help</source>
+        <target>sona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">142</context>
@@ -12967,6 +12972,7 @@
       </trans-unit>
       <trans-unit id="3620232640697554352" datatype="html">
         <source>Frequently asked questions about PeerTube</source>
+        <target>jan mute li wile sona e ni pi ilo PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">143</context>
@@ -12974,6 +12980,7 @@
       </trans-unit>
       <trans-unit id="2806917038528218276" datatype="html">
         <source>FAQ</source>
+        <target>sona pona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">143</context>
@@ -12993,6 +13000,7 @@
       </trans-unit>
       <trans-unit id="3722967224215437913" datatype="html">
         <source>API documentation</source>
+        <target>lipu sona pi toki ilo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">145</context>
@@ -13000,6 +13008,7 @@
       </trans-unit>
       <trans-unit id="8942351587754185907" datatype="html">
         <source>API</source>
+        <target>toki ilo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">145</context>
@@ -13007,7 +13016,7 @@
       </trans-unit>
       <trans-unit id="7366542359085748162" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2022</source>
-        <target state="needs-translation">kepeken ilo PeerTube - nasin CopyLeft 2015-2022</target>
+        <target state="translated">kepeken ilo PeerTube - pana tawa ale 2015-2022</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">151</context>
@@ -13023,6 +13032,7 @@
       </trans-unit>
       <trans-unit id="4467323362722952678" datatype="html">
         <source>Unknown</source>
+        <target>sona ala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">206</context>
@@ -13062,6 +13072,7 @@
       </trans-unit>
       <trans-unit id="403762424689874454" datatype="html">
         <source>View your notifications</source>
+        <target>o pana lukin e ijo sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/notification.component.html</context>
           <context context-type="linenumber">3</context>
@@ -13073,6 +13084,7 @@
       </trans-unit>
       <trans-unit id="8278995041812548563" datatype="html">
         <source>Update your notification preferences</source>
+        <target>o ante e wile mi pi ijo sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/notification.component.html</context>
           <context context-type="linenumber">31</context>
@@ -13080,6 +13092,7 @@
       </trans-unit>
       <trans-unit id="5842982307680337701" datatype="html">
         <source>See all your notifications</source>
+        <target>o pana lukin e ijo sin ale mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/notification.component.html</context>
           <context context-type="linenumber">49</context>
@@ -13087,7 +13100,7 @@
       </trans-unit>
       <trans-unit id="5108072242786374364" datatype="html">
         <source>Welcome to <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>, dear user!</source>
-        <target state="needs-translation">kama pona lon ma "<x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>", jan pona o!</target>
+        <target state="translated">kama pona lon ma "<x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>", jan pona o!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -13095,6 +13108,7 @@
       </trans-unit>
       <trans-unit id="8821712929823045567" datatype="html">
         <source>It's time to set up your account profile!</source>
+        <target>o pali e lipu pi sijelo sina!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">10</context>
@@ -13102,6 +13116,7 @@
       </trans-unit>
       <trans-unit id="7239874680342223476" datatype="html">
         <source>Help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> by:</source>
+        <target>lawa en jan ante li wile sona e ni: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>sina seme<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. ni la o pana e ni:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">12</context>
@@ -13109,6 +13124,7 @@
       </trans-unit>
       <trans-unit id="5856432243446401016" datatype="html">
         <source>Uploading an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>sitelen sinpin<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">15</context>
@@ -13116,6 +13132,7 @@
       </trans-unit>
       <trans-unit id="3221645359464920754" datatype="html">
         <source>Writing a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>toki sona<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">16</context>
@@ -13155,7 +13172,7 @@
       </trans-unit>
       <trans-unit id="1516969129397662377" datatype="html">
         <source>Welcome to PeerTube, dear administrator!</source>
-        <target state="needs-translation">kama pona lon ilo PeerTube, lawa o!</target>
+        <target state="translated">kama pona lon ilo PeerTube, lawa o!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -13163,6 +13180,7 @@
       </trans-unit>
       <trans-unit id="807030720531713957" datatype="html">
         <source>CLI documentation</source>
+        <target>lipu sona pi nasin kepeken CLI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">12,13</context>
@@ -13170,6 +13188,7 @@
       </trans-unit>
       <trans-unit id="199127249622290422" datatype="html">
         <source>Upload or import videos, parse logs, prune storage directories, reset user password...</source>
+        <target>ni la sina ken pana e sitelen li ken lukin e lipu pali li ken weka e ijo pi wile ala li ken sin e nimi wawa...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">15</context>
@@ -13177,6 +13196,7 @@
       </trans-unit>
       <trans-unit id="249453844439446209" datatype="html">
         <source>Administer documentation</source>
+        <target>lipu sona lawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">19,20</context>
@@ -13184,6 +13204,7 @@
       </trans-unit>
       <trans-unit id="5910950876330656326" datatype="html">
         <source>Managing users, following other instances, dealing with spammers...</source>
+        <target>ni la sina ken ante e ijo sijelo li ken lukin e ma ante li ken weka e jan ike...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">22</context>
@@ -13191,6 +13212,7 @@
       </trans-unit>
       <trans-unit id="879127294610588497" datatype="html">
         <source>Use documentation</source>
+        <target>lipu sona kepeken</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">26,27</context>
@@ -13198,6 +13220,7 @@
       </trans-unit>
       <trans-unit id="3848077896245199337" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
+        <target>ni la sina ken pali pona e sijelo sina li ken pali e kulupu sitelen li ken kama sona e ilo ante...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">29</context>
@@ -13205,6 +13228,7 @@
       </trans-unit>
       <trans-unit id="6284442506490785579" datatype="html">
         <source>Useful links</source>
+        <target>lipu ante pona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">39</context>
@@ -13212,6 +13236,7 @@
       </trans-unit>
       <trans-unit id="5170617864166788170" datatype="html">
         <source>Official PeerTube website (news, support, contribute...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot;                                                                            rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <target>lipu pi ilo PeerTube (ona la ijo sin en sona kepeken en nasin pi pana pali li lon): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot;                                                                            rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">42,43</context>
@@ -13219,6 +13244,7 @@
       </trans-unit>
       <trans-unit id="4614992717645869756" datatype="html">
         <source>Put your instance on the public PeerTube index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://instances.joinpeertube.org/instances&quot;&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <target>sina ken pana e ma ni lon lipu ma: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://instances.joinpeertube.org/instances&quot;&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">45</context>
@@ -13226,6 +13252,7 @@
       </trans-unit>
       <trans-unit id="2081626998027585315" datatype="html">
         <source>It's time to configure your instance!</source>
+        <target>o pona e ma sina!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">55</context>
@@ -13233,6 +13260,7 @@
       </trans-unit>
       <trans-unit id="5083058563861587027" datatype="html">
         <source>Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain your it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of instance they are. </source>
+        <target>o pana e <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nimi ma<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>e <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>toki sona<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. kin la o toki e ni: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>sina seme<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>? sina pali e ma ni <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>tan seme<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>? sina wile awen e ona lon <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>tenpo seme<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>? jan mute li wile sona e ni. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">57,61</context>
@@ -13240,6 +13268,7 @@
       </trans-unit>
       <trans-unit id="5329436244765769292" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your moderation rules<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance terms of service<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> PeerTube instance. </source>
+        <target>sina wile ken e pali sijelo la o toki e ni: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nasin lawa pi ma ni li seme?<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. kin la o toki e ni: ma ni la ijo seme en toki seme li suli. ni la jan li ken sona e ni: ma ni li <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pona ala pona tawa ona<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">63,67</context>
@@ -13247,6 +13276,7 @@
       </trans-unit>
       <trans-unit id="5704345824323933019" datatype="html">
         <source>Remind me later</source>
+        <target>o toki sin e ni lon tenpo kama</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">74</context>
@@ -13254,6 +13284,7 @@
       </trans-unit>
       <trans-unit id="9202089339019827574" datatype="html">
         <source>Configure my instance</source>
+        <target>o pona e ma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">80,82</context>
@@ -13261,6 +13292,7 @@
       </trans-unit>
       <trans-unit id="9178182467454450952" datatype="html">
         <source>Confirm</source>
+        <target>pona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/confirm.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -13268,6 +13300,7 @@
       </trans-unit>
       <trans-unit id="9005121595859995793" datatype="html">
         <source>Configuration warning!</source>
+        <target>ike!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -13275,6 +13308,7 @@
       </trans-unit>
       <trans-unit id="8901933019590352016" datatype="html">
         <source>You enabled user registration on your instance but did not configure the following fields:</source>
+        <target>jan li ken pali e sijelo lon ma ni, taso sina pana ala e ni:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">10</context>
@@ -13282,6 +13316,7 @@
       </trans-unit>
       <trans-unit id="8948444690892731948" datatype="html">
         <source>Instance name</source>
+        <target>nimi ma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">13</context>
@@ -13289,6 +13324,7 @@
       </trans-unit>
       <trans-unit id="966824924873033885" datatype="html">
         <source>Instance short description</source>
+        <target>toki sona lili</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">14</context>
@@ -13296,6 +13332,7 @@
       </trans-unit>
       <trans-unit id="1339481669904426442" datatype="html">
         <source>Who you are</source>
+        <target>sina seme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">16</context>
@@ -13303,6 +13340,7 @@
       </trans-unit>
       <trans-unit id="5026256683194518810" datatype="html">
         <source>How long you plan to maintain your instance</source>
+        <target>sina wile awen e ma ni lon tenpo seme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">17</context>
@@ -13310,6 +13348,7 @@
       </trans-unit>
       <trans-unit id="1909672990242291785" datatype="html">
         <source>How you plan to pay for keeping your instance running</source>
+        <target>sina awen e ma ni kepeken mani tan seme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">18</context>
@@ -13317,6 +13356,7 @@
       </trans-unit>
       <trans-unit id="869943508869906576" datatype="html">
         <source>How you will moderate your instance</source>
+        <target>sina lawa e ma ni kepeken nasin seme</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">20</context>
@@ -13324,6 +13364,7 @@
       </trans-unit>
       <trans-unit id="5032335000394561521" datatype="html">
         <source>Instance terms</source>
+        <target>lipu lawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">21</context>
@@ -13331,6 +13372,7 @@
       </trans-unit>
       <trans-unit id="5330788940795142335" datatype="html">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Without them, your instance may not be referenced on the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>JoinPeerTube website<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+        <target>o pana e sona ni la jan li ken sona e ni: ma ni li <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>pona ala pona tawa ona<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. sina ni ala la ma ni li ken ala lon <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>lipu JoinPeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">24,27</context>
@@ -13338,6 +13380,7 @@
       </trans-unit>
       <trans-unit id="2728623642717111613" datatype="html">
         <source>Don't show me this warning anymore</source>
+        <target>o toki ala e ni tawa mi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">33</context>
@@ -13345,6 +13388,7 @@
       </trans-unit>
       <trans-unit id="6013345175862135505" datatype="html">
         <source>Configure</source>
+        <target>o pali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">43,45</context>
@@ -13352,6 +13396,7 @@
       </trans-unit>
       <trans-unit id="1420294365005204590" datatype="html">
         <source>These settings apply only to your session on this instance.</source>
+        <target>ni li ante e ilo sina taso pi ma ni taso.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">8</context>
@@ -13359,6 +13404,7 @@
       </trans-unit>
       <trans-unit id="4786000816576841850" datatype="html">
         <source>Display settings</source>
+        <target>lukin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">10</context>
@@ -13366,6 +13412,7 @@
       </trans-unit>
       <trans-unit id="6460084371385263470" datatype="html">
         <source>Video settings</source>
+        <target>sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">18</context>
@@ -13373,6 +13420,7 @@
       </trans-unit>
       <trans-unit id="1288210794011686132" datatype="html">
         <source>Interface settings</source>
+        <target>selo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">22</context>
@@ -13380,6 +13428,7 @@
       </trans-unit>
       <trans-unit id="1000468652492651683" datatype="html">
         <source>Report reason is required.</source>
+        <target>o toki e ni: ni li ike tan seme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -13387,6 +13436,7 @@
       </trans-unit>
       <trans-unit id="1109780973109145433" datatype="html">
         <source>Report reason must be at least 2 characters long.</source>
+        <target>mute sitelen o lili ala tawa 2.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -13394,6 +13444,7 @@
       </trans-unit>
       <trans-unit id="5414573937278525654" datatype="html">
         <source>Report reason cannot be more than 3000 characters long.</source>
+        <target>mute sitelen o suli ala tawa 3000.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -13401,6 +13452,7 @@
       </trans-unit>
       <trans-unit id="8779567454442277762" datatype="html">
         <source>Moderation comment is required.</source>
+        <target>o toki e ni: sina ni tan seme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">16</context>
@@ -13408,6 +13460,7 @@
       </trans-unit>
       <trans-unit id="8954765410376245909" datatype="html">
         <source>Moderation comment must be at least 2 characters long.</source>
+        <target>mute sitelen o lili ala tawa 2.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">17</context>
@@ -13415,6 +13468,7 @@
       </trans-unit>
       <trans-unit id="6316804467108244906" datatype="html">
         <source>Moderation comment cannot be more than 3000 characters long.</source>
+        <target>mute sitelen o suli ala tawa 3000.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">18</context>
@@ -13422,6 +13476,7 @@
       </trans-unit>
       <trans-unit id="8835075531528610034" datatype="html">
         <source>Abuse message is required.</source>
+        <target>o toki e ni: ni li ike tan seme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">25</context>
@@ -13429,6 +13484,7 @@
       </trans-unit>
       <trans-unit id="9034042966936514516" datatype="html">
         <source>Abuse message must be at least 2 characters long.</source>
+        <target>mute sitelen o lili ala tawa 2.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">26</context>
@@ -13436,6 +13492,7 @@
       </trans-unit>
       <trans-unit id="7989186574443390119" datatype="html">
         <source>Abuse message cannot be more than 3000 characters long.</source>
+        <target>mute sitelen o suli ala tawa 3000.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">27</context>
@@ -13443,6 +13500,7 @@
       </trans-unit>
       <trans-unit id="7784486624424057376" datatype="html">
         <source>Instance name is required.</source>
+        <target>o pana e nimi ma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -13450,6 +13508,7 @@
       </trans-unit>
       <trans-unit id="3281212084219111058" datatype="html">
         <source>Short description should not be longer than 250 characters.</source>
+        <target>mute sitelen o suli ala tawa 250.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -13457,6 +13516,7 @@
       </trans-unit>
       <trans-unit id="6033463036257195528" datatype="html">
         <source>Twitter username is required.</source>
+        <target>o pana e nimi sijelo pi ilo Twitter.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">21</context>
@@ -13464,6 +13524,7 @@
       </trans-unit>
       <trans-unit id="8198703669620791633" datatype="html">
         <source>Previews cache size is required.</source>
+        <target>o pana e nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">28</context>
@@ -13471,6 +13532,7 @@
       </trans-unit>
       <trans-unit id="3971192070835972256" datatype="html">
         <source>Previews cache size must be greater than 1.</source>
+        <target>nanpa o suli tawa 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">29</context>
@@ -13478,6 +13540,7 @@
       </trans-unit>
       <trans-unit id="2903453036126968504" datatype="html">
         <source>Previews cache size must be a number.</source>
+        <target>ni o nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">30</context>
@@ -13485,6 +13548,7 @@
       </trans-unit>
       <trans-unit id="6941976540222684735" datatype="html">
         <source>Captions cache size is required.</source>
+        <target>o pana e nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">37</context>
@@ -13492,6 +13556,7 @@
       </trans-unit>
       <trans-unit id="780869536819343075" datatype="html">
         <source>Captions cache size must be greater than 1.</source>
+        <target>nanpa o suli tawa 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">38</context>
@@ -13499,6 +13564,7 @@
       </trans-unit>
       <trans-unit id="2498218540197718478" datatype="html">
         <source>Captions cache size must be a number.</source>
+        <target>ni o nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">39</context>
@@ -13506,6 +13572,7 @@
       </trans-unit>
       <trans-unit id="818392297325723982" datatype="html">
         <source>Signup limit is required.</source>
+        <target>o pana e nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">46</context>
@@ -13513,6 +13580,7 @@
       </trans-unit>
       <trans-unit id="5630311719329022718" datatype="html">
         <source>Signup limit must be greater than 1. Use -1 to disable it.</source>
+        <target>nanpa o suli tawa 1. sina wile ala e pini la o pana e -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">47</context>
@@ -13520,6 +13588,7 @@
       </trans-unit>
       <trans-unit id="2555843408410000965" datatype="html">
         <source>Signup limit must be a number.</source>
+        <target>ni o nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">48</context>
@@ -13527,6 +13596,7 @@
       </trans-unit>
       <trans-unit id="346485141381099383" datatype="html">
         <source>Signup minimum age is required.</source>
+        <target>o pana e nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">55</context>
@@ -13534,6 +13604,7 @@
       </trans-unit>
       <trans-unit id="4230672031132838318" datatype="html">
         <source>Signup minimum age must be greater than 1.</source>
+        <target>nanpa o suli tawa 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">56</context>
@@ -13541,6 +13612,7 @@
       </trans-unit>
       <trans-unit id="5929230001329133993" datatype="html">
         <source>Signup minimum age must be a number.</source>
+        <target>ni o nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">57</context>
@@ -13548,6 +13620,7 @@
       </trans-unit>
       <trans-unit id="240096858386658337" datatype="html">
         <source>Admin email is required.</source>
+        <target>o pana e nimi Email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">64</context>
@@ -13555,6 +13628,7 @@
       </trans-unit>
       <trans-unit id="4392533896009432078" datatype="html">
         <source>Admin email must be valid.</source>
+        <target>nimi Email o pona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">65</context>
@@ -13562,6 +13636,7 @@
       </trans-unit>
       <trans-unit id="6172217783476989430" datatype="html">
         <source>Transcoding threads is required.</source>
+        <target>o pana e nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">72</context>
@@ -13569,6 +13644,7 @@
       </trans-unit>
       <trans-unit id="5320424292625586941" datatype="html">
         <source>Transcoding threads must be greater or equal to 0.</source>
+        <target>nanpa o 0 anu suli tawa 0.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">73</context>
@@ -13576,6 +13652,7 @@
       </trans-unit>
       <trans-unit id="8185661254949728718" datatype="html">
         <source>Max live duration is required.</source>
+        <target>o pana e nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">80</context>
@@ -13583,6 +13660,7 @@
       </trans-unit>
       <trans-unit id="8892863662898651766" datatype="html">
         <source>Max live duration should be greater or equal to -1.</source>
+        <target>nanpa o -1 anu suli tawa -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">81</context>
@@ -13590,6 +13668,7 @@
       </trans-unit>
       <trans-unit id="8196240396863235661" datatype="html">
         <source>Max instance lives is required.</source>
+        <target>o pana e nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">88</context>
@@ -13597,6 +13676,7 @@
       </trans-unit>
       <trans-unit id="913683464711184925" datatype="html">
         <source>Max instance lives should be greater or equal to -1.</source>
+        <target>nanpa o -1 anu suli tawa -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">89</context>
@@ -13604,6 +13684,7 @@
       </trans-unit>
       <trans-unit id="5614457087254770778" datatype="html">
         <source>Max user lives is required.</source>
+        <target>o pana e nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">96</context>
@@ -13611,6 +13692,7 @@
       </trans-unit>
       <trans-unit id="2779726697233311712" datatype="html">
         <source>Max user lives should be greater or equal to -1.</source>
+        <target>nanpa o -1 anu suli tawa -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">97</context>
@@ -13618,6 +13700,7 @@
       </trans-unit>
       <trans-unit id="351272950792130803" datatype="html">
         <source>Max video channels per user is required.</source>
+        <target>o pana e nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">104</context>
@@ -13625,6 +13708,7 @@
       </trans-unit>
       <trans-unit id="5253683089104713724" datatype="html">
         <source>Max video channels per user must be greater or equal to 1.</source>
+        <target>nanpa o 1 anu suli tawa 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">105</context>
@@ -13632,6 +13716,7 @@
       </trans-unit>
       <trans-unit id="8354695459880751923" datatype="html">
         <source>Max video channels per user must be a number.</source>
+        <target>ni o nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">106</context>
@@ -13639,6 +13724,7 @@
       </trans-unit>
       <trans-unit id="5832601947705094130" datatype="html">
         <source>Concurrency is required.</source>
+        <target>o pana e nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">113</context>
@@ -13646,6 +13732,7 @@
       </trans-unit>
       <trans-unit id="4751566092251132371" datatype="html">
         <source>Concurrency should be greater or equal to 1.</source>
+        <target>nanpa o 1 anu suli tawa 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">114</context>
@@ -13653,6 +13740,7 @@
       </trans-unit>
       <trans-unit id="75589896034107743" datatype="html">
         <source>Index URL should be a URL</source>
+        <target>ni o nimi linluwi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">121</context>
@@ -13660,6 +13748,7 @@
       </trans-unit>
       <trans-unit id="3964961007325702684" datatype="html">
         <source>Search index URL should be a URL</source>
+        <target>ni o nimi linluwi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">128</context>
@@ -13667,6 +13756,7 @@
       </trans-unit>
       <trans-unit id="2740793005745065895" datatype="html">
         <source><x id="PH" equiv-text="host"/> is not valid</source>
+        <target>"<x id="PH" equiv-text="host"/>" li pakala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">27</context>
@@ -13678,6 +13768,7 @@
       </trans-unit>
       <trans-unit id="2127446333083057097" datatype="html">
         <source>Domain is required.</source>
+        <target>o pana e nimi linluwi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">92</context>
@@ -13689,6 +13780,7 @@
       </trans-unit>
       <trans-unit id="7951488350851416577" datatype="html">
         <source>Hosts entered are invalid.</source>
+        <target>pakala li lon ni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">93</context>
@@ -13696,6 +13788,7 @@
       </trans-unit>
       <trans-unit id="1469559036084108672" datatype="html">
         <source>Hosts entered contain duplicates.</source>
+        <target>nimi wan li lon mute.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">94</context>
@@ -13703,6 +13796,7 @@
       </trans-unit>
       <trans-unit id="5991533283446904296" datatype="html">
         <source>Hosts or handles are invalid.</source>
+        <target>pakala li lon ni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">102</context>
@@ -13710,6 +13804,7 @@
       </trans-unit>
       <trans-unit id="6759198394434886237" datatype="html">
         <source>Hosts or handles contain duplicates.</source>
+        <target>nimi wan li lon mute.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">103</context>
@@ -13717,6 +13812,7 @@
       </trans-unit>
       <trans-unit id="8602814243662345124" datatype="html">
         <source>Email is required.</source>
+        <target>o pana e nimi Email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -13728,6 +13824,7 @@
       </trans-unit>
       <trans-unit id="4591482207344282590" datatype="html">
         <source>Email must be valid.</source>
+        <target>nimi Email o pona.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -13739,6 +13836,7 @@
       </trans-unit>
       <trans-unit id="4968369344159400023" datatype="html">
         <source>Your name is required.</source>
+        <target>o pana e nimi sina.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">19</context>
@@ -13746,6 +13844,7 @@
       </trans-unit>
       <trans-unit id="5799695548385507586" datatype="html">
         <source>Your name must be at least 1 character long.</source>
+        <target>mute sitelen o lili ala tawa 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">20</context>
@@ -13753,6 +13852,7 @@
       </trans-unit>
       <trans-unit id="3600004643604731577" datatype="html">
         <source>Your name cannot be more than 120 characters long.</source>
+        <target>mute sitelen o suli ala tawa 120.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">21</context>
@@ -13760,6 +13860,7 @@
       </trans-unit>
       <trans-unit id="3981804692726336204" datatype="html">
         <source>A subject is required.</source>
+        <target>o pana e toki suli.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">32</context>
@@ -13767,6 +13868,7 @@
       </trans-unit>
       <trans-unit id="7787099349830266861" datatype="html">
         <source>The subject must be at least 1 character long.</source>
+        <target>mute sitelen o lili ala tawa 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">33</context>
@@ -13774,6 +13876,7 @@
       </trans-unit>
       <trans-unit id="5905189237950302829" datatype="html">
         <source>The subject cannot be more than 120 characters long.</source>
+        <target>mute sitelen o suli ala tawa 120.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">34</context>
@@ -13781,6 +13884,7 @@
       </trans-unit>
       <trans-unit id="847704400962945123" datatype="html">
         <source>A message is required.</source>
+        <target>o pana e toki.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">45</context>
@@ -13788,6 +13892,7 @@
       </trans-unit>
       <trans-unit id="3871842658394273178" datatype="html">
         <source>The message must be at least 3 characters long.</source>
+        <target>mute sitelen o lili ala tawa 3.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">46</context>
@@ -13795,6 +13900,7 @@
       </trans-unit>
       <trans-unit id="3731145759205895653" datatype="html">
         <source>The message cannot be more than 5000 characters long.</source>
+        <target>mute sitelen o lili ala tawa 5000.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">47</context>
@@ -13802,6 +13908,7 @@
       </trans-unit>
       <trans-unit id="3868123820758341861" datatype="html">
         <source>Username is required.</source>
+        <target>o pana e nimi ilo sijelo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -13813,6 +13920,7 @@
       </trans-unit>
       <trans-unit id="3577237269587081090" datatype="html">
         <source>Password is required.</source>
+        <target>o pana e nimi wawa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context>
           <context context-type="linenumber">18</context>
@@ -13828,6 +13936,7 @@
       </trans-unit>
       <trans-unit id="3152303769378345477" datatype="html">
         <source>Confirmation of the password is required.</source>
+        <target>o pana e nimi wawa sama.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/reset-password-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -13835,6 +13944,7 @@
       </trans-unit>
       <trans-unit id="4786141633412279939" datatype="html">
         <source>Username must be at least 1 character long.</source>
+        <target>mute sitelen o lili ala tawa 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">15</context>
@@ -13842,6 +13952,7 @@
       </trans-unit>
       <trans-unit id="1019755749203839300" datatype="html">
         <source>Username cannot be more than 50 characters long.</source>
+        <target>mute sitelen o suli ala tawa 50.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">16</context>
@@ -13849,6 +13960,7 @@
       </trans-unit>
       <trans-unit id="5621067256208426608" datatype="html">
         <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
+        <target>nimi ilo la sina ken pana e sitelen toki lili e sitelen nanpa e sike lili e linja anpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">17</context>
@@ -13856,6 +13968,7 @@
       </trans-unit>
       <trans-unit id="6288154707582132676" datatype="html">
         <source>Channel name is required.</source>
+        <target>o pana e nimi ilo lipu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">29</context>
@@ -13863,6 +13976,7 @@
       </trans-unit>
       <trans-unit id="8178814467139959283" datatype="html">
         <source>Channel name must be at least 1 character long.</source>
+        <target>mute sitelen o lili ala tawa 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">30</context>
@@ -13870,6 +13984,7 @@
       </trans-unit>
       <trans-unit id="8602785819772117007" datatype="html">
         <source>Channel name cannot be more than 50 characters long.</source>
+        <target>mute sitelen o suli ala tawa 50.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">31</context>
@@ -13877,6 +13992,7 @@
       </trans-unit>
       <trans-unit id="3419415520566928243" datatype="html">
         <source>Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</source>
+        <target>nimi ilo la sina ken pana e sitelen toki lili e sitelen nanpa e sike lili e linja anpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">32</context>
@@ -13884,6 +14000,7 @@
       </trans-unit>
       <trans-unit id="544279804045883862" datatype="html">
         <source>Handle is required.</source>
+        <target>o pana e nimi linluwi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">50</context>
@@ -13891,6 +14008,7 @@
       </trans-unit>
       <trans-unit id="2805037637775107078" datatype="html">
         <source>Handle must be valid (eg. chocobozzz@example.com).</source>
+        <target>nimi linluwi o pona (sama ni: jan_sonja@ma.mu).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">51</context>
@@ -13898,6 +14016,7 @@
       </trans-unit>
       <trans-unit id="525871656034789056" datatype="html">
         <source>Password must be at least 6 characters long.</source>
+        <target>mute sitelen o lili ala tawa 6.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">72</context>
@@ -13909,6 +14028,7 @@
       </trans-unit>
       <trans-unit id="1099684476181448167" datatype="html">
         <source>Password cannot be more than 255 characters long.</source>
+        <target>mute sitelen o suli ala tawa 255.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">73</context>
@@ -13920,6 +14040,7 @@
       </trans-unit>
       <trans-unit id="3392630942539073768" datatype="html">
         <source>The new password and the confirmed password do not correspond.</source>
+        <target>nimi wawa tu ni li sama ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">91</context>
@@ -13927,6 +14048,7 @@
       </trans-unit>
       <trans-unit id="2027337371129904473" datatype="html">
         <source>Video quota is required.</source>
+        <target>o pana e nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">98</context>
@@ -13934,6 +14056,7 @@
       </trans-unit>
       <trans-unit id="267386529333143660" datatype="html">
         <source>Quota must be greater than -1.</source>
+        <target>nanpa o suli tawa -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">99</context>
@@ -13941,6 +14064,7 @@
       </trans-unit>
       <trans-unit id="1220179061234048936" datatype="html">
         <source>Daily upload limit is required.</source>
+        <target>o pana e nanpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">105</context>
@@ -13948,6 +14072,7 @@
       </trans-unit>
       <trans-unit id="8959404382357999234" datatype="html">
         <source>Daily upload limit must be greater than -1.</source>
+        <target>nanpa o suli tawa -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">106</context>
@@ -13955,6 +14080,7 @@
       </trans-unit>
       <trans-unit id="4796798537475457493" datatype="html">
         <source>User role is required.</source>
+        <target>o pana e wawa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">113</context>
@@ -13962,6 +14088,7 @@
       </trans-unit>
       <trans-unit id="2761226139624435788" datatype="html">
         <source>Description must be at least 3 characters long.</source>
+        <target>mute sitelen o lili ala tawa 3.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">125</context>
@@ -13977,6 +14104,7 @@
       </trans-unit>
       <trans-unit id="4717982586356605243" datatype="html">
         <source>Description cannot be more than 1000 characters long.</source>
+        <target>mute sitelen o suli ala tawa 1000.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">126</context>
@@ -13992,6 +14120,7 @@
       </trans-unit>
       <trans-unit id="1814372869868173571" datatype="html">
         <source>You must agree with the instance terms in order to register on it.</source>
+        <target>sina wile pali e sijelo o toki e ni: lawa pi ma ni li pona tawa sina.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">133</context>
@@ -13999,6 +14128,7 @@
       </trans-unit>
       <trans-unit id="7803960725351649605" datatype="html">
         <source>Ban reason must be at least 3 characters long.</source>
+        <target>mute sitelen o lili ala tawa 3.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">143</context>
@@ -14006,6 +14136,7 @@
       </trans-unit>
       <trans-unit id="3851609012243698179" datatype="html">
         <source>Ban reason cannot be more than 250 characters long.</source>
+        <target>mute sitelen o suli ala tawa 250.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">144</context>
@@ -14013,6 +14144,7 @@
       </trans-unit>
       <trans-unit id="6632896893630378443" datatype="html">
         <source>Display name is required.</source>
+        <target>o pana e nimi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">155</context>
@@ -14028,6 +14160,7 @@
       </trans-unit>
       <trans-unit id="1303578752658966736" datatype="html">
         <source>Display name must be at least 1 character long.</source>
+        <target>mute sitelen o lili ala tawa 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">156</context>
@@ -14043,6 +14176,7 @@
       </trans-unit>
       <trans-unit id="4613240543124934954" datatype="html">
         <source>Display name cannot be more than 50 characters long.</source>
+        <target>mute sitelen o suli ala tawa 50.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">157</context>
@@ -14054,6 +14188,7 @@
       </trans-unit>
       <trans-unit id="9191505323045740697" datatype="html">
         <source>Block reason must be at least 2 characters long.</source>
+        <target>mute sitelen o lili ala tawa 2.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -14061,6 +14196,7 @@
       </trans-unit>
       <trans-unit id="8581623418602419755" datatype="html">
         <source>Block reason cannot be more than 300 characters long.</source>
+        <target>mute sitelen o suli ala tawa 300.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -14068,6 +14204,7 @@
       </trans-unit>
       <trans-unit id="1099619384694370156" datatype="html">
         <source>Video caption language is required.</source>
+        <target>o pana e toki pi sitelen toki.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -14075,6 +14212,7 @@
       </trans-unit>
       <trans-unit id="3438639650276868976" datatype="html">
         <source>Video caption file is required.</source>
+        <target>o pana e lipu pi sitelen toki.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -14082,6 +14220,7 @@
       </trans-unit>
       <trans-unit id="9145435275110757909" datatype="html">
         <source>Caption content is required.</source>
+        <target>o pana e sitelen toki.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">21</context>
@@ -14089,6 +14228,7 @@
       </trans-unit>
       <trans-unit id="4444753420973870540" datatype="html">
         <source>Name is required.</source>
+        <target>o pana e nimi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">10</context>
@@ -14096,6 +14236,7 @@
       </trans-unit>
       <trans-unit id="4006797705713167676" datatype="html">
         <source>Name must be at least 1 character long.</source>
+        <target>mute sitelen o lili ala tawa 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">11</context>
@@ -14103,6 +14244,7 @@
       </trans-unit>
       <trans-unit id="2233809696503670883" datatype="html">
         <source>Name cannot be more than 50 characters long.</source>
+        <target>mute sitelen o suli ala tawa 50.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">12</context>
@@ -14110,6 +14252,7 @@
       </trans-unit>
       <trans-unit id="7915656854942800659" datatype="html">
         <source>Name should be lowercase alphanumeric; dots and underscores are allowed.</source>
+        <target>nimi ilo la sina ken pana e sitelen toki lili e sitelen nanpa e sike lili e linja anpa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">13</context>
@@ -14117,6 +14260,7 @@
       </trans-unit>
       <trans-unit id="6880459830525364741" datatype="html">
         <source>Support text must be at least 3 characters long.</source>
+        <target>mute sitelen o lili ala tawa 3.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">47</context>
@@ -14124,6 +14268,7 @@
       </trans-unit>
       <trans-unit id="6461548560008228165" datatype="html">
         <source>Support text cannot be more than 1000 characters long</source>
+        <target>mute sitelen o suli ala tawa 1000.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">48</context>
@@ -14131,6 +14276,7 @@
       </trans-unit>
       <trans-unit id="4267638333776227701" datatype="html">
         <source>Comment is required.</source>
+        <target>o pana e toki.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -14138,6 +14284,7 @@
       </trans-unit>
       <trans-unit id="71132671234491945" datatype="html">
         <source>Comment must be at least 2 characters long.</source>
+        <target>mute sitelen o lili ala tawa 2.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -14145,6 +14292,7 @@
       </trans-unit>
       <trans-unit id="4148250392704331190" datatype="html">
         <source>Comment cannot be more than 3000 characters long.</source>
+        <target>mute sitelen o suli ala tawa 3000.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -14152,6 +14300,7 @@
       </trans-unit>
       <trans-unit id="6700357678556223012" datatype="html">
         <source>The channel is required.</source>
+        <target>o pana e lipu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -14159,6 +14308,7 @@
       </trans-unit>
       <trans-unit id="7365924714339585574" datatype="html">
         <source>The username is required.</source>
+        <target>o pana e nimi ilo sijelo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -14166,6 +14316,7 @@
       </trans-unit>
       <trans-unit id="3954099618513992825" datatype="html">
         <source>You can only transfer ownership to a local account</source>
+        <target>sina ken pana e wawa lawa tawa sijelo pi ma ni taso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context>
           <context context-type="linenumber">15</context>
@@ -14173,6 +14324,7 @@
       </trans-unit>
       <trans-unit id="6854100952145697527" datatype="html">
         <source>Display name cannot be more than 120 characters long.</source>
+        <target>mute sitelen o suli ala tawa 120.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -14180,6 +14332,7 @@
       </trans-unit>
       <trans-unit id="6198895122092095739" datatype="html">
         <source>Privacy is required.</source>
+        <target>o pana e suli pi ken lukin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context>
           <context context-type="linenumber">23</context>
@@ -14187,6 +14340,7 @@
       </trans-unit>
       <trans-unit id="1276238402004616037" datatype="html">
         <source>The channel is required when the playlist is public.</source>
+        <target>ale o ken lukin la o pana e lipu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context>
           <context context-type="linenumber">41</context>
@@ -14194,6 +14348,7 @@
       </trans-unit>
       <trans-unit id="5437132245714159662" datatype="html">
         <source>Video name is required.</source>
+        <target>o pana e nimi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">15</context>
@@ -14201,6 +14356,7 @@
       </trans-unit>
       <trans-unit id="2807676084745266104" datatype="html">
         <source>Video name must be at least 3 characters long.</source>
+        <target>mute sitelen o lili ala tawa 3.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">16</context>
@@ -14208,6 +14364,7 @@
       </trans-unit>
       <trans-unit id="2155414141025589556" datatype="html">
         <source>Video name cannot be more than 120 characters long.</source>
+        <target>mute sitelen o suli ala tawa 120.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">17</context>
@@ -14215,6 +14372,7 @@
       </trans-unit>
       <trans-unit id="1074634769552897790" datatype="html">
         <source>Video name has leading or trailing whitespace.</source>
+        <target>nimi la kon li lon open anu pini.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">18</context>
@@ -14222,6 +14380,7 @@
       </trans-unit>
       <trans-unit id="9115337161597088460" datatype="html">
         <source>Video privacy is required.</source>
+        <target>o pana e suli pi ken lukin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">25</context>
@@ -14229,6 +14388,7 @@
       </trans-unit>
       <trans-unit id="7309902991450450996" datatype="html">
         <source>Video channel is required.</source>
+        <target>o pana e lipu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">52</context>
@@ -14236,6 +14396,7 @@
       </trans-unit>
       <trans-unit id="3959376623771116873" datatype="html">
         <source>Video description must be at least 3 characters long.</source>
+        <target>mute sitelen o lili ala tawa 3.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">59</context>
@@ -14243,6 +14404,7 @@
       </trans-unit>
       <trans-unit id="725195891739570830" datatype="html">
         <source>Video description cannot be more than 10000 characters long.</source>
+        <target>mute sitelen o suli ala tawa 10000.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">60</context>
@@ -14250,6 +14412,7 @@
       </trans-unit>
       <trans-unit id="142488285332434408" datatype="html">
         <source>A tag should be more than 2 characters long.</source>
+        <target>mute sitelen o lili ala tawa 2.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">67</context>
@@ -14257,6 +14420,7 @@
       </trans-unit>
       <trans-unit id="691846635236293620" datatype="html">
         <source>A tag should be less than 30 characters long.</source>
+        <target>mute sitelen o suli ala tawa 30.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">68</context>
@@ -14264,6 +14428,7 @@
       </trans-unit>
       <trans-unit id="4146790476782316573" datatype="html">
         <source>A maximum of 5 tags can be used on a video.</source>
+        <target>sina ken pana e nimi poki 5 lon sitelen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">75</context>
@@ -14271,6 +14436,7 @@
       </trans-unit>
       <trans-unit id="2389667090302909529" datatype="html">
         <source>A tag should be more than 1 and less than 30 characters long.</source>
+        <target>mute sitelen o lili ala tawa 1 o suli ala tawa 30.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">76</context>
@@ -14278,6 +14444,7 @@
       </trans-unit>
       <trans-unit id="4806300480558315727" datatype="html">
         <source>Video support must be at least 3 characters long.</source>
+        <target>mute sitelen o lili ala tawa 3.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">83</context>
@@ -14285,6 +14452,7 @@
       </trans-unit>
       <trans-unit id="6655773021893755977" datatype="html">
         <source>Video support cannot be more than 1000 characters long.</source>
+        <target>mute sitelen o suli ala tawa 1000.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">84</context>
@@ -14292,6 +14460,7 @@
       </trans-unit>
       <trans-unit id="4246579596585402255" datatype="html">
         <source>A date is required to schedule video update.</source>
+        <target>sina wile pana lon tenpo kama la o pana e tenpo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">91</context>
@@ -14299,6 +14468,7 @@
       </trans-unit>
       <trans-unit id="730589419287534524" datatype="html">
         <source>Reporter</source>
+        <target>jan toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">7</context>
@@ -14310,6 +14480,7 @@
       </trans-unit>
       <trans-unit id="1258618443362430782" datatype="html">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}" xid="1879828604800763221"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
+        <target><x id="ICU" xid="1879828604800763221" equiv-text="toki ike {{ abuse.countReportsForReporter }}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;ml-1 glyphicon glyphicon-flag&quot;&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -14321,6 +14492,7 @@
       </trans-unit>
       <trans-unit id="6540177673229220400" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</source>
+        <target>toki ike <x id="INTERPOLATION"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">22</context>
@@ -14332,6 +14504,7 @@
       </trans-unit>
       <trans-unit id="3109314382334906782" datatype="html">
         <source>Reportee</source>
+        <target>jan ike</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">28</context>
@@ -14339,6 +14512,7 @@
       </trans-unit>
       <trans-unit id="7239750919884229270" datatype="html">
         <source>Updated</source>
+        <target>tenpo ante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">48</context>
@@ -14346,6 +14520,7 @@
       </trans-unit>
       <trans-unit id="829951422090160526" datatype="html">
         <source>Reported part</source>
+        <target>seme li ike</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">73</context>
@@ -14353,6 +14528,7 @@
       </trans-unit>
       <trans-unit id="4388879716045736175" datatype="html">
         <source>Note</source>
+        <target>toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">80</context>
@@ -14360,6 +14536,7 @@
       </trans-unit>
       <trans-unit id="7234922541542636802" datatype="html">
         <source>The video was deleted</source>
+        <target>sitelen li weka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">89</context>
@@ -14367,6 +14544,7 @@
       </trans-unit>
       <trans-unit id="872792317034860453" datatype="html">
         <source>Comment:</source>
+        <target>toki:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">95</context>
@@ -14374,6 +14552,7 @@
       </trans-unit>
       <trans-unit id="149121389669248117" datatype="html">
         <source>Violent or Repulsive</source>
+        <target>jaki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context>
           <context context-type="linenumber">19</context>
@@ -14381,6 +14560,7 @@
       </trans-unit>
       <trans-unit id="2493388551376623687" datatype="html">
         <source>Hateful or Abusive</source>
+        <target>utala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context>
           <context context-type="linenumber">20</context>
@@ -14388,6 +14568,7 @@
       </trans-unit>
       <trans-unit id="5124757565683866220" datatype="html">
         <source>Spam or Misleading</source>
+        <target>jaki pi pana mute anu toki pi lon ala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context>
           <context context-type="linenumber">21</context>
@@ -14395,6 +14576,7 @@
       </trans-unit>
       <trans-unit id="8768506950499277937" datatype="html">
         <source>Copyright</source>
+        <target>ijo pi jan ante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context>
           <context context-type="linenumber">23</context>
@@ -14406,6 +14588,7 @@
       </trans-unit>
       <trans-unit id="3776575731053010580" datatype="html">
         <source>Server rules</source>
+        <target>lawa pi ma ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context>
           <context context-type="linenumber">24</context>
@@ -14413,6 +14596,7 @@
       </trans-unit>
       <trans-unit id="6907161397537530258" datatype="html">
         <source>Thumbnails</source>
+        <target>sitelen sinpin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -14432,6 +14616,7 @@
       </trans-unit>
       <trans-unit id="4266779970063047572" datatype="html">
         <source>Video/Comment/Account</source>
+        <target>sitelen/toki/sijelo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">22</context>
@@ -14439,6 +14624,7 @@
       </trans-unit>
       <trans-unit id="6452372740127749380" datatype="html">
         <source>Messages</source>
+        <target>toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">25</context>
@@ -14446,6 +14632,7 @@
       </trans-unit>
       <trans-unit id="1969144763032891922" datatype="html">
         <source>Internal note</source>
+        <target>toki lawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">26</context>
@@ -14453,6 +14640,7 @@
       </trans-unit>
       <trans-unit id="3111569165173971676" datatype="html">
         <source>Deleted account</source>
+        <target>sijelo weka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">54,56</context>
@@ -14460,6 +14648,7 @@
       </trans-unit>
       <trans-unit id="1359961255805685312" datatype="html">
         <source>This video has been reported multiple times.</source>
+        <target>jan mute li toki e ni: sitelen ni li ike.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">66</context>
@@ -14467,6 +14656,7 @@
       </trans-unit>
       <trans-unit id="8103613717136753118" datatype="html">
         <source>The video was blocked</source>
+        <target>sitelen li len</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">73</context>
@@ -14474,6 +14664,7 @@
       </trans-unit>
       <trans-unit id="1443698606045744844" datatype="html">
         <source>Video was deleted</source>
+        <target>sitelen li weka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">79</context>
@@ -14481,6 +14672,7 @@
       </trans-unit>
       <trans-unit id="5021295327106206941" datatype="html">
         <source>by <x id="INTERPOLATION" equiv-text="{{ abuse.video.channel?.displayName }}"/> on <x id="INTERPOLATION_1" equiv-text="{{ abuse.video.channel?.host }}"/> </source>
+        <target>tan sijelo "<x id="INTERPOLATION" equiv-text="{{ abuse.video.channel?.displayName }}"/>" pi ma "<x id="INTERPOLATION_1" equiv-text="{{ abuse.video.channel?.host }}"/>" </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">85</context>
@@ -14488,6 +14680,7 @@
       </trans-unit>
       <trans-unit id="1530731524535521716" datatype="html">
         <source>Account deleted</source>
+        <target>sijelo li weka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">110,112</context>
@@ -14495,6 +14688,7 @@
       </trans-unit>
       <trans-unit id="1420624050293070194" datatype="html">
         <source>No abuses found matching current filters.</source>
+        <target>wile ni la toki ike ala li lon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">152</context>
@@ -14502,6 +14696,7 @@
       </trans-unit>
       <trans-unit id="639328713281980021" datatype="html">
         <source>No abuses found.</source>
+        <target>toki ike ala li lon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">153</context>
@@ -14509,6 +14704,7 @@
       </trans-unit>
       <trans-unit id="1807029821872995706" datatype="html">
         <source>Unsolved reports</source>
+        <target>toki ike pi pali ala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">43</context>
@@ -14516,6 +14712,7 @@
       </trans-unit>
       <trans-unit id="2570256912317308673" datatype="html">
         <source>Accepted reports</source>
+        <target>toki ike pona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -14523,6 +14720,7 @@
       </trans-unit>
       <trans-unit id="4335414817109654558" datatype="html">
         <source>Refused reports</source>
+        <target>toki ike weka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -14530,6 +14728,7 @@
       </trans-unit>
       <trans-unit id="5604806676748121035" datatype="html">
         <source>Reports with blocked videos</source>
+        <target>toki ike pi sitelen len</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -14537,6 +14736,7 @@
       </trans-unit>
       <trans-unit id="5105869928182826553" datatype="html">
         <source>Reports with deleted videos</source>
+        <target>toki ike pi sitelen weka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">59</context>
@@ -14544,6 +14744,7 @@
       </trans-unit>
       <trans-unit id="1250415136605923486" datatype="html">
         <source>Do you really want to delete this abuse report?</source>
+        <target>sina wile ala wile weka e toki ike ni?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">134</context>
@@ -14551,6 +14752,7 @@
       </trans-unit>
       <trans-unit id="3482559157143817408" datatype="html">
         <source>Abuse deleted.</source>
+        <target>mi weka e toki ike.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">140</context>
@@ -14558,6 +14760,7 @@
       </trans-unit>
       <trans-unit id="6282990098351939529" datatype="html">
         <source>Deleted comment</source>
+        <target>toki weka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">215</context>
@@ -14565,6 +14768,7 @@
       </trans-unit>
       <trans-unit id="9196775343330824083" datatype="html">
         <source>Messages with reporter</source>
+        <target>toki tawa jan toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">249</context>
@@ -14572,6 +14776,7 @@
       </trans-unit>
       <trans-unit id="8770468575924421391" datatype="html">
         <source>Messages with moderators</source>
+        <target>toki tawa lawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">250</context>
@@ -14579,6 +14784,7 @@
       </trans-unit>
       <trans-unit id="8528549800795985099" datatype="html">
         <source>Update internal note</source>
+        <target>o ante e toki lawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">255</context>
@@ -14586,6 +14792,7 @@
       </trans-unit>
       <trans-unit id="1679841953757186358" datatype="html">
         <source>Mark as accepted</source>
+        <target>toki ni pi ijo ike li pona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">260</context>
@@ -14593,6 +14800,7 @@
       </trans-unit>
       <trans-unit id="7993358694073742566" datatype="html">
         <source>Mark as rejected</source>
+        <target>o weka e ni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">265</context>
@@ -14600,6 +14808,7 @@
       </trans-unit>
       <trans-unit id="4175703770051343108" datatype="html">
         <source>Add internal note</source>
+        <target>o pana e toki lawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">270</context>
@@ -14607,6 +14816,7 @@
       </trans-unit>
       <trans-unit id="4559872264406386913" datatype="html">
         <source>Delete report</source>
+        <target>o weka e toki ike</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">275</context>
@@ -14614,6 +14824,7 @@
       </trans-unit>
       <trans-unit id="5793550984155962433" datatype="html">
         <source>Actions for the flagged account</source>
+        <target>jan ike la</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">286</context>
@@ -14621,6 +14832,7 @@
       </trans-unit>
       <trans-unit id="4903651219400691248" datatype="html">
         <source>Mute account</source>
+        <target>o len e sijelo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">292</context>
@@ -14632,6 +14844,7 @@
       </trans-unit>
       <trans-unit id="3719503424625455635" datatype="html">
         <source>Mute server account</source>
+        <target>o len e ma ona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">298</context>
@@ -14639,6 +14852,7 @@
       </trans-unit>
       <trans-unit id="5072091387445907742" datatype="html">
         <source>Actions for the reporter</source>
+        <target>jan toki la</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">310</context>
@@ -14646,6 +14860,7 @@
       </trans-unit>
       <trans-unit id="6599069899275412095" datatype="html">
         <source>Mute reporter</source>
+        <target>o len e sijelo toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">316</context>
@@ -14653,6 +14868,7 @@
       </trans-unit>
       <trans-unit id="1595779426198793580" datatype="html">
         <source>Mute server</source>
+        <target>o len e ma ona</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">322</context>
@@ -14660,6 +14876,7 @@
       </trans-unit>
       <trans-unit id="3924877328520650445" datatype="html">
         <source>Block video</source>
+        <target>o len e sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">339</context>
@@ -14667,6 +14884,7 @@
       </trans-unit>
       <trans-unit id="4762794934098378428" datatype="html">
         <source>Video blocked.</source>
+        <target>mi len e sitelen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">345</context>
@@ -14674,6 +14892,7 @@
       </trans-unit>
       <trans-unit id="4328862996304258770" datatype="html">
         <source>Unblock video</source>
+        <target>o weka e len sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">355</context>
@@ -14681,6 +14900,7 @@
       </trans-unit>
       <trans-unit id="9065327551191479877" datatype="html">
         <source>Video unblocked.</source>
+        <target>mi weka e len sitelen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">361</context>
@@ -14688,6 +14908,7 @@
       </trans-unit>
       <trans-unit id="2909684945706361544" datatype="html">
         <source>Delete video</source>
+        <target>o weka e sitelen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">371</context>
@@ -14695,6 +14916,7 @@
       </trans-unit>
       <trans-unit id="2210418817778733727" datatype="html">
         <source>Actions for the comment</source>
+        <target>toki la</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">400</context>
@@ -14702,6 +14924,7 @@
       </trans-unit>
       <trans-unit id="7978668497183230348" datatype="html">
         <source>Delete comment</source>
+        <target>o weka e toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">406</context>
@@ -14709,6 +14932,7 @@
       </trans-unit>
       <trans-unit id="7837272126865175984" datatype="html">
         <source>Comment deleted.</source>
+        <target>mi weka e toki.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">418</context>
@@ -14716,6 +14940,7 @@
       </trans-unit>
       <trans-unit id="2558977494773636050" datatype="html">
         <source>Account <x id="PH" equiv-text="account.nameWithHost"/> muted by the instance.</source>
+        <target>ma ni li len e sijelo "<x id="PH" equiv-text="account.nameWithHost"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">434</context>
@@ -14727,6 +14952,7 @@
       </trans-unit>
       <trans-unit id="8014491157078444256" datatype="html">
         <source>Server <x id="PH" equiv-text="host"/> muted by the instance.</source>
+        <target>ma ni li len e ma "<x id="PH" equiv-text="host"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">446</context>
@@ -14734,6 +14960,7 @@
       </trans-unit>
       <trans-unit id="397679576231234820" datatype="html">
         <source>Messages with the reporter</source>
+        <target>toki tawa jan toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context>
           <context context-type="linenumber">4</context>
@@ -14741,6 +14968,7 @@
       </trans-unit>
       <trans-unit id="7417592908147948728" datatype="html">
         <source>Messages with the moderation team</source>
+        <target>toki tawa lawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context>
           <context context-type="linenumber">5</context>
@@ -14748,6 +14976,7 @@
       </trans-unit>
       <trans-unit id="1684858568733486744" datatype="html">
         <source>No messages for now.</source>
+        <target>toki li lon ala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context>
           <context context-type="linenumber">27,29</context>
@@ -14755,6 +14984,7 @@
       </trans-unit>
       <trans-unit id="2137920566277687382" datatype="html">
         <source>Add a message</source>
+        <target>o toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.html</context>
           <context context-type="linenumber">44</context>
@@ -14762,6 +14992,7 @@
       </trans-unit>
       <trans-unit id="2044813052587776285" datatype="html">
         <source>Add a message to communicate with the reporter</source>
+        <target>o toki tawa jan toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.ts</context>
           <context context-type="linenumber">100</context>
@@ -14769,6 +15000,7 @@
       </trans-unit>
       <trans-unit id="4117663541503607703" datatype="html">
         <source>Add a message to communicate with the moderation team</source>
+        <target>o toki tawa lawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.ts</context>
           <context context-type="linenumber">103</context>
@@ -14776,6 +15008,7 @@
       </trans-unit>
       <trans-unit id="7075448128175750939" datatype="html">
         <source>Moderation comment</source>
+        <target>toki lawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -14783,6 +15016,7 @@
       </trans-unit>
       <trans-unit id="7358611947192442969" datatype="html">
         <source>This comment can only be seen by you or the other moderators.</source>
+        <target>lawa taso li ken lukin e toki ni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.html</context>
           <context context-type="linenumber">20,22</context>
@@ -14790,6 +15024,7 @@
       </trans-unit>
       <trans-unit id="3981851640772035362" datatype="html">
         <source>Update this comment</source>
+        <target>o ante e toki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.html</context>
           <context context-type="linenumber">30</context>
@@ -14797,6 +15032,7 @@
       </trans-unit>
       <trans-unit id="2393853062458645999" datatype="html">
         <source>Comment updated.</source>
+        <target>mi ante e toki.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -14804,6 +15040,7 @@
       </trans-unit>
       <trans-unit id="31472093355465024" datatype="html">
         <source>Upload a new avatar</source>
+        <target>o pana e sitelen sinpin sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.html</context>
           <context context-type="linenumber">9</context>
@@ -14815,6 +15052,7 @@
       </trans-unit>
       <trans-unit id="3321250177023376249" datatype="html">
         <source>Change your avatar</source>
+        <target>o ante e sitelen sinpin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.html</context>
           <context context-type="linenumber">18</context>
@@ -14822,6 +15060,7 @@
       </trans-unit>
       <trans-unit id="8411430224810427392" datatype="html">
         <source>Remove avatar</source>
+        <target>o weka e sitelen sinpin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.html</context>
           <context context-type="linenumber">40</context>
@@ -14829,6 +15068,7 @@
       </trans-unit>
       <trans-unit id="7916647920967632052" datatype="html">
         <source>max size</source>
+        <target>suli ken</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -14848,6 +15088,7 @@
       </trans-unit>
       <trans-unit id="8054921481196967348" datatype="html">
         <source>This image is too large.</source>
+        <target>sitelen ni li suli ike.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -14895,6 +15136,7 @@
       </trans-unit>
       <trans-unit id="3220184757632006830" datatype="html">
         <source>Account avatar</source>
+        <target>sitelen sinpin sijelo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -14902,6 +15144,7 @@
       </trans-unit>
       <trans-unit id="1138964882426023395" datatype="html">
         <source>Channel avatar</source>
+        <target>sitelen sinpin lipu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -14909,6 +15152,7 @@
       </trans-unit>
       <trans-unit id="1358902062258458923" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>Markdown compatible<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> that also supports <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/api-custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>custom PeerTube HTML tags<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <target>nasin toki li sama <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://en.wikipedia.org/wiki/Markdown#Example&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>nasin Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, taso sina ken pana kin e <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/api-custom-client-markup&quot; target=&quot;_blank&quot; rel=&quot;noreferrer noopener&quot;&gt;"/>poki HTML pi ilo PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/custom-markup-help.component.html</context>
           <context context-type="linenumber">2</context>
@@ -14916,6 +15160,7 @@
       </trans-unit>
       <trans-unit id="7976591803735140601" datatype="html">
         <source>Latest published video</source>
+        <target>sitelen pi sin nanpa wan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context>
           <context context-type="linenumber">24</context>
@@ -14923,6 +15168,7 @@
       </trans-unit>
       <trans-unit id="283609029522452529" datatype="html">
         <source>Error in channel miniature component: <x id="PH" equiv-text="err.message"/></source>
+        <target>poki lipu la pakala li kama: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -14930,6 +15176,7 @@
       </trans-unit>
       <trans-unit id="3059355667050002541" datatype="html">
         <source>Error in playlist miniature component: <x id="PH" equiv-text="err.message"/></source>
+        <target>poki kulupu la pakala li kama: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/playlist-miniature-markup.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -14937,6 +15184,7 @@
       </trans-unit>
       <trans-unit id="863691161959989717" datatype="html">
         <source>Error in video miniature component: <x id="PH" equiv-text="err.message"/></source>
+        <target>poki sitelen la pakala li kama: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/video-miniature-markup.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -14944,6 +15192,7 @@
       </trans-unit>
       <trans-unit id="1247256698916587400" datatype="html">
         <source>Error in videos list component: <x id="PH" equiv-text="err.message"/></source>
+        <target>poki pi sitelen mute la pakala li kama: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -14951,6 +15200,7 @@
       </trans-unit>
       <trans-unit id="9209781328340965816" datatype="html">
         <source>Filter...</source>
+        <target>wile...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">21</context>
@@ -14958,6 +15208,7 @@
       </trans-unit>
       <trans-unit id="6559246822757089203" datatype="html">
         <source>Clear filters</source>
+        <target>o weka e wile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">27</context>
@@ -14969,6 +15220,7 @@
       </trans-unit>
       <trans-unit id="4323470180912194028" datatype="html">
         <source>Copy</source>
+        <target>o kama jo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/input-toggle-hidden.component.html</context>
           <context context-type="linenumber">15</context>
@@ -14976,6 +15228,7 @@
       </trans-unit>
       <trans-unit id="2115592966120408375" datatype="html">
         <source>Copied</source>
+        <target>mi kama jo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/input-toggle-hidden.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -14987,6 +15240,7 @@
       </trans-unit>
       <trans-unit id="5293515551330482519" datatype="html">
         <source>Truncated preview</source>
+        <target>pana lukin lili</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">12</context>
@@ -14994,6 +15248,7 @@
       </trans-unit>
       <trans-unit id="80730865601179554" datatype="html">
         <source>Complete preview</source>
+        <target>pana lukin suli</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">20</context>
@@ -15001,6 +15256,7 @@
       </trans-unit>
       <trans-unit id="6489275254908395777" datatype="html">
         <source>Maximize editor</source>
+        <target>o suli e poki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -15008,6 +15264,7 @@
       </trans-unit>
       <trans-unit id="4243591013849340688" datatype="html">
         <source>Exit maximized editor</source>
+        <target>o lili e poki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -15015,6 +15272,7 @@
       </trans-unit>
       <trans-unit id="146235964740293376" datatype="html">
         <source>Recommended</source>
+        <target>pona tawa mute</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/peertube-checkbox.component.html</context>
           <context context-type="linenumber">33</context>
@@ -15030,6 +15288,7 @@
       </trans-unit>
       <trans-unit id="8728283516316752593" datatype="html">
         <source>This file is too large.</source>
+        <target>ni li suli ike.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -15037,6 +15296,7 @@
       </trans-unit>
       <trans-unit id="6360987759186261451" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>}.</source>
+        <target>ilo PeerTube li sona ala e nasin pi ijo ni. o pana e ijo pi nasin ni: <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -15052,6 +15312,7 @@
       </trans-unit>
       <trans-unit id="3999967345340145904" datatype="html">
         <source>You can't select more than <x id="PH" equiv-text="this.maxItems"/> items</source>
+        <target>sina ken luka e ijo <x id="PH" equiv-text="this.maxItems"/> taso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -15059,6 +15320,7 @@
       </trans-unit>
       <trans-unit id="2504502765849142619" datatype="html">
         <source>No items found</source>
+        <target>ijo li lon ala</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox.component.html</context>
           <context context-type="linenumber">15</context>
@@ -15066,6 +15328,7 @@
       </trans-unit>
       <trans-unit id="6708273825233539746" datatype="html">
         <source>Add a new option</source>
+        <target>o pana e ijo sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox.component.ts</context>
           <context context-type="linenumber">29</context>
@@ -15073,6 +15336,7 @@
       </trans-unit>
       <trans-unit id="4076995379551303829" datatype="html">
         <source>Custom value...</source>
+        <target>ante...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-custom-value.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -15088,6 +15352,7 @@
       </trans-unit>
       <trans-unit id="3265632123453688399" datatype="html">
         <source>Enter a new tag</source>
+        <target>o pana e nimi poki sin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-tags.component.ts</context>
           <context context-type="linenumber">19</context>
@@ -15231,7 +15496,7 @@
       </trans-unit>
       <trans-unit id="8135461567542503937" datatype="html">
         <source>Transcode live video in multiple resolutions</source>
-        <target state="needs-translation">ilo li pali ala pali e suli ante tawa sitelen pi tenpo sama</target>
+        <target state="translated">sitelen pi tenpo sama la mi o pali ala pali e suli ante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">78</context>
@@ -15239,6 +15504,7 @@
       </trans-unit>
       <trans-unit id="4990508956923223990" datatype="html">
         <source>Max parallel lives</source>
+        <target>sitelen pi mute seme o ken lon tenpo sama</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">85</context>
@@ -15246,6 +15512,7 @@
       </trans-unit>
       <trans-unit id="7864066132065250510" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ maxUserLives }}"/> per user / <x id="INTERPOLATION_1" equiv-text="{{ maxInstanceLives }}"/> per instance </source>
+        <target>jan wan la <x id="INTERPOLATION" equiv-text="{{ maxUserLives }}"/> / ale ma la <x id="INTERPOLATION_1" equiv-text="{{ maxInstanceLives }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">86,88</context>
@@ -15253,6 +15520,7 @@
       </trans-unit>
       <trans-unit id="5812787579835788700" datatype="html">
         <source>HTTP import (YouTube, Vimeo, direct URL...)</source>
+        <target>kama jo pi nasin HTTP (ilo YouTube, ilo Vimeo, sitelen taso...)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">96</context>
@@ -15260,6 +15528,7 @@
       </trans-unit>
       <trans-unit id="4992364287704007430" datatype="html">
         <source>Torrent import</source>
+        <target>kama jo pi nasin Torrent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">103</context>
