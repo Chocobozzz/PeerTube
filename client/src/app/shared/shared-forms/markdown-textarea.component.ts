@@ -24,6 +24,7 @@ import { Video } from '@shared/models'
 export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   @Input() content = ''
 
+  @Input() formError: string
   @Input() classes: string[] | { [klass: string]: any[] | any } = []
 
   @Input() textareaMaxWidth = '100%'
@@ -93,6 +94,8 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   }
 
   onMaximizeClick () {
+    if (this.disabled) return
+
     this.isMaximized = !this.isMaximized
 
     // Make sure textarea have the focus

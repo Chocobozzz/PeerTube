@@ -6,260 +6,169 @@ $nav-preview-tab-height: 30px;
 $base-padding: 15px;
 $input-border-radius: 3px;
 
-@mixin in-small-view {
-  .root {
-    display: flex;
-    flex-direction: column;
-
-    textarea {
-      @include peertube-textarea(100%, 150px);
-
-      background-color: pvar(--markdownTextareaBackgroundColor);
-
-      font-family: monospace;
-      font-size: 13px;
-      border-bottom: 0;
-      border-bottom-left-radius: unset;
-      border-bottom-right-radius: unset;
-    }
-
-    .nav-preview {
-      @include padding-left(10px);
-      @include padding-right(10px);
-
-      display: block;
-      text-align: end;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      border-top: 1px dashed $input-border-color;
-      border-left: 1px solid $input-border-color;
-      border-right: 1px solid $input-border-color;
-      border-bottom: 1px solid $input-border-color;
-      border-bottom-right-radius: $input-border-radius;
-
-      border-bottom-left-radius: $input-border-radius;
-      ::ng-deep {
-        .nav-link {
-          display: none !important;
-        }
-
-        .maximize-button {
-          padding: 0 7px;
-          cursor: pointer;
-
-          svg {
-            stroke: var(--mainForegroundColor);
-            opacity: 0.7;
-          }
-
-          &:hover,
-          &:active {
-            svg {
-              opacity: 1;
-            }
-          }
-        }
-      }
-    }
-
-    ::ng-deep {
-      .tab-content {
-        display: none;
-      }
-    }
-  }
-}
-
-@mixin nav-preview-medium {
+.root {
   display: flex;
-  flex-grow: 1;
-  border-bottom-left-radius: unset;
-  border-bottom-right-radius: unset;
-  border-bottom: 2px solid pvar(--mainColor);
+  flex-direction: column;
 
-  :first-child {
-    @include margin-left(auto);
+  textarea {
+    @include peertube-textarea(100%, 150px);
+
+    background-color: pvar(--markdownTextareaBackgroundColor);
+
+    font-family: monospace;
+    font-size: 13px;
+    border-bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
-
-  ::ng-deep {
-    .nav-link {
-      display: flex !important;
-      align-items: center;
-      height: $nav-preview-tab-height !important;
-      padding: 0 15px !important;
-      font-size: 85% !important;
-      opacity: .7;
-    }
-
-    .maximize-button {
-      @include margin-left(5px);
-    }
-  }
-}
-
-@mixin content-preview-base {
-  display: block;
-  min-height: 75px;
-  padding: $base-padding;
-  overflow-y: auto;
-  word-wrap: break-word;
-}
-
-@mixin maximized-base {
-  $nav-preview-vertical-padding: 40px;
-
-  flex-direction: row;
-  z-index: #{z(header) - 1};
-  position: fixed;
-  top: $header-height;
-  left: $menu-width;
-  max-height: none !important;
-  max-width: none !important;
-  width: calc(100% - #{$menu-width});
-  height: calc(100vh - #{$header-height}) !important;
 
   .nav-preview {
-    @include nav-preview-medium();
-    @include padding-right(0);
-    @include padding-left(0);
+    padding: 10px;
 
-    padding-top: math.div($nav-preview-vertical-padding, 2);
-    padding-bottom: math.div($nav-preview-vertical-padding, 2);
-    position: absolute;
-    background-color: pvar(--mainBackgroundColor);
-    width: 100% !important;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
+    border: 1px solid $input-border-color;
+    border-top: 1px dashed $input-border-color;
 
-    :last-child {
-      @include margin-right(pvar(--horizontalMarginContent));
+    border-bottom-right-radius: $input-border-radius;
+    border-bottom-left-radius: $input-border-radius;
+
+    display: flex;
+    flex-grow: 1;
+    border-bottom-left-radius: unset;
+    border-bottom-right-radius: unset;
+    border-bottom: 2px solid pvar(--mainColor);
+
+    .maximize-button {
+      @include margin-left(15px);
+
+      opacity: 0.6;
+      cursor: default;
+
+      &:not(.disabled) {
+        cursor: pointer;
+
+        &:hover,
+        &:active {
+          opacity: 1;
+        }
+      }
     }
   }
 
-  ::ng-deep .tab-content {
-    @include content-preview-base();
-    background-color: pvar(--mainBackgroundColor);
-    scrollbar-color: pvar(--actionButtonColor) pvar(--mainBackgroundColor);
+  .nav-pills {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    > * {
+      font-size: 0.9em !important;
+    }
   }
 
-  textarea,
-  ::ng-deep .tab-content {
+  .tab-content {
+    min-height: 75px;
+    max-height: 210px;
+    padding: $base-padding;
+
+    overflow-y: auto;
+    word-wrap: break-word;
+
+    border: 1px solid $input-border-color;
+    border-top: 0;
+
+    border-bottom-left-radius: $input-border-radius;
+    border-bottom-right-radius: $input-border-radius;
+  }
+
+  &.maximized {
+    z-index: #{z(header) - 1};
+    position: fixed;
+    top: $header-height;
+    left: $menu-width;
+
     max-height: none !important;
     max-width: none !important;
-    margin-top: #{$nav-preview-tab-height + $nav-preview-vertical-padding} !important;
-    height: calc(100vh - #{$header-height + $nav-preview-tab-height + $nav-preview-vertical-padding}) !important;
-    width: 50% !important;
-    border: 0 !important;
-    border-radius: unset !important;
-  }
+    width: calc(100% - #{$menu-width});
+    height: calc(100vh - #{$header-height});
 
-  :host-context(.expanded) {
-    .root.maximized {
-      left: 0;
-      width: 100%;
-    }
-  }
-}
+    display: grid;
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr 1fr;
 
-@mixin maximized-in-small-view {
-  .root.maximized {
-    @include maximized-base();
+    background-color: pvar(--mainBackgroundColor);
 
-    textarea {
-      display: none;
-    }
+    .nav-preview {
+      grid-row: 1;
+      grid-column: 1 / 3;
 
-    ::ng-deep .tab-content {
+      border: 0;
+      border-bottom: 2px solid pvar(--mainColor);
+
+      padding: 20px 0;
       width: 100% !important;
-    }
-  }
-}
 
-@mixin maximized-tabs-in-mobile-view {
-  // Ellipsis on tabs for mobile view
-  .root.maximized {
-    .nav-preview {
-      ::ng-deep .nav-link {
-        @include ellipsis();
-        @include margin-right(10px !important);
-
-        display: block !important;
-        max-width: 45% !important;
-        padding: 5px 0 !important;
-        text-align: center;
-
-        &:not(.active) {
-          max-width: 15% !important;
-        }
-
-        &.active {
-          padding: 5px 15px !important;
-        }
+      .maximize-button {
+        @include margin-right(15px);
       }
     }
-  }
-}
 
-@mixin in-medium-view {
-  .root {
-    .nav-preview {
-      @include nav-preview-medium();
+    textarea {
+      grid-column: 1;
+
+      border: 0;
+      border-right: 1px dashed $input-border-color;
+
+      resize: none;
     }
 
     ::ng-deep .tab-content {
-      @include content-preview-base();
-      max-height: 210px;
-      border-bottom: 1px solid $input-border-color;
-      border-left: 1px solid $input-border-color;
-      border-right: 1px solid $input-border-color;
-      border-bottom-left-radius: $input-border-radius;
-      border-bottom-right-radius: $input-border-radius;
-    }
-  }
-}
+      grid-column: 2;
 
-@mixin maximized-in-medium-view {
-  .root.maximized {
-    @include maximized-base();
+      border: 0;
 
-    textarea {
       display: block;
-      padding: $base-padding;
-      border-right: 1px dashed $input-border-color !important;
-      resize: none;
-      scrollbar-color: pvar(--actionButtonColor) pvar(--markdownTextareaBackgroundColor);
+      overflow-y: auto;
+      word-wrap: break-word;
 
-      &:focus {
-        box-shadow: none;
+      scrollbar-color: pvar(--actionButtonColor) pvar(--mainBackgroundColor);
+    }
+
+    textarea,
+    ::ng-deep .tab-content {
+      grid-row: 2;
+
+      height: 100% !important;
+      max-height: none !important;
+      border-radius: 0;
+
+      padding: 15px;
+    }
+
+    @media screen and (max-width: $mobile-view) {
+      grid-template-rows: auto 45% 1fr;
+      grid-template-columns: 1fr;
+
+      .nav-preview {
+        grid-column: 1;
+      }
+
+      textarea {
+        grid-row: 2;
+        grid-column: 1;
+        border: 0;
+        border-bottom: 1px dashed $input-border-color;;
+      }
+
+      ::ng-deep .tab-content {
+        grid-column: 1;
+        grid-row: 3;
       }
     }
   }
 }
 
-@include in-small-view();
-@include maximized-in-small-view();
-
-@media only screen and (max-width: $mobile-view) {
-  @include maximized-tabs-in-mobile-view();
-}
-
-@media only screen and (max-width: #{$mobile-view + $menu-width}) {
-  :host-context(.main-col:not(.expanded)) {
-    @include maximized-tabs-in-mobile-view();
-  }
-}
-
-@media only screen and (min-width: $small-view) {
-  @include maximized-in-medium-view();
-
-  :host-context(.expanded) {
-    @include in-medium-view();
-  }
-}
-
-@media only screen and (min-width: #{$small-view + $menu-width}) {
-  :host-context(.main-col:not(.expanded)) {
-    @include in-medium-view();
+:host-context(.main-col.expanded) {
+  .root.maximized {
+    left: 0;
+    width: 100%;
   }
 }
