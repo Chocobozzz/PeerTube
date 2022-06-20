@@ -58,12 +58,10 @@
           <div class="form-group">
             <label i18n for="password">Password</label>
 
-            <my-input-text formControlName="password" inputId="password"
-                                    i18n-placeholder placeholder="Password"
-                                    [ngClass]="{ 'input-error': formErrors['password'] }"
-                                    autocomplete="current-password" [tabindex]="2"></my-input-text>
-
-            <div *ngIf="formErrors.password" class="form-error">{{ formErrors.password }}</div>
+            <my-input-text
+              formControlName="password" inputId="password" i18n-placeholder placeholder="Password"
+              [formError]="formErrors['password']" autocomplete="current-password" [tabindex]="2"
+            ></my-input-text>
           </div>
 
           <input type="submit" class="peertube-button orange-button" i18n-value value="Login" [disabled]="!form.valid">

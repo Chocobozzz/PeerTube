@@ -12,4 +12,15 @@ export class DynamicFormFieldComponent {
   @Input() form: FormGroup
   @Input() formErrors: any
   @Input() setting: RegisterClientFormFieldOptions
+
+  hasDedicatedFormError () {
+    const dedicated = new Set<RegisterClientFormFieldOptions['type']>([
+      'input-checkbox',
+      'input',
+      'select',
+      'input-textarea'
+    ])
+
+    return dedicated.has(this.setting.type)
+  }
 }

@@ -24,6 +24,7 @@ export class InputTextComponent implements ControlValueAccessor {
   @Input() withCopy = false
   @Input() readonly = false
   @Input() show = false
+  @Input() formError: string
 
   constructor (private notifier: Notifier) { }
 

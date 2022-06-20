@@ -3,6 +3,7 @@
     [id]="inputId" [autocomplete]="autocomplete" [value]="value" [placeholder]="placeholder" [tabindex]="tabindex"
     [(ngModel)]="value" (ngModelChange)="update()" [readonly]="readonly"
     #input (click)="input.select()" (input)="update()" (change)="update()" [type]="inputType" class="form-control"
+    [ngClass]="{ 'input-error': formError }"
   />
 
   <button *ngIf="withToggle" (click)="toggle()" type="button" class="btn btn-outline-secondary" [title]="toggleTitle">
@@ -18,3 +19,5 @@
     <span class="copy-text">Copy</span>
   </button>
 </div>
+
+<div *ngIf="formError" class="form-error">{{ formError }}</div>

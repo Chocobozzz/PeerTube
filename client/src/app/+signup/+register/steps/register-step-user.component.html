@@ -64,10 +64,8 @@
 
       <my-input-text
         formControlName="password" inputId="password"
-        [ngClass]="{ 'input-error': formErrors['password'] }" autocomplete="new-password"
+        [formError]="formErrors['password']" autocomplete="new-password"
       ></my-input-text>
-
-      <div *ngIf="formErrors.password" class="form-error">{{ formErrors.password }}</div>
     </div>
   </div>
 </form>
