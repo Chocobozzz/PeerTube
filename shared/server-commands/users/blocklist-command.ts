@@ -6,7 +6,10 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared'
 type ListBlocklistOptions = OverrideCommandOptions & {
   start: number
   count: number
-  sort: string // default -createdAt
+
+  sort?: string // default -createdAt
+
+  search?: string
 }
 
 export class BlocklistCommand extends AbstractCommand {
@@ -147,13 +150,13 @@ export class BlocklistCommand extends AbstractCommand {
   }
 
   private listBlocklist <T> (options: ListBlocklistOptions, path: string) {
-    const { start, count, sort = '-createdAt' } = options
+    const { start, count, search, sort = '-createdAt' } = options
 
     return this.getRequestBody<ResultList<T>>({
       ...options,
 
       path,
-      query: { start, count, sort },
+      query: { start, count, sort, search },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

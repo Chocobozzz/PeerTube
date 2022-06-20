@@ -9,6 +9,7 @@
 
 .action-selection-mode-child {
   position: fixed;
+  display: flex;
 
   .action-button {
     @include margin-left(55px);

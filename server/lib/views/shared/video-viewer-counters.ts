@@ -165,7 +165,7 @@ export class VideoViewerCounters {
   private async federateViewerIfNeeded (video: MVideoImmutable, viewer: Viewer) {
     // Federate the viewer if it's been a "long" time we did not
     const now = new Date().getTime()
-    const federationLimit = now - (VIEW_LIFETIME.VIEWER_COUNTER / 2)
+    const federationLimit = now - (VIEW_LIFETIME.VIEWER_COUNTER * 0.75)
 
     if (viewer.lastFederation && viewer.lastFederation > federationLimit) return
 

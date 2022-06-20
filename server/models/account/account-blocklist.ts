@@ -132,6 +132,20 @@ export class AccountBlocklistModel extends Model<Partial<AttributesOnly<AccountB
             as: 'BlockedAccount'
           }
         ]
+      } else if (search) { // We need some joins when counting with search
+        query.include = [
+          {
+            model: AccountModel.unscoped(),
+            required: true,
+            as: 'BlockedAccount',
+            include: [
+              {
+                model: ActorModel.unscoped(),
+                required: true
+              }
+            ]
+          }
+        ]
       }
 
       return query

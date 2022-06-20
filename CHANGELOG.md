@@ -1,5 +1,29 @@
 # Changelog
 
+## v4.2.1
+
+### IMPORTANT NOTES
+
+ * If you upgrade from PeerTube **< 4.2.0**, please follow 4.2.0 IMPORTANT NOTES
+
+### Bug fixes
+
+ * Fix live ending job that breaks new live session
+ * Fix search filters counter
+ * Fix upload banner icon margin
+ * Fix button icon margin
+ * Fix my import expander icon that should only be displayed on import error
+ * Fix select components styling inconsistency
+ * Increase max watch section to avoid too much warnings in server
+ * Optimize broadcast job creation
+ * Optimize `View` activities delivery using a dedicated broadcast job queue that can be run in parallel
+ * Fix video selection buttons placement
+ * Fix searching into account blocklist
+ * Fix incorrect instance stats
+ * Fix broken player on ICE error
+ * Relax views federation
+
+
 ## v4.2.0
 
 ### IMPORTANT NOTES
