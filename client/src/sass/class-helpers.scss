@@ -71,8 +71,8 @@
 
 .input-error:not(:focus) {
   &,
-  & + .nav-preview, // Markdown textarea
-  & + * + .tab-content {
+  + .nav-preview, // Markdown textarea
+  + * + .tab-content {
     border-color: $red !important;
   }
 }
@@ -85,6 +85,7 @@
 .form-warning {
   display: block;
   margin-top: 5px;
+  font-size: 0.9em;
 }
 
 .form-error {
@@ -94,9 +95,9 @@
 // Disable red error on input focus
 .input-error:focus,
 .input-group:focus-within {
-  & + .form-error,
-  & + * + .form-error, // Markdown textarea
-  & + * + * + .form-error {
+  + .form-error,
+  + * + .form-error, // Markdown textarea
+  + * + * + .form-error {
     color: pvar(--mainForegroundColor);
   }
 }
