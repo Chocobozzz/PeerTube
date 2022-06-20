@@ -1,9 +1,10 @@
 import cors from 'cors'
 import express from 'express'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
+import { MActorImage } from '@server/types/models'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { logger } from '../helpers/logger'
-import { LAZY_STATIC_PATHS, STATIC_MAX_AGE } from '../initializers/constants'
+import { ACTOR_IMAGES_SIZE, LAZY_STATIC_PATHS, STATIC_MAX_AGE } from '../initializers/constants'
 import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
 import { actorImagePathUnsafeCache, pushActorImageProcessInQueue } from '../lib/local-actor'
 import { asyncMiddleware } from '../middlewares'
@@ -67,10 +68,7 @@ async function getActorImage (req: express.Request, res: express.Response, next:
       await pushActorImageProcessInQueue({
         filename: image.filename,
         fileUrl: image.fileUrl,
-        size: {
-          height: image.height,
-          width: image.width
-        },
+        size: getActorImageSize(image),
         type: image.type
       })
     } catch (err) {
@@ -94,7 +92,7 @@ async function getActorImage (req: express.Request, res: express.Response, next:
     if (err.status === HttpStatusCode.NOT_FOUND_404 && !image.isOwned()) {
       logger.error('Cannot lazy serve actor image %s.', filename, { err })
 
-      actorImagePathUnsafeCache.del(filename)
+      actorImagePathUnsafeCache.delete(filename)
 
       image.onDisk = false
       image.save()
@@ -103,6 +101,17 @@ async function getActorImage (req: express.Request, res: express.Response, next:
 
     return next(err)
   })
+}
+
+function getActorImageSize (image: MActorImage): { width: number, height: number } {
+  if (image.width && image.height) {
+    return {
+      height: image.height,
+      width: image.width
+    }
+  }
+
+  return ACTOR_IMAGES_SIZE[image.type][0]
 }
 
 async function getPreview (req: express.Request, res: express.Response) {
