@@ -1393,12 +1393,14 @@ Geen resultaten gevonden</target>
         <source>It's time to configure your instance!</source>
         <target state="translated">Tijd om je exemplaar van PeerTube in te stellen!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">55</context></context-group>
+      </trans-unit><trans-unit id="1852111465407058121" datatype="html">
+        <source> Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> is very important for visitors to understand on what type of instance they are. </source><target state="new"> Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> is very important for visitors to understand on what type of instance they are. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
+          <context context-type="linenumber">57,61</context>
+        </context-group>
       </trans-unit>
-      <trans-unit id="5083058563861587027" datatype="html">
-        <source>Choosing your <x id="START_TAG_STRONG"/>instance name<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>setting up a description<x id="CLOSE_TAG_STRONG"/>, specifying <x id="START_TAG_STRONG"/>who you are<x id="CLOSE_TAG_STRONG"/>, why <x id="START_TAG_STRONG"/>you created your instance<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>how long<x id="CLOSE_TAG_STRONG"/> you plan to <x id="START_TAG_STRONG"/>maintain your it<x id="CLOSE_TAG_STRONG"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="translated">Het uitzoeken van <x id="START_TAG_STRONG"/> een naam voor je exemplaar van PeerTube<x id="CLOSE_TAG_STRONG"/>, <x id="START_TAG_STRONG"/>het toevoegen van een beschrijving<x id="CLOSE_TAG_STRONG"/>, uitleggen <x id="START_TAG_STRONG"/>wie je bent<x id="CLOSE_TAG_STRONG"/>, waarom <x id="START_TAG_STRONG"/>je dit exemplaar van peertube hebt gemaakt<x id="CLOSE_TAG_STRONG"/> en <x id="START_TAG_STRONG"/>hoe lang<x id="CLOSE_TAG_STRONG"/> je van plan bent <x id="START_TAG_STRONG"/>deze te onderhouden<x id="CLOSE_TAG_STRONG"/> is van groot belang voor bezoekers om te begrijpen op wat voor soort exemplaar van peertube ze zich bevinden. </target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">57</context></context-group></trans-unit>
+      
       <trans-unit id="5329436244765769292" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
         <target state="translated">Als je registratie wil inschakelen, dan graag <x id="START_TAG_STRONG"/>je moderatieregels<x id="CLOSE_TAG_STRONG"/> en de <x id="START_TAG_STRONG"/>gebruiksvoorwaarden van je exemplaar van PeerTube<x id="CLOSE_TAG_STRONG"/> instellen, en ook de categorieën en de talen die je moderatoren spreken. Zo help je gebruikers zich te registreren op het <x id="START_TAG_STRONG"/>geschikte<x id="CLOSE_TAG_STRONG"/> exemplaar van PeerTube. </target>
@@ -6102,12 +6104,14 @@ color: red;
         <source>Verify account via email</source>
         <target state="translated">Verifieer account via e-mail</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context><context context-type="linenumber">15</context></context-group>
+      </trans-unit><trans-unit id="6040639330855198542" datatype="html">
+        <source>Ask to send an email to verify your account</source><target state="new">Ask to send an email to verify your account</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
       </trans-unit>
-      <trans-unit id="9197112111252826229" datatype="html">
-        <source>Ask to send an email to verify you account</source>
-        <target state="translated">Vraag om een e-mail te sturen om uw account te verifiëren</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context><context context-type="linenumber">24</context></context-group>
-      </trans-unit><trans-unit id="7225513189981158956" datatype="html">
+      <trans-unit id="7225513189981158956" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Welcome<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/></source><target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Welcome<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context>
@@ -9649,12 +9653,14 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Support text must be at least 3 characters long.</source>
         <target>Supporttekst moet minstens 3 karakters zijn.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">47</context></context-group>
+      </trans-unit><trans-unit id="6122525173522570480" datatype="html">
+        <source>Support text cannot be more than 1000 characters long.</source><target state="new">Support text cannot be more than 1000 characters long.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
       </trans-unit>
-      <trans-unit id="6461548560008228165" datatype="html">
-        <source>Support text cannot be more than 1000 characters long</source>
-        <target state="translated">Hulptekst mag niet langer dan 1000 tekens zijn</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">48</context></context-group>
-      </trans-unit>
+      
       <trans-unit id="5637879201055173642" datatype="html">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>   "/> to learn how to use the PeerTube live streaming feature. </source>
         <target state="translated">Bekijk <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/#/use-create-upload-video?id=publish-a-live-in-peertube-gt-v3&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>"/>de documentatie<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>   "/> om te leren hoe je de PeerTube live streaming functie kunt gebruiken. </target>
