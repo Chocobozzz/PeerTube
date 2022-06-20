@@ -45,6 +45,6 @@ export const VIDEO_CHANNEL_SUPPORT_VALIDATOR: BuildFormValidator = {
   ],
   MESSAGES: {
     minlength: $localize`Support text must be at least 3 characters long.`,
-    maxlength: $localize`Support text cannot be more than 1000 characters long`
+    maxlength: $localize`Support text cannot be more than 1000 characters long.`
   }
 }
