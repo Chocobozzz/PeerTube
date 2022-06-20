@@ -13,9 +13,9 @@ ngx-loading-bar {
   z-index: z(header) + 1 !important;
 }
 
-/* rules for dropdowns excepts when in button group, to avoid impacting the dropdown-toggle */
-.dropdown,
-.dropup {
+// Dropdown added to body, override default z-index
+body > .dropdown,
+body > .dropup {
   z-index: z(dropdown) !important;
 }
 
