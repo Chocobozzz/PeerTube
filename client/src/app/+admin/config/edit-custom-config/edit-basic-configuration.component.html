@@ -132,8 +132,8 @@
           <label i18n for="broadcastMessageMessage">Message</label><my-help helpType="markdownText"></my-help>
 
           <my-markdown-textarea
-            name="broadcastMessageMessage" formControlName="message" textareaMaxWidth="500px"
-            [classes]="{ 'input-error': formErrors['broadcastMessage.message'] }"
+            name="broadcastMessageMessage" formControlName="message"
+            [formError]="formErrors['broadcastMessage.message']"
           ></my-markdown-textarea>
 
           <div *ngIf="formErrors.broadcastMessage.message" class="form-error">{{ formErrors.broadcastMessage.message }}</div>

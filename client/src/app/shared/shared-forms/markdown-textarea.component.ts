@@ -25,10 +25,6 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   @Input() content = ''
 
   @Input() formError: string
-  @Input() classes: string[] | { [klass: string]: any[] | any } = []
-
-  @Input() textareaMaxWidth = '100%'
-  @Input() textareaHeight = '150px'
 
   @Input() truncate: number
 

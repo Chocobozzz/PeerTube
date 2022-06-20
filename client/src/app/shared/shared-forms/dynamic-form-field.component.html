@@ -28,19 +28,19 @@
 
   <my-markdown-textarea
     *ngIf="setting.type === 'markdown-text'"
-    markdownType="text" [id]="setting.name" [formControlName]="setting.name" textareaWidth="500px"
-    [classes]="{ 'input-error': formErrors['settings.name'] }"
+    markdownType="text" [id]="setting.name" [formControlName]="setting.name"
+    [formError]="formErrors['settings.name']"
   ></my-markdown-textarea>
 
   <my-markdown-textarea
     *ngIf="setting.type === 'markdown-enhanced'"
-    markdownType="enhanced" [id]="setting.name" [formControlName]="setting.name" textareaWidth="500px"
-    [classes]="{ 'input-error': formErrors['settings.name'] }"
+    markdownType="enhanced" [id]="setting.name" [formControlName]="setting.name"
+    [formError]="formErrors['settings.name']"
   ></my-markdown-textarea>
 
   <div *ngIf="setting.type === 'html'" [innerHTML]="setting.html"></div>
 
-  <div *ngIf="formErrors[setting.name]" class="form-error">
+  <div *ngIf="setting.type !== 'markdown-text' && setting.type !== 'markdown-enhanced' && formErrors[setting.name]" class="form-error">
     {{ formErrors[setting.name] }}
   </div>
 

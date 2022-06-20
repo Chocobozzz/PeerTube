@@ -51,11 +51,10 @@
                 </ng-template>
               </my-help>
 
-              <my-markdown-textarea [truncate]="250" formControlName="description" [markdownVideo]="videoToUpdate"></my-markdown-textarea>
-
-              <div *ngIf="formErrors.description" class="form-error">
-                {{ formErrors.description }}
-              </div>
+              <my-markdown-textarea
+                formControlName="description" [markdownVideo]="videoToUpdate"
+                [formError]="formErrors.description" [truncate]="250"
+              ></my-markdown-textarea>
             </div>
           </div>
 
@@ -332,13 +331,11 @@
                   </ng-container>
                 </ng-template>
               </my-help>
+
               <my-markdown-textarea
                 id="support" formControlName="support" markdownType="enhanced"
-                [classes]="{ 'input-error': formErrors['support'] }"
+                [formError]="formErrors['support']"
               ></my-markdown-textarea>
-              <div *ngIf="formErrors.support" class="form-error">
-                {{ formErrors.support }}
-              </div>
             </div>
           </div>
 

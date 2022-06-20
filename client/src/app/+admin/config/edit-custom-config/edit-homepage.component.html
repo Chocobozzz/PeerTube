@@ -2,7 +2,7 @@
 
   <ng-container formGroupName="instanceCustomHomepage">
 
-    <div class="row mt-5"> <!-- homepage grid -->
+    <div class="homepage row mt-5"> <!-- homepage grid -->
       <div class="col-12 col-lg-4 col-xl-3">
         <div i18n class="inner-form-title">INSTANCE HOMEPAGE</div>
       </div>
@@ -16,9 +16,9 @@
           </div>
 
           <my-markdown-textarea
-            name="instanceCustomHomepageContent" formControlName="content" textareaMaxWidth="90%" textareaHeight="300px"
+            name="instanceCustomHomepageContent" formControlName="content"
             [customMarkdownRenderer]="getCustomMarkdownRenderer()"
-            [classes]="{ 'input-error': formErrors['instanceCustomHomepage.content'] }"
+            [formError]="formErrors['instanceCustomHomepage.content']"
           ></my-markdown-textarea>
 
           <div *ngIf="formErrors.instanceCustomHomepage.content" class="form-error">{{ formErrors.instanceCustomHomepage.content }}</div>

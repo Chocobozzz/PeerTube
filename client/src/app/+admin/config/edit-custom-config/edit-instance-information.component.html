@@ -37,12 +37,10 @@
           </div>
 
           <my-markdown-textarea
-            name="instanceDescription" formControlName="description" textareaMaxWidth="500px"
+            name="instanceDescription" formControlName="description"
             [customMarkdownRenderer]="getCustomMarkdownRenderer()"
-            [classes]="{ 'input-error': formErrors['instance.description'] }"
+            [formError]="formErrors['instance.description']"
           ></my-markdown-textarea>
-
-          <div *ngIf="formErrors.instance.description" class="form-error">{{ formErrors.instance.description }}</div>
         </div>
 
         <div class="form-group">
@@ -127,22 +125,18 @@
           <label i18n for="instanceTerms">Terms</label><my-help helpType="markdownText"></my-help>
 
           <my-markdown-textarea
-            name="instanceTerms" formControlName="terms" textareaMaxWidth="500px"
-            [ngClass]="{ 'input-error': formErrors['instance.terms'] }"
+            name="instanceTerms" formControlName="terms"
+            [formError]="formErrors['instance.terms']"
           ></my-markdown-textarea>
-
-          <div *ngIf="formErrors.instance.terms" class="form-error">{{ formErrors.instance.terms }}</div>
         </div>
 
         <div class="form-group">
           <label i18n for="instanceCodeOfConduct">Code of conduct</label><my-help helpType="markdownText"></my-help>
 
           <my-markdown-textarea
-            name="instanceCodeOfConduct" formControlName="codeOfConduct" textareaMaxWidth="500px"
-            [ngClass]="{ 'input-error': formErrors['instance.codeOfConduct'] }"
+            name="instanceCodeOfConduct" formControlName="codeOfConduct"
+            [formError]="formErrors['instance.codeOfConduct']"
           ></my-markdown-textarea>
-
-          <div *ngIf="formErrors.instance.codeOfConduct" class="form-error">{{ formErrors.instance.codeOfConduct }}</div>
         </div>
 
         <div class="form-group">
@@ -150,11 +144,9 @@
           <div i18n class="label-small-info">Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</div>
 
           <my-markdown-textarea
-            name="instanceModerationInformation" formControlName="moderationInformation" textareaMaxWidth="500px"
-            [ngClass]="{ 'input-error': formErrors['instance.moderationInformation'] }"
+            name="instanceModerationInformation" formControlName="moderationInformation"
+            [formError]="formErrors['instance.moderationInformation']"
           ></my-markdown-textarea>
-
-          <div *ngIf="formErrors.instance.moderationInformation" class="form-error">{{ formErrors.instance.moderationInformation }}</div>
         </div>
 
       </div>
@@ -172,11 +164,9 @@
           <div i18n class="label-small-info">A single person? A non-profit? A company?</div>
 
           <my-markdown-textarea
-            name="instanceAdministrator" formControlName="administrator" textareaMaxWidth="500px"
-            [classes]="{ 'input-error': formErrors['instance.administrator'] }"
+            name="instanceAdministrator" formControlName="administrator"
+            [formError]="formErrors['instance.administrator']"
           ></my-markdown-textarea>
-
-          <div *ngIf="formErrors.instance.administrator" class="form-error">{{ formErrors.instance.administrator }}</div>
         </div>
 
         <div class="form-group">
@@ -184,11 +174,9 @@
           <div i18n class="label-small-info">To share your personal videos? To open registrations and allow people to upload what they want?</div>
 
           <my-markdown-textarea
-            name="instanceCreationReason" formControlName="creationReason" textareaMaxWidth="500px"
-            [ngClass]="{ 'input-error': formErrors['instance.creationReason'] }"
+            name="instanceCreationReason" formControlName="creationReason"
+            [formError]="formErrors['instance.creationReason']"
           ></my-markdown-textarea>
-
-          <div *ngIf="formErrors.instance.creationReason" class="form-error">{{ formErrors.instance.creationReason }}</div>
         </div>
 
         <div class="form-group">
@@ -196,11 +184,9 @@
           <div i18n class="label-small-info">It's important to know for users who want to register on your instance</div>
 
           <my-markdown-textarea
-            name="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" textareaMaxWidth="500px"
-            [ngClass]="{ 'input-error': formErrors['instance.maintenanceLifetime'] }"
+            name="instanceMaintenanceLifetime" formControlName="maintenanceLifetime"
+            [formError]="formErrors['instance.maintenanceLifetime']"
           ></my-markdown-textarea>
-
-          <div *ngIf="formErrors.instance.maintenanceLifetime" class="form-error">{{ formErrors.instance.maintenanceLifetime }}</div>
         </div>
 
         <div class="form-group">
@@ -208,11 +194,9 @@
           <div i18n class="label-small-info">With your own funds? With user donations? Advertising?</div>
 
           <my-markdown-textarea
-            name="instanceBusinessModel" formControlName="businessModel" textareaMaxWidth="500px"
-            [ngClass]="{ 'input-error': formErrors['instance.businessModel'] }"
+            name="instanceBusinessModel" formControlName="businessModel"
+            [formError]="formErrors['instance.businessModel']"
           ></my-markdown-textarea>
-
-          <div *ngIf="formErrors.instance.businessModel" class="form-error">{{ formErrors.instance.businessModel }}</div>
         </div>
 
       </div>
@@ -230,11 +214,9 @@
           <div i18n class="label-small-info">i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</div>
 
           <my-markdown-textarea
-            name="instanceHardwareInformation" formControlName="hardwareInformation" textareaMaxWidth="500px"
-            [classes]="{ 'input-error': formErrors['instance.hardwareInformation'] }"
+            name="instanceHardwareInformation" formControlName="hardwareInformation"
+            [formError]="formErrors['instance.hardwareInformation']"
           ></my-markdown-textarea>
-
-          <div *ngIf="formErrors.instance.hardwareInformation" class="form-error">{{ formErrors.instance.hardwareInformation }}</div>
         </div>
 
       </div>

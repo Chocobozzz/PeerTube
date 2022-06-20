@@ -1,10 +1,9 @@
-<div class="root" [ngClass]="{ 'maximized': isMaximized }" [ngStyle]="{ 'max-width': textareaMaxWidth }">
+<div class="root" [ngClass]="{ 'maximized': isMaximized }">
 
   <textarea #textarea
     [(ngModel)]="content" (ngModelChange)="onModelChange()"
     class="form-control" [ngClass]="{ 'input-error': formError }"
     [attr.disabled]="disabled || null"
-    [ngStyle]="{ height: textareaHeight }"
     [id]="name" [name]="name">
   </textarea>
 

@@ -42,6 +42,11 @@ textarea {
   display: block;
 }
 
+my-markdown-textarea {
+  display: block;
+  max-width: 500px;
+}
+
 .peertube-select-container {
   @include peertube-select-container(340px);
 }

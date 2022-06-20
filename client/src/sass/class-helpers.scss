@@ -70,7 +70,11 @@
 }
 
 .input-error:not(:focus) {
-  border-color: $red !important;
+  &,
+  & + .nav-preview, // Markdown textarea
+  & + * + .tab-content {
+    border-color: $red !important;
+  }
 }
 
 .form-error,
@@ -83,8 +87,12 @@
   color: $red;
 }
 
-.input-error:focus + .form-error {
-  color: pvar(--mainForegroundColor);
+.input-error:focus {
+  & + .form-error,
+  & + * + .form-error, // Markdown textarea
+  & + * + * + .form-error {
+    color: pvar(--mainForegroundColor);
+  }
 }
 
 .form-group-description {

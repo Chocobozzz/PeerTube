@@ -7,12 +7,21 @@ form {
   padding-bottom: 1.5rem;
 }
 
-input[type=text] {
-  @include peertube-input-text($form-base-input-width);
-
+my-markdown-textarea {
   display: block;
+  max-width: 500px;
 }
 
+.homepage my-markdown-textarea {
+  display: block;
+  max-width: 90%;
+
+  ::ng-deep textarea {
+    height: 300px !important;
+  }
+}
+
+input[type=text],
 input[type=number] {
   @include peertube-input-text($form-base-input-width);
 

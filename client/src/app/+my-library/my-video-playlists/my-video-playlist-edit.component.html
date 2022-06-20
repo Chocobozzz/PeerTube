@@ -42,13 +42,7 @@
 
         <div class="form-group">
           <label i18n for="description">Description</label><my-help helpType="markdownText"></my-help>
-          <my-markdown-textarea
-            id="description" formControlName="description"
-            [ngClass]="{ 'input-error': formErrors['description'] }"
-          ></my-markdown-textarea>
-          <div *ngIf="formErrors.description" class="form-error">
-            {{ formErrors.description }}
-          </div>
+          <my-markdown-textarea id="description" formControlName="description" [formError]="formErrors['description']"></my-markdown-textarea>
         </div>
       </div>
 
