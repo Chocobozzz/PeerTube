@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '@shared/models'
-import { createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
+import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
 describe('Test video sources API validator', function () {
   let server: PeerTubeServer = null
@@ -10,7 +10,6 @@ describe('Test video sources API validator', function () {
     this.timeout(30000)
 
     server = await createSingleServer(1)
-
     await setAccessTokensToServers([ server ])
 
     const created = await server.videos.quickUpload({ name: 'video' })
@@ -37,5 +36,9 @@ describe('Test video sources API validator', function () {
 
   it('Should succeed with the correct parameters get the source as another user', async function () {
     await server.videos.getSource({ id: uuid })
+  })
+
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

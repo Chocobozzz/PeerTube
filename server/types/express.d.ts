@@ -69,7 +69,7 @@ declare module 'express' {
   } | UploadFileForCheck[]
 
   // Upload file with a duration added by our middleware
-  export type VideoUploadFile = Pick<Express.Multer.File, 'path' | 'filename' | 'size'> & {
+  export type VideoUploadFile = Pick<Express.Multer.File, 'path' | 'filename' | 'size', 'originalname'> & {
     duration: number
   }
 
@@ -86,6 +86,7 @@ declare module 'express' {
     duration: number
     path: string
     filename: string
+    originalname: string
   }
 
   // Extends Response with added functions and potential variables passed by middlewares

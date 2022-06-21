@@ -152,7 +152,7 @@ async function addVideo (options: {
   video.url = getLocalVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
   const videoFile = await buildNewFile(videoPhysicalFile)
-  const originalFilename = videoPhysicalFile.filename
+  const originalFilename = videoPhysicalFile.originalname
 
   // Move physical file
   const destination = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)

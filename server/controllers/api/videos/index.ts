@@ -97,12 +97,14 @@ videosRouter.get('/:id/description',
   asyncMiddleware(videosGetValidator),
   asyncMiddleware(getVideoDescription)
 )
+
 videosRouter.get('/:id/source',
   openapiOperationDoc({ operationId: 'getVideoSource' }),
   authenticate,
   asyncMiddleware(videoSourceGetValidator),
   getVideoSource
 )
+
 videosRouter.get('/:id',
   openapiOperationDoc({ operationId: 'getVideo' }),
   optionalAuthenticate,
