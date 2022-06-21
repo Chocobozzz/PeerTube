@@ -1,15 +1,10 @@
+import express from 'express'
 import { getVideoWithAttributes } from '@server/helpers/video'
 import { VideoSourceModel } from '@server/models/video/video-source'
 import { MVideoFullLight } from '@server/types/models'
-import { HttpStatusCode, UserRight, VideoPrivacy } from '@shared/models'
-import express from 'express'
+import { HttpStatusCode, UserRight } from '@shared/models'
 import { logger } from '../../../helpers/logger'
-import {
-  areValidationErrors,
-  checkUserCanManageVideo,
-  doesVideoExist,
-  isValidVideoIdParam
-} from '../shared'
+import { areValidationErrors, checkUserCanManageVideo, doesVideoExist, isValidVideoIdParam } from '../shared'
 
 const videoSourceGetValidator = [
   isValidVideoIdParam('id'),
@@ -20,33 +15,20 @@ const videoSourceGetValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res, 'for-api')) return
 
-    const user = res.locals.oauth ? res.locals.oauth.token.User : null
     const video = getVideoWithAttributes(res) as MVideoFullLight
 
-    if (user && checkUserCanManageVideo(user, video, UserRight.UPDATE_ANY_VIDEO, res)) {
-      res.locals.videoSource = await VideoSourceModel.loadByVideoId(video.id)
-
-      if (!res.locals.videoSource) {
-        return res.fail({
-          status: HttpStatusCode.NOT_FOUND_404,
-          message: 'Video source not found'
-        })
-      }
-
-      return next()
-    }
-
-    if (video.privacy === VideoPrivacy.PUBLIC || video.privacy === VideoPrivacy.UNLISTED) {
-      res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Refused get video sources'
+    res.locals.videoSource = await VideoSourceModel.loadByVideoId(video.id)
+    if (!res.locals.videoSource) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Video source not found'
       })
     }
 
-    return res.fail({
-      status: HttpStatusCode.NOT_FOUND_404,
-      message: 'Video not found'
-    })
+    const user = res.locals.oauth.token.User
+    if (!checkUserCanManageVideo(user, video, UserRight.UPDATE_ANY_VIDEO, res)) return
+
+    return next()
   }
 ]
 

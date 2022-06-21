@@ -160,7 +160,7 @@ export class VideosCommand extends AbstractCommand {
       ...options,
 
       path,
-      implicitToken: false,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }

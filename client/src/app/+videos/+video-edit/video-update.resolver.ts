@@ -34,8 +34,7 @@ export class VideoUpdateResolver implements Resolve<any> {
         .loadCompleteDescription(video.descriptionPath)
         .pipe(map(description => Object.assign(video, { description }))),
 
-      this.videoService
-        .getSource(video.id),
+      this.videoService.getSource(video.id),
 
       listUserChannelsForSelect(this.authService),
 

@@ -26,6 +26,7 @@ import {
   setDefaultVideosSort,
   videosCustomGetValidator,
   videosGetValidator,
+  videoSourceGetValidator,
   videosRemoveValidator,
   videosSortValidator
 } from '../../../middlewares'
@@ -44,7 +45,6 @@ import { transcodingRouter } from './transcoding'
 import { updateRouter } from './update'
 import { uploadRouter } from './upload'
 import { viewRouter } from './view'
-import { videoSourceGetValidator } from '@server/middlewares/validators/videos/video-source'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -163,7 +163,7 @@ async function getVideoDescription (req: express.Request, res: express.Response)
 }
 
 function getVideoSource (req: express.Request, res: express.Response) {
-  return res.json(res.locals.videoSource)
+  return res.json(res.locals.videoSource.toFormattedJSON())
 }
 
 async function listVideos (req: express.Request, res: express.Response) {
