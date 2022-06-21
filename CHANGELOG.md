@@ -22,6 +22,8 @@
  * Fix incorrect instance stats
  * Fix broken player on ICE error
  * Relax views federation
+ * Fix peertube user in docker
+ * Fix playlist element federation with a deleted video
 
 
 ## v4.2.0
