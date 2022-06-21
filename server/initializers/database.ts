@@ -49,6 +49,7 @@ import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-pla
 import { VideoTagModel } from '../models/video/video-tag'
 import { VideoViewModel } from '../models/view/video-view'
 import { CONFIG } from './config'
+import { VideoSourceModel } from '@server/models/video/video-source'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -126,6 +127,7 @@ async function initDatabaseModels (silent: boolean) {
     VideoChannelModel,
     VideoShareModel,
     VideoFileModel,
+    VideoSourceModel,
     VideoCaptionModel,
     VideoBlacklistModel,
     VideoTagModel,

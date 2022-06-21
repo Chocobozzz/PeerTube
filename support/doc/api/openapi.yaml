@@ -1903,6 +1903,22 @@ paths:
                 example: |
                   **[Want to help to translate this video?](https://weblate.framasoft.org/projects/what-is-peertube-video/)**\r\n\r\n**Take back the control of your videos! [#JoinPeertube](https://joinpeertube.org)**
 
+  '/videos/{id}/source':
+    post:
+      summary: Get video source file metadata
+      operationId: getVideoSource
+      tags:
+        - Video
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoSource'
+
   '/videos/{id}/views':
     post:
       summary: Notify user is watching a video
@@ -6140,6 +6156,10 @@ components:
         language:
           $ref: '#/components/schemas/VideoConstantString-Language'
         captionPath:
+          type: string
+    VideoSource:
+      properties:
+        filename:
           type: string
     ActorImage:
       properties:

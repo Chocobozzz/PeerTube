@@ -42,6 +42,7 @@ import {
   MVideoThumbnail
 } from './models'
 import { Writable } from 'stream'
+import { MVideoSource } from './models/video/video-source'
 
 declare module 'express' {
   export interface Request {
@@ -68,7 +69,7 @@ declare module 'express' {
   } | UploadFileForCheck[]
 
   // Upload file with a duration added by our middleware
-  export type VideoUploadFile = Pick<Express.Multer.File, 'path' | 'filename' | 'size'> & {
+  export type VideoUploadFile = Pick<Express.Multer.File, 'path' | 'filename' | 'size', 'originalname'> & {
     duration: number
   }
 
@@ -85,6 +86,7 @@ declare module 'express' {
     duration: number
     path: string
     filename: string
+    originalname: string
   }
 
   // Extends Response with added functions and potential variables passed by middlewares
@@ -122,6 +124,8 @@ declare module 'express' {
       videoLiveSession?: MVideoLiveSession
 
       videoShare?: MVideoShareActor
+
+      videoSource?: MVideoSource
 
       videoFile?: MVideoFile
 

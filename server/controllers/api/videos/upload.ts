@@ -44,6 +44,7 @@ import {
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
+import { VideoSourceModel } from '@server/models/video/video-source'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -151,6 +152,7 @@ async function addVideo (options: {
   video.url = getLocalVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
   const videoFile = await buildNewFile(videoPhysicalFile)
+  const originalFilename = videoPhysicalFile.originalname
 
   // Move physical file
   const destination = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
@@ -180,6 +182,11 @@ async function addVideo (options: {
     await videoFile.save(sequelizeOptions)
 
     video.VideoFiles = [ videoFile ]
+
+    await VideoSourceModel.create({
+      filename: originalFilename,
+      videoId: video.id
+    }, { transaction: t })
 
     await setVideoTags({ video, tags: videoInfo.tags, transaction: t })
 

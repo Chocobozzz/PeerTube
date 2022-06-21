@@ -152,7 +152,7 @@ const videosAddResumableValidator = [
 
     if (!await isVideoAccepted(req, res, file)) return cleanup()
 
-    res.locals.videoFileResumable = file
+    res.locals.videoFileResumable = { ...file, originalname: file.filename }
 
     return next()
   }

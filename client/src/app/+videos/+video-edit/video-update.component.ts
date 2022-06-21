@@ -10,6 +10,7 @@ import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { LiveVideo, LiveVideoUpdate, VideoPrivacy } from '@shared/models'
 import { hydrateFormFromVideo } from './shared/video-edit-utils'
+import { VideoSource } from '@shared/models/videos/video-source'
 
 @Component({
   selector: 'my-videos-update',
@@ -19,6 +20,7 @@ import { hydrateFormFromVideo } from './shared/video-edit-utils'
 export class VideoUpdateComponent extends FormReactive implements OnInit {
   video: VideoEdit
   videoDetails: VideoDetails
+  videoSource: VideoSource
   userVideoChannels: SelectChannelItem[] = []
   videoCaptions: VideoCaptionEdit[] = []
   liveVideo: LiveVideo
@@ -46,13 +48,14 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.buildForm({})
 
     const { videoData } = this.route.snapshot.data
-    const { video, videoChannels, videoCaptions, liveVideo } = videoData
+    const { video, videoChannels, videoCaptions, videoSource, liveVideo } = videoData
 
     this.video = new VideoEdit(video)
     this.videoDetails = video
 
     this.userVideoChannels = videoChannels
     this.videoCaptions = videoCaptions
+    this.videoSource = videoSource
     this.liveVideo = liveVideo
 
     this.forbidScheduledPublication = this.video.privacy !== VideoPrivacy.PRIVATE

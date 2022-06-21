@@ -23,7 +23,8 @@ export class VideoUpdateResolver implements Resolve<any> {
     return this.videoService.getVideo({ videoId: uuid })
                .pipe(
                  switchMap(video => forkJoin(this.buildVideoObservables(video))),
-                 map(([ video, videoChannels, videoCaptions, liveVideo ]) => ({ video, videoChannels, videoCaptions, liveVideo }))
+                 map(([ video, videoSource, videoChannels, videoCaptions, liveVideo ]) =>
+                   ({ video, videoChannels, videoCaptions, videoSource, liveVideo }))
                )
   }
 
@@ -32,6 +33,8 @@ export class VideoUpdateResolver implements Resolve<any> {
       this.videoService
         .loadCompleteDescription(video.descriptionPath)
         .pipe(map(description => Object.assign(video, { description }))),
+
+      this.videoService.getSource(video.id),
 
       listUserChannelsForSelect(this.authService),
 

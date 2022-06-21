@@ -37,6 +37,7 @@ import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
 import { VideoCaptionEditModalComponent } from './video-caption-edit-modal/video-caption-edit-modal.component'
 import { VideoEditType } from './video-edit.type'
+import { VideoSource } from '@shared/models/videos/video-source'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
 type PluginField = {
@@ -61,6 +62,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() forbidScheduledPublication = true
 
   @Input() videoCaptions: VideoCaptionWithPathEdit[] = []
+  @Input() videoSource: VideoSource
 
   @Input() waitTranscodingEnabled = true
   @Input() type: VideoEditType

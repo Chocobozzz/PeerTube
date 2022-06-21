@@ -340,6 +340,21 @@
           </div>
 
           <div class="col-md-12 col-xl-4">
+
+            <div *ngIf="videoSource" class="form-group">
+              <label i18n for="filename">Filename</label>
+
+              <my-help>
+                <ng-template ptTemplate="preHtml">
+                  <ng-container i18n>
+                    Name of the uploaded file
+                  </ng-container>
+                </ng-template>
+              </my-help>
+
+              <input type="text" [disabled]="true" id="filename" class="form-control" [value]="videoSource.filename" />
+            </div>
+
             <div class="form-group originally-published-at">
               <label i18n for="originallyPublishedAt">Original publication date</label>
               <my-help>

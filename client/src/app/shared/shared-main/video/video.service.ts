@@ -1,5 +1,5 @@
 import { SortMeta } from 'primeng/api'
-import { from, Observable } from 'rxjs'
+import { from, Observable, of } from 'rxjs'
 import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
@@ -24,6 +24,7 @@ import {
   VideoTranscodingCreate,
   VideoUpdate
 } from '@shared/models'
+import { VideoSource } from '@shared/models/videos/video-source'
 import { environment } from '../../../../environments/environment'
 import { Account } from '../account/account.model'
 import { AccountService } from '../account/account.service'
@@ -320,6 +321,20 @@ export class VideoService {
                .pipe(
                  map(res => res.description),
                  catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
+  getSource (videoId: number) {
+    return this.authHttp
+               .get<{ source: VideoSource }>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/source')
+               .pipe(
+                 catchError(err => {
+                   if (err.status === 404) {
+                     return of(undefined)
+                   }
+
+                   this.restExtractor.handleError(err)
+                 })
                )
   }
 

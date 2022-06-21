@@ -26,6 +26,7 @@ import {
   setDefaultVideosSort,
   videosCustomGetValidator,
   videosGetValidator,
+  videoSourceGetValidator,
   videosRemoveValidator,
   videosSortValidator
 } from '../../../middlewares'
@@ -96,6 +97,14 @@ videosRouter.get('/:id/description',
   asyncMiddleware(videosGetValidator),
   asyncMiddleware(getVideoDescription)
 )
+
+videosRouter.get('/:id/source',
+  openapiOperationDoc({ operationId: 'getVideoSource' }),
+  authenticate,
+  asyncMiddleware(videoSourceGetValidator),
+  getVideoSource
+)
+
 videosRouter.get('/:id',
   openapiOperationDoc({ operationId: 'getVideo' }),
   optionalAuthenticate,
@@ -153,6 +162,10 @@ async function getVideoDescription (req: express.Request, res: express.Response)
     : await fetchRemoteVideoDescription(videoInstance)
 
   return res.json({ description })
+}
+
+function getVideoSource (req: express.Request, res: express.Response) {
+  return res.json(res.locals.videoSource.toFormattedJSON())
 }
 
 async function listVideos (req: express.Request, res: express.Response) {

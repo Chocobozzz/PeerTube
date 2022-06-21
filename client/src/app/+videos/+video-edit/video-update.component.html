@@ -12,6 +12,7 @@
       [videoCaptions]="videoCaptions" [waitTranscodingEnabled]="isWaitTranscodingEnabled()"
       type="update" (pluginFieldsAdded)="hydratePluginFieldsFromVideo()"
       [liveVideo]="liveVideo" [videoToUpdate]="videoDetails"
+      [videoSource]="videoSource"
 
       (formBuilt)="onFormBuilt()"
     ></my-video-edit>

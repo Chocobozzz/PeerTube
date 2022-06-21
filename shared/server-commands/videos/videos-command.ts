@@ -23,6 +23,7 @@ import {
 import { unwrapBody } from '../requests'
 import { waitJobs } from '../server'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
+import { VideoSource } from '@shared/models/videos/video-source'
 
 export type VideoEdit = Partial<Omit<VideoCreate, 'thumbnailfile' | 'previewfile'>> & {
   fixture?: string
@@ -147,6 +148,20 @@ export class VideosCommand extends AbstractCommand {
       ...options,
 
       token: this.buildCommonRequestToken({ ...options, implicitToken: true })
+    })
+  }
+
+  getSource (options: OverrideCommandOptions & {
+    id: number | string
+  }) {
+    const path = '/api/v1/videos/' + options.id + '/source'
+
+    return this.getRequestBody<VideoSource>({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
 
