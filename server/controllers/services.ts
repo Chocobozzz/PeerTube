@@ -1,9 +1,9 @@
 import express from 'express'
-import { EMBED_SIZE, PREVIEWS_SIZE, WEBSERVER, THUMBNAILS_SIZE } from '../initializers/constants'
-import { asyncMiddleware, oembedValidator } from '../middlewares'
-import { accountNameWithHostGetValidator } from '../middlewares/validators'
 import { MChannelSummary } from '@server/types/models'
 import { escapeHTML } from '@shared/core-utils/renderer'
+import { EMBED_SIZE, PREVIEWS_SIZE, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants'
+import { asyncMiddleware, oembedValidator } from '../middlewares'
+import { accountNameWithHostGetValidator } from '../middlewares/validators'
 
 const servicesRouter = express.Router()
 
@@ -36,7 +36,7 @@ function generatePlaylistOEmbed (req: express.Request, res: express.Response) {
   const json = buildOEmbed({
     channel: playlist.VideoChannel,
     title: playlist.name,
-    embedPath: playlist.getEmbedStaticPath(),
+    embedPath: playlist.getEmbedStaticPath() + buildPlayerURLQuery(req.query.url),
     previewPath: playlist.getThumbnailStaticPath(),
     previewSize: THUMBNAILS_SIZE,
     req
@@ -51,13 +51,47 @@ function generateVideoOEmbed (req: express.Request, res: express.Response) {
   const json = buildOEmbed({
     channel: video.VideoChannel,
     title: video.name,
-    embedPath: video.getEmbedStaticPath(),
+    embedPath: video.getEmbedStaticPath() + buildPlayerURLQuery(req.query.url),
     previewPath: video.getPreviewStaticPath(),
     previewSize: PREVIEWS_SIZE,
     req
   })
 
   return res.json(json)
+}
+
+function buildPlayerURLQuery (inputQueryUrl: string) {
+  const allowedParameters = new Set([
+    'start',
+    'stop',
+    'loop',
+    'autoplay',
+    'muted',
+    'controls',
+    'controlBar',
+    'title',
+    'api',
+    'warningTitle',
+    'peertubeLink',
+    'p2p',
+    'subtitle',
+    'bigPlayBackgroundColor',
+    'mode',
+    'foregroundColor'
+  ])
+
+  const params = new URLSearchParams()
+
+  new URL(inputQueryUrl).searchParams.forEach((v, k) => {
+    if (allowedParameters.has(k)) {
+      params.append(k, v)
+    }
+  })
+
+  const stringQuery = params.toString()
+  if (!stringQuery) return ''
+
+  return '?' + stringQuery
 }
 
 function buildOEmbed (options: {
