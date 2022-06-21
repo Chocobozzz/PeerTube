@@ -57,7 +57,7 @@ const consoleLoggerFormat = format.printf(info => {
     if (CONFIG.LOG.PRETTIFY_SQL) {
       additionalInfos += '\n' + sqlFormat(info.sql, {
         language: 'sql',
-        indent: '  '
+        tabWidth: 2
       })
     } else {
       additionalInfos += ' - ' + info.sql
