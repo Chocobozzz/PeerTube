@@ -26,8 +26,9 @@ $ sudo passwd peertube
 ```
 
 Ensure the peertube root directory is traversable by nginx:
+
 ```bash
-$ sudo chmod 751 /var/www/peertube
+$ ls -ld /var/www/peertube # Should be drwxr-xr-x
 ```
 
 **On FreeBSD**
