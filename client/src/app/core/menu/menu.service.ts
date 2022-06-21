@@ -132,7 +132,7 @@ export class MenuService {
         path: '/videos/trending'
       },
       {
-        icon: 'recently-added' as 'recently-added',
+        icon: 'add' as 'add',
         label: $localize`Recently added videos`,
         shortLabel: $localize`Recently added`,
         path: '/videos/recently-added'

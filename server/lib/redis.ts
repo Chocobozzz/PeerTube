@@ -1,4 +1,4 @@
-import { createClient, RedisClientOptions, RedisModules, RedisScripts } from 'redis'
+import { createClient, RedisClientOptions, RedisModules } from 'redis'
 import { exists } from '@server/helpers/custom-validators/misc'
 import { sha256 } from '@shared/extra-utils'
 import { logger } from '../helpers/logger'
@@ -16,16 +16,12 @@ import {
   WEBSERVER
 } from '../initializers/constants'
 
-// Only used for typings
-// TODO: remove when https://github.com/microsoft/TypeScript/issues/37181 is fixed
-const redisClientWrapperForType = () => createClient<{}, RedisScripts>()
-
 class Redis {
 
   private static instance: Redis
   private initialized = false
   private connected = false
-  private client: ReturnType<typeof redisClientWrapperForType>
+  private client: ReturnType<typeof createClient>
   private prefix: string
 
   private constructor () {

@@ -65,7 +65,6 @@
     grid-row: 2;
 
     max-height: 80px;
-    font-size: 16px;
   }
 }
 
@@ -105,7 +104,6 @@ my-subscribe-button {
 
   a {
     color: pvar(--mainColor);
-    font-size: 16px;
     font-weight: $font-semibold;
   }
 }
@@ -124,10 +122,6 @@ my-subscribe-button {
 
     .avatar-link {
       grid-row: 1 / 4;
-    }
-
-    h2 {
-      font-size: 16px;
     }
 
     .actor-counters {

@@ -24,7 +24,7 @@
   <ng-template pTemplate="body" let-expanded="expanded" let-videoImport>
     <tr>
       <td class="expand-cell" [pRowToggler]="videoImport">
-        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
+        <my-table-expander-icon *ngIf="videoImport.error" [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">
@@ -50,7 +50,7 @@
       </td>
 
       <td>
-        <span class="badge" [ngClass]="getVideoImportStateClass(videoImport.state.id)">
+        <span class="pt-badge" [ngClass]="getVideoImportStateClass(videoImport.state.id)">
           {{ videoImport.state.label }}
         </span>
       </td>

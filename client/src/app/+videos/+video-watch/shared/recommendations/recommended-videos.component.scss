@@ -8,16 +8,12 @@
   margin-bottom: 25px;
   flex-wrap: wrap-reverse;
 
-  .title-page.active,
-  .title-page.title-page-single {
+  .title-page {
     @include margin-right(.5rem !important);
 
     margin-bottom: unset;
+    margin-top: 0;
   }
-}
-
-.title-page {
-  margin-top: 0;
 }
 
 .title-page-autoplay {

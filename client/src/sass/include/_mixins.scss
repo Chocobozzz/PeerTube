@@ -89,11 +89,13 @@
   display: inline-block;
   height: $button-height;
   width: $width;
+  max-width: $width;
   color: pvar(--inputForegroundColor);
   background-color: pvar(--inputBackgroundColor);
-  border: 1px solid #C6C6C6;
+  border: 1px solid $input-border-color;
   border-radius: 3px;
-  font-size: 15px;
+  font-size: $form-input-font-size;
+  line-height: $form-input-line-height;
 
   &::placeholder {
     color: pvar(--inputPlaceholderColor);
@@ -108,19 +110,6 @@
   }
 }
 
-@mixin peertube-input-group($width) {
-  width: $width;
-  min-height: $button-height;
-  padding-top: 0;
-  padding-bottom: 0;
-  flex-wrap: nowrap;
-
-  .input-group-text {
-    font-size: 14px;
-    color: #808080;
-  }
-}
-
 @mixin peertube-textarea ($width, $height) {
   @include peertube-input-text($width);
 
@@ -128,7 +117,6 @@
   background-color: pvar(--textareaBackgroundColor) !important;
   height: $height;
   padding: 5px 15px;
-  font-size: 15px;
 }
 
 @mixin orange-button {
@@ -150,7 +138,7 @@
   &.disabled {
     cursor: default;
     color: #fff;
-    background-color: #C6C6C6;
+    background-color: $input-border-color;
   }
 
   my-global-icon {
@@ -180,7 +168,7 @@
   &.disabled {
     cursor: default;
     color: pvar(--mainColor);
-    background-color: #C6C6C6;
+    background-color: $input-border-color;
   }
 
   my-global-icon {
@@ -261,7 +249,6 @@
 
   border: 0;
   font-weight: $font-semibold;
-  font-size: 15px;
   height: $button-height;
   line-height: $button-height;
 
@@ -271,9 +258,23 @@
   text-align: center;
   cursor: pointer;
 
+  font-size: $button-font-size;
+
   my-global-icon + * {
     @include margin-right(4px);
   }
+}
+
+@mixin peertube-button-big {
+  height: auto;
+  padding: 10px 25px;
+  font-size: 18px;
+  line-height: 1.2;
+  border: 0;
+  font-weight: $font-semibold;
+
+  // Because of primeng that redefines border-radius of all input[type="..."]
+  border-radius: 3px !important;
 }
 
 @mixin peertube-button-link {
@@ -292,10 +293,6 @@
 }
 
 @mixin button-with-icon($width: 20px, $margin-right: 3px, $top: -1px) {
-  display: inline-flex;
-  align-items: center;
-  line-height: normal !important;
-
   my-global-icon {
     @include margin-right($margin-right);
 
@@ -361,7 +358,6 @@
   color: pvar(--inputForegroundColor);
   background: pvar(--inputBackgroundColor);
   position: relative;
-  font-size: 15px;
   height: min-content;
 
   &.disabled {
@@ -371,6 +367,7 @@
       cursor: default;
     }
   }
+
   select[disabled] {
     background-color: #f9f9f9;
   }
@@ -396,13 +393,14 @@
   select {
     padding: 0 35px 0 12px;
     position: relative;
-    border: 1px solid #C6C6C6;
+    border: 1px solid $input-border-color;
     background: transparent none;
     appearance: none;
-    cursor: pointer;
     height: $button-height;
     text-overflow: ellipsis;
     color: pvar(--mainForegroundColor);
+    font-size: $form-input-font-size;
+    line-height: $form-input-line-height;
 
     &:focus {
       outline: none;
@@ -415,14 +413,17 @@
 
     option {
       color: #000;
+
+      &[value=undefined] {
+        font-weight: $font-semibold;
+      }
     }
   }
 
   &.peertube-select-button {
     @include grey-button;
 
-    select,
-    option {
+    select {
       font-weight: $font-semibold;
       color: pvar(--greyForegroundColor);
       border: 0;
@@ -432,6 +433,10 @@
 
 // Thanks: https://codepen.io/manabox/pen/raQmpL
 @mixin peertube-radio-container {
+  label {
+    font-size: $form-input-font-size;
+  }
+
   [type=radio]:checked,
   [type=radio]:not(:checked) {
     position: absolute;
@@ -445,7 +450,6 @@
     cursor: pointer;
     line-height: 20px;
     display: inline-block;
-    font-size: 15px;
     font-weight: $font-regular;
   }
 
@@ -457,7 +461,7 @@
     top: 0;
     width: 18px;
     height: 18px;
-    border: 1px solid #C6C6C6;
+    border: 1px solid $input-border-color;
     border-radius: 100%;
     background: #fff;
   }
@@ -504,7 +508,7 @@
     width: 18px;
     min-width: 18px;
     height: 18px;
-    border: $border-width solid #C6C6C6;
+    border: $border-width solid $input-border-color;
     border-radius: 3px;
     vertical-align: middle;
     cursor: pointer;
@@ -537,7 +541,6 @@
   + span + span {
     @include margin-left(5px);
 
-    font-size: 15px;
     font-weight: $font-regular;
     cursor: pointer;
     display: inline;
@@ -547,50 +550,6 @@
   &[disabled] + span + span {
     opacity: 0.5;
     cursor: default;
-  }
-}
-
-@mixin peertube-badge {
-  border-radius: 2px;
-  padding: 1/4em 1/2em;
-  text-transform: uppercase;
-  font-weight: $font-bold;
-  font-size: 12px;
-  letter-spacing: 1/3px;
-
-  &.badge-banned,
-  &.badge-red {
-    background-color: #ffcdd2;
-    color: #c63737;
-  }
-
-  &.badge-banned {
-    text-decoration: line-through;
-  }
-
-  &.badge-yellow {
-    background-color: #feedaf;
-    color: #8a5340;
-  }
-
-  &.badge-brown {
-    background-color: #ffd8b2;
-    color: #805b36;
-  }
-
-  &.badge-green {
-    background-color: #c8e6c9;
-    color: #256029;
-  }
-
-  &.badge-blue {
-    background-color: #b3e5fc;
-    color: #23547b;
-  }
-
-  &.badge-purple {
-    background-color: #eccfff;
-    color: #694382;
   }
 }
 
@@ -604,7 +563,6 @@
 
 @mixin actor-counters ($separator-margin: 10px) {
   color: pvar(--greyForegroundColor);
-  font-size: 16px;
   display: flex;
   align-items: center;
 
@@ -613,30 +571,6 @@
     margin: 0 $separator-margin;
     color: pvar(--mainColor);
   }
-}
-
-@mixin chevron ($size, $border-width) {
-  border-style: solid;
-  border-width: $border-width $border-width 0 0;
-  content: '';
-  display: inline-block;
-  transform: rotate(-45deg);
-  height: $size;
-  width: $size;
-}
-
-@mixin chevron-right ($size, $border-width) {
-  @include chevron($size, $border-width);
-
-  left: 0;
-  transform: rotate(45deg);
-}
-
-@mixin chevron-left ($size, $border-width) {
-  @include chevron($size, $border-width);
-
-  left: 0.25em;
-  transform: rotate(-135deg);
 }
 
 @mixin in-content-small-title {
@@ -650,7 +584,7 @@
   text-transform: uppercase;
   color: pvar(--mainColor);
   font-weight: $font-bold;
-  font-size: 110%;
+  font-size: 1rem;
   margin-bottom: 10px;
 }
 
@@ -667,7 +601,7 @@
   margin-bottom: 20px;
 
   @if $separator {
-    border-bottom: 1px solid #C6C6C6;
+    border-bottom: 1px solid $input-border-color;
   }
 
   @media screen and (max-width: $small-view) {
@@ -731,10 +665,6 @@
     white-space: nowrap;
     transition: width 0.6s ease;
 
-    &.secondary {
-      background-color: pvar(--secondaryColor);
-    }
-
     &.red {
       background-color: lighten($color: #c54130, $amount: 10);
     }
@@ -744,11 +674,10 @@
 @mixin breadcrumb {
   display: flex;
   flex-wrap: wrap;
-  padding: 0.75rem 1rem;
+  padding: 0;
   margin-bottom: 1rem;
   list-style: none;
-  background-color: pvar(--submenuBackgroundColor);
-  border-radius: 0.25rem;
+  font-weight: $font-semibold;
 
   .breadcrumb-item {
     display: flex;
@@ -937,8 +866,9 @@
       vertical-align: top;
     }
 
-    .badge {
+    .pt-badge {
       @include margin-left(7px);
+
       vertical-align: top;
     }
   }

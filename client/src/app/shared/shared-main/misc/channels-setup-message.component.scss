@@ -5,28 +5,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
 
-  my-global-icon {
-    width: 32px;
-    align-self: flex-start;
+my-global-icon {
+  @include apply-svg-color(pvar(--mainColor));
 
-    ::ng-deep {
-      svg {
-        fill: #0c5460;
-      }
-    }
+  width: 32px;
+  align-self: flex-start;
 
-    + div {
-      margin-left: 10px;
-      text-align: center;
-
-      a.channels-settings-link {
-        @include peertube-button-link;
-        @include grey-button;
-
-        height: fit-content;
-        margin-top: 10px;
-      }
-    }
+  + div {
+    margin-left: 10px;
+    text-align: center;
   }
+}
+
+.channels-settings-link {
+  @include peertube-button-link;
+  @include grey-button;
+
+  height: fit-content;
+  margin-top: 10px;
 }

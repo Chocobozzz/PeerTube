@@ -2,7 +2,7 @@ import { pairwise } from 'rxjs/operators'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 import { FormGroup } from '@angular/forms'
-import { MenuService } from '@app/core'
+import { MenuService, ThemeService } from '@app/core'
 import { HTMLServerConfig } from '@shared/models'
 import { ConfigService } from '../shared/config.service'
 
@@ -22,7 +22,8 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
 
   constructor (
     private configService: ConfigService,
-    private menuService: MenuService
+    private menuService: MenuService,
+    private themeService: ThemeService
   ) { }
 
   ngOnInit () {
@@ -49,8 +50,7 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   }
 
   getAvailableThemes () {
-    return this.serverConfig.theme.registered
-      .map(t => t.name)
+    return this.themeService.getAvailableThemeLabels()
   }
 
   doesTrendingVideosAlgorithmsEnabledInclude (algorithm: string) {
@@ -92,6 +92,10 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
         label: o.label,
         description: o.path
       }))
+  }
+
+  getDefaultThemeLabel () {
+    return this.themeService.getDefaultThemeLabel()
   }
 
   private checkSignupField () {

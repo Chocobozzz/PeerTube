@@ -46,10 +46,6 @@ export abstract class UserEdit extends FormReactive implements OnInit {
       .concat(this.serverConfig.plugin.registeredExternalAuths.map(p => p.npmName))
   }
 
-  isInBigView () {
-    return this.screenService.getWindowInnerWidth() > 1600
-  }
-
   buildRoles () {
     const authUser = this.auth.getUser()
 

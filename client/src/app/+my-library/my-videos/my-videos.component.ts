@@ -67,7 +67,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
   user: User
 
-  inputFilters: AdvancedInputFilter[]
+  inputFilters: AdvancedInputFilter[] = []
 
   disabled = false
 

@@ -1,23 +1,8 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-label,
-my-dynamic-form-field ::ng-deep label {
-  font-weight: $font-regular;
-  font-size: 100%;
-}
-
 .peertube-select-container {
   @include peertube-select-container(auto);
-}
-
-.title-page a {
-  color: pvar(--mainForegroundColor);
-
-  &:hover {
-    text-decoration: none;
-    opacity: .8;
-  }
 }
 
 my-peertube-checkbox {
@@ -33,21 +18,9 @@ my-peertube-checkbox {
   height: 100%;
   min-height: 300px;
 
-  .form-group {
-    margin-bottom: 25px;
-  }
-
   input {
     @include peertube-input-text(100%);
     display: block;
-  }
-
-  .label-tags + span {
-    font-size: 15px;
-  }
-
-  .advanced-settings .form-group {
-    margin-bottom: 20px;
   }
 }
 
@@ -79,7 +52,6 @@ my-peertube-checkbox {
   .caption-entry-label {
     @include margin-right(20px);
 
-    font-size: 15px;
     font-weight: bold;
     width: 150px;
   }
@@ -108,7 +80,6 @@ my-peertube-checkbox {
 
 .no-caption {
   text-align: center;
-  font-size: 15px;
 }
 
 .submit-container {
@@ -119,7 +90,6 @@ my-peertube-checkbox {
 
     display: inline-block;
     color: pvar(--greyForegroundColor);
-    font-size: 15px;
   }
 }
 

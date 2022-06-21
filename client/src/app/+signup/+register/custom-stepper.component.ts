@@ -14,13 +14,10 @@ export class CustomStepperComponent extends CdkStepper {
   }
 
   isCompleted (step: CdkStep) {
-    return step.stepControl?.dirty && step.stepControl.valid
+    return step.completed
   }
 
-  isAccessible (index: number) {
-    const stepsCompletedMap = this.steps.map(step => this.isCompleted(step))
-    return index === 0
-      ? true
-      : stepsCompletedMap[index - 1]
+  isAccessible (step: CdkStep) {
+    return step.editable && step.completed
   }
 }

@@ -15,6 +15,9 @@ export class InstanceAboutAccordionComponent implements OnInit {
 
   @Output() init: EventEmitter<InstanceAboutAccordionComponent> = new EventEmitter<InstanceAboutAccordionComponent>()
 
+  @Input() displayInstanceName = true
+  @Input() displayInstanceShortDescription = true
+
   @Input() pluginScope: PluginClientScope
   @Input() pluginHook: ClientFilterHookName
 
@@ -64,6 +67,10 @@ export class InstanceAboutAccordionComponent implements OnInit {
     if (!this.panels.administrators) return false
 
     return !!(this.aboutHtml?.administrator || this.about?.instance.maintenanceLifetime || this.about?.instance.businessModel)
+  }
+
+  getTermsTitle () {
+    return $localize`Terms of ${this.about.instance.name}`
   }
 
   get moderationPanel () {

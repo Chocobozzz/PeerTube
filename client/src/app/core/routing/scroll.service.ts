@@ -67,7 +67,7 @@ export class ScrollService {
   private consumeScroll () {
     // Handle anchors/restore position
     this.peertubeRouter.getScrollEvents().subscribe(e => {
-      logger('Will schedule scroll after router event %o.', e)
+      logger('Will schedule scroll after router event %o.', { e, resetScroll: this.resetScroll })
 
       // scrollToAnchor first to preserve anchor position when using history navigation
       if (e.anchor) {

@@ -33,7 +33,7 @@ import { refreshAPObject } from './handlers/activitypub-refresher'
 import { processActorKeys } from './handlers/actor-keys'
 import { processEmail } from './handlers/email'
 import { processManageVideoTorrent } from './handlers/manage-video-torrent'
-import { processMoveToObjectStorage } from './handlers/move-to-object-storage'
+import { onMoveToObjectStorageFailure, processMoveToObjectStorage } from './handlers/move-to-object-storage'
 import { processVideoFileImport } from './handlers/video-file-import'
 import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
@@ -43,6 +43,7 @@ import { processVideosViewsStats } from './handlers/video-views-stats'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
+  { type: 'activitypub-http-broadcast-parallel', payload: ActivitypubHttpBroadcastPayload } |
   { type: 'activitypub-http-unicast', payload: ActivitypubHttpUnicastPayload } |
   { type: 'activitypub-http-fetcher', payload: ActivitypubHttpFetcherPayload } |
   { type: 'activitypub-http-cleaner', payload: {} } |
@@ -68,6 +69,7 @@ export type CreateJobOptions = {
 
 const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'activitypub-http-broadcast': processActivityPubHttpBroadcast,
+  'activitypub-http-broadcast-parallel': processActivityPubHttpBroadcast,
   'activitypub-http-unicast': processActivityPubHttpUnicast,
   'activitypub-http-fetcher': processActivityPubHttpFetcher,
   'activitypub-cleaner': processActivityPubCleaner,
@@ -86,9 +88,14 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'video-studio-edition': processVideoStudioEdition
 }
 
+const errorHandlers: { [id in JobType]?: (job: Job, err: any) => Promise<any> } = {
+  'move-to-object-storage': onMoveToObjectStorageFailure
+}
+
 const jobTypes: JobType[] = [
   'activitypub-follow',
   'activitypub-http-broadcast',
+  'activitypub-http-broadcast-parallel',
   'activitypub-http-fetcher',
   'activitypub-http-unicast',
   'activitypub-cleaner',
@@ -159,6 +166,11 @@ class JobQueue {
           : 'error'
 
         logger.log(logLevel, 'Cannot execute job %d in queue %s.', job.id, handlerName, { payload: job.data, err })
+
+        if (errorHandlers[job.name]) {
+          errorHandlers[job.name](job, err)
+            .catch(err => logger.error('Cannot run error handler for job failure %d in queue %s.', job.id, handlerName, { err }))
+        }
       })
 
       queue.on('error', err => {

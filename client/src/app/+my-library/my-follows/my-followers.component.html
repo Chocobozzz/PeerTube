@@ -2,7 +2,7 @@
   <span>
     <my-global-icon iconName="follower" aria-hidden="true"></my-global-icon>
     <ng-container i18n>My followers</ng-container>
-    <span class="badge badge-secondary"> {{ pagination.totalItems }}</span>
+    <span *ngIf="pagination.totalItems" class="pt-badge badge-secondary"> {{ pagination.totalItems }}</span>
   </span>
 </h1>
 
@@ -19,10 +19,10 @@
     <div class="actor-info">
       <a [href]="follow.follower.url" class="actor-names" rel="noopener noreferrer" target="_blank" i18n-title title="Follower page">
         <div class="actor-display-name">{{ follow.follower.name + '@' + follow.follower.host }}</div>
-        <span class="glyphicon glyphicon-new-window"></span>
+        <my-global-icon iconName="external-link"></my-global-icon>
       </a>
 
-      <div class="muted">
+      <div class="small muted">
         <ng-container *ngIf="isFollowingAccount(follow)" i18n>Is following all your channels</ng-container>
         <ng-container *ngIf="!isFollowingAccount(follow)" i18n>Is following your channel {{ follow.following.name }}</ng-container>
       </div>

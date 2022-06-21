@@ -1,64 +1,121 @@
-<div class="margin-content">
+<div>
 
-  <div class="signup-disabled" *ngIf="signupDisabled">
+  <div class="margin-content signup-disabled" *ngIf="signupDisabled">
     <div class="alert alert-warning" i18n>Signup is not enabled on this instance.</div>
   </div>
 
   <ng-container *ngIf="!signupDisabled">
-    <div i18n class="title-page title-page-single">
+    <h1 i18n class="title-page-v2">
+      <strong class="underline-orange">{{ instanceName }}</strong>
+      >
       Create an account
-    </div>
+    </h1>
 
-    <my-signup-success *ngIf="signupDone" [message]="success"></my-signup-success>
-    <div *ngIf="info" class="alert alert-info">{{ info }}</div>
+    <div class="register-content">
+      <my-custom-stepper linear>
 
-    <div class="wrapper" [hidden]="signupDone">
-      <div class="register-form">
-        <my-custom-stepper linear *ngIf="!signupDone">
-          <cdk-step [stepControl]="formStepTerms" i18n-label="Stepper label for the registration page describing terms of service" label="Terms">
-            <div class="instance-information">
-              <my-instance-about-accordion
-                (init)="onInstanceAboutAccordionInit($event)" [panels]="instanceInformationPanels"
-                pluginScope="signup" pluginHook="filter:signup.instance-about-plugin-panels.create.result"
-              ></my-instance-about-accordion>
-            </div>
+        <cdk-step i18n-label label="About" [editable]="!signupSuccess">
+          <my-signup-step-title mascotImageName="about" i18n>
+            <strong>Create an account</strong>
+            <div>on {{ instanceName }}</div>
+          </my-signup-step-title>
 
-            <my-register-step-terms
-              [hasCodeOfConduct]="!!aboutHtml.codeOfConduct"
-              [minimumAge]="minimumAge"
-              (formBuilt)="onTermsFormBuilt($event)" (termsClick)="onTermsClick()" (codeOfConductClick)="onCodeOfConductClick()"
-            ></my-register-step-terms>
+          <my-register-step-about [videoUploadDisabled]="videoUploadDisabled"></my-register-step-about>
 
+          <div class="step-buttons">
+            <a i18n class="skip-step underline-orange" routerLink="/login">
+              <strong>I already have an account</strong>, I log in
+            </a>
+
+            <button i18n cdkStepperNext>I create an account</button>
+          </div>
+        </cdk-step>
+
+        <cdk-step [stepControl]="formStepTerms" i18n-label label="Terms" [editable]="!signupSuccess">
+          <my-signup-step-title mascotImageName="terms" i18n>
+            <strong>Terms</strong>
+            <div>of {{ instanceName }}</div>
+          </my-signup-step-title>
+
+          <my-instance-about-accordion
+            [displayInstanceName]="false"
+            (init)="onInstanceAboutAccordionInit($event)" [panels]="instanceInformationPanels"
+            pluginScope="signup" pluginHook="filter:signup.instance-about-plugin-panels.create.result"
+          ></my-instance-about-accordion>
+
+          <my-register-step-terms
+            [hasCodeOfConduct]="!!aboutHtml.codeOfConduct"
+            [minimumAge]="minimumAge"
+            (formBuilt)="onTermsFormBuilt($event)" (termsClick)="onTermsClick()" (codeOfConductClick)="onCodeOfConductClick()"
+          ></my-register-step-terms>
+
+          <div class="step-buttons">
+            <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
             <button cdkStepperNext [disabled]="!formStepTerms || !formStepTerms.valid">{{ defaultNextStepButtonLabel }}</button>
-          </cdk-step>
+          </div>
+        </cdk-step>
 
-          <cdk-step [stepControl]="formStepUser" i18n-label="Stepper label for the registration page asking user information" label="User">
-            <my-register-step-user (formBuilt)="onUserFormBuilt($event)" [videoUploadDisabled]="videoUploadDisabled"></my-register-step-user>
+        <cdk-step [stepControl]="formStepUser" label="My account" [editable]="!signupSuccess">
+          <my-signup-step-title mascotImageName="account" i18n>
+            <strong>Setup</strong>
+            <div>your account</div>
+          </my-signup-step-title>
 
+          <my-register-step-user
+            (formBuilt)="onUserFormBuilt($event)"
+            [videoUploadDisabled]="videoUploadDisabled" [requiresEmailVerification]="requiresEmailVerification"
+          ></my-register-step-user>
+
+          <div class="step-buttons">
             <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
             <button cdkStepperNext [disabled]="!formStepUser || !formStepUser.valid" (click)="videoUploadDisabled && signup()">{{ stepUserButtonLabel }}</button>
-          </cdk-step>
+          </div>
+        </cdk-step>
 
-          <cdk-step [stepControl]="formStepChannel" i18n-label="Stepper label for the registration page asking information about the default channel" label="Channel" *ngIf="!videoUploadDisabled">
-            <my-register-step-channel (formBuilt)="onChannelFormBuilt($event)" [username]="getUsername()"></my-register-step-channel>
+        <cdk-step *ngIf="!videoUploadDisabled" [optional]="true" [stepControl]="formStepChannel" i18n-label label="My channel" [editable]="!signupSuccess">
+          <my-signup-step-title mascotImageName="channel" i18n>
+            <div>Create</div>
+            <strong>your first channel</strong>
+          </my-signup-step-title>
 
+          <my-register-step-channel
+            (formBuilt)="onChannelFormBuilt($event)"
+            [videoQuota]="videoQuota" [instanceName]="instanceName" [username]="getUsername()"
+          ></my-register-step-channel>
+
+          <div class="step-buttons">
             <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
+
+            <div class="skip-step">
+              <span class="underline-orange" role="button" (click)="skipChannelCreation()">
+                <strong i18n>I don't want to create a channel</strong>
+              </span>
+
+              <div class="skip-step-description" i18n>You will be able to create a channel later</div>
+            </div>
+
             <button cdkStepperNext [disabled]="!formStepChannel || !formStepChannel.valid || hasSameChannelAndAccountNames()" (click)="signup()" i18n>
               Create my account
             </button>
-          </cdk-step>
+          </div>
+        </cdk-step>
 
-          <cdk-step i18n-label label="Done" editable="false">
-            <div *ngIf="!signupDone && !error" class="done-loader">
-              <my-loader [loading]="true"></my-loader>
+        <cdk-step #lastStep i18n-label label="Done!" [editable]="false">
+          <div *ngIf="!signupSuccess && !signupError" class="done-loader">
+            <my-loader [loading]="true"></my-loader>
 
-              <div i18n>PeerTube is creating your account...</div>
-            </div>
+            <div i18n>PeerTube is creating your account...</div>
+          </div>
 
-            <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-          </cdk-step>
-        </my-custom-stepper>
-      </div>
+          <div *ngIf="signupError" class="alert alert-danger">{{ signupError }}</div>
+
+          <my-signup-success *ngIf="signupSuccess" [requiresEmailVerification]="requiresEmailVerification"></my-signup-success>
+
+          <div *ngIf="signupError" class="steps-button">
+            <button cdkStepperPrevious>{{ defaultPreviousStepButtonLabel }}</button>
+          </div>
+        </cdk-step>
+      </my-custom-stepper>
     </div>
   </ng-container>
 

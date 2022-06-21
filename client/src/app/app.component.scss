@@ -103,14 +103,4 @@
     cursor: pointer;
     width: 20px;
   }
-
-  ::ng-deep {
-    p {
-      font-size: 16px;
-    }
-
-    p:last-child {
-      margin-bottom: 0;
-    }
-  }
 }

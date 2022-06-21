@@ -62,7 +62,7 @@ export class FollowModalComponent extends FormReactive implements OnInit {
       .subscribe({
         next: () => {
           this.notifier.success(
-            prepareIcu($localize`{count, plural, =1 {Follow request} other {Follow requests}} sent!`)(
+            prepareIcu($localize`{count, plural, =1 {Follow request sent!} other {Follow requests sent!}}`)(
               { count: hostsOrHandles.length },
               $localize`Follow request(s) sent!`
             )

@@ -48,7 +48,7 @@ export class ActionDropdownComponent<T> {
     return actions.some(a => {
       if (Array.isArray(a)) return this.areActionsDisplayed(a, entry)
 
-      return a.isDisplayed === undefined || a.isDisplayed(entry)
+      return a.isHeader !== true && (a.isDisplayed === undefined || a.isDisplayed(entry))
     })
   }
 }

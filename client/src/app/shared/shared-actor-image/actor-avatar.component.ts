@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input, OnChanges } from '@angular/core'
 import { VideoChannel } from '../shared-main'
 import { Account } from '../shared-main/account/account.model'
 
@@ -15,7 +15,7 @@ export type ActorAvatarSize = '18' | '25' | '28' | '32' | '34' | '35' | '36' | '
   styleUrls: [ './actor-avatar.component.scss' ],
   templateUrl: './actor-avatar.component.html'
 })
-export class ActorAvatarComponent {
+export class ActorAvatarComponent implements OnChanges {
   private _title: string
 
   @Input() account: ActorInput
@@ -41,6 +41,8 @@ export class ActorAvatarComponent {
 
     return ''
   }
+
+  classes: string[] = []
 
   get alt () {
     if (this.account) return $localize`Account avatar`
@@ -68,20 +70,18 @@ export class ActorAvatarComponent {
     return name.slice(0, 1)
   }
 
-  getClass (type: 'avatar' | 'initial') {
-    const base = [ 'avatar' ]
+  ngOnChanges () {
+    this.classes = [ 'avatar' ]
 
-    if (this.size) base.push(`avatar-${this.size}`)
+    if (this.size) this.classes.push(`avatar-${this.size}`)
 
-    if (this.channel) base.push('channel')
-    else base.push('account')
+    if (this.channel) this.classes.push('channel')
+    else this.classes.push('account')
 
-    if (type === 'initial' && this.initial) {
-      base.push('initial')
-      base.push(this.getColorTheme())
+    if (!this.avatarUrl && this.initial) {
+      this.classes.push('initial')
+      this.classes.push(this.getColorTheme())
     }
-
-    return base
   }
 
   hasActor () {

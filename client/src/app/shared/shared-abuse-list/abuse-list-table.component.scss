@@ -7,10 +7,6 @@
   color: var(--greyForegroundColor);
 }
 
-.abuse-states .glyphicon-comment {
-  @include margin-left(0.5rem);
-}
-
 .abuse-messages {
   my-global-icon {
     @include margin-left(3px);
@@ -19,4 +15,11 @@
     position: relative;
     top: -2px;
   }
+}
+
+.table-video-text my-global-icon,
+my-video-cell my-global-icon {
+  width: 15px;
+  position: relative;
+  top: -2px;
 }

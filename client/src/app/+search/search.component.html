@@ -2,22 +2,22 @@
   <div class="results-header">
     <div class="first-line">
       <div class="results-counter" *ngIf="pagination.totalItems">
-        <span class="mr-1" i18n>{{ pagination.totalItems | myNumberFormatter }} {pagination.totalItems, plural, =1 {result} other {results}}</span>
+        <span class="me-1" i18n>{{ pagination.totalItems | myNumberFormatter }} {pagination.totalItems, plural, =1 {result} other {results}}</span>
 
-        <span class="mr-1" i18n *ngIf="advancedSearch.searchTarget === 'local'">on this instance</span>
-        <span class="mr-1" i18n *ngIf="advancedSearch.searchTarget === 'search-index'">on the vidiverse</span>
+        <span class="me-1" i18n *ngIf="advancedSearch.searchTarget === 'local'">on this instance</span>
+        <span class="me-1" i18n *ngIf="advancedSearch.searchTarget === 'search-index'">on the vidiverse</span>
 
         <span *ngIf="currentSearch" i18n>for <span class="search-value">{{ currentSearch }}</span></span>
       </div>
 
       <div
-        class="results-filter-button ml-auto" (click)="isSearchFilterCollapsed = !isSearchFilterCollapsed" role="button"
+        class="results-filter-button ms-auto" (click)="isSearchFilterCollapsed = !isSearchFilterCollapsed" role="button"
         [attr.aria-expanded]="!isSearchFilterCollapsed" aria-controls="collapseBasic"
       >
         <span class="icon icon-filter"></span>
         <ng-container i18n>
           Filters
-          <span *ngIf="numberOfFilters() > 0" class="badge badge-secondary">{{ numberOfFilters() }}</span>
+          <span *ngIf="numberOfFilters() > 0" class="pt-badge badge-secondary">{{ numberOfFilters() }}</span>
         </ng-container>
       </div>
     </div>

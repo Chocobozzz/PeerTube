@@ -1,0 +1,53 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+h3 {
+  font-weight: $font-bold;
+  font-size: 24px;
+}
+
+h4 {
+  font-size: 18px;
+  font-weight: $font-bold;
+}
+
+.why {
+  margin-bottom: 30px;
+}
+
+.callout {
+  margin: 75px auto 25px;
+  border-width: 2px;
+  display: flex;
+
+  .mascot-container {
+    position: relative;
+
+    .mascot {
+      position: absolute;
+      top: -65px;
+    }
+  }
+
+  .callout-content {
+    margin-left: 30px;
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+@media screen and (max-width: $small-view) {
+  .callout {
+    margin-top: 20px;
+
+    .mascot-container {
+      display: none;
+    }
+
+    .callout-content {
+      margin-left: 0;
+    }
+  }
+}

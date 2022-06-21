@@ -134,4 +134,12 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
           error: err => this.notifier.error(err.message)
         })
   }
+
+  getNoResultMessage () {
+    if (this.search) {
+      return $localize`No videos found for "${this.search}".`
+    }
+
+    return $localize`You don't have any video in your watch history yet.`
+  }
 }

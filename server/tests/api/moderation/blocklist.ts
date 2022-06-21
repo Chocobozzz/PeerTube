@@ -256,6 +256,13 @@ describe('Test blocklist', function () {
         }
       })
 
+      it('Should search blocked accounts', async function () {
+        const body = await command.listMyAccountBlocklist({ start: 0, count: 10, search: 'user2' })
+        expect(body.total).to.equal(1)
+
+        expect(body.data[0].blockedAccount.name).to.equal('user2')
+      })
+
       it('Should get blocked status', async function () {
         const remoteHandle = 'user2@' + servers[1].host
         const localHandle = 'user1@' + servers[0].host
@@ -475,6 +482,13 @@ describe('Test blocklist', function () {
         expect(block.blockedServer.host).to.equal('localhost:' + servers[1].port)
       })
 
+      it('Should search blocked servers', async function () {
+        const body = await command.listMyServerBlocklist({ start: 0, count: 10, search: servers[1].host })
+        expect(body.total).to.equal(1)
+
+        expect(body.data[0].blockedServer.host).to.equal(servers[1].host)
+      })
+
       it('Should get blocklist status', async function () {
         const blockedServer = servers[1].host
         const notBlockedServer = 'example.com'
@@ -645,6 +659,13 @@ describe('Test blocklist', function () {
         }
       })
 
+      it('Should search blocked accounts', async function () {
+        const body = await command.listServerAccountBlocklist({ start: 0, count: 10, search: 'user2' })
+        expect(body.total).to.equal(1)
+
+        expect(body.data[0].blockedAccount.name).to.equal('user2')
+      })
+
       it('Should get blocked status', async function () {
         const remoteHandle = 'user2@' + servers[1].host
         const localHandle = 'user1@' + servers[0].host
@@ -803,6 +824,13 @@ describe('Test blocklist', function () {
         expect(block.byAccount.displayName).to.equal('peertube')
         expect(block.byAccount.name).to.equal('peertube')
         expect(block.blockedServer.host).to.equal('localhost:' + servers[1].port)
+      })
+
+      it('Should search blocked servers', async function () {
+        const body = await command.listServerServerBlocklist({ start: 0, count: 10, search: servers[1].host })
+        expect(body.total).to.equal(1)
+
+        expect(body.data[0].blockedServer.host).to.equal(servers[1].host)
       })
 
       it('Should get blocklist status', async function () {

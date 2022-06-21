@@ -30,12 +30,10 @@
       </div>
 
       <div class="optional-rows" *ngIf="playlist.optionalRowDisplayed">
-        <div class="labels">
-          <div i18n>Start at</div>
-          <div i18n>Stop at</div>
-        </div>
+        <div class="header-label" i18n>Start at</div>
+        <div class="header-label" i18n>Stop at</div>
 
-        <div *ngFor="let element of buildOptionalRowElements(playlist)">
+        <ng-container *ngFor="let element of buildOptionalRowElements(playlist)">
           <my-peertube-checkbox
             [inputName]="getOptionalInputName(playlist, element)"
             [ngModel]="element.enabled" [onPushWorkaround]="true"
@@ -55,7 +53,7 @@
             (inputBlur)="onElementTimestampUpdate(playlist, element)"
             #stopAt
           ></my-timestamp-input>
-        </div>
+        </ng-container>
       </div>
     </div>
   </div>

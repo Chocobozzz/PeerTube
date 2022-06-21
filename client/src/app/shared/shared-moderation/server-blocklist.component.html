@@ -19,7 +19,7 @@
         </a>
       </div>
 
-      <div class="ml-auto">
+      <div class="ms-auto">
         <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
     </div>
@@ -41,7 +41,7 @@
       <td>
         <a [href]="'https://' + serverBlock.blockedServer.host" i18n-title title="Open instance in a new tab" target="_blank" rel="noopener noreferrer">
           {{ serverBlock.blockedServer.host }}
-          <span class="glyphicon glyphicon-new-window"></span>
+          <my-global-icon iconName="external-link"></my-global-icon>
         </a>
       </td>
       <td>{{ serverBlock.createdAt | date: 'short' }}</td>
@@ -50,7 +50,7 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="6">
+      <td colspan="3">
         <div class="no-results">
           <ng-container *ngIf="search" i18n>No server found matching current filters.</ng-container>
           <ng-container *ngIf="!search" i18n>No server found.</ng-container>

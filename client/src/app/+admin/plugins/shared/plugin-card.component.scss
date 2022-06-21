@@ -14,12 +14,11 @@
   .plugin-name {
     @include margin-right(10px);
 
-    font-size: 16px;
     font-weight: $font-semibold;
   }
 
   .plugin-version {
-    opacity: 0.6;
+    opacity: 0.7;
   }
 
   .plugin-icon {

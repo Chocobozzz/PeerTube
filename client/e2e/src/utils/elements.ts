@@ -1,5 +1,8 @@
-function getCheckbox (name: string) {
-  return $(`my-peertube-checkbox input[id=${name}]`).parentElement()
+async function getCheckbox (name: string) {
+  const input = $(`my-peertube-checkbox input[id=${name}]`)
+  await input.waitForExist()
+
+  return input.parentElement()
 }
 
 async function selectCustomSelect (id: string, valueLabel: string) {

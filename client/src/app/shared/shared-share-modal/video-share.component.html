@@ -8,7 +8,7 @@
   <div class="modal-body">
 
     <div class="playlist" *ngIf="playlist">
-      <div class="title-page title-page-single" i18n *ngIf="video">Share the playlist</div>
+      <h5 i18n *ngIf="video">Share the playlist</h5>
 
       <div *ngIf="isPrivatePlaylist()" class="alert-private alert alert-warning">
         <div i18n>This playlist is private so you won't be able to share it with external users</div>
@@ -25,8 +25,7 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-
-              <my-input-toggle-hidden [value]="getPlaylistUrl()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+              <my-input-text [value]="getPlaylistUrl()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
             </div>
           </ng-template>
         </ng-container>
@@ -46,10 +45,10 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-toggle-hidden
+              <my-input-text
                 [value]="customizations.onlyEmbedUrl ? getPlaylistEmbedUrl() : getPlaylistIframeCode()" (change)="updateEmbedCode()"
                 [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
-              ></my-input-toggle-hidden>
+              ></my-input-text>
 
               <div i18n *ngIf="notSecure()" class="alert alert-warning">
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
@@ -86,7 +85,7 @@
 
 
     <div class="video" *ngIf="video">
-      <div class="title-page title-page-single" *ngIf="playlist" i18n>Share the video</div>
+      <h5 *ngIf="playlist" i18n>Share the video</h5>
 
       <div *ngIf="isPrivateVideo()" class="alert-private alert alert-warning">
         <div i18n>This video is private so you won't be able to share it with external users</div>
@@ -103,7 +102,7 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-toggle-hidden [value]="getVideoUrl()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+              <my-input-text [value]="getVideoUrl()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
             </div>
           </ng-template>
         </ng-container>
@@ -123,10 +122,10 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-toggle-hidden
+              <my-input-text
                 [value]="customizations.onlyEmbedUrl ? getVideoEmbedUrl() : getVideoIframeCode()" (ngModelChange)="updateEmbedCode()"
                 [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
-              ></my-input-toggle-hidden>
+              ></my-input-text>
 
               <div i18n *ngIf="notSecure()" class="alert alert-warning">
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
@@ -171,9 +170,8 @@
             </div>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" *ngIf="isInVideoEmbedTab()">
             <my-peertube-checkbox
-              *ngIf="isInVideoEmbedTab()"
               inputName="onlyEmbedUrl" [(ngModel)]="customizations.onlyEmbedUrl"
               i18n-labelText labelText="Only display embed URL"
             ></my-peertube-checkbox>
@@ -268,7 +266,7 @@
              [attr.aria-expanded]="!isAdvancedCustomizationCollapsed" aria-controls="collapseBasic">
 
           <ng-container *ngIf="isAdvancedCustomizationCollapsed">
-            <span class="glyphicon glyphicon-menu-down"></span>
+            <span class="chevron-down"></span>
 
             <ng-container i18n>
               More customization
@@ -276,7 +274,7 @@
           </ng-container>
 
           <ng-container *ngIf="!isAdvancedCustomizationCollapsed">
-            <span class="glyphicon glyphicon-menu-up"></span>
+            <span class="chevron-up"></span>
 
             <ng-container i18n>
               Less customization

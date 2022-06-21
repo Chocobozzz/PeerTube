@@ -19,7 +19,7 @@
         </a>
       </div>
 
-      <div class="ml-auto">
+      <div class="ms-auto">
         <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
     </div>
@@ -43,15 +43,15 @@
       <td>
         <a [href]="follow.following.url" i18n-title title="Open instance in a new tab" target="_blank" rel="noopener noreferrer">
           {{ follow.following.name + '@' + follow.following.host }}
-          <span class="glyphicon glyphicon-new-window"></span>
+          <my-global-icon iconName="external-link"></my-global-icon>
         </a>
       </td>
 
       <td *ngIf="follow.state === 'accepted'">
-        <span class="badge badge-green" i18n>Accepted</span>
+        <span class="pt-badge badge-green" i18n>Accepted</span>
       </td>
       <td *ngIf="follow.state === 'pending'">
-        <span class="badge badge-yellow" i18n>Pending</span>
+        <span class="pt-badge badge-yellow" i18n>Pending</span>
       </td>
 
       <td>{{ follow.createdAt | date: 'short' }}</td>

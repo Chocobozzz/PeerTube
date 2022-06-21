@@ -53,9 +53,7 @@
         <p>{{ message.detail }}</p>
       </div>
 
-      <span *ngIf="message.severity === 'success'" class="glyphicon glyphicon-ok"></span>
-      <span *ngIf="message.severity === 'info'" class="glyphicon glyphicon-info-sign"></span>
-      <span *ngIf="message.severity === 'error'" class="glyphicon glyphicon-remove"></span>
+      <my-global-icon [iconName]="getNotificationIcon(message)"></my-global-icon>
     </div>
   </ng-template>
 </p-toast>

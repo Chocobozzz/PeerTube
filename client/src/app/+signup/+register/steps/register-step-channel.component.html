@@ -1,0 +1,55 @@
+<div class="mb-5">
+  <p i18n>
+    You want to <strong>publish videos</strong> on {{ instanceName }}? Then you need to create your first <strong>channel</strong>.
+  </p>
+
+  <p i18n>
+    You might want to <strong>create a channel by theme:</strong> for example, you can create a channel named "SweetMelodies"
+    to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology.
+  </p>
+
+  <p i18n *ngIf="videoQuota !== -1">
+    {{ instanceName }} administrators allow you to publish up to <strong>{{ videoQuota | bytes: 0 }} of videos</strong> on their website.
+  </p>
+</div>
+
+<form role="form" [formGroup]="form">
+
+  <div class="row">
+
+    <div class="col-md-12 col-xl-6 form-group">
+      <label for="displayName" i18n>Channel display name</label>
+
+      <div i18n class="form-group-description">This is the name that will be publicly visible by other users.</div>
+
+      <div class="input-group">
+        <input
+          type="text" id="displayName" i18n-placeholder placeholder="Example: Sweet Melodies"
+          formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
+        >
+      </div>
+
+      <div *ngIf="formErrors.displayName" class="form-error">{{ formErrors.displayName }}</div>
+    </div>
+
+    <div class="col-md-12 col-xl-6 form-group">
+      <label for="name" i18n>Channel identifier</label>
+
+      <div i18n class="form-group-description">This is the name that will be displayed in your profile URL.</div>
+
+      <div class="input-group">
+        <input
+          type="text" id="name" i18n-placeholder placeholder="Example: sweetmelodies24"
+          formControlName="name" [ngClass]="{ 'input-error': formErrors['name'] }"
+        >
+        <div class="input-group-text">@{{ instanceHost }}</div>
+      </div>
+
+      <div *ngIf="formErrors.name" class="form-error">{{ formErrors.name }}</div>
+
+      <div *ngIf="isSameThanUsername()" class="form-error" i18n>
+        Channel identifier cannot be the same as your account name. You can click on the first step to update your account name.
+      </div>
+    </div>
+  </div>
+</form>

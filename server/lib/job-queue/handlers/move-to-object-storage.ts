@@ -48,13 +48,22 @@ export async function processMoveToObjectStorage (job: Job) {
       await doAfterLastJob({ video, previousVideoState: payload.previousVideoState, isNewVideo: payload.isNewVideo })
     }
   } catch (err) {
-    logger.error('Cannot move video %s to object storage.', video.url, { err, ...lTags })
-
-    await moveToFailedMoveToObjectStorageState(video)
-    await VideoJobInfoModel.abortAllTasks(video.uuid, 'pendingMove')
+    await onMoveToObjectStorageFailure(job, err)
   }
 
   return payload.videoUUID
+}
+
+export async function onMoveToObjectStorageFailure (job: Job, err: any) {
+  const payload = job.data as MoveObjectStoragePayload
+
+  const video = await VideoModel.loadWithFiles(payload.videoUUID)
+  if (!video) return
+
+  logger.error('Cannot move video %s to object storage.', video.url, { err, ...lTagsBase(video.uuid, video.url) })
+
+  await moveToFailedMoveToObjectStorageState(video)
+  await VideoJobInfoModel.abortAllTasks(video.uuid, 'pendingMove')
 }
 
 // ---------------------------------------------------------------------------

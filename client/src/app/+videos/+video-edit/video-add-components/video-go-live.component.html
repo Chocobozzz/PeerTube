@@ -44,7 +44,7 @@
   {{ error }}
 </div>
 
-<div class="alert alert-info" i18n *ngIf="isInUpdateForm && getMaxLiveDuration() >= 0">
+<div class="alert pt-alert-primary" i18n *ngIf="isInUpdateForm && getMaxLiveDuration() >= 0">
   Max live duration is {{ getMaxLiveDuration() | myDurationFormatter }}.
   If your live reaches this limit, it will be automatically terminated.
 </div>

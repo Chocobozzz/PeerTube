@@ -1,54 +1,6 @@
-svg {
-  width: 100px;
-  display: block;
-  margin: 40px auto 0;
-}
-
-.path {
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 0;
-
-  &.circle {
-    animation: dash .9s ease-in-out;
-  }
-
-  &.line {
-    stroke-dashoffset: 1000;
-    animation: dash .9s .35s ease-in-out forwards;
-  }
-
-  &.check {
-    stroke-dashoffset: -100;
-    animation: dash-check .9s .35s ease-in-out forwards;
-  }
-}
-
-.bottom-message {
-  text-align: center;
-  margin: 20px 0 60px;
-  font-size: 1.25em;
-  color: #73AF55;
-}
-
 .alert {
-  font-size: 15px;
+  font-size: 18px;
+  max-width: 900px;
   text-align: center;
-}
-
-@keyframes dash {
-  0% {
-    stroke-dashoffset: 1000;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes dash-check {
-  0% {
-    stroke-dashoffset: -100;
-  }
-  100% {
-    stroke-dashoffset: 900;
-  }
+  margin: auto;
 }

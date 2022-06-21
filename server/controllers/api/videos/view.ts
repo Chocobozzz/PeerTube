@@ -26,7 +26,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function viewVideo (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
+  const video = res.locals.onlyImmutableVideo
 
   const body = req.body as VideoView
 

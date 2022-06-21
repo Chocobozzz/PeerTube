@@ -15,6 +15,9 @@ import {
 } from '@angular/core'
 import { ScreenService } from '@app/core'
 import { NgbDropdown, NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import * as debug from 'debug'
+
+const logger = debug('peertube:main:ListOverflowItem')
 
 export interface ListOverflowItem {
   label: string
@@ -37,7 +40,6 @@ export class ListOverflowComponent<T extends ListOverflowItem> implements AfterV
 
   showItemsUntilIndexExcluded: number
   active = false
-  isInTouchScreen = false
   isInMobileView = false
 
   private openedOnHover = false
@@ -58,12 +60,13 @@ export class ListOverflowComponent<T extends ListOverflowItem> implements AfterV
 
   @HostListener('window:resize')
   onWindowResize () {
-    this.isInTouchScreen = !!this.screenService.isInTouchScreen()
     this.isInMobileView = !!this.screenService.isInMobileView()
 
     const parentWidth = this.parent.nativeElement.getBoundingClientRect().width
     let showItemsUntilIndexExcluded: number
     let accWidth = 0
+
+    logger('Parent width is %d', parentWidth)
 
     for (const [ index, el ] of this.itemsRendered.toArray().entries()) {
       accWidth += el.nativeElement.getBoundingClientRect().width
@@ -75,6 +78,8 @@ export class ListOverflowComponent<T extends ListOverflowItem> implements AfterV
       const shouldBeVisible = showItemsUntilIndexExcluded ? index < showItemsUntilIndexExcluded : true
       e.style.visibility = shouldBeVisible ? 'inherit' : 'hidden'
     }
+
+    logger('Accumulated children width is %d so exclude index is %d', accWidth, showItemsUntilIndexExcluded)
 
     this.showItemsUntilIndexExcluded = showItemsUntilIndexExcluded
     this.cdr.markForCheck()

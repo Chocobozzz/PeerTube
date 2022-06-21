@@ -61,7 +61,7 @@
             <div class="video-info-channel-left d-flex">
               <my-video-avatar-channel [video]="video" [showChannel]="!isChannelDisplayNameGeneric()"></my-video-avatar-channel>
 
-              <div class="video-info-channel-left-links ml-1">
+              <div class="video-info-channel-left-links ms-1">
                 <ng-container *ngIf="!isChannelDisplayNameGeneric()">
                   <a [routerLink]="[ '/c', video.byVideoChannel ]" i18n-title title="Channel page">
                     {{ video.channel.displayName }}

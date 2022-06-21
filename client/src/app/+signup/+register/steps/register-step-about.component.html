@@ -1,0 +1,39 @@
+<div class="why">
+  <h3 i18n>Why creating an account?</h3>
+
+  <p i18n>
+    As you probably noticed: creating an account is not necessary to watch video son {{ instanceName }}.
+    <br />
+    However, creating an account on {{ instanceName }} will allow you to:
+  </p>
+
+  <ul>
+    <li i18n><strong>Comment</strong> videos</li>
+    <li i18n><strong>Subscribe</strong> to channels to be notified of new videos</li>
+    <li i18n>Have access to your <strong>watch history</strong></li>
+    <li *ngIf="!videoUploadDisabled" i18n>Create your channel to <strong>publish videos</strong></li>
+  </ul>
+</div>
+
+<div>
+  <h4 i18n>You're using Mastodon, ActivityPub or a RSS feed aggregator?</h4>
+
+  <p i18n>
+    You can already follow {{ instanceName }} using your favorite tool.
+  </p>
+</div>
+
+<div class="callout callout-orange callout-light">
+  <div class="mascot-container" style="min-width: 140px">
+    <img class="mascot" width="140px" height="160px" src="/client/assets/images/mascot/happy.svg" alt="mascot"/>
+  </div>
+
+  <div class="callout-content">
+    <h4 i18>This website is a GAFAM alternative</h4>
+
+    <p i18n>
+      {{ instanceName }} has been created using <a class="link-orange" target="_blank" rel="noopener noreferrer" href="https://joinpeertube.org">PeerTube</a>, a video creation platform developed by Framasoft.
+      <a class="link-orange" target="_blank" rel="noopener noreferrer" href="https://framasoft.org">Framasoft</a> is a french non-profit organization that offers alternatives to Big Tech's digital tools
+    </p>
+  </div>
+</div>

@@ -7,7 +7,6 @@
 
   margin-top: 20px;
   margin-bottom: 20px;
-  font-size: 15px;
 
   .video-info-description-html {
     @include peertube-word-wrap;
@@ -17,13 +16,8 @@
     }
   }
 
-  .glyphicon,
   .description-loading {
-    @include margin-left(3px);
-  }
-
-  .description-loading {
-    display: inline-block;
+    @include margin-left(5px);
   }
 
   .video-info-description-more {
@@ -31,11 +25,6 @@
     font-weight: $font-semibold;
     color: pvar(--greyForegroundColor);
     font-size: 14px;
-
-    .glyphicon {
-      position: relative;
-      top: 2px;
-    }
   }
 }
 

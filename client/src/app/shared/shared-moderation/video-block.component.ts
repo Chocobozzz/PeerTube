@@ -81,7 +81,7 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
     this.videoBlocklistService.blockVideo(options)
         .subscribe({
           next: () => {
-            const message = prepareIcu($localize`{count, plural, =1 {Blocked {videoName}} other {Blocked {count} videos}}.`)(
+            const message = prepareIcu($localize`{count, plural, =1 {Blocked {videoName}.} other {Blocked {count} videos.}}`)(
               { count: this.videos.length, videoName: this.getSingleVideo().name },
               $localize`Blocked ${this.videos.length} videos.`
             )

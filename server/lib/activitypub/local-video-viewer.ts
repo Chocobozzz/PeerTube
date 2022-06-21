@@ -23,7 +23,7 @@ async function createOrUpdateLocalVideoViewer (watchAction: WatchActionObject, v
       : null,
 
     videoId: video.id
-  })
+  }, { transaction: t })
 
   await LocalVideoViewerWatchSectionModel.bulkCreateSections({
     localVideoViewerId: localVideoViewer.id,
@@ -31,7 +31,9 @@ async function createOrUpdateLocalVideoViewer (watchAction: WatchActionObject, v
     watchSections: watchAction.watchSections.map(s => ({
       start: s.startTimestamp,
       end: s.endTimestamp
-    }))
+    })),
+
+    transaction: t
   })
 }
 

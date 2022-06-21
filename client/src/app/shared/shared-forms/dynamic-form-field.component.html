@@ -18,7 +18,7 @@
     </select>
   </div>
 
-  <my-input-toggle-hidden *ngIf="setting.type === 'input-password'" [formControlName]="setting.name" [inputId]="setting.name"></my-input-toggle-hidden>
+  <my-input-text *ngIf="setting.type === 'input-password'" [formError]="formErrors['settings.name']" [formControlName]="setting.name" [inputId]="setting.name"></my-input-text>
 
   <textarea *ngIf="setting.type === 'input-textarea'" type="text" [id]="setting.name" [formControlName]="setting.name"></textarea>
 
@@ -28,19 +28,19 @@
 
   <my-markdown-textarea
     *ngIf="setting.type === 'markdown-text'"
-    markdownType="text" [id]="setting.name" [formControlName]="setting.name" textareaWidth="500px"
-    [classes]="{ 'input-error': formErrors['settings.name'] }"
+    markdownType="text" [id]="setting.name" [formControlName]="setting.name"
+    [formError]="formErrors['settings.name']"
   ></my-markdown-textarea>
 
   <my-markdown-textarea
     *ngIf="setting.type === 'markdown-enhanced'"
-    markdownType="enhanced" [id]="setting.name" [formControlName]="setting.name" textareaWidth="500px"
-    [classes]="{ 'input-error': formErrors['settings.name'] }"
+    markdownType="enhanced" [id]="setting.name" [formControlName]="setting.name"
+    [formError]="formErrors['settings.name']"
   ></my-markdown-textarea>
 
   <div *ngIf="setting.type === 'html'" [innerHTML]="setting.html"></div>
 
-  <div *ngIf="formErrors[setting.name]" class="form-error">
+  <div *ngIf="hasDedicatedFormError() && formErrors[setting.name]" class="form-error">
     {{ formErrors[setting.name] }}
   </div>
 

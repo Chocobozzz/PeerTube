@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core'
+import { ServerService } from '@app/core'
 
 @Component({
   selector: 'my-signup-success',
@@ -6,5 +7,13 @@ import { Component, Input } from '@angular/core'
   styleUrls: [ './signup-success.component.scss' ]
 })
 export class SignupSuccessComponent {
-  @Input() message: string
+  @Input() requiresEmailVerification: boolean
+
+  constructor (private serverService: ServerService) {
+
+  }
+
+  get instanceName () {
+    return this.serverService.getHTMLConfig().instance.name
+  }
 }

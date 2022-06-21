@@ -1,15 +1,38 @@
+<h1 i18n class="title-page-v2">
+  <strong class="underline-orange">{{ instanceName }}</strong>
+  >
+  Login
+</h1>
+
 <div class="margin-content">
-  <div i18n class="title-page title-page-single">
-    Login
-  </div>
-
-  <div class="alert alert-danger" i18n *ngIf="externalAuthError">
-    Sorry but there was an issue with the external login process. Please <a routerLink="/about">contact an administrator</a>.
-  </div>
-
   <ng-container *ngIf="!externalAuthError && !isAuthenticatedWithExternalAuth">
-    <div *ngIf="error" class="alert alert-danger">{{ error }}
-      <span *ngIf="error === 'User email is not verified.'"> <a i18n routerLink="/verify-account/ask-send-email">Request new verification email.</a></span>
+
+    <div class="alert pt-alert-primary" role="alert">
+      <h5 class="alert-heading" i18n>
+        Logging into an account lets you publish content
+      </h5>
+
+      <p *ngIf="signupAllowed" i18n>
+        This instance allows registration. However, be careful to check the <a class="link-orange terms-anchor" (click)="onTermsClick($event, instanceInformation)" href='#'>Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance" fragment="terms">Terms</a> before creating an account.
+        You may also search for another instance to match your exact needs at: <a class="link-orange" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
+      </p>
+
+      <p *ngIf="!signupAllowed" i18n>
+        Currently this instance doesn't allow for user registration, you may check the <a class="link-orange" (click)="onTermsClick($event, instanceInformation)" href='#'>Terms</a> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there.
+        Find yours among multiple instances at: <a class="link-orange" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
+      </p>
+    </div>
+
+    <div class="alert alert-danger" i18n *ngIf="externalAuthError">
+      Sorry but there was an issue with the external login process. Please <a class="link-orange" routerLink="/about">contact an administrator</a>.
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger">
+      {{ error }}
+
+      <a *ngIf="error === 'User email is not verified.'" class="ms-1 link-orange" i18n routerLink="/verify-account/ask-send-email">
+        Request new verification email
+      </a>
     </div>
 
     <div class="wrapper">
@@ -18,16 +41,14 @@
         <form myPluginSelector pluginSelectorId="login-form" role="form" (ngSubmit)="login()" [formGroup]="form">
           <div class="form-group">
             <div>
-              <label i18n for="username">User</label>
+              <label i18n for="username">Username or email address</label>
               <input
-                type="text" id="username" i18n-placeholder placeholder="Username or email address" required tabindex="1"
+                type="text" id="username" i18n-placeholder placeholder="Example: john@example.com" required tabindex="1"
                 formControlName="username" class="form-control" [ngClass]="{ 'input-error': formErrors['username'] }" myAutofocus
               >
             </div>
 
-            <div *ngIf="formErrors.username" class="form-error">
-              {{ formErrors.username }}
-            </div>
+            <div *ngIf="formErrors.username" class="form-error">{{ formErrors.username }}</div>
 
             <div *ngIf="hasUsernameUppercase()" i18n class="form-warning">
               ⚠️ Most email addresses do not include capital letters.
@@ -36,40 +57,22 @@
 
           <div class="form-group">
             <label i18n for="password">Password</label>
-            <my-input-toggle-hidden formControlName="password" inputId="password"
-                                    i18n-placeholder placeholder="Password"
-                                    [ngClass]="{ 'input-error': formErrors['password'] }"
-                                    autocomplete="current-password" [tabindex]="2"></my-input-toggle-hidden>
-            <div *ngIf="formErrors.password" class="form-error">
-              {{ formErrors.password }}
-            </div>
+
+            <my-input-text
+              formControlName="password" inputId="password" i18n-placeholder placeholder="Password"
+              [formError]="formErrors['password']" autocomplete="current-password" [tabindex]="2"
+            ></my-input-text>
           </div>
 
           <input type="submit" class="peertube-button orange-button" i18n-value value="Login" [disabled]="!form.valid">
 
-          <div class="additionnal-links">
-            <a i18n role="button" class="forgot-password-button" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">I forgot my password</a>
+          <div class="additional-links">
+            <a i18n role="button" class="link-orange" (click)="openForgotPasswordModal()" i18n-title title="Click here to reset your password">I forgot my password</a>
 
-            <div *ngIf="signupAllowed" class="signup-link">
+            <ng-container *ngIf="signupAllowed">
               <span>·</span>
-              <a i18n routerLink="/signup" class="create-an-account">Create an account</a>
-            </div>
-          </div>
-
-          <div class="looking-for-account alert alert-info"  role="alert">
-            <h6 class="alert-heading" i18n>
-              Logging into an account lets you publish content
-            </h6>
-
-            <div *ngIf="signupAllowed" i18n>
-              This instance allows registration. However, be careful to check the <a class="terms-anchor" (click)="onTermsClick($event, instanceInformation)" href='#'>Terms</a><a class="terms-link" target="_blank" routerLink="/about/instance" fragment="terms">Terms</a> before creating an account.
-              You may also search for another instance to match your exact needs at: <br /><a class="alert-link" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
-            </div>
-
-            <div *ngIf="!signupAllowed" i18n>
-              Currently this instance doesn't allow for user registration, you may check the <a (click)="onTermsClick($event, instanceInformation)" href='#'>Terms</a> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there.
-              Find yours among multiple instances at: <br /> <a class="alert-link" href="https://joinpeertube.org/instances" target="_blank" rel="noopener noreferrer">https://joinpeertube.org/instances</a>.
-            </div>
+              <a i18n routerLink="/signup" class="link-orange">Create an account</a>
+            </ng-container>
           </div>
         </form>
 
@@ -86,6 +89,7 @@
 
       <div #instanceInformation class="instance-information">
         <my-instance-about-accordion
+          [displayInstanceName]="false"
           (init)="onInstanceAboutAccordionInit($event)" [panels]="instanceInformationPanels"
           pluginScope="login" pluginHook="filter:login.instance-about-plugin-panels.create.result"
         ></my-instance-about-accordion>

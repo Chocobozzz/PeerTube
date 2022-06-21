@@ -34,7 +34,7 @@ import { ActionDropdownComponent, ButtonComponent, DeleteButtonComponent, EditBu
 import { CustomPageService } from './custom-page'
 import { DateToggleComponent } from './date'
 import { FeedComponent } from './feeds'
-import { LoaderComponent, SmallLoaderComponent } from './loaders'
+import { LoaderComponent } from './loaders'
 import {
   ChannelsSetupMessageComponent,
   HelpComponent,
@@ -97,7 +97,6 @@ import { VideoChannelService } from './video-channel'
     FeedComponent,
 
     LoaderComponent,
-    SmallLoaderComponent,
 
     ChannelsSetupMessageComponent,
     HelpComponent,
@@ -157,7 +156,6 @@ import { VideoChannelService } from './video-channel'
     FeedComponent,
 
     LoaderComponent,
-    SmallLoaderComponent,
 
     ChannelsSetupMessageComponent,
     HelpComponent,

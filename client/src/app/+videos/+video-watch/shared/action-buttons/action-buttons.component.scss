@@ -5,6 +5,9 @@
   height: 40px; // Align with the title
   display: flex;
   align-items: center;
+  width: 100%;
+  margin: 0 auto;
+  max-width: initial;
 
   .action-button:not(:first-child),
   .action-dropdown,

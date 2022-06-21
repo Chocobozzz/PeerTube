@@ -9,7 +9,7 @@ import { AdvancedInputFilterComponent } from './advanced-input-filter.component'
 import { DynamicFormFieldComponent } from './dynamic-form-field.component'
 import { FormValidatorService } from './form-validator.service'
 import { InputSwitchComponent } from './input-switch.component'
-import { InputToggleHiddenComponent } from './input-toggle-hidden.component'
+import { InputTextComponent } from './input-text.component'
 import { MarkdownTextareaComponent } from './markdown-textarea.component'
 import { PeertubeCheckboxComponent } from './peertube-checkbox.component'
 import { PreviewUploadComponent } from './preview-upload.component'
@@ -40,7 +40,7 @@ import { TimestampInputComponent } from './timestamp-input.component'
   ],
 
   declarations: [
-    InputToggleHiddenComponent,
+    InputTextComponent,
     MarkdownTextareaComponent,
     PeertubeCheckboxComponent,
     PreviewUploadComponent,
@@ -71,7 +71,7 @@ import { TimestampInputComponent } from './timestamp-input.component'
     InputMaskModule,
     NgSelectModule,
 
-    InputToggleHiddenComponent,
+    InputTextComponent,
     MarkdownTextareaComponent,
     PeertubeCheckboxComponent,
     PreviewUploadComponent,

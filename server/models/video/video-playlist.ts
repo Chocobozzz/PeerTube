@@ -617,11 +617,11 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
     const totalLocalPlaylists = await VideoPlaylistModel.count({
       include: [
         {
-          model: AccountModel,
+          model: AccountModel.unscoped(),
           required: true,
           include: [
             {
-              model: ActorModel,
+              model: ActorModel.unscoped(),
               required: true,
               where: {
                 serverId: null

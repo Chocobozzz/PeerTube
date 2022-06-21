@@ -25,6 +25,12 @@ Set its password:
 $ sudo passwd peertube
 ```
 
+Ensure the peertube root directory is traversable by nginx:
+
+```bash
+$ ls -ld /var/www/peertube # Should be drwxr-xr-x
+```
+
 **On FreeBSD**
 
 ```bash
@@ -337,6 +343,15 @@ Change the link to point to the latest version:
 $ cd /var/www/peertube && \
     sudo unlink ./peertube-latest && \
     sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest
+```
+
+### Configuration
+
+You can check for configuration changes, and report them in your `config/production.yaml` file:
+
+```bash
+$ cd /var/www/peertube/versions
+$ diff -u "$(ls --sort=t | head -2 | tail -1)/config/production.yaml.example" "$(ls --sort=t | head -1)/config/production.yaml.example"
 ```
 
 ### nginx

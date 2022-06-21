@@ -1,5 +1,5 @@
 import { values } from 'lodash'
-import { literal, Op, Transaction } from 'sequelize'
+import { literal, Op, QueryTypes, Transaction } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -43,15 +43,18 @@ import {
   MActorAccountChannelId,
   MActorAPAccount,
   MActorAPChannel,
+  MActorFollowersUrl,
   MActorFormattable,
   MActorFull,
   MActorHost,
+  MActorId,
   MActorServer,
   MActorSummaryFormattable,
   MActorUrl,
   MActorWithInboxes
 } from '../../types/models'
 import { AccountModel } from '../account/account'
+import { getServerActor } from '../application/application'
 import { ServerModel } from '../server/server'
 import { isOutdated, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
@@ -304,7 +307,10 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
   })
   VideoChannel: VideoChannelModel
 
-  static load (id: number): Promise<MActor> {
+  static async load (id: number): Promise<MActor> {
+    const actorServer = await getServerActor()
+    if (id === actorServer.id) return actorServer
+
     return ActorModel.unscoped().findByPk(id)
   }
 
@@ -312,48 +318,21 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     return ActorModel.scope(ScopeNames.FULL).findByPk(id)
   }
 
-  static loadFromAccountByVideoId (videoId: number, transaction: Transaction): Promise<MActor> {
-    const query = {
-      include: [
-        {
-          attributes: [ 'id' ],
-          model: AccountModel.unscoped(),
-          required: true,
-          include: [
-            {
-              attributes: [ 'id' ],
-              model: VideoChannelModel.unscoped(),
-              required: true,
-              include: [
-                {
-                  attributes: [ 'id' ],
-                  model: VideoModel.unscoped(),
-                  required: true,
-                  where: {
-                    id: videoId
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
+  static loadAccountActorFollowerUrlByVideoId (videoId: number, transaction: Transaction) {
+    const query = `SELECT "actor"."id" AS "id", "actor"."followersUrl" AS "followersUrl" ` +
+                  `FROM "actor" ` +
+                  `INNER JOIN "account" ON "actor"."id" = "account"."actorId" ` +
+                  `INNER JOIN "videoChannel" ON "videoChannel"."accountId" = "account"."id" ` +
+                  `INNER JOIN "video" ON "video"."channelId" = "videoChannel"."id" AND "video"."id" = :videoId`
+
+    const options = {
+      type: QueryTypes.SELECT as QueryTypes.SELECT,
+      replacements: { videoId },
+      plain: true as true,
       transaction
     }
 
-    return ActorModel.unscoped().findOne(query)
-  }
-
-  static isActorUrlExist (url: string) {
-    const query = {
-      raw: true,
-      where: {
-        url
-      }
-    }
-
-    return ActorModel.unscoped().findOne(query)
-      .then(a => !!a)
+    return ActorModel.sequelize.query<MActorId & MActorFollowersUrl>(query, options)
   }
 
   static listByFollowersUrls (followersUrls: string[], transaction?: Transaction): Promise<MActorFull[]> {

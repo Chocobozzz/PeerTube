@@ -34,7 +34,7 @@ describe('Plugins', () => {
   it('Should install hello world plugin', async () => {
     await loginPage.loginAsRootUser()
 
-    await adminPluginPage.navigateToSearch()
+    await adminPluginPage.navigateToPluginSearch()
     await adminPluginPage.search('hello-world')
     await adminPluginPage.installHelloWorld()
     await browser.refresh()

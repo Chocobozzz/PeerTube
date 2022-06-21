@@ -1,11 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-label {
-  font-weight: $font-regular;
-  font-size: 100%;
-}
-
 .video-playlist-title {
   @include settings-big-title;
 }
@@ -18,6 +13,11 @@ input[type=text] {
 
 .peertube-select-container {
   @include peertube-select-container(340px);
+}
+
+my-select-channel {
+  display: block;
+  max-width: 340px;
 }
 
 input[type=submit] {

@@ -28,15 +28,10 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <div class="input-group input-group-sm">
-                <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getLink()" />
-
-                <div class="input-group-append" *ngIf="!isConfidentialVideo()">
-                  <button [cdkCopyToClipboard]="urlInput.value" (click)="activateCopiedMessage()" type="button" class="btn btn-outline-secondary">
-                    <span class="glyphicon glyphicon-duplicate"></span>
-                  </button>
-                </div>
-              </div>
+              <my-input-text
+                *ngIf="!isConfidentialVideo()"
+                [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getLink()"
+              ></my-input-text>
             </div>
           </ng-template>
         </ng-container>
@@ -53,14 +48,10 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <div class="input-group input-group-sm">
-                <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getLink()" />
-                <div class="input-group-append" *ngIf="!isConfidentialVideo()">
-                  <button [cdkCopyToClipboard]="urlInput.value" (click)="activateCopiedMessage()" type="button" class="btn btn-outline-secondary">
-                    <span class="glyphicon glyphicon-duplicate"></span>
-                  </button>
-                </div>
-              </div>
+              <my-input-text
+                *ngIf="!isConfidentialVideo()"
+                [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getLink()"
+              ></my-input-text>
             </div>
           </ng-template>
         </ng-container>
@@ -129,7 +120,7 @@
         [attr.aria-expanded]="!isAdvancedCustomizationCollapsed" aria-controls="collapseBasic"
       >
         <ng-container *ngIf="isAdvancedCustomizationCollapsed">
-          <span class="glyphicon glyphicon-menu-down"></span>
+          <span class="chevron-down"></span>
 
           <ng-container i18n>
             Advanced
@@ -137,7 +128,7 @@
         </ng-container>
 
         <ng-container *ngIf="!isAdvancedCustomizationCollapsed">
-          <span class="glyphicon glyphicon-menu-up"></span>
+          <span class="chevron-up"></span>
 
           <ng-container i18n>
             Simple

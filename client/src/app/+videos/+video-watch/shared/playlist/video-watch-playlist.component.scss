@@ -15,43 +15,47 @@
   .playlist-info {
     padding: 5px 30px;
     background-color: pvar(--greyBackgroundColor);
+  }
 
-    .playlist-display-name {
-      font-size: 18px;
-      font-weight: $font-semibold;
-      margin-bottom: 5px;
+  .playlist-display-name {
+    font-size: 18px;
+    font-weight: $font-semibold;
+    margin-bottom: 5px;
+
+    .pt-badge {
+      @include margin-left(5px);
+    }
+  }
+
+  .playlist-by-index {
+    color: pvar(--greyForegroundColor);
+    display: flex;
+
+    .playlist-by {
+      @include margin-right(5px);
     }
 
-    .playlist-by-index {
-      color: pvar(--greyForegroundColor);
-      display: flex;
+    .playlist-index span:first-child::after {
+      content: '/';
+      margin: 0 3px;
+    }
+  }
 
-      .playlist-by {
-        @include margin-right(5px);
-      }
+  .playlist-controls {
+    display: flex;
+    margin: 10px 0;
 
-      .playlist-index span:first-child::after {
-        content: '/';
-        margin: 0 3px;
-      }
+    my-global-icon:not(:last-child) {
+      @include margin-right(.5rem);
     }
 
-    .playlist-controls {
-      display: flex;
-      margin: 10px 0;
-
-      my-global-icon:not(:last-child) {
-        @include margin-right(.5rem);
+    my-global-icon {
+      &:not(.active) {
+        opacity: .5;
       }
 
-      my-global-icon {
-        &:not(.active) {
-          opacity: .5;
-        }
-
-        ::ng-deep {
-          cursor: pointer;
-        }
+      ::ng-deep {
+        cursor: pointer;
       }
     }
   }

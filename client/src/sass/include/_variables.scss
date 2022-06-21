@@ -1,4 +1,6 @@
 @use 'sass:math';
+@use 'sass:color';
+@use '~bootstrap/scss/functions' as *;
 
 $small-view: 800px;
 $mobile-view: 500px;
@@ -13,22 +15,21 @@ $grey-background-color: #E5E5E5;
 $grey-background-hover-color: #EFEFEF;
 $grey-foreground-color: #585858;
 $grey-foreground-hover-color: #303030;
-$grey-button-outline-color: scale-color($grey-foreground-color, $alpha: -95%);
+$grey-button-outline-color: color.scale($grey-foreground-color, $alpha: -95%);
 
 $main-color: hsl(24, 90%, 50%);
 $main-color-lighter: lighten($main-color, 10%);
 $main-color-lightest: lighten($main-color, 40%);
+$main-color-very-light: #fff5eb;
 
 $main-hover-color: lighten($main-color, 5%);
 $main-background-hover-color: #e9ecef;
-
-$secondary-color: hsl(187, 77%, 34%);
 
 $support-button: inherit;
 $support-button-heart: #e83e8c;
 
 $bg-color: #fff;
-$fg-color: #000;
+$fg-color: #212529;
 
 $red: #FF0000;
 $green: #39CC0B;
@@ -38,6 +39,7 @@ $grey-actor-name: #777272;
 $expanded-horizontal-margins: 150px;
 $not-expanded-horizontal-margins: 30px;
 
+$button-font-size: 15px;
 $button-height: 30px;
 
 $header-height: 50px;
@@ -84,6 +86,7 @@ $theater-bottom-space: 115px;
 $input-foreground-color: $fg-color;
 $input-background-color: $bg-color;
 $input-placeholder-color: #898989;
+$input-border-color: #C6C6C6;
 
 $textarea-foreground-color: $fg-color;
 $textarea-background-color: $bg-color;
@@ -92,9 +95,11 @@ $markdown-textarea-background-color: $grey-background-hover-color;
 $sub-menu-margin-bottom: 30px;
 $sub-menu-margin-bottom-small-view: 10px;
 
-$activated-action-button-color: #000;
+$activated-action-button-color: #212529;
 
 $focus-box-shadow-form: 0 0 0 .2rem;
+$form-input-font-size: 15px;
+$form-input-line-height: 1.4;
 
 $video-watch-player-factor: math.div(16, 9);
 $video-watch-info-margin-left: 44px;
@@ -109,14 +114,13 @@ $variables: (
   --mainColor: var(--mainColor),
   --mainColorLighter: var(--mainColorLighter),
   --mainColorLightest: var(--mainColorLightest),
+  --mainColorVeryLight: var(--mainColorVeryLight),
 
   --mainHoverColor: var(--mainHoverColor),
   --mainBackgroundHoverColor: var(--mainBackgroundHoverColor),
 
   --mainBackgroundColor: var(--mainBackgroundColor),
   --mainForegroundColor: var(--mainForegroundColor),
-
-  --secondaryColor: var(--secondaryColor),
 
   --greyForegroundColor: var(--greyForegroundColor),
   --greyBackgroundColor: var(--greyBackgroundColor),
@@ -171,13 +175,13 @@ $zindex: (
   popover         : 13000,
   tooltip         : 14000,
   loadbar         : 15000,
-  dropdown        : 17000,
-  help-popover    : 17000,
   privacymsg      : 17500,
   header          : 17500,
-  notification    : 18000,
+  help-popover    : 17600,
+  dropdown        : 17600,
   modal           : 19000,
-  hotkeys         : 19000
+  hotkeys         : 19000,
+  notification    : 20000
 );
 
 @function z($label) {

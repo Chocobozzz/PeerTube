@@ -610,7 +610,7 @@ describe('Test live', function () {
     }
 
     before(async function () {
-      this.timeout(160000)
+      this.timeout(300000)
 
       liveVideoId = await createLiveWrapper({ saveReplay: false, permanent: false })
       liveVideoReplayId = await createLiveWrapper({ saveReplay: true, permanent: false })

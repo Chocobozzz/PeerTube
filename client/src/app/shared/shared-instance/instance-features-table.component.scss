@@ -4,6 +4,7 @@
 table {
   font-size: 14px;
   color: pvar(--mainForegroundColor);
+  width: 100%;
 
   .label,
   .sub-label {
@@ -24,13 +25,14 @@ table {
     }
   }
 
+  th,
   td {
-    vertical-align: middle;
+    padding: 0.75rem;
+    border-top: 1px solid #dee2e6;
   }
 
   caption {
     caption-side: top;
-    font-size: 15px;
     font-weight: $font-semibold;
     color: pvar(--mainForegroundColor);
   }

@@ -6,7 +6,7 @@
 
       <div *ngIf="editable && !hasAvatar()" class="actor-img-edit-button" [ngbTooltip]="avatarFormat" placement="right" container="body">
         <my-global-icon iconName="upload"></my-global-icon>
-        <label class="sr-only" for="avatarfile" i18n>Upload a new avatar</label>
+        <label class="visually-hidden" for="avatarfile" i18n>Upload a new avatar</label>
         <input #avatarfileInput type="file" name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange(avatarfileInput)"/>
       </div>
 
@@ -15,7 +15,7 @@
         #avatarPopover="ngbPopover" [ngbPopover]="avatarEditContent" popoverClass="popover-image-info" autoClose="outside" placement="right"
       >
         <my-global-icon iconName="edit"></my-global-icon>
-        <label class="sr-only" for="avatarMenu" i18n>Change your avatar</label>
+        <label class="visually-hidden" for="avatarMenu" i18n>Change your avatar</label>
       </div>
 
     </div>

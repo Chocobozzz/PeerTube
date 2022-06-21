@@ -2,7 +2,7 @@
   <div class="avatar-and-textarea">
     <my-actor-avatar [account]="user?.account" size="25"></my-actor-avatar>
 
-    <div class="form-group">
+    <div class="textarea-wrapper">
       <textarea i18n-placeholder placeholder="Add comment..." myAutoResize
                 [readonly]="(user === null) ? true : false"
                 (click)="openVisitorModal($event)"

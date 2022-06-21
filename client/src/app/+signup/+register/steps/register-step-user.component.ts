@@ -2,17 +2,24 @@ import { concat, of } from 'rxjs'
 import { pairwise } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormGroup } from '@angular/forms'
-import { VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR, VIDEO_CHANNEL_NAME_VALIDATOR } from '@app/shared/form-validators/video-channel-validators'
+import {
+  USER_DISPLAY_NAME_REQUIRED_VALIDATOR,
+  USER_EMAIL_VALIDATOR,
+  USER_PASSWORD_VALIDATOR,
+  USER_USERNAME_VALIDATOR
+} from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { UserSignupService } from '@app/shared/shared-users'
 
 @Component({
-  selector: 'my-register-step-channel',
-  templateUrl: './register-step-channel.component.html',
-  styleUrls: [ './register.component.scss' ]
+  selector: 'my-register-step-user',
+  templateUrl: './register-step-user.component.html',
+  styleUrls: [ './step.component.scss' ]
 })
-export class RegisterStepChannelComponent extends FormReactive implements OnInit {
-  @Input() username: string
+export class RegisterStepUserComponent extends FormReactive implements OnInit {
+  @Input() videoUploadDisabled = false
+  @Input() requiresEmailVerification = false
+
   @Output() formBuilt = new EventEmitter<FormGroup>()
 
   constructor (
@@ -28,8 +35,10 @@ export class RegisterStepChannelComponent extends FormReactive implements OnInit
 
   ngOnInit () {
     this.buildForm({
-      displayName: VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
-      name: VIDEO_CHANNEL_NAME_VALIDATOR
+      displayName: USER_DISPLAY_NAME_REQUIRED_VALIDATOR,
+      username: USER_USERNAME_VALIDATOR,
+      password: USER_PASSWORD_VALIDATOR,
+      email: USER_EMAIL_VALIDATOR
     })
 
     setTimeout(() => this.formBuilt.emit(this.form))
@@ -41,14 +50,14 @@ export class RegisterStepChannelComponent extends FormReactive implements OnInit
      .subscribe(([ oldValue, newValue ]) => this.onDisplayNameChange(oldValue, newValue))
   }
 
-  isSameThanUsername () {
-    return this.username && this.username === this.form.value['name']
+  getMinPasswordLengthMessage () {
+    return USER_PASSWORD_VALIDATOR.MESSAGES.minlength
   }
 
   private onDisplayNameChange (oldDisplayName: string, newDisplayName: string) {
-    const name = this.form.value['name'] || ''
+    const username = this.form.value['username'] || ''
 
-    const newName = this.userSignupService.getNewUsername(oldDisplayName, newDisplayName, name)
-    this.form.patchValue({ name: newName })
+    const newUsername = this.userSignupService.getNewUsername(oldDisplayName, newDisplayName, username)
+    this.form.patchValue({ username: newUsername })
   }
 }

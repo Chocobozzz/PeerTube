@@ -139,6 +139,7 @@ const REMOTE_SCHEME = {
 
 const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 1,
+  'activitypub-http-broadcast-parallel': 1,
   'activitypub-http-unicast': 1,
   'activitypub-http-fetcher': 2,
   'activitypub-follow': 5,
@@ -159,6 +160,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
 // Excluded keys are jobs that can be configured by admins
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
   'activitypub-http-broadcast': 1,
+  'activitypub-http-broadcast-parallel': 30,
   'activitypub-http-unicast': 10,
   'activitypub-http-fetcher': 3,
   'activitypub-cleaner': 1,
@@ -176,6 +178,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
+  'activitypub-http-broadcast-parallel': 60000 * 10, // 10 minutes
   'activitypub-http-unicast': 60000 * 10, // 10 minutes
   'activitypub-http-fetcher': 1000 * 3600 * 10, // 10 hours
   'activitypub-follow': 60000 * 10, // 10 minutes
@@ -367,11 +370,11 @@ const CONSTRAINTS_FIELDS = {
 
 const VIEW_LIFETIME = {
   VIEW: CONFIG.VIEWS.VIDEOS.IP_VIEW_EXPIRATION,
-  VIEWER_COUNTER: 60000 * 1, // 1 minute
+  VIEWER_COUNTER: 60000 * 2, // 2 minutes
   VIEWER_STATS: 60000 * 60 // 1 hour
 }
 
-const MAX_LOCAL_VIEWER_WATCH_SECTIONS = 10
+const MAX_LOCAL_VIEWER_WATCH_SECTIONS = 100
 
 let CONTACT_FORM_LIFETIME = 60000 * 60 // 1 hour
 
@@ -731,12 +734,14 @@ const VIDEO_LIVE = {
 const MEMOIZE_TTL = {
   OVERVIEWS_SAMPLE: 1000 * 3600 * 4, // 4 hours
   INFO_HASH_EXISTS: 1000 * 3600 * 12, // 12 hours
+  VIDEO_DURATION: 1000 * 10, // 10 seconds
   LIVE_ABLE_TO_UPLOAD: 1000 * 60, // 1 minute
   LIVE_CHECK_SOCKET_HEALTH: 1000 * 60 // 1 minute
 }
 
 const MEMOIZE_LENGTH = {
-  INFO_HASH_EXISTS: 200
+  INFO_HASH_EXISTS: 200,
+  VIDEO_DURATION: 200
 }
 
 const QUEUE_CONCURRENCY = {
@@ -809,7 +814,7 @@ const STATS_TIMESERIE = {
 // ---------------------------------------------------------------------------
 
 // Special constants for a test instance
-if (isTestInstance() === true) {
+if (isTestInstance() === true && process.env.PRODUCTION_CONSTANTS !== 'true') {
   PRIVATE_RSA_KEY_SIZE = 1024
 
   ACTOR_FOLLOW_SCORE.BASE = 20

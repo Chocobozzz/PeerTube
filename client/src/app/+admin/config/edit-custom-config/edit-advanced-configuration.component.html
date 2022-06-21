@@ -1,15 +1,15 @@
 <ng-container [formGroup]="form">
 
-  <div class="form-row mt-5"> <!-- cache grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-5"> <!-- cache grid -->
+
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">CACHE</div>
       <div i18n class="inner-form-description">
         Some files are not federated, and fetched when necessary. Define their caching policies.
       </div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
-
+    <div class="col-12 col-lg-8 col-xl-9">
       <ng-container formGroupName="cache">
         <div class="form-group" formGroupName="previews">
           <label i18n for="cachePreviewsSize">Number of previews to keep in cache</label>
@@ -57,8 +57,8 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- cache grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- cache grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div class="anchor" id="customizations"></div> <!-- customizations anchor -->
       <div i18n class="inner-form-title">CUSTOMIZATIONS</div>
       <div i18n class="inner-form-description">
@@ -66,8 +66,7 @@
       </div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
-
+    <div class="col-12 col-lg-8 col-xl-9">
       <ng-container formGroupName="instance">
         <ng-container formGroupName="customizations">
           <div class="form-group">

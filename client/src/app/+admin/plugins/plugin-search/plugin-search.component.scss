@@ -17,16 +17,13 @@
 
   input {
     @include peertube-input-text(500px);
-
-    height: 35px;
   }
 }
 
-.badge {
+.pt-badge {
   @include margin-left(15px);
 
   font-size: 13px;
-  font-weight: $font-semibold;
 }
 
 .alert {

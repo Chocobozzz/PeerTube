@@ -1,5 +1,5 @@
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
-import { MVideo } from '@server/types/models'
+import { MVideo, MVideoImmutable } from '@server/types/models'
 import { VideoViewEvent } from '@shared/models'
 import { VideoViewerCounters, VideoViewerStats, VideoViews } from './shared'
 
@@ -41,7 +41,7 @@ export class VideoViewsManager {
   }
 
   async processLocalView (options: {
-    video: MVideo
+    video: MVideoImmutable
     currentTime: number
     ip: string | null
     viewEvent?: VideoViewEvent

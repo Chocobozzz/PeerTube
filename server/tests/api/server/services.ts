@@ -13,6 +13,21 @@ describe('Test services', function () {
   let playlistDisplayName: string
   let video: Video
 
+  const urlSuffixes = [
+    {
+      input: '',
+      output: ''
+    },
+    {
+      input: '?param=1',
+      output: ''
+    },
+    {
+      input: '?muted=1&warningTitle=0&toto=1',
+      output: '?muted=1&warningTitle=0'
+    }
+  ]
+
   before(async function () {
     this.timeout(30000)
 
@@ -52,14 +67,15 @@ describe('Test services', function () {
 
   it('Should have a valid oEmbed video response', async function () {
     for (const basePath of [ '/videos/watch/', '/w/' ]) {
-      for (const suffix of [ '', '?param=1' ]) {
-        const oembedUrl = server.url + basePath + video.uuid + suffix
+      for (const suffix of urlSuffixes) {
+        const oembedUrl = server.url + basePath + video.uuid + suffix.input
 
         const res = await server.services.getOEmbed({ oembedUrl })
         const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts allow-popups" ' +
-          `title="${video.name}" src="http://localhost:${server.port}/videos/embed/${video.uuid}" ` +
+          `title="${video.name}" src="http://${server.host}/videos/embed/${video.uuid}${suffix.output}" ` +
           'frameborder="0" allowfullscreen></iframe>'
-        const expectedThumbnailUrl = 'http://localhost:' + server.port + video.previewPath
+
+        const expectedThumbnailUrl = 'http://' + server.host + video.previewPath
 
         expect(res.body.html).to.equal(expectedHtml)
         expect(res.body.title).to.equal(video.name)
@@ -75,12 +91,12 @@ describe('Test services', function () {
 
   it('Should have a valid playlist oEmbed response', async function () {
     for (const basePath of [ '/videos/watch/playlist/', '/w/p/' ]) {
-      for (const suffix of [ '', '?param=1' ]) {
-        const oembedUrl = server.url + basePath + playlistUUID + suffix
+      for (const suffix of urlSuffixes) {
+        const oembedUrl = server.url + basePath + playlistUUID + suffix.input
 
         const res = await server.services.getOEmbed({ oembedUrl })
         const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts allow-popups" ' +
-          `title="${playlistDisplayName}" src="http://localhost:${server.port}/video-playlists/embed/${playlistUUID}" ` +
+          `title="${playlistDisplayName}" src="http://${server.host}/video-playlists/embed/${playlistUUID}${suffix.output}" ` +
           'frameborder="0" allowfullscreen></iframe>'
 
         expect(res.body.html).to.equal(expectedHtml)
@@ -97,14 +113,14 @@ describe('Test services', function () {
 
   it('Should have a valid oEmbed response with small max height query', async function () {
     for (const basePath of [ '/videos/watch/', '/w/' ]) {
-      const oembedUrl = 'http://localhost:' + server.port + basePath + video.uuid
+      const oembedUrl = 'http://' + server.host + basePath + video.uuid
       const format = 'json'
       const maxHeight = 50
       const maxWidth = 50
 
       const res = await server.services.getOEmbed({ oembedUrl, format, maxHeight, maxWidth })
       const expectedHtml = '<iframe width="50" height="50" sandbox="allow-same-origin allow-scripts allow-popups" ' +
-        `title="${video.name}" src="http://localhost:${server.port}/videos/embed/${video.uuid}" ` +
+        `title="${video.name}" src="http://${server.host}/videos/embed/${video.uuid}" ` +
         'frameborder="0" allowfullscreen></iframe>'
 
       expect(res.body.html).to.equal(expectedHtml)

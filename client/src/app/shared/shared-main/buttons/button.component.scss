@@ -9,17 +9,14 @@
   .button-label {
     display: none;
   }
+
+  my-global-icon {
+    margin: 0 !important;
+  }
 }
 
 :host {
-  outline: none;
   display: inline-block;
-}
-
-my-small-loader ::ng-deep .root {
-  display: inline-block;
-  margin: 0 3px 0 0;
-  width: 20px;
 }
 
 a[class$=-button],
@@ -30,29 +27,34 @@ span[class$=-button] {
 }
 
 .action-button {
-  @include peertube-button-link;
-  @include button-with-icon(21px);
-
   width: 100%; // useful for ellipsis, allow to define a max-width on host component
+
+  &.has-icon {
+    @include button-with-icon(21px);
+  }
+
+  &.icon-only my-global-icon {
+    margin: 0 !important;
+  }
 }
 
-.orange-button {
-  @include peertube-button;
-  @include orange-button;
-}
-
-.orange-button-link {
-  @include peertube-button-link;
-  @include orange-button;
-}
-
+.orange-button,
 .grey-button {
   @include peertube-button;
-  @include grey-button;
 }
 
+.orange-button-link,
 .grey-button-link {
   @include peertube-button-link;
+}
+
+.orange-button,
+.orange-button-link {
+  @include orange-button;
+}
+
+.grey-button,
+.grey-button-link {
   @include grey-button;
 }
 

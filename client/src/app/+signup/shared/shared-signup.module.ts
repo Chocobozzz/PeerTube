@@ -3,6 +3,8 @@ import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedUsersModule } from '@app/shared/shared-users'
+import { SignupMascotComponent } from './signup-mascot.component'
+import { SignupStepTitleComponent } from './signup-step-title.component'
 import { SignupSuccessComponent } from './signup-success.component'
 
 @NgModule({
@@ -14,7 +16,9 @@ import { SignupSuccessComponent } from './signup-success.component'
   ],
 
   declarations: [
-    SignupSuccessComponent
+    SignupSuccessComponent,
+    SignupStepTitleComponent,
+    SignupMascotComponent
   ],
 
   exports: [
@@ -22,7 +26,9 @@ import { SignupSuccessComponent } from './signup-success.component'
     SharedFormModule,
     SharedGlobalIconModule,
 
-    SignupSuccessComponent
+    SignupSuccessComponent,
+    SignupStepTitleComponent,
+    SignupMascotComponent
   ],
 
   providers: [

@@ -31,6 +31,7 @@ import { BroadcastMessageLevel, HTMLServerConfig, UserRole } from '@shared/model
 import { MenuService } from './core/menu/menu.service'
 import { POP_STATE_MODAL_DISMISS } from './helpers'
 import { InstanceService } from './shared/shared-instance'
+import { GlobalIconName } from './shared/shared-icons'
 
 @Component({
   selector: 'my-app',
@@ -148,6 +149,17 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     this.broadcastMessage = null
     this.screenService.isBroadcastMessageDisplayed = false
+  }
+
+  getNotificationIcon (message: { severity: 'success' | 'error' | 'info' }): GlobalIconName {
+    switch (message.severity) {
+      case 'error':
+        return 'cross'
+      case 'success':
+        return 'tick'
+      case 'info':
+        return 'help'
+    }
   }
 
   private initRouteEvents () {

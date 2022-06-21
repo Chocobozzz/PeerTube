@@ -3,7 +3,6 @@
 
 .header {
   display: flex;
-  font-size: 15px;
   margin-bottom: 20px;
 
   a {
@@ -21,11 +20,6 @@
   .peertube-select-container {
     @include peertube-select-container(auto);
   }
-}
-
-
-my-user-notifications {
-  font-size: 15px;
 }
 
 @media screen and (max-width: $mobile-view) {

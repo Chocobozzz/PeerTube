@@ -10,6 +10,8 @@ import {
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar,
   waitJobs
 } from '@shared/server-commands'
 
@@ -29,6 +31,8 @@ describe('Test stats (excluding redundancy)', function () {
     servers = await createMultipleServers(3)
 
     await setAccessTokensToServers(servers)
+    await setDefaultChannelAvatar(servers)
+    await setDefaultAccountAvatar(servers)
 
     await doubleFollow(servers[0], servers[1])
 

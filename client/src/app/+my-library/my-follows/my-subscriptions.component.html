@@ -2,7 +2,7 @@
   <span>
     <my-global-icon iconName="subscriptions" aria-hidden="true"></my-global-icon>
     <ng-container i18n>My subscriptions</ng-container>
-    <span class="badge badge-secondary"> {{ pagination.totalItems }}</span>
+    <span *ngIf="pagination.totalItems" class="pt-badge badge-secondary"> {{ pagination.totalItems }}</span>
   </span>
 </h1>
 

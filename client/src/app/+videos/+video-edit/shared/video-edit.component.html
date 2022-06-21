@@ -51,11 +51,10 @@
                 </ng-template>
               </my-help>
 
-              <my-markdown-textarea [truncate]="250" formControlName="description" [markdownVideo]="videoToUpdate"></my-markdown-textarea>
-
-              <div *ngIf="formErrors.description" class="form-error">
-                {{ formErrors.description }}
-              </div>
+              <my-markdown-textarea
+                formControlName="description" [markdownVideo]="videoToUpdate"
+                [formError]="formErrors.description" [truncate]="250"
+              ></my-markdown-textarea>
             </div>
           </div>
 
@@ -237,23 +236,23 @@
       <ng-template ngbNavContent>
         <div class="row live-settings">
           <div class="col-md-12">
-            <div class="alert alert-info">
+            <div class="alert pt-alert-primary">
               <my-live-documentation-link></my-live-documentation-link>
             </div>
 
             <div *ngIf="liveVideo.rtmpUrl" class="form-group">
               <label for="liveVideoRTMPUrl" i18n>Live RTMP Url</label>
-              <my-input-toggle-hidden inputId="liveVideoRTMPUrl" [value]="liveVideo.rtmpUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+              <my-input-text inputId="liveVideoRTMPUrl" [value]="liveVideo.rtmpUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
             </div>
 
             <div *ngIf="liveVideo.rtmpsUrl" class="form-group">
               <label for="liveVideoRTMPSUrl" i18n>Live RTMPS Url</label>
-              <my-input-toggle-hidden inputId="liveVideoRTMPSUrl" [value]="liveVideo.rtmpsUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+              <my-input-text inputId="liveVideoRTMPSUrl" [value]="liveVideo.rtmpsUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
             </div>
 
             <div class="form-group">
               <label for="liveVideoStreamKey" i18n>Live stream key</label>
-              <my-input-toggle-hidden inputId="liveVideoStreamKey" [value]="liveVideo.streamKey" [withCopy]="true" [readonly]="true"></my-input-toggle-hidden>
+              <my-input-text inputId="liveVideoStreamKey" [value]="liveVideo.streamKey" [withCopy]="true" [readonly]="true"></my-input-text>
 
               <div class="form-group-description" i18n>⚠️ Never share your stream key with anyone.</div>
             </div>
@@ -332,13 +331,11 @@
                   </ng-container>
                 </ng-template>
               </my-help>
+
               <my-markdown-textarea
                 id="support" formControlName="support" markdownType="enhanced"
-                [classes]="{ 'input-error': formErrors['support'] }"
+                [formError]="formErrors['support']"
               ></my-markdown-textarea>
-              <div *ngIf="formErrors.support" class="form-error">
-                {{ formErrors.support }}
-              </div>
             </div>
           </div>
 

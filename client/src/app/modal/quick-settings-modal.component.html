@@ -5,21 +5,17 @@
   </div>
 
   <div class="modal-body">
-    <div i18n class="mb-4 font-italic">These settings apply only to your session on this instance.</div>
+    <div i18n class="alert pt-alert-primary">These settings apply only to your session on this instance.</div>
 
-    <h6 i18n class="mb-4">Display settings</h6>
+    <h5 i18n class="mt-4 mb-2">Videos</h5>
 
     <my-user-video-settings
       *ngIf="!isUserLoggedIn()"
       [user]="user" [userInformationLoaded]="userInformationLoaded" [reactiveUpdate]="true" [notifyOnUpdate]="true"
     >
-
-      <ng-container ngProjectAs="inner-title">
-        <h6 i18n class="mb-4 mt-4">Video settings</h6>
-      </ng-container>
     </my-user-video-settings>
 
-    <h6 i18n class="mb-4 mt-4">Interface settings</h6>
+    <h5 i18n class="mt-4 mb-2">Interface</h5>
 
     <my-user-interface-settings
       *ngIf="!isUserLoggedIn()"

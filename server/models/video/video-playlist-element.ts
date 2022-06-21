@@ -351,7 +351,7 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
       id: this.url,
       type: 'PlaylistElement',
 
-      url: this.Video.url,
+      url: this.Video?.url || null,
       position: this.position
     }
 

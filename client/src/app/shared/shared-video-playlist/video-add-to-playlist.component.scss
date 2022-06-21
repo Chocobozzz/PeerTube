@@ -1,10 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-$optional-rows-checkbox-width: 34px;
-$timestamp-width: 50px;
-$timestamp-margin-right: 10px;
-
 .header,
 .dropdown-item,
 .input-container {
@@ -52,12 +48,12 @@ $timestamp-margin-right: 10px;
   }
 }
 
-.primary-row,
-.optional-rows > div {
+.primary-row {
   display: flex;
 
   my-peertube-checkbox {
     @include margin-right(10px);
+
     align-self: center;
   }
 
@@ -84,41 +80,30 @@ $timestamp-margin-right: 10px;
       height: 19px;
     }
   }
-
-  my-timestamp-input {
-    @include margin-right($timestamp-margin-right);
-
-    ::ng-deep .ui-inputtext {
-      padding: 0;
-      width: $timestamp-width;
-    }
-  }
 }
 
 .optional-rows {
-  > div {
-    padding: 8px 5px 5px 10px;
-  }
+  display: grid;
+  grid-template-columns: 35px 80px 80px;
+  row-gap: 3px;
+  column-gap: 10px;
+  align-items: center;
 
   my-peertube-checkbox {
-    @include margin-right(0 !important);
-
-    display: block;
-    width: $optional-rows-checkbox-width;
+    @include margin-left(auto);
   }
 
-  .labels {
-    @include margin-left($optional-rows-checkbox-width);
-
+  .header-label {
     font-size: 13px;
     color: pvar(--greyForegroundColor);
-    padding-top: 5px;
-    padding-bottom: 0;
+    padding-left: 2px;
 
-    div {
-      @include margin-right($timestamp-margin-right);
+    &:nth-child(1) {
+      grid-column: 2;
+    }
 
-      width: $timestamp-width;
+    &:nth-child(2) {
+      grid-column: 3;
     }
   }
 }

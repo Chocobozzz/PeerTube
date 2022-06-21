@@ -1,5 +1,5 @@
 <div
-  class="btn-group-subscribe btn-group"
+  class="btn-group-subscribe btn-group" role="group"
   [ngClass]="{'subscribe-button': !isAllChannelsSubscribed, 'unsubscribe-button': isAllChannelsSubscribed, 'big': isBigButton }"
 >
 
@@ -20,17 +20,11 @@
   </ng-template>
 
   <ng-template #userLoggedIn>
-    <button
-      *ngIf="!isAllChannelsSubscribed" type="button"
-      class="btn btn-sm" (click)="subscribe()"
-    >
+    <button *ngIf="!isAllChannelsSubscribed" type="button" class="btn" (click)="subscribe()">
       <ng-template [ngTemplateOutlet]="userLoggedOut"></ng-template>
     </button>
 
-    <button
-      *ngIf="isAllChannelsSubscribed" type="button"
-      class="btn btn-sm" role="button"
-      (click)="unsubscribe()">
+    <button *ngIf="isAllChannelsSubscribed" type="button" class="btn" role="button" (click)="unsubscribe()">
       <ng-container i18n>{account + "", select, undefined {Unsubscribe} other {Unsubscribe from all channels}}</ng-container>
     </button>
   </ng-template>
@@ -43,7 +37,7 @@
     class="btn-group" ngbDropdown autoClose="outside" placement="bottom-right bottom-left bottom auto"
     role="group" aria-label="Multiple ways to subscribe to the current channel" i18n-aria-label
   >
-    <button class="btn btn-sm dropdown-toggle-split" ngbDropdownToggle aria-label="Open subscription dropdown" i18n-aria-label>
+    <button class="btn dropdown-toggle-split" ngbDropdownToggle aria-label="Open subscription dropdown" i18n-aria-label>
       <ng-container
         *ngIf="!isUserLoggedIn(); then userLoggedOut">
       </ng-container>

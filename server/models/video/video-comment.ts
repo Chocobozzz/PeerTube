@@ -683,11 +683,11 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
     const totalLocalVideoComments = await VideoCommentModel.count({
       include: [
         {
-          model: AccountModel,
+          model: AccountModel.unscoped(),
           required: true,
           include: [
             {
-              model: ActorModel,
+              model: ActorModel.unscoped(),
               required: true,
               where: {
                 serverId: null

@@ -1,12 +1,8 @@
 @use '_mixins' as *;
 @use '_variables' as *;
 
-my-input-toggle-hidden {
+my-input-text {
   width: 100%;
-}
-
-.title-page.title-page-single {
-  margin-top: 0;
 }
 
 .playlist {
@@ -34,6 +30,10 @@ my-input-toggle-hidden {
   margin-top: 20px;
 }
 
+.alert-private {
+  margin-top: 0;
+}
+
 .filters {
   margin-top: 30px;
 
@@ -46,20 +46,8 @@ my-input-toggle-hidden {
     justify-content: center;
     align-items: center;
     margin-top: 20px;
-    font-size: 16px;
     font-weight: $font-semibold;
     cursor: pointer;
-
-    .glyphicon {
-      @include margin-right(5px);
-    }
-  }
-
-  .form-group {
-    margin-bottom: 0;
-    height: 34px;
-    display: flex;
-    align-items: center;
   }
 
   .video-caption-block {
@@ -87,4 +75,8 @@ my-input-toggle-hidden {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+h5 {
+  font-size: 1.15rem;
 }

@@ -210,8 +210,6 @@ function getVideoAttributesFromObject (videoChannel: MChannelId, videoObject: Vi
 
     updatedAt: new Date(videoObject.updated),
     views: videoObject.views,
-    likes: 0,
-    dislikes: 0,
     remote: true,
     privacy
   }

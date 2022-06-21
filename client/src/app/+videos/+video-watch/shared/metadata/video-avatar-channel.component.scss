@@ -1,14 +1,5 @@
 @use '_mixins' as *;
 
-@mixin secondary {
-  height: 60%;
-  width: 60%;
-  position: absolute;
-  bottom: -5px;
-  right: -5px;
-  background-color: rgba(0, 0, 0, 0);
-}
-
 .wrapper {
   @include margin-right(5px);
 
@@ -16,6 +7,11 @@
   margin-bottom: 5px;
 
   .second-avatar {
-    @include secondary();
+    height: 60%;
+    width: 60%;
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    background-color: rgba(0, 0, 0, 0);
   }
 }

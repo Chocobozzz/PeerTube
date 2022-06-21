@@ -6,6 +6,7 @@ import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { exists, isIdValid, isIntOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
+import { getCachedVideoDuration } from '@server/lib/video'
 
 const getVideoLocalViewerValidator = [
   param('localViewerId')
@@ -42,20 +43,18 @@ const videoViewValidator = [
     logger.debug('Checking videoView parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'only-immutable-attributes')) return
 
-    const video = res.locals.onlyVideo
-    const videoDuration = video.isLive
-      ? undefined
-      : video.duration
+    const video = res.locals.onlyImmutableVideo
+    const { duration } = await getCachedVideoDuration(video.id)
 
     if (!exists(req.body.currentTime)) { // TODO: remove in a few versions, introduced in 4.2
-      req.body.currentTime = Math.min(videoDuration ?? 0, 30)
+      req.body.currentTime = Math.min(duration ?? 0, 30)
     }
 
     const currentTime: number = req.body.currentTime
 
-    if (!isVideoTimeValid(currentTime, videoDuration)) {
+    if (!isVideoTimeValid(currentTime, duration)) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
         message: 'Current time is invalid'

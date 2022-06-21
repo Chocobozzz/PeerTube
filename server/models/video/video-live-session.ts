@@ -110,7 +110,7 @@ export class VideoLiveSessionModel extends Model<Partial<AttributesOnly<VideoLiv
   static listSessionsOfLiveForAPI (options: { videoId: number }) {
     const { videoId } = options
 
-    const query: FindOptions<VideoLiveSessionModel> = {
+    const query: FindOptions<AttributesOnly<VideoLiveSessionModel>> = {
       where: {
         liveVideoId: videoId
       },

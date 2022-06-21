@@ -1,4 +1,3 @@
-
 import { isTestInstance } from '@server/helpers/core-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { VIEW_LIFETIME } from '@server/initializers/constants'
@@ -6,7 +5,7 @@ import { sendView } from '@server/lib/activitypub/send/send-view'
 import { PeerTubeSocket } from '@server/lib/peertube-socket'
 import { getServerActor } from '@server/models/application/application'
 import { VideoModel } from '@server/models/video/video'
-import { MVideo } from '@server/types/models'
+import { MVideo, MVideoImmutable } from '@server/types/models'
 import { buildUUID, sha256 } from '@shared/extra-utils'
 
 const lTags = loggerTagsFactory('views')
@@ -34,7 +33,7 @@ export class VideoViewerCounters {
   // ---------------------------------------------------------------------------
 
   async addLocalViewer (options: {
-    video: MVideo
+    video: MVideoImmutable
     ip: string
   }) {
     const { video, ip } = options
@@ -87,7 +86,7 @@ export class VideoViewerCounters {
   // ---------------------------------------------------------------------------
 
   private async addViewerToVideo (options: {
-    video: MVideo
+    video: MVideoImmutable
     viewerId: string
     viewerExpires?: Date
   }) {
@@ -163,10 +162,10 @@ export class VideoViewerCounters {
     return sha256(this.salt + '-' + ip + '-' + videoUUID)
   }
 
-  private async federateViewerIfNeeded (video: MVideo, viewer: Viewer) {
+  private async federateViewerIfNeeded (video: MVideoImmutable, viewer: Viewer) {
     // Federate the viewer if it's been a "long" time we did not
     const now = new Date().getTime()
-    const federationLimit = now - (VIEW_LIFETIME.VIEWER_COUNTER / 2)
+    const federationLimit = now - (VIEW_LIFETIME.VIEWER_COUNTER * 0.75)
 
     if (viewer.lastFederation && viewer.lastFederation > federationLimit) return
 

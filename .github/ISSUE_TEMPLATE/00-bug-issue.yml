@@ -1,0 +1,39 @@
+name: 🐛 Bug Report
+description: Use this template for reporting a bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please search among past open/closed issues for a similar one beforehand:
+          - https://github.com/Chocobozzz/PeerTube/issues?q=
+          - https://framacolibri.org/c/peertube
+
+  - type: textarea
+    attributes:
+      label: Describe the current behavior
+
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      value: |
+          1.
+          2.
+          3.
+
+  - type: textarea
+    attributes:
+      label: Describe the expected behavior
+
+  - type: textarea
+    attributes:
+      label: Additional information
+      value: |
+          * PeerTube instance:
+            * URL:
+            * Version:
+            * NodeJS version:
+            * Ffmpeg version:
+
+          * Browser name, version and platforms on which you could reproduce the bug:
+          * Link to browser console log if relevant:
+          * Link to server log if relevant (`journalctl` or `/var/www/peertube/storage/logs/`):

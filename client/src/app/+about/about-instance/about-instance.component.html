@@ -8,9 +8,9 @@
     </div>
 
     <div class="instance-badges" *ngIf="categories.length !== 0 || languages.length !== 0">
-      <span *ngFor="let category of categories" class="badge badge-primary category">{{ category }}</span>
+      <span *ngFor="let category of categories" class="pt-badge badge-primary">{{ category }}</span>
 
-      <span *ngFor="let language of languages" class="badge badge-secondary language">{{ language }}</span>
+      <span *ngFor="let language of languages" class="pt-badge badge-secondary">{{ language }}</span>
     </div>
 
     <div class="short-description">
@@ -204,7 +204,7 @@
   </div>
 
   <div class="col-md-12 col-xl-6" myPluginSelector pluginSelectorId="about-instance-features">
-    <h2 class="sr-only" i18n>FEATURES</h2>
+    <h2 class="visually-hidden" i18n>FEATURES</h2>
     <my-instance-features-table></my-instance-features-table>
   </div>
 

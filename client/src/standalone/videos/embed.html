@@ -67,7 +67,12 @@
         if (placeholderPreview) placeholderPreview.style.display = 'none'
       }
 
-      window.onerror = function () {
+      window.onerror = function (msg) {
+        if (typeof msg === 'string' && msg.toLowerCase().includes(' ice ')) {
+          console.warn(msg)
+          return
+        }
+
         window.displayIncompatibleBrowser()
       }
 

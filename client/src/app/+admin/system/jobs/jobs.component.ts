@@ -25,6 +25,7 @@ export class JobsComponent extends RestTable implements OnInit {
 
     'activitypub-follow',
     'activitypub-http-broadcast',
+    'activitypub-http-broadcast-parallel',
     'activitypub-http-fetcher',
     'activitypub-http-unicast',
     'activitypub-refresher',

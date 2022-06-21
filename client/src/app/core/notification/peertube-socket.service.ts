@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs'
-import { io, Socket } from 'socket.io-client'
+import { ManagerOptions, Socket, SocketOptions } from 'socket.io-client'
 import { Injectable } from '@angular/core'
 import { LiveVideoEventPayload, LiveVideoEventType, UserNotification as UserNotificationServer } from '@shared/models'
 import { environment } from '../../../environments/environment'
@@ -9,7 +9,7 @@ export type NotificationEvent = 'new' | 'read' | 'read-all'
 
 @Injectable()
 export class PeerTubeSocket {
-  private io: typeof io
+  private io: (uri: string, opts?: Partial<ManagerOptions & SocketOptions>) => Socket
 
   private notificationSubject = new Subject<{ type: NotificationEvent, notification?: UserNotificationServer }>()
   private liveVideosSubject = new Subject<{ type: LiveVideoEventType, payload: LiveVideoEventPayload }>()

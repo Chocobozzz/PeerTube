@@ -1,11 +1,7 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.root {
-  font-size: 15px;
-
-  code {
-    font-size: 14px;
-    font-weight: $font-semibold;
-  }
+code {
+  font-size: 14px;
+  font-weight: $font-semibold;
 }

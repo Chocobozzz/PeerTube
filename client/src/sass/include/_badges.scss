@@ -1,0 +1,61 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+@mixin peertube-badge {
+  display: inline-block;
+  border-radius: .25rem;
+  padding: .25em .4em;
+  font-size: 75%;
+  font-weight: $font-semibold;
+  line-height: 1.1;
+
+  &.badge-primary {
+    color: pvar(--mainBackgroundColor);
+    background-color: pvar(--mainColor);
+  }
+
+  &.badge-secondary {
+    color: pvar(--mainBackgroundColor);
+    background-color: pvar(--greyForegroundColor);
+    opacity: 0.7;
+  }
+
+  &.badge-banned,
+  &.badge-danger,
+  &.badge-red {
+    background-color: #ffcdd2;
+    color: #c63737;
+  }
+
+  &.badge-banned {
+    text-decoration: line-through;
+  }
+
+  &.badge-yellow,
+  &.badge-warning {
+    background-color: #feedaf;
+    color: #8a5340;
+  }
+
+  &.badge-brown {
+    background-color: #ffd8b2;
+    color: #805b36;
+  }
+
+  &.badge-green,
+  &.badge-success {
+    background-color: #c8e6c9;
+    color: #256029;
+  }
+
+  &.badge-blue,
+  &.badge-info {
+    background-color: #b3e5fc;
+    color: #23547b;
+  }
+
+  &.badge-purple {
+    background-color: #eccfff;
+    color: #694382;
+  }
+}
