@@ -18,9 +18,6 @@ function runServer (appInstance: string, config: any = {}) {
     log: {
       level: 'warn'
     },
-    signup: {
-      enabled: false
-    },
     transcoding: {
       enabled: false
     },

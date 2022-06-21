@@ -15,9 +15,7 @@ export class LoginPage {
 
     await $('form input[type=submit]').click()
 
-    await this.getLoggedInInfoElem().waitForExist()
-
-    await expect(this.getLoggedInInfoElem()).toHaveText('root')
+    await this.ensureIsLoggedInAs('root')
   }
 
   async logout () {
@@ -29,6 +27,12 @@ export class LoginPage {
     await logout().click()
 
     await $('.login-buttons-block').waitForDisplayed()
+  }
+
+  async ensureIsLoggedInAs (displayName: string) {
+    await this.getLoggedInInfoElem().waitForExist()
+
+    await expect(this.getLoggedInInfoElem()).toHaveText(displayName)
   }
 
   private getLoggedInInfoElem () {

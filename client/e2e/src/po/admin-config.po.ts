@@ -1,4 +1,4 @@
-import { browserSleep, go } from '../utils'
+import { getCheckbox, go } from '../utils'
 
 export class AdminConfigPage {
 
@@ -22,8 +22,13 @@ export class AdminConfigPage {
     return $('#instanceCustomHomepageContent').setValue(newValue)
   }
 
+  async toggleSignup () {
+    const checkbox = await getCheckbox('signupEnabled')
+    await checkbox.click()
+  }
+
   async save () {
-    await $('input[type=submit]').click()
-    await browserSleep(200)
+    const button = $('input[type=submit]')
+    await button.click()
   }
 }
