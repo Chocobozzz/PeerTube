@@ -47,7 +47,7 @@ function authenticateSocket (socket: Socket, next: (err?: any) => void) {
     .catch(err => logger.error('Cannot get access token.', { err }))
 }
 
-function authenticatePromiseIfNeeded (req: express.Request, res: express.Response, authenticateInQuery = false) {
+function authenticatePromise (req: express.Request, res: express.Response, authenticateInQuery = false) {
   return new Promise<void>(resolve => {
     // Already authenticated? (or tried to)
     if (res.locals.oauth?.token.User) return resolve()
@@ -76,6 +76,6 @@ function optionalAuthenticate (req: express.Request, res: express.Response, next
 export {
   authenticate,
   authenticateSocket,
-  authenticatePromiseIfNeeded,
+  authenticatePromise,
   optionalAuthenticate
 }

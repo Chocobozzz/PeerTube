@@ -33,7 +33,7 @@ import { logger } from '../../../helpers/logger'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { VideoPlaylistElementModel } from '../../../models/video/video-playlist-element'
 import { MVideoPlaylist } from '../../../types/models/video/video-playlist'
-import { authenticatePromiseIfNeeded } from '../../auth'
+import { authenticatePromise } from '../../auth'
 import {
   areValidationErrors,
   doesVideoChannelIdExist,
@@ -161,7 +161,7 @@ const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) => {
       }
 
       if (videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) {
-        await authenticatePromiseIfNeeded(req, res)
+        await authenticatePromise(req, res)
 
         const user = res.locals.oauth ? res.locals.oauth.token.User : null
 

@@ -162,7 +162,7 @@ describe('Test video privacy', function () {
     })
 
     it('Should not be able to get this unlisted video using its id', async function () {
-      await servers[1].videos.get({ id: unlistedVideo.id, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await servers[1].videos.get({ id: unlistedVideo.id, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should be able to get this unlisted video using its uuid/shortUUID', async function () {

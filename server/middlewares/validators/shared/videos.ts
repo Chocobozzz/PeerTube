@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { isUUIDValid } from '@server/helpers/custom-validators/misc'
 import { loadVideo, VideoLoadType } from '@server/lib/model-loaders'
 import { isAbleToUploadVideo } from '@server/lib/user'
-import { authenticatePromiseIfNeeded } from '@server/middlewares/auth'
+import { authenticatePromise } from '@server/middlewares/auth'
 import { VideoModel } from '@server/models/video/video'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { VideoFileModel } from '@server/models/video/video-file'
@@ -137,7 +137,7 @@ async function checkCanSeeAuthVideo (req: Request, res: Response, video: MVideoI
     return false
   }
 
-  await authenticatePromiseIfNeeded(req, res, authenticateInQuery)
+  await authenticatePromise(req, res, authenticateInQuery)
 
   const user = res.locals.oauth?.token.User
   if (!user) return fail()
@@ -154,14 +154,15 @@ async function checkCanSeeAuthVideo (req: Request, res: Response, video: MVideoI
   }
 
   const isOwnedByUser = videoWithRights.VideoChannel.Account.userId === user.id
-  if (privacy === VideoPrivacy.PRIVATE || privacy === VideoPrivacy.UNLISTED) {
-    if (isOwnedByUser && user.hasRight(UserRight.SEE_ALL_VIDEOS)) return true
+
+  if (videoWithRights.isBlacklisted()) {
+    if (isOwnedByUser || user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)) return true
 
     return fail()
   }
 
-  if (videoWithRights.isBlacklisted()) {
-    if (isOwnedByUser || user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)) return true
+  if (privacy === VideoPrivacy.PRIVATE || privacy === VideoPrivacy.UNLISTED) {
+    if (isOwnedByUser || user.hasRight(UserRight.SEE_ALL_VIDEOS)) return true
 
     return fail()
   }
