@@ -6,6 +6,7 @@ import { exists, isIdOrUUIDValid, isIdValid, toCompleteUUID } from '../../helper
 import { logger } from '../../helpers/logger'
 import {
   areValidationErrors,
+  checkCanSeeVideo,
   doesAccountIdExist,
   doesAccountNameWithHostExist,
   doesUserFeedTokenCorrespond,
@@ -112,7 +113,10 @@ const videoCommentsFeedsValidator = [
       return res.fail({ message: 'videoId cannot be mixed with a channel filter' })
     }
 
-    if (req.query.videoId && !await doesVideoExist(req.query.videoId, res)) return
+    if (req.query.videoId) {
+      if (!await doesVideoExist(req.query.videoId, res)) return
+      if (!await checkCanSeeVideo({ req, res, paramId: req.query.videoId, video: res.locals.videoAll })) return
+    }
 
     return next()
   }

@@ -7,7 +7,7 @@ import { logger } from '../../../helpers/logger'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants'
 import {
   areValidationErrors,
-  checkCanSeeVideoIfPrivate,
+  checkCanSeeVideo,
   checkUserCanManageVideo,
   doesVideoCaptionExist,
   doesVideoExist,
@@ -74,7 +74,7 @@ const listVideoCaptionsValidator = [
     if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
 
     const video = res.locals.onlyVideo
-    if (!await checkCanSeeVideoIfPrivate(req, res, video)) return
+    if (!await checkCanSeeVideo({ req, res, video, paramId: req.params.videoId })) return
 
     return next()
   }

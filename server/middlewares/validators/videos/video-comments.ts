@@ -10,7 +10,7 @@ import { Hooks } from '../../../lib/plugins/hooks'
 import { MCommentOwnerVideoReply, MVideo, MVideoFullLight } from '../../../types/models/video'
 import {
   areValidationErrors,
-  checkCanSeeVideoIfPrivate,
+  checkCanSeeVideo,
   doesVideoCommentExist,
   doesVideoCommentThreadExist,
   doesVideoExist,
@@ -54,7 +54,7 @@ const listVideoCommentThreadsValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
 
-    if (!await checkCanSeeVideoIfPrivate(req, res, res.locals.onlyVideo)) return
+    if (!await checkCanSeeVideo({ req, res, paramId: req.params.videoId, video: res.locals.onlyVideo })) return
 
     return next()
   }
@@ -73,7 +73,7 @@ const listVideoThreadCommentsValidator = [
     if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
     if (!await doesVideoCommentThreadExist(req.params.threadId, res.locals.onlyVideo, res)) return
 
-    if (!await checkCanSeeVideoIfPrivate(req, res, res.locals.onlyVideo)) return
+    if (!await checkCanSeeVideo({ req, res, paramId: req.params.videoId, video: res.locals.onlyVideo })) return
 
     return next()
   }
@@ -91,7 +91,7 @@ const addVideoCommentThreadValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
-    if (!await checkCanSeeVideoIfPrivate(req, res, res.locals.videoAll)) return
+    if (!await checkCanSeeVideo({ req, res, paramId: req.params.videoId, video: res.locals.videoAll })) return
 
     if (!isVideoCommentsEnabled(res.locals.videoAll, res)) return
     if (!await isVideoCommentAccepted(req, res, res.locals.videoAll, false)) return
@@ -113,7 +113,7 @@ const addVideoCommentReplyValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
-    if (!await checkCanSeeVideoIfPrivate(req, res, res.locals.videoAll)) return
+    if (!await checkCanSeeVideo({ req, res, paramId: req.params.videoId, video: res.locals.videoAll })) return
 
     if (!isVideoCommentsEnabled(res.locals.videoAll, res)) return
     if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoAll, res)) return

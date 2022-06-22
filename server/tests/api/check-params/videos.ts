@@ -39,10 +39,7 @@ describe('Test videos API validator', function () {
 
     await setAccessTokensToServers([ server ])
 
-    const username = 'user1'
-    const password = 'my super password'
-    await server.users.create({ username: username, password: password })
-    userAccessToken = await server.login.getAccessToken({ username, password })
+    userAccessToken = await server.users.generateUserAndToken('user1')
 
     {
       const body = await server.users.getMyInfo()

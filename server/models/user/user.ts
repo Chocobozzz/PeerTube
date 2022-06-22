@@ -29,12 +29,11 @@ import {
   MUserDefault,
   MUserFormattable,
   MUserNotifSettingChannelDefault,
-  MUserWithNotificationSetting,
-  MVideoWithRights
+  MUserWithNotificationSetting
 } from '@server/types/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { hasUserRight, USER_ROLE_LABELS } from '../../../shared/core-utils/users'
-import { AbuseState, MyUser, UserRight, VideoPlaylistType, VideoPrivacy } from '../../../shared/models'
+import { AbuseState, MyUser, UserRight, VideoPlaylistType } from '../../../shared/models'
 import { User, UserRole } from '../../../shared/models/users'
 import { UserAdminFlag } from '../../../shared/models/users/user-flag.model'
 import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
@@ -849,22 +848,6 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
     return UserModel.findAll(query)
                     .then(u => u.map(u => u.username))
-  }
-
-  canGetVideo (video: MVideoWithRights) {
-    const videoUserId = video.VideoChannel.Account.userId
-
-    if (video.isBlacklisted()) {
-      return videoUserId === this.id || this.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
-    }
-
-    if (video.privacy === VideoPrivacy.PRIVATE) {
-      return video.VideoChannel && videoUserId === this.id || this.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
-    }
-
-    if (video.privacy === VideoPrivacy.INTERNAL) return true
-
-    return false
   }
 
   hasRight (right: UserRight) {

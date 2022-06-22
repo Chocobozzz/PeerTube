@@ -7,14 +7,13 @@ import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express-handler'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
 import { getAllPrivacies } from '@shared/core-utils'
-import { HttpStatusCode, ServerErrorCode, UserRight, VideoInclude, VideoPrivacy } from '@shared/models'
+import { HttpStatusCode, ServerErrorCode, UserRight, VideoInclude } from '@shared/models'
 import {
   exists,
   isBooleanValid,
   isDateValid,
   isFileValid,
   isIdValid,
-  isUUIDValid,
   toArray,
   toBooleanOrNull,
   toIntOrNull,
@@ -50,7 +49,7 @@ import { Hooks } from '../../../lib/plugins/hooks'
 import { VideoModel } from '../../../models/video/video'
 import {
   areValidationErrors,
-  checkCanSeePrivateVideo,
+  checkCanSeeVideo,
   checkUserCanManageVideo,
   checkUserQuota,
   doesVideoChannelOfAccountExist,
@@ -297,28 +296,9 @@ const videosCustomGetValidator = (
 
       const video = getVideoWithAttributes(res) as MVideoFullLight
 
-      // Video private or blacklisted
-      if (video.requiresAuth()) {
-        if (await checkCanSeePrivateVideo(req, res, video, authenticateInQuery)) {
-          return next()
-        }
+      if (!await checkCanSeeVideo({ req, res, video, paramId: req.params.id, authenticateInQuery })) return
 
-        return
-      }
-
-      // Video is public, anyone can access it
-      if (video.privacy === VideoPrivacy.PUBLIC) return next()
-
-      // Video is unlisted, check we used the uuid to fetch it
-      if (video.privacy === VideoPrivacy.UNLISTED) {
-        if (isUUIDValid(req.params.id)) return next()
-
-        // Don't leak this unlisted video
-        return res.fail({
-          status: HttpStatusCode.NOT_FOUND_404,
-          message: 'Video not found'
-        })
-      }
+      return next()
     }
   ]
 }

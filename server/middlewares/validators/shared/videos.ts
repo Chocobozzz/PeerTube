@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { isUUIDValid } from '@server/helpers/custom-validators/misc'
 import { loadVideo, VideoLoadType } from '@server/lib/model-loaders'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { authenticatePromiseIfNeeded } from '@server/middlewares/auth'
@@ -18,18 +19,19 @@ import {
   MVideoThumbnail,
   MVideoWithRights
 } from '@server/types/models'
-import { HttpStatusCode, ServerErrorCode, UserRight } from '@shared/models'
+import { HttpStatusCode, ServerErrorCode, UserRight, VideoPrivacy } from '@shared/models'
 
 async function doesVideoExist (id: number | string, res: Response, fetchType: VideoLoadType = 'all') {
   const userId = res.locals.oauth ? res.locals.oauth.token.User.id : undefined
 
   const video = await loadVideo(id, fetchType, userId)
 
-  if (video === null) {
+  if (!video) {
     res.fail({
       status: HttpStatusCode.NOT_FOUND_404,
       message: 'Video not found'
     })
+
     return false
   }
 
@@ -58,6 +60,8 @@ async function doesVideoExist (id: number | string, res: Response, fetchType: Vi
   return true
 }
 
+// ---------------------------------------------------------------------------
+
 async function doesVideoFileOfVideoExist (id: number, videoIdOrUUID: number | string, res: Response) {
   if (!await VideoFileModel.doesVideoExistForVideoFile(id, videoIdOrUUID)) {
     res.fail({
@@ -69,6 +73,8 @@ async function doesVideoFileOfVideoExist (id: number, videoIdOrUUID: number | st
 
   return true
 }
+
+// ---------------------------------------------------------------------------
 
 async function doesVideoChannelOfAccountExist (channelId: number, user: MUserAccountId, res: Response) {
   const videoChannel = await VideoChannelModel.loadAndPopulateAccount(channelId)
@@ -95,31 +101,76 @@ async function doesVideoChannelOfAccountExist (channelId: number, user: MUserAcc
   return true
 }
 
-async function checkCanSeeVideoIfPrivate (req: Request, res: Response, video: MVideo, authenticateInQuery = false) {
-  if (!video.requiresAuth()) return true
+// ---------------------------------------------------------------------------
 
-  const videoWithRights = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.id)
+async function checkCanSeeVideo (options: {
+  req: Request
+  res: Response
+  paramId: string
+  video: MVideo
+  authenticateInQuery?: boolean // default false
+}) {
+  const { req, res, video, paramId, authenticateInQuery = false } = options
 
-  return checkCanSeePrivateVideo(req, res, videoWithRights, authenticateInQuery)
+  if (video.requiresAuth()) {
+    return checkCanSeeAuthVideo(req, res, video, authenticateInQuery)
+  }
+
+  if (video.privacy === VideoPrivacy.UNLISTED) {
+    if (isUUIDValid(paramId)) return true
+
+    return checkCanSeeAuthVideo(req, res, video, authenticateInQuery)
+  }
+
+  if (video.privacy === VideoPrivacy.PUBLIC) return true
+
+  throw new Error('Fatal error when checking video right ' + video.url)
 }
 
-async function checkCanSeePrivateVideo (req: Request, res: Response, video: MVideoWithRights, authenticateInQuery = false) {
-  await authenticatePromiseIfNeeded(req, res, authenticateInQuery)
-
-  const user = res.locals.oauth ? res.locals.oauth.token.User : null
-
-  // Only the owner or a user that have blocklist rights can see the video
-  if (!user || !user.canGetVideo(video)) {
+async function checkCanSeeAuthVideo (req: Request, res: Response, video: MVideoId | MVideoWithRights, authenticateInQuery = false) {
+  const fail = () => {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Cannot fetch information of private/internal/blocklisted video'
+      message: 'Cannot fetch information of private/internal/blocked video'
     })
 
     return false
   }
 
-  return true
+  await authenticatePromiseIfNeeded(req, res, authenticateInQuery)
+
+  const user = res.locals.oauth?.token.User
+  if (!user) return fail()
+
+  const videoWithRights = (video as MVideoWithRights).VideoChannel?.Account?.userId
+    ? video as MVideoWithRights
+    : await VideoModel.loadAndPopulateAccountAndServerAndTags(video.id)
+
+  const privacy = videoWithRights.privacy
+
+  if (privacy === VideoPrivacy.INTERNAL) {
+    // We know we have a user
+    return true
+  }
+
+  const isOwnedByUser = videoWithRights.VideoChannel.Account.userId === user.id
+  if (privacy === VideoPrivacy.PRIVATE || privacy === VideoPrivacy.UNLISTED) {
+    if (isOwnedByUser && user.hasRight(UserRight.SEE_ALL_VIDEOS)) return true
+
+    return fail()
+  }
+
+  if (videoWithRights.isBlacklisted()) {
+    if (isOwnedByUser || user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)) return true
+
+    return fail()
+  }
+
+  // Should not happen
+  return fail()
 }
+
+// ---------------------------------------------------------------------------
 
 function checkUserCanManageVideo (user: MUser, video: MVideoAccountLight, right: UserRight, res: Response, onlyOwned = true) {
   // Retrieve the user who did the request
@@ -146,6 +197,8 @@ function checkUserCanManageVideo (user: MUser, video: MVideoAccountLight, right:
   return true
 }
 
+// ---------------------------------------------------------------------------
+
 async function checkUserQuota (user: MUserId, videoFileSize: number, res: Response) {
   if (await isAbleToUploadVideo(user.id, videoFileSize) === false) {
     res.fail({
@@ -167,7 +220,6 @@ export {
   doesVideoFileOfVideoExist,
 
   checkUserCanManageVideo,
-  checkCanSeeVideoIfPrivate,
-  checkCanSeePrivateVideo,
+  checkCanSeeVideo,
   checkUserQuota
 }
