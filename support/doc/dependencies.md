@@ -149,6 +149,8 @@ sudo yum-config-manager --set-enabled powertools
 sudo yum-config-manager --add-repo=https://negativo17.org/repos/epel-multimedia.repo
 sudo dnf install ffmpeg
 ```
+4. Install packages:
+```
 sudo dnf update
 sudo dnf install epel-release
 sudo dnf update
