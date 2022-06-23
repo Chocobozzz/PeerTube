@@ -1349,7 +1349,7 @@
       </trans-unit>
       <trans-unit id="3163018370908865909" datatype="html">
         <source>As you probably noticed: creating an account is not necessary to watch video son <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </source>
-        <target state="new"> As you probably noticed: creating an account is not necessary to watch video son <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </target>
+        <target state="translated">Як ви, напевно, помітили: створення облікового запису не обов'язкове для перегляду відео <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Однак створення облікового запису на <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> дасть вам змогу: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">4,8</context>
@@ -1357,7 +1357,7 @@
       </trans-unit>
       <trans-unit id="3514732276382852116" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos</source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Коментувати<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> відео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1365,7 +1365,7 @@
       </trans-unit>
       <trans-unit id="6928511254538021087" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Subscribe<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to channels to be notified of new videos</source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Subscribe<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to channels to be notified of new videos</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Підписуватися<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> на канали, щоб отримувати сповіщення про нові відео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1373,7 +1373,7 @@
       </trans-unit>
       <trans-unit id="269413964682905563" datatype="html">
         <source>Have access to your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>watch history<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Have access to your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>watch history<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Мати доступ до своєї <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>історії перегляду<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">13</context>
@@ -1381,7 +1381,7 @@
       </trans-unit>
       <trans-unit id="7760677303939127268" datatype="html">
         <source>Create your channel to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Create your channel to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Створювати канали, щоб <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>публікувати відео<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1421,7 +1421,7 @@
       </trans-unit>
       <trans-unit id="1335686739562009265" datatype="html">
         <source>You might want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>create a channel by theme:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> for example, you can create a channel named "SweetMelodies" to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology. </source>
-        <target state="new"> You might want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>create a channel by theme:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> for example, you can create a channel named "SweetMelodies" to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology. </target>
+        <target state="translated">Ви можете захотіти <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>створити тематичний канал:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> наприклад, ви можете створити канал під назвою «SweetMelodies» для публікації своїх фортепіанних концертів і ще один «Екологія», на якому ви публікуватимете свої відео про екологію. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">6,9</context>
@@ -1429,7 +1429,7 @@
       </trans-unit>
       <trans-unit id="5716290603546738313" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrators allow you to publish up to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> of videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on their website. </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrators allow you to publish up to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> of videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on their website. </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> адміністратори дозволяють вам публікувати до <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> відео<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> на їхньому вебсайті. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -1502,7 +1502,7 @@
       </trans-unit>
       <trans-unit id="1852111465407058121" datatype="html">
         <source>Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="new"> Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of instance they are. </target>
+        <target state="translated">Вибір <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>назви сервера<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>додавання опису<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, із зазначенням <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>хто ви<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, чому <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ви створили свій сервер<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> і <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>як довго<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> плануєте <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>підтримувати його<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> — дуже важливо для розуміння відвідувачами, на якому типі сервера вони перебувають. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">57,61</context>
@@ -1867,7 +1867,7 @@
       </trans-unit>
       <trans-unit id="1792963373738226329" datatype="html">
         <source>You will be able to create a channel later</source>
-        <target state="new">You will be able to create a channel later</target>
+        <target state="translated">Ви зможете створити канал пізніше</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">94,95</context>
@@ -3034,7 +3034,7 @@
       </trans-unit>
       <trans-unit id="8920371331444717794" datatype="html">
         <source>Only display embed URL</source>
-        <target state="new">Only display embed URL</target>
+        <target state="translated">Показувати лише вбудовані URL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">79</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">176</context></context-group>
       </trans-unit>
@@ -3155,7 +3155,7 @@
       </trans-unit>
       <trans-unit id="4583515246777381165" datatype="html">
         <source>Display player control bar</source>
-        <target state="new">Display player control bar</target>
+        <target state="translated">Показати панель керування програвачем</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">252</context></context-group>
       </trans-unit>
       <trans-unit id="805456636864344681" datatype="html">
@@ -3358,8 +3358,7 @@
       </trans-unit>
       <trans-unit id="7365478703093390233" datatype="html">
         <source>There are no videos available in this playlist.</source>
-        <target state="new"> There are no videos available in this playlist.
-</target>
+        <target state="translated">У цій добірці немає доступних відео.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">37,39</context>
@@ -6961,7 +6960,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4331636419103456800" datatype="html">
         <source>Done!</source>
-        <target state="new">Done!</target>
+        <target state="translated">Готово!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">103</context>
@@ -6974,7 +6973,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7119544246688514254" datatype="html">
         <source>Go to the previous step</source>
-        <target state="new">Go to the previous step</target>
+        <target state="translated">До попереднього кроку</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -6983,7 +6982,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4323994782717641395" datatype="html">
         <source>Go to the next step</source>
-        <target state="new">Go to the next step</target>
+        <target state="translated">До наступного кроку</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -7007,7 +7006,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5659987171239176484" datatype="html">
         <source>Terms of <x id="PH" equiv-text="this.about.instance.name"/></source>
-        <target state="new">Terms of <x id="PH" equiv-text="this.about.instance.name"/></target>
+        <target state="translated">Умови надання послуг <x id="PH" equiv-text="this.about.instance.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -7015,7 +7014,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2573967459337636542" datatype="html">
         <source>Administrators &amp; Sustainability</source>
-        <target state="new">Administrators &amp; Sustainability</target>
+        <target state="translated">Адміністратори та стійкість</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">15</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
@@ -7031,7 +7030,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4376397515999418662" datatype="html">
         <source>This is the name that will be publicly visible by other users.</source>
-        <target state="new">This is the name that will be publicly visible by other users.</target>
+        <target state="translated">Цю назву бачитимуть усі користувачі.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">23</context>
@@ -7039,7 +7038,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1506228075480230031" datatype="html">
         <source>Example: Sweet Melodies</source>
-        <target state="new">Example: Sweet Melodies</target>
+        <target state="translated">Наприклад: Sweet Melodies</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">27</context>
@@ -7047,7 +7046,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1346553616305614767" datatype="html">
         <source>Channel identifier</source>
-        <target state="new">Channel identifier</target>
+        <target state="translated">Ідентифікатор каналу</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">36</context>
@@ -7055,7 +7054,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1421502666684458815" datatype="html">
         <source>This is the name that will be displayed in your profile URL.</source>
-        <target state="new">This is the name that will be displayed in your profile URL.</target>
+        <target state="translated">Ця назва показуватиметься в URL-адресі вашого профілю.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">38</context>
@@ -7063,7 +7062,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5007378598046048755" datatype="html">
         <source>Example: sweetmelodies24</source>
-        <target state="new">Example: sweetmelodies24</target>
+        <target state="translated">Наприклад: sweetmelodies24</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">42</context>
@@ -7071,7 +7070,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6433602064879074151" datatype="html">
         <source>Channel identifier cannot be the same as your account name. You can click on the first step to update your account name.</source>
-        <target state="new"> Channel identifier cannot be the same as your account name. You can click on the first step to update your account name. </target>
+        <target state="translated">Ідентифікатор каналу не може бути таким же, як і ім'я вашого облікового запису. Ви можете натиснути на перший крок, щоб оновити ім'я свого облікового запису.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">50,52</context>
@@ -7096,8 +7095,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1081343670550705648" datatype="html">
         <source>Video uploads are disabled on this instance, hence your account won't be able to upload videos.</source>
-        <target state="new"> Video uploads are disabled on this instance, hence your account won't be able to upload videos.
-</target>
+        <target state="translated">На цьому сервері вимкнено вивантаження відео, тому ваш обліковий запис не зможе вивантажувати відео.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">1,3</context>
@@ -7105,7 +7103,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7657420986523643151" datatype="html">
         <source>Public name</source>
-        <target state="new">Public name</target>
+        <target state="translated">Загальнодоступне ім'я</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">9</context>
@@ -7113,7 +7111,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7536432216862568979" datatype="html">
         <source>This is the name that will be publicly visible by other users.</source>
-        <target state="new"> This is the name that will be publicly visible by other users. </target>
+        <target state="translated">Це ім'я бачитимуть усі користувачі.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -7121,7 +7119,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1926625386720791836" datatype="html">
         <source>Example: John Doe</source>
-        <target state="new">Example: John Doe</target>
+        <target state="translated">Наприклад: John Doe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">17</context>
@@ -7129,7 +7127,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8656171949584591423" datatype="html">
         <source>This is the name that will be displayed in your profile URL.</source>
-        <target state="new"> This is the name that will be displayed in your profile URL. </target>
+        <target state="translated">Це ім'я показуватиметься в URL-адресі вашого профілю.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -7137,7 +7135,7 @@ color: red;
       </trans-unit>
       <trans-unit id="9199457913561943854" datatype="html">
         <source>Example: john_doe58</source>
-        <target state="new">Example: john_doe58</target>
+        <target state="translated">Наприклад: john_doe58</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">34</context>
@@ -7145,7 +7143,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5856397248272246243" datatype="html">
         <source>This email address will be used to validate your account.</source>
-        <target state="new"> This email address will be used to validate your account. </target>
+        <target state="translated">Ця електронна адреса буде використана для підтвердження вашого облікового запису.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">48,50</context>
@@ -7153,7 +7151,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1789116494691736014" datatype="html">
         <source>Request email for account verification</source>
-        <target state="new">Request email for account verification</target>
+        <target state="translated">Запит електронною поштою для підтвердження облікового запису</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -7169,7 +7167,7 @@ color: red;
       </trans-unit>
       <trans-unit id="670353405713142439" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="s=&quot;underline-orange&quot;&gt;"/><x id="INTERPOLATION" equiv-text="&lt;/s"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&gt;"/> &gt; Create an account </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="s=&quot;underline-orange&quot;&gt;"/><x id="INTERPOLATION" equiv-text="&lt;/s"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&gt;"/> &gt; Create an account </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="s=&quot;underline-orange&quot;&gt;"/><x id="INTERPOLATION" equiv-text="&lt;/s"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&gt;"/> &gt; Створити обліковий запис </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">9,12</context>
@@ -7238,7 +7236,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5019568087038659501" datatype="html">
         <source>Federated</source>
-        <target state="new">Federated</target>
+        <target state="translated">Федерація</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="1949800099101277248" datatype="html">
