@@ -4,7 +4,7 @@ import { join } from 'path'
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamDuration } from '@server/helpers/ffmpeg'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
-import { cleanupNormalLive, cleanupPermanentLive, cleanupTMPLiveFiles, LiveSegmentShaStore } from '@server/lib/live'
+import { cleanupUnsavedNormalLive, cleanupPermanentLive, cleanupTMPLiveFiles, LiveSegmentShaStore } from '@server/lib/live'
 import {
   generateHLSMasterPlaylistFilename,
   generateHlsSha256SegmentsFilename,
@@ -22,15 +22,17 @@ import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { MVideo, MVideoLive, MVideoLiveSession, MVideoWithAllFiles } from '@server/types/models'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
-import { logger } from '../../../helpers/logger'
+import { logger, loggerTagsFactory } from '../../../helpers/logger'
+
+const lTags = loggerTagsFactory('live', 'job')
 
 async function processVideoLiveEnding (job: Job) {
   const payload = job.data as VideoLiveEndingPayload
 
-  logger.info('Processing video live ending for %s.', payload.videoId, { payload })
+  logger.info('Processing video live ending for %s.', payload.videoId, { payload, ...lTags() })
 
   function logError () {
-    logger.warn('Video live %d does not exist anymore. Cannot process live ending.', payload.videoId)
+    logger.warn('Video live %d does not exist anymore. Cannot process live ending.', payload.videoId, lTags())
   }
 
   const liveVideo = await VideoModel.load(payload.videoId)
@@ -72,8 +74,6 @@ async function saveReplayToExternalVideo (options: {
   replayDirectory: string
 }) {
   const { liveVideo, liveSession, publishedAt, replayDirectory } = options
-
-  await cleanupTMPLiveFiles(getLiveDirectory(liveVideo))
 
   const video = new VideoModel({
     name: `${liveVideo.name} - ${new Date(publishedAt).toLocaleString()}`,
@@ -243,7 +243,7 @@ async function cleanupLiveAndFederate (options: {
     if (live.permanentLive) {
       await cleanupPermanentLive(video, streamingPlaylist)
     } else {
-      await cleanupNormalLive(video, streamingPlaylist)
+      await cleanupUnsavedNormalLive(video, streamingPlaylist)
     }
   }
 

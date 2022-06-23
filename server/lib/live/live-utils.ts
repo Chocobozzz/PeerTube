@@ -10,20 +10,20 @@ function buildConcatenatedName (segmentOrPlaylistPath: string) {
   return 'concat-' + num[1] + '.ts'
 }
 
-async function cleanupPermanentLive (video: MVideo, streamingPlaylist?: MStreamingPlaylist) {
+async function cleanupPermanentLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
   const hlsDirectory = getLiveDirectory(video)
 
   await cleanupTMPLiveFiles(hlsDirectory)
 
-  if (streamingPlaylist) await streamingPlaylist.destroy()
+  await streamingPlaylist.destroy()
 }
 
-async function cleanupNormalLive (video: MVideo, streamingPlaylist?: MStreamingPlaylist) {
+async function cleanupUnsavedNormalLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {
   const hlsDirectory = getLiveDirectory(video)
 
   await remove(hlsDirectory)
 
-  if (streamingPlaylist) await streamingPlaylist.destroy()
+  await streamingPlaylist.destroy()
 }
 
 async function cleanupTMPLiveFiles (hlsDirectory: string) {
@@ -49,7 +49,7 @@ async function cleanupTMPLiveFiles (hlsDirectory: string) {
 
 export {
   cleanupPermanentLive,
-  cleanupNormalLive,
+  cleanupUnsavedNormalLive,
   cleanupTMPLiveFiles,
   buildConcatenatedName
 }

@@ -865,7 +865,7 @@ if (isTestInstance() === true) {
 
   PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME = 5000
 
-  VIDEO_LIVE.CLEANUP_DELAY = 5000
+  VIDEO_LIVE.CLEANUP_DELAY = getIntEnv('PEERTUBE_TEST_CONSTANTS.VIDEO_LIVE.CLEANUP_DELAY') ?? 5000
   VIDEO_LIVE.SEGMENT_TIME_SECONDS.DEFAULT_LATENCY = 2
   VIDEO_LIVE.SEGMENT_TIME_SECONDS.SMALL_LATENCY = 1
   VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION = 1
@@ -1173,4 +1173,10 @@ function buildLanguages () {
 
 function generateContentHash () {
   return randomBytes(20).toString('hex')
+}
+
+function getIntEnv (path: string) {
+  if (process.env[path]) return parseInt(process.env[path])
+
+  return undefined
 }
