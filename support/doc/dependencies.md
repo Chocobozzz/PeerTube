@@ -143,7 +143,12 @@ sudo systemctl enable --now postgresql
 
 3. Install or compile ffmpeg:
 
-* Install - [https://linuxize.com/post/how-to-install-ffmpeg-on-centos-8/](https://linuxize.com/post/how-to-install-ffmpeg-on-centos-8/)
+```
+sudo dnf install epel-release dnf-utils
+sudo yum-config-manager --set-enabled powertools
+sudo yum-config-manager --add-repo=https://negativo17.org/repos/epel-multimedia.repo
+sudo dnf install ffmpeg
+```
 
 4. Install packages:
 
@@ -151,7 +156,7 @@ sudo systemctl enable --now postgresql
 sudo dnf update
 sudo dnf install epel-release
 sudo dnf update
-sudo dnf install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git
+sudo dnf install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git unzip
 ```
 
 5. You'll need a symlink for python3 to python for youtube-dl to work
