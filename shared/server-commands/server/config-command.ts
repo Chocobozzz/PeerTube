@@ -39,15 +39,18 @@ export class ConfigCommand extends AbstractCommand {
   enableLive (options: {
     allowReplay?: boolean
     transcoding?: boolean
+    resolutions?: 'min' | 'max' // Default max
   } = {}) {
+    const { allowReplay, transcoding, resolutions = 'max' } = options
+
     return this.updateExistingSubConfig({
       newConfig: {
         live: {
           enabled: true,
-          allowReplay: options.allowReplay ?? true,
+          allowReplay: allowReplay ?? true,
           transcoding: {
-            enabled: options.transcoding ?? true,
-            resolutions: ConfigCommand.getCustomConfigResolutions(true)
+            enabled: transcoding ?? true,
+            resolutions: ConfigCommand.getCustomConfigResolutions(resolutions === 'max')
           }
         }
       }

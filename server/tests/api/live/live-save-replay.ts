@@ -12,7 +12,6 @@ import {
   createMultipleServers,
   doubleFollow,
   findExternalSavedVideo,
-  makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -441,46 +440,6 @@ describe('Save replay setting', function () {
 
       await checkVideosExist(liveVideoUUID, false, HttpStatusCode.NOT_FOUND_404)
       await checkLiveCleanup(servers[0], liveVideoUUID, [])
-    })
-
-    it('Should correctly save replays with multiple sessions', async function () {
-      this.timeout(120000)
-
-      liveVideoUUID = await createLiveWrapper({ permanent: true, replay: true })
-      await waitJobs(servers)
-
-      // Streaming session #1
-      ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
-      await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
-      await stopFfmpeg(ffmpegCommand)
-      await servers[0].live.waitUntilWaiting({ videoId: liveVideoUUID })
-
-      // Streaming session #2
-      ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveVideoUUID })
-      await waitUntilLivePublishedOnAllServers(servers, liveVideoUUID)
-
-      await wait(5000)
-      const video = await servers[0].videos.get({ id: liveVideoUUID })
-      expect(video.streamingPlaylists).to.have.lengthOf(1)
-      await makeRawRequest(video.streamingPlaylists[0].playlistUrl)
-
-      await stopFfmpeg(ffmpegCommand)
-      await waitUntilLiveWaitingOnAllServers(servers, liveVideoUUID)
-
-      // Wait for replays
-      await waitJobs(servers)
-
-      const { total, data: sessions } = await servers[0].live.listSessions({ videoId: liveVideoUUID })
-
-      expect(total).to.equal(2)
-      expect(sessions).to.have.lengthOf(2)
-
-      for (const session of sessions) {
-        expect(session.error).to.be.null
-        expect(session.replayVideo).to.exist
-
-        await servers[0].videos.get({ id: session.replayVideo.uuid })
-      }
     })
   })
 

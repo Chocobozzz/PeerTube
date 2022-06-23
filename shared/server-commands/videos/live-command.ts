@@ -154,13 +154,33 @@ export class LiveCommand extends AbstractCommand {
 
   waitUntilSegmentGeneration (options: OverrideCommandOptions & {
     videoUUID: string
-    resolution: number
+    playlistNumber: number
+    segment: number
+    totalSessions?: number
+  }) {
+    const { playlistNumber, segment, videoUUID, totalSessions = 1 } = options
+    const segmentName = `${playlistNumber}-00000${segment}.ts`
+
+    return this.server.servers.waitUntilLog(`${videoUUID}/${segmentName}`, totalSessions * 2, false)
+  }
+
+  getSegment (options: OverrideCommandOptions & {
+    videoUUID: string
+    playlistNumber: number
     segment: number
   }) {
-    const { resolution, segment, videoUUID } = options
-    const segmentName = `${resolution}-00000${segment}.ts`
+    const { playlistNumber, segment, videoUUID } = options
 
-    return this.server.servers.waitUntilLog(`${videoUUID}/${segmentName}`, 2, false)
+    const segmentName = `${playlistNumber}-00000${segment}.ts`
+    const url = `${this.server.url}/static/streaming-playlists/hls/${videoUUID}/${segmentName}`
+
+    return this.getRawRequest({
+      ...options,
+
+      url,
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
   }
 
   async waitUntilReplacedByReplay (options: OverrideCommandOptions & {

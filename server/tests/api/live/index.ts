@@ -1,4 +1,5 @@
 import './live-constraints'
+import './live-fast-restream'
 import './live-socket-messages'
 import './live-permanent'
 import './live-rtmps'

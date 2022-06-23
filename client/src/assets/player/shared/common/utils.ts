@@ -4,17 +4,15 @@ function toTitleCase (str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
-// https://github.com/danrevah/ngx-pipes/blob/master/src/pipes/math/bytes.ts
-// Don't import all Angular stuff, just copy the code with shame
-const dictionaryBytes: Array<{max: number, type: string}> = [
-  { max: 1024, type: 'B' },
-  { max: 1048576, type: 'KB' },
-  { max: 1073741824, type: 'MB' },
-  { max: 1.0995116e12, type: 'GB' }
+const dictionaryBytes = [
+  { max: 1024, type: 'B', decimals: 0 },
+  { max: 1048576, type: 'KB', decimals: 0 },
+  { max: 1073741824, type: 'MB', decimals: 0 },
+  { max: 1.0995116e12, type: 'GB', decimals: 1 }
 ]
 function bytes (value: number) {
   const format = dictionaryBytes.find(d => value < d.max) || dictionaryBytes[dictionaryBytes.length - 1]
-  const calc = Math.floor(value / (format.max / 1024)).toString()
+  const calc = (value / (format.max / 1024)).toFixed(format.decimals)
 
   return [ calc, format.type ]
 }
