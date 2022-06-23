@@ -45,8 +45,9 @@ export class TagModel extends Model<Partial<AttributesOnly<TagModel>>> {
   static findOrCreateTags (tags: string[], transaction: Transaction): Promise<MTag[]> {
     if (tags === null) return Promise.resolve([])
 
-    const tasks: Promise<MTag>[] = []
-    tags.forEach(tag => {
+    const uniqueTags = new Set(tags)
+
+    const tasks = Array.from(uniqueTags).map(tag => {
       const query = {
         where: {
           name: tag
@@ -57,9 +58,8 @@ export class TagModel extends Model<Partial<AttributesOnly<TagModel>>> {
         transaction
       }
 
-      const promise = TagModel.findOrCreate<MTag>(query)
+      return TagModel.findOrCreate<MTag>(query)
         .then(([ tagInstance ]) => tagInstance)
-      tasks.push(promise)
     })
 
     return Promise.all(tasks)
