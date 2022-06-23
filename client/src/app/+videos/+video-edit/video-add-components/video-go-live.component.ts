@@ -7,7 +7,7 @@ import { FormValidatorService } from '@app/shared/shared-forms'
 import { Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
+import { LiveVideo, LiveVideoCreate, LiveVideoLatencyMode, LiveVideoUpdate, PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
 import { VideoSend } from './video-send'
 
 @Component({
@@ -71,12 +71,13 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
       nsfw: this.serverConfig.instance.isNSFW,
       waitTranscoding: true,
       permanentLive: this.firstStepPermanentLive,
+      latencyMode: LiveVideoLatencyMode.DEFAULT,
       saveReplay: this.isReplayAllowed(),
       channelId: this.firstStepChannelId
     }
 
     // Go live in private mode, but correctly fill the update form with the first user choice
-    const toPatch = Object.assign({}, video, { privacy: this.firstStepPrivacyId })
+    const toPatch = { ...video, privacy: this.firstStepPrivacyId }
     this.form.patchValue(toPatch)
 
     this.liveVideoService.goLive(video)
@@ -121,6 +122,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
 
     const liveVideoUpdate: LiveVideoUpdate = {
       saveReplay: this.form.value.saveReplay,
+      latencyMode: this.form.value.latencyMode,
       permanentLive: this.form.value.permanentLive
     }
 
