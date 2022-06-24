@@ -4,13 +4,8 @@ import { join } from 'path'
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamDuration } from '@server/helpers/ffmpeg'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
-import { cleanupUnsavedNormalLive, cleanupPermanentLive, cleanupTMPLiveFiles, LiveSegmentShaStore } from '@server/lib/live'
-import {
-  generateHLSMasterPlaylistFilename,
-  generateHlsSha256SegmentsFilename,
-  getLiveDirectory,
-  getLiveReplayBaseDirectory
-} from '@server/lib/paths'
+import { cleanupPermanentLive, cleanupTMPLiveFiles, cleanupUnsavedNormalLive } from '@server/lib/live'
+import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getLiveReplayBaseDirectory } from '@server/lib/paths'
 import { generateVideoMiniature } from '@server/lib/thumbnail'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/transcoding'
 import { moveToNextState } from '@server/lib/video-state'
@@ -43,8 +38,6 @@ async function processVideoLiveEnding (job: Job) {
     logError()
     return
   }
-
-  LiveSegmentShaStore.Instance.cleanupShaSegments(liveVideo.uuid)
 
   if (live.saveReplay !== true) {
     return cleanupLiveAndFederate({ live, video: liveVideo, streamingPlaylistId: payload.streamingPlaylistId })
@@ -137,7 +130,7 @@ async function replaceLiveByReplay (options: {
 }) {
   const { liveVideo, liveSession, live, replayDirectory } = options
 
-  await cleanupTMPLiveFiles(getLiveDirectory(liveVideo))
+  await cleanupTMPLiveFiles(liveVideo)
 
   await live.destroy()
 
