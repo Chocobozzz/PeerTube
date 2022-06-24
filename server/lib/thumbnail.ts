@@ -1,13 +1,13 @@
 import { join } from 'path'
 import { ThumbnailType } from '@shared/models'
 import { generateImageFilename, generateImageFromVideoFile, processImage } from '../helpers/image-utils'
-import { downloadImage } from '../helpers/requests'
 import { CONFIG } from '../initializers/config'
 import { ASSETS_PATH, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '../initializers/constants'
 import { ThumbnailModel } from '../models/video/thumbnail'
 import { MVideoFile, MVideoThumbnail, MVideoUUID } from '../types/models'
 import { MThumbnail } from '../types/models/video/thumbnail'
 import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist'
+import { downloadImageFromWorker } from './local-actor'
 import { VideoPathManager } from './video-path-manager'
 
 type ImageSize = { height?: number, width?: number }
@@ -49,7 +49,10 @@ function updatePlaylistMiniatureFromUrl (options: {
     ? null
     : downloadUrl
 
-  const thumbnailCreator = () => downloadImage(downloadUrl, basePath, filename, { width, height })
+  const thumbnailCreator = () => {
+    return downloadImageFromWorker({ url: downloadUrl, destDir: basePath, destName: filename, size: { width, height } })
+  }
+
   return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
 }
 
@@ -75,7 +78,9 @@ function updateVideoMiniatureFromUrl (options: {
     : existingThumbnail.filename
 
   const thumbnailCreator = () => {
-    if (thumbnailUrlChanged) return downloadImage(downloadUrl, basePath, filename, { width, height })
+    if (thumbnailUrlChanged) {
+      return downloadImageFromWorker({ url: downloadUrl, destDir: basePath, destName: filename, size: { width, height } })
+    }
 
     return Promise.resolve()
   }

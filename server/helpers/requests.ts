@@ -1,11 +1,8 @@
 import { createWriteStream, remove } from 'fs-extra'
 import got, { CancelableRequest, NormalizedOptions, Options as GotOptions, RequestError, Response } from 'got'
 import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
-import { join } from 'path'
-import { CONFIG } from '../initializers/config'
 import { ACTIVITY_PUB, BINARY_CONTENT_TYPES, PEERTUBE_VERSION, REQUEST_TIMEOUTS, WEBSERVER } from '../initializers/constants'
 import { pipelinePromise } from './core-utils'
-import { processImage } from './image-utils'
 import { logger, loggerTagsFactory } from './logger'
 import { getProxy, isProxyEnabled } from './proxy'
 
@@ -147,21 +144,6 @@ async function doRequestAndSaveToFile (
   }
 }
 
-async function downloadImage (url: string, destDir: string, destName: string, size: { width: number, height: number }) {
-  const tmpPath = join(CONFIG.STORAGE.TMP_DIR, 'pending-' + destName)
-  await doRequestAndSaveToFile(url, tmpPath)
-
-  const destPath = join(destDir, destName)
-
-  try {
-    await processImage(tmpPath, destPath, size)
-  } catch (err) {
-    await remove(tmpPath)
-
-    throw err
-  }
-}
-
 function getAgent () {
   if (!isProxyEnabled()) return {}
 
@@ -211,7 +193,6 @@ export {
   doJSONRequest,
   doRequestAndSaveToFile,
   isBinaryResponse,
-  downloadImage,
   getAgent,
   findLatestRedirection,
   peertubeGot

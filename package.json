@@ -137,6 +137,7 @@
     "password-generator": "^2.0.2",
     "pem": "^1.12.3",
     "pg": "^8.2.1",
+    "piscina": "^3.2.0",
     "prompt": "^1.0.0",
     "proxy-addr": "^2.0.7",
     "pug": "^3.0.0",

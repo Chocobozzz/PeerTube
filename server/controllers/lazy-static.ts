@@ -6,7 +6,7 @@ import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { logger } from '../helpers/logger'
 import { ACTOR_IMAGES_SIZE, LAZY_STATIC_PATHS, STATIC_MAX_AGE } from '../initializers/constants'
 import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
-import { actorImagePathUnsafeCache, pushActorImageProcessInQueue } from '../lib/local-actor'
+import { actorImagePathUnsafeCache, downloadActorImageFromWorker } from '../lib/local-actor'
 import { asyncMiddleware } from '../middlewares'
 import { ActorImageModel } from '../models/actor/actor-image'
 
@@ -65,7 +65,7 @@ async function getActorImage (req: express.Request, res: express.Response, next:
     logger.info('Lazy serve remote actor image %s.', image.fileUrl)
 
     try {
-      await pushActorImageProcessInQueue({
+      await downloadActorImageFromWorker({
         filename: image.filename,
         fileUrl: image.fileUrl,
         size: getActorImageSize(image),
