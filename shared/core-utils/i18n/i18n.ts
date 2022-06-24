@@ -33,6 +33,7 @@ export const I18N_LOCALES = {
   'nb-NO': 'norsk bokmål',
   'th-TH': 'ไทย',
   'vi-VN': 'Tiếng Việt',
+  'tok': 'Toki Pona',
   'zh-Hans-CN': '简体中文（中国）',
   'zh-Hant-TW': '繁體中文（台灣）'
 }

@@ -133,6 +133,10 @@
             "translation": "src/locale/angular.nb-NO.xlf",
             "baseHref": "/client/nb-NO/"
           },
+          "tok": {
+            "translation": "src/locale/angular.tok.xlf",
+            "baseHref": "/client/tok/"
+          },
           "nn": {
             "translation": "src/locale/angular.nn.xlf",
             "baseHref": "/client/nn/"

@@ -36,6 +36,7 @@ languages=(
     ["de"]="de-DE"
     ["it"]="it-IT"
     ["sq"]="sq"
+    ["tok"]="tok"
     ["nn"]="nn"
     ["nb"]="nb-NO"
     ["kab"]="kab"
