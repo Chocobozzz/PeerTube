@@ -54,6 +54,6 @@ export class LiveStreamInformationComponent {
       .subscribe(live => this.live = live)
 
     this.liveVideoService.listSessions(video.id)
-      .subscribe(({ data }) => this.latestLiveSessions = data.slice(0, 5))
+      .subscribe(({ data }) => this.latestLiveSessions = data.reverse().slice(0, 5))
   }
 }
