@@ -1158,6 +1158,7 @@ function buildLanguages () {
   // Override Occitan label
   languages['oc'] = 'Occitan'
   languages['el'] = 'Greek'
+  languages['tok'] = 'Toki Pona'
 
   // Chinese languages
   languages['zh-Hans'] = 'Simplified Chinese'
