@@ -102,7 +102,7 @@ describe('Fast restream in live', function () {
   before(async function () {
     this.timeout(120000)
 
-    const env = { 'PEERTUBE_TEST_CONSTANTS_VIDEO_LIVE_CLEANUP_DELAY': '10000' }
+    const env = { PEERTUBE_TEST_CONSTANTS_VIDEO_LIVE_CLEANUP_DELAY: '10000' }
     server = await createSingleServer(1, {}, { env })
 
     // Get the access tokens
