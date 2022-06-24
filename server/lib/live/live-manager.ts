@@ -27,7 +27,6 @@ import { JobQueue } from '../job-queue'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getLiveReplayBaseDirectory } from '../paths'
 import { PeerTubeSocket } from '../peertube-socket'
 import { LiveQuotaStore } from './live-quota-store'
-import { LiveSegmentShaStore } from './live-segment-sha-store'
 import { cleanupPermanentLive } from './live-utils'
 import { MuxingSession } from './shared'
 
@@ -219,9 +218,7 @@ class LiveManager {
       return this.abortSession(sessionId)
     }
 
-    // Cleanup old potential live files (could happen with a permanent live)
-    LiveSegmentShaStore.Instance.cleanupShaSegments(video.uuid)
-
+    // Cleanup old potential live (could happen with a permanent live)
     const oldStreamingPlaylist = await VideoStreamingPlaylistModel.loadHLSPlaylistByVideo(video.id)
     if (oldStreamingPlaylist) {
       if (!videoLive.permanentLive) throw new Error('Found previous session in a non permanent live: ' + video.uuid)

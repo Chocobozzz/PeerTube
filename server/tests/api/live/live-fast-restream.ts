@@ -57,13 +57,14 @@ describe('Fast restream in live', function () {
   }
 
   async function ensureLastLiveWorks (liveId: string) {
-    // Equivalent to PEERTUBE_TEST_CONSTANTS.VIDEO_LIVE.CLEANUP_DELAY
+    // Equivalent to PEERTUBE_TEST_CONSTANTS_VIDEO_LIVE_CLEANUP_DELAY
     for (let i = 0; i < 100; i++) {
       const video = await server.videos.get({ id: liveId })
       expect(video.streamingPlaylists).to.have.lengthOf(1)
 
       await server.live.getSegment({ videoUUID: liveId, segment: 0, playlistNumber: 0 })
       await makeRawRequest(video.streamingPlaylists[0].playlistUrl, HttpStatusCode.OK_200)
+      await makeRawRequest(video.streamingPlaylists[0].segmentsSha256Url, HttpStatusCode.OK_200)
 
       await wait(100)
     }
@@ -101,7 +102,7 @@ describe('Fast restream in live', function () {
   before(async function () {
     this.timeout(120000)
 
-    const env = { 'PEERTUBE_TEST_CONSTANTS.VIDEO_LIVE.CLEANUP_DELAY': '10000' }
+    const env = { 'PEERTUBE_TEST_CONSTANTS_VIDEO_LIVE_CLEANUP_DELAY': '10000' }
     server = await createSingleServer(1, {}, { env })
 
     // Get the access tokens
