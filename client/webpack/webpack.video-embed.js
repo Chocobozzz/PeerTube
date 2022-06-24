@@ -188,6 +188,7 @@ module.exports = function () {
             ecma: 6,
             warnings: false,
             ie8: false,
+            safari10: true,
             mangle: true,
             compress: {
               passes: 3,
