@@ -176,12 +176,12 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
 
   private addCommentReply (commentCreate: VideoCommentCreate) {
     return this.videoCommentService
-      .addCommentReply(this.video.id, this.parentComment.id, commentCreate)
+      .addCommentReply(this.video.uuid, this.parentComment.id, commentCreate)
   }
 
   private addCommentThread (commentCreate: VideoCommentCreate) {
     return this.videoCommentService
-      .addCommentThread(this.video.id, commentCreate)
+      .addCommentThread(this.video.uuid, commentCreate)
   }
 
   private initTextValue () {

@@ -18,7 +18,7 @@ export class VideoCaptionService {
     private restExtractor: RestExtractor
   ) {}
 
-  listCaptions (videoId: number | string): Observable<ResultList<VideoCaption>> {
+  listCaptions (videoId: string): Observable<ResultList<VideoCaption>> {
     return this.authHttp.get<ResultList<VideoCaption>>(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions`)
                .pipe(
                  switchMap(captionsResult => {

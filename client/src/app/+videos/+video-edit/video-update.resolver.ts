@@ -39,7 +39,7 @@ export class VideoUpdateResolver implements Resolve<any> {
       listUserChannelsForSelect(this.authService),
 
       this.videoCaptionService
-        .listCaptions(video.id)
+        .listCaptions(video.uuid)
         .pipe(
           map(result => result.data)
         ),

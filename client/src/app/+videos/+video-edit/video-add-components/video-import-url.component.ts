@@ -78,7 +78,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
         .pipe(
           switchMap(res => {
             return this.videoCaptionService
-                .listCaptions(res.video.id)
+                .listCaptions(res.video.uuid)
                 .pipe(
                   map(result => ({ video: res.video, videoCaptions: result.data }))
                 )

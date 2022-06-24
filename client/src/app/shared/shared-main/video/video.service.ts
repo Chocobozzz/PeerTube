@@ -338,19 +338,19 @@ export class VideoService {
                )
   }
 
-  setVideoLike (id: number) {
+  setVideoLike (id: string) {
     return this.setVideoRate(id, 'like')
   }
 
-  setVideoDislike (id: number) {
+  setVideoDislike (id: string) {
     return this.setVideoRate(id, 'dislike')
   }
 
-  unsetVideoLike (id: number) {
+  unsetVideoLike (id: string) {
     return this.setVideoRate(id, 'none')
   }
 
-  getUserVideoRating (id: number) {
+  getUserVideoRating (id: string) {
     const url = UserService.BASE_USERS_URL + 'me/videos/' + id + '/rating'
 
     return this.authHttp.get<UserVideoRate>(url)
@@ -466,7 +466,7 @@ export class VideoService {
     }
   }
 
-  private setVideoRate (id: number, rateType: UserVideoRateType) {
+  private setVideoRate (id: string, rateType: UserVideoRateType) {
     const url = `${VideoService.BASE_VIDEO_URL}/${id}/rate`
     const body: UserVideoRateUpdate = {
       rating: rateType

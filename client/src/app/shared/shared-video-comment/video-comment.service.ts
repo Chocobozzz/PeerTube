@@ -31,7 +31,7 @@ export class VideoCommentService {
     private restService: RestService
   ) {}
 
-  addCommentThread (videoId: number | string, comment: VideoCommentCreate) {
+  addCommentThread (videoId: string, comment: VideoCommentCreate) {
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comment-threads'
     const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
@@ -42,7 +42,7 @@ export class VideoCommentService {
                )
   }
 
-  addCommentReply (videoId: number | string, inReplyToCommentId: number, comment: VideoCommentCreate) {
+  addCommentReply (videoId: string, inReplyToCommentId: number, comment: VideoCommentCreate) {
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comments/' + inReplyToCommentId
     const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
@@ -75,7 +75,7 @@ export class VideoCommentService {
   }
 
   getVideoCommentThreads (parameters: {
-    videoId: number | string
+    videoId: string
     componentPagination: ComponentPaginationLight
     sort: string
   }): Observable<ThreadsResultList<VideoComment>> {
@@ -95,7 +95,7 @@ export class VideoCommentService {
   }
 
   getVideoThreadComments (parameters: {
-    videoId: number | string
+    videoId: string
     threadId: number
   }): Observable<VideoCommentThreadTree> {
     const { videoId, threadId } = parameters

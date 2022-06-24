@@ -78,7 +78,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     this.threadLoading[commentId] = true
 
     const params = {
-      videoId: this.video.id,
+      videoId: this.video.uuid,
       threadId: commentId
     }
 
@@ -110,7 +110,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   loadMoreThreads () {
     const params = {
-      videoId: this.video.id,
+      videoId: this.video.uuid,
       componentPagination: this.componentPagination,
       sort: this.sort
     }
