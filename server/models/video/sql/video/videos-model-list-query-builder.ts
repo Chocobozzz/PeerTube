@@ -1,6 +1,8 @@
-import { VideoInclude } from '@shared/models'
+import { pick } from 'lodash'
 import { Sequelize } from 'sequelize'
+import { VideoInclude } from '@shared/models'
 import { AbstractVideoQueryBuilder } from './shared/abstract-video-query-builder'
+import { VideoFileQueryBuilder } from './shared/video-file-query-builder'
 import { VideoModelBuilder } from './shared/video-model-builder'
 import { BuildVideosListQueryOptions, VideosIdListQueryBuilder } from './videos-id-list-query-builder'
 
@@ -16,20 +18,46 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
   private innerQuery: string
   private innerSort: string
 
+  webtorrentFilesQueryBuilder: VideoFileQueryBuilder
+  streamingPlaylistFilesQueryBuilder: VideoFileQueryBuilder
+
   private readonly videoModelBuilder: VideoModelBuilder
 
   constructor (protected readonly sequelize: Sequelize) {
     super(sequelize, 'list')
 
     this.videoModelBuilder = new VideoModelBuilder(this.mode, this.tables)
+    this.webtorrentFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
+    this.streamingPlaylistFilesQueryBuilder = new VideoFileQueryBuilder(sequelize)
   }
 
-  queryVideos (options: BuildVideosListQueryOptions) {
+  async queryVideos (options: BuildVideosListQueryOptions) {
     this.buildInnerQuery(options)
     this.buildMainQuery(options)
 
-    return this.runQuery()
-      .then(rows => this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include }))
+    const rows = await this.runQuery()
+
+    if (options.include & VideoInclude.FILES) {
+      const videoIds = Array.from(new Set(rows.map(r => r.id)))
+
+      if (videoIds.length !== 0) {
+        const fileQueryOptions = {
+          ...pick(options, [ 'transaction', 'logging' ]),
+
+          ids: videoIds,
+          includeRedundancy: false
+        }
+
+        const [ rowsWebTorrentFiles, rowsStreamingPlaylist ] = await Promise.all([
+          this.webtorrentFilesQueryBuilder.queryWebTorrentVideos(fileQueryOptions),
+          this.streamingPlaylistFilesQueryBuilder.queryStreamingPlaylistVideos(fileQueryOptions)
+        ])
+
+        return this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include, rowsStreamingPlaylist, rowsWebTorrentFiles })
+      }
+    }
+
+    return this.videoModelBuilder.buildVideosFromRows({ rows, include: options.include })
   }
 
   private buildInnerQuery (options: BuildVideosListQueryOptions) {
@@ -51,11 +79,6 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
     this.includeChannels()
     this.includeAccounts()
     this.includeThumbnails()
-
-    if (options.include & VideoInclude.FILES) {
-      this.includeWebtorrentFiles()
-      this.includeStreamingPlaylistFiles()
-    }
 
     if (options.user) {
       this.includeUserHistory(options.user.id)

@@ -1,3 +1,4 @@
+import { pick } from 'lodash'
 import { Sequelize, Transaction } from 'sequelize'
 import { AbstractVideoQueryBuilder } from './shared/abstract-video-query-builder'
 import { VideoFileQueryBuilder } from './shared/video-file-query-builder'
@@ -50,15 +51,21 @@ export class VideoModelGetQueryBuilder {
   }
 
   async queryVideo (options: BuildVideoGetQueryOptions) {
+    const fileQueryOptions = {
+      ...pick(options, [ 'id', 'url', 'transaction', 'logging' ]),
+
+      includeRedundancy: this.shouldIncludeRedundancies(options)
+    }
+
     const [ videoRows, webtorrentFilesRows, streamingPlaylistFilesRows ] = await Promise.all([
       this.videoQueryBuilder.queryVideos(options),
 
       VideoModelGetQueryBuilder.videoFilesInclude.has(options.type)
-        ? this.webtorrentFilesQueryBuilder.queryWebTorrentVideos(options)
+        ? this.webtorrentFilesQueryBuilder.queryWebTorrentVideos(fileQueryOptions)
         : Promise.resolve(undefined),
 
       VideoModelGetQueryBuilder.videoFilesInclude.has(options.type)
-        ? this.streamingPlaylistFilesQueryBuilder.queryStreamingPlaylistVideos(options)
+        ? this.streamingPlaylistFilesQueryBuilder.queryStreamingPlaylistVideos(fileQueryOptions)
         : Promise.resolve(undefined)
     ])
 
@@ -75,6 +82,10 @@ export class VideoModelGetQueryBuilder {
     if (videos.length === 0) return null
 
     return videos[0]
+  }
+
+  private shouldIncludeRedundancies (options: BuildVideoGetQueryOptions) {
+    return options.type === 'api'
   }
 }
 

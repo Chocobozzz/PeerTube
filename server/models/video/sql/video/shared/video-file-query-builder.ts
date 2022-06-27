@@ -1,6 +1,16 @@
-import { Sequelize } from 'sequelize'
-import { BuildVideoGetQueryOptions } from '../video-model-get-query-builder'
+import { Sequelize, Transaction } from 'sequelize'
 import { AbstractVideoQueryBuilder } from './abstract-video-query-builder'
+
+export type FileQueryOptions = {
+  id?: string | number
+  url?: string
+
+  includeRedundancy: boolean
+
+  transaction?: Transaction
+
+  logging?: boolean
+}
 
 /**
  *
@@ -15,26 +25,26 @@ export class VideoFileQueryBuilder extends AbstractVideoQueryBuilder {
     super(sequelize, 'get')
   }
 
-  queryWebTorrentVideos (options: BuildVideoGetQueryOptions) {
+  queryWebTorrentVideos (options: FileQueryOptions) {
     this.buildWebtorrentFilesQuery(options)
 
     return this.runQuery(options)
   }
 
-  queryStreamingPlaylistVideos (options: BuildVideoGetQueryOptions) {
+  queryStreamingPlaylistVideos (options: FileQueryOptions) {
     this.buildVideoStreamingPlaylistFilesQuery(options)
 
     return this.runQuery(options)
   }
 
-  private buildWebtorrentFilesQuery (options: BuildVideoGetQueryOptions) {
+  private buildWebtorrentFilesQuery (options: FileQueryOptions) {
     this.attributes = {
       '"video"."id"': ''
     }
 
     this.includeWebtorrentFiles()
 
-    if (this.shouldIncludeRedundancies(options)) {
+    if (options.includeRedundancy) {
       this.includeWebTorrentRedundancies()
     }
 
@@ -43,14 +53,14 @@ export class VideoFileQueryBuilder extends AbstractVideoQueryBuilder {
     this.query = this.buildQuery()
   }
 
-  private buildVideoStreamingPlaylistFilesQuery (options: BuildVideoGetQueryOptions) {
+  private buildVideoStreamingPlaylistFilesQuery (options: FileQueryOptions) {
     this.attributes = {
       '"video"."id"': ''
     }
 
     this.includeStreamingPlaylistFiles()
 
-    if (this.shouldIncludeRedundancies(options)) {
+    if (options.includeRedundancy) {
       this.includeStreamingPlaylistRedundancies()
     }
 
@@ -61,9 +71,5 @@ export class VideoFileQueryBuilder extends AbstractVideoQueryBuilder {
 
   private buildQuery () {
     return `${this.buildSelect()} FROM "video" ${this.joins} ${this.where}`
-  }
-
-  private shouldIncludeRedundancies (options: BuildVideoGetQueryOptions) {
-    return options.type === 'api'
   }
 }

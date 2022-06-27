@@ -313,7 +313,12 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     return result
   }
 
-  protected whereId (options: { id?: string | number, url?: string }) {
+  protected whereId (options: { ids?: number[], id?: string | number, url?: string }) {
+    if (options.ids) {
+      this.where = `WHERE "video"."id" IN (${createSafeIn(this.sequelize, options.ids)})`
+      return
+    }
+
     if (options.url) {
       this.where = 'WHERE "video"."url" = :videoUrl'
       this.replacements.videoUrl = options.url
