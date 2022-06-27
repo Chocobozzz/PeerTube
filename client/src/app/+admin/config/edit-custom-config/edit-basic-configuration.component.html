@@ -17,7 +17,7 @@
             <select formControlName="default" id="themeDefault" class="form-control">
               <option i18n value="default">{{ getDefaultThemeLabel() }}</option>
 
-              <option *ngFor="let theme of getAvailableThemes()" [value]="theme">{{ theme }}</option>
+              <option *ngFor="let theme of availableThemes" [value]="theme.id">{{ theme.label }}</option>
             </select>
           </div>
         </div>

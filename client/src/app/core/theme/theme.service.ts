@@ -49,9 +49,9 @@ export class ThemeService {
     return $localize`Light/Orange`
   }
 
-  getAvailableThemeLabels () {
+  buildAvailableThemes () {
     return this.serverConfig.theme.registered
-               .map(t => capitalizeFirstLetter(t.name))
+               .map(t => ({ id: t.name, label: capitalizeFirstLetter(t.name) }))
   }
 
   private injectThemes (themes: ServerConfigTheme[], fromLocalStorage = false) {

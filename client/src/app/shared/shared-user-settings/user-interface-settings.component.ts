@@ -3,6 +3,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { AuthService, Notifier, ServerService, ThemeService, UserService } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { HTMLServerConfig, User, UserUpdateMe } from '@shared/models'
+import { SelectOptionsItem } from 'src/types'
 
 @Component({
   selector: 'my-user-interface-settings',
@@ -15,6 +16,7 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
   @Input() notifyOnUpdate = true
   @Input() userInformationLoaded: Subject<any>
 
+  availableThemes: SelectOptionsItem[]
   formValuesWatcher: Subscription
 
   private serverConfig: HTMLServerConfig
@@ -36,6 +38,8 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
 
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
+
+    this.availableThemes = this.themeService.buildAvailableThemes()
 
     this.buildForm({
       theme: null
@@ -59,10 +63,6 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
 
   getDefaultThemeLabel () {
     return this.themeService.getDefaultThemeLabel()
-  }
-
-  getAvailableThemes () {
-    return this.themeService.getAvailableThemeLabels()
   }
 
   getDefaultInstanceThemeLabel () {

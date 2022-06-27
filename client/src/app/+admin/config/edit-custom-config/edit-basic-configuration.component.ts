@@ -19,6 +19,7 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
 
   signupAlertMessage: string
   defaultLandingPageOptions: SelectOptionsItem[] = []
+  availableThemes: SelectOptionsItem[]
 
   constructor (
     private configService: ConfigService,
@@ -29,6 +30,8 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   ngOnInit () {
     this.buildLandingPageOptions()
     this.checkSignupField()
+
+    this.availableThemes = this.themeService.buildAvailableThemes()
   }
 
   ngOnChanges (changes: SimpleChanges) {
@@ -47,10 +50,6 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
 
   getVideoQuotaDailyOptions () {
     return this.configService.videoQuotaDailyOptions
-  }
-
-  getAvailableThemes () {
-    return this.themeService.getAvailableThemeLabels()
   }
 
   doesTrendingVideosAlgorithmsEnabledInclude (algorithm: string) {
