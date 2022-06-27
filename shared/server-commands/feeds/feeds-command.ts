@@ -1,4 +1,4 @@
-
+import { buildUUID } from '@shared/extra-utils'
 import { HttpStatusCode } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
@@ -8,16 +8,22 @@ export class FeedCommand extends AbstractCommand {
 
   getXML (options: OverrideCommandOptions & {
     feed: FeedType
+    ignoreCache: boolean
     format?: string
   }) {
-    const { feed, format } = options
+    const { feed, format, ignoreCache } = options
     const path = '/feeds/' + feed + '.xml'
+
+    const query: { [id: string]: string } = {}
+
+    if (ignoreCache) query.v = buildUUID()
+    if (format) query.format = format
 
     return this.getRequestText({
       ...options,
 
       path,
-      query: format ? { format } : undefined,
+      query,
       accept: 'application/xml',
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
@@ -26,16 +32,21 @@ export class FeedCommand extends AbstractCommand {
 
   getJSON (options: OverrideCommandOptions & {
     feed: FeedType
+    ignoreCache: boolean
     query?: { [ id: string ]: any }
   }) {
-    const { feed, query } = options
+    const { feed, query = {}, ignoreCache } = options
     const path = '/feeds/' + feed + '.json'
+
+    const cacheQuery = ignoreCache
+      ? { v: buildUUID() }
+      : {}
 
     return this.getRequestText({
       ...options,
 
       path,
-      query,
+      query: { ...query, ...cacheQuery },
       accept: 'application/json',
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200

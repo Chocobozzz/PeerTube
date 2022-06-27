@@ -312,11 +312,13 @@ function addVideosToFeed (feed: Feed, videos: VideoModel[]) {
       torrents,
 
       // Enclosure
-      video: {
-        url: videoFiles[0].url,
-        length: videoFiles[0].fileSize,
-        type: videoFiles[0].type
-      },
+      video: videoFiles.length !== 0
+        ? {
+          url: videoFiles[0].url,
+          length: videoFiles[0].fileSize,
+          type: videoFiles[0].type
+        }
+        : undefined,
 
       // Media RSS
       videos: videoFiles,
