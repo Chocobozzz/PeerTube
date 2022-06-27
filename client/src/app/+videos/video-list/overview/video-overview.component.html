@@ -33,7 +33,7 @@
       <div class="section channel videos" *ngFor="let object of overview.channels">
         <div class="section-title">
           <a class="link-orange" [routerLink]="[ '/c', buildVideoChannelBy(object) ]">
-            <my-actor-avatar [channel]="buildVideoChannel(object)" size="28"></my-actor-avatar>
+            <my-actor-avatar [actor]="buildVideoChannel(object)" actorType="channel" size="28"></my-actor-avatar>
 
             <h2 class="section-title">{{ object.channel.displayName }}</h2>
           </a>

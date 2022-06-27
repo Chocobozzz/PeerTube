@@ -2,7 +2,7 @@
   <my-actor-avatar
     *ngIf="showChannel"
     class="channel"
-    [channel]="video.channel"
+    [actor]="video.channel" actorType="channel"
     [internalHref]="[ '/c', video.byVideoChannel ]"
     [title]="channelLinkTitle"
     size="35"
@@ -12,7 +12,7 @@
     *ngIf="showAccount"
     class="account"
     [class.second-avatar]="showChannel"
-    [account]="video.account"
+    [actor]="video.account" actorType="account"
     [internalHref]="[ '/a', video.byAccount ]"
     [title]="accountLinkTitle"
     size="35">

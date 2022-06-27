@@ -8,7 +8,8 @@
             [container]="dropdownContainer" (openChange)="onDropdownOpenChange($event)" autoClose="outside"
           >
             <div ngbDropdownToggle>
-              <my-actor-avatar [account]="user.account" size="34"></my-actor-avatar>
+              <my-actor-avatar [actor]="user.account" actorType="account" size="34"></my-actor-avatar>
+
               <div class="logged-in-info">
                 <div class="logged-in-display-name">{{ user.account?.displayName }}</div>
 

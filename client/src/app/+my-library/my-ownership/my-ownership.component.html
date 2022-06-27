@@ -37,7 +37,7 @@
       <td>
         <a [href]="videoChangeOwnership.initiatorAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="chip two-lines">
-            <my-actor-avatar [account]="videoChangeOwnership.initiatorAccount" size="32"></my-actor-avatar>
+            <my-actor-avatar [actor]="videoChangeOwnership.initiatorAccount" actorType="account" size="32"></my-actor-avatar>
             <div>
               {{ videoChangeOwnership.initiatorAccount.displayName }}
               <span class="muted">{{ videoChangeOwnership.initiatorAccount.nameWithHost }}</span>

@@ -10,7 +10,7 @@
         <a [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse.reporterAccount.displayName + '&quot;' }"
           class="chip"
         >
-          <my-actor-avatar size="18" [account]="abuse.reporterAccount"></my-actor-avatar>
+          <my-actor-avatar size="18" [actor]="abuse.reporterAccount" actorType="account"></my-actor-avatar>
           <div>
             <span class="muted">{{ abuse.reporterAccount.nameWithHost }}</span>
           </div>
@@ -31,7 +31,7 @@
         <a [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse.flaggedAccount.displayName + '&quot;' }"
           class="chip"
         >
-          <my-actor-avatar size="18" [account]="abuse.flaggedAccount"></my-actor-avatar>
+          <my-actor-avatar size="18" [actor]="abuse.flaggedAccount" actorType="account"></my-actor-avatar>
           <div>
             <span class="muted">{{ abuse.flaggedAccount ? abuse.flaggedAccount.nameWithHost : '' }}</span>
           </div>

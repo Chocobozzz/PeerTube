@@ -57,6 +57,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   }
 
   get emojiMarkupList () {
+    console.log('hi')
     const emojiMarkupObjectList = require('markdown-it-emoji/lib/data/light.json')
 
     // Populate emoji-markup-list from object to array to avoid keys alphabetical order
@@ -172,6 +173,12 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
 
   isRTL () {
     return getLocaleDirection(this.localeId) === 'rtl'
+  }
+
+  getAvatarActorType () {
+    if (this.user) return 'account'
+
+    return 'unlogged'
   }
 
   private addCommentReply (commentCreate: VideoCommentCreate) {

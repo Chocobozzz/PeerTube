@@ -1,6 +1,6 @@
 <div class="actor" *ngIf="actor">
   <div class="d-flex">
-    <my-actor-avatar [channel]="getChannel()" [account]="getAccount()" [previewImage]="preview" size="100"></my-actor-avatar>
+    <my-actor-avatar [actor]="actor" [actorType]="getActorType()" [previewImage]="preview" size="100"></my-actor-avatar>
 
     <div class="actor-img-edit-container">
 

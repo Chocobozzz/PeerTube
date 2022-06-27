@@ -93,8 +93,8 @@
       <td *ngIf="isSelected('username')" class="cell-username">
         <a i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/a/' + user.username ]">
           <div class="chip two-lines">
-            <my-actor-avatar [account]="user?.account" size="32"></my-actor-avatar>
-           <div>
+            <my-actor-avatar [actor]="user?.account" actorType="account" size="32"></my-actor-avatar>
+            <div>
               <span class="user-table-primary-text">{{ user.account.displayName }}</span>
               <span class="muted">{{ user.username }}</span>
             </div>

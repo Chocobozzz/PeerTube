@@ -43,7 +43,7 @@
       <td *ngIf="isAdminView()">
         <a *ngIf="abuse.reporterAccount" [href]="abuse.reporterAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="chip two-lines">
-            <my-actor-avatar [account]="abuse.reporterAccount" size="32"></my-actor-avatar>
+            <my-actor-avatar [actor]="abuse.reporterAccount" actorType="account" size="32"></my-actor-avatar>
             <div>
               {{ abuse.reporterAccount.displayName }}
               <span>{{ abuse.reporterAccount.nameWithHost }}</span>

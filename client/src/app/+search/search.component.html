@@ -36,7 +36,7 @@
   <ng-container *ngFor="let result of results">
     <div *ngIf="isVideoChannel(result)" class="entry video-channel">
 
-      <my-actor-avatar [channel]="result" [internalHref]="getInternalChannelUrl(result)" [href]="getExternalChannelUrl(result)" size="120"></my-actor-avatar>
+      <my-actor-avatar [actor]="result" actorType="channel" [internalHref]="getInternalChannelUrl(result)" [href]="getExternalChannelUrl(result)" size="120"></my-actor-avatar>
 
       <div class="video-channel-info">
         <a *ngIf="!isExternalChannelUrl()" [routerLink]="getInternalChannelUrl(result)" class="video-channel-names">

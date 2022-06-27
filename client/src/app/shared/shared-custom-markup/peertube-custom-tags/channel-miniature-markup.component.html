@@ -1,7 +1,7 @@
 <div *ngIf="channel" class="channel">
 
   <div class="channel-avatar-row">
-    <my-actor-avatar [channel]="channel" [internalHref]="getVideoChannelLink()" i18n-title title="See this video channel" size="75"></my-actor-avatar>
+    <my-actor-avatar [actor]="channel" actorType="channel" [internalHref]="getVideoChannelLink()" i18n-title title="See this video channel" size="75"></my-actor-avatar>
 
     <h6>
       <a [routerLink]="getVideoChannelLink()" i18n-title title="See this video channel">

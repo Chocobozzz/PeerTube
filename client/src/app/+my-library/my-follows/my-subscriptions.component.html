@@ -14,7 +14,7 @@
 
 <div class="actors" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
   <div *ngFor="let videoChannel of videoChannels" class="actor">
-    <my-actor-avatar [channel]="videoChannel" [internalHref]="[ '/c', videoChannel.nameWithHost ]" size="80"></my-actor-avatar>
+    <my-actor-avatar [actor]="videoChannel" actorType="channel" [internalHref]="[ '/c', videoChannel.nameWithHost ]" size="80"></my-actor-avatar>
 
     <div class="actor-info">
       <a [routerLink]="[ '/c', videoChannel.nameWithHost ]" class="actor-names" i18n-title title="Channel page">
@@ -27,7 +27,7 @@
       <a [routerLink]="[ '/a', videoChannel.ownerBy ]" i18n-title title="Owner account page" class="actor-owner">
         <span i18n>Created by {{ videoChannel.ownerBy }}</span>
 
-        <my-actor-avatar [account]="videoChannel.ownerAccount" size="18"></my-actor-avatar>
+        <my-actor-avatar [actor]="videoChannel.ownerAccount" actorType="account" size="18"></my-actor-avatar>
       </a>
     </div>
 

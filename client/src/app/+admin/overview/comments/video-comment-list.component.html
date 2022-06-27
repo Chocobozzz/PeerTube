@@ -68,7 +68,7 @@
       <td>
         <a [href]="videoComment.account.localUrl" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="chip two-lines">
-            <my-actor-avatar [account]="videoComment.account" size="32"></my-actor-avatar>
+            <my-actor-avatar [actor]="videoComment.account" actorType="account" size="32"></my-actor-avatar>
           <div>
               {{ videoComment.account.displayName }}
               <span>{{ videoComment.by }}</span>

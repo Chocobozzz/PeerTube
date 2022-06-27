@@ -14,7 +14,7 @@
 
 <div class="actors" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
   <div *ngFor="let follow of follows" class="actor">
-    <my-actor-avatar [account]="follow.follower" [href]="follow.follower.url" size="40"></my-actor-avatar>
+    <my-actor-avatar [actor]="follow.follower" actorType="account" [href]="follow.follower.url" size="40"></my-actor-avatar>
 
     <div class="actor-info">
       <a [href]="follow.follower.url" class="actor-names" rel="noopener noreferrer" target="_blank" i18n-title title="Follower page">

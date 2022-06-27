@@ -75,19 +75,9 @@ export class ActorAvatarEditComponent implements OnInit {
     return !!this.preview || this.actor.avatars.length !== 0
   }
 
-  isChannel () {
-    return !!(this.actor as VideoChannel).ownerAccount
-  }
+  getActorType () {
+    if ((this.actor as VideoChannel).ownerAccount) return 'channel'
 
-  getChannel (): VideoChannel {
-    if (this.isChannel()) return this.actor as VideoChannel
-
-    return undefined
-  }
-
-  getAccount (): Account {
-    if (this.isChannel()) return undefined
-
-    return this.actor as Account
+    return 'account'
   }
 }

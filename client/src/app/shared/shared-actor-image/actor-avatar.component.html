@@ -1,19 +1,21 @@
 <ng-template #img>
-  <img *ngIf="previewImage || avatarUrl || !initial" [class]="classes" [src]="previewImage || avatarUrl || defaultAvatarUrl" [alt]="alt" />
+  <img *ngIf="displayImage()" [class]="classes" [src]="previewImage || avatarUrl || defaultAvatarUrl" [alt]="alt" />
 
-  <div *ngIf="!avatarUrl && initial" [ngClass]="classes">
-    <span>{{ initial }}</span>
+  <div *ngIf="displayActorInitial()" [ngClass]="classes">
+    <span>{{ getActorInitial() }}</span>
   </div>
+
+  <div *ngIf="displayPlaceholder()" [ngClass]="classes"></div>
 </ng-template>
 
-<a *ngIf="hasActor() && href" [href]="href" target="_blank" rel="noopener noreferrer" [title]="title">
+<a *ngIf="actor && href" [href]="href" target="_blank" rel="noopener noreferrer" [title]="title">
   <ng-template *ngTemplateOutlet="img"></ng-template>
 </a>
 
-<a *ngIf="hasActor() && internalHref" [routerLink]="internalHref" [title]="title">
+<a *ngIf="actor && internalHref" [routerLink]="internalHref" [title]="title">
   <ng-template *ngTemplateOutlet="img"></ng-template>
 </a>
 
-<ng-container *ngIf="!hasActor() || (!href && !internalHref)">
+<ng-container *ngIf="!actor || (!href && !internalHref)">
   <ng-template *ngTemplateOutlet="img"></ng-template>
 </ng-container>
