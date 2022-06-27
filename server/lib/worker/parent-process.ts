@@ -18,8 +18,8 @@ function downloadImageFromWorker (options: Parameters<typeof downloadImage>[0]):
 
 const processImageWorker = new Piscina({
   filename: join(__dirname, 'workers', 'image-processor.js'),
-  concurrentTasksPerWorker: WORKER_THREADS.DOWNLOAD_IMAGE.CONCURRENCY,
-  maxThreads: WORKER_THREADS.DOWNLOAD_IMAGE.MAX_THREADS
+  concurrentTasksPerWorker: WORKER_THREADS.PROCESS_IMAGE.CONCURRENCY,
+  maxThreads: WORKER_THREADS.PROCESS_IMAGE.MAX_THREADS
 })
 
 function processImageFromWorker (options: Parameters<typeof processImage>[0]): Promise<ReturnType<typeof processImage>> {
