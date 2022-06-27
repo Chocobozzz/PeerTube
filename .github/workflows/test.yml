@@ -48,7 +48,7 @@ jobs:
       ENABLE_OBJECT_STORAGE_TESTS: true
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: './.github/actions/reusable-prepare-peertube-build'
         with:
@@ -57,7 +57,7 @@ jobs:
       - uses: './.github/actions/reusable-prepare-peertube-run'
 
       - name: Cache fixtures
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             fixtures

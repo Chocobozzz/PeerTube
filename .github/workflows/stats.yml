@@ -18,7 +18,7 @@ jobs:
       CI_BRANCH_BASE: develop
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: './.github/actions/reusable-prepare-peertube-build'
         with:
