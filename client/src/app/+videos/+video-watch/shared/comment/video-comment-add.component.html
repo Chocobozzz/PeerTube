@@ -88,8 +88,8 @@
   </div>
   <div class="modal-body">
     <div class="emoji-flex">
-      <div class="emoji-flex-item" *ngFor="let emojiMarkup of emojiMarkupList">
-        {{ emojiMarkup[0] }} <code>:{{ emojiMarkup[1] }}:</code>
+      <div class="emoji-flex-item" *ngFor="let emojiMarkup of getEmojiMarkupList()">
+        {{ emojiMarkup.emoji }} <code>:{{ emojiMarkup.name }}:</code>
       </div>
     </div>
   </div>
