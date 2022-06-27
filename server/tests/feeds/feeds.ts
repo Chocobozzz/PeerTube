@@ -13,6 +13,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultChannelAvatar,
+  stopFfmpeg,
   waitJobs
 } from '@shared/server-commands'
 
@@ -30,6 +31,7 @@ describe('Test syndication feeds', () => {
   let userAccountId: number
   let userChannelId: number
   let userFeedToken: string
+  let liveId: string
 
   before(async function () {
     this.timeout(120000)
@@ -47,6 +49,8 @@ describe('Test syndication feeds', () => {
     await setAccessTokensToServers([ ...servers, serverHLSOnly ])
     await setDefaultChannelAvatar(servers[0])
     await doubleFollow(servers[0], servers[1])
+
+    await servers[0].config.enableLive({ allowReplay: false, transcoding: false })
 
     {
       const user = await servers[0].users.getMyInfo()
@@ -266,6 +270,41 @@ describe('Test syndication feeds', () => {
         expect(jsonObj.items[0].attachments[i].size_in_bytes).to.be.greaterThan(0)
         expect(jsonObj.items[0].attachments[i].url).to.exist
       }
+    })
+
+    it('Should not display waiting live videos', async function () {
+      const { uuid } = await servers[0].live.create({
+        fields: {
+          name: 'live',
+          privacy: VideoPrivacy.PUBLIC,
+          channelId: rootChannelId
+        }
+      })
+      liveId = uuid
+
+      const json = await servers[0].feed.getJSON({ feed: 'videos' })
+
+      const jsonObj = JSON.parse(json)
+      expect(jsonObj.items.length).to.be.equal(2)
+      expect(jsonObj.items[0].title).to.equal('my super name for server 1')
+      expect(jsonObj.items[1].title).to.equal('user video')
+    })
+
+    it('Should not display published live videos', async function () {
+      this.timeout(120000)
+
+      const ffmpeg = await servers[0].live.sendRTMPStreamInVideo({ videoId: liveId, copyCodecs: true, fixtureName: 'video_short.mp4' })
+      await servers[0].live.waitUntilPublished({ videoId: liveId })
+
+      const json = await servers[0].feed.getJSON({ feed: 'videos' })
+
+      const jsonObj = JSON.parse(json)
+      expect(jsonObj.items.length).to.be.equal(3)
+      expect(jsonObj.items[0].title).to.equal('my super name for server 1')
+      expect(jsonObj.items[1].title).to.equal('user video')
+      expect(jsonObj.items[2].title).to.equal('live video')
+
+      await stopFfmpeg(ffmpeg)
     })
   })
 
