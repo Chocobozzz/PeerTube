@@ -52,8 +52,9 @@ export class ActorAvatarComponent implements OnChanges {
   }
 
   get defaultAvatarUrl () {
-    if (this.account) return Account.GET_DEFAULT_AVATAR_URL(this.getSizeNumber())
     if (this.channel) return VideoChannel.GET_DEFAULT_AVATAR_URL(this.getSizeNumber())
+
+    return Account.GET_DEFAULT_AVATAR_URL(this.getSizeNumber())
   }
 
   get avatarUrl () {
