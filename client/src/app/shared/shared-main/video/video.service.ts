@@ -423,14 +423,14 @@ export class VideoService {
 
     if (skipCount) newParams = newParams.set('skipCount', skipCount + '')
 
-    if (isLocal) newParams = newParams.set('isLocal', isLocal)
-    if (include) newParams = newParams.set('include', include)
-    if (isLive) newParams = newParams.set('isLive', isLive)
-    if (nsfw) newParams = newParams.set('nsfw', nsfw)
-    if (nsfwPolicy) newParams = newParams.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
-    if (languageOneOf) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
-    if (categoryOneOf) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
-    if (privacyOneOf) newParams = this.restService.addArrayParams(newParams, 'privacyOneOf', privacyOneOf)
+    if (isLocal !== undefined) newParams = newParams.set('isLocal', isLocal)
+    if (include !== undefined) newParams = newParams.set('include', include)
+    if (isLive !== undefined) newParams = newParams.set('isLive', isLive)
+    if (nsfw !== undefined) newParams = newParams.set('nsfw', nsfw)
+    if (nsfwPolicy !== undefined) newParams = newParams.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
+    if (languageOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
+    if (categoryOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
+    if (privacyOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'privacyOneOf', privacyOneOf)
 
     return newParams
   }
