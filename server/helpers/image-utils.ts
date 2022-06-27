@@ -12,12 +12,14 @@ function generateImageFilename (extension = '.jpg') {
   return buildUUID() + extension
 }
 
-async function processImage (
-  path: string,
-  destination: string,
-  newSize: { width: number, height: number },
-  keepOriginal = false
-) {
+async function processImage (options: {
+  path: string
+  destination: string
+  newSize: { width: number, height: number }
+  keepOriginal?: boolean // default false
+}) {
+  const { path, destination, newSize, keepOriginal = false } = options
+
   const extension = getLowercaseExtension(path)
 
   if (path === destination) {
@@ -36,7 +38,14 @@ async function processImage (
   if (keepOriginal !== true) await remove(path)
 }
 
-async function generateImageFromVideoFile (fromPath: string, folder: string, imageName: string, size: { width: number, height: number }) {
+async function generateImageFromVideoFile (options: {
+  fromPath: string
+  folder: string
+  imageName: string
+  size: { width: number, height: number }
+}) {
+  const { fromPath, folder, imageName, size } = options
+
   const pendingImageName = 'pending-' + imageName
   const pendingImagePath = join(folder, pendingImageName)
 
@@ -44,7 +53,7 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
     await generateThumbnailFromVideo(fromPath, folder, imageName)
 
     const destination = join(folder, imageName)
-    await processImage(pendingImagePath, destination, size)
+    await processImage({ path: pendingImagePath, destination, newSize: size })
   } catch (err) {
     logger.error('Cannot generate image from video %s.', fromPath, { err, ...lTags() })
 

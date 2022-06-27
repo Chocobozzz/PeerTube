@@ -18,7 +18,7 @@ async function downloadImage (options: {
   const destPath = join(destDir, destName)
 
   try {
-    await processImage(tmpPath, destPath, size)
+    await processImage({ path: tmpPath, destination: destPath, newSize: size })
   } catch (err) {
     await remove(tmpPath)
 

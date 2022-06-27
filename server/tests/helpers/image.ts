@@ -37,28 +37,28 @@ describe('Image helpers', function () {
 
   it('Should skip processing if the source image is okay', async function () {
     const input = buildAbsoluteFixturePath('thumbnail.jpg')
-    await processImage(input, imageDestJPG, thumbnailSize, true)
+    await processImage({ path: input, destination: imageDestJPG, newSize: thumbnailSize, keepOriginal: true })
 
     await checkBuffers(input, imageDestJPG, true)
   })
 
   it('Should not skip processing if the source image does not have the appropriate extension', async function () {
     const input = buildAbsoluteFixturePath('thumbnail.png')
-    await processImage(input, imageDestJPG, thumbnailSize, true)
+    await processImage({ path: input, destination: imageDestJPG, newSize: thumbnailSize, keepOriginal: true })
 
     await checkBuffers(input, imageDestJPG, false)
   })
 
   it('Should not skip processing if the source image does not have the appropriate size', async function () {
     const input = buildAbsoluteFixturePath('preview.jpg')
-    await processImage(input, imageDestJPG, thumbnailSize, true)
+    await processImage({ path: input, destination: imageDestJPG, newSize: thumbnailSize, keepOriginal: true })
 
     await checkBuffers(input, imageDestJPG, false)
   })
 
   it('Should not skip processing if the source image does not have the appropriate size', async function () {
     const input = buildAbsoluteFixturePath('thumbnail-big.jpg')
-    await processImage(input, imageDestJPG, thumbnailSize, true)
+    await processImage({ path: input, destination: imageDestJPG, newSize: thumbnailSize, keepOriginal: true })
 
     await checkBuffers(input, imageDestJPG, false)
   })
@@ -67,7 +67,7 @@ describe('Image helpers', function () {
     const input = buildAbsoluteFixturePath('exif.jpg')
     expect(await hasTitleExif(input)).to.be.true
 
-    await processImage(input, imageDestJPG, { width: 100, height: 100 }, true)
+    await processImage({ path: input, destination: imageDestJPG, newSize: { width: 100, height: 100 }, keepOriginal: true })
     await checkBuffers(input, imageDestJPG, false)
 
     expect(await hasTitleExif(imageDestJPG)).to.be.false
@@ -77,7 +77,7 @@ describe('Image helpers', function () {
     const input = buildAbsoluteFixturePath('exif.jpg')
     expect(await hasTitleExif(input)).to.be.true
 
-    await processImage(input, imageDestJPG, thumbnailSize, true)
+    await processImage({ path: input, destination: imageDestJPG, newSize: thumbnailSize, keepOriginal: true })
     await checkBuffers(input, imageDestJPG, false)
 
     expect(await hasTitleExif(imageDestJPG)).to.be.false
@@ -87,7 +87,7 @@ describe('Image helpers', function () {
     const input = buildAbsoluteFixturePath('exif.png')
     expect(await hasTitleExif(input)).to.be.true
 
-    await processImage(input, imageDestPNG, thumbnailSize, true)
+    await processImage({ path: input, destination: imageDestPNG, newSize: thumbnailSize, keepOriginal: true })
     expect(await hasTitleExif(imageDestPNG)).to.be.false
   })
 

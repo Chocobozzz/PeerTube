@@ -6,14 +6,13 @@ import { getLowercaseExtension } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
 import { ActivityPubActorType, ActorImageType } from '@shared/models'
 import { retryTransactionWrapper } from '../helpers/database-utils'
-import { processImage } from '../helpers/image-utils'
 import { CONFIG } from '../initializers/config'
 import { ACTOR_IMAGES_SIZE, LRU_CACHE, WEBSERVER } from '../initializers/constants'
 import { sequelizeTypescript } from '../initializers/database'
 import { MAccountDefault, MActor, MChannelDefault } from '../types/models'
 import { deleteActorImages, updateActorImages } from './activitypub/actors'
 import { sendUpdateActor } from './activitypub/send'
-import { downloadImageFromWorker } from './worker/parent-process'
+import { downloadImageFromWorker, processImageFromWorker } from './worker/parent-process'
 
 function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string) {
   return new ActorModel({
@@ -42,7 +41,7 @@ async function updateLocalActorImageFiles (
 
     const imageName = buildUUID() + extension
     const destination = join(CONFIG.STORAGE.ACTOR_IMAGES, imageName)
-    await processImage(imagePhysicalFile.path, destination, imageSize, true)
+    await processImageFromWorker({ path: imagePhysicalFile.path, destination, newSize: imageSize, keepOriginal: true })
 
     return {
       imageName,

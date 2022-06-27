@@ -52,7 +52,7 @@ async function processVideo (id: number) {
   thumbnail.height = size.height
 
   const thumbnailPath = thumbnail.getPath()
-  await processImage(previewPath, thumbnailPath, size, true)
+  await processImage({ path: previewPath, destination: thumbnailPath, newSize: size, keepOriginal: true })
 
   // Save new attributes
   await thumbnail.save()
