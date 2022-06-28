@@ -34,9 +34,11 @@ header {
   position: relative;
 
   .completed-icon {
-    width: 16px;
-    height: 16px;
-    border-radius: 16px;
+    $size: 14px;
+
+    width: $size;
+    height: $size;
+    border-radius: $size;
     background-color: pvar(--mainBackgroundColor);
     position: absolute;
     bottom: 0;
@@ -44,7 +46,9 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid pvar(--mainColor);
+    // Better than border color for aliasing
+    box-shadow: 0 0 0 1px var(--mainColor);
+    overflow: hidden;
 
     my-global-icon {
       @include apply-svg-color(pvar(--mainColor));
