@@ -30,7 +30,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
     for (const schedule of schedules) {
       await sequelizeTypescript.transaction(async t => {
-        const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(schedule.videoId, t)
+        const video = await VideoModel.loadFull(schedule.videoId, t)
 
         logger.info('Executing scheduled video update on %s.', video.uuid)
 

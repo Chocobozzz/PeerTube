@@ -42,7 +42,7 @@ async function processVideoTranscoding (job: Job) {
   const payload = job.data as VideoTranscodingPayload
   logger.info('Processing transcoding job %d.', job.id, lTags(payload.videoUUID))
 
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(payload.videoUUID)
+  const video = await VideoModel.loadFull(payload.videoUUID)
   // No video, maybe deleted?
   if (!video) {
     logger.info('Do not process job %d, video does not exist.', job.id, lTags(payload.videoUUID))
@@ -180,7 +180,7 @@ async function onVideoFirstWebTorrentTranscoding (
   const { resolution, isPortraitMode, audioStream } = await videoArg.probeMaxQualityFile()
 
   // Maybe the video changed in database, refresh it
-  const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoArg.uuid)
+  const videoDatabase = await VideoModel.loadFull(videoArg.uuid)
   // Video does not exist anymore
   if (!videoDatabase) return undefined
 

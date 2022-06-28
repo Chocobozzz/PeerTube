@@ -63,7 +63,7 @@ async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
-    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(onlyVideo.id, t)
+    const video = await VideoModel.loadFull(onlyVideo.id, t)
     const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, likeActivity.id, t)
     if (!rate || rate.type !== 'like') throw new Error(`Unknown like by account ${byActor.Account.id} for video ${video.id}.`)
 
@@ -87,7 +87,7 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
-    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(onlyVideo.id, t)
+    const video = await VideoModel.loadFull(onlyVideo.id, t)
     const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, dislike.id, t)
     if (!rate || rate.type !== 'dislike') throw new Error(`Unknown dislike by account ${byActor.Account.id} for video ${video.id}.`)
 

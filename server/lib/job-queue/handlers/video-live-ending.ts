@@ -144,7 +144,7 @@ async function replaceLiveByReplay (options: {
   await liveSession.save()
 
   // Remove old HLS playlist video files
-  const videoWithFiles = await VideoModel.loadAndPopulateAccountAndServerAndTags(liveVideo.id)
+  const videoWithFiles = await VideoModel.loadFull(liveVideo.id)
 
   const hlsPlaylist = videoWithFiles.getHLSPlaylist()
   await VideoFileModel.removeHLSFilesOfVideoId(hlsPlaylist.id)
@@ -241,7 +241,7 @@ async function cleanupLiveAndFederate (options: {
   }
 
   try {
-    const fullVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.id)
+    const fullVideo = await VideoModel.loadFull(video.id)
     return federateVideoIfNeeded(fullVideo, false, undefined)
   } catch (err) {
     logger.warn('Cannot federate live after cleanup', { videoId: video.id, err })

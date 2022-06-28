@@ -26,7 +26,7 @@ export class VideoViewsBufferScheduler extends AbstractScheduler {
         const views = await Redis.Instance.getLocalVideoViews(videoId)
         await Redis.Instance.deleteLocalVideoViews(videoId)
 
-        const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
+        const video = await VideoModel.loadFull(videoId)
         if (!video) {
           logger.debug('Video %d does not exist anymore, skipping videos view addition.', videoId, lTags())
           continue

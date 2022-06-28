@@ -35,7 +35,7 @@ class VideosCaptionCache extends AbstractVideoStaticFileCache <string> {
     if (videoCaption.isOwned()) throw new Error('Cannot load remote caption of owned video.')
 
     // Used to fetch the path
-    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoCaption.videoId)
+    const video = await VideoModel.loadFull(videoCaption.videoId)
     if (!video) return undefined
 
     const remoteUrl = videoCaption.getFileUrl(video)

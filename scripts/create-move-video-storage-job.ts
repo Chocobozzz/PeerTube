@@ -70,7 +70,7 @@ async function run () {
   }
 
   for (const id of ids) {
-    const videoFull = await VideoModel.loadAndPopulateAccountAndServerAndTags(id)
+    const videoFull = await VideoModel.loadFull(id)
 
     const files = videoFull.VideoFiles || []
     const hls = videoFull.getHLSPlaylist()

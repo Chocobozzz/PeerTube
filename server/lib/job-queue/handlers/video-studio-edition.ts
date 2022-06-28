@@ -44,7 +44,7 @@ async function processVideoStudioEdition (job: Job) {
 
   logger.info('Process video studio edition of %s in job %d.', payload.videoUUID, job.id, lTags)
 
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(payload.videoUUID)
+  const video = await VideoModel.loadFull(payload.videoUUID)
 
   // No video, maybe deleted?
   if (!video) {

@@ -351,7 +351,7 @@ class LiveManager {
     const videoId = live.videoId
 
     try {
-      const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
+      const video = await VideoModel.loadFull(videoId)
 
       logger.info('Will publish and federate live %s.', video.url, localLTags)
 
@@ -390,7 +390,7 @@ class LiveManager {
     const { videoId, liveSession: liveSessionArg, cleanupNow = false } = options
 
     try {
-      const fullVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
+      const fullVideo = await VideoModel.loadFull(videoId)
       if (!fullVideo) return
 
       const live = await VideoLiveModel.loadByVideoId(fullVideo.id)

@@ -43,7 +43,7 @@ function moveToNextState (options: {
 
   return sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
-    const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
+    const videoDatabase = await VideoModel.loadFull(video.uuid, t)
     // Video does not exist anymore
     if (!videoDatabase) return undefined
 

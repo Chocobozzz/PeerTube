@@ -83,7 +83,7 @@ async function sendUndoCacheFile (byActor: MActor, redundancyModel: MVideoRedund
     return
   }
 
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(associatedVideo.id)
+  const video = await VideoModel.loadFull(associatedVideo.id)
   const createActivity = buildCreateActivity(redundancyModel.url, byActor, redundancyModel.toActivityPubObject())
 
   return sendUndoVideoRelatedActivity({

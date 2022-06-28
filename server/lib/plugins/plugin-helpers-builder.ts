@@ -83,7 +83,7 @@ function buildVideosHelpers () {
 
     removeVideo: (id: number) => {
       return sequelizeTypescript.transaction(async t => {
-        const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(id, t)
+        const video = await VideoModel.loadFull(id, t)
 
         await video.destroy({ transaction: t })
       })
@@ -94,7 +94,7 @@ function buildVideosHelpers () {
     },
 
     getFiles: async (id: number | string) => {
-      const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(id)
+      const video = await VideoModel.loadFull(id)
       if (!video) return undefined
 
       const webtorrentVideoFiles = (video.VideoFiles || []).map(f => ({
@@ -178,14 +178,14 @@ function buildModerationHelpers () {
     },
 
     blacklistVideo: async (options: { videoIdOrUUID: number | string, createOptions: VideoBlacklistCreate }) => {
-      const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(options.videoIdOrUUID)
+      const video = await VideoModel.loadFull(options.videoIdOrUUID)
       if (!video) return
 
       await blacklistVideo(video, options.createOptions)
     },
 
     unblacklistVideo: async (options: { videoIdOrUUID: number | string }) => {
-      const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(options.videoIdOrUUID)
+      const video = await VideoModel.loadFull(options.videoIdOrUUID)
       if (!video) return
 
       const videoBlacklist = await VideoBlacklistModel.loadByVideoId(video.id)

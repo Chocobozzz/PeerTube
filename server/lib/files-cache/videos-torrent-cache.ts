@@ -40,7 +40,7 @@ class VideosTorrentCache extends AbstractVideoStaticFileCache <string> {
     if (file.getVideo().isOwned()) throw new Error('Cannot load remote file of owned video.')
 
     // Used to fetch the path
-    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(file.getVideo().id)
+    const video = await VideoModel.loadFull(file.getVideo().id)
     if (!video) return undefined
 
     const remoteUrl = file.getRemoteTorrentUrl(video)

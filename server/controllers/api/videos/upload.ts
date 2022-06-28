@@ -272,7 +272,7 @@ async function createTorrentFederate (video: MVideoFullLight, videoFile: MVideoF
   const job = await JobQueue.Instance.createJobWithPromise({ type: 'manage-video-torrent', payload })
   await job.finished()
 
-  const refreshedVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.id)
+  const refreshedVideo = await VideoModel.loadFull(video.id)
   if (!refreshedVideo) return
 
   // Only federate and notify after the torrent creation

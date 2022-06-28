@@ -219,7 +219,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
         if (previewModel) await video.addAndSaveThumbnail(previewModel, t)
 
         // Now we can federate the video (reload from database, we need more attributes)
-        const videoForFederation = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
+        const videoForFederation = await VideoModel.loadFull(video.uuid, t)
         await federateVideoIfNeeded(videoForFederation, true, t)
 
         // Update video import object

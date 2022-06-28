@@ -17,7 +17,7 @@ async function processActivityPubHttpFetcher (job: Job) {
   const payload = job.data as ActivitypubHttpFetcherPayload
 
   let video: MVideoFullLight
-  if (payload.videoId) video = await VideoModel.loadAndPopulateAccountAndServerAndTags(payload.videoId)
+  if (payload.videoId) video = await VideoModel.loadFull(payload.videoId)
 
   const fetcherType: { [ id in FetchType ]: (items: any[]) => Promise<any> } = {
     'activity': items => processActivities(items, { outboxUrl: payload.uri, fromFetch: true }),

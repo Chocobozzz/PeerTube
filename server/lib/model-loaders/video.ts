@@ -35,7 +35,7 @@ function loadVideo (
     )
   }
 
-  if (fetchType === 'all') return VideoModel.loadAndPopulateAccountAndServerAndTags(id, undefined, userId)
+  if (fetchType === 'all') return VideoModel.loadFull(id, undefined, userId)
 
   if (fetchType === 'only-immutable-attributes') return VideoModel.loadImmutableAttributes(id)
 

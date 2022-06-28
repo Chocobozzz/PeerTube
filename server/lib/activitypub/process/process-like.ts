@@ -34,7 +34,7 @@ async function processLikeVideo (byActor: MActorSignature, activity: ActivityLik
   if (!onlyVideo.isOwned()) return
 
   return sequelizeTypescript.transaction(async t => {
-    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(onlyVideo.id, t)
+    const video = await VideoModel.loadFull(onlyVideo.id, t)
 
     const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, activity.id, t)
     if (existingRate && existingRate.type === 'like') return

@@ -144,7 +144,7 @@ async function checkCanSeeAuthVideo (req: Request, res: Response, video: MVideoI
 
   const videoWithRights = (video as MVideoWithRights).VideoChannel?.Account?.userId
     ? video as MVideoWithRights
-    : await VideoModel.loadAndPopulateAccountAndServerAndTags(video.id)
+    : await VideoModel.loadFull(video.id)
 
   const privacy = videoWithRights.privacy
 

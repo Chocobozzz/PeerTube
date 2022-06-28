@@ -43,7 +43,7 @@ async function run () {
     return
   }
 
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(uuid)
+  const video = await VideoModel.loadFull(uuid)
   if (!video) throw new Error('Video not found.')
 
   const dataInput: VideoTranscodingPayload[] = []

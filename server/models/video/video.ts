@@ -1352,10 +1352,10 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return queryBuilder.queryVideo({ url, transaction, type: 'account-blacklist-files' })
   }
 
-  static loadAndPopulateAccountAndServerAndTags (id: number | string, t?: Transaction, userId?: number): Promise<MVideoFullLight> {
+  static loadFull (id: number | string, t?: Transaction, userId?: number): Promise<MVideoFullLight> {
     const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
-    return queryBuilder.queryVideo({ id, transaction: t, type: 'full-light', userId })
+    return queryBuilder.queryVideo({ id, transaction: t, type: 'full', userId })
   }
 
   static loadForGetAPI (parameters: {

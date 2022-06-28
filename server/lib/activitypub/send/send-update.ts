@@ -92,7 +92,7 @@ async function sendUpdateCacheFile (byActor: MActorLight, redundancyModel: MVide
     return
   }
 
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(associatedVideo.id)
+  const video = await VideoModel.loadFull(associatedVideo.id)
 
   const activityBuilder = (audience: ActivityAudience) => {
     const redundancyObject = redundancyModel.toActivityPubObject()

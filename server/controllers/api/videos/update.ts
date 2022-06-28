@@ -62,7 +62,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
   try {
     const { videoInstanceUpdated, isNewVideo } = await sequelizeTypescript.transaction(async t => {
       // Refresh video since thumbnails to prevent concurrent updates
-      const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoFromReq.id, t)
+      const video = await VideoModel.loadFull(videoFromReq.id, t)
 
       const sequelizeOptions = { transaction: t }
       const oldVideoChannel = video.VideoChannel
@@ -212,5 +212,5 @@ async function updateTorrentsMetadataIfNeeded (video: MVideoFullLight, videoInfo
   }
 
   // Refresh video since files have changed
-  return VideoModel.loadAndPopulateAccountAndServerAndTags(video.id)
+  return VideoModel.loadFull(video.id)
 }

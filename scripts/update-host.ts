@@ -114,7 +114,7 @@ async function run () {
 
   const ids = await VideoModel.listLocalIds()
   for (const id of ids) {
-    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(id)
+    const video = await VideoModel.loadFull(id)
 
     console.log('Updating video ' + video.uuid)
 
