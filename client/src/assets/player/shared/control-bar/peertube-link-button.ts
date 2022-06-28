@@ -5,8 +5,6 @@ import { PeerTubeLinkButtonOptions } from '../../types'
 const Button = videojs.getComponent('Button')
 class PeerTubeLinkButton extends Button {
 
-  private instanceName: string
-
   constructor (player: videojs.Player, options?: PeerTubeLinkButtonOptions) {
     super(player, options as any)
   }
