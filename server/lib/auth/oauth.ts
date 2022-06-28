@@ -1,5 +1,5 @@
 import express from 'express'
-import {
+import OAuth2Server, {
   InvalidClientError,
   InvalidGrantError,
   InvalidRequestError,
@@ -7,7 +7,7 @@ import {
   Response,
   UnauthorizedClientError,
   UnsupportedGrantTypeError
-} from 'oauth2-server'
+} from '@node-oauth/oauth2-server'
 import { randomBytesPromise } from '@server/helpers/core-utils'
 import { MOAuthClient } from '@server/types/models'
 import { sha1 } from '@shared/extra-utils'
@@ -19,8 +19,7 @@ import { BypassLogin, getClient, getRefreshToken, getUser, revokeToken, saveToke
  * Reimplement some functions of OAuth2Server to inject external auth methods
  *
  */
-
-const oAuthServer = new (require('oauth2-server'))({
+const oAuthServer = new OAuth2Server({
   accessTokenLifetime: OAUTH_LIFETIME.ACCESS_TOKEN,
   refreshTokenLifetime: OAUTH_LIFETIME.REFRESH_TOKEN,
 
