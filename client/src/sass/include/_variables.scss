@@ -48,7 +48,6 @@ $search-input-width: 375px;
 
 $menu-background: #000;
 $menu-color: #fff;
-$menu-bottom-color: #C6C6C6;
 $menu-width: 240px;
 $menu-lateral-padding: 26px;
 
@@ -135,6 +134,7 @@ $variables: (
   --inputForegroundColor: var(--inputForegroundColor),
   --inputBackgroundColor: var(--inputBackgroundColor),
   --inputPlaceholderColor: var(--inputPlaceholderColor),
+  --inputBorderColor: var(--inputBorderColor),
 
   --textareaForegroundColor: var(--textareaForegroundColor),
   --textareaBackgroundColor: var(--textareaBackgroundColor),

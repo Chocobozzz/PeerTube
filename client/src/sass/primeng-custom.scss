@@ -623,6 +623,12 @@ p-table {
         }
       }
 
+      .p-dropdown,
+      .p-dropdown-trigger {
+        color: pvar(--mainForegroundColor);
+        background-color: pvar(--mainBackgroundColor);
+      }
+
       .p-paginator-current {
         position: absolute;
         right: 0;

@@ -42,14 +42,12 @@
 // ---------------------------------------------------------------------------
 
 .dropdown-menu {
-  color: pvar(--mainForegroundColor);
-  background-color: pvar(--mainBackgroundColor);
-
   .dropdown-header {
     @include padding-left(1rem);
   }
 
   .dropdown-item {
+    color: pvar(--mainForegroundColor);
     padding: 3px 15px;
 
     &.active {
@@ -271,7 +269,7 @@
 }
 
 .btn-outline-secondary {
-  border-color: $input-border-color;
+  border-color: pvar(--inputBorderColor);
 
   &:focus-within,
   &:focus,
@@ -342,7 +340,6 @@
   }
 
   .form-control-clear {
-    color: rgba(0, 0, 0, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -350,9 +347,10 @@
     font-size: 14px;
     position: absolute;
     right: .5rem;
+    opacity: 0.4;
 
     &:hover {
-      color: rgba(0, 0, 0, 0.7);
+      opacity: 0.7;
       cursor: pointer;
     }
   }

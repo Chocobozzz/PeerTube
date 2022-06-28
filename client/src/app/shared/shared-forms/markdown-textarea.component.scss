@@ -25,8 +25,8 @@ $input-border-radius: 3px;
   .nav-preview {
     padding: 10px;
 
-    border: 1px solid $input-border-color;
-    border-top: 1px dashed $input-border-color;
+    border: 1px solid pvar(--inputBorderColor);
+    border-top: 1px dashed pvar(--inputBorderColor);
 
     border-bottom-right-radius: $input-border-radius;
     border-bottom-left-radius: $input-border-radius;
@@ -72,7 +72,7 @@ $input-border-radius: 3px;
     overflow-y: auto;
     word-wrap: break-word;
 
-    border: 1px solid $input-border-color;
+    border: 1px solid pvar(--inputBorderColor);
     border-top: 0;
 
     border-bottom-left-radius: $input-border-radius;
@@ -115,7 +115,7 @@ $input-border-radius: 3px;
       grid-column: 1;
 
       border: 0;
-      border-right: 1px dashed $input-border-color;
+      border-right: 1px dashed pvar(--inputBorderColor);
 
       resize: none;
     }
@@ -155,7 +155,7 @@ $input-border-radius: 3px;
         grid-row: 2;
         grid-column: 1;
         border: 0;
-        border-bottom: 1px dashed $input-border-color;;
+        border-bottom: 1px dashed pvar(--inputBorderColor);;
       }
 
       ::ng-deep .tab-content {
