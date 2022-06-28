@@ -26,6 +26,8 @@ fi
 
 maintainer_public_key=${MAINTAINER_GPG:-"583A612D890159BE"}
 
+peertube_directory=$(basename $(pwd))
+
 branch=$(git symbolic-ref --short -q HEAD)
 if [ "$branch" != "develop" ] && [[ "$branch" != release/* ]]; then
   echo "Need to be on develop or release branch."
@@ -80,13 +82,13 @@ rm -f "./client/dist/embed-stats.json"
 
   # temporary setup
   cd ..
-  ln -s "PeerTube" "$directory_name"
+  ln -s "$peertube_directory" "$directory_name"
 
   # archive creation + signing
-  zip -9 -r "PeerTube/$zip_name" "${directories_to_archive[@]}"
-  gpg --armor --detach-sign -u "$maintainer_public_key" "PeerTube/$zip_name"
-  XZ_OPT="-e9 -T0" tar cfJ "PeerTube/$tar_name" "${directories_to_archive[@]}"
-  gpg --armor --detach-sign -u "$maintainer_public_key" "PeerTube/$tar_name"
+  zip -9 -r "$peertube_directory/$zip_name" "${directories_to_archive[@]}"
+  gpg --armor --detach-sign -u "$maintainer_public_key" "$peertube_directory/$zip_name"
+  XZ_OPT="-e9 -T0" tar cfJ "$peertube_directory/$tar_name" "${directories_to_archive[@]}"
+  gpg --armor --detach-sign -u "$maintainer_public_key" "$peertube_directory/$tar_name"
 
   # temporary setup destruction
   rm "$directory_name"
