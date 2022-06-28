@@ -160,8 +160,8 @@
 
   .vjs-peertube {
     @include margin-right(6px);
+    @include margin-left(auto);
 
-    width: 100%;
     line-height: $control-bar-height;
     text-align: end;
     overflow: hidden;
@@ -358,11 +358,13 @@
   .vjs-peertube-link {
     @include disable-outline;
     @include disable-default-a-behaviour;
+    @include ellipsis;
 
     text-decoration: none;
     line-height: $control-bar-height;
     font-weight: $font-semibold;
     padding: 0 5px;
+    max-width: 150px;
   }
 
   .vjs-theater-control {
@@ -420,12 +422,20 @@
   }
 
   @media screen and (max-width: $screen-width-570) {
+    .vjs-volume-control {
+      display: none;
+    }
+
     .vjs-peertube {
       padding: 0 !important;
 
       .vjs-peertube-displayed {
         display: none !important;
       }
+    }
+
+    .vjs-peertube-link {
+      max-width: 100px;
     }
 
     &.vjs-live {
@@ -440,7 +450,6 @@
   }
 
   @media screen and (max-width: $screen-width-350) {
-    .vjs-volume-control,
     .vjs-next-video,
     .vjs-previous-video {
       display: none !important;
@@ -456,6 +465,12 @@
 
     > button:last-child {
       @include margin-right($first-control-bar-element-margin-left-small-width);
+    }
+
+    .vjs-play-control {
+      @include margin-left(0);
+
+      width: 30px;
     }
 
     &.vjs-live {

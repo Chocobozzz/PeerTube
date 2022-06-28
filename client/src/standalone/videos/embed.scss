@@ -40,25 +40,6 @@ body {
   .vjs-poster {
     background-size: 100% auto;
   }
-
-  @media screen and (max-width: 350px) {
-    .vjs-play-control {
-      padding: 0 5px !important;
-      width: 25px !important;
-    }
-
-    .vjs-volume-control {
-      display: none !important;
-    }
-
-    .vjs-volume-panel {
-      width: 26px !important;
-    }
-
-    .vjs-peertube-link {
-      padding: 0;
-    }
-  }
 }
 
 #error-block {

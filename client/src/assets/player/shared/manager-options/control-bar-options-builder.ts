@@ -51,7 +51,10 @@ export class ControlBarOptionsBuilder {
 
     if (this.options.peertubeLink === true) {
       Object.assign(children, {
-        peerTubeLinkButton: { shortUUID: this.options.videoShortUUID } as PeerTubeLinkButtonOptions
+        peerTubeLinkButton: {
+          shortUUID: this.options.videoShortUUID,
+          instanceName: this.options.instanceName
+        } as PeerTubeLinkButtonOptions
       })
     }
 

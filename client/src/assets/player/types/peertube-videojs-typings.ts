@@ -127,6 +127,7 @@ type NextPreviousVideoButtonOptions = {
 
 type PeerTubeLinkButtonOptions = {
   shortUUID: string
+  instanceName: string
 }
 
 type PeerTubeP2PInfoButtonOptions = {

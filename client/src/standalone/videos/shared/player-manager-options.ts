@@ -148,6 +148,8 @@ export class PlayerManagerOptions {
     captionsResponse: Response
     live?: LiveVideo
 
+    serverConfig: HTMLServerConfig
+
     alreadyHadPlayer: boolean
 
     translations: Translations
@@ -163,7 +165,8 @@ export class PlayerManagerOptions {
       alreadyHadPlayer,
       translations,
       playlistTracker,
-      live
+      live,
+      serverConfig
     } = options
 
     const videoCaptions = await this.buildCaptions(captionsResponse, translations)
@@ -205,7 +208,10 @@ export class PlayerManagerOptions {
 
         videoDuration: video.duration,
         enableHotkeys: true,
+
         peertubeLink: this.peertubeLink,
+        instanceName: serverConfig.instance.name,
+
         poster: window.location.origin + video.previewPath,
         theaterButton: false,
 

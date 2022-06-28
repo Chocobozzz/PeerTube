@@ -196,6 +196,8 @@ export class PeerTubeEmbed {
       captionsResponse,
       alreadyHadPlayer,
       translations,
+      serverConfig: this.config,
+
       onVideoUpdate: (uuid: string) => this.loadVideoAndBuildPlayer(uuid),
 
       playlistTracker: this.playlistTracker,

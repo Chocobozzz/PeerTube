@@ -5,6 +5,8 @@ import { PeerTubeLinkButtonOptions } from '../../types'
 const Button = videojs.getComponent('Button')
 class PeerTubeLinkButton extends Button {
 
+  private instanceName: string
+
   constructor (player: videojs.Player, options?: PeerTubeLinkButtonOptions) {
     super(player, options as any)
   }
@@ -24,7 +26,7 @@ class PeerTubeLinkButton extends Button {
   private buildElement () {
     const el = videojs.dom.createEl('a', {
       href: this.buildLink(),
-      innerHTML: 'PeerTube',
+      innerHTML: (this.options_ as PeerTubeLinkButtonOptions).instanceName,
       title: this.player().localize('Video page (new window)'),
       className: 'vjs-peertube-link',
       target: '_blank'

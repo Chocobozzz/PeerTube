@@ -627,6 +627,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         embedUrl: video.embedUrl,
         embedTitle: video.name,
+        instanceName: this.serverConfig.instance.name,
 
         isLive: video.isLive,
         liveOptions,
