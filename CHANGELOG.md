@@ -1,5 +1,25 @@
 # Changelog
 
+## v4.2.2
+
+### IMPORTANT NOTES
+
+ * If you upgrade from PeerTube **< 4.2.0**, please follow 4.2.0 IMPORTANT NOTES
+
+### SECURITY
+
+ * Upgrade vulnerable server dependencies
+
+### Bug fixes
+
+ * Fix fast restream in permanent live
+ * Fix latency mode setting when creating a live
+ * Fix unique constraint tag violation when importing videos
+ * Fix latest live sessions order
+ * Fix server crash feed when accessing feeds that contains a live
+ * Fix `false` boolean attribute (`data-is-live` etc) in custom markup
+
+
 ## v4.2.1
 
 ### IMPORTANT NOTES
