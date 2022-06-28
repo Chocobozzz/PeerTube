@@ -249,6 +249,18 @@
   }
 }
 
+.accordion-button {
+  font-size: 18px;
+
+  &:not(.collapsed) {
+    font-weight: $font-bold;
+
+    my-global-icon {
+      color: pvar(--mainColorLighter);
+    }
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Buttons & form controls
 // ---------------------------------------------------------------------------

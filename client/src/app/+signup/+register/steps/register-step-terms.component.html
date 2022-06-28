@@ -5,7 +5,7 @@
         <ng-container i18n>
           I am at least {{ minimumAge }} years old and agree
           to the <a class="link-orange" (click)="onTermsClick($event)" href='#'>Terms</a>
-          <ng-container *ngIf="hasCodeOfConduct"> and to the <a (click)="onCodeOfConductClick($event)" href='#'>Code of Conduct</a></ng-container>
+          <ng-container *ngIf="hasCodeOfConduct"> and to the <a class="link-orange" (click)="onCodeOfConductClick($event)" href='#'>Code of Conduct</a></ng-container>
           of this instance
         </ng-container>
       </ng-template>

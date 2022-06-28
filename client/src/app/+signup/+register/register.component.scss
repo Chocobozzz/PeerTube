@@ -1,6 +1,10 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
+my-signup-step-title strong {
+  font-weight: $font-bold;
+}
+
 .signup-disabled {
   padding-top: 30vh;
 }
@@ -8,11 +12,12 @@
 .title-page-v2 {
   background-color: pvar(--mainColorVeryLight);
   margin: 0;
+  padding-bottom: 10px;
 }
 
 my-instance-about-accordion {
   display: block;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 }
 
 .step-buttons {

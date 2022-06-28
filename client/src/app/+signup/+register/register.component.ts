@@ -42,8 +42,8 @@ export class RegisterComponent implements OnInit {
     moderation: false
   }
 
-  defaultPreviousStepButtonLabel = $localize`:Button on the registration form to go to the previous step:Go to the previous step`
-  defaultNextStepButtonLabel = $localize`:Button on the registration form to go to the previous step:Go to the next step`
+  defaultPreviousStepButtonLabel = $localize`Go to the previous step`
+  defaultNextStepButtonLabel = $localize`Go to the next step`
   stepUserButtonLabel = this.defaultNextStepButtonLabel
 
   signupDisabled = false
