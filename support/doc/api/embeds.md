@@ -79,7 +79,7 @@ Value must be `0` or `1`.
 
 ## peertubeLink
 
-Hide PeerTube link in control bar.
+Hide PeerTube instance link in control bar.
 
 Value must be `0` or `1`.
 
@@ -100,6 +100,55 @@ Value must be `0` or `1`.
 Auto select a subtitle by default.
 
 Value must be a valid subtitle ISO code (`fr`, `en`, etc.).
+
+## autoplay
+
+Try to automatically play the video.
+Most web browsers disable video autoplay if the user did not interact with the video. You can try to bypass this limitation by muting the video
+
+Value must be `0` or `1`.
+
+## title
+
+Hide embed title.
+
+Value must be `0` or `1`.
+
+## warningTitle
+
+Hide P2P warning title.
+
+Value must be `0` or `1`.
+
+## p2p
+
+Disable P2P.
+
+Value must be `0` or `1`.
+
+## bigPlayBackgroundColor
+
+Customize big play button background color.
+
+Value must be a valid color (`red` or `rgba(100, 100, 100, 0.5)`).
+
+## foregroundColor
+
+Customize embed font color.
+
+Value must be a valid color (`red` or `rgba(100, 100, 100, 0.5)`).
+
+## mode
+
+Force a specific player engine.
+
+Value must be a valid mode (`webtorrent` or `p2p-media-loader`).
+
+## api
+
+Enable embed JavaScript API (see methods below).
+
+Value must be `0` or `1`.
 
 
 # Methods
