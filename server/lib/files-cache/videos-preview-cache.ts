@@ -37,13 +37,19 @@ class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
 
     const preview = video.getPreview()
     const destPath = join(FILES_CACHE.PREVIEWS.DIRECTORY, preview.filename)
-
     const remoteUrl = preview.getFileUrl(video)
-    await doRequestAndSaveToFile(remoteUrl, destPath)
 
-    logger.debug('Fetched remote preview %s to %s.', remoteUrl, destPath)
+    try {
+      await doRequestAndSaveToFile(remoteUrl, destPath)
 
-    return { isOwned: false, path: destPath }
+      logger.debug('Fetched remote preview %s to %s.', remoteUrl, destPath)
+
+      return { isOwned: false, path: destPath }
+    } catch (err) {
+      logger.info('Cannot fetch remote preview file %s.', remoteUrl, { err })
+
+      return undefined
+    }
   }
 }
 

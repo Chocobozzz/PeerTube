@@ -1,11 +1,12 @@
 import { join } from 'path'
+import { logger } from '@server/helpers/logger'
 import { doRequestAndSaveToFile } from '@server/helpers/requests'
 import { VideoFileModel } from '@server/models/video/video-file'
+import { MVideo, MVideoFile } from '@server/types/models'
 import { CONFIG } from '../../initializers/config'
 import { FILES_CACHE } from '../../initializers/constants'
 import { VideoModel } from '../../models/video/video'
 import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
-import { MVideo, MVideoFile } from '@server/types/models'
 
 class VideosTorrentCache extends AbstractVideoStaticFileCache <string> {
 
@@ -46,11 +47,17 @@ class VideosTorrentCache extends AbstractVideoStaticFileCache <string> {
     const remoteUrl = file.getRemoteTorrentUrl(video)
     const destPath = join(FILES_CACHE.TORRENTS.DIRECTORY, file.torrentFilename)
 
-    await doRequestAndSaveToFile(remoteUrl, destPath)
+    try {
+      await doRequestAndSaveToFile(remoteUrl, destPath)
 
-    const downloadName = this.buildDownloadName(video, file)
+      const downloadName = this.buildDownloadName(video, file)
 
-    return { isOwned: false, path: destPath, downloadName }
+      return { isOwned: false, path: destPath, downloadName }
+    } catch (err) {
+      logger.info('Cannot fetch remote torrent file %s.', remoteUrl, { err })
+
+      return undefined
+    }
   }
 
   private buildDownloadName (video: MVideo, file: MVideoFile) {
