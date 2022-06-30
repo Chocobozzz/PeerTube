@@ -1,5 +1,5 @@
 listen:
-  hostname: 'localhost'
+  hostname: '127.0.0.1'
   port: 9000
 
 # Correspond to your reverse proxy server_name/listen configuration (i.e., your public PeerTube instance URL)
@@ -91,11 +91,13 @@ defaults:
     licence: null
 
   p2p:
-    # Enable P2P by default
+    # Enable P2P by default in PeerTube client
     # Can be enabled/disabled by anonymous users and logged in users
     webapp:
       enabled: true
 
+    # Enable P2P by default in PeerTube embed
+    # Can be enabled/disabled by URL option
     embed:
       enabled: true
 
@@ -135,7 +137,7 @@ object_storage:
   region: 'us-east-1'
 
   # Set this ACL on each uploaded object
-  upload_acl: 'public'
+  upload_acl: 'public-read'
 
   credentials:
     # You can also use AWS_ACCESS_KEY_ID env variable
@@ -170,6 +172,7 @@ log:
     max_files: 20
   anonymize_ip: false
   log_ping_requests: true
+  log_tracker_unknown_infohash: true
   prettify_sql: false
 
 trending:
@@ -225,7 +228,7 @@ security:
     enabled: true
 
 tracker:
-  # If you disable the tracker, you disable the P2P aspect of PeerTube
+  # If you disable the tracker, you disable the P2P on your PeerTube instance
   enabled: true
   # Only handle requests on your videos
   # If you set this to false it means you have a public tracker

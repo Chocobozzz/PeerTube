@@ -164,6 +164,7 @@ const CONFIG = {
     },
     ANONYMIZE_IP: config.get<boolean>('log.anonymize_ip'),
     LOG_PING_REQUESTS: config.get<boolean>('log.log_ping_requests'),
+    LOG_TRACKER_UNKNOWN_INFOHASH: config.get<boolean>('log.log_tracker_unknown_infohash'),
     PRETTIFY_SQL: config.get<boolean>('log.prettify_sql')
   },
   TRENDING: {
