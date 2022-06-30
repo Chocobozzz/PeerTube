@@ -2905,7 +2905,7 @@
       </trans-unit>
       <trans-unit id="8675588963276687921" datatype="html">
         <source>Stream only once, replay will replace your live</source>
-        <target state="new">Stream only once, replay will replace your live</target>
+        <target state="translated">Транслювати лише раз, повтор замінить вашу пряму трансляцію</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">159</context></context-group>
       </trans-unit>
       <trans-unit id="2360261543675520397" datatype="html">
@@ -2915,7 +2915,7 @@
       </trans-unit>
       <trans-unit id="3384650899171037827" datatype="html">
         <source>Stream multiple times, replays will be separate videos</source>
-        <target state="new">Stream multiple times, replays will be separate videos</target>
+        <target state="translated">Транслювати кілька разів, повтори будуть окремими відео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
       <trans-unit id="58134197356653483" datatype="html">
@@ -3405,12 +3405,12 @@
       </trans-unit>
       <trans-unit id="5964038603724691720" datatype="html">
         <source>Delete and re-draft</source>
-        <target state="new">Delete and re-draft</target>
+        <target state="translated">Видалити й відредагувати повторно</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">205</context></context-group>
       </trans-unit>
       <trans-unit id="7163633882758007711" datatype="html">
         <source>Do you really want to delete and re-draft this comment?</source>
-        <target state="new">Do you really want to delete and re-draft this comment?</target>
+        <target state="translated">Ви справді хочете видалити та повторно редагувати цей коментар?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">206</context></context-group>
       </trans-unit>
       <trans-unit id="5733075023444401902" datatype="html">
@@ -3822,7 +3822,7 @@
       </trans-unit>
       <trans-unit id="7049348886126005391" datatype="html">
         <source>Batch actions</source>
-        <target state="new">Batch actions</target>
+        <target state="translated">Пакетні дії</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">22</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">18</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">18</context></context-group>
@@ -3854,7 +3854,7 @@
       </trans-unit>
       <trans-unit id="3939342579126794385" datatype="html">
         <source>User's email is verified / User can login without email verification</source>
-        <target state="new">User's email is verified / User can login without email verification</target>
+        <target state="translated">Електронна адреса користувача підтверджена / Користувач може ввійти без підтвердження електронної пошти</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="242888077027281874" datatype="html">
@@ -4403,12 +4403,12 @@
       </trans-unit>
       <trans-unit id="2144158274184161635" datatype="html">
         <source>Videos with the most interactions for recent videos</source>
-        <target state="new">Videos with the most interactions for recent videos</target>
+        <target state="translated">Відео з найбільшою кількістю взаємодій серед недавніх відео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">208</context></context-group>
       </trans-unit>
       <trans-unit id="8312243926314494468" datatype="html">
         <source>Videos with the most views during the last 24 hours</source>
-        <target state="new">Videos with the most views during the last 24 hours</target>
+        <target state="translated">Відео з найбільшою кількістю переглядів за останні 24 години</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">224</context></context-group>
       </trans-unit>
       <trans-unit id="8731139416455609016" datatype="html">
@@ -4485,7 +4485,7 @@
       </trans-unit>
       <trans-unit id="1271241007621398467" datatype="html">
         <source>{count, plural, =1 {1 comment deleted.} other {<x id="count"/> comments deleted.}}</source>
-        <target state="new">{count, plural, =1 {1 comment deleted.} other {<x id="count"/> comments deleted.}}</target>
+        <target state="translated">{count, plural, =1 {1 коментар видалено.} few {<x id="count"/> коментарі видалено.} other {<x id="count"/> коментарів видалено.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context>
           <context context-type="linenumber">150</context>
@@ -4723,7 +4723,7 @@
       </trans-unit>
       <trans-unit id="7497677457560701935" datatype="html">
         <source>Policy on videos containing sensitive content</source>
-        <target state="new">Policy on videos containing sensitive content</target>
+        <target state="translated">Політика щодо відео, які містять делікатний вміст</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="8930852890861583005" datatype="html">
@@ -4767,7 +4767,7 @@
       </trans-unit>
       <trans-unit id="5056489767203690328" datatype="html">
         <source>Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</source>
-        <target state="new">Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</target>
+        <target state="translated">Хто модерує сервер? Яка політика щодо відео NSFW? Політичні відео? тощо</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">144</context></context-group>
       </trans-unit>
       <trans-unit id="2047672753819413550" datatype="html">
@@ -5183,7 +5183,7 @@
       </trans-unit>
       <trans-unit id="9076632742417302918" datatype="html">
         <source>See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information about the expected URL </source>
-        <target state="new"> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information about the expected URL </target>
+        <target state="translated">Читайте <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>документацію<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/>, щоб докладніше дізнатися про очікувану URL </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">477</context></context-group>
       </trans-unit>
       <trans-unit id="3946988229617310200" datatype="html">
@@ -5218,7 +5218,7 @@
       </trans-unit>
       <trans-unit id="3202133522706129143" datatype="html">
         <source>Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value.</source>
-        <target state="new"> Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value. </target>
+        <target state="translated">Вкажіть обліковий запис Twitter, який представляє ваш сервер, щоб покращити попередній перегляд посилань. Якщо у вас немає облікового запису Twitter, просто залиште типове значення.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">533</context></context-group>
       </trans-unit>
       <trans-unit id="4087837092261487511" datatype="html">
