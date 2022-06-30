@@ -291,43 +291,46 @@ my-actor-avatar {
 }
 
 .footer {
-  width: $menu-width;
   padding-bottom: 15px;
 }
 
 .footer-bottom {
-  display: flex;
-  flex-direction: column;
   padding: 0 $menu-lateral-padding;
 }
 
 .footer-links {
-  &,
   > div {
     display: flex;
     flex-wrap: wrap;
   }
 
-  a,
-  span[role=button] {
+  a {
     @include margin-right(8px);
+    @include disable-default-a-behaviour;
 
-    display: inline-block;
-    text-decoration: none;
     color: pvar(--menuForegroundColor);
     opacity: $footer-links-base-opacity;
     white-space: nowrap;
     font-size: 0.75rem;
-    font-weight: 500;
     line-height: 1.4rem;
+    font-weight: $font-semibold;
+
+    &:hover {
+      opacity: $footer-links-base-opacity + .2;
+    }
   }
 }
 
-.footer-copyleft small a {
+.footer-copyleft a {
   @include disable-default-a-behaviour;
 
   color: pvar(--menuForegroundColor);
   opacity: $footer-links-base-opacity - .2;
+  font-size: 0.85rem;
+
+  &:hover {
+    opacity: $footer-links-base-opacity;
+  }
 }
 
 .dropdown {
