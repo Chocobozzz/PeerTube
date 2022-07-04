@@ -1,4 +1,6 @@
-import { Video, VideoPrivacy, VideoScheduleUpdate, VideoUpdate } from '@shared/models'
+import { getAbsoluteAPIUrl } from '@app/helpers'
+import { VideoPrivacy, VideoScheduleUpdate, VideoUpdate } from '@shared/models'
+import { VideoDetails } from './video-details.model'
 
 export class VideoEdit implements VideoUpdate {
   static readonly SPECIAL_SCHEDULED_PRIVACY = -1
@@ -29,40 +31,34 @@ export class VideoEdit implements VideoUpdate {
 
   pluginData?: any
 
-  constructor (
-    video?: Video & {
-      tags: string[]
-      commentsEnabled: boolean
-      downloadEnabled: boolean
-      support: string
-      thumbnailUrl: string
-      previewUrl: string
-    }) {
-    if (video) {
-      this.id = video.id
-      this.uuid = video.uuid
-      this.shortUUID = video.shortUUID
-      this.category = video.category.id
-      this.licence = video.licence.id
-      this.language = video.language.id
-      this.description = video.description
-      this.name = video.name
-      this.tags = video.tags
-      this.nsfw = video.nsfw
-      this.commentsEnabled = video.commentsEnabled
-      this.downloadEnabled = video.downloadEnabled
-      this.waitTranscoding = video.waitTranscoding
-      this.channelId = video.channel.id
-      this.privacy = video.privacy.id
-      this.support = video.support
-      this.thumbnailUrl = video.thumbnailUrl
-      this.previewUrl = video.previewUrl
+  constructor (video?: VideoDetails) {
+    if (!video) return
 
-      this.scheduleUpdate = video.scheduledUpdate
-      this.originallyPublishedAt = video.originallyPublishedAt ? new Date(video.originallyPublishedAt) : null
+    this.id = video.id
+    this.uuid = video.uuid
+    this.shortUUID = video.shortUUID
+    this.category = video.category.id
+    this.licence = video.licence.id
+    this.language = video.language.id
+    this.description = video.description
+    this.name = video.name
+    this.tags = video.tags
+    this.nsfw = video.nsfw
+    this.waitTranscoding = video.waitTranscoding
+    this.channelId = video.channel.id
+    this.privacy = video.privacy.id
+    this.commentsEnabled = video.commentsEnabled
+    this.downloadEnabled = video.downloadEnabled
 
-      this.pluginData = video.pluginData
-    }
+    if (video.thumbnailPath) this.thumbnailUrl = getAbsoluteAPIUrl() + video.thumbnailPath
+    if (video.previewPath) this.previewUrl = getAbsoluteAPIUrl() + video.previewPath
+
+    this.scheduleUpdate = video.scheduledUpdate
+    this.originallyPublishedAt = video.originallyPublishedAt
+      ? new Date(video.originallyPublishedAt)
+      : null
+
+    this.pluginData = video.pluginData
   }
 
   patch (values: { [ id: string ]: any }) {
@@ -86,7 +82,7 @@ export class VideoEdit implements VideoUpdate {
 
     // Convert originallyPublishedAt to string so that function objectToFormData() works correctly
     if (this.originallyPublishedAt) {
-      const originallyPublishedAt = new Date(values['originallyPublishedAt'])
+      const originallyPublishedAt = new Date(this.originallyPublishedAt)
       this.originallyPublishedAt = originallyPublishedAt.toISOString()
     }
 

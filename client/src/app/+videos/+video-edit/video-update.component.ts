@@ -18,7 +18,7 @@ import { VideoSource } from '@shared/models/videos/video-source'
   templateUrl: './video-update.component.html'
 })
 export class VideoUpdateComponent extends FormReactive implements OnInit {
-  video: VideoEdit
+  videoEdit: VideoEdit
   videoDetails: VideoDetails
   videoSource: VideoSource
   userVideoChannels: SelectChannelItem[] = []
@@ -50,19 +50,19 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     const { videoData } = this.route.snapshot.data
     const { video, videoChannels, videoCaptions, videoSource, liveVideo } = videoData
 
-    this.video = new VideoEdit(video)
     this.videoDetails = video
+    this.videoEdit = new VideoEdit(this.videoDetails)
 
     this.userVideoChannels = videoChannels
     this.videoCaptions = videoCaptions
     this.videoSource = videoSource
     this.liveVideo = liveVideo
 
-    this.forbidScheduledPublication = this.video.privacy !== VideoPrivacy.PRIVATE
+    this.forbidScheduledPublication = this.videoEdit.privacy !== VideoPrivacy.PRIVATE
   }
 
   onFormBuilt () {
-    hydrateFormFromVideo(this.form, this.video, true)
+    hydrateFormFromVideo(this.form, this.videoEdit, true)
 
     if (this.liveVideo) {
       this.form.patchValue({
@@ -115,16 +115,16 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
       return
     }
 
-    this.video.patch(this.form.value)
+    this.videoEdit.patch(this.form.value)
 
     this.loadingBar.useRef().start()
     this.isUpdatingVideo = true
 
     // Update the video
-    this.videoService.updateVideo(this.video)
+    this.videoService.updateVideo(this.videoEdit)
         .pipe(
           // Then update captions
-          switchMap(() => this.videoCaptionService.updateCaptions(this.video.id, this.videoCaptions)),
+          switchMap(() => this.videoCaptionService.updateCaptions(this.videoEdit.id, this.videoCaptions)),
 
           switchMap(() => {
             if (!this.liveVideo) return of(undefined)
@@ -140,7 +140,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
               .some(key => this.liveVideo[key] !== liveVideoUpdate[key])
             if (!liveChanged) return of(undefined)
 
-            return this.liveVideoService.updateLive(this.video.id, liveVideoUpdate)
+            return this.liveVideoService.updateLive(this.videoEdit.id, liveVideoUpdate)
           })
         )
         .subscribe({
@@ -149,7 +149,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
             this.isUpdatingVideo = false
             this.loadingBar.useRef().complete()
             this.notifier.success($localize`Video updated.`)
-            this.router.navigateByUrl(Video.buildWatchUrl(this.video))
+            this.router.navigateByUrl(Video.buildWatchUrl(this.videoEdit))
           },
 
           error: err => {
@@ -162,10 +162,10 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   }
 
   hydratePluginFieldsFromVideo () {
-    if (!this.video.pluginData) return
+    if (!this.videoEdit.pluginData) return
 
     this.form.patchValue({
-      pluginData: this.video.pluginData
+      pluginData: this.videoEdit.pluginData
     })
   }
 

@@ -1,3 +1,4 @@
+import { switchMap } from 'rxjs'
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
@@ -87,21 +88,16 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Af
     this.loadingBar.useRef().start()
 
     this.videoImportService.importVideoTorrent(torrentfile || this.magnetUri, videoUpdate)
+      .pipe(switchMap(({ video }) => this.videoService.getVideo({ videoId: video.uuid })))
       .subscribe({
-        next: res => {
+        next: video => {
           this.loadingBar.useRef().complete()
-          this.firstStepDone.emit(res.video.name)
+          this.firstStepDone.emit(video.name)
           this.isImportingVideo = false
           this.hasImportedVideo = true
 
-          this.video = new VideoEdit(Object.assign(res.video, {
-            commentsEnabled: videoUpdate.commentsEnabled,
-            downloadEnabled: videoUpdate.downloadEnabled,
-            privacy: { id: this.firstStepPrivacyId },
-            support: null,
-            thumbnailUrl: null,
-            previewUrl: null
-          }))
+          this.video = new VideoEdit(video)
+          this.video.patch({ privacy: this.firstStepPrivacyId })
 
           hydrateFormFromVideo(this.form, this.video, false)
         },
