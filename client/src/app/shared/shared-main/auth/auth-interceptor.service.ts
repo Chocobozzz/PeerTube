@@ -61,8 +61,8 @@ export class AuthInterceptor implements HttpInterceptor {
     return req.clone({ headers: req.headers.set('Authorization', authHeaderValue) })
   }
 
-  private handleNotAuthenticated (err: HttpErrorResponse, path = '/login'): Observable<any> {
-    this.router.navigateByUrl(path)
+  private handleNotAuthenticated (err: HttpErrorResponse): Observable<any> {
+    this.router.navigate([ '/404' ], { state: { obj: err }, skipLocationChange: true })
     return of(err.message)
   }
 }

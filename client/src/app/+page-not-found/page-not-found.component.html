@@ -1,5 +1,5 @@
 <div class="root">
-  <div *ngIf="status !== 403 && status !== 418" class="box">
+  <div *ngIf="status !== 401 && status !== 403 && status !== 418" class="box">
     <strong>{{ status }}.</strong>
     <span class="ms-1 muted" i18n>That's an error.</span>
 
@@ -20,6 +20,21 @@
         <li i18n>You may have typed the address or URL incorrectly</li>
       </ul>
     </div>
+  </div>
+
+  <div *ngIf="status === 401" class="box">
+    <strong>{{ status }}.</strong>
+    <span class="ms-1 muted" i18n>You are not authorized here.</span>
+
+    <div class="text mt-4">
+      <ng-container *ngIf="type === 'video'" i18n>You might need to login to see the video.</ng-container>
+      <ng-container *ngIf="type !== 'video'" i18n>You might need to login to see the resource.</ng-container>
+    </div>
+
+    <a class="peertube-button-link orange-button mt-5" i18n routerLink="/login">
+      Login
+    </a>
+
   </div>
 
   <div *ngIf="status === 403" class="box">

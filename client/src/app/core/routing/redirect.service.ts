@@ -46,6 +46,8 @@ export class RedirectService {
     this.currentUrl = this.router.url
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd || event instanceof NavigationCancel) {
+        if (event.url === '/404') return
+
         this.previousUrl = this.currentUrl
         this.currentUrl = event.url
 
