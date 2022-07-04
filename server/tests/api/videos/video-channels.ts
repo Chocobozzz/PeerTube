@@ -59,7 +59,7 @@ describe('Test video channels', function () {
   })
 
   it('Should create another video channel', async function () {
-    this.timeout(10000)
+    this.timeout(30000)
 
     {
       const videoChannel = {
