@@ -7,6 +7,7 @@ import { MyHistoryComponent } from './my-history/my-history.component'
 import { MyLibraryComponent } from './my-library.component'
 import { MyOwnershipComponent } from './my-ownership/my-ownership.component'
 import { MyVideoChannelsSyncComponent } from './my-video-channels-sync/my-video-channels-sync.component'
+import { VideoChannelsSyncEditComponent } from './my-video-channels-sync/video-channels-sync-edit/video-channels-sync-edit.component'
 import { MyVideoImportsComponent } from './my-video-imports/my-video-imports.component'
 import { MyVideoPlaylistCreateComponent } from './my-video-playlists/my-video-playlist-create.component'
 import { MyVideoPlaylistElementsComponent } from './my-video-playlists/my-video-playlist-elements.component'
@@ -140,6 +141,16 @@ const myLibraryRoutes: Routes = [
         data: {
           meta: {
             title: $localize`My synchronizations`
+          }
+        }
+      },
+
+      {
+        path: 'video-channels-sync/create',
+        component: VideoChannelsSyncEditComponent,
+        data: {
+          meta: {
+            title: $localize`Create new synchronization`
           }
         }
       }

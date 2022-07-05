@@ -1,0 +1,44 @@
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<div class="margin-content">
+  <form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
+
+    <div class="row"> <!-- channel grid -->
+      <div class="col-12 col-lg-4 col-xl-3">
+        <div class="video-channel-sync-title" i18n>NEW SYNCHRONIZATION</div>
+      </div>
+
+      <div class="col-12 col-lg-8 col-xl-9">
+        <div class="form-group">
+          <label i18n for="url">Remote channel URL</label>
+          <div class="input-group">
+            <input
+              type="text" id="url" i18n-placeholder placeholder="Example: https://youtube.com/channel/UC_fancy_channel"
+              formControlName="url" [ngClass]="{ 'input-error': formErrors['url'] }" class="form-control"
+            >
+          </div>
+          <div *ngIf="formErrors['url']" class="form-error">
+            {{ formErrors['url'] }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="video-channel">Video Channel</label>
+          <input
+            type="text" id="video-channel" class="form-control"
+            formControlName="video-channel" [ngClass]="{ 'input-error': formErrors['video-channel'] }"
+          >
+          <div *ngIf="formErrors['video-channel']" class="form-error">
+            {{ formErrors['video-channel'] }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row"> <!-- submit placement block -->
+      <div class="col-md-7 col-xl-5"></div>
+      <div class="col-md-5 col-xl-5 d-inline-flex">
+        <input type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
+      </div>
+    </div>
+  </form>
+</div>

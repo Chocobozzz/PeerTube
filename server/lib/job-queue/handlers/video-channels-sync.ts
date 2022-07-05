@@ -42,8 +42,7 @@ export async function processVideoChannelsSync () {
   const syncedChannels: VideoChannelModel[] = await VideoChannelModel.listSynced()
   const youtubeDL = await YoutubeDLCLI.safeGet()
 
-  const shuffledChannels = _.shuffle(syncedChannels)
-  for (const channel of shuffledChannels) {
+  for (const channel of syncedChannels) {
     try {
       logger.info(`Starting synchronizing "${channel.name}" with external channel "${channel.externalChannelUrl}"`)
       const { errors, successes, alreadyImported } = await synchronizeChannel(channel, youtubeDL)
@@ -61,6 +60,7 @@ export async function processVideoChannelsSync () {
 }
 
 async function synchronizeChannel (channel: VideoChannelModel, youtubeDL: YoutubeDLCLI): Promise<ChannelSyncInfo> {
+  // FIXME mettre dans constants.ts
   const NB_MAX_VIDEOS = 3
   const result: ChannelSyncInfo = {
     total: NB_MAX_VIDEOS,

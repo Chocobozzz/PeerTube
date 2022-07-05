@@ -557,6 +557,7 @@ describe('Test video channels', function () {
     }
   })
 
+  // FIXME dans un fichier séparé
   it('Should update the channel with the external channel to synchronize with', async function () {
     this.timeout(15000)
 

@@ -49,7 +49,7 @@ export const VIDEO_CHANNEL_SUPPORT_VALIDATOR: BuildFormValidator = {
   }
 }
 
-export const VIDEO_CHANNEL_EXTERNAL_URL: BuildFormValidator = {
+export const VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [
     Validators.pattern(/^https?:\/\//),
     Validators.maxLength(1000)

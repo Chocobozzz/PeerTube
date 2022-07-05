@@ -13,7 +13,7 @@
   <ng-template pTemplate="caption">
     <div class="caption">
       <div class="left-buttons">
-        <a class="add-sync" routerLink="/admin/users/create">
+        <a class="add-sync" routerLink="{{ getVideoChannelCreateLink() }}">
           <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Add synchronization</ng-container>
         </a>
@@ -22,11 +22,11 @@
   </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 40px;"></th>
-      <th style="width: 200px">Action</th>
+      <th style="width: 5%"></th>
+      <th style="width: 10%">Action</th>
       <th style="width: 45%" i18n pSortableColumn="externalChannelUrl">External Channel</th>
-      <th style="width: 150px" i18n>State</th>
-      <th style="width: 150px" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th style="width: 15%" i18n>State</th>
+      <th style="width: 15%" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-expanded="expanded" let-videoChannelSync>

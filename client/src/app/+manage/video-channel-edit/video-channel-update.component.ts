@@ -8,7 +8,7 @@ import {
   VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
   VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
   VIDEO_CHANNEL_SUPPORT_VALIDATOR,
-  VIDEO_CHANNEL_EXTERNAL_URL
+  VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR
 } from '@app/shared/form-validators/video-channel-validators'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
@@ -52,7 +52,7 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
       support: VIDEO_CHANNEL_SUPPORT_VALIDATOR,
       bulkVideosSupportUpdate: null,
       enableSync: null,
-      externalChannelUrl: VIDEO_CHANNEL_EXTERNAL_URL,
+      externalChannelUrl: VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR,
       isUploadAllowed: null
     })
 
@@ -219,15 +219,15 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
     // upload is not allowed
     if (this.isUploadAllowed()) {
       const enableSync = this.form.value['enableSync'] === true
-      return {'disabled-checkbox-extra': !enableSync}
+      return { 'disabled-checkbox-extra': !enableSync }
     }
   }
 
-  isUploadAllowed(): boolean {
+  isUploadAllowed (): boolean {
     return this.isQuotaPositive && this.isHttpUploadAllowed()
   }
 
-  isHttpUploadAllowed(): boolean {
+  isHttpUploadAllowed (): boolean {
     return this.serverConfig.import.videos.http.enabled
   }
 

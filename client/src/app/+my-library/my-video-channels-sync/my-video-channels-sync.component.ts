@@ -31,12 +31,6 @@ export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
         {
           label: $localize`Delete this synchonization`,
           handler: videoChannelSync => this.deleteSync(videoChannelSync)
-        },
-
-        {
-          label: $localize`Edit this synchronization`,
-          description: $localize`Change synchronization settings`,
-          handler: videoChannelSync => this.editSync(videoChannelSync)
         }
       ]
     ]
@@ -50,9 +44,8 @@ export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
     this.channelsSync = this.channelsSync.filter(item => item !== videoChannelsSync)
   }
 
-  editSync (videoChannelSync: VideoChannelsSync) {
-    // FIXME
-    location.href = '/yolo/coincoin/' + videoChannelSync.id
+  getVideoChannelCreateLink () {
+    return '/my-library/video-channels-sync/create'
   }
 
   getVideoChannelSyncStateClass (syncId: number) {
