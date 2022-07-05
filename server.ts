@@ -1,4 +1,7 @@
 // ----------- Node modules -----------
+import { registerOpentelemetryTracing } from './server/lib/opentelemetry/tracing'
+registerOpentelemetryTracing()
+
 import express from 'express'
 import morgan, { token } from 'morgan'
 import cors from 'cors'
@@ -46,6 +49,12 @@ checkConfig()
 
 // Trust our proxy (IP forwarding...)
 app.set('trust proxy', CONFIG.TRUST_PROXY)
+
+app.use((_req, res, next) => {
+  res.locals.requestStart = Date.now()
+
+  return next()
+})
 
 // Security middleware
 import { baseCSP } from './server/middlewares/csp'
@@ -126,6 +135,7 @@ import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { VideoViewsManager } from '@server/lib/views/video-views-manager'
 import { isTestInstance } from './server/helpers/core-utils'
+import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics'
 
 // ----------- Command line -----------
 
@@ -193,6 +203,10 @@ app.use(cookieParser())
 
 // W3C DNT Tracking Status
 app.use(advertiseDoNotTrack)
+
+// ----------- Open Telemetry -----------
+
+OpenTelemetryMetrics.Instance.init(app)
 
 // ----------- Views, routes and static files -----------
 
@@ -297,6 +311,7 @@ async function startApplication () {
   RemoveDanglingResumableUploadsScheduler.Instance.enable()
   VideoViewsBufferScheduler.Instance.enable()
   GeoIPUpdateScheduler.Instance.enable()
+  OpenTelemetryMetrics.Instance.registerMetrics()
 
   Redis.Instance.init()
   PeerTubeSocket.Instance.init(server)

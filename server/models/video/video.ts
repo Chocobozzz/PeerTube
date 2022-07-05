@@ -24,7 +24,6 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { buildNSFWFilter } from '@server/helpers/express-utils'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live/live-manager'
 import { removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'
@@ -134,9 +133,9 @@ import { VideoJobInfoModel } from './video-job-info'
 import { VideoLiveModel } from './video-live'
 import { VideoPlaylistElementModel } from './video-playlist-element'
 import { VideoShareModel } from './video-share'
+import { VideoSourceModel } from './video-source'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
-import { VideoSourceModel } from './video-source'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -1370,11 +1369,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   static async getStats () {
-    const totalLocalVideos = await VideoModel.count({
-      where: {
-        remote: false
-      }
-    })
+    const serverActor = await getServerActor()
 
     let totalLocalVideoViews = await VideoModel.sum('views', {
       where: {
@@ -1385,18 +1380,25 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     // Sequelize could return null...
     if (!totalLocalVideoViews) totalLocalVideoViews = 0
 
-    const serverActor = await getServerActor()
-
-    const { total: totalVideos } = await VideoModel.listForApi({
+    const baseOptions = {
       start: 0,
       count: 0,
       sort: '-publishedAt',
-      nsfw: buildNSFWFilter(),
+      nsfw: null,
+      isLocal: true,
       displayOnlyForFollower: {
         actorId: serverActor.id,
         orLocalVideos: true
       }
+    }
+
+    const { total: totalLocalVideos } = await VideoModel.listForApi({
+      ...baseOptions,
+
+      isLocal: true
     })
+
+    const { total: totalVideos } = await VideoModel.listForApi(baseOptions)
 
     return {
       totalLocalVideos,

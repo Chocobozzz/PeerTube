@@ -29,6 +29,12 @@ async function expectLogDoesNotContain (server: PeerTubeServer, str: string) {
   expect(content.toString()).to.not.contain(str)
 }
 
+async function expectLogContain (server: PeerTubeServer, str: string) {
+  const content = await server.servers.getLogContent()
+
+  expect(content.toString()).to.contain(str)
+}
+
 async function testImage (url: string, imageName: string, imageHTTPPath: string, extension = '.jpg') {
   const res = await makeGetRequest({
     url,
@@ -99,5 +105,6 @@ export {
   expectNotStartWith,
   checkBadStartPagination,
   checkBadCountPagination,
-  checkBadSortPagination
+  checkBadSortPagination,
+  expectLogContain
 }

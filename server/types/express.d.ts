@@ -103,6 +103,8 @@ declare module 'express' {
     }) => void
 
     locals: {
+      requestStart: number
+
       apicache: {
         content: string | Buffer
         write: Writable['write']

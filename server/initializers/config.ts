@@ -167,6 +167,22 @@ const CONFIG = {
     LOG_TRACKER_UNKNOWN_INFOHASH: config.get<boolean>('log.log_tracker_unknown_infohash'),
     PRETTIFY_SQL: config.get<boolean>('log.prettify_sql')
   },
+  OPEN_TELEMETRY: {
+    METRICS: {
+      ENABLED: config.get<boolean>('open_telemetry.metrics.enabled'),
+
+      PROMETHEUS_EXPORTER: {
+        PORT: config.get<number>('open_telemetry.metrics.prometheus_exporter.port')
+      }
+    },
+    TRACING: {
+      ENABLED: config.get<boolean>('open_telemetry.tracing.enabled'),
+
+      JAEGER_EXPORTER: {
+        ENDPOINT: config.get<string>('open_telemetry.tracing.jaeger_exporter.endpoint')
+      }
+    }
+  },
   TRENDING: {
     VIDEOS: {
       INTERVAL_DAYS: config.get<number>('trending.videos.interval_days'),

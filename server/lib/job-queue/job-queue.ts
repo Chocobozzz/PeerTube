@@ -285,6 +285,12 @@ class JobQueue {
     return total
   }
 
+  async getStats () {
+    const promises = jobTypes.map(async t => ({ jobType: t, counts: await this.queues[t].getJobCounts() }))
+
+    return Promise.all(promises)
+  }
+
   async removeOldJobs () {
     for (const key of Object.keys(this.queues)) {
       const queue = this.queues[key]

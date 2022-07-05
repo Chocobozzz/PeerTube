@@ -1,7 +1,6 @@
-import 'mocha'
 import request from 'supertest'
-import { cleanupTests, createSingleServer, PeerTubeServer } from '@shared/server-commands'
 import { HttpStatusCode } from '@shared/models'
+import { cleanupTests, createSingleServer, PeerTubeServer } from '@shared/server-commands'
 
 describe('Start and stop server without web client routes', function () {
   let server: PeerTubeServer

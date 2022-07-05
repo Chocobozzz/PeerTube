@@ -177,6 +177,22 @@ log:
   log_tracker_unknown_infohash: true
   prettify_sql: false
 
+# Highly experimental support of Open Telemetry
+open_telemetry:
+  metrics:
+    enabled: false
+
+    # Create a prometheus exporter server on this port so prometheus server can scrape PeerTube metrics
+    prometheus_exporter:
+      port: 9091
+
+  tracing:
+    enabled: false
+
+    # Send traces to a Jaeger compatible endpoint
+    jaeger_exporter:
+      endpoint: ''
+
 trending:
   videos:
     interval_days: 7 # Compute trending videos for the last x days
