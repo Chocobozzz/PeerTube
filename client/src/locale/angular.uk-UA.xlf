@@ -2885,7 +2885,7 @@
       </trans-unit>
       <trans-unit id="4422946962830681102" datatype="html">
         <source>Torrents with only 1 file are supported.</source>
-        <target state="translated">Підтримуються торренти лише з 1 файлом.</target>
+        <target state="translated">Підтримуються торенти лише з 1 файлом.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.ts</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="7860848084471862305" datatype="html">
@@ -5411,7 +5411,7 @@
       </trans-unit>
       <trans-unit id="8373385486403101567" datatype="html">
         <source>If you also enabled HLS support, it will multiply videos storage by 2</source>
-        <target state="new">If you also enabled HLS support, it will multiply videos storage by 2</target>
+        <target state="translated">Якщо ви також увімкнули підтримку HLS, обсяг відео зросте вдвічі</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="3839590624406770455" datatype="html">
@@ -5958,7 +5958,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5278589041647101772" datatype="html">
         <source>Overwrite support field of all videos of this channel</source>
-        <target state="new">Overwrite support field of all videos of this channel</target>
+        <target state="translated">Перезаписати поле підтримки всіх відео цього каналу</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">79</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
@@ -10173,12 +10173,12 @@ color: red;
       </trans-unit>
       <trans-unit id="6880459830525364741" datatype="html">
         <source>Support text must be at least 3 characters long.</source>
-        <target state="new">Support text must be at least 3 characters long.</target>
+        <target state="translated">Текст підтримки має містити принаймні 3 символи.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="6122525173522570480" datatype="html">
         <source>Support text cannot be more than 1000 characters long.</source>
-        <target state="new">Support text cannot be more than 1000 characters long.</target>
+        <target state="translated">Довжина тексту підтримки не може перевищувати 1000 символів.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">48</context>
@@ -10287,7 +10287,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6445713766140892433" datatype="html">
         <source>Latest live sessions</source>
-        <target state="new">Latest live sessions</target>
+        <target state="translated">Останні сеанси наживо</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">36</context>
@@ -10295,7 +10295,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1018828582442463303" datatype="html">
         <source>Started on <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></source>
-        <target state="new">Started on <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></target>
+        <target state="translated">Початок <x id="INTERPOLATION" equiv-text="{{ session.startDate | date:'medium' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">42</context>
@@ -10303,7 +10303,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6765028278622459314" datatype="html">
         <source>Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></source>
-        <target state="new">Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></target>
+        <target state="translated">Завершення <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">43</context>
@@ -10382,12 +10382,12 @@ color: red;
       </trans-unit>
       <trans-unit id="4806300480558315727" datatype="html">
         <source>Video support must be at least 3 characters long.</source>
-        <target state="new">Video support must be at least 3 characters long.</target>
+        <target state="translated">Опис підтримки відео має містити принаймні 3 символи.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="6655773021893755977" datatype="html">
         <source>Video support cannot be more than 1000 characters long.</source>
-        <target state="new">Video support cannot be more than 1000 characters long.</target>
+        <target state="translated">Довжина опису підтримки відео не може перевищувати 1000 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="4246579596585402255" datatype="html">
