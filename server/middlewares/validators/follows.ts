@@ -1,12 +1,13 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
+import { isProdInstance } from '@server/helpers/core-utils'
 import { isEachUniqueHandleValid, isFollowStateValid, isRemoteHandleValid } from '@server/helpers/custom-validators/follows'
 import { loadActorUrlOrGetFromWebfinger } from '@server/lib/activitypub/actors'
 import { getRemoteNameAndHost } from '@server/lib/activitypub/follow'
 import { getServerActor } from '@server/models/application/application'
 import { MActorFollowActorsDefault } from '@server/types/models'
+import { ServerFollowCreate } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
-import { isTestInstance } from '../../helpers/core-utils'
 import { isActorTypeValid, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
 import { isEachUniqueHostValid, isHostValid } from '../../helpers/custom-validators/servers'
 import { logger } from '../../helpers/logger'
@@ -14,7 +15,6 @@ import { WEBSERVER } from '../../initializers/constants'
 import { ActorModel } from '../../models/actor/actor'
 import { ActorFollowModel } from '../../models/actor/actor-follow'
 import { areValidationErrors } from './shared'
-import { ServerFollowCreate } from '@shared/models'
 
 const listFollowsValidator = [
   query('state')
@@ -42,7 +42,7 @@ const followValidator = [
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // Force https if the administrator wants to follow remote actors
-    if (isTestInstance() === false && WEBSERVER.SCHEME === 'http') {
+    if (isProdInstance() && WEBSERVER.SCHEME === 'http') {
       return res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
         .json({

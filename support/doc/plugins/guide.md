@@ -1036,7 +1036,7 @@ $ npm run setup:cli
  * Run PeerTube (you can access to your instance on http://localhost:9000):
 
 ```
-$ NODE_ENV=test npm start
+$ NODE_ENV=dev npm start
 ```
 
  * Register the instance via the CLI:

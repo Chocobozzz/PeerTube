@@ -5,17 +5,6 @@ listen:
 webserver:
   https: false
 
-rates_limit:
-  signup:
-    window: 10 minutes
-    max: 50
-  login:
-    window: 5 minutes
-    max: 20
-  api:
-    window: 10 seconds
-    max: 500
-
 database:
   hostname: 'localhost'
   port: 5432
@@ -44,7 +33,7 @@ peertube:
 
 redundancy:
   videos:
-    check_interval: '1 minute'
+    check_interval: '5 minutes'
     strategies:
       -
         size: '1000MB'
@@ -62,67 +51,34 @@ redundancy:
 
 cache:
   previews:
-    size: 1
+    size: 10
   captions:
-    size: 1
+    size: 10
   torrents:
-    size: 1
+    size: 10
 
 signup:
   enabled: true
   requires_email_verification: false
 
-transcoding:
-  enabled: true
-  allow_additional_extensions: false
-  allow_audio_files: false
-  threads: 2
-  concurrency: 2
-  resolutions:
-    0p: false
-    144p: false
-    240p: true
-    360p: true
-    480p: true
-    720p: true
-    1080p: true
-    1440p: true
-    2160p: true
-  webtorrent:
-    enabled: true
-  hls:
-    enabled: true
-
 live:
-  enabled: false
+  enabled: true
 
-  allow_replay: false
-
-  rtmp:
-    port: 1935
+  allow_replay: true
 
   transcoding:
-    enabled: false
+    enabled: true
     threads: 2
 
     resolutions:
-      144p: false
-      240p: false
-      360p: false
-      480p: false
-      720p: false
-      1080p: false
-      1440p: false
-      2160p: false
+      360p: true
+      720p: true
 
 import:
   videos:
     concurrency: 2
     http:
       enabled: true
-      youtube_dl_release:
-        url: 'https://api.github.com/repos/yt-dlp/yt-dlp/releases'
-        name: 'yt-dlp'
     torrent:
       enabled: true
 
@@ -135,7 +91,6 @@ plugins:
 
 federation:
   videos:
-    federate_unlisted: true
     cleanup_remote_interactions: false
 
 views:
@@ -143,11 +98,8 @@ views:
     remote:
       max_age: -1
 
-    local_buffer_update_interval: '5 seconds'
-    ip_view_expiration: '1 second'
-
 geo_ip:
-  enabled: false
+  enabled: true
 
 video_studio:
   enabled: true

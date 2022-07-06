@@ -134,7 +134,7 @@ import { HttpStatusCode } from './shared/models/http/http-error-codes'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { VideoViewsManager } from '@server/lib/views/video-views-manager'
-import { isTestInstance } from './server/helpers/core-utils'
+import { isTestOrDevInstance } from './server/helpers/core-utils'
 import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics'
 
 // ----------- Command line -----------
@@ -148,7 +148,7 @@ cli
 // ----------- App -----------
 
 // Enable CORS for develop
-if (isTestInstance()) {
+if (isTestOrDevInstance()) {
   app.use(cors({
     origin: '*',
     exposedHeaders: 'Retry-After',

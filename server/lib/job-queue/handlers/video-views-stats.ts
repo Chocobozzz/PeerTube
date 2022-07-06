@@ -1,5 +1,5 @@
 import { VideoViewModel } from '@server/models/view/video-view'
-import { isTestInstance } from '../../../helpers/core-utils'
+import { isTestOrDevInstance } from '../../../helpers/core-utils'
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
 import { Redis } from '../../redis'
@@ -8,7 +8,7 @@ async function processVideosViewsStats () {
   const lastHour = new Date()
 
   // In test mode, we run this function multiple times per hour, so we don't want the values of the previous hour
-  if (!isTestInstance()) lastHour.setHours(lastHour.getHours() - 1)
+  if (!isTestOrDevInstance()) lastHour.setHours(lastHour.getHours() - 1)
 
   const hour = lastHour.getHours()
   const startDate = lastHour.setMinutes(0, 0, 0)

@@ -1,4 +1,4 @@
-import { isTestInstance } from '../../helpers/core-utils'
+import { isTestOrDevInstance } from '../../helpers/core-utils'
 import { logger } from '../../helpers/logger'
 import { ACTOR_FOLLOW_SCORE, SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 import { ActorFollowModel } from '../../models/actor/actor-follow'
@@ -39,7 +39,7 @@ export class ActorFollowScheduler extends AbstractScheduler {
   }
 
   private async removeBadActorFollows () {
-    if (!isTestInstance()) logger.info('Removing bad actor follows (scheduler).')
+    if (!isTestOrDevInstance()) logger.info('Removing bad actor follows (scheduler).')
 
     try {
       await ActorFollowModel.removeBadActorFollows()

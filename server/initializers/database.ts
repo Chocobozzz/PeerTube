@@ -8,9 +8,10 @@ import { UserNotificationModel } from '@server/models/user/user-notification'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
+import { VideoSourceModel } from '@server/models/video/video-source'
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer'
 import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-video-viewer-watch-section'
-import { isTestInstance } from '../helpers/core-utils'
+import { isTestOrDevInstance } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
 import { AbuseModel } from '../models/abuse/abuse'
 import { AbuseMessageModel } from '../models/abuse/abuse-message'
@@ -49,7 +50,6 @@ import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-pla
 import { VideoTagModel } from '../models/video/video-tag'
 import { VideoViewModel } from '../models/view/video-view'
 import { CONFIG } from './config'
-import { VideoSourceModel } from '@server/models/video/video-source'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -81,13 +81,13 @@ const sequelizeTypescript = new SequelizeTypescript({
   pool: {
     max: poolMax
   },
-  benchmark: isTestInstance(),
+  benchmark: isTestOrDevInstance(),
   isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
   logging: (message: string, benchmark: number) => {
     if (process.env.NODE_DB_LOG === 'false') return
 
     let newMessage = 'Executed SQL request'
-    if (isTestInstance() === true && benchmark !== undefined) {
+    if (isTestOrDevInstance() === true && benchmark !== undefined) {
       newMessage += ' in ' + benchmark + 'ms'
     }
 

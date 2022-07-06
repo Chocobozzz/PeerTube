@@ -2,10 +2,10 @@ import { readFileSync } from 'fs-extra'
 import { isArray, merge } from 'lodash'
 import { createTransport, Transporter } from 'nodemailer'
 import { join } from 'path'
+import { root } from '@shared/core-utils'
 import { EmailPayload } from '@shared/models'
 import { SendEmailDefaultOptions } from '../../shared/models/server/emailer.model'
-import { isTestInstance } from '../helpers/core-utils'
-import { root } from '@shared/core-utils'
+import { isTestOrDevInstance } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
 import { CONFIG, isEmailEnabled } from '../initializers/config'
 import { WEBSERVER } from '../initializers/constants'
@@ -29,7 +29,7 @@ class Emailer {
     this.initialized = true
 
     if (!isEmailEnabled()) {
-      if (!isTestInstance()) {
+      if (!isTestOrDevInstance()) {
         logger.error('Cannot use SMTP server because of lack of configuration. PeerTube will not be able to send mails!')
       }
 

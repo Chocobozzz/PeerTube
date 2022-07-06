@@ -2,6 +2,7 @@ import express from 'express'
 import { readFile } from 'fs-extra'
 import { join } from 'path'
 import validator from 'validator'
+import { isTestOrDevInstance } from '@server/helpers/core-utils'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc'
 import { mdToOneLinePlainText } from '@server/helpers/markdown'
 import { ActorImageModel } from '@server/models/actor/actor-image'
@@ -30,7 +31,6 @@ import { MAccountActor, MChannelActor } from '../types/models'
 import { getActivityStreamDuration } from './activitypub/activity'
 import { getBiggestActorImage } from './actor-image'
 import { ServerConfigManager } from './server-config-manager'
-import { isTestInstance } from '@server/helpers/core-utils'
 
 type Tags = {
   ogType: string
@@ -234,7 +234,7 @@ class ClientHtml {
     const path = ClientHtml.getEmbedPath()
 
     // Disable HTML cache in dev mode because webpack can regenerate JS files
-    if (!isTestInstance() && ClientHtml.htmlCache[path]) {
+    if (!isTestOrDevInstance() && ClientHtml.htmlCache[path]) {
       return ClientHtml.htmlCache[path]
     }
 

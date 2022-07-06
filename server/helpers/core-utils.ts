@@ -165,6 +165,14 @@ function isTestInstance () {
   return process.env.NODE_ENV === 'test'
 }
 
+function isDevInstance () {
+  return process.env.NODE_ENV === 'dev'
+}
+
+function isTestOrDevInstance () {
+  return isTestInstance() || isDevInstance()
+}
+
 function isProdInstance () {
   return process.env.NODE_ENV === 'production'
 }
@@ -270,6 +278,7 @@ const pipelinePromise = promisify(pipeline)
 
 export {
   isTestInstance,
+  isTestOrDevInstance,
   isProdInstance,
   getAppNumber,
 

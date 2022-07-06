@@ -1,4 +1,4 @@
-import { isTestInstance } from '@server/helpers/core-utils'
+import { isTestOrDevInstance } from '@server/helpers/core-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { VIEW_LIFETIME } from '@server/initializers/constants'
 import { sendView } from '@server/lib/activitypub/send/send-view'
@@ -117,7 +117,7 @@ export class VideoViewerCounters {
     if (this.processingViewerCounters) return
     this.processingViewerCounters = true
 
-    if (!isTestInstance()) logger.info('Cleaning video viewers.', lTags())
+    if (!isTestOrDevInstance()) logger.info('Cleaning video viewers.', lTags())
 
     try {
       for (const videoId of this.viewersPerVideo.keys()) {

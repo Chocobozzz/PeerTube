@@ -4,7 +4,7 @@ import { URL } from 'url'
 import { getFFmpegVersion } from '@server/helpers/ffmpeg'
 import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
 import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
-import { isProdInstance, isTestInstance, parseSemVersion } from '../helpers/core-utils'
+import { isProdInstance, parseSemVersion } from '../helpers/core-utils'
 import { isArray } from '../helpers/custom-validators/misc'
 import { logger } from '../helpers/logger'
 import { ApplicationModel, getServerActor } from '../models/application/application'
@@ -33,6 +33,9 @@ async function checkActivityPubUrls () {
 
 // Some checks on configuration files or throw if there is an error
 function checkConfig () {
+
+  const configFiles = config.util.getConfigSources().map(s => s.name).join(' -> ')
+  logger.info('Using following configuration file hierarchy: %s.', configFiles)
 
   // Moved configuration keys
   if (config.has('services.csp-logger')) {
@@ -128,7 +131,7 @@ function checkLocalRedundancyConfig () {
       }
 
       // Lifetime should not be < 10 hours
-      if (!isTestInstance() && r.minLifetime < 1000 * 3600 * 10) {
+      if (isProdInstance() && r.minLifetime < 1000 * 3600 * 10) {
         throw new Error('Video redundancy minimum lifetime should be >= 10 hours for strategy ' + r.strategy)
       }
     }

@@ -5,7 +5,7 @@ import { loadVideo } from '@server/lib/model-loaders'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
-import { isTestInstance } from '../../helpers/core-utils'
+import { isTestOrDevInstance } from '../../helpers/core-utils'
 import { isIdOrUUIDValid, isUUIDValid, toCompleteUUID } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
@@ -34,7 +34,7 @@ const isURLOptions = {
 }
 
 // We validate 'localhost', so we don't have the top level domain
-if (isTestInstance()) {
+if (isTestOrDevInstance()) {
   isURLOptions.require_tld = false
 }
 

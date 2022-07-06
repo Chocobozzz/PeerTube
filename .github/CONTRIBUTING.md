@@ -216,7 +216,7 @@ Instance configurations are in `config/test-{1,2,3}.yaml`.
 To test emails with PeerTube:
 
  * Run [mailslurper](http://mailslurper.com/)
- * Run PeerTube using mailslurper SMTP port: `NODE_CONFIG='{ "smtp": { "hostname": "localhost", "port": 2500, "tls": false } }' NODE_ENV=test npm start`
+ * Run PeerTube using mailslurper SMTP port: `NODE_CONFIG='{ "smtp": { "hostname": "localhost", "port": 2500, "tls": false } }' NODE_ENV=dev node dist/server`
 
 ## Plugins & Themes
 

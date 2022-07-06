@@ -1,7 +1,7 @@
 import validator from 'validator'
-import { exists, isArray } from './misc'
-import { isTestInstance } from '../core-utils'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
+import { isTestOrDevInstance } from '../core-utils'
+import { exists, isArray } from './misc'
 
 function isHostValid (host: string) {
   const isURLOptions = {
@@ -10,7 +10,7 @@ function isHostValid (host: string) {
   }
 
   // We validate 'localhost', so we don't have the top level domain
-  if (isTestInstance()) {
+  if (isTestOrDevInstance()) {
     isURLOptions.require_tld = false
   }
 
