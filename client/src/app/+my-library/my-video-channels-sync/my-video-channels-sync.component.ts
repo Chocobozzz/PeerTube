@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { Notifier, RestPagination, RestTable, ServerService } from '@app/core'
-import { DropdownAction, VideoChannelsSyncService } from '@app/shared/shared-main'
+import { DropdownAction, VideoChannelSyncService } from '@app/shared/shared-main'
 import { HTMLServerConfig } from '@shared/models/server'
-import { VideoChannel, VideoChannelsSync, VideoChannelsSyncState } from '@shared/models/videos'
+import { VideoChannel, VideoChannelSync, VideoChannelSyncState } from '@shared/models/videos'
 import { SortMeta } from 'primeng/api'
 
 @Component({
@@ -11,13 +11,13 @@ import { SortMeta } from 'primeng/api'
 })
 export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
   private serverConfig: HTMLServerConfig
-  channelsSync: VideoChannelsSync[] = [ {
+  channelsSync: VideoChannelSync[] = [ {
     id: 42,
     externalChannelUrl: 'https://yt.com/UC_yolo',
     createdAt: '2021-01-01',
     updatedAt: '2021-01-01',
     state: {
-      id: VideoChannelsSyncState.SYNCED,
+      id: VideoChannelSyncState.SYNCED,
       label: 'Synchronized'
     }
   } ]
@@ -41,12 +41,12 @@ export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
     url: ''
   } ] ])
   totalRecords = 0
-  videoChannelSyncActions: DropdownAction<VideoChannelsSync>[][] = []
+  videoChannelSyncActions: DropdownAction<VideoChannelSync>[][] = []
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   constructor (
-    private videoChannelsSyncService: VideoChannelsSyncService,
+    private videoChannelsSyncService: VideoChannelSyncService,
     private serverService: ServerService,
     private notifier: Notifier
   ) {
@@ -76,7 +76,7 @@ export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
     return this.serverConfig.import.videos.http.enabled
   }
 
-  deleteSync (videoChannelsSync: VideoChannelsSync) {
+  deleteSync (videoChannelsSync: VideoChannelSync) {
     this.videoChannelsSyncService.deleteSync(videoChannelsSync.id)
       .subscribe({
         next: () => {

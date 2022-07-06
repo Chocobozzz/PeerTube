@@ -3,17 +3,16 @@ import { Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
 import { VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { VideoChannelService } from '@app/shared/shared-main'
-import { VideoChannelsSyncService } from '@app/shared/shared-main/video-channels-sync/video-channels-sync.service'
-import { VideoChannel, VideoChannelsSyncCreate } from '@shared/models/videos'
+import { VideoChannelService, VideoChannelSyncService } from '@app/shared/shared-main'
+import { VideoChannel, VideoChannelSyncCreate } from '@shared/models/videos'
 import { mergeMap } from 'rxjs'
 
 @Component({
-  selector: 'my-video-channels-sync-edit',
-  templateUrl: './video-channels-sync-edit.component.html',
-  styleUrls: [ './video-channels-sync-edit.component.scss' ]
+  selector: 'my-video-channel-sync-edit',
+  templateUrl: './video-channel-sync-edit.component.html',
+  styleUrls: [ './video-channel-sync-edit.component.scss' ]
 })
-export class VideoChannelsSyncEditComponent extends FormReactive implements OnInit {
+export class VideoChannelSyncEditComponent extends FormReactive implements OnInit {
   error: string
   selectedVideoChannel: VideoChannel
   videoChannels: VideoChannel[]
@@ -24,7 +23,7 @@ export class VideoChannelsSyncEditComponent extends FormReactive implements OnIn
     private authService: AuthService,
     private router: Router,
     private notifier: Notifier,
-    private videoChannelsSyncService: VideoChannelsSyncService
+    private videoChannelSyncService: VideoChannelSyncService
   ) {
     super()
   }
@@ -56,11 +55,11 @@ export class VideoChannelsSyncEditComponent extends FormReactive implements OnIn
 
     const body = this.form.value
     const videoChannelName = this.selectedVideoChannel.displayName
-    const videoChannelsSyncCreate: VideoChannelsSyncCreate = {
+    const videoChannelSyncCreate: VideoChannelSyncCreate = {
       externalChannelUrl: body.externalChannelUrl,
       videoChannel: body['video-channel']
     }
-    this.videoChannelsSyncService.createSync(videoChannelsSyncCreate)
+    this.videoChannelSyncService.createSync(videoChannelSyncCreate)
       .subscribe({
         next: () => {
           this.authService.refreshUserInformation()

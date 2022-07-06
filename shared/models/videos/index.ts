@@ -11,7 +11,7 @@ export * from './playlist'
 export * from './rate'
 export * from './stats'
 export * from './transcoding'
-export * from './channels-sync'
+export * from './channel-sync'
 
 export * from './nsfw-policy.type'
 

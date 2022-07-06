@@ -1,4 +1,4 @@
-export const enum VideoChannelsSyncState {
+export const enum VideoChannelSyncState {
   SYNCED = 1,
   WARNING = 2,
   FAILURE = 3
