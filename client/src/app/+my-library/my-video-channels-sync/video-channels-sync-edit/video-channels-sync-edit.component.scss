@@ -1,0 +1,46 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+$form-base-input-width: 480px;
+input[type=text] {
+  @include peertube-input-text($form-base-input-width);
+}
+
+.video-channel-sync-title {
+  @include settings-big-title;
+}
+
+ng-select {
+  width: $form-base-input-width;
+
+  @media screen and (max-width: $form-base-input-width) {
+    width: 100%;
+  }
+}
+
+ng-select ::ng-deep {
+  .ng-value-container {
+    max-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  // make sure the image is vertically adjusted
+  .ng-value-label img {
+    position: relative;
+    top: -1px;
+  }
+
+  img {
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+  }
+}
+
+input[type=submit] {
+  @include peertube-button;
+  @include orange-button;
+  @include margin-left(auto);
+}
+

@@ -22,18 +22,15 @@
   </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 5%"></th>
-      <th style="width: 10%">Action</th>
-      <th style="width: 45%" i18n pSortableColumn="externalChannelUrl">External Channel</th>
+      <th style="width: 10%"><my-global-icon iconName="columns"></my-global-icon></th>
+      <th style="width: 25%" i18n pSortableColumn="externalChannelUrl">External Channel <p-sortIcon field="externalChannelUrl"></p-sortIcon></th>
+      <th style="width: 25%" i18n>Channel</th>
       <th style="width: 15%" i18n>State</th>
       <th style="width: 15%" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-expanded="expanded" let-videoChannelSync>
     <tr>
-      <td class="expand-cell" [pRowToggler]="videoChannelSync">
-        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
-      </td>
       <td class="action-cell">
         <my-action-dropdown
            container="body"
@@ -42,6 +39,9 @@
       </td>
       <td>
         <a [href]="videoChannelSync.externalChannelUrl" target="_blank" rel="noopener noreferrer">{{ videoChannelSync.externalChannelUrl }}</a>
+      </td>
+      <td>
+        <a [href]="getChannelUrl(videoChannelSync.id)" target="_blank" rel="noopener noreferrer">{{ getChannelName(videoChannelSync.id) }}</a>
       </td>
       <td>
         <span class="badge" [ngClass]="getVideoChannelSyncStateClass(videoChannelSync.state.id)">

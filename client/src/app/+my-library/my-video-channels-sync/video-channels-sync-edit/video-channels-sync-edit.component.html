@@ -24,10 +24,12 @@
 
         <div class="form-group">
           <label i18n for="video-channel">Video Channel</label>
-          <input
-            type="text" id="video-channel" class="form-control"
-            formControlName="video-channel" [ngClass]="{ 'input-error': formErrors['video-channel'] }"
-          >
+          <ng-select labelForId="video-channel" [items]="videoChannels"
+                      bindLabel="displayName"
+                      bindValue="id"
+                      [(ngModel)]="selectedVideoChannel"
+                      formControlName="video-channel">
+          </ng-select>
           <div *ngIf="formErrors['video-channel']" class="form-error">
             {{ formErrors['video-channel'] }}
           </div>

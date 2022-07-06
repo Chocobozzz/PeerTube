@@ -1,4 +1,3 @@
-import { Video } from '../video.model'
 import { VideoConstant } from '../video-constant.model'
 import { VideoChannelsSyncState } from './video-channels-sync-state.enum'
 
