@@ -2,17 +2,16 @@ import { of } from 'rxjs'
 import { switchMap } from 'rxjs/operators'
 import { AfterViewInit, Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, HooksService, Notifier, ServerService } from '@app/core'
+import { AuthService, HooksService, Notifier } from '@app/core'
 import {
   VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
   VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
-  VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR,
   VIDEO_CHANNEL_NAME_VALIDATOR,
   VIDEO_CHANNEL_SUPPORT_VALIDATOR
 } from '@app/shared/form-validators/video-channel-validators'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
-import { HTMLServerConfig, HttpStatusCode, VideoChannelCreate } from '@shared/models'
+import { HttpStatusCode, VideoChannelCreate } from '@shared/models'
 import { VideoChannelEdit } from './video-channel-edit'
 
 @Component({
@@ -25,7 +24,6 @@ export class VideoChannelCreateComponent extends VideoChannelEdit implements OnI
 
   private avatar: FormData
   private banner: FormData
-  private serverConfig: HTMLServerConfig
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -33,21 +31,17 @@ export class VideoChannelCreateComponent extends VideoChannelEdit implements OnI
     private notifier: Notifier,
     private router: Router,
     private videoChannelService: VideoChannelService,
-    private hooks: HooksService,
-    private serverService: ServerService
+    private hooks: HooksService
   ) {
     super()
   }
 
   ngOnInit () {
-    this.serverConfig = this.serverService.getHTMLConfig()
     this.buildForm({
       name: VIDEO_CHANNEL_NAME_VALIDATOR,
       'display-name': VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
       description: VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
-      support: VIDEO_CHANNEL_SUPPORT_VALIDATOR,
-      enableSync: null,
-      externalChannelUrl: VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR
+      support: VIDEO_CHANNEL_SUPPORT_VALIDATOR
     })
   }
 
@@ -63,8 +57,7 @@ export class VideoChannelCreateComponent extends VideoChannelEdit implements OnI
       name: body.name,
       displayName: body['display-name'],
       description: body.description || null,
-      support: body.support || null,
-      externalChannelUrl: body.enableSync ? body.externalChannelUrl : null
+      support: body.support || null
     }
 
     this.videoChannelService.createVideoChannel(videoChannelCreate)
@@ -116,19 +109,6 @@ export class VideoChannelCreateComponent extends VideoChannelEdit implements OnI
 
   getUsername () {
     return this.form.value.name
-  }
-
-  getDisabledSync () {
-    const enableSync = this.form.value['enableSync'] === true
-    return { 'disabled-checkbox-extra': !enableSync }
-  }
-
-  isUploadAllowed (): boolean {
-    return this.isHttpUploadAllowed()
-  }
-
-  isHttpUploadAllowed (): boolean {
-    return this.serverConfig.import.videos.http.enabled
   }
 
   private uploadAvatar () {

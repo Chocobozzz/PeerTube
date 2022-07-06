@@ -3,7 +3,4 @@ export interface VideoChannelCreate {
   displayName: string
   description?: string
   support?: string
-
-  enableSync?: boolean
-  externalChannelUrl?: string
 }

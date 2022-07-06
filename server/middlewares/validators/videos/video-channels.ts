@@ -7,7 +7,6 @@ import { isBooleanValid, toBooleanOrNull } from '../../../helpers/custom-validat
 import {
   isVideoChannelDescriptionValid,
   isVideoChannelDisplayNameValid,
-  isVideoChannelExternalChannelUrlValid,
   isVideoChannelSupportValid,
   isVideoChannelUsernameValid
 } from '../../../helpers/custom-validators/video-channels'
@@ -21,10 +20,6 @@ const videoChannelsAddValidator = [
   body('displayName').custom(isVideoChannelDisplayNameValid).withMessage('Should have a valid display name'),
   body('description').optional().custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
   body('support').optional().custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
-  body('externalChannelUrl')
-    .optional()
-    .custom(isVideoChannelExternalChannelUrlValid)
-    .withMessage('Should have a valid externalChannelUrl beginning either with "https://" or "http://"'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsAdd parameters', { parameters: req.body })
@@ -64,10 +59,6 @@ const videoChannelsUpdateValidator = [
   body('bulkVideosSupportUpdate')
     .optional()
     .custom(isBooleanValid).withMessage('Should have a valid bulkVideosSupportUpdate boolean field'),
-  body('externalChannelUrl')
-    .optional()
-    .custom(isVideoChannelExternalChannelUrlValid)
-    .withMessage('Should have a valid externalChannelUrl beginning either with "https://" or "http://"'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsUpdate parameters', { parameters: req.body })

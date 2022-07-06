@@ -52,7 +52,6 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
       support: VIDEO_CHANNEL_SUPPORT_VALIDATOR,
       bulkVideosSupportUpdate: null,
       enableSync: null,
-      externalChannelUrl: VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR,
       isUploadAllowed: null
     })
 
@@ -71,9 +70,7 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
             this.form.patchValue({
               'display-name': videoChannelToUpdate.displayName,
               description: videoChannelToUpdate.description,
-              support: videoChannelToUpdate.support,
-              externalChannelUrl: videoChannelToUpdate.externalChannelUrl,
-              enableSync: !!videoChannelToUpdate.externalChannelUrl
+              support: videoChannelToUpdate.support
             })
             this.userService.getUser(videoChannelToUpdate.ownerAccount.userId).subscribe({
               next: userInfo => {
@@ -108,8 +105,7 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
       displayName: body['display-name'],
       description: body.description || null,
       support: body.support || null,
-      bulkVideosSupportUpdate: body.bulkVideosSupportUpdate || false,
-      externalChannelUrl: body.enableSync ? body.externalChannelUrl : null
+      bulkVideosSupportUpdate: body.bulkVideosSupportUpdate || false
     }
 
     this.videoChannelService.updateVideoChannel(this.videoChannel.name, videoChannelUpdate)

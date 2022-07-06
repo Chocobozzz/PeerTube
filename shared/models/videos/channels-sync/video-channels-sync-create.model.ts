@@ -1,4 +1,4 @@
 export interface VideoChannelsSyncCreate {
-  url: string;
-  videoChannel: number;
+  externalChannelUrl: string
+  videoChannel: number
 }

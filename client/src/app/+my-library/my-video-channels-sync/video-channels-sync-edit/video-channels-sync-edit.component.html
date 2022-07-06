@@ -10,15 +10,15 @@
 
       <div class="col-12 col-lg-8 col-xl-9">
         <div class="form-group">
-          <label i18n for="url">Remote channel URL</label>
+          <label i18n for="externalChannelUrl">Remote channel URL</label>
           <div class="input-group">
             <input
-              type="text" id="url" i18n-placeholder placeholder="Example: https://youtube.com/channel/UC_fancy_channel"
-              formControlName="url" [ngClass]="{ 'input-error': formErrors['url'] }" class="form-control"
+              type="text" id="externalChannelUrl" i18n-placeholder placeholder="Example: https://youtube.com/channel/UC_fancy_channel"
+              formControlName="externalChannelUrl" [ngClass]="{ 'input-error': formErrors['externalChannelUrl'] }" class="form-control"
             >
           </div>
-          <div *ngIf="formErrors['url']" class="form-error">
-            {{ formErrors['url'] }}
+          <div *ngIf="formErrors['externalChannelUrl']" class="form-error">
+            {{ formErrors['externalChannelUrl'] }}
           </div>
         </div>
 

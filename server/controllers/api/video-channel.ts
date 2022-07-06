@@ -280,9 +280,6 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
           await VideoModel.bulkUpdateSupportField(videoChannelInstance, t)
         }
       }
-      if (videoChannelInfoToUpdate.externalChannelUrl !== undefined) {
-        videoChannelInstance.externalChannelUrl = videoChannelInfoToUpdate.externalChannelUrl
-      }
 
       const videoChannelInstanceUpdated = await videoChannelInstance.save({ transaction: t }) as MChannelBannerAccountDefault
       await sendUpdateActor(videoChannelInstanceUpdated, t)

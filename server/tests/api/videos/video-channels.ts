@@ -4,7 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { basename } from 'path'
 import { ACTOR_IMAGES_SIZE } from '@server/initializers/constants'
-import { FIXTURE_URLS, testFileExistsOrNot, testImage } from '@server/tests/shared'
+import { testFileExistsOrNot, testImage } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { ActorImageType, User, VideoChannel } from '@shared/models'
 import {
@@ -557,32 +557,32 @@ describe('Test video channels', function () {
     }
   })
 
-  // FIXME dans un fichier séparé
-  it('Should update the channel with the external channel to synchronize with', async function () {
-    this.timeout(15000)
+  // // FIXME dans un fichier séparé
+  // it('Should update the channel with the external channel to synchronize with', async function () {
+  //   this.timeout(15000)
 
-    const videoChannelAttributes = {
-      externalChannelUrl: FIXTURE_URLS.youtubeChannel
-    }
+  //   const videoChannelAttributes = {
+  //     externalChannelUrl: FIXTURE_URLS.youtubeChannel
+  //   }
 
-    await servers[0].channels.update({ channelName: 'root_channel', attributes: videoChannelAttributes })
+  //   await servers[0].channels.update({ channelName: 'root_channel', attributes: videoChannelAttributes })
 
-    await waitJobs(servers, true)
-  })
+  //   await waitJobs(servers, true)
+  // })
 
-  it('Should have updated the externalChannelUrl locally only', async function () {
-    const [ localServer, remoteServer ] = servers
-    {
-      const body = await localServer.channels.get({ channelName: `root_channel@${servers[0].host}` })
+  // it('Should have updated the externalChannelUrl locally only', async function () {
+  //   const [ localServer, remoteServer ] = servers
+  //   {
+  //     const body = await localServer.channels.get({ channelName: `root_channel@${servers[0].host}` })
 
-      expect(body.externalChannelUrl).to.equal(FIXTURE_URLS.youtubeChannel)
-    }
-    {
-      const body = await remoteServer.channels.get({ channelName: `root_channel@${servers[0].host}` })
+  //     expect(body.externalChannelUrl).to.equal(FIXTURE_URLS.youtubeChannel)
+  //   }
+  //   {
+  //     const body = await remoteServer.channels.get({ channelName: `root_channel@${servers[0].host}` })
 
-      expect(body.externalChannelUrl).to.be.null
-    }
-  })
+  //     expect(body.externalChannelUrl).to.be.null
+  //   }
+  // })
 
   it('Should synchronize videos of remote platforms with PeerTube channel', async function () {
     await waitJobs(servers)

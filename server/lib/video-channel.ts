@@ -17,7 +17,6 @@ async function createLocalVideoChannel (videoChannelInfo: VideoChannelCreate, ac
     name: videoChannelInfo.displayName,
     description: videoChannelInfo.description,
     support: videoChannelInfo.support,
-    externalChannelUrl: videoChannelInfo.externalChannelUrl,
     accountId: account.id,
     actorId: actorInstanceCreated.id
   }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
-import { Notifier, RestPagination, RestTable } from '@app/core'
+import { Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { DropdownAction, VideoChannelsSyncService } from '@app/shared/shared-main'
+import { HTMLServerConfig } from '@shared/models/server'
 import { VideoChannel, VideoChannelsSync, VideoChannelsSyncState } from '@shared/models/videos'
 import { SortMeta } from 'primeng/api'
 
@@ -9,6 +10,7 @@ import { SortMeta } from 'primeng/api'
   styleUrls: [ './my-video-channels-sync.component.scss' ]
 })
 export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
+  private serverConfig: HTMLServerConfig
   channelsSync: VideoChannelsSync[] = [ {
     id: 42,
     externalChannelUrl: 'https://yt.com/UC_yolo',
@@ -45,12 +47,14 @@ export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
 
   constructor (
     private videoChannelsSyncService: VideoChannelsSyncService,
+    private serverService: ServerService,
     private notifier: Notifier
   ) {
     super()
   }
 
   ngOnInit (): void {
+    this.serverConfig = this.serverService.getHTMLConfig()
     this.initialize()
     this.videoChannelSyncActions = [
       [
@@ -66,6 +70,10 @@ export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
   protected reloadData (): void {
     // TODO
     return
+  }
+
+  httpUploadEnabled () {
+    return this.serverConfig.import.videos.http.enabled
   }
 
   deleteSync (videoChannelsSync: VideoChannelsSync) {

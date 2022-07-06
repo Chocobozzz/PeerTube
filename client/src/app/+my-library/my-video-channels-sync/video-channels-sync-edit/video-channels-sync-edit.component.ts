@@ -31,7 +31,7 @@ export class VideoChannelsSyncEditComponent extends FormReactive implements OnIn
 
   ngOnInit () {
     this.buildForm({
-      url: VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR,
+      externalChannelUrl: VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR,
       'video-channel': null
     })
     this.authService.userInformationLoaded
@@ -57,7 +57,7 @@ export class VideoChannelsSyncEditComponent extends FormReactive implements OnIn
     const body = this.form.value
     const videoChannelName = this.selectedVideoChannel.displayName
     const videoChannelsSyncCreate: VideoChannelsSyncCreate = {
-      url: body.url,
+      externalChannelUrl: body.externalChannelUrl,
       videoChannel: body['video-channel']
     }
     this.videoChannelsSyncService.createSync(videoChannelsSyncCreate)

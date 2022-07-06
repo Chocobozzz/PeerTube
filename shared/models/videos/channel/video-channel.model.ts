@@ -10,7 +10,6 @@ export interface VideoChannel extends Actor {
   displayName: string
   description: string
   support: string
-  externalChannelUrl: string
   isLocal: boolean
 
   updatedAt: Date | string
