@@ -120,9 +120,6 @@ import:
     concurrency: 2
     http:
       enabled: true
-      youtube_dl_release:
-        url: 'https://api.github.com/repos/yt-dlp/yt-dlp/releases'
-        name: 'yt-dlp'
     torrent:
       enabled: true
 
