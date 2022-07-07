@@ -218,6 +218,18 @@ To test emails with PeerTube:
  * Run [mailslurper](http://mailslurper.com/)
  * Run PeerTube using mailslurper SMTP port: `NODE_CONFIG='{ "smtp": { "hostname": "localhost", "port": 2500, "tls": false } }' NODE_ENV=dev node dist/server`
 
+### Environment variables
+
+PeerTube can be configured using environment variables.
+See the list on https://docs.joinpeertube.org/maintain-configuration?id=environment-variables
+
+Additionally to these ones, we provide some environment for dev/test purpose:
+
+ * `PRODUCTION_CONSTANTS=true`: in `NODE_ENV=dev` or `NODE_ENV=test` PeerTube customizes some constants. To prevent this behaviour, you can set `PRODUCTION_CONSTANTS` env to
+ `true`
+ * `PEERTUBE_LOCAL_CONFIG`: directory to find the local configuration file (used by web admin)
+ * `NODE_DB_LOG=false`: disable SQL request logging
+
 ## Plugins & Themes
 
 See the dedicated documentation: https://docs.joinpeertube.org/contribute-plugins
