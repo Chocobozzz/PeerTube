@@ -29,6 +29,8 @@ export class AbuseDetailsComponent implements OnInit {
   }
 
   ngOnInit (): void {
+    if (!this.abuse.predefinedReasons) return
+
     this.predefinedReasons = this.abuse.predefinedReasons.map(r => ({
       id: r,
       label: this.predefinedReasonsTranslations[r]
