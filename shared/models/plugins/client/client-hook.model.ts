@@ -52,8 +52,8 @@ export const clientFilterHookObject = {
   'filter:api.signup.registration.create.params': true,
 
   // Filter params/result of the function that fetch video playlist elements of the my-library page
-  'filter:api.my-library.video-playlist-elements.get.params': true,
-  'filter:api.my-library.video-playlist-elements.get.result': true,
+  'filter:api.my-library.video-playlist-elements.list.params': true,
+  'filter:api.my-library.video-playlist-elements.list.result': true,
 
   // Filter the options to create our player
   'filter:internal.video-watch.player.build-options.params': true,

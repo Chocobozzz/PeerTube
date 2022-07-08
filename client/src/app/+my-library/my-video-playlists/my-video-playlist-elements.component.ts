@@ -159,9 +159,9 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
     this.hooks.wrapObsFun(
       this.videoPlaylistService.getPlaylistVideos.bind(this.videoPlaylistService),
       { videoPlaylistId: this.videoPlaylistId, componentPagination: this.pagination },
-      'common',
-      'filter:api.my-library.video-playlist-elements.get.params',
-      'filter:api.my-library.video-playlist-elements.get.result'
+      'my-library',
+      'filter:api.my-library.video-playlist-elements.list.params',
+      'filter:api.my-library.video-playlist-elements.list.result'
     )
         .subscribe(({ total, data }) => {
           this.playlistElements = this.playlistElements.concat(data)
