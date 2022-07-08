@@ -29,7 +29,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.next" datatype="html">
         <source>Next</source>
-        <target state="translated">Sljedeće</target>
+        <target state="translated">Sljedeći</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/carousel/carousel.ts</context>
           <context context-type="linenumber">147,151</context>
