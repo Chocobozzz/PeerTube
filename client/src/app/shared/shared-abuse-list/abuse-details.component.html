@@ -60,10 +60,9 @@
       <span class="moderation-expanded-text" [innerHTML]="abuse.reasonHtml"></span>
     </div>
 
-    <div *ngIf="getPredefinedReasons()" class="mt-2 d-flex">
-      <span class="></span>
-      <span class=">
-        <a *ngFor="let reason of getPredefinedReasons()"  [routerLink]="[ '.' ]"
+    <div *ngIf="predefinedReasons" class="mt-2 d-flex">
+      <span>
+        <a *ngFor="let reason of predefinedReasons"  [routerLink]="[ '.' ]"
           [queryParams]="{ 'search': 'tag:' + reason.id  }" class="chip rectangular bg-secondary text-light"
         >
           <div>{{ reason.label }}</div>
