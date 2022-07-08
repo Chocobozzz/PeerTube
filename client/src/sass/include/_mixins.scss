@@ -284,6 +284,13 @@
   display: inline-block;
 }
 
+@mixin peertube-button-big-link {
+  @include disable-default-a-behaviour;
+  @include peertube-button-big;
+
+  display: inline-block;
+}
+
 @mixin peertube-button-outline {
   @include disable-default-a-behaviour;
   @include peertube-button;

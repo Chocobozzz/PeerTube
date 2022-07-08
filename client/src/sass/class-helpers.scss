@@ -27,8 +27,16 @@
   @include peertube-button;
 }
 
+.peertube-button-big {
+  @include peertube-button-big;
+}
+
 .peertube-button-link {
   @include peertube-button-link;
+}
+
+.peertube-button-big-link {
+  @include peertube-button-big-link;
 }
 
 .orange-button {

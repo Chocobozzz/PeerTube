@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { PageNotFoundComponent } from './page-not-found.component'
+import { ErrorPageComponent } from './error-page.component'
 import { MenuGuards } from '@app/core'
 
-const pageNotFoundRoutes: Routes = [
+const errorPageRoutes: Routes = [
   {
     path: '',
-    component: PageNotFoundComponent,
+    component: ErrorPageComponent,
     canActivate: [ MenuGuards.close(true) ],
     canDeactivate: [ MenuGuards.open(true) ],
     data: {
@@ -18,7 +18,7 @@ const pageNotFoundRoutes: Routes = [
 ]
 
 @NgModule({
-  imports: [ RouterModule.forChild(pageNotFoundRoutes) ],
+  imports: [ RouterModule.forChild(errorPageRoutes) ],
   exports: [ RouterModule ]
 })
-export class PageNotFoundRoutingModule {}
+export class ErrorPageRoutingModule {}
