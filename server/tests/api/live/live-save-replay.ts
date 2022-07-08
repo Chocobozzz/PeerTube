@@ -316,7 +316,7 @@ describe('Save replay setting', function () {
     })
 
     it('Should correctly terminate the stream on blacklist and blacklist the saved replay video', async function () {
-      this.timeout(40000)
+      this.timeout(120000)
 
       await publishLiveAndBlacklist({ permanent: false, replay: true })
 
@@ -412,7 +412,7 @@ describe('Save replay setting', function () {
     })
 
     it('Should correctly terminate the stream on blacklist and blacklist the saved replay video', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       await servers[0].videos.remove({ id: lastReplayUUID })
       const { liveDetails } = await publishLiveAndBlacklist({ permanent: true, replay: true })

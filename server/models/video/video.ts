@@ -1385,7 +1385,6 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       count: 0,
       sort: '-publishedAt',
       nsfw: null,
-      isLocal: true,
       displayOnlyForFollower: {
         actorId: serverActor.id,
         orLocalVideos: true
