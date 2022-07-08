@@ -62,7 +62,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private handleNotAuthenticated (err: HttpErrorResponse): Observable<any> {
-    this.router.navigate([ '/404' ], { state: { obj: err }, skipLocationChange: true })
+    this.router.navigate([ '/401' ], { state: { obj: err }, skipLocationChange: true })
     return of(err.message)
   }
 }

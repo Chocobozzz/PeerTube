@@ -4,11 +4,11 @@ import { Router } from '@angular/router'
 import { HttpStatusCode } from '@shared/models'
 
 @Component({
-  selector: 'my-page-not-found',
-  templateUrl: './page-not-found.component.html',
-  styleUrls: [ './page-not-found.component.scss' ]
+  selector: 'my-error-page',
+  templateUrl: './error-page.component.html',
+  styleUrls: [ './error-page.component.scss' ]
 })
-export class PageNotFoundComponent implements OnInit {
+export class ErrorPageComponent implements OnInit {
   status = HttpStatusCode.NOT_FOUND_404
   type: 'video' | 'other' = 'other'
 

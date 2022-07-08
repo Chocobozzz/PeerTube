@@ -194,7 +194,7 @@ for (const locale of POSSIBLE_LOCALES) {
 
 routes.push({
   path: '**',
-  loadChildren: () => import('./+page-not-found/page-not-found.module').then(m => m.PageNotFoundModule)
+  loadChildren: () => import('./+error-page/error-page.module').then(m => m.ErrorPageModule)
 })
 
 @NgModule({
