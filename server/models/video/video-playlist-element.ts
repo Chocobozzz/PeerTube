@@ -1,6 +1,7 @@
 import { AggregateOptions, Op, ScopeOptions, Sequelize, Transaction } from 'sequelize'
 import {
   AllowNull,
+  AutoIncrement,
   BelongsTo,
   Column,
   CreatedAt,
@@ -11,6 +12,7 @@ import {
   IsInt,
   Min,
   Model,
+  PrimaryKey,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -50,6 +52,11 @@ import { VideoPlaylistModel } from './video-playlist'
   ]
 })
 export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<VideoPlaylistElementModel>>> {
+  @PrimaryKey
+  @AutoIncrement
+  @Column
+  id: number
+
   @CreatedAt
   createdAt: Date
 
@@ -146,6 +153,7 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
       where: {
         videoPlaylistId: options.videoPlaylistId
       },
+      subQuery: false,
       include: [
         {
           model: VideoModel.scope(videoScope),

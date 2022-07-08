@@ -136,6 +136,7 @@ import { VideoShareModel } from './video-share'
 import { VideoSourceModel } from './video-source'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoTagModel } from './video-tag'
+import { VideoPlaylistModel } from './video-playlist'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -597,6 +598,12 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   })
   VideoPlaylistElements: VideoPlaylistElementModel[]
 
+  @BelongsToMany(() => VideoPlaylistModel, {
+    foreignKey: 'videoId',
+    through: () => VideoPlaylistElementModel
+  })
+  ContainedInPlaylists: VideoPlaylistModel[]
+
   @HasOne(() => VideoSourceModel, {
     foreignKey: {
       name: 'videoId',
@@ -1019,6 +1026,14 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
                 required: true
               }
             ]
+          },
+          {
+            model: VideoPlaylistModel.unscoped(),
+            required: false,
+            where: {
+              ...channelWhere,
+              ownerAccountId: accountId
+            }
           }
         ]
       }

@@ -52,6 +52,7 @@ export type VideoFormattingJSONOptions = {
     blacklistInfo?: boolean
     files?: boolean
     blockedOwner?: boolean
+    containedInPlaylists?: boolean
   }
 }
 
@@ -138,6 +139,10 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options: VideoForm
       id: video.state,
       label: getStateLabel(video.state)
     }
+  }
+
+  if (add?.containedInPlaylists) {
+    videoObject.containedInPlaylists = video.ContainedInPlaylists?.map(c => c.toFormattedJSON())
   }
 
   if (add?.waitTranscoding === true) {

@@ -649,7 +649,9 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
   }
 
   isOwned () {
-    return this.OwnerAccount.isOwned()
+    return this.OwnerAccount
+      ? this.OwnerAccount.isOwned()
+      : null
   }
 
   isOutdated () {
@@ -688,7 +690,9 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
 
-      ownerAccount: this.OwnerAccount.toFormattedSummaryJSON(),
+      ownerAccount: this.OwnerAccount
+        ? this.OwnerAccount.toFormattedSummaryJSON()
+        : null,
       videoChannel: this.VideoChannel
         ? this.VideoChannel.toFormattedSummaryJSON()
         : null

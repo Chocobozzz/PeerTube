@@ -309,6 +309,7 @@ describe('Test users', function () {
   })
 
   describe('My videos & quotas', function () {
+    let createdVideo
 
     it('Should be able to upload a video with this user', async function () {
       this.timeout(10000)
@@ -317,7 +318,7 @@ describe('Test users', function () {
         name: 'super user video',
         fixture: 'video_short.webm'
       }
-      await server.videos.upload({ token: userToken, attributes })
+      createdVideo = await server.videos.upload({ token: userToken, attributes })
 
       await server.channels.create({ token: userToken, attributes: { name: 'other_channel' } })
     })
@@ -340,6 +341,34 @@ describe('Test users', function () {
       expect(video.name).to.equal('super user video')
       expect(video.thumbnailPath).to.not.be.null
       expect(video.previewPath).to.not.be.null
+    })
+
+    it('Should be able to list my videos with playlists their contained in', async function () {
+      const playlistDisplayName = 'My playlist'
+      const playlist = await server.playlists.create({
+        token: userToken,
+        attributes: {
+          displayName: playlistDisplayName,
+          privacy: 3
+        }
+      })
+      await server.playlists.addElement({
+        token: userToken,
+        playlistId: playlist.uuid,
+        attributes: {
+          videoId: createdVideo.id
+        }
+      })
+      const { total, data } = await server.videos.listMyVideos({ token: userToken })
+      expect(total).to.equal(1)
+      expect(data).to.have.lengthOf(1)
+
+      const video: Video = data[0]
+      expect(video.name).to.equal('super user video')
+      expect(video.thumbnailPath).to.not.be.null
+      expect(video.previewPath).to.not.be.null
+      expect(video.containedInPlaylists).to.have.lengthOf(1)
+      expect(video.containedInPlaylists[0].displayName).to.equal(playlistDisplayName)
     })
 
     it('Should be able to filter by channel in my videos', async function () {

@@ -128,7 +128,8 @@ async function getUserVideos (req: express.Request, res: express.Response) {
     waitTranscoding: true,
     state: true,
     scheduledUpdate: true,
-    blacklistInfo: true
+    blacklistInfo: true,
+    containedInPlaylists: true
   }
   return res.json(getFormattedObjects(resultList.data, resultList.total, { additionalAttributes }))
 }

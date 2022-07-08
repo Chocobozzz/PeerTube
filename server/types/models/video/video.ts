@@ -18,6 +18,7 @@ import {
 } from './video-channels'
 import { MVideoFile, MVideoFileRedundanciesAll, MVideoFileRedundanciesOpt } from './video-file'
 import { MVideoLive } from './video-live'
+import { MVideoPlaylist } from './video-playlist'
 import {
   MStreamingPlaylistFiles,
   MStreamingPlaylistRedundancies,
@@ -212,7 +213,8 @@ export type MVideoFormattable =
   PickWithOpt<VideoModel, 'ScheduleVideoUpdate', Pick<MScheduleVideoUpdate, 'updateAt' | 'privacy'>> &
   PickWithOpt<VideoModel, 'VideoBlacklist', Pick<MVideoBlacklist, 'reason'>> &
   PickWithOpt<VideoModel, 'VideoStreamingPlaylists', MStreamingPlaylistFiles[]> &
-  PickWithOpt<VideoModel, 'VideoFiles', MVideoFile[]>
+  PickWithOpt<VideoModel, 'VideoFiles', MVideoFile[]> &
+  PickWithOpt<VideoModel, 'ContainedInPlaylists', MVideoPlaylist[]>
 
 export type MVideoFormattableDetails =
   MVideoFormattable &

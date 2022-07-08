@@ -1,6 +1,7 @@
 import { Account, AccountSummary } from '../actors'
 import { VideoChannel, VideoChannelSummary } from './channel/video-channel.model'
 import { VideoFile } from './file'
+import { VideoPlaylist } from './playlist'
 import { VideoConstant } from './video-constant.model'
 import { VideoPrivacy } from './video-privacy.enum'
 import { VideoScheduleUpdate } from './video-schedule-update.model'
@@ -67,6 +68,8 @@ export interface Video {
 
   files?: VideoFile[]
   streamingPlaylists?: VideoStreamingPlaylist[]
+
+  containedInPlaylists?: VideoPlaylist[]
 }
 
 export interface VideoDetails extends Video {

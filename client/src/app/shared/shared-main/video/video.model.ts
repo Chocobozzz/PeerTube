@@ -9,6 +9,7 @@ import {
   HTMLServerConfig,
   UserRight,
   Video as VideoServerModel,
+  VideoPlaylist,
   VideoConstant,
   VideoFile,
   VideoPrivacy,
@@ -112,6 +113,8 @@ export class Video implements VideoServerModel {
 
   pluginData?: any
 
+  containedInPlaylists?: VideoPlaylist[]
+
   streamingPlaylists?: VideoStreamingPlaylist[]
   files?: VideoFile[]
 
@@ -191,6 +194,8 @@ export class Video implements VideoServerModel {
 
     this.blockedOwner = hash.blockedOwner
     this.blockedServer = hash.blockedServer
+
+    this.containedInPlaylists = hash.containedInPlaylists
 
     this.streamingPlaylists = hash.streamingPlaylists
     this.files = hash.files

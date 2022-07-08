@@ -52,6 +52,12 @@
             <ng-container *ngIf="displayOptions.privacyText && displayOptions.state && getStateLabel(video)"> - </ng-container>
             <ng-container *ngIf="displayOptions.state">{{ getStateLabel(video) }}</ng-container>
           </div>
+
+          <div class="video-contained-in-playlists">
+            <a *ngFor="let playlist of video.containedInPlaylists" class="chip rectangular bg-secondary text-light" [routerLink]="['/w/p/', playlist.shortUUID]" i18n>
+              {{ playlist.displayName }}
+            </a>
+          </div>
         </div>
       </div>
 
