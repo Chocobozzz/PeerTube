@@ -2,7 +2,7 @@ import { Subject, Subscription } from 'rxjs'
 import { CdkDragDrop } from '@angular/cdk/drag-drop'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { ComponentPagination, ConfirmService, Notifier, ScreenService } from '@app/core'
+import { ComponentPagination, ConfirmService, HooksService, Notifier, ScreenService } from '@app/core'
 import { DropdownAction } from '@app/shared/shared-main'
 import { VideoShareComponent } from '@app/shared/shared-share-modal'
 import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
@@ -32,6 +32,7 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
   private paramsSub: Subscription
 
   constructor (
+    private hooks: HooksService,
     private notifier: Notifier,
     private router: Router,
     private confirmService: ConfirmService,
@@ -155,7 +156,13 @@ export class MyVideoPlaylistElementsComponent implements OnInit, OnDestroy {
   }
 
   private loadElements () {
-    this.videoPlaylistService.getPlaylistVideos({ videoPlaylistId: this.videoPlaylistId, componentPagination: this.pagination })
+    this.hooks.wrapObsFun(
+      this.videoPlaylistService.getPlaylistVideos.bind(this.videoPlaylistService),
+      { videoPlaylistId: this.videoPlaylistId, componentPagination: this.pagination },
+      'my-library',
+      'filter:api.my-library.video-playlist-elements.list.params',
+      'filter:api.my-library.video-playlist-elements.list.result'
+    )
         .subscribe(({ total, data }) => {
           this.playlistElements = this.playlistElements.concat(data)
           this.pagination.totalItems = total
