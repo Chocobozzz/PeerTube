@@ -141,7 +141,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.last-aria" datatype="html">
         <source>Last</source>
-        <target state="translated">Zadnje</target>
+        <target state="translated">Posljednje</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/pagination/pagination.ts</context>
           <context context-type="linenumber">195,200</context>
