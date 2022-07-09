@@ -345,7 +345,7 @@
       </trans-unit>
       <trans-unit id="19872047295276660" datatype="html">
         <source>This instance is dedicated to sensitive/NSFW content.</source>
-        <target state="translated">Ova je instanca namijenjena za osjetljiv/neprikladan sadržaj.</target>
+        <target state="translated">Ova je instanca namijenjena za neprikladan sadržaj.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">19</context>
@@ -2437,7 +2437,7 @@
       </trans-unit>
       <trans-unit id="7030031694783481217" datatype="html">
         <source>This instance is dedicated to sensitive or NSFW content</source>
-        <target state="translated">Ova je instanca namijenjena za osjetljiv ili neprikladan sadržaj</target>
+        <target state="translated">Ova je instanca namijenjena za neprikladan sadržaj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">89</context>
@@ -2445,7 +2445,7 @@
       </trans-unit>
       <trans-unit id="4620493570088713907" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="translated">Uključivanjem ćeš dozvoliti drugim administratorima da znaju da uglavnom sjedinjuješ osjetljiv sadržaj.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Štoviše, potvrdni okvir za neprikladan sadržaj pri prijenosu videa standardno će se automatski označiti. </target>
+        <target state="translated">Uključivanjem ćeš dozvoliti drugim administratorima da znaju da uglavnom sjedinjuješ neprikladan sadržaj.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Štoviše, potvrdni okvir za neprikladni sadržaj pri prijenosu videa standardno će se automatski označiti. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">94,96</context>
@@ -2453,7 +2453,7 @@
       </trans-unit>
       <trans-unit id="7497677457560701935" datatype="html">
         <source>Policy on videos containing sensitive content</source>
-        <target state="translated">Politika za videa koji sadrže osjetljiv sadržaj</target>
+        <target state="translated">Politika za videa koji sadrže neprikladan sadržaj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">102</context>
@@ -2469,7 +2469,7 @@
       </trans-unit>
       <trans-unit id="4409859601539810260" datatype="html">
         <source>Policy for sensitive videos</source>
-        <target state="translated">Politika za osjetljiva videa</target>
+        <target state="translated">Politika za neprikladna videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">114</context>
@@ -3997,7 +3997,7 @@
       </trans-unit>
       <trans-unit id="7574091010118901399" datatype="html">
         <source>Sensitive</source>
-        <target state="translated">Osjetljivo</target>
+        <target state="translated">Neprikladno</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">44</context>
@@ -7818,7 +7818,7 @@
       </trans-unit>
       <trans-unit id="3589238979642505685" datatype="html">
         <source>Display sensitive content</source>
-        <target/>
+        <target state="translated">Prikaži neprikladni sadržaj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">21</context>
@@ -9092,7 +9092,7 @@
       </trans-unit>
       <trans-unit id="9155449485123349070" datatype="html">
         <source>Contains sensitive content</source>
-        <target/>
+        <target state="translated">Sadrži neprikladan sadržaj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">131</context>
@@ -11280,7 +11280,7 @@
       </trans-unit>
       <trans-unit id="9156407045661257130" datatype="html">
         <source>Sensitive:</source>
-        <target state="translated">Osjetljivo:</target>
+        <target state="translated">Neprikladno:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">46</context>
@@ -13628,7 +13628,7 @@
       </trans-unit>
       <trans-unit id="5975923297757530070" datatype="html">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_DIV_1" ctype="x-div_1" equiv-text="&lt;div class=&quot;more-info&quot;&gt;"/>can be redefined by the users<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
-        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Standardnu politiku za videa neprikladnog sadržaja/osjetljivih videa<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_DIV_1" ctype="x-div_1" equiv-text="&lt;div class=&quot;more-info&quot;&gt;"/>mogu promijeniti korisnici<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Standardnu politiku za videa neprikladnog sadržaja<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_DIV_1" ctype="x-div_1" equiv-text="&lt;div class=&quot;more-info&quot;&gt;"/>mogu promijeniti korisnici<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -15548,7 +15548,7 @@
       </trans-unit>
       <trans-unit id="7377817702119089263" datatype="html">
         <source>Default policy on videos containing sensitive content</source>
-        <target/>
+        <target state="translated">Standardna politika za videa s neprikladnim sadržajem</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">4</context>
@@ -16228,7 +16228,7 @@
       </trans-unit>
       <trans-unit id="3514509630940272440" datatype="html">
         <source>Sensitive</source>
-        <target state="translated">Osjetljivo</target>
+        <target state="translated">Neprikladno</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context>
           <context context-type="linenumber">57,58</context>
