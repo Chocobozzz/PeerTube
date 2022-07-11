@@ -77,6 +77,10 @@
             "translation": "src/locale/angular.sq.xlf",
             "baseHref": "/client/sq/"
           },
+          "hr": {
+            "translation": "src/locale/angular.hr.xlf",
+            "baseHref": "/client/hr/"
+          },
           "zh-Hans": {
             "translation": "src/locale/angular.zh-Hans-CN.xlf",
             "baseHref": "/client/zh-Hans-CN/"
