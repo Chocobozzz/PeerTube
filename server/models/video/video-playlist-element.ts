@@ -153,7 +153,7 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
       where: {
         videoPlaylistId: options.videoPlaylistId
       },
-      subQuery: false,
+      subQuery: true,
       include: [
         {
           model: VideoModel.scope(videoScope),
