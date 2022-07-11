@@ -600,7 +600,10 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
   @BelongsToMany(() => VideoPlaylistModel, {
     foreignKey: 'videoId',
-    through: () => VideoPlaylistElementModel
+    through: {
+      model: () => VideoPlaylistElementModel,
+      unique: false
+    }
   })
   ContainedInPlaylists: VideoPlaylistModel[]
 
