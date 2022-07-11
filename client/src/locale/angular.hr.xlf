@@ -277,7 +277,7 @@
       </trans-unit>
       <trans-unit id="3701439542279610547" datatype="html">
         <source>Follows</source>
-        <target/>
+        <target state="translated">Prati</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">2</context>
@@ -313,7 +313,7 @@
       </trans-unit>
       <trans-unit id="2081837971167498893" datatype="html">
         <source>Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</source>
-        <target/>
+        <target state="translated">Praćene instance (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">16</context>
@@ -377,7 +377,7 @@
       </trans-unit>
       <trans-unit id="6434467346812189214" datatype="html">
         <source>How long we plan to maintain this instance</source>
-        <target/>
+        <target state="translated">Kako dugo ćemo održavati ovu instancu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">72</context>
@@ -385,7 +385,7 @@
       </trans-unit>
       <trans-unit id="2646614e3af5f103885f64e4f097e45569091fd6" datatype="html">
         <source>How we will pay for this instance</source>
-        <target/>
+        <target state="translated">Kako ćemo financirati ovu instancu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">86</context>
@@ -461,7 +461,7 @@
       </trans-unit>
       <trans-unit id="4127416011499804250" datatype="html">
         <source>Code of conduct</source>
-        <target/>
+        <target state="translated">Pravila ponašanja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">154</context>
@@ -685,7 +685,7 @@
       </trans-unit>
       <trans-unit id="2072135752262464360" datatype="html">
         <source>You already sent this form recently</source>
-        <target/>
+        <target state="translated">Ovu si poruku nedavno već poslao/la</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -693,7 +693,7 @@
       </trans-unit>
       <trans-unit id="1045244999981860085" datatype="html">
         <source>Developed with ❤ by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target/>
+        <target state="translated">Razvija se sa ❤ od <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube-contributors.component.html</context>
           <context context-type="linenumber">3</context>
@@ -709,7 +709,7 @@
       </trans-unit>
       <trans-unit id="1161141363959659794" datatype="html">
         <source>PeerTube is a self-hosted ActivityPub-federated video streaming platform using P2P directly in your web browser.</source>
-        <target/>
+        <target state="translated">PeerTube je platforma za prijenos videa s vlastitim hostingom s međusobno povezanim računalima ActivityPub-protokolom i koristi P2P izravno u tvom web-pregledniku.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -717,7 +717,7 @@
       </trans-unit>
       <trans-unit id="135286612733607700" datatype="html">
         <source>It is free and open-source software, under <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE&quot;&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target/>
+        <target state="translated">Radi se o besplatnom softveru otvorenog koda, licenziran pod <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE&quot;&gt;"/>AGPLv3<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -725,7 +725,7 @@
       </trans-unit>
       <trans-unit id="7257048945916143687" datatype="html">
         <source>For more information, please visit <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target/>
+        <target state="translated">Za više informacija posjeti stranicu <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">19,20</context>
@@ -733,7 +733,7 @@
       </trans-unit>
       <trans-unit id="8205344394429673413" datatype="html">
         <source>Use PeerTube documentation</source>
-        <target/>
+        <target state="translated">Koristi PeerTube dokumentaciju</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">28,29</context>
@@ -741,7 +741,7 @@
       </trans-unit>
       <trans-unit id="8674693181203168033" datatype="html">
         <source>Discover how to setup your account, what is a channel, how to create a playlist and more!</source>
-        <target/>
+        <target state="translated">Otkrij kako postaviti račun, što je kanal, kako izraditi playlistu i još više!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">33,34</context>
@@ -757,7 +757,7 @@
       </trans-unit>
       <trans-unit id="7916664392219781729" datatype="html">
         <source>Discover unofficial Android applications or browser addons!</source>
-        <target/>
+        <target state="translated">Otkrij neslužbene Android aplikacije i dodatke za preglednik!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">46,47</context>
@@ -765,7 +765,7 @@
       </trans-unit>
       <trans-unit id="4093735071527927163" datatype="html">
         <source>Contribute on PeerTube</source>
-        <target/>
+        <target state="translated">Doprinesi na PeerTubeu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">54,55</context>
@@ -773,7 +773,7 @@
       </trans-unit>
       <trans-unit id="6886584917624458638" datatype="html">
         <source>Want to help to improve PeerTube? You can translate the web interface, give your feedback or directly contribute to the code!</source>
-        <target/>
+        <target state="translated">Želiš pomoći poboljšati PeerTube? Prevedi web-sučelje, pošalji povratne informacije ili izravno doprinesi kodu!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">59,60</context>
@@ -781,7 +781,7 @@
       </trans-unit>
       <trans-unit id="185970110822844952" datatype="html">
         <source>P2P &amp; Privacy</source>
-        <target/>
+        <target state="translated">P2P i privatnost</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">71</context>
@@ -1053,7 +1053,7 @@
       </trans-unit>
       <trans-unit id="8bc634cd9d8c9b684dbfaaf17a522f894bedbffc" datatype="html">
         <source>Joined <x id="INTERPOLATION" equiv-text="{{ account.createdAt | date }}"/></source>
-        <target/>
+        <target state="translated">Pridružen <x id="INTERPOLATION" equiv-text="{{ account.createdAt | date }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-about/account-about.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1097,7 +1097,7 @@
       </trans-unit>
       <trans-unit id="6479885129995567639" datatype="html">
         <source>Video channels</source>
-        <target/>
+        <target state="translated">Video kanali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1105,7 +1105,7 @@
       </trans-unit>
       <trans-unit id="3666829335406793239" datatype="html">
         <source>This account does not have channels.</source>
-        <target/>
+        <target state="translated">Ovaj račun nema kanala.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1137,7 +1137,7 @@
       </trans-unit>
       <trans-unit id="1545109431751219382" datatype="html">
         <source>This channel doesn't have any videos.</source>
-        <target/>
+        <target state="translated">Ovaj kanal nema nijedan video.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">20</context>
@@ -1305,7 +1305,7 @@
       </trans-unit>
       <trans-unit id="4856575356061361269" datatype="html">
         <source><x id="PH" equiv-text="followers"/> direct account followers</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="followers"/> izravni pratitelji računa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">127</context>
@@ -1313,7 +1313,7 @@
       </trans-unit>
       <trans-unit id="6250999352462648289" datatype="html">
         <source>Report this account</source>
-        <target/>
+        <target state="translated">Prijavi ovaj račun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">133</context>
@@ -1481,7 +1481,7 @@
       </trans-unit>
       <trans-unit id="5511334650211127631" datatype="html">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
-        <target state="translated">Neke datoteke nisu sjedinjene i dohvaćaju se po potrebi. Definiraj njihovu politiku predmemoriranja.</target>
+        <target state="translated">Neke datoteke nisu međusobno povezane i dohvaćaju se po potrebi. Definiraj njihovu politiku predmemoriranja.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -1489,7 +1489,7 @@
       </trans-unit>
       <trans-unit id="4382565260112874406" datatype="html">
         <source>Number of previews to keep in cache</source>
-        <target/>
+        <target state="translated">Broj pregleda koji se čuvaju u predmemoriji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">15</context>
@@ -1497,7 +1497,7 @@
       </trans-unit>
       <trans-unit id="3710881484246327863" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {predmemorirana slika} other {predmemorirane slike}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {slika u predmemoriji} few {slike u predmemoriji} other {slika u predmemoriji}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">22</context>
@@ -1505,7 +1505,7 @@
       </trans-unit>
       <trans-unit id="2279905277031617076" datatype="html">
         <source>Number of video captions to keep in cache</source>
-        <target/>
+        <target state="translated">Broj titlova za nagluhe koji se čuvaju u predmemoriji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">29</context>
@@ -1513,7 +1513,7 @@
       </trans-unit>
       <trans-unit id="6193666854590647323" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</source>
-        <target/>
+        <target state="translated">{VAR_PLURAL, plural, =1 {titl za nagluhe u predmemoriji} few {titla za nagluhe u predmemoriji} other {titlova za nagluhe u predmemoriji}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">36</context>
@@ -1521,7 +1521,7 @@
       </trans-unit>
       <trans-unit id="330647913034301472" datatype="html">
         <source>Number of video torrents to keep in cache</source>
-        <target/>
+        <target state="translated">Broj torrenta videa koji se čuvaju u predmemoriji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">43</context>
@@ -1529,7 +1529,7 @@
       </trans-unit>
       <trans-unit id="4613961764793311850" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached torrent} other {cached torrents}}</source>
-        <target/>
+        <target state="translated">{VAR_PLURAL, plural, =1 {torrent u predmemoriji} few {torrenta u predmemoriji} other {torrenta u predmemoriji}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">50</context>
@@ -1605,7 +1605,7 @@
       </trans-unit>
       <trans-unit id="6855462350544488601" datatype="html">
         <source>default</source>
-        <target/>
+        <target state="translated">standardna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1613,7 +1613,7 @@
       </trans-unit>
       <trans-unit id="4096396973250090478" datatype="html">
         <source>Landing page</source>
-        <target/>
+        <target state="translated">Odredišna stranica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">27</context>
@@ -1621,7 +1621,7 @@
       </trans-unit>
       <trans-unit id="28aca3fd95c8d941f643c617058636715b6f87d9" datatype="html">
         <source>Discover videos</source>
-        <target/>
+        <target state="translated">Otkrij videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1637,7 +1637,7 @@
       </trans-unit>
       <trans-unit id="2609416025385742456" datatype="html">
         <source>Default trending page</source>
-        <target/>
+        <target state="translated">Standardna stranica videa u trendu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">34</context>
@@ -1705,7 +1705,7 @@
       </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f" datatype="html">
         <source>Local videos</source>
-        <target/>
+        <target state="translated">Lokalna videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">42</context>
@@ -1773,7 +1773,7 @@
       </trans-unit>
       <trans-unit id="2669509104300979449" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> to set their quota individually. </source>
-        <target/>
+        <target state="translated">Upravljaj <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>korisnicima<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> za postavljanje njihovih kontingenata. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">131,132</context>
@@ -1837,7 +1837,7 @@
       </trans-unit>
       <trans-unit id="502260296951057925" datatype="html">
         <source>Default video quota per user</source>
-        <target/>
+        <target state="translated">Standardni kontingent za videa po korisniku</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">177</context>
@@ -1873,7 +1873,7 @@
       </trans-unit>
       <trans-unit id="8509882464852636851" datatype="html">
         <source>Default daily upload limit per user</source>
-        <target/>
+        <target state="translated">Standardna granica za prijenos videa po korisniku</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">191</context>
@@ -1897,7 +1897,7 @@
       </trans-unit>
       <trans-unit id="2184839376696112704" datatype="html">
         <source>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</source>
-        <target/>
+        <target state="translated">dozvoljava istovremen uvoz više videa. ⚠️ Zahtijeva ponovno pokretanje PeerTubea.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">221</context>
@@ -1917,7 +1917,7 @@
       </trans-unit>
       <trans-unit id="5997625369044180192" datatype="html">
         <source>Allow import with HTTP URL (e.g. YouTube)</source>
-        <target/>
+        <target state="translated">Dozvoli uvoz s HTTP URL (npr. YouTube)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">234</context>
@@ -1925,7 +1925,7 @@
       </trans-unit>
       <trans-unit id="4719342289581047890" datatype="html">
         <source>Allow import with a torrent file or a magnet URI</source>
-        <target/>
+        <target state="translated">Dozvoli uvoz s torrent datotekom ili magnet URI-jem</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">241</context>
@@ -1981,7 +1981,7 @@
       </trans-unit>
       <trans-unit id="7305237807882754643" datatype="html">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> to look up remote videos/actors that may not be federated with your instance</source>
-        <target state="translated">Dozvoli <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonimnim korisnicima<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> tražiti udaljena videa/sudionike koji možda nisu sjedinjeni s tvojom instancom</target>
+        <target state="translated">Dozvoli <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonimnim korisnicima<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> tražiti udaljena videa/sudionike koji možda nisu međusobno povezani s tvojom instancom</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">297</context>
@@ -2045,7 +2045,7 @@
       </trans-unit>
       <trans-unit id="836183323506117145" datatype="html">
         <source>FEDERATION</source>
-        <target state="translated">SJEDINJENJE</target>
+        <target state="translated">MEĐUSOBNA POVEZANOST</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">361</context>
@@ -2053,7 +2053,7 @@
       </trans-unit>
       <trans-unit id="252719899360434356" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/follows&quot;&gt;"/>relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> with other instances. </source>
-        <target/>
+        <target state="translated">Upravljaj <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/follows&quot;&gt;"/>vezama<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> s drugim instancama. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">363,364</context>
@@ -2069,7 +2069,7 @@
       </trans-unit>
       <trans-unit id="7015551137649102649" datatype="html">
         <source>Manually approve new instance followers</source>
-        <target/>
+        <target state="translated">Ručno odobri nove pratitelje instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">382</context>
@@ -2077,7 +2077,7 @@
       </trans-unit>
       <trans-unit id="4803992993548153434" datatype="html">
         <source>Automatically follow back instances</source>
-        <target/>
+        <target state="translated">Automatski prati instance natrag</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">395</context>
@@ -2085,7 +2085,7 @@
       </trans-unit>
       <trans-unit id="173263206605027981" datatype="html">
         <source>Automatically follow instances of a public index</source>
-        <target/>
+        <target state="translated">Automatski prati instance javnog indeksa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">408</context>
@@ -2141,7 +2141,7 @@
       </trans-unit>
       <trans-unit id="3202133522706129143" datatype="html">
         <source>Provide the Twitter account representing your instance to improve link previews. If you don't have a Twitter account, just leave the default value.</source>
-        <target/>
+        <target state="translated">Navedi Twitter račun koji predstavlja tvoju instancu za poboljšavanje preglede poveznica. Ako nemaš Twitter račun, jednostavno ostavi standardnu vrijednost.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">470,472</context>
@@ -2157,7 +2157,7 @@
       </trans-unit>
       <trans-unit id="5648651824279408711" datatype="html">
         <source>Instance allowed by Twitter</source>
-        <target/>
+        <target state="translated">Twitter je dozvolio instancu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">494</context>
@@ -2165,7 +2165,7 @@
       </trans-unit>
       <trans-unit id="8042372696350741398" datatype="html">
         <source>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                   "/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                   "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                   "/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;                   "/> to see if you instance is allowed. </source>
-        <target/>
+        <target state="translated">Ako Twitter izričito dozvoljava tvoju instancu, videoplayer će biti ugrađen u Twitter vijest o dijeljenju PeerTube videa.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                   "/> Ako ne, koristimo poveznicu s karticom slike koja preusmjerava na tvoju PeerTube instancu.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                   "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                   "/> Označi ovu opciju, spremi konfiguraciju i testiraj s URL-om videa tvoje instance (https://example.com/videos/watch/blabla) na <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;                   "/> za prikaz, je li tvoja instance dozvoljena. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">499,504</context>
@@ -2173,7 +2173,7 @@
       </trans-unit>
       <trans-unit id="3203902538239082422" datatype="html">
         <source>You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</source>
-        <target/>
+        <target state="translated">Uključio/la si mogućnost za registraciju: dolje smo automatski uključili opciju „Automatski blokiraj nova videa” u odjeljku „Videa”.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -2445,7 +2445,7 @@
       </trans-unit>
       <trans-unit id="4620493570088713907" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="translated">Uključivanjem ćeš dozvoliti drugim administratorima da znaju da uglavnom sjedinjuješ neprikladan sadržaj.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Štoviše, potvrdni okvir za neprikladni sadržaj pri prijenosu videa standardno će se automatski označiti. </target>
+        <target state="translated">Uključivanjem ćeš dozvoliti drugim administratorima da znaju da uglavnom međusobno povezuješ neprikladan sadržaj.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Štoviše, potvrdni okvir za neprikladni sadržaj pri prijenosu videa standardno će se automatski označiti. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">94,96</context>
@@ -2537,7 +2537,7 @@
       </trans-unit>
       <trans-unit id="3968335261686887328" datatype="html">
         <source>Who is behind the instance?</source>
-        <target/>
+        <target state="translated">Tko predstavlja ovu instancu?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">169</context>
@@ -2609,7 +2609,7 @@
       </trans-unit>
       <trans-unit id="3447208665089679283" datatype="html">
         <source>What server/hardware does the instance run on?</source>
-        <target/>
+        <target state="translated">Na kojem poslužitelju/hardveru radi instanca?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">227</context>
@@ -2617,7 +2617,7 @@
       </trans-unit>
       <trans-unit id="4739907951373047958" datatype="html">
         <source>i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</source>
-        <target/>
+        <target state="translated">npr. 2vCore 2 GB RAM, izravna poveznica na iznajmljeni poslužitelj itd.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context>
           <context context-type="linenumber">228</context>
@@ -2637,7 +2637,7 @@
       </trans-unit>
       <trans-unit id="1429138002697017359" datatype="html">
         <source>Enable users of your instance to stream live.</source>
-        <target state="translated">Omogući korisnicima svoje instance prijenos uživo.</target>
+        <target state="translated">Uključi prijenos uživo korisnicima tvoje instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -2645,7 +2645,7 @@
       </trans-unit>
       <trans-unit id="2281161665447607254" datatype="html">
         <source>Allow live streaming</source>
-        <target/>
+        <target state="translated">Dozvoli prijenos uživo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">18</context>
@@ -2753,7 +2753,7 @@
       </trans-unit>
       <trans-unit id="6727057461851446921" datatype="html">
         <source>Live resolutions to generate</source>
-        <target/>
+        <target state="translated">Generiranje rezolucija uživo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">107</context>
@@ -2761,7 +2761,7 @@
       </trans-unit>
       <trans-unit id="5309195634424105927" datatype="html">
         <source>Live transcoding threads</source>
-        <target/>
+        <target state="translated">Procesi transkodiranja uživo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">128</context>
@@ -2785,7 +2785,7 @@
       </trans-unit>
       <trans-unit id="1417246074503129277" datatype="html">
         <source>Live transcoding profile</source>
-        <target/>
+        <target state="translated">Profil transkodiranja uživo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">150</context>
@@ -2841,7 +2841,7 @@
       </trans-unit>
       <trans-unit id="6659155428791414865" datatype="html">
         <source>x264, targeting maximum device compatibility</source>
-        <target/>
+        <target state="translated">× 264, ciljajući na maksimalnu kompatibilnost uređaja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -2853,7 +2853,7 @@
       </trans-unit>
       <trans-unit id="1473738049081128420" datatype="html">
         <source>Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically.</source>
-        <target/>
+        <target state="translated">Procjenjivanje kapaciteta poslužitelja za transkodiranje i prijenose videa nije laka i ne možemo automatski podesiti PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">9,10</context>
@@ -2877,7 +2877,7 @@
       </trans-unit>
       <trans-unit id="2384409178337534505" datatype="html">
         <source>Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully.</source>
-        <target/>
+        <target state="translated">Obradi prenesena videa tako da budu u prenosivom obliku te da se mogu reproducirati na svakom uređaj. Iako troši veliku količinu resursa, ovo je kritični dio PeerTubea, stoga koračaj oprezno.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -2901,7 +2901,7 @@
       </trans-unit>
       <trans-unit id="7452751710576287271" datatype="html">
         <source>Allow additional extensions</source>
-        <target/>
+        <target state="translated">Dozvoli dodatne datotečne nastavke</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">51</context>
@@ -2909,7 +2909,7 @@
       </trans-unit>
       <trans-unit id="0ff72c066084f3c420dde9febf4f7255e7511867" datatype="html">
         <source>Allows users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, .m2ts, .mxf, or .nut videos.</source>
-        <target/>
+        <target state="translated">Dozvoli korisnicima prenositi .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, .m2ts, .mxf ili .nut videa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">54</context>
@@ -2917,7 +2917,7 @@
       </trans-unit>
       <trans-unit id="1823941382992046371" datatype="html">
         <source>Allow audio files upload</source>
-        <target/>
+        <target state="translated">Dozvoli prijenos audio datoteka</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">62</context>
@@ -2925,7 +2925,7 @@
       </trans-unit>
       <trans-unit id="8340360585610503574" datatype="html">
         <source>Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</source>
-        <target/>
+        <target state="translated">Dozvoli korisnicima prenositi .mp3, .ogg, .wma, .flac, .aac ili .ac3 audio datoteke.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">65</context>
@@ -2933,7 +2933,7 @@
       </trans-unit>
       <trans-unit id="5867513506373651775" datatype="html">
         <source>The file will be merged in a still image video with the preview file on upload.</source>
-        <target/>
+        <target state="translated">Datoteka će se spojiti u sliku videa s datotekom pregleda prilikom prijenosa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">66</context>
@@ -2957,7 +2957,7 @@
       </trans-unit>
       <trans-unit id="8373385486403101567" datatype="html">
         <source>If you also enabled HLS support, it will multiply videos storage by 2</source>
-        <target/>
+        <target state="translated">Ako uklučiš i HLS podršku, to će udvostručiti memoriju videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">83</context>
@@ -2965,7 +2965,7 @@
       </trans-unit>
       <trans-unit id="3839590624406770455" datatype="html">
         <source>HLS with P2P support enabled</source>
-        <target/>
+        <target state="translated">HLS s P2P podrškom uključena</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">94</context>
@@ -2973,7 +2973,7 @@
       </trans-unit>
       <trans-unit id="7334484418359079994" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with plain WebTorrent:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target/>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Zahtijeva ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generiraj HLS playliste i fragmentirane MP4 datoteke za bolju reprodukciju nego s običnim WebTorrentom:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Brža reprodukcija, posebno s dugim videimaa<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Stabilnija reprodukcija (manji broj grešaka/beskonačno učitavanje)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Ako uklučiš i WebTorrent podršku, to će udvostručiti memoriju videa<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">99,108</context>
@@ -2981,7 +2981,7 @@
       </trans-unit>
       <trans-unit id="4748900450708089645" datatype="html">
         <source>Resolutions to generate per enabled format</source>
-        <target/>
+        <target state="translated">Generiranje rezolucija po uključenom formatu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">116</context>
@@ -2989,7 +2989,7 @@
       </trans-unit>
       <trans-unit id="5431196295724512251" datatype="html">
         <source>The original file resolution will be the default target if no option is selected.</source>
-        <target/>
+        <target state="translated">Izvorna rezolucija datoteke bit će standardni cilj ako nijedna opcija nije odabrana.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">132,133</context>
@@ -3473,7 +3473,7 @@
       </trans-unit>
       <trans-unit id="2117404838551056159" datatype="html">
         <source>Your instance doesn't have any follower.</source>
-        <target/>
+        <target state="translated">Tvoja instanca nema nijednog pratitelja.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">69</context>
@@ -3481,7 +3481,7 @@
       </trans-unit>
       <trans-unit id="2520968456492632777" datatype="html">
         <source><x id="PH" equiv-text="handle"/> accepted in instance followers</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="handle"/> prihvaćen u pratitelje instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -3489,7 +3489,7 @@
       </trans-unit>
       <trans-unit id="450530533730658004" datatype="html">
         <source>Do you really want to reject this follower?</source>
-        <target/>
+        <target state="translated">Stvarno želiš odbiti ovog pratitelja?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">52</context>
@@ -3505,7 +3505,7 @@
       </trans-unit>
       <trans-unit id="2040902819815401278" datatype="html">
         <source><x id="PH" equiv-text="handle"/> rejected from instance followers</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="handle"/> odbijen iz pratitelja instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -3513,7 +3513,7 @@
       </trans-unit>
       <trans-unit id="3620117223790525725" datatype="html">
         <source>Do you really want to delete this follower?</source>
-        <target/>
+        <target state="translated">Stvarno želiš izbrisati ovog pratitelja?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -3613,7 +3613,7 @@
       </trans-unit>
       <trans-unit id="2452034338905853167" datatype="html">
         <source><x id="PH" equiv-text="handle"/> removed from instance followers</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="handle"/> isključen iz pratitelja instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -3637,7 +3637,7 @@
       </trans-unit>
       <trans-unit id="1268699198448750610" datatype="html">
         <source>Follow instances</source>
-        <target/>
+        <target state="translated">Prati instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">17</context>
@@ -3789,7 +3789,7 @@
       </trans-unit>
       <trans-unit id="5968342253366599875" datatype="html">
         <source>Videos redundancies</source>
-        <target/>
+        <target state="translated">Redundancija videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -3805,7 +3805,7 @@
       </trans-unit>
       <trans-unit id="4667534933980942398" datatype="html">
         <source>Remote videos duplicated by my instance</source>
-        <target/>
+        <target state="translated">Ukloni videa duplicirana od moje instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">13</context>
@@ -3821,7 +3821,7 @@
       </trans-unit>
       <trans-unit id="2343069726009080052" datatype="html">
         <source>Video <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;name&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target/>
+        <target state="translated">Video <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;name&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">29</context>
@@ -3881,7 +3881,7 @@
       </trans-unit>
       <trans-unit id="7595922272001217567" datatype="html">
         <source>No redundancy strategy is enabled on your instance.</source>
-        <target/>
+        <target state="translated">Na tvojoj instanci nije uključena strategija redundantnosti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">96,97</context>
@@ -3905,7 +3905,7 @@
       </trans-unit>
       <trans-unit id="5875705095657098468" datatype="html">
         <source>Do you really want to remove this video redundancy?</source>
-        <target/>
+        <target state="translated">Stvarno želiš ukloniti redundanciju ovog videa?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">140</context>
@@ -3913,7 +3913,7 @@
       </trans-unit>
       <trans-unit id="9098272570113000349" datatype="html">
         <source>Remove redundancy</source>
-        <target/>
+        <target state="translated">Ukloniti redundanciju</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">141</context>
@@ -3921,7 +3921,7 @@
       </trans-unit>
       <trans-unit id="6537102123107780785" datatype="html">
         <source>Video redundancies removed!</source>
-        <target state="translated">Redundantna videa uklonjena!</target>
+        <target state="translated">Redundancija videa uklonjena!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">147</context>
@@ -3929,7 +3929,7 @@
       </trans-unit>
       <trans-unit id="1868606282505332204" datatype="html">
         <source>Reports</source>
-        <target state="translated">Izvještaji</target>
+        <target state="translated">Prijave</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/abuse-list/abuse-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -3957,7 +3957,7 @@
       </trans-unit>
       <trans-unit id="746099155736913817" datatype="html">
         <source>Video blocks</source>
-        <target/>
+        <target state="translated">Blokiranja videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -4005,7 +4005,7 @@
       </trans-unit>
       <trans-unit id="2478877938420291792" datatype="html">
         <source>Unfederated</source>
-        <target state="translated">Nesjedinjeni</target>
+        <target state="translated">Bez međusobnog povezivanja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">45</context>
@@ -4073,7 +4073,7 @@
       </trans-unit>
       <trans-unit id="3452334748875293295" datatype="html">
         <source>The video was blocked due to automatic blocking of new videos</source>
-        <target/>
+        <target state="translated">Video je blokiran zbog automatskog blokiranja novih videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">74</context>
@@ -4133,7 +4133,7 @@
       </trans-unit>
       <trans-unit id="6906423861055262169" datatype="html">
         <source>Video <x id="PH" equiv-text="videoBlock.video.name"/> switched to manual block.</source>
-        <target/>
+        <target state="translated">Video <x id="PH" equiv-text="videoBlock.video.name"/> promijenjen na ručno blokiranje.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -4201,7 +4201,7 @@
       </trans-unit>
       <trans-unit id="7293356040886494773" datatype="html">
         <source>Do you really want to unblock this video? It will be available again in the videos list.</source>
-        <target/>
+        <target state="translated">Stvarno želiš deblokirati ovaj video? Bit će ponovo dostupan na popisu videa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">146</context>
@@ -4225,7 +4225,7 @@
       </trans-unit>
       <trans-unit id="7427986413651551775" datatype="html">
         <source>Video comments</source>
-        <target/>
+        <target state="translated">Komentari videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -4269,7 +4269,7 @@
       </trans-unit>
       <trans-unit id="3c770e01673ea017697b8c8a4feb63aefdd1f999" datatype="html">
         <source>Remote comments</source>
-        <target/>
+        <target state="translated">Udaljeni komentari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">38</context>
@@ -4409,7 +4409,7 @@
       </trans-unit>
       <trans-unit id="2850960459131251840" datatype="html">
         <source>Comments are deleted after a few minutes</source>
-        <target/>
+        <target state="translated">Komentari se brišu nekon par minuta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context>
           <context context-type="linenumber">72</context>
@@ -4425,7 +4425,7 @@
       </trans-unit>
       <trans-unit id="379090446060940062" datatype="html">
         <source>Do you really want to delete all comments of <x id="PH" equiv-text="comment.by"/>?</source>
-        <target/>
+        <target state="translated">Stvarno želiš isbrisati komentare od <x id="PH" equiv-text="comment.by"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context>
           <context context-type="linenumber">157</context>
@@ -4433,7 +4433,7 @@
       </trans-unit>
       <trans-unit id="4539246224625965241" datatype="html">
         <source>Comments of <x id="PH" equiv-text="options.accountName"/> will be deleted in a few minutes</source>
-        <target/>
+        <target state="translated">Komentari od <x id="PH" equiv-text="options.accountName"/> će se izbrisati za par minuta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.ts</context>
           <context context-type="linenumber">169</context>
@@ -4477,7 +4477,7 @@
       </trans-unit>
       <trans-unit id="212615365039028546" datatype="html">
         <source>You don't have plugins installed yet.</source>
-        <target/>
+        <target state="translated">Još nemaš instaliranih dodataka.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -4485,7 +4485,7 @@
       </trans-unit>
       <trans-unit id="1710094819987243777" datatype="html">
         <source>You don't have themes installed yet.</source>
-        <target/>
+        <target state="translated">Još nemaš instaliranih tema.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">92</context>
@@ -4501,7 +4501,7 @@
       </trans-unit>
       <trans-unit id="9107383323119159110" datatype="html">
         <source>Do you really want to uninstall <x id="PH" equiv-text="plugin.name"/>?</source>
-        <target/>
+        <target state="translated">Stvarno želiš deinstalirati dodatak <x id="PH" equiv-text="plugin.name"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">109</context>
@@ -4541,7 +4541,7 @@
       </trans-unit>
       <trans-unit id="2006841089844688970" datatype="html">
         <source>To load your new installed plugins or themes, refresh the page.</source>
-        <target/>
+        <target state="translated">Za učitavanje novih instaliranih dodataka ili tema aktualiziraj stranicu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -4593,7 +4593,7 @@
       </trans-unit>
       <trans-unit id="3150704904301058778" datatype="html">
         <source>The plugin index is not available. Please retry later.</source>
-        <target/>
+        <target state="translated">Indeks dodataka nije dostupan. Pokušaj ponovo kasnije.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">100</context>
@@ -4601,7 +4601,7 @@
       </trans-unit>
       <trans-unit id="1387301493234848481" datatype="html">
         <source>Please only install plugins or themes you trust, since they can execute any code on your instance.</source>
-        <target/>
+        <target state="translated">Instaliraj samo dodatke ili teme kojima vjeruješ, jer oni mogu izvršiti bilo koji kod na tvojoj instanci.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">126</context>
@@ -4609,7 +4609,7 @@
       </trans-unit>
       <trans-unit id="2994182849694226596" datatype="html">
         <source>Install <x id="PH" equiv-text="plugin.name"/>?</source>
-        <target state="translated">Instalirati <x id="PH" equiv-text="plugin.name"/>?</target>
+        <target state="translated">Instalirati dodatak <x id="PH" equiv-text="plugin.name"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">127</context>
@@ -4617,7 +4617,7 @@
       </trans-unit>
       <trans-unit id="6703720397495603345" datatype="html">
         <source><x id="PH" equiv-text="plugin.name"/> installed.</source>
-        <target state="translated"><x id="PH" equiv-text="plugin.name"/> instaliran.</target>
+        <target state="translated">Dodatak <x id="PH" equiv-text="plugin.name"/> instaliran.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -4625,7 +4625,7 @@
       </trans-unit>
       <trans-unit id="2601639465696257054" datatype="html">
         <source>This <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> does not have settings. </source>
-        <target/>
+        <target state="translated">Ova <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> nema postavke. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context>
           <context context-type="linenumber">16,18</context>
@@ -4818,7 +4818,7 @@
       </trans-unit>
       <trans-unit id="2713421326605345655" datatype="html">
         <source>No <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> jobs found.</source>
-        <target state="translated">Nijedan <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> posao nije pronađen.</target>
+        <target state="translated">Nijedna vrsta posla <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> nije pronađena.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">108</context>
@@ -4826,7 +4826,7 @@
       </trans-unit>
       <trans-unit id="2384897339170501794" datatype="html">
         <source>No <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;badge&quot; [ngClass]=&quot;getJobStateClass(jobState)&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobState }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt; "/> jobs found.</source>
-        <target state="translated">Nijedan <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;badge&quot; [ngClass]=&quot;getJobStateClass(jobState)&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobState }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt; "/> posao nije pronađen.</target>
+        <target state="translated">Nijedno stanje posla <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;badge&quot; [ngClass]=&quot;getJobStateClass(jobState)&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobState }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt; "/> nije pronađeno.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">111</context>
@@ -4834,7 +4834,7 @@
       </trans-unit>
       <trans-unit id="4457061340457477073" datatype="html">
         <source>No <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> jobs found that are <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;badge&quot; [ngClass]=&quot;getJobStateClass(jobState)&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ jobState }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>.</source>
-        <target state="translated">Nijedan <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> posao nije pronađen koji je <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;badge&quot; [ngClass]=&quot;getJobStateClass(jobState)&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ jobState }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>.</target>
+        <target state="translated">Nijedna vrsta posla <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> koja je u stanju <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;badge&quot; [ngClass]=&quot;getJobStateClass(jobState)&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ jobState }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">112</context>
@@ -5090,7 +5090,7 @@
       </trans-unit>
       <trans-unit id="8147229944654164397" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Video} other {Videa}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {video} other {videa}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">24</context>
@@ -5102,7 +5102,7 @@
       </trans-unit>
       <trans-unit id="2068564237394270744" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Channel} other {Channels}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Kanal} other {Kanala}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {kanal} other {kanala}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">30</context>
@@ -5114,7 +5114,7 @@
       </trans-unit>
       <trans-unit id="407487463718398437" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Pretplatnik} other {Pretplatnika}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {pretplatnik} other {pretplatnika}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">36</context>
@@ -5150,7 +5150,7 @@
       </trans-unit>
       <trans-unit id="3094586852616580737" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Comment} other {Comments}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Komentar} other {Komentara}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {komentar} other {komentara}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">54</context>
@@ -5314,7 +5314,7 @@
       </trans-unit>
       <trans-unit id="8371296837649897723" datatype="html">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target/>
+        <target state="translated">Ako lozinku ostaviš praznom, korisniku će se poslati e-mail.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">121,122</context>
@@ -5366,7 +5366,7 @@
       </trans-unit>
       <trans-unit id="2743014784334706527" datatype="html">
         <source>Daily video quota</source>
-        <target/>
+        <target state="translated">Dnevni kontingent videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">172</context>
@@ -5382,7 +5382,7 @@
       </trans-unit>
       <trans-unit id="2622255144026150901" datatype="html">
         <source>Auth plugin</source>
-        <target/>
+        <target state="translated">Dodatak za autentifikaciju</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">188</context>
@@ -5406,7 +5406,7 @@
       </trans-unit>
       <trans-unit id="2070907480317730379" datatype="html">
         <source>Doesn't need review before a video goes public</source>
-        <target/>
+        <target state="translated">Nije potreban pregled prije nego što se video objavi javno</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">201</context>
@@ -5418,7 +5418,7 @@
       </trans-unit>
       <trans-unit id="7752239348028675311" datatype="html">
         <source>DANGER ZONE</source>
-        <target/>
+        <target state="translated">OPSANA ZONA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">219</context>
@@ -5518,7 +5518,7 @@
       </trans-unit>
       <trans-unit id="8819563010322372715" datatype="html">
         <source>An email asking for password reset has been sent to <x id="PH" equiv-text="this.user.username"/>.</source>
-        <target/>
+        <target state="translated">E-mail u kojem se traži ponovno postavljanje lozinke poslana je korisniku <x id="PH" equiv-text="this.user.username"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">109</context>
@@ -5574,7 +5574,7 @@
       </trans-unit>
       <trans-unit id="5893518121808195081" datatype="html">
         <source>Highlight banned users</source>
-        <target/>
+        <target state="translated">Istakni isključene korisnike</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">71</context>
@@ -5598,7 +5598,7 @@
       </trans-unit>
       <trans-unit id="2127094963121208963" datatype="html">
         <source>Total video quota</source>
-        <target/>
+        <target state="translated">Ukupni kontingent videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">141</context>
@@ -5610,7 +5610,7 @@
       </trans-unit>
       <trans-unit id="242888077027281874" datatype="html">
         <source>Total daily video quota</source>
-        <target/>
+        <target state="translated">Ukupni dnevni kontingent videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">151</context>
@@ -5658,7 +5658,7 @@
       </trans-unit>
       <trans-unit id="3855396975723886053" datatype="html">
         <source>User won't be able to login anymore, but videos and comments will be kept as is.</source>
-        <target/>
+        <target state="translated">Korisnik se više neće moći prijaviti, ali će videa i komentari ostati.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -5754,7 +5754,7 @@
       </trans-unit>
       <trans-unit id="8360664597512051242" datatype="html">
         <source><x id="PH" equiv-text="users.length"/> users email set as verified.</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="users.length"/> korisnički e-mail postavljen kao potvrđen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">210</context>
@@ -5914,7 +5914,7 @@
       </trans-unit>
       <trans-unit id="3238209155172574367" datatype="html">
         <source>Forgot your password</source>
-        <target/>
+        <target state="translated">Zaboravio/la si lozinku</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">91</context>
@@ -5922,7 +5922,7 @@
       </trans-unit>
       <trans-unit id="87327320394367488" datatype="html">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target/>
+        <target state="translated">Žao nam je, ne možeš obnoviti svoju lozinku jer tvoj administrator instance nije konfigurirao PeerTubeov e-mail sustav.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">99,100</context>
@@ -6371,7 +6371,7 @@
       </trans-unit>
       <trans-unit id="5671547068905553663" datatype="html">
         <source>One of your video is blocked/unblocked</source>
-        <target/>
+        <target state="translated">Jedan od tvojih videa je blokiran/deblokiran</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">36</context>
@@ -6411,7 +6411,7 @@
       </trans-unit>
       <trans-unit id="5315689532659759332" datatype="html">
         <source>Someone mentioned you in video comments</source>
-        <target/>
+        <target state="translated">Netko te je spomenuo u komentarima videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -6419,7 +6419,7 @@
       </trans-unit>
       <trans-unit id="2018794201569157817" datatype="html">
         <source>Your instance has a new follower</source>
-        <target/>
+        <target state="translated">Tvoja instanca ima novog pratitelja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -6459,7 +6459,7 @@
       </trans-unit>
       <trans-unit id="6721822899525405039" datatype="html">
         <source>People can find you using @<x id="INTERPOLATION" equiv-text="{{ user.username }}"/>@<x id="INTERPOLATION_1" equiv-text="{{ instanceHost }}"/> </source>
-        <target/>
+        <target state="translated">Ljudi te mogu pronaći koristeći @<x id="INTERPOLATION" equiv-text="{{ user.username }}"/>@<x id="INTERPOLATION_1" equiv-text="{{ instanceHost }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -6627,7 +6627,7 @@
       </trans-unit>
       <trans-unit id="1137937154872046253" datatype="html">
         <source>Video channel <x id="PH" equiv-text="videoChannelCreate.displayName"/> created.</source>
-        <target/>
+        <target state="translated">Videokanal <x id="PH" equiv-text="videoChannelCreate.displayName"/> stvoren.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-create.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -6635,7 +6635,7 @@
       </trans-unit>
       <trans-unit id="8723777130353305761" datatype="html">
         <source>This name already exists on this instance.</source>
-        <target/>
+        <target state="translated">Ovo ime već postoji u ovoj instanci.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channel-create.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -6839,7 +6839,7 @@
       </trans-unit>
       <trans-unit id="2575302837003821736" datatype="html">
         <source>Please type the display name of the video channel (<x id="PH" equiv-text="videoChannel.displayName"/>) to confirm</source>
-        <target/>
+        <target state="translated">Za podtvrđivanje upiši ime videokanala (<x id="PH" equiv-text="videoChannel.displayName"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -6847,7 +6847,7 @@
       </trans-unit>
       <trans-unit id="624066830180032195" datatype="html">
         <source>Video channel <x id="PH" equiv-text="videoChannel.displayName"/> deleted.</source>
-        <target/>
+        <target state="translated">Videokanal <x id="PH" equiv-text="videoChannel.displayName"/> izbrisan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -6879,7 +6879,7 @@
       </trans-unit>
       <trans-unit id="3656932706364053858" datatype="html">
         <source>Track watch history</source>
-        <target/>
+        <target state="translated">Prati povijest gledanja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context>
           <context context-type="linenumber">20</context>
@@ -6927,7 +6927,7 @@
       </trans-unit>
       <trans-unit id="8966726118414892732" datatype="html">
         <source>Delete videos history</source>
-        <target/>
+        <target state="translated">Izbriši povijest videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">121</context>
@@ -7087,7 +7087,7 @@
       </trans-unit>
       <trans-unit id="321229234608559490" datatype="html">
         <source>Select a channel to receive the video</source>
-        <target state="translated">Za primanje videa odaberi kanal</target>
+        <target state="translated">Odaberi kanal za primanje videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership/my-accept-ownership/my-accept-ownership.component.html</context>
           <context context-type="linenumber">10</context>
@@ -7095,7 +7095,7 @@
       </trans-unit>
       <trans-unit id="798f761c8cf39e72ad38f2237dac3a3ad33c6a30" datatype="html">
         <source>Channel that will receive the video</source>
-        <target/>
+        <target state="translated">Kanal koji će primiti video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership/my-accept-ownership/my-accept-ownership.component.html</context>
           <context context-type="linenumber">13</context>
@@ -7391,7 +7391,7 @@
       </trans-unit>
       <trans-unit id="2427149618141327033" datatype="html">
         <source>Browse videos on PeerTube to add them in your playlist.</source>
-        <target/>
+        <target state="translated">Pregledaj videa na PeerTubeu te ih dodaj u svoju playlistu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context>
           <context context-type="linenumber">28,29</context>
@@ -7539,7 +7539,7 @@
       </trans-unit>
       <trans-unit id="8197117721861453263" datatype="html">
         <source>Do you really want to delete <x id="PH" equiv-text="toDeleteVideosIds.length"/> videos?</source>
-        <target/>
+        <target state="translated">Stvarno želiš isbrisati <x id="PH" equiv-text="toDeleteVideosIds.length"/> videa?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">107</context>
@@ -7555,7 +7555,7 @@
       </trans-unit>
       <trans-unit id="2767660806989176400" datatype="html">
         <source>Video <x id="PH" equiv-text="video.name"/> deleted.</source>
-        <target/>
+        <target state="translated">Video <x id="PH" equiv-text="video.name"/> izbrisan.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">142</context>
@@ -13888,7 +13888,7 @@
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
         <source>Federation</source>
-        <target state="translated">Sjedinjenje</target>
+        <target state="translated">Međusobna povezanost</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">58</context>
@@ -15332,7 +15332,7 @@
       </trans-unit>
       <trans-unit id="8558962068274430520" datatype="html">
         <source>Unfederate the video</source>
-        <target state="translated">Odvoji video</target>
+        <target state="translated">Ukloni povezivanje videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">24</context>
