@@ -1823,24 +1823,25 @@
     node-addon-api "^3.2.1"
     node-gyp-build "^4.3.0"
 
-"@peertube/p2p-media-loader-core@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@peertube/p2p-media-loader-core/-/p2p-media-loader-core-1.0.6.tgz#e5d1b02aa60fe3a8b82dd486745d9ac8cdddbac0"
-  integrity sha512-S3xdYU5MPIf8LtXpd2EXtJJLIPtjQxRYbS3ytnx5t83/ALnP+p8OVR5u+sq3ghq5EMsxbCXUn29pR88BHSdyQw==
+"@peertube/p2p-media-loader-core@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@peertube/p2p-media-loader-core/-/p2p-media-loader-core-1.0.7.tgz#605a6bd248dc95cf8e73a65e37183dcb9f4a795a"
+  integrity sha512-J5VQBaS/L6b0yVNIBLnES4WcsHp4Z6IrAuYNIgG3iC5UcejeA1YHftZ/dAOlzZXQx77qYM7OJtmYAUsQ+2Pd4g==
   dependencies:
-    bittorrent-tracker "^9.16.1"
-    debug "^4.3.1"
+    bittorrent-tracker "^9.19.0"
+    debug "^4.3.4"
     events "^3.3.0"
     sha.js "^2.4.11"
-    simple-peer "^9.10.0"
+    simple-peer "^9.11.1"
 
-"@peertube/p2p-media-loader-hlsjs@^1.0.8":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@peertube/p2p-media-loader-hlsjs/-/p2p-media-loader-hlsjs-1.0.9.tgz#b6128f4b923ba101fad6c2c34d88eb1d8338214f"
-  integrity sha512-3czZrIs61RinMI3YskwFSvRn0Dq7lDHsk1YcIAeOb9aL2OPTnnudSIm+GaS1IPnWNci3u2Op+43zdWfdKIaB9Q==
+"@peertube/p2p-media-loader-hlsjs@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@peertube/p2p-media-loader-hlsjs/-/p2p-media-loader-hlsjs-1.0.10.tgz#2381841f7390761458f581cdfd226acbc8c8fe09"
+  integrity sha512-a4dSHmFf3VQTlfwEPtCN0q0i5TbJFGgd8Jbr96nIYZWr+SAaBBYFi+Q9Az5ksJovMSXzNLb0L5h6dGcS0eZOrg==
   dependencies:
+    debug "^4.3.4"
     events "^3.3.0"
-    m3u8-parser "^4.6.0"
+    m3u8-parser "^4.7.1"
 
 "@peertube/videojs-contextmenu@^5.5.0":
   version "5.5.0"
@@ -3434,7 +3435,7 @@ bittorrent-protocol@^3.5.5:
     speedometer "^1.1.0"
     unordered-array-remove "^1.0.2"
 
-bittorrent-tracker@^9.16.1, bittorrent-tracker@^9.18.6:
+bittorrent-tracker@^9.18.6, bittorrent-tracker@^9.19.0:
   version "9.19.0"
   resolved "https://registry.yarnpkg.com/bittorrent-tracker/-/bittorrent-tracker-9.19.0.tgz#2266bfa8a45a57b09f8d8b184710ba531712d8ef"
   integrity sha512-09d0aD2b+MC+zWvWajkUAKkYMynYW4tMbTKiRSthKtJZbafzEoNQSUHyND24SoCe3ZOb2fKfa6fu2INAESL9wA==
@@ -7500,7 +7501,7 @@ lt_donthave@^1.0.1:
     debug "^4.2.0"
     unordered-array-remove "^1.0.2"
 
-m3u8-parser@4.7.1, m3u8-parser@^4.6.0:
+m3u8-parser@4.7.1, m3u8-parser@^4.7.1:
   version "4.7.1"
   resolved "https://registry.yarnpkg.com/m3u8-parser/-/m3u8-parser-4.7.1.tgz#d6df2c940bb19a01112a04ccc4ff44886a945305"
   integrity sha512-pbrQwiMiq+MmI9bl7UjtPT3AK603PV9bogNlr83uC+X9IoxqL5E4k7kU7fMQ0dpRgxgeSMygqUa0IMLQNXLBNA==
@@ -10176,7 +10177,7 @@ simple-get@^4.0.0, simple-get@^4.0.1:
     once "^1.3.1"
     simple-concat "^1.0.0"
 
-simple-peer@^9.10.0, simple-peer@^9.11.0, simple-peer@^9.11.1:
+simple-peer@^9.11.0, simple-peer@^9.11.1:
   version "9.11.1"
   resolved "https://registry.yarnpkg.com/simple-peer/-/simple-peer-9.11.1.tgz#9814d5723f821b778b7fb011bdefcbd1e788e6cc"
   integrity sha512-D1SaWpOW8afq1CZGWB8xTfrT3FekjQmPValrqncJMX7QFl8YwhrPTZvMCANLtgBwwdS+7zURyqxDDEmY558tTw==
