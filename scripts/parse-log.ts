@@ -76,44 +76,48 @@ run()
   .then(() => process.exit(0))
   .catch(err => console.error(err))
 
-function run () {
-  return new Promise<void>(async res => {
-    const files = await getFiles()
+async function run () {
+  const files = await getFiles()
 
-    for (const file of files) {
-      if (file === 'peertube-audit.log') continue
+  for (const file of files) {
+    if (file === 'peertube-audit.log') continue
 
-      console.log('Opening %s.', file)
+    await readFile(file)
+  }
+}
 
-      const stream = createReadStream(file)
+function readFile (file: string) {
+  console.log('Opening %s.', file)
 
-      const rl = createInterface({
-        input: stream
-      })
+  const stream = createReadStream(file)
 
-      rl.on('line', line => {
-        try {
-          const log = JSON.parse(line)
-          if (options.tags && !containsTags(log.tags, options.tags)) {
-            return
-          }
+  const rl = createInterface({
+    input: stream
+  })
 
-          if (options.notTags && containsTags(log.tags, options.notTags)) {
-            return
-          }
-
-          // Don't know why but loggerFormat does not remove splat key
-          Object.assign(log, { splat: undefined })
-
-          logLevels[log.level](log)
-        } catch (err) {
-          console.error('Cannot parse line.', inspect(line))
-          throw err
+  return new Promise<void>(res => {
+    rl.on('line', line => {
+      try {
+        const log = JSON.parse(line)
+        if (options.tags && !containsTags(log.tags, options.tags)) {
+          return
         }
-      })
 
-      stream.once('close', () => res())
-    }
+        if (options.notTags && containsTags(log.tags, options.notTags)) {
+          return
+        }
+
+        // Don't know why but loggerFormat does not remove splat key
+        Object.assign(log, { splat: undefined })
+
+        logLevels[log.level](log)
+      } catch (err) {
+        console.error('Cannot parse line.', inspect(line))
+        throw err
+      }
+    })
+
+    stream.once('close', () => res())
   })
 }
 
