@@ -21,10 +21,19 @@ function ffprobePromise (path: string) {
 // Audio
 // ---------------------------------------------------------------------------
 
+const imageCodecs = new Set([
+  'ansi', 'apng', 'bintext', 'bmp', 'brender_pix', 'dpx', 'exr', 'fits', 'gem', 'gif', 'jpeg2000', 'jpgls', 'mjpeg', 'mjpegb', 'msp2',
+  'pam', 'pbm', 'pcx', 'pfm', 'pgm', 'pgmyuv', 'pgx', 'photocd', 'pictor', 'png', 'ppm', 'psd', 'sgi', 'sunrast', 'svg', 'targa', 'tiff',
+  'txd', 'webp', 'xbin', 'xbm', 'xface', 'xpm', 'xwd'
+])
+
 async function isAudioFile (path: string, existingProbe?: FfprobeData) {
   const videoStream = await getVideoStream(path, existingProbe)
+  if (!videoStream) return true
 
-  return !videoStream
+  if (imageCodecs.has(videoStream.codec_name)) return true
+
+  return false
 }
 
 async function hasAudioStream (path: string, existingProbe?: FfprobeData) {
