@@ -1780,10 +1780,10 @@
   dependencies:
     xml-js "^1.6.11"
 
-"@peertube/http-signature@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@peertube/http-signature/-/http-signature-1.6.0.tgz#22bef028384e6437e8dbd94052ba7b8bd7f7f1ae"
-  integrity sha512-Bx780c7FPYtkV4LgCoaJcXYcKQqaMef2iQR2V2r5klkYkIQWFxbTOpyhKxvVXYIBIFpj5Cb8DGVDAmhkm7aavg==
+"@peertube/http-signature@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@peertube/http-signature/-/http-signature-1.7.0.tgz#12a84f3fc62e786aa3a2eb09426417bad65736dc"
+  integrity sha512-aGQIwo6/sWtyyqhVK4e1MtxYz4N1X8CNt6SOtCc+Wnczs5S5ONaLHDDR8LYaGn0MgOwvGgXyuZ5sJIfd7iyoUw==
   dependencies:
     assert-plus "^1.0.0"
     jsprim "^1.2.2"
@@ -2220,13 +2220,6 @@
     "@types/magnet-uri" "*"
     "@types/node" "*"
     "@types/parse-torrent-file" "*"
-
-"@types/pem@^1.9.3":
-  version "1.9.6"
-  resolved "https://registry.yarnpkg.com/@types/pem/-/pem-1.9.6.tgz#c3686832e935947fdd9d848dec3b8fe830068de7"
-  integrity sha512-IC67SxacM9fxEi/w7hf98dTun83OwUMeLMo1NS2gE0wdM9MHeg73iH/Pp9nB02OUCQ7Zb2UuKE/IpFCmQw9jxw==
-  dependencies:
-    "@types/node" "*"
 
 "@types/pg-pool@2.0.3":
   version "2.0.3"
@@ -3332,11 +3325,6 @@ character-parser@^2.2.0:
   dependencies:
     is-regex "^1.0.3"
 
-charenc@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/charenc/-/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
-  integrity sha512-yrLQ/yVUFXkzg7EDQsPieE/53+0RlaWTs+wBrvW36cyilJ2SaDWfl4Yj7MtLTXleV9uEKefbAGUPv2/iWSooRA==
-
 charset-detector@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/charset-detector/-/charset-detector-0.0.2.tgz#1cd5ddaf56e83259c6ef8e906ccf06f75fe9a1b2"
@@ -3777,11 +3765,6 @@ cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
     which "^2.0.1"
-
-crypt@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/crypt/-/crypt-0.0.2.tgz#88d7ff7ec0dfb86f713dc87bbb42d044d3e6c41b"
-  integrity sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==
 
 css-select@^5.1.0:
   version "5.1.0"
@@ -4313,11 +4296,6 @@ es6-iterator@^2.0.3:
     d "1"
     es5-ext "^0.10.35"
     es6-symbol "^3.1.1"
-
-es6-promisify@^6.0.0:
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/es6-promisify/-/es6-promisify-6.1.1.tgz#46837651b7b06bf6fff893d03f29393668d01621"
-  integrity sha512-HBL8I3mIki5C1Cc9QjKUenHtnG0A5/xA8Q/AllRcfiwl2CZFXGK7ddBiCoRwAix4i2KxcQfjtIVcrVbB3vbmwg==
 
 es6-symbol@^3.1.1, es6-symbol@^3.1.3:
   version "3.1.3"
@@ -5604,11 +5582,6 @@ is-boolean-object@^1.1.0:
     call-bind "^1.0.2"
     has-tostringtag "^1.0.0"
 
-is-buffer@~1.1.6:
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
-  integrity sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
-
 is-callable@^1.1.4, is-callable@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/is-callable/-/is-callable-1.2.4.tgz#47301d58dd0259407865547853df6d61fe471945"
@@ -6348,15 +6321,6 @@ maxmind@^4.3.6:
     mmdb-lib "2.0.2"
     tiny-lru "8.0.2"
 
-md5@^2.2.1:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/md5/-/md5-2.3.0.tgz#c3da9a6aae3a30b46b7b0c349b87b110dc3bda4f"
-  integrity sha512-T1GITYmFaKuO91vxyoQMFETst+O71VUPEU3ze5GNzDm0OWdP8v1ziTaAEPUr/3kLsY3Sftgz242A1SetQiDL7g==
-  dependencies:
-    charenc "0.0.2"
-    crypt "0.0.2"
-    is-buffer "~1.1.6"
-
 mdurl@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/mdurl/-/mdurl-1.0.1.tgz#fe85b2ec75a59037f2adfec100fd6c601761152e"
@@ -6988,7 +6952,7 @@ optionator@^0.9.1:
     type-check "^0.4.0"
     word-wrap "^1.2.3"
 
-os-tmpdir@^1.0.1, os-tmpdir@~1.0.2:
+os-tmpdir@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
   integrity sha512-D2FR03Vir7FIu45XBY20mTb+/ZSWB00sjU9jdQXt83gDrI4Ztz5Fs7/yy74g2N5SVQY4xY1qDr4rNddwYRVX0g==
@@ -7235,16 +7199,6 @@ peek-stream@^1.1.1:
     buffer-from "^1.0.0"
     duplexify "^3.5.0"
     through2 "^2.0.3"
-
-pem@^1.12.3:
-  version "1.14.6"
-  resolved "https://registry.yarnpkg.com/pem/-/pem-1.14.6.tgz#89babca3a73466fb844df70666dbf1b25eb0dc56"
-  integrity sha512-I5GKUer2PPv5qzUfxaZ6IGRkhp+357Kyv2t1JJg9vP8hGGI13qU34N2QupmggbpIZGPuudH0jn8KU5hjFpPk3g==
-  dependencies:
-    es6-promisify "^6.0.0"
-    md5 "^2.2.1"
-    os-tmpdir "^1.0.1"
-    which "^2.0.2"
 
 pg-connection-string@^2.5.0:
   version "2.5.0"
@@ -9332,7 +9286,7 @@ which@^1.1.1:
   dependencies:
     isexe "^2.0.0"
 
-which@^2.0.1, which@^2.0.2:
+which@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/which/-/which-2.0.2.tgz#7c6a8dd0a636a0327e10b59c9286eee93f3f51b1"
   integrity sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==

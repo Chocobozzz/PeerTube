@@ -1,5 +1,5 @@
 import * as Sequelize from 'sequelize'
-import { createPrivateKey, getPublicKey } from '../../helpers/core-utils'
+import { generateRSAKeyPairPromise } from '../../helpers/core-utils'
 import { PRIVATE_RSA_KEY_SIZE } from '../constants'
 
 async function up (utils: {
@@ -15,10 +15,9 @@ async function up (utils: {
     const actors = await utils.sequelize.query<any>(query, options)
 
     for (const actor of actors) {
-      const { key } = await createPrivateKey(PRIVATE_RSA_KEY_SIZE)
-      const { publicKey } = await getPublicKey(key)
+      const { privateKey, publicKey } = await generateRSAKeyPairPromise(PRIVATE_RSA_KEY_SIZE)
 
-      const queryUpdate = `UPDATE "actor" SET "publicKey" = '${publicKey}', "privateKey" = '${key}' WHERE id = ${actor.id}`
+      const queryUpdate = `UPDATE "actor" SET "publicKey" = '${publicKey}', "privateKey" = '${privateKey}' WHERE id = ${actor.id}`
       await utils.sequelize.query(queryUpdate)
     }
   }
