@@ -293,6 +293,10 @@ tags:
       PeerTube instances can mirror videos from one another, and help distribute some videos.
 
       For importing videos as your own, refer to [video imports](#operation/importVideo).
+  - name: Stats
+    description: |
+      Statistics
+
 x-tagGroups:
   - name: Auth
     tags:
@@ -341,6 +345,9 @@ x-tagGroups:
       - Instance Follows
       - Instance Redundancy
       - Plugins
+  - name: Stats
+    tags:
+      - Stats
   - name: Jobs
     tags:
       - Job
@@ -4294,6 +4301,22 @@ paths:
         '404':
           description: video redundancy not found
 
+  /server/stats:
+    get:
+      tags:
+        - Stats
+      summary: Get instance stats
+      description: Get instance public statistics. This endpoint is cached.
+      operationId: getInstanceStats
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerStats'
+
+
   '/feeds/video-comments.{format}':
     get:
       tags:
@@ -6502,6 +6525,71 @@ components:
           properties:
             enabled:
               type: boolean
+
+    ServerStats:
+      properties:
+        totalUsers:
+          type: number
+        totalDailyActiveUsers:
+          type: number
+        totalWeeklyActiveUsers:
+          type: number
+        totalMonthlyActiveUsers:
+          type: number
+        totalLocalVideos:
+          type: number
+        totalLocalVideoViews:
+          type: number
+          description: Total video views made on the instance
+        totalLocalVideoComments:
+          type: number
+          description: Total comments made by local users
+        totalLocalVideoFilesSize:
+          type: number
+        totalVideos:
+          type: number
+        totalVideoComments:
+          type: number
+        totalLocalVideoChannels:
+          type: number
+        totalLocalDailyActiveVideoChannels:
+          type: number
+        totalLocalWeeklyActiveVideoChannels:
+          type: number
+        totalLocalMonthlyActiveVideoChannels:
+          type: number
+        totalLocalPlaylists:
+          type: number
+        totalInstanceFollowers:
+          type: number
+        totalInstanceFollowing:
+          type: number
+        videosRedundancy:
+          type: array
+          items:
+            type: object
+            properties:
+                strategy:
+                  type: string
+                totalSize:
+                  type: number
+                totalUsed:
+                  type: number
+                totalVideoFiles:
+                  type: number
+                totalVideos:
+                  type: number
+        totalActivityPubMessagesProcessed:
+          type: number
+        totalActivityPubMessagesSuccesses:
+          type: number
+        totalActivityPubMessagesErrors:
+          type: number
+
+        activityPubMessagesProcessedPerSecond:
+          type: number
+        totalActivityPubMessagesWaiting:
+          type: number
 
     ServerConfigAbout:
       properties:
