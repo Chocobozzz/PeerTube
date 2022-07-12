@@ -9,6 +9,7 @@ import { VideoState } from '@shared/models'
 import { federateVideoIfNeeded } from './activitypub/videos'
 import { Notifier } from './notifier'
 import { addMoveToObjectStorageJob } from './video'
+import { retryTransactionWrapper } from '@server/helpers/database-utils'
 
 function buildNextVideoState (currentState?: VideoState) {
   if (currentState === VideoState.PUBLISHED) {
@@ -41,26 +42,28 @@ function moveToNextState (options: {
 }) {
   const { video, previousVideoState, isNewVideo = true } = options
 
-  return sequelizeTypescript.transaction(async t => {
-    // Maybe the video changed in database, refresh it
-    const videoDatabase = await VideoModel.loadFull(video.uuid, t)
-    // Video does not exist anymore
-    if (!videoDatabase) return undefined
+  return retryTransactionWrapper(() => {
+    return sequelizeTypescript.transaction(async t => {
+      // Maybe the video changed in database, refresh it
+      const videoDatabase = await VideoModel.loadFull(video.uuid, t)
+      // Video does not exist anymore
+      if (!videoDatabase) return undefined
 
-    // Already in its final state
-    if (videoDatabase.state === VideoState.PUBLISHED) {
-      return federateVideoIfNeeded(videoDatabase, false, t)
-    }
+      // Already in its final state
+      if (videoDatabase.state === VideoState.PUBLISHED) {
+        return federateVideoIfNeeded(videoDatabase, false, t)
+      }
 
-    const newState = buildNextVideoState(videoDatabase.state)
+      const newState = buildNextVideoState(videoDatabase.state)
 
-    if (newState === VideoState.PUBLISHED) {
-      return moveToPublishedState({ video: videoDatabase, previousVideoState, isNewVideo, transaction: t })
-    }
+      if (newState === VideoState.PUBLISHED) {
+        return moveToPublishedState({ video: videoDatabase, previousVideoState, isNewVideo, transaction: t })
+      }
 
-    if (newState === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-      return moveToExternalStorageState({ video: videoDatabase, isNewVideo, transaction: t })
-    }
+      if (newState === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
+        return moveToExternalStorageState({ video: videoDatabase, isNewVideo, transaction: t })
+      }
+    })
   })
 }
 
