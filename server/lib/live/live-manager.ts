@@ -395,7 +395,7 @@ class LiveManager {
 
       const live = await VideoLiveModel.loadByVideoId(fullVideo.id)
 
-      const liveSession = liveSessionArg ?? await VideoLiveSessionModel.findCurrentSessionOf(fullVideo.id)
+      const liveSession = liveSessionArg ?? await VideoLiveSessionModel.findLatestSessionOf(fullVideo.id)
 
       // On server restart during a live
       if (!liveSession.endDate) {

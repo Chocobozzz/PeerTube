@@ -107,6 +107,15 @@ export class VideoLiveSessionModel extends Model<Partial<AttributesOnly<VideoLiv
     })
   }
 
+  static findLatestSessionOf (videoId: number) {
+    return VideoLiveSessionModel.findOne({
+      where: {
+        liveVideoId: videoId
+      },
+      order: [ [ 'startDate', 'DESC' ] ]
+    })
+  }
+
   static listSessionsOfLiveForAPI (options: { videoId: number }) {
     const { videoId } = options
 
