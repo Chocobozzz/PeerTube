@@ -8,8 +8,8 @@
 <em i18n>This view also shows comments from muted accounts.</em>
 
 <p-table
-  [value]="comments" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id"
+  [value]="comments" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
+  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id"
   [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} comments"

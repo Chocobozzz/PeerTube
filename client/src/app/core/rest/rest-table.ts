@@ -65,6 +65,11 @@ export abstract class RestTable {
   }
 
   onSearch (search: string) {
+    this.pagination = {
+      start: 0,
+      count: this.rowsPerPage
+    }
+
     this.search = search
     this.reloadData()
   }

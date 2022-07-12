@@ -4,7 +4,8 @@
 </h1>
 
 <p-table
-  [value]="blockedServers" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [value]="blockedServers" [paginator]="totalRecords > 0" [totalRecords]="totalRecords"
+  [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions" [first]="pagination.start"
   [sortField]="sort.field" [sortOrder]="sort.order"
   [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
