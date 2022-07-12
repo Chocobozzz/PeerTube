@@ -132,7 +132,8 @@ class Emailer {
 
   async sendMail (options: EmailPayload) {
     if (!isEmailEnabled()) {
-      throw new Error('Cannot send mail because SMTP is not configured.')
+      logger.info('Cannot send mail because SMTP is not configured.')
+      return
     }
 
     const fromDisplayName = options.from
