@@ -134,9 +134,7 @@
       <div class="footer-bottom">
 
         <div class="footer-links">
-          <div *ngIf="isLoggedIn === false">
-            <span role="button" (click)="openLanguageChooser()" class="c-hand" i18n>Interface: {{ currentInterfaceLanguage }}</span>
-          </div>
+          <span *ngIf="isLoggedIn === false" role="button" (click)="openLanguageChooser()" class="c-hand" i18n>Interface: {{ currentInterfaceLanguage }}</span>
 
           <div>
             <a i18n routerLink="/about/instance">Contact</a>

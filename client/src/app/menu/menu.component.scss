@@ -304,7 +304,8 @@ my-actor-avatar {
     flex-wrap: wrap;
   }
 
-  a {
+  a,
+  span[role=button] {
     @include margin-right(8px);
     @include disable-default-a-behaviour;
 
