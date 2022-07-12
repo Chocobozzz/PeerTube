@@ -30,7 +30,7 @@ input[type=number] {
 
 .number-with-unit {
   position: relative;
-  width: min-content;
+  width: fit-content;
 
   input[type=number] + span {
     position: absolute;
@@ -80,6 +80,7 @@ input[type=submit] {
 
 .inner-form-description {
   font-size: 15px;
+  margin-bottom: 15px;
 }
 
 textarea {
