@@ -1,5 +1,6 @@
 import { concat, Observable } from 'rxjs'
-import { tap, toArray } from 'rxjs/operators'
+import { switchMap, tap, toArray } from 'rxjs/operators'
+import { uniqBy } from 'lodash'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService, User } from '@app/core'
@@ -14,8 +15,9 @@ import {
   VideoActionsDisplayType,
   VideosSelectionComponent
 } from '@app/shared/shared-video-miniature'
-import { VideoChannel, VideoSortField } from '@shared/models'
+import { VideoChannel, VideoExistInPlaylist, VideosExistInPlaylists, VideoSortField } from '@shared/models'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist'
 
 @Component({
   templateUrl: './my-videos.component.html',
@@ -26,6 +28,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   @ViewChild('videoChangeOwnershipModal', { static: true }) videoChangeOwnershipModal: VideoChangeOwnershipComponent
   @ViewChild('liveStreamInformationModal', { static: true }) liveStreamInformationModal: LiveStreamInformationComponent
 
+  videosContainedInPlaylists: VideosExistInPlaylists
   titlePage: string
   selection: SelectionType = {}
   pagination: ComponentPagination = {
@@ -34,6 +37,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     totalItems: null
   }
   miniatureDisplayOptions: MiniatureDisplayOptions = {
+    containedInPlaylists: true,
     date: true,
     views: true,
     by: true,
@@ -82,7 +86,8 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     protected notifier: Notifier,
     protected screenService: ScreenService,
     private confirmService: ConfirmService,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private playlistService: VideoPlaylistService
   ) {
     this.titlePage = $localize`My videos`
   }
@@ -95,6 +100,15 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     if (this.route.snapshot.queryParams['search']) {
       this.search = this.route.snapshot.queryParams['search']
     }
+
+    this.getVideosObservable(this.pagination.currentPage)
+      .pipe(switchMap(({ data }) => this.playlistService.listPlaylistsForVideos(data.map(v => v.id))))
+      .subscribe(result => {
+        this.videosContainedInPlaylists = Object.keys(result).reduce((acc, videoId) => ({
+          ...acc,
+          [videoId]: uniqBy(result[videoId], (p: VideoExistInPlaylist) => p.playlistId)
+        }), {})
+      })
 
     this.authService.userInformationLoaded.subscribe(() => {
       this.user = this.authService.getUser()

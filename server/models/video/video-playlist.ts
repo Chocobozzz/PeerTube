@@ -49,7 +49,7 @@ import {
   MVideoPlaylistFormattable,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
-  MVideoPlaylistIdWithElements
+  MVideoPlaylistSummaryWithElements
 } from '../../types/models/video/video-playlist'
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions } from '../account/account'
 import { ActorModel } from '../actor/actor'
@@ -470,9 +470,9 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
     }))
   }
 
-  static listPlaylistIdsOf (accountId: number, videoIds: number[]): Promise<MVideoPlaylistIdWithElements[]> {
+  static listPlaylistSummariesOf (accountId: number, videoIds: number[]): Promise<MVideoPlaylistSummaryWithElements[]> {
     const query = {
-      attributes: [ 'id' ],
+      attributes: [ 'id', 'name', 'uuid' ],
       where: {
         ownerAccountId: accountId
       },

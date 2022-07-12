@@ -75,6 +75,10 @@ export class VideoPlaylistService {
                )
   }
 
+  listPlaylistsForVideos (videoIds: number[]) {
+    return this.doVideosExistInPlaylist(videoIds)
+  }
+
   listMyPlaylistWithCache (user: AuthUser, search?: string) {
     if (!search) {
       if (this.myAccountPlaylistCacheRunning) return this.myAccountPlaylistCacheRunning
@@ -188,14 +192,6 @@ export class VideoPlaylistService {
     return this.authHttp.post<{ videoPlaylistElement: { id: number } }>(url, body)
                .pipe(
                  tap(res => {
-                   const existsResult = this.videoExistsCache[body.videoId]
-                   existsResult.push({
-                     playlistId,
-                     playlistElementId: res.videoPlaylistElement.id,
-                     startTimestamp: body.startTimestamp,
-                     stopTimestamp: body.stopTimestamp
-                   })
-
                    this.runPlaylistCheck(body.videoId)
                  }),
                  catchError(err => this.restExtractor.handleError(err))

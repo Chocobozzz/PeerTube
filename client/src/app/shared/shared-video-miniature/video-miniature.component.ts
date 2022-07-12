@@ -11,7 +11,7 @@ import {
   Output
 } from '@angular/core'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
-import { HTMLServerConfig, VideoPlaylistType, VideoPrivacy, VideoState } from '@shared/models'
+import { HTMLServerConfig, VideoExistInPlaylist, VideoPlaylistType, VideoPrivacy, VideoState } from '@shared/models'
 import { LinkType } from '../../../types/link.type'
 import { ActorAvatarSize } from '../shared-actor-image/actor-avatar.component'
 import { Video } from '../shared-main'
@@ -19,6 +19,7 @@ import { VideoPlaylistService } from '../shared-video-playlist'
 import { VideoActionsDisplayType } from './video-actions-dropdown.component'
 
 export type MiniatureDisplayOptions = {
+  containedInPlaylists?: boolean
   date?: boolean
   views?: boolean
   by?: boolean
@@ -38,8 +39,10 @@ export type MiniatureDisplayOptions = {
 export class VideoMiniatureComponent implements OnInit {
   @Input() user: User
   @Input() video: Video
+  @Input() containedInPlaylists: VideoExistInPlaylist[]
 
   @Input() displayOptions: MiniatureDisplayOptions = {
+    containedInPlaylists: false,
     date: true,
     views: true,
     by: true,

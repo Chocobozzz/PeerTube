@@ -1,3 +1,4 @@
+import { uuidToShort } from '@shared/extra-utils'
 import express from 'express'
 import { VideosExistInPlaylists } from '../../../../shared/models/videos/playlist/video-exist-in-playlist.model'
 import { asyncMiddleware, authenticate } from '../../../middlewares'
@@ -24,7 +25,7 @@ async function doVideosInPlaylistExist (req: express.Request, res: express.Respo
   const videoIds = req.query.videoIds.map(i => parseInt(i + '', 10))
   const user = res.locals.oauth.token.User
 
-  const results = await VideoPlaylistModel.listPlaylistIdsOf(user.Account.id, videoIds)
+  const results = await VideoPlaylistModel.listPlaylistSummariesOf(user.Account.id, videoIds)
 
   const existObject: VideosExistInPlaylists = {}
 
@@ -37,6 +38,8 @@ async function doVideosInPlaylistExist (req: express.Request, res: express.Respo
       existObject[element.videoId].push({
         playlistElementId: element.id,
         playlistId: result.id,
+        playlistDisplayName: result.name,
+        playlistShortUUID: uuidToShort(result.uuid),
         startTimestamp: element.startTimestamp,
         stopTimestamp: element.stopTimestamp
       })

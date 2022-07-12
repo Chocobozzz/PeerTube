@@ -5,6 +5,8 @@ export type VideosExistInPlaylists = {
 export type VideoExistInPlaylist = {
   playlistElementId: number
   playlistId: number
+  playlistDisplayName: string
+  playlistShortUUID: string
   startTimestamp?: number
   stopTimestamp?: number
 }
