@@ -95,9 +95,11 @@ import { VideosPreviewCache, VideosCaptionCache } from './server/lib/files-cache
 import {
   activityPubRouter,
   apiRouter,
+  miscRouter,
   clientsRouter,
   feedsRouter,
   staticRouter,
+  wellKnownRouter,
   lazyStaticRouter,
   servicesRouter,
   liveRouter,
@@ -231,6 +233,8 @@ app.use('/', botsRouter)
 
 // Static files
 app.use('/', staticRouter)
+app.use('/', wellKnownRouter)
+app.use('/', miscRouter)
 app.use('/', downloadRouter)
 app.use('/', lazyStaticRouter)
 
