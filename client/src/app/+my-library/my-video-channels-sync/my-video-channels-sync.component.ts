@@ -1,45 +1,19 @@
 import { Component, OnInit } from '@angular/core'
-import { Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { AuthService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { DropdownAction, VideoChannelSyncService } from '@app/shared/shared-main'
 import { HTMLServerConfig } from '@shared/models/server'
-import { VideoChannel, VideoChannelSync, VideoChannelSyncState } from '@shared/models/videos'
+import { VideoChannel, VideoChannelSync } from '@shared/models/videos'
 import { SortMeta } from 'primeng/api'
+import { mergeMap } from 'rxjs'
 
 @Component({
   templateUrl: './my-video-channels-sync.component.html',
   styleUrls: [ './my-video-channels-sync.component.scss' ]
 })
 export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
+  error: string = undefined
   private serverConfig: HTMLServerConfig
-  channelsSync: VideoChannelSync[] = [ {
-    id: 42,
-    externalChannelUrl: 'https://yt.com/UC_yolo',
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-    state: {
-      id: VideoChannelSyncState.SYNCED,
-      label: 'Synchronized'
-    }
-  } ]
-  channelsById: Map<number, VideoChannel> = new Map([ [ 42, {
-    id: 42,
-    displayName: 'Fancy Channel',
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-    externalChannelUrl: null,
-    avatar: null,
-    avatars: null,
-    banner: null,
-    banners: null,
-    description: '',
-    followersCount: 1,
-    followingCount: 1,
-    host: 'localhost:3000',
-    isLocal: true,
-    name: 'fancy_channel',
-    support: '',
-    url: ''
-  } ] ])
+  channelsSync: VideoChannelSync[]
   totalRecords = 0
   videoChannelSyncActions: DropdownAction<VideoChannelSync>[][] = []
   sort: SortMeta = { field: 'createdAt', order: 1 }
@@ -48,7 +22,8 @@ export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
   constructor (
     private videoChannelsSyncService: VideoChannelSyncService,
     private serverService: ServerService,
-    private notifier: Notifier
+    private notifier: Notifier,
+    private authService: AuthService
   ) {
     super()
   }
@@ -68,8 +43,21 @@ export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
   }
 
   protected reloadData (): void {
-    // TODO
-    return
+    this.error = undefined
+    this.authService.userInformationLoaded
+        .pipe(mergeMap(() => {
+          const user = this.authService.getUser()
+
+          return this.videoChannelsSyncService.getSyncs(user.account.id)
+        }))
+        .subscribe({
+          next: (res) => {
+            this.channelsSync = res.data
+          },
+          error: err => {
+            this.error = err.message
+          }
+        })
   }
 
   httpUploadEnabled () {
@@ -80,8 +68,8 @@ export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
     this.videoChannelsSyncService.deleteSync(videoChannelsSync.id)
       .subscribe({
         next: () => {
-          this.channelsSync = this.channelsSync.filter(item => item !== videoChannelsSync)
           this.notifier.success($localize`TODO ${videoChannelsSync.id}`)
+          this.reloadData()
         }
       })
   }
@@ -99,12 +87,7 @@ export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
     return 'MyVideoChannelsSyncComponent'
   }
 
-  getChannelUrl (id: number) {
-    return '/c/' + this.channelsById.get(id).name
+  getChannelUrl (name: string) {
+    return '/c/' + name
   }
-
-  getChannelName (id: number) {
-    return this.channelsById.get(id).displayName
-  }
-
 }

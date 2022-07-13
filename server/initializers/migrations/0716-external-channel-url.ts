@@ -7,10 +7,37 @@ async function up (utils: {
   sequelize: Sequelize.Sequelize
   db: any
 }): Promise<void> {
-  await utils.queryInterface.addColumn('videoChannel', 'externalChannelUrl', {
-    type: Sequelize.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.EXTERNAL_CHANNEL_URL.max),
-    defaultValue: null,
-    allowNull: true
+  await utils.queryInterface.createTable('videoChannelSync', {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    externalChannelUrl: {
+      type: Sequelize.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.EXTERNAL_CHANNEL_URL.max),
+      allowNull: false
+    },
+    videoChannel: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'videoChannel',
+        key: 'id'
+      },
+      onDelete: 'CASCADE'
+    },
+    createdAt: {
+      type: Sequelize.DATE,
+      allowNull: false
+    },
+    updatedAt: {
+      type: Sequelize.DATE,
+      allowNull: false
+    },
+    state: {
+      type: Sequelize.INTEGER,
+      allowNull: false
+    }
   }, { transaction: utils.transaction })
 }
 
@@ -18,7 +45,7 @@ async function down (utils: {
   queryInterface: Sequelize.QueryInterface
   transaction: Sequelize.Transaction
 }) {
-  await utils.queryInterface.removeColumn('videoChannel', 'externalChannelUrl', { transaction: utils.transaction })
+  await utils.queryInterface.dropTable('videoChannelSync', { transaction: utils.transaction })
 }
 
 export {

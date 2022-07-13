@@ -1,5 +1,5 @@
 export const enum VideoChannelSyncState {
   SYNCED = 1,
   WARNING = 2,
-  FAILURE = 3
+  FAILED = 3
 }

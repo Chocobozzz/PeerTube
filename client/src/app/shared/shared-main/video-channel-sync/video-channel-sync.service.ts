@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { RestExtractor, RestService } from '@app/core'
-import { VideoChannelSyncCreate } from '@shared/models/videos'
-import { catchError } from 'rxjs'
+import { RestExtractor } from '@app/core'
+import { ResultList } from '@shared/models/common'
+import { VideoChannelSync, VideoChannelSyncCreate } from '@shared/models/videos'
+import { catchError, Observable } from 'rxjs'
 import { environment } from 'src/environments/environment'
 
 @Injectable({
@@ -12,9 +13,14 @@ export class VideoChannelSyncService {
   static BASE_VIDEO_CHANNEL_URL = environment.apiUrl + '/api/v1/video-channels-sync/'
   constructor (
     private authHttp: HttpClient,
-    private restService: RestService,
     private restExtractor: RestExtractor
   ) { }
+
+  getSyncs (accountId: number): Observable<ResultList<VideoChannelSync>> {
+    const url = VideoChannelSyncService.BASE_VIDEO_CHANNEL_URL + accountId
+    return this.authHttp.get<ResultList<VideoChannelSync>>(url)
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
 
   createSync (videoChannelsSyncCreate: VideoChannelSyncCreate) {
     return this.authHttp.post(VideoChannelSyncService.BASE_VIDEO_CHANNEL_URL, videoChannelsSyncCreate)

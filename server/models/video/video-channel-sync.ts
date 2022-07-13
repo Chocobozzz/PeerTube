@@ -1,0 +1,121 @@
+import { isVideoChannelExternalChannelUrlValid } from "@server/helpers/custom-validators/video-channels"
+import { isVideoChannelSyncStateValid } from "@server/helpers/custom-validators/video-channels-sync"
+import { CONSTRAINTS_FIELDS, VIDEO_CHANNEL_SYNC_STATE } from "@server/initializers/constants"
+import { VideoChannelSync, VideoChannelSyncState } from "@shared/models"
+import { MChannelSyncFormattable } from "@server/types/models/video/video-channel-sync"
+import { AttributesOnly } from "@shared/typescript-utils"
+import {
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  ForeignKey,
+  Is,
+  Model,
+  Table,
+  UpdatedAt
+} from "sequelize-typescript"
+import { AccountModel } from "../account/account"
+import { getSort, throwIfNotValid } from "../utils"
+import { VideoChannelModel } from "./video-channel"
+import { ActorModel } from "../actor/actor"
+
+type AvailableForListOptions = {
+  accountId: number
+  search?: string
+  host?: string
+  handles?: string[]
+  forCount?: boolean
+}
+
+@Table({
+  tableName: 'videoChannelSync'
+})
+export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoChannelSyncModel>>> {
+
+  @AllowNull(false)
+  @Default(null)
+  @Is('VideoChannelExternalChannelUrl', value => throwIfNotValid(value, isVideoChannelExternalChannelUrlValid, 'externalChannelUrl', true))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNEL_SYNCS.EXTERNAL_CHANNEL_URL.max))
+  externalChannelUrl: string
+
+  @CreatedAt
+  createdAt: Date
+
+  @UpdatedAt
+  updatedAt: Date
+
+  @ForeignKey(() => VideoChannelModel)
+  @Column
+  videoChannel: number
+
+  @BelongsTo(() => VideoChannelModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  VideoChannel: VideoChannelModel
+
+  @AllowNull(false)
+  @Default(null)
+  @Is('VideoChannelSyncState', value => throwIfNotValid(value, isVideoChannelSyncStateValid, 'state'))
+  @Column
+  state: VideoChannelSyncState
+
+  static listByAccountForAPI (options: Pick<AvailableForListOptions, 'accountId'> & {
+    start: number
+    count: number
+    sort: string
+  }) {
+    const getQuery = (forCount: boolean) => {
+      const accountModel = forCount
+        ? AccountModel.unscoped()
+        : AccountModel
+
+      return {
+        offset: options.start,
+        limit: options.count,
+        order: getSort(options.sort),
+        include: [
+          {
+            model: VideoChannelModel.unscoped(),
+            include: [
+              {
+                model: accountModel,
+                where: {
+                  id: options.accountId
+                },
+                required: true
+              },
+              {
+                model: ActorModel.unscoped()
+              }
+            ]
+          }
+        ]
+      }
+    }
+
+    return Promise.all([
+      VideoChannelSyncModel.count(getQuery(true)),
+      VideoChannelSyncModel.findAll(getQuery(false))
+    ]).then(([ total, data ]) => ({ total, data }))
+  }
+
+  toFormattedJSON (this: MChannelSyncFormattable): VideoChannelSync {
+    return {
+      id: this.id,
+      updatedAt: this.updatedAt.toString(),
+      state: {
+        id: this.state,
+        label: VIDEO_CHANNEL_SYNC_STATE[this.state]
+      },
+      externalChannelUrl: this.externalChannelUrl,
+      createdAt: this.createdAt.toString(),
+      channel: this.VideoChannel.toFormattedSummaryJSON()
+    }
+  }
+}

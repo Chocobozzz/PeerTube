@@ -1,3 +1,5 @@
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
 <h1>
   <my-global-icon iconName="refresh" aria-hidden="true"></my-global-icon>
   <ng-container i18n>My synchronizations</ng-container>
@@ -46,7 +48,7 @@
         <a [href]="videoChannelSync.externalChannelUrl" target="_blank" rel="noopener noreferrer">{{ videoChannelSync.externalChannelUrl }}</a>
       </td>
       <td>
-        <a [href]="getChannelUrl(videoChannelSync.id)" target="_blank" rel="noopener noreferrer">{{ getChannelName(videoChannelSync.id) }}</a>
+        <a [href]="getChannelUrl(videoChannelSync.channel.name)" target="_blank" rel="noopener noreferrer">{{ videoChannelSync.channel.displayName }}</a>
       </td>
       <td>
         <span class="badge" [ngClass]="getVideoChannelSyncStateClass(videoChannelSync.state.id)">

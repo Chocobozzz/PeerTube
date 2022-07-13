@@ -52,6 +52,7 @@ const videoPlaylistsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_PLAY
 const pluginsSortValidator = checkSortFactory(SORTABLE_COLUMNS.PLUGINS)
 const availablePluginsSortValidator = checkSortFactory(SORTABLE_COLUMNS.AVAILABLE_PLUGINS)
 const videoRedundanciesSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_REDUNDANCIES)
+const videoChannelSyncsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_CHANNEL_SYNCS)
 
 const accountsFollowersSortValidator = checkSortFactory(SORTABLE_COLUMNS.ACCOUNT_FOLLOWERS)
 const videoChannelsFollowersSortValidator = checkSortFactory(SORTABLE_COLUMNS.CHANNEL_FOLLOWERS)
@@ -84,5 +85,6 @@ export {
   videoPlaylistsSearchSortValidator,
   accountsFollowersSortValidator,
   videoChannelsFollowersSortValidator,
+  videoChannelSyncsSortValidator,
   pluginsSortValidator
 }

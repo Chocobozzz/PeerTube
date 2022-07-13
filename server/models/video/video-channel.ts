@@ -26,7 +26,6 @@ import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos
 import {
   isVideoChannelDescriptionValid,
   isVideoChannelDisplayNameValid,
-  isVideoChannelExternalChannelUrlValid,
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
@@ -48,7 +47,6 @@ import { setAsUpdated } from '../shared'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
-import { UserModel } from '../user/user'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -361,12 +359,6 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.SUPPORT.max))
   support: string
 
-  @AllowNull(true)
-  @Default(null)
-  @Is('VideoChannelExternalChannelUrl', value => throwIfNotValid(value, isVideoChannelExternalChannelUrlValid, 'externalChannelUrl', true))
-  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.EXTERNAL_CHANNEL_URL.max))
-  externalChannelUrl: string
-
   @CreatedAt
   createdAt: Date
 
@@ -523,37 +515,6 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       VideoChannelModel.scope(getScope(true)).count(),
       VideoChannelModel.scope(getScope(false)).findAll(query)
     ]).then(([ total, data ]) => ({ total, data }))
-  }
-
-  static async listSynced (): Promise<VideoChannelModel[]> {
-    const query = {
-      include: [
-        {
-          attributes: [ ],
-          model: AccountModel.unscoped(),
-          required: true,
-          include: [ {
-            attributes: [ ],
-            model: UserModel.unscoped(),
-            where: {
-              videoQuota: {
-                [Op.ne]: 0
-              },
-              videoQuotaDaily: {
-                [Op.ne]: 0
-              }
-            },
-            required: true
-          } ]
-        }
-      ],
-      where: {
-        externalChannelUrl: {
-          [Op.not]: null
-        }
-      }
-    }
-    return VideoChannelModel.unscoped().findAll(query)
   }
 
   static searchForApi (options: Pick<AvailableForListOptions, 'actorId' | 'search' | 'host' | 'handles'> & {
@@ -823,7 +784,6 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       displayName: this.getDisplayName(),
       description: this.description,
       support: this.support,
-      externalChannelUrl: this.externalChannelUrl, // TODO: is this information published to activity pub?
       isLocal: this.Actor.isOwned(),
       updatedAt: this.updatedAt,
 

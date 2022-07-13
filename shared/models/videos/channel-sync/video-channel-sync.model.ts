@@ -1,3 +1,4 @@
+import { VideoChannelSummary } from '../channel/video-channel.model'
 import { VideoConstant } from '../video-constant.model'
 import { VideoChannelSyncState } from './video-channel-sync-state.enum'
 
@@ -8,5 +9,6 @@ export interface VideoChannelSync {
 
   createdAt: string
   updatedAt: string
+  channel: VideoChannelSummary
   state: VideoConstant<VideoChannelSyncState>
 }
