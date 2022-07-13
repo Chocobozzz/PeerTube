@@ -10,7 +10,6 @@ videoChannelSyncRouter.get('/:accountId',
   videoChannelSyncsSortValidator,
   setDefaultSort,
   setDefaultPagination,
-  // videoChannelsListValidator, //FIXME implement search in the front-end
   asyncMiddleware(listVideoChannelSyncs)
 )
 
