@@ -82,7 +82,6 @@ jobs:
         run: |
           ( \
             test -f dist/scripts/parse-log.js && \
-            cat *-ci.log | uniq -c && \
             NODE_ENV=test node dist/scripts/parse-log.js -l error -f artifacts/*.log \
           ) || \
           echo "parse-log.js script does not exist, skipping."

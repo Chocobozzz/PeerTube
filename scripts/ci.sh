@@ -27,7 +27,7 @@ runTest () {
         "echo Trying {} >> $joblog; npm run mocha -- -c --timeout 30000 --exit --bail {}" \
         ::: $files
 
-    cat "$joblog" | uniq -c
+    cat "$joblog" | sort | uniq -c
     rm "$joblog"
 }
 
