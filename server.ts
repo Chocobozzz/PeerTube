@@ -283,7 +283,7 @@ async function startApplication () {
   checkFFmpegVersion()
     .catch(err => logger.error('Cannot check ffmpeg version', { err }))
 
-  // Email initialization
+  Redis.Instance.init()
   Emailer.Instance.init()
 
   await Promise.all([
@@ -313,7 +313,6 @@ async function startApplication () {
   GeoIPUpdateScheduler.Instance.enable()
   OpenTelemetryMetrics.Instance.registerMetrics()
 
-  Redis.Instance.init()
   PeerTubeSocket.Instance.init(server)
   VideoViewsManager.Instance.init()
 
