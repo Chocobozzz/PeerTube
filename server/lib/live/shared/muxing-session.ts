@@ -73,6 +73,8 @@ class MuxingSession extends EventEmitter {
   private tsWatcher: FSWatcher
   private masterWatcher: FSWatcher
 
+  private aborted = false
+
   private readonly isAbleToUploadVideoWithCache = memoizee((userId: number) => {
     return isAbleToUploadVideo(userId, 1000)
   }, { maxAge: MEMOIZE_TTL.LIVE_ABLE_TO_UPLOAD })
@@ -176,6 +178,7 @@ class MuxingSession extends EventEmitter {
   abort () {
     if (!this.ffmpegCommand) return
 
+    this.aborted = true
     this.ffmpegCommand.kill('SIGINT')
   }
 
@@ -246,6 +249,8 @@ class MuxingSession extends EventEmitter {
     const playlistIdMatcher = /^([\d+])-/
 
     const addHandler = async (segmentPath: string) => {
+      if (this.aborted) return
+
       logger.debug('Live add handler of %s.', segmentPath, this.lTags())
 
       const playlistId = basename(segmentPath).match(playlistIdMatcher)[0]
@@ -332,6 +337,8 @@ class MuxingSession extends EventEmitter {
   }
 
   private processSegments (segmentPaths: string[]) {
+    if (this.aborted) return
+
     mapSeries(segmentPaths, async previousSegment => {
       // Add sha hash of previous segments, because ffmpeg should have finished generating them
       await LiveSegmentShaStore.Instance.addSegmentSha(this.videoUUID, previousSegment)
