@@ -64,12 +64,12 @@ describe('Test videos views', function () {
     })
 
     it('Should fail without token', async function () {
-      await servers[0].videoStats.getOverallStats({ videoId: videoId, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await servers[0].videoStats.getOverallStats({ videoId, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should fail with another token', async function () {
       await servers[0].videoStats.getOverallStats({
-        videoId: videoId,
+        videoId,
         token: userAccessToken,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
@@ -114,7 +114,7 @@ describe('Test videos views', function () {
 
     it('Should fail without token', async function () {
       await servers[0].videoStats.getTimeserieStats({
-        videoId: videoId,
+        videoId,
         token: null,
         metric: 'viewers',
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
@@ -123,7 +123,7 @@ describe('Test videos views', function () {
 
     it('Should fail with another token', async function () {
       await servers[0].videoStats.getTimeserieStats({
-        videoId: videoId,
+        videoId,
         token: userAccessToken,
         metric: 'viewers',
         expectedStatus: HttpStatusCode.FORBIDDEN_403
@@ -198,7 +198,7 @@ describe('Test videos views', function () {
 
     it('Should fail without token', async function () {
       await servers[0].videoStats.getRetentionStats({
-        videoId: videoId,
+        videoId,
         token: null,
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
@@ -206,7 +206,7 @@ describe('Test videos views', function () {
 
     it('Should fail with another token', async function () {
       await servers[0].videoStats.getRetentionStats({
-        videoId: videoId,
+        videoId,
         token: userAccessToken,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })

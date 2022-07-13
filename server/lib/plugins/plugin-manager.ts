@@ -563,7 +563,7 @@ export class PluginManager implements ServerHook {
       if (!this.hooks[options.target]) this.hooks[options.target] = []
 
       this.hooks[options.target].push({
-        npmName: npmName,
+        npmName,
         pluginName: plugin.name,
         handler: options.handler,
         priority: options.priority || 0

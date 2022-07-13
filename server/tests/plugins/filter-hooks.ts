@@ -395,7 +395,7 @@ describe('Test plugin filter hooks', function () {
       const uuids: string[] = []
 
       for (const name of [ 'bad torrent', 'bad file', 'bad playlist file' ]) {
-        const uuid = (await servers[0].videos.quickUpload({ name: name })).uuid
+        const uuid = (await servers[0].videos.quickUpload({ name })).uuid
         uuids.push(uuid)
       }
 
@@ -446,7 +446,7 @@ describe('Test plugin filter hooks', function () {
 
       for (const name of [ 'bad embed', 'good embed' ]) {
         {
-          const uuid = (await servers[0].videos.quickUpload({ name: name })).uuid
+          const uuid = (await servers[0].videos.quickUpload({ name })).uuid
           embedVideos.push(await servers[0].videos.get({ id: uuid }))
         }
 

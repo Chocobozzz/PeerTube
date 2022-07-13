@@ -47,7 +47,7 @@ function registerOpentelemetryTracing () {
   })
 
   registerInstrumentations({
-    tracerProvider: tracerProvider,
+    tracerProvider,
     instrumentations: [
       new PgInstrumentation({
         enhancedDatabaseReporting: true

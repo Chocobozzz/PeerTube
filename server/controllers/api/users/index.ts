@@ -226,7 +226,7 @@ async function registerUser (req: express.Request, res: express.Response) {
   })
 
   const { user, account, videoChannel } = await createUserAccountAndChannelAndPlaylist({
-    userToCreate: userToCreate,
+    userToCreate,
     userDisplayName: body.displayName || undefined,
     channelNames: body.channel
   })

@@ -949,7 +949,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       const total = totalVideos + totalVideoShares
       return {
         data: rows,
-        total: total
+        total
       }
     })
   }

@@ -43,7 +43,9 @@
       2,
       {
         "SwitchCase": 1,
-        "MemberExpression": "off"
+        "MemberExpression": "off",
+        // https://github.com/eslint/eslint/issues/15299
+        "ignoredNodes": ["PropertyDefinition"]
       }
     ],
     "@typescript-eslint/consistent-type-assertions": [

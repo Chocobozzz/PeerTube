@@ -166,7 +166,7 @@ function getBypassFromExternalAuth (username: string, externalAuthToken: string)
   return {
     bypass: true,
     pluginName: npmName,
-    authName: authName,
+    authName,
     user
   }
 }

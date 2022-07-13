@@ -163,7 +163,7 @@ describe('Test abuses API validators', function () {
 
     it('Should fail with a wrong video', async function () {
       const fields = { video: { id: 'blabla' }, reason: 'my super reason' }
-      await makePostBodyRequest({ url: server.url, path: path, token: userToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
     })
 
     it('Should fail with an unknown video', async function () {
@@ -179,7 +179,7 @@ describe('Test abuses API validators', function () {
 
     it('Should fail with a wrong comment', async function () {
       const fields = { comment: { id: 'blabla' }, reason: 'my super reason' }
-      await makePostBodyRequest({ url: server.url, path: path, token: userToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
     })
 
     it('Should fail with an unknown comment', async function () {
@@ -195,7 +195,7 @@ describe('Test abuses API validators', function () {
 
     it('Should fail with a wrong account', async function () {
       const fields = { account: { id: 'blabla' }, reason: 'my super reason' }
-      await makePostBodyRequest({ url: server.url, path: path, token: userToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
     })
 
     it('Should fail with an unknown account', async function () {

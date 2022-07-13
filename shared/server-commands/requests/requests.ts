@@ -52,7 +52,7 @@ function makeActivityPubGetRequest (url: string, path: string, expectedStatus = 
   return makeGetRequest({
     url,
     path,
-    expectedStatus: expectedStatus,
+    expectedStatus,
     accept: 'application/activity+json,text/html;q=0.9,\\*/\\*;q=0.8'
   })
 }

@@ -209,7 +209,7 @@ describe('Test video playlists API validator', function () {
       }
     }
     const getUpdate = (params: any, playlistId: number | string) => {
-      return { ...params, playlistId: playlistId }
+      return { ...params, playlistId }
     }
 
     it('Should fail with an unauthenticated user', async function () {

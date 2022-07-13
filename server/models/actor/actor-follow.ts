@@ -218,7 +218,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
     const query = {
       where: {
         actorId,
-        targetActorId: targetActorId
+        targetActorId
       },
       include: [
         {
@@ -372,7 +372,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
   }) {
     const { actorId, start, count, sort } = options
     const where = {
-      actorId: actorId
+      actorId
     }
 
     if (options.search) {

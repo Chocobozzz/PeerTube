@@ -74,7 +74,7 @@ export class SearchCommand extends AbstractCommand {
       ...options,
 
       search: {
-        search: search,
+        search,
         sort: sort ?? '-publishedAt'
       }
     })

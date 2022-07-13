@@ -64,8 +64,8 @@ function buildUser (options: {
     emailVerified,
     adminFlags,
 
-    videoQuota: videoQuota,
-    videoQuotaDaily: videoQuotaDaily,
+    videoQuota,
+    videoQuotaDaily,
 
     pluginAuth
   })
@@ -147,7 +147,7 @@ async function createApplicationActor (applicationId: number) {
   const accountCreated = await createLocalAccountWithoutKeys({
     name: SERVER_ACTOR_NAME,
     userId: null,
-    applicationId: applicationId,
+    applicationId,
     t: undefined,
     type: 'Application'
   })

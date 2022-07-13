@@ -423,7 +423,7 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
     ]).then(([ count, rows ]) => ({ total: count, data: rows }))
   }
 
-  static searchForApi (options: Pick<AvailableForListOptions, 'followerActorId' | 'search'| 'host'| 'uuids'> & {
+  static searchForApi (options: Pick<AvailableForListOptions, 'followerActorId' | 'search' | 'host' | 'uuids'> & {
     start: number
     count: number
     sort: string

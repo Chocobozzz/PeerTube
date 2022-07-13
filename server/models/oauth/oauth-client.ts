@@ -53,8 +53,8 @@ export class OAuthClientModel extends Model<Partial<AttributesOnly<OAuthClientMo
   static getByIdAndSecret (clientId: string, clientSecret: string) {
     const query = {
       where: {
-        clientId: clientId,
-        clientSecret: clientSecret
+        clientId,
+        clientSecret
       }
     }
 

@@ -780,7 +780,7 @@ async function checkNotification (options: CheckerBaseParams & {
   const check = options.check || { web: true, mail: true }
 
   if (check.web) {
-    const notification = await server.notifications.getLatest({ token: token })
+    const notification = await server.notifications.getLatest({ token })
 
     if (notification || checkType !== 'absence') {
       notificationChecker(notification, checkType)

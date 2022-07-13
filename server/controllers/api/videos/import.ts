@@ -274,7 +274,7 @@ async function buildVideo (channelId: number, body: VideoImportCreate, importDat
     support: body.support || null,
     privacy: body.privacy || VideoPrivacy.PRIVATE,
     duration: 0, // duration will be set by the import job
-    channelId: channelId,
+    channelId,
     originallyPublishedAt: body.originallyPublishedAt
       ? new Date(body.originallyPublishedAt)
       : importData.originallyPublishedAt

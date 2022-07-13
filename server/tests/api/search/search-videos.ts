@@ -106,7 +106,7 @@ describe('Test videos search', function () {
         licence: 2,
         language: 'en'
       }
-      await server.videos.upload({ attributes: attributes })
+      await server.videos.upload({ attributes })
 
       await server.videos.upload({ attributes: { ...attributes, name: attributes.name + ' duplicate' } })
     }
@@ -119,7 +119,7 @@ describe('Test videos search', function () {
         licence: 3,
         language: 'pl'
       }
-      await server.videos.upload({ attributes: attributes })
+      await server.videos.upload({ attributes })
     }
 
     {
@@ -210,7 +210,7 @@ describe('Test videos search', function () {
     const search = {
       categoryOneOf: [ 3 ]
     }
-    const body = await command.advancedVideoSearch({ search: search })
+    const body = await command.advancedVideoSearch({ search })
 
     expect(body.total).to.equal(1)
 

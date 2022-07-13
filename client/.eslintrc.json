@@ -29,7 +29,7 @@
         "arrow-body-style": "off",
         "import/no-webpack-loader-syntax": "off",
         "no-underscore-dangle": "off",
-        "node/no-callback-literal": "off",
+        "n/no-callback-literal": "off",
         "@angular-eslint/component-selector": [
           "error",
           {

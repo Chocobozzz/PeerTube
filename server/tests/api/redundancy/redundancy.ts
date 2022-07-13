@@ -53,7 +53,7 @@ async function createServers (strategy: VideoRedundancyStrategy | null, addition
     strategies.push(
       {
         min_lifetime: '1 hour',
-        strategy: strategy,
+        strategy,
         size: '400KB',
 
         ...additionalParams

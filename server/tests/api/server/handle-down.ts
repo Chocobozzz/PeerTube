@@ -162,7 +162,7 @@ describe('Test handle downs', function () {
 
     for (const state of states) {
       const body = await servers[0].jobs.list({
-        state: state,
+        state,
         start: 0,
         count: 50,
         sort: '-createdAt'

@@ -136,7 +136,7 @@ describe('Test video NSFW policy', function () {
     it('Should create a user having the default nsfw policy', async function () {
       const username = 'user1'
       const password = 'my super password'
-      await server.users.create({ username: username, password: password })
+      await server.users.create({ username, password })
 
       userAccessToken = await server.login.getAccessToken({ username, password })
 

@@ -37,14 +37,14 @@ describe('Test video blacklist API validators', function () {
     {
       const username = 'user1'
       const password = 'my super password'
-      await servers[0].users.create({ username: username, password: password })
+      await servers[0].users.create({ username, password })
       userAccessToken1 = await servers[0].login.getAccessToken({ username, password })
     }
 
     {
       const username = 'user2'
       const password = 'my super password'
-      await servers[0].users.create({ username: username, password: password })
+      await servers[0].users.create({ username, password })
       userAccessToken2 = await servers[0].login.getAccessToken({ username, password })
     }
 

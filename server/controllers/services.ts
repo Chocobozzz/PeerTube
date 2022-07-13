@@ -141,7 +141,7 @@ function buildOEmbed (options: {
     html,
     width: embedWidth,
     height: embedHeight,
-    title: title,
+    title,
     author_name: channel.name,
     author_url: channel.Actor.url,
     provider_name: 'PeerTube',

@@ -220,6 +220,7 @@
     "eslint": "^8.0.0",
     "eslint-config-standard-with-typescript": "^22.0.0",
     "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-n": "^15.2.4",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^6.0.0",
     "fast-xml-parser": "^4.0.0-beta.8",

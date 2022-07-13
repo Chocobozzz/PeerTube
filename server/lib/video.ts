@@ -26,7 +26,7 @@ function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): Fil
     description: videoInfo.description,
     support: videoInfo.support,
     privacy: videoInfo.privacy || VideoPrivacy.PRIVATE,
-    channelId: channelId,
+    channelId,
     originallyPublishedAt: videoInfo.originallyPublishedAt
       ? new Date(videoInfo.originallyPublishedAt)
       : null
@@ -122,7 +122,7 @@ async function addOptimizeOrMergeAudioJob (options: {
 async function addTranscodingJob (payload: VideoTranscodingPayload, options: CreateJobOptions = {}) {
   await VideoJobInfoModel.increaseOrCreate(payload.videoUUID, 'pendingTranscode')
 
-  return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: payload }, options)
+  return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload }, options)
 }
 
 async function getTranscodingJobPriority (user: MUserId) {

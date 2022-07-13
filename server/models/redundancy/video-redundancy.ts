@@ -530,7 +530,7 @@ export class VideoRedundancyModel extends Model<Partial<AttributesOnly<VideoRedu
     }
 
     if (strategy) {
-      Object.assign(redundancyWhere, { strategy: strategy })
+      Object.assign(redundancyWhere, { strategy })
     }
 
     const videoFilterWhere = {
