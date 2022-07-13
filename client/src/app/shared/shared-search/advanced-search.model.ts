@@ -221,7 +221,6 @@ export class AdvancedSearch {
       this.tagsAllOf !== undefined ||
       this.durationMin !== undefined ||
       this.durationMax !== undefined ||
-      this.host !== undefined ||
       this.isLive !== undefined
   }
 }
