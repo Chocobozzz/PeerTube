@@ -48,7 +48,7 @@ async function doRefresh <T extends MActorFull | MActorAccountChannelId> (option
     const { actorObject } = await fetchRemoteActor(actorUrl)
 
     if (actorObject === undefined) {
-      logger.warn('Cannot fetch remote actor in refresh actor.')
+      logger.info('Cannot fetch remote actor %s in refresh actor.', actorUrl)
       return { actor, refreshed: false }
     }
 
@@ -67,7 +67,7 @@ async function doRefresh <T extends MActorFull | MActorAccountChannelId> (option
       return { actor: undefined, refreshed: false }
     }
 
-    logger.warn('Cannot refresh actor %s.', actor.url, { err, ...lTags() })
+    logger.info('Cannot refresh actor %s.', actor.url, { err, ...lTags() })
     return { actor, refreshed: false }
   }
 }

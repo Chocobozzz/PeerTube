@@ -47,7 +47,7 @@ async function fetchActorTotalItems (url: string) {
 
     return body.totalItems || 0
   } catch (err) {
-    logger.warn('Cannot fetch remote actor count %s.', url, { err })
+    logger.info('Cannot fetch remote actor count %s.', url, { err })
     return 0
   }
 }

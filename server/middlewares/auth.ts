@@ -14,7 +14,7 @@ function authenticate (req: express.Request, res: express.Response, next: expres
       return next()
     })
     .catch(err => {
-      logger.warn('Cannot authenticate.', { err })
+      logger.info('Cannot authenticate.', { err })
 
       return res.fail({
         status: err.status,
