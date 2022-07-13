@@ -29,6 +29,8 @@ import {
 } from '../paths'
 import { VideoPathManager } from '../video-path-manager'
 import { VideoTranscodingProfilesManager } from './default-transcoding-profiles'
+import { retryTransactionWrapper } from '@server/helpers/database-utils'
+import { sequelizeTypescript } from '@server/initializers/database'
 
 /**
  *
@@ -309,22 +311,28 @@ async function generateHlsPlaylistCommon (options: {
   await transcodeVOD(transcodeOptions)
 
   // Create or update the playlist
-  const playlist = await VideoStreamingPlaylistModel.loadOrGenerate(video)
+  const playlist = await retryTransactionWrapper(() => {
+    return sequelizeTypescript.transaction(async transaction => {
+      const playlist = await VideoStreamingPlaylistModel.loadOrGenerate(video, transaction)
 
-  if (!playlist.playlistFilename) {
-    playlist.playlistFilename = generateHLSMasterPlaylistFilename(video.isLive)
-  }
+      if (!playlist.playlistFilename) {
+        playlist.playlistFilename = generateHLSMasterPlaylistFilename(video.isLive)
+      }
 
-  if (!playlist.segmentsSha256Filename) {
-    playlist.segmentsSha256Filename = generateHlsSha256SegmentsFilename(video.isLive)
-  }
+      if (!playlist.segmentsSha256Filename) {
+        playlist.segmentsSha256Filename = generateHlsSha256SegmentsFilename(video.isLive)
+      }
 
-  playlist.p2pMediaLoaderInfohashes = []
-  playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
+      playlist.p2pMediaLoaderInfohashes = []
+      playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
 
-  playlist.type = VideoStreamingPlaylistType.HLS
+      playlist.type = VideoStreamingPlaylistType.HLS
 
-  await playlist.save()
+      await playlist.save({ transaction })
+
+      return playlist
+    })
+  })
 
   // Build the new playlist file
   const extname = extnameUtil(videoFilename)

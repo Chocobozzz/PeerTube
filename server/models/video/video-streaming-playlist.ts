@@ -1,6 +1,6 @@
 import memoizee from 'memoizee'
 import { join } from 'path'
-import { Op } from 'sequelize'
+import { Op, Transaction } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -180,19 +180,20 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
     return VideoStreamingPlaylistModel.findByPk(id, options)
   }
 
-  static loadHLSPlaylistByVideo (videoId: number): Promise<MStreamingPlaylist> {
+  static loadHLSPlaylistByVideo (videoId: number, transaction?: Transaction): Promise<MStreamingPlaylist> {
     const options = {
       where: {
         type: VideoStreamingPlaylistType.HLS,
         videoId
-      }
+      },
+      transaction
     }
 
     return VideoStreamingPlaylistModel.findOne(options)
   }
 
-  static async loadOrGenerate (video: MVideo) {
-    let playlist = await VideoStreamingPlaylistModel.loadHLSPlaylistByVideo(video.id)
+  static async loadOrGenerate (video: MVideo, transaction?: Transaction) {
+    let playlist = await VideoStreamingPlaylistModel.loadHLSPlaylistByVideo(video.id, transaction)
     if (!playlist) playlist = new VideoStreamingPlaylistModel()
 
     return Object.assign(playlist, { videoId: video.id, Video: video })
