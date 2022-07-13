@@ -16,8 +16,8 @@ export class VideoChannelSyncService {
     private restExtractor: RestExtractor
   ) { }
 
-  getSyncs (accountId: number): Observable<ResultList<VideoChannelSync>> {
-    const url = VideoChannelSyncService.BASE_VIDEO_CHANNEL_URL + accountId
+  getSyncs (): Observable<ResultList<VideoChannelSync>> {
+    const url = VideoChannelSyncService.BASE_VIDEO_CHANNEL_URL + 'me'
     return this.authHttp.get<ResultList<VideoChannelSync>>(url)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
