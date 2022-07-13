@@ -79,6 +79,7 @@ async function getAudioStreamCodec (path: string, existingProbe?: FfprobeData) {
   if (audioCodecName === 'opus') return 'opus'
   if (audioCodecName === 'vorbis') return 'vorbis'
   if (audioCodecName === 'aac') return 'mp4a.40.2'
+  if (audioCodecName === 'mp3') return 'mp4a.40.34'
 
   logger.warn('Cannot get audio codec of %s.', path, { audioStream })
 
