@@ -1,4 +1,5 @@
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
+import { logger } from '@server/helpers/logger'
 import { JobQueue } from '@server/lib/job-queue'
 import { loadVideoByUrl, VideoLoadByUrlType } from '@server/lib/model-loaders'
 import { MVideoAccountLightBlacklistAllFiles, MVideoImmutable, MVideoThumbnail } from '@server/types/models'
@@ -77,6 +78,8 @@ async function getOrCreateAPVideo (
     if (err.name === 'SequelizeUniqueConstraintError') {
       const alreadyCreatedVideo = await loadVideoByUrl(videoUrl, fetchType)
       if (alreadyCreatedVideo) return { video: alreadyCreatedVideo, created: false }
+
+      logger.error('Cannot create video %s because of SequelizeUniqueConstraintError error, but cannot find it in database.', videoUrl)
     }
 
     throw err
