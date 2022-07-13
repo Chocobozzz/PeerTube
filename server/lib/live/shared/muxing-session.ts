@@ -249,8 +249,6 @@ class MuxingSession extends EventEmitter {
     const playlistIdMatcher = /^([\d+])-/
 
     const addHandler = async (segmentPath: string) => {
-      if (this.aborted) return
-
       logger.debug('Live add handler of %s.', segmentPath, this.lTags())
 
       const playlistId = basename(segmentPath).match(playlistIdMatcher)[0]
@@ -285,6 +283,7 @@ class MuxingSession extends EventEmitter {
 
   private async isQuotaExceeded (segmentPath: string) {
     if (this.saveReplay !== true) return false
+    if (this.aborted) return false
 
     try {
       const segmentStat = await stat(segmentPath)
@@ -337,8 +336,6 @@ class MuxingSession extends EventEmitter {
   }
 
   private processSegments (segmentPaths: string[]) {
-    if (this.aborted) return
-
     mapSeries(segmentPaths, async previousSegment => {
       // Add sha hash of previous segments, because ffmpeg should have finished generating them
       await LiveSegmentShaStore.Instance.addSegmentSha(this.videoUUID, previousSegment)
@@ -346,7 +343,11 @@ class MuxingSession extends EventEmitter {
       if (this.saveReplay) {
         await this.addSegmentToReplay(previousSegment)
       }
-    }).catch(err => logger.error('Cannot process segments', { err, ...this.lTags() }))
+    }).catch(err => {
+      if (this.aborted) return
+
+      logger.error('Cannot process segments', { err, ...this.lTags() })
+    })
   }
 
   private hasClientSocketInBadHealth (sessionId: string) {
