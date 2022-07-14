@@ -1,12 +1,12 @@
 import express from 'express'
-import {InboxManager} from '@server/lib/activitypub/inbox-manager'
-import {RemoveDanglingResumableUploadsScheduler} from '@server/lib/schedulers/remove-dangling-resumable-uploads-scheduler'
-import {VideoViewsBufferScheduler} from '@server/lib/schedulers/video-views-buffer-scheduler'
-import {VideoViewsManager} from '@server/lib/views/video-views-manager'
-import {Debug, SendDebugCommand} from '@shared/models'
-import {HttpStatusCode} from '../../../../shared/models/http/http-error-codes'
-import {UserRight} from '../../../../shared/models/users'
-import {authenticate, ensureUserHasRight} from '../../../middlewares'
+import { InboxManager } from '@server/lib/activitypub/inbox-manager'
+import { RemoveDanglingResumableUploadsScheduler } from '@server/lib/schedulers/remove-dangling-resumable-uploads-scheduler'
+import { VideoViewsBufferScheduler } from '@server/lib/schedulers/video-views-buffer-scheduler'
+import { VideoViewsManager } from '@server/lib/views/video-views-manager'
+import { Debug, SendDebugCommand } from '@shared/models'
+import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
+import { UserRight } from '../../../../shared/models/users'
+import { authenticate, ensureUserHasRight } from '../../../middlewares'
 
 const debugRouter = express.Router()
 
@@ -30,14 +30,14 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function getDebug(req: express.Request, res: express.Response) {
+function getDebug (req: express.Request, res: express.Response) {
   return res.json({
     ip: req.ip,
     activityPubMessagesWaiting: InboxManager.Instance.getActivityPubMessagesWaiting()
   } as Debug)
 }
 
-async function runCommand(req: express.Request, res: express.Response) {
+async function runCommand (req: express.Request, res: express.Response) {
   const body: SendDebugCommand = req.body
 
   const processors: {[id in SendDebugCommand['command']]: () => Promise<any>} = {
