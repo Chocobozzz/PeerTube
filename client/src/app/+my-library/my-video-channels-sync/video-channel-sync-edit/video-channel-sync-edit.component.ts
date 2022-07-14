@@ -64,7 +64,7 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
         next: () => {
           this.authService.refreshUserInformation()
 
-          this.notifier.success($localize`Synchronization created successfully for ${videoChannelName}.`)
+          this.notifier.success($localize`Synchronization created successfully.`)
           this.router.navigate([ '/my-library', 'video-channels-sync' ])
         },
 

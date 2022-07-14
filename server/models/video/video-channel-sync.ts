@@ -82,6 +82,7 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
         include: [
           {
             model: VideoChannelModel.unscoped(),
+            required: true,
             include: [
               {
                 model: accountModel,
@@ -115,7 +116,14 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
       },
       externalChannelUrl: this.externalChannelUrl,
       createdAt: this.createdAt.toString(),
-      channel: this.VideoChannel.toFormattedSummaryJSON()
+      channel: this.VideoChannel?.toFormattedSummaryJSON(),
+      channelId: this.videoChannel
     }
+  }
+
+  static loadById (id: number) {
+    return this.findOne({
+      where: { id }
+    })
   }
 }

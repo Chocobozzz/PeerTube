@@ -42,7 +42,10 @@ export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
 
   protected reloadData (): void {
     this.error = undefined
-    this.videoChannelsSyncService.getSyncs()
+    this.videoChannelsSyncService.getSyncs({
+      sort: this.sort,
+      pagination: this.pagination
+    })
         .subscribe({
           next: (res) => {
             this.channelsSync = res.data
@@ -61,8 +64,11 @@ export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
     this.videoChannelsSyncService.deleteSync(videoChannelsSync.id)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`TODO ${videoChannelsSync.id}`)
+          this.notifier.success($localize`Synchronization removed successfully for ${videoChannelsSync.channel.displayName}.`)
           this.reloadData()
+        },
+        error: (err) => {
+          this.error = err.message
         }
       })
   }
