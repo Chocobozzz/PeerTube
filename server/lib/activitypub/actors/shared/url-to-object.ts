@@ -27,8 +27,11 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode: number
 }
 
 async function fetchActorFollowsCount (actorObject: ActivityPubActor) {
-  const followersCount = await fetchActorTotalItems(actorObject.followers)
-  const followingCount = await fetchActorTotalItems(actorObject.following)
+  let followersCount = 0
+  let followingCount = 0
+
+  if (actorObject.followers) followersCount = await fetchActorTotalItems(actorObject.followers)
+  if (actorObject.following) followingCount = await fetchActorTotalItems(actorObject.following)
 
   return { followersCount, followingCount }
 }
