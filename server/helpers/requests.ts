@@ -85,11 +85,14 @@ const peertubeGot = got.extend({
           }
 
           httpSignature.signRequest({
-            getHeader: function (header) {
-              return options.headers[header]
+            getHeader: function (header: string) {
+              const value = options.headers[header.toLowerCase()]
+
+              if (!value) logger.warn('Unknown header requested by http-signature.', { headers: options.headers, header })
+              return value
             },
 
-            setHeader: function (header, value) {
+            setHeader: function (header: string, value: string) {
               options.headers[header] = value
             },
 
