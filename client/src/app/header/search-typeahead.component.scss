@@ -74,6 +74,8 @@ li.suggestion {
 }
 
 #typeahead-container {
+  font-size: 14px;
+
   input {
     border: 1px solid pvar(--mainBackgroundColor) !important;
     box-shadow: rgba(0, 0, 0, 0.1) 0 1px 20px 0;
