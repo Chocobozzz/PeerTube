@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { Notifier } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { logger } from '@root-helpers/logger'
 import { USER_HANDLE_VALIDATOR } from '../form-validators/user-validators'
 
 @Component({
@@ -59,7 +60,7 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
       })
       .then(window.open)
       .catch(err => {
-        console.error(err)
+        logger.error(err)
 
         this.notifier.error($localize`Cannot fetch information of this remote account`)
       })

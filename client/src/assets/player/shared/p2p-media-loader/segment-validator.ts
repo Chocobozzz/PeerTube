@@ -1,6 +1,7 @@
-import { wait } from '@root-helpers/utils'
-import { Segment } from '@peertube/p2p-media-loader-core'
 import { basename } from 'path'
+import { Segment } from '@peertube/p2p-media-loader-core'
+import { logger } from '@root-helpers/logger'
+import { wait } from '@root-helpers/utils'
 
 type SegmentsJSON = { [filename: string]: string | { [byterange: string]: string } }
 
@@ -23,7 +24,7 @@ function segmentValidatorFactory (segmentsSha256Url: string, isLive: boolean) {
     }
 
     if (!segmentValue) {
-      console.log('Refetching sha segments for %s.', filename)
+      logger.info(`Refetching sha segments for ${filename}`)
 
       await wait(1000)
 
@@ -71,7 +72,7 @@ function fetchSha256Segments (url: string) {
   return fetch(url)
     .then(res => res.json() as Promise<SegmentsJSON>)
     .catch(err => {
-      console.error('Cannot get sha256 segments', err)
+      logger.error('Cannot get sha256 segments', err)
       return {}
     })
 }

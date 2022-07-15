@@ -1,4 +1,5 @@
 import { basename, dirname } from 'path'
+import { logger } from '@root-helpers/logger'
 
 class RedundancyUrlManager {
 
@@ -7,7 +8,7 @@ class RedundancyUrlManager {
   }
 
   removeBySegmentUrl (segmentUrl: string) {
-    console.log('Removing redundancy of segment URL %s.', segmentUrl)
+    logger.info(`Removing redundancy of segment URL ${segmentUrl}.`)
 
     const baseUrl = dirname(segmentUrl)
 

@@ -69,7 +69,7 @@ module.exports = function () {
             {
               loader: 'ts-loader',
               options: {
-                configFile: helpers.root('tsconfig.json')
+                configFile: helpers.root('src/standalone/videos/tsconfig.json')
               }
             }
           ]

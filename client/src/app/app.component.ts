@@ -1,5 +1,5 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
-import { forkJoin, delay } from 'rxjs'
+import { delay, forkJoin } from 'rxjs'
 import { filter, first, map } from 'rxjs/operators'
 import { DOCUMENT, getLocaleDirection, PlatformLocation } from '@angular/common'
 import { AfterViewInit, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
@@ -20,18 +20,19 @@ import {
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { AccountSetupWarningModalComponent } from '@app/modal/account-setup-warning-modal.component'
+import { AdminWelcomeModalComponent } from '@app/modal/admin-welcome-modal.component'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
-import { AdminWelcomeModalComponent } from '@app/modal/admin-welcome-modal.component'
 import { NgbConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { LoadingBarService } from '@ngx-loading-bar/core'
+import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { getShortLocale } from '@shared/core-utils/i18n'
 import { BroadcastMessageLevel, HTMLServerConfig, UserRole } from '@shared/models'
 import { MenuService } from './core/menu/menu.service'
 import { POP_STATE_MODAL_DISMISS } from './helpers'
-import { InstanceService } from './shared/shared-instance'
 import { GlobalIconName } from './shared/shared-icons'
+import { InstanceService } from './shared/shared-instance'
 
 @Component({
   selector: 'my-app',
@@ -221,7 +222,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         /* eslint-disable no-eval */
         eval(this.serverConfig.instance.customizations.javascript)
       } catch (err) {
-        console.error('Cannot eval custom JavaScript.', err)
+        logger.error('Cannot eval custom JavaScript.', err)
       }
     }
   }

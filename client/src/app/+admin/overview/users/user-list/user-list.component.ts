@@ -2,11 +2,12 @@ import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, LocalStorageService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
-import { prepareIcu, getAPIHost } from '@app/helpers'
+import { getAPIHost, prepareIcu } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { Actor, DropdownAction } from '@app/shared/shared-main'
 import { AccountMutedStatus, BlocklistService, UserBanModalComponent, UserModerationDisplayType } from '@app/shared/shared-moderation'
 import { UserAdminService } from '@app/shared/shared-users'
+import { logger } from '@root-helpers/logger'
 import { User, UserRole } from '@shared/models'
 
 type UserForList = User & {
@@ -149,7 +150,7 @@ export class UserListComponent extends RestTable implements OnInit {
         this.selectedColumns = JSON.parse(result)
         return
       } catch (err) {
-        console.error('Cannot load selected columns.', err)
+        logger.error('Cannot load selected columns.', err)
       }
     }
 

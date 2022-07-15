@@ -8,9 +8,10 @@ import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { Video, VideoCaptionEdit, VideoCaptionService, VideoDetails, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
+import { logger } from '@root-helpers/logger'
 import { LiveVideo, LiveVideoUpdate, VideoPrivacy } from '@shared/models'
-import { hydrateFormFromVideo } from './shared/video-edit-utils'
 import { VideoSource } from '@shared/models/videos/video-source'
+import { hydrateFormFromVideo } from './shared/video-edit-utils'
 
 @Component({
   selector: 'my-videos-update',
@@ -156,7 +157,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
             this.loadingBar.useRef().complete()
             this.isUpdatingVideo = false
             this.notifier.error(err.message)
-            console.error(err)
+            logger.error(err)
           }
         })
   }

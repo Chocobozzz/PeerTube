@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
 import { MarkdownService, Notifier } from '@app/core'
 import { VideoDetails, VideoService } from '@app/shared/shared-main'
+import { logger } from '@root-helpers/logger'
 
 @Component({
   selector: 'my-video-description',
@@ -75,7 +76,7 @@ export class VideoDescriptionComponent implements OnChanges {
   private updateVideoDescription (description: string) {
     this.video.description = description
     this.setVideoDescriptionHTML()
-      .catch(err => console.error(err))
+      .catch(err => logger.error(err))
   }
 
   private async setVideoDescriptionHTML () {

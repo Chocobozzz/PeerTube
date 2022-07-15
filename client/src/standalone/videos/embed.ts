@@ -6,7 +6,7 @@ import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
 import { HTMLServerConfig, LiveVideo, ResultList, VideoDetails, VideoPlaylist, VideoPlaylistElement } from '../../../../shared/models'
 import { PeertubePlayerManager } from '../../assets/player'
 import { TranslationsManager } from '../../assets/player/translations-manager'
-import { getParamString } from '../../root-helpers'
+import { getParamString, logger } from '../../root-helpers'
 import { PeerTubeEmbedApi } from './embed-api'
 import { AuthHTTP, LiveManager, PeerTubePlugin, PlayerManagerOptions, PlaylistFetcher, PlaylistTracker, VideoFetcher } from './shared'
 import { PlayerHTML } from './shared/player-html'
@@ -31,6 +31,8 @@ export class PeerTubeEmbed {
   private playlistTracker: PlaylistTracker
 
   constructor (videoWrapperId: string) {
+    logger.registerServerSending(window.location.origin)
+
     this.http = new AuthHTTP()
 
     this.videoFetcher = new VideoFetcher(this.http)
@@ -43,7 +45,7 @@ export class PeerTubeEmbed {
     try {
       this.config = JSON.parse(window['PeerTubeServerConfig'])
     } catch (err) {
-      console.error('Cannot parse HTML config.', err)
+      logger.error('Cannot parse HTML config.', err)
     }
   }
 
@@ -125,7 +127,7 @@ export class PeerTubeEmbed {
   async playNextPlaylistVideo () {
     const next = this.playlistTracker.getNextPlaylistElement()
     if (!next) {
-      console.log('Next element not found in playlist.')
+      logger.info('Next element not found in playlist.')
       return
     }
 
@@ -137,7 +139,7 @@ export class PeerTubeEmbed {
   async playPreviousPlaylistVideo () {
     const previous = this.playlistTracker.getPreviousPlaylistElement()
     if (!previous) {
-      console.log('Previous element not found in playlist.')
+      logger.info('Previous element not found in playlist.')
       return
     }
 
@@ -343,5 +345,5 @@ PeerTubeEmbed.main()
   .catch(err => {
     (window as any).displayIncompatibleBrowser()
 
-    console.error('Cannot init embed.', err)
+    logger.error('Cannot init embed.', err)
   })

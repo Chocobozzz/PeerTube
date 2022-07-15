@@ -2,6 +2,7 @@ import { AuthUser } from '@app/core'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { logger } from '@root-helpers/logger'
 import {
   AbuseState,
   ActorInfo,
@@ -234,7 +235,7 @@ export class UserNotification implements UserNotificationServer {
       }
     } catch (err) {
       this.type = null
-      console.error(err)
+      logger.error(err)
     }
   }
 

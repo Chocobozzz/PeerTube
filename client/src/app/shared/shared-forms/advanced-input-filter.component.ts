@@ -16,7 +16,7 @@ export type AdvancedInputFilterChild = {
   value: string
 }
 
-const logger = debug('peertube:AdvancedInputFilterComponent')
+const debugLogger = debug('peertube:AdvancedInputFilterComponent')
 
 @Component({
   selector: 'my-advanced-input-filter',
@@ -98,7 +98,7 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
       .subscribe(params => {
         const search = params.search || ''
 
-        logger('On route search change "%s".', search)
+        debugLogger('On route search change "%s".', search)
 
         if (this.searchValue === search) return
 
@@ -132,7 +132,7 @@ export class AdvancedInputFilterComponent implements OnInit, AfterViewInit {
       return
     }
 
-    logger('On search "%s".', this.searchValue)
+    debugLogger('On search "%s".', this.searchValue)
 
     this.search.emit(this.searchValue)
   }

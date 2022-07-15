@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PluginService } from '@app/core'
+import { logger } from '@root-helpers/logger'
 
 @Component({
   templateUrl: './plugin-pages.component.html'
@@ -26,7 +27,7 @@ export class PluginPagesComponent implements AfterViewInit {
 
     const registered = this.pluginService.getRegisteredClientRoute(path)
     if (!registered) {
-      console.log('Could not find registered route %s.', path, this.pluginService.getAllRegisteredClientRoutes())
+      logger.info(`Could not find registered route ${path}`, this.pluginService.getAllRegisteredClientRoutes())
 
       return this.router.navigate([ '/404' ], { skipLocationChange: true })
     }

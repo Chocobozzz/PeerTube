@@ -1,12 +1,25 @@
-import { HttpStatusCode, LogLevel } from '@shared/models'
+import { ClientLogCreate, HttpStatusCode, ServerLogLevel } from '@shared/models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class LogsCommand extends AbstractCommand {
 
+  createLogClient (options: OverrideCommandOptions & { payload: ClientLogCreate }) {
+    const path = '/api/v1/server/logs/client'
+
+    return this.postBodyRequest({
+      ...options,
+
+      path,
+      fields: options.payload,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
   getLogs (options: OverrideCommandOptions & {
     startDate: Date
     endDate?: Date
-    level?: LogLevel
+    level?: ServerLogLevel
     tagsOneOf?: string[]
   }) {
     const { startDate, endDate, tagsOneOf, level } = options

@@ -1,10 +1,11 @@
-import * as debug from 'debug'
+import debug from 'debug'
 import { LazyLoadEvent, SortMeta } from 'primeng/api'
 import { ActivatedRoute, Router } from '@angular/router'
+import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { RestPagination } from './rest-pagination'
 
-const logger = debug('peertube:tables:RestTable')
+const debugLogger = debug('peertube:tables:RestTable')
 
 export abstract class RestTable {
 
@@ -34,7 +35,7 @@ export abstract class RestTable {
       try {
         this.sort = JSON.parse(result)
       } catch (err) {
-        console.error('Cannot load sort of local storage key ' + this.getSortLocalStorageKey(), err)
+        logger.error('Cannot load sort of local storage key ' + this.getSortLocalStorageKey(), err)
       }
     }
   }
@@ -44,7 +45,7 @@ export abstract class RestTable {
   }
 
   loadLazy (event: LazyLoadEvent) {
-    logger('Load lazy %o.', event)
+    debugLogger('Load lazy %o.', event)
 
     this.sort = {
       order: event.sortOrder,

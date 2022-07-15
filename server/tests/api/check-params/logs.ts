@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { cleanupTests, createSingleServer, makeGetRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
+import { expect } from 'chai'
 import { HttpStatusCode } from '@shared/models'
+import { cleanupTests, createSingleServer, makeGetRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
 describe('Test logs API validators', function () {
   const path = '/api/v1/server/logs'
@@ -92,6 +93,62 @@ describe('Test logs API validators', function () {
         query: { startDate: new Date().toISOString() },
         expectedStatus: HttpStatusCode.OK_200
       })
+    })
+  })
+
+  describe('When creating client logs', function () {
+    const base = {
+      level: 'warn' as 'warn',
+      message: 'my super message',
+      url: 'https://example.com/toto'
+    }
+    const expectedStatus = HttpStatusCode.BAD_REQUEST_400
+
+    it('Should fail with an invalid level', async function () {
+      await server.logs.createLogClient({ payload: { ...base, level: '' as any }, expectedStatus })
+      await server.logs.createLogClient({ payload: { ...base, level: undefined }, expectedStatus })
+      await server.logs.createLogClient({ payload: { ...base, level: 'toto' as any }, expectedStatus })
+    })
+
+    it('Should fail with an invalid message', async function () {
+      await server.logs.createLogClient({ payload: { ...base, message: undefined }, expectedStatus })
+      await server.logs.createLogClient({ payload: { ...base, message: '' }, expectedStatus })
+      await server.logs.createLogClient({ payload: { ...base, message: 'm'.repeat(2500) }, expectedStatus })
+    })
+
+    it('Should fail with an invalid url', async function () {
+      await server.logs.createLogClient({ payload: { ...base, url: undefined }, expectedStatus })
+      await server.logs.createLogClient({ payload: { ...base, url: 'toto' }, expectedStatus })
+    })
+
+    it('Should fail with an invalid stackTrace', async function () {
+      await server.logs.createLogClient({ payload: { ...base, stackTrace: 's'.repeat(10000) }, expectedStatus })
+    })
+
+    it('Should fail with an invalid userAgent', async function () {
+      await server.logs.createLogClient({ payload: { ...base, userAgent: 's'.repeat(500) }, expectedStatus })
+    })
+
+    it('Should fail with an invalid meta', async function () {
+      await server.logs.createLogClient({ payload: { ...base, meta: 's'.repeat(10000) }, expectedStatus })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await server.logs.createLogClient({ payload: { ...base, stackTrace: 'stackTrace', meta: '{toto}', userAgent: 'userAgent' } })
+    })
+
+    it('Should rate limit log creation', async function () {
+      let fail = false
+
+      for (let i = 0; i < 10; i++) {
+        try {
+          await server.logs.createLogClient({ token: null, payload: base })
+        } catch {
+          fail = true
+        }
+      }
+
+      expect(fail).to.be.true
     })
   })
 

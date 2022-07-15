@@ -13,7 +13,7 @@ import {
   ViewContainerRef
 } from '@angular/core'
 
-const logger = debug('peertube:main:DeferLoadingDirective')
+const debugLogger = debug('peertube:main:DeferLoadingDirective')
 
 @Directive({
   selector: '[myDeferLoading]'
@@ -52,7 +52,7 @@ export class DeferLoadingDirective implements AfterViewInit, OnDestroy {
   load () {
     if (this.isLoaded()) return
 
-    logger('Loading component')
+    debugLogger('Loading component')
 
     this.viewContainer.clear()
     this.view = this.viewContainer.createEmbeddedView(this.template, {}, 0)

@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { Notifier, ServerService, User, UserService } from '@app/core'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 
 @Component({
@@ -71,7 +72,7 @@ export class AccountSetupWarningModalComponent {
 
     this.userService.updateMyProfile({ noAccountSetupWarningModal: true })
         .subscribe({
-          next: () => console.log('We will not open the account setup modal again.'),
+          next: () => logger.info('We will not open the account setup modal again.'),
 
           error: err => this.notifier.error(err.message)
         })

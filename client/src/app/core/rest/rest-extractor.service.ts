@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { dateToHuman } from '@app/helpers'
 import { HttpStatusCode, ResultList } from '@shared/models'
+import { logger } from '@root-helpers/logger'
 
 @Injectable()
 export class RestExtractor {
@@ -64,7 +65,7 @@ export class RestExtractor {
     if (err.error instanceof Error) {
       // A client-side or network error occurred. Handle it accordingly.
       const errorMessage = err.error.detail || err.error.title
-      console.error('An error occurred:', errorMessage)
+      logger.error('An error occurred:', errorMessage)
 
       return errorMessage
     }
@@ -75,12 +76,12 @@ export class RestExtractor {
 
     if (err.status !== undefined) {
       const errorMessage = this.buildServerErrorMessage(err)
-      console.error(`Backend returned code ${err.status}, errorMessage is: ${errorMessage}`)
+      logger.error(`Backend returned code ${err.status}, errorMessage is: ${errorMessage}`)
 
       return errorMessage
     }
 
-    console.error(err)
+    logger.error(err)
     return err
   }
 

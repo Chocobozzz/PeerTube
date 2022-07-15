@@ -365,6 +365,12 @@ const CONSTRAINTS_FIELDS = {
   VIDEO_STUDIO: {
     TASKS: { min: 1, max: 10 }, // Number of tasks
     CUT_TIME: { min: 0 } // Value
+  },
+  LOGS: {
+    CLIENT_MESSAGE: { min: 1, max: 1000 }, // Length
+    CLIENT_STACK_TRACE: { min: 1, max: 5000 }, // Length
+    CLIENT_META: { min: 1, max: 5000 }, // Length
+    CLIENT_USER_AGENT: { min: 1, max: 200 } // Length
   }
 }
 

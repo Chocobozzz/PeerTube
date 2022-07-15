@@ -4,6 +4,7 @@ import { ConfirmService, Notifier, ServerService } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { VideoDetails } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
+import { logger } from '@root-helpers/logger'
 import { secondsToTime } from '@shared/core-utils'
 import { VideoStudioTask, VideoStudioTaskCut } from '@shared/models'
 import { VideoStudioService } from '../shared'
@@ -97,7 +98,7 @@ export class VideoStudioEditComponent extends FormReactive implements OnInit {
           this.loadingBar.useRef().complete()
           this.isRunningEdition = false
           this.notifier.error(err.message)
-          console.error(err)
+          logger.error(err)
         }
       })
   }

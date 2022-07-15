@@ -1,3 +1,5 @@
+import { logger } from '@root-helpers/logger'
+
 function getStoredVolume () {
   const value = getLocalStorage('volume')
   if (value !== null && value !== undefined) {
@@ -81,7 +83,7 @@ function getStoredVideoWatchHistory (videoUUID?: string) {
 
     data = JSON.parse(value)
   } catch (error) {
-    console.error('Cannot parse video watch history from local storage: ', error)
+    logger.error('Cannot parse video watch history from local storage/', error)
   }
 
   data = data || {}

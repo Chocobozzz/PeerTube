@@ -1,6 +1,7 @@
 // Thanks: https://github.com/feross/render-media
 
 const MediaElementWrapper = require('mediasource')
+import { logger } from '@root-helpers/logger'
 import { extname } from 'path'
 const Videostream = require('videostream')
 
@@ -77,8 +78,8 @@ function renderMedia (file: any, elem: HTMLVideoElement, opts: RenderMediaOption
   }
 
   function fallbackToMediaSource (useVP9 = false) {
-    if (useVP9 === true) console.log('Falling back to media source with VP9 enabled.')
-    else console.log('Falling back to media source..')
+    if (useVP9 === true) logger.info('Falling back to media source with VP9 enabled.')
+    else logger.info('Falling back to media source..')
 
     useMediaSource(useVP9)
   }

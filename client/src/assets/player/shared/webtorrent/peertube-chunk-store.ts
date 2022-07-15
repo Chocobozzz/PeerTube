@@ -2,8 +2,9 @@
 // We use temporary IndexDB (all data are removed on destroy) to avoid RAM issues
 // Thanks @santiagogil and @Feross
 
-import { EventEmitter } from 'events'
 import Dexie from 'dexie'
+import { EventEmitter } from 'events'
+import { logger } from '@root-helpers/logger'
 
 class ChunkDatabase extends Dexie {
   chunks: Dexie.Table<{ id: number, buf: Buffer }, number>
@@ -104,7 +105,7 @@ export class PeertubeChunkStore extends EventEmitter {
           return this.db.chunks.bulkPut(processing.map(p => ({ id: p.id, buf: p.buf })))
         })
       } catch (err) {
-        console.log('Cannot bulk insert chunks. Store them in memory.', { err })
+        logger.info('Cannot bulk insert chunks. Store them in memory.', err)
 
         processing.forEach(p => {
           this.memoryChunks[p.id] = p.buf
@@ -143,7 +144,7 @@ export class PeertubeChunkStore extends EventEmitter {
       return cb(null, buf.slice(offset, len + offset))
     })
     .catch(err => {
-      console.error(err)
+      logger.error(err)
       return cb(err)
     })
   }
@@ -176,7 +177,7 @@ export class PeertubeChunkStore extends EventEmitter {
 
       return cb()
     } catch (err) {
-      console.error('Cannot destroy peertube chunk store.', err)
+      logger.error('Cannot destroy peertube chunk store.', err)
       return cb(err)
     }
   }
@@ -204,7 +205,7 @@ export class PeertubeChunkStore extends EventEmitter {
         databasesToDeleteInfo = await this.expirationDB.databases.where('expiration').below(now).toArray()
       })
     } catch (err) {
-      console.error('Cannot update expiration of fetch expired databases.', err)
+      logger.error('Cannot update expiration of fetch expired databases.', err)
     }
 
     for (const databaseToDeleteInfo of databasesToDeleteInfo) {
@@ -214,7 +215,7 @@ export class PeertubeChunkStore extends EventEmitter {
 
   private async dropDatabase (databaseName: string) {
     const dbToDelete = new ChunkDatabase(databaseName)
-    console.log('Destroying IndexDB database %s.', databaseName)
+    logger.info(`Destroying IndexDB database ${databaseName}`)
 
     try {
       await dbToDelete.delete()
@@ -223,7 +224,7 @@ export class PeertubeChunkStore extends EventEmitter {
         return this.expirationDB.databases.where({ name: databaseName }).delete()
       })
     } catch (err) {
-      console.error('Cannot delete %s.', databaseName, err)
+      logger.error(`Cannot delete ${databaseName}.`, err)
     }
   }
 

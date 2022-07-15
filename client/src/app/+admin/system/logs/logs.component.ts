@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { LocalStorageService, Notifier } from '@app/core'
-import { LogLevel } from '@shared/models'
+import { ServerLogLevel } from '@shared/models'
 import { LogRow } from './log-row.model'
 import { LogsService } from './logs.service'
 
@@ -17,11 +17,11 @@ export class LogsComponent implements OnInit {
 
   logs: LogRow[] = []
   timeChoices: { id: string, label: string, dateFormat: string }[] = []
-  levelChoices: { id: LogLevel, label: string }[] = []
+  levelChoices: { id: ServerLogLevel, label: string }[] = []
   logTypeChoices: { id: 'audit' | 'standard', label: string }[] = []
 
   startDate: string
-  level: LogLevel
+  level: ServerLogLevel
   logType: 'audit' | 'standard'
   tagsOneOf: string[] = []
 

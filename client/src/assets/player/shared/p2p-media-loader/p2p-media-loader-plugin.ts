@@ -5,6 +5,7 @@ import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from '@peertub
 import { timeToInt } from '@shared/core-utils'
 import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo } from '../../types'
 import { registerConfigPlugin, registerSourceHandler } from './hls-plugin'
+import { logger } from '@root-helpers/logger'
 
 registerConfigPlugin(videojs)
 registerSourceHandler(videojs)
@@ -43,11 +44,11 @@ class P2pMediaLoaderPlugin extends Plugin {
 
     // FIXME: typings https://github.com/Microsoft/TypeScript/issues/14080
     if (!(videojs as any).Html5Hlsjs) {
-      console.warn('HLS.js does not seem to be supported. Try to fallback to built in HLS.')
+      logger.warn('HLS.js does not seem to be supported. Try to fallback to built in HLS.')
 
       if (!player.canPlayType('application/vnd.apple.mpegurl')) {
         const message = 'Cannot fallback to built-in HLS'
-        console.warn(message)
+        logger.warn(message)
 
         player.ready(() => player.trigger('error', new Error(message)))
         return
@@ -114,7 +115,7 @@ class P2pMediaLoaderPlugin extends Plugin {
     this.p2pEngine = this.options.loader.getEngine()
 
     this.p2pEngine.on(Events.SegmentError, (segment: Segment, err) => {
-      console.error('Segment error.', segment, err)
+      logger.error(`Segment ${segment.id} error.`, err)
 
       this.options.redundancyUrlManager.removeBySegmentUrl(segment.requestUrl)
     })

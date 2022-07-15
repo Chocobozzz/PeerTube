@@ -1,5 +1,6 @@
 import { HybridLoaderSettings } from '@peertube/p2p-media-loader-core'
 import { HlsJsEngineSettings } from '@peertube/p2p-media-loader-hlsjs'
+import { logger } from '@root-helpers/logger'
 import { LiveVideoLatencyMode } from '@shared/models'
 import { getAverageBandwidthInStore } from '../../peertube-player-local-storage'
 import { P2PMediaLoader, P2PMediaLoaderPluginOptions } from '../../types'
@@ -61,7 +62,7 @@ export class HLSOptionsBuilder {
   private getP2PMediaLoaderOptions (redundancyUrlManager: RedundancyUrlManager): HlsJsEngineSettings {
     let consumeOnly = false
     if ((navigator as any)?.connection?.type === 'cellular') {
-      console.log('We are on a cellular connection: disabling seeding.')
+      logger.info('We are on a cellular connection: disabling seeding.')
       consumeOnly = true
     }
 

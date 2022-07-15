@@ -24,6 +24,7 @@ import { Video, VideoCaptionService, VideoDetails, VideoService } from '@app/sha
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
+import { logger } from '@root-helpers/logger'
 import { isP2PEnabled } from '@root-helpers/video'
 import { timeToInt } from '@shared/core-utils'
 import {
@@ -225,7 +226,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         : parseInt(positionParam + '', 10)
 
       if (isNaN(this.playlistPosition)) {
-        console.error(`playlistPosition query param '${positionParam}' was parsed as NaN, defaulting to 1.`)
+        logger.error(`playlistPosition query param '${positionParam}' was parsed as NaN, defaulting to 1.`)
         this.playlistPosition = 1
       }
 
@@ -378,7 +379,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     this.buildPlayer(urlOptions, loggedInOrAnonymousUser)
-      .catch(err => console.error('Cannot build the player', err))
+      .catch(err => logger.error('Cannot build the player', err))
 
     this.setOpenGraphTags()
 
@@ -550,7 +551,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.player.dispose()
       this.player = undefined
     } catch (err) {
-      console.error('Cannot dispose player.', err)
+      logger.error('Cannot dispose player.', err)
     }
   }
 
@@ -717,7 +718,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private handleLiveStateChange (newState: VideoState) {
     if (newState !== VideoState.PUBLISHED) return
 
-    console.log('Loading video after live update.')
+    logger.info('Loading video after live update.')
 
     const videoUUID = this.video.uuid
 
@@ -728,11 +729,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private handleLiveViewsChange (newViewers: number) {
     if (!this.video) {
-      console.error('Cannot update video live views because video is no defined.')
+      logger.error('Cannot update video live views because video is no defined.')
       return
     }
 
-    console.log('Updating live views.')
+    logger.info('Updating live views.')
 
     this.video.viewers = newViewers
   }

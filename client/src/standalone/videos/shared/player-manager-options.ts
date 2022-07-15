@@ -14,6 +14,7 @@ import {
   getParamString,
   getParamToggle,
   isP2PEnabled,
+  logger,
   peertubeLocalStorage,
   UserLocalStorageKeys
 } from '../../../root-helpers'
@@ -137,7 +138,7 @@ export class PlayerManagerOptions {
         else this.mode = 'webtorrent'
       }
     } catch (err) {
-      console.error('Cannot get params from URL.', err)
+      logger.error('Cannot get params from URL.', err)
     }
   }
 

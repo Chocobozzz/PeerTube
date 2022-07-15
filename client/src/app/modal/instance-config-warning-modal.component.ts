@@ -2,6 +2,7 @@ import { Location } from '@angular/common'
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { Notifier, User, UserService } from '@app/core'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { About, ServerConfig } from '@shared/models/server'
 
@@ -64,7 +65,7 @@ export class InstanceConfigWarningModalComponent {
 
     this.userService.updateMyProfile({ noInstanceConfigWarningModal: true })
         .subscribe({
-          next: () => console.log('We will not open the instance config warning modal again.'),
+          next: () => logger.info('We will not open the instance config warning modal again.'),
 
           error: err => this.notifier.error(err.message)
         })

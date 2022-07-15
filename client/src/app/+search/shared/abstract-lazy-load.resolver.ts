@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router'
+import { logger } from '@root-helpers/logger'
 import { ResultList } from '@shared/models'
 
 export abstract class AbstractLazyLoadResolver <T> implements Resolve<any> {
@@ -10,7 +11,7 @@ export abstract class AbstractLazyLoadResolver <T> implements Resolve<any> {
     const url = route.params.url
 
     if (!url) {
-      console.error('Could not find url param.', { params: route.params })
+      logger.error('Could not find url param.', { params: route.params })
       return this.router.navigateByUrl('/404')
     }
 
@@ -18,7 +19,7 @@ export abstract class AbstractLazyLoadResolver <T> implements Resolve<any> {
       .pipe(
         map(result => {
           if (result.data.length !== 1) {
-            console.error('Cannot find result for this URL')
+            logger.error('Cannot find result for this URL')
             return this.router.navigateByUrl('/404')
           }
 

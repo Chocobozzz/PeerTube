@@ -330,26 +330,21 @@ x-tagGroups:
   - name: Search
     tags:
       - Search
-  - name: Custom pages
-    tags:
-      - Homepage
   - name: Moderation
     tags:
       - Abuses
       - Video Blocks
       - Account Blocks
       - Server Blocks
-  - name: Instance Configuration
+  - name: Instance
     tags:
       - Config
+      - Homepage
       - Instance Follows
       - Instance Redundancy
       - Plugins
-  - name: Stats
-    tags:
       - Stats
-  - name: Jobs
-    tags:
+      - Logs
       - Job
 paths:
   '/accounts/{name}':
@@ -4316,6 +4311,58 @@ paths:
               schema:
                 $ref: '#/components/schemas/ServerStats'
 
+  /server/logs/client:
+    post:
+      tags:
+        - Logs
+      summary: Send client log
+      operationId: sendClientLog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendClientLog'
+      responses:
+        '204':
+          description: successful operation
+
+  /server/logs:
+    get:
+      tags:
+        - Logs
+      summary: Get instance logs
+      operationId: getInstanceLogs
+      security:
+        - OAuth2:
+          - admin
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /server/audit-logs:
+    get:
+      tags:
+        - Logs
+      summary: Get instance audit logs
+      operationId: getInstanceAuditLogs
+      security:
+        - OAuth2:
+          - admin
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
 
   '/feeds/video-comments.{format}':
     get:
@@ -6525,6 +6572,31 @@ components:
           properties:
             enabled:
               type: boolean
+
+    SendClientLog:
+      properties:
+        message:
+          type: string
+        url:
+          type: string
+          description: URL of the current user page
+        level:
+          enum:
+            - error
+            - warn
+        stackTrace:
+          type: string
+          description: Stack trace of the error if there is one
+        userAgent:
+          type: string
+          description: User agent of the web browser that sends the message
+        meta:
+          type: string
+          description: Additional information regarding this log
+      required:
+        - message
+        - url
+        - level
 
     ServerStats:
       properties:

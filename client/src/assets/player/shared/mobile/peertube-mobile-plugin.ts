@@ -1,8 +1,9 @@
-import { PeerTubeMobileButtons } from './peertube-mobile-buttons'
-import videojs from 'video.js'
 import debug from 'debug'
+import videojs from 'video.js'
+import { logger } from '@root-helpers/logger'
+import { PeerTubeMobileButtons } from './peertube-mobile-buttons'
 
-const logger = debug('peertube:player:mobile')
+const debugLogger = debug('peertube:player:mobile')
 
 const Plugin = videojs.getPlugin('plugin')
 
@@ -45,7 +46,7 @@ class PeerTubeMobilePlugin extends Plugin {
       if (!this.player.isFullscreen() || this.isPortraitVideo()) return
 
       screen.orientation.lock('landscape')
-        .catch(err => console.error('Cannot lock screen to landscape.', err))
+        .catch(err => logger.error('Cannot lock screen to landscape.', err))
     })
   }
 
@@ -61,7 +62,7 @@ class PeerTubeMobilePlugin extends Plugin {
       }
 
       if (this.lastTapEvent && event.timeStamp - this.lastTapEvent.timeStamp < PeerTubeMobilePlugin.DOUBLE_TAP_DELAY_MS) {
-        logger('Detected double tap')
+        debugLogger('Detected double tap')
 
         this.lastTapEvent = undefined
         this.onDoubleTap(event)
@@ -71,7 +72,7 @@ class PeerTubeMobilePlugin extends Plugin {
       this.newActiveState = !this.player.userActive()
 
       this.tapTimeout = setTimeout(() => {
-        logger('No double tap detected, set user active state to %s.', this.newActiveState)
+        debugLogger('No double tap detected, set user active state to %s.', this.newActiveState)
 
         this.player.userActive(this.newActiveState)
       }, PeerTubeMobilePlugin.DOUBLE_TAP_DELAY_MS)
@@ -100,19 +101,19 @@ class PeerTubeMobilePlugin extends Plugin {
     const rect = this.findPlayerTarget((event.target as HTMLElement)).getBoundingClientRect()
     const offsetX = event.targetTouches[0].pageX - rect.left
 
-    logger('Calculating double tap zone (player width: %d, offset X: %d)', playerWidth, offsetX)
+    debugLogger('Calculating double tap zone (player width: %d, offset X: %d)', playerWidth, offsetX)
 
     if (offsetX > 0.66 * playerWidth) {
       if (this.seekAmount < 0) this.seekAmount = 0
 
       this.seekAmount += 10
 
-      logger('Will forward %d seconds', this.seekAmount)
+      debugLogger('Will forward %d seconds', this.seekAmount)
     } else if (offsetX < 0.33 * playerWidth) {
       if (this.seekAmount > 0) this.seekAmount = 0
 
       this.seekAmount -= 10
-      logger('Will rewind %d seconds', this.seekAmount)
+      debugLogger('Will rewind %d seconds', this.seekAmount)
     }
 
     this.peerTubeMobileButtons.displayFastSeek(this.seekAmount)

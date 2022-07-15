@@ -9,7 +9,7 @@ import { VideoPlaylist } from '../shared-video-playlist'
 import { SearchService } from './search.service'
 import { AdvancedSearch } from './advanced-search.model'
 
-const logger = debug('peertube:search:FindInBulkService')
+const debugLogger = debug('peertube:search:FindInBulkService')
 
 type BulkObservables <P extends number | string, R> = {
   notifier: Subject<P>
@@ -36,7 +36,7 @@ export class FindInBulkService {
   }
 
   getVideo (uuid: string): Observable<Video> {
-    logger('Schedule video fetch for uuid %s.', uuid)
+    debugLogger('Schedule video fetch for uuid %s.', uuid)
 
     return this.getData({
       observableObject: this.getVideoInBulk,
@@ -46,7 +46,7 @@ export class FindInBulkService {
   }
 
   getChannel (handle: string): Observable<VideoChannel> {
-    logger('Schedule channel fetch for handle %s.', handle)
+    debugLogger('Schedule channel fetch for handle %s.', handle)
 
     return this.getData({
       observableObject: this.getChannelInBulk,
@@ -56,7 +56,7 @@ export class FindInBulkService {
   }
 
   getPlaylist (uuid: string): Observable<VideoPlaylist> {
-    logger('Schedule playlist fetch for uuid %s.', uuid)
+    debugLogger('Schedule playlist fetch for uuid %s.', uuid)
 
     return this.getData({
       observableObject: this.getPlaylistInBulk,
@@ -94,7 +94,7 @@ export class FindInBulkService {
   }
 
   private getVideosInBulk (uuids: string[]) {
-    logger('Fetching videos %s.', uuids.join(', '))
+    debugLogger('Fetching videos %s.', uuids.join(', '))
 
     return this.searchService.searchVideos({
       uuids,
@@ -104,7 +104,7 @@ export class FindInBulkService {
   }
 
   private getChannelsInBulk (handles: string[]) {
-    logger('Fetching channels %s.', handles.join(', '))
+    debugLogger('Fetching channels %s.', handles.join(', '))
 
     return this.searchService.searchVideoChannels({
       handles,
@@ -114,7 +114,7 @@ export class FindInBulkService {
   }
 
   private getPlaylistsInBulk (uuids: string[]) {
-    logger('Fetching playlists %s.', uuids.join(', '))
+    debugLogger('Fetching playlists %s.', uuids.join(', '))
 
     return this.searchService.searchVideoPlaylists({
       uuids,

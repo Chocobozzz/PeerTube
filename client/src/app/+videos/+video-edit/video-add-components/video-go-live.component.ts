@@ -7,6 +7,7 @@ import { FormValidatorService } from '@app/shared/shared-forms'
 import { Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
+import { logger } from '@root-helpers/logger'
 import { LiveVideo, LiveVideoCreate, LiveVideoLatencyMode, LiveVideoUpdate, PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
 import { VideoSend } from './video-send'
 
@@ -141,7 +142,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
       error: err => {
         this.error = err.message
         scrollToTop()
-        console.error(err)
+        logger.error(err)
       }
     })
   }

@@ -23,7 +23,7 @@ import { environment } from '../../../environments/environment'
 import { VideoPlaylistElement } from './video-playlist-element.model'
 import { VideoPlaylist } from './video-playlist.model'
 
-const logger = debug('peertube:playlists:VideoPlaylistService')
+const debugLogger = debug('peertube:playlists:VideoPlaylistService')
 
 export type CachedPlaylist = VideoPlaylist | { id: number, displayName: string }
 
@@ -287,15 +287,15 @@ export class VideoPlaylistService {
   }
 
   runPlaylistCheck (videoId: number) {
-    logger('Running playlist check.')
+    debugLogger('Running playlist check.')
 
     if (this.videoExistsCache[videoId]) {
-      logger('Found cache for %d.', videoId)
+      debugLogger('Found cache for %d.', videoId)
 
       return this.videoExistsInPlaylistCacheSubject.next({ [videoId]: this.videoExistsCache[videoId] })
     }
 
-    logger('Fetching from network for %d.', videoId)
+    debugLogger('Fetching from network for %d.', videoId)
     return this.videoExistsInPlaylistNotifier.next(videoId)
   }
 

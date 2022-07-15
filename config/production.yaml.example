@@ -25,6 +25,10 @@ rates_limit:
     # 3 attempts in 5 min
     window: 5 minutes
     max: 3
+  receive_client_log:
+    # 10 attempts in 10 min
+    window: 10 minutes
+    max: 10
 
 # Proxies to trust to get real client IP
 # If you run PeerTube just behind a local proxy (nginx), keep 'loopback'
@@ -166,14 +170,21 @@ object_storage:
 
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
+
   rotation:
     enabled : true # Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate
     max_file_size: 12MB
     max_files: 20
+
   anonymize_ip: false
+
   log_ping_requests: true
   log_tracker_unknown_infohash: true
+
   prettify_sql: false
+
+  # Accept warn/error logs coming from the client
+  accept_client_log: true
 
 # Highly experimental support of Open Telemetry
 open_telemetry:

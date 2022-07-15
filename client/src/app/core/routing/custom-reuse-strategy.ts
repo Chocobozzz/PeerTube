@@ -1,5 +1,6 @@
 import { ComponentRef, Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, DetachedRouteHandle, RouteReuseStrategy } from '@angular/router'
+import { logger } from '@root-helpers/logger'
 import { DisableForReuseHook } from './disable-for-reuse-hook'
 import { PeerTubeRouterService, RouterSetting } from './peertube-router.service'
 
@@ -22,7 +23,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
     const key = this.generateKey(route)
     this.recentlyUsed = key
 
-    console.log('Storing component %s to reuse later.', key)
+    logger.info(`Storing component ${key} to reuse later.`)
 
     const componentRef = (handle as any).componentRef as ComponentRef<DisableForReuseHook>
     componentRef.instance.disableForReuse()
@@ -46,7 +47,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
     const key = this.generateKey(route)
     this.recentlyUsed = key
 
-    console.log('Reusing component %s.', key)
+    logger.info(`Reusing component ${key}.`)
 
     const handle = this.storedRouteHandles.get(key)
     if (!handle) return handle;
@@ -66,7 +67,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
       this.storedRouteHandles.forEach((r, key) => {
         if (key === this.recentlyUsed) return
 
-        console.log('Removing stored component %s.', key);
+        logger.info(`Removing stored component ${key}`);
 
         (r as any).componentRef.destroy()
         this.storedRouteHandles.delete(key)
