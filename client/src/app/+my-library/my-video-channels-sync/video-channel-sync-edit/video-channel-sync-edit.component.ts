@@ -16,6 +16,7 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
   error: string
   selectedVideoChannel: VideoChannel
   videoChannels: VideoChannel[]
+  existingVideosStrategy: string
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -31,7 +32,8 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
   ngOnInit () {
     this.buildForm({
       externalChannelUrl: VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR,
-      'video-channel': null
+      'video-channel': null,
+      'existing-video-strategy': null
     })
     this.authService.userInformationLoaded
         .pipe(mergeMap(() => {
@@ -58,11 +60,17 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
       externalChannelUrl: body.externalChannelUrl,
       videoChannel: body['video-channel']
     }
+    const importExistingVideos = body['existing-video-strategy'] === 'import'
     this.videoChannelSyncService.createSync(videoChannelSyncCreate)
+      .pipe(mergeMap((res: {videoChannelSync: {id: number}}) => {
+        this.authService.refreshUserInformation()
+
+        return importExistingVideos
+          ? this.videoChannelSyncService.requestTotalSync(res.videoChannelSync.id)
+          : Promise.resolve(null)
+      }))
       .subscribe({
         next: () => {
-          this.authService.refreshUserInformation()
-
           this.notifier.success($localize`Synchronization created successfully.`)
           this.router.navigate([ '/my-library', 'video-channels-sync' ])
         },

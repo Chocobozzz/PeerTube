@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment'
   providedIn: 'root'
 })
 export class VideoChannelSyncService {
-  static BASE_VIDEO_CHANNEL_URL = environment.apiUrl + '/api/v1/video-channels-sync/'
+  static BASE_VIDEO_CHANNEL_URL = environment.apiUrl + '/api/v1/video-channels-sync'
   constructor (
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
@@ -22,7 +22,7 @@ export class VideoChannelSyncService {
     const { pagination, sort } = parameters
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
-    const url = VideoChannelSyncService.BASE_VIDEO_CHANNEL_URL + 'me'
+    const url = VideoChannelSyncService.BASE_VIDEO_CHANNEL_URL + '/me'
     return this.authHttp.get<ResultList<VideoChannelSync>>(url, { params })
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
@@ -32,8 +32,14 @@ export class VideoChannelSyncService {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
   deleteSync (videoChannelsSyncId: number) {
-    const url = VideoChannelSyncService.BASE_VIDEO_CHANNEL_URL + videoChannelsSyncId
+    const url = `${VideoChannelSyncService.BASE_VIDEO_CHANNEL_URL}/${videoChannelsSyncId}`
     return this.authHttp.delete(url)
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  requestTotalSync (syncId: number) {
+    const url = `${VideoChannelSyncService.BASE_VIDEO_CHANNEL_URL}/syncAll/${syncId}`
+    return this.authHttp.post(url, {})
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }
