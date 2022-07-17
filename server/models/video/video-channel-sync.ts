@@ -21,6 +21,8 @@ import { AccountModel } from "../account/account"
 import { getSort, throwIfNotValid } from "../utils"
 import { VideoChannelModel } from "./video-channel"
 import { ActorModel } from "../actor/actor"
+import { Op } from "sequelize"
+import { UserModel } from "../user/user"
 
 type AvailableForListOptions = {
   accountId: number
@@ -126,4 +128,36 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
       where: { id }
     })
   }
+
+  static async listSyncs (): Promise<VideoChannelSyncModel[]> {
+    const query = {
+      include: [
+        {
+          model: VideoChannelModel.unscoped(),
+          required: true,
+          include: [
+            {
+              model: AccountModel.unscoped(),
+              required: true,
+              include: [ {
+                attributes: [ ],
+                model: UserModel.unscoped(),
+                where: {
+                  videoQuota: {
+                    [Op.ne]: 0
+                  },
+                  videoQuotaDaily: {
+                    [Op.ne]: 0
+                  }
+                },
+                required: true
+              } ]
+            }
+          ]
+        }
+      ]
+    }
+    return VideoChannelSyncModel.unscoped().findAll(query)
+  }
+
 }

@@ -66,7 +66,7 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
         this.authService.refreshUserInformation()
 
         return importExistingVideos
-          ? this.videoChannelSyncService.requestTotalSync(res.videoChannelSync.id)
+          ? this.videoChannelSyncService.syncChannel(res.videoChannelSync.id)
           : Promise.resolve(null)
       }))
       .subscribe({

@@ -39,7 +39,8 @@ export class JobsComponent extends RestTable implements OnInit {
     'video-transcoding',
     'videos-views-stats',
     'move-to-object-storage',
-    'video-channels-sync'
+    'video-channels-sync',
+    'video-channel-import'
   ]
 
   jobs: Job[] = []

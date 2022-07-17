@@ -5348,6 +5348,7 @@ components:
           - video-redundancy
           - video-live-ending
           - video-channels-sync
+          - video-channel-import
     followState:
       name: state
       in: query

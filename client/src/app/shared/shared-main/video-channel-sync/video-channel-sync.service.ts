@@ -37,8 +37,8 @@ export class VideoChannelSyncService {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  requestTotalSync (syncId: number) {
-    const url = `${VideoChannelSyncService.BASE_VIDEO_CHANNEL_URL}/syncAll/${syncId}`
+  syncChannel (syncId: number) {
+    const url = `${VideoChannelSyncService.BASE_VIDEO_CHANNEL_URL}/syncChannel/${syncId}`
     return this.authHttp.post(url, {})
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }

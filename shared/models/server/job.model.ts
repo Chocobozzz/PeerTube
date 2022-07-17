@@ -26,6 +26,7 @@ export type JobType =
   | 'move-to-object-storage'
   | 'video-studio-edition'
   | 'video-channels-sync'
+  | 'video-channel-import'
 
 export interface Job {
   id: number
@@ -217,4 +218,9 @@ export type VideoStudioTaskPayload =
 export interface VideoStudioEditionPayload {
   videoUUID: string
   tasks: VideoStudioTaskPayload[]
+}
+
+export interface VideoChannelImportPayload {
+  externalChannelUrl: string
+  videoChannelId: number
 }

@@ -159,7 +159,8 @@ const JOB_ATTEMPTS: {[id in JobType]: number} = {
   'video-studio-edition': 1,
   'manage-video-torrent': 1,
   'move-to-object-storage': 3,
-  'video-channels-sync': 1
+  'video-channels-sync': 1,
+  'video-channel-import': 3
 }
 // Excluded keys are jobs that can be configured by admins
 const JOB_CONCURRENCY: {[id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number} = {
@@ -179,7 +180,8 @@ const JOB_CONCURRENCY: {[id in Exclude<JobType, 'video-transcoding' | 'video-imp
   'video-studio-edition': 1,
   'manage-video-torrent': 1,
   'move-to-object-storage': 1,
-  'video-channels-sync': 1
+  'video-channels-sync': 1,
+  'video-channel-import': 1
 }
 const JOB_TTL: {[id in JobType]: number} = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -200,7 +202,8 @@ const JOB_TTL: {[id in JobType]: number} = {
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
   'manage-video-torrent': 1000 * 3600 * 3, // 3 hours
   'move-to-object-storage': 1000 * 60 * 60 * 3, // 3 hours
-  'video-channels-sync': 1000 * 60 * 60 * 4 // 4 hours
+  'video-channels-sync': 1000 * 60 * 60 * 4, // 4 hours
+  'video-channel-import': 1000 * 60 * 60 * 4 // 4 hours
 }
 const REPEAT_JOBS: {[id in JobType]?: EveryRepeatOptions | CronRepeatOptions} = {
   'videos-views-stats': {
@@ -463,6 +466,8 @@ const VIDEO_PRIVACIES: {[id in VideoPrivacy]: string} = {
   [VideoPrivacy.PRIVATE]: 'Private',
   [VideoPrivacy.INTERNAL]: 'Internal'
 }
+
+const VIDEO_CHANNEL_MAX_SYNC = 3
 
 const VIDEO_STATES: {[id in VideoState]: string} = {
   [VideoState.PUBLISHED]: 'Published',
@@ -994,6 +999,7 @@ export {
   VIDEO_LANGUAGES,
   VIDEO_PRIVACIES,
   VIDEO_LICENCES,
+  VIDEO_CHANNEL_MAX_SYNC,
   VIDEO_STATES,
   WORKER_THREADS,
   VIDEO_RATE_TYPES,
