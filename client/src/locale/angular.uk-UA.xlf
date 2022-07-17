@@ -5568,7 +5568,7 @@
       </trans-unit>
       <trans-unit id="4249062553881932496" datatype="html">
         <source>You cannot change the server configuration because it's managed externally.</source>
-        <target state="new"> You cannot change the server configuration because it's managed externally. </target>
+        <target state="translated">Ви не можете змінити конфігурацію сервера, оскільки ним керують зовні.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">85,87</context>
