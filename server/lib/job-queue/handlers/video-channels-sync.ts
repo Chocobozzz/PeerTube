@@ -36,6 +36,10 @@ type ChannelSyncInfo = {
 const waitSecs = (timeout: number) => new Promise(resolve => setTimeout(resolve, timeout * 1000))
 
 
+function formatDateForYoutubeDl(date: Date) {
+  return `${date.getFullYear()}${date.getMonth()+1}${date.getDate()}`
+}
+
 export async function processVideoChannelsSync () {
   logger.debug('Running processVideoChannelsSync')
   const serverConfig = await ServerConfigManager.Instance.getServerConfig()
@@ -48,11 +52,14 @@ export async function processVideoChannelsSync () {
 
   for (const sync of syncs) {
     try {
+      const syncCreationDate = sync.createdAt
+      // Format
       logger.info(`Starting synchronizing "${sync.VideoChannel.name}" with external channel "${sync.externalChannelUrl}"`)
       const { errors, successes, alreadyImported } = await synchronizeChannel(sync.VideoChannel, sync.externalChannelUrl, {
         youtubeDL,
         secondsToWait: 5,
-        lastVideosCount: VIDEO_CHANNEL_MAX_SYNC
+        lastVideosCount: VIDEO_CHANNEL_MAX_SYNC,
+        after: formatDateForYoutubeDl(syncCreationDate)
       })
       if (errors > 0) {
         logger.error(`Finished synchronizing "${sync.VideoChannel.name}" with failures` +
@@ -103,8 +110,9 @@ type SynchronizeChannelOptions = {
   youtubeDL: YoutubeDLCLI
   secondsToWait: number
   lastVideosCount?: number
+  after?: string
 }
-async function synchronizeChannel (channel: VideoChannelModel, externalChannelUrl: string, { youtubeDL, secondsToWait, lastVideosCount }: SynchronizeChannelOptions): Promise<ChannelSyncInfo> {
+async function synchronizeChannel (channel: VideoChannelModel, externalChannelUrl: string, { youtubeDL, secondsToWait, lastVideosCount, after }: SynchronizeChannelOptions): Promise<ChannelSyncInfo> {
   const result: ChannelSyncInfo = {
     total: VIDEO_CHANNEL_MAX_SYNC,
     errors: 0,
@@ -122,25 +130,30 @@ async function synchronizeChannel (channel: VideoChannelModel, externalChannelUr
     processOptions,
     additionalYoutubeDLArgs,
   })
-  const targetUrls: string[] = (await Promise.all(channelInfo.map(async video => {
-    const targetUrl = video['webpage_url']
-    const imported = await VideoImportModel.urlAlreadyImported(user.id, targetUrl)
-    return imported ? [] : [ targetUrl ]
-  }))).flat()
-
-  result.alreadyImported = VIDEO_CHANNEL_MAX_SYNC - targetUrls.length
+  const targetUrls: string[] = (await Promise.all(
+    channelInfo.map(async video => {
+      if (after && video['upload_date'] <= after) {
+        return []
+      }
+      return video['webpage_url']
+    })
+  )).flat()
 
   await waitSecs(secondsToWait)
 
   for (const targetUrl of targetUrls) {
     try {
       // TODO retry pour l'import d'une chaîne ?
-      await addYoutubeDLImport({
-        user,
-        channel,
-        targetUrl
-      })
-      result.successes += 1
+      if (!await VideoImportModel.urlAlreadyImported(user.id, targetUrl)) {
+        await addYoutubeDLImport({
+          user,
+          channel,
+          targetUrl
+        })
+        result.successes += 1
+      } else {
+        result.alreadyImported += 1
+      }
     } catch (ex) {
       result.errors += 1
       logger.error(`An error occured while importing ${targetUrl}: ${ex.stack}`)

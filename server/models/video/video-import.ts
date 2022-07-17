@@ -167,6 +167,9 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
       where: {
         userId,
         targetUrl,
+        videoId: {
+          [Op.not]: null
+        },
         state: {
           [Op.in]: [ VideoImportState.PENDING, VideoImportState.PROCESSING, VideoImportState.SUCCESS ]
         }
