@@ -1,5 +1,10 @@
-const advertiseDoNotTrack = (_, res, next) => {
-  res.setHeader('Tk', 'N')
+import * as express from 'express'
+
+const advertiseDoNotTrack = (_, res: express.Response, next: express.NextFunction) => {
+  if (!res.headersSent) {
+    res.setHeader('Tk', 'N')
+  }
+
   return next()
 }
 
