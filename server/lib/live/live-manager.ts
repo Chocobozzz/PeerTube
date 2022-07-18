@@ -483,6 +483,8 @@ class LiveManager {
 
   private async saveEndingSession (videoId: number, error: LiveVideoError | null) {
     const liveSession = await VideoLiveSessionModel.findCurrentSessionOf(videoId)
+    if (!liveSession) return
+
     liveSession.endDate = new Date()
     liveSession.error = error
 
