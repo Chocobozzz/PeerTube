@@ -3,7 +3,7 @@ import { getCheckbox, selectCustomSelect } from '../utils'
 
 export class VideoUploadPage {
   async navigateTo () {
-    const publishButton = await $('.header .publish-button')
+    const publishButton = await $('.root-header .publish-button')
 
     await publishButton.waitForClickable()
     await publishButton.click()

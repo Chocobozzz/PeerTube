@@ -15,7 +15,7 @@
   width: 100%;
 }
 
-.header {
+.root-header {
   height: $header-height;
   position: fixed;
   top: 0;
@@ -49,7 +49,7 @@
   }
 }
 
-.header-right {
+.root-header-right {
   height: $header-height;
   display: flex;
   align-items: center;
