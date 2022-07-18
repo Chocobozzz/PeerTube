@@ -75,7 +75,7 @@ async function doRefresh <T extends MActorFull | MActorAccountChannelId> (option
 function getActorUrl (actor: MActorFull) {
   return getUrlFromWebfinger(actor.preferredUsername + '@' + actor.getHost())
     .catch(err => {
-      logger.warn('Cannot get actor URL from webfinger, keeping the old one.', err)
+      logger.warn('Cannot get actor URL from webfinger, keeping the old one.', { err })
       return actor.url
     })
 }

@@ -127,7 +127,7 @@ export class ThumbnailModel extends Model<Partial<AttributesOnly<ThumbnailModel>
 
     // Don't block the transaction
     instance.removeThumbnail()
-            .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, err))
+            .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, { err }))
   }
 
   static loadByFilename (filename: string, thumbnailType: ThumbnailType): Promise<MThumbnail> {
