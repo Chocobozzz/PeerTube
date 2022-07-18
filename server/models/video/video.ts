@@ -1005,7 +1005,9 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
         order: getVideoSort(sort),
         include: [
           {
-            model: VideoChannelModel,
+            model: forCount
+              ? VideoChannelModel.unscoped()
+              : VideoChannelModel,
             required: true,
             where: channelWhere,
             include: [
