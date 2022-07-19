@@ -65,13 +65,3 @@ my-markdown-textarea {
     width: 100%;
   }
 }
-
-.disabled-checkbox-extra,
-.disallowed-sync my-peertube-checkbox {
-  &,
-  ::ng-deep label {
-    opacity: .5;
-    pointer-events: none;
-  }
-}
-

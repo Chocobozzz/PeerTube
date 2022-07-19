@@ -22,7 +22,6 @@ import { VideoChannelEdit } from './video-channel-edit'
 export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnInit, AfterViewInit, OnDestroy {
   error: string
   videoChannel: VideoChannel
-  isQuotaPositive = false
 
   private paramsSub: Subscription
   private oldSupportField: string
@@ -49,9 +48,7 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
       'display-name': VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
       description: VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
       support: VIDEO_CHANNEL_SUPPORT_VALIDATOR,
-      bulkVideosSupportUpdate: null,
-      enableSync: null,
-      isUploadAllowed: null
+      bulkVideosSupportUpdate: null
     })
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
@@ -70,14 +67,6 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
               'display-name': videoChannelToUpdate.displayName,
               description: videoChannelToUpdate.description,
               support: videoChannelToUpdate.support
-            })
-            this.userService.getUser(videoChannelToUpdate.ownerAccount.userId).subscribe({
-              next: userInfo => {
-                this.isQuotaPositive = userInfo.videoQuota !== 0
-              },
-              error: err => {
-                this.error = err.message
-              }
             })
           },
 
@@ -125,62 +114,62 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
 
   onAvatarChange (formData: FormData) {
     this.videoChannelService.changeVideoChannelImage(this.videoChannel.name, formData, 'avatar')
-      .subscribe({
-        next: data => {
-          this.notifier.success($localize`Avatar changed.`)
+        .subscribe({
+          next: data => {
+            this.notifier.success($localize`Avatar changed.`)
 
-          this.videoChannel.updateAvatar(data.avatars)
-        },
+            this.videoChannel.updateAvatar(data.avatars)
+          },
 
-        error: (err: HttpErrorResponse) => genericUploadErrorHandler({
-          err,
-          name: $localize`avatar`,
-          notifier: this.notifier
+          error: (err: HttpErrorResponse) => genericUploadErrorHandler({
+            err,
+            name: $localize`avatar`,
+            notifier: this.notifier
+          })
         })
-      })
   }
 
   onAvatarDelete () {
     this.videoChannelService.deleteVideoChannelImage(this.videoChannel.name, 'avatar')
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`Avatar deleted.`)
+                            .subscribe({
+                              next: () => {
+                                this.notifier.success($localize`Avatar deleted.`)
 
-          this.videoChannel.resetAvatar()
-        },
+                                this.videoChannel.resetAvatar()
+                              },
 
-        error: err => this.notifier.error(err.message)
-      })
+                              error: err => this.notifier.error(err.message)
+                            })
   }
 
   onBannerChange (formData: FormData) {
     this.videoChannelService.changeVideoChannelImage(this.videoChannel.name, formData, 'banner')
-      .subscribe({
-        next: data => {
-          this.notifier.success($localize`Banner changed.`)
+        .subscribe({
+          next: data => {
+            this.notifier.success($localize`Banner changed.`)
 
-          this.videoChannel.updateBanner(data.banners)
-        },
+            this.videoChannel.updateBanner(data.banners)
+          },
 
-        error: (err: HttpErrorResponse) => genericUploadErrorHandler({
-          err,
-          name: $localize`banner`,
-          notifier: this.notifier
+          error: (err: HttpErrorResponse) => genericUploadErrorHandler({
+            err,
+            name: $localize`banner`,
+            notifier: this.notifier
+          })
         })
-      })
   }
 
   onBannerDelete () {
     this.videoChannelService.deleteVideoChannelImage(this.videoChannel.name, 'banner')
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`Banner deleted.`)
+                            .subscribe({
+                              next: () => {
+                                this.notifier.success($localize`Banner deleted.`)
 
-          this.videoChannel.resetBanner()
-        },
+                                this.videoChannel.resetBanner()
+                              },
 
-        error: err => this.notifier.error(err.message)
-      })
+                              error: err => this.notifier.error(err.message)
+                            })
   }
 
   get maxAvatarSize () {
@@ -204,26 +193,4 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
 
     return this.oldSupportField !== this.form.value['support']
   }
-
-  getDisallowedSync () {
-    return { 'disallowed-sync': !this.isUploadAllowed }
-  }
-
-  getDisabledSync () {
-    // Prevent doubling opacity of checkbox extras if
-    // upload is not allowed
-    if (this.isUploadAllowed()) {
-      const enableSync = this.form.value['enableSync'] === true
-      return { 'disabled-checkbox-extra': !enableSync }
-    }
-  }
-
-  isUploadAllowed (): boolean {
-    return this.isQuotaPositive && this.isHttpUploadAllowed()
-  }
-
-  isHttpUploadAllowed (): boolean {
-    return this.serverConfig.import.videos.http.enabled
-  }
-
 }
