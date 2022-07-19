@@ -159,7 +159,7 @@ export class NodeJSObserversBuilder {
 
     this.meter.createObservableGauge('nodejs_active_requests_total', {
       description: 'Total number of active libuv requests.'
-    }).addCallback(async observableResult => {
+    }).addCallback(observableResult => {
       const requests = (process as any)._getActiveRequests()
 
       observableResult.observe(requests.length)
