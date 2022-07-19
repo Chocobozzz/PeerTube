@@ -4,8 +4,7 @@ import { PrometheusExporter } from '@opentelemetry/exporter-prometheus'
 import { MeterProvider } from '@opentelemetry/sdk-metrics-base'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
-import { JobQueue } from '../job-queue'
-import { StatsObserverBuilder } from './metric-helpers'
+import { JobQueueObserversBuilder, NodeJSObserversBuilder, StatsObserversBuilder } from './metric-helpers'
 
 class OpenTelemetryMetrics {
 
@@ -44,40 +43,16 @@ class OpenTelemetryMetrics {
 
     this.meter = metrics.getMeter('default')
 
-    this.buildMemoryObserver()
     this.buildRequestObserver()
-    this.buildJobQueueObserver()
 
-    const statsObserverBuilder = new StatsObserverBuilder(this.meter)
-    statsObserverBuilder.buildObservers()
-  }
+    const nodeJSObserversBuilder = new NodeJSObserversBuilder(this.meter, provider)
+    nodeJSObserversBuilder.buildObservers()
 
-  private buildMemoryObserver () {
-    this.meter.createObservableGauge('nodejs_memory_usage_bytes', {
-      description: 'Memory'
-    }).addCallback(observableResult => {
-      const current = process.memoryUsage()
+    const jobQueueObserversBuilder = new JobQueueObserversBuilder(this.meter)
+    jobQueueObserversBuilder.buildObservers()
 
-      observableResult.observe(current.heapTotal, { memoryType: 'heapTotal' })
-      observableResult.observe(current.heapUsed, { memoryType: 'heapUsed' })
-      observableResult.observe(current.arrayBuffers, { memoryType: 'arrayBuffers' })
-      observableResult.observe(current.external, { memoryType: 'external' })
-      observableResult.observe(current.rss, { memoryType: 'rss' })
-    })
-  }
-
-  private buildJobQueueObserver () {
-    this.meter.createObservableGauge('peertube_job_queue_total', {
-      description: 'Total jobs in the PeerTube job queue'
-    }).addCallback(async observableResult => {
-      const stats = await JobQueue.Instance.getStats()
-
-      for (const { jobType, counts } of stats) {
-        for (const state of Object.keys(counts)) {
-          observableResult.observe(counts[state], { jobType, state })
-        }
-      }
-    })
+    const statsObserversBuilder = new StatsObserversBuilder(this.meter)
+    statsObserversBuilder.buildObservers()
   }
 
   private buildRequestObserver () {
