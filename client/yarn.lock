@@ -1834,10 +1834,10 @@
     sha.js "^2.4.11"
     simple-peer "^9.11.1"
 
-"@peertube/p2p-media-loader-hlsjs@^1.0.10":
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/@peertube/p2p-media-loader-hlsjs/-/p2p-media-loader-hlsjs-1.0.10.tgz#2381841f7390761458f581cdfd226acbc8c8fe09"
-  integrity sha512-a4dSHmFf3VQTlfwEPtCN0q0i5TbJFGgd8Jbr96nIYZWr+SAaBBYFi+Q9Az5ksJovMSXzNLb0L5h6dGcS0eZOrg==
+"@peertube/p2p-media-loader-hlsjs@^1.0.11":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@peertube/p2p-media-loader-hlsjs/-/p2p-media-loader-hlsjs-1.0.11.tgz#1dba2e020ea7df766c5e951839811f21ffeda542"
+  integrity sha512-6BbcTRK/Dfaxq7XvWZU0sgLKiyVdaW9CWKMpNxnYjN3YGkKrXgJpY7rEnyydzaCxdVMQ5/qXKil/nOdf1aZ3BA==
   dependencies:
     debug "^4.3.4"
     events "^3.3.0"
