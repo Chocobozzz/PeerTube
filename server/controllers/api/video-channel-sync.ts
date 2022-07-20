@@ -1,6 +1,5 @@
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelSyncAuditView } from '@server/helpers/audit-logger'
 import { logger } from '@server/helpers/logger'
-import { getFormattedObjects } from '@server/helpers/utils'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { JobQueue } from '@server/lib/job-queue'
 import {
@@ -11,9 +10,6 @@ import {
   ensureSyncExists,
   ensureSyncIsEnabled,
   ensureSyncTargetChannelExists,
-  setDefaultPagination,
-  setDefaultSort,
-  videoChannelSyncsSortValidator,
   videoChannelSyncValidator,
   videoChannelSyncRemoveValidator,
   syncChannelValidator
@@ -25,14 +21,6 @@ import express from 'express'
 
 const videoChannelSyncRouter = express.Router()
 const auditLogger = auditLoggerFactory('channels')
-
-videoChannelSyncRouter.get('/me',
-  authenticate,
-  videoChannelSyncsSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  asyncMiddleware(listVideoChannelSyncs)
-)
 
 videoChannelSyncRouter.post('/',
   authenticate,
@@ -65,22 +53,10 @@ export { videoChannelSyncRouter }
 
 // ---------------------------------------------------------------------------
 
-async function listVideoChannelSyncs (req: express.Request, res: express.Response) {
-  const user = res.locals.oauth.token.User
-  const resultList = await VideoChannelSyncModel.listByAccountForAPI({
-    accountId: user.Account.id,
-    start: req.query.start,
-    count: req.query.count,
-    sort: req.query.sort
-  })
-
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
-}
-
 async function createVideoChannelSync (req: express.Request, res: express.Response) {
   const syncCreated = new VideoChannelSyncModel({
     externalChannelUrl: req.body.externalChannelUrl,
-    videoChannel: req.body.videoChannel,
+    videoChannelId: req.body.videoChannelId,
     state: VideoChannelSyncState.SYNCED
   })
   await sequelizeTypescript.transaction(async t => {
@@ -116,7 +92,7 @@ async function removeVideoChannelSync (req: express.Request, res: express.Respon
 }
 
 function syncChannel (req: express.Request, res: express.Response) {
-  const { externalChannelUrl, videoChannel: videoChannelId } = res.locals.videoChannelSync
+  const { externalChannelUrl, videoChannelId } = res.locals.videoChannelSync
   JobQueue.Instance.createJob({
     type: 'video-channel-import',
     payload: {

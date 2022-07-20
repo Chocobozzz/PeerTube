@@ -12,7 +12,7 @@ import {
   MUser,
   MVideoThumbnail
 } from '@server/types/models'
-import { ThumbnailType, VideoChannelImportPayload, VideoImportState, VideoPrivacy, VideoState } from '@shared/models'
+import { ThumbnailType, VideoChannelImportPayload, VideoChannelSyncState, VideoImportState, VideoPrivacy, VideoState } from '@shared/models'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { JobQueue } from '../job-queue'
 import { updateVideoMiniatureFromUrl } from '@server/lib/thumbnail'
@@ -53,6 +53,8 @@ export async function processVideoChannelsSync () {
   for (const sync of syncs) {
     try {
       const syncCreationDate = sync.createdAt
+      sync.state = VideoChannelSyncState.PROCESSING
+      await sync.save()
       // Format
       logger.info(`Starting synchronizing "${sync.VideoChannel.name}" with external channel "${sync.externalChannelUrl}"`)
       const { errors, successes, alreadyImported } = await synchronizeChannel(sync.VideoChannel, sync.externalChannelUrl, {
@@ -62,12 +64,15 @@ export async function processVideoChannelsSync () {
         after: formatDateForYoutubeDl(syncCreationDate)
       })
       if (errors > 0) {
+        sync.state = VideoChannelSyncState.FAILED
         logger.error(`Finished synchronizing "${sync.VideoChannel.name}" with failures` +
           ` (failures: ${errors}, imported: ${successes}, ignored because already imported: ${alreadyImported}). Please check the logs.`)
       } else {
+        sync.state = VideoChannelSyncState.SYNCED
         logger.info(`Finished synchronizing "${sync.VideoChannel.name}" successfully` +
           ` (imported: ${successes}, ignored because already imported: ${alreadyImported})`)
       }
+      await sync.save()
     } catch (ex) {
       logger.error(`Failed to synchronize channel ${sync.VideoChannel.name}: ${ex.stack}`)
     }

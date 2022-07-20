@@ -46,12 +46,13 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
   @CreatedAt
   createdAt: Date
 
+  // We have no use of this field
   @UpdatedAt
   updatedAt: Date
 
   @ForeignKey(() => VideoChannelModel)
   @Column
-  videoChannel: number
+  videoChannelId: number
 
   @BelongsTo(() => VideoChannelModel, {
     foreignKey: {
@@ -62,7 +63,7 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
   VideoChannel: VideoChannelModel
 
   @AllowNull(false)
-  @Default(null)
+  @Default(VideoChannelSyncState.WAITING_FIRST_RUN)
   @Is('VideoChannelSyncState', value => throwIfNotValid(value, isVideoChannelSyncStateValid, 'state'))
   @Column
   state: VideoChannelSyncState
@@ -111,7 +112,6 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
   toFormattedJSON (this: MChannelSyncFormattable): VideoChannelSync {
     return {
       id: this.id,
-      updatedAt: this.updatedAt.toString(),
       state: {
         id: this.state,
         label: VIDEO_CHANNEL_SYNC_STATE[this.state]
@@ -119,7 +119,7 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
       externalChannelUrl: this.externalChannelUrl,
       createdAt: this.createdAt.toString(),
       channel: this.VideoChannel?.toFormattedSummaryJSON(),
-      channelId: this.videoChannel
+      videoChannelId: this.videoChannelId
     }
   }
 

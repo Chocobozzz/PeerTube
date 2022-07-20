@@ -8,8 +8,7 @@ export interface VideoChannelSync {
   externalChannelUrl: string
 
   createdAt: string
-  updatedAt: string
   channel?: VideoChannelSummary
-  channelId: number
+  videoChannelId: number
   state: VideoConstant<VideoChannelSyncState>
 }

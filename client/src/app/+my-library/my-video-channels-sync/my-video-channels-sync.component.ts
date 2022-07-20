@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core'
-import { Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { AuthService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { DropdownAction, VideoChannelSyncService } from '@app/shared/shared-main'
 import { HTMLServerConfig } from '@shared/models/server'
 import { VideoChannelSync } from '@shared/models/videos'
 import { SortMeta } from 'primeng/api'
+import { mergeMap } from 'rxjs'
 
 @Component({
   templateUrl: './my-video-channels-sync.component.html',
@@ -21,7 +22,8 @@ export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
   constructor (
     private videoChannelsSyncService: VideoChannelSyncService,
     private serverService: ServerService,
-    private notifier: Notifier
+    private notifier: Notifier,
+    private authService: AuthService
   ) {
     super()
   }
@@ -42,10 +44,15 @@ export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
 
   protected reloadData (): void {
     this.error = undefined
-    this.videoChannelsSyncService.getSyncs({
-      sort: this.sort,
-      pagination: this.pagination
-    })
+    this.authService.userInformationLoaded
+      .pipe(mergeMap(() => {
+        const user = this.authService.getUser()
+        return this.videoChannelsSyncService.listAccountVideoChannelsSyncs({
+          sort: this.sort,
+          account: user.account,
+          pagination: this.pagination
+        })
+      }))
         .subscribe({
           next: (res) => {
             this.channelsSync = res.data

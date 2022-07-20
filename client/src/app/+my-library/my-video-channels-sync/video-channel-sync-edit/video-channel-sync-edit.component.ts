@@ -58,7 +58,7 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
     const body = this.form.value
     const videoChannelSyncCreate: VideoChannelSyncCreate = {
       externalChannelUrl: body.externalChannelUrl,
-      videoChannel: body['video-channel']
+      videoChannelId: body['video-channel']
     }
     const importExistingVideos = body['existing-video-strategy'] === 'import'
     this.videoChannelSyncService.createSync(videoChannelSyncCreate)

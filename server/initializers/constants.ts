@@ -491,9 +491,10 @@ const VIDEO_IMPORT_STATES: {[id in VideoImportState]: string} = {
 }
 
 const VIDEO_CHANNEL_SYNC_STATE: {[id in VideoChannelSyncState]: string} = {
-  [VideoChannelSyncState.FAILED]: 'Failed',
-  [VideoChannelSyncState.SYNCED]: 'Pending',
-  [VideoChannelSyncState.WARNING]: 'Warning'
+  [VideoChannelSyncState.WAITING_FIRST_RUN]: 'Waiting for the first run',
+  [VideoChannelSyncState.PROCESSING]: 'Processing',
+  [VideoChannelSyncState.SYNCED]: 'Synchronized',
+  [VideoChannelSyncState.FAILED]: 'Failed'
 }
 
 const ABUSE_STATES: {[id in AbuseState]: string} = {

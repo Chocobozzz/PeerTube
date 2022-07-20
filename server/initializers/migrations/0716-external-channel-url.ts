@@ -17,7 +17,7 @@ async function up (utils: {
       type: Sequelize.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.EXTERNAL_CHANNEL_URL.max),
       allowNull: false
     },
-    videoChannel: {
+    videoChannelId: {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {

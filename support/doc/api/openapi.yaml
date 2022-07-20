@@ -3050,7 +3050,7 @@ paths:
       tags:
         - Video Channels
       responses:
-        '204':
+        '200':
           description: successful operation
           content:
             application/json:
@@ -3287,6 +3287,62 @@ paths:
       responses:
         '204':
           description: successful operation
+
+  '/video-channels-syncs/':
+    post:
+      summary: Create a synchronization for a video channels
+      operationId: addVideoChannelSync
+      security:
+        - OAuth2: []
+      tags:
+        - Video Channels Synchronizations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoChannelSyncCreate'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  videoChannelSync:
+                    type: object
+                    properties:
+                      id:
+                        $ref: '#/components/schemas/id'
+
+  '/video-channels-syncs/{channelSyncId}':
+    delete:
+      summary: Delete a video channel synchronization
+      operationId: delVideoChannelSync
+      security:
+        - OAuth2: []
+      tags:
+        - Video Channels Synchronizations
+      parameters:
+        - $ref: '#/components/parameters/channelSyncId'
+      responses:
+        '204':
+          description: successful operation
+
+  '/video-channels-syncs/syncChannel/{channelSyncId}':
+    post:
+      summary: Triggers the channel synchronization job, fetching all the videos from the remote channel
+      operationId: triggerVideoChannelSync
+      security:
+        - OAuth2: []
+      tags:
+        - Video Channels Synchronizations
+      parameters:
+        - $ref: '#/components/parameters/channelSyncId'
+      responses:
+        '204':
+          description: successful operation
+
 
   /video-playlists/privacies:
     get:
@@ -3658,6 +3714,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoChannelList'
+
+  '/accounts/{name}/video-channels-syncs':
+    get:
+      summary: List the synchronizations of video channels of an account
+      tags:
+        - Video Channels
+        - Video Channels Synchronizations
+        - Accounts
+      parameters:
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoChannelSyncList'
 
   '/accounts/{name}/ratings':
     get:
@@ -5141,6 +5217,13 @@ components:
       schema:
         type: string
         example: my_username | my_username@example.com
+    channelSyncId:
+      name: channelSyncId
+      in: path
+      required: true
+      description: Channel Sync id
+      schema:
+        $ref: '#/components/schemas/Abuse/properties/id'
     subscriptionHandle:
       name: subscriptionHandle
       in: path
@@ -7476,6 +7559,7 @@ components:
                   type: integer
                 uuid:
                   $ref: '#/components/schemas/UUIDv4'
+
     VideoChannelCreate:
       allOf:
         - $ref: '#/components/schemas/VideoChannel'
@@ -7506,6 +7590,49 @@ components:
               - $ref: '#/components/schemas/VideoChannel'
               - $ref: '#/components/schemas/Actor'
 
+    VideoChannelSync:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        state:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 2
+            label:
+              type: string
+              example: PROCESSING
+        videoChannelId:
+          type: integer
+        externalChannelUrl:
+          type: string
+          example: 'https://youtube.com/c/UC_myfancychannel'
+        createdAt:
+          type: string
+          format: date-time
+        channel:
+          $ref: '#/components/schemas/VideoChannel'
+    VideoChannelSyncList:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 1
+        data:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/VideoChannelSync'
+    VideoChannelSyncCreate:
+      type: object
+      properties:
+        externalChannelUrl:
+          type: string
+          example: https://youtube.com/c/UC_myfancychannel
+        videoChannelId:
+          $ref: '#/components/schemas/id'
     MRSSPeerLink:
       type: object
       xml:

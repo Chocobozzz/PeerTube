@@ -9,4 +9,4 @@ export type MChannelSync = VideoChannelSyncModel
 export type MChannelSyncFormattable =
   FunctionProperties<MChannelSync> &
   Use<'VideoChannel', MChannelFormattable> &
-  Pick<MChannelSync, 'id' | 'videoChannel' | 'externalChannelUrl' | 'state' | 'createdAt' | 'updatedAt'>
+  Pick<MChannelSync, 'id' | 'videoChannelId' | 'externalChannelUrl' | 'state' | 'createdAt'>

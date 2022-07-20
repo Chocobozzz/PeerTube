@@ -6,23 +6,28 @@ import { VideoChannelSync, VideoChannelSyncCreate } from '@shared/models/videos'
 import { SortMeta } from 'primeng/api'
 import { catchError, Observable } from 'rxjs'
 import { environment } from 'src/environments/environment'
+import { Account, AccountService } from '../account'
 
 @Injectable({
   providedIn: 'root'
 })
 export class VideoChannelSyncService {
-  static BASE_VIDEO_CHANNEL_URL = environment.apiUrl + '/api/v1/video-channels-sync'
+  static BASE_VIDEO_CHANNEL_URL = environment.apiUrl + '/api/v1/video-channels-syncs'
   constructor (
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private restService: RestService
   ) { }
 
-  getSyncs (parameters: { sort: SortMeta, pagination: RestPagination }): Observable<ResultList<VideoChannelSync>> {
-    const { pagination, sort } = parameters
+  listAccountVideoChannelsSyncs (parameters: {
+    sort: SortMeta
+    pagination: RestPagination
+    account: Account
+  }): Observable<ResultList<VideoChannelSync>> {
+    const { pagination, sort, account } = parameters
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
-    const url = VideoChannelSyncService.BASE_VIDEO_CHANNEL_URL + '/me'
+    const url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-channels-syncs'
     return this.authHttp.get<ResultList<VideoChannelSync>>(url, { params })
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }

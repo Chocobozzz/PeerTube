@@ -21,7 +21,7 @@ export const ensureSyncIsEnabled = async (req: express.Request, res: express.Res
 
 export const videoChannelSyncValidator = [
   body('externalChannelUrl').custom(isUrlValid).withMessage('Should have a valid channel url'),
-  body('videoChannel').isInt().withMessage('Should have a valid video channel id'),
+  body('videoChannelId').isInt().withMessage('Should have a valid video channel id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsAdd parameters', { parameters: req.body })
@@ -29,7 +29,7 @@ export const videoChannelSyncValidator = [
     if (areValidationErrors(req, res)) return
 
     const body: VideoChannelSyncCreate = req.body
-    if (!await doesVideoChannelIdExist(body.videoChannel, res)) {
+    if (!await doesVideoChannelIdExist(body.videoChannelId, res)) {
       return res.fail({
         status: HttpStatusCode.NOT_FOUND_404,
         message: 'Video Channel not found'
@@ -59,7 +59,7 @@ export const ensureSyncExists = [
 export const ensureSyncTargetChannelExists = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const sync = res.locals.videoChannelSync
-    if (!await doesVideoChannelIdExist(sync.videoChannel, res)) {
+    if (!await doesVideoChannelIdExist(sync.videoChannelId, res)) {
       return
     }
     await sync.reload({ include: VideoChannelModel })
