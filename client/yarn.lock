@@ -1823,10 +1823,10 @@
     node-addon-api "^3.2.1"
     node-gyp-build "^4.3.0"
 
-"@peertube/p2p-media-loader-core@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@peertube/p2p-media-loader-core/-/p2p-media-loader-core-1.0.7.tgz#605a6bd248dc95cf8e73a65e37183dcb9f4a795a"
-  integrity sha512-J5VQBaS/L6b0yVNIBLnES4WcsHp4Z6IrAuYNIgG3iC5UcejeA1YHftZ/dAOlzZXQx77qYM7OJtmYAUsQ+2Pd4g==
+"@peertube/p2p-media-loader-core@^1.0.13", "@peertube/p2p-media-loader-core@^1.0.8":
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/@peertube/p2p-media-loader-core/-/p2p-media-loader-core-1.0.13.tgz#36744a291b69c001b2562c1a93017979f8534ff8"
+  integrity sha512-ArSAaeuxwwBAG0Xd3Gj0TzKObLfJFYzHz9+fREvmUf+GZQEG6qGwWmrdVWL6xjPiEuo6LdFeCOnHSQzAbj/ptg==
   dependencies:
     bittorrent-tracker "^9.19.0"
     debug "^4.3.4"
@@ -1834,11 +1834,12 @@
     sha.js "^2.4.11"
     simple-peer "^9.11.1"
 
-"@peertube/p2p-media-loader-hlsjs@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@peertube/p2p-media-loader-hlsjs/-/p2p-media-loader-hlsjs-1.0.11.tgz#1dba2e020ea7df766c5e951839811f21ffeda542"
-  integrity sha512-6BbcTRK/Dfaxq7XvWZU0sgLKiyVdaW9CWKMpNxnYjN3YGkKrXgJpY7rEnyydzaCxdVMQ5/qXKil/nOdf1aZ3BA==
+"@peertube/p2p-media-loader-hlsjs@^1.0.13":
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/@peertube/p2p-media-loader-hlsjs/-/p2p-media-loader-hlsjs-1.0.13.tgz#5305e2008041d01850802544d1c49298f79dd67a"
+  integrity sha512-2BO2oaRsSHEhLkgi2iw1r4n1Yqq1EnyoOgOZccPDqjmHUsZSV/wNrno8WYr6LsleudrHA26Imu57hVD1jDx7lg==
   dependencies:
+    "@peertube/p2p-media-loader-core" "^1.0.8"
     debug "^4.3.4"
     events "^3.3.0"
     m3u8-parser "^4.7.1"
@@ -6211,10 +6212,10 @@ he@1.2.0, he@^1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
-hls.js@^1.0.7:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.1.5.tgz#923a8a8cfdf09542578696d47c8ae435da981ffd"
-  integrity sha512-mQX5TSNtJEzGo5HPpvcQgCu+BWoKDQM6YYtg/KbgWkmVAcqOCvSTi0SuqG2ZJLXxIzdnFcKU2z7Mrw/YQWhPOA==
+hls.js@1.2.0-beta.2:
+  version "1.2.0-beta.2"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.2.0-beta.2.tgz#4a23f854c3bd69e86353e5570433637297372b4b"
+  integrity sha512-2+eruNX25TfoO0RRtqdQrlbwbqpKSnJZdXvVHDDGaVfDRmAAcJ3pSIQrRCxIJCiXxu0wECO8qmcj6Qjcw7eOCQ==
 
 hosted-git-info@^2.1.4:
   version "2.8.9"
