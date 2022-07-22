@@ -8,6 +8,9 @@ export interface LiveVideoSession {
 
   error: LiveVideoError
 
+  saveReplay: boolean
+  endingProcessed: boolean
+
   replayVideo: {
     id: number
     uuid: string

@@ -206,6 +206,7 @@ describe('Save replay setting', function () {
       expect(session.endDate).to.exist
       expect(new Date(session.endDate)).to.be.above(sessionEndDateMin)
 
+      expect(session.saveReplay).to.be.false
       expect(session.error).to.not.exist
       expect(session.replayVideo).to.not.exist
     })
@@ -272,6 +273,11 @@ describe('Save replay setting', function () {
     it('Should correctly have saved the live and federated it after the streaming', async function () {
       this.timeout(30000)
 
+      const session = await servers[0].live.findLatestSession({ videoId: liveVideoUUID })
+      expect(session.endDate).to.not.exist
+      expect(session.endingProcessed).to.be.false
+      expect(session.saveReplay).to.be.true
+
       await stopFfmpeg(ffmpegCommand)
 
       await waitUntilLiveReplacedByReplayOnAllServers(servers, liveVideoUUID)
@@ -291,6 +297,8 @@ describe('Save replay setting', function () {
       expect(session.endDate).to.exist
 
       expect(session.error).to.not.exist
+      expect(session.saveReplay).to.be.true
+      expect(session.endingProcessed).to.be.true
 
       expect(session.replayVideo).to.exist
       expect(session.replayVideo.id).to.exist

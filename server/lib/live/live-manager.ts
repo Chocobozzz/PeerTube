@@ -475,7 +475,9 @@ class LiveManager {
   private saveStartingSession (videoLive: MVideoLiveVideo) {
     const liveSession = new VideoLiveSessionModel({
       startDate: new Date(),
-      liveVideoId: videoLive.videoId
+      liveVideoId: videoLive.videoId,
+      saveReplay: videoLive.saveReplay,
+      endingProcessed: false
     })
 
     return liveSession.save()

@@ -53,6 +53,14 @@ export class VideoLiveSessionModel extends Model<Partial<AttributesOnly<VideoLiv
   @Column
   error: LiveVideoError
 
+  @AllowNull(false)
+  @Column
+  saveReplay: boolean
+
+  @AllowNull(false)
+  @Column
+  endingProcessed: boolean
+
   @ForeignKey(() => VideoModel)
   @Column
   replayVideoId: number
@@ -144,6 +152,8 @@ export class VideoLiveSessionModel extends Model<Partial<AttributesOnly<VideoLiv
       endDate: this.endDate
         ? this.endDate.toISOString()
         : null,
+      endingProcessed: this.endingProcessed,
+      saveReplay: this.saveReplay,
       replayVideo,
       error: this.error
     }

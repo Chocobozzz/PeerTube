@@ -30,26 +30,36 @@ async function processVideoLiveEnding (job: Job) {
     logger.warn('Video live %d does not exist anymore. Cannot process live ending.', payload.videoId, lTags())
   }
 
-  const liveVideo = await VideoModel.load(payload.videoId)
+  const video = await VideoModel.load(payload.videoId)
   const live = await VideoLiveModel.loadByVideoId(payload.videoId)
   const liveSession = await VideoLiveSessionModel.load(payload.liveSessionId)
 
-  if (!liveVideo || !live || !liveSession) {
+  const permanentLive = live.permanentLive
+
+  if (!video || !live || !liveSession) {
     logError()
     return
   }
 
-  if (live.saveReplay !== true) {
-    return cleanupLiveAndFederate({ live, video: liveVideo, streamingPlaylistId: payload.streamingPlaylistId })
+  liveSession.endingProcessed = true
+  await liveSession.save()
+
+  if (liveSession.saveReplay !== true) {
+    return cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
   }
 
-  if (live.permanentLive) {
-    await saveReplayToExternalVideo({ liveVideo, liveSession, publishedAt: payload.publishedAt, replayDirectory: payload.replayDirectory })
+  if (permanentLive) {
+    await saveReplayToExternalVideo({
+      liveVideo: video,
+      liveSession,
+      publishedAt: payload.publishedAt,
+      replayDirectory: payload.replayDirectory
+    })
 
-    return cleanupLiveAndFederate({ live, video: liveVideo, streamingPlaylistId: payload.streamingPlaylistId })
+    return cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
   }
 
-  return replaceLiveByReplay({ liveVideo, live, liveSession, replayDirectory: payload.replayDirectory })
+  return replaceLiveByReplay({ video, liveSession, live, permanentLive, replayDirectory: payload.replayDirectory })
 }
 
 // ---------------------------------------------------------------------------
@@ -68,7 +78,7 @@ async function saveReplayToExternalVideo (options: {
 }) {
   const { liveVideo, liveSession, publishedAt, replayDirectory } = options
 
-  const video = new VideoModel({
+  const replayVideo = new VideoModel({
     name: `${liveVideo.name} - ${new Date(publishedAt).toLocaleString()}`,
     isLive: false,
     state: VideoState.TO_TRANSCODE,
@@ -88,63 +98,64 @@ async function saveReplayToExternalVideo (options: {
     channelId: liveVideo.channelId
   }) as MVideoWithAllFiles
 
-  video.Thumbnails = []
-  video.VideoFiles = []
-  video.VideoStreamingPlaylists = []
+  replayVideo.Thumbnails = []
+  replayVideo.VideoFiles = []
+  replayVideo.VideoStreamingPlaylists = []
 
-  video.url = getLocalVideoActivityPubUrl(video)
+  replayVideo.url = getLocalVideoActivityPubUrl(replayVideo)
 
-  await video.save()
+  await replayVideo.save()
 
-  liveSession.replayVideoId = video.id
+  liveSession.replayVideoId = replayVideo.id
   await liveSession.save()
 
   // If live is blacklisted, also blacklist the replay
   const blacklist = await VideoBlacklistModel.loadByVideoId(liveVideo.id)
   if (blacklist) {
     await VideoBlacklistModel.create({
-      videoId: video.id,
+      videoId: replayVideo.id,
       unfederated: blacklist.unfederated,
       reason: blacklist.reason,
       type: blacklist.type
     })
   }
 
-  await assignReplayFilesToVideo({ video, replayDirectory })
+  await assignReplayFilesToVideo({ video: replayVideo, replayDirectory })
 
   await remove(replayDirectory)
 
   for (const type of [ ThumbnailType.MINIATURE, ThumbnailType.PREVIEW ]) {
-    const image = await generateVideoMiniature({ video, videoFile: video.getMaxQualityFile(), type })
-    await video.addAndSaveThumbnail(image)
+    const image = await generateVideoMiniature({ video: replayVideo, videoFile: replayVideo.getMaxQualityFile(), type })
+    await replayVideo.addAndSaveThumbnail(image)
   }
 
-  await moveToNextState({ video, isNewVideo: true })
+  await moveToNextState({ video: replayVideo, isNewVideo: true })
 }
 
 async function replaceLiveByReplay (options: {
-  liveVideo: MVideo
+  video: MVideo
   liveSession: MVideoLiveSession
   live: MVideoLive
+  permanentLive: boolean
   replayDirectory: string
 }) {
-  const { liveVideo, liveSession, live, replayDirectory } = options
+  const { video, liveSession, live, permanentLive, replayDirectory } = options
 
-  await cleanupTMPLiveFiles(liveVideo)
+  await cleanupTMPLiveFiles(video)
 
   await live.destroy()
 
-  liveVideo.isLive = false
-  liveVideo.waitTranscoding = true
-  liveVideo.state = VideoState.TO_TRANSCODE
+  video.isLive = false
+  video.waitTranscoding = true
+  video.state = VideoState.TO_TRANSCODE
 
-  await liveVideo.save()
+  await video.save()
 
-  liveSession.replayVideoId = liveVideo.id
+  liveSession.replayVideoId = video.id
   await liveSession.save()
 
   // Remove old HLS playlist video files
-  const videoWithFiles = await VideoModel.loadFull(liveVideo.id)
+  const videoWithFiles = await VideoModel.loadFull(video.id)
 
   const hlsPlaylist = videoWithFiles.getHLSPlaylist()
   await VideoFileModel.removeHLSFilesOfVideoId(hlsPlaylist.id)
@@ -157,7 +168,7 @@ async function replaceLiveByReplay (options: {
 
   await assignReplayFilesToVideo({ video: videoWithFiles, replayDirectory })
 
-  if (live.permanentLive) { // Remove session replay
+  if (permanentLive) { // Remove session replay
     await remove(replayDirectory)
   } else { // We won't stream again in this live, we can delete the base replay directory
     await remove(getLiveReplayBaseDirectory(videoWithFiles))
@@ -224,16 +235,16 @@ async function assignReplayFilesToVideo (options: {
 }
 
 async function cleanupLiveAndFederate (options: {
-  live: MVideoLive
   video: MVideo
+  permanentLive: boolean
   streamingPlaylistId: number
 }) {
-  const { live, video, streamingPlaylistId } = options
+  const { permanentLive, video, streamingPlaylistId } = options
 
   const streamingPlaylist = await VideoStreamingPlaylistModel.loadWithVideo(streamingPlaylistId)
 
   if (streamingPlaylist) {
-    if (live.permanentLive) {
+    if (permanentLive) {
       await cleanupPermanentLive(video, streamingPlaylist)
     } else {
       await cleanupUnsavedNormalLive(video, streamingPlaylist)

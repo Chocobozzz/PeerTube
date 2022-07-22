@@ -49,6 +49,13 @@ export class LiveStreamInformationComponent {
     return errors[session.error]
   }
 
+  isReplayBeingProcessed (session: LiveVideoSession) {
+    // Running live
+    if (!session.endDate) return false
+
+    return session.saveReplay && !session.endingProcessed
+  }
+
   private loadLiveInfo (video: Video) {
     this.liveVideoService.getVideoLive(video.id)
       .subscribe(live => this.live = live)
