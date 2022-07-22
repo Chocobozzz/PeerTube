@@ -130,7 +130,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
         this.totalNotDeletedComments = res.totalNotDeletedComments
 
         this.onDataSubject.next(res.data)
-        this.hooks.runAction('action:video-watch.video-threads.loaded', 'video-watch', { data: this.componentPagination })
+
+        setTimeout(() => this.hooks.runAction('action:video-watch.video-threads.loaded', 'video-watch', { data: this.componentPagination }))
       },
 
       error: err => this.notifier.error(err.message)
