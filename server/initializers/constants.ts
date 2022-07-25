@@ -129,7 +129,7 @@ const ACTOR_FOLLOW_SCORE = {
   MAX: 10000
 }
 
-const FOLLOW_STATES: {[id: string]: FollowState} = {
+const FOLLOW_STATES: { [ id: string ]: FollowState } = {
   PENDING: 'pending',
   ACCEPTED: 'accepted',
   REJECTED: 'rejected'
@@ -140,7 +140,7 @@ const REMOTE_SCHEME = {
   WS: 'wss'
 }
 
-const JOB_ATTEMPTS: {[id in JobType]: number} = {
+const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-broadcast-parallel': 1,
   'activitypub-http-unicast': 1,
@@ -158,12 +158,10 @@ const JOB_ATTEMPTS: {[id in JobType]: number} = {
   'video-live-ending': 1,
   'video-studio-edition': 1,
   'manage-video-torrent': 1,
-  'move-to-object-storage': 3,
-  'video-channels-sync': 1,
-  'video-channel-import': 3
+  'move-to-object-storage': 3
 }
 // Excluded keys are jobs that can be configured by admins
-const JOB_CONCURRENCY: {[id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number} = {
+const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-broadcast-parallel': 30,
   'activitypub-http-unicast': 10,
@@ -183,7 +181,7 @@ const JOB_CONCURRENCY: {[id in Exclude<JobType, 'video-transcoding' | 'video-imp
   'video-channels-sync': 1,
   'video-channel-import': 1
 }
-const JOB_TTL: {[id in JobType]: number} = {
+const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
   'activitypub-http-broadcast-parallel': 60000 * 10, // 10 minutes
   'activitypub-http-unicast': 60000 * 10, // 10 minutes
@@ -205,7 +203,7 @@ const JOB_TTL: {[id in JobType]: number} = {
   'video-channels-sync': 1000 * 60 * 60 * 4, // 4 hours
   'video-channel-import': 1000 * 60 * 60 * 4 // 4 hours
 }
-const REPEAT_JOBS: {[id in JobType]?: EveryRepeatOptions | CronRepeatOptions} = {
+const REPEAT_JOBS: { [ id in JobType ]?: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views-stats': {
     cron: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
   },
@@ -413,12 +411,12 @@ const VIDEO_TRANSCODING_FPS: VideoTranscodingFPS = {
 
 const DEFAULT_AUDIO_RESOLUTION = VideoResolution.H_480P
 
-const VIDEO_RATE_TYPES: {[id: string]: VideoRateType} = {
+const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
   LIKE: 'like',
   DISLIKE: 'dislike'
 }
 
-const FFMPEG_NICE: {[id: string]: number} = {
+const FFMPEG_NICE: { [ id: string ]: number } = {
   // parent process defaults to niceness = 0
   // reminder: lower = higher priority, max value is 19, lowest is -20
   LIVE: 5, // prioritize over VOD and THUMBNAIL
@@ -458,9 +456,9 @@ const VIDEO_LICENCES = {
   7: 'Public Domain Dedication'
 }
 
-const VIDEO_LANGUAGES: {[id: string]: string} = {}
+const VIDEO_LANGUAGES: { [id: string]: string } = {}
 
-const VIDEO_PRIVACIES: {[id in VideoPrivacy]: string} = {
+const VIDEO_PRIVACIES: { [ id in VideoPrivacy ]: string } = {
   [VideoPrivacy.PUBLIC]: 'Public',
   [VideoPrivacy.UNLISTED]: 'Unlisted',
   [VideoPrivacy.PRIVATE]: 'Private',
@@ -469,7 +467,7 @@ const VIDEO_PRIVACIES: {[id in VideoPrivacy]: string} = {
 
 const VIDEO_CHANNEL_MAX_SYNC = 3
 
-const VIDEO_STATES: {[id in VideoState]: string} = {
+const VIDEO_STATES: { [ id in VideoState ]: string } = {
   [VideoState.PUBLISHED]: 'Published',
   [VideoState.TO_TRANSCODE]: 'To transcode',
   [VideoState.TO_IMPORT]: 'To import',
@@ -481,7 +479,7 @@ const VIDEO_STATES: {[id in VideoState]: string} = {
   [VideoState.TO_EDIT]: 'To edit*'
 }
 
-const VIDEO_IMPORT_STATES: {[id in VideoImportState]: string} = {
+const VIDEO_IMPORT_STATES: { [ id in VideoImportState ]: string } = {
   [VideoImportState.FAILED]: 'Failed',
   [VideoImportState.PENDING]: 'Pending',
   [VideoImportState.SUCCESS]: 'Success',
@@ -490,26 +488,19 @@ const VIDEO_IMPORT_STATES: {[id in VideoImportState]: string} = {
   [VideoImportState.PROCESSING]: 'Processing'
 }
 
-const VIDEO_CHANNEL_SYNC_STATE: {[id in VideoChannelSyncState]: string} = {
-  [VideoChannelSyncState.WAITING_FIRST_RUN]: 'Waiting for the first run',
-  [VideoChannelSyncState.PROCESSING]: 'Processing',
-  [VideoChannelSyncState.SYNCED]: 'Synchronized',
-  [VideoChannelSyncState.FAILED]: 'Failed'
-}
-
-const ABUSE_STATES: {[id in AbuseState]: string} = {
+const ABUSE_STATES: { [ id in AbuseState ]: string } = {
   [AbuseState.PENDING]: 'Pending',
   [AbuseState.REJECTED]: 'Rejected',
   [AbuseState.ACCEPTED]: 'Accepted'
 }
 
-const VIDEO_PLAYLIST_PRIVACIES: {[id in VideoPlaylistPrivacy]: string} = {
+const VIDEO_PLAYLIST_PRIVACIES: { [ id in VideoPlaylistPrivacy ]: string } = {
   [VideoPlaylistPrivacy.PUBLIC]: 'Public',
   [VideoPlaylistPrivacy.UNLISTED]: 'Unlisted',
   [VideoPlaylistPrivacy.PRIVATE]: 'Private'
 }
 
-const VIDEO_PLAYLIST_TYPES: {[id in VideoPlaylistType]: string} = {
+const VIDEO_PLAYLIST_TYPES: { [ id in VideoPlaylistType ]: string } = {
   [VideoPlaylistType.REGULAR]: 'Regular',
   [VideoPlaylistType.WATCH_LATER]: 'Watch later'
 }
@@ -540,12 +531,12 @@ const MIMETYPES = {
       'audio/vnd.dolby.dd-raw': '.ac3',
       'audio/ac3': '.ac3'
     },
-    EXT_MIMETYPE: null as {[id: string]: string}
+    EXT_MIMETYPE: null as { [ id: string ]: string }
   },
   VIDEO: {
-    MIMETYPE_EXT: null as {[id: string]: string | string[]},
+    MIMETYPE_EXT: null as { [ id: string ]: string | string[] },
     MIMETYPES_REGEX: null as string,
-    EXT_MIMETYPE: null as {[id: string]: string}
+    EXT_MIMETYPE: null as { [ id: string ]: string }
   },
   IMAGE: {
     MIMETYPE_EXT: {
@@ -555,7 +546,7 @@ const MIMETYPES = {
       'image/jpg': '.jpg',
       'image/jpeg': '.jpg'
     },
-    EXT_MIMETYPE: null as {[id: string]: string}
+    EXT_MIMETYPE: null as { [ id: string ]: string }
   },
   VIDEO_CAPTIONS: {
     MIMETYPE_EXT: {
@@ -613,7 +604,7 @@ const ACTIVITY_PUB = {
   VIDEO_PLAYLIST_REFRESH_INTERVAL: 3600 * 24 * 1000 * 2 // 2 days
 }
 
-const ACTIVITY_PUB_ACTOR_TYPES: {[id: string]: ActivityPubActorType} = {
+const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
   GROUP: 'Group',
   PERSON: 'Person',
   APPLICATION: 'Application',
@@ -640,7 +631,7 @@ const USER_PASSWORD_CREATE_LIFETIME = 60000 * 60 * 24 * 7 // 7 days
 
 const USER_EMAIL_VERIFY_LIFETIME = 60000 * 60 // 60 minutes
 
-const NSFW_POLICY_TYPES: {[id: string]: NSFWPolicyType} = {
+const NSFW_POLICY_TYPES: { [ id: string ]: NSFWPolicyType } = {
   DO_NOT_LIST: 'do_not_list',
   BLUR: 'blur',
   DISPLAY: 'display'
@@ -688,7 +679,7 @@ const PREVIEWS_SIZE = {
   height: 480,
   minWidth: 400
 }
-const ACTOR_IMAGES_SIZE: {[key in ActorImageType]: {width: number, height: number}[]} = {
+const ACTOR_IMAGES_SIZE: { [key in ActorImageType]: { width: number, height: number }[]} = {
   [ActorImageType.AVATAR]: [
     {
       width: 120,
@@ -1134,8 +1125,8 @@ function updateWebserverConfig () {
   CONSTRAINTS_FIELDS.VIDEOS.EXTNAME = Object.keys(MIMETYPES.VIDEO.EXT_MIMETYPE)
 }
 
-function buildVideoExtMimetype (obj: {[id: string]: string | string[]}) {
-  const result: {[id: string]: string} = {}
+function buildVideoExtMimetype (obj: { [ id: string ]: string | string[] }) {
+  const result: { [id: string]: string } = {}
 
   for (const mimetype of Object.keys(obj)) {
     const value = obj[mimetype]
@@ -1151,7 +1142,7 @@ function buildVideoExtMimetype (obj: {[id: string]: string | string[]}) {
   return result
 }
 
-function buildMimetypesRegex (obj: {[id: string]: string | string[]}) {
+function buildMimetypesRegex (obj: { [id: string]: string | string[] }) {
   return Object.keys(obj)
     .map(m => `(${m})`)
     .join('|')
@@ -1164,7 +1155,7 @@ function loadLanguages () {
 function buildLanguages () {
   const iso639 = require('iso-639-3')
 
-  const languages: {[id: string]: string} = {}
+  const languages: { [id: string]: string } = {}
 
   const additionalLanguages = {
     sgn: true, // Sign languages (macro language)
