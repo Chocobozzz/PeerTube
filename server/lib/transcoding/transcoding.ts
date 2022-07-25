@@ -2,7 +2,9 @@ import { Job } from 'bull'
 import { copyFile, ensureDir, move, remove, stat } from 'fs-extra'
 import { basename, extname as extnameUtil, join } from 'path'
 import { toEven } from '@server/helpers/core-utils'
+import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
+import { sequelizeTypescript } from '@server/initializers/database'
 import { MStreamingPlaylistFilesVideo, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { VideoResolution, VideoStorage } from '../../../shared/models/videos'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
@@ -29,8 +31,6 @@ import {
 } from '../paths'
 import { VideoPathManager } from '../video-path-manager'
 import { VideoTranscodingProfilesManager } from './default-transcoding-profiles'
-import { retryTransactionWrapper } from '@server/helpers/database-utils'
-import { sequelizeTypescript } from '@server/initializers/database'
 
 /**
  *
@@ -259,6 +259,9 @@ async function onWebTorrentVideoFileTranscoding (
 
   await createTorrentAndSetInfoHash(video, videoFile)
 
+  const oldFile = await VideoFileModel.loadWebTorrentFile({ videoId: video.id, fps: videoFile.fps, resolution: videoFile.resolution })
+  if (oldFile) await video.removeWebTorrentFileAndTorrent(oldFile)
+
   await VideoFileModel.customUpsert(videoFile, 'video', undefined)
   video.VideoFiles = await video.$get('VideoFiles')
 
@@ -311,17 +314,15 @@ async function generateHlsPlaylistCommon (options: {
   await transcodeVOD(transcodeOptions)
 
   // Create or update the playlist
-  const playlist = await retryTransactionWrapper(() => {
+  const { playlist, oldPlaylistFilename, oldSegmentsSha256Filename } = await retryTransactionWrapper(() => {
     return sequelizeTypescript.transaction(async transaction => {
       const playlist = await VideoStreamingPlaylistModel.loadOrGenerate(video, transaction)
 
-      if (!playlist.playlistFilename) {
-        playlist.playlistFilename = generateHLSMasterPlaylistFilename(video.isLive)
-      }
+      const oldPlaylistFilename = playlist.playlistFilename
+      const oldSegmentsSha256Filename = playlist.segmentsSha256Filename
 
-      if (!playlist.segmentsSha256Filename) {
-        playlist.segmentsSha256Filename = generateHlsSha256SegmentsFilename(video.isLive)
-      }
+      playlist.playlistFilename = generateHLSMasterPlaylistFilename(video.isLive)
+      playlist.segmentsSha256Filename = generateHlsSha256SegmentsFilename(video.isLive)
 
       playlist.p2pMediaLoaderInfohashes = []
       playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
@@ -330,9 +331,12 @@ async function generateHlsPlaylistCommon (options: {
 
       await playlist.save({ transaction })
 
-      return playlist
+      return { playlist, oldPlaylistFilename, oldSegmentsSha256Filename }
     })
   })
+
+  if (oldPlaylistFilename) await video.removeStreamingPlaylistFile(playlist, oldPlaylistFilename)
+  if (oldSegmentsSha256Filename) await video.removeStreamingPlaylistFile(playlist, oldSegmentsSha256Filename)
 
   // Build the new playlist file
   const extname = extnameUtil(videoFilename)
@@ -364,11 +368,15 @@ async function generateHlsPlaylistCommon (options: {
 
   await createTorrentAndSetInfoHash(playlist, newVideoFile)
 
+  const oldFile = await VideoFileModel.loadHLSFile({ playlistId: playlist.id, fps: newVideoFile.fps, resolution: newVideoFile.resolution })
+  if (oldFile) await video.removeStreamingPlaylistVideoFile(playlist, oldFile)
+
   const savedVideoFile = await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', undefined)
 
   const playlistWithFiles = playlist as MStreamingPlaylistFilesVideo
   playlistWithFiles.VideoFiles = await playlist.$get('VideoFiles')
   playlist.assignP2PMediaLoaderInfoHashes(video, playlistWithFiles.VideoFiles)
+  playlist.storage = VideoStorage.FILE_SYSTEM
 
   await playlist.save()
 
