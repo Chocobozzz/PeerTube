@@ -93,14 +93,11 @@ function getLocalActorFollowActivityPubUrl (follower: MActor, following: MActorI
 }
 
 function getLocalActorFollowAcceptActivityPubUrl (actorFollow: MActorFollowActors) {
-  const follower = actorFollow.ActorFollower
-  const me = actorFollow.ActorFollowing
-
-  return WEBSERVER.URL + '/accepts/follows/' + follower.id + '/' + me.id
+  return WEBSERVER.URL + '/accepts/follows/' + actorFollow.id
 }
 
-function getLocalActorFollowRejectActivityPubUrl (follower: MActorId, following: MActorId) {
-  return WEBSERVER.URL + '/rejects/follows/' + follower.id + '/' + following.id
+function getLocalActorFollowRejectActivityPubUrl () {
+  return WEBSERVER.URL + '/rejects/follows/' + new Date().toISOString()
 }
 
 function getLocalVideoAnnounceActivityPubUrl (byActor: MActorId, video: MVideoUrl) {
