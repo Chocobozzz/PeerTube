@@ -3,7 +3,7 @@ import {
   MAbuseFull,
   MAbuseId,
   MActor,
-  MActorFollowActors,
+  MActorFollow,
   MActorId,
   MActorUrl,
   MCommentId,
@@ -92,7 +92,7 @@ function getLocalActorFollowActivityPubUrl (follower: MActor, following: MActorI
   return follower.url + '/follows/' + following.id
 }
 
-function getLocalActorFollowAcceptActivityPubUrl (actorFollow: MActorFollowActors) {
+function getLocalActorFollowAcceptActivityPubUrl (actorFollow: MActorFollow) {
   return WEBSERVER.URL + '/accepts/follows/' + actorFollow.id
 }
 
