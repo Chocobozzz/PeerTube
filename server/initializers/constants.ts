@@ -158,6 +158,8 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-live-ending': 1,
   'video-studio-edition': 1,
   'manage-video-torrent': 1,
+  'video-channels-sync': 1,
+  'video-channel-import': 3,
   'move-to-object-storage': 3
 }
 // Excluded keys are jobs that can be configured by admins
@@ -486,6 +488,13 @@ const VIDEO_IMPORT_STATES: { [ id in VideoImportState ]: string } = {
   [VideoImportState.REJECTED]: 'Rejected',
   [VideoImportState.CANCELLED]: 'Cancelled',
   [VideoImportState.PROCESSING]: 'Processing'
+}
+
+const VIDEO_CHANNEL_SYNC_STATE: { [ id in VideoChannelSyncState ]: string } = {
+  [VideoChannelSyncState.FAILED]: 'Failed',
+  [VideoChannelSyncState.SYNCED]: 'Pending',
+  [VideoChannelSyncState.PROCESSING]: 'Processing',
+  [VideoChannelSyncState.WAITING_FIRST_RUN]: 'Waiting first run'
 }
 
 const ABUSE_STATES: { [ id in AbuseState ]: string } = {

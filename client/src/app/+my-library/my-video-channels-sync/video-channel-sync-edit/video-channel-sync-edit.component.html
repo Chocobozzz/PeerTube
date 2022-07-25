@@ -35,14 +35,14 @@
             {{ formErrors['video-channel'] }}
           </div>
           <div class="form-group existing-video-strategy-container">
-            <label class="with-description" for="existing-video-strategy" i18n>Options for existing videos on remote channel:</label>
+            <label class="with-description" for="existingVideoStrategy" i18n>Options for existing videos on remote channel:</label>
             <div class="peertube-radio-container">
-              <input type="radio" name="existing-video-strategy" id="import" value="import" formControlName="existing-video-strategy" required />
+              <input type="radio" name="existingVideoStrategy" id="import" value="import" formControlName="existingVideoStrategy" required />
               <label for="import" i18n>Import all and watch for new publications</label>
             </div>
 
             <div class="peertube-radio-container">
-              <input type="radio" name="existing-video-strategy" id="doNothing" value="nothing" formControlName="existing-video-strategy" required />
+              <input type="radio" name="existingVideoStrategy" id="doNothing" value="nothing" formControlName="existingVideoStrategy" required />
               <label for="doNothing" i18n>Only watch for new publications</label>
             </div>
           </div>

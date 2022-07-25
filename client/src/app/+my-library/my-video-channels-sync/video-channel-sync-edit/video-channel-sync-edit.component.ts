@@ -33,7 +33,7 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
     this.buildForm({
       externalChannelUrl: VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR,
       'video-channel': null,
-      'existing-video-strategy': null
+      'existingVideoStrategy': null
     })
     this.authService.userInformationLoaded
         .pipe(mergeMap(() => {
@@ -60,7 +60,7 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
       externalChannelUrl: body.externalChannelUrl,
       videoChannelId: body['video-channel']
     }
-    const importExistingVideos = body['existing-video-strategy'] === 'import'
+    const importExistingVideos = body['existingVideoStrategy'] === 'import'
     this.videoChannelSyncService.createSync(videoChannelSyncCreate)
       .pipe(mergeMap((res: {videoChannelSync: {id: number}}) => {
         this.authService.refreshUserInformation()
