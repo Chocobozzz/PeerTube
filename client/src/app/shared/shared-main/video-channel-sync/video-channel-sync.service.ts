@@ -13,6 +13,7 @@ import { Account, AccountService } from '../account'
 })
 export class VideoChannelSyncService {
   static BASE_VIDEO_CHANNEL_URL = environment.apiUrl + '/api/v1/video-channels-syncs'
+
   constructor (
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
@@ -43,7 +44,7 @@ export class VideoChannelSyncService {
   }
 
   syncChannel (syncId: number) {
-    const url = `${VideoChannelSyncService.BASE_VIDEO_CHANNEL_URL}/syncChannel/${syncId}`
+    const url = `${VideoChannelSyncService.BASE_VIDEO_CHANNEL_URL}/${syncId}/sync`
     return this.authHttp.post(url, {})
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }

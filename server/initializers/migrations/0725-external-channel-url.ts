@@ -7,38 +7,21 @@ async function up (utils: {
   sequelize: Sequelize.Sequelize
   db: any
 }): Promise<void> {
-  await utils.queryInterface.createTable('videoChannelSync', {
-    id: {
-      type: Sequelize.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
-    },
-    externalChannelUrl: {
-      type: Sequelize.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.EXTERNAL_CHANNEL_URL.max),
-      allowNull: false
-    },
-    videoChannelId: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'videoChannel',
-        key: 'id'
-      },
-      onDelete: 'CASCADE'
-    },
-    createdAt: {
-      type: Sequelize.DATE,
-      allowNull: false
-    },
-    updatedAt: {
-      type: Sequelize.DATE,
-      allowNull: false
-    },
-    state: {
-      type: Sequelize.INTEGER,
-      allowNull: false
-    }
-  }, { transaction: utils.transaction })
+  const externalChannelUrlMaxLength = CONSTRAINTS_FIELDS.VIDEO_CHANNEL_SYNCS.EXTERNAL_CHANNEL_URL.max
+  const query = `
+    CREATE TABLE IF NOT EXISTS "videoChannelSync" (
+      "id"   SERIAL,
+      "externalChannelUrl" VARCHAR(${externalChannelUrlMaxLength}) NOT NULL DEFAULT NULL,
+      "videoChannelId" INTEGER NOT NULL REFERENCES "videoChannel" ("id")
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+      "state" INTEGER NOT NULL DEFAULT 1,
+      "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
+      "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL,
+      PRIMARY KEY ("id")
+    );
+  `
+  await utils.sequelize.query(query, { transaction: utils.transaction })
 }
 
 async function down (utils: {

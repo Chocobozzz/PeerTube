@@ -11,13 +11,15 @@ import { mergeMap } from 'rxjs'
   styleUrls: [ './my-video-channels-sync.component.scss' ]
 })
 export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
+
   error: string = undefined
-  private serverConfig: HTMLServerConfig
   channelsSync: VideoChannelSync[]
   totalRecords = 0
   videoChannelSyncActions: DropdownAction<VideoChannelSync>[][] = []
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+
+  private serverConfig: HTMLServerConfig
 
   constructor (
     private videoChannelsSyncService: VideoChannelSyncService,

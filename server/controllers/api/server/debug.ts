@@ -40,7 +40,7 @@ function getDebug (req: express.Request, res: express.Response) {
 async function runCommand (req: express.Request, res: express.Response) {
   const body: SendDebugCommand = req.body
 
-  const processors: {[id in SendDebugCommand['command']]: () => Promise<any>} = {
+  const processors: { [id in SendDebugCommand['command']]: () => Promise<any> } = {
     'remove-dandling-resumable-uploads': () => RemoveDanglingResumableUploadsScheduler.Instance.execute(),
     'process-video-views-buffer': () => VideoViewsBufferScheduler.Instance.execute(),
     'process-video-viewers': () => VideoViewsManager.Instance.processViewerStats()

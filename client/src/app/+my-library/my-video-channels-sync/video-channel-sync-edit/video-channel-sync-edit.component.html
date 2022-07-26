@@ -13,9 +13,13 @@
           <label i18n for="externalChannelUrl">Remote channel URL</label>
           <div class="input-group">
             <input
-              type="text" id="externalChannelUrl" i18n-placeholder placeholder="Example: https://youtube.com/channel/UC_fancy_channel"
-              formControlName="externalChannelUrl" [ngClass]="{ 'input-error': formErrors['externalChannelUrl'] }" class="form-control"
-            >
+                type="text"
+                id="externalChannelUrl"
+                i18n-placeholder
+                placeholder="Example: https://youtube.com/channel/UC_fancy_channel"
+                formControlName="externalChannelUrl"
+                [ngClass]="{ 'input-error': formErrors['externalChannelUrl'] }"
+                class="form-control">
           </div>
           <div *ngIf="formErrors['externalChannelUrl']" class="form-error">
             {{ formErrors['externalChannelUrl'] }}
@@ -23,37 +27,36 @@
         </div>
 
         <div class="form-group">
-          <label i18n for="video-channel">Video Channel</label>
-          <ng-select labelForId="video-channel" [items]="videoChannels"
-                     required
-                     bindLabel="displayName"
-                     bindValue="id"
-                     [(ngModel)]="selectedVideoChannel"
-                     formControlName="video-channel">
-          </ng-select>
-          <div *ngIf="formErrors['video-channel']" class="form-error">
-            {{ formErrors['video-channel'] }}
+          <label i18n for="videoChannel">Video Channel</label>
+          <my-select-channel
+              required
+              [items]="userVideoChannels"
+              [(ngModel)]="selectedVideoChannel"
+              formControlName="videoChannel">
+          </my-select-channel>
+          <div *ngIf="formErrors['videoChannel']" class="form-error">
+            {{ formErrors['videoChannel'] }}
           </div>
-          <div class="form-group existing-video-strategy-container">
-            <label class="with-description" for="existingVideoStrategy" i18n>Options for existing videos on remote channel:</label>
-            <div class="peertube-radio-container">
-              <input type="radio" name="existingVideoStrategy" id="import" value="import" formControlName="existingVideoStrategy" required />
-              <label for="import" i18n>Import all and watch for new publications</label>
-            </div>
+        </div>
 
-            <div class="peertube-radio-container">
-              <input type="radio" name="existingVideoStrategy" id="doNothing" value="nothing" formControlName="existingVideoStrategy" required />
-              <label for="doNothing" i18n>Only watch for new publications</label>
-            </div>
+        <div class="form-group existing-video-strategy-container">
+          <label for="existingVideoStrategy" i18n>Options for existing videos on remote channel:</label>
+          <div class="peertube-radio-container">
+            <input type="radio" name="existingVideoStrategy" id="import" value="import" formControlName="existingVideoStrategy" required />
+            <label for="import" i18n>Import all and watch for new publications</label>
           </div>
 
+          <div class="peertube-radio-container">
+            <input type="radio" name="existingVideoStrategy" id="doNothing" value="nothing" formControlName="existingVideoStrategy" required />
+            <label for="doNothing" i18n>Only watch for new publications</label>
+          </div>
         </div>
       </div>
     </div>
     <div class="row"> <!-- submit placement block -->
       <div class="col-md-7 col-xl-5"></div>
       <div class="col-md-5 col-xl-5 d-inline-flex">
-        <input type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
+        <input type="submit" class="peertube-button orange-button ms-auto" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
       </div>
     </div>
   </form>

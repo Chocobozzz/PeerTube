@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
+import { listUserChannelsForSelect } from '@app/helpers'
 import { VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { VideoChannelService, VideoChannelSyncService } from '@app/shared/shared-main'
+import { VideoChannelSyncService } from '@app/shared/shared-main'
 import { VideoChannel, VideoChannelSyncCreate } from '@shared/models/videos'
 import { mergeMap } from 'rxjs'
+import { SelectChannelItem } from 'src/types'
 
 @Component({
   selector: 'my-video-channel-sync-edit',
@@ -15,12 +17,11 @@ import { mergeMap } from 'rxjs'
 export class VideoChannelSyncEditComponent extends FormReactive implements OnInit {
   error: string
   selectedVideoChannel: VideoChannel
-  videoChannels: VideoChannel[]
+  userVideoChannels: SelectChannelItem[]
   existingVideosStrategy: string
 
   constructor (
     protected formValidatorService: FormValidatorService,
-    private videoChannelService: VideoChannelService,
     private authService: AuthService,
     private router: Router,
     private notifier: Notifier,
@@ -32,20 +33,11 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
   ngOnInit () {
     this.buildForm({
       externalChannelUrl: VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR,
-      'video-channel': null,
-      'existingVideoStrategy': null
+      videoChannel: null,
+      existingVideoStrategy: null
     })
-    this.authService.userInformationLoaded
-        .pipe(mergeMap(() => {
-          const user = this.authService.getUser()
-          const options = {
-            account: user.account
-          }
-
-          return this.videoChannelService.listAccountVideoChannels(options)
-        })).subscribe(res => {
-          this.videoChannels = res.data
-        })
+    listUserChannelsForSelect(this.authService)
+      .subscribe(channels => this.userVideoChannels = channels)
   }
 
   getFormButtonTitle () {
@@ -58,7 +50,7 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
     const body = this.form.value
     const videoChannelSyncCreate: VideoChannelSyncCreate = {
       externalChannelUrl: body.externalChannelUrl,
-      videoChannelId: body['video-channel']
+      videoChannelId: body.videoChannel
     }
     const importExistingVideos = body['existingVideoStrategy'] === 'import'
     this.videoChannelSyncService.createSync(videoChannelSyncCreate)

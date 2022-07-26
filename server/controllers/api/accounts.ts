@@ -163,7 +163,6 @@ async function listAccountChannelsSync (req: express.Request, res: express.Respo
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    withStats: req.query.withStats,
     search: req.query.search
   }
 

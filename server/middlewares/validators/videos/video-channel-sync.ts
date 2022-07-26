@@ -6,11 +6,10 @@ import { areValidationErrors, doesVideoChannelIdExist } from "../shared"
 import { HttpStatusCode, VideoChannelSyncCreate } from '@shared/models'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { VideoChannelModel } from '@server/models/video/video-channel'
-import { ServerConfigManager } from '@server/lib/server-config-manager'
+import { CONFIG } from '@server/initializers/config'
 
-export const ensureSyncIsEnabled = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  const serverConfig = await ServerConfigManager.Instance.getServerConfig()
-  if (!serverConfig.import.videos.http.enabled) {
+export const ensureSyncIsEnabled = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (!CONFIG.IMPORT.VIDEOS.HTTP.ENABLED) {
     return res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
       message: 'Synchronization is impossible as video upload via HTTP is not enabled on the server'
@@ -30,10 +29,7 @@ export const videoChannelSyncValidator = [
 
     const body: VideoChannelSyncCreate = req.body
     if (!await doesVideoChannelIdExist(body.videoChannelId, res)) {
-      return res.fail({
-        status: HttpStatusCode.NOT_FOUND_404,
-        message: 'Video Channel not found'
-      })
+      return
     }
 
     return next()

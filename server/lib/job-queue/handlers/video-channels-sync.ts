@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { logger } from '@server/helpers/logger'
 import { YoutubeDLCLI, YoutubeDLInfo, YoutubeDLWrapper } from '@server/helpers/youtube-dl'
 import { CONFIG } from '@server/initializers/config'
@@ -18,9 +17,10 @@ import { JobQueue } from '../job-queue'
 import { updateVideoMiniatureFromUrl } from '@server/lib/thumbnail'
 import { isVideoFileExtnameValid } from '@server/helpers/custom-validators/videos'
 import { hasUnicastURLsOnly, insertIntoDB, processYoutubeSubtitles } from '@server/helpers/youtube-dl/youtube-dl-import-utils'
-import {VideoChannelSyncModel} from '@server/models/video/video-channel-sync'
-import {VIDEO_CHANNEL_MAX_SYNC} from '@server/initializers/constants'
-import {Job} from 'bull'
+import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
+import { VIDEO_CHANNEL_MAX_SYNC } from '@server/initializers/constants'
+import { Job } from 'bull'
+import { wait } from '@shared/core-utils'
 
 const processOptions = {
   maxBuffer: 1024 * 1024 * 30 // 30MB
@@ -33,17 +33,13 @@ type ChannelSyncInfo = {
   successes: number
 }
 
-const waitSecs = (timeout: number) => new Promise(resolve => setTimeout(resolve, timeout * 1000))
-
-
-function formatDateForYoutubeDl(date: Date) {
-  return `${date.getFullYear()}${date.getMonth()+1}${date.getDate()}`
+function formatDateForYoutubeDl (date: Date) {
+  return `${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}`
 }
 
 export async function processVideoChannelsSync () {
   logger.debug('Running processVideoChannelsSync')
-  const serverConfig = await ServerConfigManager.Instance.getServerConfig()
-  if (!serverConfig.import.videos.http.enabled) {
+  if (!CONFIG.IMPORT.VIDEOS.HTTP.ENABLED) {
     logger.info('Discard channels synchronization as the HTTP upload is disabled')
     return
   }
@@ -73,8 +69,8 @@ export async function processVideoChannelsSync () {
           ` (imported: ${successes}, ignored because already imported: ${alreadyImported})`)
       }
       await sync.save()
-    } catch (ex) {
-      logger.error(`Failed to synchronize channel ${sync.VideoChannel.name}: ${ex.stack}`)
+    } catch (err) {
+      logger.error(`Failed to synchronize channel ${sync.VideoChannel.name}`, { err })
     }
   }
 }
@@ -82,8 +78,7 @@ export async function processVideoChannelsSync () {
 export async function processVideoChannelImport (job: Job) {
   const payload = job.data as VideoChannelImportPayload
   logger.debug('Running processVideoChannelImport')
-  const serverConfig = await ServerConfigManager.Instance.getServerConfig()
-  if (!serverConfig.import.videos.http.enabled) {
+  if (!CONFIG.IMPORT.VIDEOS.HTTP.ENABLED) {
     logger.error('Cannot import channel as the HTTP upload is disabled')
     return
   }
@@ -117,7 +112,12 @@ type SynchronizeChannelOptions = {
   lastVideosCount?: number
   after?: string
 }
-async function synchronizeChannel (channel: VideoChannelModel, externalChannelUrl: string, { youtubeDL, secondsToWait, lastVideosCount, after }: SynchronizeChannelOptions): Promise<ChannelSyncInfo> {
+
+async function synchronizeChannel (
+  channel: VideoChannelModel,
+  externalChannelUrl: string,
+  { youtubeDL, secondsToWait, lastVideosCount, after }: SynchronizeChannelOptions
+): Promise<ChannelSyncInfo> {
   const result: ChannelSyncInfo = {
     total: VIDEO_CHANNEL_MAX_SYNC,
     errors: 0,
@@ -127,16 +127,16 @@ async function synchronizeChannel (channel: VideoChannelModel, externalChannelUr
   const user = await UserModel.loadByChannelActorId(channel.actorId)
   const additionalYoutubeDLArgs = [ '--skip-download', '--playlist-reverse' ]
   if (lastVideosCount) {
-    additionalYoutubeDLArgs.push('--playlist-end', VIDEO_CHANNEL_MAX_SYNC.toString());
+    additionalYoutubeDLArgs.push('--playlist-end', VIDEO_CHANNEL_MAX_SYNC.toString())
   }
   const channelInfo = await youtubeDL.getInfo({
     url: externalChannelUrl,
     format: YoutubeDLCLI.getYoutubeDLVideoFormat([]),
     processOptions,
-    additionalYoutubeDLArgs,
+    additionalYoutubeDLArgs
   })
   const targetUrls: string[] = (await Promise.all(
-    channelInfo.map(async video => {
+    channelInfo.map(video => {
       if (after && video['upload_date'] <= after) {
         return []
       }
@@ -144,7 +144,7 @@ async function synchronizeChannel (channel: VideoChannelModel, externalChannelUr
     })
   )).flat()
 
-  await waitSecs(secondsToWait)
+  await wait(secondsToWait * 1000)
 
   for (const targetUrl of targetUrls) {
     try {
@@ -163,12 +163,12 @@ async function synchronizeChannel (channel: VideoChannelModel, externalChannelUr
       result.errors += 1
       logger.error(`An error occured while importing ${targetUrl}: ${ex.stack}`)
     }
-    await waitSecs(secondsToWait)
+    await wait(secondsToWait * 1000)
   }
   return result
 }
 
-async function buildVideo (channelId: number, targetUrl: string, importData: YoutubeDLInfo): Promise<MVideoThumbnail> {
+async function buildVideo (channelId: number, importData: YoutubeDLInfo): Promise<MVideoThumbnail> {
   let videoData = {
     name: importData.name ?? 'Unknown name',
     remote: false,
@@ -184,7 +184,7 @@ async function buildVideo (channelId: number, targetUrl: string, importData: You
     support: null,
     privacy: VideoPrivacy.PUBLIC,
     duration: 0, // duration will be set by the import job
-    channelId: channelId,
+    channelId,
     originallyPublishedAt: importData.originallyPublishedAt
   }
 
@@ -203,7 +203,7 @@ async function addYoutubeDLImport (parameters: {
   user: MUser
   channel: VideoChannelModel
   targetUrl: string
-}) {
+}): Promise<any> {
   const { user, channel, targetUrl } = parameters
   const youtubeDL = new YoutubeDLWrapper(targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
   // Get video infos
@@ -217,7 +217,7 @@ async function addYoutubeDLImport (parameters: {
   if (!await hasUnicastURLsOnly(youtubeDLInfo)) {
     throw new Error('Cannot use non unicast IP as targetUrl.')
   }
-  const video = await buildVideo(channel.id, targetUrl, youtubeDLInfo)
+  const video = await buildVideo(channel.id, youtubeDLInfo)
   let thumbnailModel
   let previewModel
   if (youtubeDLInfo.thumbnailUrl) {
@@ -262,5 +262,5 @@ async function addYoutubeDLImport (parameters: {
     videoImportId: videoImport.id,
     fileExt
   }
-  JobQueue.Instance.createJob({ type: 'video-import', payload })
+  return JobQueue.Instance.createJobWithPromise({ type: 'video-import', payload })
 }

@@ -25,12 +25,12 @@ const auditLogger = auditLoggerFactory('channels')
 videoChannelSyncRouter.post('/',
   authenticate,
   ensureSyncIsEnabled,
-  videoChannelSyncValidator,
+  asyncMiddleware(videoChannelSyncValidator),
   ensureCanManageSyncedChannel,
   asyncRetryTransactionMiddleware(createVideoChannelSync)
 )
 
-videoChannelSyncRouter.post('/syncChannel/:id',
+videoChannelSyncRouter.post('/:id/sync',
   authenticate,
   syncChannelValidator,
   ensureSyncIsEnabled,
