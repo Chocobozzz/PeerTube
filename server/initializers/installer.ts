@@ -10,6 +10,7 @@ import { applicationExist, clientsExist, usersExist } from './checker-after-init
 import { CONFIG } from './config'
 import { FILES_CACHE, HLS_STREAMING_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION, RESUMABLE_UPLOAD_DIRECTORY } from './constants'
 import { sequelizeTypescript } from './database'
+import { isTestOrDevInstance } from '@server/helpers/core-utils'
 
 async function installApplication () {
   try {
@@ -135,8 +136,8 @@ async function createOAuthAdminIfNotExist () {
   let validatePassword = true
   let password = ''
 
-  // Do not generate a random password for tests
-  if (process.env.NODE_ENV === 'test') {
+  // Do not generate a random password for test and dev environments
+  if (isTestOrDevInstance()) {
     password = 'test'
 
     if (process.env.NODE_APP_INSTANCE) {
