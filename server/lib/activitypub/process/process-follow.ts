@@ -58,6 +58,11 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
       transaction: t
     })
 
+    // Already rejected
+    if (actorFollow.state === 'rejected') {
+      return { actorFollow: undefined as MActorFollowActors }
+    }
+
     // Set the follow as accepted if the remote actor follows a channel or account
     // Or if the instance automatically accepts followers
     if (actorFollow.state !== 'accepted' && (isFollowingInstance === false || CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === false)) {

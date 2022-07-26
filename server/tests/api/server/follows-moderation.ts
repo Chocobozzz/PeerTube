@@ -2,6 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { expectStartWith } from '@server/tests/shared'
+import { ActorFollow, FollowState } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -25,8 +27,51 @@ async function checkServer1And2HasFollowers (servers: PeerTubeServer[], state = 
 
     const follow = body.data[0]
     expect(follow.state).to.equal(state)
-    expect(follow.follower.url).to.equal('http://localhost:' + servers[0].port + '/accounts/peertube')
-    expect(follow.following.url).to.equal('http://localhost:' + servers[1].port + '/accounts/peertube')
+    expect(follow.follower.url).to.equal(servers[0].url + '/accounts/peertube')
+    expect(follow.following.url).to.equal(servers[1].url + '/accounts/peertube')
+  }
+}
+
+async function checkFollows (options: {
+  follower: {
+    server: PeerTubeServer
+    state?: FollowState // if not provided, it means it does not exist
+  }
+  following: {
+    server: PeerTubeServer
+    state?: FollowState // if not provided, it means it does not exist
+  }
+}) {
+  const { follower, following } = options
+
+  const followerUrl = follower.server.url + '/accounts/peertube'
+  const followingUrl = following.server.url + '/accounts/peertube'
+  const finder = (d: ActorFollow) => d.follower.url === followerUrl && d.following.url === followingUrl
+
+  {
+    const { data } = await follower.server.follows.getFollowings()
+    const follow = data.find(finder)
+
+    if (!follower.state) {
+      expect(follow).to.not.exist
+    } else {
+      expect(follow.state).to.equal(follower.state)
+      expect(follow.follower.url).to.equal(followerUrl)
+      expect(follow.following.url).to.equal(followingUrl)
+    }
+  }
+
+  {
+    const { data } = await following.server.follows.getFollowers()
+    const follow = data.find(finder)
+
+    if (!following.state) {
+      expect(follow).to.not.exist
+    } else {
+      expect(follow.state).to.equal(following.state)
+      expect(follow.follower.url).to.equal(followerUrl)
+      expect(follow.following.url).to.equal(followingUrl)
+    }
   }
 }
 
@@ -37,7 +82,7 @@ async function checkNoFollowers (servers: PeerTubeServer[]) {
   ]
 
   for (const fn of fns) {
-    const body = await fn({ start: 0, count: 5, sort: 'createdAt' })
+    const body = await fn({ start: 0, count: 5, sort: 'createdAt', state: 'accepted' })
     expect(body.total).to.equal(0)
   }
 }
@@ -124,7 +169,7 @@ describe('Test follows moderation', function () {
   it('Should manually approve followers', async function () {
     this.timeout(20000)
 
-    await commands[1].removeFollower({ follower: servers[0] })
+    await commands[0].unfollow({ target: servers[1] })
     await waitJobs(servers)
 
     const subConfig = {
@@ -148,7 +193,7 @@ describe('Test follows moderation', function () {
   it('Should accept a follower', async function () {
     this.timeout(10000)
 
-    await commands[1].acceptFollower({ follower: 'peertube@localhost:' + servers[0].port })
+    await commands[1].acceptFollower({ follower: 'peertube@' + servers[0].host })
     await waitJobs(servers)
 
     await checkServer1And2HasFollowers(servers)
@@ -161,29 +206,142 @@ describe('Test follows moderation', function () {
     await waitJobs(servers)
 
     {
-      const body = await commands[0].getFollowings({ start: 0, count: 5, sort: 'createdAt' })
+      const body = await commands[0].getFollowings()
       expect(body.total).to.equal(2)
     }
 
     {
-      const body = await commands[1].getFollowers({ start: 0, count: 5, sort: 'createdAt' })
+      const body = await commands[1].getFollowers()
       expect(body.total).to.equal(1)
     }
 
     {
-      const body = await commands[2].getFollowers({ start: 0, count: 5, sort: 'createdAt' })
+      const body = await commands[2].getFollowers()
       expect(body.total).to.equal(1)
     }
 
-    await commands[2].rejectFollower({ follower: 'peertube@localhost:' + servers[0].port })
+    await commands[2].rejectFollower({ follower: 'peertube@' + servers[0].host })
     await waitJobs(servers)
 
-    await checkServer1And2HasFollowers(servers)
+    { // server 1
+      {
+        const { data } = await commands[0].getFollowings({ state: 'accepted' })
+        expect(data).to.have.lengthOf(1)
+      }
 
-    {
-      const body = await commands[2].getFollowers({ start: 0, count: 5, sort: 'createdAt' })
-      expect(body.total).to.equal(0)
+      {
+        const { data } = await commands[0].getFollowings({ state: 'rejected' })
+        expect(data).to.have.lengthOf(1)
+        expectStartWith(data[0].following.url, servers[2].url)
+      }
     }
+
+    { // server 3
+      {
+        const { data } = await commands[2].getFollowers({ state: 'accepted' })
+        expect(data).to.have.lengthOf(0)
+      }
+
+      {
+        const { data } = await commands[2].getFollowers({ state: 'rejected' })
+        expect(data).to.have.lengthOf(1)
+        expectStartWith(data[0].follower.url, servers[0].url)
+      }
+    }
+  })
+
+  it('Should not change the follow on refollow with and without auto accept', async function () {
+    const run = async () => {
+      await commands[0].follow({ hosts: [ servers[2].url ] })
+      await waitJobs(servers)
+
+      await checkFollows({
+        follower: {
+          server: servers[0],
+          state: 'rejected'
+        },
+        following: {
+          server: servers[2],
+          state: 'rejected'
+        }
+      })
+    }
+
+    await servers[2].config.updateExistingSubConfig({ newConfig: { followers: { instance: { manualApproval: false } } } })
+    await run()
+
+    await servers[2].config.updateExistingSubConfig({ newConfig: { followers: { instance: { manualApproval: true } } } })
+    await run()
+  })
+
+  it('Should not change the rejected status on unfollow', async function () {
+    await commands[0].unfollow({ target: servers[2] })
+    await waitJobs(servers)
+
+    await checkFollows({
+      follower: {
+        server: servers[0]
+      },
+      following: {
+        server: servers[2],
+        state: 'rejected'
+      }
+    })
+  })
+
+  it('Should delete the follower and add again the follower', async function () {
+    await commands[2].removeFollower({ follower: servers[0] })
+    await waitJobs(servers)
+
+    await commands[0].follow({ hosts: [ servers[2].url ] })
+    await waitJobs(servers)
+
+    await checkFollows({
+      follower: {
+        server: servers[0],
+        state: 'pending'
+      },
+      following: {
+        server: servers[2],
+        state: 'pending'
+      }
+    })
+  })
+
+  it('Should be able to reject a previously accepted follower', async function () {
+    await commands[1].rejectFollower({ follower: 'peertube@' + servers[0].host })
+    await waitJobs(servers)
+
+    await checkFollows({
+      follower: {
+        server: servers[0],
+        state: 'rejected'
+      },
+      following: {
+        server: servers[1],
+        state: 'rejected'
+      }
+    })
+  })
+
+  it('Should be able to re accept a previously rejected follower', async function () {
+    await commands[1].acceptFollower({ follower: 'peertube@' + servers[0].host })
+    await waitJobs(servers)
+
+    await checkFollows({
+      follower: {
+        server: servers[0],
+        state: 'accepted'
+      },
+      following: {
+        server: servers[1],
+        state: 'accepted'
+      }
+    })
+  })
+
+  it('Should ignore follow requests of muted servers', async function () {
+
   })
 
   after(async function () {

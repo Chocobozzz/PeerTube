@@ -25,7 +25,8 @@ async function processReject (follower: MActor, targetActor: MActor) {
 
     if (!actorFollow) throw new Error(`'Unknown actor follow ${follower.id} -> ${targetActor.id}.`)
 
-    await actorFollow.destroy({ transaction: t })
+    actorFollow.state = 'rejected'
+    await actorFollow.save({ transaction: t })
 
     return undefined
   })

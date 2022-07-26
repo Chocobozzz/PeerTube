@@ -129,7 +129,8 @@ const ACTOR_FOLLOW_SCORE = {
 
 const FOLLOW_STATES: { [ id: string ]: FollowState } = {
   PENDING: 'pending',
-  ACCEPTED: 'accepted'
+  ACCEPTED: 'accepted',
+  REJECTED: 'rejected'
 }
 
 const REMOTE_SCHEME = {

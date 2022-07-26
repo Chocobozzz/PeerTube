@@ -4,7 +4,7 @@ import { FollowState } from '@shared/models'
 function isFollowStateValid (value: FollowState) {
   if (!exists(value)) return false
 
-  return value === 'pending' || value === 'accepted'
+  return value === 'pending' || value === 'accepted' || value === 'rejected'
 }
 
 function isRemoteHandleValid (value: string) {
