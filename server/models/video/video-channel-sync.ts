@@ -1,5 +1,4 @@
-import { isVideoChannelExternalChannelUrlValid } from "@server/helpers/custom-validators/video-channels"
-import { isVideoChannelSyncStateValid } from "@server/helpers/custom-validators/video-channels-sync"
+import { isVideoChannelSyncStateValid } from "@server/helpers/custom-validators/video-channel-syncs"
 import { CONSTRAINTS_FIELDS, VIDEO_CHANNEL_SYNC_STATE } from "@server/initializers/constants"
 import { VideoChannelSync, VideoChannelSyncState } from "@shared/models"
 import { MChannelSyncFormattable } from "@server/types/models/video/video-channel-sync"
@@ -23,6 +22,7 @@ import { VideoChannelModel } from "./video-channel"
 import { ActorModel } from "../actor/actor"
 import { Op } from "sequelize"
 import { UserModel } from "../user/user"
+import { isVideoImportTargetUrlValid } from "@server/helpers/custom-validators/video-imports"
 
 type AvailableForListOptions = {
   accountId: number
@@ -39,7 +39,7 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
 
   @AllowNull(false)
   @Default(null)
-  @Is('VideoChannelExternalChannelUrl', value => throwIfNotValid(value, isVideoChannelExternalChannelUrlValid, 'externalChannelUrl', true))
+  @Is('VideoChannelExternalChannelUrl', value => throwIfNotValid(value, isVideoImportTargetUrlValid, 'externalChannelUrl', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNEL_SYNCS.EXTERNAL_CHANNEL_URL.max))
   externalChannelUrl: string
 

@@ -22,19 +22,11 @@ function isVideoChannelSupportValid (value: string) {
   return value === null || (exists(value) && validator.isLength(value, VIDEO_CHANNELS_CONSTRAINTS_FIELDS.SUPPORT))
 }
 
-function isVideoChannelExternalChannelUrlValid (value: string) {
-  return value === null || (exists(value) &&
-    validator.matches(value, /^https?:\/\//) &&
-    validator.isLength(value, VIDEO_CHANNELS_CONSTRAINTS_FIELDS.EXTERNAL_CHANNEL_URL
-    ))
-}
-
 // ---------------------------------------------------------------------------
 
 export {
   isVideoChannelUsernameValid,
   isVideoChannelDescriptionValid,
   isVideoChannelDisplayNameValid,
-  isVideoChannelSupportValid,
-  isVideoChannelExternalChannelUrlValid
+  isVideoChannelSupportValid
 }

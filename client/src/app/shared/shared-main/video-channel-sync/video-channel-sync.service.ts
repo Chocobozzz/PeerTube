@@ -12,7 +12,7 @@ import { Account, AccountService } from '../account'
   providedIn: 'root'
 })
 export class VideoChannelSyncService {
-  static BASE_VIDEO_CHANNEL_URL = environment.apiUrl + '/api/v1/video-channels-syncs'
+  static BASE_VIDEO_CHANNEL_URL = environment.apiUrl + '/api/v1/video-channel-syncs'
 
   constructor (
     private authHttp: HttpClient,
@@ -28,7 +28,7 @@ export class VideoChannelSyncService {
     const { pagination, sort, account } = parameters
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
-    const url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-channels-syncs'
+    const url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-channel-syncs'
     return this.authHttp.get<ResultList<VideoChannelSync>>(url, { params })
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }

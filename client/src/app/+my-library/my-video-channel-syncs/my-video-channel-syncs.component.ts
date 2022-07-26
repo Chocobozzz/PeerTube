@@ -7,10 +7,10 @@ import { SortMeta } from 'primeng/api'
 import { mergeMap } from 'rxjs'
 
 @Component({
-  templateUrl: './my-video-channels-sync.component.html',
-  styleUrls: [ './my-video-channels-sync.component.scss' ]
+  templateUrl: './my-video-channel-syncs.component.html',
+  styleUrls: [ './my-video-channel-syncs.component.scss' ]
 })
-export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
+export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
 
   error: string = undefined
   channelsSync: VideoChannelSync[]
@@ -83,7 +83,7 @@ export class MyVideoChannelsSyncComponent extends RestTable implements OnInit {
   }
 
   getVideoChannelCreateLink () {
-    return '/my-library/video-channels-sync/create'
+    return '/my-library/video-channel-syncs/create'
   }
 
   getVideoChannelSyncStateClass (syncId: number) {

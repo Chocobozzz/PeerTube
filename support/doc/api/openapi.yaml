@@ -3288,7 +3288,7 @@ paths:
         '204':
           description: successful operation
 
-  '/video-channels-syncs/':
+  '/video-channel-syncs/':
     post:
       summary: Create a synchronization for a video channels
       operationId: addVideoChannelSync
@@ -3315,7 +3315,7 @@ paths:
                       id:
                         $ref: '#/components/schemas/id'
 
-  '/video-channels-syncs/{channelSyncId}':
+  '/video-channel-syncs/{channelSyncId}':
     delete:
       summary: Delete a video channel synchronization
       operationId: delVideoChannelSync
@@ -3329,7 +3329,7 @@ paths:
         '204':
           description: successful operation
 
-  '/video-channels-syncs/syncChannel/{channelSyncId}':
+  '/video-channel-syncs/syncChannel/{channelSyncId}':
     post:
       summary: Triggers the channel synchronization job, fetching all the videos from the remote channel
       operationId: triggerVideoChannelSync
@@ -3715,7 +3715,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoChannelList'
 
-  '/accounts/{name}/video-channels-syncs':
+  '/accounts/{name}/video-channel-syncs':
     get:
       summary: List the synchronizations of video channels of an account
       tags:

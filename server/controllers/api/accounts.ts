@@ -74,7 +74,7 @@ accountsRouter.get('/:accountName/video-channels',
   asyncMiddleware(listAccountChannels)
 )
 
-accountsRouter.get('/:accountName/video-channels-syncs',
+accountsRouter.get('/:accountName/video-channel-syncs',
   asyncMiddleware(accountNameWithHostGetValidator),
   paginationValidator,
   videoChannelSyncsSortValidator,

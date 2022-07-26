@@ -64,7 +64,7 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
       .subscribe({
         next: () => {
           this.notifier.success($localize`Synchronization created successfully.`)
-          this.router.navigate([ '/my-library', 'video-channels-sync' ])
+          this.router.navigate([ '/my-library', 'video-channel-syncs' ])
         },
 
         error: err => {
