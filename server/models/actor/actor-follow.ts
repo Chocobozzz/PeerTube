@@ -276,7 +276,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
       })
     }
 
-    const where: WhereAttributeHash<Attributes<ActorFollowModel>> = { actorId}
+    const where: WhereAttributeHash<Attributes<ActorFollowModel>> = { actorId }
     if (state) where.state = state
 
     const query: FindOptions<Attributes<ActorFollowModel>> = {

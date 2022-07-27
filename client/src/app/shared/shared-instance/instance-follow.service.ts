@@ -1,9 +1,10 @@
 import { SortMeta } from 'primeng/api'
-import { Observable } from 'rxjs'
-import { catchError, map } from 'rxjs/operators'
+import { from, Observable } from 'rxjs'
+import { catchError, concatMap, map, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
+import { arrayify } from '@shared/core-utils'
 import { ActivityPubActorType, ActorFollow, FollowState, ResultList, ServerFollowCreate } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { AdvancedInputFilter } from '../shared-forms'
@@ -81,32 +82,64 @@ export class InstanceFollowService {
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  unfollow (follow: ActorFollow) {
-    const handle = follow.following.name + '@' + follow.following.host
+  unfollow (followsArg: ActorFollow[] | ActorFollow) {
+    const follows = arrayify(followsArg)
 
-    return this.authHttp.delete(InstanceFollowService.BASE_APPLICATION_URL + '/following/' + handle)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+    return from(follows)
+      .pipe(
+        concatMap(follow => {
+          const handle = follow.following.name + '@' + follow.following.host
+
+          return this.authHttp.delete(InstanceFollowService.BASE_APPLICATION_URL + '/following/' + handle)
+        }),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
-  acceptFollower (follow: ActorFollow) {
-    const handle = follow.follower.name + '@' + follow.follower.host
+  acceptFollower (followsArg: ActorFollow[] | ActorFollow) {
+    const follows = arrayify(followsArg)
 
-    return this.authHttp.post(`${InstanceFollowService.BASE_APPLICATION_URL}/followers/${handle}/accept`, {})
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+    return from(follows)
+      .pipe(
+        concatMap(follow => {
+          const handle = follow.follower.name + '@' + follow.follower.host
+
+          return this.authHttp.post(`${InstanceFollowService.BASE_APPLICATION_URL}/followers/${handle}/accept`, {})
+        }),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
-  rejectFollower (follow: ActorFollow) {
-    const handle = follow.follower.name + '@' + follow.follower.host
+  rejectFollower (followsArg: ActorFollow[] | ActorFollow) {
+    const follows = arrayify(followsArg)
 
-    return this.authHttp.post(`${InstanceFollowService.BASE_APPLICATION_URL}/followers/${handle}/reject`, {})
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+    return from(follows)
+      .pipe(
+        concatMap(follow => {
+          const handle = follow.follower.name + '@' + follow.follower.host
+
+          return this.authHttp.post(`${InstanceFollowService.BASE_APPLICATION_URL}/followers/${handle}/reject`, {})
+        }),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
-  removeFollower (follow: ActorFollow) {
-    const handle = follow.follower.name + '@' + follow.follower.host
+  removeFollower (followsArg: ActorFollow[] | ActorFollow) {
+    const follows = arrayify(followsArg)
 
-    return this.authHttp.delete(`${InstanceFollowService.BASE_APPLICATION_URL}/followers/${handle}`)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+    return from(follows)
+      .pipe(
+        concatMap(follow => {
+          const handle = follow.follower.name + '@' + follow.follower.host
+
+          return this.authHttp.delete(`${InstanceFollowService.BASE_APPLICATION_URL}/followers/${handle}`)
+        }),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   buildFollowsListFilters (): AdvancedInputFilter[] {

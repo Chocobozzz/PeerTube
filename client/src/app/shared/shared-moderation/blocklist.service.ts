@@ -4,6 +4,7 @@ import { catchError, concatMap, map, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
+import { arrayify } from '@shared/core-utils'
 import { AccountBlock as AccountBlockServer, BlockStatus, ResultList, ServerBlock } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { Account } from '../shared-main'
@@ -122,7 +123,7 @@ export class BlocklistService {
   }
 
   blockAccountByInstance (accountsArg: Pick<Account, 'nameWithHost'> | Pick<Account, 'nameWithHost'>[]) {
-    const accounts = Array.isArray(accountsArg) ? accountsArg : [ accountsArg ]
+    const accounts = arrayify(accountsArg)
 
     return from(accounts)
       .pipe(

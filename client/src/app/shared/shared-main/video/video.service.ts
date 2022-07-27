@@ -5,6 +5,7 @@ import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthService, ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
+import { arrayify } from '@shared/core-utils'
 import {
   BooleanBothQuery,
   FeedFormat,
@@ -285,7 +286,7 @@ export class VideoService {
   }
 
   removeVideo (idArg: number | number[]) {
-    const ids = Array.isArray(idArg) ? idArg : [ idArg ]
+    const ids = arrayify(idArg)
 
     return from(ids)
       .pipe(
