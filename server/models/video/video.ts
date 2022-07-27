@@ -1209,18 +1209,21 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return VideoModel.getAvailableForApi(queryOptions)
   }
 
-  static countLocalLives () {
-    const options = {
+  static countLives (options: {
+    remote: boolean
+    mode: 'published' | 'not-ended'
+  }) {
+    const query = {
       where: {
-        remote: false,
+        remote: options.remote,
         isLive: true,
-        state: {
-          [Op.ne]: VideoState.LIVE_ENDED
-        }
+        state: options.mode === 'not-ended'
+          ? { [Op.ne]: VideoState.LIVE_ENDED }
+          : { [Op.eq]: VideoState.PUBLISHED }
       }
     }
 
-    return VideoModel.count(options)
+    return VideoModel.count(query)
   }
 
   static countVideosUploadedByUserSince (userId: number, since: Date) {
