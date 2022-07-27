@@ -1,6 +1,6 @@
-import { HttpStatusCode } from '@shared/models'
 import cors from 'cors'
 import express from 'express'
+import { handleStaticError } from '@server/middlewares'
 import { CONFIG } from '../initializers/config'
 import { HLS_STREAMING_PLAYLIST_DIRECTORY, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers/constants'
 
@@ -40,20 +40,4 @@ staticRouter.use(
 
 export {
   staticRouter
-}
-
-// ---------------------------------------------------------------------------
-
-function handleStaticError (err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
-  const message = err.message || ''
-
-  if (message.includes('ENOENT')) {
-    return res.fail({
-      status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,
-      message: err.message,
-      type: err.name
-    })
-  }
-
-  return next(err)
 }

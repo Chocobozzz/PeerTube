@@ -40,6 +40,21 @@ function apiFailMiddleware (req: express.Request, res: express.Response, next: e
   if (next) next()
 }
 
+function handleStaticError (err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
+  const message = err.message || ''
+
+  if (message.includes('ENOENT')) {
+    return res.fail({
+      status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,
+      message: err.message,
+      type: err.name
+    })
+  }
+
+  return next(err)
+}
+
 export {
-  apiFailMiddleware
+  apiFailMiddleware,
+  handleStaticError
 }
