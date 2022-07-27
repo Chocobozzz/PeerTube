@@ -29,7 +29,7 @@ span[class$=-button] {
 .action-button {
   width: 100%; // useful for ellipsis, allow to define a max-width on host component
 
-  my-loader {
+  my-loader.displayed {
     @include margin-right(3px);
 
     display: inline-flex;
