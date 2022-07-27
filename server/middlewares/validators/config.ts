@@ -63,6 +63,8 @@ const customConfigUpdateValidator = [
   body('import.videos.http.enabled').isBoolean().withMessage('Should have a valid import video http enabled boolean'),
   body('import.videos.torrent.enabled').isBoolean().withMessage('Should have a valid import video torrent enabled boolean'),
 
+  body('import.synchronization.enabled').isBoolean().withMessage('Should have a valid synchronization enabled boolean'),
+
   body('trending.videos.algorithms.default').exists().withMessage('Should have a valid default trending algorithm'),
   body('trending.videos.algorithms.enabled').exists().withMessage('Should have a valid array of enabled trending algorithms'),
 
@@ -105,6 +107,7 @@ const customConfigUpdateValidator = [
     if (areValidationErrors(req, res)) return
     if (!checkInvalidConfigIfEmailDisabled(req.body, res)) return
     if (!checkInvalidTranscodingConfig(req.body, res)) return
+    if (!checkInvalidSynchronizationConfig(req.body, res)) return
     if (!checkInvalidLiveConfig(req.body, res)) return
     if (!checkInvalidVideoStudioConfig(req.body, res)) return
 
@@ -149,6 +152,14 @@ function checkInvalidTranscodingConfig (customConfig: CustomConfig, res: express
     return false
   }
 
+  return true
+}
+
+function checkInvalidSynchronizationConfig (customConfig: CustomConfig, res: express.Response) {
+  if (customConfig.import.synchronization.enabled && !customConfig.import.videos.http.enabled) {
+    res.fail({ message: 'You need to enable HTTP video import in order to enable channel synchronization' })
+    return false
+  }
   return true
 }
 

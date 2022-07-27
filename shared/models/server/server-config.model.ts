@@ -188,6 +188,9 @@ export interface ServerConfig {
         enabled: boolean
       }
     }
+    synchronization: {
+      enabled: boolean
+    }
   }
 
   autoBlacklist: {

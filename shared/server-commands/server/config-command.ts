@@ -354,6 +354,9 @@ export class ConfigCommand extends AbstractCommand {
           torrent: {
             enabled: false
           }
+        },
+        synchronization: {
+          enabled: false
         }
       },
       trending: {

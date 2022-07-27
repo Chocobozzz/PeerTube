@@ -362,6 +362,9 @@ const newCustomConfig: CustomConfig = {
       torrent: {
         enabled: false
       }
+    },
+    synchronization: {
+      enabled: false
     }
   },
   trending: {

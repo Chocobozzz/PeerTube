@@ -160,6 +160,9 @@ describe('Test config API validators', function () {
         torrent: {
           enabled: false
         }
+      },
+      synchronization: {
+        enabled: false
       }
     },
     trending: {

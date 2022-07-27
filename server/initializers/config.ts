@@ -300,8 +300,7 @@ const CONFIG = {
     get VIDEO_QUOTA_DAILY () { return parseBytes(config.get<number>('user.video_quota_daily')) }
   },
   VIDEO_CHANNELS: {
-    get MAX_PER_USER () { return config.get<number>('video_channels.max_per_user') },
-    get SYNCHRONIZATION_INTERVAL () { return parseDurationToMs(config.get<string>('video_channels.synchronization_interval')) }
+    get MAX_PER_USER () { return config.get<number>('video_channels.max_per_user') }
   },
   TRANSCODING: {
     get ENABLED () { return config.get<boolean>('transcoding.enabled') },
@@ -396,6 +395,10 @@ const CONFIG = {
       TORRENT: {
         get ENABLED () { return config.get<boolean>('import.videos.torrent.enabled') }
       }
+    },
+    SYNCHRONIZATION: {
+      get ENABLED () { return config.get<boolean>('import.synchronization.enabled') },
+      get CHECK_INTERVAL () { return parseDurationToMs(config.get<string>('import.synchronization.check_interval')) }
     }
   },
   AUTO_BLACKLIST: {
@@ -497,6 +500,7 @@ const CONFIG = {
       get IS_DEFAULT_SEARCH () { return config.get<boolean>('search.search_index.is_default_search') }
     }
   }
+
 }
 
 function registerConfigChangedHandler (fun: Function) {

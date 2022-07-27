@@ -162,6 +162,9 @@ export interface CustomConfig {
         enabled: boolean
       }
     }
+    synchronization: {
+      enabled: boolean
+    }
   }
 
   trending: {

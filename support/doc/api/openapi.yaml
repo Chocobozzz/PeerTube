@@ -6582,6 +6582,11 @@ components:
                   properties:
                     enabled:
                       type: boolean
+            synchronization:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
         autoBlacklist:
           type: object
           properties:
@@ -6946,6 +6951,11 @@ components:
                   properties:
                     enabled:
                       type: boolean
+            synchronization:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
         autoBlacklist:
           type: object
           properties:
