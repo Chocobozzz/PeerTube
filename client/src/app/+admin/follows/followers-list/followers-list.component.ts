@@ -1,6 +1,7 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
+import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { InstanceFollowService } from '@app/shared/shared-instance'
 import { ActorFollow } from '@shared/models'
 
@@ -15,12 +16,16 @@ export class FollowersListComponent extends RestTable implements OnInit {
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
+  searchFilters: AdvancedInputFilter[]
+
   constructor (
     private confirmService: ConfirmService,
     private notifier: Notifier,
     private followService: InstanceFollowService
   ) {
     super()
+
+    this.searchFilters = this.followService.buildFollowsListFilters()
   }
 
   ngOnInit () {
@@ -70,7 +75,7 @@ export class FollowersListComponent extends RestTable implements OnInit {
   }
 
   async deleteFollower (follow: ActorFollow) {
-    const message = $localize`Do you really want to delete this follower?`
+    const message = $localize`Do you really want to delete this follower? It will be able to send again another follow request.`
     const res = await this.confirmService.confirm(message, $localize`Delete`)
     if (res === false) return
 

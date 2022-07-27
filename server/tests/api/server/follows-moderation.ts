@@ -33,42 +33,39 @@ async function checkServer1And2HasFollowers (servers: PeerTubeServer[], state = 
 }
 
 async function checkFollows (options: {
-  follower: {
-    server: PeerTubeServer
-    state?: FollowState // if not provided, it means it does not exist
-  }
-  following: {
-    server: PeerTubeServer
-    state?: FollowState // if not provided, it means it does not exist
-  }
-}) {
-  const { follower, following } = options
+  follower: PeerTubeServer
+  followerState: FollowState | 'deleted'
 
-  const followerUrl = follower.server.url + '/accounts/peertube'
-  const followingUrl = following.server.url + '/accounts/peertube'
+  following: PeerTubeServer
+  followingState: FollowState | 'deleted'
+}) {
+  const { follower, followerState, followingState, following } = options
+
+  const followerUrl = follower.url + '/accounts/peertube'
+  const followingUrl = following.url + '/accounts/peertube'
   const finder = (d: ActorFollow) => d.follower.url === followerUrl && d.following.url === followingUrl
 
   {
-    const { data } = await follower.server.follows.getFollowings()
+    const { data } = await follower.follows.getFollowings()
     const follow = data.find(finder)
 
-    if (!follower.state) {
+    if (followerState === 'deleted') {
       expect(follow).to.not.exist
     } else {
-      expect(follow.state).to.equal(follower.state)
+      expect(follow.state).to.equal(followerState)
       expect(follow.follower.url).to.equal(followerUrl)
       expect(follow.following.url).to.equal(followingUrl)
     }
   }
 
   {
-    const { data } = await following.server.follows.getFollowers()
+    const { data } = await following.follows.getFollowers()
     const follow = data.find(finder)
 
-    if (!following.state) {
+    if (followingState === 'deleted') {
       expect(follow).to.not.exist
     } else {
-      expect(follow.state).to.equal(following.state)
+      expect(follow.state).to.equal(followingState)
       expect(follow.follower.url).to.equal(followerUrl)
       expect(follow.following.url).to.equal(followingUrl)
     }
@@ -256,14 +253,10 @@ describe('Test follows moderation', function () {
       await waitJobs(servers)
 
       await checkFollows({
-        follower: {
-          server: servers[0],
-          state: 'rejected'
-        },
-        following: {
-          server: servers[2],
-          state: 'rejected'
-        }
+        follower: servers[0],
+        followerState: 'rejected',
+        following: servers[2],
+        followingState: 'rejected'
       })
     }
 
@@ -279,13 +272,10 @@ describe('Test follows moderation', function () {
     await waitJobs(servers)
 
     await checkFollows({
-      follower: {
-        server: servers[0]
-      },
-      following: {
-        server: servers[2],
-        state: 'rejected'
-      }
+      follower: servers[0],
+      followerState: 'deleted',
+      following: servers[2],
+      followingState: 'rejected'
     })
   })
 
@@ -297,14 +287,10 @@ describe('Test follows moderation', function () {
     await waitJobs(servers)
 
     await checkFollows({
-      follower: {
-        server: servers[0],
-        state: 'pending'
-      },
-      following: {
-        server: servers[2],
-        state: 'pending'
-      }
+      follower: servers[0],
+      followerState: 'pending',
+      following: servers[2],
+      followingState: 'pending'
     })
   })
 
@@ -313,14 +299,10 @@ describe('Test follows moderation', function () {
     await waitJobs(servers)
 
     await checkFollows({
-      follower: {
-        server: servers[0],
-        state: 'rejected'
-      },
-      following: {
-        server: servers[1],
-        state: 'rejected'
-      }
+      follower: servers[0],
+      followerState: 'rejected',
+      following: servers[1],
+      followingState: 'rejected'
     })
   })
 
@@ -329,19 +311,36 @@ describe('Test follows moderation', function () {
     await waitJobs(servers)
 
     await checkFollows({
-      follower: {
-        server: servers[0],
-        state: 'accepted'
-      },
-      following: {
-        server: servers[1],
-        state: 'accepted'
-      }
+      follower: servers[0],
+      followerState: 'accepted',
+      following: servers[1],
+      followingState: 'accepted'
     })
   })
 
   it('Should ignore follow requests of muted servers', async function () {
+    await servers[1].blocklist.addToServerBlocklist({ server: servers[0].host })
 
+    await commands[0].unfollow({ target: servers[1] })
+
+    await waitJobs(servers)
+
+    await checkFollows({
+      follower: servers[0],
+      followerState: 'deleted',
+      following: servers[1],
+      followingState: 'deleted'
+    })
+
+    await commands[0].follow({ hosts: [ servers[1].host ] })
+    await waitJobs(servers)
+
+    await checkFollows({
+      follower: servers[0],
+      followerState: 'rejected',
+      following: servers[1],
+      followingState: 'deleted'
+    })
   })
 
   after(async function () {

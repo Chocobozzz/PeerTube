@@ -20,7 +20,7 @@
       </div>
 
       <div class="ms-auto">
-        <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+        <my-advanced-input-filter [filters]="searchFilters" (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
     </div>
   </ng-template>
@@ -47,11 +47,10 @@
         </a>
       </td>
 
-      <td *ngIf="follow.state === 'accepted'">
-        <span class="pt-badge badge-green" i18n>Accepted</span>
-      </td>
-      <td *ngIf="follow.state === 'pending'">
-        <span class="pt-badge badge-yellow" i18n>Pending</span>
+      <td>
+        <span *ngIf="follow.state === 'accepted'" class="pt-badge badge-green" i18n>Accepted</span>
+        <span *ngIf="follow.state === 'pending'" class="pt-badge badge-yellow" i18n>Pending</span>
+        <span *ngIf="follow.state === 'rejected'" class="pt-badge badge-red" i18n>Rejected</span>
       </td>
 
       <td>{{ follow.createdAt | date: 'short' }}</td>
@@ -66,7 +65,7 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="6">
+      <td colspan="5">
         <div class="no-results">
           <ng-container *ngIf="search" i18n>No host found matching current filters.</ng-container>
           <ng-container *ngIf="!search" i18n>Your instance is not following anyone.</ng-container>

@@ -13,7 +13,7 @@
   <ng-template pTemplate="caption">
     <div class="caption">
       <div class="ms-auto">
-        <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+        <my-advanced-input-filter [filters]="searchFilters" (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
     </div>
   </ng-template>
@@ -31,12 +31,10 @@
   <ng-template pTemplate="body" let-follow>
     <tr>
       <td class="action-cell">
-        <ng-container *ngIf="follow.state === 'pending'">
-          <my-button i18n-title title="Accept" icon="tick" (click)="acceptFollower(follow)"></my-button>
-          <my-button i18n-title title="Refuse" icon="cross" (click)="rejectFollower(follow)"></my-button>
-        </ng-container>
+        <my-button *ngIf="follow.state !== 'accepted'" i18n-title title="Accept" icon="tick" (click)="acceptFollower(follow)"></my-button>
+        <my-button *ngIf="follow.state !== 'rejected'" i18n-title title="Refuse" icon="cross" (click)="rejectFollower(follow)"></my-button>
 
-        <my-delete-button label *ngIf="follow.state === 'accepted'" (click)="deleteFollower(follow)"></my-delete-button>
+        <my-delete-button *ngIf="follow.state === 'rejected'" (click)="deleteFollower(follow)"></my-delete-button>
       </td>
       <td>
         <a [href]="follow.follower.url" i18n-title title="Open actor page in a new tab" target="_blank" rel="noopener noreferrer">
@@ -45,11 +43,10 @@
         </a>
       </td>
 
-      <td *ngIf="follow.state === 'accepted'">
-        <span class="pt-badge badge-green" i18n>Accepted</span>
-      </td>
-      <td *ngIf="follow.state === 'pending'">
-        <span class="pt-badge badge-yellow" i18n>Pending</span>
+      <td>
+        <span *ngIf="follow.state === 'accepted'" class="pt-badge badge-green" i18n>Accepted</span>
+        <span *ngIf="follow.state === 'pending'" class="pt-badge badge-yellow" i18n>Pending</span>
+        <span *ngIf="follow.state === 'rejected'" class="pt-badge badge-red" i18n>Rejected</span>
       </td>
 
       <td>{{ follow.score }}</td>

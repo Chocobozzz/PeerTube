@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { ActivityPubActorType, ActorFollow, FollowState, ResultList, ServerFollowCreate } from '@shared/models'
 import { environment } from '../../../environments/environment'
+import { AdvancedInputFilter } from '../shared-forms'
 
 @Injectable()
 export class InstanceFollowService {
@@ -30,7 +31,10 @@ export class InstanceFollowService {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    if (search) params = params.append('search', search)
+    if (search) {
+      params = this.restService.addObjectParams(params, this.parseFollowsListFilters(search))
+    }
+
     if (state) params = params.append('state', state)
     if (actorType) params = params.append('actorType', actorType)
 
@@ -53,7 +57,10 @@ export class InstanceFollowService {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    if (search) params = params.append('search', search)
+    if (search) {
+      params = this.restService.addObjectParams(params, this.parseFollowsListFilters(search))
+    }
+
     if (state) params = params.append('state', state)
     if (actorType) params = params.append('actorType', actorType)
 
@@ -100,5 +107,35 @@ export class InstanceFollowService {
 
     return this.authHttp.delete(`${InstanceFollowService.BASE_APPLICATION_URL}/followers/${handle}`)
                .pipe(catchError(res => this.restExtractor.handleError(res)))
+  }
+
+  buildFollowsListFilters (): AdvancedInputFilter[] {
+    return [
+      {
+        title: $localize`Advanced filters`,
+        children: [
+          {
+            value: 'state:accepted',
+            label: $localize`Accepted follows`
+          },
+          {
+            value: 'state:rejected',
+            label: $localize`Rejected follows`
+          },
+          {
+            value: 'state:pending',
+            label: $localize`Pending follows`
+          }
+        ]
+      }
+    ]
+  }
+
+  private parseFollowsListFilters (search: string) {
+    return this.restService.parseQueryStringFilter(search, {
+      state: {
+        prefix: 'state:'
+      }
+    })
   }
 }
