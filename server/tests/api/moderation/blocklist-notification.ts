@@ -23,7 +23,7 @@ async function checkNotifications (server: PeerTubeServer, token: string, expect
   }
 }
 
-describe('Test blocklist', function () {
+describe('Test blocklist notifications', function () {
   let servers: PeerTubeServer[]
   let videoUUID: string
 

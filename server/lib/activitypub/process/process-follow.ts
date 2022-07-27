@@ -40,7 +40,7 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
     if (!targetActor) throw new Error('Unknown actor')
     if (targetActor.isOwned() === false) throw new Error('This is not a local actor.')
 
-    if (rejectIfInstanceFollowDisabled(byActor, activityId, targetActor)) return { actorFollow: undefined }
+    if (await rejectIfInstanceFollowDisabled(byActor, activityId, targetActor)) return { actorFollow: undefined }
     if (await rejectIfMuted(byActor, activityId, targetActor)) return { actorFollow: undefined }
 
     const [ actorFollow, created ] = await ActorFollowModel.findOrCreateCustom({
@@ -79,7 +79,7 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
     const follower = await ActorModel.loadFull(byActor.id)
     const actorFollowFull = Object.assign(actorFollow, { ActorFollowing: targetActor, ActorFollower: follower })
 
-    if (isFollowingInstance(targetActor)) {
+    if (await isFollowingInstance(targetActor)) {
       Notifier.Instance.notifyOfNewInstanceFollow(actorFollowFull)
     } else {
       Notifier.Instance.notifyOfNewUserFollow(actorFollowFull)
@@ -89,8 +89,8 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
   logger.info('Actor %s is followed by actor %s.', targetActorURL, byActor.url)
 }
 
-function rejectIfInstanceFollowDisabled (byActor: MActorSignature, activityId: string, targetActor: MActorFull) {
-  if (isFollowingInstance(targetActor) && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
+async function rejectIfInstanceFollowDisabled (byActor: MActorSignature, activityId: string, targetActor: MActorFull) {
+  if (await isFollowingInstance(targetActor) && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
     logger.info('Rejecting %s because instance followers are disabled.', targetActor.url)
 
     sendReject(activityId, byActor, targetActor)
@@ -133,7 +133,7 @@ async function acceptIfNeeded (actorFollow: MActorFollow, targetActor: MActorFul
   // Set the follow as accepted if the remote actor follows a channel or account
   // Or if the instance automatically accepts followers
   if (actorFollow.state === 'accepted') return
-  if (!isFollowingInstance(targetActor)) return
+  if (!await isFollowingInstance(targetActor)) return
   if (CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === true) return
 
   actorFollow.state = 'accepted'
