@@ -1,5 +1,4 @@
 import * as Sequelize from 'sequelize'
-import { CONSTRAINTS_FIELDS } from '../constants'
 
 async function up (utils: {
   transaction: Sequelize.Transaction
@@ -7,11 +6,10 @@ async function up (utils: {
   sequelize: Sequelize.Sequelize
   db: any
 }): Promise<void> {
-  const externalChannelUrlMaxLength = CONSTRAINTS_FIELDS.VIDEO_CHANNEL_SYNCS.EXTERNAL_CHANNEL_URL.max
   const query = `
     CREATE TABLE IF NOT EXISTS "videoChannelSync" (
       "id"   SERIAL,
-      "externalChannelUrl" VARCHAR(${externalChannelUrlMaxLength}) NOT NULL DEFAULT NULL,
+      "externalChannelUrl" VARCHAR(2000) NOT NULL DEFAULT NULL,
       "videoChannelId" INTEGER NOT NULL REFERENCES "videoChannel" ("id")
         ON DELETE CASCADE
         ON UPDATE CASCADE,

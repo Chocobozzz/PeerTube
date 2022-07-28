@@ -40,7 +40,7 @@ export const ensureSyncExists = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
     const syncId = parseInt(req.params.id, 10)
-    const sync = await VideoChannelSyncModel.loadById(syncId)
+    const sync = await VideoChannelSyncModel.load(syncId)
     if (!sync) {
       return res.fail({
         status: HttpStatusCode.NOT_FOUND_404,

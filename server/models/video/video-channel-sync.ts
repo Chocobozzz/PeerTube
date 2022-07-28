@@ -22,7 +22,7 @@ import { VideoChannelModel } from "./video-channel"
 import { ActorModel } from "../actor/actor"
 import { Op } from "sequelize"
 import { UserModel } from "../user/user"
-import { isVideoImportTargetUrlValid } from "@server/helpers/custom-validators/video-imports"
+import { isUrlValid } from "@server/helpers/custom-validators/activitypub/misc"
 
 type AvailableForListOptions = {
   accountId: number
@@ -33,20 +33,24 @@ type AvailableForListOptions = {
 }
 
 @Table({
-  tableName: 'videoChannelSync'
+  tableName: 'videoChannelSync',
+  indexes: [
+    {
+      fields: [ 'videoChannelId' ]
+    }
+  ]
 })
 export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoChannelSyncModel>>> {
 
   @AllowNull(false)
   @Default(null)
-  @Is('VideoChannelExternalChannelUrl', value => throwIfNotValid(value, isVideoImportTargetUrlValid, 'externalChannelUrl', true))
+  @Is('VideoChannelExternalChannelUrl', value => throwIfNotValid(value, isUrlValid, 'externalChannelUrl', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNEL_SYNCS.EXTERNAL_CHANNEL_URL.max))
   externalChannelUrl: string
 
   @CreatedAt
   createdAt: Date
 
-  // We have no use of this field
   @UpdatedAt
   updatedAt: Date
 
@@ -117,15 +121,18 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
         label: VIDEO_CHANNEL_SYNC_STATE[this.state]
       },
       externalChannelUrl: this.externalChannelUrl,
-      createdAt: this.createdAt.toString(),
-      channel: this.VideoChannel?.toFormattedSummaryJSON(),
-      videoChannelId: this.videoChannelId
+      createdAt: this.createdAt.toISOString(),
+      channel: this.VideoChannel.toFormattedSummaryJSON()
     }
   }
 
-  static loadById (id: number) {
+  static load (id: number) {
     return this.findOne({
-      where: { id }
+      where: { id },
+      include: [ {
+        model: VideoChannelModel.unscoped(),
+        required: true
+      } ]
     })
   }
 
@@ -140,7 +147,7 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
               model: AccountModel.unscoped(),
               required: true,
               include: [ {
-                attributes: [ ],
+                attributes: [],
                 model: UserModel.unscoped(),
                 where: {
                   videoQuota: {

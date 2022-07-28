@@ -254,6 +254,8 @@ tags:
       download it for you, saving you as much bandwidth and avoiding any instability or limitation your network might have.
   - name: Video Imports
     description: Operations dealing with listing, adding and removing video imports.
+  - name: Channels Sync
+    description: Operations dealing with synchronizing PeerTube user's channel with channels of other platforms
   - name: Video Captions
     description: Operations dealing with listing, adding and removing closed captions of a video.
   - name: Video Channels
@@ -327,6 +329,7 @@ x-tagGroups:
       - Video Transcoding
       - Live Videos
       - Feeds
+      - Channels Sync
   - name: Search
     tags:
       - Search
@@ -3288,14 +3291,14 @@ paths:
         '204':
           description: successful operation
 
-  '/video-channel-syncs/':
+  '/video-channel-syncs':
     post:
-      summary: Create a synchronization for a video channels
+      summary: Create a synchronization for a video channel
       operationId: addVideoChannelSync
       security:
         - OAuth2: []
       tags:
-        - Video Channels Synchronizations
+        - Channels Sync
       requestBody:
         content:
           application/json:
@@ -3322,21 +3325,21 @@ paths:
       security:
         - OAuth2: []
       tags:
-        - Video Channels Synchronizations
+        - Channels Sync
       parameters:
         - $ref: '#/components/parameters/channelSyncId'
       responses:
         '204':
           description: successful operation
 
-  '/video-channel-syncs/syncChannel/{channelSyncId}':
+  '/video-channel-syncs/{channelSyncId}/sync':
     post:
       summary: Triggers the channel synchronization job, fetching all the videos from the remote channel
       operationId: triggerVideoChannelSync
       security:
         - OAuth2: []
       tags:
-        - Video Channels Synchronizations
+        - Channels Sync
       parameters:
         - $ref: '#/components/parameters/channelSyncId'
       responses:
@@ -3720,7 +3723,7 @@ paths:
       summary: List the synchronizations of video channels of an account
       tags:
         - Video Channels
-        - Video Channels Synchronizations
+        - Channels Sync
         - Accounts
       parameters:
         - $ref: '#/components/parameters/name'
@@ -7614,8 +7617,6 @@ components:
             label:
               type: string
               example: PROCESSING
-        videoChannelId:
-          type: integer
         externalChannelUrl:
           type: string
           example: 'https://youtube.com/c/UC_myfancychannel'
