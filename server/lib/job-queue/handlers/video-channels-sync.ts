@@ -125,15 +125,10 @@ async function synchronizeChannel (
     alreadyImported: 0
   }
   const user = await UserModel.loadByChannelActorId(channel.actorId)
-  const additionalYoutubeDLArgs = [ '--skip-download', '--playlist-reverse' ]
-  if (lastVideosCount) {
-    additionalYoutubeDLArgs.push('--playlist-end', VIDEO_CHANNEL_MAX_SYNC.toString())
-  }
-  const channelInfo = await youtubeDL.getInfo({
-    url: externalChannelUrl,
-    format: YoutubeDLCLI.getYoutubeDLVideoFormat([]),
-    processOptions,
-    additionalYoutubeDLArgs
+  const channelInfo = await youtubeDL.getChannelInfo({
+    lastVideosCount,
+    channelUrl: externalChannelUrl,
+    processOptions
   })
   const targetUrls: string[] = (await Promise.all(
     channelInfo.map(video => {

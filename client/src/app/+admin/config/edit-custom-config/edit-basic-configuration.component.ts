@@ -25,7 +25,7 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
     private configService: ConfigService,
     private menuService: MenuService,
     private themeService: ThemeService
-  ) { }
+  ) {}
 
   ngOnInit () {
     this.buildLandingPageOptions()

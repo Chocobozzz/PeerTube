@@ -121,6 +121,23 @@ export class YoutubeDLCLI {
       : info
   }
 
+  getChannelInfo (options: {
+    channelUrl: string
+    lastVideosCount?: number
+    processOptions: execa.NodeOptions
+  }) {
+    const additionalYoutubeDLArgs = [ '--skip-download', '--playlist-reverse' ]
+    if (options.lastVideosCount !== undefined) {
+      additionalYoutubeDLArgs.push('--playlist-end', options.lastVideosCount.toString())
+    }
+    return this.getInfo({
+      url: options.channelUrl,
+      format: YoutubeDLCLI.getYoutubeDLVideoFormat([]),
+      processOptions: options.processOptions,
+      additionalYoutubeDLArgs
+    })
+  }
+
   async getSubs (options: {
     url: string
     format: 'vtt'
