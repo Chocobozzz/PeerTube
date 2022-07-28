@@ -5,7 +5,6 @@ import { body, param } from "express-validator"
 import { areValidationErrors, doesVideoChannelIdExist } from "../shared"
 import { HttpStatusCode, VideoChannelSyncCreate } from '@shared/models'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
-import { VideoChannelModel } from '@server/models/video/video-channel'
 import { CONFIG } from '@server/initializers/config'
 
 export const ensureSyncIsEnabled = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -37,8 +36,9 @@ export const videoChannelSyncValidator = [
 ]
 
 export const ensureSyncExists = [
+  param('id').exists().isInt().withMessage('Should have an sync id'),
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-
+    if (areValidationErrors(req, res)) return
     const syncId = parseInt(req.params.id, 10)
     const sync = await VideoChannelSyncModel.load(syncId)
     if (!sync) {
@@ -48,28 +48,7 @@ export const ensureSyncExists = [
       })
     }
     res.locals.videoChannelSync = sync
+    res.locals.videoChannel = sync.VideoChannel
     return next()
   }
 ]
-
-export const ensureSyncTargetChannelExists = [
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const sync = res.locals.videoChannelSync
-    if (!await doesVideoChannelIdExist(sync.videoChannelId, res)) {
-      return
-    }
-    await sync.reload({ include: VideoChannelModel })
-    return next()
-  }
-]
-
-const routeWithIdValidator = [
-  param('id').exists().isInt().withMessage('Should have an sync id'),
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res)) return
-    return next()
-  }
-]
-
-export const videoChannelSyncRemoveValidator = routeWithIdValidator
-export const syncChannelValidator = routeWithIdValidator

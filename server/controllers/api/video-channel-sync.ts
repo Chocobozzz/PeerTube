@@ -9,10 +9,7 @@ import {
   ensureCanManageChannel as ensureCanManageSyncedChannel,
   ensureSyncExists,
   ensureSyncIsEnabled,
-  ensureSyncTargetChannelExists,
-  videoChannelSyncValidator,
-  videoChannelSyncRemoveValidator,
-  syncChannelValidator
+  videoChannelSyncValidator
 } from '@server/middlewares'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
@@ -32,19 +29,15 @@ videoChannelSyncRouter.post('/',
 
 videoChannelSyncRouter.post('/:id/sync',
   authenticate,
-  syncChannelValidator,
   ensureSyncIsEnabled,
   asyncMiddleware(ensureSyncExists),
-  asyncMiddleware(ensureSyncTargetChannelExists),
   ensureCanManageSyncedChannel,
   syncChannel
 )
 
 videoChannelSyncRouter.delete('/:id',
   authenticate,
-  videoChannelSyncRemoveValidator,
   asyncMiddleware(ensureSyncExists),
-  asyncMiddleware(ensureSyncTargetChannelExists),
   ensureCanManageSyncedChannel,
   asyncRetryTransactionMiddleware(removeVideoChannelSync)
 )
