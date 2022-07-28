@@ -3,7 +3,7 @@ import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
 import { catchError, filter, map, share, switchMap, tap } from 'rxjs/operators'
 import { HttpClient, HttpContext, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { AuthUser, ComponentPaginationLight, RestExtractor, RestService, ServerService } from '@app/core'
+import { AuthService, AuthUser, ComponentPaginationLight, RestExtractor, RestService, ServerService } from '@app/core'
 import { buildBulkObservable, objectToFormData } from '@app/helpers'
 import { Account, AccountService, VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { NGX_LOADING_BAR_IGNORED } from '@ngx-loading-bar/http-client'
@@ -46,6 +46,7 @@ export class VideoPlaylistService {
 
   constructor (
     private authHttp: HttpClient,
+    private auth: AuthService,
     private serverService: ServerService,
     private restExtractor: RestExtractor,
     private restService: RestService
@@ -53,7 +54,14 @@ export class VideoPlaylistService {
     this.videoExistsInPlaylistObservable = merge(
       buildBulkObservable({
         time: 500,
-        bulkGet: this.doVideosExistInPlaylist.bind(this),
+        bulkGet: (videoIds: number[]) => {
+          // We added a delay to the request, so ensure the user is still logged in
+          if (this.auth.isLoggedIn()) {
+            return this.doVideosExistInPlaylist(videoIds)
+          }
+
+          return of({})
+        },
         notifierObservable: this.videoExistsInPlaylistNotifier
       }).pipe(map(({ response }) => response)),
 
