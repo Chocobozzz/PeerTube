@@ -27,6 +27,7 @@ import {
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live/live-manager'
 import { removeHLSFileObjectStorage, removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'
+import { tracer } from '@server/lib/opentelemetry/tracing'
 import { getHLSDirectory, getHLSRedundancyDirectory } from '@server/lib/paths'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { getServerActor } from '@server/models/application/application'
@@ -1535,6 +1536,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     options: BuildVideosListQueryOptions,
     countVideos = true
   ): Promise<ResultList<VideoModel>> {
+    const span = tracer.startSpan('peertube.VideoModel.getAvailableForApi')
+
     function getCount () {
       if (countVideos !== true) return Promise.resolve(undefined)
 
@@ -1553,6 +1556,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     }
 
     const [ count, rows ] = await Promise.all([ getCount(), getModels() ])
+
+    span.end()
 
     return {
       data: rows,

@@ -1732,7 +1732,7 @@
     semver "^7.3.2"
     shimmer "^1.2.1"
 
-"@opentelemetry/instrumentation@^0.29.2":
+"@opentelemetry/instrumentation@^0.29.0", "@opentelemetry/instrumentation@^0.29.2":
   version "0.29.2"
   resolved "https://registry.yarnpkg.com/@opentelemetry/instrumentation/-/instrumentation-0.29.2.tgz#70e6d4e1a84508f5e9d8c7c426adcd7b0dba6c95"
   integrity sha512-LXx5V0ONNATQFCE8C5uqnxWSm4rcXLssdLHdXjtGdxRmURqj/JO8jYefqXCD0LzsqEQ6yxOx2GZ0dgXvhBVdTw==
@@ -7026,6 +7026,15 @@ open@7:
   dependencies:
     is-docker "^2.0.0"
     is-wsl "^2.1.1"
+
+opentelemetry-instrumentation-sequelize@^0.29.0:
+  version "0.29.0"
+  resolved "https://registry.yarnpkg.com/opentelemetry-instrumentation-sequelize/-/opentelemetry-instrumentation-sequelize-0.29.0.tgz#d8355b7c845473b3d66978b80620dba6f686e257"
+  integrity sha512-nBhWMhpOtFxR0+W9WwTC+g49UMPqDMusbceGycDJOaq9l7B/IGo8a15UHKm4N4uU/Cr1NTrvyJ0cFXUtSh7i3g==
+  dependencies:
+    "@opentelemetry/core" "^1.0.0"
+    "@opentelemetry/instrumentation" "^0.29.0"
+    "@opentelemetry/semantic-conventions" "^1.0.0"
 
 opentracing@^0.14.4:
   version "0.14.7"
