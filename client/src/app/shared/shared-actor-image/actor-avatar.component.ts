@@ -140,6 +140,6 @@ export class ActorAvatarComponent implements OnChanges {
     const theme = Object.keys(themes)
                         .find(chars => chars.includes(initialLowercase))
 
-    return themes[theme]
+    return themes[theme] || 'blue'
   }
 }
