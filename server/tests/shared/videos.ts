@@ -115,6 +115,7 @@ async function completeVideoCheck (
     // Transcoding enabled: extension will always be .mp4
     if (attributes.files.length > 1) extension = '.mp4'
 
+    expect(file.id).to.exist
     expect(file.magnetUri).to.have.lengthOf.above(2)
 
     expect(file.torrentDownloadUrl).to.match(new RegExp(`http://${host}/download/torrents/${uuidRegex}-${file.resolution.id}.torrent`))

@@ -3,6 +3,8 @@ import { VideoFileMetadata } from './video-file-metadata.model'
 import { VideoResolution } from './video-resolution.enum'
 
 export interface VideoFile {
+  id: number
+
   resolution: VideoConstant<VideoResolution>
   size: number // Bytes
 

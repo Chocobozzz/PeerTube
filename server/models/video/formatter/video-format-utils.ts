@@ -256,6 +256,8 @@ function videoFilesModelToFormattedJSON (
     .sort(sortByResolutionDesc)
     .map(videoFile => {
       return {
+        id: videoFile.id,
+
         resolution: {
           id: videoFile.resolution,
           label: videoFile.resolution === 0 ? 'Audio' : `${videoFile.resolution}p`

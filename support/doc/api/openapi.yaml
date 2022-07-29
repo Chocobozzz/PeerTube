@@ -5665,6 +5665,8 @@ components:
     VideoFile:
       readOnly: true
       properties:
+        id:
+          $ref: '#/components/schemas/id'
         magnetUri:
           type: string
           format: uri
