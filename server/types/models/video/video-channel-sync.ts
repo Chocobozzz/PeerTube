@@ -4,9 +4,10 @@ import { MChannelFormattable } from "./video-channels"
 
 type Use<K extends keyof VideoChannelSyncModel, M> = PickWith<VideoChannelSyncModel, K, M>
 
-export type MChannelSync = VideoChannelSyncModel
+type MChannelSync = Omit<VideoChannelSyncModel, 'VideoChannel'>
+export type MChannelSyncChannel = VideoChannelSyncModel
 
 export type MChannelSyncFormattable =
-  FunctionProperties<MChannelSync> &
+  FunctionProperties<MChannelSyncChannel> &
   Use<'VideoChannel', MChannelFormattable> &
-  Pick<MChannelSync, 'id' | 'externalChannelUrl' | 'state' | 'createdAt'>
+  MChannelSync

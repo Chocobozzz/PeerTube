@@ -8,7 +8,7 @@ import {
   MActorFollowActorsDefault,
   MActorUrl,
   MChannelBannerAccountDefault,
-  MChannelSync,
+  MChannelSyncChannel,
   MStreamingPlaylist,
   MVideoChangeOwnershipFull,
   MVideoFile,
@@ -146,7 +146,7 @@ declare module 'express' {
       videoStreamingPlaylist?: MStreamingPlaylist
 
       videoChannel?: MChannelBannerAccountDefault
-      videoChannelSync?: MChannelSync
+      videoChannelSync?: MChannelSyncChannel
 
       videoPlaylistFull?: MVideoPlaylistFull
       videoPlaylistSummary?: MVideoPlaylistFullSummary
