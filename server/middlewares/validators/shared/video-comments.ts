@@ -1,7 +1,7 @@
 import express from 'express'
 import { VideoCommentModel } from '@server/models/video/video-comment'
 import { MVideoId } from '@server/types/models'
-import { HttpStatusCode } from '@shared/models'
+import { HttpStatusCode, ServerErrorCode } from '@shared/models'
 
 async function doesVideoCommentThreadExist (idArg: number | string, video: MVideoId, res: express.Response) {
   const id = parseInt(idArg + '', 10)
@@ -16,7 +16,10 @@ async function doesVideoCommentThreadExist (idArg: number | string, video: MVide
   }
 
   if (videoComment.videoId !== video.id) {
-    res.fail({ message: 'Video comment is not associated to this video.' })
+    res.fail({
+      type: ServerErrorCode.COMMENT_NOT_ASSOCIATED_TO_VIDEO,
+      message: 'Video comment is not associated to this video.'
+    })
     return false
   }
 
@@ -42,7 +45,10 @@ async function doesVideoCommentExist (idArg: number | string, video: MVideoId, r
   }
 
   if (videoComment.videoId !== video.id) {
-    res.fail({ message: 'Video comment is not associated to this video.' })
+    res.fail({
+      type: ServerErrorCode.COMMENT_NOT_ASSOCIATED_TO_VIDEO,
+      message: 'Video comment is not associated to this video.'
+    })
     return false
   }
 

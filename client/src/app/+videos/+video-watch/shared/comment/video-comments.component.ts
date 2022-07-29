@@ -5,6 +5,7 @@ import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifie
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { Syndication, VideoDetails } from '@app/shared/shared-main'
 import { VideoComment, VideoCommentService, VideoCommentThreadTree } from '@app/shared/shared-video-comment'
+import { PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
 
 @Component({
   selector: 'my-video-comments',
@@ -104,7 +105,14 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
         }
       },
 
-      error: err => this.notifier.error(err.message)
+      error: err => {
+        // We may try to fetch highlighted thread of another video, skip the error if it is the case
+        // We'll retry the request on video Input() change
+        const errorBody = err.body as PeerTubeProblemDocument
+        if (highlightThread && errorBody?.code === ServerErrorCode.COMMENT_NOT_ASSOCIATED_TO_VIDEO) return
+
+        this.notifier.error(err.message)
+      }
     })
   }
 
@@ -254,6 +262,10 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
       this.syndicationItems = this.videoCommentService.getVideoCommentsFeeds(this.video)
       this.loadMoreThreads()
+
+      if (this.activatedRoute.params['threadId']) {
+        this.processHighlightedThread(+this.activatedRoute.params['threadId'])
+      }
     }
   }
 
