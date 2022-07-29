@@ -122,7 +122,7 @@ function runTests (objectStorage: boolean) {
   it('Should generate WebTorrent from HLS only video', async function () {
     this.timeout(60000)
 
-    await servers[0].videos.removeWebTorrentFiles({ videoId: videoUUID })
+    await servers[0].videos.removeAllWebTorrentFiles({ videoId: videoUUID })
     await waitJobs(servers)
 
     await servers[0].videos.runTranscoding({ videoId: videoUUID, transcodingType: 'webtorrent' })
@@ -142,7 +142,7 @@ function runTests (objectStorage: boolean) {
   it('Should only generate WebTorrent', async function () {
     this.timeout(60000)
 
-    await servers[0].videos.removeHLSFiles({ videoId: videoUUID })
+    await servers[0].videos.removeHLSPlaylist({ videoId: videoUUID })
     await waitJobs(servers)
 
     await servers[0].videos.runTranscoding({ videoId: videoUUID, transcodingType: 'webtorrent' })

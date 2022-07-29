@@ -13,6 +13,13 @@ my-embed {
 
 .video-info > div {
   display: flex;
+
+  my-global-icon {
+    width: 16px;
+    margin-left: 3px;
+    position: relative;
+    top: -2px;
+  }
 }
 
 .loading {

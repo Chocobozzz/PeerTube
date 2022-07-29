@@ -305,6 +305,11 @@ export class VideoService {
       )
   }
 
+  removeFile (videoId: number | string, fileId: number, type: 'hls' | 'webtorrent') {
+    return this.authHttp.delete(VideoService.BASE_VIDEO_URL + '/' + videoId + '/' + type + '/' + fileId)
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
   runTranscoding (videoIds: (number | string)[], type: 'hls' | 'webtorrent') {
     const body: VideoTranscodingCreate = { transcodingType: type }
 

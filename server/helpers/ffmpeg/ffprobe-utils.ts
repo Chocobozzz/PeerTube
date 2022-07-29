@@ -1,15 +1,15 @@
 import { FfprobeData } from 'fluent-ffmpeg'
 import { getMaxBitrate } from '@shared/core-utils'
 import {
+  buildFileMetadata,
   ffprobePromise,
   getAudioStream,
-  getVideoStreamDuration,
   getMaxAudioBitrate,
-  buildFileMetadata,
-  getVideoStreamBitrate,
-  getVideoStreamFPS,
   getVideoStream,
+  getVideoStreamBitrate,
   getVideoStreamDimensionsInfo,
+  getVideoStreamDuration,
+  getVideoStreamFPS,
   hasAudioStream
 } from '@shared/extra-utils/ffprobe'
 import { VideoResolution, VideoTranscodingFPS } from '@shared/models'

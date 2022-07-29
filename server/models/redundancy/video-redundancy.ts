@@ -162,7 +162,7 @@ export class VideoRedundancyModel extends Model<Partial<AttributesOnly<VideoRedu
       const logIdentifier = `${videoFile.Video.uuid}-${videoFile.resolution}`
       logger.info('Removing duplicated video file %s.', logIdentifier)
 
-      videoFile.Video.removeWebTorrentFileAndTorrent(videoFile, true)
+      videoFile.Video.removeWebTorrentFile(videoFile, true)
         .catch(err => logger.error('Cannot delete %s files.', logIdentifier, { err }))
     }
 

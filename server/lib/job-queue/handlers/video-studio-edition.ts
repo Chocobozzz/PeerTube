@@ -9,6 +9,7 @@ import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles'
 import { isAbleToUploadVideo } from '@server/lib/user'
 import { addOptimizeOrMergeAudioJob } from '@server/lib/video'
+import { removeHLSPlaylist, removeWebTorrentFile } from '@server/lib/video-file'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { approximateIntroOutroAdditionalSize } from '@server/lib/video-studio'
 import { UserModel } from '@server/models/user/user'
@@ -27,12 +28,12 @@ import {
 } from '@shared/extra-utils'
 import {
   VideoStudioEditionPayload,
-  VideoStudioTaskPayload,
+  VideoStudioTask,
   VideoStudioTaskCutPayload,
   VideoStudioTaskIntroPayload,
   VideoStudioTaskOutroPayload,
-  VideoStudioTaskWatermarkPayload,
-  VideoStudioTask
+  VideoStudioTaskPayload,
+  VideoStudioTaskWatermarkPayload
 } from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 
@@ -89,7 +90,6 @@ async function processVideoStudioEdition (job: Job) {
   await move(editionResultPath, outputPath)
 
   await createTorrentAndSetInfoHashFromPath(video, newFile, outputPath)
-
   await removeAllFiles(video, newFile)
 
   await newFile.save()
@@ -197,18 +197,12 @@ async function buildNewFile (video: MVideoId, path: string) {
 }
 
 async function removeAllFiles (video: MVideoWithAllFiles, webTorrentFileException: MVideoFile) {
-  const hls = video.getHLSPlaylist()
-
-  if (hls) {
-    await video.removeStreamingPlaylistFiles(hls)
-    await hls.destroy()
-  }
+  await removeHLSPlaylist(video)
 
   for (const file of video.VideoFiles) {
     if (file.id === webTorrentFileException.id) continue
 
-    await video.removeWebTorrentFileAndTorrent(file)
-    await file.destroy()
+    await removeWebTorrentFile(video, file.id)
   }
 }
 

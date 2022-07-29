@@ -1,4 +1,4 @@
-import { Transaction } from 'sequelize/types'
+import { CreationAttributes, Transaction } from 'sequelize/types'
 import { deleteAllModels, filterNonExistingModels } from '@server/helpers/database-utils'
 import { logger, LoggerTagsFn } from '@server/helpers/logger'
 import { updatePlaceholderThumbnail, updateVideoMiniatureFromUrl } from '@server/lib/thumbnail'
@@ -7,7 +7,15 @@ import { VideoCaptionModel } from '@server/models/video/video-caption'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { MStreamingPlaylistFilesVideo, MThumbnail, MVideoCaption, MVideoFile, MVideoFullLight, MVideoThumbnail } from '@server/types/models'
+import {
+  MStreamingPlaylistFiles,
+  MStreamingPlaylistFilesVideo,
+  MThumbnail,
+  MVideoCaption,
+  MVideoFile,
+  MVideoFullLight,
+  MVideoThumbnail
+} from '@server/types/models'
 import { ActivityTagObject, ThumbnailType, VideoObject, VideoStreamingPlaylistType } from '@shared/models'
 import { getOrCreateAPActor } from '../../actors'
 import { checkUrlsSameHost } from '../../url'
@@ -125,38 +133,39 @@ export abstract class APVideoAbstractBuilder {
     // Remove video playlists that do not exist anymore
     await deleteAllModels(filterNonExistingModels(video.VideoStreamingPlaylists || [], newStreamingPlaylists), t)
 
+    const oldPlaylists = video.VideoStreamingPlaylists
     video.VideoStreamingPlaylists = []
 
     for (const playlistAttributes of streamingPlaylistAttributes) {
       const streamingPlaylistModel = await this.insertOrReplaceStreamingPlaylist(playlistAttributes, t)
       streamingPlaylistModel.Video = video
 
-      await this.setStreamingPlaylistFiles(video, streamingPlaylistModel, playlistAttributes.tagAPObject, t)
+      await this.setStreamingPlaylistFiles(oldPlaylists, streamingPlaylistModel, playlistAttributes.tagAPObject, t)
 
       video.VideoStreamingPlaylists.push(streamingPlaylistModel)
     }
   }
 
-  private async insertOrReplaceStreamingPlaylist (attributes: VideoStreamingPlaylistModel['_creationAttributes'], t: Transaction) {
+  private async insertOrReplaceStreamingPlaylist (attributes: CreationAttributes<VideoStreamingPlaylistModel>, t: Transaction) {
     const [ streamingPlaylist ] = await VideoStreamingPlaylistModel.upsert(attributes, { returning: true, transaction: t })
 
     return streamingPlaylist as MStreamingPlaylistFilesVideo
   }
 
-  private getStreamingPlaylistFiles (video: MVideoFullLight, type: VideoStreamingPlaylistType) {
-    const playlist = video.VideoStreamingPlaylists.find(s => s.type === type)
+  private getStreamingPlaylistFiles (oldPlaylists: MStreamingPlaylistFiles[], type: VideoStreamingPlaylistType) {
+    const playlist = oldPlaylists.find(s => s.type === type)
     if (!playlist) return []
 
     return playlist.VideoFiles
   }
 
   private async setStreamingPlaylistFiles (
-    video: MVideoFullLight,
+    oldPlaylists: MStreamingPlaylistFiles[],
     playlistModel: MStreamingPlaylistFilesVideo,
     tagObjects: ActivityTagObject[],
     t: Transaction
   ) {
-    const oldStreamingPlaylistFiles = this.getStreamingPlaylistFiles(video, playlistModel.type)
+    const oldStreamingPlaylistFiles = this.getStreamingPlaylistFiles(oldPlaylists || [], playlistModel.type)
 
     const newVideoFiles: MVideoFile[] = getFileAttributesFromUrl(playlistModel, tagObjects).map(a => new VideoFileModel(a))
 

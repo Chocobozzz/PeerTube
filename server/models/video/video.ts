@@ -28,7 +28,7 @@ import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation
 import { LiveManager } from '@server/lib/live/live-manager'
 import { removeHLSFileObjectStorage, removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'
 import { tracer } from '@server/lib/opentelemetry/tracing'
-import { getHLSDirectory, getHLSRedundancyDirectory } from '@server/lib/paths'
+import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
@@ -769,7 +769,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
       // Remove physical files and torrents
       instance.VideoFiles.forEach(file => {
-        tasks.push(instance.removeWebTorrentFileAndTorrent(file))
+        tasks.push(instance.removeWebTorrentFile(file))
       })
 
       // Remove playlists file
@@ -1783,7 +1783,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
                                        .concat(toAdd)
   }
 
-  removeWebTorrentFileAndTorrent (videoFile: MVideoFile, isRedundancy = false) {
+  removeWebTorrentFile (videoFile: MVideoFile, isRedundancy = false) {
     const filePath = isRedundancy
       ? VideoPathManager.Instance.getFSRedundancyVideoFilePath(this, videoFile)
       : VideoPathManager.Instance.getFSVideoFileOutputPath(this, videoFile)
@@ -1829,8 +1829,12 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     await videoFile.removeTorrent()
     await remove(filePath)
 
+    const resolutionFilename = getHlsResolutionPlaylistFilename(videoFile.filename)
+    await remove(VideoPathManager.Instance.getFSHLSOutputPath(this, resolutionFilename))
+
     if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
       await removeHLSFileObjectStorage(streamingPlaylist.withVideo(this), videoFile.filename)
+      await removeHLSFileObjectStorage(streamingPlaylist.withVideo(this), resolutionFilename)
     }
   }
 

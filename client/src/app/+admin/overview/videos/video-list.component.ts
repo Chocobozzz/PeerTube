@@ -8,7 +8,7 @@ import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { VideoBlockComponent, VideoBlockService } from '@app/shared/shared-moderation'
 import { VideoActionsDisplayType } from '@app/shared/shared-video-miniature'
-import { UserRight, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
+import { UserRight, VideoFile, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { VideoAdminService } from './video-admin.service'
 
 @Component({
@@ -190,6 +190,22 @@ export class VideoListComponent extends RestTable implements OnInit {
         next: resultList => {
           this.videos = resultList.data
           this.totalRecords = resultList.total
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  async removeVideoFile (video: Video, file: VideoFile, type: 'hls' | 'webtorrent') {
+    const message = $localize`Are you sure you want to delete this ${file.resolution.label} file?`
+    const res = await this.confirmService.confirm(message, $localize`Delete file`)
+    if (res === false) return
+
+    this.videoService.removeFile(video.uuid, file.id, type)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`File removed.`)
+          this.reloadData()
         },
 
         error: err => this.notifier.error(err.message)
