@@ -418,7 +418,7 @@
       </trans-unit>
       <trans-unit id="1161141363959659794" datatype="html">
         <source>PeerTube is a self-hosted ActivityPub-federated video streaming platform using P2P directly in your web browser.</source>
-        <target state="translated">PeerTube je platforma za prijenos videa s vlastitim hostingom s međusobno povezanim računalima ActivityPub-protokolom i koristi P2P izravno u tvom web-pregledniku.</target>
+        <target state="translated">PeerTube je platforma za prijenos videa s vlastitom uslugom za hosting s međusobno povezanim računalima ActivityPub-protokolom i koristi P2P izravno u tvom web-pregledniku.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="135286612733607700" datatype="html">
@@ -1008,7 +1008,7 @@
       </trans-unit>
       <trans-unit id="5511334650211127631" datatype="html">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
-        <target state="translated">Neke datoteke nisu povezane i dohvaćaju se po potrebi. Definiraj njihovu politiku predmemoriranja.</target>
+        <target state="translated">Neke datoteke nisu međusobno povezane i dohvaćaju se po potrebi. Definiraj njihovu politiku predmemoriranja.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -1357,7 +1357,7 @@
       </trans-unit>
       <trans-unit id="2258148539285928012" datatype="html">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> to look up remote videos/actors that may not be federated with your instance</source>
-        <target state="translated">Dozvoli <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>svojim korisnicima<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> da traže videa/glumce na instancama koje možda nisu povezane s tvojom instancom</target>
+        <target state="translated">Dozvoli <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>svojim korisnicima<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> da traže videa/glumce na instancama koje možda nisu međusobno povezane s tvojom instancom</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">350</context></context-group>
       </trans-unit>
       <trans-unit id="7295422540935146771" datatype="html">
@@ -1367,7 +1367,7 @@
       </trans-unit>
       <trans-unit id="7305237807882754643" datatype="html">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> to look up remote videos/actors that may not be federated with your instance</source>
-        <target state="translated">Dozvoli <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonimnim korisnicima<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> tražiti udaljena videa/sudionike koji možda nisu povezani s tvojom instancom</target>
+        <target state="translated">Dozvoli <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonimnim korisnicima<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt; "/> tražiti udaljena videa/sudionike koji možda nisu međusobno povezani s tvojom instancom</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">361</context></context-group>
       </trans-unit>
       <trans-unit id="6476750382562952780" datatype="html">
@@ -1407,7 +1407,7 @@
       </trans-unit>
       <trans-unit id="836183323506117145" datatype="html">
         <source>FEDERATION</source>
-        <target state="translated">POVEZANOST</target>
+        <target state="translated">MEĐUSOBNA POVEZANOST</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">425</context></context-group>
       </trans-unit>
       <trans-unit id="252719899360434356" datatype="html">
@@ -1631,7 +1631,7 @@
       </trans-unit>
       <trans-unit id="283725429207896837" datatype="html">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
-        <target state="translated">Ne možeš dozvoliti ponovnu reprodukciju uživo ako ne uključiš transkodiranje.</target>
+        <target state="translated">Ne možeš dozvoliti reprizu uživo ako ne uključiš transkodiranje.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="4249062553881932496" datatype="html">
@@ -1717,7 +1717,7 @@
       </trans-unit>
       <trans-unit id="4620493570088713907" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="translated">Uključivanjem ćeš dozvoliti drugim administratorima da znaju da uglavnom povezuješ neprikladan sadržaj.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Štoviše, potvrdni okvir za neprikladni sadržaj pri prijenosu videa standardno će se automatski označiti. </target>
+        <target state="translated">Uključivanjem ćeš dozvoliti drugim administratorima da znaju da uglavnom međusobno povezuješ neprikladan sadržaj.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Štoviše, potvrdni okvir za neprikladni sadržaj pri prijenosu videa standardno će se automatski označiti. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="7497677457560701935" datatype="html">
@@ -1888,7 +1888,7 @@
       </trans-unit>
       <trans-unit id="6421580347313273983" datatype="html">
         <source>Allow your users to automatically publish a replay of their live</source>
-        <target state="translated">Dozvoli svojim korisnicima da automatski objave ponovnu reprodukciju njihovih videa uživo</target>
+        <target state="translated">Dozvoli svojim korisnicima da automatski objave reprizu njihovih videa uživo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">31</context>
@@ -2736,7 +2736,7 @@
       </trans-unit>
       <trans-unit id="2478877938420291792" datatype="html">
         <source>Unfederated</source>
-        <target state="translated">Nepovezano</target>
+        <target state="translated">Međusobno nepovezano</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">28</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
@@ -7238,7 +7238,7 @@
       </trans-unit>
       <trans-unit id="4022826795131920912" datatype="html">
         <source>You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live</source>
-        <target state="translated">Možeš prenositi samo jednom u normalnom prijenosu uživo. Ako uključiš ponovnu reprodukciju, bit će spremljen pod istim URL-om kao i tvoj prijenos uživo</target>
+        <target state="translated">Možeš prenositi samo jednom u normalnom prijenosu uživo. Ako uključiš reprizu, ona će se spremiti pod istim URL-om kao i tvoj prijenos uživo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">266</context>
@@ -7254,7 +7254,7 @@
       </trans-unit>
       <trans-unit id="8986073791327847979" datatype="html">
         <source>You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos</source>
-        <target state="translated">Može prenositi više puta u stalnom/ponavljajućem prijenosu uživo. Ako uključiš ponovne reprodukcije, one će se spremiti kao zasebna videa</target>
+        <target state="translated">Može prenositi više puta u stalnom/ponavljajućem prijenosu uživo. Ako uključiš reprize, one će se spremiti kao zasebna videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">275</context>
@@ -7262,7 +7262,7 @@
       </trans-unit>
       <trans-unit id="8891497955962997247" datatype="html">
         <source>Automatically publish a replay when your live ends</source>
-        <target state="translated">Automatski objavi ponovnu reprodukciju kad prijenos uživo završi</target>
+        <target state="translated">Automatski objavi reprizu kad prijenos uživo završi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">283</context></context-group>
       </trans-unit>
       <trans-unit id="1212376766715456139" datatype="html">
@@ -7510,7 +7510,7 @@
       </trans-unit>
       <trans-unit id="8675588963276687921" datatype="html">
         <source>Stream only once, replay will replace your live</source>
-        <target state="translated">Prenesi samo jednom, ponavljanje će zamijeniti tvoj prijenos uživo</target>
+        <target state="translated">Prenesi samo jednom, repriza će zamijeniti tvoj prijenos uživo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="2360261543675520397" datatype="html">
@@ -7520,7 +7520,7 @@
       </trans-unit>
       <trans-unit id="3384650899171037827" datatype="html">
         <source>Stream multiple times, replays will be separate videos</source>
-        <target state="translated">Prenosi više puta, ponavljanja će biti zasebna videa</target>
+        <target state="translated">Prenosi više puta, reprize će biti zasebna videa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">168</context></context-group>
       </trans-unit>
       <trans-unit id="58134197356653483" datatype="html">
@@ -11189,7 +11189,7 @@
       </trans-unit>
       <trans-unit id="6827125739942610231" datatype="html">
         <source>In this instance federation</source>
-        <target state="translated">U ovoj povezanosti instance</target>
+        <target state="translated">U ovoj instanci međusobne povezanosti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">58</context>
@@ -11197,7 +11197,7 @@
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
         <source>Federation</source>
-        <target state="translated">Povezanost</target>
+        <target state="translated">Međusobna povezanost</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="3541687134897970106" datatype="html">
@@ -12363,7 +12363,7 @@
       </trans-unit>
       <trans-unit id="9133713232258232158" datatype="html">
         <source>Unfederate</source>
-        <target state="translated">Povezano</target>
+        <target state="translated">Prekini međusobnu povezanost</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">31</context>
@@ -12841,7 +12841,7 @@
       </trans-unit>
       <trans-unit id="3112273530390098557" datatype="html">
         <source>Replay will be saved</source>
-        <target state="translated">Ponavljanje će se spremiti</target>
+        <target state="translated">Repriza će se spremiti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">11</context>
@@ -12873,7 +12873,7 @@
       </trans-unit>
       <trans-unit id="3424935624805832445" datatype="html">
         <source>Go to replay</source>
-        <target state="translated">Idi na ponavljanje</target>
+        <target state="translated">Idi na reprizu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">44</context>
@@ -12881,7 +12881,7 @@
       </trans-unit>
       <trans-unit id="6989092358991683843" datatype="html">
         <source>Replay is being processed...</source>
-        <target state="translated">Ponovna reprodukcija se obrađuje …</target>
+        <target state="translated">Repriza se obrađuje …</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">45</context>
@@ -12962,7 +12962,7 @@
       </trans-unit>
       <trans-unit id="5019568087038659501" datatype="html">
         <source>Federated</source>
-        <target state="translated">Povezano</target>
+        <target state="translated">Međusobno povezano</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">125</context>
@@ -13025,7 +13025,7 @@
       </trans-unit>
       <trans-unit id="3143238830256588661" datatype="html">
         <source>The live stream will be automatically terminated and replays won't be saved.</source>
-        <target state="translated">Prijenos uživo automatski će se prekinuti i ponovne reprodukcije se neće spremiti.</target>
+        <target state="translated">Prijenos uživo automatski će se prekinuti i reprize se neće spremiti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">233</context>
@@ -13463,7 +13463,7 @@
       </trans-unit>
       <trans-unit id="8383401711408398806" datatype="html">
         <source>Federated videos (this instance + followed instances)</source>
-        <target state="translated">Povezana videa (ova instanca + prećene instance</target>
+        <target state="translated">Međusobno povezana videa (ova instanca + prećene instance)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">91</context>
