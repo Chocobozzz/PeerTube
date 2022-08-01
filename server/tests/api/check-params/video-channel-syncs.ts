@@ -59,7 +59,7 @@ describe('Test video channel sync API validator', () => {
   })
 
   after(async function () {
-    await server.kill()
+    await server?.kill()
   })
 
   describe('When creating a sync', function () {
@@ -188,10 +188,26 @@ describe('Test video channel sync API validator', () => {
       })
     })
 
-    it('Should succeed even with no authentication', async function () {
+    it('Should fail with no authentication', async function () {
       await command.listByAccount({
         accountName: 'root',
         token: null,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail when a simple user lists another user\'s synchronizations', async function () {
+      await command.listByAccount({
+        accountName: 'root',
+        token: userInfo.accessToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should succeed when root lists another user\'s synchronizations', async function () {
+      await command.listByAccount({
+        accountName: userInfo.username,
+        token: server.accessToken,
         expectedStatus: HttpStatusCode.OK_200
       })
     })

@@ -18,7 +18,7 @@ export class ChannelSyncsCommand extends AbstractCommand {
 
       path,
       query: { sort, ...pick(options, [ 'start', 'count', 'withStats', 'search' ]) },
-      implicitToken: false,
+      implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }

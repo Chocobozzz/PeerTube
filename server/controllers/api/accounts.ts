@@ -25,6 +25,7 @@ import {
   accountsFollowersSortValidator,
   accountsSortValidator,
   ensureAuthUserOwnsAccountValidator,
+  ensureCanManageUser,
   videoChannelsSortValidator,
   videoChannelStatsValidator,
   videoChannelSyncsSortValidator,
@@ -75,7 +76,9 @@ accountsRouter.get('/:accountName/video-channels',
 )
 
 accountsRouter.get('/:accountName/video-channel-syncs',
+  authenticate,
   asyncMiddleware(accountNameWithHostGetValidator),
+  ensureCanManageUser,
   paginationValidator,
   videoChannelSyncsSortValidator,
   setDefaultSort,
