@@ -39,8 +39,8 @@ function formatDateForYoutubeDl (date: Date) {
 
 export async function processVideoChannelsSync () {
   logger.debug('Running processVideoChannelsSync')
-  if (!CONFIG.IMPORT.VIDEOS.HTTP.ENABLED) {
-    logger.info('Discard channels synchronization as the HTTP upload is disabled')
+  if (!CONFIG.IMPORT.SYNCHRONIZATION.ENABLED) {
+    logger.info('Discard channels synchronization as the feature is disabled')
     return
   }
   const syncs: VideoChannelSyncModel[] = await VideoChannelSyncModel.listSyncs()
@@ -78,10 +78,13 @@ export async function processVideoChannelsSync () {
 export async function processVideoChannelImport (job: Job) {
   const payload = job.data as VideoChannelImportPayload
   logger.debug('Running processVideoChannelImport')
+
+  // Channel import requires only http upload to be allowed
   if (!CONFIG.IMPORT.VIDEOS.HTTP.ENABLED) {
     logger.error('Cannot import channel as the HTTP upload is disabled')
     return
   }
+
   const videoChannel = await VideoChannelModel.findOne({
     where: {
       id: payload.videoChannelId

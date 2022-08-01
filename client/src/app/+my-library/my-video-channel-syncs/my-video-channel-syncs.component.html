@@ -5,12 +5,12 @@
   <ng-container i18n>My synchronizations</ng-container>
 </h1>
 
-<div *ngIf="!httpUploadEnabled()">
-  <p class="muted" i18n>⚠️ The instance doesn't allow import with HTTP URL, synchronization is thus disallowed</p>
+<div *ngIf="!syncEnabled()">
+  <p class="muted" i18n>⚠️ The instance doesn't allow channel synchronization</p>
 </div>
 
 <p-table
-  *ngIf="httpUploadEnabled()"
+  *ngIf="syncEnabled()"
   [value]="channelsSync" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate

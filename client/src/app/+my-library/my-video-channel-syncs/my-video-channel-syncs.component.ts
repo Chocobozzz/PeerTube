@@ -65,8 +65,8 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
         })
   }
 
-  httpUploadEnabled () {
-    return this.serverConfig.import.videos.http.enabled
+  syncEnabled () {
+    return this.serverConfig.import.synchronization.enabled
   }
 
   deleteSync (videoChannelsSync: VideoChannelSync) {
