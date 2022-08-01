@@ -199,12 +199,6 @@ function checkTranscodingConfig () {
       throw new Error('Video import concurrency should be > 0')
     }
   }
-
-  if (CONFIG.IMPORT.VIDEOS.HTTP.ENABLED || CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED) {
-    if (CONFIG.IMPORT.VIDEOS.CONCURRENCY <= 0) {
-      throw new Error('Video import concurrency should be > 0')
-    }
-  }
 }
 
 function checkImportConfig () {
