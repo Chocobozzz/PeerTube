@@ -34,6 +34,8 @@ describe('Test videos files', function () {
     let validId2: string
 
     before(async function () {
+      this.timeout(120_000)
+
       {
         const { uuid } = await servers[0].videos.quickUpload({ name: 'video 1' })
         validId1 = uuid
@@ -83,6 +85,8 @@ describe('Test videos files', function () {
     let hlsId: string
 
     before(async function () {
+      this.timeout(120_000)
+
       {
         const { uuid } = await servers[0].videos.quickUpload({ name: 'webtorrent' })
         webtorrentId = uuid
@@ -97,6 +101,8 @@ describe('Test videos files', function () {
     })
 
     it('Shoulde delete a webtorrent file', async function () {
+      this.timeout(30_000)
+
       const video = await servers[0].videos.get({ id: webtorrentId })
       const files = video.files
 
@@ -113,6 +119,8 @@ describe('Test videos files', function () {
     })
 
     it('Should delete all webtorrent files', async function () {
+      this.timeout(30_000)
+
       const video = await servers[0].videos.get({ id: webtorrentId })
       const files = video.files
 
@@ -130,6 +138,8 @@ describe('Test videos files', function () {
     })
 
     it('Should delete a hls file', async function () {
+      this.timeout(30_000)
+
       const video = await servers[0].videos.get({ id: hlsId })
       const files = video.streamingPlaylists[0].files
       const toDelete = files[0]
@@ -152,6 +162,8 @@ describe('Test videos files', function () {
     })
 
     it('Should delete all hls files', async function () {
+      this.timeout(30_000)
+
       const video = await servers[0].videos.get({ id: hlsId })
       const files = video.streamingPlaylists[0].files
 
@@ -169,6 +181,8 @@ describe('Test videos files', function () {
     })
 
     it('Should not delete last file of a video', async function () {
+      this.timeout(60_000)
+
       const webtorrentOnly = await servers[0].videos.get({ id: hlsId })
       const hlsOnly = await servers[0].videos.get({ id: webtorrentId })
 
