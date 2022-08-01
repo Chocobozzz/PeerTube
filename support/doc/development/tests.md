@@ -33,8 +33,14 @@ $ sudo docker run -p 10389:10389 chocobozzz/docker-test-openldap
 
 Ensure you also have these commands:
 
-```
+```bash
 $ exiftool --help
+$ parallel --help
+```
+
+Otherwise, install the packages. On Debian-based systems (like Debian, Ubuntu or Mint):
+```bash
+$ sudo apt-get install parallel libimage-exiftool-perl
 ```
 
 ### Test
