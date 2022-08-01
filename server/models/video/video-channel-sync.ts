@@ -1,7 +1,7 @@
 import { isVideoChannelSyncStateValid } from "@server/helpers/custom-validators/video-channel-syncs"
 import { CONSTRAINTS_FIELDS, VIDEO_CHANNEL_SYNC_STATE } from "@server/initializers/constants"
 import { VideoChannelSync, VideoChannelSyncState } from "@shared/models"
-import { MChannelSyncFormattable } from "@server/types/models/video/video-channel-sync"
+import { MChannelSyncChannel, MChannelSyncFormattable } from "@server/types/models/video/video-channel-sync"
 import { AttributesOnly } from "@shared/typescript-utils"
 import {
   AllowNull,
@@ -19,7 +19,6 @@ import {
 import { AccountModel } from "../account/account"
 import { getSort, throwIfNotValid } from "../utils"
 import { VideoChannelModel } from "./video-channel"
-import { ActorModel } from "../actor/actor"
 import { Op } from "sequelize"
 import { UserModel } from "../user/user"
 import { isUrlValid } from "@server/helpers/custom-validators/activitypub/misc"
@@ -77,39 +76,23 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
     count: number
     sort: string
   }) {
-    const getQuery = (forCount: boolean) => {
-      const accountModel = forCount
-        ? AccountModel.unscoped()
-        : AccountModel
-
-      return {
-        offset: options.start,
-        limit: options.count,
-        order: getSort(options.sort),
-        include: [
-          {
-            model: VideoChannelModel.unscoped(),
-            required: true,
-            include: [
-              {
-                model: accountModel,
-                where: {
-                  id: options.accountId
-                },
-                required: true
-              },
-              {
-                model: ActorModel.unscoped()
-              }
-            ]
+    const query = {
+      offset: options.start,
+      limit: options.count,
+      order: getSort(options.sort),
+      include: [
+        {
+          model: VideoChannelModel,
+          required: true,
+          where: {
+            accountId: options.accountId
           }
-        ]
-      }
+        }
+      ]
     }
-
     return Promise.all([
-      VideoChannelSyncModel.count(getQuery(true)),
-      VideoChannelSyncModel.findAll(getQuery(false))
+      VideoChannelSyncModel.count(query),
+      VideoChannelSyncModel.findAll(query)
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
@@ -130,13 +113,27 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
     return this.findOne({
       where: { id },
       include: [ {
-        model: VideoChannelModel.unscoped(),
+        model: VideoChannelModel,
         required: true
       } ]
     })
   }
 
-  static async listSyncs (): Promise<VideoChannelSyncModel[]> {
+  static loadWithAccount (id: number) {
+    return this.findOne({
+      where: { id },
+      include: [ {
+        model: VideoChannelModel,
+        required: true,
+        include: [ {
+          model: AccountModel,
+          required: true
+        } ]
+      } ]
+    })
+  }
+
+  static async listSyncs (): Promise<MChannelSyncChannel[]> {
     const query = {
       include: [
         {

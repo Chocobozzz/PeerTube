@@ -347,7 +347,31 @@ describe('Test config API validators', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should fail with a disabled http upload & enabled sync', async function () {
+      const newUpdateParams: CustomConfig = {
+        ...updateParams,
+        import: {
+          videos: {
+            ...updateParams.import.videos,
+            http: {
+              enabled: false
+            }
+          },
+          synchronization: {
+            enabled: true
+          }
+        }
+      }
+      await makePutBodyRequest({
+        url: server.url,
+        path,
+        fields: newUpdateParams,
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should succeed with the correct parameters', async function () {
       await makePutBodyRequest({
         url: server.url,
         path,

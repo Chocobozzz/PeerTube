@@ -36,6 +36,26 @@ export class ConfigCommand extends AbstractCommand {
     })
   }
 
+  private setChannelSyncEnabled (enabled: boolean) {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        import: {
+          synchronization: {
+            enabled
+          }
+        }
+      }
+    })
+  }
+
+  enableChannelSync () {
+    return this.setChannelSyncEnabled(true)
+  }
+
+  disableChannelSync () {
+    return this.setChannelSyncEnabled(false)
+  }
+
   enableLive (options: {
     allowReplay?: boolean
     transcoding?: boolean

@@ -3,7 +3,7 @@ import { pick } from "lodash"
 import { unwrapBody } from "../requests"
 import { AbstractCommand, OverrideCommandOptions } from "../shared"
 
-export class ChannelsSyncCommand extends AbstractCommand {
+export class ChannelSyncsCommand extends AbstractCommand {
   private static readonly API_PATH = '/api/v1/video-channel-syncs'
   listByAccount (options: OverrideCommandOptions & {
     accountName: string
@@ -27,7 +27,7 @@ export class ChannelsSyncCommand extends AbstractCommand {
     attributes: VideoChannelSyncCreate
   }) {
     const response = this.postBodyRequest({
-      path: ChannelsSyncCommand.API_PATH,
+      path: ChannelSyncsCommand.API_PATH,
       ...options,
       fields: options.attributes,
       implicitToken: true,
@@ -40,7 +40,7 @@ export class ChannelsSyncCommand extends AbstractCommand {
   delete (options: OverrideCommandOptions & {
     channelSyncId: number
   }) {
-    const path = `${ChannelsSyncCommand.API_PATH}/${options.channelSyncId}`
+    const path = `${ChannelSyncsCommand.API_PATH}/${options.channelSyncId}`
 
     return this.deleteRequest({
       ...options,
@@ -54,7 +54,7 @@ export class ChannelsSyncCommand extends AbstractCommand {
   syncChannel (options: OverrideCommandOptions & {
     channelSyncId: number
   }) {
-    const path = `${ChannelsSyncCommand.API_PATH}/${options.channelSyncId}/sync`
+    const path = `${ChannelSyncsCommand.API_PATH}/${options.channelSyncId}/sync`
 
     return this.postBodyRequest({
       ...options,

@@ -88,7 +88,13 @@ describe('Test video imports API validator', function () {
 
     it('Should fail with nothing', async function () {
       const fields = {}
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        fields,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
     })
 
     it('Should fail without a target url', async function () {

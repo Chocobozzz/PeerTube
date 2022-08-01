@@ -19,6 +19,7 @@ import {
   CaptionsCommand,
   ChangeOwnershipCommand,
   ChannelsCommand,
+  ChannelSyncsCommand,
   HistoryCommand,
   ImportsCommand,
   LiveCommand,
@@ -118,6 +119,7 @@ export class PeerTubeServer {
   playlists?: PlaylistsCommand
   history?: HistoryCommand
   imports?: ImportsCommand
+  channelSyncs?: ChannelSyncsCommand
   streamingPlaylists?: StreamingPlaylistsCommand
   channels?: ChannelsCommand
   comments?: CommentsCommand
@@ -390,6 +392,7 @@ export class PeerTubeServer {
     this.playlists = new PlaylistsCommand(this)
     this.history = new HistoryCommand(this)
     this.imports = new ImportsCommand(this)
+    this.channelSyncs = new ChannelSyncsCommand(this)
     this.streamingPlaylists = new StreamingPlaylistsCommand(this)
     this.channels = new ChannelsCommand(this)
     this.comments = new CommentsCommand(this)
