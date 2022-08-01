@@ -47,10 +47,7 @@ describe('Test video channel sync API validator', () => {
     await server.users.create({ username: userInfo.username, password })
     userInfo.accessToken = await server.login.getAccessToken({ username: userInfo.username, password })
 
-    {
-      const { videoChannels } = await server.users.getMyInfo()
-      rootChannelId = videoChannels[0].id
-    }
+    rootChannelId = server.store.channel.id
     {
       const { videoChannels } = await server.users.getMyInfo({ token: userInfo.accessToken })
       userInfo.channelId = videoChannels[0].id

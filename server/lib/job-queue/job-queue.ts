@@ -64,7 +64,7 @@ type CreateJobArgument =
   { type: 'video-studio-edition', payload: VideoStudioEditionPayload } |
   { type: 'manage-video-torrent', payload: ManageVideoTorrentPayload } |
   { type: 'move-to-object-storage', payload: MoveObjectStoragePayload } |
-  { type: 'video-channel-sync', payload: {} } |
+  { type: 'video-channel-sync-latest', payload: {} } |
   { type: 'video-channel-import', payload: VideoChannelImportPayload }
 
 export type CreateJobOptions = {
@@ -91,7 +91,7 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'move-to-object-storage': processMoveToObjectStorage,
   'manage-video-torrent': processManageVideoTorrent,
   'video-studio-edition': processVideoStudioEdition,
-  'video-channels-sync': processVideoChannelsSync,
+  'video-channel-sync-latest': processVideoChannelsSync,
   'video-channel-import': processVideoChannelImport
 }
 
@@ -118,7 +118,7 @@ const jobTypes: JobType[] = [
   'move-to-object-storage',
   'manage-video-torrent',
   'video-studio-edition',
-  'video-channels-sync',
+  'video-channel-sync-latest',
   'video-channel-import'
 ]
 
@@ -315,8 +315,8 @@ class JobQueue {
       repeat: REPEAT_JOBS['videos-views-stats']
     }).catch(err => logger.error('Cannot add repeatable job.', { err }))
 
-    this.queues['video-channels-sync'].add({}, {
-      repeat: REPEAT_JOBS['video-channels-sync']
+    this.queues['video-channel-sync-latest'].add({}, {
+      repeat: REPEAT_JOBS['video-channel-sync-latest']
     }).catch(err => logger.error('Cannot add repeatable job.', { err }))
 
     if (CONFIG.FEDERATION.VIDEOS.CLEANUP_REMOTE_INTERACTIONS) {

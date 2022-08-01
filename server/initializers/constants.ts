@@ -158,7 +158,7 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-live-ending': 1,
   'video-studio-edition': 1,
   'manage-video-torrent': 1,
-  'video-channels-sync': 1,
+  'video-channel-sync-latest': 1,
   'video-channel-import': 3,
   'move-to-object-storage': 3
 }
@@ -180,7 +180,7 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'video-studio-edition': 1,
   'manage-video-torrent': 1,
   'move-to-object-storage': 1,
-  'video-channels-sync': 1,
+  'video-channel-sync-latest': 1,
   'video-channel-import': 1
 }
 const JOB_TTL: { [id in JobType]: number } = {
@@ -202,7 +202,7 @@ const JOB_TTL: { [id in JobType]: number } = {
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
   'manage-video-torrent': 1000 * 3600 * 3, // 3 hours
   'move-to-object-storage': 1000 * 60 * 60 * 3, // 3 hours
-  'video-channels-sync': 1000 * 60 * 60 * 4, // 4 hours
+  'video-channel-sync-latest': 1000 * 60 * 60 * 4, // 4 hours
   'video-channel-import': 1000 * 60 * 60 * 4 // 4 hours
 }
 const REPEAT_JOBS: { [ id in JobType ]?: EveryRepeatOptions | CronRepeatOptions } = {
@@ -212,7 +212,7 @@ const REPEAT_JOBS: { [ id in JobType ]?: EveryRepeatOptions | CronRepeatOptions 
   'activitypub-cleaner': {
     cron: '30 5 * * ' + randomInt(0, 7) // 1 time per week (random day) at 5:30 AM
   },
-  'video-channels-sync': {
+  'video-channel-sync-latest': {
     // FIXME is this value realistic for every server? Should we allow the admin to configure it or is this fine as it is?
     cron: '*/15 * * * *' // 1 time per 15 minutes
   }
@@ -252,7 +252,8 @@ const SCHEDULER_INTERVALS_MS = {
   REMOVE_OLD_VIEWS: 60000 * 60 * 24, // 1 day
   REMOVE_OLD_HISTORY: 60000 * 60 * 24, // 1 day
   UPDATE_INBOX_STATS: 1000 * 60, // 1 minute
-  REMOVE_DANGLING_RESUMABLE_UPLOADS: 60000 * 60 // 1 hour
+  REMOVE_DANGLING_RESUMABLE_UPLOADS: 60000 * 60, // 1 hour
+  CHANNEL_SYNC_CHECK_INTERVAL: CONFIG.IMPORT.SYNCHRONIZATION.CHECK_INTERVAL
 }
 
 // ---------------------------------------------------------------------------
@@ -877,7 +878,7 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     REPEAT_JOBS['videos-views-stats'] = { every: 5000 }
 
     REPEAT_JOBS['activitypub-cleaner'] = { every: 5000 }
-    REPEAT_JOBS['video-channels-sync'] = { every: 5 * 60 * 1000 }
+    REPEAT_JOBS['video-channel-sync-latest'] = { every: 5 * 60 * 1000 }
     AP_CLEANER.PERIOD = 5000
 
     REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1

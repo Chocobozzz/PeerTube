@@ -25,7 +25,7 @@ export type JobType =
   | 'manage-video-torrent'
   | 'move-to-object-storage'
   | 'video-studio-edition'
-  | 'video-channels-sync'
+  | 'video-channel-sync-latest'
   | 'video-channel-import'
 
 export interface Job {
