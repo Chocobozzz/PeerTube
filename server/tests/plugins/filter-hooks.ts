@@ -638,6 +638,7 @@ describe('Test plugin filter hooks', function () {
     before(async function () {
       this.timeout(120_000)
 
+      await servers[0].config.enableMinimumTranscoding()
       const { uuid } = await servers[0].videos.quickUpload({ name: 'studio' })
 
       const video = await servers[0].videos.get({ id: uuid })
