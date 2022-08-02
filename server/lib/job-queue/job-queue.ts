@@ -24,6 +24,7 @@ import {
 } from '../../../shared/models'
 import { logger } from '../../helpers/logger'
 import { JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants'
+import { Hooks } from '../plugins/hooks'
 import { processActivityPubCleaner } from './handlers/activitypub-cleaner'
 import { processActivityPubFollow } from './handlers/activitypub-follow'
 import { processActivityPubHttpBroadcast } from './handlers/activitypub-http-broadcast'
@@ -157,8 +158,11 @@ class JobQueue {
 
       const handler = handlers[handlerName]
 
-      queue.process(this.getJobConcurrency(handlerName), handler)
-           .catch(err => logger.error('Error in job queue processor %s.', handlerName, { err }))
+      queue.process(this.getJobConcurrency(handlerName), async (jobArg: Job<any>) => {
+        const job = await Hooks.wrapObject(jobArg, 'filter:job-queue.process.params', { type: handlerName })
+
+        return Hooks.wrapPromiseFun(handler, job, 'filter:job-queue.process.result')
+      }).catch(err => logger.error('Error in job queue processor %s.', handlerName, { err }))
 
       queue.on('failed', (job, err) => {
         const logLevel = silentFailure.has(handlerName)

@@ -215,8 +215,12 @@ export class PluginManager implements ServerHook {
     for (const hook of this.hooks[hookName]) {
       logger.debug('Running hook %s of plugin %s.', hookName, hook.npmName)
 
-      result = await internalRunHook(hook.handler, hookType, result, params, err => {
-        logger.error('Cannot run hook %s of plugin %s.', hookName, hook.pluginName, { err })
+      result = await internalRunHook({
+        handler: hook.handler,
+        hookType,
+        result,
+        params,
+        onError: err => { logger.error('Cannot run hook %s of plugin %s.', hookName, hook.pluginName, { err }) }
       })
     }
 

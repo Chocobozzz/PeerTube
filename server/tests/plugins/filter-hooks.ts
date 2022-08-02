@@ -632,6 +632,51 @@ describe('Test plugin filter hooks', function () {
 
   })
 
+  describe('Job queue filters', function () {
+    let videoUUID: string
+
+    before(async function () {
+      this.timeout(120_000)
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'studio' })
+
+      const video = await servers[0].videos.get({ id: uuid })
+      expect(video.duration).at.least(2)
+      videoUUID = video.uuid
+
+      await waitJobs(servers)
+
+      await servers[0].config.enableStudio()
+    })
+
+    it('Should run filter:job-queue.process.params', async function () {
+      this.timeout(120_000)
+
+      await servers[0].videoStudio.createEditionTasks({
+        videoId: videoUUID,
+        tasks: [
+          {
+            name: 'add-intro',
+            options: {
+              file: 'video_very_short_240p.mp4'
+            }
+          }
+        ]
+      })
+
+      await waitJobs(servers)
+
+      await servers[0].servers.waitUntilLog('Run hook filter:job-queue.process.params', 1, false)
+
+      const video = await servers[0].videos.get({ id: videoUUID })
+      expect(video.duration).at.most(2)
+    })
+
+    it('Should run filter:job-queue.process.result', async function () {
+      await servers[0].servers.waitUntilLog('Run hook filter:job-queue.process.result', 1, false)
+    })
+  })
+
   after(async function () {
     await cleanupTests(servers)
   })

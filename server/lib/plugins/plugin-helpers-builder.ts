@@ -220,6 +220,10 @@ function buildPluginRelatedHelpers (plugin: MPlugin, npmName: string) {
 
 function buildUserHelpers () {
   return {
+    loadById: (id: number) => {
+      return UserModel.loadByIdFull(id)
+    },
+
     getAuthUser: (res: express.Response) => {
       const user = res.locals.oauth?.token?.User
       if (!user) return undefined

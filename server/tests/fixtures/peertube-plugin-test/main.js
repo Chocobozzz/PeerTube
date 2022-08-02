@@ -253,6 +253,27 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     }
   })
 
+  registerHook({
+    target: 'filter:job-queue.process.params',
+    handler: (object, context) => {
+      peertubeHelpers.logger.debug('TOTO.', { object, context })
+
+      if (context.type !== 'video-studio-edition') return object
+
+      object.data.tasks = [
+        {
+          name: 'cut',
+          options: {
+            start: 0,
+            end: 1
+          }
+        }
+      ]
+
+      return object
+    }
+  })
+
   // Upload/import/live attributes
   for (const target of [
     'filter:api.video.upload.video-attribute.result',
@@ -284,7 +305,10 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       'filter:api.search.video-playlists.index.list.result',
 
       'filter:api.overviews.videos.list.params',
-      'filter:api.overviews.videos.list.result'
+      'filter:api.overviews.videos.list.result',
+
+      'filter:job-queue.process.params',
+      'filter:job-queue.process.result'
     ]
 
     for (const h of filterHooks) {
