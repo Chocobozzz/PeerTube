@@ -50,7 +50,7 @@ async function createVideoChannelSync (req: express.Request, res: express.Respon
   const syncCreated = new VideoChannelSyncModel({
     externalChannelUrl: req.body.externalChannelUrl,
     videoChannelId: req.body.videoChannelId,
-    state: VideoChannelSyncState.SYNCED
+    state: VideoChannelSyncState.WAITING_FIRST_RUN
   })
   await sequelizeTypescript.transaction(async t => {
     await syncCreated.save({ transaction: t })

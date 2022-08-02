@@ -260,5 +260,6 @@ async function addYoutubeDLImport (parameters: {
     videoImportId: videoImport.id,
     fileExt
   }
-  return JobQueue.Instance.createJobWithPromise({ type: 'video-import', payload })
+  const job = await JobQueue.Instance.createJobWithPromise({ type: 'video-import', payload })
+  return job.finished()
 }

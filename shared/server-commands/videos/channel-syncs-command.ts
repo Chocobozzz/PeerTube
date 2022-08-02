@@ -58,7 +58,6 @@ export class ChannelSyncsCommand extends AbstractCommand {
 
     return this.postBodyRequest({
       ...options,
-
       path,
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204

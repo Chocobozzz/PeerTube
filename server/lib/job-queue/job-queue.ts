@@ -315,10 +315,6 @@ class JobQueue {
       repeat: REPEAT_JOBS['videos-views-stats']
     }).catch(err => logger.error('Cannot add repeatable job.', { err }))
 
-    this.queues['video-channel-sync-latest'].add({}, {
-      repeat: REPEAT_JOBS['video-channel-sync-latest']
-    }).catch(err => logger.error('Cannot add repeatable job.', { err }))
-
     if (CONFIG.FEDERATION.VIDEOS.CLEANUP_REMOTE_INTERACTIONS) {
       this.queues['activitypub-cleaner'].add({}, {
         repeat: REPEAT_JOBS['activitypub-cleaner']

@@ -17,7 +17,7 @@ async function waitJobs (serversArg: PeerTubeServer[] | PeerTubeServer, skipDela
   const states: JobState[] = [ 'waiting', 'active' ]
   if (!skipDelayed) states.push('delayed')
 
-  const repeatableJobs: JobType[] = [ 'videos-views-stats', 'activitypub-cleaner', 'video-channel-sync-latest' ]
+  const repeatableJobs: JobType[] = [ 'videos-views-stats', 'activitypub-cleaner' ]
   let pendingRequests: boolean
 
   function tasksBuilder () {

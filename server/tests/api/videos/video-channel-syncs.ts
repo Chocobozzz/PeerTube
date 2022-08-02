@@ -6,7 +6,8 @@ import {
   createSingleServer,
   PeerTubeServer,
   setAccessTokensToServers,
-  setDefaultVideoChannel
+  setDefaultVideoChannel,
+  waitJobs
 } from '@shared/server-commands'
 import { expect } from 'chai'
 import 'mocha'
@@ -21,9 +22,11 @@ describe('Test channel synchronizations', function () {
       const userInfo = {
         accessToken: '',
         username: 'user1',
+        get channelName () {
+          return this.username + "_channel"
+        },
         channelId: -1,
-        syncId: -1,
-        syncs: []
+        syncId: -1
       }
 
       before(async function () {
@@ -99,10 +102,6 @@ describe('Test channel synchronizations', function () {
           `)
 
         // when
-        await command.syncChannel({
-          channelSyncId,
-          expectedStatus: HttpStatusCode.NO_CONTENT_204
-        })
         await server.debug.sendCommand({
           body: {
             command: 'process-video-channel-sync-latest'
@@ -113,6 +112,7 @@ describe('Test channel synchronizations', function () {
         // then
         {
           const res = await server.videos.listByChannel({ handle: 'root_channel', include: VideoInclude.NOT_PUBLISHED_STATE })
+          await waitJobs(server, true)
           expect(res.total).to.equal(2)
           expect(res.data[0].name).to.equal('test')
         }
@@ -139,7 +139,7 @@ describe('Test channel synchronizations', function () {
           token: userInfo.accessToken,
           expectedStatus: HttpStatusCode.OK_200
         })
-        userInfo.syncs.push(id)
+        userInfo.syncId = id
       })
 
       it('Should list user\'s channel synchronizations', async function () {
@@ -161,17 +161,38 @@ describe('Test channel synchronizations', function () {
 
         const resForUser = await command.listByAccount({ accountName: userInfo.username })
         expect(resForUser.total).to.equal(1)
-        expect(resForUser.data[0]).to.contain({
-          externalChannelUrl: FIXTURE_URLS.youtubeChannel + "?baz=qux"
+        expect(resForUser.data[0]).to.deep.contain({
+          externalChannelUrl: FIXTURE_URLS.youtubeChannel + "?baz=qux",
+          state: {
+            id: VideoChannelSyncState.WAITING_FIRST_RUN,
+            label: 'Waiting first run'
+          }
         })
       })
 
-      it('Should import a whole channel', async function () {
-        // TODO
+      it('Should not import a channel if not asked', async function () {
+        await waitJobs(server, true)
+        const resForUser = await command.listByAccount({ accountName: userInfo.username })
+        expect(resForUser.data[0].state).to.contain({
+          id: VideoChannelSyncState.WAITING_FIRST_RUN,
+          label: 'Waiting first run'
+        })
+      })
+
+      it('Should import a whole channel (this test takes a while)', async function () {
+        this.timeout(240_000)
+        await command.syncChannel({
+          channelSyncId: userInfo.syncId
+        })
+        await waitJobs(server, true)
+        const resForUser = await server.videos.listByChannel({
+          handle: userInfo.channelName
+        })
+        expect(resForUser.total).to.equal(2)
       })
 
       it('Should remove user\'s channel synchronizations', async function () {
-        await command.delete({ channelSyncId: userInfo.syncs[0] })
+        await command.delete({ channelSyncId: userInfo.syncId })
         const resForUser = await command.listByAccount({ accountName: userInfo.username })
         expect(resForUser.total).to.equal(0)
       })

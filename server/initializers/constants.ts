@@ -211,10 +211,6 @@ const REPEAT_JOBS: { [ id in JobType ]?: EveryRepeatOptions | CronRepeatOptions 
   },
   'activitypub-cleaner': {
     cron: '30 5 * * ' + randomInt(0, 7) // 1 time per week (random day) at 5:30 AM
-  },
-  'video-channel-sync-latest': {
-    // FIXME is this value realistic for every server? Should we allow the admin to configure it or is this fine as it is?
-    cron: '*/15 * * * *' // 1 time per 15 minutes
   }
 }
 const JOB_PRIORITY = {
@@ -878,7 +874,6 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     REPEAT_JOBS['videos-views-stats'] = { every: 5000 }
 
     REPEAT_JOBS['activitypub-cleaner'] = { every: 5000 }
-    REPEAT_JOBS['video-channel-sync-latest'] = { every: 5 * 60 * 1000 }
     AP_CLEANER.PERIOD = 5000
 
     REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
