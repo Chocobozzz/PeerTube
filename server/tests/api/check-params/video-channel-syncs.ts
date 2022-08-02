@@ -42,13 +42,14 @@ describe('Test video channel sync API validator', () => {
 
     command = server.channelSyncs
 
-    userInfo.username = 'user1'
-    const password = 'my super password'
-    await server.users.create({ username: userInfo.username, password })
-    userInfo.accessToken = await server.login.getAccessToken({ username: userInfo.username, password })
-
     rootChannelId = server.store.channel.id
+
     {
+      userInfo.username = 'user1'
+      const password = 'my super password'
+      await server.users.create({ username: userInfo.username, password })
+      userInfo.accessToken = await server.login.getAccessToken({ username: userInfo.username, password })
+
       const { videoChannels } = await server.users.getMyInfo({ token: userInfo.accessToken })
       userInfo.channelId = videoChannels[0].id
     }

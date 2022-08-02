@@ -493,7 +493,7 @@ const VIDEO_IMPORT_STATES: { [ id in VideoImportState ]: string } = {
 
 const VIDEO_CHANNEL_SYNC_STATE: { [ id in VideoChannelSyncState ]: string } = {
   [VideoChannelSyncState.FAILED]: 'Failed',
-  [VideoChannelSyncState.SYNCED]: 'Pending',
+  [VideoChannelSyncState.SYNCED]: 'Synchronized',
   [VideoChannelSyncState.PROCESSING]: 'Processing',
   [VideoChannelSyncState.WAITING_FIRST_RUN]: 'Waiting first run'
 }
