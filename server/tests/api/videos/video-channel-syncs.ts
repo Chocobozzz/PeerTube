@@ -19,6 +19,7 @@ describe('Test channel synchronizations', function () {
     describe('Sync using ' + mode, function () {
       let server: PeerTubeServer
       let command: ChannelSyncsCommand
+      let startTestDate: Date
       const userInfo = {
         accessToken: '',
         username: 'user1',
@@ -31,6 +32,7 @@ describe('Test channel synchronizations', function () {
 
       before(async function () {
         this.timeout(120_000)
+        startTestDate = new Date()
         server = await createSingleServer(1, {
           import: {
             videos: {
@@ -152,6 +154,7 @@ describe('Test channel synchronizations', function () {
             label: 'Synchronized'
           }
         })
+        expect(new Date(resForRoot.data[0].lastSyncAt)).to.be.greaterThan(startTestDate)
         expect(resForRoot.data[0].channel).to.contain({
           id: server.store.channel.id
         })

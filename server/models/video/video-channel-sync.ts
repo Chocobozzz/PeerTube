@@ -71,6 +71,10 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
   @Column
   state: VideoChannelSyncState
 
+  @AllowNull(true)
+  @Column(DataType.DATE)
+  lastSyncAt?: Date
+
   static listByAccountForAPI (options: Pick<AvailableForListOptions, 'accountId'> & {
     start: number
     count: number
@@ -105,7 +109,8 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
       },
       externalChannelUrl: this.externalChannelUrl,
       createdAt: this.createdAt.toISOString(),
-      channel: this.VideoChannel.toFormattedSummaryJSON()
+      channel: this.VideoChannel.toFormattedSummaryJSON(),
+      lastSyncAt: this.lastSyncAt?.toISOString()
     }
   }
 

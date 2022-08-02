@@ -7623,6 +7623,10 @@ components:
         createdAt:
           type: string
           format: date-time
+        lastSyncAt:
+          type: string
+          format: date-time
+          nullable: true
         channel:
           $ref: '#/components/schemas/VideoChannel'
     VideoChannelSyncList:

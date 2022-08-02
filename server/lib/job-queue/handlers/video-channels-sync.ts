@@ -50,6 +50,7 @@ export async function processVideoChannelsSync () {
     try {
       const syncCreationDate = sync.createdAt
       sync.state = VideoChannelSyncState.PROCESSING
+      sync.lastSyncAt = new Date()
       await sync.save()
       // Format
       logger.info(`Starting synchronizing "${sync.VideoChannel.name}" with external channel "${sync.externalChannelUrl}"`)

@@ -16,6 +16,7 @@ async function up (utils: {
       "state" INTEGER NOT NULL DEFAULT 1,
       "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
       "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL,
+      "lastSyncAt" TIMESTAMP WITH TIME ZONE,
       PRIMARY KEY ("id")
     );
   `

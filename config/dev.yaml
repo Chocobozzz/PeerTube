@@ -81,6 +81,9 @@ import:
       enabled: true
     torrent:
       enabled: true
+  synchronization:
+    enabled: true
+    check_interval: 5 minutes
 
 instance:
   default_nsfw_policy: 'display'

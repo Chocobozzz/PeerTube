@@ -32,8 +32,9 @@
       <th style="width: 10%"><my-global-icon iconName="columns"></my-global-icon></th>
       <th style="width: 25%" i18n pSortableColumn="externalChannelUrl">External Channel</th>
       <th style="width: 25%" i18n>Channel</th> <!-- FIXME allow sort for this column -->
-      <th style="width: 15%" i18n>State</th> <!-- FIXME allow sort for this column -->
-      <th style="width: 15%" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th style="width: 10%" i18n>State</th> <!-- FIXME allow sort for this column -->
+      <th style="width: 10%" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th style="width: 10%" i18n pSortableColumn="lastSyncAt">Last synchronization at <p-sortIcon field="lastSyncAt"></p-sortIcon></th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-expanded="expanded" let-videoChannelSync>
@@ -56,6 +57,7 @@
         </span>
       </td>
       <td>{{ videoChannelSync.createdAt | date: 'short' }}</td>
+      <td>{{ videoChannelSync?.lastSyncAt | date: 'short' }}</td>
 
     </tr>
   </ng-template>
