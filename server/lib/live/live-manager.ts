@@ -29,6 +29,7 @@ import { PeerTubeSocket } from '../peertube-socket'
 import { LiveQuotaStore } from './live-quota-store'
 import { cleanupPermanentLive } from './live-utils'
 import { MuxingSession } from './shared'
+import { Hooks } from '../plugins/hooks'
 
 const NodeRtmpSession = require('node-media-server/src/node_rtmp_session')
 const context = require('node-media-server/src/node_core_ctx')
@@ -242,7 +243,11 @@ class LiveManager {
       inputUrl, Date.now() - now, bitrate, fps, resolution, lTags(sessionId, video.uuid)
     )
 
-    const allResolutions = this.buildAllResolutionsToTranscode(resolution)
+    const allResolutions = await Hooks.wrapObject(
+      this.buildAllResolutionsToTranscode(resolution),
+      'filter:transcoding.auto.lower-resolutions-to-transcode.result',
+      { video }
+    )
 
     logger.info(
       'Will mux/transcode live video of original resolution %d.', resolution,

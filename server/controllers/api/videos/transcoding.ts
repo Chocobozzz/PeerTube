@@ -4,6 +4,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { addTranscodingJob } from '@server/lib/video'
 import { HttpStatusCode, UserRight, VideoState, VideoTranscodingCreate } from '@shared/models'
 import { asyncMiddleware, authenticate, createTranscodingValidator, ensureUserHasRight } from '../../../middlewares'
+import { Hooks } from '@server/lib/plugins/hooks'
 
 const lTags = loggerTagsFactory('api', 'video')
 const transcodingRouter = express.Router()
@@ -30,7 +31,15 @@ async function createTranscoding (req: express.Request, res: express.Response) {
   const body: VideoTranscodingCreate = req.body
 
   const { resolution: maxResolution, isPortraitMode, audioStream } = await video.probeMaxQualityFile()
-  const resolutions = computeLowerResolutionsToTranscode(maxResolution, 'vod').concat([ maxResolution ])
+  const resolutions = await Hooks.wrapObject(
+    computeLowerResolutionsToTranscode(maxResolution, 'vod').concat([ maxResolution ]),
+    'filter:transcoding.manual.lower-resolutions-to-transcode.result',
+    body
+  )
+
+  if (resolutions.length === 0) {
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  }
 
   video.state = VideoState.TO_TRANSCODE
   await video.save()

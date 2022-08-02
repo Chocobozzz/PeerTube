@@ -256,8 +256,6 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   registerHook({
     target: 'filter:job-queue.process.params',
     handler: (object, context) => {
-      peertubeHelpers.logger.debug('TOTO.', { object, context })
-
       if (context.type !== 'video-studio-edition') return object
 
       object.data.tasks = [
@@ -269,6 +267,17 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
           }
         }
       ]
+
+      return object
+    }
+  })
+
+  registerHook({
+    target: 'filter:transcoding.auto.lower-resolutions-to-transcode.result',
+    handler: (object, context) => {
+      if (context.video.name.includes('transcode-filter')) {
+        object = [ 100 ]
+      }
 
       return object
     }

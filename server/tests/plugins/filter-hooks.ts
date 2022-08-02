@@ -677,6 +677,19 @@ describe('Test plugin filter hooks', function () {
     })
   })
 
+  describe('Transcoding filters', async function () {
+
+    it('Should run filter:transcoding.auto.lower-resolutions-to-transcode.result', async function () {
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'transcode-filter' })
+
+      await waitJobs(servers)
+
+      const video = await servers[0].videos.get({ id: uuid })
+      expect(video.files).to.have.lengthOf(2)
+      expect(video.files.find(f => f.resolution.id === 100 as any)).to.exist
+    })
+  })
+
   after(async function () {
     await cleanupTests(servers)
   })

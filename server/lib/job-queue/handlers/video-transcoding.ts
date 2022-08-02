@@ -26,6 +26,7 @@ import {
   optimizeOriginalVideofile,
   transcodeNewWebTorrentResolution
 } from '../../transcoding/transcoding'
+import { Hooks } from '@server/lib/plugins/hooks'
 
 type HandlerFunction = (job: Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<void>
 
@@ -269,7 +270,12 @@ async function createLowerResolutionsJobs (options: {
   const { video, user, videoFileResolution, isPortraitMode, isNewVideo, hasAudio, type } = options
 
   // Create transcoding jobs if there are enabled resolutions
-  const resolutionsEnabled = computeLowerResolutionsToTranscode(videoFileResolution, 'vod')
+  const resolutionsEnabled = await Hooks.wrapObject(
+    computeLowerResolutionsToTranscode(videoFileResolution, 'vod'),
+    'filter:transcoding.auto.lower-resolutions-to-transcode.result',
+    options
+  )
+
   const resolutionCreated: string[] = []
 
   for (const resolution of resolutionsEnabled) {
