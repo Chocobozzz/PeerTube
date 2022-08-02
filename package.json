@@ -104,7 +104,6 @@
     "@peertube/feed": "^5.0.1",
     "@peertube/http-signature": "^1.7.0",
     "@uploadx/core": "^5.1.2",
-    "async": "^3.0.1",
     "async-lru": "^1.1.1",
     "bcrypt": "5.0.1",
     "bencode": "^2.0.2",
@@ -179,7 +178,6 @@
   },
   "devDependencies": {
     "@peertube/maildev": "^1.2.0",
-    "@types/async": "^3.0.0",
     "@types/async-lock": "^1.1.0",
     "@types/bcrypt": "^5.0.0",
     "@types/bencode": "^2.0.0",
