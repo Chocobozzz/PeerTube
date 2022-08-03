@@ -34,7 +34,7 @@ type ChannelSyncInfo = {
 }
 
 function formatDateForYoutubeDl (date: Date) {
-  return `${date.getFullYear()}${date.getMonth() + 1}${date.getDate()}`
+  return `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${(date.getDate()).toString().padStart(2, '0')}`
 }
 
 export async function processVideoChannelsSync () {
@@ -142,6 +142,7 @@ async function synchronizeChannel (
       return video['webpage_url']
     })
   )).flat()
+  logger.debug('Fetched %d candidate URLs for upload: %j', targetUrls.length, targetUrls)
 
   await wait(secondsToWait * 1000)
 

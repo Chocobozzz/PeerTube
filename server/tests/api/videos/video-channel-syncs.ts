@@ -30,6 +30,14 @@ describe('Test channel synchronizations', function () {
         syncId: -1
       }
 
+      async function changeCreationDateForSync (channelSyncId: number, creationDate: string) {
+        await server.sql.updateQuery(`
+            UPDATE "videoChannelSync"
+            SET "createdAt"='${creationDate}'
+            WHERE id=${channelSyncId}
+          `)
+      }
+
       before(async function () {
         this.timeout(120_000)
         startTestDate = new Date()
@@ -97,12 +105,7 @@ describe('Test channel synchronizations', function () {
         })
 
         // Ensure any missing video not already fetched will be considered as new
-        await server.sql.updateQuery(`
-            UPDATE "videoChannelSync"
-            SET "createdAt"='1970-01-01'
-            WHERE id=${channelSyncId}
-          `)
-
+        await changeCreationDateForSync(channelSyncId, '1970-01-01')
         // when
         await server.debug.sendCommand({
           body: {
@@ -113,8 +116,8 @@ describe('Test channel synchronizations', function () {
 
         // then
         {
-          const res = await server.videos.listByChannel({ handle: 'root_channel', include: VideoInclude.NOT_PUBLISHED_STATE })
           await waitJobs(server, true)
+          const res = await server.videos.listByChannel({ handle: 'root_channel', include: VideoInclude.NOT_PUBLISHED_STATE })
           expect(res.total).to.equal(2)
           expect(res.data[0].name).to.equal('test')
         }
@@ -129,7 +132,6 @@ describe('Test channel synchronizations', function () {
           token: server.accessToken,
           expectedStatus: HttpStatusCode.OK_200
         })
-
       })
 
       it('Should add a synchronization for another user', async function () {
@@ -142,6 +144,37 @@ describe('Test channel synchronizations', function () {
           expectedStatus: HttpStatusCode.OK_200
         })
         userInfo.syncId = id
+      })
+
+      it('Should not import a channel if not asked', async function () {
+        await waitJobs(server, true)
+        const resForUser = await command.listByAccount({ accountName: userInfo.username })
+        expect(resForUser.data[0].state).to.contain({
+          id: VideoChannelSyncState.WAITING_FIRST_RUN,
+          label: 'Waiting first run'
+        })
+      })
+
+      it('Should only fetch the videos channel newer than the creation date', async function () {
+        // given
+        this.timeout(120_000)
+        await changeCreationDateForSync(userInfo.syncId, '2019-03-01')
+
+        // when
+        await server.debug.sendCommand({
+          body: {
+            command: 'process-video-channel-sync-latest'
+          },
+          expectedStatus: HttpStatusCode.NO_CONTENT_204
+        })
+
+        // then
+        {
+          await waitJobs(server, true)
+          const res = await server.videos.listByChannel({ handle: userInfo.channelName, include: VideoInclude.NOT_PUBLISHED_STATE })
+          expect(res.total).to.equal(1)
+          expect(res.data[0].name).to.equal('test')
+        }
       })
 
       it('Should list user\'s channel synchronizations', async function () {
@@ -167,18 +200,9 @@ describe('Test channel synchronizations', function () {
         expect(resForUser.data[0]).to.deep.contain({
           externalChannelUrl: FIXTURE_URLS.youtubeChannel + "?baz=qux",
           state: {
-            id: VideoChannelSyncState.WAITING_FIRST_RUN,
-            label: 'Waiting first run'
+            id: VideoChannelSyncState.SYNCED,
+            label: 'Synchronized'
           }
-        })
-      })
-
-      it('Should not import a channel if not asked', async function () {
-        await waitJobs(server, true)
-        const resForUser = await command.listByAccount({ accountName: userInfo.username })
-        expect(resForUser.data[0].state).to.contain({
-          id: VideoChannelSyncState.WAITING_FIRST_RUN,
-          label: 'Waiting first run'
         })
       })
 
