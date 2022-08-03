@@ -161,19 +161,22 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
-  static async urlAlreadyImported (userId: number, targetUrl: string): Promise<boolean> {
+  static async urlAlreadyImported (channelId: number, targetUrl: string): Promise<boolean> {
     const count = await (VideoImportModel.unscoped().count({
       col: 'targetUrl',
       where: {
-        userId,
         targetUrl,
-        videoId: {
-          [Op.not]: null
-        },
         state: {
           [Op.in]: [ VideoImportState.PENDING, VideoImportState.PROCESSING, VideoImportState.SUCCESS ]
         }
-      }
+      },
+      include: [ {
+        model: VideoModel,
+        required: true,
+        where: {
+          channelId
+        }
+      } ]
     }))
     return count > 0
   }

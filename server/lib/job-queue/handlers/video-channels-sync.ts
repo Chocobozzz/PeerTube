@@ -138,7 +138,7 @@ async function synchronizeChannel (
   for (const targetUrl of targetUrls) {
     try {
       // TODO retry pour l'import d'une chaîne ?
-      if (!await VideoImportModel.urlAlreadyImported(user.id, targetUrl)) {
+      if (!await VideoImportModel.urlAlreadyImported(channel.id, targetUrl)) {
         const { job } = await addYoutubeDLImport({
           user,
           channel,
