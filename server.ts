@@ -138,6 +138,7 @@ import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { VideoViewsManager } from '@server/lib/views/video-views-manager'
 import { isTestOrDevInstance } from './server/helpers/core-utils'
 import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics'
+import { ApplicationModel } from '@server/models/application/application'
 
 // ----------- Command line -----------
 
@@ -330,11 +331,16 @@ async function startApplication () {
   server.listen(port, hostname, async () => {
     if (cliOptions.plugins) {
       try {
+        await PluginManager.Instance.rebuildNativePluginsIfNeeded()
+
         await PluginManager.Instance.registerPluginsAndThemes()
       } catch (err) {
         logger.error('Cannot register plugins and themes.', { err })
       }
     }
+
+    ApplicationModel.updateNodeVersions()
+      .catch(err => logger.error('Cannot update node versions.', { err }))
 
     logger.info('HTTP server listening on %s:%d', hostname, port)
     logger.info('Web server: %s', WEBSERVER.URL)

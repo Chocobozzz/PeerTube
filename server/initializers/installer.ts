@@ -1,6 +1,8 @@
 import { ensureDir, readdir, remove } from 'fs-extra'
 import passwordGenerator from 'password-generator'
 import { join } from 'path'
+import { isTestOrDevInstance } from '@server/helpers/core-utils'
+import { getNodeABIVersion } from '@server/helpers/version'
 import { UserRole } from '@shared/models'
 import { logger } from '../helpers/logger'
 import { buildUser, createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user'
@@ -10,7 +12,6 @@ import { applicationExist, clientsExist, usersExist } from './checker-after-init
 import { CONFIG } from './config'
 import { FILES_CACHE, HLS_STREAMING_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION, RESUMABLE_UPLOAD_DIRECTORY } from './constants'
 import { sequelizeTypescript } from './database'
-import { isTestOrDevInstance } from '@server/helpers/core-utils'
 
 async function installApplication () {
   try {
@@ -175,7 +176,9 @@ async function createApplicationIfNotExist () {
   logger.info('Creating application account.')
 
   const application = await ApplicationModel.create({
-    migrationVersion: LAST_MIGRATION_VERSION
+    migrationVersion: LAST_MIGRATION_VERSION,
+    nodeVersion: process.version,
+    nodeABIVersion: getNodeABIVersion()
   })
 
   return createApplicationActor(application.id)

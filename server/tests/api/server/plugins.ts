@@ -2,6 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { pathExists, remove } from 'fs-extra'
+import { join } from 'path'
 import { testHelloWorldRegisteredSettings } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { HttpStatusCode, PluginType } from '@shared/models'
@@ -9,6 +11,7 @@ import {
   cleanupTests,
   createSingleServer,
   killallServers,
+  makeGetRequest,
   PeerTubeServer,
   PluginsCommand,
   setAccessTokensToServers
@@ -347,6 +350,35 @@ describe('Test plugins', function () {
     await server.run()
 
     await check()
+  })
+
+  it('Should rebuild native modules on Node ABI change', async function () {
+    await command.install({ path: PluginsCommand.getPluginTestPath('-native') })
+
+    await makeGetRequest({
+      url: server.url,
+      path: '/plugins/test-native/router',
+      expectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+
+    const query = `UPDATE "application" SET "nodeABIVersion" = 1`
+    await server.sql.updateQuery(query)
+
+    const baseNativeModule = server.servers.buildDirectory(join('plugins', 'node_modules', 'a-native-example'))
+    await remove(join(baseNativeModule, 'build'))
+    await remove(join(baseNativeModule, 'prebuilds'))
+
+    await server.kill()
+    await server.run()
+
+    await pathExists(join(baseNativeModule, 'build'))
+    await pathExists(join(baseNativeModule, 'prebuilds'))
+
+    await makeGetRequest({
+      url: server.url,
+      path: '/plugins/test-native/router',
+      expectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
   })
 
   after(async function () {

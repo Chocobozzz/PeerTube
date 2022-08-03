@@ -3,6 +3,7 @@ import { createReadStream, createWriteStream } from 'fs'
 import { ensureDir, outputFile, readJSON } from 'fs-extra'
 import { basename, join } from 'path'
 import { decachePlugin } from '@server/helpers/decache'
+import { ApplicationModel } from '@server/models/application/application'
 import { MOAuthTokenUser, MUser } from '@server/types/models'
 import { getCompleteLocale } from '@shared/core-utils'
 import {
@@ -23,7 +24,7 @@ import { PluginModel } from '../../models/server/plugin'
 import { PluginLibrary, RegisterServerAuthExternalOptions, RegisterServerAuthPassOptions, RegisterServerOptions } from '../../types/plugins'
 import { ClientHtml } from '../client-html'
 import { RegisterHelpers } from './register-helpers'
-import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
+import { installNpmPlugin, installNpmPluginFromDisk, rebuildNativePlugins, removeNpmPlugin } from './yarn'
 
 export interface RegisteredPlugin {
   npmName: string
@@ -382,6 +383,12 @@ export class PluginManager implements ServerHook {
     await removeNpmPlugin(npmName)
 
     logger.info('Plugin %s uninstalled.', npmName)
+  }
+
+  async rebuildNativePluginsIfNeeded () {
+    if (!await ApplicationModel.nodeABIChanged()) return
+
+    return rebuildNativePlugins()
   }
 
   // ###################### Private register ######################
