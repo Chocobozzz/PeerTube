@@ -26,8 +26,8 @@ export class NewPluginVersionForAdmins extends AbstractNotification <MPlugin> {
     return this.admins
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: UserNotificationType.NEW_PLUGIN_VERSION,
       userId: user.id,
       pluginId: this.plugin.id

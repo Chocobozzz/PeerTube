@@ -17,8 +17,8 @@ describe('Test plugin action hooks', function () {
   let videoUUID: string
   let threadId: number
 
-  function checkHook (hook: ServerHookName) {
-    return servers[0].servers.waitUntilLog('Run hook ' + hook)
+  function checkHook (hook: ServerHookName, strictCount = true) {
+    return servers[0].servers.waitUntilLog('Run hook ' + hook, 1, strictCount)
   }
 
   before(async function () {
@@ -222,6 +222,13 @@ describe('Test plugin action hooks', function () {
       await servers[0].playlists.addElement({ playlistId, attributes: { videoId } })
 
       await checkHook('action:api.video-playlist-element.created')
+    })
+  })
+
+  describe('Notification hook', function () {
+
+    it('Should run action:notifier.notification.created', async function () {
+      await checkHook('action:notifier.notification.created', false)
     })
   })
 

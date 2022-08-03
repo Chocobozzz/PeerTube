@@ -30,8 +30,8 @@ export class NewPeerTubeVersionForAdmins extends AbstractNotification <NewPeerTu
     return this.admins
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: UserNotificationType.NEW_PEERTUBE_VERSION,
       userId: user.id,
       applicationId: this.payload.application.id

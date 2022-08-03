@@ -32,8 +32,8 @@ export class ImportFinishedForOwner extends AbstractNotification <ImportFinished
     return [ this.user ]
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: this.payload.success
         ? UserNotificationType.MY_VIDEO_IMPORT_SUCCESS
         : UserNotificationType.MY_VIDEO_IMPORT_ERROR,

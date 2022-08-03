@@ -1,6 +1,7 @@
 async function register ({ registerHook, registerSetting, settingsManager, storageManager, peertubeHelpers }) {
   const actionHooks = [
     'action:application.listening',
+    'action:notifier.notification.created',
 
     'action:api.video.updated',
     'action:api.video.deleted',
