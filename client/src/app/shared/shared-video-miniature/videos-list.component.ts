@@ -76,6 +76,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() disabled = false
 
   @Output() filtersChanged = new EventEmitter<VideoFilters>()
+  @Output() videosLoaded = new EventEmitter<Video[]>()
 
   videos: Video[] = []
   filters: VideoFilters
@@ -241,6 +242,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
           if (this.groupByDate) this.buildGroupedDateLabels()
 
           this.onDataSubject.next(data)
+          this.videosLoaded.emit(this.videos)
         },
 
         error: err => {

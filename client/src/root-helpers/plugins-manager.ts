@@ -69,7 +69,8 @@ class PluginsManager {
     login: new ReplaySubject<boolean>(1),
     'video-edit': new ReplaySubject<boolean>(1),
     embed: new ReplaySubject<boolean>(1),
-    'my-library': new ReplaySubject<boolean>(1)
+    'my-library': new ReplaySubject<boolean>(1),
+    'video-channel': new ReplaySubject<boolean>(1)
   }
 
   private readonly peertubeHelpersFactory: PeertubeHelpersFactory

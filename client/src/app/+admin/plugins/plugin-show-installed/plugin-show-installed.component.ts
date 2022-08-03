@@ -111,7 +111,7 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
 
     this.form.patchValue(settingsValues)
 
-    setTimeout(() => this.hooks.runAction('action:admin-plugin-settings.init', 'admin-plugin', { npmName: this.npmName }))
+    this.hooks.runAction('action:admin-plugin-settings.init', 'admin-plugin', { npmName: this.npmName })
   }
 
   private getSetting (name: string) {

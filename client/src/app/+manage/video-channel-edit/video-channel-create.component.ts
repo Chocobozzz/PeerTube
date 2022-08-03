@@ -1,8 +1,8 @@
 import { of } from 'rxjs'
 import { switchMap } from 'rxjs/operators'
-import { Component, OnInit } from '@angular/core'
+import { AfterViewInit, Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, Notifier } from '@app/core'
+import { AuthService, HooksService, Notifier } from '@app/core'
 import {
   VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
   VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR,
@@ -18,7 +18,7 @@ import { VideoChannelEdit } from './video-channel-edit'
   templateUrl: './video-channel-edit.component.html',
   styleUrls: [ './video-channel-edit.component.scss' ]
 })
-export class VideoChannelCreateComponent extends VideoChannelEdit implements OnInit {
+export class VideoChannelCreateComponent extends VideoChannelEdit implements OnInit, AfterViewInit {
   error: string
   videoChannel = new VideoChannel({})
 
@@ -30,7 +30,8 @@ export class VideoChannelCreateComponent extends VideoChannelEdit implements OnI
     private authService: AuthService,
     private notifier: Notifier,
     private router: Router,
-    private videoChannelService: VideoChannelService
+    private videoChannelService: VideoChannelService,
+    private hooks: HooksService
   ) {
     super()
   }
@@ -42,6 +43,10 @@ export class VideoChannelCreateComponent extends VideoChannelEdit implements OnI
       description: VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
       support: VIDEO_CHANNEL_SUPPORT_VALIDATOR
     })
+  }
+
+  ngAfterViewInit () {
+    this.hooks.runAction('action:video-channel-create.init', 'video-channel')
   }
 
   formValidated () {
