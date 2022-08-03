@@ -8,7 +8,6 @@ import {
   MVideoThumbnail
 } from '@server/types/models'
 
-
 type VideoLoadType = 'for-api' | 'all' | 'only-video' | 'id' | 'none' | 'only-immutable-attributes'
 
 function loadVideo (id: number | string, fetchType: 'for-api', userId?: number): Promise<MVideoFormattableDetails>
