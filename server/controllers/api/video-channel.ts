@@ -126,7 +126,7 @@ videoChannelRouter.delete('/:nameWithHost',
 
 videoChannelRouter.get('/:nameWithHost',
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  getVideoChannel
+  asyncMiddleware(getVideoChannel)
 )
 
 videoChannelRouter.get('/:nameWithHost/video-playlists',
@@ -171,12 +171,19 @@ export {
 
 async function listVideoChannels (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
-  const resultList = await VideoChannelModel.listForApi({
+
+  const apiOptions = await Hooks.wrapObject({
     actorId: serverActor.id,
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort
-  })
+  }, 'filter:api.video-channels.list.params')
+
+  const resultList = await Hooks.wrapPromiseFun(
+    VideoChannelModel.listForApi,
+    apiOptions,
+    'filter:api.video-channels.list.result'
+  )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -243,6 +250,8 @@ async function addVideoChannel (req: express.Request, res: express.Response) {
   auditLogger.create(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelCreated.toFormattedJSON()))
   logger.info('Video channel %s created.', videoChannelCreated.Actor.url)
 
+  Hooks.runAction('action:api.video-channel.created', { videoChannel: videoChannelCreated, req, res })
+
   return res.json({
     videoChannel: {
       id: videoChannelCreated.id
@@ -281,6 +290,8 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
         oldVideoChannelAuditKeys
       )
 
+      Hooks.runAction('action:api.video-channel.updated', { videoChannel: videoChannelInstanceUpdated, req, res })
+
       logger.info('Video channel %s updated.', videoChannelInstance.Actor.url)
     })
   } catch (err) {
@@ -310,6 +321,8 @@ async function removeVideoChannel (req: express.Request, res: express.Response) 
 
     await videoChannelInstance.destroy({ transaction: t })
 
+    Hooks.runAction('action:api.video-channel.deleted', { videoChannel: videoChannelInstance, req, res })
+
     auditLogger.delete(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelInstance.toFormattedJSON()))
     logger.info('Video channel %s deleted.', videoChannelInstance.Actor.url)
   })
@@ -317,8 +330,9 @@ async function removeVideoChannel (req: express.Request, res: express.Response) 
   return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
-function getVideoChannel (req: express.Request, res: express.Response) {
-  const videoChannel = res.locals.videoChannel
+async function getVideoChannel (req: express.Request, res: express.Response) {
+  const id = res.locals.videoChannel.id
+  const videoChannel = await Hooks.wrapObject(res.locals.videoChannel, 'filter:api.video-channel.get.result', { id })
 
   if (videoChannel.isOutdated()) {
     JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'actor', url: videoChannel.Actor.url } })

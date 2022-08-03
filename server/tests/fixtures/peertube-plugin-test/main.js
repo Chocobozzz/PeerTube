@@ -7,6 +7,10 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     'action:api.video.uploaded',
     'action:api.video.viewed',
 
+    'action:api.video-channel.created',
+    'action:api.video-channel.updated',
+    'action:api.video-channel.deleted',
+
     'action:api.live-video.created',
 
     'action:api.video-thread.created',
@@ -92,6 +96,29 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       return video
     }
   })
+
+  // ---------------------------------------------------------------------------
+
+  registerHook({
+    target: 'filter:api.video-channels.list.params',
+    handler: obj => addToCount(obj, 1)
+  })
+
+  registerHook({
+    target: 'filter:api.video-channels.list.result',
+    handler: obj => addToTotal(obj, 1)
+  })
+
+  registerHook({
+    target: 'filter:api.video-channel.get.result',
+    handler: channel => {
+      channel.name += ' <3'
+
+      return channel
+    }
+  })
+
+  // ---------------------------------------------------------------------------
 
   for (const hook of [ 'filter:api.video.upload.accept.result', 'filter:api.live-video.create.accept.result' ]) {
     registerHook({

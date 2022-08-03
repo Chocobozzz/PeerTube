@@ -65,6 +65,39 @@ describe('Test plugin action hooks', function () {
 
       await checkHook('action:api.video.viewed')
     })
+
+    it('Should run action:api.video.deleted', async function () {
+      await servers[0].videos.remove({ id: videoUUID })
+
+      await checkHook('action:api.video.deleted')
+    })
+
+    after(async function () {
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+      videoUUID = uuid
+    })
+  })
+
+  describe('Video channel hooks', function () {
+    const channelName = 'my_super_channel'
+
+    it('Should run action:api.video-channel.created', async function () {
+      await servers[0].channels.create({ attributes: { name: channelName } })
+
+      await checkHook('action:api.video-channel.created')
+    })
+
+    it('Should run action:api.video-channel.updated', async function () {
+      await servers[0].channels.update({ channelName, attributes: { displayName: 'my display name' } })
+
+      await checkHook('action:api.video-channel.updated')
+    })
+
+    it('Should run action:api.video-channel.deleted', async function () {
+      await servers[0].channels.delete({ channelName })
+
+      await checkHook('action:api.video-channel.deleted')
+    })
   })
 
   describe('Live hooks', function () {

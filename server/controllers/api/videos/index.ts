@@ -110,7 +110,7 @@ videosRouter.get('/:id',
   optionalAuthenticate,
   asyncMiddleware(videosCustomGetValidator('for-api')),
   asyncMiddleware(checkVideoFollowConstraints),
-  getVideo
+  asyncMiddleware(getVideo)
 )
 
 videosRouter.delete('/:id',
@@ -144,8 +144,11 @@ function listVideoPrivacies (_req: express.Request, res: express.Response) {
   res.json(VIDEO_PRIVACIES)
 }
 
-function getVideo (_req: express.Request, res: express.Response) {
-  const video = res.locals.videoAPI
+async function getVideo (_req: express.Request, res: express.Response) {
+  const videoId = res.locals.videoAPI.id
+  const userId = res.locals.oauth?.token.User.id
+
+  const video = await Hooks.wrapObject(res.locals.videoAPI, 'filter:api.video.get.result', { id: videoId, userId })
 
   if (video.isOutdated()) {
     JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: video.url } })

@@ -295,7 +295,7 @@ describe('Test plugin filter hooks', function () {
     await servers[0].servers.waitUntilLog('Run hook filter:api.overviews.videos.list.result', 3)
   })
 
-  describe('Should run filter:video.auto-blacklist.result', function () {
+  describe('filter:video.auto-blacklist.result', function () {
 
     async function checkIsBlacklisted (id: number | string, value: boolean) {
       const video = await servers[0].videos.getWithToken({ id })
@@ -688,6 +688,28 @@ describe('Test plugin filter hooks', function () {
       const video = await servers[0].videos.get({ id: uuid })
       expect(video.files).to.have.lengthOf(2)
       expect(video.files.find(f => f.resolution.id === 100 as any)).to.exist
+    })
+  })
+
+  describe('Video channel filters', async function () {
+
+    it('Should run filter:api.video-channels.list.params', async function () {
+      const { data } = await servers[0].channels.list({ start: 0, count: 0 })
+
+      // plugin do +1 to the count parameter
+      expect(data).to.have.lengthOf(1)
+    })
+
+    it('Should run filter:api.video-channels.list.result', async function () {
+      const { total } = await servers[0].channels.list({ start: 0, count: 1 })
+
+      // plugin do +1 to the total parameter
+      expect(total).to.equal(4)
+    })
+
+    it('Should run filter:api.video-channel.get.result', async function () {
+      const channel = await servers[0].channels.get({ channelName: 'root_channel' })
+      expect(channel.displayName).to.equal('Main root channel <3')
     })
   })
 
