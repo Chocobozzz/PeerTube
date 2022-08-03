@@ -1,8 +1,6 @@
-import { isVTTFileValid } from "../custom-validators/video-captions"
-import { logger } from "../logger"
-import { moveAndProcessCaptionFile } from "../captions-utils"
 import {
   MChannelAccountDefault,
+  MChannelBannerAccountDefault,
   MThumbnail,
   MUser,
   MVideoAccountDefault,
@@ -15,13 +13,25 @@ import {
 import { remove } from "fs-extra"
 import { sequelizeTypescript } from "@server/initializers/database"
 import { VideoCaptionModel } from "@server/models/video/video-caption"
-import { YoutubeDLWrapper } from "./youtube-dl-wrapper"
-import { isResolvingToUnicastOnly } from "../dns"
-import { YoutubeDLInfo } from "./youtube-dl-info-builder"
 import { FilteredModelAttributes } from "@server/types"
 import { VideoImportModel } from "@server/models/video/video-import"
 import { autoBlacklistVideoIfNeeded } from "@server/lib/video-blacklist"
 import { setVideoTags } from "@server/lib/video"
+import { ServerConfigManager } from "@server/lib/server-config-manager"
+import { YoutubeDLInfo, YoutubeDLWrapper } from "@server/helpers/youtube-dl"
+import { logger } from "@server/helpers/logger"
+import { isVTTFileValid } from "@server/helpers/custom-validators/video-captions"
+import { moveAndProcessCaptionFile } from "@server/helpers/captions-utils"
+import { isResolvingToUnicastOnly } from "@server/helpers/dns"
+import { ThumbnailType, VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from "@shared/models"
+import { CONFIG } from "@server/initializers/config"
+import { Hooks } from '@server/lib/plugins/hooks'
+import { VideoModel } from "@server/models/video/video"
+import { getLocalVideoActivityPubUrl } from "./activitypub/url"
+import { updateVideoMiniatureFromExisting, updateVideoMiniatureFromUrl } from "./thumbnail"
+import { isVideoFileExtnameValid } from "@server/helpers/custom-validators/videos"
+import { JobQueue } from "./job-queue"
+import { Job } from "bull"
 
 export async function insertIntoDB (parameters: {
   video: MVideoThumbnail
@@ -68,7 +78,7 @@ export async function insertIntoDB (parameters: {
   return videoImport
 }
 
-export async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: string, videoId: number) {
+async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: string, videoId: number) {
   try {
     const subtitles = await youtubeDL.getSubtitles()
 
@@ -98,7 +108,7 @@ export async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targ
   }
 }
 
-export async function hasUnicastURLsOnly (youtubeDLInfo: YoutubeDLInfo) {
+async function hasUnicastURLsOnly (youtubeDLInfo: YoutubeDLInfo) {
   const hosts = youtubeDLInfo.urls.map(u => new URL(u).hostname)
   const uniqHosts = new Set(hosts)
 
@@ -109,4 +119,167 @@ export async function hasUnicastURLsOnly (youtubeDLInfo: YoutubeDLInfo) {
   }
 
   return true
+}
+
+export async function buildVideo ({ channelId, importData, importDataOverride, importType }: {
+  channelId: number
+  importData: YoutubeDLInfo
+  importDataOverride?: Partial<VideoImportCreate>
+  importType: 'url' | 'torrent'
+}): Promise<MVideoThumbnail> {
+  let videoData = {
+    name: importDataOverride?.name || importData.name || 'Unknown name',
+    remote: false,
+    category: importDataOverride?.category || importData.category,
+    licence: importDataOverride?.licence ?? importData.licence ?? CONFIG.DEFAULTS.PUBLISH.LICENCE,
+    language: importDataOverride?.language || importData.language,
+    commentsEnabled: importDataOverride?.commentsEnabled ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_ENABLED,
+    downloadEnabled: importDataOverride?.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
+    waitTranscoding: importDataOverride?.waitTranscoding || false,
+    state: VideoState.TO_IMPORT,
+    nsfw: importDataOverride?.nsfw || importData.nsfw || false,
+    description: importDataOverride?.description || importData.description,
+    support: importDataOverride?.support || null,
+    privacy: importDataOverride?.privacy || VideoPrivacy.PRIVATE,
+    duration: 0, // duration will be set by the import job
+    channelId,
+    originallyPublishedAt: importDataOverride?.originallyPublishedAt
+      ? new Date(importDataOverride?.originallyPublishedAt)
+      : importData.originallyPublishedAt
+  }
+
+  videoData = await Hooks.wrapObject(
+    videoData,
+    importType === 'url'
+      ? 'filter:api.video.import-url.video-attribute.result'
+      : 'filter:api.video.import-torrent.video-attribute.result'
+  )
+
+  const video = new VideoModel(videoData)
+  video.url = getLocalVideoActivityPubUrl(video)
+
+  return video
+}
+
+export class YoutubeDlImportError extends Error {
+  code: YoutubeDlImportError.CODE
+  cause?: Error // Property to remove once ES2022 is used
+  constructor ({ message, code }) {
+    super(message)
+    this.code = code
+  }
+
+  static fromError (err: Error, code: YoutubeDlImportError.CODE, message?: string) {
+    const ytDlErr = new this({ message: message ?? err.message, code })
+    ytDlErr.cause = err
+    ytDlErr.stack = err.stack // Useless once ES2022 is used
+    return ytDlErr
+  }
+}
+
+export namespace YoutubeDlImportError {
+  export enum CODE {
+    FETCH_ERROR,
+    NOT_ONLY_UNICAST_URL
+  }
+}
+
+export async function addYoutubeDLImport ({ targetUrl, channel, importDataOverride, thumbnailFilePath, previewFilePath, user }: {
+  targetUrl: string
+  channel: MChannelBannerAccountDefault
+  importDataOverride?: Partial<VideoImportCreate>
+  thumbnailFilePath?: string
+  previewFilePath?: string
+  user: MUser
+}): Promise<{job: Job, videoImport: MVideoImportFormattable}> {
+  const youtubeDL = new YoutubeDLWrapper(targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
+  // Get video infos
+  let youtubeDLInfo: YoutubeDLInfo
+  try {
+    youtubeDLInfo = await youtubeDL.getInfoForDownload()
+  } catch (err) {
+    throw YoutubeDlImportError.fromError(
+      err, YoutubeDlImportError.CODE.FETCH_ERROR, `Cannot fetch information from import for URL ${targetUrl}`
+    )
+  }
+
+  if (!await hasUnicastURLsOnly(youtubeDLInfo)) {
+    throw new YoutubeDlImportError({
+      message: 'Cannot use non unicast IP as targetUrl.',
+      code: YoutubeDlImportError.CODE.NOT_ONLY_UNICAST_URL
+    })
+  }
+
+  const video = await buildVideo({
+    channelId: channel.id,
+    importData: youtubeDLInfo,
+    importDataOverride,
+    importType: 'url'
+  })
+
+  let thumbnailModel: MThumbnail
+  if (thumbnailFilePath) {
+    thumbnailModel = await updateVideoMiniatureFromExisting({
+      inputPath: thumbnailFilePath,
+      video,
+      type: ThumbnailType.MINIATURE,
+      automaticallyGenerated: false
+    })
+  // Process video thumbnail from url if caller did not or failed to provide one
+  } else if (youtubeDLInfo.thumbnailUrl) {
+    try {
+      thumbnailModel = await updateVideoMiniatureFromUrl({ downloadUrl: youtubeDLInfo.thumbnailUrl, video, type: ThumbnailType.MINIATURE })
+    } catch (err) {
+      logger.warn('Cannot process thumbnail %s from youtubedl.', youtubeDLInfo.thumbnailUrl, { err })
+    }
+  }
+
+  let previewModel: MThumbnail
+  if (previewFilePath) {
+    previewModel = await updateVideoMiniatureFromExisting({
+      inputPath: previewFilePath,
+      video,
+      type: ThumbnailType.PREVIEW,
+      automaticallyGenerated: false
+    })
+  // Process video thumbnail from url if caller did not or failed to provide one
+  } else if (youtubeDLInfo.thumbnailUrl) {
+    try {
+      previewModel = await updateVideoMiniatureFromUrl({ downloadUrl: youtubeDLInfo.thumbnailUrl, video, type: ThumbnailType.PREVIEW })
+    } catch (err) {
+      logger.warn('Cannot process preview %s from youtubedl.', youtubeDLInfo.thumbnailUrl, { err })
+    }
+  }
+
+  const videoImport = await insertIntoDB({
+    video,
+    thumbnailModel,
+    previewModel,
+    videoChannel: channel,
+    tags: importDataOverride?.tags || youtubeDLInfo.tags,
+    user,
+    videoImportAttributes: {
+      targetUrl,
+      state: VideoImportState.PENDING,
+      userId: user.id
+    }
+  })
+
+  // Get video subtitles
+  await processYoutubeSubtitles(youtubeDL, targetUrl, video.id)
+
+  let fileExt = `.${youtubeDLInfo.ext}`
+  if (!isVideoFileExtnameValid(fileExt)) fileExt = '.mp4'
+
+  // Create job to import the video
+  const payload = {
+    type: 'youtube-dl' as 'youtube-dl',
+    videoImportId: videoImport.id,
+    fileExt
+  }
+
+  return {
+    videoImport,
+    job: await JobQueue.Instance.createJobWithPromise({ type: 'video-import', payload })
+  }
 }
