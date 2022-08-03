@@ -1,6 +1,7 @@
 import { remove } from 'fs-extra'
 import LRUCache from 'lru-cache'
 import { join } from 'path'
+import { Transaction } from 'sequelize/types'
 import { ActorModel } from '@server/models/actor/actor'
 import { getLowercaseExtension } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
@@ -87,6 +88,22 @@ async function deleteLocalActorImageFile (accountOrChannel: MAccountDefault | MC
 
 // ---------------------------------------------------------------------------
 
+async function findAvailableLocalActorName (baseActorName: string, transaction?: Transaction) {
+  let actor = await ActorModel.loadLocalByName(baseActorName, transaction)
+  if (!actor) return baseActorName
+
+  for (let i = 1; i < 30; i++) {
+    const name = `${baseActorName}-${i}`
+
+    actor = await ActorModel.loadLocalByName(name, transaction)
+    if (!actor) return name
+  }
+
+  throw new Error('Cannot find available actor local name (too much iterations).')
+}
+
+// ---------------------------------------------------------------------------
+
 function downloadActorImageFromWorker (options: {
   fileUrl: string
   filename: string
@@ -109,6 +126,7 @@ const actorImagePathUnsafeCache = new LRUCache<string, string>({ max: LRU_CACHE.
 export {
   actorImagePathUnsafeCache,
   updateLocalActorImageFiles,
+  findAvailableLocalActorName,
   downloadActorImageFromWorker,
   deleteLocalActorImageFile,
   downloadImageFromWorker,
