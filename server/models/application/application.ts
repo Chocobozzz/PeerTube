@@ -73,5 +73,7 @@ export class ApplicationModel extends Model<Partial<AttributesOnly<ApplicationMo
 
     application.nodeABIVersion = getNodeABIVersion()
     application.nodeVersion = process.version
+
+    await application.save()
   }
 }

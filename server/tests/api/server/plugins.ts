@@ -353,6 +353,13 @@ describe('Test plugins', function () {
   })
 
   it('Should rebuild native modules on Node ABI change', async function () {
+    this.timeout(50000)
+
+    const removeNativeModule = async () => {
+      await remove(join(baseNativeModule, 'build'))
+      await remove(join(baseNativeModule, 'prebuilds'))
+    }
+
     await command.install({ path: PluginsCommand.getPluginTestPath('-native') })
 
     await makeGetRequest({
@@ -365,19 +372,32 @@ describe('Test plugins', function () {
     await server.sql.updateQuery(query)
 
     const baseNativeModule = server.servers.buildDirectory(join('plugins', 'node_modules', 'a-native-example'))
-    await remove(join(baseNativeModule, 'build'))
-    await remove(join(baseNativeModule, 'prebuilds'))
 
+    await removeNativeModule()
     await server.kill()
     await server.run()
 
-    await pathExists(join(baseNativeModule, 'build'))
-    await pathExists(join(baseNativeModule, 'prebuilds'))
+    expect(await pathExists(join(baseNativeModule, 'build'))).to.be.true
+    expect(await pathExists(join(baseNativeModule, 'prebuilds'))).to.be.true
 
     await makeGetRequest({
       url: server.url,
       path: '/plugins/test-native/router',
       expectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+
+    await removeNativeModule()
+
+    await server.kill()
+    await server.run()
+
+    expect(await pathExists(join(baseNativeModule, 'build'))).to.be.false
+    expect(await pathExists(join(baseNativeModule, 'prebuilds'))).to.be.false
+
+    await makeGetRequest({
+      url: server.url,
+      path: '/plugins/test-native/router',
+      expectedStatus: HttpStatusCode.NOT_FOUND_404
     })
   })
 
