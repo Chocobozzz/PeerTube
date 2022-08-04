@@ -161,6 +161,29 @@ export async function buildVideo ({ channelId, importData, importDataOverride, i
   return video
 }
 
+async function forgeThumbnail ({ inputPath, video, downloadUrl, type }: {
+  inputPath?: string
+  downloadUrl?: string
+  video: MVideoThumbnail
+  type: ThumbnailType
+}): Promise<MThumbnail> {
+  if (inputPath) {
+    return updateVideoMiniatureFromExisting({
+      inputPath,
+      video,
+      type,
+      automaticallyGenerated: false
+    })
+  } else if (downloadUrl) {
+    try {
+      return await updateVideoMiniatureFromUrl({ downloadUrl, video, type })
+    } catch (err) {
+      logger.warn('Cannot process thumbnail %s from youtubedl.', downloadUrl, { err })
+    }
+  }
+  return null
+}
+
 export class YoutubeDlImportError extends Error {
   code: YoutubeDlImportError.CODE
   cause?: Error // Property to remove once ES2022 is used
@@ -217,39 +240,19 @@ export async function addYoutubeDLImport ({ targetUrl, channel, importDataOverri
     importType: 'url'
   })
 
-  let thumbnailModel: MThumbnail
-  if (thumbnailFilePath) {
-    thumbnailModel = await updateVideoMiniatureFromExisting({
-      inputPath: thumbnailFilePath,
-      video,
-      type: ThumbnailType.MINIATURE,
-      automaticallyGenerated: false
-    })
-  // Process video thumbnail from url if caller did not or failed to provide one
-  } else if (youtubeDLInfo.thumbnailUrl) {
-    try {
-      thumbnailModel = await updateVideoMiniatureFromUrl({ downloadUrl: youtubeDLInfo.thumbnailUrl, video, type: ThumbnailType.MINIATURE })
-    } catch (err) {
-      logger.warn('Cannot process thumbnail %s from youtubedl.', youtubeDLInfo.thumbnailUrl, { err })
-    }
-  }
+  const thumbnailModel = await forgeThumbnail({
+    inputPath: thumbnailFilePath,
+    downloadUrl: youtubeDLInfo.thumbnailUrl,
+    video,
+    type: ThumbnailType.MINIATURE
+  })
 
-  let previewModel: MThumbnail
-  if (previewFilePath) {
-    previewModel = await updateVideoMiniatureFromExisting({
-      inputPath: previewFilePath,
-      video,
-      type: ThumbnailType.PREVIEW,
-      automaticallyGenerated: false
-    })
-  // Process video thumbnail from url if caller did not or failed to provide one
-  } else if (youtubeDLInfo.thumbnailUrl) {
-    try {
-      previewModel = await updateVideoMiniatureFromUrl({ downloadUrl: youtubeDLInfo.thumbnailUrl, video, type: ThumbnailType.PREVIEW })
-    } catch (err) {
-      logger.warn('Cannot process preview %s from youtubedl.', youtubeDLInfo.thumbnailUrl, { err })
-    }
-  }
+  const previewModel = await forgeThumbnail({
+    inputPath: previewFilePath,
+    downloadUrl: youtubeDLInfo.thumbnailUrl,
+    video,
+    type: ThumbnailType.PREVIEW
+  })
 
   const videoImport = await insertIntoDB({
     video,
