@@ -263,8 +263,8 @@ class CustomConfigAuditView extends EntityAuditView {
 const channelSyncKeysToKeep = [
   'id',
   'externalChannelUrl',
-  'videoChannel-id',
-  'videoChannel-name'
+  'channel-id',
+  'channel-name'
 ]
 class VideoChannelSyncAuditView extends EntityAuditView {
   constructor (channelSync: VideoChannelSync) {
