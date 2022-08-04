@@ -149,6 +149,17 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
   return res.json(videoImport.toFormattedJSON()).end()
 }
 
+function statusFromYtDlImportError (err: YoutubeDlImportError): number {
+  switch (err.code) {
+    case YoutubeDlImportError.CODE.NOT_ONLY_UNICAST_URL:
+      return HttpStatusCode.FORBIDDEN_403
+    case YoutubeDlImportError.CODE.FETCH_ERROR:
+      return HttpStatusCode.BAD_REQUEST_400
+    default:
+      return HttpStatusCode.INTERNAL_SERVER_ERROR_500
+  }
+}
+
 async function handleYoutubeDlImport (req: express.Request, res: express.Response) {
   const body: VideoImportCreate = req.body
   const targetUrl = body.targetUrl
@@ -170,9 +181,7 @@ async function handleYoutubeDlImport (req: express.Request, res: express.Respons
     logger.error('An error occurred while importing the video %s. ', targetUrl, { err })
     return res.fail({
       message: err.message,
-      status: err.code === YoutubeDlImportError.CODE.NOT_ONLY_UNICAST_URL
-        ? HttpStatusCode.FORBIDDEN_403
-        : HttpStatusCode.INTERNAL_SERVER_ERROR_500,
+      status: statusFromYtDlImportError(err),
       data: {
         targetUrl
       }
