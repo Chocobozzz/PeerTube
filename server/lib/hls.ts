@@ -100,7 +100,7 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
 
 // ---------------------------------------------------------------------------
 
-async function updateSha256VODSegments (video: MVideo, playlistArg: MStreamingPlaylist): Promise<MStreamingPlaylistFilesVideo> {
+function updateSha256VODSegments (video: MVideo, playlistArg: MStreamingPlaylist): Promise<MStreamingPlaylistFilesVideo> {
   return playlistFilesQueue.add(async () => {
     const json: { [filename: string]: { [range: string]: string } } = {}
 
