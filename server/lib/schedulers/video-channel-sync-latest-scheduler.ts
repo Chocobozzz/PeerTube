@@ -16,7 +16,7 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
   }
 
   protected async internalExecute () {
-    logger.debug('Running processVideoChannelsSync')
+    logger.debug('Running %s.%s', this.constructor.name, this.internalExecute.name)
     if (!CONFIG.IMPORT.SYNCHRONIZATION.ENABLED) {
       logger.info('Discard channels synchronization as the feature is disabled')
       return
@@ -30,13 +30,12 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
         sync.state = VideoChannelSyncState.PROCESSING
         sync.lastSyncAt = new Date()
         await sync.save()
-        // Format
         logger.info(`Starting synchronizing "${sync.VideoChannel.name}" with external channel "${sync.externalChannelUrl}"`)
         const { errors, successes, alreadyImported } = await synchronizeChannel(sync.VideoChannel, sync.externalChannelUrl, {
           youtubeDL,
           secondsToWait: 5,
           lastVideosCount: VIDEO_CHANNEL_MAX_SYNC,
-          after: this.formatDateForYoutubeDl(syncCreationDate)
+          onlyAfter: syncCreationDate
         })
         if (errors > 0) {
           sync.state = VideoChannelSyncState.FAILED
@@ -52,10 +51,6 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
         logger.error(`Failed to synchronize channel ${sync.VideoChannel.name}`, { err })
       }
     }
-  }
-
-  private formatDateForYoutubeDl (date: Date) {
-    return `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${(date.getDate()).toString().padStart(2, '0')}`
   }
 
   static get Instance () {

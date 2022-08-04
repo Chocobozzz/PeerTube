@@ -19,8 +19,11 @@ describe('Test video channel sync API validator', () => {
   const userInfo = {
     accessToken: '',
     username: 'user1',
+    id: -1,
     channelId: -1,
-    syncId: -1
+    syncId: -1,
+    defaultQuota: -1,
+    defaultDailyQuota: -1
   }
 
   async function withChannelSyncDisabled<T> (callback: () => T): Promise<T> {
@@ -48,9 +51,13 @@ describe('Test video channel sync API validator', () => {
       userInfo.username = 'user1'
       const password = 'my super password'
       await server.users.create({ username: userInfo.username, password })
+
       userInfo.accessToken = await server.login.getAccessToken({ username: userInfo.username, password })
 
-      const { videoChannels } = await server.users.getMyInfo({ token: userInfo.accessToken })
+      const { videoChannels, ...otherUserInfo } = await server.users.getMyInfo({ token: userInfo.accessToken })
+      userInfo.id = otherUserInfo.id
+      userInfo.defaultQuota = otherUserInfo.videoQuota
+      userInfo.defaultDailyQuota = otherUserInfo.videoQuotaDaily
       userInfo.channelId = videoChannels[0].id
     }
     await server.config.enableChannelSync()
@@ -264,6 +271,44 @@ describe('Test video channel sync API validator', () => {
         channelSyncId: rootChannelSyncId,
         token: userInfo.accessToken,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail when the user has no quota', async function () {
+      // set-up
+      await server.users.update({
+        userId: userInfo.id,
+        videoQuota: 0
+      })
+      // test
+      await command.syncChannel({
+        channelSyncId: userInfo.syncId,
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413
+      })
+      // teardown
+      await server.users.update({
+        userId: userInfo.id,
+        videoQuota: userInfo.defaultQuota
+      })
+    })
+
+    it('Should fail when the user has no daily quota', async function () {
+      // set-up
+      await server.users.update({
+        userId: userInfo.id,
+        videoQuotaDaily: 0
+      })
+      // test
+      await command.syncChannel({
+        channelSyncId: userInfo.syncId,
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413
+      })
+      // teardown
+      await server.users.update({
+        userId: userInfo.id,
+        videoQuotaDaily: userInfo.defaultQuota
       })
     })
 

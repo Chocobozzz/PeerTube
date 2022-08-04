@@ -2,7 +2,7 @@ import * as express from 'express'
 import { isUrlValid } from "@server/helpers/custom-validators/activitypub/misc"
 import { logger } from "@server/helpers/logger"
 import { body, param } from "express-validator"
-import { areValidationErrors, doesVideoChannelIdExist } from "../shared"
+import { areValidationErrors, checkUserQuota, doesVideoChannelIdExist } from "../shared"
 import { HttpStatusCode, VideoChannelSyncCreate } from '@shared/models'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { CONFIG } from '@server/initializers/config'
@@ -50,5 +50,16 @@ export const ensureSyncExists = [
     res.locals.videoChannelSync = sync
     res.locals.videoChannel = sync.VideoChannel
     return next()
+  }
+]
+
+export const ensureCanUpload = [
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const sync = res.locals.videoChannelSync
+    const user = {
+      id: sync.VideoChannel.Account.userId
+    }
+    if (!await checkUserQuota(user, 1, res)) return
+    next()
   }
 ]

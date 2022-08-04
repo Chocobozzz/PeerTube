@@ -7,6 +7,7 @@ import {
   asyncRetryTransactionMiddleware,
   authenticate,
   ensureCanManageChannel as ensureCanManageSyncedChannel,
+  ensureCanUpload,
   ensureSyncExists,
   ensureSyncIsEnabled,
   videoChannelSyncValidator
@@ -31,6 +32,7 @@ videoChannelSyncRouter.post('/:id/sync',
   ensureSyncIsEnabled,
   asyncMiddleware(ensureSyncExists),
   ensureCanManageSyncedChannel,
+  asyncMiddleware(ensureCanUpload),
   syncChannel
 )
 

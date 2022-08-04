@@ -8,7 +8,7 @@ import { synchronizeChannel } from '@server/lib/video-import-channel'
 
 export async function processVideoChannelImport (job: Job) {
   const payload = job.data as VideoChannelImportPayload
-  logger.debug('Running processVideoChannelImport')
+  logger.debug('Running %s', processVideoChannelImport.name)
 
   // Channel import requires only http upload to be allowed
   if (!CONFIG.IMPORT.VIDEOS.HTTP.ENABLED) {

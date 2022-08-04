@@ -22,13 +22,17 @@ export type SynchronizeChannelOptions = {
   youtubeDL: YoutubeDLCLI
   secondsToWait: number
   lastVideosCount?: number
-  after?: string
+  onlyAfter?: Date
+}
+
+function formatDateForYoutubeDl (date: Date) {
+  return `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${(date.getDate()).toString().padStart(2, '0')}`
 }
 
 export async function synchronizeChannel (
   channel: VideoChannelModel,
   externalChannelUrl: string,
-  { youtubeDL, secondsToWait, lastVideosCount, after }: SynchronizeChannelOptions
+  { youtubeDL, secondsToWait, lastVideosCount, onlyAfter }: SynchronizeChannelOptions
 ): Promise<ChannelSyncInfo> {
   const user = await UserModel.loadByChannelActorId(channel.actorId)
   const channelInfo = await youtubeDL.getChannelInfo({
@@ -36,9 +40,10 @@ export async function synchronizeChannel (
     channelUrl: externalChannelUrl,
     processOptions
   })
+  const afterFormatted: string = onlyAfter && formatDateForYoutubeDl(onlyAfter)
   const targetUrls: string[] = (await Promise.all(
     channelInfo.map(video => {
-      if (after && video['upload_date'] <= after) {
+      if (afterFormatted && video['upload_date'] <= afterFormatted) {
         return []
       }
       return video['webpage_url']
