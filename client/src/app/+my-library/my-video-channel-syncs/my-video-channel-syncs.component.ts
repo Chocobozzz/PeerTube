@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { AuthService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
 import { DropdownAction, VideoChannelSyncService } from '@app/shared/shared-main'
 import { HTMLServerConfig } from '@shared/models/server'
-import { VideoChannelSync } from '@shared/models/videos'
+import { VideoChannelSync, VideoChannelSyncState } from '@shared/models/videos'
 import { SortMeta } from 'primeng/api'
 import { mergeMap } from 'rxjs'
 
@@ -18,6 +18,13 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
   videoChannelSyncActions: DropdownAction<VideoChannelSync>[][] = []
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+
+  private static STATE_CLASS_BY_ID = {
+    [VideoChannelSyncState.FAILED]: 'badge-red',
+    [VideoChannelSyncState.PROCESSING]: 'badge-blue',
+    [VideoChannelSyncState.SYNCED]: 'badge-green',
+    [VideoChannelSyncState.WAITING_FIRST_RUN]: 'badge-yellow'
+  }
 
   private serverConfig: HTMLServerConfig
 
@@ -86,9 +93,8 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
     return '/my-library/video-channel-syncs/create'
   }
 
-  getVideoChannelSyncStateClass (syncId: number) {
-    // FIXME
-    return 'foobar'
+  getVideoChannelSyncStateClass (stateId: number) {
+    return 'pt-badge ' + MyVideoChannelSyncsComponent.STATE_CLASS_BY_ID[stateId]
   }
 
   getIdentifier () {
