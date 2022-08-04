@@ -158,7 +158,6 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-live-ending': 1,
   'video-studio-edition': 1,
   'manage-video-torrent': 1,
-  'video-channel-sync-latest': 1,
   'video-channel-import': 3,
   'move-to-object-storage': 3
 }
@@ -180,7 +179,6 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'video-studio-edition': 1,
   'manage-video-torrent': 1,
   'move-to-object-storage': 1,
-  'video-channel-sync-latest': 1,
   'video-channel-import': 1
 }
 const JOB_TTL: { [id in JobType]: number } = {
@@ -202,7 +200,6 @@ const JOB_TTL: { [id in JobType]: number } = {
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
   'manage-video-torrent': 1000 * 3600 * 3, // 3 hours
   'move-to-object-storage': 1000 * 60 * 60 * 3, // 3 hours
-  'video-channel-sync-latest': 1000 * 60 * 60 * 4, // 4 hours
   'video-channel-import': 1000 * 60 * 60 * 4 // 4 hours
 }
 const REPEAT_JOBS: { [ id in JobType ]?: EveryRepeatOptions | CronRepeatOptions } = {

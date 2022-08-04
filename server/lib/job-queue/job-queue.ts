@@ -40,9 +40,9 @@ import { processVideoFileImport } from './handlers/video-file-import'
 import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoStudioEdition } from './handlers/video-studio-edition'
-import { processVideoChannelImport, processVideoChannelsSync } from './handlers/video-channels-sync'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViewsStats } from './handlers/video-views-stats'
+import { processVideoChannelImport } from './handlers/video-channel-import'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -64,7 +64,6 @@ type CreateJobArgument =
   { type: 'video-studio-edition', payload: VideoStudioEditionPayload } |
   { type: 'manage-video-torrent', payload: ManageVideoTorrentPayload } |
   { type: 'move-to-object-storage', payload: MoveObjectStoragePayload } |
-  { type: 'video-channel-sync-latest', payload: {} } |
   { type: 'video-channel-import', payload: VideoChannelImportPayload }
 
 export type CreateJobOptions = {
@@ -91,7 +90,6 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'move-to-object-storage': processMoveToObjectStorage,
   'manage-video-torrent': processManageVideoTorrent,
   'video-studio-edition': processVideoStudioEdition,
-  'video-channel-sync-latest': processVideoChannelsSync,
   'video-channel-import': processVideoChannelImport
 }
 
@@ -118,7 +116,6 @@ const jobTypes: JobType[] = [
   'move-to-object-storage',
   'manage-video-torrent',
   'video-studio-edition',
-  'video-channel-sync-latest',
   'video-channel-import'
 ]
 
