@@ -11,7 +11,6 @@ import {
   ensureSyncIsEnabled,
   videoChannelSyncValidator
 } from '@server/middlewares'
-import { VideoChannelModel } from '@server/models/video/video-channel'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { HttpStatusCode, VideoChannelSyncState } from '@shared/models'
 import express from 'express'
@@ -54,7 +53,7 @@ async function createVideoChannelSync (req: express.Request, res: express.Respon
   })
   await sequelizeTypescript.transaction(async t => {
     await syncCreated.save({ transaction: t })
-    await syncCreated.reload({ transaction: t, include: VideoChannelModel })
+    await syncCreated.reload({ transaction: t })
   })
   auditLogger.create(getAuditIdFromRes(res), new VideoChannelSyncAuditView(syncCreated.toFormattedJSON()))
   logger.info(

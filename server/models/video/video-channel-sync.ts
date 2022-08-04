@@ -10,6 +10,7 @@ import {
   CreatedAt,
   DataType,
   Default,
+  DefaultScope,
   ForeignKey,
   Is,
   Model,
@@ -31,6 +32,14 @@ type AvailableForListOptions = {
   forCount?: boolean
 }
 
+@DefaultScope(() => ({
+  include: [
+    {
+      model: VideoChannelModel, // Default scope includes avatar and server
+      required: true
+    }
+  ]
+}))
 @Table({
   tableName: 'videoChannelSync',
   indexes: [
@@ -116,11 +125,7 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
 
   static load (id: number) {
     return this.findOne({
-      where: { id },
-      include: [ {
-        model: VideoChannelModel,
-        required: true
-      } ]
+      where: { id }
     })
   }
 

@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs'
 import { HttpErrorResponse } from '@angular/common/http'
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService, HooksService, Notifier, RedirectService, ServerService, UserService } from '@app/core'
+import { AuthService, HooksService, Notifier, RedirectService, ServerService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
 import {
   VIDEO_CHANNEL_DESCRIPTION_VALIDATOR,
@@ -35,8 +35,7 @@ export class VideoChannelUpdateComponent extends VideoChannelEdit implements OnI
     private videoChannelService: VideoChannelService,
     private serverService: ServerService,
     private redirectService: RedirectService,
-    private hooks: HooksService,
-    private userService: UserService
+    private hooks: HooksService
   ) {
     super()
   }
