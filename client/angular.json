@@ -330,5 +330,8 @@
     "@schematics/angular:directive": {
       "prefix": "my"
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
