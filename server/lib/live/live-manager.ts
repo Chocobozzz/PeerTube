@@ -456,10 +456,10 @@ class LiveManager {
   }
 
   private buildAllResolutionsToTranscode (originResolution: number) {
-    const includeInputResolution = CONFIG.LIVE.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+    const includeInput = CONFIG.LIVE.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
 
     const resolutionsEnabled = CONFIG.LIVE.TRANSCODING.ENABLED
-      ? computeResolutionsToTranscode({ inputResolution: originResolution, type: 'live', includeInputResolution })
+      ? computeResolutionsToTranscode({ input: originResolution, type: 'live', includeInput, strictLower: false })
       : []
 
     if (resolutionsEnabled.length === 0) {

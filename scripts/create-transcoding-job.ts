@@ -53,7 +53,7 @@ async function run () {
   if (options.generateHls || CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
     const resolutionsEnabled = options.resolution
       ? [ parseInt(options.resolution) ]
-      : computeResolutionsToTranscode({ inputResolution: maxResolution, type: 'vod', includeInputResolution: true })
+      : computeResolutionsToTranscode({ input: maxResolution, type: 'vod', includeInput: true, strictLower: false })
 
     for (const resolution of resolutionsEnabled) {
       dataInput.push({

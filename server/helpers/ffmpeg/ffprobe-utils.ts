@@ -91,11 +91,12 @@ async function getAudioStreamCodec (path: string, existingProbe?: FfprobeData) {
 // ---------------------------------------------------------------------------
 
 function computeResolutionsToTranscode (options: {
-  inputResolution: number
+  input: number
   type: 'vod' | 'live'
-  includeInputResolution: boolean
+  includeInput: boolean
+  strictLower: boolean
 }) {
-  const { inputResolution, type, includeInputResolution } = options
+  const { input, type, includeInput, strictLower } = options
 
   const configResolutions = type === 'vod'
     ? CONFIG.TRANSCODING.RESOLUTIONS
@@ -117,13 +118,18 @@ function computeResolutionsToTranscode (options: {
   ]
 
   for (const resolution of availableResolutions) {
-    if (configResolutions[resolution + 'p'] === true && inputResolution > resolution) {
-      resolutionsEnabled.add(resolution)
-    }
+    // Resolution not enabled
+    if (configResolutions[resolution + 'p'] !== true) continue
+    // Too big resolution for input file
+    if (input < resolution) continue
+    // We only want lower resolutions than input file
+    if (strictLower && input === resolution) continue
+
+    resolutionsEnabled.add(resolution)
   }
 
-  if (includeInputResolution) {
-    resolutionsEnabled.add(inputResolution)
+  if (includeInput) {
+    resolutionsEnabled.add(input)
   }
 
   return Array.from(resolutionsEnabled)

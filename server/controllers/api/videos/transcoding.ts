@@ -32,7 +32,7 @@ async function createTranscoding (req: express.Request, res: express.Response) {
 
   const { resolution: maxResolution, audioStream } = await video.probeMaxQualityFile()
   const resolutions = await Hooks.wrapObject(
-    computeResolutionsToTranscode({ inputResolution: maxResolution, type: 'vod', includeInputResolution: true }),
+    computeResolutionsToTranscode({ input: maxResolution, type: 'vod', includeInput: true, strictLower: false }),
     'filter:transcoding.manual.resolutions-to-transcode.result',
     body
   )

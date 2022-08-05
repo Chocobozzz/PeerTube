@@ -2,6 +2,7 @@ import { Job } from 'bull'
 import { move, remove, stat } from 'fs-extra'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { YoutubeDLWrapper } from '@server/helpers/youtube-dl'
+import { CONFIG } from '@server/initializers/config'
 import { isPostImportVideoAccepted } from '@server/lib/moderation'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { Hooks } from '@server/lib/plugins/hooks'
@@ -25,7 +26,7 @@ import {
   VideoResolution,
   VideoState
 } from '@shared/models'
-import { ffprobePromise, getVideoStreamDuration, getVideoStreamFPS, getVideoStreamDimensionsInfo } from '../../../helpers/ffmpeg'
+import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamDuration, getVideoStreamFPS } from '../../../helpers/ffmpeg'
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
@@ -80,7 +81,11 @@ async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefaul
 
   const options = { type: payload.type, videoImportId: videoImport.id }
 
-  const youtubeDL = new YoutubeDLWrapper(videoImport.targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
+  const youtubeDL = new YoutubeDLWrapper(
+    videoImport.targetUrl,
+    ServerConfigManager.Instance.getEnabledResolutions('vod'),
+    CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+  )
 
   return processFile(
     () => youtubeDL.downloadVideo(payload.fileExt, JOB_TTL['video-import']),
