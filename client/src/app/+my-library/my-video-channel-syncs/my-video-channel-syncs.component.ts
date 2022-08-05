@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { AuthService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
-import { DropdownAction, VideoChannelSyncService } from '@app/shared/shared-main'
+import { DropdownAction, VideoChannelService, VideoChannelSyncService } from '@app/shared/shared-main'
 import { HTMLServerConfig } from '@shared/models/server'
 import { VideoChannelSync, VideoChannelSyncState } from '@shared/models/videos'
 import { SortMeta } from 'primeng/api'
@@ -32,7 +32,8 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
     private videoChannelsSyncService: VideoChannelSyncService,
     private serverService: ServerService,
     private notifier: Notifier,
-    private authService: AuthService
+    private authService: AuthService,
+    private videoChannelService: VideoChannelService
   ) {
     super()
   }
@@ -46,6 +47,12 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
           label: $localize`Delete`,
           iconName: 'delete',
           handler: videoChannelSync => this.deleteSync(videoChannelSync)
+        },
+        {
+          label: $localize`Fully synchronize the channel`,
+          description: $localize`This fetches any missing videos on the local channel`,
+          iconName: 'refresh',
+          handler: videoChannelSync => this.fullySynchronize(videoChannelSync)
         }
       ]
     ]
@@ -76,12 +83,24 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
     return this.serverConfig.import.synchronization.enabled
   }
 
-  deleteSync (videoChannelsSync: VideoChannelSync) {
-    this.videoChannelsSyncService.deleteSync(videoChannelsSync.id)
+  deleteSync (videoChannelSync: VideoChannelSync) {
+    this.videoChannelsSyncService.deleteSync(videoChannelSync.id)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Synchronization removed successfully for ${videoChannelsSync.channel.displayName}.`)
+          this.notifier.success($localize`Synchronization removed successfully for ${videoChannelSync.channel.displayName}.`)
           this.reloadData()
+        },
+        error: (err) => {
+          this.error = err.message
+        }
+      })
+  }
+
+  fullySynchronize (videoChannelSync: VideoChannelSync) {
+    this.videoChannelService.importVideos(videoChannelSync.channel.name, videoChannelSync.externalChannelUrl)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Full synchronization requested successfully for ${videoChannelSync.channel.displayName}.`)
         },
         error: (err) => {
           this.error = err.message
