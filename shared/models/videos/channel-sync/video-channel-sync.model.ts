@@ -10,5 +10,5 @@ export interface VideoChannelSync {
   createdAt: string
   channel: VideoChannelSummary
   state: VideoConstant<VideoChannelSyncState>
-  lastSyncAt?: string
+  lastSyncAt: string
 }

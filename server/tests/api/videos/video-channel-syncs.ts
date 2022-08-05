@@ -124,14 +124,22 @@ describe('Test channel synchronizations', function () {
       })
 
       it('Should add another synchronization', async function () {
-        await command.create({
+        const externalChannelUrl = FIXTURE_URLS.youtubeChannel + "?foo=bar"
+        const res = await command.create({
           attributes: {
-            externalChannelUrl: FIXTURE_URLS.youtubeChannel + "?foo=bar",
+            externalChannelUrl,
             videoChannelId: server.store.channel.id
           },
           token: server.accessToken,
           expectedStatus: HttpStatusCode.OK_200
         })
+        expect(res).to.include({ externalChannelUrl })
+        expect(res.channel).to.include({
+          id: server.store.channel.id,
+          name: 'root_channel'
+        })
+        expect(res.state.id).to.equal(VideoChannelSyncState.WAITING_FIRST_RUN)
+        expect(new Date(res.createdAt)).to.be.above(startTestDate).and.to.be.at.most(new Date())
       })
 
       it('Should add a synchronization for another user', async function () {

@@ -1,4 +1,4 @@
-import { HttpStatusCode, ResultList, VideoChannelCreateResult, VideoChannelSync, VideoChannelSyncCreate } from "@shared/models"
+import { HttpStatusCode, ResultList, VideoChannelSync, VideoChannelSyncCreate } from "@shared/models"
 import { pick } from "lodash"
 import { unwrapBody } from "../requests"
 import { AbstractCommand, OverrideCommandOptions } from "../shared"
@@ -33,7 +33,7 @@ export class ChannelSyncsCommand extends AbstractCommand {
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
-    const body = await unwrapBody<{ videoChannelSync: VideoChannelCreateResult }>(response)
+    const body = await unwrapBody<{ videoChannelSync: VideoChannelSync }>(response)
     return body.videoChannelSync
   }
 

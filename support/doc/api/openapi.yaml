@@ -3313,10 +3313,7 @@ paths:
                 type: object
                 properties:
                   videoChannelSync:
-                    type: object
-                    properties:
-                      id:
-                        $ref: '#/components/schemas/id'
+                    $ref: "#/components/schemas/VideoChannelSync"
 
   '/video-channel-syncs/{channelSyncId}':
     delete:

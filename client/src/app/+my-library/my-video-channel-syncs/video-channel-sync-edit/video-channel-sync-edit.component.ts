@@ -5,7 +5,7 @@ import { listUserChannelsForSelect } from '@app/helpers'
 import { VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannelService, VideoChannelSyncService } from '@app/shared/shared-main'
-import { VideoChannelSyncCreate } from '@shared/models/videos'
+import { VideoChannelSync, VideoChannelSyncCreate } from '@shared/models/videos'
 import { mergeMap } from 'rxjs'
 import { SelectChannelItem } from 'src/types'
 
@@ -55,12 +55,11 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
     }
     const importExistingVideos = body['existingVideoStrategy'] === 'import'
     this.videoChannelSyncService.createSync(videoChannelSyncCreate)
-      .pipe(mergeMap((res: {videoChannelSync: {id: number}}) => {
+      .pipe(mergeMap(({ videoChannelSync: sync }: {videoChannelSync: VideoChannelSync}) => {
         this.authService.refreshUserInformation()
 
-        const selectedChannel = this.authService.getUser().videoChannels.find(video => video.id === this.selectedChannelId)
         return importExistingVideos
-          ? this.videoChannelService.importVideos(selectedChannel.name, body.externalChannelUrl)
+          ? this.videoChannelService.importVideos(sync.channel.name, sync.externalChannelUrl)
           : Promise.resolve(null)
       }))
       .subscribe({

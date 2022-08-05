@@ -82,7 +82,7 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
 
   @AllowNull(true)
   @Column(DataType.DATE)
-  lastSyncAt?: Date
+  lastSyncAt: Date
 
   static listByAccountForAPI (options: Pick<AvailableForListOptions, 'accountId'> & {
     start: number
@@ -173,5 +173,4 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
     }
     return VideoChannelSyncModel.unscoped().findAll(query)
   }
-
 }

@@ -54,9 +54,7 @@ async function createVideoChannelSync (req: express.Request, res: express.Respon
   )
 
   return res.json({
-    videoChannelSync: {
-      id: syncCreated.id
-    }
+    videoChannelSync: syncCreated.toFormattedJSON()
   })
 }
 
