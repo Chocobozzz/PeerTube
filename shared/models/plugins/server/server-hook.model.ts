@@ -102,8 +102,8 @@ export const serverFilterHookObject = {
   'filter:job-queue.process.params': true,
   'filter:job-queue.process.result': true,
 
-  'filter:transcoding.manual.lower-resolutions-to-transcode.result': true,
-  'filter:transcoding.auto.lower-resolutions-to-transcode.result': true
+  'filter:transcoding.manual.resolutions-to-transcode.result': true,
+  'filter:transcoding.auto.resolutions-to-transcode.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject

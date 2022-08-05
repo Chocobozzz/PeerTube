@@ -245,7 +245,7 @@ class LiveManager {
 
     const allResolutions = await Hooks.wrapObject(
       this.buildAllResolutionsToTranscode(resolution),
-      'filter:transcoding.auto.lower-resolutions-to-transcode.result',
+      'filter:transcoding.auto.resolutions-to-transcode.result',
       { video }
     )
 

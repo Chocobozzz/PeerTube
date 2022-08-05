@@ -266,7 +266,7 @@ async function createLowerResolutionsJobs (options: {
   // Create transcoding jobs if there are enabled resolutions
   const resolutionsEnabled = await Hooks.wrapObject(
     computeResolutionsToTranscode({ inputResolution: videoFileResolution, type: 'vod', includeInputResolution: false }),
-    'filter:transcoding.auto.lower-resolutions-to-transcode.result',
+    'filter:transcoding.auto.resolutions-to-transcode.result',
     options
   )
 
