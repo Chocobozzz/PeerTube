@@ -4,14 +4,16 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const ProvidePlugin = require('webpack/lib/ProvidePlugin')
+const DefinePlugin = require('webpack/lib/DefinePlugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const version = (Math.random() * 10000).toFixed(0)
 
 module.exports = function () {
   const configuration = {
     entry: {
-      'video-embed': './src/standalone/videos/embed.ts',
-      'player': './src/standalone/player/player.ts',
-      'test-embed': './src/standalone/videos/test-embed.ts'
+      'video-embed': './src/standalone/videos/embed.ts'
+      /*'player': './src/standalone/player/player.ts',
+      'test-embed': './src/standalone/videos/test-embed.ts'*/
     },
 
     resolve: {
@@ -31,7 +33,8 @@ module.exports = function () {
         'hls.js$': path.resolve('node_modules/hls.js/dist/hls.light.js'),
         '@root-helpers': path.resolve('src/root-helpers'),
         '@shared/models': path.resolve('../shared/models'),
-        '@shared/core-utils': path.resolve('../shared/core-utils')
+        '@shared/core-utils': path.resolve('../shared/core-utils'),
+        process: "process/browser"
       },
 
       fallback: {
@@ -45,19 +48,25 @@ module.exports = function () {
     },
 
     output: {
-      path: helpers.root('dist/standalone/videos'),
+      // path: helpers.root('dist/standalone/videos'),
+      //path: '/Users/aleksandr/dev-server/pocketnet/peertube',
+
+      clean : {},
+
+      path: 'C:\\inetpub\\wwwroot\\pocketnet\\peertube',
 
       filename: process.env.ANALYZE_BUNDLE === 'true'
         ? '[name].bundle.js'
-        : '[name].[contenthash].bundle.js',
+        : '[name].bundle.js',
 
       sourceMapFilename: '[file].map',
 
       chunkFilename: process.env.ANALYZE_BUNDLE === 'true'
-        ? '[name].chunk.js'
-        : '[id].[contenthash].chunk.js',
+        ? '[name].chunk.js?v=' + version
+        : '[name].chunk.js?v=' + version,
 
-      publicPath: '/client/standalone/videos/'
+      publicPath: './peertube/'
+
     },
 
     devtool: process.env.NODE_ENV === 'production' ? false : 'source-map',
@@ -88,7 +97,9 @@ module.exports = function () {
                       targets: 'last 1 Chrome version, last 2 Edge major versions, Firefox ESR, Safari >= 11, ios_saf >= 11'
                     }
                   ]
-                ]
+                ],
+
+                plugins : ["@babel/plugin-transform-spread", "@babel/plugin-transform-classes", "@babel/plugin-proposal-object-rest-spread"]
               }
             }
           ]
@@ -150,10 +161,14 @@ module.exports = function () {
         Buffer: [ 'buffer', 'Buffer' ]
       }),
 
+      new DefinePlugin({
+        'process.env': JSON.stringify(process.env)
+      }),
+
       new MiniCssExtractPlugin({
         filename: process.env.ANALYZE_BUNDLE === 'true'
           ? '[name].css'
-          : '[name].[contenthash].css'
+          : '[name].css?v=' + version
       }),
 
       new HtmlWebpackPlugin({

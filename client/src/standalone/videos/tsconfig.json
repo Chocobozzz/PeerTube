@@ -2,6 +2,6 @@
   "extends": "../../../tsconfig.json",
   "include": [
     "src/standalone/videos/embed.ts",
-    "src/standalone/videos/test-embed.ts"
+    //"src/standalone/videos/test-embed.ts"
   ]
 }

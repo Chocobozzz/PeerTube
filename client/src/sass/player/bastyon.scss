@@ -1,0 +1,558 @@
+.video-js{
+    background: transparent;
+    font-family: 'Segoe UI Variable', 'Segoe UI', SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    position: relative;
+    height: auto;
+    line-height: 3em;
+
+    * {
+        font-family: 'Segoe UI Variable', 'Segoe UI', SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    }
+
+    &.vjs-fullscreen {
+        video {
+            max-width: none!important;
+            max-height: 100%;
+        }
+    
+        .vjs-picture-in-picture-control{
+            display: none!important;
+        }
+    }
+
+    .vjs-menu-content {
+        font-family: 'Segoe UI Variable', 'Segoe UI', SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    }
+
+    .vjs-peertube{
+        display: none!important;
+    }
+
+    .vjs-bezel,
+    .vjs-control-bar{
+        text-shadow: -1px -1px 1px rgba(255,255,255,.1), 1px 1px 1px rgba(0,0,0,.5);
+        background: rgb(0,0,0);
+        background: linear-gradient(to top,rgba(0,0,0,0.25) 0%,rgba(0,0,0,0) 100%);
+
+        button{
+        -webkit-filter: drop-shadow(1px 1px 1px rgba(0,0,0,.5));
+        filter: drop-shadow(1px 1px 1px rgba(0,0,0,.5));
+        }
+
+    }
+
+    .vjs-overlay{
+        -webkit-filter: drop-shadow(1px 1px 1px rgba(0,0,0,.5));
+        filter: drop-shadow(1px 1px 1px rgba(0,0,0,.5));
+    }
+
+    .vjs-progress-control,
+    .vjs-volume-control{
+        .vjs-slider-bar{
+        box-shadow: 1px 1px 1px rgba(0,0,0,.2);
+        }
+
+    }
+
+    .vjs-bezel{
+        z-index: 1;
+    }
+
+    @media (pointer:fine) {
+        .vjs-progress-control{
+          height: 4px;
+          border-radius: 2px;
+        }
+      
+        .vjs-progress-control:hover{
+          height: 8px;
+        }
+    }
+
+    .vjs-slider-vertical{
+        .vjs-slider-bar{
+            height: 100%!important;
+            transition: transform .2s;
+            &:before{
+                display: none;
+            }
+        }
+    }
+      
+    .vjs-volume-level{
+        pointer-events: none;
+        &:before{
+            display: none;
+        }
+    }
+    
+    .vjs-play-progress{
+        pointer-events: none;
+        .vjs-time-tooltip{
+            display: none!important;
+        }
+    }
+
+    .vjs-tech {
+        position: absolute;
+        left : 0;
+        top : 0;
+        bottom : 0;
+        right: 0;
+    }
+
+    .vjs-poster {
+        background-size: 100% auto;
+        left: -1px;
+        top : -1px;
+        bottom : -1px;
+        right: -1px;
+        height: auto;
+    }
+
+    .warning-block,
+    .error-block{
+        height: 300px;
+        display: flex;
+        align-items: center;
+        background: #000;
+        color : rgb(190, 190, 190);
+
+        >div{
+            margin : 0 auto;
+            text-align: left;
+            padding : 50px;
+        }
+    }
+
+    &[error="noncritical"]{
+        .vjs-big-play-button, #vjs-forward-button, #vjs-rewind-button{
+          display: none!important;
+        }
+        .error-block{
+            position: absolute;
+            left : 0;
+            right : 0;
+            top : 0;
+            bottom : 0;
+            height: auto;
+            background: rgba(0,0,0,0.85);
+        
+            .error-title{
+                display: none;
+            }
+        
+            .error-reload{
+                background: rgba(26, 101, 241);
+                color: rgba(255, 255, 255);
+                border: 1px solid rgba(26, 101, 241);
+                text-align: center;
+                font-size: 0.8em;
+                font-weight: 400;
+                border-radius: 2px;
+                padding : 0.75em 3em;
+        
+                &:hover{
+                    background: transparent;
+                    color: rgba(255, 255, 255, 1);
+                    border: 1px solid rgba(255, 255, 255, 1);
+                }
+            }
+        }
+    }
+
+    .warning-block{
+        position: absolute;
+        z-index: 20;
+        left : 0;
+        top : 0;
+        bottom : 0;
+        right : 0;
+        background:rgba(0, 0, 0, .45);
+        height: auto;
+    }
+    
+    .warning-overlay{
+        position: absolute;
+        padding-left: 2em;
+        z-index: 1000;
+        top : 50%;
+    }
+
+    .vjs-thumb{
+        background : #000;
+        background-size: 100% auto;
+    }
+
+    .vjs-time-tooltip {
+        top: -3.9em;
+    }
+
+    .vjs-control:focus,
+    .vjs-control:focus:before,
+    .vjs-control:hover:before {
+        text-shadow: 0 0 0em #fff;
+    }
+
+    .vjs-menu li.vjs-menu-item:focus,
+    .vjs-menu li.vjs-menu-item:hover {
+        outline: none
+    }
+
+    button {
+        outline: none
+    }
+
+    .pocketnet-link-button{
+        width: auto;
+        padding : 0 1em;
+    
+        a{
+            display: block;
+            background: rgba(32, 35, 42,1);
+            color : rgb(255, 255, 255);
+            padding : 0 1em;
+            border-radius: 6px;
+            height: 3em;
+            line-height: 3em;
+            text-decoration: none;
+        }
+    }
+
+    .vjs-controls-disabled .vjs-big-play-button {
+        display: none !important
+    }
+
+    &.vjs-has-started.video-js .vjs-big-play-button,
+    &.vjs-ended .vjs-big-play-button,
+    &.vjs-paused .vjs-big-play-button {
+        display: block
+    }
+
+    .vjs-load-progress div{
+        display: none !important
+    }
+
+    &.vjs-seeking .vjs-big-play-button,
+    &.vjs-waiting .vjs-big-play-button {
+        display: none !important
+    }
+
+    &.vjs-ended .vjs-big-play-button {
+        display: block !important
+    }
+
+    #vjs-forward-button,
+    #vjs-rewind-button,
+    .vjs-big-play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -1.5em;
+        margin-top: -1.5em;
+        width: 3em;
+        height: 3em;
+        line-height: 3em;
+        text-align: center;
+        font-size: 1.3em;
+        border: none;
+        border-radius: 50%;
+        color: #fff;
+        font-size: 40px;
+        -webkit-transition: border-color .4s, outline .4s, background-color .4s;
+        -moz-transition: border-color .4s, outline .4s, background-color .4s;
+        -ms-transition: border-color .4s, outline .4s, background-color .4s;
+        -o-transition: border-color .4s, outline .4s, background-color .4s;
+        transition: border-color .4s, outline .4s, background-color .4s;
+        text-shadow: -1px -1px 1px rgba(255,255,255,.1), 1px 1px 1px rgba(0,0,0,.5);
+        background: transparent;
+
+        i{
+        vertical-align: middle;
+        font-size: 0.5em;
+        }
+    }
+
+    #vjs-rewind-button{
+        margin-left: -4.5em;
+        line-height: 2.85em;
+    }
+
+    #vjs-forward-button{
+        margin-left: 1.5em;
+        line-height: 2.85em;
+    }
+
+    &:hover .vjs-big-play-button,
+    .vjs-big-play-button:focus,
+    .vjs-big-play-button:active {
+        background-color: rgba(0, 0, 0, 0)
+    }
+
+    .vjs-remaining-time-display {
+        display: none
+    }
+
+    .vjs-duration {
+        display: block;
+        left: 0em
+    }
+
+    .vjs-current-time {
+        display: block;
+        left: 0
+    }
+
+    &.vjs-live .vjs-time-control {
+        display: none
+    }
+
+    .vjs-time-divider {
+        display: block;
+    }
+
+    
+    
+    .pocketnet-logo-video-player .icon.icon-only-logo-transparent {
+        &:hover {
+            opacity: 1;
+        
+            &::before {
+                color: white;
+            }
+        }
+    }
+    
+    .pocketnet-logo-video-player {
+        max-width: 100%;
+        left: 1.5em;
+        top: 1.5em;
+        position: absolute;
+        transition: all .3s ease-in;
+    }
+
+    .vjs-play-progress:before{
+        padding : 1em;
+        right : -1.5em;
+        top : -1.3333333em;
+    }
+
+    .vjs-settings-dialog {
+        bottom: 5em;
+    }
+
+    .vjs-control-bar{
+        touch-action: none;
+        backface-visibility: hidden;
+        height: 5em !important;
+        font-size: 1.25em;
+        text-shadow: -1px -1px 1px rgba(255,255,255,.1), 1px 1px 1px rgba(0,0,0,.5);
+
+        button{
+            -webkit-filter: drop-shadow(1px 1px 1px rgba(0,0,0,.5));
+            filter: drop-shadow(1px 1px 1px rgba(0,0,0,.5));
+        }
+
+        .vjs-mouse-display{
+            display: none!important;
+        }
+
+        .vjs-progress-control {
+            position: absolute;
+            width: 100%;
+            bottom: 13px;
+            left : 0;
+            right : 0;
+            display: block;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .vjs-current-time {
+            margin-left: 10px;
+        }
+
+        .vjs-mute-control {
+            height: 3em;
+            line-height: 3.5em;
+            font-size: 1em;
+        }
+
+        .vjs-icon-settings {
+            position: absolute;
+            right: 4em;
+            width: 4em;
+            top: 0;
+            height: 3em;
+            font-size: 1em;
+
+            span{
+                height: 1.5em;
+                width: 1.5em;
+            }
+        }
+
+        .vjs-picture-in-picture-control {
+            position: absolute;
+            right: 8em;
+            width: 4em;
+            top: 0;
+            height: 3em;
+            font-size: 1em;
+
+            span{
+                height: 1.5em;
+                width: 1.5em;
+            }
+        }
+
+        .vjs-fullscreen-control {
+            position: absolute;
+            right: 0;
+            height: 3em;
+            line-height: 3.5em;
+            font-size: 1em;
+        }
+
+        .vjs-time-divider,
+        .vjs-time-control{
+            padding-left: 0.1em;
+            padding-right: 0.1em;
+            min-width: 0;
+        }
+
+    }
+
+    &.vjs-fullscreen {
+        .vjs-control-bar{
+            font-size: 1.5em;
+            background:transparent;
+        }
+    }
+
+
+}
+
+html.mobileview{
+    #vjs-forward-button, #vjs-rewind-button {
+        visibility: hidden;
+        opacity: 0;
+        transition: all .3s ease-in
+    }
+
+    .vjs-has-started {
+        #vjs-forward-button, #vjs-rewind-button {
+            visibility: visible;
+            opacity: 1;
+            transition: all .3s ease-in
+        }
+    }
+
+    .vjs-user-inactive.vjs-playing {
+        .vjs-big-play-button {
+            visibility: hidden !important;
+            opacity: 0;
+            transition: all .3s ease-in
+        }
+
+        #vjs-forward-button, #vjs-rewind-button {
+            visibility: hidden;
+            opacity: 0;
+            transition: all .3s ease-in
+        }
+    }
+    .vjs-user-active.vjs-playing {
+        .vjs-big-play-button {
+            visibility: visible !important;
+            opacity: 1;
+            transition: all .3s ease-in
+        }
+    }
+}
+
+@mixin mobileview () {
+    .video-js{
+        .vjs-control-bar{
+            .vjs-play-control{
+                display: none;
+            }
+            .vjs-volume-control {
+                display: none;
+            }
+
+            .vjs-mute-control {
+                position: absolute;
+                right: 4em;
+                height: 3em;
+                line-height: 3.5em;
+                font-size: 1em;
+            }
+
+            .vjs-icon-settings {
+                right: 8em;
+            }
+
+            .vjs-picture-in-picture-control {
+                right: 12em;
+            }
+        }
+    }
+}
+
+
+html.mobileview{
+    @include mobileview ();
+}
+
+@media only screen and (max-width: 768px){
+    @include mobileview ();
+}
+
+
+@media only screen and (max-width: 768px){
+    @include mobileview ();
+}
+
+
+.pipmini,
+.pipmode{
+
+    .js-player{
+
+        .vjs-control-bar{
+            backdrop-filter : none;
+
+        >div,
+        >button{
+            display: none;
+        }
+
+        >button{
+            &.vjs-mute-control{
+                right : 0;
+                bottom : 0;
+                display: block;
+                width: 3em;
+                }
+            }
+        }
+        #vjs-rewind-button,
+        #vjs-forward-button,
+        .vjs-overlay{
+            display: none!important;
+        }
+    }
+}
+
+.pipmode{
+    .js-player{
+
+        .vjs-control-bar{
+            display: none!important;
+        }
+
+        .vjs-big-play-button{
+            display: none!important;
+        }
+    }
+}

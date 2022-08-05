@@ -14,7 +14,6 @@ export class LiveManager {
 
   async displayInfoAndListenForChanges (options: {
     video: VideoDetails
-    translations: Translations
     onPublishedVideo: () => any
   }) {
     const { video, onPublishedVideo } = options
@@ -34,36 +33,35 @@ export class LiveManager {
       }
     })
 
-    this.liveSocket.emit('subscribe', { videoId: video.id })
+    this.liveSocket.emit('subscribe', { videoId: video.id, host : video.host })
   }
 
   stopListeningForChanges (video: VideoDetails) {
-    this.liveSocket.emit('unsubscribe', { videoId: video.id })
+    this.liveSocket.emit('unsubscribe', { videoId: video.id, host : video.host })
   }
 
   private displayAppropriateInfo (options: {
     video: VideoDetails
-    translations: Translations
   }) {
-    const { video, translations } = options
+    const { video } = options
 
     if (video.state.id === VideoState.WAITING_FOR_LIVE) {
-      this.displayWaitingForLiveInfo(translations)
+      this.displayWaitingForLiveInfo()
       return
     }
 
     if (video.state.id === VideoState.LIVE_ENDED) {
-      this.displayEndedLiveInfo(translations)
+      this.displayEndedLiveInfo()
       return
     }
   }
 
-  private displayWaitingForLiveInfo (translations: Translations) {
-    this.playerHTML.displayInformation('This live has not started yet.', translations)
+  private displayWaitingForLiveInfo () {
+    this.playerHTML.displayInformation('This live has not started yet.')
   }
 
-  private displayEndedLiveInfo (translations: Translations) {
-    this.playerHTML.displayInformation('This live has ended.', translations)
+  private displayEndedLiveInfo () {
+    this.playerHTML.displayInformation('This live has ended.')
 
   }
 }

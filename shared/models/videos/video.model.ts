@@ -10,6 +10,7 @@ import { VideoStreamingPlaylist } from './video-streaming-playlist.model'
 export interface Video {
   id: number
   uuid: string
+  host : String
   shortUUID: string
 
   createdAt: Date | string
@@ -77,6 +78,8 @@ export interface VideoDetails extends Video {
   tags: string[]
   commentsEnabled: boolean
   downloadEnabled: boolean
+  host : string
+  aspectRatio : number
 
   // Not optional in details (unlike in parent Video)
   waitTranscoding: boolean

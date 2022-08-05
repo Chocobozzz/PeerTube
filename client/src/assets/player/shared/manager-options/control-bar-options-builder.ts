@@ -53,7 +53,7 @@ export class ControlBarOptionsBuilder {
       Object.assign(children, {
         peerTubeLinkButton: {
           shortUUID: this.options.videoShortUUID,
-          instanceName: this.options.instanceName
+          //instanceName: this.options.instanceName
         } as PeerTubeLinkButtonOptions
       })
     }
@@ -76,7 +76,7 @@ export class ControlBarOptionsBuilder {
 
     settingEntries.push('playbackRateMenuButton')
 
-    if (this.options.captions === true) settingEntries.push('captionsButton')
+    //if (this.options.captions === true) settingEntries.push('captionsButton')
 
     settingEntries.push('resolutionMenuButton')
 

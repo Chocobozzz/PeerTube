@@ -1,9 +1,0 @@
-<ng-container *ngIf="userActions.length !== 0">
-  <my-user-ban-modal #userBanModal (userBanned)="onUserBanned()"></my-user-ban-modal>
-
-  <my-action-dropdown
-    [actions]="userActions" [entry]="{ user: user, account: account }"
-    [buttonSize]="buttonSize" [placement]="placement" [label]="label"
-    [container]="container" [buttonStyled]="buttonStyled"
-  ></my-action-dropdown>
-</ng-container>

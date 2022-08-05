@@ -9,6 +9,7 @@ import { getRtcConfig } from '../common'
 import { RedundancyUrlManager } from '../p2p-media-loader/redundancy-url-manager'
 import { segmentUrlBuilderFactory } from '../p2p-media-loader/segment-url-builder'
 import { segmentValidatorFactory } from '../p2p-media-loader/segment-validator'
+//import CapLevelController from './peertube-cap-level-controller'
 
 export class HLSOptionsBuilder {
 
@@ -162,7 +163,9 @@ export class HLSOptionsBuilder {
       backBufferLength: 90,
       startLevel: -1,
       testBandwidth: false,
-      debug: false
+      debug: false,
+
+     // capLevelController : CapLevelController
     }
   }
 

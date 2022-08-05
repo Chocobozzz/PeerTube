@@ -46,6 +46,8 @@ declare module 'video.js' {
     peertubeMobile (): void
     peerTubeHotkeysPlugin (): void
 
+    overlay (options: any): any
+
     stats (options?: StatsCardOptions): StatsForNerdsPlugin
 
     textTracks (): TextTrackList & {
@@ -99,7 +101,7 @@ type PeerTubePluginOptions = {
 
   subtitle?: string
 
-  videoCaptions: VideoJSCaption[]
+  //videoCaptions: VideoJSCaption[]
 
   startTime: number | string
   stopTime: number | string
@@ -127,7 +129,7 @@ type NextPreviousVideoButtonOptions = {
 
 type PeerTubeLinkButtonOptions = {
   shortUUID: string
-  instanceName: string
+  //instanceName: string
 }
 
 type PeerTubeP2PInfoButtonOptions = {
@@ -162,7 +164,7 @@ export type P2PMediaLoader = {
 }
 
 type VideoJSPluginOptions = {
-  playlist?: PlaylistPluginOptions
+  //playlist?: PlaylistPluginOptions
 
   peertube: PeerTubePluginOptions
 

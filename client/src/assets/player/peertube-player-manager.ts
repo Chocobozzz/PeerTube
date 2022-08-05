@@ -31,6 +31,7 @@ import { ManagerOptionsBuilder } from './shared/manager-options'
 import { TranslationsManager } from './translations-manager'
 import { CommonOptions, PeertubePlayerManagerOptions, PlayerMode, PlayerNetworkInfo } from './types'
 
+
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 (videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
 
@@ -44,7 +45,7 @@ export class PeertubePlayerManager {
   private static playerElementClassName: string
   private static onPlayerChange: (player: videojs.Player) => void
   private static alreadyPlayed = false
-  private static pluginsManager: PluginsManager
+  //private static pluginsManager: PluginsManager
 
   private static videojsDecodeErrors = 0
 
@@ -55,7 +56,7 @@ export class PeertubePlayerManager {
   }
 
   static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions, onPlayerChange: (player: videojs.Player) => void) {
-    this.pluginsManager = options.pluginsManager
+    //this.pluginsManager = options.pluginsManager
 
     this.onPlayerChange = onPlayerChange
     this.playerElementClassName = options.common.playerElement.className
@@ -77,11 +78,12 @@ export class PeertubePlayerManager {
 
   private static async buildPlayer (mode: PlayerMode, options: PeertubePlayerManagerOptions): Promise<videojs.Player> {
     const videojsOptionsBuilder = new ManagerOptionsBuilder(mode, options, this.p2pMediaLoaderModule)
+    const videojsOptions = videojsOptionsBuilder.getVideojsOptions(this.alreadyPlayed)
 
-    const videojsOptions = await this.pluginsManager.runHook(
+    /*const videojsOptions = await this.pluginsManager.runHook(
       'filter:internal.player.videojs.options.result',
       videojsOptionsBuilder.getVideojsOptions(this.alreadyPlayed)
-    )
+    )*/
 
     const self = this
     return new Promise(res => {
@@ -97,7 +99,7 @@ export class PeertubePlayerManager {
           if (mode === 'p2p-media-loader') {
             self.tryToRecoverHLSError(player.error(), player, options)
           } else {
-            self.maybeFallbackToWebTorrent(mode, player, options)
+            /// remove torrent /// self.maybeFallbackToWebTorrent(mode, player, options)
           }
         }
 

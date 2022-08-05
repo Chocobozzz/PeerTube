@@ -9,24 +9,6 @@ $assets-path: '../../assets/';
   display: none !important;
 }
 
-body {
-  font-family: $main-fonts;
-  font-weight: $font-regular;
-  color: #000;
-}
-
-video {
-  width: 99%;
-}
-
-/* fill the entire space */
-html,
-body {
-  height: 100%;
-  margin: 0;
-  background-color: #000;
-}
-
 #video-wrapper {
   width: 100%;
   height: 100%;

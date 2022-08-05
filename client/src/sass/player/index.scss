@@ -1,4 +1,4 @@
-@use './peertube-skin';
+/*@use './peertube-skin';*/
 @use './dock';
 @use './control-bar';
 @use './mobile';
@@ -9,3 +9,4 @@
 @use './bezels';
 @use './playlist';
 @use './stats';
+@use './bastyon';

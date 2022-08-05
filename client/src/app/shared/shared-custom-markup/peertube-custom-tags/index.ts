@@ -1,6 +1,0 @@
-export * from './button-markup.component'
-export * from './channel-miniature-markup.component'
-export * from './embed-markup.component'
-export * from './playlist-miniature-markup.component'
-export * from './video-miniature-markup.component'
-export * from './videos-list-markup.component'

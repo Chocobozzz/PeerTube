@@ -8,9 +8,10 @@ export class PlayerHTML {
 
   private playerElement: HTMLVideoElement
   private informationElement: HTMLDivElement
+  private errorBlock : HTMLDivElement
 
-  constructor (private readonly videoWrapperId: string) {
-    this.wrapperElement = document.getElementById(this.videoWrapperId)
+  constructor (wrapperElement: HTMLElement) {
+    this.wrapperElement = wrapperElement //document.getElementById(this.videoWrapperId)
   }
 
   getPlayerElement () {
@@ -29,36 +30,57 @@ export class PlayerHTML {
     this.wrapperElement.appendChild(this.playerElement)
   }
 
-  displayError (text: string, translations: Translations) {
+  displayError (text: string, style : string = "noncritical" /* translations: Translations*/) {
     logger.error(text)
 
-    // Remove video element
-    if (this.playerElement) {
-      this.removeElement(this.playerElement)
-      this.playerElement = undefined
-    }
+    const errorBlock = document.createElement("div");
+		errorBlock.className = "error-block " + style;
 
-    const translatedText = peertubeTranslate(text, translations)
-    const translatedSorry = peertubeTranslate('Sorry', translations)
+		const errorBlockWrapper = document.createElement("div");
+		errorBlockWrapper.className = "error-block-wrapper";
 
-    document.title = translatedSorry + ' - ' + translatedText
+		const errorTitle = document.createElement("div");
+		errorTitle.className = "error-title";
+		errorTitle.innerHTML = "Sorry";
 
-    const errorBlock = document.getElementById('error-block')
-    errorBlock.style.display = 'flex'
+		const errorText = document.createElement("div");
+		errorText.className = "error-text";
+		errorText.innerHTML = text;
 
-    const errorTitle = document.getElementById('error-title')
-    errorTitle.innerHTML = peertubeTranslate('Sorry', translations)
+		errorBlock.appendChild(errorBlockWrapper);
+		errorBlockWrapper.appendChild(errorTitle);
+		errorBlockWrapper.appendChild(errorText);
 
-    const errorText = document.getElementById('error-content')
-    errorText.innerHTML = translatedText
+		/*if (this.details && this.details.uuid) {
 
-    this.wrapperElement.style.display = 'none'
+			const errorReload = document.createElement("button");
+			errorReload.className = "error-reload";
+			errorReload.innerHTML = `<i class="fas fa-redo"></i> ${is_transcoding ? "Keep watching" : "Reload"}`;
+
+			errorReload.onclick = () => {
+				this.wrapperElement.removeChild(errorBlock);
+				this.playnottranscoded = true;
+				this.loadVideoTotal(this.details.uuid).then((r) => {
+					this.loadVideoAndBuildPlayer(this.details.uuid);
+				});
+				this.errorBlock = null;
+			};
+
+			errorBlockWrapper.appendChild(errorReload);
+		}*/
+
+		this.errorBlock = errorBlock;
+
+		this.wrapperElement.appendChild(errorBlock);
+		this.wrapperElement.setAttribute('error', style)
+
+    this.deleteLoadingPlaceholder()
   }
 
-  buildPlaceholder (video: VideoDetails) {
+  /*buildPlaceholder (video: VideoDetails, host : string) {
     const placeholder = this.getPlaceholderElement()
 
-    const url = window.location.origin + video.previewPath
+    const url = host + video.previewPath
     placeholder.style.backgroundImage = `url("${url}")`
     placeholder.style.display = 'block'
   }
@@ -66,14 +88,14 @@ export class PlayerHTML {
   removePlaceholder () {
     const placeholder = this.getPlaceholderElement()
     placeholder.style.display = 'none'
-  }
+  }*/
 
-  displayInformation (text: string, translations: Translations) {
+  displayInformation (text: string) {
     if (this.informationElement) this.removeInformation()
 
     this.informationElement = document.createElement('div')
     this.informationElement.className = 'player-information'
-    this.informationElement.innerText = peertubeTranslate(text, translations)
+    this.informationElement.innerText = text
 
     document.body.appendChild(this.informationElement)
   }
@@ -81,6 +103,62 @@ export class PlayerHTML {
   removeInformation () {
     this.removeElement(this.informationElement)
   }
+
+  createARElement(videoInfo: VideoDetails) {
+
+		const videoSizeValue = videoInfo.aspectRatio
+
+		const paddingSize: Number = 100 / (2 * videoSizeValue);
+
+		var aslayer = document.createElement("div");
+		aslayer.classList.add("aspectratio-matte");
+		aslayer.style.cssText = `padding-top: ${paddingSize}%; padding-bottom: ${paddingSize}%; height: 1px!important;`;
+
+		return aslayer
+
+	}
+
+	setARElement(videoInfo: VideoDetails, element : any) {
+
+		console.log('element', element)
+
+		try {
+
+			var aslayer = this.createARElement(videoInfo)
+			this.deleteLoadingPlaceholder()
+
+			if (element)
+				element.appendChild(aslayer)
+
+
+		}
+		catch (e) {
+			console.log("E", e)
+		}
+
+	}
+
+	deleteLoadingPlaceholder() {
+
+		try {
+			var el = this.wrapperElement.getElementsByClassName('jsPlayerLoading')[0]
+
+			if (el)
+				this.wrapperElement.removeChild(el);
+
+			var el2 = this.wrapperElement.getElementsByClassName('vjs-thumb')[0]
+
+			if (el2)
+				this.wrapperElement.removeChild(el2);
+
+			this.wrapperElement.classList.add('player-ready')
+
+		}
+		catch (e) {
+			console.error(e)
+		}
+
+	}
 
   private getPlaceholderElement () {
     return document.getElementById('placeholder-preview')

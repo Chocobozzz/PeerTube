@@ -2,7 +2,7 @@ import { PluginsManager } from '@root-helpers/plugins-manager'
 import { LiveVideoLatencyMode, VideoFile } from '@shared/models'
 import { PlaylistPluginOptions, VideoJSCaption } from './peertube-videojs-typings'
 
-export type PlayerMode = 'webtorrent' | 'p2p-media-loader'
+export type PlayerMode = 'webtorrent' | 'p2p-media-loader' | 'localvideo'
 
 export type WebtorrentOptions = {
   videoFiles: VideoFile[]
@@ -44,17 +44,17 @@ export interface CommonOptions extends CustomizationOptions {
   previousVideo?: () => void
   hasPreviousVideo?: () => boolean
 
-  playlist?: PlaylistPluginOptions
+  //playlist?: PlaylistPluginOptions
 
   videoDuration: number
   enableHotkeys: boolean
   inactivityTimeout: number
   poster: string
 
-  instanceName: string
+  //instanceName: string
 
   theaterButton: boolean
-  captions: boolean
+  ///captions: boolean
 
   videoViewUrl: string
   authorizationHeader?: string
@@ -69,7 +69,7 @@ export interface CommonOptions extends CustomizationOptions {
 
   language?: string
 
-  videoCaptions: VideoJSCaption[]
+  ///videoCaptions: VideoJSCaption[]
 
   videoUUID: string
   videoShortUUID: string
@@ -84,5 +84,5 @@ export type PeertubePlayerManagerOptions = {
   webtorrent: WebtorrentOptions
   p2pMediaLoader?: P2PMediaLoaderOptions
 
-  pluginsManager: PluginsManager
+  //pluginsManager: PluginsManager
 }

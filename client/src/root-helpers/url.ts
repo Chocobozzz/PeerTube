@@ -10,6 +10,18 @@ function getParamString (params: URLSearchParams, name: string, defaultValue?: s
     : defaultValue
 }
 
+function getToggle(params : any, name : string, defaultValue? : boolean){
+  if(typeof params[name] === 'undefined') return defaultValue
+
+  return params[name]
+}
+
+function getString(params : any, name : string, defaultValue? : string){
+  if(typeof params[name] === 'undefined') return defaultValue
+
+  return params[name]
+}
+
 function objectToUrlEncoded (obj: any) {
   const str: string[] = []
   for (const key of Object.keys(obj)) {
@@ -22,5 +34,7 @@ function objectToUrlEncoded (obj: any) {
 export {
   getParamToggle,
   getParamString,
-  objectToUrlEncoded
+  objectToUrlEncoded,
+  getString,
+  getToggle
 }

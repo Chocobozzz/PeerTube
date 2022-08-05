@@ -7,7 +7,7 @@ import { bytes } from '../common'
 interface StatsCardOptions extends videojs.ComponentOptions {
   videoUUID: string
   videoIsLive: boolean
-  mode: 'webtorrent' | 'p2p-media-loader'
+  mode: 'webtorrent' | 'p2p-media-loader' | 'localvideo'
   p2pEnabled: boolean
 }
 

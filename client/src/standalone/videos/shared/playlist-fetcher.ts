@@ -8,9 +8,9 @@ export class PlaylistFetcher {
 
   }
 
-  async loadPlaylist (playlistId: string) {
-    const playlistPromise = this.loadPlaylistInfo(playlistId)
-    const playlistElementsPromise = this.loadPlaylistElements(playlistId)
+  async loadPlaylist (playlistId: string, host : string) {
+    const playlistPromise = this.loadPlaylistInfo(playlistId, host)
+    const playlistElementsPromise = this.loadPlaylistElements(playlistId, host)
 
     let playlistResponse: Response
     let isResponseOk: boolean
@@ -34,13 +34,13 @@ export class PlaylistFetcher {
     return { playlistResponse, videosResponse: await playlistElementsPromise }
   }
 
-  async loadAllPlaylistVideos (playlistId: string, baseResult: ResultList<VideoPlaylistElement>) {
+  async loadAllPlaylistVideos (playlistId: string, baseResult: ResultList<VideoPlaylistElement>, host : string) {
     let elements = baseResult.data
     let total = baseResult.total
     let i = 0
 
     while (total > elements.length && i < 10) {
-      const result = await this.loadPlaylistElements(playlistId, elements.length)
+      const result = await this.loadPlaylistElements(playlistId, host, elements.length)
 
       const json = await result.json()
       total = json.total
@@ -56,18 +56,18 @@ export class PlaylistFetcher {
     return elements
   }
 
-  private loadPlaylistInfo (playlistId: string): Promise<Response> {
-    return this.http.fetch(this.getPlaylistUrl(playlistId), { optionalAuth: true })
+  private loadPlaylistInfo (playlistId: string, host : string): Promise<Response> {
+    return this.http.fetch(this.getPlaylistUrl(playlistId, host), { optionalAuth: true })
   }
 
-  private loadPlaylistElements (playlistId: string, start = 0): Promise<Response> {
-    const url = new URL(this.getPlaylistUrl(playlistId) + '/videos')
+  private loadPlaylistElements (playlistId: string, host : string, start = 0): Promise<Response> {
+    const url = new URL(this.getPlaylistUrl(playlistId, host) + '/videos')
     url.search = new URLSearchParams({ start: '' + start, count: '100' }).toString()
 
     return this.http.fetch(url.toString(), { optionalAuth: true })
   }
 
-  private getPlaylistUrl (id: string) {
-    return window.location.origin + '/api/v1/video-playlists/' + id
+  private getPlaylistUrl (id: string, host : string) {
+    return host + '/api/v1/video-playlists/' + id
   }
 }

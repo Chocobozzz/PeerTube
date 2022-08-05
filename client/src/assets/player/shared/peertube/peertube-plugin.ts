@@ -31,7 +31,7 @@ class PeerTubePlugin extends Plugin {
     USER_VIEW_VIDEO_INTERVAL: 5000 // Every 5 seconds, notify the user is watching the video
   }
 
-  private videoCaptions: VideoJSCaption[]
+  //private videoCaptions: VideoJSCaption[]
   private defaultSubtitle: string
 
   private videoViewInterval: any
@@ -49,7 +49,7 @@ class PeerTubePlugin extends Plugin {
     this.videoUUID = options.videoUUID
     this.startTime = timeToInt(options.startTime)
 
-    this.videoCaptions = options.videoCaptions
+    //this.videoCaptions = options.videoCaptions
     this.initialInactivityTimeout = this.player.options_.inactivityTimeout
 
     if (options.autoplay) this.player.addClass('vjs-has-autoplay')
@@ -101,7 +101,7 @@ class PeerTubePlugin extends Plugin {
         saveLastSubtitle(showing.language)
       })
 
-      this.player.on('sourcechange', () => this.initCaptions())
+      //this.player.on('sourcechange', () => this.initCaptions())
 
       this.player.duration(options.videoDuration)
 
@@ -137,7 +137,7 @@ class PeerTubePlugin extends Plugin {
 
     this.initSmoothProgressBar()
 
-    this.initCaptions()
+    //this.initCaptions()
 
     this.listenControlBarMouse()
 
@@ -253,7 +253,7 @@ class PeerTubePlugin extends Plugin {
     debugLogger('Set player inactivity to ' + timeout)
   }
 
-  private initCaptions () {
+  /*private initCaptions () {
     for (const caption of this.videoCaptions) {
       this.player.addRemoteTextTrack({
         kind: 'captions',
@@ -266,7 +266,7 @@ class PeerTubePlugin extends Plugin {
     }
 
     this.player.trigger('captionsChanged')
-  }
+  }*/
 
   // Thanks: https://github.com/videojs/video.js/issues/4460#issuecomment-312861657
   private initSmoothProgressBar () {

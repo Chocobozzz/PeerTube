@@ -1,6 +1,5 @@
 import videojs from 'video.js'
 import { copyToClipboard } from '@root-helpers/utils'
-import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { isIOS, isSafari } from '@root-helpers/web-browser'
 import { buildVideoLink, decorateVideoLink, pick } from '@shared/core-utils'
 import { isDefaultLocale } from '@shared/core-utils/i18n'
@@ -39,7 +38,7 @@ export class ManagerOptionsBuilder {
           'startTime',
           'videoDuration',
           'subtitle',
-          'videoCaptions',
+        //  'videoCaptions',
           'stopTime',
           'isLive',
           'videoUUID'
@@ -47,9 +46,9 @@ export class ManagerOptionsBuilder {
       }
     }
 
-    if (commonOptions.playlist) {
+    /*if (commonOptions.playlist) {
       plugins.playlist = commonOptions.playlist
-    }
+    }*/
 
     if (this.mode === 'p2p-media-loader') {
       const hlsOptionsBuilder = new HLSOptionsBuilder(this.options, this.p2pMediaLoaderModule)
@@ -138,13 +137,13 @@ export class ManagerOptionsBuilder {
             copyToClipboard(decorateVideoLink({ url, startTime: this.currentTime() }))
           }
         },
-        {
+        /*{
           icon: 'code',
           label: player.localize('Copy embed code'),
           listener: () => {
             copyToClipboard(buildVideoOrPlaylistEmbed(commonOptions.embedUrl, commonOptions.embedTitle))
           }
-        }
+        }*/
       ]
 
       if (this.mode === 'webtorrent') {
