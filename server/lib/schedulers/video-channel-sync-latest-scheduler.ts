@@ -49,6 +49,8 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
         await sync.save()
       } catch (err) {
         logger.error(`Failed to synchronize channel ${sync.VideoChannel.name}`, { err })
+        sync.state = VideoChannelSyncState.FAILED
+        await sync.save()
       }
     }
   }

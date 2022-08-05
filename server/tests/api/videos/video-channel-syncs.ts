@@ -123,7 +123,7 @@ describe('Test channel synchronizations', function () {
         }
       })
 
-      it('Should add another synchronizations', async function () {
+      it('Should add another synchronization', async function () {
         await command.create({
           attributes: {
             externalChannelUrl: FIXTURE_URLS.youtubeChannel + "?foo=bar",
@@ -155,7 +155,7 @@ describe('Test channel synchronizations', function () {
         })
       })
 
-      it('Should only fetch the videos channel newer than the creation date', async function () {
+      it('Should only fetch the videos newer than the creation date', async function () {
         // given
         this.timeout(120_000)
         await changeCreationDateForSync(userInfo.syncId, '2019-03-01')
