@@ -31,7 +31,7 @@
           <my-select-channel
               required
               [items]="userVideoChannels"
-              [(ngModel)]="selectedVideoChannel"
+              [(ngModel)]="selectedChannelId"
               formControlName="videoChannel">
           </my-select-channel>
           <div *ngIf="formErrors['videoChannel']" class="form-error">

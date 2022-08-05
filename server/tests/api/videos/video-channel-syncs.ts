@@ -206,18 +206,6 @@ describe('Test channel synchronizations', function () {
         })
       })
 
-      it('Should import a whole channel (this test takes a while)', async function () {
-        this.timeout(240_000)
-        await command.syncChannel({
-          channelSyncId: userInfo.syncId
-        })
-        await waitJobs(server, true)
-        const resForUser = await server.videos.listByChannel({
-          handle: userInfo.channelName
-        })
-        expect(resForUser.total).to.equal(2)
-      })
-
       it('Should remove user\'s channel synchronizations', async function () {
         await command.delete({ channelSyncId: userInfo.syncId })
         const resForUser = await command.listByAccount({ accountName: userInfo.username })

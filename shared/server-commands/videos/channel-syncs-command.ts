@@ -50,17 +50,4 @@ export class ChannelSyncsCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
-
-  syncChannel (options: OverrideCommandOptions & {
-    channelSyncId: number
-  }) {
-    const path = `${ChannelSyncsCommand.API_PATH}/${options.channelSyncId}/sync`
-
-    return this.postBodyRequest({
-      ...options,
-      path,
-      implicitToken: true,
-      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
-    })
-  }
 }

@@ -181,4 +181,20 @@ export class ChannelsCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
+
+  importVideos (options: OverrideCommandOptions & {
+    channelName: string
+    externalChannelUrl: string
+  }) {
+    const { channelName, externalChannelUrl } = options
+    const path = `/api/v1/video-channels/${channelName}/import-videos`
+    return this.postBodyRequest({
+      ...options,
+      fields: { externalChannelUrl },
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
 }

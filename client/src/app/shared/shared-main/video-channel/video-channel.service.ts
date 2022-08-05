@@ -95,4 +95,10 @@ export class VideoChannelService {
     return this.authHttp.delete(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
+
+  importVideos (videoChannelName: string, externalChannelUrl: string) {
+    const path = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName + '/import-videos'
+    return this.authHttp.post(path, { externalChannelUrl })
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
 }

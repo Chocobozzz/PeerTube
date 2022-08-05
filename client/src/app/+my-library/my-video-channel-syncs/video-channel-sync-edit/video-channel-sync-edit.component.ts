@@ -4,8 +4,8 @@ import { AuthService, Notifier } from '@app/core'
 import { listUserChannelsForSelect } from '@app/helpers'
 import { VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { VideoChannelSyncService } from '@app/shared/shared-main'
-import { VideoChannel, VideoChannelSyncCreate } from '@shared/models/videos'
+import { VideoChannelService, VideoChannelSyncService } from '@app/shared/shared-main'
+import { VideoChannelSyncCreate } from '@shared/models/videos'
 import { mergeMap } from 'rxjs'
 import { SelectChannelItem } from 'src/types'
 
@@ -16,7 +16,7 @@ import { SelectChannelItem } from 'src/types'
 })
 export class VideoChannelSyncEditComponent extends FormReactive implements OnInit {
   error: string
-  selectedVideoChannel: VideoChannel
+  selectedChannelId: number
   userVideoChannels: SelectChannelItem[]
   existingVideosStrategy: string
 
@@ -25,7 +25,8 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
     private authService: AuthService,
     private router: Router,
     private notifier: Notifier,
-    private videoChannelSyncService: VideoChannelSyncService
+    private videoChannelSyncService: VideoChannelSyncService,
+    private videoChannelService: VideoChannelService
   ) {
     super()
   }
@@ -57,8 +58,9 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
       .pipe(mergeMap((res: {videoChannelSync: {id: number}}) => {
         this.authService.refreshUserInformation()
 
+        const selectedChannel = this.authService.getUser().videoChannels.find(video => video.id === this.selectedChannelId)
         return importExistingVideos
-          ? this.videoChannelSyncService.syncChannel(res.videoChannelSync.id)
+          ? this.videoChannelService.importVideos(selectedChannel.name, body.externalChannelUrl)
           : Promise.resolve(null)
       }))
       .subscribe({

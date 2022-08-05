@@ -36,7 +36,9 @@ import {
   videoPlaylistsSortValidator
 } from '../../middlewares'
 import {
+  ensureChannelOwnerCanUpload,
   ensureIsLocalChannel,
+  videoChannelImportVideosValidator,
   videoChannelsFollowersSortValidator,
   videoChannelsListValidator,
   videoChannelsNameWithHostValidator,
@@ -159,6 +161,16 @@ videoChannelRouter.get('/:nameWithHost/followers',
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listVideoChannelFollowers)
+)
+
+videoChannelRouter.post('/:nameWithHost/import-videos',
+  authenticate,
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  videoChannelImportVideosValidator,
+  ensureIsLocalChannel,
+  ensureCanManageChannel,
+  asyncMiddleware(ensureChannelOwnerCanUpload),
+  importVideosOnChannel
 )
 
 // ---------------------------------------------------------------------------
@@ -403,4 +415,22 @@ async function listVideoChannelFollowers (req: express.Request, res: express.Res
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
+}
+
+function importVideosOnChannel (req: express.Request, res: express.Response) {
+  const { id: videoChannelId } = res.locals.videoChannel
+  const { externalChannelUrl } = req.body
+  JobQueue.Instance.createJob({
+    type: 'video-channel-import',
+    payload: {
+      externalChannelUrl,
+      videoChannelId
+    }
+  })
+  logger.info(
+    'Video import job for channel "%s" with url "%s" created.',
+    res.locals.videoChannel.name,
+    externalChannelUrl
+  )
+  return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }

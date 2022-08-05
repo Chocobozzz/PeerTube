@@ -42,10 +42,4 @@ export class VideoChannelSyncService {
     return this.authHttp.delete(url)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
-
-  syncChannel (syncId: number) {
-    const url = `${VideoChannelSyncService.BASE_VIDEO_CHANNEL_URL}/${syncId}/sync`
-    return this.authHttp.post(url, {})
-               .pipe(catchError(err => this.restExtractor.handleError(err)))
-  }
 }

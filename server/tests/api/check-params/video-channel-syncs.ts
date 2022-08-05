@@ -151,7 +151,7 @@ describe('Test video channel sync API validator', () => {
     })
 
     it('Should succeed to create a sync with root and for another user\'s channel', async function () {
-      await command.create({
+      const res = await command.create({
         token: server.accessToken,
         attributes: {
           ...baseCorrectParams,
@@ -159,14 +159,16 @@ describe('Test video channel sync API validator', () => {
         },
         expectedStatus: HttpStatusCode.OK_200
       })
+      userInfo.syncId = res.id
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await command.create({
+      const res = await command.create({
         token: server.accessToken,
         attributes: baseCorrectParams,
         expectedStatus: HttpStatusCode.OK_200
       })
+      rootChannelSyncId = res.id
     })
   })
 
@@ -224,107 +226,6 @@ describe('Test video channel sync API validator', () => {
           token: server.accessToken,
           expectedStatus: HttpStatusCode.OK_200
         })
-      })
-    })
-  })
-
-  describe('When triggering full synchronization', function () {
-    before(async function () {
-      {
-        const body = await server.channelSyncs.listByAccount({ accountName: 'root' })
-        rootChannelSyncId = body.data[0].id
-      }
-      {
-        const body = await server.channelSyncs.listByAccount({ accountName: userInfo.username })
-        userInfo.syncId = body.data[0].id
-      }
-    })
-
-    it('Should fail when sync is disabled', async function () {
-      await withChannelSyncDisabled(async function () {
-        await command.syncChannel({
-          channelSyncId: rootChannelSyncId,
-          token: server.accessToken,
-          expectedStatus: HttpStatusCode.FORBIDDEN_403
-        })
-      })
-    })
-
-    it('Should fail when channelSyncId does not refer to any sync', async function () {
-      await command.syncChannel({
-        channelSyncId: 42,
-        token: server.accessToken,
-        expectedStatus: HttpStatusCode.NOT_FOUND_404
-      })
-    })
-
-    it('Should fail with no authentication', async function () {
-      await command.syncChannel({
-        channelSyncId: 42,
-        token: null,
-        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
-      })
-    })
-
-    it('Should fail when sync is not owned by the user', async function () {
-      await command.syncChannel({
-        channelSyncId: rootChannelSyncId,
-        token: userInfo.accessToken,
-        expectedStatus: HttpStatusCode.FORBIDDEN_403
-      })
-    })
-
-    it('Should fail when the user has no quota', async function () {
-      // set-up
-      await server.users.update({
-        userId: userInfo.id,
-        videoQuota: 0
-      })
-      // test
-      await command.syncChannel({
-        channelSyncId: userInfo.syncId,
-        token: server.accessToken,
-        expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413
-      })
-      // teardown
-      await server.users.update({
-        userId: userInfo.id,
-        videoQuota: userInfo.defaultQuota
-      })
-    })
-
-    it('Should fail when the user has no daily quota', async function () {
-      // set-up
-      await server.users.update({
-        userId: userInfo.id,
-        videoQuotaDaily: 0
-      })
-      // test
-      await command.syncChannel({
-        channelSyncId: userInfo.syncId,
-        token: server.accessToken,
-        expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413
-      })
-      // teardown
-      await server.users.update({
-        userId: userInfo.id,
-        videoQuotaDaily: userInfo.defaultQuota
-      })
-    })
-
-    it('Should succeed when sync is run by its owner', async function () {
-      await command.syncChannel({
-        channelSyncId: userInfo.syncId,
-        token: server.accessToken,
-        expectedStatus: HttpStatusCode.NO_CONTENT_204
-      })
-    })
-
-    it('Should succeed when sync is run with root and for another user\'s channel', async function () {
-      await command.syncChannel({
-        channelSyncId: userInfo.syncId,
-        token: server.accessToken,
-        expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })
   })

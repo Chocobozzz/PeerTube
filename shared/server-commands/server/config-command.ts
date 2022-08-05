@@ -18,22 +18,30 @@ export class ConfigCommand extends AbstractCommand {
     }
   }
 
-  enableImports () {
+  private setImportsEnabled (enabled: boolean) {
     return this.updateExistingSubConfig({
       newConfig: {
         import: {
           videos: {
             http: {
-              enabled: true
+              enabled
             },
 
             torrent: {
-              enabled: true
+              enabled
             }
           }
         }
       }
     })
+  }
+
+  disableImports () {
+    return this.setImportsEnabled(false)
+  }
+
+  enableImports () {
+    return this.setImportsEnabled(true)
   }
 
   private setChannelSyncEnabled (enabled: boolean) {

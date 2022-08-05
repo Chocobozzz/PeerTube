@@ -1,13 +1,11 @@
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelSyncAuditView } from '@server/helpers/audit-logger'
 import { logger } from '@server/helpers/logger'
 import { sequelizeTypescript } from '@server/initializers/database'
-import { JobQueue } from '@server/lib/job-queue'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
   ensureCanManageChannel as ensureCanManageSyncedChannel,
-  ensureCanUpload,
   ensureSyncExists,
   ensureSyncIsEnabled,
   videoChannelSyncValidator
@@ -25,15 +23,6 @@ videoChannelSyncRouter.post('/',
   asyncMiddleware(videoChannelSyncValidator),
   ensureCanManageSyncedChannel,
   asyncRetryTransactionMiddleware(createVideoChannelSync)
-)
-
-videoChannelSyncRouter.post('/:id/sync',
-  authenticate,
-  ensureSyncIsEnabled,
-  asyncMiddleware(ensureSyncExists),
-  ensureCanManageSyncedChannel,
-  asyncMiddleware(ensureCanUpload),
-  syncChannel
 )
 
 videoChannelSyncRouter.delete('/:id',
@@ -81,23 +70,6 @@ async function removeVideoChannelSync (req: express.Request, res: express.Respon
     'Video synchronization for channel "%s" with external channel "%s" deleted.',
     syncInstance.VideoChannel.name,
     syncInstance.externalChannelUrl
-  )
-  return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
-}
-
-function syncChannel (req: express.Request, res: express.Response) {
-  const { externalChannelUrl, videoChannelId } = res.locals.videoChannelSync
-  JobQueue.Instance.createJob({
-    type: 'video-channel-import',
-    payload: {
-      externalChannelUrl,
-      videoChannelId
-    }
-  })
-  logger.info(
-    'Video import job for channel "%s" with external channel "%s" created.',
-    res.locals.videoChannel.name,
-    externalChannelUrl
   )
   return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
