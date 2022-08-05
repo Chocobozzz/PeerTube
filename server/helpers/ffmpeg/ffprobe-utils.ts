@@ -90,15 +90,21 @@ async function getAudioStreamCodec (path: string, existingProbe?: FfprobeData) {
 // Resolutions
 // ---------------------------------------------------------------------------
 
-function computeLowerResolutionsToTranscode (videoFileResolution: number, type: 'vod' | 'live') {
+function computeResolutionsToTranscode (options: {
+  inputResolution: number
+  type: 'vod' | 'live'
+  includeInputResolution: boolean
+}) {
+  const { inputResolution, type, includeInputResolution } = options
+
   const configResolutions = type === 'vod'
     ? CONFIG.TRANSCODING.RESOLUTIONS
     : CONFIG.LIVE.TRANSCODING.RESOLUTIONS
 
-  const resolutionsEnabled: number[] = []
+  const resolutionsEnabled = new Set<number>()
 
   // Put in the order we want to proceed jobs
-  const resolutions: VideoResolution[] = [
+  const availableResolutions: VideoResolution[] = [
     VideoResolution.H_NOVIDEO,
     VideoResolution.H_480P,
     VideoResolution.H_360P,
@@ -110,13 +116,17 @@ function computeLowerResolutionsToTranscode (videoFileResolution: number, type: 
     VideoResolution.H_4K
   ]
 
-  for (const resolution of resolutions) {
-    if (configResolutions[resolution + 'p'] === true && videoFileResolution > resolution) {
-      resolutionsEnabled.push(resolution)
+  for (const resolution of availableResolutions) {
+    if (configResolutions[resolution + 'p'] === true && inputResolution > resolution) {
+      resolutionsEnabled.add(resolution)
     }
   }
 
-  return resolutionsEnabled
+  if (includeInputResolution) {
+    resolutionsEnabled.add(inputResolution)
+  }
+
+  return Array.from(resolutionsEnabled)
 }
 
 // ---------------------------------------------------------------------------
@@ -224,7 +234,7 @@ export {
   computeFPS,
   getClosestFramerateStandard,
 
-  computeLowerResolutionsToTranscode,
+  computeResolutionsToTranscode,
 
   canDoQuickTranscode,
   canDoQuickVideoTranscode,

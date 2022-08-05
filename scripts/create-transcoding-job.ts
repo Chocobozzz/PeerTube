@@ -1,6 +1,6 @@
 import { program } from 'commander'
 import { isUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
-import { computeLowerResolutionsToTranscode } from '@server/helpers/ffmpeg'
+import { computeResolutionsToTranscode } from '@server/helpers/ffmpeg'
 import { CONFIG } from '@server/initializers/config'
 import { addTranscodingJob } from '@server/lib/video'
 import { VideoState, VideoTranscodingPayload } from '@shared/models'
@@ -53,7 +53,7 @@ async function run () {
   if (options.generateHls || CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
     const resolutionsEnabled = options.resolution
       ? [ parseInt(options.resolution) ]
-      : computeLowerResolutionsToTranscode(maxResolution, 'vod').concat([ maxResolution ])
+      : computeResolutionsToTranscode({ inputResolution: maxResolution, type: 'vod', includeInputResolution: true })
 
     for (const resolution of resolutionsEnabled) {
       dataInput.push({
@@ -61,8 +61,6 @@ async function run () {
         videoUUID: video.uuid,
         resolution,
 
-        // FIXME: check the file has audio and is not in portrait mode
-        isPortraitMode: false,
         hasAudio: true,
 
         copyCodecs: false,

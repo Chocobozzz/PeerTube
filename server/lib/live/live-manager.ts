@@ -4,7 +4,7 @@ import { createServer, Server } from 'net'
 import { join } from 'path'
 import { createServer as createServerTLS, Server as ServerTLS } from 'tls'
 import {
-  computeLowerResolutionsToTranscode,
+  computeResolutionsToTranscode,
   ffprobePromise,
   getLiveSegmentTime,
   getVideoStreamBitrate,
@@ -26,10 +26,10 @@ import { federateVideoIfNeeded } from '../activitypub/videos'
 import { JobQueue } from '../job-queue'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getLiveReplayBaseDirectory } from '../paths'
 import { PeerTubeSocket } from '../peertube-socket'
+import { Hooks } from '../plugins/hooks'
 import { LiveQuotaStore } from './live-quota-store'
 import { cleanupPermanentLive } from './live-utils'
 import { MuxingSession } from './shared'
-import { Hooks } from '../plugins/hooks'
 
 const NodeRtmpSession = require('node-media-server/src/node_rtmp_session')
 const context = require('node-media-server/src/node_core_ctx')
@@ -456,11 +456,17 @@ class LiveManager {
   }
 
   private buildAllResolutionsToTranscode (originResolution: number) {
+    const includeInputResolution = CONFIG.LIVE.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+
     const resolutionsEnabled = CONFIG.LIVE.TRANSCODING.ENABLED
-      ? computeLowerResolutionsToTranscode(originResolution, 'live')
+      ? computeResolutionsToTranscode({ inputResolution: originResolution, type: 'live', includeInputResolution })
       : []
 
-    return resolutionsEnabled.concat([ originResolution ])
+    if (resolutionsEnabled.length === 0) {
+      return [ originResolution ]
+    }
+
+    return resolutionsEnabled
   }
 
   private async createLivePlaylist (video: MVideo, allResolutions: number[]): Promise<MStreamingPlaylistVideo> {

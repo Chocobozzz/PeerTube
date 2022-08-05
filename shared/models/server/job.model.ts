@@ -1,7 +1,7 @@
 import { ContextType } from '../activitypub/context'
 import { VideoState } from '../videos'
-import { VideoStudioTaskCut } from '../videos/studio'
 import { VideoResolution } from '../videos/file/video-resolution.enum'
+import { VideoStudioTaskCut } from '../videos/studio'
 import { SendEmailOptions } from './emailer.model'
 
 export type JobState = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed' | 'paused'
@@ -126,7 +126,6 @@ export interface HLSTranscodingPayload extends BaseTranscodingPayload {
   copyCodecs: boolean
 
   hasAudio: boolean
-  isPortraitMode?: boolean
 
   autoDeleteWebTorrentIfNeeded: boolean
   isMaxQuality: boolean
@@ -138,8 +137,6 @@ export interface NewWebTorrentResolutionTranscodingPayload extends BaseTranscodi
 
   hasAudio: boolean
   createHLSIfNeeded: boolean
-
-  isPortraitMode?: boolean
 }
 
 export interface MergeAudioTranscodingPayload extends BaseTranscodingPayload {

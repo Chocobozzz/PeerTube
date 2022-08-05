@@ -54,6 +54,9 @@ const customConfigUpdateValidator = [
   body('transcoding.resolutions.1440p').isBoolean().withMessage('Should have a valid transcoding 1440p resolution enabled boolean'),
   body('transcoding.resolutions.2160p').isBoolean().withMessage('Should have a valid transcoding 2160p resolution enabled boolean'),
 
+  body('transcoding.alwaysTranscodeOriginalResolution').isBoolean()
+    .withMessage('Should have a valid always transcode original resolution boolean'),
+
   body('transcoding.webtorrent.enabled').isBoolean().withMessage('Should have a valid webtorrent transcoding enabled boolean'),
   body('transcoding.hls.enabled').isBoolean().withMessage('Should have a valid hls transcoding enabled boolean'),
 
@@ -91,6 +94,8 @@ const customConfigUpdateValidator = [
   body('live.transcoding.resolutions.1080p').isBoolean().withMessage('Should have a valid transcoding 1080p resolution enabled boolean'),
   body('live.transcoding.resolutions.1440p').isBoolean().withMessage('Should have a valid transcoding 1440p resolution enabled boolean'),
   body('live.transcoding.resolutions.2160p').isBoolean().withMessage('Should have a valid transcoding 2160p resolution enabled boolean'),
+  body('live.transcoding.alwaysTranscodeOriginalResolution').isBoolean()
+    .withMessage('Should have a valid always transcode live original resolution boolean'),
 
   body('search.remoteUri.users').isBoolean().withMessage('Should have a remote URI search for users boolean'),
   body('search.remoteUri.anonymous').isBoolean().withMessage('Should have a valid remote URI search for anonymous boolean'),

@@ -213,13 +213,12 @@ async function assignReplayFilesToVideo (options: {
     const probe = await ffprobePromise(concatenatedTsFilePath)
     const { audioStream } = await getAudioStream(concatenatedTsFilePath, probe)
 
-    const { resolution, isPortraitMode } = await getVideoStreamDimensionsInfo(concatenatedTsFilePath, probe)
+    const { resolution } = await getVideoStreamDimensionsInfo(concatenatedTsFilePath, probe)
 
     const { resolutionPlaylistPath: outputPath } = await generateHlsPlaylistResolutionFromTS({
       video,
       concatenatedTsFilePath,
       resolution,
-      isPortraitMode,
       isAAC: audioStream?.codec_name === 'aac'
     })
 

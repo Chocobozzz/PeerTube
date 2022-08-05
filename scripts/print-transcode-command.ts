@@ -31,8 +31,7 @@ async function run (path: string, cmd: any) {
     availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
     profile: 'default',
 
-    resolution: +cmd.resolution,
-    isPortraitMode: false
+    resolution: +cmd.resolution
   } as TranscodeVODOptions
 
   let command = ffmpeg(options.inputPath)

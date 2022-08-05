@@ -1,5 +1,5 @@
 import express from 'express'
-import { computeLowerResolutionsToTranscode } from '@server/helpers/ffmpeg'
+import { computeResolutionsToTranscode } from '@server/helpers/ffmpeg'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { addTranscodingJob } from '@server/lib/video'
 import { HttpStatusCode, UserRight, VideoState, VideoTranscodingCreate } from '@shared/models'
@@ -30,9 +30,9 @@ async function createTranscoding (req: express.Request, res: express.Response) {
 
   const body: VideoTranscodingCreate = req.body
 
-  const { resolution: maxResolution, isPortraitMode, audioStream } = await video.probeMaxQualityFile()
+  const { resolution: maxResolution, audioStream } = await video.probeMaxQualityFile()
   const resolutions = await Hooks.wrapObject(
-    computeLowerResolutionsToTranscode(maxResolution, 'vod').concat([ maxResolution ]),
+    computeResolutionsToTranscode({ inputResolution: maxResolution, type: 'vod', includeInputResolution: true }),
     'filter:transcoding.manual.lower-resolutions-to-transcode.result',
     body
   )
@@ -50,7 +50,6 @@ async function createTranscoding (req: express.Request, res: express.Response) {
         type: 'new-resolution-to-hls',
         videoUUID: video.uuid,
         resolution,
-        isPortraitMode,
         hasAudio: !!audioStream,
         copyCodecs: false,
         isNewVideo: false,
@@ -64,8 +63,7 @@ async function createTranscoding (req: express.Request, res: express.Response) {
         isNewVideo: false,
         resolution,
         hasAudio: !!audioStream,
-        createHLSIfNeeded: false,
-        isPortraitMode
+        createHLSIfNeeded: false
       })
     }
   }
