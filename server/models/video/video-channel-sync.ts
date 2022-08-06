@@ -24,14 +24,6 @@ import { Op } from "sequelize"
 import { UserModel } from "../user/user"
 import { isUrlValid } from "@server/helpers/custom-validators/activitypub/misc"
 
-type AvailableForListOptions = {
-  accountId: number
-  search?: string
-  host?: string
-  handles?: string[]
-  forCount?: boolean
-}
-
 @DefaultScope(() => ({
   include: [
     {
@@ -84,54 +76,39 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
   @Column(DataType.DATE)
   lastSyncAt: Date
 
-  static listByAccountForAPI (options: Pick<AvailableForListOptions, 'accountId'> & {
+  static listByAccountForAPI (options: {
+    accountId: number
     start: number
     count: number
     sort: string
   }) {
-    const query = {
-      offset: options.start,
-      limit: options.count,
-      order: getSort(options.sort),
-      include: [
-        {
-          model: VideoChannelModel,
-          required: true,
-          where: {
-            accountId: options.accountId
+    const getQuery = (forCount: boolean) => {
+      const videoChannelModel = forCount
+        ? VideoChannelModel.unscoped()
+        : VideoChannelModel
+      return {
+        offset: options.start,
+        limit: options.count,
+        order: getSort(options.sort),
+        include: [
+          {
+            model: videoChannelModel,
+            required: true,
+            where: {
+              accountId: options.accountId
+            }
           }
-        }
-      ]
+        ]
+      }
     }
     return Promise.all([
-      VideoChannelSyncModel.count(query),
-      VideoChannelSyncModel.findAll(query)
+      VideoChannelSyncModel.unscoped().count(getQuery(true)),
+      VideoChannelSyncModel.unscoped().findAll(getQuery(false))
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
-  toFormattedJSON (this: MChannelSyncFormattable): VideoChannelSync {
-    return {
-      id: this.id,
-      state: {
-        id: this.state,
-        label: VIDEO_CHANNEL_SYNC_STATE[this.state]
-      },
-      externalChannelUrl: this.externalChannelUrl,
-      createdAt: this.createdAt.toISOString(),
-      channel: this.VideoChannel.toFormattedSummaryJSON(),
-      lastSyncAt: this.lastSyncAt?.toISOString()
-    }
-  }
-
-  static load (id: number) {
-    return this.findOne({
-      where: { id }
-    })
-  }
-
   static loadWithAccount (id: number) {
-    return this.findOne({
-      where: { id },
+    return this.unscoped().findByPk(id, {
       include: [ {
         model: VideoChannelModel,
         required: true,
@@ -156,6 +133,7 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
               include: [ {
                 attributes: [],
                 model: UserModel.unscoped(),
+                required: true,
                 where: {
                   videoQuota: {
                     [Op.ne]: 0
@@ -163,8 +141,7 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
                   videoQuotaDaily: {
                     [Op.ne]: 0
                   }
-                },
-                required: true
+                }
               } ]
             }
           ]
@@ -172,5 +149,19 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
       ]
     }
     return VideoChannelSyncModel.unscoped().findAll(query)
+  }
+
+  toFormattedJSON (this: MChannelSyncFormattable): VideoChannelSync {
+    return {
+      id: this.id,
+      state: {
+        id: this.state,
+        label: VIDEO_CHANNEL_SYNC_STATE[this.state]
+      },
+      externalChannelUrl: this.externalChannelUrl,
+      createdAt: this.createdAt.toISOString(),
+      channel: this.VideoChannel.toFormattedSummaryJSON(),
+      lastSyncAt: this.lastSyncAt?.toISOString()
+    }
   }
 }

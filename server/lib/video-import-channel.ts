@@ -3,9 +3,9 @@ import { VideoImportModel } from '@server/models/video/video-import'
 import { wait } from '@shared/core-utils'
 import { addYoutubeDLImport } from '@server/lib/video-import'
 import { YoutubeDLCLI } from '@server/helpers/youtube-dl'
-import { VideoChannelModel } from '@server/models/video/video-channel'
 import { logger } from '@server/helpers/logger'
 import { VideoPrivacy } from '@shared/models'
+import { MChannelAccountDefault } from '@server/types/models'
 
 type ChannelSyncInfo = {
   total: number
@@ -30,7 +30,7 @@ function formatDateForYoutubeDl (date: Date) {
 }
 
 export async function synchronizeChannel (
-  channel: VideoChannelModel,
+  channel: MChannelAccountDefault,
   externalChannelUrl: string,
   { youtubeDL, secondsToWait, lastVideosCount, onlyAfter }: SynchronizeChannelOptions
 ): Promise<ChannelSyncInfo> {
@@ -77,9 +77,9 @@ export async function synchronizeChannel (
       } else {
         result.alreadyImported += 1
       }
-    } catch (ex) {
+    } catch (err) {
       result.errors += 1
-      logger.error(`An error occured while importing ${targetUrl}: ${ex.stack}`)
+      logger.error(`An error occured while importing ${targetUrl}`, { err })
     }
     await wait(secondsToWait * 1000)
   }

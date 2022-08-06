@@ -13,7 +13,7 @@ import { mergeMap } from 'rxjs'
 export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
 
   error: string = undefined
-  channelsSync: VideoChannelSync[]
+  channelsSync: VideoChannelSync[] = []
   totalRecords = 0
   videoChannelSyncActions: DropdownAction<VideoChannelSync>[][] = []
   sort: SortMeta = { field: 'createdAt', order: 1 }
@@ -108,12 +108,12 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
       })
   }
 
-  getVideoChannelCreateLink () {
+  getSyncCreateLink () {
     return '/my-library/video-channel-syncs/create'
   }
 
-  getVideoChannelSyncStateClass (stateId: number) {
-    return 'pt-badge ' + MyVideoChannelSyncsComponent.STATE_CLASS_BY_ID[stateId]
+  getSyncStateClass (stateId: number) {
+    return [ 'pt-badge', MyVideoChannelSyncsComponent.STATE_CLASS_BY_ID[stateId] ]
   }
 
   getIdentifier () {

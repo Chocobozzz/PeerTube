@@ -1,6 +1,5 @@
 import {
   MChannelAccountDefault,
-  MChannelBannerAccountDefault,
   MThumbnail,
   MUser,
   MVideoAccountDefault,
@@ -209,7 +208,7 @@ export namespace YoutubeDlImportError {
 
 export async function addYoutubeDLImport ({ targetUrl, channel, importDataOverride, thumbnailFilePath, previewFilePath, user }: {
   targetUrl: string
-  channel: MChannelBannerAccountDefault
+  channel: MChannelAccountDefault
   importDataOverride?: Partial<VideoImportCreate>
   thumbnailFilePath?: string
   previewFilePath?: string

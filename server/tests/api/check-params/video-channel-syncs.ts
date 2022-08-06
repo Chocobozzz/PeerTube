@@ -21,15 +21,13 @@ describe('Test video channel sync API validator', () => {
     username: 'user1',
     id: -1,
     channelId: -1,
-    syncId: -1,
-    defaultQuota: -1,
-    defaultDailyQuota: -1
+    syncId: -1
   }
 
-  async function withChannelSyncDisabled<T> (callback: () => T): Promise<T> {
+  async function withChannelSyncDisabled<T> (callback: () => Promise<T>): Promise<void> {
     try {
       await server.config.disableChannelSync()
-      return callback()
+      await callback()
     } finally {
       await server.config.enableChannelSync()
     }
@@ -49,22 +47,13 @@ describe('Test video channel sync API validator', () => {
 
     {
       userInfo.username = 'user1'
-      const password = 'my super password'
-      await server.users.create({ username: userInfo.username, password })
+      userInfo.accessToken = await server.users.generateUserAndToken(userInfo.username)
 
-      userInfo.accessToken = await server.login.getAccessToken({ username: userInfo.username, password })
-
-      const { videoChannels, ...otherUserInfo } = await server.users.getMyInfo({ token: userInfo.accessToken })
-      userInfo.id = otherUserInfo.id
-      userInfo.defaultQuota = otherUserInfo.videoQuota
-      userInfo.defaultDailyQuota = otherUserInfo.videoQuotaDaily
+      const { videoChannels, id: userId } = await server.users.getMyInfo({ token: userInfo.accessToken })
+      userInfo.id = userId
       userInfo.channelId = videoChannels[0].id
     }
     await server.config.enableChannelSync()
-  })
-
-  after(async function () {
-    await server?.kill()
   })
 
   describe('When creating a sync', function () {
@@ -289,5 +278,9 @@ describe('Test video channel sync API validator', () => {
         })
       })
     })
+  })
+
+  after(async function () {
+    await server?.kill()
   })
 })

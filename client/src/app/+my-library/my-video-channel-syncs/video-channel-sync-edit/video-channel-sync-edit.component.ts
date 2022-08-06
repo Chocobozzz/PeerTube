@@ -17,7 +17,7 @@ import { SelectChannelItem } from 'src/types'
 export class VideoChannelSyncEditComponent extends FormReactive implements OnInit {
   error: string
   selectedChannelId: number
-  userVideoChannels: SelectChannelItem[]
+  userVideoChannels: SelectChannelItem[] = []
   existingVideosStrategy: string
 
   constructor (

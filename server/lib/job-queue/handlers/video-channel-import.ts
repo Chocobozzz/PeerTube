@@ -35,7 +35,7 @@ export async function processVideoChannelImport (job: Job) {
       logger.info(`Finished importing videos to "${videoChannel.name}" successfully` +
         ` (imported: ${successes}, ignored because already imported: ${alreadyImported})`)
     }
-  } catch (ex) {
-    logger.error(`Failed to import channel ${videoChannel.name}: ${ex.stack}`)
+  } catch (err) {
+    logger.error(`Failed to import channel ${videoChannel.name}`, { err })
   }
 }

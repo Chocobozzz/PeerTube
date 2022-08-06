@@ -1,5 +1,5 @@
 import { HttpStatusCode, ResultList, VideoChannelSync, VideoChannelSyncCreate } from "@shared/models"
-import { pick } from "lodash"
+import { pick } from "@shared/core-utils"
 import { unwrapBody } from "../requests"
 import { AbstractCommand, OverrideCommandOptions } from "../shared"
 
@@ -17,7 +17,7 @@ export class ChannelSyncsCommand extends AbstractCommand {
       ...options,
 
       path,
-      query: { sort, ...pick(options, [ 'start', 'count', 'withStats', 'search' ]) },
+      query: { sort, ...pick(options, [ 'start', 'count' ]) },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

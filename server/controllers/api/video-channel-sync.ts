@@ -1,6 +1,5 @@
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelSyncAuditView } from '@server/helpers/audit-logger'
 import { logger } from '@server/helpers/logger'
-import { sequelizeTypescript } from '@server/initializers/database'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -10,12 +9,13 @@ import {
   ensureSyncIsEnabled,
   videoChannelSyncValidator
 } from '@server/middlewares'
+import { VideoChannelModel } from '@server/models/video/video-channel'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { HttpStatusCode, VideoChannelSyncState } from '@shared/models'
 import express from 'express'
 
 const videoChannelSyncRouter = express.Router()
-const auditLogger = auditLoggerFactory('channels')
+const auditLogger = auditLoggerFactory('channel-syncs')
 
 videoChannelSyncRouter.post('/',
   authenticate,
@@ -42,10 +42,8 @@ async function createVideoChannelSync (req: express.Request, res: express.Respon
     videoChannelId: req.body.videoChannelId,
     state: VideoChannelSyncState.WAITING_FIRST_RUN
   })
-  await sequelizeTypescript.transaction(async t => {
-    await syncCreated.save({ transaction: t })
-    await syncCreated.reload({ transaction: t })
-  })
+  await syncCreated.save()
+  syncCreated.VideoChannel = res.locals.videoChannel as VideoChannelModel
   auditLogger.create(getAuditIdFromRes(res), new VideoChannelSyncAuditView(syncCreated.toFormattedJSON()))
   logger.info(
     'Video synchronization for channel "%s" with external channel "%s" created.',

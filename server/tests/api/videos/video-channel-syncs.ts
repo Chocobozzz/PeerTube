@@ -6,6 +6,8 @@ import {
   createSingleServer,
   PeerTubeServer,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar,
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
@@ -23,9 +25,7 @@ describe('Test channel synchronizations', function () {
       const userInfo = {
         accessToken: '',
         username: 'user1',
-        get channelName () {
-          return this.username + "_channel"
-        },
+        channelName: "user1_channel",
         channelId: -1,
         syncId: -1
       }
@@ -58,6 +58,8 @@ describe('Test channel synchronizations', function () {
         })
         await setAccessTokensToServers([ server ])
         await setDefaultVideoChannel([ server ])
+        await setDefaultChannelAvatar([ server ])
+        await setDefaultAccountAvatar([ server ])
         command = server.channelSyncs
         await server.config.enableChannelSync()
 

@@ -2,6 +2,7 @@ import { logger } from '@server/helpers/logger'
 import { YoutubeDLCLI } from '@server/helpers/youtube-dl'
 import { CONFIG } from '@server/initializers/config'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
+import { MChannelSyncChannel } from '@server/types/models'
 import { VideoChannelSyncState } from '@shared/models'
 import { SCHEDULER_INTERVALS_MS, VIDEO_CHANNEL_MAX_SYNC } from '../../initializers/constants'
 import { synchronizeChannel } from '../video-import-channel'
@@ -21,7 +22,7 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
       logger.info('Discard channels synchronization as the feature is disabled')
       return
     }
-    const syncs: VideoChannelSyncModel[] = await VideoChannelSyncModel.listSyncs()
+    const syncs: MChannelSyncChannel[] = await VideoChannelSyncModel.listSyncs()
     const youtubeDL = await YoutubeDLCLI.safeGet()
 
     for (const sync of syncs) {
