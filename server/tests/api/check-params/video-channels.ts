@@ -383,7 +383,7 @@ describe('Test video channels API validator', function () {
     it('Should fail when externalChannelUrl is malformed', async function () {
       await command.importVideos({
         channelName: 'super_channel',
-        externalChannelUrl: "not-a-url",
+        externalChannelUrl: 'not-a-url',
         token: server.accessToken,
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })

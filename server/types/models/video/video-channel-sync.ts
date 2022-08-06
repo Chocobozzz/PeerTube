@@ -1,6 +1,6 @@
-import { VideoChannelSyncModel } from "@server/models/video/video-channel-sync"
-import { FunctionProperties, PickWith } from "@shared/typescript-utils"
-import { MChannelAccountDefault, MChannelFormattable } from "./video-channels"
+import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
+import { FunctionProperties, PickWith } from '@shared/typescript-utils'
+import { MChannelAccountDefault, MChannelFormattable } from './video-channels'
 
 type Use<K extends keyof VideoChannelSyncModel, M> = PickWith<VideoChannelSyncModel, K, M>
 

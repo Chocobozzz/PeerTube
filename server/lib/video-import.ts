@@ -8,29 +8,29 @@ import {
   MVideoTag,
   MVideoThumbnail,
   MVideoWithBlacklistLight
-} from "@server/types/models"
-import { remove } from "fs-extra"
-import { sequelizeTypescript } from "@server/initializers/database"
-import { VideoCaptionModel } from "@server/models/video/video-caption"
-import { FilteredModelAttributes } from "@server/types"
-import { VideoImportModel } from "@server/models/video/video-import"
-import { autoBlacklistVideoIfNeeded } from "@server/lib/video-blacklist"
-import { setVideoTags } from "@server/lib/video"
-import { ServerConfigManager } from "@server/lib/server-config-manager"
-import { YoutubeDLInfo, YoutubeDLWrapper } from "@server/helpers/youtube-dl"
-import { logger } from "@server/helpers/logger"
-import { isVTTFileValid } from "@server/helpers/custom-validators/video-captions"
-import { moveAndProcessCaptionFile } from "@server/helpers/captions-utils"
-import { isResolvingToUnicastOnly } from "@server/helpers/dns"
-import { ThumbnailType, VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from "@shared/models"
-import { CONFIG } from "@server/initializers/config"
+} from '@server/types/models'
+import { remove } from 'fs-extra'
+import { sequelizeTypescript } from '@server/initializers/database'
+import { VideoCaptionModel } from '@server/models/video/video-caption'
+import { FilteredModelAttributes } from '@server/types'
+import { VideoImportModel } from '@server/models/video/video-import'
+import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist'
+import { setVideoTags } from '@server/lib/video'
+import { ServerConfigManager } from '@server/lib/server-config-manager'
+import { YoutubeDLInfo, YoutubeDLWrapper } from '@server/helpers/youtube-dl'
+import { logger } from '@server/helpers/logger'
+import { isVTTFileValid } from '@server/helpers/custom-validators/video-captions'
+import { moveAndProcessCaptionFile } from '@server/helpers/captions-utils'
+import { isResolvingToUnicastOnly } from '@server/helpers/dns'
+import { ThumbnailType, VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '@shared/models'
+import { CONFIG } from '@server/initializers/config'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { VideoModel } from "@server/models/video/video"
-import { getLocalVideoActivityPubUrl } from "./activitypub/url"
-import { updateVideoMiniatureFromExisting, updateVideoMiniatureFromUrl } from "./thumbnail"
-import { isVideoFileExtnameValid } from "@server/helpers/custom-validators/videos"
-import { JobQueue } from "./job-queue"
-import { Job } from "bull"
+import { VideoModel } from '@server/models/video/video'
+import { getLocalVideoActivityPubUrl } from './activitypub/url'
+import { updateVideoMiniatureFromExisting, updateVideoMiniatureFromUrl } from './thumbnail'
+import { isVideoFileExtnameValid } from '@server/helpers/custom-validators/videos'
+import { JobQueue } from './job-queue'
+import { Job } from 'bull'
 
 export async function insertIntoDB (parameters: {
   video: MVideoThumbnail

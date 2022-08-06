@@ -1,8 +1,8 @@
 import * as express from 'express'
-import { isUrlValid } from "@server/helpers/custom-validators/activitypub/misc"
-import { logger } from "@server/helpers/logger"
-import { body, param } from "express-validator"
-import { areValidationErrors, doesVideoChannelIdExist } from "../shared"
+import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
+import { logger } from '@server/helpers/logger'
+import { body, param } from 'express-validator'
+import { areValidationErrors, doesVideoChannelIdExist } from '../shared'
 import { HttpStatusCode, VideoChannelSyncCreate } from '@shared/models'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { CONFIG } from '@server/initializers/config'

@@ -25,7 +25,7 @@ describe('Test channel synchronizations', function () {
       const userInfo = {
         accessToken: '',
         username: 'user1',
-        channelName: "user1_channel",
+        channelName: 'user1_channel',
         channelId: -1,
         syncId: -1
       }
@@ -126,7 +126,7 @@ describe('Test channel synchronizations', function () {
       })
 
       it('Should add another synchronization', async function () {
-        const externalChannelUrl = FIXTURE_URLS.youtubeChannel + "?foo=bar"
+        const externalChannelUrl = FIXTURE_URLS.youtubeChannel + '?foo=bar'
         const res = await command.create({
           attributes: {
             externalChannelUrl,
@@ -147,7 +147,7 @@ describe('Test channel synchronizations', function () {
       it('Should add a synchronization for another user', async function () {
         const { id } = await command.create({
           attributes: {
-            externalChannelUrl: FIXTURE_URLS.youtubeChannel + "?baz=qux",
+            externalChannelUrl: FIXTURE_URLS.youtubeChannel + '?baz=qux',
             videoChannelId: userInfo.channelId
           },
           token: userInfo.accessToken,
@@ -202,13 +202,13 @@ describe('Test channel synchronizations', function () {
           id: server.store.channel.id
         })
         expect(resForRoot.data[1]).to.contain({
-          externalChannelUrl: FIXTURE_URLS.youtubeChannel + "?foo=bar"
+          externalChannelUrl: FIXTURE_URLS.youtubeChannel + '?foo=bar'
         })
 
         const resForUser = await command.listByAccount({ accountName: userInfo.username })
         expect(resForUser.total).to.equal(1)
         expect(resForUser.data[0]).to.deep.contain({
-          externalChannelUrl: FIXTURE_URLS.youtubeChannel + "?baz=qux",
+          externalChannelUrl: FIXTURE_URLS.youtubeChannel + '?baz=qux',
           state: {
             id: VideoChannelSyncState.SYNCED,
             label: 'Synchronized'

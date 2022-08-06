@@ -203,7 +203,7 @@ function checkTranscodingConfig () {
 
 function checkImportConfig () {
   if (CONFIG.IMPORT.SYNCHRONIZATION.ENABLED && !CONFIG.IMPORT.VIDEOS.HTTP) {
-    throw new Error("You need to enable HTTP import to allow synchronization")
+    throw new Error('You need to enable HTTP import to allow synchronization')
   }
 }
 
