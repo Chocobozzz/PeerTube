@@ -145,7 +145,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
             enabled: null
           }
         },
-        synchronization: {
+        videoChannelSynchronization: {
           enabled: null
         }
       },

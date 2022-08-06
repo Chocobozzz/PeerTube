@@ -73,7 +73,7 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   }
 
   importSynchronizationChecked () {
-    return this.isImportVideosHttpEnabled() && this.form.value['import']['synchronization']['enabled']
+    return this.isImportVideosHttpEnabled() && this.form.value['import']['videoChannelSynchronization']['enabled']
   }
 
   hasUnlimitedSignup () {
@@ -107,7 +107,7 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
   }
 
   private checkImportSyncField () {
-    const importSyncControl = this.form.get('import.synchronization.enabled')
+    const importSyncControl = this.form.get('import.videoChannelSynchronization.enabled')
     const importVideosHttpControl = this.form.get('import.videos.http.enabled')
 
     importVideosHttpControl.valueChanges

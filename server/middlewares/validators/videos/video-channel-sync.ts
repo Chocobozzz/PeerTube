@@ -8,7 +8,7 @@ import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { CONFIG } from '@server/initializers/config'
 
 export const ensureSyncIsEnabled = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  if (!CONFIG.IMPORT.SYNCHRONIZATION.ENABLED) {
+  if (!CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED) {
     return res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
       message: 'Synchronization is impossible as video channel synchronization is not enabled on the server'

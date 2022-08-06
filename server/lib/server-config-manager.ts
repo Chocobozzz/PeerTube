@@ -171,8 +171,8 @@ class ServerConfigManager {
             enabled: CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED
           }
         },
-        synchronization: {
-          enabled: CONFIG.IMPORT.SYNCHRONIZATION.ENABLED
+        videoChannelSynchronization: {
+          enabled: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED
         }
       },
       autoBlacklist: {

@@ -363,7 +363,7 @@ const newCustomConfig: CustomConfig = {
         enabled: false
       }
     },
-    synchronization: {
+    videoChannelSynchronization: {
       enabled: false
     }
   },

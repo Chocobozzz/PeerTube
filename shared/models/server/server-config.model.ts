@@ -188,7 +188,7 @@ export interface ServerConfig {
         enabled: boolean
       }
     }
-    synchronization: {
+    videoChannelSynchronization: {
       enabled: boolean
     }
   }

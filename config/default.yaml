@@ -539,7 +539,7 @@ import:
       # We recommend to only enable magnet URI/torrent import if you trust your users
       # See https://docs.joinpeertube.org/maintain-configuration?id=security for more information
       enabled: false
-  synchronization:
+  video_channel_synchronization:
     enabled: false
     check_interval: 1 hour
 

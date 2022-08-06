@@ -161,7 +161,7 @@ describe('Test config API validators', function () {
           enabled: false
         }
       },
-      synchronization: {
+      videoChannelSynchronization: {
         enabled: false
       }
     },
@@ -357,7 +357,7 @@ describe('Test config API validators', function () {
               enabled: false
             }
           },
-          synchronization: {
+          videoChannelSynchronization: {
             enabled: true
           }
         }

@@ -48,7 +48,7 @@ export class ConfigCommand extends AbstractCommand {
     return this.updateExistingSubConfig({
       newConfig: {
         import: {
-          synchronization: {
+          videoChannelSynchronization: {
             enabled
           }
         }
@@ -383,7 +383,7 @@ export class ConfigCommand extends AbstractCommand {
             enabled: false
           }
         },
-        synchronization: {
+        videoChannelSynchronization: {
           enabled: false
         }
       },

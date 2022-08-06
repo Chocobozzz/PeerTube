@@ -162,7 +162,7 @@ export interface CustomConfig {
         enabled: boolean
       }
     }
-    synchronization: {
+    videoChannelSynchronization: {
       enabled: boolean
     }
   }

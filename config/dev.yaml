@@ -81,7 +81,7 @@ import:
       enabled: true
     torrent:
       enabled: true
-  synchronization:
+  video_channel_synchronization:
     enabled: true
     check_interval: 5 minutes
 

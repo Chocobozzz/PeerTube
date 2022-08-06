@@ -396,9 +396,9 @@ const CONFIG = {
         get ENABLED () { return config.get<boolean>('import.videos.torrent.enabled') }
       }
     },
-    SYNCHRONIZATION: {
-      get ENABLED () { return config.get<boolean>('import.synchronization.enabled') },
-      get CHECK_INTERVAL () { return parseDurationToMs(config.get<string>('import.synchronization.check_interval')) }
+    VIDEO_CHANNEL_SYNCHRONIZATION: {
+      get ENABLED () { return config.get<boolean>('import.video_channel_synchronization.enabled') },
+      get CHECK_INTERVAL () { return parseDurationToMs(config.get<string>('import.video_channel_synchronization.check_interval')) }
     }
   },
   AUTO_BLACKLIST: {

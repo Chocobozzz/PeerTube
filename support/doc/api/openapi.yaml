@@ -6581,7 +6581,7 @@ components:
                   properties:
                     enabled:
                       type: boolean
-            synchronization:
+            video_channel_synchronization:
               type: object
               properties:
                 enabled:
@@ -6950,7 +6950,7 @@ components:
                   properties:
                     enabled:
                       type: boolean
-            synchronization:
+            video_channel_synchronization:
               type: object
               properties:
                 enabled:

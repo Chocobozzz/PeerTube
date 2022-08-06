@@ -80,7 +80,7 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
   }
 
   syncEnabled () {
-    return this.serverConfig.import.synchronization.enabled
+    return this.serverConfig.import.videoChannelSynchronization.enabled
   }
 
   deleteSync (videoChannelSync: VideoChannelSync) {
