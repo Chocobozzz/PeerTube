@@ -37,7 +37,7 @@ command
   .option('--last <last>', 'Process last n elements of returned playlist')
   .option('--wait-interval <waitInterval>', 'Duration between two video imports (in seconds)', convertIntoMs)
   .option('-T, --tmpdir <tmpdir>', 'Working directory', __dirname)
-  .usage("[global options] [ -- youtube-dl options]")
+  .usage('[global options] [ -- youtube-dl options]')
   .parse(process.argv)
 
 const options = command.opts()
@@ -97,7 +97,7 @@ async function run (url: string, username: string, password: string) {
   for (const [ index, info ] of infoArray.entries()) {
     try {
       if (index > 0 && options.waitInterval && !skipInterval) {
-        log.info("Wait for %d seconds before continuing.", options.waitInterval / 1000)
+        log.info('Wait for %d seconds before continuing.', options.waitInterval / 1000)
         await wait(options.waitInterval)
       }
 
