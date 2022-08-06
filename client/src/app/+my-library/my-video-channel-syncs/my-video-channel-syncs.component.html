@@ -49,7 +49,21 @@
         <a [href]="videoChannelSync.externalChannelUrl" target="_blank" rel="noopener noreferrer">{{ videoChannelSync.externalChannelUrl }}</a>
       </td>
       <td>
-        <a [href]="getChannelUrl(videoChannelSync.channel.name)" target="_blank" rel="noopener noreferrer">{{ videoChannelSync.channel.displayName }}</a>
+          <div class="actor">
+        <my-actor-avatar
+          class="channel"
+          [actor]="videoChannelSync.channel" actorType="channel"
+          [internalHref]="[ '/c', videoChannelSync.channel.name ]"
+          size="25"
+        ></my-actor-avatar>
+        <div class="actor-info">
+          <a [routerLink]="[ '/c', videoChannelSync.channel.name ]" class="actor-names" i18n-title title="Channel page">
+            <div class="actor-display-name">{{ videoChannelSync.channel.displayName }}</div>
+            <div class="actor-name">{{ videoChannelSync.channel.name }}</div>
+          </a>
+        </div>
+        </div>
+        <!-- <a [href]="getChannelUrl(videoChannelSync.channel.name)" target="_blank" rel="noopener noreferrer">{{ videoChannelSync.channel.displayName }}</a> -->
       </td>
       <td>
         <span [ngClass]="getSyncStateClass(videoChannelSync.state.id)">
