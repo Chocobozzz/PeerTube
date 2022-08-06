@@ -21,7 +21,7 @@ const processOptions = {
 export type SynchronizeChannelOptions = {
   youtubeDL: YoutubeDLCLI
   secondsToWait: number
-  lastVideosCount?: number
+  latestVideosCount?: number
   onlyAfter?: Date
 }
 
@@ -32,11 +32,11 @@ function formatDateForYoutubeDl (date: Date) {
 export async function synchronizeChannel (
   channel: MChannelAccountDefault,
   externalChannelUrl: string,
-  { youtubeDL, secondsToWait, lastVideosCount, onlyAfter }: SynchronizeChannelOptions
+  { youtubeDL, secondsToWait, latestVideosCount, onlyAfter }: SynchronizeChannelOptions
 ): Promise<ChannelSyncInfo> {
   const user = await UserModel.loadByChannelActorId(channel.actorId)
   const channelInfo = await youtubeDL.getChannelInfo({
-    lastVideosCount,
+    latestVideosCount,
     channelUrl: externalChannelUrl,
     processOptions
   })
@@ -62,7 +62,6 @@ export async function synchronizeChannel (
 
   for (const targetUrl of targetUrls) {
     try {
-      // TODO retry pour l'import d'une chaîne ?
       if (!await VideoImportModel.urlAlreadyImported(channel.id, targetUrl)) {
         const { job } = await addYoutubeDLImport({
           user,

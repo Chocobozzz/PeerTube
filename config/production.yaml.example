@@ -549,6 +549,17 @@ import:
       # We recommend to only enable magnet URI/torrent import if you trust your users
       # See https://docs.joinpeertube.org/maintain-configuration?id=security for more information
       enabled: false
+  # Add ability for your users to synchronize their channels with external channels, playlists, etc.
+  video_channel_synchronization:
+    # If you enable the channel synchronization, ensure to enable the video import through HTTP (import.videos.http.enabled)
+    enabled: false
+    # The number of synchronizations a user can create
+    max_per_user: 10
+    check:
+      # The check interval during which PeerTube imports the new videos published remotely
+      interval: 1 hour
+      # Number of latest published videos to check and to potentially import
+      latest_videos_count: 3
 
 auto_blacklist:
   # New videos automatically blacklisted so moderators can review before publishing

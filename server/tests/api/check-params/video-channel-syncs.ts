@@ -8,6 +8,7 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@shared/server-commands'
+import { chain } from 'lodash'
 import 'mocha'
 
 describe('Test video channel sync API validator', () => {
@@ -30,6 +31,21 @@ describe('Test video channel sync API validator', () => {
       await callback()
     } finally {
       await server.config.enableChannelSync()
+    }
+  }
+
+  async function withMaxSyncsPerUser<T> (maxSync: number, callback: () => Promise<T>): Promise<void> {
+    const origConfig = await server.config.getCustomConfig()
+    const newConfig = chain(origConfig).cloneDeep().update('import.videoChannelSynchronization.maxPerUser', () => 1).value()
+    await server.config.updateCustomConfig({
+      newCustomConfig: newConfig
+    })
+    try {
+      await callback()
+    } finally {
+      await server.config.updateCustomConfig({
+        newCustomConfig: origConfig
+      })
     }
   }
 
@@ -158,6 +174,19 @@ describe('Test video channel sync API validator', () => {
         expectedStatus: HttpStatusCode.OK_200
       })
       rootChannelSyncId = res.id
+    })
+
+    it('Should fail when the user exceeds allowed number of synchronizations', async function () {
+      await withMaxSyncsPerUser(1, async () => {
+        await command.create({
+          token: server.accessToken,
+          attributes: {
+            ...baseCorrectParams,
+            videoChannelId: userInfo.channelId
+          },
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      })
     })
   })
 

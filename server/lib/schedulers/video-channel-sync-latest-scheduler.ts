@@ -4,7 +4,7 @@ import { CONFIG } from '@server/initializers/config'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { MChannelSyncChannel } from '@server/types/models'
 import { VideoChannelSyncState } from '@shared/models'
-import { SCHEDULER_INTERVALS_MS, VIDEO_CHANNEL_MAX_SYNC } from '../../initializers/constants'
+import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 import { synchronizeChannel } from '../video-import-channel'
 import { AbstractScheduler } from './abstract-scheduler'
 
@@ -35,7 +35,7 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
         const { errors, successes, alreadyImported } = await synchronizeChannel(sync.VideoChannel, sync.externalChannelUrl, {
           youtubeDL,
           secondsToWait: 5,
-          lastVideosCount: VIDEO_CHANNEL_MAX_SYNC,
+          latestVideosCount: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.CHECK.LATEST_VIDEOS_COUNT,
           onlyAfter: syncCreationDate
         })
         if (errors > 0) {

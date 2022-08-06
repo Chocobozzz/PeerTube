@@ -246,7 +246,7 @@ const SCHEDULER_INTERVALS_MS = {
   REMOVE_OLD_HISTORY: 60000 * 60 * 24, // 1 day
   UPDATE_INBOX_STATS: 1000 * 60, // 1 minute
   REMOVE_DANGLING_RESUMABLE_UPLOADS: 60000 * 60, // 1 hour
-  CHANNEL_SYNC_CHECK_INTERVAL: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.CHECK_INTERVAL
+  CHANNEL_SYNC_CHECK_INTERVAL: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.CHECK.INTERVAL
 }
 
 // ---------------------------------------------------------------------------
@@ -460,8 +460,6 @@ const VIDEO_PRIVACIES: { [ id in VideoPrivacy ]: string } = {
   [VideoPrivacy.PRIVATE]: 'Private',
   [VideoPrivacy.INTERNAL]: 'Internal'
 }
-
-const VIDEO_CHANNEL_MAX_SYNC = 3
 
 const VIDEO_STATES: { [ id in VideoState ]: string } = {
   [VideoState.PUBLISHED]: 'Published',
@@ -993,7 +991,6 @@ export {
   VIDEO_LANGUAGES,
   VIDEO_PRIVACIES,
   VIDEO_LICENCES,
-  VIDEO_CHANNEL_MAX_SYNC,
   VIDEO_STATES,
   WORKER_THREADS,
   VIDEO_RATE_TYPES,

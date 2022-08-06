@@ -123,12 +123,12 @@ export class YoutubeDLCLI {
 
   getChannelInfo (options: {
     channelUrl: string
-    lastVideosCount?: number
+    latestVideosCount?: number
     processOptions: execa.NodeOptions
   }) {
     const additionalYoutubeDLArgs = [ '--skip-download', '--playlist-reverse' ]
-    if (options.lastVideosCount !== undefined) {
-      additionalYoutubeDLArgs.push('--playlist-end', options.lastVideosCount.toString())
+    if (options.latestVideosCount !== undefined) {
+      additionalYoutubeDLArgs.push('--playlist-end', options.latestVideosCount.toString())
     }
     return this.getInfo({
       url: options.channelUrl,

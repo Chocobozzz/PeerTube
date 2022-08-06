@@ -83,7 +83,10 @@ import:
       enabled: true
   video_channel_synchronization:
     enabled: true
-    check_interval: 5 minutes
+    max_per_user: 10
+    check:
+      interval: 5 minutes
+      latest_videos_count: 3 # Number of latest published videos to check and to potentially import
 
 instance:
   default_nsfw_policy: 'display'

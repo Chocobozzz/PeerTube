@@ -364,7 +364,8 @@ const newCustomConfig: CustomConfig = {
       }
     },
     videoChannelSynchronization: {
-      enabled: false
+      enabled: false,
+      maxPerUser: 10
     }
   },
   trending: {

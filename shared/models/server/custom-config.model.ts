@@ -164,6 +164,7 @@ export interface CustomConfig {
     }
     videoChannelSynchronization: {
       enabled: boolean
+      maxPerUser: number
     }
   }
 

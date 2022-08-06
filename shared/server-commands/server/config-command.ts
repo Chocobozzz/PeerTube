@@ -384,7 +384,8 @@ export class ConfigCommand extends AbstractCommand {
           }
         },
         videoChannelSynchronization: {
-          enabled: false
+          enabled: false,
+          maxPerUser: 10
         }
       },
       trending: {

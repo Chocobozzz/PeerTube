@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { omit } from 'lodash'
+import { chain, omit } from 'lodash'
 import {
   cleanupTests,
   createSingleServer,
@@ -162,7 +162,8 @@ describe('Test config API validators', function () {
         }
       },
       videoChannelSynchronization: {
-        enabled: false
+        enabled: false,
+        maxPerUser: 10
       }
     },
     trending: {
@@ -348,20 +349,11 @@ describe('Test config API validators', function () {
     })
 
     it('Should fail with a disabled http upload & enabled sync', async function () {
-      const newUpdateParams: CustomConfig = {
-        ...updateParams,
-        import: {
-          videos: {
-            ...updateParams.import.videos,
-            http: {
-              enabled: false
-            }
-          },
-          videoChannelSynchronization: {
-            enabled: true
-          }
-        }
-      }
+      const newUpdateParams: CustomConfig = chain(updateParams)
+        .cloneDeep()
+        .update('import.videos.http.enabled', () => false)
+        .update('import.videoChannelSynchronization.enabled', () => true)
+        .value()
       await makePutBodyRequest({
         url: server.url,
         path,

@@ -398,7 +398,13 @@ const CONFIG = {
     },
     VIDEO_CHANNEL_SYNCHRONIZATION: {
       get ENABLED () { return config.get<boolean>('import.video_channel_synchronization.enabled') },
-      get CHECK_INTERVAL () { return parseDurationToMs(config.get<string>('import.video_channel_synchronization.check_interval')) }
+      get MAX_PER_USER () { return config.get<number>('import.video_channel_synchronization.max_per_user') },
+      CHECK: {
+        get INTERVAL () { return parseDurationToMs(config.get<string>('import.video_channel_synchronization.check.interval')) },
+        get LATEST_VIDEOS_COUNT () {
+          return parseDurationToMs(config.get<number>('import.video_channel_synchronization.check.latest_videos_count'))
+        }
+      }
     }
   },
   AUTO_BLACKLIST: {

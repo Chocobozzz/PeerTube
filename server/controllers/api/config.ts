@@ -273,7 +273,8 @@ function customConfig (): CustomConfig {
         }
       },
       videoChannelSynchronization: {
-        enabled: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED
+        enabled: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED,
+        maxPerUser: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.MAX_PER_USER
       }
     },
     trending: {

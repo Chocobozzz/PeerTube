@@ -541,7 +541,11 @@ import:
       enabled: false
   video_channel_synchronization:
     enabled: false
-    check_interval: 1 hour
+    max_per_user: 10
+    check:
+      interval: 1 hour
+      # Number of latest published videos to check and to potentially import
+      latest_videos_count: 3
 
 auto_blacklist:
   # New videos automatically blacklisted so moderators can review before publishing

@@ -107,6 +107,22 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
+  static countByAccount (accountId: number) {
+    const query = {
+      include: [
+        {
+          model: VideoChannelModel.unscoped(),
+          required: true,
+          where: {
+            accountId
+          }
+        }
+      ]
+    }
+
+    return VideoChannelSyncModel.unscoped().count(query)
+  }
+
   static loadWithAccount (id: number) {
     return this.unscoped().findByPk(id, {
       include: [ {

@@ -31,6 +31,14 @@ export const videoChannelSyncValidator = [
       return
     }
 
+    const count = await VideoChannelSyncModel.countByAccount(res.locals.videoChannel.accountId)
+    if (count >= CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.MAX_PER_USER) {
+      res.fail({
+        message: `You cannot create more than ${CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.MAX_PER_USER} channel synchronizations`
+      })
+      return false
+    }
+
     return next()
   }
 ]
