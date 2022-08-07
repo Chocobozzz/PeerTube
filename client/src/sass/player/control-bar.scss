@@ -4,7 +4,7 @@
 @use './_player-variables' as *;
 
 .video-js.vjs-peertube-skin .vjs-control-bar {
-  z-index: 100;
+  z-index: 10;
   align-items: center;
   height: $control-bar-height;
   background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6));
@@ -12,6 +12,8 @@
   text-shadow: -1px -1px 1px rgba(255,255,255,.1), 1px 1px 1px rgba(0,0,0,.5);
   transition: visibility 0.3s, opacity 0.3s !important;
   padding-bottom: 2em;
+  padding-left: 2em;
+  padding-right: 2em;
 
   .vjs-control{
     display: flex;
@@ -22,13 +24,13 @@
     display: none !important;
   }
 
-  > button:first-child {
+  /*> button:first-child {
     @include margin-left(2em);
   }
 
   > button:last-child {
     @include margin-right(2em);
-  }
+  }*/
 
   .vjs-progress-control,
   .vjs-play-control,
@@ -446,11 +448,11 @@
     }
 
     > button:first-child {
-      @include margin-left(2em);
+      @include margin-left(0);
     }
 
     > button:last-child {
-      @include margin-right(2em);
+      @include margin-right(0);
     }
 
     .vjs-play-control {

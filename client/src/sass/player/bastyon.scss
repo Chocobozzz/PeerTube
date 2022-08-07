@@ -442,7 +442,8 @@
 }
 
 html.mobileview{
-    #vjs-forward-button, #vjs-rewind-button {
+    
+    /*#vjs-forward-button, #vjs-rewind-button {
         visibility: hidden;
         opacity: 0;
         transition: all .3s ease-in
@@ -475,33 +476,23 @@ html.mobileview{
             opacity: 1;
             transition: all .3s ease-in
         }
-    }
+    }*/
 }
 
 @mixin mobileview () {
     .video-js{
         .vjs-control-bar{
+            padding-left: 1em;
+            padding-right: 1em;
+            .vjs-progress-control{
+                left: 1em;
+                right : 1em;
+            }
             .vjs-play-control{
                 display: none;
             }
             .vjs-volume-control {
                 display: none;
-            }
-
-            .vjs-mute-control {
-                position: absolute;
-                right: 4em;
-                height: 3em;
-                line-height: 3.5em;
-                font-size: 1em;
-            }
-
-            .vjs-icon-settings {
-                right: 8em;
-            }
-
-            .vjs-picture-in-picture-control {
-                right: 12em;
             }
         }
     }

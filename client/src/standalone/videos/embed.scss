@@ -68,6 +68,14 @@ $assets-path: '../../assets/';
   text-align: center;
 }
 
+.pocketnet-logo-video-player .icon.logo-bastyon {
+  background: url('#{$assets-path}/player/images/logoBastyon.svg') no-repeat;
+  width: 100px;
+  height: 15px;
+  display: block;
+  opacity: 0.5;
+}
+
 @media screen and (max-width: 300px) {
   #error-block {
     font-size: 36px;

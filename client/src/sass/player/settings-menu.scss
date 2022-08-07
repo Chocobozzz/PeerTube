@@ -23,11 +23,11 @@ $setting-transition-easing: ease-out;
     opacity: $primary-foreground-opacity;
     margin: 0 auto;
     font-size: $font-size !important;
-    z-index: 100;
+    z-index: 1001;
     border-radius: 12px;
     width: auto;
     overflow: hidden;
-
+    background: #000;
     transition: width $setting-transition-duration $setting-transition-easing,  height $setting-transition-duration $setting-transition-easing;
 
     .vjs-settings-sub-menu-value,
