@@ -136,10 +136,15 @@
   .vjs-time-divider{
     order: 4;
     min-width: 0;
+    padding : 0 0.25em;
     width: auto;
   }
   .vjs-duration{
     order: 5;
+  }
+
+  .vjs-picture-in-picture-control{
+    order: 6;
   }
 
   .vjs-settings{

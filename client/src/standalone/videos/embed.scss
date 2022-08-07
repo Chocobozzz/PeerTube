@@ -78,3 +78,57 @@ $assets-path: '../../assets/';
   }
 }
 
+
+
+.pipmini,
+.pipmode{
+
+  .js-player{
+
+    .video-js{
+      .vjs-control-bar{
+        backdrop-filter : none;
+  
+        >div,
+        >button{
+          display: none!important;
+        }
+  
+        >button{
+          &.vjs-mute-control{
+            display: block!important;
+            position: absolute;
+            height: 3em;
+            line-height: 3.5em;
+            font-size: 1em;
+            right: 0.25em;
+            bottom: 0;
+            width: 3em;
+            font-size: 0.9em;
+          }
+        }
+      }
+
+      #vjs-rewind-button,
+      #vjs-forward-button,
+      .vjs-overlay{
+        display: none!important;
+      }
+    }
+  }
+}
+
+.pipmode{
+  .js-player{
+
+    .video-js{
+      .vjs-control-bar{
+        display: none!important;
+      }
+  
+      .vjs-big-play-button{
+        display: none!important;
+      }
+    }
+  }
+}

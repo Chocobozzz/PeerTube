@@ -15,6 +15,7 @@ export class PeerTubeEmbedApi {
 	ignoreChange: boolean
 
 	constructor(private embed: PeerTubeEmbed, private clbk: any) {
+		console.log('clbk',clbk)
 		this.ignoreChange = false
 	}
 
@@ -273,6 +274,7 @@ export class PeerTubeEmbedApi {
 		}
 
 		this.embed.player.on('pictureInPictureRequest', function (ev: any) {
+			console.log("ASAS")
 			slf.answer({ method: 'pictureInPictureRequest' })
 		})
 		

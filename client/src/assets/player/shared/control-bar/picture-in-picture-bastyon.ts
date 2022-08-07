@@ -29,6 +29,7 @@
     }
  
     handleClick(event) {
+      console.log("PICRE")
      this.player_.trigger('pictureInPictureRequest', event)
     }
  

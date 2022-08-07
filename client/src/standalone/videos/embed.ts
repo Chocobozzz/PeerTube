@@ -147,7 +147,7 @@ export class PeerTubeEmbed {
 
 				return this.buildVideoPlayerLight(videoDetails, async () => {
 					await this.buildVideoPlayer(videoDetails, host, parameters, clbk)
-				}, parameters);
+				}, parameters, clbk);
 	
 			}
 
@@ -157,10 +157,10 @@ export class PeerTubeEmbed {
 		}
 	}
 
-	private async buildVideoPlayerLight(videoDetails: VideoDetails,clbk : Function, parameters : any){
+	private async buildVideoPlayerLight(videoDetails: VideoDetails,clbk : Function, parameters : any, aclbk: any){
 		parameters.lighted = true
 
-		this.initializeApi();
+		this.initializeApi(aclbk);
 
 		var poster = this.playerHTML.thumbPlayer(videoDetails)
 

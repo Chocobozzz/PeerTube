@@ -49,14 +49,18 @@ export class ControlBarOptionsBuilder {
       ...this.getSettingsButton()
     })
 
-    if (this.options.peertubeLink === true) {
+    /*if (this.options.peertubeLink === true) {
       Object.assign(children, {
         peerTubeLinkButton: {
           shortUUID: this.options.videoShortUUID,
           //instanceName: this.options.instanceName
         } as PeerTubeLinkButtonOptions
       })
-    }
+    }*/
+
+    Object.assign(children, {
+      PictureInPictureBastyon: {}
+    })
 
     if (this.options.theaterButton === true) {
       Object.assign(children, {
