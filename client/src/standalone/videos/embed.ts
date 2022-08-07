@@ -136,6 +136,7 @@ export class PeerTubeEmbed {
 	// ---------------------------------------------------------------------------
 
 	private async loadVideoAndBuildPlayer(host: string, uuid: string, parameters: any, clbk : any) {
+		console.log('uuid, host', uuid, host)
 		try {
 			const { videoDetails } = await this.videoFetcher.loadVideoCache(uuid, host)
 

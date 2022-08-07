@@ -53,11 +53,13 @@ export class VideoFetcher {
 			return videoResponse.json()
 		}).then((json) => {
 
+      console.log('json', json)
+
 			if (json && Object.keys(json).length != 0) {
 				window.peertubeglobalcache[videoId] = json
 			}
 
-			return json
+			return {videoDetails : json}
 		})
   }
 

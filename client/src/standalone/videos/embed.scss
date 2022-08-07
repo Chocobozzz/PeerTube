@@ -93,7 +93,31 @@ $assets-path: '../../assets/';
     }
   }
 }
+.standalone-video-embed {
+  margin: 0 !important;
+  background-color: black;
+  overflow: hidden;
 
+  .video-js .vjs-tech {
+  }
+
+  .video-js-wrapper {
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    height: 100%;
+    width: 100%;
+  }
+
+  .vjs-picture-in-picture-control{
+    display: none!important;
+  }
+
+  .pocketnet-logo-video-player{
+    display: none!important;
+  }
+
+}
 
 
 @media screen and (max-width: 300px) {
