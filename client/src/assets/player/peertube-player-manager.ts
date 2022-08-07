@@ -8,7 +8,8 @@ import './shared/peertube/peertube-plugin'
 import './shared/resolutions/peertube-resolutions-plugin'
 import './shared/control-bar/next-previous-video-button'
 import './shared/control-bar/p2p-info-button'
-import './shared/control-bar/peertube-link-button'
+//import './shared/control-bar/peertube-link-button'
+import './shared/control-bar/picture-in-picture-bastyon'
 import './shared/control-bar/peertube-load-progress-bar'
 import './shared/control-bar/theater-button'
 import './shared/settings/resolution-menu-button'
@@ -24,7 +25,6 @@ import './shared/mobile/peertube-mobile-buttons'
 import './shared/hotkeys/peertube-hotkeys-plugin'
 import videojs from 'video.js'
 import { logger } from '@root-helpers/logger'
-import { PluginsManager } from '@root-helpers/plugins-manager'
 import { isMobile } from '@root-helpers/web-browser'
 import { saveAverageBandwidth } from './peertube-player-local-storage'
 import { ManagerOptionsBuilder } from './shared/manager-options'
@@ -32,8 +32,147 @@ import { TranslationsManager } from './translations-manager'
 import { CommonOptions, PeertubePlayerManagerOptions, PlayerMode, PlayerNetworkInfo } from './types'
 
 
+const Fn: any = require('./shared/videojs-helpers/fn.js');
+
+
+const Slider = videojs.getComponent('Slider') as any
+const SeekBar = videojs.getComponent('SeekBar') as any
+
+Slider.prototype.update = function(){
+
+    // In VolumeBar init we have a setTimeout for update that pops and update
+    // to the end of the execution stack. The player is destroyed before then
+    // update will cause an error
+    // If there's no bar...
+    if (!this.el_ || !this.bar) {
+      return;
+    }
+
+    // clamp progress between 0 and 1
+    // and only round to four decimal places, as we round to two below
+    const progress = this.getProgress();
+
+    if (progress === this.progress_) {
+      return progress;
+    }
+
+    this.progress_ = progress;
+
+    // Set the new bar width or height
+    var el = this.bar.el()
+
+    if(!this.vertical()){
+      //el.style['transform-origin'] = 'left'
+      el.style['transform'] = 'scaleX('+(progress).toFixed(2)+')'
+    }
+    else{
+      el.style['transform-origin'] = 'bottom'
+      el.style['transform'] = 'scaleY('+(progress).toFixed(2)+')'
+    }
+
+    return progress;
+}
+
+SeekBar.prototype.getPercent = function getPercent () {
+  const time = this.player_.currentTime()
+  const percent = time / this.player_.duration()
+  return percent >= 1 ? 1 : percent
+}
+
+SeekBar.prototype.setEventHandlers_ = function () {
+
+  this.update_ = Fn.bind(this, this.update);
+  this.update = Fn.throttle(this.update_, Fn.UPDATE_REFRESH_INTERVAL);
+
+  this.on(this.player_, ['ended', 'durationchange', 'timeupdate'], this.update);
+  if (this.player_.liveTracker) {
+    this.on(this.player_.liveTracker, 'liveedgechange', this.update);
+  }
+
+  // when playing, let's ensure we smoothly update the play progress bar
+  // via an interval
+  this.updateInterval = null;
+
+  this.enableIntervalHandler_ = (e :any) => this.enableInterval_(e);
+  this.disableIntervalHandler_ = (e :any) => this.disableInterval_(e);
+
+  this.on(this.player_, ['playing'], this.enableIntervalHandler_);
+
+  this.on(this.player_, ['ended', 'pause', 'waiting'], this.disableIntervalHandler_);
+
+  // we don't need to update the play progress if the document is hidden,
+  // also, this causes the CPU to spike and eventually crash the page on IE11.
+  if ('hidden' in document && 'visibilityState' in document) {
+    this.on(document, 'visibilitychange', this.toggleVisibility_);
+  }
+}
+
+SeekBar.prototype.enableInterval_ = function() {
+  if (this.updateInterval) {
+    return;
+
+  }
+  this.updateInterval = this.setInterval(this.update, Fn.UPDATE_REFRESH_INTERVAL);
+}
+
+SeekBar.prototype.update = function (event : any) {
+
+  // ignore updates while the tab is hidden
+  if (document.visibilityState === 'hidden') {
+    return;
+  }
+
+  const percent = this.getPercent();
+
+    
+    /*const currentTime = this.player_.ended() ?
+    
+    this.player_.duration() : this.getCurrentTime_();
+
+    const liveTracker = this.player_.liveTracker;
+
+    let duration = this.player_.duration();
+
+    if (liveTracker && liveTracker.isLive()) {
+      duration = this.player_.liveTracker.liveCurrentTime();
+    }
+
+    if (this.percent_ !== percent) {
+      // machine readable value of progress bar (percentage complete)
+      //this.el_.setAttribute('aria-valuenow', (percent * 100).toFixed(2));
+      this.percent_ = percent;
+    }
+
+    if (this.currentTime_ !== currentTime || this.duration_ !== duration) {
+      // human readable value of progress bar (time complete)
+
+      this.currentTime_ = currentTime;
+      this.duration_ = duration;
+    }*/
+
+    var el = this.bar.el()
+
+    el.style['transform-origin'] = 'left'
+    el.style['transform'] = 'scaleX('+(percent).toFixed(2)+')'
+
+
+  return percent;
+  
+}
+
+SeekBar.prototype.handleMouseMove = function handleMouseMove (event: any) {
+
+  let newTime = this.calculateDistance(event) * this.player_.duration()
+  if (newTime === this.player_.duration()) {
+    newTime = newTime - 0.1
+  }
+
+  this.player_.currentTime(newTime)
+  this.update()
+}
+
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
-(videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
+//(videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
 
 const CaptionsButton = videojs.getComponent('CaptionsButton') as any
 // Change Captions to Subtitles/CC

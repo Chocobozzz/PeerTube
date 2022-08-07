@@ -69,6 +69,7 @@ export class PeerTubeEmbedApi {
 	}
 
 	public async prepare(){
+		console.log("prepare")
 		await this.embed.getplayer()
 	}
 
@@ -279,7 +280,7 @@ export class PeerTubeEmbedApi {
 		this.embed.player.on('play', function (ev: any) {
 
 			if (hls){
-				hls.capLevelController.resumeCapping()
+				hls.capLevelController.pause = false
 			}
 			
 			currentState = 'playing'
@@ -290,7 +291,7 @@ export class PeerTubeEmbedApi {
 		this.embed.player.on('pause', function (ev: any) {
 
 			if (hls){
-				hls.capLevelController.pauseCapping()
+				hls.capLevelController.pause = true
 			}
 
 			currentState = 'paused'
@@ -301,7 +302,7 @@ export class PeerTubeEmbedApi {
 		this.embed.player.on('ended', function (ev: any) {
 			
 			if (hls){
-				hls.capLevelController.pauseCapping()
+				hls.capLevelController.pause = true
 			}
 
 			currentState = 'ended'

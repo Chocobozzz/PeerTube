@@ -5,23 +5,29 @@
 
 .video-js.vjs-peertube-skin .vjs-control-bar {
   z-index: 100;
-
+  align-items: center;
   height: $control-bar-height;
   background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6));
   box-shadow: 0 -15px 40px 10px rgba(0, 0, 0, 0.2);
-  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  text-shadow: -1px -1px 1px rgba(255,255,255,.1), 1px 1px 1px rgba(0,0,0,.5);
   transition: visibility 0.3s, opacity 0.3s !important;
+  padding-bottom: 2em;
+
+  .vjs-control{
+    display: flex;
+    align-items: center;
+  }
 
   &.control-bar-hidden {
     display: none !important;
   }
 
   > button:first-child {
-    @include margin-left($first-control-bar-element-margin-left);
+    @include margin-left(2em);
   }
 
   > button:last-child {
-    @include margin-right($first-control-bar-element-margin-left);
+    @include margin-right(2em);
   }
 
   .vjs-progress-control,
@@ -52,35 +58,45 @@
   }
 
   .vjs-progress-control {
-    @include margin-left($progress-margin);
 
     position: absolute;
-    top: $control-bar-slider-top;
+    bottom: 0;
     z-index: 100; // On top of the progress bar
-    width: calc(100% - (2 * #{$progress-margin}));
-    height: 20px;
+    height: 2.5em;
+    left: 2em;
+    right: 2em;
+    width: auto;
 
     .vjs-slider {
       margin: 0;
       border-radius: 0;
       background-color: rgba(255, 255, 255, .2);
-      height: 3px;
-      transition: none;
+      height: 4px;
+      border-radius: 2px;
+      
+      overflow: hidden;
+
+      .vjs-slider-bar{
+        transition: 0.3s;
+      }
+
+      .vjs-mouse-display{
+        display: none!important;
+      }
 
       .vjs-play-progress {
-        background: pvar(--embedForegroundColor);
+        background: #fff;
+        width: 100%;
 
-        // Not display the circle if the progress is not hovered
         &::before {
           opacity: 0;
           transition: opacity 0.1s ease;
-          font-size: 14px;
-
           top: -0.3em;
+          display: none!important;
         }
 
         .vjs-time-tooltip {
-          display: none;
+          display: none!important;
         }
       }
 
@@ -93,58 +109,62 @@
     }
   }
 
-  .vjs-progress-control:hover .vjs-slider,
-  .vjs-progress-control .vjs-slider.vjs-sliding {
-    height: 5px;
-
-    .vjs-play-progress::before {
-      opacity: 1;
-    }
-  }
 
   .vjs-play-control {
     @include disable-outline;
-
+    
     cursor: pointer;
-    width: $control-bar-button-width;
 
     .vjs-icon-placeholder::before {
-      font-size: $control-bar-play-font-size;
-      line-height: unset;
       position: relative;
       top: -1px;
     }
   }
 
+  .vjs-play-control{
+    order: 0;
+  }
+  .vjs-mute-control{
+    order: 1;
+  }
+  .vjs-volume-control{
+    order: 2;
+  }
+  .vjs-current-time{
+    order: 3;
+  }
+  .vjs-time-divider{
+    order: 4;
+    min-width: 0;
+    width: auto;
+  }
+  .vjs-duration{
+    order: 5;
+  }
+
+  .vjs-settings{
+    order: 7;
+  }
+
+  .vjs-fullscreen-control{
+    order: 8;
+  }
+
   .vjs-time-control {
-    line-height: inherit;
+  
 
     &.vjs-current-time {
       @include margin-left(.5em);
-
-      font-size: $control-bar-font-size;
-      display: inline-block;
+      display: flex;
+      align-items: center;
       padding: 0;
-
-      .vjs-current-time-display {
-        line-height: calc(#{$control-bar-height} - 1px);
-
-        &::after {
-          @include margin(0, 1px, 0, 2px);
-
-          content: '/';
-        }
-      }
     }
 
     &.vjs-duration {
-      font-size: $control-bar-font-size;
-      display: inline-block;
+      display: flex;
+      align-items: center;
       padding: 0;
-
-      .vjs-duration-display {
-        line-height: calc(#{$control-bar-height} - 1px);
-      }
+      margin-right: auto;
     }
 
     &.vjs-remaining-time {
@@ -153,7 +173,6 @@
   }
 
   .vjs-live-control {
-    line-height: $control-bar-height;
     min-width: 4em;
     width: inherit;
   }
@@ -162,10 +181,8 @@
     @include margin-right(6px);
     @include margin-left(auto);
 
-    line-height: $control-bar-height;
     text-align: end;
     overflow: hidden;
-    font-size: $control-bar-font-size;
 
     .vjs-peertube-displayed {
       display: block;
@@ -247,47 +264,29 @@
 
     .vjs-icon-placeholder {
       display: inline-block;
-      width: $control-bar-icon-size;
-      height: $control-bar-icon-size;
       vertical-align: middle;
-      background: url('#{$assets-path}/player/images/volume.svg') no-repeat;
-      background-size: contain;
 
-      &::before {
-        content: '';
-      }
     }
 
-    &.vjs-vol-0 .vjs-icon-placeholder {
-      background: url('#{$assets-path}/player/images/volume-mute.svg') no-repeat;
-      background-size: contain;
-    }
+    
   }
 
   .vjs-volume-control {
-    @include margin(0, 5px, 0, 5px);
-
-    width: $control-bar-icon-size;
     display: flex;
     align-items: center;
+    margin-left: 1em;
+    margin-right: 1em;
   }
 
   .vjs-volume-bar {
-    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAcCAQAAACw95UnAAAAMElEQVRIx2NgoBL4n4YKGUYNHkEG4zJg1OCRYDCpBowaPJwMppbLRg0eNXjUYBLEAXWNUA6QNm1lAAAAAElFTkSuQmCC') no-repeat;
-    background-size: $control-bar-icon-size $control-bar-volume-slider-height;
-    height: 100%;
+    height: 4px;
     width: 100%;
-    max-width: $control-bar-icon-size;
-    max-height: $control-bar-volume-slider-height;
     margin: 0;
-    border-radius: 0;
+    border-radius: 2px;
 
     .vjs-volume-level {
-      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAcAQAAAAAyhWABAAAAAnRSTlMAAHaTzTgAAAAZSURBVHgBYwAB/g9EUv+JokCqiaT+U4MCAPKPS7WUUOc1AAAAAElFTkSuQmCC') no-repeat;
-      background-size: $control-bar-icon-size $control-bar-volume-slider-height;
-      max-width: $control-bar-icon-size;
       height: 100%;
-      max-height: $control-bar-volume-slider-height;
+      transform-origin: left;
 
       &::before {
         // Remove circle
@@ -336,21 +335,13 @@
   }
 
   .vjs-settings {
-    @include disable-outline;
-
+    font-family: VideoJS;
+    font-weight: normal;
+    font-style: normal;
     cursor: pointer;
-    width: $control-bar-button-width;
-
     .vjs-icon-placeholder {
-      display: inline-block;
-      height: $control-bar-icon-size - 5px;
-      width: $control-bar-icon-size - 5px;
-      vertical-align: middle;
-      background: url('#{$assets-path}/player/images/settings.svg') no-repeat;
-      background-size: contain;
-
       &::before {
-        content: '';
+        content: '\f110';
       }
     }
   }
@@ -361,8 +352,6 @@
     @include ellipsis;
 
     text-decoration: none;
-    line-height: $control-bar-height;
-    font-weight: $font-semibold;
     padding: 0 5px;
     max-width: 150px;
   }
@@ -391,19 +380,11 @@
   .vjs-fullscreen-control {
     @include disable-outline;
 
-    width: $control-bar-button-width;
 
     .vjs-icon-placeholder {
       display: inline-block;
-      width: $control-bar-icon-size;
-      height: $control-bar-icon-size;
       vertical-align: middle;
-      background: url('#{$assets-path}/player/images/fullscreen.svg') no-repeat;
-      background-size: contain;
 
-      &::before {
-        content: '';
-      }
     }
   }
 
@@ -460,11 +441,11 @@
     }
 
     > button:first-child {
-      @include margin-left($first-control-bar-element-margin-left-small-width);
+      @include margin-left(2em);
     }
 
     > button:last-child {
-      @include margin-right($first-control-bar-element-margin-left-small-width);
+      @include margin-right(2em);
     }
 
     .vjs-play-control {

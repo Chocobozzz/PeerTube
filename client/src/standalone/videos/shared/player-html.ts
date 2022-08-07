@@ -104,6 +104,32 @@ export class PlayerHTML {
     this.removeElement(this.informationElement)
   }
 
+  thumbPlayer(videoInfo: VideoDetails){
+
+	const url = videoInfo.host + videoInfo.previewPath
+
+
+	var poster = document.createElement("div");
+		poster.className = "vjs-thumb video-js";
+		poster.style.backgroundImage = 'url('+url+')'
+		
+
+	var aslayer = this.createARElement(videoInfo)
+		poster.appendChild(aslayer)
+
+	var playbutton = document.createElement("button");
+		playbutton.className = "vjs-big-play-button";
+		playbutton.innerHTML='<span class="vjs-icon-placeholder"></span>'
+
+		poster.appendChild(playbutton)
+
+	this.wrapperElement.innerHTML = "";
+	this.wrapperElement.appendChild(poster);
+
+
+	return poster
+}
+
   createARElement(videoInfo: VideoDetails) {
 
 		const videoSizeValue = videoInfo.aspectRatio
@@ -117,6 +143,8 @@ export class PlayerHTML {
 		return aslayer
 
 	}
+
+	
 
 	setARElement(videoInfo: VideoDetails, element : any) {
 

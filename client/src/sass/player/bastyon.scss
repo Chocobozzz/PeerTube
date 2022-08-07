@@ -4,10 +4,8 @@
     position: relative;
     height: auto;
     line-height: 3em;
+    background: #000;
 
-    * {
-        font-family: 'Segoe UI Variable', 'Segoe UI', SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-    }
 
     &.vjs-fullscreen {
         video {
@@ -54,20 +52,17 @@
 
     }
 
+    .vjs-progress-control{
+        .vjs-play-progress{
+            width: 100%;
+        }
+    }
+
     .vjs-bezel{
         z-index: 1;
     }
 
-    @media (pointer:fine) {
-        .vjs-progress-control{
-          height: 4px;
-          border-radius: 2px;
-        }
-      
-        .vjs-progress-control:hover{
-          height: 8px;
-        }
-    }
+    
 
     .vjs-slider-vertical{
         .vjs-slider-bar{
@@ -179,7 +174,8 @@
         top : 50%;
     }
 
-    .vjs-thumb{
+    &.vjs-thumb{
+        width: 100%;
         background : #000;
         background-size: 100% auto;
     }
@@ -188,11 +184,7 @@
         top: -3.9em;
     }
 
-    .vjs-control:focus,
-    .vjs-control:focus:before,
-    .vjs-control:hover:before {
-        text-shadow: 0 0 0em #fff;
-    }
+    
 
     .vjs-menu li.vjs-menu-item:focus,
     .vjs-menu li.vjs-menu-item:hover {
@@ -219,14 +211,22 @@
         }
     }
 
+    .vjs-mouse-display{
+        display: none;
+    }
+
     .vjs-controls-disabled .vjs-big-play-button {
         display: none !important
     }
 
-    &.vjs-has-started.video-js .vjs-big-play-button,
+    &.vjs-has-started .vjs-big-play-button,
     &.vjs-ended .vjs-big-play-button,
     &.vjs-paused .vjs-big-play-button {
         display: block
+    }
+
+    &.vjs-playing .vjs-big-play-button{
+        display: none;
     }
 
     .vjs-load-progress div{
@@ -303,9 +303,7 @@
         left: 0
     }
 
-    &.vjs-live .vjs-time-control {
-        display: none
-    }
+    
 
     .vjs-time-divider {
         display: block;
@@ -341,6 +339,16 @@
         bottom: 5em;
     }
 
+    &.vjs-live .vjs-time-control {
+        display: none
+    }
+
+    .vjs-control:focus,
+    .vjs-control:focus:before,
+    .vjs-control:hover:before {
+        text-shadow: 0 0 0em #fff;
+    }
+
     .vjs-control-bar{
         touch-action: none;
         backface-visibility: hidden;
@@ -357,7 +365,7 @@
             display: none!important;
         }
 
-        .vjs-progress-control {
+        /*.vjs-progress-control {
             position: absolute;
             width: 100%;
             bottom: 13px;
@@ -366,9 +374,9 @@
             display: block;
             z-index: 1;
             overflow: hidden;
-        }
+        }*/
 
-        .vjs-current-time {
+        /*.vjs-current-time {
             margin-left: 10px;
         }
 
@@ -419,7 +427,7 @@
             padding-left: 0.1em;
             padding-right: 0.1em;
             min-width: 0;
-        }
+        }*/
 
     }
 

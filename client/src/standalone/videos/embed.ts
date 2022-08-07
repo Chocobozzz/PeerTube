@@ -15,6 +15,7 @@ export class PeerTubeEmbed {
 	player: videojs.Player
 	details : VideoDetails
 	api: PeerTubeEmbedApi = null
+	lightclbk : Function
 	pathfunction: any
 	config: HTMLServerConfig
 	parameters : any
@@ -55,10 +56,11 @@ export class PeerTubeEmbed {
 		parameters: any,
 		clbk: any
 	) {
-		console.log("MAIN")
 		const embed = new PeerTubeEmbed(element)
 
-		await embed.init(host, videoId, parameters, clbk)
+		return await embed.init(host, videoId, parameters, clbk).then(() => {
+			return Promise.resolve(embed);
+		})
 	}
 
 	getPlayerElement() {
@@ -67,9 +69,10 @@ export class PeerTubeEmbed {
 
 	public async getplayer(){
 
-		/*if(this.lighted && this.lightclbk){
+		if (this.lightclbk){
+			console.log("ASDADSD")
 			await this.lightclbk()
-		}*/
+		}
 
 		return this.player
 	}
@@ -138,7 +141,15 @@ export class PeerTubeEmbed {
 			console.log('host', host, uuid)
 			const { videoDetails } = await this.videoFetcher.loadVideoCache(uuid, host)
 
-			console.log("videoDetails", videoDetails)
+			videoDetails.host = host
+
+			if (parameters.light){
+
+				return this.buildVideoPlayerLight(videoDetails, async () => {
+					await this.buildVideoPlayer(videoDetails, host, parameters, clbk)
+				}, parameters);
+	
+			}
 
 			return this.buildVideoPlayer(videoDetails, host, parameters, clbk)
 		} catch (err) {
@@ -146,11 +157,38 @@ export class PeerTubeEmbed {
 		}
 	}
 
+	private async buildVideoPlayerLight(videoDetails: VideoDetails,clbk : Function, parameters : any){
+		parameters.lighted = true
+
+		this.initializeApi();
+
+		var poster = this.playerHTML.thumbPlayer(videoDetails)
+
+		poster.addEventListener('click', () => {
+
+			if (this.lightclbk)
+				this.lightclbk().then(() => {
+					this.player.play()
+				})
+
+		})
+
+		this.lightclbk = async () => {
+
+			parameters.lighted = false
+
+			this.lightclbk = null
+
+			await clbk()
+
+		}
+	}
+
 	private async buildVideoPlayer(videoDetails: VideoDetails, host : any, parameters: any, clbk : any) {
 		const alreadyHadPlayer = this.resetPlayerElement()
 		
 		const videoInfoPromise: Promise<{ video: VideoDetails, live?: LiveVideo }> = new Promise((resolve, reject) => {
-			videoDetails.host = host
+			
 			this.details = videoDetails
 			this.parameters = parameters
 			this.clbk = clbk
