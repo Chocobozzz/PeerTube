@@ -41,7 +41,7 @@ export class ManagerOptionsBuilder {
         //  'videoCaptions',
           'stopTime',
           'isLive',
-          'videoUUID'
+          'videoUUID',
         ])
       }
     }
@@ -86,6 +86,8 @@ export class ManagerOptionsBuilder {
       playbackRates: [ 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2 ],
 
       plugins,
+
+      sources : commonOptions.sources,
 
       controlBar: {
         children: controlBarOptionsBuilder.getChildrenOptions() as any // FIXME: typings

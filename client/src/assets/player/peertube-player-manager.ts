@@ -210,7 +210,8 @@ export class PeertubePlayerManager {
       this.p2pMediaLoaderModule = p2pMediaLoaderModule
     }
 
-    await TranslationsManager.loadLocaleInVideoJS(options.common.serverUrl, options.common.language, videojs)
+    //await TranslationsManager.loadLocaleInVideoJS(options.common.serverUrl, options.common.language, videojs)
+
 
     return this.buildPlayer(mode, options)
   }
@@ -250,7 +251,7 @@ export class PeertubePlayerManager {
 
         self.addContextMenu(videojsOptionsBuilder, player, options.common)
 
-        if (isMobile()) player.peertubeMobile()
+        if (isMobile() || options.mobile) player.peertubeMobile()
         if (options.common.enableHotkeys === true) player.peerTubeHotkeysPlugin()
         if (options.common.controlBar === false) player.controlBar.addClass('control-bar-hidden')
 

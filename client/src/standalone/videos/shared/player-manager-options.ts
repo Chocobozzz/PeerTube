@@ -19,6 +19,11 @@ import { PlaylistTracker } from './playlist-tracker'
 import { Translations } from './translations'
 import { VideoFetcher } from './video-fetcher'
 
+import {
+  IdbAssetsStorage,
+  IdbSegmentsStorage
+} from './storage'
+
 export class PlayerManagerOptions {
   private autoplay: boolean
 
@@ -41,6 +46,10 @@ export class PlayerManagerOptions {
 
   private mode: PlayerMode
   private scope = 'peertube'
+  private mobile = false
+
+  private assetsStorage: any
+  private segmentsStorage : any
 
   constructor (
     private readonly playerHTML: PlayerHTML,
@@ -113,7 +122,7 @@ export class PlayerManagerOptions {
       this.enableApi = getToggle(params, 'api', this.enableApi)
       this.warningTitle = getToggle(params, 'warningTitle', true)
       this.peertubeLink = getToggle(params, 'peertubeLink', true)
-
+      this.mobile  = getToggle(params, 'mobile', false) 
 
       this.p2pEnabled = getToggle(params, 'p2p', true) //getToggle(params, 'p2p', this.isP2PEnabled(config, video))
 
@@ -121,6 +130,9 @@ export class PlayerManagerOptions {
       this.subtitle = getString(params, 'subtitle')
       this.startTime = getString(params, 'start')
       this.stopTime = getString(params, 'stop')
+
+      this.assetsStorage = params.assetsStorage
+      this.segmentsStorage = params.segmentsStorage
       //this.localVideo = getString(params, 'localvideo', false)
 
       /*this.bigPlayBackgroundColor = getString(params, 'bigPlayBackgroundColor')
@@ -130,7 +142,9 @@ export class PlayerManagerOptions {
 
       this.mode = 'p2p-media-loader'
 
-      if(getString(params, 'localvideo', '')) this.mode = 'localvideo'
+      if(params.localVideo) this.mode = 'localvideo'
+
+      console.log("LOCALVIDEO", this)
 
       /*if (modeParam) {
         if (modeParam === 'p2p-media-loader') this.mode = 'p2p-media-loader'
@@ -163,13 +177,18 @@ export class PlayerManagerOptions {
     playPreviousPlaylistVideo?: () => any*/
     onVideoUpdate?: (uuid: string, host : string) => any,
 
+    poster ?: string,
+    sources? : Array<any> | null
+
   }) {
     const {
       video,
       alreadyHadPlayer,
       //playlistTracker,
       live,
-      serverConfig
+      serverConfig,
+      sources,
+      poster
     } = options
 
     //const videoCaptions = await this.buildCaptions(captionsResponse, translations)
@@ -211,13 +230,15 @@ export class PlayerManagerOptions {
         peertubeLink: this.peertubeLink,
         //instanceName: serverConfig.instance.name,
 
-        poster: video.host + video.previewPath,
+        poster: poster ? poster : video.host + video.previewPath,
         theaterButton: false,
 
         serverUrl: video.host,
         language: navigator.language,
         embedUrl: video.host + video.embedPath,
         embedTitle: video.name,
+
+        sources : sources,
 
         errorNotifier: () => {
           // Empty, we don't have a notifier in the embed
@@ -231,8 +252,11 @@ export class PlayerManagerOptions {
       webtorrent: {
         videoFiles: video.files
       },
-
+      mobile : this.mobile,
       ...this.buildP2PMediaLoaderOptions(video),
+
+      assetsStorage : this.assetsStorage,
+      segmentsStorage : this.segmentsStorage
 
       //pluginsManager: this.peertubePlugin.getPluginsManager()
     }
@@ -248,38 +272,6 @@ export class PlayerManagerOptions {
       liveOptions: {
         latencyMode: live.latencyMode
       }
-    }
-  }
-
-  private buildPlaylistOptions (options: {
-    playlistTracker?: PlaylistTracker
-    playNextPlaylistVideo?: () => any
-    playPreviousPlaylistVideo?: () => any
-    onVideoUpdate?: (uuid: string, host : string) => any
-  }) {
-    const { playlistTracker, playNextPlaylistVideo, playPreviousPlaylistVideo, onVideoUpdate } = options
-
-    if (!playlistTracker) return {}
-
-    return {
-      playlist: {
-        elements: playlistTracker.getPlaylistElements(),
-        playlist: playlistTracker.getPlaylist(),
-
-        getCurrentPosition: () => playlistTracker.getCurrentPosition(),
-
-        /*onItemClicked: (videoPlaylistElement: VideoPlaylistElement) => {
-          playlistTracker.setCurrentElement(videoPlaylistElement)
-
-          onVideoUpdate(videoPlaylistElement.video.uuid)
-        }*/
-      },
-
-      /*nextVideo: () => playNextPlaylistVideo(),
-      hasNextVideo: () => playlistTracker.hasNextPlaylistElement(),
-
-      previousVideo: () => playPreviousPlaylistVideo(),
-      hasPreviousVideo: () => playlistTracker.hasPreviousPlaylistElement()*/
     }
   }
 

@@ -28,6 +28,8 @@ export class HLSOptionsBuilder {
     const p2pMediaLoaderConfig = this.getP2PMediaLoaderOptions(redundancyUrlManager)
     const loader = new this.p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass() as P2PMediaLoader
 
+    console.log('p2pMediaLoaderConfig', p2pMediaLoaderConfig)
+
     const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
       redundancyUrlManager,
       type: 'application/x-mpegURL',
@@ -87,10 +89,12 @@ export class HLSOptionsBuilder {
 
         useP2P: this.options.common.p2pEnabled,
         consumeOnly,
+        segmentsStorage : this.options.segmentsStorage,
 
         ...specificLiveOrVODOptions
       },
       segments: {
+        assetsStorage : this.options.assetsStorage,
         swarmId: this.options.p2pMediaLoader.playlistUrl,
         forwardSegmentCount: specificLiveOrVODOptions.p2pDownloadMaxPriority ?? 20
       }

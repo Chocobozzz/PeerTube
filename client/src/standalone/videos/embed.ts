@@ -70,7 +70,6 @@ export class PeerTubeEmbed {
 	public async getplayer(){
 
 		if (this.lightclbk){
-			console.log("ASDADSD")
 			await this.lightclbk()
 		}
 
@@ -138,7 +137,6 @@ export class PeerTubeEmbed {
 
 	private async loadVideoAndBuildPlayer(host: string, uuid: string, parameters: any, clbk : any) {
 		try {
-			console.log('host', host, uuid)
 			const { videoDetails } = await this.videoFetcher.loadVideoCache(uuid, host)
 
 			videoDetails.host = host
@@ -229,12 +227,23 @@ export class PeerTubeEmbed {
 			//playNextPlaylistVideo: () => this.playNextPlaylistVideo(),
 			//playPreviousPlaylistVideo: () => this.playPreviousPlaylistVideo(),
 
-			live
+			live,
+
+			poster: !parameters.localVideo ? null : parameters.localVideo.infos.thumbnail,
+
+			sources: !parameters.localVideo ? null : [{
+				src:  parameters.localVideo.video.internalURL,
+				type: 'video/mp4',
+				size: parseInt(parameters.localVideo.video.name)
+			}]
 		})
 
 		this.player = await PlayerManager.initialize(this.playerManagerOptions.getMode(), options, (player: videojs.Player) => {
 			this.player = player
 		})
+
+
+		
 
 		this.player.on('customError', (event: any, data: any) => {
 			const message = data?.err?.message || ''
@@ -273,7 +282,16 @@ export class PeerTubeEmbed {
 		// @ts-ignore
 		this.playerHTML.setARElement(video, this.player.el_)
 
-		
+		// @ts-ignore
+		if (window.cordova) {
+			try{
+				// @ts-ignore
+				(this.player.tech_.el_ || this.player.el_).setAttribute('poster', options.common.poster);
+			}catch(e){
+				console.error(e)
+			}
+			
+		}
 
 		//if (this.isPlaylistEmbed()) {
 		//await this.buildPlayerPlaylistUpnext()

@@ -68,6 +68,7 @@ export interface CommonOptions extends CustomizationOptions {
   }
 
   language?: string
+  sources? : Array<any> | null
 
   ///videoCaptions: VideoJSCaption[]
 
@@ -82,7 +83,10 @@ export interface CommonOptions extends CustomizationOptions {
 export type PeertubePlayerManagerOptions = {
   common: CommonOptions
   webtorrent: WebtorrentOptions
-  p2pMediaLoader?: P2PMediaLoaderOptions
-
+  p2pMediaLoader?: P2PMediaLoaderOptions,
+  mobile ?: Boolean,
+  segmentsStorage? : any,
+  assetsStorage? : any
+  
   //pluginsManager: PluginsManager
 }
