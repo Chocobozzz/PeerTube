@@ -107,7 +107,7 @@ async function scheduleRefresh (video: MVideoThumbnail, fetchType: VideoLoadByUr
     return refreshVideoIfNeeded(refreshOptions)
   }
 
-  await JobQueue.Instance.createJobWithPromise({
+  await JobQueue.Instance.createJob({
     type: 'activitypub-refresher',
     payload: { type: 'video', url: video.url }
   })

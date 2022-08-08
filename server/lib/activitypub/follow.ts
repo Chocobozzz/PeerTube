@@ -27,7 +27,7 @@ async function autoFollowBackIfNeeded (actorFollow: MActorFollowActors, transact
       isAutoFollow: true
     }
 
-    JobQueue.Instance.createJob({ type: 'activitypub-follow', payload })
+    JobQueue.Instance.createJobAsync({ type: 'activitypub-follow', payload })
   }
 }
 

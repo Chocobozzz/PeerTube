@@ -17,7 +17,7 @@ async function processActivityPubFollow (job: Job) {
   const payload = job.data as ActivitypubFollowPayload
   const host = payload.host
 
-  logger.info('Processing ActivityPub follow in job %d.', job.id)
+  logger.info('Processing ActivityPub follow in job %s.', job.id)
 
   let targetActor: MActorFull
   if (!host || host === WEBSERVER.HOST) {

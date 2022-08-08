@@ -66,7 +66,7 @@ class Emailer {
       }
     }
 
-    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
   addPasswordCreateEmailJob (username: string, to: string, createPasswordUrl: string) {
@@ -80,7 +80,7 @@ class Emailer {
       }
     }
 
-    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
   addVerifyEmailJob (username: string, to: string, verifyEmailUrl: string) {
@@ -94,7 +94,7 @@ class Emailer {
       }
     }
 
-    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
   addUserBlockJob (user: MUser, blocked: boolean, reason?: string) {
@@ -108,7 +108,7 @@ class Emailer {
       text: `Your account ${user.username} on ${CONFIG.INSTANCE.NAME} has been ${blockedWord}${reasonString}.`
     }
 
-    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
   addContactFormJob (fromEmail: string, fromName: string, subject: string, body: string) {
@@ -127,7 +127,7 @@ class Emailer {
       }
     }
 
-    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
   async sendMail (options: EmailPayload) {

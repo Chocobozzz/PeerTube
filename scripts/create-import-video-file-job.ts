@@ -45,6 +45,6 @@ async function run () {
   }
 
   JobQueue.Instance.init(true)
-  await JobQueue.Instance.createJobWithPromise({ type: 'video-file-import', payload: dataInput })
+  await JobQueue.Instance.createJob({ type: 'video-file-import', payload: dataInput })
   console.log('Import job for video %s created.', video.uuid)
 }

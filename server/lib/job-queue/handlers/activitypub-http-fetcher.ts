@@ -12,7 +12,7 @@ import { addVideoShares } from '../../activitypub/share'
 import { addVideoComments } from '../../activitypub/video-comments'
 
 async function processActivityPubHttpFetcher (job: Job) {
-  logger.info('Processing ActivityPub fetcher in job %d.', job.id)
+  logger.info('Processing ActivityPub fetcher in job %s.', job.id)
 
   const payload = job.data as ActivitypubHttpFetcherPayload
 

@@ -408,7 +408,7 @@ class LiveManager {
         await liveSession.save()
       }
 
-      JobQueue.Instance.createJob({
+      JobQueue.Instance.createJobAsync({
         type: 'video-live-ending',
         payload: {
           videoId: fullVideo.id,
@@ -421,8 +421,12 @@ class LiveManager {
           streamingPlaylistId: fullVideo.getHLSPlaylist()?.id,
 
           publishedAt: fullVideo.publishedAt.toISOString()
-        }
-      }, { delay: cleanupNow ? 0 : VIDEO_LIVE.CLEANUP_DELAY })
+        },
+
+        delay: cleanupNow
+          ? 0
+          : VIDEO_LIVE.CLEANUP_DELAY
+      })
 
       fullVideo.state = live.permanentLive
         ? VideoState.WAITING_FOR_LIVE

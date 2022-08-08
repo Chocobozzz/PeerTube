@@ -5,7 +5,7 @@ import { logger } from '../../../helpers/logger'
 
 async function processVideoRedundancy (job: Job) {
   const payload = job.data as VideoRedundancyPayload
-  logger.info('Processing video redundancy in job %d.', job.id)
+  logger.info('Processing video redundancy in job %s.', job.id)
 
   return VideosRedundancyScheduler.Instance.createManualRedundancy(payload.videoId)
 }

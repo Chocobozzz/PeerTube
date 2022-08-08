@@ -25,6 +25,8 @@ export type JobType =
   | 'manage-video-torrent'
   | 'move-to-object-storage'
   | 'video-studio-edition'
+  | 'notify'
+  | 'federate-video'
 
 export interface Job {
   id: number | string
@@ -213,4 +215,19 @@ export type VideoStudioTaskPayload =
 export interface VideoStudioEditionPayload {
   videoUUID: string
   tasks: VideoStudioTaskPayload[]
+}
+
+// ---------------------------------------------------------------------------
+
+export type NotifyPayload =
+  {
+    action: 'new-video'
+    videoUUID: string
+  }
+
+// ---------------------------------------------------------------------------
+
+export interface FederateVideoPayload {
+  videoUUID: string
+  isNewVideo: boolean
 }

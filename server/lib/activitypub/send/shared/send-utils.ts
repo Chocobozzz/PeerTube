@@ -120,7 +120,7 @@ async function forwardActivity (
     body: activity,
     contextType: null
   }
-  return afterCommitIfTransaction(t, () => JobQueue.Instance.createJob({ type: 'activitypub-http-broadcast', payload }))
+  return afterCommitIfTransaction(t, () => JobQueue.Instance.createJobAsync({ type: 'activitypub-http-broadcast', payload }))
 }
 
 // ---------------------------------------------------------------------------
@@ -205,7 +205,7 @@ function broadcastTo (options: {
       contextType
     }
 
-    JobQueue.Instance.createJob({
+    JobQueue.Instance.createJobAsync({
       type: parallelizable
         ? 'activitypub-http-broadcast-parallel'
         : 'activitypub-http-broadcast',
@@ -222,7 +222,7 @@ function broadcastTo (options: {
       contextType
     }
 
-    JobQueue.Instance.createJob({ type: 'activitypub-http-unicast', payload })
+    JobQueue.Instance.createJobAsync({ type: 'activitypub-http-unicast', payload })
   }
 }
 
@@ -243,7 +243,7 @@ function unicastTo (options: {
     contextType
   }
 
-  JobQueue.Instance.createJob({ type: 'activitypub-http-unicast', payload })
+  JobQueue.Instance.createJobAsync({ type: 'activitypub-http-unicast', payload })
 }
 
 // ---------------------------------------------------------------------------

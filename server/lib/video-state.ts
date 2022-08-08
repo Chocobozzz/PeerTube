@@ -1,4 +1,5 @@
 import { Transaction } from 'sequelize'
+import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { sequelizeTypescript } from '@server/initializers/database'
@@ -7,9 +8,9 @@ import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { MVideo, MVideoFullLight, MVideoUUID } from '@server/types/models'
 import { VideoState } from '@shared/models'
 import { federateVideoIfNeeded } from './activitypub/videos'
+import { JobQueue } from './job-queue'
 import { Notifier } from './notifier'
-import { addMoveToObjectStorageJob } from './video'
-import { retryTransactionWrapper } from '@server/helpers/database-utils'
+import { buildMoveToObjectStorageJob } from './video'
 
 function buildNextVideoState (currentState?: VideoState) {
   if (currentState === VideoState.PUBLISHED) {
@@ -86,7 +87,7 @@ async function moveToExternalStorageState (options: {
   logger.info('Creating external storage move job for video %s.', video.uuid, { tags: [ video.uuid ] })
 
   try {
-    await addMoveToObjectStorageJob({ video, previousVideoState, isNewVideo })
+    await JobQueue.Instance.createJob(await buildMoveToObjectStorageJob({ video, previousVideoState, isNewVideo }))
 
     return true
   } catch (err) {

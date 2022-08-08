@@ -74,7 +74,7 @@ async function getRatesCount (type: 'like' | 'dislike', video: MVideo, fetchedVi
 }
 
 function createJob (payload: ActivitypubHttpFetcherPayload) {
-  return JobQueue.Instance.createJobWithPromise({ type: 'activitypub-http-fetcher', payload })
+  return JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
 }
 
 function syncShares (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {

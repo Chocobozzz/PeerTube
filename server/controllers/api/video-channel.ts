@@ -245,7 +245,7 @@ async function addVideoChannel (req: express.Request, res: express.Response) {
   })
 
   const payload = { actorId: videoChannelCreated.actorId }
-  await JobQueue.Instance.createJobWithPromise({ type: 'actor-keys', payload })
+  await JobQueue.Instance.createJob({ type: 'actor-keys', payload })
 
   auditLogger.create(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelCreated.toFormattedJSON()))
   logger.info('Video channel %s created.', videoChannelCreated.Actor.url)
@@ -335,7 +335,7 @@ async function getVideoChannel (req: express.Request, res: express.Response) {
   const videoChannel = await Hooks.wrapObject(res.locals.videoChannel, 'filter:api.video-channel.get.result', { id })
 
   if (videoChannel.isOutdated()) {
-    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'actor', url: videoChannel.Actor.url } })
+    JobQueue.Instance.createJobAsync({ type: 'activitypub-refresher', payload: { type: 'actor', url: videoChannel.Actor.url } })
   }
 
   return res.json(videoChannel.toFormattedJSON())

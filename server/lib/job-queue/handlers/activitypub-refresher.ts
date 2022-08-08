@@ -11,7 +11,7 @@ import { refreshActorIfNeeded } from '../../activitypub/actors'
 async function refreshAPObject (job: Job) {
   const payload = job.data as RefreshPayload
 
-  logger.info('Processing AP refresher in job %d for %s.', job.id, payload.url)
+  logger.info('Processing AP refresher in job %s for %s.', job.id, payload.url)
 
   if (payload.type === 'video') return refreshVideo(payload.url)
   if (payload.type === 'video-playlist') return refreshVideoPlaylist(payload.url)

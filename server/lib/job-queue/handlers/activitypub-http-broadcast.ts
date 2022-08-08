@@ -8,7 +8,7 @@ import { doRequest } from '../../../helpers/requests'
 import { BROADCAST_CONCURRENCY } from '../../../initializers/constants'
 
 async function processActivityPubHttpBroadcast (job: Job) {
-  logger.info('Processing ActivityPub broadcast in job %d.', job.id)
+  logger.info('Processing ActivityPub broadcast in job %s.', job.id)
 
   const payload = job.data as ActivitypubHttpBroadcastPayload
 

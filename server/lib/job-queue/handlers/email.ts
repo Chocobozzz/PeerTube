@@ -5,7 +5,7 @@ import { Emailer } from '../../emailer'
 
 async function processEmail (job: Job) {
   const payload = job.data as EmailPayload
-  logger.info('Processing email in job %d.', job.id)
+  logger.info('Processing email in job %s.', job.id)
 
   return Emailer.Instance.sendMail(payload)
 }

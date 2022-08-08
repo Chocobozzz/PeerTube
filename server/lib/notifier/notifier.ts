@@ -242,7 +242,7 @@ class Notifier {
 
     for (const to of toEmails) {
       const payload = await object.createEmail(to)
-      JobQueue.Instance.createJob({ type: 'email', payload })
+      JobQueue.Instance.createJobAsync({ type: 'email', payload })
     }
   }
 

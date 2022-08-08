@@ -151,7 +151,7 @@ async function getVideo (_req: express.Request, res: express.Response) {
   const video = await Hooks.wrapObject(res.locals.videoAPI, 'filter:api.video.get.result', { id: videoId, userId })
 
   if (video.isOutdated()) {
-    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: video.url } })
+    JobQueue.Instance.createJobAsync({ type: 'activitypub-refresher', payload: { type: 'video', url: video.url } })
   }
 
   return res.json(video.toFormattedDetailsJSON())
