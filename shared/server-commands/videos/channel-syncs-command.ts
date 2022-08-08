@@ -1,7 +1,7 @@
-import { HttpStatusCode, ResultList, VideoChannelSync, VideoChannelSyncCreate } from "@shared/models"
-import { pick } from "@shared/core-utils"
-import { unwrapBody } from "../requests"
-import { AbstractCommand, OverrideCommandOptions } from "../shared"
+import { HttpStatusCode, ResultList, VideoChannelSync, VideoChannelSyncCreate } from '@shared/models'
+import { pick } from '@shared/core-utils'
+import { unwrapBody } from '../requests'
+import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class ChannelSyncsCommand extends AbstractCommand {
   private static readonly API_PATH = '/api/v1/video-channel-syncs'
