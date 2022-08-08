@@ -1,7 +1,0 @@
-import './search-activitypub-video-playlists'
-import './search-activitypub-video-channels'
-import './search-activitypub-videos'
-import './search-channels'
-import './search-index'
-import './search-playlists'
-import './search-videos'
