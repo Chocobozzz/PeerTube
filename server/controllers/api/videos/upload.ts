@@ -17,6 +17,7 @@ import {
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { buildNextVideoState } from '@server/lib/video-state'
 import { openapiOperationDoc } from '@server/middlewares/doc'
+import { VideoSourceModel } from '@server/models/video/video-source'
 import { MVideoFile, MVideoFullLight } from '@server/types/models'
 import { getLowercaseExtension } from '@shared/core-utils'
 import { isAudioFile, uuidToShort } from '@shared/extra-utils'
@@ -44,7 +45,6 @@ import {
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
-import { VideoSourceModel } from '@server/models/video/video-source'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -270,7 +270,7 @@ async function createTorrentFederate (video: MVideoFullLight, videoFile: MVideoF
   const payload: ManageVideoTorrentPayload = { videoId: video.id, videoFileId: videoFile.id, action: 'create' }
 
   const job = await JobQueue.Instance.createJobWithPromise({ type: 'manage-video-torrent', payload })
-  await job.finished()
+  await JobQueue.Instance.waitJob(job)
 
   const refreshedVideo = await VideoModel.loadFull(video.id)
   if (!refreshedVideo) return

@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { EmailPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { Emailer } from '../../emailer'

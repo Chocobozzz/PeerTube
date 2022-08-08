@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { move, remove, stat } from 'fs-extra'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { YoutubeDLWrapper } from '@server/helpers/youtube-dl'

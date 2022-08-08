@@ -199,7 +199,7 @@ async function updateTorrentsMetadataIfNeeded (video: MVideoFullLight, videoInfo
     const payload: ManageVideoTorrentPayload = { action: 'update-metadata', videoId: video.id, videoFileId: file.id }
 
     const job = await JobQueue.Instance.createJobWithPromise({ type: 'manage-video-torrent', payload })
-    await job.finished()
+    await JobQueue.Instance.waitJob(job)
   }
 
   const hls = video.getHLSPlaylist()
@@ -208,7 +208,7 @@ async function updateTorrentsMetadataIfNeeded (video: MVideoFullLight, videoInfo
     const payload: ManageVideoTorrentPayload = { action: 'update-metadata', streamingPlaylistId: hls.id, videoFileId: file.id }
 
     const job = await JobQueue.Instance.createJobWithPromise({ type: 'manage-video-torrent', payload })
-    await job.finished()
+    await JobQueue.Instance.waitJob(job)
   }
 
   // Refresh video since files have changed

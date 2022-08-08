@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from '@server/lib/activitypub/send'
 import { ActivitypubHttpUnicastPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'

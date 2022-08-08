@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { getLocalActorFollowActivityPubUrl } from '@server/lib/activitypub/url'
 import { ActivitypubFollowPayload } from '@shared/models'
 import { sanitizeHost } from '../../../helpers/core-utils'

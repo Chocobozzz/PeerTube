@@ -1,7 +1,19 @@
-import Bull, { Job, JobOptions, Queue } from 'bull'
+import {
+  Job,
+  JobsOptions,
+  Queue,
+  QueueEvents,
+  QueueEventsOptions,
+  QueueOptions,
+  QueueScheduler,
+  QueueSchedulerOptions,
+  Worker,
+  WorkerOptions
+} from 'bullmq'
 import { jobStates } from '@server/helpers/custom-validators/jobs'
 import { CONFIG } from '@server/initializers/config'
 import { processVideoRedundancy } from '@server/lib/job-queue/handlers/video-redundancy'
+import { timeoutPromise } from '@shared/core-utils'
 import {
   ActivitypubFollowPayload,
   ActivitypubHttpBroadcastPayload,
@@ -120,7 +132,11 @@ class JobQueue {
 
   private static instance: JobQueue
 
+  private workers: { [id in JobType]?: Worker } = {}
   private queues: { [id in JobType]?: Queue } = {}
+  private queueSchedulers: { [id in JobType]?: QueueScheduler } = {}
+  private queueEvents: { [id in JobType]?: QueueEvents } = {}
+
   private initialized = false
   private jobRedisPrefix: string
 
@@ -134,75 +150,131 @@ class JobQueue {
 
     this.jobRedisPrefix = 'bull-' + WEBSERVER.HOST
 
-    const queueOptions: Bull.QueueOptions = {
-      prefix: this.jobRedisPrefix,
-      redis: {
-        password: CONFIG.REDIS.AUTH,
-        db: CONFIG.REDIS.DB,
-        host: CONFIG.REDIS.HOSTNAME,
-        port: CONFIG.REDIS.PORT,
-        path: CONFIG.REDIS.SOCKET
-      },
-      settings: {
-        maxStalledCount: 10 // transcoding could be long, so jobs can often be interrupted by restarts
-      }
-    }
-
     for (const handlerName of (Object.keys(handlers) as JobType[])) {
-      const queue = new Bull(handlerName, queueOptions)
-
-      if (produceOnly) {
-        queue.pause(true)
-             .catch(err => logger.error('Cannot pause queue %s in produced only job queue', handlerName, { err }))
-      }
-
-      const handler = handlers[handlerName]
-
-      queue.process(this.getJobConcurrency(handlerName), async (jobArg: Job<any>) => {
-        const job = await Hooks.wrapObject(jobArg, 'filter:job-queue.process.params', { type: handlerName })
-
-        return Hooks.wrapPromiseFun(handler, job, 'filter:job-queue.process.result')
-      }).catch(err => logger.error('Error in job queue processor %s.', handlerName, { err }))
-
-      queue.on('failed', (job, err) => {
-        const logLevel = silentFailure.has(handlerName)
-          ? 'debug'
-          : 'error'
-
-        logger.log(logLevel, 'Cannot execute job %d in queue %s.', job.id, handlerName, { payload: job.data, err })
-
-        if (errorHandlers[job.name]) {
-          errorHandlers[job.name](job, err)
-            .catch(err => logger.error('Cannot run error handler for job failure %d in queue %s.', job.id, handlerName, { err }))
-        }
-      })
-
-      queue.on('error', err => {
-        logger.error('Error in job queue %s.', handlerName, { err })
-      })
-
-      this.queues[handlerName] = queue
+      this.buildWorker(handlerName, produceOnly)
+      this.buildQueue(handlerName)
+      this.buildQueueScheduler(handlerName, produceOnly)
+      this.buildQueueEvent(handlerName, produceOnly)
     }
 
     this.addRepeatableJobs()
   }
 
-  terminate () {
-    for (const queueName of Object.keys(this.queues)) {
-      const queue = this.queues[queueName]
-      queue.close()
+  private buildWorker (handlerName: JobType, produceOnly: boolean) {
+    const workerOptions: WorkerOptions = {
+      autorun: !produceOnly,
+      concurrency: this.getJobConcurrency(handlerName),
+      prefix: this.jobRedisPrefix,
+      connection: this.getRedisConnection()
     }
+
+    const handler = function (job: Job) {
+      const timeout = JOB_TTL[handlerName]
+      const p = handlers[handlerName](job)
+
+      if (!timeout) return p
+
+      return timeoutPromise(p, timeout)
+    }
+
+    const processor = async (jobArg: Job<any>) => {
+      const job = await Hooks.wrapObject(jobArg, 'filter:job-queue.process.params', { type: handlerName })
+
+      return Hooks.wrapPromiseFun(handler, job, 'filter:job-queue.process.result')
+    }
+
+    const worker = new Worker(handlerName, processor, workerOptions)
+
+    worker.on('failed', (job, err) => {
+      const logLevel = silentFailure.has(handlerName)
+        ? 'debug'
+        : 'error'
+
+      logger.log(logLevel, 'Cannot execute job %s in queue %s.', job.id, handlerName, { payload: job.data, err })
+
+      if (errorHandlers[job.name]) {
+        errorHandlers[job.name](job, err)
+          .catch(err => logger.error('Cannot run error handler for job failure %d in queue %s.', job.id, handlerName, { err }))
+      }
+    })
+
+    worker.on('error', err => {
+      logger.error('Error in job queue %s.', handlerName, { err })
+    })
+
+    this.workers[handlerName] = worker
+  }
+
+  private buildQueue (handlerName: JobType) {
+    const queueOptions: QueueOptions = {
+      connection: this.getRedisConnection(),
+      prefix: this.jobRedisPrefix
+    }
+
+    this.queues[handlerName] = new Queue(handlerName, queueOptions)
+  }
+
+  private buildQueueScheduler (handlerName: JobType, produceOnly: boolean) {
+    const queueSchedulerOptions: QueueSchedulerOptions = {
+      autorun: !produceOnly,
+      connection: this.getRedisConnection(),
+      prefix: this.jobRedisPrefix,
+      maxStalledCount: 10
+    }
+    this.queueSchedulers[handlerName] = new QueueScheduler(handlerName, queueSchedulerOptions)
+  }
+
+  private buildQueueEvent (handlerName: JobType, produceOnly: boolean) {
+    const queueEventsOptions: QueueEventsOptions = {
+      autorun: !produceOnly,
+      connection: this.getRedisConnection(),
+      prefix: this.jobRedisPrefix
+    }
+    this.queueEvents[handlerName] = new QueueEvents(handlerName, queueEventsOptions)
+  }
+
+  private getRedisConnection () {
+    return {
+      password: CONFIG.REDIS.AUTH,
+      db: CONFIG.REDIS.DB,
+      host: CONFIG.REDIS.HOSTNAME,
+      port: CONFIG.REDIS.PORT,
+      path: CONFIG.REDIS.SOCKET
+    }
+  }
+
+  async terminate () {
+    const promises = Object.keys(this.workers)
+      .map(handlerName => {
+        const worker: Worker = this.workers[handlerName]
+        const queue: Queue = this.queues[handlerName]
+        const queueScheduler: QueueScheduler = this.queueSchedulers[handlerName]
+        const queueEvent: QueueEvents = this.queueEvents[handlerName]
+
+        return Promise.all([
+          worker.close(false),
+          queue.close(),
+          queueScheduler.close(),
+          queueEvent.close()
+        ])
+      })
+
+    return Promise.all(promises)
   }
 
   async pause () {
-    for (const handler of Object.keys(this.queues)) {
-      await this.queues[handler].pause(true)
+    for (const handler of Object.keys(this.workers)) {
+      const worker: Worker = this.workers[handler]
+
+      await worker.pause()
     }
   }
 
-  async resume () {
-    for (const handler of Object.keys(this.queues)) {
-      await this.queues[handler].resume(true)
+  resume () {
+    for (const handler of Object.keys(this.workers)) {
+      const worker: Worker = this.workers[handler]
+
+      worker.resume()
     }
   }
 
@@ -211,22 +283,21 @@ class JobQueue {
         .catch(err => logger.error('Cannot create job.', { err, obj }))
   }
 
-  createJobWithPromise (obj: CreateJobArgument, options: CreateJobOptions = {}) {
+  async createJobWithPromise (obj: CreateJobArgument, options: CreateJobOptions = {}) {
     const queue: Queue = this.queues[obj.type]
     if (queue === undefined) {
       logger.error('Unknown queue %s: cannot create job.', obj.type)
       return
     }
 
-    const jobArgs: JobOptions = {
+    const jobArgs: JobsOptions = {
       backoff: { delay: 60 * 1000, type: 'exponential' },
       attempts: JOB_ATTEMPTS[obj.type],
-      timeout: JOB_TTL[obj.type],
       priority: options.priority,
       delay: options.delay
     }
 
-    return queue.add(obj.payload, jobArgs)
+    return queue.add('job', obj.payload, jobArgs)
   }
 
   async listForApi (options: {
@@ -244,7 +315,8 @@ class JobQueue {
     const filteredJobTypes = this.filterJobTypes(jobType)
 
     for (const jobType of filteredJobTypes) {
-      const queue = this.queues[jobType]
+      const queue: Queue = this.queues[jobType]
+
       if (queue === undefined) {
         logger.error('Unknown queue %s to list jobs.', jobType)
         continue
@@ -297,18 +369,22 @@ class JobQueue {
 
   async removeOldJobs () {
     for (const key of Object.keys(this.queues)) {
-      const queue = this.queues[key]
-      await queue.clean(JOB_COMPLETED_LIFETIME, 'completed')
+      const queue: Queue = this.queues[key]
+      await queue.clean(JOB_COMPLETED_LIFETIME, 100, 'completed')
     }
   }
 
+  waitJob (job: Job) {
+    return job.waitUntilFinished(this.queueEvents[job.queueName])
+  }
+
   private addRepeatableJobs () {
-    this.queues['videos-views-stats'].add({}, {
+    this.queues['videos-views-stats'].add('job', {}, {
       repeat: REPEAT_JOBS['videos-views-stats']
     }).catch(err => logger.error('Cannot add repeatable job.', { err }))
 
     if (CONFIG.FEDERATION.VIDEOS.CLEANUP_REMOTE_INTERACTIONS) {
-      this.queues['activitypub-cleaner'].add({}, {
+      this.queues['activitypub-cleaner'].add('job', {}, {
         repeat: REPEAT_JOBS['activitypub-cleaner']
       }).catch(err => logger.error('Cannot add repeatable job.', { err }))
     }

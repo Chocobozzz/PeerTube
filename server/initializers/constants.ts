@@ -1,4 +1,4 @@
-import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
+import { RepeatOptions } from 'bullmq'
 import { randomBytes } from 'crypto'
 import { invert } from 'lodash'
 import { join } from 'path'
@@ -197,7 +197,7 @@ const JOB_TTL: { [id in JobType]: number } = {
   'manage-video-torrent': 1000 * 3600 * 3, // 3 hours
   'move-to-object-storage': 1000 * 60 * 60 * 3 // 3 hours
 }
-const REPEAT_JOBS: { [ id in JobType ]?: EveryRepeatOptions | CronRepeatOptions } = {
+const REPEAT_JOBS: { [ id in JobType ]?: RepeatOptions } = {
   'videos-views-stats': {
     cron: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
   },

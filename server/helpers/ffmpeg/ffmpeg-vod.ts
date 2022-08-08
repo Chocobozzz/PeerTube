@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { readFile, writeFile } from 'fs-extra'
 import { dirname } from 'path'

@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { VideosRedundancyScheduler } from '@server/lib/schedulers/videos-redundancy-scheduler'
 import { VideoRedundancyPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'

@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { ActivitypubHttpFetcherPayload, FetchType } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'

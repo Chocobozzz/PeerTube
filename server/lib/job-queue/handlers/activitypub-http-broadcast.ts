@@ -1,5 +1,5 @@
 import { map } from 'bluebird'
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from '@server/lib/activitypub/send'
 import { ActorFollowHealthCache } from '@server/lib/actor-follow-health-cache'
 import { ActivitypubHttpBroadcastPayload } from '@shared/models'

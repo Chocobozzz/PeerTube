@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { copy, stat } from 'fs-extra'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { CONFIG } from '@server/initializers/config'

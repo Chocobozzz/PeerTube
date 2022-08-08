@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { TranscodeVODOptionsType } from '@server/helpers/ffmpeg'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { addTranscodingJob, getTranscodingJobPriority } from '@server/lib/video'

@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { generateAndSaveActorKeys } from '@server/lib/activitypub/actors'
 import { ActorModel } from '@server/models/actor/actor'
 import { ActorKeysPayload } from '@shared/models'

@@ -352,6 +352,7 @@ async function startApplication () {
 
   process.on('exit', () => {
     JobQueue.Instance.terminate()
+      .catch(err => logger.error('Cannot terminate job queue.', { err }))
   })
 
   process.on('SIGINT', () => process.exit(0))

@@ -4,7 +4,7 @@ import { VideoResolution } from '../videos/file/video-resolution.enum'
 import { VideoStudioTaskCut } from '../videos/studio'
 import { SendEmailOptions } from './emailer.model'
 
-export type JobState = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed' | 'paused'
+export type JobState = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed' | 'paused' | 'waiting-children'
 
 export type JobType =
   | 'activitypub-http-unicast'
@@ -27,8 +27,8 @@ export type JobType =
   | 'video-studio-edition'
 
 export interface Job {
-  id: number
-  state: JobState
+  id: number | string
+  state: JobState | 'unknown'
   type: JobType
   data: any
   priority: number

@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { move, remove } from 'fs-extra'
 import { join } from 'path'
 import { addIntroOutro, addWatermark, cutVideo } from '@server/helpers/ffmpeg'

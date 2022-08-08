@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { refreshVideoPlaylistIfNeeded } from '@server/lib/activitypub/playlists'
 import { refreshVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { loadVideoByUrl } from '@server/lib/model-loaders'

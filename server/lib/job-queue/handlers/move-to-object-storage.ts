@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { remove } from 'fs-extra'
 import { join } from 'path'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
