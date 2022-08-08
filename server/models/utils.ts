@@ -117,6 +117,16 @@ function getInstanceFollowsSort (value: string, lastSort: OrderItem = [ 'id', 'A
   return getSort(value, lastSort)
 }
 
+function getChannelSyncSort (value: string): OrderItem[] {
+  const { direction, field } = buildDirectionAndField(value)
+  if (field.toLowerCase() === 'videochannel') {
+    return [
+      [ literal('"VideoChannel.name"'), direction ]
+    ]
+  }
+  return [ [ field, direction ] ]
+}
+
 function isOutdated (model: { createdAt: Date, updatedAt: Date }, refreshInterval: number) {
   if (!model.createdAt || !model.updatedAt) {
     throw new Error('Miss createdAt & updatedAt attributes to model')
@@ -280,6 +290,7 @@ export {
   getAdminUsersSort,
   getVideoSort,
   getBlacklistSort,
+  getChannelSyncSort,
   createSimilarityAttribute,
   throwIfNotValid,
   buildServerIdsFollowedBy,

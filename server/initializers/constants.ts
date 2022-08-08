@@ -65,7 +65,7 @@ const SORTABLE_COLUMNS = {
   JOBS: [ 'createdAt' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
   VIDEO_IMPORTS: [ 'createdAt' ],
-  VIDEO_CHANNEL_SYNCS: [ 'externalChannelUrl', 'videoChannel', 'updatedAt', 'createdAt', 'lastSyncAt' ],
+  VIDEO_CHANNEL_SYNCS: [ 'externalChannelUrl', 'videoChannel', 'createdAt', 'lastSyncAt', 'state' ],
 
   VIDEO_COMMENT_THREADS: [ 'createdAt', 'totalReplies' ],
   VIDEO_COMMENTS: [ 'createdAt' ],

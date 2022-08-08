@@ -18,7 +18,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { AccountModel } from '../account/account'
-import { getSort, throwIfNotValid } from '../utils'
+import { throwIfNotValid, getChannelSyncSort } from '../utils'
 import { VideoChannelModel } from './video-channel'
 import { Op } from 'sequelize'
 import { UserModel } from '../user/user'
@@ -89,7 +89,7 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
       return {
         offset: options.start,
         limit: options.count,
-        order: getSort(options.sort),
+        order: getChannelSyncSort(options.sort),
         include: [
           {
             model: videoChannelModel,
