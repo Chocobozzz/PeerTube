@@ -26,7 +26,7 @@ jobsRouter.post('/pause',
 jobsRouter.post('/resume',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
-  resumeJobQueue
+  asyncMiddleware(resumeJobQueue)
 )
 
 jobsRouter.get('/:state?',
@@ -55,8 +55,8 @@ async function pauseJobQueue (req: express.Request, res: express.Response) {
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
-function resumeJobQueue (req: express.Request, res: express.Response) {
-  JobQueue.Instance.resume()
+async function resumeJobQueue (req: express.Request, res: express.Response) {
+  await JobQueue.Instance.resume()
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
