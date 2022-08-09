@@ -259,6 +259,15 @@ async function addVideoJobsAfterUpload (video: MVideoFullLight, videoFile: MVide
         action: 'create'
       }
     },
+
+    {
+      type: 'notify',
+      payload: {
+        action: 'new-video',
+        videoUUID: video.uuid
+      }
+    },
+
     {
       type: 'federate-video' as 'federate-video',
       payload: {
