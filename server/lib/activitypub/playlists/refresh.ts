@@ -9,7 +9,7 @@ import { fetchRemoteVideoPlaylist } from './shared'
 function scheduleRefreshIfNeeded (playlist: MVideoPlaylist) {
   if (!playlist.isOutdated()) return
 
-  JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video-playlist', url: playlist.url } })
+  JobQueue.Instance.createJobAsync({ type: 'activitypub-refresher', payload: { type: 'video-playlist', url: playlist.url } })
 }
 
 async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwner): Promise<MVideoPlaylistOwner> {

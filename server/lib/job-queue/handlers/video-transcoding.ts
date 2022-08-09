@@ -1,6 +1,7 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { TranscodeVODOptionsType } from '@server/helpers/ffmpeg'
-import { addTranscodingJob, getTranscodingJobPriority } from '@server/lib/video'
+import { Hooks } from '@server/lib/plugins/hooks'
+import { buildTranscodingJob, getTranscodingJobPriority } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { moveToFailedTranscodingState, moveToNextState } from '@server/lib/video-state'
 import { UserModel } from '@server/models/user/user'
@@ -16,7 +17,7 @@ import {
   VideoTranscodingPayload
 } from '@shared/models'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { computeLowerResolutionsToTranscode } from '../../../helpers/ffmpeg'
+import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
 import { VideoModel } from '../../../models/video/video'
@@ -26,7 +27,7 @@ import {
   optimizeOriginalVideofile,
   transcodeNewWebTorrentResolution
 } from '../../transcoding/transcoding'
-import { Hooks } from '@server/lib/plugins/hooks'
+import { JobQueue } from '../job-queue'
 
 type HandlerFunction = (job: Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<void>
 
@@ -99,7 +100,6 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, video: MV
       videoInputPath,
       resolution: payload.resolution,
       copyCodecs: payload.copyCodecs,
-      isPortraitMode: payload.isPortraitMode || false,
       job
     })
   })
@@ -117,7 +117,7 @@ async function handleNewWebTorrentResolutionJob (
 ) {
   logger.info('Handling WebTorrent transcoding job for %s.', video.uuid, lTags(video.uuid))
 
-  await transcodeNewWebTorrentResolution(video, payload.resolution, payload.isPortraitMode || false, job)
+  await transcodeNewWebTorrentResolution({ video, resolution: payload.resolution, job })
 
   logger.info('WebTorrent transcoding job for %s ended.', video.uuid, lTags(video.uuid))
 
@@ -127,7 +127,7 @@ async function handleNewWebTorrentResolutionJob (
 async function handleWebTorrentMergeAudioJob (job: Job, payload: MergeAudioTranscodingPayload, video: MVideoFullLight, user: MUserId) {
   logger.info('Handling merge audio transcoding job for %s.', video.uuid, lTags(video.uuid))
 
-  await mergeAudioVideofile(video, payload.resolution, job)
+  await mergeAudioVideofile({ video, resolution: payload.resolution, job })
 
   logger.info('Merge audio transcoding job for %s ended.', video.uuid, lTags(video.uuid))
 
@@ -137,7 +137,7 @@ async function handleWebTorrentMergeAudioJob (job: Job, payload: MergeAudioTrans
 async function handleWebTorrentOptimizeJob (job: Job, payload: OptimizeTranscodingPayload, video: MVideoFullLight, user: MUserId) {
   logger.info('Handling optimize transcoding job for %s.', video.uuid, lTags(video.uuid))
 
-  const { transcodeType } = await optimizeOriginalVideofile(video, video.getMaxQualityFile(), job)
+  const { transcodeType } = await optimizeOriginalVideofile({ video, inputVideoFile: video.getMaxQualityFile(), job })
 
   logger.info('Optimize transcoding job for %s ended.', video.uuid, lTags(video.uuid))
 
@@ -161,7 +161,6 @@ async function onHlsPlaylistGeneration (video: MVideoFullLight, user: MUser, pay
       video,
       user,
       videoFileResolution: payload.resolution,
-      isPortraitMode: payload.isPortraitMode,
       hasAudio: payload.hasAudio,
       isNewVideo: payload.isNewVideo ?? true,
       type: 'hls'
@@ -178,7 +177,7 @@ async function onVideoFirstWebTorrentTranscoding (
   transcodeType: TranscodeVODOptionsType,
   user: MUserId
 ) {
-  const { resolution, isPortraitMode, audioStream } = await videoArg.probeMaxQualityFile()
+  const { resolution, audioStream } = await videoArg.probeMaxQualityFile()
 
   // Maybe the video changed in database, refresh it
   const videoDatabase = await VideoModel.loadFull(videoArg.uuid)
@@ -189,7 +188,6 @@ async function onVideoFirstWebTorrentTranscoding (
   const originalFileHLSPayload = {
     ...payload,
 
-    isPortraitMode,
     hasAudio: !!audioStream,
     resolution: videoDatabase.getMaxQualityFile().resolution,
     // If we quick transcoded original file, force transcoding for HLS to avoid some weird playback issues
@@ -202,7 +200,6 @@ async function onVideoFirstWebTorrentTranscoding (
     user,
     videoFileResolution: resolution,
     hasAudio: !!audioStream,
-    isPortraitMode,
     type: 'webtorrent',
     isNewVideo: payload.isNewVideo ?? true
   })
@@ -235,7 +232,6 @@ async function createHlsJobIfEnabled (user: MUserId, payload: {
   videoUUID: string
   resolution: number
   hasAudio: boolean
-  isPortraitMode?: boolean
   copyCodecs: boolean
   isMaxQuality: boolean
   isNewVideo?: boolean
@@ -250,10 +246,10 @@ async function createHlsJobIfEnabled (user: MUserId, payload: {
     type: 'new-resolution-to-hls',
     autoDeleteWebTorrentIfNeeded: true,
 
-    ...pick(payload, [ 'videoUUID', 'resolution', 'isPortraitMode', 'copyCodecs', 'isMaxQuality', 'isNewVideo', 'hasAudio' ])
+    ...pick(payload, [ 'videoUUID', 'resolution', 'copyCodecs', 'isMaxQuality', 'isNewVideo', 'hasAudio' ])
   }
 
-  await addTranscodingJob(hlsTranscodingPayload, jobOptions)
+  await JobQueue.Instance.createJob(await buildTranscodingJob(hlsTranscodingPayload, jobOptions))
 
   return true
 }
@@ -262,17 +258,16 @@ async function createLowerResolutionsJobs (options: {
   video: MVideoFullLight
   user: MUserId
   videoFileResolution: number
-  isPortraitMode: boolean
   hasAudio: boolean
   isNewVideo: boolean
   type: 'hls' | 'webtorrent'
 }) {
-  const { video, user, videoFileResolution, isPortraitMode, isNewVideo, hasAudio, type } = options
+  const { video, user, videoFileResolution, isNewVideo, hasAudio, type } = options
 
   // Create transcoding jobs if there are enabled resolutions
   const resolutionsEnabled = await Hooks.wrapObject(
-    computeLowerResolutionsToTranscode(videoFileResolution, 'vod'),
-    'filter:transcoding.auto.lower-resolutions-to-transcode.result',
+    computeResolutionsToTranscode({ input: videoFileResolution, type: 'vod', includeInput: false, strictLower: true }),
+    'filter:transcoding.auto.resolutions-to-transcode.result',
     options
   )
 
@@ -289,7 +284,6 @@ async function createLowerResolutionsJobs (options: {
         type: 'new-resolution-to-webtorrent',
         videoUUID: video.uuid,
         resolution,
-        isPortraitMode,
         hasAudio,
         createHLSIfNeeded: true,
         isNewVideo
@@ -303,7 +297,6 @@ async function createLowerResolutionsJobs (options: {
         type: 'new-resolution-to-hls',
         videoUUID: video.uuid,
         resolution,
-        isPortraitMode,
         hasAudio,
         copyCodecs: false,
         isMaxQuality: false,
@@ -320,7 +313,7 @@ async function createLowerResolutionsJobs (options: {
       priority: await getTranscodingJobPriority(user)
     }
 
-    await addTranscodingJob(dataInput, jobOptions)
+    await JobQueue.Instance.createJob(await buildTranscodingJob(dataInput, jobOptions))
   }
 
   if (resolutionCreated.length === 0) {

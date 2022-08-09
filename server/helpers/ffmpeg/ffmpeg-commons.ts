@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
 import { execPromise } from '@server/helpers/core-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
@@ -81,7 +81,7 @@ async function runCommand (options: {
       command.on('progress', progress => {
         if (!progress.percent) return
 
-        job.progress(Math.round(progress.percent))
+        job.updateProgress(Math.round(progress.percent))
           .catch(err => logger.warn('Cannot set ffmpeg job progress.', { err, ...lTags() }))
       })
     }

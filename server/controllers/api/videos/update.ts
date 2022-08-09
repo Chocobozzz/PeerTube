@@ -1,7 +1,7 @@
 import express from 'express'
 import { Transaction } from 'sequelize/types'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share'
-import { JobQueue } from '@server/lib/job-queue'
+import { CreateJobArgument, JobQueue } from '@server/lib/job-queue'
 import { buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { FilteredModelAttributes } from '@server/types'
@@ -13,8 +13,6 @@ import { createReqFiles } from '../../../helpers/express-utils'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { federateVideoIfNeeded } from '../../../lib/activitypub/videos'
-import { Notifier } from '../../../lib/notifier'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videosUpdateValidator } from '../../../middlewares'
@@ -139,13 +137,9 @@ async function updateVideo (req: express.Request, res: express.Response) {
       return { videoInstanceUpdated, isNewVideo }
     })
 
-    const refreshedVideo = await updateTorrentsMetadataIfNeeded(videoInstanceUpdated, videoInfoToUpdate)
+    Hooks.runAction('action:api.video.updated', { video: videoInstanceUpdated, body: req.body, req, res })
 
-    await sequelizeTypescript.transaction(t => federateVideoIfNeeded(refreshedVideo, isNewVideo, t))
-
-    if (wasConfidentialVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(refreshedVideo)
-
-    Hooks.runAction('action:api.video.updated', { video: refreshedVideo, body: req.body, req, res })
+    await addVideoJobsAfterUpdate({ video: videoInstanceUpdated, videoInfoToUpdate, wasConfidentialVideo, isNewVideo })
   } catch (err) {
     // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed
@@ -192,25 +186,49 @@ function updateSchedule (videoInstance: MVideoFullLight, videoInfoToUpdate: Vide
   }
 }
 
-async function updateTorrentsMetadataIfNeeded (video: MVideoFullLight, videoInfoToUpdate: VideoUpdate) {
-  if (video.isLive || !videoInfoToUpdate.name) return video
+async function addVideoJobsAfterUpdate (options: {
+  video: MVideoFullLight
+  videoInfoToUpdate: VideoUpdate
+  wasConfidentialVideo: boolean
+  isNewVideo: boolean
+}) {
+  const { video, videoInfoToUpdate, wasConfidentialVideo, isNewVideo } = options
+  const jobs: CreateJobArgument[] = []
 
-  for (const file of (video.VideoFiles || [])) {
-    const payload: ManageVideoTorrentPayload = { action: 'update-metadata', videoId: video.id, videoFileId: file.id }
+  if (!video.isLive && videoInfoToUpdate.name) {
 
-    const job = await JobQueue.Instance.createJobWithPromise({ type: 'manage-video-torrent', payload })
-    await job.finished()
+    for (const file of (video.VideoFiles || [])) {
+      const payload: ManageVideoTorrentPayload = { action: 'update-metadata', videoId: video.id, videoFileId: file.id }
+
+      jobs.push({ type: 'manage-video-torrent', payload })
+    }
+
+    const hls = video.getHLSPlaylist()
+
+    for (const file of (hls?.VideoFiles || [])) {
+      const payload: ManageVideoTorrentPayload = { action: 'update-metadata', streamingPlaylistId: hls.id, videoFileId: file.id }
+
+      jobs.push({ type: 'manage-video-torrent', payload })
+    }
   }
 
-  const hls = video.getHLSPlaylist()
+  jobs.push({
+    type: 'federate-video',
+    payload: {
+      videoUUID: video.uuid,
+      isNewVideo
+    }
+  })
 
-  for (const file of (hls?.VideoFiles || [])) {
-    const payload: ManageVideoTorrentPayload = { action: 'update-metadata', streamingPlaylistId: hls.id, videoFileId: file.id }
-
-    const job = await JobQueue.Instance.createJobWithPromise({ type: 'manage-video-torrent', payload })
-    await job.finished()
+  if (wasConfidentialVideo) {
+    jobs.push({
+      type: 'notify',
+      payload: {
+        action: 'new-video',
+        videoUUID: video.uuid
+      }
+    })
   }
 
-  // Refresh video since files have changed
-  return VideoModel.loadFull(video.id)
+  return JobQueue.Instance.createSequentialJobFlow(...jobs)
 }

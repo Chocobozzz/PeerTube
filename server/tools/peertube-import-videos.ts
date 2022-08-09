@@ -165,7 +165,7 @@ async function processVideo (parameters: {
     const youtubeDLBinary = await YoutubeDLCLI.safeGet()
     const output = await youtubeDLBinary.download({
       url: videoInfo.url,
-      format: YoutubeDLCLI.getYoutubeDLVideoFormat([]),
+      format: YoutubeDLCLI.getYoutubeDLVideoFormat([], false),
       output: path,
       additionalYoutubeDLArgs: command.args,
       processOptions
@@ -251,7 +251,7 @@ async function fetchObject (info: any) {
   const youtubeDLCLI = await YoutubeDLCLI.safeGet()
   const result = await youtubeDLCLI.getInfo({
     url,
-    format: YoutubeDLCLI.getYoutubeDLVideoFormat([]),
+    format: YoutubeDLCLI.getYoutubeDLVideoFormat([], false),
     processOptions
   })
 
@@ -336,7 +336,7 @@ function exitError (message: string, ...meta: any[]) {
 function getYoutubeDLInfo (youtubeDLCLI: YoutubeDLCLI, url: string, args: string[]) {
   return youtubeDLCLI.getInfo({
     url,
-    format: YoutubeDLCLI.getYoutubeDLVideoFormat([]),
+    format: YoutubeDLCLI.getYoutubeDLVideoFormat([], false),
     additionalYoutubeDLArgs: [ '-j', '--flat-playlist', '--playlist-reverse', ...args ],
     processOptions
   })

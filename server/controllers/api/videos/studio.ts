@@ -71,7 +71,7 @@ async function createEditionTasks (req: express.Request, res: express.Response) 
     tasks: body.tasks.map((t, i) => buildTaskPayload(t, i, files))
   }
 
-  JobQueue.Instance.createJob({ type: 'video-studio-edition', payload })
+  JobQueue.Instance.createJobAsync({ type: 'video-studio-edition', payload })
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

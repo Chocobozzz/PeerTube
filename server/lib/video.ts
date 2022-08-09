@@ -1,5 +1,7 @@
 import { UploadFiles } from 'express'
+import memoizee from 'memoizee'
 import { Transaction } from 'sequelize/types'
+import { CONFIG } from '@server/initializers/config'
 import { DEFAULT_AUDIO_RESOLUTION, JOB_PRIORITY, MEMOIZE_LENGTH, MEMOIZE_TTL } from '@server/initializers/constants'
 import { TagModel } from '@server/models/video/tag'
 import { VideoModel } from '@server/models/video/video'
@@ -7,10 +9,8 @@ import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { FilteredModelAttributes } from '@server/types'
 import { MThumbnail, MUserId, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
 import { ThumbnailType, VideoCreate, VideoPrivacy, VideoState, VideoTranscodingPayload } from '@shared/models'
-import { CreateJobOptions, JobQueue } from './job-queue/job-queue'
+import { CreateJobOptions } from './job-queue/job-queue'
 import { updateVideoMiniatureFromExisting } from './thumbnail'
-import { CONFIG } from '@server/initializers/config'
-import memoizee from 'memoizee'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
   return {
@@ -86,7 +86,7 @@ async function setVideoTags (options: {
 
 // ---------------------------------------------------------------------------
 
-async function addOptimizeOrMergeAudioJob (options: {
+async function buildOptimizeOrMergeAudioJob (options: {
   video: MVideoUUID
   videoFile: MVideoFile
   user: MUserId
@@ -94,10 +94,10 @@ async function addOptimizeOrMergeAudioJob (options: {
 }) {
   const { video, videoFile, user, isNewVideo } = options
 
-  let dataInput: VideoTranscodingPayload
+  let payload: VideoTranscodingPayload
 
   if (videoFile.isAudio()) {
-    dataInput = {
+    payload = {
       type: 'merge-audio-to-webtorrent',
       resolution: DEFAULT_AUDIO_RESOLUTION,
       videoUUID: video.uuid,
@@ -105,24 +105,26 @@ async function addOptimizeOrMergeAudioJob (options: {
       isNewVideo
     }
   } else {
-    dataInput = {
+    payload = {
       type: 'optimize-to-webtorrent',
       videoUUID: video.uuid,
       isNewVideo
     }
   }
 
-  const jobOptions = {
-    priority: await getTranscodingJobPriority(user)
-  }
-
-  return addTranscodingJob(dataInput, jobOptions)
-}
-
-async function addTranscodingJob (payload: VideoTranscodingPayload, options: CreateJobOptions = {}) {
   await VideoJobInfoModel.increaseOrCreate(payload.videoUUID, 'pendingTranscode')
 
-  return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload }, options)
+  return {
+    type: 'video-transcoding' as 'video-transcoding',
+    priority: await getTranscodingJobPriority(user),
+    payload
+  }
+}
+
+async function buildTranscodingJob (payload: VideoTranscodingPayload, options: CreateJobOptions = {}) {
+  await VideoJobInfoModel.increaseOrCreate(payload.videoUUID, 'pendingTranscode')
+
+  return { type: 'video-transcoding' as 'video-transcoding', payload, ...options }
 }
 
 async function getTranscodingJobPriority (user: MUserId) {
@@ -136,7 +138,7 @@ async function getTranscodingJobPriority (user: MUserId) {
 
 // ---------------------------------------------------------------------------
 
-async function addMoveToObjectStorageJob (options: {
+async function buildMoveToObjectStorageJob (options: {
   video: MVideoUUID
   previousVideoState: VideoState
   isNewVideo?: boolean // Default true
@@ -145,8 +147,14 @@ async function addMoveToObjectStorageJob (options: {
 
   await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingMove')
 
-  const dataInput = { videoUUID: video.uuid, isNewVideo, previousVideoState }
-  return JobQueue.Instance.createJobWithPromise({ type: 'move-to-object-storage', payload: dataInput })
+  return {
+    type: 'move-to-object-storage' as 'move-to-object-storage',
+    payload: {
+      videoUUID: video.uuid,
+      isNewVideo,
+      previousVideoState
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -173,9 +181,9 @@ export {
   buildLocalVideoFromReq,
   buildVideoThumbnailsFromReq,
   setVideoTags,
-  addOptimizeOrMergeAudioJob,
-  addTranscodingJob,
-  addMoveToObjectStorageJob,
+  buildOptimizeOrMergeAudioJob,
+  buildTranscodingJob,
+  buildMoveToObjectStorageJob,
   getTranscodingJobPriority,
   getCachedVideoDuration
 }

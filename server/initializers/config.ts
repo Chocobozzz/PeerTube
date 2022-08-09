@@ -309,6 +309,7 @@ const CONFIG = {
     get THREADS () { return config.get<number>('transcoding.threads') },
     get CONCURRENCY () { return config.get<number>('transcoding.concurrency') },
     get PROFILE () { return config.get<string>('transcoding.profile') },
+    get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () { return config.get<boolean>('transcoding.always_transcode_original_resolution') },
     RESOLUTIONS: {
       get '0p' () { return config.get<boolean>('transcoding.resolutions.0p') },
       get '144p' () { return config.get<boolean>('transcoding.resolutions.144p') },
@@ -360,6 +361,8 @@ const CONFIG = {
       get ENABLED () { return config.get<boolean>('live.transcoding.enabled') },
       get THREADS () { return config.get<number>('live.transcoding.threads') },
       get PROFILE () { return config.get<string>('live.transcoding.profile') },
+
+      get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () { return config.get<boolean>('live.transcoding.always_transcode_original_resolution') },
 
       RESOLUTIONS: {
         get '144p' () { return config.get<boolean>('live.transcoding.resolutions.144p') },

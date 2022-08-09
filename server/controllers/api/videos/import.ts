@@ -3,14 +3,9 @@ import { move, readFile } from 'fs-extra'
 import { decode } from 'magnet-uri'
 import parseTorrent, { Instance } from 'parse-torrent'
 import { join } from 'path'
+import { addYoutubeDLImport, buildVideo, insertIntoDB, YoutubeDlImportError } from '@server/lib/video-import'
 import { MThumbnail, MVideoThumbnail } from '@server/types/models'
-import {
-  HttpStatusCode,
-  ServerErrorCode,
-  ThumbnailType,
-  VideoImportCreate,
-  VideoImportState
-} from '@shared/models'
+import { HttpStatusCode, ServerErrorCode, ThumbnailType, VideoImportCreate, VideoImportState } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { isArray } from '../../../helpers/custom-validators/misc'
 import { cleanUpReqFiles, createReqFiles } from '../../../helpers/express-utils'
@@ -28,7 +23,6 @@ import {
   videoImportCancelValidator,
   videoImportDeleteValidator
 } from '../../../middlewares'
-import { addYoutubeDLImport, insertIntoDB, YoutubeDlImportError, buildVideo } from '@server/lib/video-import'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
@@ -142,7 +136,7 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
     videoImportId: videoImport.id,
     magnetUri
   }
-  await JobQueue.Instance.createJobWithPromise({ type: 'video-import', payload })
+  await JobQueue.Instance.createJob({ type: 'video-import', payload })
 
   auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
 
@@ -179,6 +173,7 @@ async function handleYoutubeDlImport (req: express.Request, res: express.Respons
     return res.json(videoImport.toFormattedJSON()).end()
   } catch (err) {
     logger.error('An error occurred while importing the video %s. ', targetUrl, { err })
+
     return res.fail({
       message: err.message,
       status: statusFromYtDlImportError(err),
@@ -187,8 +182,8 @@ async function handleYoutubeDlImport (req: express.Request, res: express.Respons
       }
     })
   }
-
 }
+
 async function processThumbnail (req: express.Request, video: MVideoThumbnail) {
   const thumbnailField = req.files ? req.files['thumbnailfile'] : undefined
   if (thumbnailField) {

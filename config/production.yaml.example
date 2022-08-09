@@ -413,6 +413,9 @@ transcoding:
     1440p: false
     2160p: false
 
+  # Transcode and keep original resolution, even if it's above your maximum enabled resolution
+  always_transcode_original_resolution: true
+
   # Generate videos in a WebTorrent format (what we do since the first PeerTube release)
   # If you also enabled the hls format, it will multiply videos storage by 2
   # If disabled, breaks federation with PeerTube instances < 2.1
@@ -505,6 +508,9 @@ live:
       1080p: false
       1440p: false
       2160p: false
+
+    # Also transcode original resolution, even if it's above your maximum enabled resolution
+    always_transcode_original_resolution: true
 
 video_studio:
   # Enable video edition by users (cut, add intro/outro, add watermark etc)

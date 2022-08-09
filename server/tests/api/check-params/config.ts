@@ -114,6 +114,7 @@ describe('Test config API validators', function () {
         '1440p': false,
         '2160p': false
       },
+      alwaysTranscodeOriginalResolution: false,
       webtorrent: {
         enabled: true
       },
@@ -145,7 +146,8 @@ describe('Test config API validators', function () {
           '1080p': true,
           '1440p': true,
           '2160p': true
-        }
+        },
+        alwaysTranscodeOriginalResolution: false
       }
     },
     videoStudio: {

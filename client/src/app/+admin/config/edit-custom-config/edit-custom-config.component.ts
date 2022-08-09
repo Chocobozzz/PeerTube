@@ -178,6 +178,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         profile: null,
         concurrency: CONCURRENCY_VALIDATOR,
         resolutions: {},
+        alwaysTranscodeOriginalResolution: null,
         hls: {
           enabled: null
         },
@@ -200,7 +201,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           enabled: null,
           threads: TRANSCODING_THREADS_VALIDATOR,
           profile: null,
-          resolutions: {}
+          resolutions: {},
+          alwaysTranscodeOriginalResolution: null
         }
       },
       videoStudio: {

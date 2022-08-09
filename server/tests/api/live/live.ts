@@ -4,7 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { basename, join } from 'path'
 import { ffprobePromise, getVideoStream } from '@server/helpers/ffmpeg'
-import { checkLiveCleanup, checkLiveSegmentHash, checkResolutionsInMasterPlaylist, testImage } from '@server/tests/shared'
+import { checkLiveSegmentHash, checkResolutionsInMasterPlaylist, getAllFiles, testImage } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import {
   HttpStatusCode,
@@ -468,7 +468,7 @@ describe('Test live', function () {
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
       await waitJobs(servers)
 
-      await testVideoResolutions(liveVideoId, resolutions)
+      await testVideoResolutions(liveVideoId, resolutions.concat([ 720 ]))
 
       await stopFfmpeg(ffmpegCommand)
     })
@@ -580,10 +580,73 @@ describe('Test live', function () {
       }
     })
 
-    it('Should correctly have cleaned up the live files', async function () {
-      this.timeout(30000)
+    it('Should not generate an upper resolution than original file', async function () {
+      this.timeout(400_000)
 
-      await checkLiveCleanup(servers[0], liveVideoId, [ 240, 360, 720 ])
+      const resolutions = [ 240, 480 ]
+      await updateConf(resolutions)
+
+      await servers[0].config.updateExistingSubConfig({
+        newConfig: {
+          live: {
+            transcoding: {
+              alwaysTranscodeOriginalResolution: false
+            }
+          }
+        }
+      })
+
+      liveVideoId = await createLiveWrapper(true)
+
+      const ffmpegCommand = await commands[0].sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
+      await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
+      await waitJobs(servers)
+
+      await testVideoResolutions(liveVideoId, resolutions)
+
+      await stopFfmpeg(ffmpegCommand)
+      await commands[0].waitUntilEnded({ videoId: liveVideoId })
+
+      await waitJobs(servers)
+
+      await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
+
+      const video = await servers[0].videos.get({ id: liveVideoId })
+      const hlsFiles = video.streamingPlaylists[0].files
+
+      expect(video.files).to.have.lengthOf(0)
+      expect(hlsFiles).to.have.lengthOf(resolutions.length)
+
+      // eslint-disable-next-line @typescript-eslint/require-array-sort-compare
+      expect(getAllFiles(video).map(f => f.resolution.id).sort()).to.deep.equal(resolutions)
+    })
+
+    it('Should only keep the original resolution if all resolutions are disabled', async function () {
+      this.timeout(400_000)
+
+      await updateConf([])
+      liveVideoId = await createLiveWrapper(true)
+
+      const ffmpegCommand = await commands[0].sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
+      await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
+      await waitJobs(servers)
+
+      await testVideoResolutions(liveVideoId, [ 720 ])
+
+      await stopFfmpeg(ffmpegCommand)
+      await commands[0].waitUntilEnded({ videoId: liveVideoId })
+
+      await waitJobs(servers)
+
+      await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
+
+      const video = await servers[0].videos.get({ id: liveVideoId })
+      const hlsFiles = video.streamingPlaylists[0].files
+
+      expect(video.files).to.have.lengthOf(0)
+      expect(hlsFiles).to.have.lengthOf(1)
+
+      expect(hlsFiles[0].resolution.id).to.equal(720)
     })
   })
 

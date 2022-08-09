@@ -1,4 +1,4 @@
-import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
+import { RepeatOptions } from 'bullmq'
 import { randomBytes } from 'crypto'
 import { invert } from 'lodash'
 import { join } from 'path'
@@ -159,7 +159,9 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-studio-edition': 1,
   'manage-video-torrent': 1,
   'video-channel-import': 3,
-  'move-to-object-storage': 3
+  'move-to-object-storage': 3,
+  'notify': 1,
+  'federate-video': 1
 }
 // Excluded keys are jobs that can be configured by admins
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
@@ -179,7 +181,10 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'video-studio-edition': 1,
   'manage-video-torrent': 1,
   'move-to-object-storage': 1,
-  'video-channel-import': 1
+  'video-channel-import': 1,
+  'move-to-object-storage': 1,
+  'notify': 5,
+  'federate-video': 3
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -200,9 +205,11 @@ const JOB_TTL: { [id in JobType]: number } = {
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
   'manage-video-torrent': 1000 * 3600 * 3, // 3 hours
   'move-to-object-storage': 1000 * 60 * 60 * 3, // 3 hours
-  'video-channel-import': 1000 * 60 * 60 * 4 // 4 hours
+  'video-channel-import': 1000 * 60 * 60 * 4, // 4 hours
+  'notify': 60000 * 5, // 5 minutes
+  'federate-video': 60000 * 5 // 5 minutes
 }
-const REPEAT_JOBS: { [ id in JobType ]?: EveryRepeatOptions | CronRepeatOptions } = {
+const REPEAT_JOBS: { [ id in JobType ]?: RepeatOptions } = {
   'videos-views-stats': {
     cron: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
   },

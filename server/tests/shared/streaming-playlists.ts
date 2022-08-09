@@ -68,6 +68,9 @@ async function checkResolutionsInMasterPlaylist (options: {
 
     expect(masterPlaylist).to.match(reg)
   }
+
+  const playlistsLength = masterPlaylist.split('\n').filter(line => line.startsWith('#EXT-X-STREAM-INF:BANDWIDTH='))
+  expect(playlistsLength).to.have.lengthOf(resolutions.length)
 }
 
 export {

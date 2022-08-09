@@ -2,7 +2,7 @@ import { JobState } from '../../../shared/models'
 import { exists } from './misc'
 import { jobTypes } from '@server/lib/job-queue/job-queue'
 
-const jobStates: JobState[] = [ 'active', 'completed', 'failed', 'waiting', 'delayed', 'paused' ]
+const jobStates: JobState[] = [ 'active', 'completed', 'failed', 'waiting', 'delayed', 'paused', 'waiting-children' ]
 
 function isValidJobState (value: JobState) {
   return exists(value) && jobStates.includes(value)

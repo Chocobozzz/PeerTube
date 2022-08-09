@@ -301,7 +301,7 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   })
 
   registerHook({
-    target: 'filter:transcoding.auto.lower-resolutions-to-transcode.result',
+    target: 'filter:transcoding.auto.resolutions-to-transcode.result',
     handler: (object, context) => {
       if (context.video.name.includes('transcode-filter')) {
         object = [ 100 ]

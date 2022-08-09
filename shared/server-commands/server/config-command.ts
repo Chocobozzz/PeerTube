@@ -338,6 +338,7 @@ export class ConfigCommand extends AbstractCommand {
           '1440p': false,
           '2160p': false
         },
+        alwaysTranscodeOriginalResolution: true,
         webtorrent: {
           enabled: true
         },
@@ -367,7 +368,8 @@ export class ConfigCommand extends AbstractCommand {
             '1080p': true,
             '1440p': true,
             '2160p': true
-          }
+          },
+          alwaysTranscodeOriginalResolution: true
         }
       },
       videoStudio: {

@@ -122,7 +122,7 @@ function addUserSubscription (req: express.Request, res: express.Response) {
     followerActorId: user.Account.Actor.id
   }
 
-  JobQueue.Instance.createJob({ type: 'activitypub-follow', payload })
+  JobQueue.Instance.createJobAsync({ type: 'activitypub-follow', payload })
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { readdir, remove } from 'fs-extra'
 import { join } from 'path'
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamDuration } from '@server/helpers/ffmpeg'
@@ -213,13 +213,12 @@ async function assignReplayFilesToVideo (options: {
     const probe = await ffprobePromise(concatenatedTsFilePath)
     const { audioStream } = await getAudioStream(concatenatedTsFilePath, probe)
 
-    const { resolution, isPortraitMode } = await getVideoStreamDimensionsInfo(concatenatedTsFilePath, probe)
+    const { resolution } = await getVideoStreamDimensionsInfo(concatenatedTsFilePath, probe)
 
     const { resolutionPlaylistPath: outputPath } = await generateHlsPlaylistResolutionFromTS({
       video,
       concatenatedTsFilePath,
       resolution,
-      isPortraitMode,
       isAAC: audioStream?.codec_name === 'aac'
     })
 

@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { readFile, writeFile } from 'fs-extra'
 import { dirname } from 'path'
@@ -7,7 +7,7 @@ import { AvailableEncoders, VideoResolution } from '@shared/models'
 import { logger, loggerTagsFactory } from '../logger'
 import { getFFmpeg, runCommand } from './ffmpeg-commons'
 import { presetCopy, presetOnlyAudio, presetVOD } from './ffmpeg-presets'
-import { computeFPS, getVideoStreamFPS } from './ffprobe-utils'
+import { computeFPS, ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamFPS } from './ffprobe-utils'
 import { VIDEO_TRANSCODING_FPS } from '@server/initializers/constants'
 
 const lTags = loggerTagsFactory('ffmpeg')
@@ -26,8 +26,6 @@ interface BaseTranscodeVODOptions {
   profile: string
 
   resolution: number
-
-  isPortraitMode?: boolean
 
   job?: Job
 }
@@ -115,13 +113,17 @@ export {
 // ---------------------------------------------------------------------------
 
 async function buildVODCommand (command: FfmpegCommand, options: TranscodeVODOptions) {
-  let fps = await getVideoStreamFPS(options.inputPath)
+  const probe = await ffprobePromise(options.inputPath)
+
+  let fps = await getVideoStreamFPS(options.inputPath, probe)
   fps = computeFPS(fps, options.resolution)
 
   let scaleFilterValue: string
 
   if (options.resolution !== undefined) {
-    scaleFilterValue = options.isPortraitMode === true
+    const videoStreamInfo = await getVideoStreamDimensionsInfo(options.inputPath, probe)
+
+    scaleFilterValue = videoStreamInfo?.isPortraitMode === true
       ? `w=${options.resolution}:h=-2`
       : `w=-2:h=${options.resolution}`
   }

@@ -57,7 +57,7 @@ export class YoutubeDLCLI {
     }
   }
 
-  static getYoutubeDLVideoFormat (enabledResolutions: VideoResolution[]) {
+  static getYoutubeDLVideoFormat (enabledResolutions: VideoResolution[], useBestFormat: boolean) {
     /**
      * list of format selectors in order or preference
      * see https://github.com/ytdl-org/youtube-dl#format-selection
@@ -69,18 +69,26 @@ export class YoutubeDLCLI {
      *
      * in any case we avoid AV1, see https://github.com/Chocobozzz/PeerTube/issues/3499
      **/
-    const resolution = enabledResolutions.length === 0
-      ? VideoResolution.H_720P
-      : Math.max(...enabledResolutions)
 
-    return [
-      `bestvideo[vcodec^=avc1][height=${resolution}]+bestaudio[ext=m4a]`, // case #1
-      `bestvideo[vcodec!*=av01][vcodec!*=vp9.2][height=${resolution}]+bestaudio`, // case #2
-      `bestvideo[vcodec^=avc1][height<=${resolution}]+bestaudio[ext=m4a]`, // case #3
+    let result: string[] = []
+
+    if (!useBestFormat) {
+      const resolution = enabledResolutions.length === 0
+        ? VideoResolution.H_720P
+        : Math.max(...enabledResolutions)
+
+      result = [
+        `bestvideo[vcodec^=avc1][height=${resolution}]+bestaudio[ext=m4a]`, // case #1
+        `bestvideo[vcodec!*=av01][vcodec!*=vp9.2][height=${resolution}]+bestaudio`, // case #2
+        `bestvideo[vcodec^=avc1][height<=${resolution}]+bestaudio[ext=m4a]` // case #
+      ]
+    }
+
+    return result.concat([
       'bestvideo[vcodec!*=av01][vcodec!*=vp9.2]+bestaudio',
       'best[vcodec!*=av01][vcodec!*=vp9.2]', // case fallback for known formats
       'best' // Ultimate fallback
-    ].join('/')
+    ]).join('/')
   }
 
   private constructor () {
@@ -127,12 +135,14 @@ export class YoutubeDLCLI {
     processOptions: execa.NodeOptions
   }) {
     const additionalYoutubeDLArgs = [ '--skip-download', '--playlist-reverse' ]
+
     if (options.latestVideosCount !== undefined) {
       additionalYoutubeDLArgs.push('--playlist-end', options.latestVideosCount.toString())
     }
+
     return this.getInfo({
       url: options.channelUrl,
-      format: YoutubeDLCLI.getYoutubeDLVideoFormat([]),
+      format: YoutubeDLCLI.getYoutubeDLVideoFormat([], false),
       processOptions: options.processOptions,
       additionalYoutubeDLArgs
     })

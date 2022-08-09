@@ -1,10 +1,10 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { copy, stat } from 'fs-extra'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { CONFIG } from '@server/initializers/config'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
-import { addMoveToObjectStorageJob } from '@server/lib/video'
+import { buildMoveToObjectStorageJob } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
@@ -13,10 +13,11 @@ import { getLowercaseExtension } from '@shared/core-utils'
 import { VideoFileImportPayload, VideoStorage } from '@shared/models'
 import { getVideoStreamFPS, getVideoStreamDimensionsInfo } from '../../../helpers/ffmpeg'
 import { logger } from '../../../helpers/logger'
+import { JobQueue } from '../job-queue'
 
 async function processVideoFileImport (job: Job) {
   const payload = job.data as VideoFileImportPayload
-  logger.info('Processing video file import in job %d.', job.id)
+  logger.info('Processing video file import in job %s.', job.id)
 
   const video = await VideoModel.loadFull(payload.videoUUID)
   // No video, maybe deleted?
@@ -28,7 +29,7 @@ async function processVideoFileImport (job: Job) {
   await updateVideoFile(video, payload.filePath)
 
   if (CONFIG.OBJECT_STORAGE.ENABLED) {
-    await addMoveToObjectStorageJob({ video, previousVideoState: video.state })
+    await JobQueue.Instance.createJob(await buildMoveToObjectStorageJob({ video, previousVideoState: video.state }))
   } else {
     await federateVideoIfNeeded(video, false)
   }

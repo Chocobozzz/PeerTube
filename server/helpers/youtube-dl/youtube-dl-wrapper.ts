@@ -21,7 +21,11 @@ const processOptions = {
 
 class YoutubeDLWrapper {
 
-  constructor (private readonly url: string = '', private readonly enabledResolutions: number[] = []) {
+  constructor (
+    private readonly url: string,
+    private readonly enabledResolutions: number[],
+    private readonly useBestFormat: boolean
+  ) {
 
   }
 
@@ -30,7 +34,7 @@ class YoutubeDLWrapper {
 
     const info = await youtubeDL.getInfo({
       url: this.url,
-      format: YoutubeDLCLI.getYoutubeDLVideoFormat(this.enabledResolutions),
+      format: YoutubeDLCLI.getYoutubeDLVideoFormat(this.enabledResolutions, this.useBestFormat),
       additionalYoutubeDLArgs: youtubeDLArgs,
       processOptions
     })
@@ -80,7 +84,7 @@ class YoutubeDLWrapper {
     try {
       await youtubeDL.download({
         url: this.url,
-        format: YoutubeDLCLI.getYoutubeDLVideoFormat(this.enabledResolutions),
+        format: YoutubeDLCLI.getYoutubeDLVideoFormat(this.enabledResolutions, this.useBestFormat),
         output: pathWithoutExtension,
         timeout,
         processOptions
