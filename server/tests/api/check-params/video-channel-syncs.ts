@@ -156,7 +156,7 @@ describe('Test video channel sync API validator', () => {
     })
 
     it('Should succeed to create a sync with root and for another user\'s channel', async function () {
-      const res = await command.create({
+      const { videoChannelSync } = await command.create({
         token: server.accessToken,
         attributes: {
           ...baseCorrectParams,
@@ -164,16 +164,16 @@ describe('Test video channel sync API validator', () => {
         },
         expectedStatus: HttpStatusCode.OK_200
       })
-      userInfo.syncId = res.id
+      userInfo.syncId = videoChannelSync.id
     })
 
     it('Should succeed with the correct parameters', async function () {
-      const res = await command.create({
+      const { videoChannelSync } = await command.create({
         token: server.accessToken,
         attributes: baseCorrectParams,
         expectedStatus: HttpStatusCode.OK_200
       })
-      rootChannelSyncId = res.id
+      rootChannelSyncId = videoChannelSync.id
     })
 
     it('Should fail when the user exceeds allowed number of synchronizations', async function () {
@@ -282,7 +282,7 @@ describe('Test video channel sync API validator', () => {
     })
 
     it('should succeed when user delete a sync they own', async function () {
-      const { id: syncIdToDelete } = await command.create({
+      const { videoChannelSync } = await command.create({
         attributes: {
           externalChannelUrl: FIXTURE_URLS.youtubeChannel,
           videoChannelId: userInfo.channelId
@@ -292,7 +292,7 @@ describe('Test video channel sync API validator', () => {
       })
 
       await command.delete({
-        channelSyncId: syncIdToDelete,
+        channelSyncId: videoChannelSync.id,
         token: server.accessToken,
         expectedStatus: HttpStatusCode.NO_CONTENT_204
       })

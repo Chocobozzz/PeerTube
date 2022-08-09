@@ -87,6 +87,7 @@ export class YoutubeDLCLI {
     return result.concat([
       'bestvideo[vcodec!*=av01][vcodec!*=vp9.2]+bestaudio',
       'best[vcodec!*=av01][vcodec!*=vp9.2]', // case fallback for known formats
+      'bestvideo[ext=mp4]+bestaudio[ext=m4a]',
       'best' // Ultimate fallback
     ]).join('/')
   }
@@ -103,11 +104,14 @@ export class YoutubeDLCLI {
     timeout?: number
     additionalYoutubeDLArgs?: string[]
   }) {
+    let args = options.additionalYoutubeDLArgs || []
+    args = args.concat([ '--merge-output-format', 'mp4', '-f', options.format, '-o', options.output ])
+
     return this.run({
       url: options.url,
       processOptions: options.processOptions,
       timeout: options.timeout,
-      args: (options.additionalYoutubeDLArgs || []).concat([ '-f', options.format, '-o', options.output ])
+      args
     })
   }
 
@@ -129,11 +133,11 @@ export class YoutubeDLCLI {
       : info
   }
 
-  getChannelInfo (options: {
-    channelUrl: string
+  getListInfo (options: {
+    url: string
     latestVideosCount?: number
     processOptions: execa.NodeOptions
-  }) {
+  }): Promise<{ upload_date: string, webpage_url: string }[]> {
     const additionalYoutubeDLArgs = [ '--skip-download', '--playlist-reverse' ]
 
     if (options.latestVideosCount !== undefined) {
@@ -141,7 +145,7 @@ export class YoutubeDLCLI {
     }
 
     return this.getInfo({
-      url: options.channelUrl,
+      url: options.url,
       format: YoutubeDLCLI.getYoutubeDLVideoFormat([], false),
       processOptions: options.processOptions,
       additionalYoutubeDLArgs
@@ -194,7 +198,7 @@ export class YoutubeDLCLI {
 
     const output = await subProcess
 
-    logger.debug('Runned youtube-dl command.', { command: output.command, ...lTags() })
+    logger.debug('Run youtube-dl command.', { command: output.command, ...lTags() })
 
     return output.stdout
       ? output.stdout.trim().split(/\r?\n/)

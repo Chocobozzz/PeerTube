@@ -1,8 +1,7 @@
 import { logger } from '@server/helpers/logger'
-import { YoutubeDLCLI } from '@server/helpers/youtube-dl'
 import { CONFIG } from '@server/initializers/config'
+import { VideoChannelModel } from '@server/models/video/video-channel'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
-import { MChannelSyncChannel } from '@server/types/models'
 import { VideoChannelSyncState } from '@shared/models'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 import { synchronizeChannel } from '../video-import-channel'
@@ -18,38 +17,38 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
 
   protected async internalExecute () {
     logger.debug('Running %s.%s', this.constructor.name, this.internalExecute.name)
+
     if (!CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED) {
       logger.info('Discard channels synchronization as the feature is disabled')
       return
     }
-    const syncs: MChannelSyncChannel[] = await VideoChannelSyncModel.listSyncs()
-    const youtubeDL = await YoutubeDLCLI.safeGet()
 
-    for (const sync of syncs) {
+    const channelSyncs = await VideoChannelSyncModel.listSyncs()
+
+    for (const sync of channelSyncs) {
+      const channel = await VideoChannelModel.loadAndPopulateAccount(sync.videoChannelId)
+
       try {
-        const syncCreationDate = sync.createdAt
+        logger.info(
+          'Creating video import jobs for "%s" sync with external channel "%s"',
+          channel.Actor.preferredUsername, sync.externalChannelUrl
+        )
+
+        const onlyAfter = sync.lastSyncAt || sync.createdAt
+
         sync.state = VideoChannelSyncState.PROCESSING
         sync.lastSyncAt = new Date()
         await sync.save()
-        logger.info(`Starting synchronizing "${sync.VideoChannel.name}" with external channel "${sync.externalChannelUrl}"`)
-        const { errors, successes, alreadyImported } = await synchronizeChannel(sync.VideoChannel, sync.externalChannelUrl, {
-          youtubeDL,
-          secondsToWait: 5,
+
+        await synchronizeChannel({
+          channel,
+          externalChannelUrl: sync.externalChannelUrl,
           latestVideosCount: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.CHECK.LATEST_VIDEOS_COUNT,
-          onlyAfter: syncCreationDate
+          channelSync: sync,
+          onlyAfter
         })
-        if (errors > 0) {
-          sync.state = VideoChannelSyncState.FAILED
-          logger.error(`Finished synchronizing "${sync.VideoChannel.name}" with failures` +
-          ` (failures: ${errors}, imported: ${successes}, ignored because already imported: ${alreadyImported}). Please check the logs.`)
-        } else {
-          sync.state = VideoChannelSyncState.SYNCED
-          logger.info(`Finished synchronizing "${sync.VideoChannel.name}" successfully` +
-          ` (imported: ${successes}, ignored because already imported: ${alreadyImported})`)
-        }
-        await sync.save()
       } catch (err) {
-        logger.error(`Failed to synchronize channel ${sync.VideoChannel.name}`, { err })
+        logger.error(`Failed to synchronize channel ${channel.Actor.preferredUsername}`, { err })
         sync.state = VideoChannelSyncState.FAILED
         await sync.save()
       }

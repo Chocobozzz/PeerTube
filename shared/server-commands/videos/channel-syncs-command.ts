@@ -26,15 +26,13 @@ export class ChannelSyncsCommand extends AbstractCommand {
   async create (options: OverrideCommandOptions & {
     attributes: VideoChannelSyncCreate
   }) {
-    const response = this.postBodyRequest({
+    return unwrapBody<{ videoChannelSync: VideoChannelSync }>(this.postBodyRequest({
       path: ChannelSyncsCommand.API_PATH,
       ...options,
       fields: options.attributes,
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
-    })
-    const body = await unwrapBody<{ videoChannelSync: VideoChannelSync }>(response)
-    return body.videoChannelSync
+    }))
   }
 
   delete (options: OverrideCommandOptions & {

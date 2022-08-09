@@ -1,86 +1,81 @@
+import { logger } from '@server/helpers/logger'
+import { YoutubeDLWrapper } from '@server/helpers/youtube-dl'
+import { CONFIG } from '@server/initializers/config'
+import { buildYoutubeDLImport } from '@server/lib/video-import'
 import { UserModel } from '@server/models/user/user'
 import { VideoImportModel } from '@server/models/video/video-import'
-import { wait } from '@shared/core-utils'
-import { addYoutubeDLImport } from '@server/lib/video-import'
-import { YoutubeDLCLI } from '@server/helpers/youtube-dl'
-import { logger } from '@server/helpers/logger'
-import { VideoPrivacy } from '@shared/models'
-import { MChannelAccountDefault } from '@server/types/models'
+import { MChannelAccountDefault, MChannelSync } from '@server/types/models'
+import { VideoChannelSyncState, VideoPrivacy } from '@shared/models'
+import { CreateJobArgument, JobQueue } from './job-queue'
+import { ServerConfigManager } from './server-config-manager'
 
-type ChannelSyncInfo = {
-  total: number
-  alreadyImported: number
-  errors: number
-  successes: number
-}
-
-const processOptions = {
-  maxBuffer: 1024 * 1024 * 30 // 30MB
-}
-
-export type SynchronizeChannelOptions = {
-  youtubeDL: YoutubeDLCLI
-  secondsToWait: number
+export async function synchronizeChannel (options: {
+  channel: MChannelAccountDefault
+  externalChannelUrl: string
+  channelSync?: MChannelSync
   latestVideosCount?: number
   onlyAfter?: Date
-}
+}) {
+  const { channel, externalChannelUrl, latestVideosCount, onlyAfter, channelSync } = options
 
-function formatDateForYoutubeDl (date: Date) {
-  return `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${(date.getDate()).toString().padStart(2, '0')}`
-}
-
-export async function synchronizeChannel (
-  channel: MChannelAccountDefault,
-  externalChannelUrl: string,
-  { youtubeDL, secondsToWait, latestVideosCount, onlyAfter }: SynchronizeChannelOptions
-): Promise<ChannelSyncInfo> {
   const user = await UserModel.loadByChannelActorId(channel.actorId)
-  const channelInfo = await youtubeDL.getChannelInfo({
-    latestVideosCount,
-    channelUrl: externalChannelUrl,
-    processOptions
-  })
-  const afterFormatted: string = onlyAfter && formatDateForYoutubeDl(onlyAfter)
-  const targetUrls: string[] = (await Promise.all(
-    channelInfo.map(video => {
-      if (afterFormatted && video['upload_date'] <= afterFormatted) {
-        return []
-      }
-      return video['webpage_url']
+  const youtubeDL = new YoutubeDLWrapper(
+    externalChannelUrl,
+    ServerConfigManager.Instance.getEnabledResolutions('vod'),
+    CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+  )
+
+  const infoList = await youtubeDL.getInfoForListImport({ latestVideosCount })
+
+  const targetUrls = infoList
+    .filter(videoInfo => {
+      if (!onlyAfter) return true
+
+      return videoInfo.originallyPublishedAt.getTime() >= onlyAfter.getTime()
     })
-  )).flat()
-  logger.debug('Fetched %d candidate URLs for upload: %j', targetUrls.length, targetUrls)
+    .map(videoInfo => videoInfo.webpageUrl)
 
-  await wait(secondsToWait * 1000)
+  logger.info(
+    'Fetched %d candidate URLs for sync channel %s.',
+    targetUrls.length, channel.Actor.preferredUsername, { targetUrls }
+  )
 
-  const result: ChannelSyncInfo = {
-    total: 0,
-    errors: 0,
-    successes: 0,
-    alreadyImported: targetUrls.length
+  if (targetUrls.length === 0) {
+    if (channelSync) {
+      channelSync.state = VideoChannelSyncState.SYNCED
+      await channelSync.save()
+    }
+
+    return
   }
+
+  const children: CreateJobArgument[] = []
 
   for (const targetUrl of targetUrls) {
-    try {
-      if (!await VideoImportModel.urlAlreadyImported(channel.id, targetUrl)) {
-        const { job } = await addYoutubeDLImport({
-          user,
-          channel,
-          targetUrl,
-          importDataOverride: {
-            privacy: VideoPrivacy.PUBLIC
-          }
-        })
-        await job.finished()
-        result.successes += 1
-      } else {
-        result.alreadyImported += 1
-      }
-    } catch (err) {
-      result.errors += 1
-      logger.error(`An error occured while importing ${targetUrl}`, { err })
+    if (await VideoImportModel.urlAlreadyImported(channel.id, targetUrl)) {
+      logger.debug('%s is already imported for channel %s, skipping video channel synchronization.', channel.name, targetUrl)
+      continue
     }
-    await wait(secondsToWait * 1000)
+
+    const { job } = await buildYoutubeDLImport({
+      user,
+      channel,
+      targetUrl,
+      channelSync,
+      importDataOverride: {
+        privacy: VideoPrivacy.PUBLIC
+      }
+    })
+
+    children.push(job)
   }
-  return result
+
+  const parent: CreateJobArgument = {
+    type: 'after-video-channel-import',
+    payload: {
+      channelSyncId: channelSync.id
+    }
+  }
+
+  await JobQueue.Instance.createJobWithChildren(parent, children)
 }

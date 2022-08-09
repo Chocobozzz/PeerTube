@@ -22,6 +22,7 @@ import {
   ActivitypubHttpFetcherPayload,
   ActivitypubHttpUnicastPayload,
   ActorKeysPayload,
+  AfterVideoChannelImportPayload,
   DeleteResumableUploadMetaFilePayload,
   EmailPayload,
   FederateVideoPayload,
@@ -61,6 +62,7 @@ import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoStudioEdition } from './handlers/video-studio-edition'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViewsStats } from './handlers/video-views-stats'
+import { processAfterVideoChannelImport } from './handlers/after-video-channel-import'
 
 export type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -83,6 +85,7 @@ export type CreateJobArgument =
   { type: 'manage-video-torrent', payload: ManageVideoTorrentPayload } |
   { type: 'move-to-object-storage', payload: MoveObjectStoragePayload } |
   { type: 'video-channel-import', payload: VideoChannelImportPayload } |
+  { type: 'after-video-channel-import', payload: AfterVideoChannelImportPayload } |
   { type: 'notify', payload: NotifyPayload } |
   { type: 'move-to-object-storage', payload: MoveObjectStoragePayload } |
   { type: 'federate-video', payload: FederateVideoPayload }
@@ -112,6 +115,7 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'manage-video-torrent': processManageVideoTorrent,
   'video-studio-edition': processVideoStudioEdition,
   'video-channel-import': processVideoChannelImport,
+  'after-video-channel-import': processAfterVideoChannelImport,
   'notify': processNotify,
   'federate-video': processFederateVideo
 }
@@ -140,6 +144,7 @@ const jobTypes: JobType[] = [
   'manage-video-torrent',
   'video-studio-edition',
   'video-channel-import',
+  'after-video-channel-import',
   'notify',
   'federate-video'
 ]

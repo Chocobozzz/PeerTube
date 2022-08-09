@@ -13,6 +13,7 @@ type YoutubeDLInfo = {
   thumbnailUrl?: string
   ext?: string
   originallyPublishedAt?: Date
+  webpageUrl?: string
 
   urls?: string[]
 }
@@ -81,7 +82,8 @@ class YoutubeDLInfoBuilder {
       thumbnailUrl: obj.thumbnail || undefined,
       urls: this.buildAvailableUrl(obj),
       originallyPublishedAt: this.buildOriginallyPublishedAt(obj),
-      ext: obj.ext
+      ext: obj.ext,
+      webpageUrl: obj.webpage_url
     }
   }
 

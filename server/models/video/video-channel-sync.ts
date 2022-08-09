@@ -1,8 +1,4 @@
-import { isVideoChannelSyncStateValid } from '@server/helpers/custom-validators/video-channel-syncs'
-import { CONSTRAINTS_FIELDS, VIDEO_CHANNEL_SYNC_STATE } from '@server/initializers/constants'
-import { VideoChannelSync, VideoChannelSyncState } from '@shared/models'
-import { MChannelSyncChannel, MChannelSyncFormattable } from '@server/types/models/video/video-channel-sync'
-import { AttributesOnly } from '@shared/typescript-utils'
+import { Op } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -17,12 +13,16 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { AccountModel } from '../account/account'
-import { throwIfNotValid, getChannelSyncSort } from '../utils'
-import { VideoChannelModel } from './video-channel'
-import { Op } from 'sequelize'
-import { UserModel } from '../user/user'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
+import { isVideoChannelSyncStateValid } from '@server/helpers/custom-validators/video-channel-syncs'
+import { CONSTRAINTS_FIELDS, VIDEO_CHANNEL_SYNC_STATE } from '@server/initializers/constants'
+import { MChannelSync, MChannelSyncFormattable } from '@server/types/models'
+import { VideoChannelSync, VideoChannelSyncState } from '@shared/models'
+import { AttributesOnly } from '@shared/typescript-utils'
+import { AccountModel } from '../account/account'
+import { UserModel } from '../user/user'
+import { getChannelSyncSort, throwIfNotValid } from '../utils'
+import { VideoChannelModel } from './video-channel'
 
 @DefaultScope(() => ({
   include: [
@@ -136,7 +136,7 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
     })
   }
 
-  static async listSyncs (): Promise<MChannelSyncChannel[]> {
+  static async listSyncs (): Promise<MChannelSync[]> {
     const query = {
       include: [
         {

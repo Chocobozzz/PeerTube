@@ -3,9 +3,9 @@ import { move, readFile } from 'fs-extra'
 import { decode } from 'magnet-uri'
 import parseTorrent, { Instance } from 'parse-torrent'
 import { join } from 'path'
-import { addYoutubeDLImport, buildVideo, insertIntoDB, YoutubeDlImportError } from '@server/lib/video-import'
+import { buildYoutubeDLImport, buildVideoFromImport, insertFromImportIntoDB, YoutubeDlImportError } from '@server/lib/video-import'
 import { MThumbnail, MVideoThumbnail } from '@server/types/models'
-import { HttpStatusCode, ServerErrorCode, ThumbnailType, VideoImportCreate, VideoImportState } from '@shared/models'
+import { HttpStatusCode, ServerErrorCode, ThumbnailType, VideoImportCreate, VideoImportPayload, VideoImportState } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { isArray } from '../../../helpers/custom-validators/misc'
 import { cleanUpReqFiles, createReqFiles } from '../../../helpers/express-utils'
@@ -103,7 +103,7 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
     videoName = result.name
   }
 
-  const video = await buildVideo({
+  const video = await buildVideoFromImport({
     channelId: res.locals.videoChannel.id,
     importData: { name: videoName },
     importDataOverride: body,
@@ -113,7 +113,7 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
   const thumbnailModel = await processThumbnail(req, video)
   const previewModel = await processPreview(req, video)
 
-  const videoImport = await insertIntoDB({
+  const videoImport = await insertFromImportIntoDB({
     video,
     thumbnailModel,
     previewModel,
@@ -128,13 +128,12 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
     }
   })
 
-  // Create job to import the video
-  const payload = {
+  const payload: VideoImportPayload = {
     type: torrentfile
-      ? 'torrent-file' as 'torrent-file'
-      : 'magnet-uri' as 'magnet-uri',
+      ? 'torrent-file'
+      : 'magnet-uri',
     videoImportId: videoImport.id,
-    magnetUri
+    preventException: false
   }
   await JobQueue.Instance.createJob({ type: 'video-import', payload })
 
@@ -160,7 +159,7 @@ async function handleYoutubeDlImport (req: express.Request, res: express.Respons
   const user = res.locals.oauth.token.User
 
   try {
-    const { videoImport } = await addYoutubeDLImport({
+    const { job, videoImport } = await buildYoutubeDLImport({
       targetUrl,
       channel: res.locals.videoChannel,
       importDataOverride: body,
@@ -168,6 +167,8 @@ async function handleYoutubeDlImport (req: express.Request, res: express.Respons
       previewFilePath: req.files?.['previewfile']?.[0].path,
       user
     })
+    await JobQueue.Instance.createJob(job)
+
     auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
 
     return res.json(videoImport.toFormattedJSON()).end()
