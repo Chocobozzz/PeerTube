@@ -37,7 +37,6 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     totalItems: null
   }
   miniatureDisplayOptions: MiniatureDisplayOptions = {
-    containedInPlaylists: true,
     date: true,
     views: true,
     by: true,
@@ -102,7 +101,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     }
 
     this.getVideosObservable(this.pagination.currentPage)
-      .pipe(switchMap(({ data }) => this.playlistService.listPlaylistsForVideos(data.map(v => v.id))))
+      .pipe(switchMap(({ data }) => this.playlistService.doVideosExistInPlaylist(data.map(v => v.id))))
       .subscribe(result => {
         this.videosContainedInPlaylists = Object.keys(result).reduce((acc, videoId) => ({
           ...acc,

@@ -19,7 +19,6 @@ import { VideoPlaylistService } from '../shared-video-playlist'
 import { VideoActionsDisplayType } from './video-actions-dropdown.component'
 
 export type MiniatureDisplayOptions = {
-  containedInPlaylists?: boolean
   date?: boolean
   views?: boolean
   by?: boolean
@@ -42,7 +41,6 @@ export class VideoMiniatureComponent implements OnInit {
   @Input() containedInPlaylists: VideoExistInPlaylist[]
 
   @Input() displayOptions: MiniatureDisplayOptions = {
-    containedInPlaylists: false,
     date: true,
     views: true,
     by: true,

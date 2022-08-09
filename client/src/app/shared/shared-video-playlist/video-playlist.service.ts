@@ -83,10 +83,6 @@ export class VideoPlaylistService {
                )
   }
 
-  listPlaylistsForVideos (videoIds: number[]) {
-    return this.doVideosExistInPlaylist(videoIds)
-  }
-
   listMyPlaylistWithCache (user: AuthUser, search?: string) {
     if (!search) {
       if (this.myAccountPlaylistCacheRunning) return this.myAccountPlaylistCacheRunning
@@ -342,7 +338,7 @@ export class VideoPlaylistService {
                )
   }
 
-  private doVideosExistInPlaylist (videoIds: number[]): Observable<VideosExistInPlaylists> {
+  doVideosExistInPlaylist (videoIds: number[]): Observable<VideosExistInPlaylists> {
     const url = VideoPlaylistService.MY_VIDEO_PLAYLIST_URL + 'videos-exist'
 
     let params = new HttpParams()
