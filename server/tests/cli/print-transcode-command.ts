@@ -27,8 +27,8 @@ describe('Test print transcode jobs', function () {
       expect(command).to.includes('-r 25')
       expect(command).to.includes('-level:v 3.1')
       expect(command).to.includes('-g:v 50')
-      expect(command).to.includes(`-maxrate `)
-      expect(command).to.includes(`-bufsize `)
+      expect(command).to.includes(`-maxrate:v `)
+      expect(command).to.includes(`-bufsize:v `)
     }
   })
 })

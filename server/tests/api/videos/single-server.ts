@@ -11,7 +11,8 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
-  setDefaultChannelAvatar
+  setDefaultChannelAvatar,
+  waitJobs
 } from '@shared/server-commands'
 
 const expect = chai.expect
@@ -357,6 +358,8 @@ describe('Test a single server', function () {
 
     it('Should have the video updated', async function () {
       this.timeout(60000)
+
+      await waitJobs([ server ])
 
       const video = await server.videos.get({ id: videoId })
 
