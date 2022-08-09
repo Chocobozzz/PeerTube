@@ -35,15 +35,19 @@ async function updateStreamingPlaylistsInfohashesIfNeeded () {
 }
 
 async function updatePlaylistAfterFileChange (video: MVideo, playlist: MStreamingPlaylist) {
-  let playlistWithFiles = await updateMasterHLSPlaylist(video, playlist)
-  playlistWithFiles = await updateSha256VODSegments(video, playlist)
+  try {
+    let playlistWithFiles = await updateMasterHLSPlaylist(video, playlist)
+    playlistWithFiles = await updateSha256VODSegments(video, playlist)
 
-  // Refresh playlist, operations can take some time
-  playlistWithFiles = await VideoStreamingPlaylistModel.loadWithVideoAndFiles(playlist.id)
-  playlistWithFiles.assignP2PMediaLoaderInfoHashes(video, playlistWithFiles.VideoFiles)
-  await playlistWithFiles.save()
+    // Refresh playlist, operations can take some time
+    playlistWithFiles = await VideoStreamingPlaylistModel.loadWithVideoAndFiles(playlist.id)
+    playlistWithFiles.assignP2PMediaLoaderInfoHashes(video, playlistWithFiles.VideoFiles)
+    await playlistWithFiles.save()
 
-  video.setHLSPlaylist(playlistWithFiles)
+    video.setHLSPlaylist(playlistWithFiles)
+  } catch (err) {
+    logger.info('Cannot update playlist after file change. Maybe due to concurrent transcoding', { err })
+  }
 }
 
 // ---------------------------------------------------------------------------

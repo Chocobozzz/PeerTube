@@ -286,20 +286,16 @@ class JobQueue {
   async pause () {
     for (const handlerName of Object.keys(this.workers)) {
       const worker: Worker = this.workers[handlerName]
-      const queue: Queue = this.queues[handlerName]
 
       await worker.pause()
-      await queue.pause()
     }
   }
 
-  async resume () {
+  resume () {
     for (const handlerName of Object.keys(this.workers)) {
       const worker: Worker = this.workers[handlerName]
-      const queue: Queue = this.queues[handlerName]
 
       worker.resume()
-      await queue.resume()
     }
   }
 

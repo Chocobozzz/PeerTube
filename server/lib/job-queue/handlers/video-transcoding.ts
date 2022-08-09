@@ -42,7 +42,7 @@ const lTags = loggerTagsFactory('transcoding')
 
 async function processVideoTranscoding (job: Job) {
   const payload = job.data as VideoTranscodingPayload
-  logger.info('Processing transcoding job %d.', job.id, lTags(payload.videoUUID))
+  logger.info('Processing transcoding job %s.', job.id, lTags(payload.videoUUID))
 
   const video = await VideoModel.loadFull(payload.videoUUID)
   // No video, maybe deleted?
