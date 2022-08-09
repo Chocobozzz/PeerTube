@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { chain, omit } from 'lodash'
+import { merge, omit } from 'lodash'
+import { CustomConfig, HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -11,7 +12,6 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/server-commands'
-import { CustomConfig, HttpStatusCode } from '@shared/models'
 
 describe('Test config API validators', function () {
   const path = '/api/v1/config/custom'
@@ -351,11 +351,15 @@ describe('Test config API validators', function () {
     })
 
     it('Should fail with a disabled http upload & enabled sync', async function () {
-      const newUpdateParams: CustomConfig = chain(updateParams)
-        .cloneDeep()
-        .update('import.videos.http.enabled', () => false)
-        .update('import.videoChannelSynchronization.enabled', () => true)
-        .value()
+      const newUpdateParams: CustomConfig = merge({}, updateParams, {
+        import: {
+          videos: {
+            http: { enabled: false }
+          },
+          videoChannelSynchronization: { enabled: true }
+        }
+      })
+
       await makePutBodyRequest({
         url: server.url,
         path,

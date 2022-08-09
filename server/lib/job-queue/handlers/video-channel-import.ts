@@ -1,7 +1,7 @@
 import { Job } from 'bullmq'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
-import { synchronizeChannel } from '@server/lib/video-import-channel'
+import { synchronizeChannel } from '@server/lib/sync-channel'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { VideoChannelImportPayload } from '@shared/models'
 

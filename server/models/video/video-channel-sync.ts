@@ -16,7 +16,7 @@ import {
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
 import { isVideoChannelSyncStateValid } from '@server/helpers/custom-validators/video-channel-syncs'
 import { CONSTRAINTS_FIELDS, VIDEO_CHANNEL_SYNC_STATE } from '@server/initializers/constants'
-import { MChannelSync, MChannelSyncFormattable } from '@server/types/models'
+import { MChannelSync, MChannelSyncChannel, MChannelSyncFormattable } from '@server/types/models'
 import { VideoChannelSync, VideoChannelSyncState } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { AccountModel } from '../account/account'
@@ -86,6 +86,7 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
       const videoChannelModel = forCount
         ? VideoChannelModel.unscoped()
         : VideoChannelModel
+
       return {
         offset: options.start,
         limit: options.count,
@@ -101,6 +102,7 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
         ]
       }
     }
+
     return Promise.all([
       VideoChannelSyncModel.unscoped().count(getQuery(true)),
       VideoChannelSyncModel.unscoped().findAll(getQuery(false))
@@ -123,17 +125,8 @@ export class VideoChannelSyncModel extends Model<Partial<AttributesOnly<VideoCha
     return VideoChannelSyncModel.unscoped().count(query)
   }
 
-  static loadWithAccount (id: number) {
-    return this.unscoped().findByPk(id, {
-      include: [ {
-        model: VideoChannelModel,
-        required: true,
-        include: [ {
-          model: AccountModel,
-          required: true
-        } ]
-      } ]
-    })
+  static loadWithChannel (id: number): Promise<MChannelSyncChannel> {
+    return VideoChannelSyncModel.findByPk(id)
   }
 
   static async listSyncs (): Promise<MChannelSync[]> {

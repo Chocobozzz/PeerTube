@@ -9,7 +9,7 @@ export async function processAfterVideoChannelImport (job: Job) {
 
   logger.info('Processing after video channel import in job %s.', job.id)
 
-  const sync = await VideoChannelSyncModel.loadWithAccount(payload.channelSyncId)
+  const sync = await VideoChannelSyncModel.loadWithChannel(payload.channelSyncId)
   if (!sync) {
     logger.error('Unknown sync id %d.', payload.channelSyncId)
     return
@@ -27,10 +27,10 @@ export async function processAfterVideoChannelImport (job: Job) {
 
   if (errors > 0) {
     sync.state = VideoChannelSyncState.FAILED
-    logger.error(`Finished synchronizing "${sync.VideoChannel.name}" with failures.`, { errors, successes })
+    logger.error(`Finished synchronizing "${sync.VideoChannel.Actor.preferredUsername}" with failures.`, { errors, successes })
   } else {
     sync.state = VideoChannelSyncState.SYNCED
-    logger.info(`Finished synchronizing "${sync.VideoChannel.name}" successfully.`, { successes })
+    logger.info(`Finished synchronizing "${sync.VideoChannel.Actor.preferredUsername}" successfully.`, { successes })
   }
 
   await sync.save()

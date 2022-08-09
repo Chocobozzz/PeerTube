@@ -5,6 +5,7 @@ import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
 export class ChannelSyncsCommand extends AbstractCommand {
   private static readonly API_PATH = '/api/v1/video-channel-syncs'
+
   listByAccount (options: OverrideCommandOptions & {
     accountName: string
     start?: number
@@ -12,7 +13,9 @@ export class ChannelSyncsCommand extends AbstractCommand {
     sort?: string
   }) {
     const { accountName, sort = 'createdAt' } = options
+
     const path = `/api/v1/accounts/${accountName}/video-channel-syncs`
+
     return this.getRequestBody<ResultList<VideoChannelSync>>({
       ...options,
 
@@ -27,8 +30,9 @@ export class ChannelSyncsCommand extends AbstractCommand {
     attributes: VideoChannelSyncCreate
   }) {
     return unwrapBody<{ videoChannelSync: VideoChannelSync }>(this.postBodyRequest({
-      path: ChannelSyncsCommand.API_PATH,
       ...options,
+
+      path: ChannelSyncsCommand.API_PATH,
       fields: options.attributes,
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200

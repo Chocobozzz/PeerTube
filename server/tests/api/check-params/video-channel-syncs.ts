@@ -8,8 +8,6 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@shared/server-commands'
-import { chain } from 'lodash'
-import 'mocha'
 
 describe('Test video channel sync API validator', () => {
   const path = '/api/v1/video-channel-syncs'
@@ -36,16 +34,21 @@ describe('Test video channel sync API validator', () => {
 
   async function withMaxSyncsPerUser<T> (maxSync: number, callback: () => Promise<T>): Promise<void> {
     const origConfig = await server.config.getCustomConfig()
-    const newConfig = chain(origConfig).cloneDeep().update('import.videoChannelSynchronization.maxPerUser', () => 1).value()
-    await server.config.updateCustomConfig({
-      newCustomConfig: newConfig
+
+    await server.config.updateExistingSubConfig({
+      newConfig: {
+        import: {
+          videoChannelSynchronization: {
+            maxPerUser: maxSync
+          }
+        }
+      }
     })
+
     try {
       await callback()
     } finally {
-      await server.config.updateCustomConfig({
-        newCustomConfig: origConfig
-      })
+      await server.config.updateCustomConfig({ newCustomConfig: origConfig })
     }
   }
 
@@ -62,13 +65,13 @@ describe('Test video channel sync API validator', () => {
     rootChannelId = server.store.channel.id
 
     {
-      userInfo.username = 'user1'
       userInfo.accessToken = await server.users.generateUserAndToken(userInfo.username)
 
       const { videoChannels, id: userId } = await server.users.getMyInfo({ token: userInfo.accessToken })
       userInfo.id = userId
       userInfo.channelId = videoChannels[0].id
     }
+
     await server.config.enableChannelSync()
   })
 
@@ -190,7 +193,7 @@ describe('Test video channel sync API validator', () => {
     })
   })
 
-  describe('When listing my video imports', function () {
+  describe('When listing my channel syncs', function () {
     const myPath = '/api/v1/accounts/root/video-channel-syncs'
 
     it('Should fail with a bad start pagination', async function () {

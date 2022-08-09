@@ -18,6 +18,14 @@ export class ConfigCommand extends AbstractCommand {
     }
   }
 
+  disableImports () {
+    return this.setImportsEnabled(false)
+  }
+
+  enableImports () {
+    return this.setImportsEnabled(true)
+  }
+
   private setImportsEnabled (enabled: boolean) {
     return this.updateExistingSubConfig({
       newConfig: {
@@ -34,14 +42,6 @@ export class ConfigCommand extends AbstractCommand {
         }
       }
     })
-  }
-
-  disableImports () {
-    return this.setImportsEnabled(false)
-  }
-
-  enableImports () {
-    return this.setImportsEnabled(true)
   }
 
   private setChannelSyncEnabled (enabled: boolean) {

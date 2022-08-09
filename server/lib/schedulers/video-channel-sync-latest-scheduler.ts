@@ -4,7 +4,7 @@ import { VideoChannelModel } from '@server/models/video/video-channel'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { VideoChannelSyncState } from '@shared/models'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
-import { synchronizeChannel } from '../video-import-channel'
+import { synchronizeChannel } from '../sync-channel'
 import { AbstractScheduler } from './abstract-scheduler'
 
 export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
@@ -43,7 +43,7 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
         await synchronizeChannel({
           channel,
           externalChannelUrl: sync.externalChannelUrl,
-          latestVideosCount: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.CHECK.LATEST_VIDEOS_COUNT,
+          videosCountLimit: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.VIDEOS_LIMIT_PER_SYNCHRONIZATION,
           channelSync: sync,
           onlyAfter
         })

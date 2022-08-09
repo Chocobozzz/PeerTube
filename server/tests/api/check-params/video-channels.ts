@@ -2,9 +2,9 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { omit, pick } from 'lodash'
+import { omit } from 'lodash'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination, FIXTURE_URLS } from '@server/tests/shared'
-import { buildAbsoluteFixturePath } from '@shared/core-utils'
+import { areHttpImportTestsDisabled, buildAbsoluteFixturePath } from '@shared/core-utils'
 import { HttpStatusCode, VideoChannelUpdate } from '@shared/models'
 import {
   ChannelsCommand,
@@ -38,7 +38,6 @@ describe('Test video channels API validator', function () {
     this.timeout(30000)
 
     server = await createSingleServer(1)
-    // server = await createSingleServer(1, undefined, { nodeArgs: [ '--inspect-brk' ] })
 
     await setAccessTokensToServers([ server ])
 
@@ -49,7 +48,7 @@ describe('Test video channels API validator', function () {
 
     {
       const user = await server.users.create({ username: userCreds.username, password: userCreds.password })
-      Object.assign(userInfo, pick(user, 'id', 'videoQuota', 'videoQuotaDaily'))
+      userInfo.id = user.id
       userInfo.accessToken = await server.login.getAccessToken(userCreds)
     }
 
@@ -358,17 +357,16 @@ describe('Test video channels API validator', function () {
   describe('When triggering full synchronization', function () {
 
     it('Should fail when HTTP upload is disabled', async function () {
-      try {
-        await server.config.disableImports()
-        await command.importVideos({
-          channelName: 'super_channel',
-          externalChannelUrl: FIXTURE_URLS.youtubeChannel,
-          token: server.accessToken,
-          expectedStatus: HttpStatusCode.FORBIDDEN_403
-        })
-      } finally {
-        await server.config.enableImports()
-      }
+      await server.config.disableImports()
+
+      await command.importVideos({
+        channelName: 'super_channel',
+        externalChannelUrl: FIXTURE_URLS.youtubeChannel,
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+
+      await server.config.enableImports()
     })
 
     it('Should fail when externalChannelUrl is not provided', async function () {
@@ -408,19 +406,18 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail when the user has no quota', async function () {
-      // set-up
       await server.users.update({
         userId: userInfo.id,
         videoQuota: 0
       })
-      // test
+
       await command.importVideos({
         channelName: 'fake_channel',
         externalChannelUrl: FIXTURE_URLS.youtubeChannel,
         token: userInfo.accessToken,
         expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413
       })
-      // teardown
+
       await server.users.update({
         userId: userInfo.id,
         videoQuota: userInfo.videoQuota
@@ -428,19 +425,18 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail when the user has no daily quota', async function () {
-      // set-up
       await server.users.update({
         userId: userInfo.id,
         videoQuotaDaily: 0
       })
-      // test
+
       await command.importVideos({
         channelName: 'fake_channel',
         externalChannelUrl: FIXTURE_URLS.youtubeChannel,
         token: userInfo.accessToken,
         expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413
       })
-      // teardown
+
       await server.users.update({
         userId: userInfo.id,
         videoQuotaDaily: userInfo.videoQuotaDaily
@@ -448,20 +444,21 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should succeed when sync is run by its owner', async function () {
+      if (!areHttpImportTestsDisabled()) return
+
       await command.importVideos({
         channelName: 'fake_channel',
         externalChannelUrl: FIXTURE_URLS.youtubeChannel,
-        token: userInfo.accessToken,
-        expectedStatus: HttpStatusCode.NO_CONTENT_204
+        token: userInfo.accessToken
       })
     })
 
     it('Should succeed when sync is run with root and for another user\'s channel', async function () {
+      if (!areHttpImportTestsDisabled()) return
+
       await command.importVideos({
         channelName: 'fake_channel',
-        externalChannelUrl: FIXTURE_URLS.youtubeChannel,
-        token: server.accessToken,
-        expectedStatus: HttpStatusCode.NO_CONTENT_204
+        externalChannelUrl: FIXTURE_URLS.youtubeChannel
       })
     })
   })

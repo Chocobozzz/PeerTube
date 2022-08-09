@@ -1,5 +1,6 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
+import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
 import { CONFIG } from '@server/initializers/config'
 import { MChannelAccountDefault } from '@server/types/models'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
@@ -14,7 +15,6 @@ import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/actor/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { areValidationErrors, checkUserQuota, doesVideoChannelNameWithHostExist } from '../shared'
-import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
 
 export const videoChannelsAddValidator = [
   body('name').custom(isVideoChannelUsernameValid).withMessage('Should have a valid channel name'),
@@ -110,10 +110,10 @@ export const ensureIsLocalChannel = [
 export const ensureChannelOwnerCanUpload = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const channel = res.locals.videoChannel
-    const user = {
-      id: channel.Account.userId
-    }
+    const user = { id: channel.Account.userId }
+
     if (!await checkUserQuota(user, 1, res)) return
+
     next()
   }
 ]
@@ -144,13 +144,14 @@ export const videoChannelsListValidator = [
 
 export const videoChannelImportVideosValidator = [
   body('externalChannelUrl').custom(isUrlValid).withMessage('Should have a valid channel url'),
+
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelImport parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
 
     if (!CONFIG.IMPORT.VIDEOS.HTTP.ENABLED) {
-      res.fail({
+      return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
         message: 'Channel import is impossible as video upload via HTTP is not enabled on the server'
       })

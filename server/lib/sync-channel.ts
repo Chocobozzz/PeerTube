@@ -13,10 +13,10 @@ export async function synchronizeChannel (options: {
   channel: MChannelAccountDefault
   externalChannelUrl: string
   channelSync?: MChannelSync
-  latestVideosCount?: number
+  videosCountLimit?: number
   onlyAfter?: Date
 }) {
-  const { channel, externalChannelUrl, latestVideosCount, onlyAfter, channelSync } = options
+  const { channel, externalChannelUrl, videosCountLimit, onlyAfter, channelSync } = options
 
   const user = await UserModel.loadByChannelActorId(channel.actorId)
   const youtubeDL = new YoutubeDLWrapper(
@@ -25,7 +25,7 @@ export async function synchronizeChannel (options: {
     CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
   )
 
-  const infoList = await youtubeDL.getInfoForListImport({ latestVideosCount })
+  const infoList = await youtubeDL.getInfoForListImport({ latestVideosCount: videosCountLimit })
 
   const targetUrls = infoList
     .filter(videoInfo => {
@@ -73,7 +73,7 @@ export async function synchronizeChannel (options: {
   const parent: CreateJobArgument = {
     type: 'after-video-channel-import',
     payload: {
-      channelSyncId: channelSync.id
+      channelSyncId: channelSync?.id
     }
   }
 

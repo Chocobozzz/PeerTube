@@ -162,23 +162,25 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
   }
 
   static async urlAlreadyImported (channelId: number, targetUrl: string): Promise<boolean> {
-    return Boolean(
-      await (VideoImportModel.unscoped().findOne({
-        where: {
-          targetUrl,
-          state: {
-            [Op.in]: [ VideoImportState.PENDING, VideoImportState.PROCESSING, VideoImportState.SUCCESS ]
-          }
-        },
-        include: [ {
+    const element = await VideoImportModel.unscoped().findOne({
+      where: {
+        targetUrl,
+        state: {
+          [Op.in]: [ VideoImportState.PENDING, VideoImportState.PROCESSING, VideoImportState.SUCCESS ]
+        }
+      },
+      include: [
+        {
           model: VideoModel,
           required: true,
           where: {
             channelId
           }
-        } ]
-      }))
-    )
+        }
+      ]
+    })
+
+    return !!element
   }
 
   getTargetIdentifier () {

@@ -6,6 +6,7 @@ import { HttpStatusCode, VideoChannelSyncState, VideoInclude, VideoPrivacy } fro
 import {
   ChannelSyncsCommand,
   createSingleServer,
+  getServerImportConfig,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
@@ -44,21 +45,7 @@ describe('Test channel synchronizations', function () {
 
         startTestDate = new Date()
 
-        server = await createSingleServer(1, {
-          import: {
-            videos: {
-              http: {
-                youtube_dl_release: {
-                  url: mode === 'youtube-dl'
-                    ? 'https://yt-dl.org/downloads/latest/youtube-dl'
-                    : 'https://api.github.com/repos/yt-dlp/yt-dlp/releases',
-
-                  name: mode
-                }
-              }
-            }
-          }
-        })
+        server = await createSingleServer(1, getServerImportConfig(mode))
 
         await setAccessTokensToServers([ server ])
         await setDefaultVideoChannel([ server ])

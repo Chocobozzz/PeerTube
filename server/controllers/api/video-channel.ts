@@ -170,7 +170,7 @@ videoChannelRouter.post('/:nameWithHost/import-videos',
   ensureIsLocalChannel,
   ensureCanManageChannel,
   asyncMiddleware(ensureChannelOwnerCanUpload),
-  importVideosOnChannel
+  asyncMiddleware(importVideosInChannel)
 )
 
 // ---------------------------------------------------------------------------
@@ -417,20 +417,18 @@ async function listVideoChannelFollowers (req: express.Request, res: express.Res
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-function importVideosOnChannel (req: express.Request, res: express.Response) {
-  const { id: videoChannelId } = res.locals.videoChannel
+async function importVideosInChannel (req: express.Request, res: express.Response) {
   const { externalChannelUrl } = req.body
-  JobQueue.Instance.createJob({
+
+  await JobQueue.Instance.createJob({
     type: 'video-channel-import',
     payload: {
       externalChannelUrl,
-      videoChannelId
+      videoChannelId: res.locals.videoChannel.id
     }
   })
-  logger.info(
-    'Video import job for channel "%s" with url "%s" created.',
-    res.locals.videoChannel.name,
-    externalChannelUrl
-  )
+
+  logger.info('Video import job for channel "%s" with url "%s" created.', res.locals.videoChannel.name, externalChannelUrl)
+
   return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
