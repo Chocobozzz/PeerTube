@@ -65,7 +65,10 @@ async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo
 
     const video = await VideoModel.loadFull(onlyVideo.id, t)
     const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, likeActivity.id, t)
-    if (!rate || rate.type !== 'like') throw new Error(`Unknown like by account ${byActor.Account.id} for video ${video.id}.`)
+    if (!rate || rate.type !== 'like') {
+      logger.warn('Unknown like by account %d for video %d.', byActor.Account.id, video.id)
+      return
+    }
 
     await rate.destroy({ transaction: t })
     await video.decrement('likes', { transaction: t })
@@ -89,7 +92,10 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
 
     const video = await VideoModel.loadFull(onlyVideo.id, t)
     const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, dislike.id, t)
-    if (!rate || rate.type !== 'dislike') throw new Error(`Unknown dislike by account ${byActor.Account.id} for video ${video.id}.`)
+    if (!rate || rate.type !== 'dislike') {
+      logger.warn(`Unknown dislike by account %d for video %d.`, byActor.Account.id, video.id)
+      return
+    }
 
     await rate.destroy({ transaction: t })
     await video.decrement('dislikes', { transaction: t })
@@ -129,7 +135,10 @@ async function processUndoCacheFile (byActor: MActorSignature, activity: Activit
 function processUndoAnnounce (byActor: MActorSignature, announceActivity: ActivityAnnounce) {
   return sequelizeTypescript.transaction(async t => {
     const share = await VideoShareModel.loadByUrl(announceActivity.id, t)
-    if (!share) throw new Error(`Unknown video share ${announceActivity.id}.`)
+    if (!share) {
+      logger.warn('Unknown video share %d', announceActivity.id)
+      return
+    }
 
     if (share.actorId !== byActor.id) throw new Error(`${share.url} is not shared by ${byActor.url}.`)
 
@@ -151,7 +160,10 @@ function processUndoFollow (follower: MActorSignature, followActivity: ActivityF
     const following = await ActorModel.loadByUrlAndPopulateAccountAndChannel(followActivity.object, t)
     const actorFollow = await ActorFollowModel.loadByActorAndTarget(follower.id, following.id, t)
 
-    if (!actorFollow) throw new Error(`'Unknown actor follow ${follower.id} -> ${following.id}.`)
+    if (!actorFollow) {
+      logger.warn('Unknown actor follow %d -> %d.', follower.id, following.id)
+      return
+    }
 
     await actorFollow.destroy({ transaction: t })
 

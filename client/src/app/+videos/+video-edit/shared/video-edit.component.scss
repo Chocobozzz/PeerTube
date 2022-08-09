@@ -41,7 +41,6 @@ my-peertube-checkbox {
   a.caption-entry-label {
     @include disable-default-a-behaviour;
 
-    flex-grow: 1;
     color: #000;
 
     &:hover {
@@ -53,11 +52,13 @@ my-peertube-checkbox {
     @include margin-right(20px);
 
     font-weight: bold;
-    width: 150px;
+    min-width: 100px;
   }
 
   .caption-entry-state {
-    width: 200px;
+    @include margin-right(15px);
+
+    min-width: 250px;
 
     &.caption-entry-state-create {
       color: #39CC0B;

@@ -3,14 +3,28 @@ import { readdir, readFile } from 'fs-extra'
 import { join } from 'path'
 import { isArray } from '@server/helpers/custom-validators/misc'
 import { logger, mtimeSortFilesDesc } from '@server/helpers/logger'
-import { LogLevel } from '../../../../shared/models/server/log-level.type'
+import { pick } from '@shared/core-utils'
+import { ClientLogCreate, HttpStatusCode } from '@shared/models'
+import { ServerLogLevel } from '../../../../shared/models/server/server-log-level.type'
 import { UserRight } from '../../../../shared/models/users'
 import { CONFIG } from '../../../initializers/config'
 import { AUDIT_LOG_FILENAME, LOG_FILENAME, MAX_LOGS_OUTPUT_CHARACTERS } from '../../../initializers/constants'
-import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../../middlewares'
-import { getAuditLogsValidator, getLogsValidator } from '../../../middlewares/validators/logs'
+import { asyncMiddleware, authenticate, buildRateLimiter, ensureUserHasRight, optionalAuthenticate } from '../../../middlewares'
+import { createClientLogValidator, getAuditLogsValidator, getLogsValidator } from '../../../middlewares/validators/logs'
+
+const createClientLogRateLimiter = buildRateLimiter({
+  windowMs: CONFIG.RATES_LIMIT.RECEIVE_CLIENT_LOG.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.RECEIVE_CLIENT_LOG.MAX
+})
 
 const logsRouter = express.Router()
+
+logsRouter.post('/logs/client',
+  createClientLogRateLimiter,
+  optionalAuthenticate,
+  createClientLogValidator,
+  createClientLog
+)
 
 logsRouter.get('/logs',
   authenticate,
@@ -33,6 +47,21 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+function createClientLog (req: express.Request, res: express.Response) {
+  const logInfo = req.body as ClientLogCreate
+
+  const meta = {
+    tags: [ 'client' ],
+    username: res.locals.oauth?.token?.User?.username,
+
+    ...pick(logInfo, [ 'userAgent', 'stackTrace', 'meta', 'url' ])
+  }
+
+  logger.log(logInfo.level, `Client log: ${logInfo.message}`, meta)
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
 
 const auditLogNameFilter = generateLogNameFilter(AUDIT_LOG_FILENAME)
 async function getAuditLogs (req: express.Request, res: express.Response) {
@@ -63,7 +92,7 @@ async function generateOutput (options: {
   startDateQuery: string
   endDateQuery?: string
 
-  level: LogLevel
+  level: ServerLogLevel
   nameFilter: RegExp
   tagsOneOf?: string[]
 }) {
@@ -104,7 +133,7 @@ async function getOutputFromFile (options: {
   path: string
   startDate: Date
   endDate: Date
-  level: LogLevel
+  level: ServerLogLevel
   currentSize: number
   tagsOneOf: Set<string>
 }) {
@@ -116,7 +145,7 @@ async function getOutputFromFile (options: {
 
   let logTime: number
 
-  const logsLevel: { [ id in LogLevel ]: number } = {
+  const logsLevel: { [ id in ServerLogLevel ]: number } = {
     audit: -1,
     debug: 0,
     info: 1,

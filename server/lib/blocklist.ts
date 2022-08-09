@@ -8,7 +8,7 @@ function addAccountInBlocklist (byAccountId: number, targetAccountId: number) {
   return sequelizeTypescript.transaction(async t => {
     return AccountBlocklistModel.upsert({
       accountId: byAccountId,
-      targetAccountId: targetAccountId
+      targetAccountId
     }, { transaction: t })
   })
 }

@@ -60,7 +60,7 @@ export class LoginCommand extends AbstractCommand {
     const body = {
       client_id: this.server.store.client.id,
       client_secret: this.server.store.client.secret,
-      username: username,
+      username,
       response_type: 'code',
       grant_type: 'password',
       scope: 'upload',

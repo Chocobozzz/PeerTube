@@ -9,7 +9,7 @@ import { Video, VideoChannel, VideoChannelService, VideoService } from '@app/sha
 import { ActorFollow, ResultList, VideoChannel as VideoChannelServer, VideoSortField } from '@shared/models'
 import { environment } from '../../../environments/environment'
 
-const logger = debug('peertube:subscriptions:UserSubscriptionService')
+const debugLogger = debug('peertube:subscriptions:UserSubscriptionService')
 
 type SubscriptionExistResult = { [ uri: string ]: boolean }
 type SubscriptionExistResultObservable = { [ uri: string ]: Observable<boolean> }
@@ -176,17 +176,17 @@ export class UserSubscriptionService {
   }
 
   doesSubscriptionExist (nameWithHost: string) {
-    logger('Running subscription check for %d.', nameWithHost)
+    debugLogger('Running subscription check for %d.', nameWithHost)
 
     if (nameWithHost in this.myAccountSubscriptionCache) {
-      logger('Found cache for %d.', nameWithHost)
+      debugLogger('Found cache for %d.', nameWithHost)
 
       return of(this.myAccountSubscriptionCache[nameWithHost])
     }
 
     this.existsSubject.next(nameWithHost)
 
-    logger('Fetching from network for %d.', nameWithHost)
+    debugLogger('Fetching from network for %d.', nameWithHost)
     return this.existsObservable.pipe(
       filter(existsResult => existsResult[nameWithHost] !== undefined),
       map(existsResult => existsResult[nameWithHost]),

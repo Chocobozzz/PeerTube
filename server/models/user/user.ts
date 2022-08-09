@@ -488,9 +488,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
     }
 
     if (blocked !== undefined) {
-      Object.assign(where, {
-        blocked: blocked
-      })
+      Object.assign(where, { blocked })
     }
 
     const query: FindOptions = {

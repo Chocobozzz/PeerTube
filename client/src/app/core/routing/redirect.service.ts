@@ -1,10 +1,11 @@
 import * as debug from 'debug'
 import { Injectable } from '@angular/core'
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router'
+import { logger } from '@root-helpers/logger'
 import { ServerService } from '../server'
 import { SessionStorageService } from '../wrappers/storage.service'
 
-const logger = debug('peertube:router:RedirectService')
+const debugLogger = debug('peertube:router:RedirectService')
 
 @Injectable()
 export class RedirectService {
@@ -40,7 +41,7 @@ export class RedirectService {
     this.latestSessionUrl = this.storage.getItem(RedirectService.SESSION_STORAGE_LATEST_SESSION_URL_KEY)
     this.storage.removeItem(RedirectService.SESSION_STORAGE_LATEST_SESSION_URL_KEY)
 
-    logger('Loaded latest session URL %s', this.latestSessionUrl)
+    debugLogger('Loaded latest session URL %s', this.latestSessionUrl)
 
     // Track previous url
     this.currentUrl = this.router.url
@@ -51,8 +52,8 @@ export class RedirectService {
         this.previousUrl = this.currentUrl
         this.currentUrl = event.url
 
-        logger('Previous URL is %s, current URL is %s', this.previousUrl, this.currentUrl)
-        logger('Setting %s as latest URL in session storage.', this.currentUrl)
+        debugLogger('Previous URL is %s, current URL is %s', this.previousUrl, this.currentUrl)
+        debugLogger('Setting %s as latest URL in session storage.', this.currentUrl)
 
         this.storage.setItem(RedirectService.SESSION_STORAGE_LATEST_SESSION_URL_KEY, this.currentUrl)
       }
@@ -84,18 +85,14 @@ export class RedirectService {
 
     this.redirectingToHomepage = true
 
-    console.log('Redirecting to %s...', this.defaultRoute)
+    logger.info(`Redirecting to ${this.defaultRoute}...`)
 
     this.router.navigateByUrl(this.defaultRoute, { skipLocationChange })
         .then(() => this.redirectingToHomepage = false)
-        .catch(() => {
+        .catch(err => {
           this.redirectingToHomepage = false
 
-          console.error(
-            'Cannot navigate to %s, resetting default route to %s.',
-            this.defaultRoute,
-            RedirectService.INIT_DEFAULT_ROUTE
-          )
+          logger.error(`Cannot navigate to ${this.defaultRoute}, resetting default route to ${RedirectService.INIT_DEFAULT_ROUTE}`, err)
 
           this.defaultRoute = RedirectService.INIT_DEFAULT_ROUTE
           return this.router.navigateByUrl(this.defaultRoute, { skipLocationChange })
@@ -104,18 +101,18 @@ export class RedirectService {
   }
 
   private doRedirect (redirectUrl: string, fallbackRoute?: string) {
-    logger('Redirecting on %s', redirectUrl)
+    debugLogger('Redirecting on %s', redirectUrl)
 
     if (this.isValidRedirection(redirectUrl)) {
       return this.router.navigateByUrl(redirectUrl)
     }
 
-    logger('%s is not a valid redirection, try fallback route %s', redirectUrl, fallbackRoute)
+    debugLogger('%s is not a valid redirection, try fallback route %s', redirectUrl, fallbackRoute)
     if (fallbackRoute) {
       return this.router.navigateByUrl(fallbackRoute)
     }
 
-    logger('There was no fallback route, redirecting to homepage')
+    debugLogger('There was no fallback route, redirecting to homepage')
     return this.redirectToHomepage()
   }
 

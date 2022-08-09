@@ -78,10 +78,14 @@ async function applicationExist () {
 
 async function checkFFmpegVersion () {
   const version = await getFFmpegVersion()
-  const { major, minor } = parseSemVersion(version)
+  const { major, minor, patch } = parseSemVersion(version)
 
   if (major < 4 || (major === 4 && minor < 1)) {
-    logger.warn('Your ffmpeg version (%s) is outdated. PeerTube supports ffmpeg >= 4.1. Please upgrade.', version)
+    logger.warn('Your ffmpeg version (%s) is outdated. PeerTube supports ffmpeg >= 4.1. Please upgrade ffmpeg.', version)
+  }
+
+  if (major === 4 && minor === 4 && patch === 0) {
+    logger.warn('There is a bug in ffmpeg 4.4.0 with HLS videos. Please upgrade ffmpeg.')
   }
 }
 

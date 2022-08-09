@@ -58,7 +58,14 @@ describe('Test external auth plugins', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await createSingleServer(1)
+    server = await createSingleServer(1, {
+      rates_limit: {
+        login: {
+          max: 30
+        }
+      }
+    })
+
     await setAccessTokensToServers([ server ])
 
     for (const suffix of [ 'one', 'two', 'three' ]) {
@@ -70,7 +77,7 @@ describe('Test external auth plugins', function () {
     const config = await server.config.getConfig()
 
     const auths = config.plugin.registeredExternalAuths
-    expect(auths).to.have.lengthOf(8)
+    expect(auths).to.have.lengthOf(9)
 
     const auth2 = auths.find((a) => a.authName === 'external-auth-2')
     expect(auth2).to.exist
@@ -275,7 +282,7 @@ describe('Test external auth plugins', function () {
     const config = await server.config.getConfig()
 
     const auths = config.plugin.registeredExternalAuths
-    expect(auths).to.have.lengthOf(7)
+    expect(auths).to.have.lengthOf(8)
 
     const auth1 = auths.find(a => a.authName === 'external-auth-2')
     expect(auth1).to.not.exist
@@ -318,7 +325,7 @@ describe('Test external auth plugins', function () {
     })
   })
 
-  it('Should not login an existing user', async function () {
+  it('Should not login an existing user email', async function () {
     await server.users.create({ username: 'existing_user', password: 'super_password' })
 
     await loginExternal({
@@ -330,11 +337,33 @@ describe('Test external auth plugins', function () {
     })
   })
 
+  it('Should be able to login an existing user username and channel', async function () {
+    await server.users.create({ username: 'existing_user2' })
+    await server.users.create({ username: 'existing_user2-1_channel' })
+
+    // Test twice to ensure we don't generate a username on every login
+    for (let i = 0; i < 2; i++) {
+      const res = await loginExternal({
+        server,
+        npmName: 'test-external-auth-two',
+        authName: 'external-auth-7',
+        username: 'existing_user2'
+      })
+
+      const token = res.access_token
+
+      const myInfo = await server.users.getMyInfo({ token })
+      expect(myInfo.username).to.equal('existing_user2-1')
+
+      expect(myInfo.videoChannels[0].name).to.equal('existing_user2-1_channel-1')
+    }
+  })
+
   it('Should display the correct configuration', async function () {
     const config = await server.config.getConfig()
 
     const auths = config.plugin.registeredExternalAuths
-    expect(auths).to.have.lengthOf(6)
+    expect(auths).to.have.lengthOf(7)
 
     const auth2 = auths.find((a) => a.authName === 'external-auth-2')
     expect(auth2).to.not.exist

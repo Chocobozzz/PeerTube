@@ -104,5 +104,10 @@ export class EditVODTranscodingComponent implements OnInit, OnChanges {
                   videoStudioControl.setValue(false)
                 }
               })
+
+    transcodingControl.updateValueAndValidity()
+    webtorrentControl.updateValueAndValidity()
+    videoStudioControl.updateValueAndValidity()
+    hlsControl.updateValueAndValidity()
   }
 }

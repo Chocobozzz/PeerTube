@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { ActivitypubHttpFetcherPayload, FetchType } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
@@ -12,7 +12,7 @@ import { addVideoShares } from '../../activitypub/share'
 import { addVideoComments } from '../../activitypub/video-comments'
 
 async function processActivityPubHttpFetcher (job: Job) {
-  logger.info('Processing ActivityPub fetcher in job %d.', job.id)
+  logger.info('Processing ActivityPub fetcher in job %s.', job.id)
 
   const payload = job.data as ActivitypubHttpFetcherPayload
 

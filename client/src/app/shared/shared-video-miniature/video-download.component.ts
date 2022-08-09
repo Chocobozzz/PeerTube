@@ -4,6 +4,7 @@ import { tap } from 'rxjs/operators'
 import { Component, ElementRef, Inject, LOCALE_ID, ViewChild } from '@angular/core'
 import { AuthService, HooksService, Notifier } from '@app/core'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { logger } from '@root-helpers/logger'
 import { VideoCaption, VideoFile, VideoPrivacy } from '@shared/models'
 import { BytesPipe, NumberFormatterPipe, VideoDetails, VideoService } from '../shared-main'
 
@@ -142,7 +143,7 @@ export class VideoDownloadComponent {
                      .find(f => f.resolution.id === this.resolutionId)
 
     if (!file) {
-      console.error('Could not find file with resolution %d.', this.resolutionId)
+      logger.error(`Could not find file with resolution ${this.resolutionId}`)
       return undefined
     }
 
@@ -175,7 +176,7 @@ export class VideoDownloadComponent {
                         .find(c => c.language.id === this.subtitleLanguageId)
 
     if (!caption) {
-      console.error('Cannot find caption %s.', this.subtitleLanguageId)
+      logger.error(`Cannot find caption ${this.subtitleLanguageId}`)
       return undefined
     }
 

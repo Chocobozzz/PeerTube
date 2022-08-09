@@ -1,6 +1,8 @@
 import { ensureDir, readdir, remove } from 'fs-extra'
 import passwordGenerator from 'password-generator'
 import { join } from 'path'
+import { isTestOrDevInstance } from '@server/helpers/core-utils'
+import { getNodeABIVersion } from '@server/helpers/version'
 import { UserRole } from '@shared/models'
 import { logger } from '../helpers/logger'
 import { buildUser, createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user'
@@ -135,8 +137,8 @@ async function createOAuthAdminIfNotExist () {
   let validatePassword = true
   let password = ''
 
-  // Do not generate a random password for tests
-  if (process.env.NODE_ENV === 'test') {
+  // Do not generate a random password for test and dev environments
+  if (isTestOrDevInstance()) {
     password = 'test'
 
     if (process.env.NODE_APP_INSTANCE) {
@@ -174,7 +176,9 @@ async function createApplicationIfNotExist () {
   logger.info('Creating application account.')
 
   const application = await ApplicationModel.create({
-    migrationVersion: LAST_MIGRATION_VERSION
+    migrationVersion: LAST_MIGRATION_VERSION,
+    nodeVersion: process.version,
+    nodeABIVersion: getNodeABIVersion()
   })
 
   return createApplicationActor(application.id)

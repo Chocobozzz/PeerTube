@@ -59,7 +59,7 @@ export class AutoFollowIndexInstances extends AbstractScheduler {
             isAutoFollow: true
           }
 
-          JobQueue.Instance.createJob({ type: 'activitypub-follow', payload })
+          JobQueue.Instance.createJobAsync({ type: 'activitypub-follow', payload })
         }
       }
 

@@ -6,6 +6,7 @@ export interface VideoCaptionEdit {
 
   action?: 'CREATE' | 'REMOVE' | 'UPDATE'
   captionfile?: any
+  updatedAt?: string
 }
 
 export type VideoCaptionWithPathEdit = VideoCaptionEdit & { captionPath?: string }

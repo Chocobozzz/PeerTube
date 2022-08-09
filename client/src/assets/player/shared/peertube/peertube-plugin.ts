@@ -1,5 +1,6 @@
 import debug from 'debug'
 import videojs from 'video.js'
+import { logger } from '@root-helpers/logger'
 import { isMobile } from '@root-helpers/web-browser'
 import { timeToInt } from '@shared/core-utils'
 import { VideoView, VideoViewEvent } from '@shared/models/videos'
@@ -15,7 +16,7 @@ import {
 import { PeerTubePluginOptions, VideoJSCaption } from '../../types'
 import { SettingsButton } from '../settings/settings-menu-button'
 
-const logger = debug('peertube:player:peertube')
+const debugLogger = debug('peertube:player:peertube')
 
 const Plugin = videojs.getPlugin('plugin')
 
@@ -176,7 +177,7 @@ class PeerTubePlugin extends Plugin {
       lastCurrentTime = currentTime
 
       this.notifyUserIsWatching(currentTime, lastViewEvent)
-        .catch(err => console.error('Cannot notify user is watching.', err))
+        .catch(err => logger.error('Cannot notify user is watching.', err))
 
       lastViewEvent = undefined
 
@@ -249,7 +250,7 @@ class PeerTubePlugin extends Plugin {
     (this.player as any).cache_.inactivityTimeout = timeout
     this.player.options_.inactivityTimeout = timeout
 
-    logger('Set player inactivity to ' + timeout)
+    debugLogger('Set player inactivity to ' + timeout)
   }
 
   private initCaptions () {

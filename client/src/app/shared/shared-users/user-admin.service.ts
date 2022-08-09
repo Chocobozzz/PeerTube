@@ -5,6 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService, UserService } from '@app/core'
 import { getBytes } from '@root-helpers/bytes'
+import { arrayify } from '@shared/core-utils'
 import { ResultList, User as UserServerModel, UserCreate, UserRole, UserUpdate } from '@shared/models'
 
 @Injectable()
@@ -65,7 +66,7 @@ export class UserAdminService {
   }
 
   removeUser (usersArg: UserServerModel | UserServerModel[]) {
-    const users = Array.isArray(usersArg) ? usersArg : [ usersArg ]
+    const users = arrayify(usersArg)
 
     return from(users)
       .pipe(
@@ -77,7 +78,7 @@ export class UserAdminService {
 
   banUsers (usersArg: UserServerModel | UserServerModel[], reason?: string) {
     const body = reason ? { reason } : {}
-    const users = Array.isArray(usersArg) ? usersArg : [ usersArg ]
+    const users = arrayify(usersArg)
 
     return from(users)
       .pipe(
@@ -88,7 +89,7 @@ export class UserAdminService {
   }
 
   unbanUsers (usersArg: UserServerModel | UserServerModel[]) {
-    const users = Array.isArray(usersArg) ? usersArg : [ usersArg ]
+    const users = arrayify(usersArg)
 
     return from(users)
       .pipe(

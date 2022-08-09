@@ -208,7 +208,7 @@ function runBenchmark (options: {
   return new Promise((res, rej) => {
     autocannon({
       url: server.url + path,
-      method: method,
+      method,
       body,
       connections: 20,
       headers,

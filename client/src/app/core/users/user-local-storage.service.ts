@@ -2,8 +2,9 @@
 import { filter, throttleTime } from 'rxjs'
 import { Injectable } from '@angular/core'
 import { AuthService, AuthStatus } from '@app/core/auth'
-import { UserLocalStorageKeys, UserTokens } from '@root-helpers/users'
 import { getBoolOrDefault } from '@root-helpers/local-storage-utils'
+import { logger } from '@root-helpers/logger'
+import { UserLocalStorageKeys, UserTokens } from '@root-helpers/users'
 import { UserRole, UserUpdateMe } from '@shared/models'
 import { NSFWPolicyType } from '@shared/models/videos'
 import { ServerService } from '../server'
@@ -95,7 +96,7 @@ export class UserLocalStorageService {
         : null
     } catch (err) {
       videoLanguages = null
-      console.error('Cannot parse desired video languages from localStorage.', err)
+      logger.error('Cannot parse desired video languages from localStorage.', err)
     }
 
     const htmlConfig = this.server.getHTMLConfig()
@@ -142,7 +143,7 @@ export class UserLocalStorageService {
 
         this.localStorageService.setItem(key, localStorageValue)
       } catch (err) {
-        console.error(`Cannot set ${key}->${value} in localStorage. Likely due to a value impossible to stringify.`, err)
+        logger.error(`Cannot set ${key}->${value} in localStorage. Likely due to a value impossible to stringify.`, err)
       }
     }
   }

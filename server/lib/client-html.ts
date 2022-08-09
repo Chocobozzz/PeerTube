@@ -576,7 +576,7 @@ async function serveIndexHTML (req: express.Request, res: express.Response) {
       await generateHTMLPage(req, res, req.params.language)
       return
     } catch (err) {
-      logger.error('Cannot generate HTML page.', err)
+      logger.error('Cannot generate HTML page.', { err })
       return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500).end()
     }
   }

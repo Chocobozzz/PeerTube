@@ -2,6 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { pathExists, remove } from 'fs-extra'
+import { join } from 'path'
 import { testHelloWorldRegisteredSettings } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { HttpStatusCode, PluginType } from '@shared/models'
@@ -9,6 +11,7 @@ import {
   cleanupTests,
   createSingleServer,
   killallServers,
+  makeGetRequest,
   PeerTubeServer,
   PluginsCommand,
   setAccessTokensToServers
@@ -347,6 +350,57 @@ describe('Test plugins', function () {
     await server.run()
 
     await check()
+  })
+
+  it('Should rebuild native modules on Node ABI change', async function () {
+    this.timeout(60000)
+
+    const removeNativeModule = async () => {
+      await remove(join(baseNativeModule, 'build'))
+      await remove(join(baseNativeModule, 'prebuilds'))
+    }
+
+    await command.install({ path: PluginsCommand.getPluginTestPath('-native') })
+
+    await makeGetRequest({
+      url: server.url,
+      path: '/plugins/test-native/router',
+      expectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+
+    const query = `UPDATE "application" SET "nodeABIVersion" = 1`
+    await server.sql.updateQuery(query)
+
+    const baseNativeModule = server.servers.buildDirectory(join('plugins', 'node_modules', 'a-native-example'))
+
+    await removeNativeModule()
+    await server.kill()
+    await server.run()
+
+    await wait(3000)
+
+    expect(await pathExists(join(baseNativeModule, 'build'))).to.be.true
+    expect(await pathExists(join(baseNativeModule, 'prebuilds'))).to.be.true
+
+    await makeGetRequest({
+      url: server.url,
+      path: '/plugins/test-native/router',
+      expectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+
+    await removeNativeModule()
+
+    await server.kill()
+    await server.run()
+
+    expect(await pathExists(join(baseNativeModule, 'build'))).to.be.false
+    expect(await pathExists(join(baseNativeModule, 'prebuilds'))).to.be.false
+
+    await makeGetRequest({
+      url: server.url,
+      path: '/plugins/test-native/router',
+      expectedStatus: HttpStatusCode.NOT_FOUND_404
+    })
   })
 
   after(async function () {

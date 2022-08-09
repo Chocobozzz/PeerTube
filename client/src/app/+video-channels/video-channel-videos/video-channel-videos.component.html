@@ -19,5 +19,7 @@
   [loadUserVideoPreferences]="true"
 
   [disabled]="disabled"
+
+  (videosLoaded)="onVideosLoaded($event)"
 >
 </my-videos-list>

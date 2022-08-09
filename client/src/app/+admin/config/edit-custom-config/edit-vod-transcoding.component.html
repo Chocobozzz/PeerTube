@@ -111,7 +111,13 @@
                   <label i18n>Resolutions to generate per enabled format</label>
 
                   <div class="ms-2 d-flex flex-column">
-                    <span class="mb-3 small muted" i18n>
+                    <my-peertube-checkbox
+                      inputName="transcodingAlwaysTranscodeOriginalResolution" formControlName="alwaysTranscodeOriginalResolution"
+                      i18n-labelText labelText="Always transcode original resolution"
+                    >
+                    </my-peertube-checkbox>
+
+                    <span class="mt-3 mb-2 small muted" i18n>
                       The original file resolution will be the default target if no option is selected.
                     </span>
 

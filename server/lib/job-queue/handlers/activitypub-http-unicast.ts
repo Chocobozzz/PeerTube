@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from '@server/lib/activitypub/send'
 import { ActivitypubHttpUnicastPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'
@@ -6,7 +6,7 @@ import { doRequest } from '../../../helpers/requests'
 import { ActorFollowHealthCache } from '../../actor-follow-health-cache'
 
 async function processActivityPubHttpUnicast (job: Job) {
-  logger.info('Processing ActivityPub unicast in job %d.', job.id)
+  logger.info('Processing ActivityPub unicast in job %s.', job.id)
 
   const payload = job.data as ActivitypubHttpUnicastPayload
   const uri = payload.uri

@@ -41,7 +41,6 @@
                   <ng-container ngProjectAs="description" i18n>
                     Small latency disables P2P and high latency can increase P2P ratio
                   </ng-container>
-
                 </my-peertube-checkbox>
               </div>
 
@@ -115,8 +114,8 @@
             <label i18n for="liveTranscodingThreads">Live resolutions to generate</label>
 
             <div class="ms-2 mt-2 d-flex flex-column">
-              <ng-container formGroupName="resolutions">
 
+              <ng-container formGroupName="resolutions">
                 <div class="form-group" *ngFor="let resolution of liveResolutions">
                   <my-peertube-checkbox
                     [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
@@ -127,8 +126,18 @@
                     </ng-template>
                   </my-peertube-checkbox>
                 </div>
-
               </ng-container>
+
+              <div class="form-group">
+                <my-peertube-checkbox
+                  inputName="transcodingAlwaysTranscodeOriginalResolution" formControlName="alwaysTranscodeOriginalResolution"
+                  i18n-labelText labelText="Also transcode original resolution"
+                >
+                  <ng-container i18n ngProjectAs="description">
+                    Even if it's above your maximum enabled resolution
+                  </ng-container>
+                </my-peertube-checkbox>
+              </div>
             </div>
           </div>
 

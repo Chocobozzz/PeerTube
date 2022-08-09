@@ -3,7 +3,7 @@
 <my-hotkeys-cheatsheet></my-hotkeys-cheatsheet>
 
 <div class="peertube-container" [ngClass]="{ 'user-logged-in': isUserLoggedIn(), 'user-not-logged-in': !isUserLoggedIn() }">
-  <div class="header">
+  <div class="root-header">
 
     <div class="top-left-block">
       <span class="icon icon-menu" role="button" [title]="getToggleTitle()" (click)="menu.toggleMenu()"></span>
@@ -14,7 +14,7 @@
       </a>
     </div>
 
-    <div class="header-right">
+    <div class="root-header-right">
       <my-header class="w-100 d-flex justify-content-end"></my-header>
     </div>
   </div>

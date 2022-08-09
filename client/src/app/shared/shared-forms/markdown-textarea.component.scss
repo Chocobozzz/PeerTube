@@ -80,7 +80,7 @@ $input-border-radius: 3px;
   }
 
   &.maximized {
-    z-index: #{z(header) - 1};
+    z-index: #{z(root-header) - 1};
     position: fixed;
     top: $header-height;
     left: $menu-width;

@@ -1,4 +1,5 @@
 import { HttpStatusCode, ResultList, VideoPlaylistElement } from '../../../../../shared/models'
+import { logger } from '../../../root-helpers'
 import { AuthHTTP } from './auth-http'
 
 export class PlaylistFetcher {
@@ -18,7 +19,7 @@ export class PlaylistFetcher {
       playlistResponse = await playlistPromise
       isResponseOk = playlistResponse.status === HttpStatusCode.OK_200
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       isResponseOk = false
     }
 
@@ -49,7 +50,7 @@ export class PlaylistFetcher {
     }
 
     if (i === 10) {
-      console.error('Cannot fetch all playlists elements, there are too many!')
+      logger.error('Cannot fetch all playlists elements, there are too many!')
     }
 
     return elements

@@ -5,6 +5,7 @@
 
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/maps';
 @import '~bootstrap/scss/mixins';
 @import '~bootstrap/scss/utilities';
 
@@ -28,6 +29,11 @@
 
 @import '~bootstrap/scss/helpers';
 @import '~bootstrap/scss/utilities/api';
+
+.accordion {
+  --bs-accordion-color: #{pvar(--mainForegroundColor)};
+  --bs-accordion-bg: #{pvar(--mainBackgroundColor)};
+}
 
 .flex-auto {
   flex: auto;

@@ -183,7 +183,7 @@
                   [href]="videoCaption.captionPath"
                 >{{ videoCaption.language.label }}</a>
 
-                <div i18n class="caption-entry-state">Already uploaded	&#10004;</div>
+                <div i18n class="caption-entry-state">Already uploaded on {{ videoCaption.updatedAt | date }}	&#10004;</div>
 
                 <span i18n class="caption-entry-edit" (click)="videoCaptionEditModal.show()">Edit</span>
                 <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Delete</span>

@@ -115,8 +115,8 @@ async function createVideoAbuse (options: {
     const videoAbuseInstance: MVideoAbuseVideoFull = await VideoAbuseModel.create({
       abuseId: abuseInstance.id,
       videoId: videoInstance.id,
-      startAt: startAt,
-      endAt: endAt
+      startAt,
+      endAt
     }, { transaction })
 
     videoAbuseInstance.Video = videoInstance

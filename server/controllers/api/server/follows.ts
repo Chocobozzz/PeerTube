@@ -1,5 +1,6 @@
 import express from 'express'
 import { getServerActor } from '@server/models/application/application'
+import { ServerFollowCreate } from '@shared/models'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { UserRight } from '../../../../shared/models/users'
 import { logger } from '../../../helpers/logger'
@@ -20,16 +21,16 @@ import {
   setDefaultSort
 } from '../../../middlewares'
 import {
-  acceptOrRejectFollowerValidator,
-  instanceFollowersSortValidator,
-  instanceFollowingSortValidator,
+  acceptFollowerValidator,
   followValidator,
   getFollowerValidator,
+  instanceFollowersSortValidator,
+  instanceFollowingSortValidator,
   listFollowsValidator,
+  rejectFollowerValidator,
   removeFollowingValidator
 } from '../../../middlewares/validators'
 import { ActorFollowModel } from '../../../models/actor/actor-follow'
-import { ServerFollowCreate } from '@shared/models'
 
 const serverFollowsRouter = express.Router()
 serverFollowsRouter.get('/following',
@@ -69,22 +70,22 @@ serverFollowsRouter.delete('/followers/:nameWithHost',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   asyncMiddleware(getFollowerValidator),
-  asyncMiddleware(removeOrRejectFollower)
+  asyncMiddleware(removeFollower)
 )
 
 serverFollowsRouter.post('/followers/:nameWithHost/reject',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   asyncMiddleware(getFollowerValidator),
-  acceptOrRejectFollowerValidator,
-  asyncMiddleware(removeOrRejectFollower)
+  rejectFollowerValidator,
+  asyncMiddleware(rejectFollower)
 )
 
 serverFollowsRouter.post('/followers/:nameWithHost/accept',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   asyncMiddleware(getFollowerValidator),
-  acceptOrRejectFollowerValidator,
+  acceptFollowerValidator,
   asyncMiddleware(acceptFollower)
 )
 
@@ -137,7 +138,7 @@ async function addFollow (req: express.Request, res: express.Response) {
       followerActorId: follower.id
     }
 
-    JobQueue.Instance.createJob({ type: 'activitypub-follow', payload })
+    JobQueue.Instance.createJobAsync({ type: 'activitypub-follow', payload })
   }
 
   for (const handle of handles) {
@@ -149,7 +150,7 @@ async function addFollow (req: express.Request, res: express.Response) {
       followerActorId: follower.id
     }
 
-    JobQueue.Instance.createJob({ type: 'activitypub-follow', payload })
+    JobQueue.Instance.createJobAsync({ type: 'activitypub-follow', payload })
   }
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
@@ -168,7 +169,7 @@ async function removeFollowing (req: express.Request, res: express.Response) {
 
     // Async, could be long
     removeRedundanciesOfServer(server.id)
-      .catch(err => logger.error('Cannot remove redundancy of %s.', server.host, err))
+      .catch(err => logger.error('Cannot remove redundancy of %s.', server.host, { err }))
 
     await follow.destroy({ transaction: t })
   })
@@ -176,10 +177,23 @@ async function removeFollowing (req: express.Request, res: express.Response) {
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
-async function removeOrRejectFollower (req: express.Request, res: express.Response) {
+async function rejectFollower (req: express.Request, res: express.Response) {
   const follow = res.locals.follow
 
-  await sendReject(follow.url, follow.ActorFollower, follow.ActorFollowing)
+  follow.state = 'rejected'
+  await follow.save()
+
+  sendReject(follow.url, follow.ActorFollower, follow.ActorFollowing)
+
+  return res.status(HttpStatusCode.NO_CONTENT_204).end()
+}
+
+async function removeFollower (req: express.Request, res: express.Response) {
+  const follow = res.locals.follow
+
+  if (follow.state === 'accepted' || follow.state === 'pending') {
+    sendReject(follow.url, follow.ActorFollower, follow.ActorFollowing)
+  }
 
   await follow.destroy()
 

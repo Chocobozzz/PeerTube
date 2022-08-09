@@ -38,6 +38,7 @@ import { VideoCaptionAddModalComponent } from './video-caption-add-modal.compone
 import { VideoCaptionEditModalComponent } from './video-caption-edit-modal/video-caption-edit-modal.component'
 import { VideoEditType } from './video-edit.type'
 import { VideoSource } from '@shared/models/videos/video-source'
+import { logger } from '@root-helpers/logger'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
 type PluginField = {
@@ -443,7 +444,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
             const oldChannel = this.userVideoChannels.find(c => c.id === oldChannelId)
             if (!newChannel || !oldChannel) {
-              console.error('Cannot find new or old channel.')
+              logger.error('Cannot find new or old channel.')
               return
             }
 

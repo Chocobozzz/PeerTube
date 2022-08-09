@@ -99,7 +99,7 @@ describe('Test notifications API', function () {
 
     before(() => {
       baseParams = {
-        server: server,
+        server,
         emails,
         socketNotifications: userNotifications,
         token: userToken

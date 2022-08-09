@@ -104,7 +104,12 @@ export class VideoViewerStats {
       })
     } else {
       const lastSection = stats.watchSections[stats.watchSections.length - 1]
-      lastSection.end = currentTime
+
+      if (lastSection.start > currentTime) {
+        logger.warn('Invalid end watch section %d. Last start record was at %d.', currentTime, lastSection.start)
+      } else {
+        lastSection.end = currentTime
+      }
     }
 
     stats.watchTime = this.buildWatchTimeFromSections(stats.watchSections)

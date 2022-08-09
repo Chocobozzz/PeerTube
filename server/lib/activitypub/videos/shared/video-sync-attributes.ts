@@ -73,10 +73,6 @@ async function getRatesCount (type: 'like' | 'dislike', video: MVideo, fetchedVi
   return totalItems
 }
 
-function createJob (payload: ActivitypubHttpFetcherPayload) {
-  return JobQueue.Instance.createJobWithPromise({ type: 'activitypub-http-fetcher', payload })
-}
-
 function syncShares (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {
   const uri = fetchedVideo.shares
 
@@ -103,4 +99,8 @@ function syncComments (video: MVideo, fetchedVideo: VideoObject, isSync: boolean
 
   return crawlCollectionPage<string>(uri, handler, cleaner)
     .catch(err => logger.error('Cannot add comments of video %s.', video.uuid, { err, rootUrl: uri, ...lTags(video.uuid, video.url) }))
+}
+
+function createJob (payload: ActivitypubHttpFetcherPayload) {
+  return JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
 }

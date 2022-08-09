@@ -119,7 +119,7 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     if (!await doesVideoChannelOfAccountExist(body.channelId, user, res)) return cleanUpReqFiles(req)
 
     if (CONFIG.LIVE.MAX_INSTANCE_LIVES !== -1) {
-      const totalInstanceLives = await VideoModel.countLocalLives()
+      const totalInstanceLives = await VideoModel.countLives({ remote: false, mode: 'not-ended' })
 
       if (totalInstanceLives >= CONFIG.LIVE.MAX_INSTANCE_LIVES) {
         cleanUpReqFiles(req)

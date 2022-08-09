@@ -39,7 +39,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
   })
 
   if (successView) {
-    Hooks.runAction('action:api.video.viewed', { video: video, ip, req, res })
+    Hooks.runAction('action:api.video.viewed', { video, ip, req, res })
   }
 
   await updateUserHistoryIfNeeded(body, video, res)

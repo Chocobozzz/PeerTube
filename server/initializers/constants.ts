@@ -1,4 +1,4 @@
-import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
+import { RepeatOptions } from 'bullmq'
 import { randomBytes } from 'crypto'
 import { invert } from 'lodash'
 import { join } from 'path'
@@ -24,7 +24,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 715
+const LAST_MIGRATION_VERSION = 725
 
 // ---------------------------------------------------------------------------
 
@@ -129,7 +129,8 @@ const ACTOR_FOLLOW_SCORE = {
 
 const FOLLOW_STATES: { [ id: string ]: FollowState } = {
   PENDING: 'pending',
-  ACCEPTED: 'accepted'
+  ACCEPTED: 'accepted',
+  REJECTED: 'rejected'
 }
 
 const REMOTE_SCHEME = {
@@ -155,7 +156,9 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-live-ending': 1,
   'video-studio-edition': 1,
   'manage-video-torrent': 1,
-  'move-to-object-storage': 3
+  'move-to-object-storage': 3,
+  'notify': 1,
+  'federate-video': 1
 }
 // Excluded keys are jobs that can be configured by admins
 const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-import'>]: number } = {
@@ -174,7 +177,9 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'video-live-ending': 10,
   'video-studio-edition': 1,
   'manage-video-torrent': 1,
-  'move-to-object-storage': 1
+  'move-to-object-storage': 1,
+  'notify': 5,
+  'federate-video': 3
 }
 const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -194,9 +199,11 @@ const JOB_TTL: { [id in JobType]: number } = {
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
   'manage-video-torrent': 1000 * 3600 * 3, // 3 hours
+  'notify': 60000 * 5, // 5 minutes
+  'federate-video': 60000 * 5, // 5 minutes
   'move-to-object-storage': 1000 * 60 * 60 * 3 // 3 hours
 }
-const REPEAT_JOBS: { [ id in JobType ]?: EveryRepeatOptions | CronRepeatOptions } = {
+const REPEAT_JOBS: { [ id in JobType ]?: RepeatOptions } = {
   'videos-views-stats': {
     cron: randomInt(1, 20) + ' * * * *' // Between 1-20 minutes past the hour
   },
@@ -365,6 +372,12 @@ const CONSTRAINTS_FIELDS = {
   VIDEO_STUDIO: {
     TASKS: { min: 1, max: 10 }, // Number of tasks
     CUT_TIME: { min: 0 } // Value
+  },
+  LOGS: {
+    CLIENT_MESSAGE: { min: 1, max: 1000 }, // Length
+    CLIENT_STACK_TRACE: { min: 1, max: 15000 }, // Length
+    CLIENT_META: { min: 1, max: 5000 }, // Length
+    CLIENT_USER_AGENT: { min: 1, max: 200 } // Length
   }
 }
 

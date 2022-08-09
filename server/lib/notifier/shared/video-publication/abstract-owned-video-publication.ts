@@ -27,8 +27,8 @@ export abstract class AbstractOwnedVideoPublication extends AbstractNotification
     return [ this.user ]
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: UserNotificationType.MY_VIDEO_PUBLISHED,
       userId: user.id,
       videoId: this.payload.id

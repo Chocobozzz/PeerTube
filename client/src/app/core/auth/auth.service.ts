@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { Notifier } from '@app/core/notification/notifier.service'
-import { objectToUrlEncoded, peertubeLocalStorage, UserTokens } from '@root-helpers/index'
+import { logger, objectToUrlEncoded, peertubeLocalStorage, UserTokens } from '@root-helpers/index'
 import { HttpStatusCode, MyUser as UserServerModel, OAuthClientLocal, User, UserLogin, UserRefreshToken } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest/rest-extractor.service'
@@ -90,7 +90,7 @@ export class AuthService {
             peertubeLocalStorage.setItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID, this.clientId)
             peertubeLocalStorage.setItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET, this.clientSecret)
 
-            console.log('Client credentials loaded.')
+            logger.info('Client credentials loaded.')
           },
 
           error: err => {
@@ -177,7 +177,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           }
         },
 
-        error: err => console.error(err)
+        error: err => logger.error(err)
       })
 
     this.user = null
@@ -190,7 +190,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
   refreshAccessToken () {
     if (this.refreshingTokenObservable) return this.refreshingTokenObservable
 
-    console.log('Refreshing token...')
+    logger.info('Refreshing token...')
 
     const refreshToken = this.getRefreshToken()
 
@@ -212,8 +212,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
                                            catchError(err => {
                                              this.refreshingTokenObservable = null
 
-                                             console.error(err)
-                                             console.log('Cannot refresh token -> logout...')
+                                             logger.error(err)
+                                             logger.info('Cannot refresh token -> logout...')
                                              this.logout()
                                              this.router.navigate([ '/login' ])
 

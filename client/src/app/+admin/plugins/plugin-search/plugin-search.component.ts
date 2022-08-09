@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService } from '@app/core'
+import { logger } from '@root-helpers/logger'
 import { PeerTubePluginIndex, PluginType } from '@shared/models'
 
 @Component({
@@ -94,7 +95,7 @@ export class PluginSearchComponent implements OnInit {
           },
 
           error: err => {
-            console.error(err)
+            logger.error(err)
 
             const message = $localize`The plugin index is not available. Please retry later.`
             this.notifier.error(message)

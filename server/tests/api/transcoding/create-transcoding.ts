@@ -46,6 +46,8 @@ function runTests (objectStorage: boolean) {
   let videoUUID: string
   let publishedAt: string
 
+  let shouldBeDeleted: string[]
+
   before(async function () {
     this.timeout(120000)
 
@@ -120,7 +122,7 @@ function runTests (objectStorage: boolean) {
   it('Should generate WebTorrent from HLS only video', async function () {
     this.timeout(60000)
 
-    await servers[0].videos.removeWebTorrentFiles({ videoId: videoUUID })
+    await servers[0].videos.removeAllWebTorrentFiles({ videoId: videoUUID })
     await waitJobs(servers)
 
     await servers[0].videos.runTranscoding({ videoId: videoUUID, transcodingType: 'webtorrent' })
@@ -140,7 +142,7 @@ function runTests (objectStorage: boolean) {
   it('Should only generate WebTorrent', async function () {
     this.timeout(60000)
 
-    await servers[0].videos.removeHLSFiles({ videoId: videoUUID })
+    await servers[0].videos.removeHLSPlaylist({ videoId: videoUUID })
     await waitJobs(servers)
 
     await servers[0].videos.runTranscoding({ videoId: videoUUID, transcodingType: 'webtorrent' })
@@ -187,6 +189,12 @@ function runTests (objectStorage: boolean) {
       expect(videoDetails.streamingPlaylists[0].files).to.have.lengthOf(1)
 
       if (objectStorage) await checkFilesInObjectStorage(videoDetails)
+
+      shouldBeDeleted = [
+        videoDetails.streamingPlaylists[0].files[0].fileUrl,
+        videoDetails.streamingPlaylists[0].playlistUrl,
+        videoDetails.streamingPlaylists[0].segmentsSha256Url
+      ]
     }
 
     await servers[0].config.updateExistingSubConfig({
@@ -224,6 +232,12 @@ function runTests (objectStorage: boolean) {
         const shaBody = await servers[0].streamingPlaylists.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url })
         expect(Object.keys(shaBody)).to.have.lengthOf(5)
       }
+    }
+  })
+
+  it('Should have correctly deleted previous files', async function () {
+    for (const fileUrl of shouldBeDeleted) {
+      await makeRawRequest(fileUrl, HttpStatusCode.NOT_FOUND_404)
     }
   })
 

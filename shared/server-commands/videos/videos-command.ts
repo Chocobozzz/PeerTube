@@ -20,10 +20,10 @@ import {
   VideosCommonQuery,
   VideoTranscodingCreate
 } from '@shared/models'
+import { VideoSource } from '@shared/models/videos/video-source'
 import { unwrapBody } from '../requests'
 import { waitJobs } from '../server'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
-import { VideoSource } from '@shared/models/videos/video-source'
 
 export type VideoEdit = Partial<Omit<VideoCreate, 'thumbnailfile' | 'previewfile'>> & {
   fixture?: string
@@ -605,7 +605,7 @@ export class VideosCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  removeHLSFiles (options: OverrideCommandOptions & {
+  removeHLSPlaylist (options: OverrideCommandOptions & {
     videoId: number | string
   }) {
     const path = '/api/v1/videos/' + options.videoId + '/hls'
@@ -619,10 +619,40 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
-  removeWebTorrentFiles (options: OverrideCommandOptions & {
+  removeHLSFile (options: OverrideCommandOptions & {
+    videoId: number | string
+    fileId: number
+  }) {
+    const path = '/api/v1/videos/' + options.videoId + '/hls/' + options.fileId
+
+    return this.deleteRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  removeAllWebTorrentFiles (options: OverrideCommandOptions & {
     videoId: number | string
   }) {
     const path = '/api/v1/videos/' + options.videoId + '/webtorrent'
+
+    return this.deleteRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  removeWebTorrentFile (options: OverrideCommandOptions & {
+    videoId: number | string
+    fileId: number
+  }) {
+    const path = '/api/v1/videos/' + options.videoId + '/webtorrent/' + options.fileId
 
     return this.deleteRequest({
       ...options,

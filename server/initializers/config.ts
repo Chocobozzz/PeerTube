@@ -149,6 +149,10 @@ const CONFIG = {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.login.window')),
       MAX: config.get<number>('rates_limit.login.max')
     },
+    RECEIVE_CLIENT_LOG: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.receive_client_log.window')),
+      MAX: config.get<number>('rates_limit.receive_client_log.max')
+    },
     ASK_SEND_EMAIL: {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.ask_send_email.window')),
       MAX: config.get<number>('rates_limit.ask_send_email.max')
@@ -165,7 +169,8 @@ const CONFIG = {
     ANONYMIZE_IP: config.get<boolean>('log.anonymize_ip'),
     LOG_PING_REQUESTS: config.get<boolean>('log.log_ping_requests'),
     LOG_TRACKER_UNKNOWN_INFOHASH: config.get<boolean>('log.log_tracker_unknown_infohash'),
-    PRETTIFY_SQL: config.get<boolean>('log.prettify_sql')
+    PRETTIFY_SQL: config.get<boolean>('log.prettify_sql'),
+    ACCEPT_CLIENT_LOG: config.get<boolean>('log.accept_client_log')
   },
   OPEN_TELEMETRY: {
     METRICS: {
@@ -304,6 +309,7 @@ const CONFIG = {
     get THREADS () { return config.get<number>('transcoding.threads') },
     get CONCURRENCY () { return config.get<number>('transcoding.concurrency') },
     get PROFILE () { return config.get<string>('transcoding.profile') },
+    get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () { return config.get<boolean>('transcoding.always_transcode_original_resolution') },
     RESOLUTIONS: {
       get '0p' () { return config.get<boolean>('transcoding.resolutions.0p') },
       get '144p' () { return config.get<boolean>('transcoding.resolutions.144p') },
@@ -355,6 +361,8 @@ const CONFIG = {
       get ENABLED () { return config.get<boolean>('live.transcoding.enabled') },
       get THREADS () { return config.get<number>('live.transcoding.threads') },
       get PROFILE () { return config.get<string>('live.transcoding.profile') },
+
+      get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () { return config.get<boolean>('live.transcoding.always_transcode_original_resolution') },
 
       RESOLUTIONS: {
         get '144p' () { return config.get<boolean>('live.transcoding.resolutions.144p') },

@@ -293,6 +293,10 @@ tags:
       PeerTube instances can mirror videos from one another, and help distribute some videos.
 
       For importing videos as your own, refer to [video imports](#operation/importVideo).
+  - name: Stats
+    description: |
+      Statistics
+
 x-tagGroups:
   - name: Auth
     tags:
@@ -326,23 +330,21 @@ x-tagGroups:
   - name: Search
     tags:
       - Search
-  - name: Custom pages
-    tags:
-      - Homepage
   - name: Moderation
     tags:
       - Abuses
       - Video Blocks
       - Account Blocks
       - Server Blocks
-  - name: Instance Configuration
+  - name: Instance
     tags:
       - Config
+      - Homepage
       - Instance Follows
       - Instance Redundancy
       - Plugins
-  - name: Jobs
-    tags:
+      - Stats
+      - Logs
       - Job
 paths:
   '/accounts/{name}':
@@ -1666,6 +1668,31 @@ paths:
           description: successful operation
         '400':
           description: changing video ownership to a remote account is not supported yet
+        '404':
+          description: video not found
+
+  /videos/{id}/studio/edit:
+    post:
+      summary: Create a studio task
+      tags:
+        - Video Transcoding
+        - Video
+      description: Create a task to edit a video  (cut, add intro/outro etc)
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VideoStudioCreateTask'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: incorrect parameters
         '404':
           description: video not found
 
@@ -4294,6 +4321,74 @@ paths:
         '404':
           description: video redundancy not found
 
+  /server/stats:
+    get:
+      tags:
+        - Stats
+      summary: Get instance stats
+      description: Get instance public statistics. This endpoint is cached.
+      operationId: getInstanceStats
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerStats'
+
+  /server/logs/client:
+    post:
+      tags:
+        - Logs
+      summary: Send client log
+      operationId: sendClientLog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendClientLog'
+      responses:
+        '204':
+          description: successful operation
+
+  /server/logs:
+    get:
+      tags:
+        - Logs
+      summary: Get instance logs
+      operationId: getInstanceLogs
+      security:
+        - OAuth2:
+          - admin
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /server/audit-logs:
+    get:
+      tags:
+        - Logs
+      summary: Get instance audit logs
+      operationId: getInstanceAuditLogs
+      security:
+        - OAuth2:
+          - admin
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
   '/feeds/video-comments.{format}':
     get:
       tags:
@@ -5595,6 +5690,8 @@ components:
     VideoFile:
       readOnly: true
       properties:
+        id:
+          $ref: '#/components/schemas/id'
         magnetUri:
           type: string
           format: uri
@@ -6502,6 +6599,96 @@ components:
           properties:
             enabled:
               type: boolean
+
+    SendClientLog:
+      properties:
+        message:
+          type: string
+        url:
+          type: string
+          description: URL of the current user page
+        level:
+          enum:
+            - error
+            - warn
+        stackTrace:
+          type: string
+          description: Stack trace of the error if there is one
+        userAgent:
+          type: string
+          description: User agent of the web browser that sends the message
+        meta:
+          type: string
+          description: Additional information regarding this log
+      required:
+        - message
+        - url
+        - level
+
+    ServerStats:
+      properties:
+        totalUsers:
+          type: number
+        totalDailyActiveUsers:
+          type: number
+        totalWeeklyActiveUsers:
+          type: number
+        totalMonthlyActiveUsers:
+          type: number
+        totalLocalVideos:
+          type: number
+        totalLocalVideoViews:
+          type: number
+          description: Total video views made on the instance
+        totalLocalVideoComments:
+          type: number
+          description: Total comments made by local users
+        totalLocalVideoFilesSize:
+          type: number
+        totalVideos:
+          type: number
+        totalVideoComments:
+          type: number
+        totalLocalVideoChannels:
+          type: number
+        totalLocalDailyActiveVideoChannels:
+          type: number
+        totalLocalWeeklyActiveVideoChannels:
+          type: number
+        totalLocalMonthlyActiveVideoChannels:
+          type: number
+        totalLocalPlaylists:
+          type: number
+        totalInstanceFollowers:
+          type: number
+        totalInstanceFollowing:
+          type: number
+        videosRedundancy:
+          type: array
+          items:
+            type: object
+            properties:
+                strategy:
+                  type: string
+                totalSize:
+                  type: number
+                totalUsed:
+                  type: number
+                totalVideoFiles:
+                  type: number
+                totalVideos:
+                  type: number
+        totalActivityPubMessagesProcessed:
+          type: number
+        totalActivityPubMessagesSuccesses:
+          type: number
+        totalActivityPubMessagesErrors:
+          type: number
+
+        activityPubMessagesProcessedPerSecond:
+          type: number
+        totalActivityPubMessagesWaiting:
+          type: number
 
     ServerConfigAbout:
       properties:
@@ -7750,6 +7937,68 @@ components:
         latencyMode:
           description: User can select live latency mode if enabled by the instance
           $ref: '#/components/schemas/LiveVideoLatencyMode'
+
+    VideoStudioCreateTask:
+      type: array
+      items:
+        anyOf:
+          -
+            title: cut
+            type: object
+            properties:
+              name:
+                type: string
+                enum:
+                  - 'cut'
+              options:
+                type: object
+                properties:
+                  start:
+                    type: integer
+                  end:
+                    type: integer
+          -
+            title: add-intro
+            type: object
+            properties:
+              name:
+                type: string
+                enum:
+                  - 'add-intro'
+              options:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    format: binary
+          -
+            title: add-outro
+            type: object
+            properties:
+              name:
+                type: string
+                enum:
+                  - 'add-outro'
+              options:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    format: binary
+          -
+            title: add-watermark
+            type: object
+            properties:
+              name:
+                type: string
+                enum:
+                  - 'add-watermark'
+              options:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    format: binary
 
     LiveVideoSessionResponse:
         properties:

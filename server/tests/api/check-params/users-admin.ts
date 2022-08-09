@@ -175,7 +175,7 @@ describe('Test users admin API validators', function () {
 
       await makePostBodyRequest({
         url: server.url,
-        path: path,
+        path,
         token: server.accessToken,
         fields,
         expectedStatus: HttpStatusCode.OK_200

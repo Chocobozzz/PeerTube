@@ -1,5 +1,6 @@
 import { HybridLoaderSettings } from '@peertube/p2p-media-loader-core'
 import { HlsJsEngineSettings } from '@peertube/p2p-media-loader-hlsjs'
+import { logger } from '@root-helpers/logger'
 import { LiveVideoLatencyMode } from '@shared/models'
 import { getAverageBandwidthInStore } from '../../peertube-player-local-storage'
 import { P2PMediaLoader, P2PMediaLoaderPluginOptions } from '../../types'
@@ -61,7 +62,7 @@ export class HLSOptionsBuilder {
   private getP2PMediaLoaderOptions (redundancyUrlManager: RedundancyUrlManager): HlsJsEngineSettings {
     let consumeOnly = false
     if ((navigator as any)?.connection?.type === 'cellular') {
-      console.log('We are on a cellular connection: disabling seeding.')
+      logger.info('We are on a cellular connection: disabling seeding.')
       consumeOnly = true
     }
 
@@ -81,7 +82,7 @@ export class HLSOptionsBuilder {
         httpFailedSegmentTimeout: 1000,
 
         segmentValidator: segmentValidatorFactory(this.options.p2pMediaLoader.segmentsSha256Url, this.options.common.isLive),
-        segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager, 1),
+        segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager),
 
         useP2P: this.options.common.p2pEnabled,
         consumeOnly,
@@ -122,6 +123,7 @@ export class HLSOptionsBuilder {
   private getP2PMediaLoaderVODOptions (): Partial<HybridLoaderSettings> {
     return {
       requiredSegmentsPriority: 3,
+      skipSegmentBuilderPriority: 1,
 
       cachedSegmentExpiration: 86400000,
       cachedSegmentsCount: 100,
@@ -157,6 +159,7 @@ export class HLSOptionsBuilder {
       ...base,
 
       abrEwmaDefaultEstimate: averageBandwidth * 8, // We want bit/s
+      backBufferLength: 90,
       startLevel: -1,
       testBandwidth: false,
       debug: false

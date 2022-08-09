@@ -163,7 +163,7 @@ describe('Test users API validators', function () {
         url: server.url,
         path: registrationPath,
         token: server.accessToken,
-        fields: fields,
+        fields,
         expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })

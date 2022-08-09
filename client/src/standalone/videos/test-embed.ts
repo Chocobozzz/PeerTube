@@ -1,6 +1,7 @@
 import './test-embed.scss'
 import { PeerTubeResolution, PlayerEventType } from '../player/definitions'
 import { PeerTubePlayer } from '../player/player'
+import { logger } from '../../root-helpers'
 
 window.addEventListener('load', async () => {
   const urlParts = window.location.href.split('/')
@@ -20,14 +21,14 @@ window.addEventListener('load', async () => {
   const mainElement = document.querySelector('#host')
   mainElement.appendChild(iframe)
 
-  console.log('Document finished loading.')
+  logger.info('Document finished loading.')
   const player = new PeerTubePlayer(document.querySelector('iframe'))
 
   window['player'] = player
 
-  console.log('Awaiting player ready...')
+  logger.info('Awaiting player ready...')
   await player.ready
-  console.log('Player is ready.')
+  logger.info('Player is ready.')
 
   const monitoredEvents = [
     'pause',
@@ -37,8 +38,8 @@ window.addEventListener('load', async () => {
   ]
 
   monitoredEvents.forEach(e => {
-    player.addEventListener(e as PlayerEventType, (param) => console.log(`PLAYER: event '${e}' received`, param))
-    console.log(`PLAYER: now listening for event '${e}'`)
+    player.addEventListener(e as PlayerEventType, (param) => logger.info(`PLAYER: event '${e}' received`, { param }))
+    logger.info(`PLAYER: now listening for event '${e}'`)
 
     player.getCurrentPosition()
       .then(position => {

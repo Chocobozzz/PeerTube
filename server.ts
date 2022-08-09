@@ -95,9 +95,11 @@ import { VideosPreviewCache, VideosCaptionCache } from './server/lib/files-cache
 import {
   activityPubRouter,
   apiRouter,
+  miscRouter,
   clientsRouter,
   feedsRouter,
   staticRouter,
+  wellKnownRouter,
   lazyStaticRouter,
   servicesRouter,
   liveRouter,
@@ -136,6 +138,7 @@ import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { VideoViewsManager } from '@server/lib/views/video-views-manager'
 import { isTestOrDevInstance } from './server/helpers/core-utils'
 import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics'
+import { ApplicationModel } from '@server/models/application/application'
 
 // ----------- Command line -----------
 
@@ -231,6 +234,8 @@ app.use('/', botsRouter)
 
 // Static files
 app.use('/', staticRouter)
+app.use('/', wellKnownRouter)
+app.use('/', miscRouter)
 app.use('/', downloadRouter)
 app.use('/', lazyStaticRouter)
 
@@ -283,7 +288,7 @@ async function startApplication () {
   checkFFmpegVersion()
     .catch(err => logger.error('Cannot check ffmpeg version', { err }))
 
-  // Email initialization
+  Redis.Instance.init()
   Emailer.Instance.init()
 
   await Promise.all([
@@ -313,7 +318,6 @@ async function startApplication () {
   GeoIPUpdateScheduler.Instance.enable()
   OpenTelemetryMetrics.Instance.registerMetrics()
 
-  Redis.Instance.init()
   PeerTubeSocket.Instance.init(server)
   VideoViewsManager.Instance.init()
 
@@ -327,11 +331,16 @@ async function startApplication () {
   server.listen(port, hostname, async () => {
     if (cliOptions.plugins) {
       try {
+        await PluginManager.Instance.rebuildNativePluginsIfNeeded()
+
         await PluginManager.Instance.registerPluginsAndThemes()
       } catch (err) {
         logger.error('Cannot register plugins and themes.', { err })
       }
     }
+
+    ApplicationModel.updateNodeVersions()
+      .catch(err => logger.error('Cannot update node versions.', { err }))
 
     logger.info('HTTP server listening on %s:%d', hostname, port)
     logger.info('Web server: %s', WEBSERVER.URL)
@@ -343,6 +352,7 @@ async function startApplication () {
 
   process.on('exit', () => {
     JobQueue.Instance.terminate()
+      .catch(err => logger.error('Cannot terminate job queue.', { err }))
   })
 
   process.on('SIGINT', () => process.exit(0))

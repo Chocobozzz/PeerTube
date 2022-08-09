@@ -1,8 +1,8 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.header {
-  z-index: z(header);
+.root-header {
+  z-index: z(root-header);
 }
 
 .help-popover {
@@ -10,7 +10,7 @@
 }
 
 ngx-loading-bar {
-  z-index: z(header) + 1 !important;
+  z-index: z(root-header) + 1 !important;
 }
 
 // Dropdown added to body, override default z-index

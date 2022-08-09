@@ -26,6 +26,10 @@ function removeHLSObjectStorage (playlist: MStreamingPlaylistVideo) {
   return removePrefix(generateHLSObjectBaseStorageKey(playlist), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
+function removeHLSFileObjectStorage (playlist: MStreamingPlaylistVideo, filename: string) {
+  return removeObject(generateHLSObjectStorageKey(playlist, filename), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+}
+
 function removeWebTorrentObjectStorage (videoFile: MVideoFile) {
   return removeObject(generateWebTorrentObjectStorageKey(videoFile.filename), CONFIG.OBJECT_STORAGE.VIDEOS)
 }
@@ -63,6 +67,7 @@ export {
   storeHLSFile,
 
   removeHLSObjectStorage,
+  removeHLSFileObjectStorage,
   removeWebTorrentObjectStorage,
 
   makeWebTorrentFileAvailable,

@@ -2,6 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -195,6 +196,70 @@ describe('Test logs', function () {
       expect(logsString.includes('video 9')).to.be.false
       expect(logsString.includes('video 10')).to.be.true
       expect(logsString.includes('video 11')).to.be.false
+    })
+  })
+
+  describe('When creating log from the client', function () {
+
+    it('Should create a warn client log', async function () {
+      const now = new Date()
+
+      await server.logs.createLogClient({
+        payload: {
+          level: 'warn',
+          url: 'http://example.com',
+          message: 'my super client message'
+        },
+        token: null
+      })
+
+      const body = await logsCommand.getLogs({ startDate: now })
+      const logsString = JSON.stringify(body)
+
+      expect(logsString.includes('my super client message')).to.be.true
+    })
+
+    it('Should create an error authenticated client log', async function () {
+      const now = new Date()
+
+      await server.logs.createLogClient({
+        payload: {
+          url: 'https://example.com/page1',
+          level: 'error',
+          message: 'my super client message 2',
+          userAgent: 'super user agent',
+          meta: '{hello}',
+          stackTrace: 'super stack trace'
+        }
+      })
+
+      const body = await logsCommand.getLogs({ startDate: now })
+      const logsString = JSON.stringify(body)
+
+      expect(logsString.includes('my super client message 2')).to.be.true
+      expect(logsString.includes('super user agent')).to.be.true
+      expect(logsString.includes('super stack trace')).to.be.true
+      expect(logsString.includes('{hello}')).to.be.true
+      expect(logsString.includes('https://example.com/page1')).to.be.true
+    })
+
+    it('Should refuse to create client logs', async function () {
+      await server.kill()
+
+      await server.run({
+        log: {
+          accept_client_log: false
+        }
+      })
+
+      await server.logs.createLogClient({
+        payload: {
+          level: 'warn',
+          url: 'http://example.com',
+          message: 'my super client message'
+        },
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
   })
 

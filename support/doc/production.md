@@ -160,12 +160,6 @@ $ sudo certbot certonly --standalone --post-hook "systemctl restart nginx"
 $ sudo systemctl reload nginx
 ```
 
-Now you have the certificates you can reload nginx:
-
-```bash
-$ sudo systemctl reload nginx
-```
-
 Certbot should have installed a cron to automatically renew your certificate.
 Since our nginx template supports webroot renewal, we suggest you to update the renewal config file to use the `webroot` authenticator:
 

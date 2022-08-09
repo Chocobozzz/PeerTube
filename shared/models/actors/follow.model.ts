@@ -1,6 +1,6 @@
 import { Actor } from './actor.model'
 
-export type FollowState = 'pending' | 'accepted'
+export type FollowState = 'pending' | 'accepted' | 'rejected'
 
 export interface ActorFollow {
   id: number

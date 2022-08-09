@@ -3,10 +3,13 @@ import { enableDebugTools } from '@angular/platform-browser'
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
 import { AppModule } from './app/app.module'
 import { environment } from './environments/environment'
+import { logger } from './root-helpers'
 
 if (environment.production) {
   enableProdMode()
 }
+
+logger.registerServerSending(environment.apiUrl)
 
 const bootstrap = () => platformBrowserDynamic()
   .bootstrapModule(AppModule)
@@ -22,7 +25,7 @@ const bootstrap = () => platformBrowserDynamic()
     return bootstrapModule
   })
   .catch(err => {
-    console.error(err)
+    logger.error(err)
     return null
   })
 

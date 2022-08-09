@@ -4,6 +4,7 @@ import { catchError, concatMap, map, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
+import { arrayify } from '@shared/core-utils'
 import { ResultList, VideoBlacklist, VideoBlacklistType } from '@shared/models'
 import { environment } from '../../../environments/environment'
 
@@ -53,7 +54,7 @@ export class VideoBlockService {
   }
 
   unblockVideo (videoIdArgs: number | number[]) {
-    const videoIds = Array.isArray(videoIdArgs) ? videoIdArgs : [ videoIdArgs ]
+    const videoIds = arrayify(videoIdArgs)
 
     return observableFrom(videoIds)
       .pipe(

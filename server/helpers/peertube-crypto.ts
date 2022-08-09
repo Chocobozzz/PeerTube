@@ -5,7 +5,7 @@ import { cloneDeep } from 'lodash'
 import { sha256 } from '@shared/extra-utils'
 import { BCRYPT_SALT_SIZE, HTTP_SIGNATURE, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants'
 import { MActor } from '../types/models'
-import { createPrivateKey, getPublicKey, promisify1, promisify2 } from './core-utils'
+import { generateRSAKeyPairPromise, promisify1, promisify2 } from './core-utils'
 import { jsonld } from './custom-jsonld-signature'
 import { logger } from './logger'
 
@@ -15,13 +15,10 @@ const bcryptHashPromise = promisify2<any, string | number, string>(hash)
 
 const httpSignature = require('@peertube/http-signature')
 
-async function createPrivateAndPublicKeys () {
+function createPrivateAndPublicKeys () {
   logger.info('Generating a RSA key...')
 
-  const { key } = await createPrivateKey(PRIVATE_RSA_KEY_SIZE)
-  const { publicKey } = await getPublicKey(key)
-
-  return { privateKey: key, publicKey }
+  return generateRSAKeyPairPromise(PRIVATE_RSA_KEY_SIZE)
 }
 
 // User password checks

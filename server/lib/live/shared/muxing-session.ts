@@ -21,16 +21,16 @@ import { buildConcatenatedName } from '../live-utils'
 import memoizee = require('memoizee')
 
 interface MuxingSessionEvents {
-  'master-playlist-created': ({ videoId: number }) => void
+  'master-playlist-created': (options: { videoId: number }) => void
 
-  'bad-socket-health': ({ videoId: number }) => void
-  'duration-exceeded': ({ videoId: number }) => void
-  'quota-exceeded': ({ videoId: number }) => void
+  'bad-socket-health': (options: { videoId: number }) => void
+  'duration-exceeded': (options: { videoId: number }) => void
+  'quota-exceeded': (options: { videoId: number }) => void
 
-  'ffmpeg-end': ({ videoId: number }) => void
-  'ffmpeg-error': ({ videoId: string }) => void
+  'ffmpeg-end': (options: { videoId: number }) => void
+  'ffmpeg-error': (options: { videoId: number }) => void
 
-  'after-cleanup': ({ videoId: number }) => void
+  'after-cleanup': (options: { videoId: number }) => void
 }
 
 declare interface MuxingSession {
@@ -72,6 +72,8 @@ class MuxingSession extends EventEmitter {
 
   private tsWatcher: FSWatcher
   private masterWatcher: FSWatcher
+
+  private aborted = false
 
   private readonly isAbleToUploadVideoWithCache = memoizee((userId: number) => {
     return isAbleToUploadVideo(userId, 1000)
@@ -176,6 +178,7 @@ class MuxingSession extends EventEmitter {
   abort () {
     if (!this.ffmpegCommand) return
 
+    this.aborted = true
     this.ffmpegCommand.kill('SIGINT')
   }
 
@@ -280,6 +283,7 @@ class MuxingSession extends EventEmitter {
 
   private async isQuotaExceeded (segmentPath: string) {
     if (this.saveReplay !== true) return false
+    if (this.aborted) return false
 
     try {
       const segmentStat = await stat(segmentPath)
@@ -339,7 +343,11 @@ class MuxingSession extends EventEmitter {
       if (this.saveReplay) {
         await this.addSegmentToReplay(previousSegment)
       }
-    }).catch(err => logger.error('Cannot process segments', { err, ...this.lTags() }))
+    }).catch(err => {
+      if (this.aborted) return
+
+      logger.error('Cannot process segments', { err, ...this.lTags() })
+    })
   }
 
   private hasClientSocketInBadHealth (sessionId: string) {

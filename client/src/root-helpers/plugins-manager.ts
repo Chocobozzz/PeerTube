@@ -21,6 +21,7 @@ import {
 } from '@shared/models'
 import { environment } from '../environments/environment'
 import { ClientScript } from '../types'
+import { logger } from './logger'
 
 interface HookStructValue extends RegisterClientHookOptions {
   plugin: ServerConfigPlugin
@@ -48,7 +49,7 @@ type OnSettingsScripts = (pluginInfo: PluginInfo, options: RegisterClientSetting
 
 type OnClientRoute = (options: RegisterClientRouteOptions) => void
 
-const logger = debug('peertube:plugins')
+const debugLogger = debug('peertube:plugins')
 
 class PluginsManager {
   private hooks: Hooks = {}
@@ -68,7 +69,8 @@ class PluginsManager {
     login: new ReplaySubject<boolean>(1),
     'video-edit': new ReplaySubject<boolean>(1),
     embed: new ReplaySubject<boolean>(1),
-    'my-library': new ReplaySubject<boolean>(1)
+    'my-library': new ReplaySubject<boolean>(1),
+    'video-channel': new ReplaySubject<boolean>(1)
   }
 
   private readonly peertubeHelpersFactory: PeertubeHelpersFactory
@@ -109,10 +111,16 @@ class PluginsManager {
     const hookType = getHookType(hookName)
 
     for (const hook of this.hooks[hookName]) {
-      console.log('Running hook %s of plugin %s.', hookName, hook.plugin.name)
+      logger.info(`Running hook ${hookName} of plugin ${hook.plugin.name}`)
 
-      result = await internalRunHook(hook.handler, hookType, result, params, err => {
-        console.error('Cannot run hook %s of script %s of plugin %s.', hookName, hook.clientScript.script, hook.plugin.name, err)
+      result = await internalRunHook({
+        handler: hook.handler,
+        hookType,
+        result,
+        params,
+        onError: err => {
+          logger.error(`Cannot run hook ${hookName} of script ${hook.clientScript.script} of plugin ${hook.plugin.name}`, err)
+        }
       })
     }
 
@@ -170,7 +178,7 @@ class PluginsManager {
 
     this.loadingScopes[scope] = true
 
-    logger('Loading scope %s', scope)
+    debugLogger('Loading scope %s', scope)
 
     try {
       if (!isReload) this.loadedScopes.push(scope)
@@ -180,7 +188,7 @@ class PluginsManager {
         this.loadingScopes[scope] = false
         this.pluginsLoaded[scope].next(true)
 
-        logger('Nothing to load for scope %s', scope)
+        debugLogger('Nothing to load for scope %s', scope)
         return
       }
 
@@ -200,9 +208,9 @@ class PluginsManager {
       this.pluginsLoaded[scope].next(true)
       this.loadingScopes[scope] = false
 
-      logger('Scope %s loaded', scope)
+      debugLogger('Scope %s loaded', scope)
     } catch (err) {
-      console.error('Cannot load plugins by scope %s.', scope, err)
+      logger.error(`Cannot load plugins by scope ${scope}`, err)
     }
   }
 
@@ -211,7 +219,7 @@ class PluginsManager {
 
     const registerHook = (options: RegisterClientHookOptions) => {
       if (clientHookObject[options.target] !== true) {
-        console.error('Unknown hook %s of plugin %s. Skipping.', options.target, plugin.name)
+        logger.error(`Unknown hook ${options.target} of plugin ${plugin.name}. Skipping.`)
         return
       }
 
@@ -252,7 +260,7 @@ class PluginsManager {
 
     const peertubeHelpers = this.peertubeHelpersFactory(pluginInfo)
 
-    console.log('Loading script %s of plugin %s.', clientScript.script, plugin.name)
+    logger.info(`Loading script ${clientScript.script} of plugin ${plugin.name}`)
 
     const absURL = (environment.apiUrl || window.location.origin) + clientScript.script
     return dynamicImport(absURL)
@@ -266,7 +274,7 @@ class PluginsManager {
         })
       })
       .then(() => this.sortHooksByPriority())
-      .catch(err => console.error('Cannot import or register plugin %s.', pluginInfo.plugin.name, err))
+      .catch(err => logger.error(`Cannot import or register plugin ${pluginInfo.plugin.name}`, err))
   }
 
   private sortHooksByPriority () {
@@ -294,7 +302,7 @@ async function dynamicImport (url: string) {
     // eslint-disable-next-line no-new-func
     return new Function(`return import('${url}')`)()
   } catch {
-    console.log('Fallback to import polyfill')
+    logger.info('Fallback to import polyfill')
 
     return new Promise((resolve, reject) => {
       const vector = '$importModule$' + Math.random().toString(32).slice(2)

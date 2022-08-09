@@ -4,8 +4,9 @@ import { ViewportScroller } from '@angular/common'
 import { Injectable } from '@angular/core'
 import { RouterSetting } from '../'
 import { PeerTubeRouterService } from './peertube-router.service'
+import { logger } from '@root-helpers/logger'
 
-const logger = debug('peertube:main:ScrollService')
+const debugLogger = debug('peertube:main:ScrollService')
 
 @Injectable()
 export class ScrollService {
@@ -57,8 +58,8 @@ export class ScrollService {
                           if (nextSearchParams.toString() !== previousSearchParams.toString()) {
                             this.resetScroll = true
                           }
-                        } catch (e) {
-                          console.error('Cannot parse URL to check next scroll.', e)
+                        } catch (err) {
+                          logger.error('Cannot parse URL to check next scroll.', err)
                           this.resetScroll = true
                         }
                       })
@@ -67,7 +68,7 @@ export class ScrollService {
   private consumeScroll () {
     // Handle anchors/restore position
     this.peertubeRouter.getScrollEvents().subscribe(e => {
-      logger('Will schedule scroll after router event %o.', { e, resetScroll: this.resetScroll })
+      debugLogger('Will schedule scroll after router event %o.', { e, resetScroll: this.resetScroll })
 
       // scrollToAnchor first to preserve anchor position when using history navigation
       if (e.anchor) {

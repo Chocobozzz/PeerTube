@@ -1,14 +1,42 @@
+import validator from 'validator'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants'
+import { ClientLogLevel, ServerLogLevel } from '@shared/models'
 import { exists } from './misc'
-import { LogLevel } from '../../../shared/models/server/log-level.type'
 
-const logLevels: LogLevel[] = [ 'debug', 'info', 'warn', 'error' ]
+const serverLogLevels: Set<ServerLogLevel> = new Set([ 'debug', 'info', 'warn', 'error' ])
+const clientLogLevels: Set<ClientLogLevel> = new Set([ 'warn', 'error' ])
 
 function isValidLogLevel (value: any) {
-  return exists(value) && logLevels.includes(value)
+  return exists(value) && serverLogLevels.has(value)
+}
+
+function isValidClientLogMessage (value: any) {
+  return typeof value === 'string' && validator.isLength(value, CONSTRAINTS_FIELDS.LOGS.CLIENT_MESSAGE)
+}
+
+function isValidClientLogLevel (value: any) {
+  return exists(value) && clientLogLevels.has(value)
+}
+
+function isValidClientLogStackTrace (value: any) {
+  return typeof value === 'string' && validator.isLength(value, CONSTRAINTS_FIELDS.LOGS.CLIENT_STACK_TRACE)
+}
+
+function isValidClientLogMeta (value: any) {
+  return typeof value === 'string' && validator.isLength(value, CONSTRAINTS_FIELDS.LOGS.CLIENT_META)
+}
+
+function isValidClientLogUserAgent (value: any) {
+  return typeof value === 'string' && validator.isLength(value, CONSTRAINTS_FIELDS.LOGS.CLIENT_USER_AGENT)
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  isValidLogLevel
+  isValidLogLevel,
+  isValidClientLogMessage,
+  isValidClientLogStackTrace,
+  isValidClientLogMeta,
+  isValidClientLogLevel,
+  isValidClientLogUserAgent
 }

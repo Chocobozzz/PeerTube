@@ -3,15 +3,14 @@
 import 'mocha'
 import * as chai from 'chai'
 import { testImage } from '@server/tests/shared'
-import { AbuseState, HttpStatusCode, OAuth2ErrorCode, UserAdminFlag, UserRole, Video, VideoPlaylistType } from '@shared/models'
+import { AbuseState, HttpStatusCode, OAuth2ErrorCode, UserAdminFlag, UserRole, VideoPlaylistType } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
   killallServers,
   makePutBodyRequest,
   PeerTubeServer,
-  setAccessTokensToServers,
-  waitJobs
+  setAccessTokensToServers
 } from '@shared/server-commands'
 
 const expect = chai.expect
@@ -126,67 +125,6 @@ describe('Test users', function () {
 
       const user3 = { username: 'ROOt', password: server.store.user.password }
       await server.login.login({ user: user3, expectedStatus: HttpStatusCode.OK_200 })
-    })
-  })
-
-  describe('Upload', function () {
-
-    it('Should upload the video with the correct token', async function () {
-      await server.videos.upload({ token })
-      const { data } = await server.videos.list()
-      const video = data[0]
-
-      expect(video.account.name).to.equal('root')
-      videoId = video.id
-    })
-
-    it('Should upload the video again with the correct token', async function () {
-      await server.videos.upload({ token })
-    })
-  })
-
-  describe('Ratings', function () {
-
-    it('Should retrieve a video rating', async function () {
-      await server.videos.rate({ id: videoId, rating: 'like' })
-      const rating = await server.users.getMyRating({ token, videoId })
-
-      expect(rating.videoId).to.equal(videoId)
-      expect(rating.rating).to.equal('like')
-    })
-
-    it('Should retrieve ratings list', async function () {
-      await server.videos.rate({ id: videoId, rating: 'like' })
-
-      const body = await server.accounts.listRatings({ accountName: server.store.user.username })
-
-      expect(body.total).to.equal(1)
-      expect(body.data[0].video.id).to.equal(videoId)
-      expect(body.data[0].rating).to.equal('like')
-    })
-
-    it('Should retrieve ratings list by rating type', async function () {
-      {
-        const body = await server.accounts.listRatings({ accountName: server.store.user.username, rating: 'like' })
-        expect(body.data.length).to.equal(1)
-      }
-
-      {
-        const body = await server.accounts.listRatings({ accountName: server.store.user.username, rating: 'dislike' })
-        expect(body.data.length).to.equal(0)
-      }
-    })
-  })
-
-  describe('Remove video', function () {
-    it('Should not be able to remove the video with an incorrect token', async function () {
-      await server.videos.remove({ token: 'bad_token', id: videoId, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
-    })
-
-    it('Should not be able to remove the video with the token of another account')
-
-    it('Should be able to remove the video with the correct token', async function () {
-      await server.videos.remove({ token, id: videoId })
     })
   })
 
@@ -305,105 +243,6 @@ describe('Test users', function () {
       expect(userGet.abusesCount).to.equal(0)
       expect(userGet.abusesAcceptedCount).to.be.a('number')
       expect(userGet.abusesAcceptedCount).to.equal(0)
-    })
-  })
-
-  describe('My videos & quotas', function () {
-
-    it('Should be able to upload a video with this user', async function () {
-      this.timeout(10000)
-
-      const attributes = {
-        name: 'super user video',
-        fixture: 'video_short.webm'
-      }
-      await server.videos.upload({ token: userToken, attributes })
-
-      await server.channels.create({ token: userToken, attributes: { name: 'other_channel' } })
-    })
-
-    it('Should have video quota updated', async function () {
-      const quota = await server.users.getMyQuotaUsed({ token: userToken })
-      expect(quota.videoQuotaUsed).to.equal(218910)
-
-      const { data } = await server.users.list()
-      const tmpUser = data.find(u => u.username === user.username)
-      expect(tmpUser.videoQuotaUsed).to.equal(218910)
-    })
-
-    it('Should be able to list my videos', async function () {
-      const { total, data } = await server.videos.listMyVideos({ token: userToken })
-      expect(total).to.equal(1)
-      expect(data).to.have.lengthOf(1)
-
-      const video: Video = data[0]
-      expect(video.name).to.equal('super user video')
-      expect(video.thumbnailPath).to.not.be.null
-      expect(video.previewPath).to.not.be.null
-    })
-
-    it('Should be able to filter by channel in my videos', async function () {
-      const myInfo = await server.users.getMyInfo({ token: userToken })
-      const mainChannel = myInfo.videoChannels.find(c => c.name !== 'other_channel')
-      const otherChannel = myInfo.videoChannels.find(c => c.name === 'other_channel')
-
-      {
-        const { total, data } = await server.videos.listMyVideos({ token: userToken, channelId: mainChannel.id })
-        expect(total).to.equal(1)
-        expect(data).to.have.lengthOf(1)
-
-        const video: Video = data[0]
-        expect(video.name).to.equal('super user video')
-        expect(video.thumbnailPath).to.not.be.null
-        expect(video.previewPath).to.not.be.null
-      }
-
-      {
-        const { total, data } = await server.videos.listMyVideos({ token: userToken, channelId: otherChannel.id })
-        expect(total).to.equal(0)
-        expect(data).to.have.lengthOf(0)
-      }
-    })
-
-    it('Should be able to search in my videos', async function () {
-      {
-        const { total, data } = await server.videos.listMyVideos({ token: userToken, sort: '-createdAt', search: 'user video' })
-        expect(total).to.equal(1)
-        expect(data).to.have.lengthOf(1)
-      }
-
-      {
-        const { total, data } = await server.videos.listMyVideos({ token: userToken, sort: '-createdAt', search: 'toto' })
-        expect(total).to.equal(0)
-        expect(data).to.have.lengthOf(0)
-      }
-    })
-
-    it('Should disable webtorrent, enable HLS, and update my quota', async function () {
-      this.timeout(160000)
-
-      {
-        const config = await server.config.getCustomConfig()
-        config.transcoding.webtorrent.enabled = false
-        config.transcoding.hls.enabled = true
-        config.transcoding.enabled = true
-        await server.config.updateCustomSubConfig({ newConfig: config })
-      }
-
-      {
-        const attributes = {
-          name: 'super user video 2',
-          fixture: 'video_short.webm'
-        }
-        await server.videos.upload({ token: userToken, attributes })
-
-        await waitJobs([ server ])
-      }
-
-      {
-        const data = await server.users.getMyQuotaUsed({ token: userToken })
-        expect(data.videoQuotaUsed).to.be.greaterThan(220000)
-      }
     })
   })
 
@@ -622,13 +461,6 @@ describe('Test users', function () {
       }
     })
 
-    it('Should still have the same amount of videos in my account', async function () {
-      const { total, data } = await server.videos.listMyVideos({ token: userToken })
-
-      expect(total).to.equal(2)
-      expect(data).to.have.lengthOf(2)
-    })
-
     it('Should be able to update my display name', async function () {
       await server.users.updateMe({ token: userToken, displayName: 'new display name' })
 
@@ -734,12 +566,28 @@ describe('Test users', function () {
   })
 
   describe('Video blacklists', function () {
-    it('Should be able to list video blacklist by a moderator', async function () {
+
+    it('Should be able to list my video blacklist', async function () {
       await server.blacklist.list({ token: userToken })
     })
   })
 
   describe('Remove a user', function () {
+
+    before(async function () {
+      await server.users.update({
+        userId,
+        token,
+        videoQuota: 2 * 1024 * 1024
+      })
+
+      await server.videos.quickUpload({ name: 'user video', token: userToken, fixture: 'video_short.webm' })
+      await server.videos.quickUpload({ name: 'root video' })
+
+      const { total } = await server.videos.list()
+      expect(total).to.equal(2)
+    })
+
     it('Should be able to remove this user', async function () {
       await server.users.remove({ userId, token })
     })
@@ -758,7 +606,7 @@ describe('Test users', function () {
   })
 
   describe('Registering a new user', function () {
-    let user15AccessToken
+    let user15AccessToken: string
 
     it('Should register a new user', async function () {
       const user = { displayName: 'super user 15', username: 'user_15', password: 'my super password' }
@@ -854,8 +702,8 @@ describe('Test users', function () {
   })
 
   describe('User stats', function () {
-    let user17Id
-    let user17AccessToken
+    let user17Id: number
+    let user17AccessToken: string
 
     it('Should report correct initial statistics about a user', async function () {
       const user17 = {

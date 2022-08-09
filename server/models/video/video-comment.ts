@@ -913,7 +913,7 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
 
     if (isVideoOwned) {
       const videoOwnerAccount = await AccountModel.loadAccountIdFromVideo(videoId)
-      blockerAccountIds.push(videoOwnerAccount.id)
+      if (videoOwnerAccount) blockerAccountIds.push(videoOwnerAccount.id)
     }
 
     return blockerAccountIds

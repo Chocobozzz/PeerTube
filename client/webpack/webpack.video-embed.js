@@ -24,6 +24,8 @@ module.exports = function () {
 
       modules: [ helpers.root('src'), 'node_modules' ],
 
+      symlinks: true,
+
       alias: {
         'video.js$': path.resolve('node_modules/video.js/core.js'),
         'hls.js$': path.resolve('node_modules/hls.js/dist/hls.light.js'),
@@ -69,7 +71,7 @@ module.exports = function () {
             {
               loader: 'ts-loader',
               options: {
-                configFile: helpers.root('tsconfig.json')
+                configFile: helpers.root('src/standalone/videos/tsconfig.json')
               }
             }
           ]

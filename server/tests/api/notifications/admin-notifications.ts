@@ -51,7 +51,7 @@ describe('Test admin notifications', function () {
     adminNotifications = res.adminNotifications
 
     baseParams = {
-      server: server,
+      server,
       emails,
       socketNotifications: adminNotifications,
       token: server.accessToken

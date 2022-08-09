@@ -30,7 +30,7 @@ function checkMissedConfig () {
     'transcoding.profile', 'transcoding.concurrency',
     'transcoding.resolutions.0p', 'transcoding.resolutions.144p', 'transcoding.resolutions.240p', 'transcoding.resolutions.360p',
     'transcoding.resolutions.480p', 'transcoding.resolutions.720p', 'transcoding.resolutions.1080p', 'transcoding.resolutions.1440p',
-    'transcoding.resolutions.2160p', 'video_studio.enabled',
+    'transcoding.resolutions.2160p', 'transcoding.always_transcode_original_resolution', 'video_studio.enabled',
     'import.videos.http.enabled', 'import.videos.torrent.enabled', 'import.videos.concurrency', 'import.videos.timeout',
     'auto_blacklist.videos.of_users.enabled', 'trending.videos.interval_days',
     'client.videos.miniature.display_author_avatar',
@@ -59,7 +59,7 @@ function checkMissedConfig () {
     'live.transcoding.enabled', 'live.transcoding.threads', 'live.transcoding.profile',
     'live.transcoding.resolutions.144p', 'live.transcoding.resolutions.240p', 'live.transcoding.resolutions.360p',
     'live.transcoding.resolutions.480p', 'live.transcoding.resolutions.720p', 'live.transcoding.resolutions.1080p',
-    'live.transcoding.resolutions.1440p', 'live.transcoding.resolutions.2160p'
+    'live.transcoding.resolutions.1440p', 'live.transcoding.resolutions.2160p', 'live.transcoding.always_transcode_original_resolution'
   ]
 
   const requiredAlternatives = [

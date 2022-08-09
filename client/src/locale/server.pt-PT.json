@@ -1,5 +1,5 @@
 {
-    "Music": "Músicas",
+    "Music": "Música",
     "Films": "Filmes",
     "Vehicles": "Veículos",
     "Art": "Arte",
@@ -13,9 +13,9 @@
     "How To": "Tutoriais",
     "Education": "Educação",
     "Activism": "Ativismo",
-    "Science & Technology": "Ciência & Tecnologia",
+    "Science & Technology": "Ciência e Tecnologia",
     "Animals": "Animais",
-    "Kids": "Infantil",
+    "Kids": "Crianças",
     "Food": "Comida",
     "Attribution": "Atribuição",
     "Attribution - Share Alike": "Atribuição - Compartilha Igual",
@@ -27,7 +27,7 @@
     "Public": "Público",
     "Unlisted": "Não listado",
     "Private": "Privado",
-    "Internal": "Internal",
+    "Internal": "Interno",
     "Published": "Publicado",
     "To transcode": "Para transcodificar",
     "To import": "Para importar",
@@ -51,7 +51,7 @@
     "This video is not available because the remote instance is not responding.": "Este vídeo não se encontra disponível porque a instância remota não responde.",
     "This playlist does not exist": "This playlist does not exist",
     "We cannot fetch the playlist. Please try again later.": "We cannot fetch the playlist. Please try again later.",
-    "Playlist: {1}": "Playlist: {1}",
+    "Playlist: {1}": "Lista de reprodução: {1}",
     "By {1}": "By {1}",
     "Unavailable video": "Unavailable video",
     "Misc": "Diversos",
@@ -251,8 +251,9 @@
     "Chinese": "Chinês",
     "Zulu": "Zulu",
     "No linguistic content": "No linguistic content",
+    "Toki Pona": "Toki Pona",
     "Simplified Chinese": "Simplified Chinese",
     "Traditional Chinese": "Traditional Chinese",
-    "Normal mode": "Normal mode",
-    "Theater mode": "Theater mode"
+    "Normal mode": "Modo normal",
+    "Theater mode": "Modo cinema"
 }

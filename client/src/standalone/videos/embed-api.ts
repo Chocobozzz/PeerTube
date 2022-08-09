@@ -1,6 +1,6 @@
 import './embed.scss'
-
 import * as Channel from 'jschannel'
+import { logger } from '../../root-helpers'
 import { PeerTubeResolution, PeerTubeTextTrack } from '../player/definitions'
 import { PeerTubeEmbed } from './embed'
 
@@ -59,7 +59,7 @@ export class PeerTubeEmbedApi {
   }
 
   private setResolution (resolutionId: number) {
-    console.log('set resolution %d', resolutionId)
+    logger.info(`Set resolution ${resolutionId}`)
 
     if (this.isWebtorrent()) {
       if (resolutionId === -1 && this.embed.player.webtorrent().isAutoResolutionPossible() === false) return

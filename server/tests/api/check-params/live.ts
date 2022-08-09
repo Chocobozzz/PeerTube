@@ -51,7 +51,7 @@ describe('Test video lives API validator', function () {
 
     const username = 'user1'
     const password = 'my super password'
-    await server.users.create({ username: username, password: password })
+    await server.users.create({ username, password })
     userAccessToken = await server.login.getAccessToken({ username, password })
 
     {

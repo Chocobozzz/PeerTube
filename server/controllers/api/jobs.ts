@@ -1,3 +1,4 @@
+import { Job as BullJob } from 'bullmq'
 import express from 'express'
 import { HttpStatusCode, Job, JobState, JobType, ResultList, UserRight } from '@shared/models'
 import { isArray } from '../../helpers/custom-validators/misc'
@@ -82,7 +83,7 @@ async function listJobs (req: express.Request, res: express.Response) {
   return res.json(result)
 }
 
-async function formatJob (job: any, state?: JobState): Promise<Job> {
+async function formatJob (job: BullJob, state?: JobState): Promise<Job> {
   const error = isArray(job.stacktrace) && job.stacktrace.length !== 0
     ? job.stacktrace[0]
     : null
@@ -90,9 +91,9 @@ async function formatJob (job: any, state?: JobState): Promise<Job> {
   return {
     id: job.id,
     state: state || await job.getState(),
-    type: job.queue.name as JobType,
+    type: job.queueName as JobType,
     data: job.data,
-    progress: await job.progress(),
+    progress: job.progress as number,
     priority: job.opts.priority,
     error,
     createdAt: new Date(job.timestamp),

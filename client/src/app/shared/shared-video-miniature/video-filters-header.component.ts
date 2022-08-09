@@ -8,7 +8,7 @@ import { UserRight } from '@shared/models'
 import { PeertubeModalService } from '../shared-main'
 import { VideoFilters } from './video-filters.model'
 
-const logger = debug('peertube:videos:VideoFiltersHeaderComponent')
+const debugLogger = debug('peertube:videos:VideoFiltersHeaderComponent')
 
 @Component({
   selector: 'my-video-filters-header',
@@ -54,7 +54,7 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
     })
 
     this.form.valueChanges.subscribe(values => {
-      logger('Loading values from form: %O', values)
+      debugLogger('Loading values from form: %O', values)
 
       this.filters.load(values)
       this.filtersChanged.emit()
@@ -105,6 +105,6 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
     const defaultValues = this.filters.toFormObject()
     this.form.patchValue(defaultValues, { emitEvent })
 
-    logger('Patched form: %O', defaultValues)
+    debugLogger('Patched form: %O', defaultValues)
   }
 }

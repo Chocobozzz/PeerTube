@@ -32,6 +32,7 @@ languages=(
     ["ca"]="ca-ES"
     ["gl"]="gl-ES"
     ["cs"]="cs-CZ"
+    ["hr"]="hr"
     ["eo"]="eo"
     ["de"]="de-DE"
     ["it"]="it-IT"

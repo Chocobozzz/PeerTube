@@ -27,8 +27,8 @@ export class StudioEditionFinishedForOwner extends AbstractNotification <MVideoF
     return [ this.user ]
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: UserNotificationType.MY_VIDEO_STUDIO_EDITION_FINISHED,
       userId: user.id,
       videoId: this.payload.id

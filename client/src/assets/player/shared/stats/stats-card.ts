@@ -1,4 +1,5 @@
 import videojs from 'video.js'
+import { logger } from '@root-helpers/logger'
 import { secondsToTime } from '@shared/core-utils'
 import { PlayerNetworkInfo as EventPlayerNetworkInfo } from '../../types'
 import { bytes } from '../common'
@@ -125,7 +126,7 @@ class StatsCard extends Component {
 
         this.populateInfoValues(options)
       } catch (err) {
-        console.error('Cannot update stats.', err)
+        logger.error('Cannot update stats.', err)
         clearInterval(this.updateInterval)
       }
     }, this.intervalMs)

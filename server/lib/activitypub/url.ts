@@ -3,7 +3,7 @@ import {
   MAbuseFull,
   MAbuseId,
   MActor,
-  MActorFollowActors,
+  MActorFollow,
   MActorId,
   MActorUrl,
   MCommentId,
@@ -92,15 +92,12 @@ function getLocalActorFollowActivityPubUrl (follower: MActor, following: MActorI
   return follower.url + '/follows/' + following.id
 }
 
-function getLocalActorFollowAcceptActivityPubUrl (actorFollow: MActorFollowActors) {
-  const follower = actorFollow.ActorFollower
-  const me = actorFollow.ActorFollowing
-
-  return WEBSERVER.URL + '/accepts/follows/' + follower.id + '/' + me.id
+function getLocalActorFollowAcceptActivityPubUrl (actorFollow: MActorFollow) {
+  return WEBSERVER.URL + '/accepts/follows/' + actorFollow.id
 }
 
-function getLocalActorFollowRejectActivityPubUrl (follower: MActorId, following: MActorId) {
-  return WEBSERVER.URL + '/rejects/follows/' + follower.id + '/' + following.id
+function getLocalActorFollowRejectActivityPubUrl () {
+  return WEBSERVER.URL + '/rejects/follows/' + new Date().toISOString()
 }
 
 function getLocalVideoAnnounceActivityPubUrl (byActor: MActorId, video: MVideoUrl) {

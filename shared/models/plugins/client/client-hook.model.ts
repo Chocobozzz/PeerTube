@@ -93,6 +93,23 @@ export const clientActionHookObject = {
   // Fired when a user click on 'View x replies' and they're loaded
   'action:video-watch.video-thread-replies.loaded': true,
 
+  // Fired when the video channel creation page is being initialized
+  'action:video-channel-create.init': true,
+
+  // Fired when the video channel update page is being initialized
+  'action:video-channel-update.init': true,
+  'action:video-channel-update.video-channel.loaded': true,
+
+  // Fired when the page that list video channel videos is being initialized
+  'action:video-channel-videos.init': true,
+  'action:video-channel-videos.video-channel.loaded': true,
+  'action:video-channel-videos.videos.loaded': true,
+
+  // Fired when the page that list video channel playlists is being initialized
+  'action:video-channel-playlists.init': true,
+  'action:video-channel-playlists.video-channel.loaded': true,
+  'action:video-channel-playlists.playlists.loaded': true,
+
   // Fired when the video edit page (upload, URL/torrent import, update) is being initialized
   'action:video-edit.init': true,
 

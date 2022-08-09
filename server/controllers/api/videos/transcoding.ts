@@ -1,7 +1,10 @@
+import Bluebird from 'bluebird'
 import express from 'express'
-import { computeLowerResolutionsToTranscode } from '@server/helpers/ffmpeg'
+import { computeResolutionsToTranscode } from '@server/helpers/ffmpeg'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
-import { addTranscodingJob } from '@server/lib/video'
+import { JobQueue } from '@server/lib/job-queue'
+import { Hooks } from '@server/lib/plugins/hooks'
+import { buildTranscodingJob } from '@server/lib/video'
 import { HttpStatusCode, UserRight, VideoState, VideoTranscodingCreate } from '@shared/models'
 import { asyncMiddleware, authenticate, createTranscodingValidator, ensureUserHasRight } from '../../../middlewares'
 
@@ -29,37 +32,95 @@ async function createTranscoding (req: express.Request, res: express.Response) {
 
   const body: VideoTranscodingCreate = req.body
 
-  const { resolution: maxResolution, isPortraitMode, audioStream } = await video.probeMaxQualityFile()
-  const resolutions = computeLowerResolutionsToTranscode(maxResolution, 'vod').concat([ maxResolution ])
+  const { resolution: maxResolution, audioStream } = await video.probeMaxQualityFile()
+  const resolutions = await Hooks.wrapObject(
+    computeResolutionsToTranscode({ input: maxResolution, type: 'vod', includeInput: true, strictLower: false }),
+    'filter:transcoding.manual.resolutions-to-transcode.result',
+    body
+  )
+
+  if (resolutions.length === 0) {
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  }
 
   video.state = VideoState.TO_TRANSCODE
   await video.save()
 
-  for (const resolution of resolutions) {
+  const hasAudio = !!audioStream
+  const childrenResolutions = resolutions.filter(r => r !== maxResolution)
+
+  const children = await Bluebird.mapSeries(childrenResolutions, resolution => {
     if (body.transcodingType === 'hls') {
-      await addTranscodingJob({
-        type: 'new-resolution-to-hls',
+      return buildHLSJobOption({
         videoUUID: video.uuid,
+        hasAudio,
         resolution,
-        isPortraitMode,
-        hasAudio: !!audioStream,
-        copyCodecs: false,
-        isNewVideo: false,
-        autoDeleteWebTorrentIfNeeded: false,
-        isMaxQuality: maxResolution === resolution
-      })
-    } else if (body.transcodingType === 'webtorrent') {
-      await addTranscodingJob({
-        type: 'new-resolution-to-webtorrent',
-        videoUUID: video.uuid,
-        isNewVideo: false,
-        resolution,
-        hasAudio: !!audioStream,
-        createHLSIfNeeded: false,
-        isPortraitMode
+        isMaxQuality: false
       })
     }
-  }
+
+    if (body.transcodingType === 'webtorrent') {
+      return buildWebTorrentJobOption({
+        videoUUID: video.uuid,
+        hasAudio,
+        resolution
+      })
+    }
+  })
+
+  const parent = body.transcodingType === 'hls'
+    ? await buildHLSJobOption({
+      videoUUID: video.uuid,
+      hasAudio,
+      resolution: maxResolution,
+      isMaxQuality: false
+    })
+    : await buildWebTorrentJobOption({
+      videoUUID: video.uuid,
+      hasAudio,
+      resolution: maxResolution
+    })
+
+  // Porcess the last resolution after the other ones to prevent concurrency issue
+  // Because low resolutions use the biggest one as ffmpeg input
+  await JobQueue.Instance.createJobWithChildren(parent, children)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+function buildHLSJobOption (options: {
+  videoUUID: string
+  hasAudio: boolean
+  resolution: number
+  isMaxQuality: boolean
+}) {
+  const { videoUUID, hasAudio, resolution, isMaxQuality } = options
+
+  return buildTranscodingJob({
+    type: 'new-resolution-to-hls',
+    videoUUID,
+    resolution,
+    hasAudio,
+    copyCodecs: false,
+    isNewVideo: false,
+    autoDeleteWebTorrentIfNeeded: false,
+    isMaxQuality
+  })
+}
+
+function buildWebTorrentJobOption (options: {
+  videoUUID: string
+  hasAudio: boolean
+  resolution: number
+}) {
+  const { videoUUID, hasAudio, resolution } = options
+
+  return buildTranscodingJob({
+    type: 'new-resolution-to-webtorrent',
+    videoUUID,
+    isNewVideo: false,
+    resolution,
+    hasAudio,
+    createHLSIfNeeded: false
+  })
 }

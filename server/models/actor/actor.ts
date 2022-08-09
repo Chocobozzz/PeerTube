@@ -462,7 +462,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     }
 
     return ActorModel.update({
-      [columnToUpdate]: literal(`(SELECT COUNT(*) FROM "actorFollow" WHERE "${columnOfCount}" = ${sanitizedOfId})`)
+      [columnToUpdate]: literal(`(SELECT COUNT(*) FROM "actorFollow" WHERE "${columnOfCount}" = ${sanitizedOfId} AND "state" = 'accepted')`)
     }, { where, transaction })
   }
 

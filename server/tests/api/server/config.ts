@@ -77,6 +77,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.transcoding.resolutions['1080p']).to.be.true
   expect(data.transcoding.resolutions['1440p']).to.be.true
   expect(data.transcoding.resolutions['2160p']).to.be.true
+  expect(data.transcoding.alwaysTranscodeOriginalResolution).to.be.true
   expect(data.transcoding.webtorrent.enabled).to.be.true
   expect(data.transcoding.hls.enabled).to.be.true
 
@@ -97,6 +98,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.live.transcoding.resolutions['1080p']).to.be.false
   expect(data.live.transcoding.resolutions['1440p']).to.be.false
   expect(data.live.transcoding.resolutions['2160p']).to.be.false
+  expect(data.live.transcoding.alwaysTranscodeOriginalResolution).to.be.true
 
   expect(data.videoStudio.enabled).to.be.false
 
@@ -181,6 +183,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.transcoding.resolutions['720p']).to.be.false
   expect(data.transcoding.resolutions['1080p']).to.be.false
   expect(data.transcoding.resolutions['2160p']).to.be.false
+  expect(data.transcoding.alwaysTranscodeOriginalResolution).to.be.false
   expect(data.transcoding.hls.enabled).to.be.false
   expect(data.transcoding.webtorrent.enabled).to.be.true
 
@@ -200,6 +203,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.live.transcoding.resolutions['720p']).to.be.true
   expect(data.live.transcoding.resolutions['1080p']).to.be.true
   expect(data.live.transcoding.resolutions['2160p']).to.be.true
+  expect(data.live.transcoding.alwaysTranscodeOriginalResolution).to.be.false
 
   expect(data.videoStudio.enabled).to.be.true
 
@@ -318,6 +322,7 @@ const newCustomConfig: CustomConfig = {
       '1440p': false,
       '2160p': false
     },
+    alwaysTranscodeOriginalResolution: false,
     webtorrent: {
       enabled: true
     },
@@ -347,7 +352,8 @@ const newCustomConfig: CustomConfig = {
         '1080p': true,
         '1440p': true,
         '2160p': true
-      }
+      },
+      alwaysTranscodeOriginalResolution: false
     }
   },
   videoStudio: {

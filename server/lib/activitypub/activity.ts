@@ -1,4 +1,4 @@
-import { ActivityType } from "@shared/models"
+import { ActivityType } from '@shared/models'
 
 function getAPId (object: string | { id: string }) {
   if (typeof object === 'string') return object

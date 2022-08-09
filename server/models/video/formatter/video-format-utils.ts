@@ -1,5 +1,6 @@
 import { generateMagnetUri } from '@server/helpers/webtorrent'
 import { getActivityStreamDuration } from '@server/lib/activitypub/activity'
+import { tracer } from '@server/lib/opentelemetry/tracing'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls'
 import { VideoViewsManager } from '@server/lib/views/video-views-manager'
 import { uuidToShort } from '@shared/extra-utils'
@@ -71,6 +72,8 @@ function guessAdditionalAttributesFromQuery (query: VideosCommonQueryAfterSaniti
 }
 
 function videoModelToFormattedJSON (video: MVideoFormattable, options: VideoFormattingJSONOptions = {}): Video {
+  const span = tracer.startSpan('peertube.VideoModel.toFormattedJSON')
+
   const userHistory = isArray(video.UserVideoHistories) ? video.UserVideoHistories[0] : undefined
 
   const videoObject: Video = {
@@ -168,10 +171,14 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options: VideoForm
     videoObject.files = videoFilesModelToFormattedJSON(video, video.VideoFiles)
   }
 
+  span.end()
+
   return videoObject
 }
 
 function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): VideoDetails {
+  const span = tracer.startSpan('peertube.VideoModel.toFormattedDetailsJSON')
+
   const videoJSON = video.toFormattedJSON({
     additionalAttributes: {
       scheduledUpdate: true,
@@ -198,6 +205,8 @@ function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): Vid
 
     trackerUrls: video.getTrackerUrls()
   }
+
+  span.end()
 
   return Object.assign(videoJSON, detailsJSON)
 }
@@ -247,6 +256,8 @@ function videoFilesModelToFormattedJSON (
     .sort(sortByResolutionDesc)
     .map(videoFile => {
       return {
+        id: videoFile.id,
+
         resolution: {
           id: videoFile.resolution,
           label: videoFile.resolution === 0 ? 'Audio' : `${videoFile.resolution}p`

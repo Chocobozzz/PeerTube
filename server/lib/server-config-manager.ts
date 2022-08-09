@@ -1,4 +1,4 @@
-import { getServerCommit } from '@server/helpers/utils'
+import { getServerCommit } from '@server/helpers/version'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION } from '@server/initializers/constants'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '@server/lib/signup'

@@ -1,5 +1,6 @@
-import { environment } from '../../environments/environment'
 import IntlMessageFormat from 'intl-messageformat'
+import { logger } from '@root-helpers/logger'
+import { environment } from '../../environments/environment'
 
 function isOnDevLocale () {
   return environment.production === false && window.location.search === '?lang=fr'
@@ -19,14 +20,14 @@ function prepareIcu (icu: string) {
       try {
         return msg.format(context) as string
       } catch (err) {
-        if (!alreadyWarned) console.warn('Cannot format ICU %s.', icu, err)
+        if (!alreadyWarned) logger.warn(`Cannot format ICU ${icu}.`, err)
 
         alreadyWarned = true
         return fallback
       }
     }
   } catch (err) {
-    console.warn('Cannot build intl message %s.', icu, err)
+    logger.warn(`Cannot build intl message ${icu}.`, err)
 
     return (_context: unknown, fallback: string) => fallback
   }

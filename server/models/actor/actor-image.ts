@@ -91,7 +91,7 @@ export class ActorImageModel extends Model<Partial<AttributesOnly<ActorImageMode
 
     // Don't block the transaction
     instance.removeImage()
-      .catch(err => logger.error('Cannot remove actor image file %s.', instance.filename, err))
+      .catch(err => logger.error('Cannot remove actor image file %s.', instance.filename, { err }))
   }
 
   static loadByName (filename: string) {

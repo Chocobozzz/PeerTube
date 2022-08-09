@@ -16,6 +16,7 @@ export const I18N_LOCALES = {
   'fr-FR': 'Français',
   'gd': 'Gàidhlig',
   'gl-ES': 'galego',
+  'hr': 'hrvatski',
   'hu-HU': 'magyar',
   'fa-IR': 'فارسی',
   'it-IT': 'Italiano',

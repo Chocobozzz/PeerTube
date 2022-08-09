@@ -1,5 +1,6 @@
 import { MessageService } from 'primeng/api'
 import { Injectable } from '@angular/core'
+import { logger } from '@root-helpers/logger'
 
 @Injectable()
 export class Notifier {
@@ -10,21 +11,21 @@ export class Notifier {
   info (text: string, title?: string, timeout?: number, sticky?: boolean) {
     if (!title) title = $localize`Info`
 
-    console.info(`${title}: ${text}`)
+    logger.info(`${title}: ${text}`)
     return this.notify('info', text, title, timeout, sticky)
   }
 
   error (text: string, title?: string, timeout?: number, sticky?: boolean) {
     if (!title) title = $localize`Error`
 
-    console.error(`${title}: ${text}`)
+    logger.error(`${title}: ${text}`)
     return this.notify('error', text, title, timeout, sticky)
   }
 
   success (text: string, title?: string, timeout?: number, sticky?: boolean) {
     if (!title) title = $localize`Success`
 
-    console.log(`${title}: ${text}`)
+    logger.info(`${title}: ${text}`)
     return this.notify('success', text, title, timeout, sticky)
   }
 

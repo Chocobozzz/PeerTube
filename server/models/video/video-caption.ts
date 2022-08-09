@@ -195,7 +195,8 @@ export class VideoCaptionModel extends Model<Partial<AttributesOnly<VideoCaption
         id: this.language,
         label: VideoCaptionModel.getLanguageLabel(this.language)
       },
-      captionPath: this.getCaptionStaticPath()
+      captionPath: this.getCaptionStaticPath(),
+      updatedAt: this.updatedAt.toISOString()
     }
   }
 

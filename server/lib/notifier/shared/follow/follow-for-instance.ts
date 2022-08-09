@@ -32,8 +32,8 @@ export class FollowForInstance extends AbstractNotification <MActorFollowFull> {
     return this.admins
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: UserNotificationType.NEW_INSTANCE_FOLLOWER,
       userId: user.id,
       actorFollowId: this.actorFollow.id

@@ -6,9 +6,8 @@
 */
 
 import { exec, ExecOptions } from 'child_process'
-import { randomBytes } from 'crypto'
+import { ED25519KeyPairOptions, generateKeyPair, randomBytes, RSAKeyPairOptions } from 'crypto'
 import { truncate } from 'lodash'
-import { createPrivateKey as createPrivateKey_1, getPublicKey as getPublicKey_1 } from 'pem'
 import { pipeline } from 'stream'
 import { URL } from 'url'
 import { promisify } from 'util'
@@ -242,6 +241,51 @@ function toEven (num: number) {
 
 // ---------------------------------------------------------------------------
 
+function generateRSAKeyPairPromise (size: number) {
+  return new Promise<{ publicKey: string, privateKey: string }>((res, rej) => {
+    const options: RSAKeyPairOptions<'pem', 'pem'> = {
+      modulusLength: size,
+      publicKeyEncoding: {
+        type: 'spki',
+        format: 'pem'
+      },
+      privateKeyEncoding: {
+        type: 'pkcs1',
+        format: 'pem'
+      }
+    }
+
+    generateKeyPair('rsa', options, (err, publicKey, privateKey) => {
+      if (err) return rej(err)
+
+      return res({ publicKey, privateKey })
+    })
+  })
+}
+
+function generateED25519KeyPairPromise () {
+  return new Promise<{ publicKey: string, privateKey: string }>((res, rej) => {
+    const options: ED25519KeyPairOptions<'pem', 'pem'> = {
+      publicKeyEncoding: {
+        type: 'spki',
+        format: 'pem'
+      },
+      privateKeyEncoding: {
+        type: 'pkcs8',
+        format: 'pem'
+      }
+    }
+
+    generateKeyPair('ed25519', options, (err, publicKey, privateKey) => {
+      if (err) return rej(err)
+
+      return res({ publicKey, privateKey })
+    })
+  })
+}
+
+// ---------------------------------------------------------------------------
+
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
   return function promisified (): Promise<A> {
     return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {
@@ -268,8 +312,6 @@ function promisify2<T, U, A> (func: (arg1: T, arg2: U, cb: (err: any, result: A)
 }
 
 const randomBytesPromise = promisify1<number, Buffer>(randomBytes)
-const createPrivateKey = promisify1<number, { key: string }>(createPrivateKey_1)
-const getPublicKey = promisify1<string, { publicKey: string }>(getPublicKey_1)
 const execPromise2 = promisify2<string, any, string>(exec)
 const execPromise = promisify1<string, string>(exec)
 const pipelinePromise = promisify(pipeline)
@@ -298,8 +340,10 @@ export {
   promisify2,
 
   randomBytesPromise,
-  createPrivateKey,
-  getPublicKey,
+
+  generateRSAKeyPairPromise,
+  generateED25519KeyPairPromise,
+
   execPromise2,
   execPromise,
   pipelinePromise,

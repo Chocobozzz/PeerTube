@@ -97,7 +97,7 @@ export class VideoConstantManagerFactory {
       }
     }
 
-    this.updatedVideoConstants[type][npmName].added.push({ key: key, label } as VideoConstant)
+    this.updatedVideoConstants[type][npmName].added.push({ key, label } as VideoConstant)
     obj[key] = label
 
     return true

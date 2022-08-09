@@ -1,4 +1,5 @@
 import { HttpStatusCode, LiveVideo, VideoDetails } from '../../../../../shared/models'
+import { logger } from '../../../root-helpers'
 import { AuthHTTP } from './auth-http'
 
 export class VideoFetcher {
@@ -17,7 +18,7 @@ export class VideoFetcher {
       videoResponse = await videoPromise
       isResponseOk = videoResponse.status === HttpStatusCode.OK_200
     } catch (err) {
-      console.error(err)
+      logger.error(err)
 
       isResponseOk = false
     }

@@ -7,4 +7,5 @@ export type PluginClientScope =
   'embed' |
   'video-edit' |
   'admin-plugin' |
-  'my-library'
+  'my-library' |
+  'video-channel'

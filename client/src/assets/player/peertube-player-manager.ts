@@ -23,6 +23,7 @@ import './shared/mobile/peertube-mobile-plugin'
 import './shared/mobile/peertube-mobile-buttons'
 import './shared/hotkeys/peertube-hotkeys-plugin'
 import videojs from 'video.js'
+import { logger } from '@root-helpers/logger'
 import { PluginsManager } from '@root-helpers/plugins-manager'
 import { isMobile } from '@root-helpers/web-browser'
 import { saveAverageBandwidth } from './peertube-player-local-storage'
@@ -145,7 +146,7 @@ export class PeertubePlayerManager {
         return
       }
 
-      console.log('Fast forwarding HLS to recover from an error.')
+      logger.info('Fast forwarding HLS to recover from an error.')
 
       this.videojsDecodeErrors++
 
@@ -170,7 +171,7 @@ export class PeertubePlayerManager {
       return
     }
 
-    console.log('Fallback to webtorrent.')
+    logger.info('Fallback to webtorrent.')
 
     this.rebuildAndUpdateVideoElement(currentPlayer, options.common)
 

@@ -21,8 +21,8 @@ export abstract class AbstractNewAbuseMessage extends AbstractNotification <NewA
     return user.NotificationSetting.abuseNewMessage
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: UserNotificationType.ABUSE_NEW_MESSAGE,
       userId: user.id,
       abuseId: this.abuse.id

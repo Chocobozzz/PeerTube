@@ -27,9 +27,9 @@ function isUserVideoQuotaDailyValid (value: string) {
 }
 
 function isUserUsernameValid (value: string) {
-  const max = USERS_CONSTRAINTS_FIELDS.USERNAME.max
-  const min = USERS_CONSTRAINTS_FIELDS.USERNAME.min
-  return exists(value) && validator.matches(value, new RegExp(`^[a-z0-9._]{${min},${max}}$`))
+  return exists(value) &&
+    validator.matches(value, new RegExp(`^[a-z0-9_]+([a-z0-9_.-]+[a-z0-9_]+)?$`)) &&
+    validator.isLength(value, USERS_CONSTRAINTS_FIELDS.USERNAME)
 }
 
 function isUserDisplayNameValid (value: string) {
