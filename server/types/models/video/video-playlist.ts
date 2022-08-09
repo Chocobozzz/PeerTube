@@ -26,16 +26,8 @@ export type MVideoPlaylistVideosLength = MVideoPlaylist & { videosLength?: numbe
 
 // With elements
 
-export type MVideoPlaylistWithElements =
-  MVideoPlaylist &
-  Use<'VideoPlaylistElements', MVideoPlaylistElementLight[]>
-
 export type MVideoPlaylistSummaryWithElements =
   MVideoPlaylistSummary &
-  Use<'VideoPlaylistElements', MVideoPlaylistElementLight[]>
-
-export type MVideoPlaylistIdWithElements =
-  MVideoPlaylistId &
   Use<'VideoPlaylistElements', MVideoPlaylistElementLight[]>
 
 // ############################################################################
