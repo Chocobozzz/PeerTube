@@ -10,7 +10,6 @@ import { CONFIG, reloadConfig } from '../../initializers/config'
 import { ClientHtml } from '../../lib/client-html'
 import { asyncMiddleware, authenticate, ensureUserHasRight, openapiOperationDoc } from '../../middlewares'
 import { customConfigUpdateValidator, ensureConfigIsEditable } from '../../middlewares/validators/config'
-import { logger } from '@server/helpers/logger'
 
 const configRouter = express.Router()
 
@@ -113,7 +112,6 @@ async function updateCustomConfig (req: express.Request, res: express.Response) 
 
   const data = customConfig()
 
-  logger.info('coucou', { data })
   auditLogger.update(
     getAuditIdFromRes(res),
     new CustomConfigAuditView(data),
