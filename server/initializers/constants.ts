@@ -375,7 +375,7 @@ const CONSTRAINTS_FIELDS = {
   },
   LOGS: {
     CLIENT_MESSAGE: { min: 1, max: 1000 }, // Length
-    CLIENT_STACK_TRACE: { min: 1, max: 5000 }, // Length
+    CLIENT_STACK_TRACE: { min: 1, max: 15000 }, // Length
     CLIENT_META: { min: 1, max: 5000 }, // Length
     CLIENT_USER_AGENT: { min: 1, max: 200 } // Length
   }
