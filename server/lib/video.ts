@@ -9,7 +9,7 @@ import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { FilteredModelAttributes } from '@server/types'
 import { MThumbnail, MUserId, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
 import { ThumbnailType, VideoCreate, VideoPrivacy, VideoState, VideoTranscodingPayload } from '@shared/models'
-import { CreateJobOptions, JobQueue } from './job-queue/job-queue'
+import { CreateJobOptions } from './job-queue/job-queue'
 import { updateVideoMiniatureFromExisting } from './thumbnail'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
@@ -121,10 +121,10 @@ async function buildOptimizeOrMergeAudioJob (options: {
   }
 }
 
-async function addTranscodingJob (payload: VideoTranscodingPayload, options: CreateJobOptions = {}) {
+async function buildTranscodingJob (payload: VideoTranscodingPayload, options: CreateJobOptions = {}) {
   await VideoJobInfoModel.increaseOrCreate(payload.videoUUID, 'pendingTranscode')
 
-  return JobQueue.Instance.createJob({ type: 'video-transcoding', payload, ...options })
+  return { type: 'video-transcoding' as 'video-transcoding', payload, ...options }
 }
 
 async function getTranscodingJobPriority (user: MUserId) {
@@ -182,7 +182,7 @@ export {
   buildVideoThumbnailsFromReq,
   setVideoTags,
   buildOptimizeOrMergeAudioJob,
-  addTranscodingJob,
+  buildTranscodingJob,
   buildMoveToObjectStorageJob,
   getTranscodingJobPriority,
   getCachedVideoDuration

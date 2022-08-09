@@ -1,7 +1,7 @@
 import { Job } from 'bullmq'
 import { TranscodeVODOptionsType } from '@server/helpers/ffmpeg'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { addTranscodingJob, getTranscodingJobPriority } from '@server/lib/video'
+import { buildTranscodingJob, getTranscodingJobPriority } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { moveToFailedTranscodingState, moveToNextState } from '@server/lib/video-state'
 import { UserModel } from '@server/models/user/user'
@@ -27,6 +27,7 @@ import {
   optimizeOriginalVideofile,
   transcodeNewWebTorrentResolution
 } from '../../transcoding/transcoding'
+import { JobQueue } from '../job-queue'
 
 type HandlerFunction = (job: Job, payload: VideoTranscodingPayload, video: MVideoFullLight, user: MUser) => Promise<void>
 
@@ -248,7 +249,7 @@ async function createHlsJobIfEnabled (user: MUserId, payload: {
     ...pick(payload, [ 'videoUUID', 'resolution', 'copyCodecs', 'isMaxQuality', 'isNewVideo', 'hasAudio' ])
   }
 
-  await addTranscodingJob(hlsTranscodingPayload, jobOptions)
+  await JobQueue.Instance.createJob(await buildTranscodingJob(hlsTranscodingPayload, jobOptions))
 
   return true
 }
@@ -312,7 +313,7 @@ async function createLowerResolutionsJobs (options: {
       priority: await getTranscodingJobPriority(user)
     }
 
-    await addTranscodingJob(dataInput, jobOptions)
+    await JobQueue.Instance.createJob(await buildTranscodingJob(dataInput, jobOptions))
   }
 
   if (resolutionCreated.length === 0) {

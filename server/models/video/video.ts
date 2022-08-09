@@ -1592,22 +1592,21 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   getQualityFileBy<T extends MVideoWithFile> (this: T, fun: (files: MVideoFile[], it: (file: MVideoFile) => number) => MVideoFile) {
-    // We first transcode to WebTorrent format, so try this array first
-    if (Array.isArray(this.VideoFiles) && this.VideoFiles.length !== 0) {
-      const file = fun(this.VideoFiles, file => file.resolution)
+    const files = this.getAllFiles()
+    const file = fun(files, file => file.resolution)
+    if (!file) return undefined
 
+    if (file.videoId) {
       return Object.assign(file, { Video: this })
     }
 
-    // No webtorrent files, try with streaming playlist files
-    if (Array.isArray(this.VideoStreamingPlaylists) && this.VideoStreamingPlaylists.length !== 0) {
+    if (file.videoStreamingPlaylistId) {
       const streamingPlaylistWithVideo = Object.assign(this.VideoStreamingPlaylists[0], { Video: this })
 
-      const file = fun(streamingPlaylistWithVideo.VideoFiles, file => file.resolution)
       return Object.assign(file, { VideoStreamingPlaylist: streamingPlaylistWithVideo })
     }
 
-    return undefined
+    throw new Error('File is not associated to a video of a playlist')
   }
 
   getMaxQualityFile<T extends MVideoWithFile> (this: T): MVideoFileVideo | MVideoFileStreamingPlaylistVideo {

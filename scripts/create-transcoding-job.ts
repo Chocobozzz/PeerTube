@@ -2,7 +2,7 @@ import { program } from 'commander'
 import { isUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
 import { computeResolutionsToTranscode } from '@server/helpers/ffmpeg'
 import { CONFIG } from '@server/initializers/config'
-import { addTranscodingJob } from '@server/lib/video'
+import { buildTranscodingJob } from '@server/lib/video'
 import { VideoState, VideoTranscodingPayload } from '@shared/models'
 import { initDatabaseModels } from '../server/initializers/database'
 import { JobQueue } from '../server/lib/job-queue'
@@ -57,7 +57,7 @@ async function run () {
 
     for (const resolution of resolutionsEnabled) {
       dataInput.push({
-        type: 'new-resolution-to-hls',
+        type: 'new-resolution-to-hls' as 'new-resolution-to-hls',
         videoUUID: video.uuid,
         resolution,
 
@@ -72,7 +72,7 @@ async function run () {
   } else {
     if (options.resolution !== undefined) {
       dataInput.push({
-        type: 'new-resolution-to-webtorrent',
+        type: 'new-resolution-to-webtorrent' as 'new-resolution-to-webtorrent',
         videoUUID: video.uuid,
 
         createHLSIfNeeded: true,
@@ -90,7 +90,7 @@ async function run () {
       }
 
       dataInput.push({
-        type: 'optimize-to-webtorrent',
+        type: 'optimize-to-webtorrent' as 'optimize-to-webtorrent',
         videoUUID: video.uuid,
         isNewVideo: false
       })
@@ -103,7 +103,8 @@ async function run () {
   await video.save()
 
   for (const d of dataInput) {
-    await addTranscodingJob(d, {})
+    await JobQueue.Instance.createJob(await buildTranscodingJob(d))
+
     console.log('Transcoding job for video %s created.', video.uuid)
   }
 }

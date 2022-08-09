@@ -325,10 +325,8 @@ class JobQueue {
       if (!job) continue
 
       lastJob = {
-        name: 'job',
-        data: job.payload,
-        queueName: job.type,
-        opts: this.buildJobOptions(job.type as JobType, pick(job, [ 'priority', 'delay' ])),
+        ...this.buildJobFlowOption(job),
+
         children: lastJob
           ? [ lastJob ]
           : []
@@ -336,6 +334,23 @@ class JobQueue {
     }
 
     return this.flowProducer.add(lastJob)
+  }
+
+  async createJobWithChildren (parent: CreateJobArgument & CreateJobOptions, children: (CreateJobArgument & CreateJobOptions)[]) {
+    return this.flowProducer.add({
+      ...this.buildJobFlowOption(parent),
+
+      children: children.map(c => this.buildJobFlowOption(c))
+    })
+  }
+
+  private buildJobFlowOption (job: CreateJobArgument & CreateJobOptions) {
+    return {
+      name: 'job',
+      data: job.payload,
+      queueName: job.type,
+      opts: this.buildJobOptions(job.type as JobType, pick(job, [ 'priority', 'delay' ]))
+    }
   }
 
   private buildJobOptions (type: JobType, options: CreateJobOptions = {}): JobsOptions {
@@ -423,10 +438,6 @@ class JobQueue {
       const queue: Queue = this.queues[key]
       await queue.clean(JOB_COMPLETED_LIFETIME, 100, 'completed')
     }
-  }
-
-  waitJob (job: Job) {
-    return job.waitUntilFinished(this.queueEvents[job.queueName])
   }
 
   private addRepeatableJobs () {
