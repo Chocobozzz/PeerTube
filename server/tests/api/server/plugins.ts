@@ -353,7 +353,7 @@ describe('Test plugins', function () {
   })
 
   it('Should rebuild native modules on Node ABI change', async function () {
-    this.timeout(50000)
+    this.timeout(60000)
 
     const removeNativeModule = async () => {
       await remove(join(baseNativeModule, 'build'))
@@ -376,6 +376,8 @@ describe('Test plugins', function () {
     await removeNativeModule()
     await server.kill()
     await server.run()
+
+    await wait(3000)
 
     expect(await pathExists(join(baseNativeModule, 'build'))).to.be.true
     expect(await pathExists(join(baseNativeModule, 'prebuilds'))).to.be.true
