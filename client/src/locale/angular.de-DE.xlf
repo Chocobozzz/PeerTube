@@ -8361,7 +8361,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="5945924096465496818" datatype="html">
         <source>&lt;p&gt;You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p&gt;</source>
-        <target state="translated">&lt;p&gt;Es ist nicht möglich Benutzer oder Kanäle mit einem Benutzernamen zu Erstellen, welche bereits von einem gelöschten Benutzer/Kanal genutzt wurde.&lt;/p&gt;</target>
+        <target state="translated">&lt;p&gt;Sie können keine Benutzer oder Kanäle mit einem Benutzernamen erstellen, der bereits von einem gelöschten Benutzer/Kanal verwendet wird.&lt;/p&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">245</context></context-group>
       </trans-unit>
       <trans-unit id="5643060985393782358" datatype="html">
