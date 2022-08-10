@@ -1195,7 +1195,7 @@
       </trans-unit>
       <trans-unit id="175344056589888866" datatype="html">
         <source>Example: john@example.com</source>
-        <target state="translated">z. B.: maxine@musterfrau.de</target>
+        <target state="translated">Beispiel-E-Mail: max@beispiel.de</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">46</context>
