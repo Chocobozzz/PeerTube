@@ -23,7 +23,10 @@ describe('Test channel synchronizations', function () {
     describe('Sync using ' + mode, function () {
       let server: PeerTubeServer
       let command: ChannelSyncsCommand
+
       let startTestDate: Date
+
+      let rootChannelSyncId: number
       const userInfo = {
         accessToken: '',
         username: 'user1',
@@ -90,6 +93,7 @@ describe('Test channel synchronizations', function () {
           token: server.accessToken,
           expectedStatus: HttpStatusCode.OK_200
         })
+        rootChannelSyncId = videoChannelSync.id
 
         // Ensure any missing video not already fetched will be considered as new
         await changeDateForSync(videoChannelSync.id, '1970-01-01')
@@ -206,6 +210,14 @@ describe('Test channel synchronizations', function () {
             }
           })
         }
+      })
+
+      it('Should list imports of a channel synchronization', async function () {
+        const { total, data } = await server.imports.getMyVideoImports({ videoChannelSyncId: rootChannelSyncId })
+
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
+        expect(data[0].video.name).to.equal('test')
       })
 
       it('Should remove user\'s channel synchronizations', async function () {

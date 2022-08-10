@@ -236,6 +236,8 @@ export interface VideoStudioEditionPayload {
 export interface VideoChannelImportPayload {
   externalChannelUrl: string
   videoChannelId: number
+
+  partOfChannelSyncId?: number
 }
 
 export interface AfterVideoChannelImportPayload {

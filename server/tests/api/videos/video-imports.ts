@@ -228,6 +228,15 @@ describe('Test video imports', function () {
         expect(videoImports[0].targetUrl).to.equal(FIXTURE_URLS.youtube)
       })
 
+      it('Should search in my imports', async function () {
+        const { total, data: videoImports } = await servers[0].imports.getMyVideoImports({ search: 'peertube2' })
+        expect(total).to.equal(1)
+        expect(videoImports).to.have.lengthOf(1)
+
+        expect(videoImports[0].magnetUri).to.equal(FIXTURE_URLS.magnet)
+        expect(videoImports[0].video.name).to.equal('super peertube2 video')
+      })
+
       it('Should have the video listed on the two instances', async function () {
         this.timeout(120_000)
 

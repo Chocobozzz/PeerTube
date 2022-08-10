@@ -59,6 +59,15 @@ describe('Test video imports API validator', function () {
       await checkBadSortPagination(server.url, myPath, server.accessToken)
     })
 
+    it('Should fail with a bad videoChannelSyncId param', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: myPath,
+        query: { videoChannelSyncId: 'toto' },
+        token: server.accessToken
+      })
+    })
+
     it('Should success with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path: myPath, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken })
     })

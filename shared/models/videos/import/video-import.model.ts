@@ -16,4 +16,9 @@ export interface VideoImport {
   error?: string
 
   video?: Video & { tags: string[] }
+
+  videoChannelSync?: {
+    id: number
+    externalChannelUrl: string
+  }
 }

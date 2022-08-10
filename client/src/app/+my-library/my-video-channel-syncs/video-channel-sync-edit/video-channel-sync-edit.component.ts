@@ -59,7 +59,7 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
     this.videoChannelSyncService.createSync(videoChannelSyncCreate)
       .pipe(mergeMap(({ videoChannelSync }) => {
         return importExistingVideos
-          ? this.videoChannelService.importVideos(videoChannelSync.channel.name, videoChannelSync.externalChannelUrl)
+          ? this.videoChannelService.importVideos(videoChannelSync.channel.name, videoChannelSync.externalChannelUrl, videoChannelSync.id)
           : Promise.resolve(null)
       }))
       .subscribe({

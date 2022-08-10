@@ -100,7 +100,7 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
   }
 
   fullySynchronize (videoChannelSync: VideoChannelSync) {
-    this.videoChannelService.importVideos(videoChannelSync.channel.name, videoChannelSync.externalChannelUrl)
+    this.videoChannelService.importVideos(videoChannelSync.channel.name, videoChannelSync.externalChannelUrl, videoChannelSync.id)
       .subscribe({
         next: () => {
           this.notifier.success($localize`Full synchronization requested successfully for ${videoChannelSync.channel.displayName}.`)

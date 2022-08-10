@@ -36,10 +36,6 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
 
         const onlyAfter = sync.lastSyncAt || sync.createdAt
 
-        sync.state = VideoChannelSyncState.PROCESSING
-        sync.lastSyncAt = new Date()
-        await sync.save()
-
         await synchronizeChannel({
           channel,
           externalChannelUrl: sync.externalChannelUrl,

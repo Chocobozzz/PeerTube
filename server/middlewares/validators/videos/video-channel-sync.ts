@@ -3,10 +3,10 @@ import { body, param } from 'express-validator'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
-import { VideoChannelModel } from '@server/models/video/video-channel'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { HttpStatusCode, VideoChannelSyncCreate } from '@shared/models'
 import { areValidationErrors, doesVideoChannelIdExist } from '../shared'
+import { doesVideoChannelSyncIdExist } from '../shared/video-channel-syncs'
 
 export const ensureSyncIsEnabled = (req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (!CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED) {
@@ -48,18 +48,8 @@ export const ensureSyncExists = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    const syncId = parseInt(req.params.id, 10)
-    const sync = await VideoChannelSyncModel.loadWithChannel(syncId)
-
-    if (!sync) {
-      return res.fail({
-        status: HttpStatusCode.NOT_FOUND_404,
-        message: 'Synchronization not found'
-      })
-    }
-
-    res.locals.videoChannelSync = sync
-    res.locals.videoChannel = await VideoChannelModel.loadAndPopulateAccount(sync.videoChannelId)
+    if (!await doesVideoChannelSyncIdExist(+req.params.id, res)) return
+    if (!await doesVideoChannelIdExist(res.locals.videoChannelSync.videoChannelId, res)) return
 
     return next()
   }

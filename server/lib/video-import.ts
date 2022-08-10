@@ -206,7 +206,8 @@ async function buildYoutubeDLImport (options: {
     videoImportAttributes: {
       targetUrl,
       state: VideoImportState.PENDING,
-      userId: user.id
+      userId: user.id,
+      videoChannelSyncId: channelSync?.id
     }
   })
 

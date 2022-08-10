@@ -3,6 +3,8 @@ import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { synchronizeChannel } from '@server/lib/sync-channel'
 import { VideoChannelModel } from '@server/models/video/video-channel'
+import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
+import { MChannelSync } from '@server/types/models'
 import { VideoChannelImportPayload } from '@shared/models'
 
 export async function processVideoChannelImport (job: Job) {
@@ -12,13 +14,20 @@ export async function processVideoChannelImport (job: Job) {
 
   // Channel import requires only http upload to be allowed
   if (!CONFIG.IMPORT.VIDEOS.HTTP.ENABLED) {
-    logger.error('Cannot import channel as the HTTP upload is disabled')
-    return
+    throw new Error('Cannot import channel as the HTTP upload is disabled')
   }
 
   if (!CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED) {
-    logger.error('Cannot import channel as the synchronization is disabled')
-    return
+    throw new Error('Cannot import channel as the synchronization is disabled')
+  }
+
+  let channelSync: MChannelSync
+  if (payload.partOfChannelSyncId) {
+    channelSync = await VideoChannelSyncModel.loadWithChannel(payload.partOfChannelSyncId)
+
+    if (!channelSync) {
+      throw new Error('Unlnown channel sync specified in videos channel import')
+    }
   }
 
   const videoChannel = await VideoChannelModel.loadAndPopulateAccount(payload.videoChannelId)
@@ -28,7 +37,8 @@ export async function processVideoChannelImport (job: Job) {
 
     await synchronizeChannel({
       channel: videoChannel,
-      externalChannelUrl: payload.externalChannelUrl
+      externalChannelUrl: payload.externalChannelUrl,
+      channelSync
     })
   } catch (err) {
     logger.error(`Failed to import channel ${videoChannel.name}`, { err })

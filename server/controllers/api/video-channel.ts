@@ -6,7 +6,7 @@ import { ActorFollowModel } from '@server/models/actor/actor-follow'
 import { getServerActor } from '@server/models/application/application'
 import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
 import { MChannelBannerAccountDefault } from '@server/types/models'
-import { ActorImageType, HttpStatusCode, VideoChannelCreate, VideoChannelUpdate } from '@shared/models'
+import { ActorImageType, HttpStatusCode, VideoChannelCreate, VideoChannelUpdate, VideosImportInChannelCreate } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { buildNSFWFilter, createReqFiles, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
@@ -166,7 +166,7 @@ videoChannelRouter.get('/:nameWithHost/followers',
 videoChannelRouter.post('/:nameWithHost/import-videos',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  videoChannelImportVideosValidator,
+  asyncMiddleware(videoChannelImportVideosValidator),
   ensureIsLocalChannel,
   ensureCanManageChannel,
   asyncMiddleware(ensureChannelOwnerCanUpload),
@@ -418,13 +418,14 @@ async function listVideoChannelFollowers (req: express.Request, res: express.Res
 }
 
 async function importVideosInChannel (req: express.Request, res: express.Response) {
-  const { externalChannelUrl } = req.body
+  const { externalChannelUrl } = req.body as VideosImportInChannelCreate
 
   await JobQueue.Instance.createJob({
     type: 'video-channel-import',
     payload: {
       externalChannelUrl,
-      videoChannelId: res.locals.videoChannel.id
+      videoChannelId: res.locals.videoChannel.id,
+      partOfChannelSyncId: res.locals.videoChannelSync?.id
     }
   })
 

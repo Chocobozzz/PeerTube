@@ -43,9 +43,22 @@ export class VideoImportService {
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  getMyVideoImports (pagination: RestPagination, sort: SortMeta): Observable<ResultList<VideoImport>> {
+  getMyVideoImports (pagination: RestPagination, sort: SortMeta, search?: string): Observable<ResultList<VideoImport>> {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (search) {
+      const filters = this.restService.parseQueryStringFilter(search, {
+        videoChannelSyncId: {
+          prefix: 'videoChannelSyncId:'
+        },
+        targetUrl: {
+          prefix: 'targetUrl:'
+        }
+      })
+
+      params = this.restService.addObjectParams(params, filters)
+    }
 
     return this.authHttp
                .get<ResultList<VideoImport>>(UserService.BASE_USERS_URL + '/me/videos/imports', { params })

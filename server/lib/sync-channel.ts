@@ -18,6 +18,12 @@ export async function synchronizeChannel (options: {
 }) {
   const { channel, externalChannelUrl, videosCountLimit, onlyAfter, channelSync } = options
 
+  if (channelSync) {
+    channelSync.state = VideoChannelSyncState.PROCESSING
+    channelSync.lastSyncAt = new Date()
+    await channelSync.save()
+  }
+
   const user = await UserModel.loadByChannelActorId(channel.actorId)
   const youtubeDL = new YoutubeDLWrapper(
     externalChannelUrl,
@@ -70,6 +76,7 @@ export async function synchronizeChannel (options: {
     children.push(job)
   }
 
+  // Will update the channel sync status
   const parent: CreateJobArgument = {
     type: 'after-video-channel-import',
     payload: {

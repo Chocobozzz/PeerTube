@@ -3,8 +3,9 @@ import { body, param, query } from 'express-validator'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
 import { CONFIG } from '@server/initializers/config'
 import { MChannelAccountDefault } from '@server/types/models'
+import { VideosImportInChannelCreate } from '@shared/models'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
-import { isBooleanValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
+import { isBooleanValid, isIdValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
 import {
   isVideoChannelDescriptionValid,
   isVideoChannelDisplayNameValid,
@@ -15,6 +16,7 @@ import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/actor/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { areValidationErrors, checkUserQuota, doesVideoChannelNameWithHostExist } from '../shared'
+import { doesVideoChannelSyncIdExist } from '../shared/video-channel-syncs'
 
 export const videoChannelsAddValidator = [
   body('name').custom(isVideoChannelUsernameValid).withMessage('Should have a valid channel name'),
@@ -145,10 +147,16 @@ export const videoChannelsListValidator = [
 export const videoChannelImportVideosValidator = [
   body('externalChannelUrl').custom(isUrlValid).withMessage('Should have a valid channel url'),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  body('videoChannelSyncId')
+    .optional()
+    .custom(isIdValid).withMessage('Should have a valid channel sync id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelImport parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
+
+    const body: VideosImportInChannelCreate = req.body
 
     if (!CONFIG.IMPORT.VIDEOS.HTTP.ENABLED) {
       return res.fail({
@@ -156,6 +164,8 @@ export const videoChannelImportVideosValidator = [
         message: 'Channel import is impossible as video upload via HTTP is not enabled on the server'
       })
     }
+
+    if (body.videoChannelSyncId && !await doesVideoChannelSyncIdExist(body.videoChannelSyncId, res)) return
 
     return next()
   }

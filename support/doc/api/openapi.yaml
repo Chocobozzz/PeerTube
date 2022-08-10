@@ -1187,6 +1187,20 @@ paths:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
+        -
+          name: targetUrl
+          in: query
+          required: false
+          description: Filter on import target URL
+          schema:
+            type: string
+        -
+          name: videoChannelSyncId
+          in: query
+          required: false
+          description: Filter on imports created by a specific channel synchronization
+          schema:
+            type: number
       responses:
         '200':
           description: successful operation

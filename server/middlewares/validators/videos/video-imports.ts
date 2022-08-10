@@ -1,5 +1,5 @@
 import express from 'express'
-import { body, param } from 'express-validator'
+import { body, param, query } from 'express-validator'
 import { isResolvingToUnicastOnly } from '@server/helpers/dns'
 import { isPreImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
@@ -92,6 +92,20 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   }
 ])
 
+const getMyVideoImportsValidator = [
+  query('videoChannelSyncId')
+    .optional()
+    .custom(isIdValid).withMessage('Should have correct videoChannelSync id'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking getMyVideoImportsValidator parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
 const videoImportDeleteValidator = [
   param('id')
     .custom(isIdValid).withMessage('Should have correct import id'),
@@ -143,7 +157,8 @@ const videoImportCancelValidator = [
 export {
   videoImportAddValidator,
   videoImportCancelValidator,
-  videoImportDeleteValidator
+  videoImportDeleteValidator,
+  getMyVideoImportsValidator
 }
 
 // ---------------------------------------------------------------------------

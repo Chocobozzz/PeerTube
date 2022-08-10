@@ -1,4 +1,4 @@
-import { Op, WhereOptions } from 'sequelize'
+import { IncludeOptions, Op, WhereOptions } from 'sequelize'
 import {
   AfterUpdate,
   AllowNull,
@@ -22,8 +22,17 @@ import { isVideoImportStateValid, isVideoImportTargetUrlValid } from '../../help
 import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
 import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers/constants'
 import { UserModel } from '../user/user'
-import { getSort, throwIfNotValid } from '../utils'
+import { getSort, searchAttribute, throwIfNotValid } from '../utils'
 import { ScopeNames as VideoModelScopeNames, VideoModel } from './video'
+import { VideoChannelSyncModel } from './video-channel-sync'
+
+const defaultVideoScope = () => {
+  return VideoModel.scope([
+    VideoModelScopeNames.WITH_ACCOUNT_DETAILS,
+    VideoModelScopeNames.WITH_TAGS,
+    VideoModelScopeNames.WITH_THUMBNAILS
+  ])
+}
 
 @DefaultScope(() => ({
   include: [
@@ -32,11 +41,11 @@ import { ScopeNames as VideoModelScopeNames, VideoModel } from './video'
       required: true
     },
     {
-      model: VideoModel.scope([
-        VideoModelScopeNames.WITH_ACCOUNT_DETAILS,
-        VideoModelScopeNames.WITH_TAGS,
-        VideoModelScopeNames.WITH_THUMBNAILS
-      ]),
+      model: defaultVideoScope(),
+      required: false
+    },
+    {
+      model: VideoChannelSyncModel.unscoped(),
       required: false
     }
   ]
@@ -113,6 +122,18 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
   })
   Video: VideoModel
 
+  @ForeignKey(() => VideoChannelSyncModel)
+  @Column
+  videoChannelSyncId: number
+
+  @BelongsTo(() => VideoChannelSyncModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'set null'
+  })
+  VideoChannelSync: VideoChannelSyncModel
+
   @AfterUpdate
   static deleteVideoIfFailed (instance: VideoImportModel, options) {
     if (instance.state === VideoImportState.FAILED) {
@@ -132,23 +153,44 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
     count: number
     sort: string
 
+    search?: string
     targetUrl?: string
+    videoChannelSyncId?: number
   }) {
-    const { userId, start, count, sort, targetUrl } = options
+    const { userId, start, count, sort, targetUrl, videoChannelSyncId, search } = options
 
     const where: WhereOptions = { userId }
+    const include: IncludeOptions[] = [
+      {
+        attributes: [ 'id' ],
+        model: UserModel.unscoped(), // FIXME: Without this, sequelize try to COUNT(DISTINCT(*)) which is an invalid SQL query
+        required: true
+      },
+      {
+        model: VideoChannelSyncModel.unscoped(),
+        required: false
+      }
+    ]
 
     if (targetUrl) where['targetUrl'] = targetUrl
+    if (videoChannelSyncId) where['videoChannelSyncId'] = videoChannelSyncId
+
+    if (search) {
+      include.push({
+        model: defaultVideoScope(),
+        required: true,
+        where: searchAttribute(search, 'name')
+      })
+    } else {
+      include.push({
+        model: defaultVideoScope(),
+        required: false
+      })
+    }
 
     const query = {
       distinct: true,
-      include: [
-        {
-          attributes: [ 'id' ],
-          model: UserModel.unscoped(), // FIXME: Without this, sequelize try to COUNT(DISTINCT(*)) which is an invalid SQL query
-          required: true
-        }
-      ],
+      include,
       offset: start,
       limit: count,
       order: getSort(sort),
@@ -196,6 +238,10 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
       ? Object.assign(this.Video.toFormattedJSON(videoFormatOptions), { tags: this.Video.Tags.map(t => t.name) })
       : undefined
 
+    const videoChannelSync = this.VideoChannelSync
+      ? { id: this.VideoChannelSync.id, externalChannelUrl: this.VideoChannelSync.externalChannelUrl }
+      : undefined
+
     return {
       id: this.id,
 
@@ -210,7 +256,8 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
       error: this.error,
       updatedAt: this.updatedAt.toISOString(),
       createdAt: this.createdAt.toISOString(),
-      video
+      video,
+      videoChannelSync
     }
   }
 

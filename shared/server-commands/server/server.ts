@@ -2,7 +2,7 @@ import { ChildProcess, fork } from 'child_process'
 import { copy } from 'fs-extra'
 import { join } from 'path'
 import { parallelTests, randomInt, root } from '@shared/core-utils'
-import { Video, VideoChannel, VideoCreateResult, VideoDetails } from '@shared/models'
+import { Video, VideoChannel, VideoChannelSync, VideoCreateResult, VideoDetails } from '@shared/models'
 import { BulkCommand } from '../bulk'
 import { CLICommand } from '../cli'
 import { CustomPagesCommand } from '../custom-pages'
@@ -80,6 +80,7 @@ export class PeerTubeServer {
     }
 
     channel?: VideoChannel
+    videoChannelSync?: Partial<VideoChannelSync>
 
     video?: Video
     videoCreated?: VideoCreateResult

@@ -3,7 +3,14 @@ import { catchError, map, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
-import { ActorImage, ResultList, VideoChannel as VideoChannelServer, VideoChannelCreate, VideoChannelUpdate } from '@shared/models'
+import {
+  ActorImage,
+  ResultList,
+  VideoChannel as VideoChannelServer,
+  VideoChannelCreate,
+  VideoChannelUpdate,
+  VideosImportInChannelCreate
+} from '@shared/models'
 import { environment } from '../../../../environments/environment'
 import { Account } from '../account'
 import { AccountService } from '../account/account.service'
@@ -96,9 +103,15 @@ export class VideoChannelService {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  importVideos (videoChannelName: string, externalChannelUrl: string) {
+  importVideos (videoChannelName: string, externalChannelUrl: string, syncId?: number) {
     const path = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName + '/import-videos'
-    return this.authHttp.post(path, { externalChannelUrl })
+
+    const body: VideosImportInChannelCreate = {
+      externalChannelUrl,
+      videoChannelSyncId: syncId
+    }
+
+    return this.authHttp.post(path, body)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }
