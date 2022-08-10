@@ -548,7 +548,7 @@
       </trans-unit>
       <trans-unit id="1080230904501320275" datatype="html">
         <source>{count, plural, =1 {1 user banned.} other {<x id="count"/> users banned.}}</source>
-        <target state="translated"><x id="count"/> Nutzer gesperrt.</target>
+        <target state="translated"><x id="count"/> Nutzer gesperrt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -1076,7 +1076,7 @@
       </trans-unit>
       <trans-unit id="732935381486595265" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</source>
-        <target state="translated">Die Datei <x id="PH" equiv-text="name"/>  konnte nicht übertragen werden, bevor eine Zeitüberschreitung beim Proxy-Server auftrat.</target>
+        <target state="translated">Ihre <x id="PH" equiv-text="name"/> Datei konnte nicht übertragen werden auf Grund einer Zeitüberschreitung des Proxy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">35</context>
@@ -2910,7 +2910,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="8675588963276687921" datatype="html">
         <source>Stream only once, replay will replace your live</source>
-        <target state="translated">Streamen Sie nur einmal, die Wiederholung ersetzt Ihre Live-Übertragung.</target>
+        <target state="translated">Streamen Sie nur einmal, die Wiederholung ersetzt Ihre Live-Übertragung</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="2360261543675520397" datatype="html">
@@ -6253,7 +6253,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="5382746022482410588" datatype="html">
         <source>A view means that someone watched the video for at least 30 seconds</source>
-        <target state="translated">Eine Ansicht bedeutet, dass jemand das Video mindestens 30 Sekunden lang angesehen hat.</target>
+        <target state="translated">Eine Ansicht bedeutet, dass jemand das Video mindestens 30 Sekunden lang angesehen hat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">257</context></context-group>
       </trans-unit>
       <trans-unit id="6782077395930235254" datatype="html">
@@ -6353,7 +6353,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6040639330855198542" datatype="html">
         <source>Ask to send an email to verify your account</source>
-        <target state="translated">Bitten Sie darum, eine E-Mail zur Verifizierung Ihres Kontos zu senden.</target>
+        <target state="translated">Bitten Sie darum, eine E-Mail zur Verifizierung Ihres Kontos zu senden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">24</context>
@@ -10202,7 +10202,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4022826795131920912" datatype="html">
         <source>You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live</source>
-        <target state="translated">Sie können nur einmal in einer normalen Live-Übertragung streamen. Wenn Sie die Wiederholung aktivieren, wird sie unter der gleichen URL wie Ihre Live-Übertragung gespeichert.</target>
+        <target state="translated">Sie können nur einmal in einer normalen Live-Übertragung streamen. Wenn Sie die Wiederholung aktivieren, wird sie unter der gleichen URL wie Ihre Live-Übertragung gespeichert</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">266</context></context-group>
       </trans-unit>
       <trans-unit id="2261925229535541622" datatype="html">
