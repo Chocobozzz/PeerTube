@@ -11,10 +11,11 @@ import { mergeMap } from 'rxjs'
   styleUrls: [ './my-video-channel-syncs.component.scss' ]
 })
 export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
+  error: string
 
-  error: string = undefined
-  channelsSync: VideoChannelSync[] = []
+  channelSyncs: VideoChannelSync[] = []
   totalRecords = 0
+
   videoChannelSyncActions: DropdownAction<VideoChannelSync>[][] = []
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
@@ -38,9 +39,10 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
     super()
   }
 
-  ngOnInit (): void {
+  ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
     this.initialize()
+
     this.videoChannelSyncActions = [
       [
         {
@@ -58,8 +60,9 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
     ]
   }
 
-  protected reloadData (): void {
+  protected reloadData () {
     this.error = undefined
+
     this.authService.userInformationLoaded
       .pipe(mergeMap(() => {
         const user = this.authService.getUser()
@@ -69,14 +72,14 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
           pagination: this.pagination
         })
       }))
-        .subscribe({
-          next: (res) => {
-            this.channelsSync = res.data
-          },
-          error: err => {
-            this.error = err.message
-          }
-        })
+      .subscribe({
+        next: res => {
+          this.channelSyncs = res.data
+        },
+        error: err => {
+          this.error = err.message
+        }
+      })
   }
 
   syncEnabled () {
@@ -90,7 +93,7 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
           this.notifier.success($localize`Synchronization removed successfully for ${videoChannelSync.channel.displayName}.`)
           this.reloadData()
         },
-        error: (err) => {
+        error: err => {
           this.error = err.message
         }
       })
@@ -102,7 +105,7 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
         next: () => {
           this.notifier.success($localize`Full synchronization requested successfully for ${videoChannelSync.channel.displayName}.`)
         },
-        error: (err) => {
+        error: err => {
           this.error = err.message
         }
       })

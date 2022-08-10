@@ -1,3 +1,5 @@
+import { mergeMap } from 'rxjs'
+import { SelectChannelItem } from 'src/types'
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
@@ -5,9 +7,7 @@ import { listUserChannelsForSelect } from '@app/helpers'
 import { VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { VideoChannelService, VideoChannelSyncService } from '@app/shared/shared-main'
-import { VideoChannelSync, VideoChannelSyncCreate } from '@shared/models/videos'
-import { mergeMap } from 'rxjs'
-import { SelectChannelItem } from 'src/types'
+import { VideoChannelSyncCreate } from '@shared/models/videos'
 
 @Component({
   selector: 'my-video-channel-sync-edit',
@@ -16,7 +16,6 @@ import { SelectChannelItem } from 'src/types'
 })
 export class VideoChannelSyncEditComponent extends FormReactive implements OnInit {
   error: string
-  selectedChannelId: number
   userVideoChannels: SelectChannelItem[] = []
   existingVideosStrategy: string
 
@@ -37,6 +36,7 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
       videoChannel: null,
       existingVideoStrategy: null
     })
+
     listUserChannelsForSelect(this.authService)
       .subscribe(channels => this.userVideoChannels = channels)
   }
@@ -53,13 +53,13 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
       externalChannelUrl: body.externalChannelUrl,
       videoChannelId: body.videoChannel
     }
-    const importExistingVideos = body['existingVideoStrategy'] === 'import'
-    this.videoChannelSyncService.createSync(videoChannelSyncCreate)
-      .pipe(mergeMap(({ videoChannelSync: sync }: {videoChannelSync: VideoChannelSync}) => {
-        this.authService.refreshUserInformation()
 
+    const importExistingVideos = body['existingVideoStrategy'] === 'import'
+
+    this.videoChannelSyncService.createSync(videoChannelSyncCreate)
+      .pipe(mergeMap(({ videoChannelSync }) => {
         return importExistingVideos
-          ? this.videoChannelService.importVideos(sync.channel.name, sync.externalChannelUrl)
+          ? this.videoChannelService.importVideos(videoChannelSync.channel.name, videoChannelSync.externalChannelUrl)
           : Promise.resolve(null)
       }))
       .subscribe({

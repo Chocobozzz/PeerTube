@@ -10,8 +10,8 @@
 </div>
 
 <p-table
-  *ngIf="syncEnabled()"
-  [value]="channelsSync" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  *ngIf="syncEnabled()" [value]="channelSyncs" [lazy]="true"
+  [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} synchronizations"
@@ -27,6 +27,7 @@
       </div>
     </div>
   </ng-template>
+
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 10%"><my-global-icon iconName="columns"></my-global-icon></th>
@@ -37,6 +38,7 @@
       <th style="width: 10%" i18n pSortableColumn="lastSyncAt">Last synchronization at <p-sortIcon field="lastSyncAt"></p-sortIcon></th>
     </tr>
   </ng-template>
+
   <ng-template pTemplate="body" let-expanded="expanded" let-videoChannelSync>
     <tr>
       <td class="action-cell">
@@ -45,31 +47,35 @@
           [actions]="videoChannelSyncActions" [entry]="videoChannelSync"
         ></my-action-dropdown>
       </td>
+
       <td>
         <a [href]="videoChannelSync.externalChannelUrl" target="_blank" rel="noopener noreferrer">{{ videoChannelSync.externalChannelUrl }}</a>
       </td>
+
       <td>
-          <div class="actor">
-        <my-actor-avatar
-          class="channel"
-          [actor]="videoChannelSync.channel" actorType="channel"
-          [internalHref]="[ '/c', videoChannelSync.channel.name ]"
-          size="25"
-        ></my-actor-avatar>
-        <div class="actor-info">
-          <a [routerLink]="[ '/c', videoChannelSync.channel.name ]" class="actor-names" i18n-title title="Channel page">
-            <div class="actor-display-name">{{ videoChannelSync.channel.displayName }}</div>
-            <div class="actor-name">{{ videoChannelSync.channel.name }}</div>
-          </a>
+        <div class="actor">
+          <my-actor-avatar
+            class="channel"
+            [actor]="videoChannelSync.channel" actorType="channel"
+            [internalHref]="[ '/c', videoChannelSync.channel.name ]"
+            size="25"
+          ></my-actor-avatar>
+
+          <div class="actor-info">
+            <a [routerLink]="[ '/c', videoChannelSync.channel.name ]" class="actor-names" i18n-title title="Channel page">
+              <div class="actor-display-name">{{ videoChannelSync.channel.displayName }}</div>
+              <div class="actor-name">{{ videoChannelSync.channel.name }}</div>
+            </a>
+          </div>
         </div>
-        </div>
-        <!-- <a [href]="getChannelUrl(videoChannelSync.channel.name)" target="_blank" rel="noopener noreferrer">{{ videoChannelSync.channel.displayName }}</a> -->
       </td>
+
       <td>
         <span [ngClass]="getSyncStateClass(videoChannelSync.state.id)">
           {{ videoChannelSync.state.label }}
         </span>
       </td>
+
       <td>{{ videoChannelSync.createdAt | date: 'short' }}</td>
       <td>{{ videoChannelSync.lastSyncAt | date: 'short' }}</td>
     </tr>
