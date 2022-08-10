@@ -163,7 +163,7 @@ async function canDoQuickAudioTranscode (path: string, probe?: FfprobeData): Pro
 
   const channelLayout = parsedAudio.audioStream['channel_layout']
   // Causes playback issues with Chrome
-  if (!channelLayout || channelLayout === 'unknown') return false
+  if (!channelLayout || channelLayout === 'unknown' || channelLayout === 'quad') return false
 
   return true
 }
