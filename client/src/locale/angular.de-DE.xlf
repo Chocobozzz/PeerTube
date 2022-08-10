@@ -679,7 +679,7 @@
       </trans-unit>
       <trans-unit id="653148876380254581" datatype="html">
         <source>Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</source>
-        <target state="translated">Sind Sie sich sicher, dass Sie die WebTorrent Dateien von {count, plural, =1 {1 Video} other {<x id="count"/> Videos}}löschen wollen?</target>
+        <target state="translated">Wirklich die WebTorrent Dateien {count, plural, =0 {von keinem Video} =1 {von einem Video} other {von <x id="count"/> Videos}} löschen?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">254</context>
