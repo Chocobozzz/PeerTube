@@ -548,7 +548,7 @@
       </trans-unit>
       <trans-unit id="1080230904501320275" datatype="html">
         <source>{count, plural, =1 {1 user banned.} other {<x id="count"/> users banned.}}</source>
-        <target state="translated"><x id="count"/> Nutzer gesperrt</target>
+        <target state="translated">{count, plural, =1 {1 user banned.} other {<x id="count"/> users banned.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">70</context>
