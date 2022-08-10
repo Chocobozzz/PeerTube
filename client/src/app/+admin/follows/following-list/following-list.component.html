@@ -45,8 +45,8 @@
     </tr>
   </ng-template>
 
-  <ng-template pSelectableRow="follow" pTemplate="body" let-follow>
-    <tr>
+  <ng-template pTemplate="body" let-follow>
+    <tr pSelectableRow="follow">
       <td class="checkbox-cell">
         <p-tableCheckbox [value]="follow" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
       </td>
