@@ -4,7 +4,14 @@ import 'mocha'
 import { FIXTURE_URLS } from '@server/tests/shared'
 import { areHttpImportTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
-import { ChannelsCommand, cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
+import {
+  ChannelsCommand,
+  cleanupTests,
+  createSingleServer,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  setDefaultVideoChannel
+} from '@shared/server-commands'
 
 describe('Test videos import in a channel API validator', function () {
   let server: PeerTubeServer
@@ -25,6 +32,7 @@ describe('Test videos import in a channel API validator', function () {
     server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
+    await setDefaultVideoChannel([ server ])
 
     const userCreds = {
       username: 'fake',
@@ -44,7 +52,7 @@ describe('Test videos import in a channel API validator', function () {
     await server.config.disableImports()
 
     await command.importVideos({
-      channelName: 'super_channel',
+      channelName: server.store.channel.name,
       externalChannelUrl: FIXTURE_URLS.youtubeChannel,
       token: server.accessToken,
       expectedStatus: HttpStatusCode.FORBIDDEN_403
@@ -55,7 +63,7 @@ describe('Test videos import in a channel API validator', function () {
 
   it('Should fail when externalChannelUrl is not provided', async function () {
     await command.importVideos({
-      channelName: 'super_channel',
+      channelName: server.store.channel.name,
       externalChannelUrl: null,
       token: server.accessToken,
       expectedStatus: HttpStatusCode.BAD_REQUEST_400
@@ -64,7 +72,7 @@ describe('Test videos import in a channel API validator', function () {
 
   it('Should fail when externalChannelUrl is malformed', async function () {
     await command.importVideos({
-      channelName: 'super_channel',
+      channelName: server.store.channel.name,
       externalChannelUrl: 'not-a-url',
       token: server.accessToken,
       expectedStatus: HttpStatusCode.BAD_REQUEST_400
@@ -73,7 +81,7 @@ describe('Test videos import in a channel API validator', function () {
 
   it('Should fail with a bad sync id', async function () {
     await command.importVideos({
-      channelName: 'super_channel',
+      channelName: server.store.channel.name,
       externalChannelUrl: FIXTURE_URLS.youtubeChannel,
       videoChannelSyncId: 'toto' as any,
       token: server.accessToken,
@@ -83,7 +91,7 @@ describe('Test videos import in a channel API validator', function () {
 
   it('Should fail with a unknown sync id', async function () {
     await command.importVideos({
-      channelName: 'super_channel',
+      channelName: server.store.channel.name,
       externalChannelUrl: FIXTURE_URLS.youtubeChannel,
       videoChannelSyncId: 42,
       token: server.accessToken,
@@ -93,7 +101,7 @@ describe('Test videos import in a channel API validator', function () {
 
   it('Should fail with no authentication', async function () {
     await command.importVideos({
-      channelName: 'super_channel',
+      channelName: server.store.channel.name,
       externalChannelUrl: FIXTURE_URLS.youtubeChannel,
       token: null,
       expectedStatus: HttpStatusCode.UNAUTHORIZED_401
@@ -102,7 +110,7 @@ describe('Test videos import in a channel API validator', function () {
 
   it('Should fail when sync is not owned by the user', async function () {
     await command.importVideos({
-      channelName: 'super_channel',
+      channelName: server.store.channel.name,
       externalChannelUrl: FIXTURE_URLS.youtubeChannel,
       token: userInfo.accessToken,
       expectedStatus: HttpStatusCode.FORBIDDEN_403
