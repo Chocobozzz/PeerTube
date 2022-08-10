@@ -762,7 +762,7 @@
       </trans-unit>
       <trans-unit id="9157178301885999151" datatype="html">
         <source>Do you really want to delete {length, plural, =1 {this video} other {<x id="length"/> videos}}?</source>
-        <target state="translated">Wollen Sie wirklich {length, plural, =1 {dieses Video Löschen?} other {<x id="length"/> Videos}}?</target>
+        <target state="translated">Wollen Sie wirklich {length, plural, =1 {dieses Video} other {<x id="length"/> Videos}}löschen?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">170</context>
@@ -1076,7 +1076,7 @@
       </trans-unit>
       <trans-unit id="732935381486595265" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</source>
-        <target state="translated">Ihre <x id="PH" equiv-text="name"/> konnte nicht vor dem Server Proxy Timeout übertragen werden</target>
+        <target state="translated">Ihre <x id="PH" equiv-text="name"/> Datei konnte nicht übertragen werden auf Grund einer Zeitüberschreitung des Proxy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">35</context>
@@ -1143,7 +1143,7 @@
       </trans-unit>
       <trans-unit id="901879091817013957" datatype="html">
         <source>{count, plural, =1 {Blocked <x id="videoName"/>.} other {Blocked <x id="count"/> videos.}}</source>
-        <target state="translated">{count, plural, =1 {<x id="videoName"/>blockiert.} other { <x id="count"/> Videos blockiert.}}</target>
+        <target state="translated">{count, plural, =1 {Blocked <x id="videoName"/>.} other {Blocked <x id="count"/> videos.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.ts</context>
           <context context-type="linenumber">84</context>
