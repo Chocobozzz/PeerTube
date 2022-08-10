@@ -653,7 +653,7 @@
       </trans-unit>
       <trans-unit id="9164541937317586242" datatype="html">
         <source>Unblocked {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="translated">{count, plural, =1 {1 Video} other {<x id="count"/> Videos}} entblockiert.</target>
+        <target state="translated">{count, plural, =1 {Eine Videoblockierung} other {<x id="count"/> Videoblockierungen}} wurden rückgängig gemacht.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">230</context>
