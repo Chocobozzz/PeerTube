@@ -1201,6 +1201,13 @@ paths:
           description: Filter on imports created by a specific channel synchronization
           schema:
             type: number
+        -
+          name: search
+          in: query
+          required: false
+          description: Search in video names
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -3301,6 +3308,26 @@ paths:
         - Video Channels
       parameters:
         - $ref: '#/components/parameters/channelHandle'
+      responses:
+        '204':
+          description: successful operation
+
+  '/video-channels/{channelHandle}/import-videos':
+    post:
+      summary: Import videos in channel
+      description: Import a remote channel/playlist videos into a channel
+      security:
+        - OAuth2: []
+      tags:
+        - Video Channels
+        - Channels Sync
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportVideosInChannelCreate'
       responses:
         '204':
           description: successful operation
@@ -7612,6 +7639,18 @@ components:
             allOf:
               - $ref: '#/components/schemas/VideoChannel'
               - $ref: '#/components/schemas/Actor'
+
+    ImportVideosInChannelCreate:
+      type: object
+      properties:
+        externalChannelUrl:
+          type: string
+          example: https://youtube.com/c/UC_myfancychannel
+        videoChannelSyncId:
+          type: integer
+          description: If part of a channel sync process, specify its id to assign video imports to this channel synchronization
+      required:
+        - 'externalChannelUrl'
 
     VideoChannelSync:
       type: object

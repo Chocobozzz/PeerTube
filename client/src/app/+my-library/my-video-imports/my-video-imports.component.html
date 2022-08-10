@@ -1,15 +1,17 @@
-<h1>
-  <my-global-icon iconName="cloud-download" aria-hidden="true"></my-global-icon>
-  <ng-container i18n>My imports</ng-container>
-</h1>
-
-<div class="mb-4 d-flex justify-content-between">
-  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+<h1 class="d-flex justify-content-between">
+  <span>
+    <my-global-icon iconName="cloud-download" aria-hidden="true"></my-global-icon>
+    <ng-container i18n>My imports</ng-container>
+  </span>
 
   <a routerLink="/my-library/video-channel-syncs" class="button-link">
     <my-global-icon iconName="repeat" aria-hidden="true"></my-global-icon>
     <ng-container i18n>My synchronizations</ng-container>
   </a>
+</h1>
+
+<div class="mb-4 d-flex justify-content-between">
+  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
 </div>
 
 <p-table
