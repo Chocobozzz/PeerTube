@@ -23,23 +23,28 @@ export class JobsComponent extends RestTable implements OnInit {
   jobTypes: JobTypeClient[] = [
     'all',
 
+    'activitypub-cleaner',
     'activitypub-follow',
-    'activitypub-http-broadcast',
     'activitypub-http-broadcast-parallel',
+    'activitypub-http-broadcast',
     'activitypub-http-fetcher',
     'activitypub-http-unicast',
     'activitypub-refresher',
-    'activitypub-cleaner',
     'actor-keys',
+    'after-video-channel-import',
     'email',
+    'federate-video',
+    'manage-video-torrent',
+    'move-to-object-storage',
+    'notify',
+    'video-channel-import',
     'video-file-import',
     'video-import',
     'video-live-ending',
     'video-redundancy',
+    'video-studio-edition',
     'video-transcoding',
-    'videos-views-stats',
-    'move-to-object-storage',
-    'video-channel-import'
+    'videos-views-stats'
   ]
 
   jobs: Job[] = []
