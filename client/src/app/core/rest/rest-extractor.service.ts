@@ -1,14 +1,17 @@
 import { throwError as observableThrowError } from 'rxjs'
-import { Injectable } from '@angular/core'
+import { Inject, Injectable, LOCALE_ID } from '@angular/core'
 import { Router } from '@angular/router'
-import { dateToHuman } from '@app/helpers'
-import { HttpStatusCode, ResultList } from '@shared/models'
+import { DateFormat, dateToHuman } from '@app/helpers'
 import { logger } from '@root-helpers/logger'
+import { HttpStatusCode, ResultList } from '@shared/models'
 
 @Injectable()
 export class RestExtractor {
 
-  constructor (private router: Router) { }
+  constructor (
+    @Inject(LOCALE_ID) private localeId: string,
+    private router: Router
+  ) { }
 
   applyToResultListData <T, A, U> (
     result: ResultList<T>,
@@ -23,13 +26,17 @@ export class RestExtractor {
     }
   }
 
-  convertResultListDateToHuman <T> (result: ResultList<T>, fieldsToConvert: string[] = [ 'createdAt' ]): ResultList<T> {
-    return this.applyToResultListData(result, this.convertDateToHuman, [ fieldsToConvert ])
+  convertResultListDateToHuman <T> (
+    result: ResultList<T>,
+    fieldsToConvert: string[] = [ 'createdAt' ],
+    format?: DateFormat
+  ): ResultList<T> {
+    return this.applyToResultListData(result, this.convertDateToHuman, [ fieldsToConvert, format ])
   }
 
-  convertDateToHuman (target: any, fieldsToConvert: string[]) {
+  convertDateToHuman (target: any, fieldsToConvert: string[], format?: DateFormat) {
     fieldsToConvert.forEach(field => {
-      target[field] = dateToHuman(target[field])
+      target[field] = dateToHuman(this.localeId, new Date(target[field]), format)
     })
 
     return target
