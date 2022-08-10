@@ -1,0 +1,64 @@
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<div class="margin-content">
+  <form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
+
+    <div class="row">
+      <div class="col-12 col-lg-4 col-xl-3">
+        <div class="video-channel-sync-title" i18n>NEW SYNCHRONIZATION</div>
+      </div>
+
+      <div class="col-12 col-lg-8 col-xl-9">
+        <div class="form-group">
+          <label i18n for="externalChannelUrl">Remote channel URL</label>
+
+          <div class="input-group">
+            <input
+              type="text"
+              id="externalChannelUrl"
+              i18n-placeholder
+              placeholder="Example: https://youtube.com/channel/UC_fancy_channel"
+              formControlName="externalChannelUrl"
+              [ngClass]="{ 'input-error': formErrors['externalChannelUrl'] }"
+              class="form-control"
+            >
+          </div>
+
+          <div *ngIf="formErrors['externalChannelUrl']" class="form-error">
+            {{ formErrors['externalChannelUrl'] }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="videoChannel">Video Channel</label>
+          <my-select-channel required [items]="userVideoChannels" formControlName="videoChannel"></my-select-channel>
+
+          <div *ngIf="formErrors['videoChannel']" class="form-error">
+            {{ formErrors['videoChannel'] }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="existingVideoStrategy" i18n>Options for existing videos on remote channel:</label>
+
+          <div class="peertube-radio-container">
+            <input type="radio" name="existingVideoStrategy" id="import" value="import" formControlName="existingVideoStrategy" required />
+            <label for="import" i18n>Import all and watch for new publications</label>
+          </div>
+
+          <div class="peertube-radio-container">
+            <input type="radio" name="existingVideoStrategy" id="doNothing" value="nothing" formControlName="existingVideoStrategy" required />
+            <label for="doNothing" i18n>Only watch for new publications</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row"> <!-- submit placement block -->
+      <div class="col-md-7 col-xl-5"></div>
+      <div class="col-md-5 col-xl-5 d-inline-flex">
+        <input type="submit" class="peertube-button orange-button ms-auto" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
+      </div>
+    </div>
+  </form>
+</div>

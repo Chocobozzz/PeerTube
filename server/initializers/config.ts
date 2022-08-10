@@ -398,6 +398,14 @@ const CONFIG = {
       TORRENT: {
         get ENABLED () { return config.get<boolean>('import.videos.torrent.enabled') }
       }
+    },
+    VIDEO_CHANNEL_SYNCHRONIZATION: {
+      get ENABLED () { return config.get<boolean>('import.video_channel_synchronization.enabled') },
+      get MAX_PER_USER () { return config.get<number>('import.video_channel_synchronization.max_per_user') },
+      get CHECK_INTERVAL () { return parseDurationToMs(config.get<string>('import.video_channel_synchronization.check_interval')) },
+      get VIDEOS_LIMIT_PER_SYNCHRONIZATION () {
+        return config.get<number>('import.video_channel_synchronization.videos_limit_per_synchronization')
+      }
     }
   },
   AUTO_BLACKLIST: {
@@ -499,6 +507,7 @@ const CONFIG = {
       get IS_DEFAULT_SEARCH () { return config.get<boolean>('search.search_index.is_default_search') }
     }
   }
+
 }
 
 function registerConfigChangedHandler (fun: Function) {

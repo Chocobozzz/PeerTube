@@ -3,8 +3,8 @@
 import 'mocha'
 import * as chai from 'chai'
 import { omit } from 'lodash'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
-import { buildAbsoluteFixturePath } from '@shared/core-utils'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination, FIXTURE_URLS } from '@server/tests/shared'
+import { areHttpImportTestsDisabled, buildAbsoluteFixturePath } from '@shared/core-utils'
 import { HttpStatusCode, VideoChannelUpdate } from '@shared/models'
 import {
   ChannelsCommand,
@@ -23,7 +23,13 @@ const expect = chai.expect
 describe('Test video channels API validator', function () {
   const videoChannelPath = '/api/v1/video-channels'
   let server: PeerTubeServer
-  let accessTokenUser: string
+  const userInfo = {
+    accessToken: '',
+    channelName: 'fake_channel',
+    id: -1,
+    videoQuota: -1,
+    videoQuotaDaily: -1
+  }
   let command: ChannelsCommand
 
   // ---------------------------------------------------------------
@@ -35,14 +41,15 @@ describe('Test video channels API validator', function () {
 
     await setAccessTokensToServers([ server ])
 
-    const user = {
+    const userCreds = {
       username: 'fake',
       password: 'fake_password'
     }
 
     {
-      await server.users.create({ username: user.username, password: user.password })
-      accessTokenUser = await server.login.getAccessToken(user)
+      const user = await server.users.create({ username: userCreds.username, password: userCreds.password })
+      userInfo.id = user.id
+      userInfo.accessToken = await server.login.getAccessToken(userCreds)
     }
 
     command = server.channels
@@ -191,7 +198,7 @@ describe('Test video channels API validator', function () {
       await makePutBodyRequest({
         url: server.url,
         path,
-        token: accessTokenUser,
+        token: userInfo.accessToken,
         fields: baseCorrectParams,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
@@ -339,11 +346,120 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with a another user', async function () {
-      await makeGetRequest({ url: server.url, path, token: accessTokenUser, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await makeGetRequest({ url: server.url, path, token: userInfo.accessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should succeed with the correct params', async function () {
       await makeGetRequest({ url: server.url, path, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+    })
+  })
+
+  describe('When triggering full synchronization', function () {
+
+    it('Should fail when HTTP upload is disabled', async function () {
+      await server.config.disableImports()
+
+      await command.importVideos({
+        channelName: 'super_channel',
+        externalChannelUrl: FIXTURE_URLS.youtubeChannel,
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+
+      await server.config.enableImports()
+    })
+
+    it('Should fail when externalChannelUrl is not provided', async function () {
+      await command.importVideos({
+        channelName: 'super_channel',
+        externalChannelUrl: null,
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail when externalChannelUrl is malformed', async function () {
+      await command.importVideos({
+        channelName: 'super_channel',
+        externalChannelUrl: 'not-a-url',
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with no authentication', async function () {
+      await command.importVideos({
+        channelName: 'super_channel',
+        externalChannelUrl: FIXTURE_URLS.youtubeChannel,
+        token: null,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail when sync is not owned by the user', async function () {
+      await command.importVideos({
+        channelName: 'super_channel',
+        externalChannelUrl: FIXTURE_URLS.youtubeChannel,
+        token: userInfo.accessToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail when the user has no quota', async function () {
+      await server.users.update({
+        userId: userInfo.id,
+        videoQuota: 0
+      })
+
+      await command.importVideos({
+        channelName: 'fake_channel',
+        externalChannelUrl: FIXTURE_URLS.youtubeChannel,
+        token: userInfo.accessToken,
+        expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413
+      })
+
+      await server.users.update({
+        userId: userInfo.id,
+        videoQuota: userInfo.videoQuota
+      })
+    })
+
+    it('Should fail when the user has no daily quota', async function () {
+      await server.users.update({
+        userId: userInfo.id,
+        videoQuotaDaily: 0
+      })
+
+      await command.importVideos({
+        channelName: 'fake_channel',
+        externalChannelUrl: FIXTURE_URLS.youtubeChannel,
+        token: userInfo.accessToken,
+        expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413
+      })
+
+      await server.users.update({
+        userId: userInfo.id,
+        videoQuotaDaily: userInfo.videoQuotaDaily
+      })
+    })
+
+    it('Should succeed when sync is run by its owner', async function () {
+      if (!areHttpImportTestsDisabled()) return
+
+      await command.importVideos({
+        channelName: 'fake_channel',
+        externalChannelUrl: FIXTURE_URLS.youtubeChannel,
+        token: userInfo.accessToken
+      })
+    })
+
+    it('Should succeed when sync is run with root and for another user\'s channel', async function () {
+      if (!areHttpImportTestsDisabled()) return
+
+      await command.importVideos({
+        channelName: 'fake_channel',
+        externalChannelUrl: FIXTURE_URLS.youtubeChannel
+      })
     })
   })
 
@@ -353,7 +469,7 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with another authenticated user', async function () {
-      await command.delete({ token: accessTokenUser, channelName: 'super_channel', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await command.delete({ token: userInfo.accessToken, channelName: 'super_channel', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with an unknown video channel id', async function () {

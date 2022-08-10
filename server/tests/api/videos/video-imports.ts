@@ -12,6 +12,7 @@ import {
   createMultipleServers,
   createSingleServer,
   doubleFollow,
+  getServerImportConfig,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -84,24 +85,9 @@ describe('Test video imports', function () {
       let servers: PeerTubeServer[] = []
 
       before(async function () {
-        this.timeout(30_000)
+        this.timeout(60_000)
 
-        // Run servers
-        servers = await createMultipleServers(2, {
-          import: {
-            videos: {
-              http: {
-                youtube_dl_release: {
-                  url: mode === 'youtube-dl'
-                    ? 'https://yt-dl.org/downloads/latest/youtube-dl'
-                    : 'https://api.github.com/repos/yt-dlp/yt-dlp/releases',
-
-                  name: mode
-                }
-              }
-            }
-          }
-        })
+        servers = await createMultipleServers(2, getServerImportConfig(mode))
 
         await setAccessTokensToServers(servers)
         await setDefaultVideoChannel(servers)

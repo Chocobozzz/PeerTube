@@ -50,6 +50,7 @@ import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-pla
 import { VideoTagModel } from '../models/video/video-tag'
 import { VideoViewModel } from '../models/view/video-view'
 import { CONFIG } from './config'
+import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -153,7 +154,8 @@ async function initDatabaseModels (silent: boolean) {
     VideoTrackerModel,
     PluginModel,
     ActorCustomPageModel,
-    VideoJobInfoModel
+    VideoJobInfoModel,
+    VideoChannelSyncModel
   ])
 
   // Check extensions exist in the database

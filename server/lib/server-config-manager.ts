@@ -170,6 +170,9 @@ class ServerConfigManager {
           torrent: {
             enabled: CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED
           }
+        },
+        videoChannelSynchronization: {
+          enabled: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED
         }
       },
       autoBlacklist: {

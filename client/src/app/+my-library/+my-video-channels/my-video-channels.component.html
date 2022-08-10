@@ -1,7 +1,16 @@
 <h1>
-  <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon>
-  <ng-container i18n>My channels</ng-container>
-  <span *ngIf="totalItems" class="pt-badge badge-secondary">{{ totalItems }}</span>
+  <span>
+    <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon>
+    <ng-container i18n>My channels</ng-container>
+    <span *ngIf="totalItems" class="pt-badge badge-secondary">{{ totalItems }}</span>
+  </span>
+
+  <div>
+    <a routerLink="/my-library/video-channel-syncs" class="button-link">
+      <my-global-icon iconName="repeat" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>My synchronizations</ng-container>
+    </a>
+  </div>
 </h1>
 
 <my-channels-setup-message [hideLink]="true"></my-channels-setup-message>

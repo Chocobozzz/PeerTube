@@ -254,6 +254,8 @@ tags:
       download it for you, saving you as much bandwidth and avoiding any instability or limitation your network might have.
   - name: Video Imports
     description: Operations dealing with listing, adding and removing video imports.
+  - name: Channels Sync
+    description: Operations dealing with synchronizing PeerTube user's channel with channels of other platforms
   - name: Video Captions
     description: Operations dealing with listing, adding and removing closed captions of a video.
   - name: Video Channels
@@ -327,6 +329,7 @@ x-tagGroups:
       - Video Transcoding
       - Live Videos
       - Feeds
+      - Channels Sync
   - name: Search
     tags:
       - Search
@@ -3050,7 +3053,7 @@ paths:
       tags:
         - Video Channels
       responses:
-        '204':
+        '200':
           description: successful operation
           content:
             application/json:
@@ -3287,6 +3290,59 @@ paths:
       responses:
         '204':
           description: successful operation
+
+  '/video-channel-syncs':
+    post:
+      summary: Create a synchronization for a video channel
+      operationId: addVideoChannelSync
+      security:
+        - OAuth2: []
+      tags:
+        - Channels Sync
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoChannelSyncCreate'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  videoChannelSync:
+                    $ref: "#/components/schemas/VideoChannelSync"
+
+  '/video-channel-syncs/{channelSyncId}':
+    delete:
+      summary: Delete a video channel synchronization
+      operationId: delVideoChannelSync
+      security:
+        - OAuth2: []
+      tags:
+        - Channels Sync
+      parameters:
+        - $ref: '#/components/parameters/channelSyncId'
+      responses:
+        '204':
+          description: successful operation
+
+  '/video-channel-syncs/{channelSyncId}/sync':
+    post:
+      summary: Triggers the channel synchronization job, fetching all the videos from the remote channel
+      operationId: triggerVideoChannelSync
+      security:
+        - OAuth2: []
+      tags:
+        - Channels Sync
+      parameters:
+        - $ref: '#/components/parameters/channelSyncId'
+      responses:
+        '204':
+          description: successful operation
+
 
   /video-playlists/privacies:
     get:
@@ -3658,6 +3714,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoChannelList'
+
+  '/accounts/{name}/video-channel-syncs':
+    get:
+      summary: List the synchronizations of video channels of an account
+      tags:
+        - Video Channels
+        - Channels Sync
+        - Accounts
+      parameters:
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoChannelSyncList'
 
   '/accounts/{name}/ratings':
     get:
@@ -5141,6 +5217,13 @@ components:
       schema:
         type: string
         example: my_username | my_username@example.com
+    channelSyncId:
+      name: channelSyncId
+      in: path
+      required: true
+      description: Channel Sync id
+      schema:
+        $ref: '#/components/schemas/Abuse/properties/id'
     subscriptionHandle:
       name: subscriptionHandle
       in: path
@@ -5347,6 +5430,7 @@ components:
           - activitypub-refresher
           - video-redundancy
           - video-live-ending
+          - video-channel-import
     followState:
       name: state
       in: query
@@ -6497,6 +6581,11 @@ components:
                   properties:
                     enabled:
                       type: boolean
+            videoChannelSynchronization:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
         autoBlacklist:
           type: object
           properties:
@@ -6861,6 +6950,11 @@ components:
                   properties:
                     enabled:
                       type: boolean
+            video_channel_synchronization:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
         autoBlacklist:
           type: object
           properties:
@@ -6953,6 +7047,7 @@ components:
             - videos-views-stats
             - activitypub-refresher
             - video-redundancy
+            - video-channel-import
         data:
           type: object
           additionalProperties: true
@@ -7473,6 +7568,7 @@ components:
                   type: integer
                 uuid:
                   $ref: '#/components/schemas/UUIDv4'
+
     VideoChannelCreate:
       allOf:
         - $ref: '#/components/schemas/VideoChannel'
@@ -7503,6 +7599,51 @@ components:
               - $ref: '#/components/schemas/VideoChannel'
               - $ref: '#/components/schemas/Actor'
 
+    VideoChannelSync:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        state:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 2
+            label:
+              type: string
+              example: PROCESSING
+        externalChannelUrl:
+          type: string
+          example: 'https://youtube.com/c/UC_myfancychannel'
+        createdAt:
+          type: string
+          format: date-time
+        lastSyncAt:
+          type: string
+          format: date-time
+          nullable: true
+        channel:
+          $ref: '#/components/schemas/VideoChannel'
+    VideoChannelSyncList:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 1
+        data:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/VideoChannelSync'
+    VideoChannelSyncCreate:
+      type: object
+      properties:
+        externalChannelUrl:
+          type: string
+          example: https://youtube.com/c/UC_myfancychannel
+        videoChannelId:
+          $ref: '#/components/schemas/id'
     MRSSPeerLink:
       type: object
       xml:

@@ -22,6 +22,7 @@ import {
   ActivitypubHttpFetcherPayload,
   ActivitypubHttpUnicastPayload,
   ActorKeysPayload,
+  AfterVideoChannelImportPayload,
   DeleteResumableUploadMetaFilePayload,
   EmailPayload,
   FederateVideoPayload,
@@ -31,6 +32,7 @@ import {
   MoveObjectStoragePayload,
   NotifyPayload,
   RefreshPayload,
+  VideoChannelImportPayload,
   VideoFileImportPayload,
   VideoImportPayload,
   VideoLiveEndingPayload,
@@ -53,12 +55,14 @@ import { processFederateVideo } from './handlers/federate-video'
 import { processManageVideoTorrent } from './handlers/manage-video-torrent'
 import { onMoveToObjectStorageFailure, processMoveToObjectStorage } from './handlers/move-to-object-storage'
 import { processNotify } from './handlers/notify'
+import { processVideoChannelImport } from './handlers/video-channel-import'
 import { processVideoFileImport } from './handlers/video-file-import'
 import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoStudioEdition } from './handlers/video-studio-edition'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViewsStats } from './handlers/video-views-stats'
+import { processAfterVideoChannelImport } from './handlers/after-video-channel-import'
 
 export type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -79,6 +83,9 @@ export type CreateJobArgument =
   { type: 'delete-resumable-upload-meta-file', payload: DeleteResumableUploadMetaFilePayload } |
   { type: 'video-studio-edition', payload: VideoStudioEditionPayload } |
   { type: 'manage-video-torrent', payload: ManageVideoTorrentPayload } |
+  { type: 'move-to-object-storage', payload: MoveObjectStoragePayload } |
+  { type: 'video-channel-import', payload: VideoChannelImportPayload } |
+  { type: 'after-video-channel-import', payload: AfterVideoChannelImportPayload } |
   { type: 'notify', payload: NotifyPayload } |
   { type: 'move-to-object-storage', payload: MoveObjectStoragePayload } |
   { type: 'federate-video', payload: FederateVideoPayload }
@@ -106,8 +113,10 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'video-redundancy': processVideoRedundancy,
   'move-to-object-storage': processMoveToObjectStorage,
   'manage-video-torrent': processManageVideoTorrent,
-  'notify': processNotify,
   'video-studio-edition': processVideoStudioEdition,
+  'video-channel-import': processVideoChannelImport,
+  'after-video-channel-import': processAfterVideoChannelImport,
+  'notify': processNotify,
   'federate-video': processFederateVideo
 }
 
@@ -134,6 +143,8 @@ const jobTypes: JobType[] = [
   'move-to-object-storage',
   'manage-video-torrent',
   'video-studio-edition',
+  'video-channel-import',
+  'after-video-channel-import',
   'notify',
   'federate-video'
 ]
@@ -306,7 +317,7 @@ class JobQueue {
         .catch(err => logger.error('Cannot create job.', { err, options }))
   }
 
-  async createJob (options: CreateJobArgument & CreateJobOptions) {
+  createJob (options: CreateJobArgument & CreateJobOptions) {
     const queue: Queue = this.queues[options.type]
     if (queue === undefined) {
       logger.error('Unknown queue %s: cannot create job.', options.type)
@@ -318,7 +329,7 @@ class JobQueue {
     return queue.add('job', options.payload, jobOptions)
   }
 
-  async createSequentialJobFlow (...jobs: ((CreateJobArgument & CreateJobOptions) | undefined)[]) {
+  createSequentialJobFlow (...jobs: ((CreateJobArgument & CreateJobOptions) | undefined)[]) {
     let lastJob: FlowJob
 
     for (const job of jobs) {
@@ -336,7 +347,7 @@ class JobQueue {
     return this.flowProducer.add(lastJob)
   }
 
-  async createJobWithChildren (parent: CreateJobArgument & CreateJobOptions, children: (CreateJobArgument & CreateJobOptions)[]) {
+  createJobWithChildren (parent: CreateJobArgument & CreateJobOptions, children: (CreateJobArgument & CreateJobOptions)[]) {
     return this.flowProducer.add({
       ...this.buildJobFlowOption(parent),
 

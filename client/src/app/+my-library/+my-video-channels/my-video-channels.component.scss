@@ -1,9 +1,20 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-h1 my-global-icon {
-  position: relative;
-  top: -2px;
+h1 {
+  display: flex;
+  justify-content: space-between;
+
+  my-global-icon {
+    position: relative;
+    top: -2px;
+  }
+
+  .button-link {
+    @include peertube-button-link;
+    @include grey-button;
+    @include button-with-icon(18px, 3px, -1px);
+  }
 }
 
 .create-button {

@@ -8,7 +8,7 @@ import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { isAbleToUploadVideo } from '@server/lib/user'
-import { buildOptimizeOrMergeAudioJob, buildMoveToObjectStorageJob } from '@server/lib/video'
+import { buildMoveToObjectStorageJob, buildOptimizeOrMergeAudioJob } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { buildNextVideoState } from '@server/lib/video-state'
 import { ThumbnailModel } from '@server/models/video/thumbnail'
@@ -18,6 +18,7 @@ import { isAudioFile } from '@shared/extra-utils'
 import {
   ThumbnailType,
   VideoImportPayload,
+  VideoImportPreventExceptionResult,
   VideoImportState,
   VideoImportTorrentPayload,
   VideoImportTorrentPayloadType,
@@ -41,20 +42,29 @@ import { Notifier } from '../../notifier'
 import { generateVideoMiniature } from '../../thumbnail'
 import { JobQueue } from '../job-queue'
 
-async function processVideoImport (job: Job) {
+async function processVideoImport (job: Job): Promise<VideoImportPreventExceptionResult> {
   const payload = job.data as VideoImportPayload
 
   const videoImport = await getVideoImportOrDie(payload)
   if (videoImport.state === VideoImportState.CANCELLED) {
     logger.info('Do not process import since it has been cancelled', { payload })
-    return
+    return { resultType: 'success' }
   }
 
   videoImport.state = VideoImportState.PROCESSING
   await videoImport.save()
 
-  if (payload.type === 'youtube-dl') return processYoutubeDLImport(job, videoImport, payload)
-  if (payload.type === 'magnet-uri' || payload.type === 'torrent-file') return processTorrentImport(job, videoImport, payload)
+  try {
+    if (payload.type === 'youtube-dl') await processYoutubeDLImport(job, videoImport, payload)
+    if (payload.type === 'magnet-uri' || payload.type === 'torrent-file') await processTorrentImport(job, videoImport, payload)
+
+    return { resultType: 'success' }
+  } catch (err) {
+    if (!payload.preventException) throw err
+
+    logger.warn('Catch error in video import to send value to parent job.', { payload, err })
+    return { resultType: 'error' }
+  }
 }
 
 // ---------------------------------------------------------------------------

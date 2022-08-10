@@ -139,6 +139,7 @@ import { VideoViewsManager } from '@server/lib/views/video-views-manager'
 import { isTestOrDevInstance } from './server/helpers/core-utils'
 import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics'
 import { ApplicationModel } from '@server/models/application/application'
+import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler'
 
 // ----------- Command line -----------
 
@@ -314,6 +315,7 @@ async function startApplication () {
   PeerTubeVersionCheckScheduler.Instance.enable()
   AutoFollowIndexInstances.Instance.enable()
   RemoveDanglingResumableUploadsScheduler.Instance.enable()
+  VideoChannelSyncLatestScheduler.Instance.enable()
   VideoViewsBufferScheduler.Instance.enable()
   GeoIPUpdateScheduler.Instance.enable()
   OpenTelemetryMetrics.Instance.registerMetrics()

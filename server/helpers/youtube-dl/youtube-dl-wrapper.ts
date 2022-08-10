@@ -46,6 +46,24 @@ class YoutubeDLWrapper {
     return infoBuilder.getInfo()
   }
 
+  async getInfoForListImport (options: {
+    latestVideosCount?: number
+  }) {
+    const youtubeDL = await YoutubeDLCLI.safeGet()
+
+    const list = await youtubeDL.getListInfo({
+      url: this.url,
+      latestVideosCount: options.latestVideosCount,
+      processOptions
+    })
+
+    return list.map(info => {
+      const infoBuilder = new YoutubeDLInfoBuilder(info)
+
+      return infoBuilder.getInfo()
+    })
+  }
+
   async getSubtitles (): Promise<YoutubeDLSubs> {
     const cwd = CONFIG.STORAGE.TMP_DIR
 
@@ -103,7 +121,7 @@ class YoutubeDLWrapper {
 
           return remove(path)
         })
-        .catch(innerErr => logger.error('Cannot remove file in youtubeDL timeout.', { innerErr, ...lTags() }))
+        .catch(innerErr => logger.error('Cannot remove file in youtubeDL error.', { innerErr, ...lTags() }))
 
       throw err
     }

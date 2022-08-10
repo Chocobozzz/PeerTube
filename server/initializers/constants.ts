@@ -6,6 +6,7 @@ import { randomInt, root } from '@shared/core-utils'
 import {
   AbuseState,
   JobType,
+  VideoChannelSyncState,
   VideoImportState,
   VideoPrivacy,
   VideoRateType,
@@ -24,7 +25,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 725
+const LAST_MIGRATION_VERSION = 730
 
 // ---------------------------------------------------------------------------
 
@@ -64,6 +65,7 @@ const SORTABLE_COLUMNS = {
   JOBS: [ 'createdAt' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
   VIDEO_IMPORTS: [ 'createdAt' ],
+  VIDEO_CHANNEL_SYNCS: [ 'externalChannelUrl', 'videoChannel', 'createdAt', 'lastSyncAt', 'state' ],
 
   VIDEO_COMMENT_THREADS: [ 'createdAt', 'totalReplies' ],
   VIDEO_COMMENTS: [ 'createdAt' ],
@@ -156,6 +158,8 @@ const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-live-ending': 1,
   'video-studio-edition': 1,
   'manage-video-torrent': 1,
+  'video-channel-import': 1,
+  'after-video-channel-import': 1,
   'move-to-object-storage': 3,
   'notify': 1,
   'federate-video': 1
@@ -178,6 +182,8 @@ const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'video-im
   'video-studio-edition': 1,
   'manage-video-torrent': 1,
   'move-to-object-storage': 1,
+  'video-channel-import': 1,
+  'after-video-channel-import': 1,
   'notify': 5,
   'federate-video': 3
 }
@@ -199,9 +205,11 @@ const JOB_TTL: { [id in JobType]: number } = {
   'video-redundancy': 1000 * 3600 * 3, // 3 hours
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
   'manage-video-torrent': 1000 * 3600 * 3, // 3 hours
+  'move-to-object-storage': 1000 * 60 * 60 * 3, // 3 hours
+  'video-channel-import': 1000 * 60 * 60 * 4, // 4 hours
+  'after-video-channel-import': 60000 * 5, // 5 minutes
   'notify': 60000 * 5, // 5 minutes
-  'federate-video': 60000 * 5, // 5 minutes
-  'move-to-object-storage': 1000 * 60 * 60 * 3 // 3 hours
+  'federate-video': 60000 * 5 // 5 minutes
 }
 const REPEAT_JOBS: { [ id in JobType ]?: RepeatOptions } = {
   'videos-views-stats': {
@@ -246,7 +254,8 @@ const SCHEDULER_INTERVALS_MS = {
   REMOVE_OLD_VIEWS: 60000 * 60 * 24, // 1 day
   REMOVE_OLD_HISTORY: 60000 * 60 * 24, // 1 day
   UPDATE_INBOX_STATS: 1000 * 60, // 1 minute
-  REMOVE_DANGLING_RESUMABLE_UPLOADS: 60000 * 60 // 1 hour
+  REMOVE_DANGLING_RESUMABLE_UPLOADS: 60000 * 60, // 1 hour
+  CHANNEL_SYNC_CHECK_INTERVAL: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.CHECK_INTERVAL
 }
 
 // ---------------------------------------------------------------------------
@@ -276,7 +285,11 @@ const CONSTRAINTS_FIELDS = {
     NAME: { min: 1, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 1000 }, // Length
     SUPPORT: { min: 3, max: 1000 }, // Length
+    EXTERNAL_CHANNEL_URL: { min: 3, max: 2000 }, // Length
     URL: { min: 3, max: 2000 } // Length
+  },
+  VIDEO_CHANNEL_SYNCS: {
+    EXTERNAL_CHANNEL_URL: { min: 3, max: 2000 } // Length
   },
   VIDEO_CAPTIONS: {
     CAPTION_FILE: {
@@ -476,6 +489,13 @@ const VIDEO_IMPORT_STATES: { [ id in VideoImportState ]: string } = {
   [VideoImportState.REJECTED]: 'Rejected',
   [VideoImportState.CANCELLED]: 'Cancelled',
   [VideoImportState.PROCESSING]: 'Processing'
+}
+
+const VIDEO_CHANNEL_SYNC_STATE: { [ id in VideoChannelSyncState ]: string } = {
+  [VideoChannelSyncState.FAILED]: 'Failed',
+  [VideoChannelSyncState.SYNCED]: 'Synchronized',
+  [VideoChannelSyncState.PROCESSING]: 'Processing',
+  [VideoChannelSyncState.WAITING_FIRST_RUN]: 'Waiting first run'
 }
 
 const ABUSE_STATES: { [ id in AbuseState ]: string } = {
@@ -1005,6 +1025,7 @@ export {
   JOB_COMPLETED_LIFETIME,
   HTTP_SIGNATURE,
   VIDEO_IMPORT_STATES,
+  VIDEO_CHANNEL_SYNC_STATE,
   VIEW_LIFETIME,
   CONTACT_FORM_LIFETIME,
   VIDEO_PLAYLIST_PRIVACIES,

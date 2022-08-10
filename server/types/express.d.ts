@@ -8,6 +8,7 @@ import {
   MActorFollowActorsDefault,
   MActorUrl,
   MChannelBannerAccountDefault,
+  MChannelSyncChannel,
   MStreamingPlaylist,
   MVideoChangeOwnershipFull,
   MVideoFile,
@@ -145,6 +146,7 @@ declare module 'express' {
       videoStreamingPlaylist?: MStreamingPlaylist
 
       videoChannel?: MChannelBannerAccountDefault
+      videoChannelSync?: MChannelSyncChannel
 
       videoPlaylistFull?: MVideoPlaylistFull
       videoPlaylistSummary?: MVideoPlaylistFullSummary
@@ -194,6 +196,7 @@ declare module 'express' {
       plugin?: MPlugin
 
       localViewerFull?: MLocalVideoViewerWithWatchSections
+
     }
   }
 }

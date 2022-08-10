@@ -39,11 +39,30 @@ async function cleanupTests (servers: PeerTubeServer[]) {
   return Promise.all(p)
 }
 
+function getServerImportConfig (mode: 'youtube-dl' | 'yt-dlp') {
+  return {
+    import: {
+      videos: {
+        http: {
+          youtube_dl_release: {
+            url: mode === 'youtube-dl'
+              ? 'https://yt-dl.org/downloads/latest/youtube-dl'
+              : 'https://api.github.com/repos/yt-dlp/yt-dlp/releases',
+
+            name: mode
+          }
+        }
+      }
+    }
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   createSingleServer,
   createMultipleServers,
   cleanupTests,
-  killallServers
+  killallServers,
+  getServerImportConfig
 }

@@ -18,22 +18,50 @@ export class ConfigCommand extends AbstractCommand {
     }
   }
 
+  disableImports () {
+    return this.setImportsEnabled(false)
+  }
+
   enableImports () {
+    return this.setImportsEnabled(true)
+  }
+
+  private setImportsEnabled (enabled: boolean) {
     return this.updateExistingSubConfig({
       newConfig: {
         import: {
           videos: {
             http: {
-              enabled: true
+              enabled
             },
 
             torrent: {
-              enabled: true
+              enabled
             }
           }
         }
       }
     })
+  }
+
+  private setChannelSyncEnabled (enabled: boolean) {
+    return this.updateExistingSubConfig({
+      newConfig: {
+        import: {
+          videoChannelSynchronization: {
+            enabled
+          }
+        }
+      }
+    })
+  }
+
+  enableChannelSync () {
+    return this.setChannelSyncEnabled(true)
+  }
+
+  disableChannelSync () {
+    return this.setChannelSyncEnabled(false)
   }
 
   enableLive (options: {
@@ -356,6 +384,10 @@ export class ConfigCommand extends AbstractCommand {
           torrent: {
             enabled: false
           }
+        },
+        videoChannelSynchronization: {
+          enabled: false,
+          maxPerUser: 10
         }
       },
       trending: {

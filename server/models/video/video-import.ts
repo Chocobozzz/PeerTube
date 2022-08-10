@@ -1,4 +1,4 @@
-import { WhereOptions } from 'sequelize'
+import { Op, WhereOptions } from 'sequelize'
 import {
   AfterUpdate,
   AllowNull,
@@ -159,6 +159,28 @@ export class VideoImportModel extends Model<Partial<AttributesOnly<VideoImportMo
       VideoImportModel.unscoped().count(query),
       VideoImportModel.findAll<MVideoImportDefault>(query)
     ]).then(([ total, data ]) => ({ total, data }))
+  }
+
+  static async urlAlreadyImported (channelId: number, targetUrl: string): Promise<boolean> {
+    const element = await VideoImportModel.unscoped().findOne({
+      where: {
+        targetUrl,
+        state: {
+          [Op.in]: [ VideoImportState.PENDING, VideoImportState.PROCESSING, VideoImportState.SUCCESS ]
+        }
+      },
+      include: [
+        {
+          model: VideoModel,
+          required: true,
+          where: {
+            channelId
+          }
+        }
+      ]
+    })
+
+    return !!element
   }
 
   getTargetIdentifier () {

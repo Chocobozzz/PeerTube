@@ -1,0 +1,83 @@
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<h1>
+  <my-global-icon iconName="refresh" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>My synchronizations</ng-container>
+</h1>
+
+<div *ngIf="!syncEnabled()">
+  <p class="muted" i18n>⚠️ The instance doesn't allow channel synchronization</p>
+</div>
+
+<p-table
+  *ngIf="syncEnabled()" [value]="channelSyncs" [lazy]="true"
+  [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
+  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
+  currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} synchronizations"
+  [expandedRowKeys]="expandedRows"
+>
+  <ng-template pTemplate="caption">
+    <div class="caption">
+      <div class="left-buttons">
+        <a class="add-sync" routerLink="{{ getSyncCreateLink() }}">
+          <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
+          <ng-container i18n>Add synchronization</ng-container>
+        </a>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 10%"><my-global-icon iconName="columns"></my-global-icon></th>
+      <th style="width: 25%" i18n pSortableColumn="externalChannelUrl">External Channel <p-sortIcon field="externalChannelUrl"></p-sortIcon></th>
+      <th style="width: 25%" i18n pSortableColumn="videoChannel">Channel <p-sortIcon field="videoChannel"></p-sortIcon></th>
+      <th style="width: 10%" i18n pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
+      <th style="width: 10%" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th style="width: 10%" i18n pSortableColumn="lastSyncAt">Last synchronization at <p-sortIcon field="lastSyncAt"></p-sortIcon></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-expanded="expanded" let-videoChannelSync>
+    <tr>
+      <td class="action-cell">
+        <my-action-dropdown
+           container="body"
+          [actions]="videoChannelSyncActions" [entry]="videoChannelSync"
+        ></my-action-dropdown>
+      </td>
+
+      <td>
+        <a [href]="videoChannelSync.externalChannelUrl" target="_blank" rel="noopener noreferrer">{{ videoChannelSync.externalChannelUrl }}</a>
+      </td>
+
+      <td>
+        <div class="actor">
+          <my-actor-avatar
+            class="channel"
+            [actor]="videoChannelSync.channel" actorType="channel"
+            [internalHref]="[ '/c', videoChannelSync.channel.name ]"
+            size="25"
+          ></my-actor-avatar>
+
+          <div class="actor-info">
+            <a [routerLink]="[ '/c', videoChannelSync.channel.name ]" class="actor-names" i18n-title title="Channel page">
+              <div class="actor-display-name">{{ videoChannelSync.channel.displayName }}</div>
+              <div class="actor-name">{{ videoChannelSync.channel.name }}</div>
+            </a>
+          </div>
+        </div>
+      </td>
+
+      <td>
+        <span [ngClass]="getSyncStateClass(videoChannelSync.state.id)">
+          {{ videoChannelSync.state.label }}
+        </span>
+      </td>
+
+      <td>{{ videoChannelSync.createdAt | date: 'short' }}</td>
+      <td>{{ videoChannelSync.lastSyncAt | date: 'short' }}</td>
+    </tr>
+  </ng-template>
+</p-table>

@@ -25,8 +25,10 @@ import {
   accountsFollowersSortValidator,
   accountsSortValidator,
   ensureAuthUserOwnsAccountValidator,
+  ensureCanManageUser,
   videoChannelsSortValidator,
   videoChannelStatsValidator,
+  videoChannelSyncsSortValidator,
   videosSortValidator
 } from '../../middlewares/validators'
 import { commonVideoPlaylistFiltersValidator, videoPlaylistsSearchValidator } from '../../middlewares/validators/videos/video-playlists'
@@ -35,6 +37,7 @@ import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { VideoModel } from '../../models/video/video'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
+import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 
 const accountsRouter = express.Router()
 
@@ -70,6 +73,17 @@ accountsRouter.get('/:accountName/video-channels',
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listAccountChannels)
+)
+
+accountsRouter.get('/:accountName/video-channel-syncs',
+  authenticate,
+  asyncMiddleware(accountNameWithHostGetValidator),
+  ensureCanManageUser,
+  paginationValidator,
+  videoChannelSyncsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(listAccountChannelsSync)
 )
 
 accountsRouter.get('/:accountName/video-playlists',
@@ -142,6 +156,20 @@ async function listAccountChannels (req: express.Request, res: express.Response)
   }
 
   const resultList = await VideoChannelModel.listByAccountForAPI(options)
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
+}
+
+async function listAccountChannelsSync (req: express.Request, res: express.Response) {
+  const options = {
+    accountId: res.locals.account.id,
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    search: req.query.search
+  }
+
+  const resultList = await VideoChannelSyncModel.listByAccountForAPI(options)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

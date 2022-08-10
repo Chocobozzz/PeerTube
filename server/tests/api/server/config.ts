@@ -368,6 +368,10 @@ const newCustomConfig: CustomConfig = {
       torrent: {
         enabled: false
       }
+    },
+    videoChannelSynchronization: {
+      enabled: false,
+      maxPerUser: 10
     }
   },
   trending: {

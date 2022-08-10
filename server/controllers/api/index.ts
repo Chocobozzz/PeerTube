@@ -20,6 +20,7 @@ import { usersRouter } from './users'
 import { videoChannelRouter } from './video-channel'
 import { videoPlaylistRouter } from './video-playlist'
 import { videosRouter } from './videos'
+import { videoChannelSyncRouter } from './video-channel-sync'
 
 const apiRouter = express.Router()
 
@@ -43,6 +44,7 @@ apiRouter.use('/config', configRouter)
 apiRouter.use('/users', usersRouter)
 apiRouter.use('/accounts', accountsRouter)
 apiRouter.use('/video-channels', videoChannelRouter)
+apiRouter.use('/video-channel-syncs', videoChannelSyncRouter)
 apiRouter.use('/video-playlists', videoPlaylistRouter)
 apiRouter.use('/videos', videosRouter)
 apiRouter.use('/jobs', jobsRouter)

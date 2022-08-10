@@ -5,7 +5,7 @@ import { chain } from 'lodash'
 import { join } from 'path'
 import { addColors, config, createLogger, format, transports } from 'winston'
 import { AUDIT_LOG_FILENAME } from '@server/initializers/constants'
-import { AdminAbuse, CustomConfig, User, VideoChannel, VideoComment, VideoDetails, VideoImport } from '@shared/models'
+import { AdminAbuse, CustomConfig, User, VideoChannel, VideoChannelSync, VideoComment, VideoDetails, VideoImport } from '@shared/models'
 import { CONFIG } from '../initializers/config'
 import { jsonLoggerFormat, labelFormatter } from './logger'
 
@@ -260,6 +260,18 @@ class CustomConfigAuditView extends EntityAuditView {
   }
 }
 
+const channelSyncKeysToKeep = [
+  'id',
+  'externalChannelUrl',
+  'channel-id',
+  'channel-name'
+]
+class VideoChannelSyncAuditView extends EntityAuditView {
+  constructor (channelSync: VideoChannelSync) {
+    super(channelSyncKeysToKeep, 'channelSync', channelSync)
+  }
+}
+
 export {
   getAuditIdFromRes,
 
@@ -270,5 +282,6 @@ export {
   UserAuditView,
   VideoAuditView,
   AbuseAuditView,
-  CustomConfigAuditView
+  CustomConfigAuditView,
+  VideoChannelSyncAuditView
 }

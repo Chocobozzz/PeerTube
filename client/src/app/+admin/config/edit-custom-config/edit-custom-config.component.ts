@@ -144,6 +144,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           torrent: {
             enabled: null
           }
+        },
+        videoChannelSynchronization: {
+          enabled: null
         }
       },
       trending: {

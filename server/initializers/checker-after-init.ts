@@ -48,6 +48,7 @@ function checkConfig () {
   checkRemoteRedundancyConfig()
   checkStorageConfig()
   checkTranscodingConfig()
+  checkImportConfig()
   checkBroadcastMessageConfig()
   checkSearchConfig()
   checkLiveConfig()
@@ -197,6 +198,12 @@ function checkTranscodingConfig () {
     if (CONFIG.IMPORT.VIDEOS.CONCURRENCY <= 0) {
       throw new Error('Video import concurrency should be > 0')
     }
+  }
+}
+
+function checkImportConfig () {
+  if (CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED && !CONFIG.IMPORT.VIDEOS.HTTP) {
+    throw new Error('You need to enable HTTP import to allow synchronization')
   }
 }
 

@@ -25,6 +25,8 @@ export type JobType =
   | 'manage-video-torrent'
   | 'move-to-object-storage'
   | 'video-studio-edition'
+  | 'video-channel-import'
+  | 'after-video-channel-import'
   | 'notify'
   | 'federate-video'
 
@@ -82,20 +84,32 @@ export type VideoFileImportPayload = {
   filePath: string
 }
 
+// ---------------------------------------------------------------------------
+
 export type VideoImportTorrentPayloadType = 'magnet-uri' | 'torrent-file'
 export type VideoImportYoutubeDLPayloadType = 'youtube-dl'
 
-export type VideoImportYoutubeDLPayload = {
+export interface VideoImportYoutubeDLPayload {
   type: VideoImportYoutubeDLPayloadType
   videoImportId: number
 
   fileExt?: string
 }
-export type VideoImportTorrentPayload = {
+
+export interface VideoImportTorrentPayload {
   type: VideoImportTorrentPayloadType
   videoImportId: number
 }
-export type VideoImportPayload = VideoImportYoutubeDLPayload | VideoImportTorrentPayload
+
+export type VideoImportPayload = (VideoImportYoutubeDLPayload | VideoImportTorrentPayload) & {
+  preventException: boolean
+}
+
+export interface VideoImportPreventExceptionResult {
+  resultType: 'success' | 'error'
+}
+
+// ---------------------------------------------------------------------------
 
 export type VideoRedundancyPayload = {
   videoId: number
@@ -215,6 +229,17 @@ export type VideoStudioTaskPayload =
 export interface VideoStudioEditionPayload {
   videoUUID: string
   tasks: VideoStudioTaskPayload[]
+}
+
+// ---------------------------------------------------------------------------
+
+export interface VideoChannelImportPayload {
+  externalChannelUrl: string
+  videoChannelId: number
+}
+
+export interface AfterVideoChannelImportPayload {
+  channelSyncId: number
 }
 
 // ---------------------------------------------------------------------------

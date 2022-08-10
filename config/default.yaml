@@ -546,6 +546,17 @@ import:
       # See https://docs.joinpeertube.org/maintain-configuration?id=security for more information
       enabled: false
 
+  # Add ability for your users to synchronize their channels with external channels, playlists, etc
+  video_channel_synchronization:
+    enabled: false
+
+    max_per_user: 10
+
+    check_interval: 1 hour
+
+    # Number of latest published videos to check and to potentially import when syncing a channel
+    videos_limit_per_synchronization: 10
+
 auto_blacklist:
   # New videos automatically blacklisted so moderators can review before publishing
   videos:
