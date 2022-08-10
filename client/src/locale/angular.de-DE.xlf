@@ -358,7 +358,7 @@
       </trans-unit>
       <trans-unit id="906167214730624194" datatype="html">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="translated">{views, plural, =0 {Kein Aufruf} =1 {1 Aufruf} other {<x id="views"/> Aufrufe}}</target>
+        <target state="translated">{views, plural, =0 {Keine Aufrufe} =1 {1 Aufruf} other {<x id="views"/> Aufrufe}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">22</context>
@@ -366,7 +366,7 @@
       </trans-unit>
       <trans-unit id="4873265433447388314" datatype="html">
         <source>{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</source>
-        <target state="translated">{viewers, plural, =0 {Keine Zuschauer} =1 {1 Zuschauer} other {<x id="viewers"/> Zuschauer}}</target>
+        <target state="translated">{viewers, plural, =0 {Kein Zuschauer} other {<x id="viewers"/> Zuschauer}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">23</context>
@@ -548,7 +548,7 @@
       </trans-unit>
       <trans-unit id="1080230904501320275" datatype="html">
         <source>{count, plural, =1 {1 user banned.} other {<x id="count"/> users banned.}}</source>
-        <target state="translated">{count, plural, =1 {1 Benutzer gebannt.} other {<x id="count"/> Benutzer gebannt.}}</target>
+        <target state="translated"><x id="count"/> Nutzer gesperrt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">70</context>
