@@ -1,5 +1,5 @@
 import { basename } from 'path'
-import { Segment } from '@peertube/p2p-media-loader-core'
+import { Segment } from 'p2p-media-loader-core-basyton'
 import { logger } from '@root-helpers/logger'
 import { wait } from '@root-helpers/utils'
 

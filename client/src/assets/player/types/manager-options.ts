@@ -77,7 +77,9 @@ export interface CommonOptions extends CustomizationOptions {
 
   serverUrl: string
 
-  errorNotifier: (message: string) => void
+  errorNotifier: (message: string) => void,
+
+  localTransport? : typeof fetch
 }
 
 export type PeertubePlayerManagerOptions = {

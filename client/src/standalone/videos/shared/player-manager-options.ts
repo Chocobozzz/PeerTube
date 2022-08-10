@@ -19,10 +19,6 @@ import { PlaylistTracker } from './playlist-tracker'
 import { Translations } from './translations'
 import { VideoFetcher } from './video-fetcher'
 
-import {
-  IdbAssetsStorage,
-  IdbSegmentsStorage
-} from './storage'
 
 export class PlayerManagerOptions {
   private autoplay: boolean
@@ -50,6 +46,8 @@ export class PlayerManagerOptions {
 
   private assetsStorage: any
   private segmentsStorage : any
+
+  private localTransport : typeof fetch
 
   constructor (
     private readonly playerHTML: PlayerHTML,
@@ -133,6 +131,7 @@ export class PlayerManagerOptions {
 
       this.assetsStorage = params.assetsStorage
       this.segmentsStorage = params.segmentsStorage
+      this.localTransport = params.localTransport
       //this.localVideo = getString(params, 'localvideo', false)
 
       /*this.bigPlayBackgroundColor = getString(params, 'bigPlayBackgroundColor')
@@ -225,7 +224,7 @@ export class PlayerManagerOptions {
         },
 
         videoDuration: video.duration,
-        enableHotkeys: true,
+        enableHotkeys: false,
 
         peertubeLink: this.peertubeLink,
         //instanceName: serverConfig.instance.name,
@@ -239,6 +238,8 @@ export class PlayerManagerOptions {
         embedTitle: video.name,
 
         sources : sources,
+
+        localTransport : this.localTransport,
 
         errorNotifier: () => {
           // Empty, we don't have a notifier in the embed

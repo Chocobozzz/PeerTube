@@ -1,5 +1,5 @@
-import { HybridLoaderSettings } from '@peertube/p2p-media-loader-core'
-import { HlsJsEngineSettings } from '@peertube/p2p-media-loader-hlsjs'
+import { HybridLoaderSettings } from 'p2p-media-loader-core-basyton'
+import { HlsJsEngineSettings } from 'p2p-media-loader-hlsjs-basyton'
 import { logger } from '@root-helpers/logger'
 import { LiveVideoLatencyMode } from '@shared/models'
 import { getAverageBandwidthInStore } from '../../peertube-player-local-storage'
@@ -90,6 +90,8 @@ export class HLSOptionsBuilder {
         useP2P: this.options.common.p2pEnabled,
         consumeOnly,
         segmentsStorage : this.options.segmentsStorage,
+
+        localTransport : this.options.common.localTransport,
 
         ...specificLiveOrVODOptions
       },

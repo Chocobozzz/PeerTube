@@ -50,6 +50,8 @@ export class ManagerOptionsBuilder {
       plugins.playlist = commonOptions.playlist
     }*/
 
+
+
     if (this.mode === 'p2p-media-loader') {
       const hlsOptionsBuilder = new HLSOptionsBuilder(this.options, this.p2pMediaLoaderModule)
       const options = hlsOptionsBuilder.getPluginOptions()
@@ -64,6 +66,10 @@ export class ManagerOptionsBuilder {
       // WebTorrent plugin handles autoplay, because we do some hackish stuff in there
       autoplay = false
     }
+
+    Object.assign(plugins, {
+      hotkeys : {}
+    })
 
     const controlBarOptionsBuilder = new ControlBarOptionsBuilder(this.options, this.mode)
 
@@ -91,7 +97,9 @@ export class ManagerOptionsBuilder {
 
       controlBar: {
         children: controlBarOptionsBuilder.getChildrenOptions() as any // FIXME: typings
-      }
+      },
+
+      
     }
 
     if (commonOptions.language && !isDefaultLocale(commonOptions.language)) {

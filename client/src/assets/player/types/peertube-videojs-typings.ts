@@ -1,6 +1,6 @@
 import { HlsConfig, Level } from 'hls.js'
 import videojs from 'video.js'
-import { Engine } from '@peertube/p2p-media-loader-hlsjs'
+import { Engine } from 'p2p-media-loader-hlsjs-basyton'
 import { VideoFile, VideoPlaylist, VideoPlaylistElement } from '@shared/models'
 import { PeerTubeDockPluginOptions } from '../shared/dock/peertube-dock-plugin'
 import { Html5Hlsjs } from '../shared/p2p-media-loader/hls-plugin'

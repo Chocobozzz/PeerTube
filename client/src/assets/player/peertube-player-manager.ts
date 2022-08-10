@@ -23,6 +23,8 @@ import './shared/playlist/playlist-plugin'
 import './shared/mobile/peertube-mobile-plugin'
 import './shared/mobile/peertube-mobile-buttons'
 import './shared/hotkeys/peertube-hotkeys-plugin'
+import "./shared/videojs-helpers/hotkeys.js";
+
 import videojs from 'video.js'
 import { logger } from '@root-helpers/logger'
 import { isMobile } from '@root-helpers/web-browser'
@@ -203,7 +205,7 @@ export class PeertubePlayerManager {
     if (mode === 'webtorrent') await import('./shared/webtorrent/webtorrent-plugin')
     if (mode === 'p2p-media-loader') {
       const [ p2pMediaLoaderModule ] = await Promise.all([
-        import('@peertube/p2p-media-loader-hlsjs'),
+        import('p2p-media-loader-hlsjs-basyton'),
         import('./shared/p2p-media-loader/p2p-media-loader-plugin')
       ])
 
@@ -252,7 +254,7 @@ export class PeertubePlayerManager {
         self.addContextMenu(videojsOptionsBuilder, player, options.common)
 
         if (isMobile() || options.mobile) player.peertubeMobile()
-        if (options.common.enableHotkeys === true) player.peerTubeHotkeysPlugin()
+        //if (options.common.enableHotkeys === true) player.peerTubeHotkeysPlugin()
         if (options.common.controlBar === false) player.controlBar.addClass('control-bar-hidden')
 
         player.bezels()

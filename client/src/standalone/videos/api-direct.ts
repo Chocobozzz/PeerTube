@@ -208,6 +208,8 @@ export class PeerTubeEmbedApi {
 	public enableHotKeys(){
 		if(!this.embed.player) return
 
+		console.log('enableHotKeys')
+
 			this.embed.player.trigger('enablehotkeys')
 	}
 

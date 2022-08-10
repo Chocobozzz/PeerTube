@@ -18,7 +18,7 @@
   class PictureInPictureBastyon extends MenuButton {
   
  
-    constructor(player, options) {
+    constructor(player : any, options : any) {
       super(player, options);
  
       this.controlText('Mini Player')
@@ -28,8 +28,7 @@
      return this.buildElement();
     }
  
-    handleClick(event) {
-      console.log("PICRE")
+    handleClick(event : any) {
      this.player_.trigger('pictureInPictureRequest', event)
     }
  

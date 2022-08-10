@@ -167,7 +167,7 @@ module.exports = function () {
 
       new MiniCssExtractPlugin({
         filename: process.env.ANALYZE_BUNDLE === 'true'
-          ? '[name].css'
+          ? '[name].css?v=' + version
           : '[name].css?v=' + version
       }),
 

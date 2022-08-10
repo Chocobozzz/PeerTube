@@ -1087,27 +1087,6 @@
     "@nodelib/fs.scandir" "2.1.5"
     "fastq" "^1.6.0"
 
-"@peertube/p2p-media-loader-core@^1.0.13", "@peertube/p2p-media-loader-core@^1.0.8":
-  "integrity" "sha512-ArSAaeuxwwBAG0Xd3Gj0TzKObLfJFYzHz9+fREvmUf+GZQEG6qGwWmrdVWL6xjPiEuo6LdFeCOnHSQzAbj/ptg=="
-  "resolved" "https://registry.npmjs.org/@peertube/p2p-media-loader-core/-/p2p-media-loader-core-1.0.13.tgz"
-  "version" "1.0.13"
-  dependencies:
-    "bittorrent-tracker" "^9.19.0"
-    "debug" "^4.3.4"
-    "events" "^3.3.0"
-    "sha.js" "^2.4.11"
-    "simple-peer" "^9.11.1"
-
-"@peertube/p2p-media-loader-hlsjs@^1.0.13":
-  "integrity" "sha512-2BO2oaRsSHEhLkgi2iw1r4n1Yqq1EnyoOgOZccPDqjmHUsZSV/wNrno8WYr6LsleudrHA26Imu57hVD1jDx7lg=="
-  "resolved" "https://registry.npmjs.org/@peertube/p2p-media-loader-hlsjs/-/p2p-media-loader-hlsjs-1.0.13.tgz"
-  "version" "1.0.13"
-  dependencies:
-    "@peertube/p2p-media-loader-core" "^1.0.8"
-    "debug" "^4.3.4"
-    "events" "^3.3.0"
-    "m3u8-parser" "^4.7.1"
-
 "@peertube/videojs-contextmenu@^5.5.0":
   "integrity" "sha512-+zV/RbrybVJHwqOO+YmtJjTwKM8r695Ax8AbXmNoL3J7NVguqy6TI8XKyQo3g5WHNj5nJozzaJQqDBc+BhKGRw=="
   "resolved" "https://registry.npmjs.org/@peertube/videojs-contextmenu/-/videojs-contextmenu-5.5.0.tgz"
@@ -4979,6 +4958,27 @@
   "integrity" "sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ=="
   "resolved" "https://registry.npmjs.org/p-try/-/p-try-2.2.0.tgz"
   "version" "2.2.0"
+
+"p2p-media-loader-core-basyton@^1.0.14":
+  "integrity" "sha512-Q5MRWs1BKkmNX2+vrDp/S7z1G9lZmI4mxJCfJLDtqdTIuZLk8ITjHg+PuhThk0ts3CnU2MdJgVF3PsyCFeZwGQ=="
+  "resolved" "https://registry.npmjs.org/p2p-media-loader-core-basyton/-/p2p-media-loader-core-basyton-1.0.14.tgz"
+  "version" "1.0.14"
+  dependencies:
+    "bittorrent-tracker" "^9.19.0"
+    "debug" "^4.3.4"
+    "events" "^3.3.0"
+    "sha.js" "^2.4.11"
+    "simple-peer" "^9.11.1"
+
+"p2p-media-loader-hlsjs-basyton@^1.0.14":
+  "integrity" "sha512-YMPaA1RCO9TiRZiMIUaTokdumJpigGc+jwwHq3D3qCGz0u95DwECKGEXfGU4AQCcGL5p4ttSnWBczTSpj79dog=="
+  "resolved" "https://registry.npmjs.org/p2p-media-loader-hlsjs-basyton/-/p2p-media-loader-hlsjs-basyton-1.0.14.tgz"
+  "version" "1.0.14"
+  dependencies:
+    "debug" "^4.3.4"
+    "events" "^3.3.0"
+    "m3u8-parser" "^4.7.1"
+    "p2p-media-loader-core-basyton" "^1.0.14"
 
 "package-json-versionify@^1.0.4":
   "integrity" "sha512-mtKKtCeSZMtWcc5hHJS6OlEGP7J9g7WN6vWCCZi2hCXFag/Zmjokh6WFFTQb9TuMnBcZpRjhhMQyOyglPCAahw=="
