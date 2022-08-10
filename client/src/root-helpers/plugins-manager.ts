@@ -69,7 +69,8 @@ class PluginsManager {
     login: new ReplaySubject<boolean>(1),
     'video-edit': new ReplaySubject<boolean>(1),
     embed: new ReplaySubject<boolean>(1),
-    'my-library': new ReplaySubject<boolean>(1)
+    'my-library': new ReplaySubject<boolean>(1),
+    'video-channel': new ReplaySubject<boolean>(1)
   }
 
   private readonly peertubeHelpersFactory: PeertubeHelpersFactory
@@ -112,8 +113,14 @@ class PluginsManager {
     for (const hook of this.hooks[hookName]) {
       logger.info(`Running hook ${hookName} of plugin ${hook.plugin.name}`)
 
-      result = await internalRunHook(hook.handler, hookType, result, params, err => {
-        logger.error(`Cannot run hook ${hookName} of script ${hook.clientScript.script} of plugin ${hook.plugin.name}`, err)
+      result = await internalRunHook({
+        handler: hook.handler,
+        hookType,
+        result,
+        params,
+        onError: err => {
+          logger.error(`Cannot run hook ${hookName} of script ${hook.clientScript.script} of plugin ${hook.plugin.name}`, err)
+        }
       })
     }
 

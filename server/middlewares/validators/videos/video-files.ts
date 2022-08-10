@@ -3,6 +3,8 @@ import { MVideo } from '@server/types/models'
 import { HttpStatusCode } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
+import { isIdValid } from '@server/helpers/custom-validators/misc'
+import { param } from 'express-validator'
 
 const videoFilesDeleteWebTorrentValidator = [
   isValidVideoIdParam('id'),
@@ -35,6 +37,43 @@ const videoFilesDeleteWebTorrentValidator = [
   }
 ]
 
+const videoFilesDeleteWebTorrentFileValidator = [
+  isValidVideoIdParam('id'),
+
+  param('videoFileId')
+    .custom(isIdValid).withMessage('Should have a valid file id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videoFilesDeleteWebTorrentFile parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await doesVideoExist(req.params.id, res)) return
+
+    const video = res.locals.videoAll
+
+    if (!checkLocalVideo(video, res)) return
+
+    const files = video.VideoFiles
+    if (!files.find(f => f.id === +req.params.videoFileId)) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'This video does not have this WebTorrent file id'
+      })
+    }
+
+    if (files.length === 1 && !video.getHLSPlaylist()) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Cannot delete WebTorrent files since this video does not have HLS playlist'
+      })
+    }
+
+    return next()
+  }
+]
+
+// ---------------------------------------------------------------------------
+
 const videoFilesDeleteHLSValidator = [
   isValidVideoIdParam('id'),
 
@@ -66,9 +105,55 @@ const videoFilesDeleteHLSValidator = [
   }
 ]
 
+const videoFilesDeleteHLSFileValidator = [
+  isValidVideoIdParam('id'),
+
+  param('videoFileId')
+    .custom(isIdValid).withMessage('Should have a valid file id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videoFilesDeleteHLSFile parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await doesVideoExist(req.params.id, res)) return
+
+    const video = res.locals.videoAll
+
+    if (!checkLocalVideo(video, res)) return
+
+    if (!video.getHLSPlaylist()) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'This video does not have HLS files'
+      })
+    }
+
+    const hlsFiles = video.getHLSPlaylist().VideoFiles
+    if (!hlsFiles.find(f => f.id === +req.params.videoFileId)) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'This HLS playlist does not have this file id'
+      })
+    }
+
+    // Last file to delete
+    if (hlsFiles.length === 1 && !video.hasWebTorrentFiles()) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Cannot delete last HLS playlist file since this video does not have WebTorrent files'
+      })
+    }
+
+    return next()
+  }
+]
+
 export {
   videoFilesDeleteWebTorrentValidator,
-  videoFilesDeleteHLSValidator
+  videoFilesDeleteWebTorrentFileValidator,
+
+  videoFilesDeleteHLSValidator,
+  videoFilesDeleteHLSFileValidator
 }
 
 // ---------------------------------------------------------------------------

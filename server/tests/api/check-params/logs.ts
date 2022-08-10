@@ -122,7 +122,7 @@ describe('Test logs API validators', function () {
     })
 
     it('Should fail with an invalid stackTrace', async function () {
-      await server.logs.createLogClient({ payload: { ...base, stackTrace: 's'.repeat(10000) }, expectedStatus })
+      await server.logs.createLogClient({ payload: { ...base, stackTrace: 's'.repeat(20000) }, expectedStatus })
     })
 
     it('Should fail with an invalid userAgent', async function () {

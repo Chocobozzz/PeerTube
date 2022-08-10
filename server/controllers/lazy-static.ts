@@ -7,7 +7,7 @@ import { logger } from '../helpers/logger'
 import { ACTOR_IMAGES_SIZE, LAZY_STATIC_PATHS, STATIC_MAX_AGE } from '../initializers/constants'
 import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
 import { actorImagePathUnsafeCache, downloadActorImageFromWorker } from '../lib/local-actor'
-import { asyncMiddleware } from '../middlewares'
+import { asyncMiddleware, handleStaticError } from '../middlewares'
 import { ActorImageModel } from '../models/actor/actor-image'
 
 const lazyStaticRouter = express.Router()
@@ -16,27 +16,32 @@ lazyStaticRouter.use(cors())
 
 lazyStaticRouter.use(
   LAZY_STATIC_PATHS.AVATARS + ':filename',
-  asyncMiddleware(getActorImage)
+  asyncMiddleware(getActorImage),
+  handleStaticError
 )
 
 lazyStaticRouter.use(
   LAZY_STATIC_PATHS.BANNERS + ':filename',
-  asyncMiddleware(getActorImage)
+  asyncMiddleware(getActorImage),
+  handleStaticError
 )
 
 lazyStaticRouter.use(
   LAZY_STATIC_PATHS.PREVIEWS + ':filename',
-  asyncMiddleware(getPreview)
+  asyncMiddleware(getPreview),
+  handleStaticError
 )
 
 lazyStaticRouter.use(
   LAZY_STATIC_PATHS.VIDEO_CAPTIONS + ':filename',
-  asyncMiddleware(getVideoCaption)
+  asyncMiddleware(getVideoCaption),
+  handleStaticError
 )
 
 lazyStaticRouter.use(
   LAZY_STATIC_PATHS.TORRENTS + ':filename',
-  asyncMiddleware(getTorrent)
+  asyncMiddleware(getTorrent),
+  handleStaticError
 )
 
 // ---------------------------------------------------------------------------

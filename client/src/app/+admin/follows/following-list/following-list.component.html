@@ -9,24 +9,34 @@
   [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} hosts"
+  [(selection)]="selectedFollows"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
       <div class="left-buttons">
-        <a class="follow-button" (click)="openFollowModal()" (key.enter)="openFollowModal()">
+        <my-action-dropdown
+          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="orange"
+          [actions]="bulkFollowsActions" [entry]="selectedFollows"
+        >
+        </my-action-dropdown>
+
+        <a *ngIf="!isInSelectionMode()" class="follow-button" (click)="openFollowModal()" (key.enter)="openFollowModal()">
           <my-global-icon iconName="following" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Follow</ng-container>
         </a>
       </div>
 
       <div class="ms-auto">
-        <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+        <my-advanced-input-filter [filters]="searchFilters" (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
     </div>
   </ng-template>
 
   <ng-template pTemplate="header">
     <tr>
+      <th style="width: 40px">
+        <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
+      </th>
       <th style="width: 150px;" i18n>Action</th>
       <th i18n>Following</th>
       <th style="width: 100px;" i18n pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
@@ -35,23 +45,26 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-follow>
+  <ng-template pSelectableRow="follow" pTemplate="body" let-follow>
     <tr>
+      <td class="checkbox-cell">
+        <p-tableCheckbox [value]="follow" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
+      </td>
+
       <td class="action-cell">
-        <my-delete-button label (click)="removeFollowing(follow)"></my-delete-button>
+        <my-delete-button label (click)="removeFollowing([ follow ])"></my-delete-button>
       </td>
       <td>
         <a [href]="follow.following.url" i18n-title title="Open instance in a new tab" target="_blank" rel="noopener noreferrer">
-          {{ follow.following.name + '@' + follow.following.host }}
+          {{ buildFollowingName(follow) }}
           <my-global-icon iconName="external-link"></my-global-icon>
         </a>
       </td>
 
-      <td *ngIf="follow.state === 'accepted'">
-        <span class="pt-badge badge-green" i18n>Accepted</span>
-      </td>
-      <td *ngIf="follow.state === 'pending'">
-        <span class="pt-badge badge-yellow" i18n>Pending</span>
+      <td>
+        <span *ngIf="follow.state === 'accepted'" class="pt-badge badge-green" i18n>Accepted</span>
+        <span *ngIf="follow.state === 'pending'" class="pt-badge badge-yellow" i18n>Pending</span>
+        <span *ngIf="follow.state === 'rejected'" class="pt-badge badge-red" i18n>Rejected</span>
       </td>
 
       <td>{{ follow.createdAt | date: 'short' }}</td>

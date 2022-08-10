@@ -1,3 +1,6 @@
+import { Transaction } from 'sequelize/types'
+import { isBlockedByServerOrAccount } from '@server/lib/blocklist'
+import { AccountModel } from '@server/models/account/account'
 import { getServerActor } from '@server/models/application/application'
 import { ActivityFollow } from '../../../../shared/models/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
@@ -8,7 +11,7 @@ import { getAPId } from '../../../lib/activitypub/activity'
 import { ActorModel } from '../../../models/actor/actor'
 import { ActorFollowModel } from '../../../models/actor/actor-follow'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
-import { MActorFollowActors, MActorSignature } from '../../../types/models'
+import { MActorFollow, MActorFull, MActorId, MActorSignature } from '../../../types/models'
 import { Notifier } from '../../notifier'
 import { autoFollowBackIfNeeded } from '../follow'
 import { sendAccept, sendReject } from '../send'
@@ -31,22 +34,14 @@ export {
 // ---------------------------------------------------------------------------
 
 async function processFollow (byActor: MActorSignature, activityId: string, targetActorURL: string) {
-  const { actorFollow, created, isFollowingInstance, targetActor } = await sequelizeTypescript.transaction(async t => {
+  const { actorFollow, created, targetActor } = await sequelizeTypescript.transaction(async t => {
     const targetActor = await ActorModel.loadByUrlAndPopulateAccountAndChannel(targetActorURL, t)
 
     if (!targetActor) throw new Error('Unknown actor')
     if (targetActor.isOwned() === false) throw new Error('This is not a local actor.')
 
-    const serverActor = await getServerActor()
-    const isFollowingInstance = targetActor.id === serverActor.id
-
-    if (isFollowingInstance && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
-      logger.info('Rejecting %s because instance followers are disabled.', targetActor.url)
-
-      sendReject(activityId, byActor, targetActor)
-
-      return { actorFollow: undefined as MActorFollowActors }
-    }
+    if (await rejectIfInstanceFollowDisabled(byActor, activityId, targetActor)) return { actorFollow: undefined }
+    if (await rejectIfMuted(byActor, activityId, targetActor)) return { actorFollow: undefined }
 
     const [ actorFollow, created ] = await ActorFollowModel.findOrCreateCustom({
       byActor,
@@ -58,19 +53,11 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
       transaction: t
     })
 
-    // Set the follow as accepted if the remote actor follows a channel or account
-    // Or if the instance automatically accepts followers
-    if (actorFollow.state !== 'accepted' && (isFollowingInstance === false || CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === false)) {
-      actorFollow.state = 'accepted'
+    if (rejectIfAlreadyRejected(actorFollow, byActor, activityId, targetActor)) return { actorFollow: undefined }
 
-      await actorFollow.save({ transaction: t })
-    }
+    await acceptIfNeeded(actorFollow, targetActor, t)
 
-    // Before PeerTube V3 we did not save the follow ID. Try to fix these old follows
-    if (!actorFollow.url) {
-      actorFollow.url = activityId
-      await actorFollow.save({ transaction: t })
-    }
+    await fixFollowURLIfNeeded(actorFollow, activityId, t)
 
     actorFollow.ActorFollower = byActor
     actorFollow.ActorFollowing = targetActor
@@ -82,7 +69,7 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
       await autoFollowBackIfNeeded(actorFollow, t)
     }
 
-    return { actorFollow, created, isFollowingInstance, targetActor }
+    return { actorFollow, created, targetActor }
   })
 
   // Rejected
@@ -92,7 +79,7 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
     const follower = await ActorModel.loadFull(byActor.id)
     const actorFollowFull = Object.assign(actorFollow, { ActorFollowing: targetActor, ActorFollower: follower })
 
-    if (isFollowingInstance) {
+    if (await isFollowingInstance(targetActor)) {
       Notifier.Instance.notifyOfNewInstanceFollow(actorFollowFull)
     } else {
       Notifier.Instance.notifyOfNewUserFollow(actorFollowFull)
@@ -100,4 +87,70 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
   }
 
   logger.info('Actor %s is followed by actor %s.', targetActorURL, byActor.url)
+}
+
+async function rejectIfInstanceFollowDisabled (byActor: MActorSignature, activityId: string, targetActor: MActorFull) {
+  if (await isFollowingInstance(targetActor) && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
+    logger.info('Rejecting %s because instance followers are disabled.', targetActor.url)
+
+    sendReject(activityId, byActor, targetActor)
+
+    return true
+  }
+
+  return false
+}
+
+async function rejectIfMuted (byActor: MActorSignature, activityId: string, targetActor: MActorFull) {
+  const followerAccount = await AccountModel.load(byActor.Account.id)
+  const followingAccountId = targetActor.Account
+
+  if (followerAccount && await isBlockedByServerOrAccount(followerAccount, followingAccountId)) {
+    logger.info('Rejecting %s because follower is muted.', byActor.url)
+
+    sendReject(activityId, byActor, targetActor)
+
+    return true
+  }
+
+  return false
+}
+
+function rejectIfAlreadyRejected (actorFollow: MActorFollow, byActor: MActorSignature, activityId: string, targetActor: MActorFull) {
+  // Already rejected
+  if (actorFollow.state === 'rejected') {
+    logger.info('Rejecting %s because follow is already rejected.', byActor.url)
+
+    sendReject(activityId, byActor, targetActor)
+
+    return true
+  }
+
+  return false
+}
+
+async function acceptIfNeeded (actorFollow: MActorFollow, targetActor: MActorFull, transaction: Transaction) {
+  // Set the follow as accepted if the remote actor follows a channel or account
+  // Or if the instance automatically accepts followers
+  if (actorFollow.state === 'accepted') return
+  if (!await isFollowingInstance(targetActor)) return
+  if (CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === true) return
+
+  actorFollow.state = 'accepted'
+
+  await actorFollow.save({ transaction })
+}
+
+async function fixFollowURLIfNeeded (actorFollow: MActorFollow, activityId: string, transaction: Transaction) {
+  // Before PeerTube V3 we did not save the follow ID. Try to fix these old follows
+  if (!actorFollow.url) {
+    actorFollow.url = activityId
+    await actorFollow.save({ transaction })
+  }
+}
+
+async function isFollowingInstance (targetActor: MActorId) {
+  const serverActor = await getServerActor()
+
+  return targetActor.id === serverActor.id
 }

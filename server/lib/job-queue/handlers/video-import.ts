@@ -1,13 +1,14 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { move, remove, stat } from 'fs-extra'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { YoutubeDLWrapper } from '@server/helpers/youtube-dl'
+import { CONFIG } from '@server/initializers/config'
 import { isPostImportVideoAccepted } from '@server/lib/moderation'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
 import { isAbleToUploadVideo } from '@server/lib/user'
-import { addMoveToObjectStorageJob, addOptimizeOrMergeAudioJob } from '@server/lib/video'
+import { buildOptimizeOrMergeAudioJob, buildMoveToObjectStorageJob } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { buildNextVideoState } from '@server/lib/video-state'
 import { ThumbnailModel } from '@server/models/video/thumbnail'
@@ -25,7 +26,7 @@ import {
   VideoResolution,
   VideoState
 } from '@shared/models'
-import { ffprobePromise, getVideoStreamDuration, getVideoStreamFPS, getVideoStreamDimensionsInfo } from '../../../helpers/ffmpeg'
+import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamDuration, getVideoStreamFPS } from '../../../helpers/ffmpeg'
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
@@ -38,6 +39,7 @@ import { MThumbnail } from '../../../types/models/video/thumbnail'
 import { federateVideoIfNeeded } from '../../activitypub/videos'
 import { Notifier } from '../../notifier'
 import { generateVideoMiniature } from '../../thumbnail'
+import { JobQueue } from '../job-queue'
 
 async function processVideoImport (job: Job) {
   const payload = job.data as VideoImportPayload
@@ -64,7 +66,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function processTorrentImport (job: Job, videoImport: MVideoImportDefault, payload: VideoImportTorrentPayload) {
-  logger.info('Processing torrent video import in job %d.', job.id)
+  logger.info('Processing torrent video import in job %s.', job.id)
 
   const options = { type: payload.type, videoImportId: payload.videoImportId }
 
@@ -76,11 +78,15 @@ async function processTorrentImport (job: Job, videoImport: MVideoImportDefault,
 }
 
 async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefault, payload: VideoImportYoutubeDLPayload) {
-  logger.info('Processing youtubeDL video import in job %d.', job.id)
+  logger.info('Processing youtubeDL video import in job %s.', job.id)
 
   const options = { type: payload.type, videoImportId: videoImport.id }
 
-  const youtubeDL = new YoutubeDLWrapper(videoImport.targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
+  const youtubeDL = new YoutubeDLWrapper(
+    videoImport.targetUrl,
+    ServerConfigManager.Instance.getEnabledResolutions('vod'),
+    CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+  )
 
   return processFile(
     () => youtubeDL.downloadVideo(payload.fileExt, JOB_TTL['video-import']),
@@ -254,12 +260,16 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     }
 
     if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-      return addMoveToObjectStorageJob({ video: videoImportUpdated.Video, previousVideoState: VideoState.TO_IMPORT })
+      await JobQueue.Instance.createJob(
+        await buildMoveToObjectStorageJob({ video: videoImportUpdated.Video, previousVideoState: VideoState.TO_IMPORT })
+      )
     }
 
     // Create transcoding jobs?
     if (video.state === VideoState.TO_TRANSCODE) {
-      await addOptimizeOrMergeAudioJob({ video: videoImportUpdated.Video, videoFile, user: videoImport.User })
+      await JobQueue.Instance.createJob(
+        await buildOptimizeOrMergeAudioJob({ video: videoImportUpdated.Video, videoFile, user: videoImport.User })
+      )
     }
 
   } catch (err) {

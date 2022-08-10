@@ -230,7 +230,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
     let message = $localize`Do you really want to delete ${this.video.name}?`
     if (this.video.isLive) {
-      message += ' ' + $localize`The live stream will be automatically terminated.`
+      message += ' ' + $localize`The live stream will be automatically terminated and replays won't be saved.`
     }
 
     const res = await this.confirmService.confirm(message, $localize`Delete ${this.video.name}`)

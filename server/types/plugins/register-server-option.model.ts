@@ -14,10 +14,9 @@ import {
   RegisterServerSettingOptions,
   ServerConfig,
   ThumbnailType,
-  UserRole,
   VideoBlacklistCreate
 } from '@shared/models'
-import { MVideoThumbnail } from '../models'
+import { MUserDefault, MVideoThumbnail } from '../models'
 import {
   RegisterServerAuthExternalOptions,
   RegisterServerAuthExternalResult,
@@ -100,16 +99,10 @@ export type PeerTubeHelpers = {
 
   user: {
     // PeerTube >= 3.2
-    getAuthUser: (response: Response) => Promise<{
-      id?: string
-      username: string
-      email: string
-      blocked: boolean
-      role: UserRole
-      Account: {
-        name: string
-      }
-    } | undefined>
+    getAuthUser: (response: Response) => Promise<MUserDefault>
+
+    // PeerTube >= 4.3
+    loadById: (id: number) => Promise<MUserDefault>
   }
 }
 

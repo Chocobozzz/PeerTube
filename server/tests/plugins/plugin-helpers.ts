@@ -110,6 +110,7 @@ describe('Test plugin helpers', function () {
   })
 
   describe('User', function () {
+    let rootId: number
 
     it('Should not get a user if not authenticated', async function () {
       await makeGetRequest({
@@ -132,6 +133,28 @@ describe('Test plugin helpers', function () {
       expect(res.body.isAdmin).to.be.true
       expect(res.body.isModerator).to.be.false
       expect(res.body.isUser).to.be.false
+
+      rootId = res.body.id
+    })
+
+    it('Should load a user by id', async function () {
+      {
+        const res = await makeGetRequest({
+          url: servers[0].url,
+          path: '/plugins/test-four/router/user/' + rootId,
+          expectedStatus: HttpStatusCode.OK_200
+        })
+
+        expect(res.body.username).to.equal('root')
+      }
+
+      {
+        await makeGetRequest({
+          url: servers[0].url,
+          path: '/plugins/test-four/router/user/42',
+          expectedStatus: HttpStatusCode.NOT_FOUND_404
+        })
+      }
     })
   })
 

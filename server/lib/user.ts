@@ -3,13 +3,11 @@ import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { UserModel } from '@server/models/user/user'
 import { MActorDefault } from '@server/types/models/actor'
-import { buildUUID } from '@shared/extra-utils'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { UserAdminFlag, UserNotificationSetting, UserNotificationSettingValue, UserRole } from '../../shared/models/users'
 import { SERVER_ACTOR_NAME, WEBSERVER } from '../initializers/constants'
 import { sequelizeTypescript } from '../initializers/database'
 import { AccountModel } from '../models/account/account'
-import { ActorModel } from '../models/actor/actor'
 import { UserNotificationSettingModel } from '../models/user/user-notification-setting'
 import { MAccountDefault, MChannelActor } from '../types/models'
 import { MUser, MUserDefault, MUserId } from '../types/models/user'
@@ -17,7 +15,7 @@ import { generateAndSaveActorKeys } from './activitypub/actors'
 import { getLocalAccountActivityPubUrl } from './activitypub/url'
 import { Emailer } from './emailer'
 import { LiveQuotaStore } from './live/live-quota-store'
-import { buildActorInstance } from './local-actor'
+import { buildActorInstance, findAvailableLocalActorName } from './local-actor'
 import { Redis } from './redis'
 import { createLocalVideoChannel } from './video-channel'
 import { createWatchLaterPlaylist } from './video-playlist'
@@ -70,6 +68,8 @@ function buildUser (options: {
     pluginAuth
   })
 }
+
+// ---------------------------------------------------------------------------
 
 async function createUserAccountAndChannelAndPlaylist (parameters: {
   userToCreate: MUser
@@ -157,6 +157,8 @@ async function createApplicationActor (applicationId: number) {
   return accountCreated
 }
 
+// ---------------------------------------------------------------------------
+
 async function sendVerifyUserEmail (user: MUser, isPendingEmail = false) {
   const verificationString = await Redis.Instance.setVerifyEmailVerificationString(user.id)
   let url = WEBSERVER.URL + '/verify-account/email?userId=' + user.id + '&verificationString=' + verificationString
@@ -168,6 +170,8 @@ async function sendVerifyUserEmail (user: MUser, isPendingEmail = false) {
 
   Emailer.Instance.addVerifyEmailJob(username, email, url)
 }
+
+// ---------------------------------------------------------------------------
 
 async function getOriginalVideoFileTotalFromUser (user: MUserId) {
   // Don't use sequelize because we need to use a sub query
@@ -263,12 +267,7 @@ function createDefaultUserNotificationSettings (user: MUserId, t: Transaction | 
 async function buildChannelAttributes (user: MUser, transaction?: Transaction, channelNames?: ChannelNames) {
   if (channelNames) return channelNames
 
-  let channelName = user.username + '_channel'
-
-  // Conflict, generate uuid instead
-  const actor = await ActorModel.loadLocalByName(channelName, transaction)
-  if (actor) channelName = buildUUID()
-
+  const channelName = await findAvailableLocalActorName(user.username + '_channel', transaction)
   const videoChannelDisplayName = `Main ${user.username} channel`
 
   return {

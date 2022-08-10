@@ -7,7 +7,6 @@ import {
   MVideoImmutable,
   MVideoThumbnail
 } from '@server/types/models'
-import { Hooks } from '../plugins/hooks'
 
 type VideoLoadType = 'for-api' | 'all' | 'only-video' | 'id' | 'none' | 'only-immutable-attributes'
 
@@ -27,13 +26,7 @@ function loadVideo (
   userId?: number
 ): Promise<MVideoFullLight | MVideoThumbnail | MVideoId | MVideoImmutable> {
 
-  if (fetchType === 'for-api') {
-    return Hooks.wrapPromiseFun(
-      VideoModel.loadForGetAPI,
-      { id, userId },
-      'filter:api.video.get.result'
-    )
-  }
+  if (fetchType === 'for-api') return VideoModel.loadForGetAPI({ id, userId })
 
   if (fetchType === 'all') return VideoModel.loadFull(id, undefined, userId)
 

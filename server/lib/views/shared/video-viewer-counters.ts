@@ -10,9 +10,14 @@ import { buildUUID, sha256 } from '@shared/extra-utils'
 
 const lTags = loggerTagsFactory('views')
 
+export type ViewerScope = 'local' | 'remote'
+export type VideoScope = 'local' | 'remote'
+
 type Viewer = {
   expires: number
   id: string
+  viewerScope: ViewerScope
+  videoScope: VideoScope
   lastFederation?: number
 }
 
@@ -50,7 +55,7 @@ export class VideoViewerCounters {
       return false
     }
 
-    const newViewer = await this.addViewerToVideo({ viewerId, video })
+    const newViewer = await this.addViewerToVideo({ viewerId, video, viewerScope: 'local' })
     await this.federateViewerIfNeeded(video, newViewer)
 
     return true
@@ -65,12 +70,25 @@ export class VideoViewerCounters {
 
     logger.debug('Adding remote viewer to video %s.', video.uuid, { ...lTags(video.uuid) })
 
-    await this.addViewerToVideo({ video, viewerExpires, viewerId })
+    await this.addViewerToVideo({ video, viewerExpires, viewerId, viewerScope: 'remote' })
 
     return true
   }
 
   // ---------------------------------------------------------------------------
+
+  getTotalViewers (options: {
+    viewerScope: ViewerScope
+    videoScope: VideoScope
+  }) {
+    let total = 0
+
+    for (const viewers of this.viewersPerVideo.values()) {
+      total += viewers.filter(v => v.viewerScope === options.viewerScope && v.videoScope === options.videoScope).length
+    }
+
+    return total
+  }
 
   getViewers (video: MVideo) {
     const viewers = this.viewersPerVideo.get(video.id)
@@ -88,9 +106,10 @@ export class VideoViewerCounters {
   private async addViewerToVideo (options: {
     video: MVideoImmutable
     viewerId: string
+    viewerScope: ViewerScope
     viewerExpires?: Date
   }) {
-    const { video, viewerExpires, viewerId } = options
+    const { video, viewerExpires, viewerId, viewerScope } = options
 
     let watchers = this.viewersPerVideo.get(video.id)
 
@@ -103,7 +122,11 @@ export class VideoViewerCounters {
       ? viewerExpires.getTime()
       : this.buildViewerExpireTime()
 
-    const viewer = { id: viewerId, expires }
+    const videoScope: VideoScope = video.remote
+      ? 'remote'
+      : 'local'
+
+    const viewer = { id: viewerId, expires, videoScope, viewerScope }
     watchers.push(viewer)
 
     this.idToViewer.set(viewerId, viewer)

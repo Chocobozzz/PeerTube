@@ -163,7 +163,7 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
     videoImportId: videoImport.id,
     magnetUri
   }
-  await JobQueue.Instance.createJobWithPromise({ type: 'video-import', payload })
+  await JobQueue.Instance.createJob({ type: 'video-import', payload })
 
   auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
 
@@ -175,7 +175,11 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   const targetUrl = body.targetUrl
   const user = res.locals.oauth.token.User
 
-  const youtubeDL = new YoutubeDLWrapper(targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
+  const youtubeDL = new YoutubeDLWrapper(
+    targetUrl,
+    ServerConfigManager.Instance.getEnabledResolutions('vod'),
+    CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+  )
 
   // Get video infos
   let youtubeDLInfo: YoutubeDLInfo
@@ -251,7 +255,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
     videoImportId: videoImport.id,
     fileExt
   }
-  await JobQueue.Instance.createJobWithPromise({ type: 'video-import', payload })
+  await JobQueue.Instance.createJob({ type: 'video-import', payload })
 
   auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
 

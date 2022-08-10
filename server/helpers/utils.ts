@@ -4,7 +4,7 @@ import { join } from 'path'
 import { sha256 } from '@shared/extra-utils'
 import { ResultList } from '@shared/models'
 import { CONFIG } from '../initializers/config'
-import { execPromise, execPromise2, randomBytesPromise } from './core-utils'
+import { randomBytesPromise } from './core-utils'
 import { logger } from './logger'
 
 function deleteFileAndCatch (path: string) {
@@ -44,29 +44,6 @@ function getSecureTorrentName (originalName: string) {
   return sha256(originalName) + '.torrent'
 }
 
-async function getServerCommit () {
-  try {
-    const tag = await execPromise2(
-      '[ ! -d .git ] || git name-rev --name-only --tags --no-undefined HEAD 2>/dev/null || true',
-      { stdio: [ 0, 1, 2 ] }
-    )
-
-    if (tag) return tag.replace(/^v/, '')
-  } catch (err) {
-    logger.debug('Cannot get version from git tags.', { err })
-  }
-
-  try {
-    const version = await execPromise('[ ! -d .git ] || git rev-parse --short HEAD')
-
-    if (version) return version.toString().trim()
-  } catch (err) {
-    logger.debug('Cannot get version from git HEAD.', { err })
-  }
-
-  return ''
-}
-
 /**
  * From a filename like "ede4cba5-742b-46fa-a388-9a6eb3a3aeb3.mp4", returns
  * only the "ede4cba5-742b-46fa-a388-9a6eb3a3aeb3" part. If the filename does
@@ -88,7 +65,6 @@ export {
   generateRandomString,
   getFormattedObjects,
   getSecureTorrentName,
-  getServerCommit,
   generateVideoImportTmpPath,
   getUUIDFromFilename
 }

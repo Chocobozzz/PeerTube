@@ -1,7 +1,7 @@
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { MVideo, MVideoImmutable } from '@server/types/models'
 import { VideoViewEvent } from '@shared/models'
-import { VideoViewerCounters, VideoViewerStats, VideoViews } from './shared'
+import { VideoScope, VideoViewerCounters, VideoViewerStats, VideoViews, ViewerScope } from './shared'
 
 /**
  * If processing a local view:
@@ -77,6 +77,13 @@ export class VideoViewsManager {
 
   getViewers (video: MVideo) {
     return this.videoViewerCounters.getViewers(video)
+  }
+
+  getTotalViewers (options: {
+    viewerScope: ViewerScope
+    videoScope: VideoScope
+  }) {
+    return this.videoViewerCounters.getTotalViewers(options)
   }
 
   buildViewerExpireTime () {

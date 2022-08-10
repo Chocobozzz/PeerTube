@@ -1,3 +1,4 @@
+import { SequelizeInstrumentation } from 'opentelemetry-instrumentation-sequelize'
 import { diag, DiagLogLevel, trace } from '@opentelemetry/api'
 import { JaegerExporter } from '@opentelemetry/exporter-jaeger'
 import { registerInstrumentations } from '@opentelemetry/instrumentation'
@@ -60,7 +61,8 @@ function registerOpentelemetryTracing () {
           return [ cmdName, ...cmdArgs ].join(' ')
         }
       }),
-      new FsInstrumentation()
+      new FsInstrumentation(),
+      new SequelizeInstrumentation()
     ]
   })
 

@@ -227,6 +227,7 @@ function customConfig (): CustomConfig {
         '1440p': CONFIG.TRANSCODING.RESOLUTIONS['1440p'],
         '2160p': CONFIG.TRANSCODING.RESOLUTIONS['2160p']
       },
+      alwaysTranscodeOriginalResolution: CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION,
       webtorrent: {
         enabled: CONFIG.TRANSCODING.WEBTORRENT.ENABLED
       },
@@ -256,7 +257,8 @@ function customConfig (): CustomConfig {
           '1080p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['1080p'],
           '1440p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['1440p'],
           '2160p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['2160p']
-        }
+        },
+        alwaysTranscodeOriginalResolution: CONFIG.LIVE.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
       }
     },
     videoStudio: {

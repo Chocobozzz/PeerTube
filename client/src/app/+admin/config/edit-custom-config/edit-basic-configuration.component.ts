@@ -103,7 +103,7 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
     signupControl.valueChanges
       .pipe(pairwise())
       .subscribe(([ oldValue, newValue ]) => {
-        if (oldValue !== true && newValue === true) {
+        if (oldValue === false && newValue === true) {
           /* eslint-disable max-len */
           this.signupAlertMessage = $localize`You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.`
 
@@ -118,5 +118,7 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
           })
         }
       })
+
+    signupControl.updateValueAndValidity()
   }
 }

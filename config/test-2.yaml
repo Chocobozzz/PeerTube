@@ -35,3 +35,7 @@ transcoding:
   enabled: true
   allow_additional_extensions: true
   allow_audio_files: true
+
+live:
+  rtmp:
+    port: 1937

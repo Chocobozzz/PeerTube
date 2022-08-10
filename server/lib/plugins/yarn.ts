@@ -31,11 +31,16 @@ async function removeNpmPlugin (name: string) {
   await execYarn('remove ' + name)
 }
 
+async function rebuildNativePlugins () {
+  await execYarn('install --pure-lockfile')
+}
+
 // ############################################################################
 
 export {
   installNpmPlugin,
   installNpmPluginFromDisk,
+  rebuildNativePlugins,
   removeNpmPlugin
 }
 

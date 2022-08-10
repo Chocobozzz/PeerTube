@@ -1,15 +1,15 @@
 import { FfprobeData } from 'fluent-ffmpeg'
 import { getMaxBitrate } from '@shared/core-utils'
 import {
+  buildFileMetadata,
   ffprobePromise,
   getAudioStream,
-  getVideoStreamDuration,
   getMaxAudioBitrate,
-  buildFileMetadata,
-  getVideoStreamBitrate,
-  getVideoStreamFPS,
   getVideoStream,
+  getVideoStreamBitrate,
   getVideoStreamDimensionsInfo,
+  getVideoStreamDuration,
+  getVideoStreamFPS,
   hasAudioStream
 } from '@shared/extra-utils/ffprobe'
 import { VideoResolution, VideoTranscodingFPS } from '@shared/models'
@@ -90,15 +90,22 @@ async function getAudioStreamCodec (path: string, existingProbe?: FfprobeData) {
 // Resolutions
 // ---------------------------------------------------------------------------
 
-function computeLowerResolutionsToTranscode (videoFileResolution: number, type: 'vod' | 'live') {
+function computeResolutionsToTranscode (options: {
+  input: number
+  type: 'vod' | 'live'
+  includeInput: boolean
+  strictLower: boolean
+}) {
+  const { input, type, includeInput, strictLower } = options
+
   const configResolutions = type === 'vod'
     ? CONFIG.TRANSCODING.RESOLUTIONS
     : CONFIG.LIVE.TRANSCODING.RESOLUTIONS
 
-  const resolutionsEnabled: number[] = []
+  const resolutionsEnabled = new Set<number>()
 
   // Put in the order we want to proceed jobs
-  const resolutions: VideoResolution[] = [
+  const availableResolutions: VideoResolution[] = [
     VideoResolution.H_NOVIDEO,
     VideoResolution.H_480P,
     VideoResolution.H_360P,
@@ -110,13 +117,22 @@ function computeLowerResolutionsToTranscode (videoFileResolution: number, type: 
     VideoResolution.H_4K
   ]
 
-  for (const resolution of resolutions) {
-    if (configResolutions[resolution + 'p'] === true && videoFileResolution > resolution) {
-      resolutionsEnabled.push(resolution)
-    }
+  for (const resolution of availableResolutions) {
+    // Resolution not enabled
+    if (configResolutions[resolution + 'p'] !== true) continue
+    // Too big resolution for input file
+    if (input < resolution) continue
+    // We only want lower resolutions than input file
+    if (strictLower && input === resolution) continue
+
+    resolutionsEnabled.add(resolution)
   }
 
-  return resolutionsEnabled
+  if (includeInput) {
+    resolutionsEnabled.add(input)
+  }
+
+  return Array.from(resolutionsEnabled)
 }
 
 // ---------------------------------------------------------------------------
@@ -224,7 +240,7 @@ export {
   computeFPS,
   getClosestFramerateStandard,
 
-  computeLowerResolutionsToTranscode,
+  computeResolutionsToTranscode,
 
   canDoQuickTranscode,
   canDoQuickVideoTranscode,

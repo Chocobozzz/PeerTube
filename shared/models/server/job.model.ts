@@ -1,10 +1,10 @@
 import { ContextType } from '../activitypub/context'
 import { VideoState } from '../videos'
-import { VideoStudioTaskCut } from '../videos/studio'
 import { VideoResolution } from '../videos/file/video-resolution.enum'
+import { VideoStudioTaskCut } from '../videos/studio'
 import { SendEmailOptions } from './emailer.model'
 
-export type JobState = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed' | 'paused'
+export type JobState = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed' | 'paused' | 'waiting-children'
 
 export type JobType =
   | 'activitypub-http-unicast'
@@ -25,10 +25,12 @@ export type JobType =
   | 'manage-video-torrent'
   | 'move-to-object-storage'
   | 'video-studio-edition'
+  | 'notify'
+  | 'federate-video'
 
 export interface Job {
-  id: number
-  state: JobState
+  id: number | string
+  state: JobState | 'unknown'
   type: JobType
   data: any
   priority: number
@@ -126,7 +128,6 @@ export interface HLSTranscodingPayload extends BaseTranscodingPayload {
   copyCodecs: boolean
 
   hasAudio: boolean
-  isPortraitMode?: boolean
 
   autoDeleteWebTorrentIfNeeded: boolean
   isMaxQuality: boolean
@@ -138,8 +139,6 @@ export interface NewWebTorrentResolutionTranscodingPayload extends BaseTranscodi
 
   hasAudio: boolean
   createHLSIfNeeded: boolean
-
-  isPortraitMode?: boolean
 }
 
 export interface MergeAudioTranscodingPayload extends BaseTranscodingPayload {
@@ -216,4 +215,19 @@ export type VideoStudioTaskPayload =
 export interface VideoStudioEditionPayload {
   videoUUID: string
   tasks: VideoStudioTaskPayload[]
+}
+
+// ---------------------------------------------------------------------------
+
+export type NotifyPayload =
+  {
+    action: 'new-video'
+    videoUUID: string
+  }
+
+// ---------------------------------------------------------------------------
+
+export interface FederateVideoPayload {
+  videoUUID: string
+  isNewVideo: boolean
 }

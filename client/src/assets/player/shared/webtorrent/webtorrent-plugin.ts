@@ -349,7 +349,7 @@ class WebTorrentPlugin extends Plugin {
                             return
                           }
 
-                          logger.error(err)
+                          logger.warn(err)
                           this.player.pause()
                           this.player.posterImage.show()
                           this.player.removeClass('vjs-has-autoplay')

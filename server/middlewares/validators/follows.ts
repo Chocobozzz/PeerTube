@@ -81,7 +81,11 @@ const removeFollowingValidator = [
     const serverActor = await getServerActor()
 
     const { name, host } = getRemoteNameAndHost(req.params.hostOrHandle)
-    const follow = await ActorFollowModel.loadByActorAndTargetNameAndHostForAPI(serverActor.id, name, host)
+    const follow = await ActorFollowModel.loadByActorAndTargetNameAndHostForAPI({
+      actorId: serverActor.id,
+      targetName: name,
+      targetHost: host
+    })
 
     if (!follow) {
       return res.fail({
@@ -126,13 +130,26 @@ const getFollowerValidator = [
   }
 ]
 
-const acceptOrRejectFollowerValidator = [
+const acceptFollowerValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking accept/reject follower parameters', { parameters: req.params })
+    logger.debug('Checking accept follower parameters', { parameters: req.params })
 
     const follow = res.locals.follow
-    if (follow.state !== 'pending') {
-      return res.fail({ message: 'Follow is not in pending state.' })
+    if (follow.state !== 'pending' && follow.state !== 'rejected') {
+      return res.fail({ message: 'Follow is not in pending/rejected state.' })
+    }
+
+    return next()
+  }
+]
+
+const rejectFollowerValidator = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking reject follower parameters', { parameters: req.params })
+
+    const follow = res.locals.follow
+    if (follow.state !== 'pending' && follow.state !== 'accepted') {
+      return res.fail({ message: 'Follow is not in pending/accepted state.' })
     }
 
     return next()
@@ -145,6 +162,7 @@ export {
   followValidator,
   removeFollowingValidator,
   getFollowerValidator,
-  acceptOrRejectFollowerValidator,
+  acceptFollowerValidator,
+  rejectFollowerValidator,
   listFollowsValidator
 }

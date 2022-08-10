@@ -5,6 +5,7 @@ import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { AuthService, ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
+import { arrayify } from '@shared/core-utils'
 import {
   BooleanBothQuery,
   FeedFormat,
@@ -285,7 +286,7 @@ export class VideoService {
   }
 
   removeVideo (idArg: number | number[]) {
-    const ids = Array.isArray(idArg) ? idArg : [ idArg ]
+    const ids = arrayify(idArg)
 
     return from(ids)
       .pipe(
@@ -302,6 +303,11 @@ export class VideoService {
         toArray(),
         catchError(err => this.restExtractor.handleError(err))
       )
+  }
+
+  removeFile (videoId: number | string, fileId: number, type: 'hls' | 'webtorrent') {
+    return this.authHttp.delete(VideoService.BASE_VIDEO_URL + '/' + videoId + '/' + type + '/' + fileId)
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   runTranscoding (videoIds: (number | string)[], type: 'hls' | 'webtorrent') {

@@ -1,7 +1,6 @@
 import express from 'express'
 import { AccessDeniedError } from '@node-oauth/oauth2-server'
 import { PluginManager } from '@server/lib/plugins/plugin-manager'
-import { ActorModel } from '@server/models/actor/actor'
 import { MOAuthClient } from '@server/types/models'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token'
 import { MUser } from '@server/types/models/user/user'
@@ -12,6 +11,7 @@ import { CONFIG } from '../../initializers/config'
 import { OAuthClientModel } from '../../models/oauth/oauth-client'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token'
 import { UserModel } from '../../models/user/user'
+import { findAvailableLocalActorName } from '../local-actor'
 import { buildUser, createUserAccountAndChannelAndPlaylist } from '../user'
 import { TokensCache } from './tokens-cache'
 
@@ -225,13 +225,12 @@ async function createUserFromExternal (pluginAuth: string, options: {
   role: UserRole
   displayName: string
 }) {
-  // Check an actor does not already exists with that name (removed user)
-  const actor = await ActorModel.loadLocalByName(options.username)
-  if (actor) return null
+  const username = await findAvailableLocalActorName(options.username)
 
   const userToCreate = buildUser({
-    ...pick(options, [ 'username', 'email', 'role' ]),
+    ...pick(options, [ 'email', 'role' ]),
 
+    username,
     emailVerified: null,
     password: null,
     pluginAuth

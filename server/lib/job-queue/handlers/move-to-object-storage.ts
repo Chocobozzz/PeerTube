@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { remove } from 'fs-extra'
 import { join } from 'path'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
@@ -17,7 +17,7 @@ const lTagsBase = loggerTagsFactory('move-object-storage')
 
 export async function processMoveToObjectStorage (job: Job) {
   const payload = job.data as MoveObjectStoragePayload
-  logger.info('Moving video %s in job %d.', payload.videoUUID, job.id)
+  logger.info('Moving video %s in job %s.', payload.videoUUID, job.id)
 
   const video = await VideoModel.loadWithFiles(payload.videoUUID)
   // No video, maybe deleted?
@@ -43,7 +43,7 @@ export async function processMoveToObjectStorage (job: Job) {
 
     const pendingMove = await VideoJobInfoModel.decrease(video.uuid, 'pendingMove')
     if (pendingMove === 0) {
-      logger.info('Running cleanup after moving files to object storage (video %s in job %d)', video.uuid, job.id, lTags)
+      logger.info('Running cleanup after moving files to object storage (video %s in job %s)', video.uuid, job.id, lTags)
 
       await doAfterLastJob({ video, previousVideoState: payload.previousVideoState, isNewVideo: payload.isNewVideo })
     }

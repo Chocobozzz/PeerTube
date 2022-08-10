@@ -1671,6 +1671,31 @@ paths:
         '404':
           description: video not found
 
+  /videos/{id}/studio/edit:
+    post:
+      summary: Create a studio task
+      tags:
+        - Video Transcoding
+        - Video
+      description: Create a task to edit a video  (cut, add intro/outro etc)
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VideoStudioCreateTask'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: incorrect parameters
+        '404':
+          description: video not found
+
   /videos:
     get:
       summary: List videos
@@ -5665,6 +5690,8 @@ components:
     VideoFile:
       readOnly: true
       properties:
+        id:
+          $ref: '#/components/schemas/id'
         magnetUri:
           type: string
           format: uri
@@ -7910,6 +7937,68 @@ components:
         latencyMode:
           description: User can select live latency mode if enabled by the instance
           $ref: '#/components/schemas/LiveVideoLatencyMode'
+
+    VideoStudioCreateTask:
+      type: array
+      items:
+        anyOf:
+          -
+            title: cut
+            type: object
+            properties:
+              name:
+                type: string
+                enum:
+                  - 'cut'
+              options:
+                type: object
+                properties:
+                  start:
+                    type: integer
+                  end:
+                    type: integer
+          -
+            title: add-intro
+            type: object
+            properties:
+              name:
+                type: string
+                enum:
+                  - 'add-intro'
+              options:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    format: binary
+          -
+            title: add-outro
+            type: object
+            properties:
+              name:
+                type: string
+                enum:
+                  - 'add-outro'
+              options:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    format: binary
+          -
+            title: add-watermark
+            type: object
+            properties:
+              name:
+                type: string
+                enum:
+                  - 'add-watermark'
+              options:
+                type: object
+                properties:
+                  file:
+                    type: string
+                    format: binary
 
     LiveVideoSessionResponse:
         properties:

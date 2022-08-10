@@ -405,15 +405,16 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     mode: 'streaming-playlist' | 'video',
     transaction: Transaction
   ) {
-    const baseWhere = {
+    const baseFind = {
       fps: videoFile.fps,
-      resolution: videoFile.resolution
+      resolution: videoFile.resolution,
+      transaction
     }
 
-    if (mode === 'streaming-playlist') Object.assign(baseWhere, { videoStreamingPlaylistId: videoFile.videoStreamingPlaylistId })
-    else Object.assign(baseWhere, { videoId: videoFile.videoId })
+    const element = mode === 'streaming-playlist'
+      ? await VideoFileModel.loadHLSFile({ ...baseFind, playlistId: videoFile.videoStreamingPlaylistId })
+      : await VideoFileModel.loadWebTorrentFile({ ...baseFind, videoId: videoFile.videoId })
 
-    const element = await VideoFileModel.findOne({ where: baseWhere, transaction })
     if (!element) return videoFile.save({ transaction })
 
     for (const k of Object.keys(videoFile.toJSON())) {
@@ -421,6 +422,36 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     }
 
     return element.save({ transaction })
+  }
+
+  static async loadWebTorrentFile (options: {
+    videoId: number
+    fps: number
+    resolution: number
+    transaction?: Transaction
+  }) {
+    const where = {
+      fps: options.fps,
+      resolution: options.resolution,
+      videoId: options.videoId
+    }
+
+    return VideoFileModel.findOne({ where, transaction: options.transaction })
+  }
+
+  static async loadHLSFile (options: {
+    playlistId: number
+    fps: number
+    resolution: number
+    transaction?: Transaction
+  }) {
+    const where = {
+      fps: options.fps,
+      resolution: options.resolution,
+      videoStreamingPlaylistId: options.playlistId
+    }
+
+    return VideoFileModel.findOne({ where, transaction: options.transaction })
   }
 
   static removeHLSFilesOfVideoId (videoStreamingPlaylistId: number) {

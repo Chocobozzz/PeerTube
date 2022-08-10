@@ -1,7 +1,10 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
+import { prepareIcu } from '@app/helpers'
+import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { InstanceFollowService } from '@app/shared/shared-instance'
+import { DropdownAction } from '@app/shared/shared-main'
 import { ActorFollow } from '@shared/models'
 
 @Component({
@@ -15,6 +18,11 @@ export class FollowersListComponent extends RestTable implements OnInit {
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
+  searchFilters: AdvancedInputFilter[] = []
+
+  selectedFollows: ActorFollow[] = []
+  bulkFollowsActions: DropdownAction<ActorFollow[]>[] = []
+
   constructor (
     private confirmService: ConfirmService,
     private notifier: Notifier,
@@ -25,66 +33,114 @@ export class FollowersListComponent extends RestTable implements OnInit {
 
   ngOnInit () {
     this.initialize()
+
+    this.searchFilters = this.followService.buildFollowsListFilters()
+
+    this.bulkFollowsActions = [
+      {
+        label: $localize`Reject`,
+        handler: follows => this.rejectFollower(follows),
+        isDisplayed: follows => follows.every(f => f.state !== 'rejected')
+      },
+      {
+        label: $localize`Accept`,
+        handler: follows => this.acceptFollower(follows),
+        isDisplayed: follows => follows.every(f => f.state !== 'accepted')
+      },
+      {
+        label: $localize`Delete`,
+        handler: follows => this.deleteFollowers(follows),
+        isDisplayed: follows => follows.every(f => f.state === 'rejected')
+      }
+    ]
   }
 
   getIdentifier () {
     return 'FollowersListComponent'
   }
 
-  acceptFollower (follow: ActorFollow) {
-    follow.state = 'accepted'
-
-    this.followService.acceptFollower(follow)
+  acceptFollower (follows: ActorFollow[]) {
+    this.followService.acceptFollower(follows)
       .subscribe({
         next: () => {
-          const handle = follow.follower.name + '@' + follow.follower.host
-          this.notifier.success($localize`${handle} accepted in instance followers`)
+          // eslint-disable-next-line max-len
+          const message = prepareIcu($localize`Accepted {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`)(
+            { count: follows.length, followerName: this.buildFollowerName(follows[0]) },
+            $localize`Follow requests accepted`
+          )
+          this.notifier.success(message)
+
+          this.reloadData()
         },
 
-        error: err => {
-          follow.state = 'pending'
-          this.notifier.error(err.message)
-        }
+        error: err => this.notifier.error(err.message)
       })
   }
 
-  async rejectFollower (follow: ActorFollow) {
-    const message = $localize`Do you really want to reject this follower?`
+  async rejectFollower (follows: ActorFollow[]) {
+    // eslint-disable-next-line max-len
+    const message = prepareIcu($localize`Do you really want to reject {count, plural, =1 {{followerName} follow request?} other {{count} follow requests?}}`)(
+      { count: follows.length, followerName: this.buildFollowerName(follows[0]) },
+      $localize`Do you really want to reject these follow requests?`
+    )
+
     const res = await this.confirmService.confirm(message, $localize`Reject`)
     if (res === false) return
 
-    this.followService.rejectFollower(follow)
+    this.followService.rejectFollower(follows)
         .subscribe({
           next: () => {
-            const handle = follow.follower.name + '@' + follow.follower.host
-            this.notifier.success($localize`${handle} rejected from instance followers`)
-
-            this.reloadData()
-          },
-
-          error: err => {
-            follow.state = 'pending'
-            this.notifier.error(err.message)
-          }
-        })
-  }
-
-  async deleteFollower (follow: ActorFollow) {
-    const message = $localize`Do you really want to delete this follower?`
-    const res = await this.confirmService.confirm(message, $localize`Delete`)
-    if (res === false) return
-
-    this.followService.removeFollower(follow)
-        .subscribe({
-          next: () => {
-            const handle = follow.follower.name + '@' + follow.follower.host
-            this.notifier.success($localize`${handle} removed from instance followers`)
+            // eslint-disable-next-line max-len
+            const message = prepareIcu($localize`Rejected {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`)(
+              { count: follows.length, followerName: this.buildFollowerName(follows[0]) },
+              $localize`Follow requests rejected`
+            )
+            this.notifier.success(message)
 
             this.reloadData()
           },
 
           error: err => this.notifier.error(err.message)
         })
+  }
+
+  async deleteFollowers (follows: ActorFollow[]) {
+    let message = $localize`Deleted followers will be able to send again a follow request.`
+    message += '<br /><br />'
+
+    // eslint-disable-next-line max-len
+    message += prepareIcu($localize`Do you really want to delete {count, plural, =1 {{followerName} follow request?} other {{count} follow requests?}}`)(
+      { count: follows.length, followerName: this.buildFollowerName(follows[0]) },
+      $localize`Do you really want to delete these follow requests?`
+    )
+
+    const res = await this.confirmService.confirm(message, $localize`Delete`)
+    if (res === false) return
+
+    this.followService.removeFollower(follows)
+        .subscribe({
+          next: () => {
+            // eslint-disable-next-line max-len
+            const message = prepareIcu($localize`Removed {count, plural, =1 {{followerName} follow request} other {{count} follow requests}}`)(
+              { count: follows.length, followerName: this.buildFollowerName(follows[0]) },
+              $localize`Follow requests removed`
+            )
+
+            this.notifier.success(message)
+
+            this.reloadData()
+          },
+
+          error: err => this.notifier.error(err.message)
+        })
+  }
+
+  buildFollowerName (follow: ActorFollow) {
+    return follow.follower.name + '@' + follow.follower.host
+  }
+
+  isInSelectionMode () {
+    return this.selectedFollows.length !== 0
   }
 
   protected reloadData () {

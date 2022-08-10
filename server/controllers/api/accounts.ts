@@ -119,7 +119,7 @@ function getAccount (req: express.Request, res: express.Response) {
   const account = res.locals.account
 
   if (account.isOutdated()) {
-    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'actor', url: account.Actor.url } })
+    JobQueue.Instance.createJobAsync({ type: 'activitypub-refresher', payload: { type: 'actor', url: account.Actor.url } })
   }
 
   return res.json(account.toFormattedJSON())

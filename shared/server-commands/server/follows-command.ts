@@ -6,13 +6,13 @@ import { PeerTubeServer } from './server'
 export class FollowsCommand extends AbstractCommand {
 
   getFollowers (options: OverrideCommandOptions & {
-    start: number
-    count: number
-    sort: string
+    start?: number
+    count?: number
+    sort?: string
     search?: string
     actorType?: ActivityPubActorType
     state?: FollowState
-  }) {
+  } = {}) {
     const path = '/api/v1/server/followers'
 
     const query = pick(options, [ 'start', 'count', 'sort', 'search', 'state', 'actorType' ])

@@ -25,8 +25,8 @@ export class RegistrationForModerators extends AbstractNotification <MUserDefaul
     return this.moderators
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: UserNotificationType.NEW_USER_REGISTRATION,
       userId: user.id,
       accountId: this.payload.Account.id

@@ -1,14 +1,16 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { copyFile, ensureDir, move, remove, stat } from 'fs-extra'
 import { basename, extname as extnameUtil, join } from 'path'
 import { toEven } from '@server/helpers/core-utils'
+import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
-import { MStreamingPlaylistFilesVideo, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
+import { sequelizeTypescript } from '@server/initializers/database'
+import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { VideoResolution, VideoStorage } from '../../../shared/models/videos'
-import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import {
   buildFileMetadata,
   canDoQuickTranscode,
+  computeResolutionsToTranscode,
   getVideoStreamDuration,
   getVideoStreamFPS,
   transcodeVOD,
@@ -16,21 +18,12 @@ import {
   TranscodeVODOptionsType
 } from '../../helpers/ffmpeg'
 import { CONFIG } from '../../initializers/config'
-import { P2P_MEDIA_LOADER_PEER_VERSION } from '../../initializers/constants'
 import { VideoFileModel } from '../../models/video/video-file'
 import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist'
-import { updateMasterHLSPlaylist, updateSha256VODSegments } from '../hls'
-import {
-  generateHLSMasterPlaylistFilename,
-  generateHlsSha256SegmentsFilename,
-  generateHLSVideoFilename,
-  generateWebTorrentVideoFilename,
-  getHlsResolutionPlaylistFilename
-} from '../paths'
+import { updatePlaylistAfterFileChange } from '../hls'
+import { generateHLSVideoFilename, generateWebTorrentVideoFilename, getHlsResolutionPlaylistFilename } from '../paths'
 import { VideoPathManager } from '../video-path-manager'
 import { VideoTranscodingProfilesManager } from './default-transcoding-profiles'
-import { retryTransactionWrapper } from '@server/helpers/database-utils'
-import { sequelizeTypescript } from '@server/initializers/database'
 
 /**
  *
@@ -40,7 +33,13 @@ import { sequelizeTypescript } from '@server/initializers/database'
  */
 
 // Optimize the original video file and replace it. The resolution is not changed.
-function optimizeOriginalVideofile (video: MVideoFullLight, inputVideoFile: MVideoFile, job?: Job) {
+function optimizeOriginalVideofile (options: {
+  video: MVideoFullLight
+  inputVideoFile: MVideoFile
+  job: Job
+}) {
+  const { video, inputVideoFile, job } = options
+
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
 
@@ -51,7 +50,7 @@ function optimizeOriginalVideofile (video: MVideoFullLight, inputVideoFile: MVid
       ? 'quick-transcode'
       : 'video'
 
-    const resolution = toEven(inputVideoFile.resolution)
+    const resolution = buildOriginalFileResolution(inputVideoFile.resolution)
 
     const transcodeOptions: TranscodeVODOptions = {
       type: transcodeType,
@@ -71,6 +70,7 @@ function optimizeOriginalVideofile (video: MVideoFullLight, inputVideoFile: MVid
     await transcodeVOD(transcodeOptions)
 
     // Important to do this before getVideoFilename() to take in account the new filename
+    inputVideoFile.resolution = resolution
     inputVideoFile.extname = newExtname
     inputVideoFile.filename = generateWebTorrentVideoFilename(resolution, newExtname)
     inputVideoFile.storage = VideoStorage.FILE_SYSTEM
@@ -84,17 +84,22 @@ function optimizeOriginalVideofile (video: MVideoFullLight, inputVideoFile: MVid
   })
 }
 
-// Transcode the original video file to a lower resolution
-// We are sure it's x264 in mp4 because optimizeOriginalVideofile was already executed
-function transcodeNewWebTorrentResolution (video: MVideoFullLight, resolution: VideoResolution, isPortrait: boolean, job: Job) {
+// Transcode the original video file to a lower resolution compatible with WebTorrent
+function transcodeNewWebTorrentResolution (options: {
+  video: MVideoFullLight
+  resolution: VideoResolution
+  job: Job
+}) {
+  const { video, resolution, job } = options
+
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
-  const extname = '.mp4'
+  const newExtname = '.mp4'
 
   return VideoPathManager.Instance.makeAvailableVideoFile(video.getMaxQualityFile().withVideoOrPlaylist(video), async videoInputPath => {
     const newVideoFile = new VideoFileModel({
       resolution,
-      extname,
-      filename: generateWebTorrentVideoFilename(resolution, extname),
+      extname: newExtname,
+      filename: generateWebTorrentVideoFilename(resolution, newExtname),
       size: 0,
       videoId: video.id
     })
@@ -125,7 +130,6 @@ function transcodeNewWebTorrentResolution (video: MVideoFullLight, resolution: V
         profile: CONFIG.TRANSCODING.PROFILE,
 
         resolution,
-        isPortraitMode: isPortrait,
 
         job
       }
@@ -137,7 +141,13 @@ function transcodeNewWebTorrentResolution (video: MVideoFullLight, resolution: V
 }
 
 // Merge an image with an audio file to create a video
-function mergeAudioVideofile (video: MVideoFullLight, resolution: VideoResolution, job: Job) {
+function mergeAudioVideofile (options: {
+  video: MVideoFullLight
+  resolution: VideoResolution
+  job: Job
+}) {
+  const { video, resolution, job } = options
+
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
 
@@ -196,13 +206,11 @@ async function generateHlsPlaylistResolutionFromTS (options: {
   video: MVideo
   concatenatedTsFilePath: string
   resolution: VideoResolution
-  isPortraitMode: boolean
   isAAC: boolean
 }) {
   return generateHlsPlaylistCommon({
     video: options.video,
     resolution: options.resolution,
-    isPortraitMode: options.isPortraitMode,
     inputPath: options.concatenatedTsFilePath,
     type: 'hls-from-ts' as 'hls-from-ts',
     isAAC: options.isAAC
@@ -215,14 +223,12 @@ function generateHlsPlaylistResolution (options: {
   videoInputPath: string
   resolution: VideoResolution
   copyCodecs: boolean
-  isPortraitMode: boolean
   job?: Job
 }) {
   return generateHlsPlaylistCommon({
     video: options.video,
     resolution: options.resolution,
     copyCodecs: options.copyCodecs,
-    isPortraitMode: options.isPortraitMode,
     inputPath: options.videoInputPath,
     type: 'hls' as 'hls',
     job: options.job
@@ -259,6 +265,9 @@ async function onWebTorrentVideoFileTranscoding (
 
   await createTorrentAndSetInfoHash(video, videoFile)
 
+  const oldFile = await VideoFileModel.loadWebTorrentFile({ videoId: video.id, fps: videoFile.fps, resolution: videoFile.resolution })
+  if (oldFile) await video.removeWebTorrentFile(oldFile)
+
   await VideoFileModel.customUpsert(videoFile, 'video', undefined)
   video.VideoFiles = await video.$get('VideoFiles')
 
@@ -272,11 +281,10 @@ async function generateHlsPlaylistCommon (options: {
   resolution: VideoResolution
   copyCodecs?: boolean
   isAAC?: boolean
-  isPortraitMode: boolean
 
   job?: Job
 }) {
-  const { type, video, inputPath, resolution, copyCodecs, isPortraitMode, isAAC, job } = options
+  const { type, video, inputPath, resolution, copyCodecs, isAAC, job } = options
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
 
   const videoTranscodedBasePath = join(transcodeDirectory, type)
@@ -297,7 +305,6 @@ async function generateHlsPlaylistCommon (options: {
 
     resolution,
     copyCodecs,
-    isPortraitMode,
 
     isAAC,
 
@@ -313,32 +320,13 @@ async function generateHlsPlaylistCommon (options: {
   // Create or update the playlist
   const playlist = await retryTransactionWrapper(() => {
     return sequelizeTypescript.transaction(async transaction => {
-      const playlist = await VideoStreamingPlaylistModel.loadOrGenerate(video, transaction)
-
-      if (!playlist.playlistFilename) {
-        playlist.playlistFilename = generateHLSMasterPlaylistFilename(video.isLive)
-      }
-
-      if (!playlist.segmentsSha256Filename) {
-        playlist.segmentsSha256Filename = generateHlsSha256SegmentsFilename(video.isLive)
-      }
-
-      playlist.p2pMediaLoaderInfohashes = []
-      playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
-
-      playlist.type = VideoStreamingPlaylistType.HLS
-
-      await playlist.save({ transaction })
-
-      return playlist
+      return VideoStreamingPlaylistModel.loadOrGenerate(video, transaction)
     })
   })
 
-  // Build the new playlist file
-  const extname = extnameUtil(videoFilename)
   const newVideoFile = new VideoFileModel({
     resolution,
-    extname,
+    extname: extnameUtil(videoFilename),
     size: 0,
     filename: videoFilename,
     fps: -1,
@@ -346,8 +334,6 @@ async function generateHlsPlaylistCommon (options: {
   })
 
   const videoFilePath = VideoPathManager.Instance.getFSVideoFileOutputPath(playlist, newVideoFile)
-
-  // Move files from tmp transcoded directory to the appropriate place
   await ensureDir(VideoPathManager.Instance.getFSHLSOutputPath(video))
 
   // Move playlist file
@@ -364,18 +350,24 @@ async function generateHlsPlaylistCommon (options: {
 
   await createTorrentAndSetInfoHash(playlist, newVideoFile)
 
+  const oldFile = await VideoFileModel.loadHLSFile({ playlistId: playlist.id, fps: newVideoFile.fps, resolution: newVideoFile.resolution })
+  if (oldFile) {
+    await video.removeStreamingPlaylistVideoFile(playlist, oldFile)
+    await oldFile.destroy()
+  }
+
   const savedVideoFile = await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', undefined)
 
-  const playlistWithFiles = playlist as MStreamingPlaylistFilesVideo
-  playlistWithFiles.VideoFiles = await playlist.$get('VideoFiles')
-  playlist.assignP2PMediaLoaderInfoHashes(video, playlistWithFiles.VideoFiles)
-
-  await playlist.save()
-
-  video.setHLSPlaylist(playlist)
-
-  await updateMasterHLSPlaylist(video, playlistWithFiles)
-  await updateSha256VODSegments(video, playlistWithFiles)
+  await updatePlaylistAfterFileChange(video, playlist)
 
   return { resolutionPlaylistPath, videoFile: savedVideoFile }
+}
+
+function buildOriginalFileResolution (inputResolution: number) {
+  if (CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION === true) return toEven(inputResolution)
+
+  const resolutions = computeResolutionsToTranscode({ input: inputResolution, type: 'vod', includeInput: false, strictLower: false })
+  if (resolutions.length === 0) return toEven(inputResolution)
+
+  return Math.max(...resolutions)
 }

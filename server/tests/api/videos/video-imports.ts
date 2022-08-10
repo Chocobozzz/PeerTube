@@ -6,7 +6,7 @@ import { pathExists, readdir, remove } from 'fs-extra'
 import { join } from 'path'
 import { FIXTURE_URLS, testCaptionFile, testImage } from '@server/tests/shared'
 import { areHttpImportTestsDisabled } from '@shared/core-utils'
-import { HttpStatusCode, Video, VideoImportState, VideoPrivacy, VideoResolution, VideoState } from '@shared/models'
+import { CustomConfig, HttpStatusCode, Video, VideoImportState, VideoPrivacy, VideoResolution, VideoState } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -17,6 +17,7 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
+import { DeepPartial } from '@shared/typescript-utils'
 
 async function checkVideosServer1 (server: PeerTubeServer, idHttp: string, idMagnet: string, idTorrent: string) {
   const videoHttp = await server.videos.get({ id: idHttp })
@@ -104,6 +105,16 @@ describe('Test video imports', function () {
 
         await setAccessTokensToServers(servers)
         await setDefaultVideoChannel(servers)
+
+        for (const server of servers) {
+          await server.config.updateExistingSubConfig({
+            newConfig: {
+              transcoding: {
+                alwaysTranscodeOriginalResolution: false
+              }
+            }
+          })
+        }
 
         await doubleFollow(servers[0], servers[1])
       })
@@ -306,10 +317,11 @@ describe('Test video imports', function () {
       it('Should import no HDR version on a HDR video', async function () {
         this.timeout(300_000)
 
-        const config = {
+        const config: DeepPartial<CustomConfig> = {
           transcoding: {
             enabled: true,
             resolutions: {
+              '0p': false,
               '144p': true,
               '240p': true,
               '360p': false,
@@ -321,19 +333,9 @@ describe('Test video imports', function () {
             },
             webtorrent: { enabled: true },
             hls: { enabled: false }
-          },
-          import: {
-            videos: {
-              http: {
-                enabled: true
-              },
-              torrent: {
-                enabled: true
-              }
-            }
           }
         }
-        await servers[0].config.updateCustomSubConfig({ newConfig: config })
+        await servers[0].config.updateExistingSubConfig({ newConfig: config })
 
         const attributes = {
           name: 'hdr video',
@@ -351,6 +353,76 @@ describe('Test video imports', function () {
         expect(video.name).to.equal('hdr video')
         const maxResolution = Math.max.apply(Math, video.files.map(function (o) { return o.resolution.id }))
         expect(maxResolution, 'expected max resolution not met').to.equals(VideoResolution.H_240P)
+      })
+
+      it('Should not import resolution higher than enabled transcoding resolution', async function () {
+        this.timeout(300_000)
+
+        const config: DeepPartial<CustomConfig> = {
+          transcoding: {
+            enabled: true,
+            resolutions: {
+              '0p': false,
+              '144p': true,
+              '240p': false,
+              '360p': false,
+              '480p': false,
+              '720p': false,
+              '1080p': false,
+              '1440p': false,
+              '2160p': false
+            },
+            alwaysTranscodeOriginalResolution: false
+          }
+        }
+        await servers[0].config.updateExistingSubConfig({ newConfig: config })
+
+        const attributes = {
+          name: 'small resolution video',
+          targetUrl: FIXTURE_URLS.youtube,
+          channelId: servers[0].store.channel.id,
+          privacy: VideoPrivacy.PUBLIC
+        }
+        const { video: videoImported } = await servers[0].imports.importVideo({ attributes })
+        const videoUUID = videoImported.uuid
+
+        await waitJobs(servers)
+
+        // test resolution
+        const video = await servers[0].videos.get({ id: videoUUID })
+        expect(video.name).to.equal('small resolution video')
+        expect(video.files).to.have.lengthOf(1)
+        expect(video.files[0].resolution.id).to.equal(144)
+      })
+
+      it('Should import resolution higher than enabled transcoding resolution', async function () {
+        this.timeout(300_000)
+
+        const config: DeepPartial<CustomConfig> = {
+          transcoding: {
+            alwaysTranscodeOriginalResolution: true
+          }
+        }
+        await servers[0].config.updateExistingSubConfig({ newConfig: config })
+
+        const attributes = {
+          name: 'bigger resolution video',
+          targetUrl: FIXTURE_URLS.youtube,
+          channelId: servers[0].store.channel.id,
+          privacy: VideoPrivacy.PUBLIC
+        }
+        const { video: videoImported } = await servers[0].imports.importVideo({ attributes })
+        const videoUUID = videoImported.uuid
+
+        await waitJobs(servers)
+
+        // test resolution
+        const video = await servers[0].videos.get({ id: videoUUID })
+        expect(video.name).to.equal('bigger resolution video')
+
+        expect(video.files).to.have.lengthOf(2)
+        expect(video.files.find(f => f.resolution.id === 240)).to.exist
+        expect(video.files.find(f => f.resolution.id === 144)).to.exist
       })
 
       it('Should import a peertube video', async function () {

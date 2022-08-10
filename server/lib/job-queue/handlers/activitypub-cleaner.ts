@@ -1,5 +1,5 @@
 import { map } from 'bluebird'
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import {
   isAnnounceActivityValid,
   isDislikeActivityValid,

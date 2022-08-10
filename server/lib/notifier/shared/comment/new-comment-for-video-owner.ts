@@ -38,8 +38,8 @@ export class NewCommentForVideoOwner extends AbstractNotification <MCommentOwner
     return [ this.user ]
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: UserNotificationType.NEW_COMMENT_ON_MY_VIDEO,
       userId: user.id,
       commentId: this.payload.id

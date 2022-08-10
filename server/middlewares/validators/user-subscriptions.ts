@@ -58,7 +58,12 @@ const userSubscriptionGetValidator = [
     if (host === WEBSERVER.HOST) host = null
 
     const user = res.locals.oauth.token.User
-    const subscription = await ActorFollowModel.loadByActorAndTargetNameAndHostForAPI(user.Account.Actor.id, name, host)
+    const subscription = await ActorFollowModel.loadByActorAndTargetNameAndHostForAPI({
+      actorId: user.Account.Actor.id,
+      targetName: name,
+      targetHost: host,
+      state: 'accepted'
+    })
 
     if (!subscription || !subscription.ActorFollowing.VideoChannel) {
       return res.fail({

@@ -260,12 +260,12 @@ describe('Test abuses', function () {
       await waitJobs(servers)
 
       const body = await commands[1].getAdminList()
-      expect(body.total).to.equal(2, "wrong number of videos returned")
-      expect(body.data).to.have.lengthOf(2, "wrong number of videos returned")
+      expect(body.total).to.equal(2, 'wrong number of videos returned')
+      expect(body.data).to.have.lengthOf(2, 'wrong number of videos returned')
 
       const abuse = body.data[0]
-      expect(abuse.id).to.equal(abuseServer2.id, "wrong origin server id for first video")
-      expect(abuse.video.id).to.equal(abuseServer2.video.id, "wrong video id")
+      expect(abuse.id).to.equal(abuseServer2.id, 'wrong origin server id for first video')
+      expect(abuse.video.id).to.equal(abuseServer2.video.id, 'wrong video id')
       expect(abuse.video.channel).to.exist
       expect(abuse.video.deleted).to.be.true
     })
@@ -299,13 +299,13 @@ describe('Test abuses', function () {
 
         const abuseVideo3 = body.data.find(a => a.video.id === video3Id)
         expect(abuseVideo3).to.not.be.undefined
-        expect(abuseVideo3.video.countReports).to.equal(1, "wrong reports count for video 3")
-        expect(abuseVideo3.video.nthReport).to.equal(1, "wrong report position in report list for video 3")
-        expect(abuseVideo3.countReportsForReportee).to.equal(1, "wrong reports count for reporter on video 3 abuse")
-        expect(abuseVideo3.countReportsForReporter).to.equal(3, "wrong reports count for reportee on video 3 abuse")
+        expect(abuseVideo3.video.countReports).to.equal(1, 'wrong reports count for video 3')
+        expect(abuseVideo3.video.nthReport).to.equal(1, 'wrong report position in report list for video 3')
+        expect(abuseVideo3.countReportsForReportee).to.equal(1, 'wrong reports count for reporter on video 3 abuse')
+        expect(abuseVideo3.countReportsForReporter).to.equal(3, 'wrong reports count for reportee on video 3 abuse')
 
         const abuseServer1 = abuses.find(a => a.video.id === servers[0].store.videoCreated.id)
-        expect(abuseServer1.countReportsForReportee).to.equal(3, "wrong reports count for reporter on video 1 abuse")
+        expect(abuseServer1.countReportsForReportee).to.equal(3, 'wrong reports count for reporter on video 1 abuse')
       }
     })
 
@@ -327,7 +327,7 @@ describe('Test abuses', function () {
       {
         const abuse = body.data.find(a => a.id === createRes.abuse.id)
         expect(abuse.reason).to.equals(reason5)
-        expect(abuse.predefinedReasons).to.deep.equals(predefinedReasons5, "predefined reasons do not match the one reported")
+        expect(abuse.predefinedReasons).to.deep.equals(predefinedReasons5, 'predefined reasons do not match the one reported')
         expect(abuse.video.startAt).to.equal(1, "starting timestamp doesn't match the one reported")
         expect(abuse.video.endAt).to.equal(5, "ending timestamp doesn't match the one reported")
       }

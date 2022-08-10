@@ -107,6 +107,11 @@
             <ul>
               <li *ngFor="let file of video.files">
                 {{ file.resolution.label }}: {{ file.size | bytes: 1 }}
+
+                <my-global-icon
+                  i18n-ngbTooltip ngbTooltip="Delete this file" iconName="delete" role="button"
+                  (click)="removeVideoFile(video, file, 'webtorrent')"
+                ></my-global-icon>
               </li>
             </ul>
           </div>
@@ -117,6 +122,11 @@
             <ul>
               <li *ngFor="let file of video.streamingPlaylists[0].files">
                 {{ file.resolution.label }}: {{ file.size | bytes: 1 }}
+
+                <my-global-icon
+                  i18n-ngbTooltip ngbTooltip="Delete this file" iconName="delete" role="button"
+                  (click)="removeVideoFile(video, file, 'hls')"
+                ></my-global-icon>
               </li>
             </ul>
           </div>

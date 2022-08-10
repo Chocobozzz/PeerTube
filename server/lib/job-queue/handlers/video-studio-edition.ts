@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { move, remove } from 'fs-extra'
 import { join } from 'path'
 import { addIntroOutro, addWatermark, cutVideo } from '@server/helpers/ffmpeg'
@@ -8,7 +8,8 @@ import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles'
 import { isAbleToUploadVideo } from '@server/lib/user'
-import { addOptimizeOrMergeAudioJob } from '@server/lib/video'
+import { buildOptimizeOrMergeAudioJob } from '@server/lib/video'
+import { removeHLSPlaylist, removeWebTorrentFile } from '@server/lib/video-file'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { approximateIntroOutroAdditionalSize } from '@server/lib/video-studio'
 import { UserModel } from '@server/models/user/user'
@@ -27,14 +28,15 @@ import {
 } from '@shared/extra-utils'
 import {
   VideoStudioEditionPayload,
-  VideoStudioTaskPayload,
+  VideoStudioTask,
   VideoStudioTaskCutPayload,
   VideoStudioTaskIntroPayload,
   VideoStudioTaskOutroPayload,
-  VideoStudioTaskWatermarkPayload,
-  VideoStudioTask
+  VideoStudioTaskPayload,
+  VideoStudioTaskWatermarkPayload
 } from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
+import { JobQueue } from '../job-queue'
 
 const lTagsBase = loggerTagsFactory('video-edition')
 
@@ -42,7 +44,7 @@ async function processVideoStudioEdition (job: Job) {
   const payload = job.data as VideoStudioEditionPayload
   const lTags = lTagsBase(payload.videoUUID)
 
-  logger.info('Process video studio edition of %s in job %d.', payload.videoUUID, job.id, lTags)
+  logger.info('Process video studio edition of %s in job %s.', payload.videoUUID, job.id, lTags)
 
   const video = await VideoModel.loadFull(payload.videoUUID)
 
@@ -89,7 +91,6 @@ async function processVideoStudioEdition (job: Job) {
   await move(editionResultPath, outputPath)
 
   await createTorrentAndSetInfoHashFromPath(video, newFile, outputPath)
-
   await removeAllFiles(video, newFile)
 
   await newFile.save()
@@ -100,7 +101,10 @@ async function processVideoStudioEdition (job: Job) {
   await federateVideoIfNeeded(video, false, undefined)
 
   const user = await UserModel.loadByVideoId(video.id)
-  await addOptimizeOrMergeAudioJob({ video, videoFile: newFile, user, isNewVideo: false })
+
+  await JobQueue.Instance.createJob(
+    await buildOptimizeOrMergeAudioJob({ video, videoFile: newFile, user, isNewVideo: false })
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -197,18 +201,12 @@ async function buildNewFile (video: MVideoId, path: string) {
 }
 
 async function removeAllFiles (video: MVideoWithAllFiles, webTorrentFileException: MVideoFile) {
-  const hls = video.getHLSPlaylist()
-
-  if (hls) {
-    await video.removeStreamingPlaylistFiles(hls)
-    await hls.destroy()
-  }
+  await removeHLSPlaylist(video)
 
   for (const file of video.VideoFiles) {
     if (file.id === webTorrentFileException.id) continue
 
-    await video.removeWebTorrentFileAndTorrent(file)
-    await file.destroy()
+    await removeWebTorrentFile(video, file.id)
   }
 }
 

@@ -42,6 +42,7 @@
         <span i18n>Started on {{ session.startDate | date:'medium' }}</span>
         <span i18n *ngIf="session.endDate">Ended on {{ session.endDate | date:'medium' }}</span>
         <a i18n *ngIf="session.replayVideo" [routerLink]="getVideoUrl(session.replayVideo)" target="_blank">Go to replay</a>
+        <span i18n *ngIf="isReplayBeingProcessed(session)">Replay is being processed...</span>
       </div>
     </div>
   </div>

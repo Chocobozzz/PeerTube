@@ -49,7 +49,7 @@ const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOp
 
   return {
     outputOptions: [
-      ...getCommonOutputOptions(targetBitrate),
+      ...getCommonOutputOptions(targetBitrate, streamNum),
 
       `${buildStreamSuffix('-r:v', streamNum)} ${fps}`,
       `${buildStreamSuffix('-b:v', streamNum)} ${targetBitrate}`
@@ -271,11 +271,11 @@ function capBitrate (inputBitrate: number, targetBitrate: number) {
   return Math.min(targetBitrate, inputBitrateWithMargin)
 }
 
-function getCommonOutputOptions (targetBitrate: number) {
+function getCommonOutputOptions (targetBitrate: number, streamNum?: number) {
   return [
     `-preset veryfast`,
-    `-maxrate ${targetBitrate}`,
-    `-bufsize ${targetBitrate * 2}`,
+    `${buildStreamSuffix('-maxrate:v', streamNum)} ${targetBitrate}`,
+    `${buildStreamSuffix('-bufsize:v', streamNum)} ${targetBitrate * 2}`,
 
     // NOTE: b-strategy 1 - heuristic algorithm, 16 is optimal B-frames for it
     `-b_strategy 1`,

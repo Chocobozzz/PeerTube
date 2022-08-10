@@ -49,9 +49,12 @@ export class HooksService {
   }
 
   runAction<T, U extends ClientActionHookName> (hookName: U, scope: PluginClientScope, params?: T) {
-    this.pluginService.ensurePluginsAreLoaded(scope)
+    // Use setTimeout to give priority to Angular change detector
+    setTimeout(() => {
+      this.pluginService.ensurePluginsAreLoaded(scope)
         .then(() => this.pluginService.runHook(hookName, undefined, params))
         .catch((err: any) => logger.error('Fatal hook error.', err))
+    })
   }
 
   async wrapObject<T, U extends ClientFilterHookName> (result: T, scope: PluginClientScope, hookName: U) {

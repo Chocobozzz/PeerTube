@@ -4,7 +4,13 @@ import { PrometheusExporter } from '@opentelemetry/exporter-prometheus'
 import { MeterProvider } from '@opentelemetry/sdk-metrics-base'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
-import { JobQueueObserversBuilder, NodeJSObserversBuilder, StatsObserversBuilder } from './metric-helpers'
+import {
+  JobQueueObserversBuilder,
+  LivesObserversBuilder,
+  NodeJSObserversBuilder,
+  StatsObserversBuilder,
+  ViewersObserversBuilder
+} from './metric-helpers'
 
 class OpenTelemetryMetrics {
 
@@ -53,6 +59,12 @@ class OpenTelemetryMetrics {
 
     const statsObserversBuilder = new StatsObserversBuilder(this.meter)
     statsObserversBuilder.buildObservers()
+
+    const livesObserversBuilder = new LivesObserversBuilder(this.meter)
+    livesObserversBuilder.buildObservers()
+
+    const viewersObserversBuilder = new ViewersObserversBuilder(this.meter)
+    viewersObserversBuilder.buildObservers()
   }
 
   private buildRequestObserver () {

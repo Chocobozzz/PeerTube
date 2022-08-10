@@ -1,5 +1,6 @@
 import memoizee from 'memoizee'
 import { AllowNull, Column, Default, DefaultScope, HasOne, IsInt, Model, Table } from 'sequelize-typescript'
+import { getNodeABIVersion } from '@server/helpers/version'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { AccountModel } from '../account/account'
 
@@ -37,6 +38,14 @@ export class ApplicationModel extends Model<Partial<AttributesOnly<ApplicationMo
   @Column
   latestPeerTubeVersion: string
 
+  @AllowNull(false)
+  @Column
+  nodeVersion: string
+
+  @AllowNull(false)
+  @Column
+  nodeABIVersion: number
+
   @HasOne(() => AccountModel, {
     foreignKey: {
       allowNull: true
@@ -51,5 +60,20 @@ export class ApplicationModel extends Model<Partial<AttributesOnly<ApplicationMo
 
   static load () {
     return ApplicationModel.findOne()
+  }
+
+  static async nodeABIChanged () {
+    const application = await this.load()
+
+    return application.nodeABIVersion !== getNodeABIVersion()
+  }
+
+  static async updateNodeVersions () {
+    const application = await this.load()
+
+    application.nodeABIVersion = getNodeABIVersion()
+    application.nodeVersion = process.version
+
+    await application.save()
   }
 }

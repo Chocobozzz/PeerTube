@@ -8,6 +8,14 @@ function findCommonElement <T> (array1: T[], array2: T[]) {
   return null
 }
 
+// Avoid conflict with other toArray() functions
+function arrayify <T> (element: T | T[]) {
+  if (Array.isArray(element)) return element
+
+  return [ element ]
+}
+
 export {
-  findCommonElement
+  findCommonElement,
+  arrayify
 }

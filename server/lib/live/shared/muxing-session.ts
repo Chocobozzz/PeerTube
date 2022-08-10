@@ -21,16 +21,16 @@ import { buildConcatenatedName } from '../live-utils'
 import memoizee = require('memoizee')
 
 interface MuxingSessionEvents {
-  'master-playlist-created': ({ videoId: number }) => void
+  'master-playlist-created': (options: { videoId: number }) => void
 
-  'bad-socket-health': ({ videoId: number }) => void
-  'duration-exceeded': ({ videoId: number }) => void
-  'quota-exceeded': ({ videoId: number }) => void
+  'bad-socket-health': (options: { videoId: number }) => void
+  'duration-exceeded': (options: { videoId: number }) => void
+  'quota-exceeded': (options: { videoId: number }) => void
 
-  'ffmpeg-end': ({ videoId: number }) => void
-  'ffmpeg-error': ({ videoId: string }) => void
+  'ffmpeg-end': (options: { videoId: number }) => void
+  'ffmpeg-error': (options: { videoId: number }) => void
 
-  'after-cleanup': ({ videoId: number }) => void
+  'after-cleanup': (options: { videoId: number }) => void
 }
 
 declare interface MuxingSession {

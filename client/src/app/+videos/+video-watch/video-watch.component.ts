@@ -242,6 +242,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     if (this.player) this.player.pause()
 
+    this.video = undefined
+
     const videoObs = this.hooks.wrapObsFun(
       this.videoService.getVideo.bind(this.videoService),
       { videoId },

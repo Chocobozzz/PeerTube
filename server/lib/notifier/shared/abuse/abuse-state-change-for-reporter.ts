@@ -32,8 +32,8 @@ export class AbuseStateChangeForReporter extends AbstractNotification <MAbuseFul
     return [ this.user ]
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: UserNotificationType.ABUSE_STATE_CHANGE,
       userId: user.id,
       abuseId: this.abuse.id

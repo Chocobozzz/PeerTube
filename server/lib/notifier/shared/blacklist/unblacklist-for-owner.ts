@@ -28,8 +28,8 @@ export class UnblacklistForOwner extends AbstractNotification <MVideoFullLight> 
     return [ this.user ]
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: UserNotificationType.UNBLACKLIST_ON_MY_VIDEO,
       userId: user.id,
       videoId: this.payload.id

@@ -1,5 +1,5 @@
 import { difference, values } from 'lodash'
-import { Includeable, IncludeOptions, Op, QueryTypes, Transaction } from 'sequelize'
+import { Attributes, FindOptions, Includeable, IncludeOptions, Op, QueryTypes, Transaction, WhereAttributeHash } from 'sequelize'
 import {
   AfterCreate,
   AfterDestroy,
@@ -209,7 +209,9 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
   }
 
   static isFollowedBy (actorId: number, followerActorId: number) {
-    const query = 'SELECT 1 FROM "actorFollow" WHERE "actorId" = $followerActorId AND "targetActorId" = $actorId LIMIT 1'
+    const query = `SELECT 1 FROM "actorFollow" ` +
+      `WHERE "actorId" = $followerActorId AND "targetActorId" = $actorId AND "state" = 'accepted' ` +
+      `LIMIT 1`
 
     return doesExist(query, { actorId, followerActorId })
   }
@@ -238,12 +240,15 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
     return ActorFollowModel.findOne(query)
   }
 
-  static loadByActorAndTargetNameAndHostForAPI (
-    actorId: number,
-    targetName: string,
-    targetHost: string,
-    t?: Transaction
-  ): Promise<MActorFollowActorsDefaultSubscription> {
+  static loadByActorAndTargetNameAndHostForAPI (options: {
+    actorId: number
+    targetName: string
+    targetHost: string
+    state?: FollowState
+    transaction?: Transaction
+  }): Promise<MActorFollowActorsDefaultSubscription> {
+    const { actorId, targetHost, targetName, state, transaction } = options
+
     const actorFollowingPartInclude: IncludeOptions = {
       model: ActorModel,
       required: true,
@@ -271,10 +276,11 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
       })
     }
 
-    const query = {
-      where: {
-        actorId
-      },
+    const where: WhereAttributeHash<Attributes<ActorFollowModel>> = { actorId }
+    if (state) where.state = state
+
+    const query: FindOptions<Attributes<ActorFollowModel>> = {
+      where,
       include: [
         actorFollowingPartInclude,
         {
@@ -283,7 +289,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
           as: 'ActorFollower'
         }
       ],
-      transaction: t
+      transaction
     }
 
     return ActorFollowModel.findOne(query)
@@ -325,6 +331,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
             [Op.or]: whereTab
           },
           {
+            state: 'accepted',
             actorId
           }
         ]
@@ -372,6 +379,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
   }) {
     const { actorId, start, count, sort } = options
     const where = {
+      state: 'accepted',
       actorId
     }
 
@@ -512,13 +520,15 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
 
     const totalInstanceFollowing = await ActorFollowModel.count({
       where: {
-        actorId: serverActor.id
+        actorId: serverActor.id,
+        state: 'accepted'
       }
     })
 
     const totalInstanceFollowers = await ActorFollowModel.count({
       where: {
-        targetActorId: serverActor.id
+        targetActorId: serverActor.id,
+        state: 'accepted'
       }
     })
 

@@ -89,10 +89,10 @@ export class RedirectService {
 
     this.router.navigateByUrl(this.defaultRoute, { skipLocationChange })
         .then(() => this.redirectingToHomepage = false)
-        .catch(() => {
+        .catch(err => {
           this.redirectingToHomepage = false
 
-          logger.error(`Cannot navigate to ${this.defaultRoute}, resetting default route to ${RedirectService.INIT_DEFAULT_ROUTE}`)
+          logger.error(`Cannot navigate to ${this.defaultRoute}, resetting default route to ${RedirectService.INIT_DEFAULT_ROUTE}`, err)
 
           this.defaultRoute = RedirectService.INIT_DEFAULT_ROUTE
           return this.router.navigateByUrl(this.defaultRoute, { skipLocationChange })

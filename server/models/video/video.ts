@@ -26,8 +26,9 @@ import {
 } from 'sequelize-typescript'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live/live-manager'
-import { removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'
-import { getHLSDirectory, getHLSRedundancyDirectory } from '@server/lib/paths'
+import { removeHLSFileObjectStorage, removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'
+import { tracer } from '@server/lib/opentelemetry/tracing'
+import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
@@ -768,7 +769,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
       // Remove physical files and torrents
       instance.VideoFiles.forEach(file => {
-        tasks.push(instance.removeWebTorrentFileAndTorrent(file))
+        tasks.push(instance.removeWebTorrentFile(file))
       })
 
       // Remove playlists file
@@ -1209,18 +1210,21 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return VideoModel.getAvailableForApi(queryOptions)
   }
 
-  static countLocalLives () {
-    const options = {
+  static countLives (options: {
+    remote: boolean
+    mode: 'published' | 'not-ended'
+  }) {
+    const query = {
       where: {
-        remote: false,
+        remote: options.remote,
         isLive: true,
-        state: {
-          [Op.ne]: VideoState.LIVE_ENDED
-        }
+        state: options.mode === 'not-ended'
+          ? { [Op.ne]: VideoState.LIVE_ENDED }
+          : { [Op.eq]: VideoState.PUBLISHED }
       }
     }
 
-    return VideoModel.count(options)
+    return VideoModel.count(query)
   }
 
   static countVideosUploadedByUserSince (userId: number, since: Date) {
@@ -1532,6 +1536,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     options: BuildVideosListQueryOptions,
     countVideos = true
   ): Promise<ResultList<VideoModel>> {
+    const span = tracer.startSpan('peertube.VideoModel.getAvailableForApi')
+
     function getCount () {
       if (countVideos !== true) return Promise.resolve(undefined)
 
@@ -1550,6 +1556,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     }
 
     const [ count, rows ] = await Promise.all([ getCount(), getModels() ])
+
+    span.end()
 
     return {
       data: rows,
@@ -1584,22 +1592,21 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
   }
 
   getQualityFileBy<T extends MVideoWithFile> (this: T, fun: (files: MVideoFile[], it: (file: MVideoFile) => number) => MVideoFile) {
-    // We first transcode to WebTorrent format, so try this array first
-    if (Array.isArray(this.VideoFiles) && this.VideoFiles.length !== 0) {
-      const file = fun(this.VideoFiles, file => file.resolution)
+    const files = this.getAllFiles()
+    const file = fun(files, file => file.resolution)
+    if (!file) return undefined
 
+    if (file.videoId) {
       return Object.assign(file, { Video: this })
     }
 
-    // No webtorrent files, try with streaming playlist files
-    if (Array.isArray(this.VideoStreamingPlaylists) && this.VideoStreamingPlaylists.length !== 0) {
+    if (file.videoStreamingPlaylistId) {
       const streamingPlaylistWithVideo = Object.assign(this.VideoStreamingPlaylists[0], { Video: this })
 
-      const file = fun(streamingPlaylistWithVideo.VideoFiles, file => file.resolution)
       return Object.assign(file, { VideoStreamingPlaylist: streamingPlaylistWithVideo })
     }
 
-    return undefined
+    throw new Error('File is not associated to a video of a playlist')
   }
 
   getMaxQualityFile<T extends MVideoWithFile> (this: T): MVideoFileVideo | MVideoFileStreamingPlaylistVideo {
@@ -1775,7 +1782,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
                                        .concat(toAdd)
   }
 
-  removeWebTorrentFileAndTorrent (videoFile: MVideoFile, isRedundancy = false) {
+  removeWebTorrentFile (videoFile: MVideoFile, isRedundancy = false) {
     const filePath = isRedundancy
       ? VideoPathManager.Instance.getFSRedundancyVideoFilePath(this, videoFile)
       : VideoPathManager.Instance.getFSVideoFileOutputPath(this, videoFile)
@@ -1813,6 +1820,29 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       if (streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
         await removeHLSObjectStorage(streamingPlaylist.withVideo(this))
       }
+    }
+  }
+
+  async removeStreamingPlaylistVideoFile (streamingPlaylist: MStreamingPlaylist, videoFile: MVideoFile) {
+    const filePath = VideoPathManager.Instance.getFSHLSOutputPath(this, videoFile.filename)
+    await videoFile.removeTorrent()
+    await remove(filePath)
+
+    const resolutionFilename = getHlsResolutionPlaylistFilename(videoFile.filename)
+    await remove(VideoPathManager.Instance.getFSHLSOutputPath(this, resolutionFilename))
+
+    if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
+      await removeHLSFileObjectStorage(streamingPlaylist.withVideo(this), videoFile.filename)
+      await removeHLSFileObjectStorage(streamingPlaylist.withVideo(this), resolutionFilename)
+    }
+  }
+
+  async removeStreamingPlaylistFile (streamingPlaylist: MStreamingPlaylist, filename: string) {
+    const filePath = VideoPathManager.Instance.getFSHLSOutputPath(this, filename)
+    await remove(filePath)
+
+    if (streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
+      await removeHLSFileObjectStorage(streamingPlaylist.withVideo(this), filename)
     }
   }
 

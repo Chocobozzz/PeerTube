@@ -16,8 +16,9 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { getHLSPublicFileUrl } from '@server/lib/object-storage'
+import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename } from '@server/lib/paths'
 import { VideoFileModel } from '@server/models/video/video-file'
-import { MStreamingPlaylist, MVideo } from '@server/types/models'
+import { MStreamingPlaylist, MStreamingPlaylistFilesVideo, MVideo } from '@server/types/models'
 import { sha1 } from '@shared/extra-utils'
 import { VideoStorage } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
@@ -167,6 +168,22 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
     return VideoStreamingPlaylistModel.findAll(query)
   }
 
+  static loadWithVideoAndFiles (id: number) {
+    const options = {
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: true
+        },
+        {
+          model: VideoFileModel.unscoped()
+        }
+      ]
+    }
+
+    return VideoStreamingPlaylistModel.findByPk<MStreamingPlaylistFilesVideo>(id, options)
+  }
+
   static loadWithVideo (id: number) {
     const options = {
       include: [
@@ -194,9 +211,22 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
 
   static async loadOrGenerate (video: MVideo, transaction?: Transaction) {
     let playlist = await VideoStreamingPlaylistModel.loadHLSPlaylistByVideo(video.id, transaction)
-    if (!playlist) playlist = new VideoStreamingPlaylistModel()
 
-    return Object.assign(playlist, { videoId: video.id, Video: video })
+    if (!playlist) {
+      playlist = new VideoStreamingPlaylistModel({
+        p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
+        type: VideoStreamingPlaylistType.HLS,
+        storage: VideoStorage.FILE_SYSTEM,
+        p2pMediaLoaderInfohashes: [],
+        playlistFilename: generateHLSMasterPlaylistFilename(video.isLive),
+        segmentsSha256Filename: generateHlsSha256SegmentsFilename(video.isLive),
+        videoId: video.id
+      })
+
+      await playlist.save({ transaction })
+    }
+
+    return Object.assign(playlist, { Video: video })
   }
 
   static doesOwnedHLSPlaylistExist (videoUUID: string) {

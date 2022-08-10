@@ -60,7 +60,6 @@ describe('Test jobs', function () {
       if (job.type === 'videos-views-stats') job = body.data[1]
 
       expect(job.state).to.equal('completed')
-      expect(job.type.startsWith('activitypub-')).to.be.true
       expect(dateIsValid(job.createdAt as string)).to.be.true
       expect(dateIsValid(job.processedOn as string)).to.be.true
       expect(dateIsValid(job.finishedOn as string)).to.be.true
@@ -103,8 +102,16 @@ describe('Test jobs', function () {
 
     await wait(5000)
 
-    const body = await servers[1].jobs.list({ state: 'waiting', jobType: 'video-transcoding' })
-    expect(body.data).to.have.lengthOf(4)
+    {
+      const body = await servers[1].jobs.list({ state: 'waiting', jobType: 'video-transcoding' })
+      // waiting includes waiting-children
+      expect(body.data).to.have.lengthOf(4)
+    }
+
+    {
+      const body = await servers[1].jobs.list({ state: 'waiting-children', jobType: 'video-transcoding' })
+      expect(body.data).to.have.lengthOf(1)
+    }
   })
 
   it('Should resume the job queue', async function () {

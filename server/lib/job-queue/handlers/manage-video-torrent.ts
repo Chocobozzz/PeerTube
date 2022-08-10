@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { createTorrentAndSetInfoHash, updateTorrentMetadata } from '@server/helpers/webtorrent'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
@@ -8,7 +8,7 @@ import { logger } from '../../../helpers/logger'
 
 async function processManageVideoTorrent (job: Job) {
   const payload = job.data as ManageVideoTorrentPayload
-  logger.info('Processing torrent in job %d.', job.id)
+  logger.info('Processing torrent in job %s.', job.id)
 
   if (payload.action === 'create') return doCreateAction(payload)
   if (payload.action === 'update-metadata') return doUpdateMetadataAction(payload)
