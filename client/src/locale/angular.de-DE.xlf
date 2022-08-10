@@ -1076,7 +1076,7 @@
       </trans-unit>
       <trans-unit id="732935381486595265" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</source>
-        <target state="translated">Ihre <x id="PH" equiv-text="name"/> Datei konnte nicht übertragen werden auf Grund einer Zeitüberschreitung des Proxy</target>
+        <target state="translated">Die Datei <x id="PH" equiv-text="name"/>  konnte nicht übertragen werden, bevor eine Zeitüberschreitung beim Proxy-Server auftrat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">35</context>
