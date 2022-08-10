@@ -548,7 +548,7 @@
       </trans-unit>
       <trans-unit id="1080230904501320275" datatype="html">
         <source>{count, plural, =1 {1 user banned.} other {<x id="count"/> users banned.}}</source>
-        <target state="translated">{count, plural, =1 {un usuario vetado.} otro {<x id="count"/> usuarios vetados.}}</target>
+        <target state="translated">{count, plural, =1 {un usuario vetado.} other {<x id="count"/> usuarios vetados.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -1143,7 +1143,7 @@
       </trans-unit>
       <trans-unit id="901879091817013957" datatype="html">
         <source>{count, plural, =1 {Blocked <x id="videoName"/>.} other {Blocked <x id="count"/> videos.}}</source>
-        <target state="translated">{recuento, plural, =1 {Bloqueado <x id="videoName"/>.} otro {<x id="count"/> videos Bloqueados.}}</target>
+        <target state="translated">{recuento, plural, =1 {Bloqueado <x id="videoName"/>.} other {<x id="count"/> videos Bloqueados.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.ts</context>
           <context context-type="linenumber">84</context>
