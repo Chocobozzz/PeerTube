@@ -1366,7 +1366,7 @@
       </trans-unit>
       <trans-unit id="6928511254538021087" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Subscribe<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to channels to be notified of new videos</source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Subscribe<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to channels to be notified of new videos</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Abonnieren<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Sie Kanäle, um über neue Videos informiert zu werden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1374,7 +1374,7 @@
       </trans-unit>
       <trans-unit id="269413964682905563" datatype="html">
         <source>Have access to your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>watch history<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Have access to your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>watch history<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Zugriff auf Ihren <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Verlauf<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">13</context>
@@ -1382,7 +1382,7 @@
       </trans-unit>
       <trans-unit id="7760677303939127268" datatype="html">
         <source>Create your channel to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Create your channel to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Erstellen Sie Ihren Kanal, um <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Videos zu veröffentlichen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1390,7 +1390,7 @@
       </trans-unit>
       <trans-unit id="5767014923310516" datatype="html">
         <source>Do you use Mastodon, ActivityPub or a RSS feed aggregator?</source>
-        <target state="new">Do you use Mastodon, ActivityPub or a RSS feed aggregator?</target>
+        <target state="translated">Verwenden Sie Mastodon, ActivityPub oder einen RSS-Feed-Aggregator?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">19</context>
@@ -1398,7 +1398,7 @@
       </trans-unit>
       <trans-unit id="5853527794391720600" datatype="html">
         <source>You can already follow <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> using your favorite tool. </source>
-        <target state="new"> You can already follow <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> using your favorite tool. </target>
+        <target state="translated">Sie können <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> bereits mit Ihrem bevorzugten Tool verfolgen. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">21,23</context>
@@ -1406,7 +1406,7 @@
       </trans-unit>
       <trans-unit id="7772973173091400795" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> has been created using <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, a video creation platform developed by Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is a french non-profit organization that offers alternatives to Big Tech's digital tools </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> has been created using <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, a video creation platform developed by Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is a french non-profit organization that offers alternatives to Big Tech's digital tools </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> wurde mit<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, eine von Framasoft entwickelte Plattform zur Erstellung von Videos. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ist eine französische Non-Profit-Organisation, die Alternativen zu den digitalen Werkzeugen von Big Tech bietet </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">34,37</context>
@@ -1414,7 +1414,7 @@
       </trans-unit>
       <trans-unit id="2528596078796844503" datatype="html">
         <source>You want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Then you need to create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="new"> You want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Then you need to create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">Sie wollen <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> auf <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>veröffentlichen? Dann müssen Sie Ihren ersten <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Kanal<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> erstellen. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -1422,7 +1422,7 @@
       </trans-unit>
       <trans-unit id="1335686739562009265" datatype="html">
         <source>You might want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>create a channel by theme:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> for example, you can create a channel named "SweetMelodies" to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology. </source>
-        <target state="new"> You might want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>create a channel by theme:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> for example, you can create a channel named "SweetMelodies" to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology. </target>
+        <target state="translated">Vielleicht möchten Sie <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> einen Kanal nach Thema erstellen:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Sie können zum Beispiel einen Kanal mit dem Namen "SweetMelodies" erstellen, um Ihre Klavierkonzerte zu veröffentlichen, und einen anderen mit dem Namen "Ecology", in dem Sie Ihre Videos zum Thema Ökologie veröffentlichen. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">6,9</context>
@@ -1430,7 +1430,7 @@
       </trans-unit>
       <trans-unit id="5716290603546738313" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrators allow you to publish up to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> of videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on their website. </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrators allow you to publish up to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> of videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on their website. </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> Administratoren ermöglichen es Ihnen, bis zu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> von Videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> auf ihrer Website. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -1503,7 +1503,7 @@
       </trans-unit>
       <trans-unit id="1852111465407058121" datatype="html">
         <source>Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="new"> Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of instance they are. </target>
+        <target state="translated">Auswahl des <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Instanznamens<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Einrichten einer Beschreibung<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, die Angabe <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>wer Sie sind<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, warum <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Sie haben Ihre Instanz<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>und <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>wie lange<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Sie planen, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>es zu pflegen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>ist sehr wichtig, damit die Besucher verstehen, um welche Art von Instanz es sich handelt. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">57,61</context>
@@ -1593,7 +1593,7 @@
       </trans-unit>
       <trans-unit id="7630362802781892981" datatype="html">
         <source>Interface</source>
-        <target state="new">Interface</target>
+        <target state="translated">Schnittstelle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1631,7 +1631,7 @@
       </trans-unit>
       <trans-unit id="1599290313974118905" datatype="html">
         <source>Live blacklisted</source>
-        <target state="new">Live blacklisted</target>
+        <target state="translated">Live auf der schwarzen Liste</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">43</context>
@@ -1639,7 +1639,7 @@
       </trans-unit>
       <trans-unit id="5274374742436838139" datatype="html">
         <source>Max duration exceeded</source>
-        <target state="new">Max duration exceeded</target>
+        <target state="translated">Maximale Dauer überschritten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -1806,7 +1806,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6653148913296143805" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Crea"/>Create an account<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Crea"/>Create an account<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Crea"/>Ein Konto erstellen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>auf <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">19,21</context>
@@ -1814,7 +1814,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="8246967116432095499" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="I al"/>I already have an account<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, I log in </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="I al"/>I already have an account<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, I log in </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="I al"/>Ich habe bereits ein Konto<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, ich melde mich an </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">27,30</context>
@@ -1822,7 +1822,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6075115017891566450" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Term"/>Terms<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Term"/>Terms<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>of <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Term"/>Terms<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>von <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">36,38</context>
@@ -1830,7 +1830,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="5788965650054506209" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>Setup<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>your account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>Setup<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>your account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>Setup<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Ihr Konto<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">60,62</context>
@@ -1838,7 +1838,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6090939006626576593" datatype="html">
         <source>My channel</source>
-        <target state="new">My channel</target>
+        <target state="translated">Mein Kanal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">75</context>
@@ -1846,7 +1846,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3071761663064320665" datatype="html">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>Create<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your first channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>Create<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your first channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>Erstellen<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Ihren ersten Kanal<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">77,79</context>
@@ -1854,7 +1854,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3761381527105312450" datatype="html">
         <source>I don't want to create a channel</source>
-        <target state="new">I don't want to create a channel</target>
+        <target state="translated">Ich möchte keinen Kanal erstellen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">91,92</context>
@@ -1862,7 +1862,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1792963373738226329" datatype="html">
         <source>You will be able to create a channel later</source>
-        <target state="new">You will be able to create a channel later</target>
+        <target state="translated">Sie werden später einen Kanal erstellen können</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">94,95</context>
@@ -1985,7 +1985,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="8497991113445747319" datatype="html">
         <source>You might need to login to see the video.</source>
-        <target state="new">You might need to login to see the video.</target>
+        <target state="translated">Sie müssen sich möglicherweise anmelden, um das Video zu sehen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">30</context>
@@ -1993,7 +1993,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="250608669543270729" datatype="html">
         <source>You might need to login to see the resource.</source>
-        <target state="new">You might need to login to see the resource.</target>
+        <target state="translated">Sie müssen sich möglicherweise anmelden, um die Ressource zu sehen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">31</context>
@@ -2001,7 +2001,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1908285951500318953" datatype="html">
         <source>Login</source>
-        <target state="new"> Login </target>
+        <target state="translated">Login</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">34,36</context>
@@ -2530,7 +2530,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="4335724652642647824" datatype="html">
         <source>Already uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | date }}"/> ✔</source>
-        <target state="new">Already uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | date }}"/>	✔</target>
+        <target state="translated">Bereits hochgeladen am <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | date }}"/> ✔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">186,188</context>
@@ -2641,7 +2641,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="7003790776240394114" datatype="html">
         <source>Filename</source>
-        <target state="new">Filename</target>
+        <target state="translated">Dateiname</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">345,347</context>
@@ -2649,7 +2649,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1186960092655764809" datatype="html">
         <source>Name of the uploaded file</source>
-        <target state="new"> Name of the uploaded file </target>
+        <target state="translated">Name der hochgeladenen Datei</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">350</context>
@@ -2910,7 +2910,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="8675588963276687921" datatype="html">
         <source>Stream only once, replay will replace your live</source>
-        <target state="new">Stream only once, replay will replace your live</target>
+        <target state="translated">Streamen Sie nur einmal, die Wiederholung ersetzt Ihre Live-Übertragung.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">160</context></context-group>
       </trans-unit>
       <trans-unit id="2360261543675520397" datatype="html">
@@ -2920,7 +2920,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3384650899171037827" datatype="html">
         <source>Stream multiple times, replays will be separate videos</source>
-        <target state="new">Stream multiple times, replays will be separate videos</target>
+        <target state="translated">Mehrmals streamen, Wiederholungen werden als separate Videos angezeigt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context><context context-type="linenumber">168</context></context-group>
       </trans-unit>
       <trans-unit id="58134197356653483" datatype="html">
@@ -3092,8 +3092,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6154714649766447409" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong class=&quot;underline-orange&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> &gt; Login </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong class=&quot;underline-orange&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> &gt; Login
-</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong class=&quot;underline-orange&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> &gt; Login </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">2,5</context>
@@ -3143,7 +3142,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="4583515246777381165" datatype="html">
         <source>Display player control bar</source>
-        <target state="new">Display player control bar</target>
+        <target state="translated">Player-Steuerungsleiste anzeigen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">252</context></context-group>
       </trans-unit>
       <trans-unit id="805456636864344681" datatype="html">
@@ -3574,7 +3573,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="4965562695253171955" datatype="html">
         <source>Clear filter</source>
-        <target state="new">Clear filter</target>
+        <target state="translated">Filter löschen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">28</context>
@@ -4130,7 +4129,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="5026011498416291967" datatype="html">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></source>
-        <target state="new"> <x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></target>
+        <target state="translated"><x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">21,23</context>
@@ -4283,7 +4282,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="2959657578684395250" datatype="html">
         <source>{count, plural, =1 {Follow request sent!} other {Follow requests sent!}}</source>
-        <target state="new">{count, plural, =1 {Follow request sent!} other {Follow requests sent!}}</target>
+        <target state="translated">{count, plural, =1 {Gesendeter Folgeantrag!} other {Gesendete Folgeanträge!}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -4487,7 +4486,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1271241007621398467" datatype="html">
         <source>{count, plural, =1 {1 comment deleted.} other {<x id="count"/> comments deleted.}}</source>
-        <target state="new">{count, plural, =1 {1 comment deleted.} other {<x id="count"/> comments deleted.}}</target>
+        <target state="translated">{count, plural, =1 {1 Kommentar gelöscht.} other {<x id="count"/> Kommentare gelöscht.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context>
           <context context-type="linenumber">150</context>
@@ -4495,7 +4494,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="264978617337249011" datatype="html">
         <source><x id="PH" equiv-text="commentArgs.length"/> comment(s) deleted.</source>
-        <target state="new"><x id="PH" equiv-text="commentArgs.length"/> comment(s) deleted.</target>
+        <target state="translated"><x id="PH" equiv-text="commentArgs.length"/> Kommentar(e) gelöscht.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context>
           <context context-type="linenumber">152,150</context>
@@ -4839,7 +4838,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="371306187337992930" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or add slight <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>customizations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or add slight <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>customizations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Verwenden Sie <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> für umfangreichere Änderungen, oder fügen Sie leichte <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>Anpassungen<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">5,7</context>
@@ -5279,7 +5278,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="5191164170233238999" datatype="html">
         <source>Max simultaneous lives created on your instance</source>
-        <target state="new">Max simultaneous lives created on your instance</target>
+        <target state="translated">Maximal gleichzeitig erstellte Live-Übertragungen auf Ihrer Instanz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">49</context>
@@ -5293,7 +5292,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="1834362188086938736" datatype="html">
         <source>Max simultaneous lives created per user</source>
-        <target state="new">Max simultaneous lives created per user</target>
+        <target state="translated">Maximal gleichzeitig erstellte Live-Übertragungen pro Benutzer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">62</context>
@@ -5689,7 +5688,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="762510264401369759" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Original Publication Date"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Original Publication Date"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Sortieren nach <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Originalveröffentlichungsdatum"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">47</context>
@@ -6002,7 +6001,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6500762313951857695" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Keine Aufrufe} =1 {1 Aufruf other {<x id="INTERPOLATION"/> Aufrufe}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="9131836378905533756">
@@ -6067,7 +6066,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3343758569423394070" datatype="html">
         <source>No videos found for "<x id="PH" equiv-text="this.search"/>".</source>
-        <target state="new">No videos found for "<x id="PH" equiv-text="this.search"/>".</target>
+        <target state="translated">Keine Videos gefunden für "<x id="PH" equiv-text="this.search"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context>
           <context context-type="linenumber">140</context>
@@ -6207,7 +6206,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="7849797693092882170" datatype="html">
         <source>Since the video publication</source>
-        <target state="new">Since the video publication</target>
+        <target state="translated">Seit der Veröffentlichung des Videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -6231,7 +6230,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="2232536542109196600" datatype="html">
         <source>Viewers stats between <x id="PH" equiv-text="this.statsStartDate.toLocaleString()"/> and <x id="PH_1" equiv-text="this.statsEndDate.toLocaleString()"/></source>
-        <target state="new">Viewers stats between <x id="PH" equiv-text="this.statsStartDate.toLocaleString()"/> and <x id="PH_1" equiv-text="this.statsEndDate.toLocaleString()"/></target>
+        <target state="translated">Betrachterstatistiken zwischen <x id="PH" equiv-text="this.statsStartDate.toLocaleString()"/> und <x id="PH_1" equiv-text="this.statsEndDate.toLocaleString()"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">153</context></context-group>
       </trans-unit>
       <trans-unit id="5697131528899933134" datatype="html">
@@ -6241,7 +6240,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="8089238718524110373" datatype="html">
         <source>Live as of <x id="PH" equiv-text="this.toMediumDate(new Date(session.startDate))"/></source>
-        <target state="new">Live as of <x id="PH" equiv-text="this.toMediumDate(new Date(session.startDate))"/></target>
+        <target state="translated">Live ab <x id="PH" equiv-text="this.toMediumDate(new Date(session.startDate))"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">227</context>
@@ -6249,12 +6248,12 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="3249405667632600635" datatype="html">
         <source>Custom dates</source>
-        <target state="new">Custom dates</target>
+        <target state="translated">Benutzerdefinierte Daten</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">238</context></context-group>
       </trans-unit>
       <trans-unit id="5382746022482410588" datatype="html">
         <source>A view means that someone watched the video for at least 30 seconds</source>
-        <target state="new">A view means that someone watched the video for at least 30 seconds</target>
+        <target state="translated">Eine Ansicht bedeutet, dass jemand das Video mindestens 30 Sekunden lang angesehen hat.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context><context context-type="linenumber">257</context></context-group>
       </trans-unit>
       <trans-unit id="6782077395930235254" datatype="html">
@@ -6316,7 +6315,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="8994506181143828992" datatype="html">
         <source>Request new verification email</source>
-        <target state="new">Request new verification email</target>
+        <target state="translated">Neue Bestätigungs-E-Mail anfordern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">12</context>
@@ -6354,7 +6353,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6040639330855198542" datatype="html">
         <source>Ask to send an email to verify your account</source>
-        <target state="new">Ask to send an email to verify your account</target>
+        <target state="translated">Bitten Sie darum, eine E-Mail zur Verifizierung Ihres Kontos zu senden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">24</context>
@@ -6362,7 +6361,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="7225513189981158956" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Welcome<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Welcome<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Willkommen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>auf <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context>
           <context context-type="linenumber">2,3</context>
@@ -6370,7 +6369,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="4422394577857179995" datatype="html">
         <source>Your account has been created!</source>
-        <target state="new">Your account has been created!</target>
+        <target state="translated">Ihr Konto wurde erstellt!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context>
           <context context-type="linenumber">7</context>
@@ -6378,7 +6377,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="4656825997819651017" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your emails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your inscription. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your emails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your inscription. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Überprüfen Sie Ihre E-Mails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, um Ihr Konto zu bestätigen und Ihre Anmeldung abzuschließen. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -6506,7 +6505,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="6591746065516872491" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No subscribers} =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No subscribers} =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Keine Abonnenten} =1 {1 Abonnent} other {<x id="INTERPOLATION"/> Abonnenten}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">26</context>
@@ -6889,7 +6888,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4331636419103456800" datatype="html">
         <source>Done!</source>
-        <target state="new">Done!</target>
+        <target state="translated">Fertig!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">103</context>
@@ -6902,7 +6901,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="7119544246688514254" datatype="html">
         <source>Go to the previous step</source>
-        <target state="new">Go to the previous step</target>
+        <target state="translated">Gehen Sie zum vorherigen Schritt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -6910,7 +6909,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4323994782717641395" datatype="html">
         <source>Go to the next step</source>
-        <target state="new">Go to the next step</target>
+        <target state="translated">Weiter zum nächsten Schritt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -6933,7 +6932,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="5659987171239176484" datatype="html">
         <source>Terms of <x id="PH" equiv-text="this.about.instance.name"/></source>
-        <target state="new">Terms of <x id="PH" equiv-text="this.about.instance.name"/></target>
+        <target state="translated">Richtlinien von <x id="PH" equiv-text="this.about.instance.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -6956,7 +6955,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4376397515999418662" datatype="html">
         <source>This is the name that will be publicly visible by other users.</source>
-        <target state="new">This is the name that will be publicly visible by other users.</target>
+        <target state="translated">Dies ist der Name, der für andere Benutzer öffentlich sichtbar sein wird.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">23</context>
@@ -6964,7 +6963,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1506228075480230031" datatype="html">
         <source>Example: Sweet Melodies</source>
-        <target state="new">Example: Sweet Melodies</target>
+        <target state="translated">Beispiel: Sweet Melodies</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">27</context>
@@ -6972,7 +6971,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1346553616305614767" datatype="html">
         <source>Channel identifier</source>
-        <target state="new">Channel identifier</target>
+        <target state="translated">Kanalbezeichner</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">36</context>
@@ -6980,7 +6979,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1421502666684458815" datatype="html">
         <source>This is the name that will be displayed in your profile URL.</source>
-        <target state="new">This is the name that will be displayed in your profile URL.</target>
+        <target state="translated">Dies ist der Name, der in der URL Ihres Profils angezeigt wird.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">38</context>
@@ -6988,7 +6987,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="5007378598046048755" datatype="html">
         <source>Example: sweetmelodies24</source>
-        <target state="new">Example: sweetmelodies24</target>
+        <target state="translated">Beispiel: sweetmelodies24</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">42</context>
@@ -6996,7 +6995,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6433602064879074151" datatype="html">
         <source>Channel identifier cannot be the same as your account name. You can click on the first step to update your account name.</source>
-        <target state="new"> Channel identifier cannot be the same as your account name. You can click on the first step to update your account name. </target>
+        <target state="translated">Die Kanalkennung darf nicht mit Ihrem Kontonamen identisch sein. Sie können auf den ersten Schritt klicken, um Ihren Kontonamen zu aktualisieren.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">50,52</context>
@@ -7021,8 +7020,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1081343670550705648" datatype="html">
         <source>Video uploads are disabled on this instance, hence your account won't be able to upload videos.</source>
-        <target state="new"> Video uploads are disabled on this instance, hence your account won't be able to upload videos.
-</target>
+        <target state="translated">Video-Uploads sind in dieser Instanz deaktiviert, so dass Ihr Konto nicht in der Lage ist, Videos hochzuladen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">1,3</context>
@@ -7030,7 +7028,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="7657420986523643151" datatype="html">
         <source>Public name</source>
-        <target state="new">Public name</target>
+        <target state="translated">Öffentlicher Name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">9</context>
@@ -7038,7 +7036,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="7536432216862568979" datatype="html">
         <source>This is the name that will be publicly visible by other users.</source>
-        <target state="new"> This is the name that will be publicly visible by other users. </target>
+        <target state="translated">Dies ist der Name, der für andere Benutzer öffentlich sichtbar sein wird.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -7046,7 +7044,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1926625386720791836" datatype="html">
         <source>Example: John Doe</source>
-        <target state="new">Example: John Doe</target>
+        <target state="translated">Beispiel: John Doe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">17</context>
@@ -7054,7 +7052,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8656171949584591423" datatype="html">
         <source>This is the name that will be displayed in your profile URL.</source>
-        <target state="new"> This is the name that will be displayed in your profile URL. </target>
+        <target state="translated">Dies ist der Name, der in der URL Ihres Profils angezeigt wird.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -7062,7 +7060,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="9199457913561943854" datatype="html">
         <source>Example: john_doe58</source>
-        <target state="new">Example: john_doe58</target>
+        <target state="translated">Beispiel: john_doe58</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">34</context>
@@ -7070,7 +7068,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="5856397248272246243" datatype="html">
         <source>This email address will be used to validate your account.</source>
-        <target state="new"> This email address will be used to validate your account. </target>
+        <target state="translated">Diese E-Mail-Adresse wird für die Validierung Ihres Kontos verwendet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">48,50</context>
@@ -7078,7 +7076,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1789116494691736014" datatype="html">
         <source>Request email for account verification</source>
-        <target state="new">Request email for account verification</target>
+        <target state="translated">E-Mail zur Kontoverifizierung anfordern</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -7094,7 +7092,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="670353405713142439" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="s=&quot;underline-orange&quot;&gt;"/><x id="INTERPOLATION" equiv-text="&lt;/s"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&gt;"/> &gt; Create an account </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="s=&quot;underline-orange&quot;&gt;"/><x id="INTERPOLATION" equiv-text="&lt;/s"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&gt;"/> &gt; Create an account </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="s=&quot;underline-orange&quot;&gt;"/><x id="INTERPOLATION" equiv-text="&lt;/s"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&gt;"/> &gt; Ein Konto erstellen </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">9,12</context>
@@ -7279,7 +7277,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="5921284055608402352" datatype="html">
         <source>{value, plural, =1 {thread} other {threads}}</source>
-        <target state="new">{value, plural, =1 {thread} other {threads}}</target>
+        <target state="translated">{value, plural, =1 {Thread} other {Threads}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">90</context>
@@ -7336,7 +7334,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8538708819525283296" datatype="html">
         <source>However, you may want to read <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://docs.joinpeertube.org/admin-configuration?id=transcoding&quot;&gt;"/>our guidelines<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before tweaking the following values. </source>
-        <target state="new"> However, you may want to read <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://docs.joinpeertube.org/admin-configuration?id=transcoding&quot;&gt;"/>our guidelines<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before tweaking the following values. </target>
+        <target state="translated">Sie sollten jedoch<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://docs.joinpeertube.org/admin-configuration?id=transcoding&quot;&gt;"/>unsere Richtlinien<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> bevor Sie die folgenden Werte ändern. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">12,14</context>
@@ -8146,7 +8144,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6410650387447929805" datatype="html">
         <source>Light/Orange or Dark</source>
-        <target state="new">Light/Orange or Dark</target>
+        <target state="translated">Hell/Orange oder Dunkel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/theme/theme.service.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="1519954996184640001">
@@ -8335,7 +8333,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="7634059432691079352" datatype="html">
         <source>Do you really want to unban {count, plural, =1 {1 user} other {<x id="count"/> users}}?</source>
-        <target state="new">Do you really want to unban {count, plural, =1 {1 user} other {<x id="count"/> users}}?</target>
+        <target state="translated">Wollen Sie wirklich {count, plural, =1 {1 Benutzer} other {<x id="count"/> Benutzer}} sperren?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">214</context></context-group>
       </trans-unit>
       <trans-unit id="4884272193574287483">
@@ -8345,7 +8343,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="738031253894929036" datatype="html">
         <source>{count, plural, =1 {1 user unbanned.} other {<x id="count"/> users unbanned.}}</source>
-        <target state="new">{count, plural, =1 {1 user unbanned.} other {<x id="count"/> users unbanned.}}</target>
+        <target state="translated">{count, plural, =1 {1 Benutzer entbannt.} other {<x id="count"/> Benutzer entbannt.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">227</context></context-group>
       </trans-unit>
       <trans-unit id="8712248120167780385">
@@ -8363,7 +8361,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="5945924096465496818" datatype="html">
         <source>&lt;p&gt;You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p&gt;</source>
-        <target state="new">&lt;p&gt;You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p&gt;</target>
+        <target state="translated">&lt;p&gt;Sie können keine Benutzer oder Kanäle mit einem Benutzernamen erstellen, der bereits von einem gelöschten Benutzer/Kanal verwendet wird.&lt;/p&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">245</context></context-group>
       </trans-unit>
       <trans-unit id="5643060985393782358" datatype="html">
@@ -8373,7 +8371,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1301767781765127363" datatype="html">
         <source>{count, plural, =1 {1 user deleted.} other {<x id="count"/> users deleted.}}</source>
-        <target state="new">{count, plural, =1 {1 user deleted.} other {<x id="count"/> users deleted.}}</target>
+        <target state="translated">{count, plural, =1 {1 Benutzer gelöscht.} other {<x id="count"/> Benutzer gelöscht.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">256</context></context-group>
       </trans-unit>
       <trans-unit id="7166936623843420016">
@@ -8385,7 +8383,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3104427236147521673" datatype="html">
         <source>{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</source>
-        <target state="new">{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</target>
+        <target state="translated">{count, plural, =1 {1 Benutzer-E-Mail als verifiziert eingestellt.} other {<x id="count"/> Benutzer-E-Mails als verifiziert eingestellt.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">274</context></context-group>
       </trans-unit>
       <trans-unit id="8360664597512051242">
@@ -8546,7 +8544,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="5935212402338564229" datatype="html">
         <source>You or one of your channels has a new follower</source>
-        <target state="new">You or one of your channels has a new follower</target>
+        <target state="translated">Sie oder einer Ihrer Kanäle hat einen neuen Follower</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -8873,7 +8871,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="696910741870112536" datatype="html">
         <source>{length, plural, =1 {Video has been deleted} other {<x id="length"/> videos have been deleted}}</source>
-        <target state="new">{length, plural, =1 {Video has been deleted} other {<x id="length"/> videos have been deleted}}</target>
+        <target state="translated">{length, plural, =1 {Video wurde gelöscht} other {<x id="length"/> Videos wurden gelöscht}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">191</context>
@@ -8959,8 +8957,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="5603224609929994288" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is awaiting email verification </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is awaiting email verification
-</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> wartet auf E-Mail Verifizierung </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">5,6</context>
@@ -8968,7 +8965,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4250548381153518208" datatype="html">
         <source>Change your email</source>
-        <target state="new">Change your email</target>
+        <target state="translated">Ändern Sie Ihre E-Mail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">11</context>
@@ -8976,7 +8973,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3173210699559672958" datatype="html">
         <source>Your current email is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. It is never shown to the public. </source>
-        <target state="new"> Your current email is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. It is never shown to the public. </target>
+        <target state="translated">Ihre aktuelle E-Mail lautet <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Sie wird niemals der Öffentlichkeit gezeigt. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">13,16</context>
@@ -9041,7 +9038,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3856244462638931422" datatype="html">
         <source>Verify account email confirmation</source>
-        <target state="new">Verify account email confirmation</target>
+        <target state="translated">Kontobestätigung per E-Mail überprüfen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -9495,7 +9492,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1995871740249853660" datatype="html">
         <source><x id="PH" equiv-text="interval"/> month(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> month(s) ago</target>
+        <target state="translated">Vor <x id="PH" equiv-text="interval"/> Monaten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">28</context>
@@ -9508,7 +9505,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3626585509896494177" datatype="html">
         <source><x id="PH" equiv-text="interval"/> week(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> week(s) ago</target>
+        <target state="translated">Vor <x id="PH" equiv-text="interval"/> Wochen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">37</context>
@@ -9516,7 +9513,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4853543308896023917" datatype="html">
         <source><x id="PH" equiv-text="interval"/> day(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> day(s) ago</target>
+        <target state="translated">Vor <x id="PH" equiv-text="interval"/> Tagen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">42</context>
@@ -9524,7 +9521,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1345947856864087664" datatype="html">
         <source><x id="PH" equiv-text="interval"/> hour(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> hour(s) ago</target>
+        <target state="translated">Vor <x id="PH" equiv-text="interval"/> Stunden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">47</context>
@@ -9549,7 +9546,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8489397598480880903" datatype="html">
         <source>{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</source>
-        <target state="new">{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</target>
+        <target state="translated">{interval, plural, =1 {Vor 1 Jahr} other {Vor <x id="interval"/> Jahren}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">7</context>
@@ -9557,7 +9554,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="599762045687999334" datatype="html">
         <source>{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</source>
-        <target state="new">{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</target>
+        <target state="translated">{interval, plural, =1 {Vor 1 Monat} other {Vor <x id="interval"/> Monaten}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">8</context>
@@ -9565,7 +9562,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4951459525104027759" datatype="html">
         <source>{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</source>
-        <target state="new">{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</target>
+        <target state="translated">{interval, plural, =1 {Vor 1 Woche} other {Vor <x id="interval"/> Wochen}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">9</context>
@@ -9573,7 +9570,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2471141982657856893" datatype="html">
         <source>{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</source>
-        <target state="new">{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</target>
+        <target state="translated">{interval, plural, =1 {Vor 1 Tag} other {Vor <x id="interval"/> Tagen}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">10</context>
@@ -9581,7 +9578,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8562677309401914974" datatype="html">
         <source>{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</source>
-        <target state="new">{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</target>
+        <target state="translated">{interval, plural, =1 {Vor 1 Stunde} other {Vor <x id="interval"/> Stunden}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">11</context>
@@ -9589,7 +9586,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3613007385964514320" datatype="html">
         <source><x id="PH" equiv-text="interval"/> year(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> year(s) ago</target>
+        <target state="translated">Vor <x id="PH" equiv-text="interval"/> Jahren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">19</context>
@@ -10120,7 +10117,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6122525173522570480" datatype="html">
         <source>Support text cannot be more than 1000 characters long.</source>
-        <target state="new">Support text cannot be more than 1000 characters long.</target>
+        <target state="translated">Der Hilfetext darf nicht mehr als 1000 Zeichen lang sein.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">48</context>
@@ -10205,7 +10202,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4022826795131920912" datatype="html">
         <source>You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live</source>
-        <target state="new"> You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live </target>
+        <target state="translated">Sie können nur einmal in einer normalen Live-Übertragung streamen. Wenn Sie die Wiederholung aktivieren, wird sie unter der gleichen URL wie Ihre Live-Übertragung gespeichert.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">266</context></context-group>
       </trans-unit>
       <trans-unit id="2261925229535541622" datatype="html">
@@ -10215,7 +10212,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8986073791327847979" datatype="html">
         <source>You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos</source>
-        <target state="new"> You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos </target>
+        <target state="translated">Sie können mehrere Male in einem permanenten/wiederkehrenden Live-Stream übertragen. Wenn Sie Wiederholungen aktivieren, werden diese als separate Videos gespeichert</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">275</context></context-group>
       </trans-unit>
       <trans-unit id="3112273530390098557" datatype="html">
@@ -10260,7 +10257,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="6989092358991683843" datatype="html">
         <source>Replay is being processed...</source>
-        <target state="new">Replay is being processed...</target>
+        <target state="translated">Die Wiederholung wird bearbeitet...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">45</context>
@@ -10367,7 +10364,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8280589137189201687" datatype="html">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
-        <target state="new">You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</target>
+        <target state="translated">Sie können nicht mehr als {maxItems, Plural, =1 {1 Objekt} andere {<x id="maxItems"/> Objekte}} auswählen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -10788,7 +10785,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3911025298999036211" datatype="html">
         <source>~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</source>
-        <target state="new">~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</target>
+        <target state="translated">~ {hours, plural, =1 {1 Stunde} other {<x id="hours"/> Stunden}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">71</context>
@@ -10796,7 +10793,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8587199198938218660" datatype="html">
         <source>~ <x id="PH" equiv-text="hours"/> hours</source>
-        <target state="new">~ <x id="PH" equiv-text="hours"/> hours</target>
+        <target state="translated">~ <x id="PH" equiv-text="hours"/> Stunden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -10804,7 +10801,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2819927377059070056" datatype="html">
         <source>~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</source>
-        <target state="new">~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</target>
+        <target state="translated">~ {minutes, plural, =1 {1 Minute} other {<x id="minutes"/> Minuten}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -10895,7 +10892,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="2836537219160375057" datatype="html">
         <source>Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</source>
-        <target state="new">Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</target>
+        <target state="translated">{count, plural, =1 {1 Benutzer} other {<x id="count"/> Benutzer}} bannen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -10923,7 +10920,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="4350392487994839749" datatype="html">
         <source>If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</source>
-        <target state="new">If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</target>
+        <target state="translated">Wenn Sie diesen Benutzer entfernen, können Sie keinen anderen Benutzer oder Kanal mit &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; Benutzernamen erstellen!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -11485,7 +11482,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1314383205093440631" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</source>
-        <target state="new">Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</target>
+        <target state="translated">Sind Sie sicher, dass Sie {count, plural, =1 {dieses Video} other {diese <x id="count"/> Videos}}löschen wollen?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">200</context>
@@ -11568,7 +11565,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3143238830256588661" datatype="html">
         <source>The live stream will be automatically terminated and replays won't be saved.</source>
-        <target state="new">The live stream will be automatically terminated and replays won't be saved.</target>
+        <target state="translated">Der Live-Stream wird automatisch beendet und Wiederholungen werden nicht gespeichert.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">233</context>
@@ -11712,7 +11709,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="435589893738610428" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> default theme (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> default theme (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> Standardlayout (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">8</context>
@@ -11864,7 +11861,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="1254111869788332501" datatype="html">
         <source>Other videos</source>
-        <target state="new">Other videos</target>
+        <target state="translated">Andere Videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">4,6</context>
