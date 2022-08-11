@@ -33,6 +33,7 @@ class Redis {
     this.initialized = true
 
     this.client = createClient(Redis.getRedisClientOptions())
+    this.client.on('error', err => logger.error('Redis Client Error', { err }))
 
     logger.info('Connecting to redis...')
 
