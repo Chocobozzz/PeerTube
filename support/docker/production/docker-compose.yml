@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
 
-  # You can comment this webserver section if you want to use another webserver/proxy
+  # You can comment this webserver section if you want to use another webserver/proxy or test PeerTube in local
   webserver:
     image: chocobozzz/peertube-webserver:latest
     # If you don't want to use the official image and build one from sources:
@@ -28,7 +28,7 @@ services:
       - peertube
     restart: "always"
 
-  # You can comment this certbot section if you want to use another webserver/proxy
+  # You can comment this certbot section if you want to use another webserver/proxy or test PeerTube in local
   certbot:
     container_name: certbot
     image: certbot/certbot
@@ -55,8 +55,8 @@ services:
       - .env
 
     ports:
-     - "1935:1935" # If you don't want to use the live feature, you can comment this line
-    #  - "9000:9000" # If you provide your own webserver and reverse-proxy, otherwise not suitable for production
+     - "1935:1935" # Comment if you don't want to use the live feature
+    #  - "9000:9000" # Uncomment if you use another webserver/proxy or test PeerTube in local, otherwise not suitable for production
     volumes:
       - assets:/app/client/dist
       - ./docker-volume/data:/data
