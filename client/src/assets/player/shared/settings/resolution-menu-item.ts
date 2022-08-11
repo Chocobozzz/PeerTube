@@ -7,7 +7,7 @@ export interface ResolutionMenuItemOptions extends videojs.MenuItemOptions {
 }
 
 class ResolutionMenuItem extends MenuItem {
-  private readonly resolutionId: number
+  readonly resolutionId: number
   private readonly label: string
 
   private autoResolutionEnabled: boolean

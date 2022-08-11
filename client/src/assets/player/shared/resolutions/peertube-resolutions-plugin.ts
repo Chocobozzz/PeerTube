@@ -21,6 +21,11 @@ class PeerTubeResolutionsPlugin extends Plugin {
     this.trigger('resolutionsAdded')
   }
 
+  remove (resolutionIndex: number) {
+    this.resolutions = this.resolutions.filter(r => r.id !== resolutionIndex)
+    this.trigger('resolutionRemoved')
+  }
+
   getResolutions () {
     return this.resolutions
   }

@@ -219,6 +219,11 @@ class Html5Hlsjs {
   }
 
   private _handleUnrecovarableError (error: any) {
+    if (this.hls.levels.filter(l => l.id > -1).length > 1) {
+      this._removeQuality(this.hls.loadLevel)
+      return
+    }
+
     this.hls.destroy()
     logger.info('bubbling error up to VIDEOJS')
     this.tech.error = () => ({
@@ -298,6 +303,12 @@ class Html5Hlsjs {
     if (level.bitrate) return (level.bitrate / 1000) + 'kbps'
 
     return '0'
+  }
+
+  private _removeQuality (index: number) {
+    this.hls.removeLevel(index)
+    this.player.peertubeResolutions().remove(index)
+    this.hls.currentLevel = -1
   }
 
   private _notifyVideoQualities () {
