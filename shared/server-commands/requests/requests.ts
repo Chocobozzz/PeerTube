@@ -172,7 +172,6 @@ function buildRequest (req: request.Test, options: CommonRequestParams) {
   if (options.accept) req.set('Accept', options.accept)
   if (options.host) req.set('Host', options.host)
   if (options.redirects) req.redirects(options.redirects)
-  if (options.expectedStatus) req.expect(options.expectedStatus)
   if (options.xForwardedFor) req.set('X-Forwarded-For', options.xForwardedFor)
   if (options.type) req.type(options.type)
 
@@ -180,7 +179,15 @@ function buildRequest (req: request.Test, options: CommonRequestParams) {
     req.set(name, options.headers[name])
   })
 
-  return req
+  return req.expect((res) => {
+    if (options.expectedStatus && res.status !== options.expectedStatus) {
+      throw new Error(`Expected status ${options.expectedStatus}, got ${res.status}. ` +
+        `\nThe server responded this error: "${res.body?.error ?? res.text}".\n` +
+        'You may take a closer look at the logs. To see how to do so, check out this page: ' +
+        'https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/development/tests.md#debug-server-logs')
+    }
+    return res
+  })
 }
 
 function buildFields (req: request.Test, fields: { [ fieldName: string ]: any }, namespace?: string) {
