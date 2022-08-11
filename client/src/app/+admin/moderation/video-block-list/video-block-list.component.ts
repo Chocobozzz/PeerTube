@@ -145,15 +145,15 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
   }
 
   getVideoEmbed (entry: VideoBlacklist) {
-    return buildVideoOrPlaylistEmbed(
-      decorateVideoLink({
+    return buildVideoOrPlaylistEmbed({
+      embedUrl: decorateVideoLink({
         url: buildVideoEmbedLink(entry.video, environment.originServerUrl),
 
         title: false,
         warningTitle: false
       }),
-      entry.video.name
-    )
+      embedTitle: entry.video.name
+    })
   }
 
   protected reloadData () {

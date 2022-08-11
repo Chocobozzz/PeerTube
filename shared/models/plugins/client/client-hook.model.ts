@@ -72,6 +72,21 @@ export const clientFilterHookObject = {
   'filter:login.instance-about-plugin-panels.create.result': true,
   'filter:signup.instance-about-plugin-panels.create.result': true,
 
+  'filter:share.video-embed-code.build.params': true,
+  'filter:share.video-embed-code.build.result': true,
+  'filter:share.video-playlist-embed-code.build.params': true,
+  'filter:share.video-playlist-embed-code.build.result': true,
+
+  'filter:share.video-embed-url.build.params': true,
+  'filter:share.video-embed-url.build.result': true,
+  'filter:share.video-playlist-embed-url.build.params': true,
+  'filter:share.video-playlist-embed-url.build.result': true,
+
+  'filter:share.video-url.build.params': true,
+  'filter:share.video-url.build.result': true,
+  'filter:share.video-playlist-url.build.params': true,
+  'filter:share.video-playlist-url.build.result': true,
+
   // Filter videojs options built for PeerTube player
   'filter:internal.player.videojs.options.result': true
 }
@@ -146,6 +161,8 @@ export const clientActionHookObject = {
 
   // Fired when the modal to download a video/caption is shown
   'action:modal.video-download.shown': true,
+  // Fired when the modal to share a video/playlist is shown
+  'action:modal.share.shown': true,
 
   // ####### Embed hooks #######
   // /!\ In embed scope, peertube helpers are not available

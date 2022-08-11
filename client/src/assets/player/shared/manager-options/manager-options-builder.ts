@@ -142,7 +142,7 @@ export class ManagerOptionsBuilder {
           icon: 'code',
           label: player.localize('Copy embed code'),
           listener: () => {
-            copyToClipboard(buildVideoOrPlaylistEmbed(commonOptions.embedUrl, commonOptions.embedTitle))
+            copyToClipboard(buildVideoOrPlaylistEmbed({ embedUrl: commonOptions.embedUrl, embedTitle: commonOptions.embedTitle }))
           }
         }
       ]

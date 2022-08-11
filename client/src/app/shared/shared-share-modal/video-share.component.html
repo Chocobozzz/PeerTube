@@ -25,7 +25,7 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-text [value]="getPlaylistUrl()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
+              <my-input-text [value]="playlistUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
             </div>
           </ng-template>
         </ng-container>
@@ -35,7 +35,7 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <qrcode [qrdata]="getPlaylistUrl()" [width]="256" level="Q"></qrcode>
+              <qrcode [qrdata]="playlistUrl" [width]="256" level="Q"></qrcode>
             </div>
           </ng-template>
         </ng-container>
@@ -46,7 +46,7 @@
           <ng-template ngbNavContent>
             <div class="nav-content">
               <my-input-text
-                [value]="customizations.onlyEmbedUrl ? getPlaylistEmbedUrl() : getPlaylistIframeCode()" (change)="updateEmbedCode()"
+                [value]="customizations.onlyEmbedUrl ? playlistEmbedUrl : playlistEmbedHTML" (change)="onUpdate()"
                 [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
               ></my-input-text>
 
@@ -54,7 +54,7 @@
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
               </div>
 
-              <div class="embed" [innerHTML]="playlistEmbedHTML"></div>
+              <div class="embed" [innerHTML]="playlistEmbedSafeHTML"></div>
             </div>
           </ng-template>
         </ng-container>
@@ -67,7 +67,7 @@
 
         <div class="form-group" *ngIf="video">
           <my-peertube-checkbox
-            inputName="includeVideoInPlaylist" [(ngModel)]="includeVideoInPlaylist"
+            inputName="includeVideoInPlaylist" [(ngModel)]="customizations.includeVideoInPlaylist"
             i18n-labelText labelText="Share the playlist at this video position"
           ></my-peertube-checkbox>
         </div>
@@ -80,6 +80,7 @@
           ></my-peertube-checkbox>
         </div>
 
+        <my-plugin-placeholder pluginId="share-modal-playlist-settings"></my-plugin-placeholder>
       </div>
     </div>
 
@@ -102,7 +103,7 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-text [value]="getVideoUrl()" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
+              <my-input-text [value]="videoUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
             </div>
           </ng-template>
         </ng-container>
@@ -112,7 +113,7 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <qrcode [qrdata]="getVideoUrl()" [width]="256" level="Q"></qrcode>
+              <qrcode [qrdata]="videoUrl" [width]="256" level="Q"></qrcode>
             </div>
           </ng-template>
         </ng-container>
@@ -123,7 +124,7 @@
           <ng-template ngbNavContent>
             <div class="nav-content">
               <my-input-text
-                [value]="customizations.onlyEmbedUrl ? getVideoEmbedUrl() : getVideoIframeCode()" (ngModelChange)="updateEmbedCode()"
+                [value]="customizations.onlyEmbedUrl ? videoEmbedUrl : videoEmbedHTML" (ngModelChange)="onUpdate()"
                 [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"
               ></my-input-text>
 
@@ -131,7 +132,7 @@
                 The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
               </div>
 
-              <div class="embed" [innerHTML]="videoEmbedHTML"></div>
+              <div class="embed" [innerHTML]="videoEmbedSafeHTML"></div>
             </div>
           </ng-template>
         </ng-container>
@@ -176,6 +177,8 @@
               i18n-labelText labelText="Only display embed URL"
             ></my-peertube-checkbox>
           </div>
+
+          <my-plugin-placeholder pluginId="share-modal-video-settings"></my-plugin-placeholder>
         </div>
 
         <div class="advanced-filters collapse-transition" [ngbCollapse]="isAdvancedCustomizationCollapsed">
