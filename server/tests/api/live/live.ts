@@ -558,7 +558,7 @@ describe('Test live', function () {
           expect(file.size).to.be.greaterThan(1)
 
           if (resolution >= 720) {
-            expect(file.fps).to.be.approximately(60, 2)
+            expect(file.fps).to.be.approximately(60, 10)
           } else {
             expect(file.fps).to.be.approximately(30, 2)
           }
