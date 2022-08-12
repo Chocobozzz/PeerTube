@@ -130,7 +130,7 @@ export class PeertubePlayerManager {
 
         const offlineNotificationElem = document.createElement('div')
         offlineNotificationElem.classList.add('vjs-peertube-offline-notification')
-        offlineNotificationElem.innerText = 'You seem to be offline and the video may not work'
+        offlineNotificationElem.innerText = player.localize('You seem to be offline and the video may not work')
 
         const handleOnline = () => {
           player.el().removeChild(offlineNotificationElem)
