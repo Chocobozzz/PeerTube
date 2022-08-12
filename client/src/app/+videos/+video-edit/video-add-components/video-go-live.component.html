@@ -61,7 +61,7 @@
   <div class="submit-container">
     <my-button className="orange-button" i18n-label label="Update" icon="circle-tick"
       (click)="updateSecondStep()"
-      [disabled]="!form.valid"
+      [disabled]="!form.valid || isUpdatingVideo === true"
     ></my-button>
   </div>
 </form>
