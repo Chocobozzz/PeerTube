@@ -4154,7 +4154,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="6510868134640657079" datatype="html">
         <source>Manual blocks</source>
-        <target state="new">Manual blocks</target>
+        <target state="translated">Manuele blokkeringen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="2143435845912984377" datatype="html">
@@ -4195,7 +4195,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="5026011498416291967" datatype="html">
         <source><x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></source>
-        <target state="new"> <x id="ICU" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 report} other {{{ abuse.countReportsForReporter }} reports}}" xid="1879828604800763221"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></target>
+        <target state="translated"><x id="ICU" xid="1879828604800763221" equiv-text="{abuse.countReportsForReporter, plural, =1 {1 aangifte} other {{{ abuse.countReportsForReporter }} aangiftes}}"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;flag&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">21,23</context>
@@ -4349,7 +4349,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="2959657578684395250" datatype="html">
         <source>{count, plural, =1 {Follow request sent!} other {Follow requests sent!}}</source>
-        <target state="new">{count, plural, =1 {Follow request sent!} other {Follow requests sent!}}</target>
+        <target state="translated">{count, plural, =1 {Volg verzoek verzonden!} other {Volgverzoeken verzonden!}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -4414,7 +4414,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="6185935497147252048" datatype="html">
         <source>This plugin is developed by Framasoft</source>
-        <target state="new">This plugin is developed by Framasoft</target>
+        <target state="translated">Deze plugin is ontwikkeld door Framasoft</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">37</context>
@@ -4422,7 +4422,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="8336721444092720377" datatype="html">
         <source>Official</source>
-        <target state="new"> Official </target>
+        <target state="translated">Officieel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="7002061007877950198" datatype="html">
