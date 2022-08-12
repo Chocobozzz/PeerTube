@@ -91,6 +91,7 @@ async function listComments (req: express.Request, res: express.Response) {
     sort: req.query.sort,
 
     isLocal: req.query.isLocal,
+    onLocalVideo: req.query.onLocalVideo,
     search: req.query.search,
     searchAccount: req.query.searchAccount,
     searchVideo: req.query.searchVideo

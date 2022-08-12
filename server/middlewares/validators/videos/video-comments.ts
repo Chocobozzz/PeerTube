@@ -24,6 +24,12 @@ const listVideoCommentsValidator = [
   .custom(isBooleanValid)
   .withMessage('Should have a valid is local boolean'),
 
+  query('onLocalVideo')
+  .optional()
+  .customSanitizer(toBooleanOrNull)
+  .custom(isBooleanValid)
+  .withMessage('Should have a valid is on local video boolean'),
+
   query('search')
     .optional()
     .custom(exists).withMessage('Should have a valid search'),

@@ -14,6 +14,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { exists } from '@server/helpers/custom-validators/misc'
 import { getServerActor } from '@server/models/application/application'
 import { MAccount, MAccountId, MUserAccountId } from '@server/types/models'
 import { VideoPrivacy } from '@shared/models'
@@ -312,12 +313,13 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
     count: number
     sort: string
 
+    onLocalVideo?: boolean
     isLocal?: boolean
     search?: string
     searchAccount?: string
     searchVideo?: string
   }) {
-    const { start, count, sort, isLocal, search, searchAccount, searchVideo } = parameters
+    const { start, count, sort, isLocal, search, searchAccount, searchVideo, onLocalVideo } = parameters
 
     const where: WhereOptions = {
       deletedAt: null
@@ -361,6 +363,10 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
 
     if (searchVideo) {
       Object.assign(whereVideo, searchAttribute(searchVideo, 'name'))
+    }
+
+    if (exists(onLocalVideo)) {
+      Object.assign(whereVideo, { remote: !onLocalVideo })
     }
 
     const getQuery = (forCount: boolean) => {

@@ -14,6 +14,7 @@ export class CommentsCommand extends AbstractCommand {
     count?: number
     sort?: string
     isLocal?: boolean
+    onLocalVideo?: boolean
     search?: string
     searchAccount?: string
     searchVideo?: string
@@ -21,7 +22,7 @@ export class CommentsCommand extends AbstractCommand {
     const { sort = '-createdAt' } = options
     const path = '/api/v1/videos/comments'
 
-    const query = { sort, ...pick(options, [ 'start', 'count', 'isLocal', 'search', 'searchAccount', 'searchVideo' ]) }
+    const query = { sort, ...pick(options, [ 'start', 'count', 'isLocal', 'onLocalVideo', 'search', 'searchAccount', 'searchVideo' ]) }
 
     return this.getRequestBody<ResultList<VideoComment>>({
       ...options,

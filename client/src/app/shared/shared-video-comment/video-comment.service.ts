@@ -190,6 +190,10 @@ export class VideoCommentService {
         prefix: 'local:',
         isBoolean: true
       },
+      onLocalVideo: {
+        prefix: 'localVideo:',
+        isBoolean: true
+      },
 
       searchAccount: { prefix: 'account:' },
       searchVideo: { prefix: 'video:' }
