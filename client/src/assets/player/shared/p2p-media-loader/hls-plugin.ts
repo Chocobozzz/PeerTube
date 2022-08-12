@@ -211,6 +211,23 @@ class Html5Hlsjs {
     }
   }
 
+  private _getHumanErrorMsg (error: { message: string, code?: number }) {
+    switch (error.code) {
+      default:
+        return error.message
+    }
+  }
+
+  private _handleUnrecovarableError (error: any) {
+    this.hls.destroy()
+    logger.info('bubbling error up to VIDEOJS')
+    this.tech.error = () => ({
+      ...error,
+      message: this._getHumanErrorMsg(error)
+    })
+    this.tech.trigger('error')
+  }
+
   private _handleMediaError (error: any) {
     if (this.errorCounts[Hlsjs.ErrorTypes.MEDIA_ERROR] === 1) {
       logger.info('trying to recover media error')
@@ -226,10 +243,7 @@ class Html5Hlsjs {
     }
 
     if (this.errorCounts[Hlsjs.ErrorTypes.MEDIA_ERROR] > 2) {
-      logger.info('bubbling media error up to VIDEOJS')
-      this.hls.destroy()
-      this.tech.error = () => error
-      this.tech.trigger('error')
+      this._handleUnrecovarableError(error)
     }
   }
 
@@ -248,10 +262,7 @@ class Html5Hlsjs {
       return
     }
 
-    logger.info('bubbling network error up to VIDEOJS')
-    this.hls.destroy()
-    this.tech.error = () => error
-    this.tech.trigger('error')
+    this._handleUnrecovarableError(error)
   }
 
   private _onError (_event: any, data: ErrorData) {
@@ -273,10 +284,7 @@ class Html5Hlsjs {
       error.code = 3
       this._handleMediaError(error)
     } else if (data.fatal) {
-      this.hls.destroy()
-      logger.info('bubbling error up to VIDEOJS')
-      this.tech.error = () => error as any
-      this.tech.trigger('error')
+      this._handleUnrecovarableError(error)
     }
   }
 

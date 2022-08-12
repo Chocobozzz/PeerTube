@@ -125,6 +125,32 @@ class PeerTubePlugin extends Plugin {
   }
 
   displayFatalError () {
+    this.player.loadingSpinner.hide()
+
+    const buildModal = (error: MediaError) => {
+      const localize = this.player.localize.bind(this.player)
+
+      const wrapper = document.createElement('div')
+      const header = document.createElement('h1')
+      header.innerText = localize('Failed to play video')
+      wrapper.appendChild(header)
+      const desc = document.createElement('div')
+      desc.innerText = localize('The video failed to play due to technical issues.')
+      wrapper.appendChild(desc)
+      const details = document.createElement('p')
+      details.classList.add('error-details')
+      details.innerText = error.message
+      wrapper.appendChild(details)
+
+      return wrapper
+    }
+
+    const modal = this.player.createModal(buildModal(this.player.error()), {
+      temporary: false,
+      uncloseable: true
+    })
+    modal.addClass('vjs-custom-error-display')
+
     this.player.addClass('vjs-error-display-enabled')
   }
 
