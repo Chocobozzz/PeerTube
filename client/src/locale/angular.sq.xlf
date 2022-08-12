@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="ngb.alert.close" datatype="html">
         <source>Close</source>
-        <target>Mbylle</target>
+        <target state="translated">Mbyll</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/alert/alert.d.ts</context>
           <context context-type="linenumber">3</context>
@@ -8308,7 +8308,7 @@
       </trans-unit>
       <trans-unit id="1123807fc813c816404598147173403d00117557" datatype="html">
         <source>Redundancy for <x id="INTERPOLATION" equiv-text="{{host}}"/> is <x id="INTERPOLATION_1" equiv-text="{{stateLabel}}"/></source>
-        <target/>
+        <target state="translated">Redundancy për është <x id="INTERPOLATION" equiv-text="{{host}}"/> is <x id="INTERPOLATION_1" equiv-text="{{stateLabel}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11234,6 +11234,7 @@
       </trans-unit>
       <trans-unit id="7296e9f7cc4956b6d57c541728b0826e76d108ba" datatype="html">
         <source>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></source>
+        <target state="translated">~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11769,7 +11770,7 @@
       </trans-unit>
       <trans-unit id="c1226821b3c276dc443b3e5a2dce10e14dcd6244" datatype="html">
         <source>Bitrate</source>
-        <target/>
+        <target state="translated">Bitrate</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11889,7 +11890,7 @@
       </trans-unit>
       <trans-unit id="dd9f3264feed4935008861c15d81c947124e4ac3" datatype="html">
         <source>Published</source>
-        <target/>
+        <target state="translated">Botuar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-miniature.component.ts</context>
           <context context-type="linenumber">1</context>
