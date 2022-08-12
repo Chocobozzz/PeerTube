@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="ngb.alert.close" datatype="html">
         <source>Close</source>
-        <target state="translated">Mbyll</target>
+        <target state="translated">Mbylle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/alert/alert.d.ts</context>
           <context context-type="linenumber">3</context>
