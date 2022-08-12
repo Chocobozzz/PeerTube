@@ -37,6 +37,7 @@ import { ContactFormCommand } from './contact-form-command'
 import { DebugCommand } from './debug-command'
 import { FollowsCommand } from './follows-command'
 import { JobsCommand } from './jobs-command'
+import { MetricsCommand } from './metrics-command'
 import { ObjectStorageCommand } from './object-storage-command'
 import { PluginsCommand } from './plugins-command'
 import { RedundancyCommand } from './redundancy-command'
@@ -104,6 +105,7 @@ export class PeerTubeServer {
   debug?: DebugCommand
   follows?: FollowsCommand
   jobs?: JobsCommand
+  metrics?: MetricsCommand
   plugins?: PluginsCommand
   redundancy?: RedundancyCommand
   stats?: StatsCommand
@@ -377,6 +379,7 @@ export class PeerTubeServer {
     this.debug = new DebugCommand(this)
     this.follows = new FollowsCommand(this)
     this.jobs = new JobsCommand(this)
+    this.metrics = new MetricsCommand(this)
     this.plugins = new PluginsCommand(this)
     this.redundancy = new RedundancyCommand(this)
     this.stats = new StatsCommand(this)

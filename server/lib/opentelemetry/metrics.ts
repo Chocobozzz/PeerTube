@@ -4,10 +4,13 @@ import { PrometheusExporter } from '@opentelemetry/exporter-prometheus'
 import { MeterProvider } from '@opentelemetry/sdk-metrics-base'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
+import { MVideoImmutable } from '@server/types/models'
+import { PlaybackMetricCreate } from '@shared/models'
 import {
   JobQueueObserversBuilder,
   LivesObserversBuilder,
   NodeJSObserversBuilder,
+  PlaybackMetrics,
   StatsObserversBuilder,
   ViewersObserversBuilder
 } from './metric-helpers'
@@ -19,6 +22,8 @@ class OpenTelemetryMetrics {
   private meter: Meter
 
   private onRequestDuration: (req: Request, res: Response) => void
+
+  private playbackMetrics: PlaybackMetrics
 
   private constructor () {}
 
@@ -41,7 +46,11 @@ class OpenTelemetryMetrics {
 
     logger.info('Registering Open Telemetry metrics')
 
-    const provider = new MeterProvider()
+    const provider = new MeterProvider({
+      views: [
+        ...NodeJSObserversBuilder.getViews()
+      ]
+    })
 
     provider.addMetricReader(new PrometheusExporter({ port: CONFIG.OPEN_TELEMETRY.METRICS.PROMETHEUS_EXPORTER.PORT }))
 
@@ -51,7 +60,10 @@ class OpenTelemetryMetrics {
 
     this.buildRequestObserver()
 
-    const nodeJSObserversBuilder = new NodeJSObserversBuilder(this.meter, provider)
+    this.playbackMetrics = new PlaybackMetrics(this.meter)
+    this.playbackMetrics.buildCounters()
+
+    const nodeJSObserversBuilder = new NodeJSObserversBuilder(this.meter)
     nodeJSObserversBuilder.buildObservers()
 
     const jobQueueObserversBuilder = new JobQueueObserversBuilder(this.meter)
@@ -65,6 +77,10 @@ class OpenTelemetryMetrics {
 
     const viewersObserversBuilder = new ViewersObserversBuilder(this.meter)
     viewersObserversBuilder.buildObservers()
+  }
+
+  observePlaybackMetric (video: MVideoImmutable, metrics: PlaybackMetricCreate) {
+    this.playbackMetrics.observe(video, metrics)
   }
 
   private buildRequestObserver () {

@@ -44,6 +44,14 @@ export class ManagerOptionsBuilder {
           'isLive',
           'videoUUID'
         ])
+      },
+      metrics: {
+        mode: this.mode,
+
+        ...pick(commonOptions, [
+          'metricsUrl',
+          'videoUUID'
+        ])
       }
     }
 

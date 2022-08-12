@@ -2,7 +2,7 @@ import { readdir } from 'fs-extra'
 import { constants, PerformanceObserver } from 'perf_hooks'
 import * as process from 'process'
 import { Meter, ObservableResult } from '@opentelemetry/api-metrics'
-import { ExplicitBucketHistogramAggregation, MeterProvider } from '@opentelemetry/sdk-metrics-base'
+import { ExplicitBucketHistogramAggregation } from '@opentelemetry/sdk-metrics-base'
 import { View } from '@opentelemetry/sdk-metrics-base/build/src/view/View'
 import { logger } from '@server/helpers/logger'
 
@@ -12,7 +12,16 @@ import { logger } from '@server/helpers/logger'
 
 export class NodeJSObserversBuilder {
 
-  constructor (private readonly meter: Meter, private readonly meterProvider: MeterProvider) {
+  constructor (private readonly meter: Meter) {
+  }
+
+  static getViews () {
+    return [
+      new View({
+        aggregation: new ExplicitBucketHistogramAggregation([ 0.001, 0.01, 0.1, 1, 2, 5 ]),
+        instrumentName: 'nodejs_gc_duration_seconds'
+      })
+    ]
   }
 
   buildObservers () {
@@ -90,11 +99,6 @@ export class NodeJSObserversBuilder {
       [constants.NODE_PERFORMANCE_GC_INCREMENTAL]: 'incremental',
       [constants.NODE_PERFORMANCE_GC_WEAKCB]: 'weakcb'
     }
-
-    this.meterProvider.addView(
-      new View({ aggregation: new ExplicitBucketHistogramAggregation([ 0.001, 0.01, 0.1, 1, 2, 5 ]) }),
-      { instrument: { name: 'nodejs_gc_duration_seconds' } }
-    )
 
     const histogram = this.meter.createHistogram('nodejs_gc_duration_seconds', {
       description: 'Garbage collection duration by kind, one of major, minor, incremental or weakcb'

@@ -109,6 +109,12 @@ type PeerTubePluginOptions = {
   videoUUID: string
 }
 
+type MetricsPluginOptions = {
+  mode: PlayerMode
+  metricsUrl: string
+  videoUUID: string
+}
+
 type PlaylistPluginOptions = {
   elements: VideoPlaylistElement[]
 
@@ -165,6 +171,7 @@ type VideoJSPluginOptions = {
   playlist?: PlaylistPluginOptions
 
   peertube: PeerTubePluginOptions
+  metrics: MetricsPluginOptions
 
   webtorrent?: WebtorrentPluginOptions
 
@@ -197,9 +204,7 @@ type PlayerNetworkInfo = {
 
   http: {
     downloadSpeed: number
-    uploadSpeed: number
     downloaded: number
-    uploaded: number
   }
 
   p2p: {
@@ -227,6 +232,7 @@ export {
   ResolutionUpdateData,
   AutoResolutionUpdateData,
   PlaylistPluginOptions,
+  MetricsPluginOptions,
   VideoJSCaption,
   PeerTubePluginOptions,
   WebtorrentPluginOptions,

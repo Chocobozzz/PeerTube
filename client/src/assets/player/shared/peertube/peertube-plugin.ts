@@ -144,6 +144,8 @@ class PeerTubePlugin extends Plugin {
     this.listenFullScreenChange()
   }
 
+  // ---------------------------------------------------------------------------
+
   private runUserViewing () {
     let lastCurrentTime = this.startTime
     let lastViewEvent: VideoViewEvent
@@ -204,6 +206,8 @@ class PeerTubePlugin extends Plugin {
 
     return fetch(this.videoViewUrl, { method: 'POST', body: JSON.stringify(body), headers })
   }
+
+  // ---------------------------------------------------------------------------
 
   private listenFullScreenChange () {
     this.player.on('fullscreenchange', () => {

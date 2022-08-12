@@ -95,9 +95,9 @@ class StatsCard extends Component {
       const httpStats = data.http
 
       this.playerNetworkInfo.downloadSpeed = bytes(p2pStats.downloadSpeed + httpStats.downloadSpeed).join(' ')
-      this.playerNetworkInfo.uploadSpeed = bytes(p2pStats.uploadSpeed + httpStats.uploadSpeed).join(' ')
+      this.playerNetworkInfo.uploadSpeed = bytes(p2pStats.uploadSpeed).join(' ')
       this.playerNetworkInfo.totalDownloaded = bytes(p2pStats.downloaded + httpStats.downloaded).join(' ')
-      this.playerNetworkInfo.totalUploaded = bytes(p2pStats.uploaded + httpStats.uploaded).join(' ')
+      this.playerNetworkInfo.totalUploaded = bytes(p2pStats.uploaded).join(' ')
       this.playerNetworkInfo.numPeers = p2pStats.numPeers
       this.playerNetworkInfo.averageBandwidth = bytes(data.bandwidthEstimate).join(' ') + '/s'
 

@@ -11,6 +11,7 @@ import { bulkRouter } from './bulk'
 import { configRouter } from './config'
 import { customPageRouter } from './custom-page'
 import { jobsRouter } from './jobs'
+import { metricsRouter } from './metrics'
 import { oauthClientsRouter } from './oauth-clients'
 import { overviewsRouter } from './overviews'
 import { pluginRouter } from './plugins'
@@ -18,9 +19,9 @@ import { searchRouter } from './search'
 import { serverRouter } from './server'
 import { usersRouter } from './users'
 import { videoChannelRouter } from './video-channel'
+import { videoChannelSyncRouter } from './video-channel-sync'
 import { videoPlaylistRouter } from './video-playlist'
 import { videosRouter } from './videos'
-import { videoChannelSyncRouter } from './video-channel-sync'
 
 const apiRouter = express.Router()
 
@@ -48,6 +49,7 @@ apiRouter.use('/video-channel-syncs', videoChannelSyncRouter)
 apiRouter.use('/video-playlists', videoPlaylistRouter)
 apiRouter.use('/videos', videosRouter)
 apiRouter.use('/jobs', jobsRouter)
+apiRouter.use('/metrics', metricsRouter)
 apiRouter.use('/search', searchRouter)
 apiRouter.use('/overviews', overviewsRouter)
 apiRouter.use('/plugins', pluginRouter)

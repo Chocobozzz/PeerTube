@@ -204,6 +204,8 @@ class WebTorrentPlugin extends Plugin {
     }
 
     this.updateVideoFile(newVideoFile, options)
+
+    this.player.trigger('engineResolutionChange')
   }
 
   flushVideoFile (videoFile: VideoFile, destroyRenderer = true) {
@@ -506,9 +508,7 @@ class WebTorrentPlugin extends Plugin {
         source: 'webtorrent',
         http: {
           downloadSpeed: 0,
-          uploadSpeed: 0,
-          downloaded: 0,
-          uploaded: 0
+          downloaded: 0
         },
         p2p: {
           downloadSpeed: this.torrent.downloadSpeed,

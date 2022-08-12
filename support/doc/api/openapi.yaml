@@ -5009,6 +5009,21 @@ paths:
         '404':
           description: plugin not found
 
+  /metrics/playback:
+    post:
+      summary: Create playback metrics
+      description: These metrics are exposed by OpenTelemetry metrics exporter if enabled.
+      tags:
+        - Stats
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlaybackMetricCreate'
+      responses:
+        '204':
+          description: successful operation
+
 servers:
   - url: 'https://peertube2.cpy.re/api/v1'
     description: Live Test Server (live data - latest nightly version)
@@ -8195,44 +8210,86 @@ components:
                     format: binary
 
     LiveVideoSessionResponse:
-        properties:
-          id:
-            type: integer
-          startDate:
-            type: string
-            format: date-time
-            description: Start date of the live session
-          endDate:
-            type: string
-            format: date-time
-            nullable: true
-            description: End date of the live session
-          error:
-            type: integer
-            enum:
-              - 1
-              - 2
-              - 3
-              - 4
-              - 5
-            nullable: true
-            description: >
-              Error type if an error occurred during the live session:
-                - `1`: Bad socket health (transcoding is too slow)
-                - `2`: Max duration exceeded
-                - `3`: Quota exceeded
-                - `4`: Quota FFmpeg error
-                - `5`: Video has been blacklisted during the live
-          replayVideo:
-            type: object
-            description: Video replay information
-            properties:
-              id:
-                type: number
-              uuid:
-                $ref: '#/components/schemas/UUIDv4'
-              shortUUID:
-                $ref: '#/components/schemas/shortUUID'
+      properties:
+        id:
+          type: integer
+        startDate:
+          type: string
+          format: date-time
+          description: Start date of the live session
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+          description: End date of the live session
+        error:
+          type: integer
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+          nullable: true
+          description: >
+            Error type if an error occurred during the live session:
+              - `1`: Bad socket health (transcoding is too slow)
+              - `2`: Max duration exceeded
+              - `3`: Quota exceeded
+              - `4`: Quota FFmpeg error
+              - `5`: Video has been blacklisted during the live
+        replayVideo:
+          type: object
+          description: Video replay information
+          properties:
+            id:
+              type: number
+            uuid:
+              $ref: '#/components/schemas/UUIDv4'
+            shortUUID:
+              $ref: '#/components/schemas/shortUUID'
+
+    PlaybackMetricCreate:
+      properties:
+        playerMode:
+          type: string
+          enum:
+            - 'p2p-media-loader'
+            - 'webtorrent'
+        resolution:
+          type: number
+          description: Current player video resolution
+        fps:
+          type: number
+          description: Current player video fps
+        resolutionChanges:
+          type: number
+          description: How many resolution changes occured since the last metric creation
+        errors:
+          type: number
+          description: How many errors occured since the last metric creation
+        downloadedBytesP2P:
+          type: number
+          description: How many bytes were downloaded with P2P since the last metric creation
+        downloadedBytesHTTP:
+          type: number
+          description: How many bytes were downloaded with HTTP since the last metric creation
+        uploadedBytesP2P:
+          type: number
+          description: How many bytes were uploaded with P2P since the last metric creation
+        videoId:
+          oneOf:
+            - $ref: '#/components/schemas/id'
+            - $ref: '#/components/schemas/UUIDv4'
+            - $ref: '#/components/schemas/shortUUID'
+      required:
+        - playerMode
+        - resolutionChanges
+        - errors
+        - downloadedBytesP2P
+        - downloadedBytesHTTP
+        - uploadedBytesP2P
+        - videoId
 
   callbacks:
     searchIndex:

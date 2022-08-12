@@ -2,10 +2,10 @@ import Hlsjs from 'hls.js'
 import videojs from 'video.js'
 import { Events, Segment } from '@peertube/p2p-media-loader-core'
 import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from '@peertube/p2p-media-loader-hlsjs'
+import { logger } from '@root-helpers/logger'
 import { timeToInt } from '@shared/core-utils'
 import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo } from '../../types'
 import { registerConfigPlugin, registerSourceHandler } from './hls-plugin'
-import { logger } from '@root-helpers/logger'
 
 registerConfigPlugin(videojs)
 registerSourceHandler(videojs)
@@ -29,9 +29,7 @@ class P2pMediaLoaderPlugin extends Plugin {
   }
   private statsHTTPBytes = {
     pendingDownload: [] as number[],
-    pendingUpload: [] as number[],
-    totalDownload: 0,
-    totalUpload: 0
+    totalDownload: 0
   }
   private startTime: number
 
@@ -123,6 +121,8 @@ class P2pMediaLoaderPlugin extends Plugin {
     this.statsP2PBytes.numPeers = 1 + this.options.redundancyUrlManager.countBaseUrls()
 
     this.runStats()
+
+    this.hlsjs.on(Hlsjs.Events.LEVEL_SWITCHED, () => this.player.trigger('engineResolutionChange'))
   }
 
   private runStats () {
@@ -134,10 +134,13 @@ class P2pMediaLoaderPlugin extends Plugin {
     })
 
     this.p2pEngine.on(Events.PieceBytesUploaded, (method: string, _segment, bytes: number) => {
-      const elem = method === 'p2p' ? this.statsP2PBytes : this.statsHTTPBytes
+      if (method !== 'p2p') {
+        logger.error(`Received upload from unknown method ${method}`)
+        return
+      }
 
-      elem.pendingUpload.push(bytes)
-      elem.totalUpload += bytes
+      this.statsP2PBytes.pendingUpload.push(bytes)
+      this.statsP2PBytes.totalUpload += bytes
     })
 
     this.p2pEngine.on(Events.PeerConnect, () => this.statsP2PBytes.numPeers++)
@@ -148,20 +151,16 @@ class P2pMediaLoaderPlugin extends Plugin {
       const p2pUploadSpeed = this.arraySum(this.statsP2PBytes.pendingUpload)
 
       const httpDownloadSpeed = this.arraySum(this.statsHTTPBytes.pendingDownload)
-      const httpUploadSpeed = this.arraySum(this.statsHTTPBytes.pendingUpload)
 
       this.statsP2PBytes.pendingDownload = []
       this.statsP2PBytes.pendingUpload = []
       this.statsHTTPBytes.pendingDownload = []
-      this.statsHTTPBytes.pendingUpload = []
 
       return this.player.trigger('p2pInfo', {
         source: 'p2p-media-loader',
         http: {
           downloadSpeed: httpDownloadSpeed,
-          uploadSpeed: httpUploadSpeed,
-          downloaded: this.statsHTTPBytes.totalDownload,
-          uploaded: this.statsHTTPBytes.totalUpload
+          downloaded: this.statsHTTPBytes.totalDownload
         },
         p2p: {
           downloadSpeed: p2pDownloadSpeed,

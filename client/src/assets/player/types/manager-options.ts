@@ -59,6 +59,8 @@ export interface CommonOptions extends CustomizationOptions {
   videoViewUrl: string
   authorizationHeader?: string
 
+  metricsUrl: string
+
   embedUrl: string
   embedTitle: string
 
