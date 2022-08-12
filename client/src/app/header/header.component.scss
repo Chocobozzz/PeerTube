@@ -1,14 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-my-search-typeahead {
-  @include margin-right(80px);
-
-  @media screen and (max-width: $small-view) {
-    @include margin-right(15px);
-  }
-}
-
 .publish-button {
   @include peertube-button-link;
   @include orange-button;
