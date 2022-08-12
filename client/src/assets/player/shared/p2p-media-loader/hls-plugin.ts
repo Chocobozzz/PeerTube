@@ -253,6 +253,8 @@ class Html5Hlsjs {
   }
 
   private _handleNetworkError (error: any) {
+    if (navigator.onLine === false) return
+
     if (this.errorCounts[Hlsjs.ErrorTypes.NETWORK_ERROR] <= this.maxNetworkErrorRecovery) {
       logger.info('trying to recover network error')
 
