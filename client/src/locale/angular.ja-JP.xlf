@@ -1354,7 +1354,7 @@
       </trans-unit>
       <trans-unit id="4502972592942341883" datatype="html">
         <source>As you probably noticed: creating an account is not necessary to watch video on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </source>
-        <target state="new"> As you probably noticed: creating an account is not necessary to watch video on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </target>
+        <target state="translated">もしかするとお気づきかもしれませんが: <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>で動画を再生するためにアカウントを作成することは、必須ではありません。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>しかし、<x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>でアカウントを作成すると以下のような事ができるようになります: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">4,8</context>
