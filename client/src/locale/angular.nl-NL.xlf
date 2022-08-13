@@ -5367,7 +5367,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="5191164170233238999" datatype="html">
         <source>Max simultaneous lives created on your instance</source>
-        <target state="translated">Max gelijktijdige live uitzendingen gecreëerd op uw instantie</target>
+        <target state="translated">Maximaal gelijktijdige live uitzendingen op uw instantie</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="6830777508073747241" datatype="html">
@@ -5378,7 +5378,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="1834362188086938736" datatype="html">
         <source>Max simultaneous lives created per user</source>
-        <target state="new">Max simultaneous lives created per user</target>
+        <target state="translated">Maximaal gelijktijdige live uitzendingen per gebruiker</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="1521259619066122077" datatype="html">
@@ -5393,22 +5393,22 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="4240037618955024499" datatype="html">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
-        <target state="new"> will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </target>
+        <target state="translated">zal maximaal <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> claimen voor het transcoderen </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">148</context></context-group>
       </trans-unit>
       <trans-unit id="8489317904250057957" datatype="html">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
-        <target state="new"> will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </target>
+        <target state="translated">zal minimaal <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> claimen voor het transcoderen </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">152</context></context-group>
       </trans-unit>
       <trans-unit id="1417246074503129277" datatype="html">
         <source>Live transcoding profile</source>
-        <target state="new">Live transcoding profile</target>
+        <target state="translated">Live transcoderingsprofiel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
       <trans-unit id="8294583621306221742" datatype="html">
         <source>new live transcoding profiles can be added by PeerTube plugins</source>
-        <target state="new">new live transcoding profiles can be added by PeerTube plugins</target>
+        <target state="translated">nieuwe live transcoding profielen kunnen worden toegevoegd door PeerTube plug-ins</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">168</context></context-group>
       </trans-unit>
       <trans-unit id="6727057461851446921" datatype="html">
@@ -5418,7 +5418,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="594064951138382358" datatype="html">
         <source>Also transcode original resolution</source>
-        <target state="new">Also transcode original resolution</target>
+        <target state="translated">Ook originele resolutie transcoderen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">134</context>
@@ -5426,7 +5426,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="5429376346987783852" datatype="html">
         <source>Even if it's above your maximum enabled resolution</source>
-        <target state="new"> Even if it's above your maximum enabled resolution </target>
+        <target state="translated">Zelfs als het boven de maximale resolutie is</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">136,138</context>
@@ -5439,7 +5439,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="6759167469686242835" datatype="html">
         <source>Transcoding enabled for live streams</source>
-        <target state="new">Transcoding enabled for live streams</target>
+        <target state="translated">Transcodering ingeschakeld voor live streams</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="5975271795105968425" datatype="html">
@@ -5450,7 +5450,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="6201638315245239510" datatype="html">
         <source>Advanced</source>
-        <target state="new">Advanced</target>
+        <target state="translated">Geavanceerd</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="7911929966701561067" datatype="html">
@@ -5461,12 +5461,12 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="8212237880239644112" datatype="html">
         <source>Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some.</source>
-        <target state="new"> Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some. </target>
+        <target state="translated">Hetzelfde als video transcoderen, live streams transcoderen zodat ze in een streambare vorm zijn die elk toestel kan afspelen. Vereist een zeer krachtige CPU, en mogelijk ook nog hardware acceleratie plug-ins.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="3444148141968928069" datatype="html">
         <source>Input formats</source>
-        <target state="new">Input formats</target>
+        <target state="translated">Invoerformaten</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="4560217482714993155">
@@ -5481,7 +5481,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="5698272164915890247" datatype="html">
         <source>Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</source>
-        <target state="new">Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</target>
+        <target state="translated">Gebruikers toestaan om video's te uploaden met andere extensies dan .mp4, .ogv en .webm (bijvoorbeeld: .avi, .mov, .mkv enz.).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="1823941382992046371">
@@ -5491,27 +5491,27 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="8340360585610503574" datatype="html">
         <source>Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</source>
-        <target state="new">Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</target>
+        <target state="translated">Gebruikers toestaan om .mp3-, .ogg-, .wma-, .flac-, .aac- of .ac3-audiobestanden te uploaden.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="5867513506373651775" datatype="html">
         <source>The file will be merged in a still image video with the preview file on upload.</source>
-        <target state="new">The file will be merged in a still image video with the preview file on upload.</target>
+        <target state="translated">Het bestand zal bij het uploaden worden samengevoegd in een stilstaand beeldvideo met het voorbeeldbestand.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="2036818807823848377" datatype="html">
         <source>Output formats</source>
-        <target state="new">Output formats</target>
+        <target state="translated">Uitvoerformaten</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="522057769554096255" datatype="html">
         <source>WebTorrent enabled</source>
-        <target state="new">WebTorrent enabled</target>
+        <target state="translated">WebTorrent ingeschakeld</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="8373385486403101567" datatype="html">
         <source>If you also enabled HLS support, it will multiply videos storage by 2</source>
-        <target state="new">If you also enabled HLS support, it will multiply videos storage by 2</target>
+        <target state="translated">Als HLS ondersteuning ook is aangezet, zal de opslag van video's vermenigvuldigen met tweevoud</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="3839590624406770455" datatype="html">
@@ -5521,17 +5521,17 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="7334484418359079994" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with plain WebTorrent:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;                             "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with plain WebTorrent:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;                             "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target state="translated">&lt;x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/&gt;Vereist ffmpeg &gt;= 4.1&lt;x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/&gt;&lt;x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/&gt;Genereert HLS-afspeellijsten en gefragmenteerde MP4-bestanden, wat resulteert in een betere weergave dan met gewone WebTorrent:&lt;x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/&gt;&lt;x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;                             "/&gt;&lt;x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/&gt; Verandering van resolutie is soepeler&lt;x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/&gt;&lt;x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/&gt;Snellere weergave, vooral met lange video's&lt;x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/&gt;&lt;x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/&gt;Stabielere weergave (minder bugs/oneindig laden)&lt;x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/&gt;&lt;x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/&gt;&lt;x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/&gt; Als u ook WebTorrent-ondersteuning hebt ingeschakeld, zal de opslagruimte voor video's met tweevoud worden vermenigvuldigd.&lt;x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="4748900450708089645" datatype="html">
         <source>Resolutions to generate per enabled format</source>
-        <target state="new">Resolutions to generate per enabled format</target>
+        <target state="translated">Te genereren resoluties per ingeschakeld formaat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="4437374135745051281" datatype="html">
         <source>Always transcode original resolution</source>
-        <target state="new">Always transcode original resolution</target>
+        <target state="translated">Altijd originele resolutie transcoderen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">116</context>
@@ -5539,7 +5539,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="5431196295724512251" datatype="html">
         <source>The original file resolution will be the default target if no option is selected.</source>
-        <target state="new"> The original file resolution will be the default target if no option is selected. </target>
+        <target state="translated">De oorspronkelijke videoresolutie is het standaarddoel als geen optie is geselecteerd.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">120</context></context-group>
       </trans-unit>
       <trans-unit id="1126867109775813762">
@@ -5549,27 +5549,27 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="7815122216882553289" datatype="html">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="new"> will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </target>
+        <target state="translated">zal maximaal <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> claimen voor live transcoderen </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">148</context></context-group>
       </trans-unit>
       <trans-unit id="8685484763568827375" datatype="html">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="new"> will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </target>
+        <target state="translated">zal op zijn minst <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> claimen voor live transcoderen </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">152</context></context-group>
       </trans-unit>
       <trans-unit id="7185278676178506632" datatype="html">
         <source>Transcoding jobs concurrency</source>
-        <target state="new">Transcoding jobs concurrency</target>
+        <target state="translated">Hoeveelheid gelijktijdige transcodering opdrachten</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">168</context></context-group>
       </trans-unit>
       <trans-unit id="1969393594784140832" datatype="html">
         <source>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</source>
-        <target state="new">allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</target>
+        <target state="translated">maakt het mogelijk om meerdere bestanden parallel te transcoderen. ⚠️ Opnieuw opstarten van PeerTube vereist</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">169</context></context-group>
       </trans-unit>
       <trans-unit id="2184317712452071847" datatype="html">
         <source>Transcoding profile</source>
-        <target state="new">Transcoding profile</target>
+        <target state="translated">Transcoderingsprofiel</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">180</context></context-group>
       </trans-unit>
       <trans-unit id="6289966287765074028" datatype="html">
