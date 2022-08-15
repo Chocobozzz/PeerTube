@@ -1,7 +1,7 @@
 {
-    "Quality": "",
-    "Auto": "",
-    "Speed": "",
+    "Quality": "Квалитет",
+    "Auto": "Аутоматски",
+    "Speed": "Брзина",
     "Subtitles/CC": "",
     "peers": "",
     "peer": "",
