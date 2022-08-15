@@ -3599,7 +3599,7 @@
       </trans-unit>
       <trans-unit id="7317290694079257887">
         <source>Accepted</source>
-        <target>受入済</target>
+        <target state="translated">承認済</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">63</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
@@ -3623,7 +3623,7 @@
       </trans-unit>
       <trans-unit id="8905995985388209337">
         <source>Accept</source>
-        <target>受け入れる</target>
+        <target state="translated">承認</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">50</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">46</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-accept-ownership/my-accept-ownership.component.html</context><context context-type="linenumber">25</context></context-group>
@@ -3673,7 +3673,7 @@
       </trans-unit>
       <trans-unit id="8168516547268350654" datatype="html">
         <source>Do you really want to unfollow {count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/> entries?}}</source>
-        <target state="translated">本当に以下のエントリーのフォローを解除しますか？{count, plural, =1 {<x id="entryName"/>?} other {<x id="count"/>のエントリー?}}</target>
+        <target state="translated">本当に以下のエントリーへのフォローを解除しますか？{count, plural, =1 {<x id="entryName"/>のエントリー} other {<x id="count"/>件のエントリー}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -7742,7 +7742,7 @@
       </trans-unit>
       <trans-unit id="7378878529334768232">
         <source>Reject</source>
-        <target>受け入れない</target>
+        <target state="translated">拒否</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">51</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">87</context></context-group>
@@ -7827,7 +7827,7 @@
       </trans-unit>
       <trans-unit id="4309656190692990192" datatype="html">
         <source>Deleted followers will be able to send again a follow request.</source>
-        <target state="new">Deleted followers will be able to send again a follow request.</target>
+        <target state="translated">削除したフォロワーは、フォローリクエストを再度送信することができます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">108</context>
@@ -7908,7 +7908,7 @@
       </trans-unit>
       <trans-unit id="1289115499993408300" datatype="html">
         <source>You are not following {count, plural, =1 {<x id="entryName"/> anymore.} other {these <x id="count"/> entries anymore.}}</source>
-        <target state="new">You are not following {count, plural, =1 {<x id="entryName"/> anymore.} other {these <x id="count"/> entries anymore.}}</target>
+        <target state="translated">あなたはもうフォローしていません。{count, plural, =1 {<x id="entryName"/>のエントリー} other {these <x id="count"/>件のエントリー}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -7916,7 +7916,7 @@
       </trans-unit>
       <trans-unit id="7233230413667661414" datatype="html">
         <source>You are not following them anymore.</source>
-        <target state="new">You are not following them anymore.</target>
+        <target state="translated">あなたはもうフォローしていません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">84,82</context>
@@ -8043,7 +8043,7 @@
       </trans-unit>
       <trans-unit id="1679841953757186358">
         <source>Mark as accepted</source>
-        <target>承認済としてマーク</target>
+        <target state="translated">受理済としてマーク</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">261</context></context-group>
       </trans-unit>
       <trans-unit id="7993358694073742566">
@@ -8819,7 +8819,7 @@
       </trans-unit>
       <trans-unit id="2326816287669585542" datatype="html">
         <source>One of your abuse reports has been accepted or rejected by moderators</source>
-        <target state="translated">不正行為に関する通報の一つがモデレーターによって受理または却下された</target>
+        <target state="translated">不正行為に関する通報の一つが、モデレーターによって受理または却下されました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="2764971902180889905" datatype="html">
@@ -10385,7 +10385,7 @@
       </trans-unit>
       <trans-unit id="6122525173522570480" datatype="html">
         <source>Support text cannot be more than 1000 characters long.</source>
-        <target state="needs-translation">Support text cannot be more than 1000 characters long.</target>
+        <target state="translated">応援テキストには1000文字以上は入力できません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">48</context>
@@ -11890,7 +11890,7 @@
       </trans-unit>
       <trans-unit id="3143238830256588661" datatype="html">
         <source>The live stream will be automatically terminated and replays won't be saved.</source>
-        <target state="new">The live stream will be automatically terminated and replays won't be saved.</target>
+        <target state="translated">ライブ配信は自動的に停止され、リプレイ動画は保存されません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">233</context>
