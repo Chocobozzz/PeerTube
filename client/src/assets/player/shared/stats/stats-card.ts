@@ -145,7 +145,10 @@ class StatsCard extends Component {
       ? `${level?.videoCodec || ''} / ${level?.audioCodec || ''}`
       : undefined
 
-    const resolution = `${level?.height}p${level?.attrs['FRAME-RATE'] || ''}`
+    const resolution = level?.height
+      ? `${level?.height}p${level?.attrs['FRAME-RATE'] || ''}`
+      : undefined
+
     const buffer = this.timeRangesToString(this.player().buffered())
 
     let progress: number
