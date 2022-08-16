@@ -99,7 +99,7 @@ describe('Permanent live', function () {
   })
 
   it('Should stream into this permanent live', async function () {
-    this.timeout(120000)
+    this.timeout(240_000)
 
     const beforePublication = new Date()
     const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUID })

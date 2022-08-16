@@ -146,7 +146,7 @@ class StatsCard extends Component {
       : undefined
 
     const resolution = level?.height
-      ? `${level?.height}p${level?.attrs['FRAME-RATE'] || ''}`
+      ? `${level.height}p${level?.attrs['FRAME-RATE'] || ''}`
       : undefined
 
     const buffer = this.timeRangesToString(this.player().buffered())
