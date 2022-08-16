@@ -19,7 +19,7 @@ describe('Test jobs', function () {
   let servers: PeerTubeServer[]
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(2)
 

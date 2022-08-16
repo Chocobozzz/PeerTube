@@ -89,7 +89,7 @@ describe('Test follows moderation', function () {
   let commands: FollowsCommand[]
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(240000)
 
     servers = await createMultipleServers(3)
 

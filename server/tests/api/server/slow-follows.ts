@@ -20,7 +20,7 @@ describe('Test slow follows', function () {
   let afterFollows: Date
 
   before(async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(3)
 

@@ -223,7 +223,7 @@ describe('Test live', function () {
     let vodVideoId: string
 
     before(async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       vodVideoId = (await servers[0].videos.quickUpload({ name: 'vod video' })).uuid
 
