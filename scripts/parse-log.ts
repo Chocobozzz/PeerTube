@@ -1,6 +1,7 @@
 import { program } from 'commander'
 import { createReadStream, readdir } from 'fs-extra'
 import { join } from 'path'
+import { stdin } from 'process'
 import { createInterface } from 'readline'
 import { format as sqlFormat } from 'sql-formatter'
 import { inspect } from 'util'
@@ -89,7 +90,7 @@ async function run () {
 function readFile (file: string) {
   console.log('Opening %s.', file)
 
-  const stream = createReadStream(file)
+  const stream = file === '-' ? stdin : createReadStream(file)
 
   const rl = createInterface({
     input: stream
@@ -117,7 +118,7 @@ function readFile (file: string) {
       }
     })
 
-    stream.once('close', () => res())
+    stream.once('end', () => res())
   })
 }
 
