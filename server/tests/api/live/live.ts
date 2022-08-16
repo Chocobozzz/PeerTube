@@ -622,7 +622,7 @@ describe('Test live', function () {
     })
 
     it('Should only keep the original resolution if all resolutions are disabled', async function () {
-      this.timeout(400_000)
+      this.timeout(600_000)
 
       await updateConf([])
       liveVideoId = await createLiveWrapper(true)
@@ -673,7 +673,7 @@ describe('Test live', function () {
     }
 
     before(async function () {
-      this.timeout(300000)
+      this.timeout(600_000)
 
       liveVideoId = await createLiveWrapper({ saveReplay: false, permanent: false })
       liveVideoReplayId = await createLiveWrapper({ saveReplay: true, permanent: false })

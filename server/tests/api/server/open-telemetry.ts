@@ -59,7 +59,7 @@ describe('Open Telemetry', function () {
       })
 
       const res = await makeRawRequest(metricsUrl, HttpStatusCode.OK_200)
-      expect(res.text).to.contain('peertube_playback_http_uploaded_bytes_total{')
+      expect(res.text).to.contain('peertube_playback_http_downloaded_bytes_total{')
     })
 
     after(async function () {
