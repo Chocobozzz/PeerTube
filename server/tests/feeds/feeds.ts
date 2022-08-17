@@ -20,6 +20,8 @@ chai.use(require('chai-xml'))
 chai.use(require('chai-json-schema'))
 chai.config.includeStack = true
 
+const expect = chai.expect
+
 describe('Test syndication feeds', () => {
   let servers: PeerTubeServer[] = []
   let serverHLSOnly: PeerTubeServer
