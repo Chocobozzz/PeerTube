@@ -13,8 +13,6 @@ const serverGetValidator = [
   body('host').custom(isHostValid).withMessage('Should have a valid host'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking serverGetValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     const server = await ServerModel.loadByHost(req.body.host)
@@ -40,8 +38,6 @@ const contactAdministratorValidator = [
     .custom(isValidContactBody),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking contactAdministratorValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     if (CONFIG.CONTACT_FORM.ENABLED === false) {

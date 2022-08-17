@@ -13,7 +13,6 @@ import {
   isValidLogLevel
 } from '../../helpers/custom-validators/logs'
 import { isDateValid, toArray } from '../../helpers/custom-validators/misc'
-import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './shared'
 
 const createClientLogValidator = [
@@ -39,8 +38,6 @@ const createClientLogValidator = [
     .custom(isValidClientLogUserAgent),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking createClientLogValidator parameters.', { parameters: req.query })
-
     if (CONFIG.LOG.ACCEPT_CLIENT_LOG !== true) {
       return res.sendStatus(HttpStatusCode.FORBIDDEN_403)
     }
@@ -66,8 +63,6 @@ const getLogsValidator = [
     .custom(isDateValid).withMessage('Should have an end date that conforms to ISO 8601'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking getLogsValidator parameters.', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -82,8 +77,6 @@ const getAuditLogsValidator = [
     .custom(isDateValid).withMessage('Should have a end date that conforms to ISO 8601'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking getAuditLogsValidator parameters.', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     return next()

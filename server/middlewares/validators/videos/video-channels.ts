@@ -12,7 +12,6 @@ import {
   isVideoChannelSupportValid,
   isVideoChannelUsernameValid
 } from '../../../helpers/custom-validators/video-channels'
-import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/actor/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { areValidationErrors, checkUserQuota, doesVideoChannelNameWithHostExist } from '../shared'
@@ -31,8 +30,6 @@ export const videoChannelsAddValidator = [
     .custom(isVideoChannelSupportValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoChannelsAdd parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     const actor = await ActorModel.loadLocalByName(req.body.name)
@@ -72,8 +69,6 @@ export const videoChannelsUpdateValidator = [
     .custom(isBooleanValid).withMessage('Should have a valid bulkVideosSupportUpdate boolean field'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoChannelsUpdate parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -82,8 +77,6 @@ export const videoChannelsUpdateValidator = [
 
 export const videoChannelsRemoveValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoChannelsRemove parameters', { parameters: req.params })
-
     if (!await checkVideoChannelIsNotTheLastOne(res.locals.videoChannel, res)) return
 
     return next()
@@ -95,8 +88,6 @@ export const videoChannelsNameWithHostValidator = [
     .exists(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoChannelsNameWithHostValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoChannelNameWithHostExist(req.params.nameWithHost, res)) return
@@ -147,8 +138,6 @@ export const videoChannelsListValidator = [
     .not().isEmpty(),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking video channels search query', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -164,8 +153,6 @@ export const videoChannelImportVideosValidator = [
     .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoChannelImport parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     const body: VideosImportInChannelCreate = req.body

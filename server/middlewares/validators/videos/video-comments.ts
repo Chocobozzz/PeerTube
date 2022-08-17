@@ -43,8 +43,6 @@ const listVideoCommentsValidator = [
     .custom(exists),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking listVideoCommentsValidator parameters.', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -55,8 +53,6 @@ const listVideoCommentThreadsValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking listVideoCommentThreads parameters.', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
 
@@ -73,8 +69,6 @@ const listVideoThreadCommentsValidator = [
     .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking listVideoThreadComments parameters.', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
     if (!await doesVideoCommentThreadExist(req.params.threadId, res.locals.onlyVideo, res)) return
@@ -92,8 +86,6 @@ const addVideoCommentThreadValidator = [
     .custom(isValidVideoCommentText),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking addVideoCommentThread parameters.', { parameters: req.params, body: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
@@ -114,8 +106,6 @@ const addVideoCommentReplyValidator = [
   body('text').custom(isValidVideoCommentText),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking addVideoCommentReply parameters.', { parameters: req.params, body: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
@@ -136,8 +126,6 @@ const videoCommentGetValidator = [
     .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoCommentGetValidator parameters.', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'id')) return
     if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoId, res)) return
@@ -153,8 +141,6 @@ const removeVideoCommentValidator = [
     .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking removeVideoCommentValidator parameters.', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
     if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoAll, res)) return

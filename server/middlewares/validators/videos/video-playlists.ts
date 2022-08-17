@@ -29,7 +29,6 @@ import {
 } from '../../../helpers/custom-validators/video-playlists'
 import { isVideoImageValid } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
-import { logger } from '../../../helpers/logger'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { VideoPlaylistElementModel } from '../../../models/video/video-playlist-element'
 import { MVideoPlaylist } from '../../../types/models/video/video-playlist'
@@ -48,8 +47,6 @@ const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
     .custom(isVideoPlaylistNameValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoPlaylistsAddValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
     const body: VideoPlaylistCreate = req.body
@@ -76,8 +73,6 @@ const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
     .custom(isVideoPlaylistNameValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoPlaylistsUpdateValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
     if (!await doesVideoPlaylistExist(req.params.playlistId, res, 'all')) return cleanUpReqFiles(req)
@@ -118,8 +113,6 @@ const videoPlaylistsDeleteValidator = [
   isValidPlaylistIdParam('playlistId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoPlaylistsDeleteValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoPlaylistExist(req.params.playlistId, res)) return
@@ -142,8 +135,6 @@ const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) => {
     isValidPlaylistIdParam('playlistId'),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      logger.debug('Checking videoPlaylistsGetValidator parameters', { parameters: req.params })
-
       if (areValidationErrors(req, res)) return
 
       if (!await doesVideoPlaylistExist(req.params.playlistId, res, fetchType)) return
@@ -189,8 +180,6 @@ const videoPlaylistsSearchValidator = [
     .not().isEmpty(),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoPlaylists search query', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -211,8 +200,6 @@ const videoPlaylistsAddVideoValidator = [
     .custom(isVideoPlaylistTimestampValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoPlaylistsAddVideoValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoPlaylistExist(req.params.playlistId, res, 'all')) return
@@ -241,8 +228,6 @@ const videoPlaylistsUpdateOrRemoveVideoValidator = [
     .custom(isVideoPlaylistTimestampValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoPlaylistsRemoveVideoValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoPlaylistExist(req.params.playlistId, res, 'all')) return
@@ -271,8 +256,6 @@ const videoPlaylistElementAPGetValidator = [
     .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoPlaylistElementAPGetValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     const playlistElementId = parseInt(req.params.playlistElementId + '', 10)
@@ -312,8 +295,6 @@ const videoPlaylistsReorderVideosValidator = [
     .isInt({ min: 1 }),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoPlaylistsReorderVideosValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoPlaylistExist(req.params.playlistId, res, 'all')) return
@@ -346,8 +327,6 @@ const commonVideoPlaylistFiltersValidator = [
     .custom(isVideoPlaylistTypeValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking commonVideoPlaylistFiltersValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -360,8 +339,6 @@ const doVideosInPlaylistExistValidator = [
     .custom(v => isArrayOf(v, isIdValid)).withMessage('Should have a valid video ids array'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking areVideosInPlaylistExistValidator parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     return next()

@@ -2,13 +2,12 @@ import express from 'express'
 import { body } from 'express-validator'
 import { isIntOrNull } from '@server/helpers/custom-validators/misc'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config'
+import { HttpStatusCode } from '@shared/models/http/http-error-codes'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users'
-import { logger } from '../../helpers/logger'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { areValidationErrors } from './shared'
-import { HttpStatusCode } from '@shared/models/http/http-error-codes'
 
 const customConfigUpdateValidator = [
   body('instance.name').exists(),
@@ -105,8 +104,6 @@ const customConfigUpdateValidator = [
   body('search.searchIndex.isDefaultSearch').isBoolean(),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking customConfigUpdateValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!checkInvalidConfigIfEmailDisabled(req.body, res)) return
     if (!checkInvalidTranscodingConfig(req.body, res)) return

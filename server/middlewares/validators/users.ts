@@ -1,6 +1,5 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { omit } from 'lodash'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { MUserDefault } from '@server/types/models'
 import { HttpStatusCode, UserRegister, UserRight, UserRole } from '@shared/models'
@@ -41,8 +40,6 @@ const usersListValidator = [
     .isBoolean().withMessage('Should be a valid blocked boolena'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersList parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -76,9 +73,7 @@ const usersAddValidator = [
     .custom(isUserAdminFlagsValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersAdd parameters', { parameters: omit(req.body, 'password') })
-
-    if (areValidationErrors(req, res)) return
+    if (areValidationErrors(req, res, { omitBodyLog: true })) return
     if (!await checkUserNameOrEmailDoesNotAlreadyExist(req.body.username, req.body.email, res)) return
 
     const authUser = res.locals.oauth.token.User
@@ -126,9 +121,7 @@ const usersRegisterValidator = [
     .custom(isVideoChannelDisplayNameValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersRegister parameters', { parameters: omit(req.body, 'password') })
-
-    if (areValidationErrors(req, res)) return
+    if (areValidationErrors(req, res, { omitBodyLog: true })) return
     if (!await checkUserNameOrEmailDoesNotAlreadyExist(req.body.username, req.body.email, res)) return
 
     const body: UserRegister = req.body
@@ -159,8 +152,6 @@ const usersRemoveValidator = [
     .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersRemove parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return
 
@@ -181,8 +172,6 @@ const usersBlockingValidator = [
     .custom(isUserBlockedReasonValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersBlocking parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return
 
@@ -236,9 +225,7 @@ const usersUpdateValidator = [
     .custom(isUserAdminFlagsValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersUpdate parameters', { parameters: req.body })
-
-    if (areValidationErrors(req, res)) return
+    if (areValidationErrors(req, res, { omitBodyLog: true })) return
     if (!await checkUserIdExist(req.params.id, res)) return
 
     const user = res.locals.user
@@ -300,8 +287,6 @@ const usersUpdateMeValidator = [
     .custom(v => isUserAutoPlayNextVideoValid(v)).withMessage('Should have a valid autoPlayNextVideo boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersUpdateMe parameters', { parameters: omit(req.body, 'password') })
-
     const user = res.locals.oauth.token.User
 
     if (req.body.password || req.body.email) {
@@ -321,7 +306,7 @@ const usersUpdateMeValidator = [
       }
     }
 
-    if (areValidationErrors(req, res)) return
+    if (areValidationErrors(req, res, { omitBodyLog: true })) return
 
     return next()
   }
@@ -335,8 +320,6 @@ const usersGetValidator = [
     .isBoolean().withMessage('Should have a valid withStats boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersGet parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res, req.query.withStats)) return
 
@@ -348,8 +331,6 @@ const usersVideoRatingValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersVideoRating parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'id')) return
 
@@ -369,8 +350,6 @@ const usersVideosValidator = [
     .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersVideosValidator parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     if (req.query.channelId && !await doesVideoChannelIdExist(req.query.channelId, res)) return
@@ -423,8 +402,6 @@ const usersAskResetPasswordValidator = [
     .isEmail(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersAskResetPassword parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     const exists = await checkUserEmailExist(req.body.email, res, false)
@@ -447,8 +424,6 @@ const usersResetPasswordValidator = [
     .custom(isUserPasswordValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersResetPassword parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return
 
@@ -470,9 +445,8 @@ const usersAskSendVerifyEmailValidator = [
   body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking askUsersSendVerifyEmail parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
+
     const exists = await checkUserEmailExist(req.body.email, res, false)
     if (!exists) {
       logger.debug('User with email %s does not exist (asking verify email).', req.body.email)
@@ -495,8 +469,6 @@ const usersVerifyEmailValidator = [
     .customSanitizer(toBooleanOrNull),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersVerifyEmail parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return
 
@@ -515,7 +487,9 @@ const usersVerifyEmailValidator = [
 ]
 
 const userAutocompleteValidator = [
-  param('search').isString().not().isEmpty().withMessage('Should have a search parameter')
+  param('search')
+    .isString()
+    .not().isEmpty()
 ]
 
 const ensureAuthUserOwnsAccountValidator = [

@@ -2,7 +2,6 @@ import express from 'express'
 import { body } from 'express-validator'
 import { isActorImageFile } from '@server/helpers/custom-validators/actor-images'
 import { cleanUpReqFiles } from '../../helpers/express-utils'
-import { logger } from '../../helpers/logger'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { areValidationErrors } from './shared'
 
@@ -13,8 +12,6 @@ const updateActorImageValidatorFactory = (fieldname: string) => ([
   ),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking updateActorImageValidator parameters', { files: req.files })
-
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
     return next()

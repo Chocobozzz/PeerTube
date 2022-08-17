@@ -1,7 +1,7 @@
 import express from 'express'
 import { param, query } from 'express-validator'
 import { isValidJobState, isValidJobType } from '../../helpers/custom-validators/jobs'
-import { logger, loggerTagsFactory } from '../../helpers/logger'
+import { loggerTagsFactory } from '../../helpers/logger'
 import { areValidationErrors } from './shared'
 
 const lTags = loggerTagsFactory('validators', 'jobs')
@@ -16,9 +16,7 @@ const listJobsValidator = [
     .custom(isValidJobType),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking listJobsValidator parameters.', { parameters: req.params, ...lTags() })
-
-    if (areValidationErrors(req, res)) return
+    if (areValidationErrors(req, res, lTags())) return
 
     return next()
   }

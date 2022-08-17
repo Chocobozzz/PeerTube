@@ -1,7 +1,6 @@
 import express from 'express'
 import { query } from 'express-validator'
 import { PAGINATION } from '@server/initializers/constants'
-import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './shared'
 
 const paginationValidator = paginationValidatorBuilder()
@@ -16,9 +15,7 @@ function paginationValidatorBuilder (tags: string[] = []) {
       .isInt({ min: 0, max: PAGINATION.GLOBAL.COUNT.MAX }).withMessage(`Should have a number count (max: ${PAGINATION.GLOBAL.COUNT.MAX})`),
 
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      logger.debug('Checking pagination parameters', { parameters: req.query, tags })
-
-      if (areValidationErrors(req, res)) return
+      if (areValidationErrors(req, res, { tags })) return
 
       return next()
     }

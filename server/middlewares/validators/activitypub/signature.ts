@@ -26,7 +26,7 @@ const signatureValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking Linked Data Signature parameter', { parameters: { signature: req.body.signature } })
 
-    if (areValidationErrors(req, res)) return
+    if (areValidationErrors(req, res, { omitLog: true })) return
 
     return next()
   }

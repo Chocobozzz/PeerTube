@@ -52,8 +52,6 @@ const abuseReportValidator = [
     .custom(areAbusePredefinedReasonsValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking abuseReport parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     const body: AbuseCreate = req.body
@@ -76,8 +74,6 @@ const abuseGetValidator = [
     .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking abuseGetValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await doesAbuseExist(req.params.id, res)) return
 
@@ -97,8 +93,6 @@ const abuseUpdateValidator = [
     .custom(isAbuseModerationCommentValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking abuseUpdateValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await doesAbuseExist(req.params.id, res)) return
 
@@ -139,8 +133,6 @@ const abuseListForAdminsValidator = [
     .custom(exists),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking abuseListForAdminsValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -161,8 +153,6 @@ const abuseListForUserValidator = [
     .custom(isAbuseStateValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking abuseListForUserValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -174,8 +164,6 @@ const getAbuseValidator = [
     .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking getAbuseValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await doesAbuseExist(req.params.id, res)) return
 
@@ -198,8 +186,6 @@ const getAbuseValidator = [
 
 const checkAbuseValidForMessagesValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking checkAbuseValidForMessagesValidator parameters', { parameters: req.body })
-
     const abuse = res.locals.abuse
     if (abuse.ReporterAccount.isOwned() === false) {
       return res.fail({ message: 'This abuse was created by a user of your instance.' })
@@ -214,8 +200,6 @@ const addAbuseMessageValidator = [
     .custom(isAbuseMessageValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking addAbuseMessageValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -227,8 +211,6 @@ const deleteAbuseMessageValidator = [
     .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking deleteAbuseMessageValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     const user = res.locals.oauth.token.user

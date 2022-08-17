@@ -50,8 +50,6 @@ const followValidator = [
         })
     }
 
-    logger.debug('Checking follow parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     const body: ServerFollowCreate = req.body
@@ -73,8 +71,6 @@ const removeFollowingValidator = [
     .custom(value => isHostValid(value) || isRemoteHandleValid(value)),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking unfollowing parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     const serverActor = await getServerActor()
@@ -103,8 +99,6 @@ const getFollowerValidator = [
     .custom(isValidActorHandle),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking get follower parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     let follow: MActorFollowActorsDefault
@@ -132,8 +126,6 @@ const getFollowerValidator = [
 
 const acceptFollowerValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking accept follower parameters', { parameters: req.params })
-
     const follow = res.locals.follow
     if (follow.state !== 'pending' && follow.state !== 'rejected') {
       return res.fail({ message: 'Follow is not in pending/rejected state.' })
@@ -145,8 +137,6 @@ const acceptFollowerValidator = [
 
 const rejectFollowerValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking reject follower parameters', { parameters: req.params })
-
     const follow = res.locals.follow
     if (follow.state !== 'pending' && follow.state !== 'accepted') {
       return res.fail({ message: 'Follow is not in pending/accepted state.' })

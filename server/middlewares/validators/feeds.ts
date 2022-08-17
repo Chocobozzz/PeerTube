@@ -3,7 +3,6 @@ import { param, query } from 'express-validator'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isValidRSSFeed } from '../../helpers/custom-validators/feeds'
 import { exists, isIdOrUUIDValid, isIdValid, toCompleteUUID } from '../../helpers/custom-validators/misc'
-import { logger } from '../../helpers/logger'
 import {
   areValidationErrors,
   checkCanSeeVideo,
@@ -24,8 +23,6 @@ const feedsFormatValidator = [
     .custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json)'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking feeds format parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -74,8 +71,6 @@ const videoFeedsValidator = [
     .optional(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking feeds parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     if (req.query.accountId && !await doesAccountIdExist(req.query.accountId, res)) return
@@ -95,8 +90,6 @@ const videoSubscriptionFeedsValidator = [
     .custom(exists),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking subscription feeds parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     if (!await doesAccountIdExist(req.query.accountId, res)) return
@@ -113,8 +106,6 @@ const videoCommentsFeedsValidator = [
     .custom(isIdOrUUIDValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking feeds parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     if (req.query.videoId && (req.query.videoChannelId || req.query.videoChannelName)) {

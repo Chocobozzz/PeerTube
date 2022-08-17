@@ -2,7 +2,6 @@ import express from 'express'
 import { body, query } from 'express-validator'
 import { isNotEmptyIntArray, toBooleanOrNull } from '../../helpers/custom-validators/misc'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
-import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './shared'
 
 const listUserNotificationsValidator = [
@@ -12,8 +11,6 @@ const listUserNotificationsValidator = [
     .isBoolean().withMessage('Should have a valid unread boolean'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking listUserNotificationsValidator parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -47,8 +44,6 @@ const updateNotificationSettingsValidator = [
     .custom(isUserNotificationSettingValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking updateNotificationSettingsValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -61,8 +56,6 @@ const markAsReadUserNotificationsValidator = [
     .custom(isNotEmptyIntArray).withMessage('Should have a valid array of notification ids'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking markAsReadUserNotificationsValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     return next()

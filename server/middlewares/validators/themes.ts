@@ -3,7 +3,6 @@ import { param } from 'express-validator'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isSafePath } from '../../helpers/custom-validators/misc'
 import { isPluginNameValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
-import { logger } from '../../helpers/logger'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
 import { areValidationErrors } from './shared'
 
@@ -16,8 +15,6 @@ const serveThemeCSSValidator = [
     .custom(isSafePath),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking serveThemeCSS parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     const theme = PluginManager.Instance.getRegisteredThemeByShortName(req.params.themeName)

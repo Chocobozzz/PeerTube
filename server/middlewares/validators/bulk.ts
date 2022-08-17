@@ -3,7 +3,6 @@ import { body } from 'express-validator'
 import { isBulkRemoveCommentsOfScopeValid } from '@server/helpers/custom-validators/bulk'
 import { HttpStatusCode, UserRight } from '@shared/models'
 import { BulkRemoveCommentsOfBody } from '@shared/models/bulk/bulk-remove-comments-of-body.model'
-import { logger } from '../../helpers/logger'
 import { areValidationErrors, doesAccountNameWithHostExist } from './shared'
 
 const bulkRemoveCommentsOfValidator = [
@@ -13,8 +12,6 @@ const bulkRemoveCommentsOfValidator = [
     .custom(isBulkRemoveCommentsOfScopeValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking bulkRemoveCommentsOfValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await doesAccountNameWithHostExist(req.body.accountName, res)) return
 

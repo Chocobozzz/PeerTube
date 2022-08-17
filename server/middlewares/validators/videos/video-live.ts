@@ -6,6 +6,7 @@ import { isLocalLiveVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { VideoModel } from '@server/models/video/video'
 import { VideoLiveModel } from '@server/models/video/video-live'
+import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 import {
   HttpStatusCode,
   LiveVideoCreate,
@@ -28,14 +29,11 @@ import {
   isValidVideoIdParam
 } from '../shared'
 import { getCommonVideoEditAttributes } from './videos'
-import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 
 const videoLiveGetValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoLiveGetValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'all')) return
 
@@ -79,8 +77,6 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     .custom(isLiveLatencyModeValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoLiveAddValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
     if (CONFIG.LIVE.ENABLED !== true) {
@@ -163,8 +159,6 @@ const videoLiveUpdateValidator = [
     .custom(isLiveLatencyModeValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoLiveUpdateValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     const body: LiveVideoUpdate = req.body
@@ -197,8 +191,6 @@ const videoLiveUpdateValidator = [
 
 const videoLiveListSessionsValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoLiveListSessionsValidator parameters', { parameters: req.params })
-
     // Check the user can manage the live
     const user = res.locals.oauth.token.User
     if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.GET_ANY_LIVE, res)) return
@@ -211,8 +203,6 @@ const videoLiveFindReplaySessionValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoLiveFindReplaySessionValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'id')) return
 

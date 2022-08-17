@@ -72,8 +72,6 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
     .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
-
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
     const videoFile: express.VideoUploadFile = req.files['videofile'][0]
@@ -202,7 +200,7 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
       files: req.files
     })
 
-    if (areValidationErrors(req, res)) return cleanup()
+    if (areValidationErrors(req, res, { omitLog: true })) return cleanup()
 
     const files = { videofile: [ videoFileMetadata ] }
     if (!await commonVideoChecksPass({ req, res, user, videoFileSize: videoFileMetadata.size, files })) return cleanup()
@@ -231,8 +229,6 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
     .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videosUpdate parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
     if (areErrorsInScheduleUpdate(req, res)) return cleanUpReqFiles(req)
     if (!await doesVideoExist(req.params.id, res)) return cleanUpReqFiles(req)
@@ -284,8 +280,6 @@ const videosCustomGetValidator = (
     isValidVideoIdParam('id'),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      logger.debug('Checking videosGet parameters', { parameters: req.params })
-
       if (areValidationErrors(req, res)) return
       if (!await doesVideoExist(req.params.id, res, fetchType)) return
 
@@ -311,8 +305,6 @@ const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
     .custom(isIdValid).not().isEmpty().withMessage('Should have a valid videoFileId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoFileMetadataGet parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoFileOfVideoExist(+req.params.videoFileId, req.params.id, res)) return
 
@@ -324,8 +316,6 @@ const videosRemoveValidator = [
   isValidVideoIdParam('id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videosRemove parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
 
@@ -485,8 +475,6 @@ const commonVideosFiltersValidator = [
     .custom(exists),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking commons video filters query', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     // FIXME: deprecated in 4.0, to remove

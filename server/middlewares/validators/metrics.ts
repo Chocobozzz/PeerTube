@@ -4,7 +4,6 @@ import { isValidPlayerMode } from '@server/helpers/custom-validators/metrics'
 import { isIdOrUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
 import { CONFIG } from '@server/initializers/config'
 import { HttpStatusCode, PlaybackMetricCreate } from '@shared/models'
-import { logger } from '../../helpers/logger'
 import { areValidationErrors, doesVideoExist } from './shared'
 
 const addPlaybackMetricValidator = [
@@ -35,8 +34,6 @@ const addPlaybackMetricValidator = [
     .custom(isIdOrUUIDValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking addPlaybackMetricValidator parameters.', { parameters: req.query })
-
     if (!CONFIG.OPEN_TELEMETRY.METRICS.ENABLED) return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 
     const body: PlaybackMetricCreate = req.body

@@ -4,7 +4,6 @@ import { isValidCreateTranscodingType } from '@server/helpers/custom-validators/
 import { CONFIG } from '@server/initializers/config'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { HttpStatusCode } from '@shared/models'
-import { logger } from '../../../helpers/logger'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
 
 const createTranscodingValidator = [
@@ -14,8 +13,6 @@ const createTranscodingValidator = [
     .custom(isValidCreateTranscodingType),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking createTranscodingValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'all')) return
 

@@ -1,7 +1,6 @@
 import * as express from 'express'
 import { body, param } from 'express-validator'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
-import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { HttpStatusCode, VideoChannelSyncCreate } from '@shared/models'
@@ -27,8 +26,6 @@ export const videoChannelSyncValidator = [
     .isInt(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoChannelSync parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     const body: VideoChannelSyncCreate = req.body

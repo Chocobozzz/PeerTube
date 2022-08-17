@@ -6,7 +6,6 @@ import { isAccountNameValid } from '../../../helpers/custom-validators/accounts'
 import { isIdValid } from '../../../helpers/custom-validators/misc'
 import { isRatingValid } from '../../../helpers/custom-validators/video-rates'
 import { isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
-import { logger } from '../../../helpers/logger'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { areValidationErrors, checkCanSeeVideo, doesVideoExist, isValidVideoIdParam } from '../shared'
 
@@ -17,8 +16,6 @@ const videoUpdateRateValidator = [
     .custom(isVideoRatingTypeValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoRate parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
 
@@ -36,8 +33,6 @@ const getAccountVideoRateValidatorFactory = function (rateType: VideoRateType) {
       .custom(isIdValid),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      logger.debug('Checking videoCommentGetValidator parameters.', { parameters: req.params })
-
       if (areValidationErrors(req, res)) return
 
       const rate = await AccountVideoRateModel.loadLocalAndPopulateVideo(rateType, req.params.name, +req.params.videoId)
@@ -61,8 +56,6 @@ const videoRatingValidator = [
     .custom(isRatingValid).withMessage('Value must be one of "like" or "dislike"'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking rating parameter', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     return next()
