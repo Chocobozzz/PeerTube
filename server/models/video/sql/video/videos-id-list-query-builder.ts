@@ -1,4 +1,4 @@
-import { Sequelize } from 'sequelize'
+import { Sequelize, Transaction } from 'sequelize'
 import validator from 'validator'
 import { exists } from '@server/helpers/custom-validators/misc'
 import { WEBSERVER } from '@server/initializers/constants'
@@ -73,6 +73,9 @@ export type BuildVideosListQueryOptions = {
 
   group?: string
   having?: string
+
+  transaction?: Transaction
+  logging?: boolean
 }
 
 export class VideosIdListQueryBuilder extends AbstractRunQuery {

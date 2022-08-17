@@ -1,4 +1,4 @@
-import { pick } from 'lodash'
+import { pick } from '@shared/core-utils'
 import { HttpStatusCode, ResultList, VideoComment, VideoCommentThreads, VideoCommentThreadTree } from '@shared/models'
 import { unwrapBody } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
