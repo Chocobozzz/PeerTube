@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import * as chai from 'chai'
 import { completeVideoCheck, dateIsValid, expectAccountFollows, expectChannelsFollows, testCaptionFile } from '@server/tests/shared'
 import { VideoCreateResult, VideoPrivacy } from '@shared/models'

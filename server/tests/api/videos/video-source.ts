@@ -1,4 +1,3 @@
-import 'mocha'
 import * as chai from 'chai'
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 

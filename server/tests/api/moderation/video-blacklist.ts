@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import * as chai from 'chai'
 import { FIXTURE_URLS } from '@server/tests/shared'
 import { sortObjectComparator } from '@shared/core-utils'

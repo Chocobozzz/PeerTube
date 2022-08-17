@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { buildAbsoluteFixturePath } from '@shared/core-utils'
 import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import {

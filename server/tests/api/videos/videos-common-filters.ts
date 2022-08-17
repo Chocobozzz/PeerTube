@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
 import { pick } from '@shared/core-utils'
 import { HttpStatusCode, UserRole, Video, VideoDetails, VideoInclude, VideoPrivacy } from '@shared/models'

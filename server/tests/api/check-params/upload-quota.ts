@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
 import { FIXTURE_URLS } from '@server/tests/shared'
 import { randomInt } from '@shared/core-utils'

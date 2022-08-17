@@ -1,4 +1,3 @@
-import 'mocha'
 import { expect } from 'chai'
 import { writeFile } from 'fs-extra'
 import { basename, join } from 'path'

@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, createSingleServer, PeerTubeServer, SearchCommand, setAccessTokensToServers } from '@shared/server-commands'
 import {
   BooleanBothQuery,
   VideoChannelsSearchQuery,
@@ -11,6 +9,7 @@ import {
   VideoPlaylistType,
   VideosSearchQuery
 } from '@shared/models'
+import { cleanupTests, createSingleServer, PeerTubeServer, SearchCommand, setAccessTokensToServers } from '@shared/server-commands'
 
 const expect = chai.expect
 

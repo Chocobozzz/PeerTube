@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import * as chai from 'chai'
 import { checkVideoFilesWereRemoved, completeVideoCheck, testImage } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'

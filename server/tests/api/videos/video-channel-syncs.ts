@@ -1,4 +1,3 @@
-import 'mocha'
 import { expect } from 'chai'
 import { FIXTURE_URLS } from '@server/tests/shared'
 import { areHttpImportTestsDisabled } from '@shared/core-utils'

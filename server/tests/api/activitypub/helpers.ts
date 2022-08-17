@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
 import { cloneDeep } from 'lodash'
 import { signAndContextify } from '@server/lib/activitypub/send'

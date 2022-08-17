@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import * as chai from 'chai'
 import { expectStartWith } from '@server/tests/shared'
 import { ActorFollow, FollowState } from '@shared/models'

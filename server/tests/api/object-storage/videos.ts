@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import bytes from 'bytes'
 import * as chai from 'chai'
 import { stat } from 'fs-extra'

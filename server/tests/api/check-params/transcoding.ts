@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { HttpStatusCode, UserRole } from '@shared/models'
 import {
   cleanupTests,

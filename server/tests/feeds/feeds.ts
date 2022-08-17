@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import * as chai from 'chai'
 import { XMLParser, XMLValidator } from 'fast-xml-parser'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'

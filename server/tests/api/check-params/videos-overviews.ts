@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { cleanupTests, createSingleServer, PeerTubeServer } from '@shared/server-commands'
 
 describe('Test videos overview', function () {

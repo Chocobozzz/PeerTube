@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import * as chai from 'chai'
 import { testImage } from '@server/tests/shared'
 import { AbuseState, HttpStatusCode, OAuth2ErrorCode, UserAdminFlag, UserRole, VideoPlaylistType } from '@shared/models'
