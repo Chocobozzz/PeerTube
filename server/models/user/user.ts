@@ -1,4 +1,3 @@
-import { values } from 'lodash'
 import { col, FindOptions, fn, literal, Op, QueryTypes, where, WhereOptions } from 'sequelize'
 import {
   AfterDestroy,
@@ -283,7 +282,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
   @AllowNull(false)
   @Is('UserNSFWPolicy', value => throwIfNotValid(value, isUserNSFWPolicyValid, 'NSFW policy'))
-  @Column(DataType.ENUM(...values(NSFW_POLICY_TYPES)))
+  @Column(DataType.ENUM(...Object.values(NSFW_POLICY_TYPES)))
   nsfwPolicy: NSFWPolicyType
 
   @AllowNull(false)

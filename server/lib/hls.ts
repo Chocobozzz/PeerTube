@@ -1,8 +1,9 @@
 import { close, ensureDir, move, open, outputJSON, read, readFile, remove, stat, writeFile } from 'fs-extra'
-import { flatten, uniq } from 'lodash'
+import { flatten } from 'lodash'
 import PQueue from 'p-queue'
 import { basename, dirname, join } from 'path'
 import { MStreamingPlaylist, MStreamingPlaylistFilesVideo, MVideo } from '@server/types/models'
+import { uniqify } from '@shared/core-utils'
 import { sha256 } from '@shared/extra-utils'
 import { VideoStorage } from '@shared/models'
 import { getAudioStreamCodec, getVideoStreamCodec, getVideoStreamDimensionsInfo } from '../helpers/ffmpeg'
@@ -182,7 +183,7 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
       const subPlaylistUrls = await fetchUniqUrls(playlistUrl)
 
       const subRequests = subPlaylistUrls.map(u => fetchUniqUrls(u))
-      const fileUrls = uniq(flatten(await Promise.all(subRequests)))
+      const fileUrls = uniqify(flatten(await Promise.all(subRequests)))
 
       logger.debug('Will download %d HLS files.', fileUrls.length, { fileUrls })
 
@@ -227,7 +228,7 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
         return `${dirname(playlistUrl)}/${url}`
       })
 
-    return uniq(urls)
+    return uniqify(urls)
   }
 }
 

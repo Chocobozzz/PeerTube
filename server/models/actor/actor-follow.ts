@@ -1,4 +1,4 @@
-import { difference, values } from 'lodash'
+import { difference } from 'lodash'
 import { Attributes, FindOptions, Includeable, IncludeOptions, Op, QueryTypes, Transaction, WhereAttributeHash } from 'sequelize'
 import {
   AfterCreate,
@@ -69,7 +69,7 @@ import { InstanceListFollowingQueryBuilder, ListFollowingOptions } from './sql/i
 export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowModel>>> {
 
   @AllowNull(false)
-  @Column(DataType.ENUM(...values(FOLLOW_STATES)))
+  @Column(DataType.ENUM(...Object.values(FOLLOW_STATES)))
   state: FollowState
 
   @AllowNull(false)

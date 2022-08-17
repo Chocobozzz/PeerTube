@@ -1,4 +1,4 @@
-import { intoArray, toBoolean } from '@app/helpers'
+import { splitIntoArray, toBoolean } from '@app/helpers'
 import { getAllPrivacies } from '@shared/core-utils'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { BooleanBothQuery, NSFWPolicyType, VideoInclude, VideoPrivacy, VideoSortField } from '@shared/models'
@@ -94,8 +94,8 @@ export class VideoFilters {
 
     if (obj.nsfw !== undefined) this.nsfw = obj.nsfw
 
-    if (obj.languageOneOf !== undefined) this.languageOneOf = intoArray(obj.languageOneOf)
-    if (obj.categoryOneOf !== undefined) this.categoryOneOf = intoArray(obj.categoryOneOf)
+    if (obj.languageOneOf !== undefined) this.languageOneOf = splitIntoArray(obj.languageOneOf)
+    if (obj.categoryOneOf !== undefined) this.categoryOneOf = splitIntoArray(obj.categoryOneOf)
 
     if (obj.scope !== undefined) this.scope = obj.scope
     if (obj.allVideos !== undefined) this.allVideos = toBoolean(obj.allVideos)

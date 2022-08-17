@@ -1,5 +1,4 @@
 import { UploadFilesForCheck } from 'express'
-import { values } from 'lodash'
 import magnetUtil from 'magnet-uri'
 import validator from 'validator'
 import { VideoFilter, VideoInclude, VideoPrivacy, VideoRateType } from '@shared/models'
@@ -78,8 +77,9 @@ function isVideoViewsValid (value: string) {
   return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.VIEWS)
 }
 
+const ratingTypes = new Set(Object.values(VIDEO_RATE_TYPES))
 function isVideoRatingTypeValid (value: string) {
-  return value === 'none' || values(VIDEO_RATE_TYPES).includes(value as VideoRateType)
+  return value === 'none' || ratingTypes.has(value as VideoRateType)
 }
 
 function isVideoFileExtnameValid (value: string) {

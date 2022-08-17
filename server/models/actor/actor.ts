@@ -1,4 +1,3 @@
-import { values } from 'lodash'
 import { literal, Op, QueryTypes, Transaction } from 'sequelize'
 import {
   AllowNull,
@@ -163,7 +162,7 @@ export const unusedActorAttributesForAPI = [
 export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
 
   @AllowNull(false)
-  @Column(DataType.ENUM(...values(ACTIVITY_PUB_ACTOR_TYPES)))
+  @Column(DataType.ENUM(...Object.values(ACTIVITY_PUB_ACTOR_TYPES)))
   type: ActivityPubActorType
 
   @AllowNull(false)

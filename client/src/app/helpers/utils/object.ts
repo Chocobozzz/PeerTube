@@ -18,7 +18,7 @@ function sortBy (obj: any[], key1: string, key2?: string) {
   })
 }
 
-function intoArray (value: any) {
+function splitIntoArray (value: any) {
   if (!value) return undefined
   if (Array.isArray(value)) return value
 
@@ -42,6 +42,6 @@ export {
   sortBy,
   immutableAssign,
   removeElementFromArray,
-  intoArray,
+  splitIntoArray,
   toBoolean
 }

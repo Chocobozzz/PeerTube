@@ -1,4 +1,3 @@
-import { values } from 'lodash'
 import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import {
@@ -45,7 +44,7 @@ import { AccountModel } from './account'
 export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountVideoRateModel>>> {
 
   @AllowNull(false)
-  @Column(DataType.ENUM(...values(VIDEO_RATE_TYPES)))
+  @Column(DataType.ENUM(...Object.values(VIDEO_RATE_TYPES)))
   type: VideoRateType
 
   @AllowNull(false)

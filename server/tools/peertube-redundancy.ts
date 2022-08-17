@@ -1,13 +1,12 @@
 import CliTable3 from 'cli-table3'
 import { Command, program } from 'commander'
-import { uniq } from 'lodash'
 import { URL } from 'url'
 import validator from 'validator'
+import { uniqify } from '@shared/core-utils'
 import { HttpStatusCode, VideoRedundanciesTarget } from '@shared/models'
 import { assignToken, buildServer, getServerCredentials } from './cli'
 
 import bytes = require('bytes')
-
 program
   .name('redundancy')
   .usage('[command] [options]')
@@ -77,7 +76,7 @@ async function listRedundanciesCLI (target: VideoRedundanciesTarget) {
       totalSize = bytes(tmp)
     }
 
-    const instances = uniq(
+    const instances = uniqify(
       webtorrentFiles.concat(streamingPlaylists)
                      .map(r => r.fileUrl)
                      .map(u => new URL(u).host)

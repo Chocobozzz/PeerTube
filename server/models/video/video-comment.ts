@@ -1,4 +1,3 @@
-import { uniq } from 'lodash'
 import { FindOptions, Op, Order, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
@@ -17,6 +16,7 @@ import {
 import { exists } from '@server/helpers/custom-validators/misc'
 import { getServerActor } from '@server/models/application/application'
 import { MAccount, MAccountId, MUserAccountId } from '@server/types/models'
+import { uniqify } from '@shared/core-utils'
 import { VideoPrivacy } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { ActivityTagObject, ActivityTombstoneObject } from '../../../shared/models/activitypub/objects/common-objects'
@@ -802,7 +802,7 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
       )
     }
 
-    return uniq(result)
+    return uniqify(result)
   }
 
   toFormattedJSON (this: MCommentFormattable) {

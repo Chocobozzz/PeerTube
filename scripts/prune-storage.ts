@@ -1,11 +1,11 @@
 import { map } from 'bluebird'
 import { readdir, remove, stat } from 'fs-extra'
-import { uniq, values } from 'lodash'
 import { basename, join } from 'path'
 import { get, start } from 'prompt'
 import { HLS_REDUNDANCY_DIRECTORY, HLS_STREAMING_PLAYLIST_DIRECTORY } from '@server/initializers/constants'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
+import { uniqify } from '@shared/core-utils'
 import { ThumbnailType } from '@shared/models'
 import { getUUIDFromFilename } from '../server/helpers/utils'
 import { CONFIG } from '../server/initializers/config'
@@ -23,9 +23,9 @@ run()
   })
 
 async function run () {
-  const dirs = values(CONFIG.STORAGE)
+  const dirs = Object.values(CONFIG.STORAGE)
 
-  if (uniq(dirs).length !== dirs.length) {
+  if (uniqify(dirs).length !== dirs.length) {
     console.error('Cannot prune storage because you put multiple storage keys in the same directory.')
     process.exit(0)
   }
