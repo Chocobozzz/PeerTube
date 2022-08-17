@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import { omit } from 'lodash'
+import { omit } from '@shared/core-utils'
 import { HttpStatusCode, PlaybackMetricCreate, VideoResolution } from '@shared/models'
 import { cleanupTests, createSingleServer, makePostBodyRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
@@ -66,7 +65,7 @@ describe('Test metrics API validators', function () {
       await makePostBodyRequest({
         url: server.url,
         path,
-        fields: omit(baseParams, 'playerMode')
+        fields: omit(baseParams, [ 'playerMode' ])
       })
 
       await makePostBodyRequest({
@@ -80,7 +79,7 @@ describe('Test metrics API validators', function () {
       await makePostBodyRequest({
         url: server.url,
         path,
-        fields: omit(baseParams, 'resolutionChanges')
+        fields: omit(baseParams, [ 'resolutionChanges' ])
       })
 
       await makePostBodyRequest({
@@ -98,7 +97,7 @@ describe('Test metrics API validators', function () {
       await makePostBodyRequest({
         url: server.url,
         path,
-        fields: omit(baseParams, 'errors')
+        fields: omit(baseParams, [ 'errors' ])
       })
 
       await makePostBodyRequest({
@@ -112,7 +111,7 @@ describe('Test metrics API validators', function () {
       await makePostBodyRequest({
         url: server.url,
         path,
-        fields: omit(baseParams, 'downloadedBytesP2P')
+        fields: omit(baseParams, [ 'downloadedBytesP2P' ])
       })
 
       await makePostBodyRequest({
@@ -126,7 +125,7 @@ describe('Test metrics API validators', function () {
       await makePostBodyRequest({
         url: server.url,
         path,
-        fields: omit(baseParams, 'downloadedBytesHTTP')
+        fields: omit(baseParams, [ 'downloadedBytesHTTP' ])
       })
 
       await makePostBodyRequest({
@@ -140,7 +139,7 @@ describe('Test metrics API validators', function () {
       await makePostBodyRequest({
         url: server.url,
         path,
-        fields: omit(baseParams, 'uploadedBytesP2P')
+        fields: omit(baseParams, [ 'uploadedBytesP2P' ])
       })
 
       await makePostBodyRequest({

@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { omit } from 'lodash'
+import { expect } from 'chai'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
-import { buildAbsoluteFixturePath } from '@shared/core-utils'
+import { buildAbsoluteFixturePath, omit } from '@shared/core-utils'
 import { HttpStatusCode, VideoChannelUpdate } from '@shared/models'
 import {
   ChannelsCommand,
@@ -17,8 +15,6 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test video channels API validator', function () {
   const videoChannelPath = '/api/v1/video-channels'
@@ -121,7 +117,7 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail without a name', async function () {
-      const fields = omit(baseCorrectParams, 'name')
+      const fields = omit(baseCorrectParams, [ 'name' ])
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 
@@ -131,7 +127,7 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail without a name', async function () {
-      const fields = omit(baseCorrectParams, 'displayName')
+      const fields = omit(baseCorrectParams, [ 'displayName' ])
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 

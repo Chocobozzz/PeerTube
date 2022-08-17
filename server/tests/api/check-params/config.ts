@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
-
-import 'mocha'
-import { merge, omit } from 'lodash'
+import { merge } from 'lodash'
+import { omit } from '@shared/core-utils'
 import { CustomConfig, HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
@@ -277,7 +276,7 @@ describe('Test config API validators', function () {
     })
 
     it('Should fail if it misses a key', async function () {
-      const newUpdateParams = omit(updateParams, 'admin.email')
+      const newUpdateParams = { ...updateParams, admin: omit(updateParams.admin, [ 'email' ]) }
 
       await makePutBodyRequest({
         url: server.url,

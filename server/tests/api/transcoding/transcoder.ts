@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { omit } from 'lodash'
+import { expect } from 'chai'
 import { canDoQuickTranscode } from '@server/helpers/ffmpeg'
 import { generateHighBitrateVideo, generateVideoWithFramerate, getAllFiles } from '@server/tests/shared'
-import { buildAbsoluteFixturePath, getMaxBitrate, getMinLimitBitrate } from '@shared/core-utils'
+import { buildAbsoluteFixturePath, getMaxBitrate, getMinLimitBitrate, omit } from '@shared/core-utils'
 import {
   buildFileMetadata,
   getAudioStream,
@@ -25,8 +23,6 @@ import {
   waitJobs,
   webtorrentAdd
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 function updateConfigForTranscoding (server: PeerTubeServer) {
   return server.config.updateCustomSubConfig({

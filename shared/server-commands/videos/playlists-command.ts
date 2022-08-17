@@ -1,5 +1,4 @@
-import { omit } from 'lodash'
-import { pick } from '@shared/core-utils'
+import { omit, pick } from '@shared/core-utils'
 import {
   BooleanBothQuery,
   HttpStatusCode,
@@ -136,7 +135,7 @@ export class PlaylistsCommand extends AbstractCommand {
   }) {
     const path = '/api/v1/video-playlists'
 
-    const fields = omit(options.attributes, 'thumbnailfile')
+    const fields = omit(options.attributes, [ 'thumbnailfile' ])
 
     const attaches = options.attributes.thumbnailfile
       ? { thumbnailfile: options.attributes.thumbnailfile }
@@ -161,7 +160,7 @@ export class PlaylistsCommand extends AbstractCommand {
   }) {
     const path = '/api/v1/video-playlists/' + options.playlistId
 
-    const fields = omit(options.attributes, 'thumbnailfile')
+    const fields = omit(options.attributes, [ 'thumbnailfile' ])
 
     const attaches = options.attributes.thumbnailfile
       ? { thumbnailfile: options.attributes.thumbnailfile }

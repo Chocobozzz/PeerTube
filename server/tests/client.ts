@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { omit } from 'lodash'
+import { omit } from '@shared/core-utils'
 import {
   Account,
   HTMLServerConfig,
@@ -31,7 +31,7 @@ function checkIndexTags (html: string, title: string, description: string, css: 
   expect(html).to.contain('<meta name="description" content="' + description + '" />')
   expect(html).to.contain('<style class="custom-css-style">' + css + '</style>')
 
-  const htmlConfig: HTMLServerConfig = omit(config, 'signup')
+  const htmlConfig: HTMLServerConfig = omit(config, [ 'signup' ])
   const configObjectString = JSON.stringify(htmlConfig)
   const configEscapedString = JSON.stringify(configObjectString)
 

@@ -1,5 +1,4 @@
-import { omit } from 'lodash'
-import { pick } from '@shared/core-utils'
+import { omit, pick } from '@shared/core-utils'
 import {
   HttpStatusCode,
   MyUser,
@@ -298,7 +297,7 @@ export class UsersCommand extends AbstractCommand {
   updateMe (options: OverrideCommandOptions & UserUpdateMe) {
     const path = '/api/v1/users/me'
 
-    const toSend: UserUpdateMe = omit(options, 'url', 'accessToken')
+    const toSend: UserUpdateMe = omit(options, [ 'expectedStatus', 'token' ])
 
     return this.putBodyRequest({
       ...options,

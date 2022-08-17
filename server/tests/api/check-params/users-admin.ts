@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import { omit } from 'lodash'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination, MockSmtpServer } from '@server/tests/shared'
+import { omit } from '@shared/core-utils'
 import { HttpStatusCode, UserAdminFlag, UserRole } from '@shared/models'
 import {
   cleanupTests,
@@ -123,7 +122,7 @@ describe('Test users admin API validators', function () {
     })
 
     it('Should fail with a missing email', async function () {
-      const fields = omit(baseCorrectParams, 'email')
+      const fields = omit(baseCorrectParams, [ 'email' ])
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -223,13 +222,13 @@ describe('Test users admin API validators', function () {
     })
 
     it('Should fail without a videoQuota', async function () {
-      const fields = omit(baseCorrectParams, 'videoQuota')
+      const fields = omit(baseCorrectParams, [ 'videoQuota' ])
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail without a videoQuotaDaily', async function () {
-      const fields = omit(baseCorrectParams, 'videoQuotaDaily')
+      const fields = omit(baseCorrectParams, [ 'videoQuotaDaily' ])
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -247,7 +246,7 @@ describe('Test users admin API validators', function () {
     })
 
     it('Should fail without a user role', async function () {
-      const fields = omit(baseCorrectParams, 'role')
+      const fields = omit(baseCorrectParams, [ 'role' ])
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
