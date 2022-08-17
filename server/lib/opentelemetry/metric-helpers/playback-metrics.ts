@@ -45,7 +45,9 @@ export class PlaybackMetrics {
       playerMode: metrics.playerMode,
 
       resolution: metrics.resolution + '',
-      fps: metrics.fps + ''
+      fps: metrics.fps + '',
+
+      videoUUID: video.uuid
     }
 
     this.errorsCounter.add(metrics.errors, attributes)
