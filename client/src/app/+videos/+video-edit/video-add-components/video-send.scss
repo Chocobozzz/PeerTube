@@ -1,7 +1,7 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-$width-size: 250px;
+$width-size: 275px;
 
 .alert.alert-danger {
   text-align: center;
@@ -27,12 +27,18 @@ $width-size: 250px;
     @include peertube-select-container($width-size);
   }
   my-select-options ::ng-deep ng-select,
-  my-select-channel ::ng-deep ng-select {
+  my-select-channel ::ng-deep ng-select,
+  .peertube-radio-container,
+  .form-group-description {
     width: $width-size;
 
     @media screen and (max-width: $width-size) {
       width: 100%;
     }
+  }
+
+  .form-group-description {
+    white-space: nowrap;
   }
 
   input[type=text] {

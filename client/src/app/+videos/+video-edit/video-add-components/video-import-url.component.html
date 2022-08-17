@@ -16,6 +16,10 @@
       </my-help>
 
       <input type="text" id="targetUrl" [(ngModel)]="targetUrl" class="form-control" />
+
+      <div *ngIf="isChannelSyncEnabled()" class="form-group-description" i18n>
+        You can also synchronize a remote channel in <a routerLink="/my-library/video-channel-syncs">your library</a>
+      </div>
     </div>
 
     <div class="form-group">
