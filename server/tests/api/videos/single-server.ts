@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { checkVideoFilesWereRemoved, completeVideoCheck, testImage } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { Video, VideoPrivacy } from '@shared/models'
@@ -13,8 +13,6 @@ import {
   setDefaultChannelAvatar,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test a single server', function () {
 

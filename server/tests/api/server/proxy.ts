@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { expectNotStartWith, expectStartWith, FIXTURE_URLS, MockProxy } from '@server/tests/shared'
 import { areObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
@@ -14,8 +14,6 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test proxy', function () {
   let servers: PeerTubeServer[] = []

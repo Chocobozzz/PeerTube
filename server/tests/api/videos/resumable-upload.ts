@@ -1,14 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { pathExists, readdir, stat } from 'fs-extra'
 import { join } from 'path'
 import { buildAbsoluteFixturePath } from '@shared/core-utils'
 import { sha1 } from '@shared/extra-utils'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers, setDefaultVideoChannel } from '@shared/server-commands'
-
-const expect = chai.expect
 
 // Most classic resumable upload tests are done in other test suites
 

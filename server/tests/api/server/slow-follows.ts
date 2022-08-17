@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { Job } from '@shared/models'
 import {
   cleanupTests,
@@ -10,8 +10,6 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test slow follows', function () {
   let servers: PeerTubeServer[] = []

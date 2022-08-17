@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import {
   cleanupTests,
   createSingleServer,
@@ -9,8 +9,6 @@ import {
   PluginsCommand,
   setAccessTokensToServers
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test plugins HTML injection', function () {
   let server: PeerTubeServer = null

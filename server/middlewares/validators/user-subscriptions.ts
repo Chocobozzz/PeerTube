@@ -1,8 +1,8 @@
+import { arrayify } from '@shared/core-utils'
 import express from 'express'
 import { body, param, query } from 'express-validator'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { areValidActorHandles, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
-import { toArray } from '../../helpers/custom-validators/misc'
 import { WEBSERVER } from '../../initializers/constants'
 import { ActorFollowModel } from '../../models/actor/actor-follow'
 import { areValidationErrors } from './shared'
@@ -32,7 +32,7 @@ const userSubscriptionAddValidator = [
 
 const areSubscriptionsExistValidator = [
   query('uris')
-    .customSanitizer(toArray)
+    .customSanitizer(arrayify)
     .custom(areValidActorHandles).withMessage('Should have a valid array of URIs'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {

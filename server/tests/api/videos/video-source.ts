@@ -1,7 +1,5 @@
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test video source', () => {
   let server: PeerTubeServer = null

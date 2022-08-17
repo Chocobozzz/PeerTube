@@ -6,7 +6,7 @@ import { Redis } from '@server/lib/redis'
 import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express-handler'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
-import { getAllPrivacies } from '@shared/core-utils'
+import { arrayify, getAllPrivacies } from '@shared/core-utils'
 import { HttpStatusCode, ServerErrorCode, UserRight, VideoInclude } from '@shared/models'
 import {
   exists,
@@ -14,7 +14,6 @@ import {
   isDateValid,
   isFileValid,
   isIdValid,
-  toArray,
   toBooleanOrNull,
   toIntOrNull,
   toValueOrNull
@@ -419,27 +418,27 @@ function getCommonVideoEditAttributes () {
 const commonVideosFiltersValidator = [
   query('categoryOneOf')
     .optional()
-    .customSanitizer(toArray)
+    .customSanitizer(arrayify)
     .custom(isNumberArray).withMessage('Should have a valid categoryOneOf array'),
   query('licenceOneOf')
     .optional()
-    .customSanitizer(toArray)
+    .customSanitizer(arrayify)
     .custom(isNumberArray).withMessage('Should have a valid licenceOneOf array'),
   query('languageOneOf')
     .optional()
-    .customSanitizer(toArray)
+    .customSanitizer(arrayify)
     .custom(isStringArray).withMessage('Should have a valid languageOneOf array'),
   query('privacyOneOf')
     .optional()
-    .customSanitizer(toArray)
+    .customSanitizer(arrayify)
     .custom(isNumberArray).withMessage('Should have a valid privacyOneOf array'),
   query('tagsOneOf')
     .optional()
-    .customSanitizer(toArray)
+    .customSanitizer(arrayify)
     .custom(isStringArray).withMessage('Should have a valid tagsOneOf array'),
   query('tagsAllOf')
     .optional()
-    .customSanitizer(toArray)
+    .customSanitizer(arrayify)
     .custom(isStringArray).withMessage('Should have a valid tagsAllOf array'),
   query('nsfw')
     .optional()

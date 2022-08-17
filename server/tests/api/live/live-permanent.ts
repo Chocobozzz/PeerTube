@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { wait } from '@shared/core-utils'
 import { LiveVideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 import {
@@ -14,8 +14,6 @@ import {
   stopFfmpeg,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Permanent live', function () {
   let servers: PeerTubeServer[] = []

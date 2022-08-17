@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { pathExists, remove } from 'fs-extra'
 import { join } from 'path'
 import { testHelloWorldRegisteredSettings } from '@server/tests/shared'
@@ -15,8 +15,6 @@ import {
   PluginsCommand,
   setAccessTokensToServers
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test plugins', function () {
   let server: PeerTubeServer = null

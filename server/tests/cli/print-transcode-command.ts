@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { buildAbsoluteFixturePath } from '@shared/core-utils'
 import { CLICommand } from '@shared/server-commands'
 import { VideoResolution } from '../../../shared/models/videos'
-
-const expect = chai.expect
 
 describe('Test print transcode jobs', function () {
 

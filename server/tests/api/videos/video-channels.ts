@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { basename } from 'path'
 import { ACTOR_IMAGES_SIZE } from '@server/initializers/constants'
 import { testFileExistsOrNot, testImage } from '@server/tests/shared'
@@ -16,8 +16,6 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 async function findChannel (server: PeerTubeServer, channelId: number) {
   const body = await server.channels.list({ sort: '-name' })

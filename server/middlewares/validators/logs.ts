@@ -3,6 +3,7 @@ import { body, query } from 'express-validator'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
 import { isStringArray } from '@server/helpers/custom-validators/search'
 import { CONFIG } from '@server/initializers/config'
+import { arrayify } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
 import {
   isValidClientLogLevel,
@@ -12,7 +13,7 @@ import {
   isValidClientLogUserAgent,
   isValidLogLevel
 } from '../../helpers/custom-validators/logs'
-import { isDateValid, toArray } from '../../helpers/custom-validators/misc'
+import { isDateValid } from '../../helpers/custom-validators/misc'
 import { areValidationErrors } from './shared'
 
 const createClientLogValidator = [
@@ -56,7 +57,7 @@ const getLogsValidator = [
     .custom(isValidLogLevel),
   query('tagsOneOf')
     .optional()
-    .customSanitizer(toArray)
+    .customSanitizer(arrayify)
     .custom(isStringArray).withMessage('Should have a valid one of tags array'),
   query('endDate')
     .optional()

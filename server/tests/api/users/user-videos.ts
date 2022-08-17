@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
@@ -11,8 +11,6 @@ import {
   setDefaultChannelAvatar,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test user videos', function () {
   let server: PeerTubeServer

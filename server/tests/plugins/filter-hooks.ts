@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { HttpStatusCode, VideoDetails, VideoImportState, VideoPlaylist, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
@@ -14,8 +14,6 @@ import {
   waitJobs
 } from '@shared/server-commands'
 import { FIXTURE_URLS } from '../shared'
-
-const expect = chai.expect
 
 describe('Test plugin filter hooks', function () {
   let servers: PeerTubeServer[]

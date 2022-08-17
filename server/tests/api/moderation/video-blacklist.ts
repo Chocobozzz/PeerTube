@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { FIXTURE_URLS } from '@server/tests/shared'
 import { sortObjectComparator } from '@shared/core-utils'
 import { UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType } from '@shared/models'
@@ -15,8 +15,6 @@ import {
   setDefaultChannelAvatar,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test video blacklist', function () {
   let servers: PeerTubeServer[] = []

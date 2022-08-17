@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { MockInstancesIndex } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { cleanupTests, createMultipleServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/server-commands'
-
-const expect = chai.expect
 
 async function checkFollow (follower: PeerTubeServer, following: PeerTubeServer, exists: boolean) {
   {

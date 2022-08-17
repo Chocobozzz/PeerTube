@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { VideoPlaylistPrivacy } from '@shared/models'
 import {
   cleanupTests,
@@ -13,8 +13,6 @@ import {
   setDefaultChannelAvatar,
   setDefaultVideoChannel
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test playlists search', function () {
   let server: PeerTubeServer

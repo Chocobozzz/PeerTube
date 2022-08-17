@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import {
   cleanupTests,
   createSingleServer,
@@ -10,8 +10,6 @@ import {
   setAccessTokensToServers
 } from '@shared/server-commands'
 import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
-
-const expect = chai.expect
 
 describe('Test plugin altering video constants', function () {
   let server: PeerTubeServer

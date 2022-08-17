@@ -1,8 +1,8 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
 import { areValidActorHandles } from '@server/helpers/custom-validators/activitypub/actor'
-import { toArray } from '@server/helpers/custom-validators/misc'
 import { getServerActor } from '@server/models/application/application'
+import { arrayify } from '@shared/core-utils'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isEachUniqueHostValid, isHostValid } from '../../helpers/custom-validators/servers'
 import { WEBSERVER } from '../../initializers/constants'
@@ -121,12 +121,12 @@ const unblockServerByServerValidator = [
 const blocklistStatusValidator = [
   query('hosts')
     .optional()
-    .customSanitizer(toArray)
+    .customSanitizer(arrayify)
     .custom(isEachUniqueHostValid).withMessage('Should have a valid hosts array'),
 
   query('accounts')
     .optional()
-    .customSanitizer(toArray)
+    .customSanitizer(arrayify)
     .custom(areValidActorHandles).withMessage('Should have a valid accounts array'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {

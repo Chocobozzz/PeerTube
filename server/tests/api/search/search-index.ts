@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import {
   BooleanBothQuery,
   VideoChannelsSearchQuery,
@@ -10,8 +10,6 @@ import {
   VideosSearchQuery
 } from '@shared/models'
 import { cleanupTests, createSingleServer, PeerTubeServer, SearchCommand, setAccessTokensToServers } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test index search', function () {
   const localVideoName = 'local video' + new Date().toISOString()

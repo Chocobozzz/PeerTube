@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { omit } from '@shared/core-utils'
 import {
   Account,
@@ -22,8 +22,6 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '../../shared/server-commands'
-
-const expect = chai.expect
 
 function checkIndexTags (html: string, title: string, description: string, css: string, config: ServerConfig) {
   expect(html).to.contain('<title>' + title + '</title>')

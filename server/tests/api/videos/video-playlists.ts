@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { checkPlaylistFilesWereRemoved, testImage } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import {
@@ -23,8 +23,6 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 async function checkPlaylistElementType (
   servers: PeerTubeServer[],
