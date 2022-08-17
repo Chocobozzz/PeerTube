@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
+import * as chai from 'chai'
 import { XMLParser, XMLValidator } from 'fast-xml-parser'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import {
@@ -19,6 +19,7 @@ import {
 chai.use(require('chai-xml'))
 chai.use(require('chai-json-schema'))
 chai.config.includeStack = true
+
 describe('Test syndication feeds', () => {
   let servers: PeerTubeServer[] = []
   let serverHLSOnly: PeerTubeServer
