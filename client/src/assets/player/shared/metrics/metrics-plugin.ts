@@ -64,7 +64,9 @@ class MetricsPlugin extends Plugin {
         if (!videoFile) return
 
         resolution = videoFile.resolution.id
-        fps = videoFile.fps
+        fps = videoFile.fps && videoFile.fps !== -1
+          ? videoFile.fps
+          : undefined
       }
 
       const body: PlaybackMetricCreate = {

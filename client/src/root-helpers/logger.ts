@@ -131,7 +131,6 @@ class Logger {
 
   private buildStack (err: Error) {
     return `${err.message}\n${err.stack || ''}`
-
   }
 }
 
