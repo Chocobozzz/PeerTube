@@ -10,7 +10,7 @@ import { getCachedVideoDuration } from '@server/lib/video'
 
 const getVideoLocalViewerValidator = [
   param('localViewerId')
-    .custom(isIdValid).withMessage('Should have a valid local viewer id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking getVideoLocalViewerValidator parameters', { parameters: req.params })
@@ -37,7 +37,7 @@ const videoViewValidator = [
   body('currentTime')
     .optional() // TODO: remove optional in a few versions, introduced in 4.2
     .customSanitizer(toIntOrNull)
-    .custom(isIntOrNull).withMessage('Should have correct current time'),
+    .custom(isIntOrNull),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoView parameters', { parameters: req.body })

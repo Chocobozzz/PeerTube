@@ -20,8 +20,11 @@ export const ensureSyncIsEnabled = (req: express.Request, res: express.Response,
 }
 
 export const videoChannelSyncValidator = [
-  body('externalChannelUrl').custom(isUrlValid).withMessage('Should have a valid channel url'),
-  body('videoChannelId').isInt().withMessage('Should have a valid video channel id'),
+  body('externalChannelUrl')
+    .custom(isUrlValid),
+
+  body('videoChannelId')
+    .isInt(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelSync parameters', { parameters: req.body })

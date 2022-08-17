@@ -16,8 +16,20 @@ import {
 } from './shared'
 
 const feedsFormatValidator = [
-  param('format').optional().custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json)'),
-  query('format').optional().custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json)')
+  param('format')
+    .optional()
+    .custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json)'),
+  query('format')
+    .optional()
+    .custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json)'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking feeds format parameters', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
 ]
 
 function setFeedFormatContentType (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -49,16 +61,14 @@ function setFeedFormatContentType (req: express.Request, res: express.Response, 
 const videoFeedsValidator = [
   query('accountId')
     .optional()
-    .custom(isIdValid)
-    .withMessage('Should have a valid account id'),
+    .custom(isIdValid),
 
   query('accountName')
     .optional(),
 
   query('videoChannelId')
     .optional()
-    .custom(isIdValid)
-    .withMessage('Should have a valid channel id'),
+    .custom(isIdValid),
 
   query('videoChannelName')
     .optional(),
@@ -79,12 +89,10 @@ const videoFeedsValidator = [
 
 const videoSubscriptionFeedsValidator = [
   query('accountId')
-    .custom(isIdValid)
-    .withMessage('Should have a valid account id'),
+    .custom(isIdValid),
 
   query('token')
-    .custom(exists)
-    .withMessage('Should have a token'),
+    .custom(exists),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking subscription feeds parameters', { parameters: req.query })
@@ -100,8 +108,8 @@ const videoSubscriptionFeedsValidator = [
 
 const videoCommentsFeedsValidator = [
   query('videoId')
-    .customSanitizer(toCompleteUUID)
     .optional()
+    .customSanitizer(toCompleteUUID)
     .custom(isIdOrUUIDValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {

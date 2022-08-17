@@ -39,10 +39,17 @@ if (isTestOrDevInstance()) {
 }
 
 const oembedValidator = [
-  query('url').isURL(isURLOptions).withMessage('Should have a valid url'),
-  query('maxwidth').optional().isInt().withMessage('Should have a valid max width'),
-  query('maxheight').optional().isInt().withMessage('Should have a valid max height'),
-  query('format').optional().isIn([ 'xml', 'json' ]).withMessage('Should have a valid format'),
+  query('url')
+    .isURL(isURLOptions),
+  query('maxwidth')
+    .optional()
+    .isInt(),
+  query('maxheight')
+    .optional()
+    .isInt(),
+  query('format')
+    .optional()
+    .isIn([ 'xml', 'json' ]),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking oembed parameters', { parameters: req.query })

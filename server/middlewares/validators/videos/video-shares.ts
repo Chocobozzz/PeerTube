@@ -10,7 +10,7 @@ const videosShareValidator = [
   isValidVideoIdParam('id'),
 
   param('actorId')
-    .custom(isIdValid).not().isEmpty().withMessage('Should have a valid actor id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoShare parameters', { parameters: req.params })

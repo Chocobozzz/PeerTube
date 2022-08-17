@@ -69,7 +69,7 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
     ),
   body('channelId')
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid).withMessage('Should have correct video channel id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
@@ -167,9 +167,7 @@ const videosAddResumableValidator = [
  */
 const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
   body('filename')
-    .isString()
-    .exists()
-    .withMessage('Should have a valid filename'),
+    .exists(),
   body('name')
     .trim()
     .custom(isVideoNameValid).withMessage(
@@ -177,7 +175,7 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     ),
   body('channelId')
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid).withMessage('Should have correct video channel id'),
+    .custom(isIdValid),
 
   header('x-upload-content-length')
     .isNumeric()
@@ -230,7 +228,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .optional()
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid).withMessage('Should have correct video channel id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosUpdate parameters', { parameters: req.body })
@@ -341,8 +339,7 @@ const videosRemoveValidator = [
 const videosOverviewValidator = [
   query('page')
     .optional()
-    .isInt({ min: 1, max: OVERVIEWS.VIDEOS.SAMPLES_COUNT })
-    .withMessage('Should have a valid pagination'),
+    .isInt({ min: 1, max: OVERVIEWS.VIDEOS.SAMPLES_COUNT }),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -367,35 +364,35 @@ function getCommonVideoEditAttributes () {
     body('category')
       .optional()
       .customSanitizer(toIntOrNull)
-      .custom(isVideoCategoryValid).withMessage('Should have a valid category'),
+      .custom(isVideoCategoryValid),
     body('licence')
       .optional()
       .customSanitizer(toIntOrNull)
-      .custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
+      .custom(isVideoLicenceValid),
     body('language')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoLanguageValid).withMessage('Should have a valid language'),
+      .custom(isVideoLanguageValid),
     body('nsfw')
       .optional()
       .customSanitizer(toBooleanOrNull)
-      .custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
+      .custom(isBooleanValid).withMessage('Should have a valid nsfw boolean'),
     body('waitTranscoding')
       .optional()
       .customSanitizer(toBooleanOrNull)
-      .custom(isBooleanValid).withMessage('Should have a valid wait transcoding attribute'),
+      .custom(isBooleanValid).withMessage('Should have a valid waitTranscoding boolean'),
     body('privacy')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
+      .custom(isVideoPrivacyValid),
     body('description')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
+      .custom(isVideoDescriptionValid),
     body('support')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoSupportValid).withMessage('Should have a valid support text'),
+      .custom(isVideoSupportValid),
     body('tags')
       .optional()
       .customSanitizer(toValueOrNull)
@@ -407,15 +404,15 @@ function getCommonVideoEditAttributes () {
     body('commentsEnabled')
       .optional()
       .customSanitizer(toBooleanOrNull)
-      .custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
+      .custom(isBooleanValid).withMessage('Should have commentsEnabled boolean'),
     body('downloadEnabled')
       .optional()
       .customSanitizer(toBooleanOrNull)
-      .custom(isBooleanValid).withMessage('Should have downloading enabled boolean'),
+      .custom(isBooleanValid).withMessage('Should have downloadEnabled boolean'),
     body('originallyPublishedAt')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoOriginallyPublishedAtValid).withMessage('Should have a valid original publication date'),
+      .custom(isVideoOriginallyPublishedAtValid),
     body('scheduleUpdate')
       .optional()
       .customSanitizer(toValueOrNull),
@@ -425,7 +422,7 @@ function getCommonVideoEditAttributes () {
     body('scheduleUpdate.privacy')
       .optional()
       .customSanitizer(toIntOrNull)
-      .custom(isScheduleVideoUpdatePrivacyValid).withMessage('Should have correct schedule update privacy')
+      .custom(isScheduleVideoUpdatePrivacyValid)
   ] as (ValidationChain | ExpressPromiseHandler)[]
 }
 
@@ -433,59 +430,59 @@ const commonVideosFiltersValidator = [
   query('categoryOneOf')
     .optional()
     .customSanitizer(toArray)
-    .custom(isNumberArray).withMessage('Should have a valid one of category array'),
+    .custom(isNumberArray).withMessage('Should have a valid categoryOneOf array'),
   query('licenceOneOf')
     .optional()
     .customSanitizer(toArray)
-    .custom(isNumberArray).withMessage('Should have a valid one of licence array'),
+    .custom(isNumberArray).withMessage('Should have a valid licenceOneOf array'),
   query('languageOneOf')
     .optional()
     .customSanitizer(toArray)
-    .custom(isStringArray).withMessage('Should have a valid one of language array'),
+    .custom(isStringArray).withMessage('Should have a valid languageOneOf array'),
   query('privacyOneOf')
     .optional()
     .customSanitizer(toArray)
-    .custom(isNumberArray).withMessage('Should have a valid one of privacy array'),
+    .custom(isNumberArray).withMessage('Should have a valid privacyOneOf array'),
   query('tagsOneOf')
     .optional()
     .customSanitizer(toArray)
-    .custom(isStringArray).withMessage('Should have a valid one of tags array'),
+    .custom(isStringArray).withMessage('Should have a valid tagsOneOf array'),
   query('tagsAllOf')
     .optional()
     .customSanitizer(toArray)
-    .custom(isStringArray).withMessage('Should have a valid all of tags array'),
+    .custom(isStringArray).withMessage('Should have a valid tagsAllOf array'),
   query('nsfw')
     .optional()
-    .custom(isBooleanBothQueryValid).withMessage('Should have a valid NSFW attribute'),
+    .custom(isBooleanBothQueryValid),
   query('isLive')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid live boolean'),
+    .custom(isBooleanValid).withMessage('Should have a valid isLive boolean'),
   query('filter')
     .optional()
-    .custom(isVideoFilterValid).withMessage('Should have a valid filter attribute'),
+    .custom(isVideoFilterValid),
   query('include')
     .optional()
-    .custom(isVideoIncludeValid).withMessage('Should have a valid include attribute'),
+    .custom(isVideoIncludeValid),
   query('isLocal')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid local boolean'),
+    .custom(isBooleanValid).withMessage('Should have a valid isLocal boolean'),
   query('hasHLSFiles')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid has hls boolean'),
+    .custom(isBooleanValid).withMessage('Should have a valid hasHLSFiles boolean'),
   query('hasWebtorrentFiles')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid has webtorrent boolean'),
+    .custom(isBooleanValid).withMessage('Should have a valid hasWebtorrentFiles boolean'),
   query('skipCount')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid skip count boolean'),
+    .custom(isBooleanValid).withMessage('Should have a valid skipCount boolean'),
   query('search')
     .optional()
-    .custom(exists).withMessage('Should have a valid search'),
+    .custom(exists),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking commons video filters query', { parameters: req.query })

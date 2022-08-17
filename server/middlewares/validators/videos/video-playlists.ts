@@ -45,7 +45,7 @@ import {
 
 const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
   body('displayName')
-    .custom(isVideoPlaylistNameValid).withMessage('Should have a valid display name'),
+    .custom(isVideoPlaylistNameValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylistsAddValidator parameters', { parameters: req.body })
@@ -73,7 +73,7 @@ const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
 
   body('displayName')
     .optional()
-    .custom(isVideoPlaylistNameValid).withMessage('Should have a valid display name'),
+    .custom(isVideoPlaylistNameValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylistsUpdateValidator parameters', { parameters: req.body })
@@ -184,7 +184,9 @@ const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) => {
 }
 
 const videoPlaylistsSearchValidator = [
-  query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
+  query('search')
+    .optional()
+    .not().isEmpty(),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylists search query', { parameters: req.query })
@@ -200,13 +202,13 @@ const videoPlaylistsAddVideoValidator = [
 
   body('videoId')
     .customSanitizer(toCompleteUUID)
-    .custom(isIdOrUUIDValid).withMessage('Should have a valid video id/uuid'),
+    .custom(isIdOrUUIDValid).withMessage('Should have a valid video id/uuid/short uuid'),
   body('startTimestamp')
     .optional()
-    .custom(isVideoPlaylistTimestampValid).withMessage('Should have a valid start timestamp'),
+    .custom(isVideoPlaylistTimestampValid),
   body('stopTimestamp')
     .optional()
-    .custom(isVideoPlaylistTimestampValid).withMessage('Should have a valid stop timestamp'),
+    .custom(isVideoPlaylistTimestampValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylistsAddVideoValidator parameters', { parameters: req.params })
@@ -230,13 +232,13 @@ const videoPlaylistsUpdateOrRemoveVideoValidator = [
   isValidPlaylistIdParam('playlistId'),
   param('playlistElementId')
     .customSanitizer(toCompleteUUID)
-    .custom(isIdValid).withMessage('Should have an element id/uuid'),
+    .custom(isIdValid).withMessage('Should have an element id/uuid/short uuid'),
   body('startTimestamp')
     .optional()
-    .custom(isVideoPlaylistTimestampValid).withMessage('Should have a valid start timestamp'),
+    .custom(isVideoPlaylistTimestampValid),
   body('stopTimestamp')
     .optional()
-    .custom(isVideoPlaylistTimestampValid).withMessage('Should have a valid stop timestamp'),
+    .custom(isVideoPlaylistTimestampValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylistsRemoveVideoValidator parameters', { parameters: req.params })
@@ -266,7 +268,7 @@ const videoPlaylistsUpdateOrRemoveVideoValidator = [
 const videoPlaylistElementAPGetValidator = [
   isValidPlaylistIdParam('playlistId'),
   param('playlistElementId')
-    .custom(isIdValid).withMessage('Should have an playlist element id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylistElementAPGetValidator parameters', { parameters: req.params })
@@ -300,13 +302,14 @@ const videoPlaylistElementAPGetValidator = [
 
 const videoPlaylistsReorderVideosValidator = [
   isValidPlaylistIdParam('playlistId'),
+
   body('startPosition')
-    .isInt({ min: 1 }).withMessage('Should have a valid start position'),
+    .isInt({ min: 1 }),
   body('insertAfterPosition')
-    .isInt({ min: 0 }).withMessage('Should have a valid insert after position'),
+    .isInt({ min: 0 }),
   body('reorderLength')
     .optional()
-    .isInt({ min: 1 }).withMessage('Should have a valid range length'),
+    .isInt({ min: 1 }),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylistsReorderVideosValidator parameters', { parameters: req.params })
@@ -340,7 +343,7 @@ const videoPlaylistsReorderVideosValidator = [
 const commonVideoPlaylistFiltersValidator = [
   query('playlistType')
     .optional()
-    .custom(isVideoPlaylistTypeValid).withMessage('Should have a valid playlist type'),
+    .custom(isVideoPlaylistTypeValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking commonVideoPlaylistFiltersValidator parameters', { parameters: req.params })
@@ -399,11 +402,11 @@ function getCommonPlaylistEditAttributes () {
     body('description')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoPlaylistDescriptionValid).withMessage('Should have a valid description'),
+      .custom(isVideoPlaylistDescriptionValid),
     body('privacy')
       .optional()
       .customSanitizer(toIntOrNull)
-      .custom(isVideoPlaylistPrivacyValid).withMessage('Should have correct playlist privacy'),
+      .custom(isVideoPlaylistPrivacyValid),
     body('videoChannelId')
       .optional()
       .customSanitizer(toIntOrNull)

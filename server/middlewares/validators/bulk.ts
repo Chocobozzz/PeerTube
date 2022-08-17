@@ -7,9 +7,10 @@ import { logger } from '../../helpers/logger'
 import { areValidationErrors, doesAccountNameWithHostExist } from './shared'
 
 const bulkRemoveCommentsOfValidator = [
-  body('accountName').exists().withMessage('Should have an account name with host'),
+  body('accountName')
+    .exists(),
   body('scope')
-    .custom(isBulkRemoveCommentsOfScopeValid).withMessage('Should have a valid scope'),
+    .custom(isBulkRemoveCommentsOfScopeValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking bulkRemoveCommentsOfValidator parameters', { parameters: req.body })

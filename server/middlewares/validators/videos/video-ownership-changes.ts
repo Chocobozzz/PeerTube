@@ -41,7 +41,7 @@ const videosChangeOwnershipValidator = [
 
 const videosTerminateChangeOwnershipValidator = [
   param('id')
-    .custom(isIdValid).withMessage('Should have a valid id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking changeOwnership parameters', { parameters: req.params })

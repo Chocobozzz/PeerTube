@@ -33,11 +33,11 @@ const serverGetValidator = [
 
 const contactAdministratorValidator = [
   body('fromName')
-    .custom(isUserDisplayNameValid).withMessage('Should have a valid name'),
+    .custom(isUserDisplayNameValid),
   body('fromEmail')
-    .isEmail().withMessage('Should have a valid email'),
+    .isEmail(),
   body('body')
-    .custom(isValidContactBody).withMessage('Should have a valid body'),
+    .custom(isValidContactBody),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking contactAdministratorValidator parameters', { parameters: req.body })

@@ -18,25 +18,25 @@ import { areValidationErrors } from './shared'
 
 const createClientLogValidator = [
   body('message')
-    .custom(isValidClientLogMessage).withMessage('Should have a valid log message'),
+    .custom(isValidClientLogMessage),
 
   body('url')
-    .custom(isUrlValid).withMessage('Should have a valid log url'),
+    .custom(isUrlValid),
 
   body('level')
-    .custom(isValidClientLogLevel).withMessage('Should have a valid log message'),
+    .custom(isValidClientLogLevel),
 
   body('stackTrace')
     .optional()
-    .custom(isValidClientLogStackTrace).withMessage('Should have a valid log stack trace'),
+    .custom(isValidClientLogStackTrace),
 
   body('meta')
     .optional()
-    .custom(isValidClientLogMeta).withMessage('Should have a valid log meta'),
+    .custom(isValidClientLogMeta),
 
   body('userAgent')
     .optional()
-    .custom(isValidClientLogUserAgent).withMessage('Should have a valid log user agent'),
+    .custom(isValidClientLogUserAgent),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking createClientLogValidator parameters.', { parameters: req.query })
@@ -56,7 +56,7 @@ const getLogsValidator = [
     .custom(isDateValid).withMessage('Should have a start date that conforms to ISO 8601'),
   query('level')
     .optional()
-    .custom(isValidLogLevel).withMessage('Should have a valid level'),
+    .custom(isValidLogLevel),
   query('tagsOneOf')
     .optional()
     .customSanitizer(toArray)

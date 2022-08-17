@@ -26,13 +26,13 @@ function areValidationErrors (req: express.Request, res: express.Response) {
 function isValidVideoIdParam (paramName: string) {
   return param(paramName)
     .customSanitizer(toCompleteUUID)
-    .custom(isIdOrUUIDValid).withMessage('Should have a valid video id')
+    .custom(isIdOrUUIDValid).withMessage('Should have a valid video id (id, short UUID or UUID)')
 }
 
 function isValidPlaylistIdParam (paramName: string) {
   return param(paramName)
     .customSanitizer(toCompleteUUID)
-    .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id')
+    .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id (id, short UUID or UUID)')
 }
 
 // ---------------------------------------------------------------------------

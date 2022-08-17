@@ -22,11 +22,11 @@ const videoFileRedundancyGetValidator = [
 
   param('resolution')
     .customSanitizer(toIntOrNull)
-    .custom(exists).withMessage('Should have a valid resolution'),
+    .custom(exists),
   param('fps')
     .optional()
     .customSanitizer(toIntOrNull)
-    .custom(exists).withMessage('Should have a valid fps'),
+    .custom(exists),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoFileRedundancyGetValidator parameters', { parameters: req.params })
@@ -69,7 +69,7 @@ const videoPlaylistRedundancyGetValidator = [
 
   param('streamingPlaylistType')
     .customSanitizer(toIntOrNull)
-    .custom(exists).withMessage('Should have a valid streaming playlist type'),
+    .custom(exists),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylistRedundancyGetValidator parameters', { parameters: req.params })
@@ -104,10 +104,12 @@ const videoPlaylistRedundancyGetValidator = [
 ]
 
 const updateServerRedundancyValidator = [
-  param('host').custom(isHostValid).withMessage('Should have a valid host'),
+  param('host')
+    .custom(isHostValid),
+
   body('redundancyAllowed')
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid redundancyAllowed attribute'),
+    .custom(isBooleanValid).withMessage('Should have a valid redundancyAllowed boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking updateServerRedundancy parameters', { parameters: req.params })
@@ -130,7 +132,7 @@ const updateServerRedundancyValidator = [
 
 const listVideoRedundanciesValidator = [
   query('target')
-    .custom(isVideoRedundancyTarget).withMessage('Should have a valid video redundancies target'),
+    .custom(isVideoRedundancyTarget),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking listVideoRedundanciesValidator parameters', { parameters: req.query })
@@ -144,8 +146,7 @@ const listVideoRedundanciesValidator = [
 const addVideoRedundancyValidator = [
   body('videoId')
     .customSanitizer(toCompleteUUID)
-    .custom(isIdOrUUIDValid)
-    .withMessage('Should have a valid video id'),
+    .custom(isIdOrUUIDValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking addVideoRedundancyValidator parameters', { parameters: req.query })
@@ -176,8 +177,7 @@ const addVideoRedundancyValidator = [
 
 const removeVideoRedundancyValidator = [
   param('redundancyId')
-    .custom(isIdValid)
-    .withMessage('Should have a valid redundancy id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking removeVideoRedundancyValidator parameters', { parameters: req.query })

@@ -10,7 +10,7 @@ function paginationValidatorBuilder (tags: string[] = []) {
   return [
     query('start')
       .optional()
-      .isInt({ min: 0 }).withMessage('Should have a number start'),
+      .isInt({ min: 0 }),
     query('count')
       .optional()
       .isInt({ min: 0, max: PAGINATION.GLOBAL.COUNT.MAX }).withMessage(`Should have a number count (max: ${PAGINATION.GLOBAL.COUNT.MAX})`),

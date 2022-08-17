@@ -19,13 +19,13 @@ import { getCommonVideoEditAttributes } from './videos'
 const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid).withMessage('Should have correct video channel id'),
+    .custom(isIdValid),
   body('targetUrl')
     .optional()
-    .custom(isVideoImportTargetUrlValid).withMessage('Should have a valid video import target URL'),
+    .custom(isVideoImportTargetUrlValid),
   body('magnetUri')
     .optional()
-    .custom(isVideoMagnetUriValid).withMessage('Should have a valid video magnet URI'),
+    .custom(isVideoMagnetUriValid),
   body('torrentfile')
     .custom((value, { req }) => isVideoImportTorrentFile(req.files))
     .withMessage(
@@ -95,7 +95,7 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
 const getMyVideoImportsValidator = [
   query('videoChannelSyncId')
     .optional()
-    .custom(isIdValid).withMessage('Should have correct videoChannelSync id'),
+    .custom(isIdValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking getMyVideoImportsValidator parameters', { parameters: req.params })
@@ -108,7 +108,7 @@ const getMyVideoImportsValidator = [
 
 const videoImportDeleteValidator = [
   param('id')
-    .custom(isIdValid).withMessage('Should have correct import id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoImportDeleteValidator parameters', { parameters: req.params })
@@ -131,7 +131,7 @@ const videoImportDeleteValidator = [
 
 const videoImportCancelValidator = [
   param('id')
-    .custom(isIdValid).withMessage('Should have correct import id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoImportCancelValidator parameters', { parameters: req.params })

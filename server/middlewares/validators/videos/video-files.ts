@@ -41,7 +41,7 @@ const videoFilesDeleteWebTorrentFileValidator = [
   isValidVideoIdParam('id'),
 
   param('videoFileId')
-    .custom(isIdValid).withMessage('Should have a valid file id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoFilesDeleteWebTorrentFile parameters', { parameters: req.params })
@@ -109,7 +109,7 @@ const videoFilesDeleteHLSFileValidator = [
   isValidVideoIdParam('id'),
 
   param('videoFileId')
-    .custom(isIdValid).withMessage('Should have a valid file id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoFilesDeleteHLSFile parameters', { parameters: req.params })

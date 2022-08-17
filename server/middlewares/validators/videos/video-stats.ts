@@ -12,13 +12,11 @@ const videoOverallStatsValidator = [
 
   query('startDate')
     .optional()
-    .custom(isDateValid)
-    .withMessage('Should have a valid start date'),
+    .custom(isDateValid),
 
   query('endDate')
     .optional()
-    .custom(isDateValid)
-    .withMessage('Should have a valid end date'),
+    .custom(isDateValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoOverallStatsValidator parameters', { parameters: req.body })
@@ -54,18 +52,15 @@ const videoTimeserieStatsValidator = [
   isValidVideoIdParam('videoId'),
 
   param('metric')
-    .custom(isValidStatTimeserieMetric)
-    .withMessage('Should have a valid timeserie metric'),
+    .custom(isValidStatTimeserieMetric),
 
   query('startDate')
     .optional()
-    .custom(isDateValid)
-    .withMessage('Should have a valid start date'),
+    .custom(isDateValid),
 
   query('endDate')
     .optional()
-    .custom(isDateValid)
-    .withMessage('Should have a valid end date'),
+    .custom(isDateValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoTimeserieStatsValidator parameters', { parameters: req.body })

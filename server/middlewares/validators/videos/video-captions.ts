@@ -18,7 +18,7 @@ const addVideoCaptionValidator = [
   isValidVideoIdParam('videoId'),
 
   param('captionLanguage')
-    .custom(isVideoCaptionLanguageValid).not().isEmpty().withMessage('Should have a valid caption language'),
+    .custom(isVideoCaptionLanguageValid).not().isEmpty(),
 
   body('captionfile')
     .custom((_, { req }) => isVideoCaptionFile(req.files, 'captionfile'))

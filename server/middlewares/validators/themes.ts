@@ -8,9 +8,12 @@ import { PluginManager } from '../../lib/plugins/plugin-manager'
 import { areValidationErrors } from './shared'
 
 const serveThemeCSSValidator = [
-  param('themeName').custom(isPluginNameValid).withMessage('Should have a valid theme name'),
-  param('themeVersion').custom(isPluginVersionValid).withMessage('Should have a valid theme version'),
-  param('staticEndpoint').custom(isSafePath).withMessage('Should have a valid static endpoint'),
+  param('themeName')
+    .custom(isPluginNameValid),
+  param('themeVersion')
+    .custom(isPluginVersionValid),
+  param('staticEndpoint')
+    .custom(isSafePath),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking serveThemeCSS parameters', { parameters: req.params })

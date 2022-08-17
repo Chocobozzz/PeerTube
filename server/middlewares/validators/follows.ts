@@ -19,10 +19,10 @@ import { areValidationErrors } from './shared'
 const listFollowsValidator = [
   query('state')
     .optional()
-    .custom(isFollowStateValid).withMessage('Should have a valid follow state'),
+    .custom(isFollowStateValid),
   query('actorType')
     .optional()
-    .custom(isActorTypeValid).withMessage('Should have a valid actor type'),
+    .custom(isActorTypeValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -70,8 +70,7 @@ const followValidator = [
 
 const removeFollowingValidator = [
   param('hostOrHandle')
-    .custom(value => isHostValid(value) || isRemoteHandleValid(value))
-    .withMessage('Should have a valid host/handle'),
+    .custom(value => isHostValid(value) || isRemoteHandleValid(value)),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking unfollowing parameters', { parameters: req.params })
@@ -100,7 +99,8 @@ const removeFollowingValidator = [
 ]
 
 const getFollowerValidator = [
-  param('nameWithHost').custom(isValidActorHandle).withMessage('Should have a valid nameWithHost'),
+  param('nameWithHost')
+    .custom(isValidActorHandle),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking get follower parameters', { parameters: req.params })

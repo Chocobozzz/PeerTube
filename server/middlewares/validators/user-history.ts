@@ -7,7 +7,7 @@ import { areValidationErrors } from './shared'
 const userHistoryListValidator = [
   query('search')
     .optional()
-    .custom(exists).withMessage('Should have a valid search'),
+    .custom(exists),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking userHistoryListValidator parameters', { parameters: req.query })
@@ -34,7 +34,7 @@ const userHistoryRemoveAllValidator = [
 
 const userHistoryRemoveElementValidator = [
   param('videoId')
-    .custom(isIdValid).withMessage('Should have a valid video id'),
+    .custom(isIdValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking userHistoryRemoveElementValidator parameters', { parameters: req.params })

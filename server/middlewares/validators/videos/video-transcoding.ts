@@ -11,7 +11,7 @@ const createTranscodingValidator = [
   isValidVideoIdParam('videoId'),
 
   body('transcodingType')
-    .custom(isValidCreateTranscodingType).withMessage('Should have a valid transcoding type'),
+    .custom(isValidCreateTranscodingType),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking createTranscodingValidator parameters', { parameters: req.body })

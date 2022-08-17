@@ -10,7 +10,9 @@ function checkSortFactory (columns: string[], tags: string[] = []) {
 
 function checkSort (sortableColumns: string[], tags: string[] = []) {
   return [
-    query('sort').optional().isIn(sortableColumns).withMessage('Should have correct sortable column'),
+    query('sort')
+      .optional()
+      .isIn(sortableColumns),
 
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
       logger.debug('Checking sort parameters', { parameters: req.query, tags })

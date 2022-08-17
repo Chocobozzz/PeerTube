@@ -8,7 +8,8 @@ import { ActorModel } from '../../models/actor/actor'
 import { areValidationErrors } from './shared'
 
 const webfingerValidator = [
-  query('resource').custom(isWebfingerLocalResourceValid).withMessage('Should have a valid webfinger resource'),
+  query('resource')
+    .custom(isWebfingerLocalResourceValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking webfinger parameters', { parameters: req.query })

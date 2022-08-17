@@ -56,7 +56,7 @@ const videoLiveGetValidator = [
 const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid).withMessage('Should have correct video channel id'),
+    .custom(isIdValid),
 
   body('name')
     .custom(isVideoNameValid).withMessage(
@@ -66,18 +66,17 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
   body('saveReplay')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid saveReplay attribute'),
+    .custom(isBooleanValid).withMessage('Should have a valid saveReplay boolean'),
 
   body('permanentLive')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid permanentLive attribute'),
+    .custom(isBooleanValid).withMessage('Should have a valid permanentLive boolean'),
 
   body('latencyMode')
     .optional()
     .customSanitizer(toIntOrNull)
-    .custom(isLiveLatencyModeValid)
-    .withMessage('Should have a valid latency mode attribute'),
+    .custom(isLiveLatencyModeValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoLiveAddValidator parameters', { parameters: req.body })
@@ -156,13 +155,12 @@ const videoLiveUpdateValidator = [
   body('saveReplay')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid saveReplay attribute'),
+    .custom(isBooleanValid).withMessage('Should have a valid saveReplay boolean'),
 
   body('latencyMode')
     .optional()
     .customSanitizer(toIntOrNull)
-    .custom(isLiveLatencyModeValid)
-    .withMessage('Should have a valid latency mode attribute'),
+    .custom(isLiveLatencyModeValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoLiveUpdateValidator parameters', { parameters: req.body })

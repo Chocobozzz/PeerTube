@@ -13,7 +13,8 @@ import { ServerBlocklistModel } from '../../models/server/server-blocklist'
 import { areValidationErrors, doesAccountNameWithHostExist } from './shared'
 
 const blockAccountValidator = [
-  body('accountName').exists().withMessage('Should have an account name with host'),
+  body('accountName')
+    .exists(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking blockAccountByAccountValidator parameters', { parameters: req.body })
@@ -37,7 +38,8 @@ const blockAccountValidator = [
 ]
 
 const unblockAccountByAccountValidator = [
-  param('accountName').exists().withMessage('Should have an account name with host'),
+  param('accountName')
+    .exists(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking unblockAccountByAccountValidator parameters', { parameters: req.params })
@@ -54,7 +56,8 @@ const unblockAccountByAccountValidator = [
 ]
 
 const unblockAccountByServerValidator = [
-  param('accountName').exists().withMessage('Should have an account name with host'),
+  param('accountName')
+    .exists(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking unblockAccountByServerValidator parameters', { parameters: req.params })
@@ -71,7 +74,8 @@ const unblockAccountByServerValidator = [
 ]
 
 const blockServerValidator = [
-  body('host').custom(isHostValid).withMessage('Should have a valid host'),
+  body('host')
+    .custom(isHostValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking serverGetValidator parameters', { parameters: req.body })
@@ -96,7 +100,8 @@ const blockServerValidator = [
 ]
 
 const unblockServerByAccountValidator = [
-  param('host').custom(isHostValid).withMessage('Should have an account name with host'),
+  param('host')
+    .custom(isHostValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking unblockServerByAccountValidator parameters', { parameters: req.params })
@@ -111,7 +116,8 @@ const unblockServerByAccountValidator = [
 ]
 
 const unblockServerByServerValidator = [
-  param('host').custom(isHostValid).withMessage('Should have an account name with host'),
+  param('host')
+    .custom(isHostValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking unblockServerByServerValidator parameters', { parameters: req.params })

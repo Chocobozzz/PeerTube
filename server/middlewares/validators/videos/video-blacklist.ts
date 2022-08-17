@@ -29,7 +29,7 @@ const videosBlacklistAddValidator = [
     .custom(isBooleanValid).withMessage('Should have a valid unfederate boolean'),
   body('reason')
     .optional()
-    .custom(isVideoBlacklistReasonValid).withMessage('Should have a valid reason'),
+    .custom(isVideoBlacklistReasonValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosBlacklistAdd parameters', { parameters: req.params })
