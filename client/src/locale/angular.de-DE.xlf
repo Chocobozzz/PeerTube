@@ -3642,7 +3642,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="4188654437346976139" datatype="html">
         <source>Rejected</source>
-        <target state="new">Rejected</target>
+        <target state="translated">Abgelehnt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">65,66</context>
@@ -5394,7 +5394,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="594064951138382358" datatype="html">
         <source>Also transcode original resolution</source>
-        <target state="new">Also transcode original resolution</target>
+        <target state="translated">Auch die ursprüngliche Auflösung transkodieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">134</context>
