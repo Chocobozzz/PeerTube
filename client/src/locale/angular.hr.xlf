@@ -2492,7 +2492,7 @@
       </trans-unit>
       <trans-unit id="8061023631336698211" datatype="html">
         <source>Do you really want to unfollow these entries?</source>
-        <target state="translated">Stvarno želip prestati pratiti ove unose?</target>
+        <target state="translated">Stvarno želiš prestati pratiti ove unose?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">72,70</context>
@@ -2595,7 +2595,7 @@
       </trans-unit>
       <trans-unit id="4667534933980942398" datatype="html">
         <source>Remote videos duplicated by my instance</source>
-        <target state="translated">Ukloni videa duplicirana od moje instance</target>
+        <target state="translated">Udaljena videa duplicirana od moje instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">13</context>
