@@ -59,6 +59,8 @@ class YoutubeDLWrapper {
       processOptions
     })
 
+    if (!Array.isArray(list)) throw new Error(`YoutubeDL could not get list info from ${this.url}`)
+
     return list.map(info => {
       const infoBuilder = new YoutubeDLInfoBuilder(info)
 
