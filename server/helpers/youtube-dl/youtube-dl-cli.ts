@@ -126,6 +126,8 @@ export class YoutubeDLCLI {
     const completeArgs = additionalYoutubeDLArgs.concat([ '--dump-json', '-f', format ])
 
     const data = await this.run({ url, args: completeArgs, processOptions })
+    if (!data) return undefined
+
     const info = data.map(this.parseInfo)
 
     return info.length === 1

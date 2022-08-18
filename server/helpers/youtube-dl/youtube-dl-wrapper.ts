@@ -39,6 +39,8 @@ class YoutubeDLWrapper {
       processOptions
     })
 
+    if (!info) throw new Error(`YoutubeDL could not get info from ${this.url}`)
+
     if (info.is_live === true) throw new Error('Cannot download a live streaming.')
 
     const infoBuilder = new YoutubeDLInfoBuilder(info)
