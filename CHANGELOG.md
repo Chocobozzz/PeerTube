@@ -2,8 +2,6 @@
 
 ## v4.3.0 (unreleased, RC planned for September)
 
-### IMPORTANT NOTES
-
 ### Maintenance
 
  * Use `yt-dlp` by default instead of `youtube-dl` for new installations (because of much more dev activity)
@@ -24,7 +22,7 @@
 ### Plugins/Themes/Embed API
 
   * Theme:
-    * Removed `--secondaryColor` CSS variable
+    * Removed unused `--secondaryColor` CSS variable
   * Add client plugin hooks (https://docs.joinpeertube.org/api-plugins):
     * `filter:api.my-library.video-playlist-elements.list.params` & `filter:api.my-library.video-playlist-elements.list.result` [#5098](https://github.com/Chocobozzz/PeerTube/pull/5098)
     * `action:video-channel-create.init`
@@ -45,63 +43,63 @@
 
 ### Features
 
-  * :tada: Add ability for user synchronize a remote channel [#5135](https://github.com/Chocobozzz/PeerTube/pull/5135) :tada:
+  * :tada: Add ability for users to synchronize a remote channel [#5135](https://github.com/Chocobozzz/PeerTube/pull/5135) :tada:
     * Automatically import all videos of a remote channel in your PeerTube channel
     * PeerTube will watch for new publications and automatically import these new videos
   * UI:
-    * Redesigned "Create an account" steps
-    * Improved "Login" page
-    * Use a lighter black font color
-    * Use a bigger default font size
-    * Don't display form errors while typing but only when we unfocus the input
+    * Redesigned *Create an account* steps
+    * Improved *Login* page
+    * Use a lighter font color
+    * Use a bigger font size
+    * Don't display form errors in red while typing but only when we unfocus the input
     * Display an error message when the user is unauthorized to view a page [#5097](https://github.com/Chocobozzz/PeerTube/pull/5097)
-    * Display latest uploaded date for captions
-    * Add an information if the replay will be saved when displaying live sessions
+    * Display latest upload date for captions
+    * Add an information if the live will be saved as a replay when displaying live sessions
     * Move search bar at the center of the header
-  * Add Toki Pona and Croatian locales in client
+  * Add *Toki Pona* and *Croatian* locales in client
   * Embed:
-    * Display a message and automatically start a not yet published live stream in embed
-    * Use instance name instead of "PeerTube" in embed instance button
+    * Display a message and automatically start live streams in embed
+    * Use the instance name instead of "PeerTube" in embed control bar
     * Reuse current watch page query parameters for embed when using OEmbed [#5023](https://github.com/Chocobozzz/PeerTube/pull/5023)
   * Instance follows:
-    * Introduce "Rejected" state for follow requests to prevent reprocessing already rejected follow requests
-    * Add bulk actions on instance following/followers
+    * Introduce a *Rejected* state for follow requests to not reprocess already rejected follow requests
+    * Add bulk actions on instance following/followers ()
   * Admins:
     * Add ability to disable original resolution transcoding of the uploaded video/live stream
     * Add ability to delete a specific video file in videos overview
-    * Display "Last Login" column by default in admin users overview
-    * Remember last selected columns in admin users overview
-    * Admins can set a custom video import timeout
-    * Admins can set the default feed (Atom, RSS...) items count
-    * Admins and moderators bypass API rate limits
-    * Add ability to list comments on local videos in admin comments overview
+    * Display *Last Login* column by default in users overview
+    * Remember last selected columns in users overview
+    * Add ability to set a custom video import timeout
+    * Add ability to set the default feed (Atom, RSS...) items count
+    * Admins and moderators now bypass API rate limits
+    * Add ability to list comments on local videos in comments overview
   * Limit video import resolution depending on enabled VOD transcoding resolutions
-  * Store and display in video edition form uploaded video original filename [#4885](https://github.com/Chocobozzz/PeerTube/pull/4885)
-  * Added "total views" in the my channels list [#5007](https://github.com/Chocobozzz/PeerTube/pull/5007)
-  * Add "Originally Published At" video sort option [#4959](https://github.com/Chocobozzz/PeerTube/pull/4959)
+  * Store and display the uploaded video original filename [#4885](https://github.com/Chocobozzz/PeerTube/pull/4885)
+  * Add *Total views* in the my channels list [#5007](https://github.com/Chocobozzz/PeerTube/pull/5007)
+  * Add *Original Publication Date* video sort option [#4959](https://github.com/Chocobozzz/PeerTube/pull/4959)
   * Performance:
     * Optimized view/watching endpoint
-    * Optimized video feeds SQL query
-    * Process remote images in a dedicated worker thread
-    * Optimized emoji markup list rendering
-  * Suffix external auth username/channel name on conflict
+    * Optimized video feed SQL query
+    * Process images (resize, convert...) in a dedicated worker thread
+    * Optimized emoji markup list rendering in client
+  * Suffix external auth username/channel name on conflict instead of throwing an exception
 
 ### Bug fixes
 
-  * Fix users overview "Last login" sort in admin
-  * More robust "move to object storage" job failure
+  * Fix users overview *Last login* sort in admin
+  * More robust *move to object storage* job failure
   * Fix comment add avatar with a unauthenticated user
   * Fix fetching unlisted video in client
-  * Fix comments/download attributes on import
+  * Fix comments/download enabled attributes when importing a video
   * Fix total instance views stats
   * Fix HLS player infinite buffering on seek
   * Reset table pagination on search
-  * "host" search filter can also search into channels and playlists
-  * Fix "my videos" invalid counter
-  * Fix incompatibility with OpenSSL 3
+  * *Host* search filter can also search into channels and playlists in global search
+  * Fix *My videos* invalid counter
   * Prevent error on highlighted thread
-  * Fix Jobs, Account blocklist and Server blocklist hidden columns on Safari
+  * Fix *Jobs*, *Account blocklist* and *Server blocklist* hidden columns on Safari
   * Fix live stream max bitrate
+  * Fix incompatibility with OpenSSL 3
   * Don't crash on redis connection error
   * Transcoding:
     * Fix failed transcoding with a mp3 file that contains a cover image
@@ -110,13 +108,13 @@
     * Prevent job failures resulting in broken videos on concurrent transcoding
     * Fix transcoding of videos with quad audio channels
   * ActivityPub
-    * Fix random invalid ActivityPub HTTP signature
-    * Use unique AP id for ActivityPub Accept/Reject activities
-    * Correctly handle remote ActivityPub actors that don't have follow counters
+    * Fix random invalid HTTP signature generation
+    * Use unique AP id for *Accept*/*Reject* activities
+    * Correctly handle remote actors that don't have follow counters
     * Correctly handle unknown remote actor image size
   * Add years in graph legend when grouping video views stats by month
   * Prevent creating multiple lives when clicking multiple times on the "Go Live" button
-  * Fix "undefined" resolution in player "Stats for nerds"
+  * Fix *undefined" resolution in player *Stats for nerds*
 
 
 ## v4.2.2
