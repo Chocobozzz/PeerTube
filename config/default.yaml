@@ -122,6 +122,7 @@ storage:
   captions: 'storage/captions/'
   cache: 'storage/cache/'
   plugins: 'storage/plugins/'
+  well_known: 'storage/well-known/'
   # Overridable client files in client/dist/assets/images:
   # - logo.svg
   # - favicon.png

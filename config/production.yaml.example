@@ -120,6 +120,7 @@ storage:
   captions: '/var/www/peertube/storage/captions/'
   cache: '/var/www/peertube/storage/cache/'
   plugins: '/var/www/peertube/storage/plugins/'
+  well_known: 'storage/well-known/'
   # Overridable client files in client/dist/assets/images:
   # - logo.svg
   # - favicon.png

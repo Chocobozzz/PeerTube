@@ -5,6 +5,7 @@ import { root } from '@shared/core-utils'
 import { CONFIG } from '../initializers/config'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
 import { cacheRoute } from '../middlewares/cache/cache'
+import { handleStaticError } from '@server/middlewares'
 
 const wellKnownRouter = express.Router()
 
@@ -67,6 +68,12 @@ wellKnownRouter.use('/.well-known/host-meta',
 
     res.send(xml).end()
   }
+)
+
+wellKnownRouter.use('/.well-known/',
+  cacheRoute(ROUTE_CACHE_LIFETIME.WELL_KNOWN),
+  express.static(CONFIG.STORAGE.WELL_KNOWN_DIR, { fallthrough: false }),
+  handleStaticError
 )
 
 // ---------------------------------------------------------------------------
