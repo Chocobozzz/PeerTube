@@ -15,6 +15,7 @@ export class PeerTubeEmbed {
 	player: videojs.Player
 	details : VideoDetails
 	api: PeerTubeEmbedApi = null
+	statusInterval : any
 	lightclbk : Function
 	pathfunction: any
 	config: HTMLServerConfig
@@ -152,7 +153,10 @@ export class PeerTubeEmbed {
 
 			return this.buildVideoPlayer(videoDetails, host, parameters, clbk)
 		} catch (err) {
+			
 			this.playerHTML.displayError(err.message/*, await this.translationsPromise*/)
+
+			this.initializeApi(clbk)
 		}
 	}
 
@@ -161,7 +165,7 @@ export class PeerTubeEmbed {
 
 		this.initializeApi(aclbk);
 
-		var poster = this.playerHTML.thumbPlayer(videoDetails)
+		var poster = this.playerHTML.thumbPlayer(videoDetails, true)
 
 		poster.addEventListener('click', () => {
 
@@ -176,15 +180,105 @@ export class PeerTubeEmbed {
 
 			parameters.lighted = false
 
-			this.lightclbk = null
+			this.playerHTML.removeErrorBlock()
+
+			this.lightclbk = null;
 
 			await clbk()
 
 		}
 	}
 
+	private async checkInfo(ca : Function) {
+
+		if (this.details && ca(this.details)) {
+
+			return this.videoFetcher.loadVideoTotal(this.details.uuid, this.details.host).then(({videoDetails}) => {
+
+
+				if (!videoDetails) return Promise.reject()
+
+				videoDetails.host = this.details.host
+
+				this.details = videoDetails
+
+				if (ca(videoDetails)) {
+					return Promise.reject()
+				}
+				else {
+
+					return Promise.resolve(true)
+				}
+
+			}).catch(e => {
+				return Promise.reject()
+			})
+
+		}
+
+		return Promise.resolve()
+	}
+
+	private stopWaiting(){
+		console.log('stopWaiting')
+		if(this.statusInterval){
+			clearInterval(this.statusInterval)
+			this.statusInterval = null
+		}
+	}
+
+	private async waitStatus(statuses : Array<Number>){
+		return this.checkInfo(function(details : any){
+
+			if(!details || !details.state) return true
+
+			if (statuses.indexOf(details.state.id) > -1){
+				return true
+			}
+		})
+	}
+
+	private initWaiting(host : any, parameters: any, clbk : any){
+		this.stopWaiting()
+
+		this.statusInterval = setInterval(() => {
+			// @ts-ignore
+			this.waitStatus([2, 4, 5]).then((r: any) => {
+
+				clearInterval(this.statusInterval)
+				
+				this.statusInterval = null
+
+				console.log("R", r)
+
+				if (r){
+
+					console.log("BUILD")
+
+					
+
+					this.buildVideoPlayer(this.details, host, parameters, clbk)
+
+					/*this.loadVideoAndBuildPlayer(this.details.uuid).catch((err) => console.error(err));
+
+					if (this.errorBlock){
+						this.wrapperElement.removeChild(this.errorBlock);
+					}*/
+				}
+				 	
+
+
+			}).catch((e : any) => {
+				console.log('e', e)
+			})
+
+		}, 30000)
+	}
+
 	private async buildVideoPlayer(videoDetails: VideoDetails, host : any, parameters: any, clbk : any) {
 		const alreadyHadPlayer = this.resetPlayerElement()
+
+		this.playerHTML.removeErrorBlock()
 		
 		const videoInfoPromise: Promise<{ video: VideoDetails, live?: LiveVideo }> = new Promise((resolve, reject) => {
 			
@@ -212,6 +306,26 @@ export class PeerTubeEmbed {
 			captionsPromise,*/
 			this.PeertubePlayerManagerModulePromise
 		])
+
+
+		if(video){
+
+			var statuses = [2, 4, 5]
+
+			console.log('video.state.id', video.state.id)
+
+			if (statuses.indexOf(video.state.id) > -1){
+
+				this.playerHTML.thumbPlayer(videoDetails, false)
+				this.playerHTML.transcodingMessage()
+
+				console.log("INIT WAIT TRA")
+
+				this.initWaiting(host, parameters, clbk)
+
+				return
+			}
+		}
 
 
 		const PlayerManager: typeof PeertubePlayerManager = PeertubePlayerManagerModule.PeertubePlayerManager
@@ -242,9 +356,6 @@ export class PeerTubeEmbed {
 		this.player = await PlayerManager.initialize(this.playerManagerOptions.getMode(), options, (player: videojs.Player) => {
 			this.player = player
 		})
-
-
-		
 
 		this.player.on('customError', (event: any, data: any) => {
 			const message = data?.err?.message || ''
@@ -348,6 +459,9 @@ export class PeerTubeEmbed {
 
 
 	destroy(){
+
+		this.stopWaiting()
+
 		if (this.player){
 			try{this.player.dispose()} catch(e){}
 		}

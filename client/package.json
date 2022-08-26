@@ -31,8 +31,6 @@
     "@babel/plugin-transform-classes": "^7.16.7",
     "@babel/plugin-transform-spread": "^7.16.7",
     "@babel/preset-env": "^7.18.2",
-    "p2p-media-loader-core-basyton": "^1.0.14",
-    "p2p-media-loader-hlsjs-basyton": "^1.0.14",
     "@peertube/videojs-contextmenu": "^5.5.0",
     "@peertube/xliffmerge": "^2.0.3",
     "@popperjs/core": "^2.11.5",
@@ -50,6 +48,7 @@
     "@types/webtorrent": "^0.109.0",
     "@typescript-eslint/eslint-plugin": "5.31.0",
     "@typescript-eslint/parser": "5.31.0",
+    "add-charset-webpack-plugin": "^1.0.6",
     "babel-loader": "^8.2.5",
     "bootstrap": "^5.1.3",
     "buffer": "^6.0.3",
@@ -79,6 +78,8 @@
     "lodash-es": "^4.17.4",
     "markdown-it": "13.0.1",
     "mini-css-extract-plugin": "^2.2.0",
+    "p2p-media-loader-core-basyton": "^1.0.14",
+    "p2p-media-loader-hlsjs-basyton": "^1.0.14",
     "path-browserify": "^1.0.0",
     "postcss": "^8.4.14",
     "process": "^0.11.10",
@@ -108,7 +109,6 @@
     "whatwg-fetch": "^3.0.0",
     "zone.js": "~0.11.4"
   },
-
   "dependencies": {
     "abortcontroller-polyfill": "^1.7.3",
     "videojs-overlay": "^2.1.4"

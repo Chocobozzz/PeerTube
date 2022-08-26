@@ -8,6 +8,8 @@ const DefinePlugin = require('webpack/lib/DefinePlugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const version = (Math.random() * 10000).toFixed(0)
 
+const AddCharsetWebpackPlugin = require("./addcharset");
+
 module.exports = function () {
   const configuration = {
     entry: {
@@ -163,6 +165,10 @@ module.exports = function () {
 
       new DefinePlugin({
         'process.env': JSON.stringify(process.env)
+      }),
+
+      new AddCharsetWebpackPlugin({
+        charset: "utf-8"
       }),
 
       new MiniCssExtractPlugin({

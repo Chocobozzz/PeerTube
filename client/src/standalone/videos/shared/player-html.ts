@@ -26,12 +26,21 @@ export class PlayerHTML {
     this.playerElement = null
   }
 
+  removeErrorBlock(){
+	console.log('this.errorBlock', this.errorBlock)
+	if (this.errorBlock){
+		this.wrapperElement.removeChild(this.errorBlock);
+	}
+  }
+
   addPlayerElementToDOM () {
     this.wrapperElement.appendChild(this.playerElement)
   }
 
   displayError (text: string, style : string = "noncritical" /* translations: Translations*/) {
     logger.error(text)
+
+	console.log('text', text)
 
     const errorBlock = document.createElement("div");
 		errorBlock.className = "error-block " + style;
@@ -104,7 +113,7 @@ export class PlayerHTML {
     this.removeElement(this.informationElement)
   }
 
-  thumbPlayer(videoInfo: VideoDetails){
+  thumbPlayer(videoInfo: VideoDetails, addplaybutton : Boolean){
 
 	const url = videoInfo.host + videoInfo.previewPath
 
@@ -117,18 +126,32 @@ export class PlayerHTML {
 	var aslayer = this.createARElement(videoInfo)
 		poster.appendChild(aslayer)
 
-	var playbutton = document.createElement("button");
+	if (addplaybutton){
+		var playbutton = document.createElement("button");
 		playbutton.className = "vjs-big-play-button";
 		playbutton.innerHTML='<span class="vjs-icon-placeholder"></span>'
 
 		poster.appendChild(playbutton)
+	}
+
+	
 
 	this.wrapperElement.innerHTML = "";
 	this.wrapperElement.appendChild(poster);
 
 
 	return poster
-}
+}	
+
+	transcodingMessage(){
+		var message = document.createElement("div");
+			message.className = 'vjs-transcoding-message'
+			message.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Video is being processed</span>'
+
+			
+
+		this.wrapperElement.appendChild(message);
+	}
 
   createARElement(videoInfo: VideoDetails) {
 
@@ -143,8 +166,6 @@ export class PlayerHTML {
 		return aslayer
 
 	}
-
-	
 
 	setARElement(videoInfo: VideoDetails, element : any) {
 

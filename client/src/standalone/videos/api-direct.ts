@@ -88,11 +88,18 @@ export class PeerTubeEmbedApi {
 
 				console.log("E", e)
 
-				/* @ts-ignore */
-    			if (typeof window.isMobile != 'undefined' && window.isMobile() || window.cordova) return
+				
 
 				if (e && e.toString) {
 					e = e.toString()
+
+					if (e && e.indexOf('removed from the document') > -1) {
+						this.destroy()
+						return
+					}
+
+					/* @ts-ignore */
+					if (typeof window.isMobile != 'undefined' && window.isMobile() || window.cordova) return
 
 					if (e && e.indexOf('request was interrupted') > -1) {
 						this.mute()
@@ -102,6 +109,9 @@ export class PeerTubeEmbedApi {
 							
 						})
 					}
+
+
+					
 				}
 			})
 
@@ -202,7 +212,8 @@ export class PeerTubeEmbedApi {
 	}
 
 	public getPosition(){
-		return this.element.currentTime
+
+		return this.embed.player.currentTime()
 	}
 
 	public enableHotKeys(){
@@ -235,7 +246,7 @@ export class PeerTubeEmbedApi {
 		this.updateinterval = setInterval(() => {
 			if (!this.element) return
 
-			const position = this.element.currentTime
+			const position = this.getPosition()
 			const volume = this.element.volume
 
 			this.state = currentState
@@ -262,6 +273,8 @@ export class PeerTubeEmbedApi {
 		if (hls){
 
 			hls.on('hlsError', (event : any, data : any) => {
+
+				console.log("data", data)
 
 				if (data.details == "bufferStalledError"){
 					slf.answer({ method: 'hlsError', params: {

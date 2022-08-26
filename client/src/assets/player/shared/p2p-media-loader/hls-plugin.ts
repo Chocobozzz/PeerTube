@@ -5,6 +5,7 @@ import Hlsjs, { ErrorData, HlsConfig, Level, LevelSwitchingData, ManifestParsedD
 import videojs from 'video.js'
 import { logger } from '@root-helpers/logger'
 import { HlsjsConfigHandlerOptions, PeerTubeResolution, VideoJSTechHLS } from '../../types'
+import CapLevelController from './cap-level-controller'
 
 type ErrorCounts = {
   [ type: string ]: number
@@ -363,6 +364,9 @@ class Html5Hlsjs {
       this.handlers.play = this._startLoad.bind(this)
       this.videoElement.addEventListener('play', this.handlers.play)
     }
+
+    //@ts-ignore
+    this.hlsjsConfig.capLevelController = CapLevelController
 
     this.hls = new Hlsjs(this.hlsjsConfig)
 

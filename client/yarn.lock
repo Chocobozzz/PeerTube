@@ -1714,6 +1714,11 @@
   "resolved" "https://registry.npmjs.org/acorn/-/acorn-8.8.0.tgz"
   "version" "8.8.0"
 
+"add-charset-webpack-plugin@^1.0.6":
+  "integrity" "sha512-3FFuoaXit6iMQu6Tz/1+mIS1cAFa8rvWRH6NeW2TWkaCG7+5Py+6G0lx+IPk1qeRJ58I0hoTkj0EENKkrqh4EQ=="
+  "resolved" "https://registry.npmjs.org/add-charset-webpack-plugin/-/add-charset-webpack-plugin-1.0.6.tgz"
+  "version" "1.0.6"
+
 "addr-to-ip-port@^1.0.1", "addr-to-ip-port@^1.5.4":
   "integrity" "sha512-ByxmJgv8vjmDcl3IDToxL2yrWFrRtFpZAToY0f46XFXl8zS081t7El5MXIodwm7RC6DhHBRoOSMLFSPKCtHukg=="
   "resolved" "https://registry.npmjs.org/addr-to-ip-port/-/addr-to-ip-port-1.5.4.tgz"
