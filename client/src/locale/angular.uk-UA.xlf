@@ -5294,12 +5294,12 @@
       </trans-unit>
       <trans-unit id="8894612824234881672" datatype="html">
         <source>⚠️ Enabling live streaming requires trust in your users and extra moderation work</source>
-        <target state="new">⚠️ Enabling live streaming requires trust in your users and extra moderation work</target>
+        <target state="translated">⚠️ Увімкнення трансляцій наживо вимагає довіри до користувачів і додаткової роботи з модерування</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="5205613575147327732" datatype="html">
         <source>If enabled, your server needs to accept incoming TCP traffic on port <x id="INTERPOLATION" equiv-text="{{ getLiveRTMPPort() }}"/></source>
-        <target state="new">If enabled, your server needs to accept incoming TCP traffic on port <x id="INTERPOLATION" equiv-text="{{ getLiveRTMPPort() }}"/></target>
+        <target state="translated">Якщо ввімкнено, ваш сервер має приймати вхідний трафік TCP на порт <x id="INTERPOLATION" equiv-text="{{ getLiveRTMPPort() }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">23</context>
@@ -5307,7 +5307,7 @@
       </trans-unit>
       <trans-unit id="6421580347313273983" datatype="html">
         <source>Allow your users to automatically publish a replay of their live</source>
-        <target state="new">Allow your users to automatically publish a replay of their live</target>
+        <target state="translated">Дозвольте своїм користувачам автоматично публікувати повтори своїх трансляцій</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="8583623894789865917" datatype="html">
