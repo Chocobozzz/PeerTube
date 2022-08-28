@@ -1174,7 +1174,7 @@ Een verbannen gebruiker kan niet langer inloggen.</target>
       </trans-unit>
       <trans-unit id="350798057497677761" datatype="html">
         <source><x id="PH"/>sec</source>
-        <target state="translated"><x id="PH"/>sec</target>
+        <target state="translated"><x id="PH"/> seconden</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="1909492071130899005" datatype="html">
@@ -7505,7 +7505,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="5921284055608402352" datatype="html">
         <source>{value, plural, =1 {thread} other {threads}}</source>
-        <target state="translated">{value, plural, =1 {thread} other {threads}}</target>
+        <target state="translated">{value, plural, =1 {taak} other {taken}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">90</context>
@@ -8237,7 +8237,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="2849750161085431718" datatype="html">
         <source>Upgrade</source>
-        <target state="translated">Upgrade</target>
+        <target state="translated">Opwaarderen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="7686590072950686188" datatype="html">
@@ -8529,7 +8529,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="8610504659433544583" datatype="html">
         <source>Live</source>
-        <target state="translated">Live</target>
+        <target state="translated">Rechtstreekse uitzending</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="545237611115823456" datatype="html">
@@ -9585,7 +9585,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="232050922346936574" datatype="html">
         <source>Trending</source>
-        <target state="translated">Trending</target>
+        <target state="translated">Populair</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">205</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">131</context></context-group>
       </trans-unit>
@@ -9853,7 +9853,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="2222108104954671970" datatype="html">
         <source><x id="PH"/> sec </source>
-        <target state="translated"><x id="PH"/> sec </target>
+        <target state="translated"><x id="PH"/> seconden </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/duration-formatter.pipe.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="8489397598480880903" datatype="html">
@@ -11716,7 +11716,7 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="346270517625845962" datatype="html">
         <source>Encoder</source>
-        <target state="translated">Encoder</target>
+        <target state="translated">Codeermachine</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">210</context></context-group>
       </trans-unit>
       <trans-unit id="2331557444464201331" datatype="html">
