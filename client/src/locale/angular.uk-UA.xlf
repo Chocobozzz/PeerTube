@@ -6757,18 +6757,18 @@
       </trans-unit>
       <trans-unit id="3701439542279610547" datatype="html">
         <source>Follows</source>
-        <target state="new">Follows</target>
+        <target state="translated">Підписки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">2</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="400578776928464905" datatype="html">
         <source>Follower instances (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</source>
-        <target state="new">Follower instances (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</target>
+        <target state="translated">Сервери підписників (<x id="INTERPOLATION" equiv-text="{{ followersPagination.totalItems }}"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="2081837971167498893" datatype="html">
         <source>Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</source>
-        <target state="new">Following instances (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
+        <target state="translated">Відслідковувані сервери (<x id="INTERPOLATION" equiv-text="{{ followingsPagination.totalItems }}"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="8203367621031610680" datatype="html">
