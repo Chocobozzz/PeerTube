@@ -1,11 +1,10 @@
-import { createReadStream, createWriteStream, ensureDir, ReadStream, stat } from 'fs-extra'
+import { createReadStream, createWriteStream, ensureDir, ReadStream } from 'fs-extra'
 import { dirname } from 'path'
 import { Readable } from 'stream'
 import {
   DeleteObjectCommand,
   GetObjectCommand,
   ListObjectsV2Command,
-  PutObjectCommand,
   PutObjectCommandInput
 } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
@@ -31,14 +30,9 @@ async function storeObject (options: {
 
   logger.debug('Uploading file %s to %s%s in bucket %s', inputPath, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
 
-  const stats = await stat(inputPath)
   const fileStream = createReadStream(inputPath)
 
-  if (stats.size > CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART) {
-    return multiPartUpload({ content: fileStream, objectStorageKey, bucketInfo })
-  }
-
-  return objectStoragePut({ objectStorageKey, content: fileStream, bucketInfo })
+  return uploadToStorage({ objectStorageKey, content: fileStream, bucketInfo })
 }
 
 async function removeObject (filename: string, bucketInfo: BucketInfo) {
@@ -132,31 +126,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function objectStoragePut (options: {
-  objectStorageKey: string
-  content: ReadStream
-  bucketInfo: BucketInfo
-}) {
-  const { objectStorageKey, content, bucketInfo } = options
-
-  const input: PutObjectCommandInput = {
-    Bucket: bucketInfo.BUCKET_NAME,
-    Key: buildKey(objectStorageKey, bucketInfo),
-    Body: content
-  }
-
-  if (CONFIG.OBJECT_STORAGE.UPLOAD_ACL) {
-    input.ACL = CONFIG.OBJECT_STORAGE.UPLOAD_ACL
-  }
-
-  const command = new PutObjectCommand(input)
-
-  await getClient().send(command)
-
-  return getPrivateUrl(bucketInfo, objectStorageKey)
-}
-
-async function multiPartUpload (options: {
+async function uploadToStorage (options: {
   content: ReadStream
   objectStorageKey: string
   bucketInfo: BucketInfo
