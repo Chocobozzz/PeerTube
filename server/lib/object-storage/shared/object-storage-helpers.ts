@@ -2,6 +2,7 @@ import { createReadStream, createWriteStream, ensureDir, ReadStream } from 'fs-e
 import { dirname } from 'path'
 import { Readable } from 'stream'
 import {
+  CompleteMultipartUploadCommandOutput,
   DeleteObjectCommand,
   GetObjectCommand,
   ListObjectsV2Command,
@@ -151,7 +152,13 @@ async function uploadToStorage (options: {
     params: input
   })
 
-  await parallelUploads3.done()
+  const response = (await parallelUploads3.done()) as CompleteMultipartUploadCommandOutput
+
+  if (!response.Key) {
+    const message = `Error uploading ${objectStorageKey} to bucket ${bucketInfo.BUCKET_NAME}`
+    logger.error(message, { response, ...lTags() })
+    throw new Error(message)
+  }
 
   logger.debug(
     'Completed %s%s in bucket %s',
