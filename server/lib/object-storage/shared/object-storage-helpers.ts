@@ -148,6 +148,11 @@ async function uploadToStorage (options: {
     client: getClient(),
     queueSize: 4,
     partSize: CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART,
+
+    // `leavePartsOnError` must be set to `true` to avoid silently dropping failed parts
+    // More detailed explanation:
+    // https://github.com/aws/aws-sdk-js-v3/blob/v3.164.0/lib/lib-storage/src/Upload.ts#L274
+    // https://github.com/aws/aws-sdk-js-v3/issues/2311#issuecomment-939413928
     leavePartsOnError: true,
     params: input
   })
