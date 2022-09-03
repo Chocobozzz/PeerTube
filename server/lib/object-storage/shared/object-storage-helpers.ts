@@ -148,7 +148,7 @@ async function uploadToStorage (options: {
     client: getClient(),
     queueSize: 4,
     partSize: CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART,
-    leavePartsOnError: false,
+    leavePartsOnError: true,
     params: input
   })
 
