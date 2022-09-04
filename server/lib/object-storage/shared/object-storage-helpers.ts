@@ -157,7 +157,13 @@ async function uploadToStorage (options: {
     params: input
   })
 
-  const response = (await parallelUploads3.done()) as CompleteMultipartUploadCommandOutput
+  let response: CompleteMultipartUploadCommandOutput
+
+  try {
+    response = await parallelUploads3.done()
+  } catch (err) {
+    response = err
+  }
 
   if (!response.Key) {
     const message = `Error uploading ${objectStorageKey} to bucket ${bucketInfo.BUCKET_NAME}`
