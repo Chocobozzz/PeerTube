@@ -158,7 +158,8 @@ async function uploadToStorage (options: {
   })
 
   const response = (await parallelUploads3.done()) as CompleteMultipartUploadCommandOutput
-
+  // Check is needed even if the HTTP status code is 200 OK
+  // For more information, see https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html
   if (!response.Bucket) {
     const message = `Error uploading ${objectStorageKey} to bucket ${bucketInfo.BUCKET_NAME}`
     logger.error(message, { response, ...lTags() })
