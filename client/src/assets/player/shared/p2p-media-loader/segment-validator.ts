@@ -12,6 +12,8 @@ function segmentValidatorFactory (segmentsSha256Url: string, isLive: boolean) {
   const regex = /bytes=(\d+)-(\d+)/
 
   return async function segmentValidator (segment: Segment, _method: string, _peerId: string, retry = 1) {
+    if (_method === 'http') return
+
     // Wait for hash generation from the server
     if (isLive) await wait(1000)
 
