@@ -162,12 +162,12 @@ describe('Test live', function () {
       }
     })
 
-    it('Should not have the live listed since nobody streams into', async function () {
+    it('Should have the live listed since its public', async function () {
       for (const server of servers) {
         const { total, data } = await server.videos.list()
 
-        expect(total).to.equal(0)
-        expect(data).to.have.lengthOf(0)
+        expect(total).to.equal(1)
+        expect(data).to.have.lengthOf(1)
       }
     })
 
