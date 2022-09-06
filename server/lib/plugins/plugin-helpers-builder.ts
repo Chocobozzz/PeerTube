@@ -20,6 +20,7 @@ import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist
 import { ServerConfigManager } from '../server-config-manager'
 import { blacklistVideo, unblacklistVideo } from '../video-blacklist'
 import { VideoPathManager } from '../video-path-manager'
+import { PeerTubeSocket } from '../peertube-socket'
 
 function buildPluginHelpers (pluginModel: MPlugin, npmName: string): PeerTubeHelpers {
   const logger = buildPluginLogger(npmName)
@@ -35,6 +36,8 @@ function buildPluginHelpers (pluginModel: MPlugin, npmName: string): PeerTubeHel
 
   const plugin = buildPluginRelatedHelpers(pluginModel, npmName)
 
+  const socket = PeerTubeSocket.Instance
+
   const user = buildUserHelpers()
 
   return {
@@ -45,6 +48,7 @@ function buildPluginHelpers (pluginModel: MPlugin, npmName: string): PeerTubeHel
     moderation,
     plugin,
     server,
+    socket,
     user
   }
 }
