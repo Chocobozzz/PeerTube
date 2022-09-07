@@ -5079,7 +5079,7 @@
       </trans-unit>
       <trans-unit id="2634326893148077182" datatype="html">
         <source>Allow channel synchronization with channel of other platforms like YouTube (requires allowing import with HTTP URL)</source>
-        <target state="translated">Povolit synchronizaci kanálu s kanálem jiných platforem, jako je YouTube (vyžaduje povolení importu pomocí HTTP URL).</target>
+        <target state="translated">Povolit synchronizaci kanálu s kanálem jiných platforem, jako je YouTube (vyžaduje povolení importu pomocí HTTP URL)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">293</context>
@@ -5999,7 +5999,7 @@
       </trans-unit>
       <trans-unit id="858570813277742962" datatype="html">
         <source>Last synchronization at <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;lastSyncAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="translated">Poslední synchronizace v  <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;lastSyncAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">Poslední synchronizace v <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;lastSyncAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context>
           <context context-type="linenumber">38</context>
@@ -6023,7 +6023,7 @@
       </trans-unit>
       <trans-unit id="2070181811140868440" datatype="html">
         <source>This fetches any missing videos on the local channel</source>
-        <target state="translated">Tím se načtou všechna chybějící videa na místním kanálu.</target>
+        <target state="translated">Tím se načtou všechna chybějící videa na místním kanálu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -7831,7 +7831,7 @@
       </trans-unit>
       <trans-unit id="9188906783046017162" datatype="html">
         <source>Follow requests rejected</source>
-        <target state="new">Follow requests rejected</target>
+        <target state="translated">Zamítnuté žádosti o sledování</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">96,94</context>
@@ -7839,7 +7839,7 @@
       </trans-unit>
       <trans-unit id="4309656190692990192" datatype="html">
         <source>Deleted followers will be able to send again a follow request.</source>
-        <target state="new">Deleted followers will be able to send again a follow request.</target>
+        <target state="translated">Odstranění sledující budou moci znovu odeslat žádost o sledování.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">108</context>
@@ -7855,7 +7855,7 @@
       </trans-unit>
       <trans-unit id="320661315515678647" datatype="html">
         <source>Do you really want to delete these follow requests?</source>
-        <target state="new">Do you really want to delete these follow requests?</target>
+        <target state="translated">Opravdu chcete tyto žádosti o sledování odstranit?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">114,112</context>
@@ -7871,7 +7871,7 @@
       </trans-unit>
       <trans-unit id="4586043076686454232" datatype="html">
         <source>Follow requests removed</source>
-        <target state="new">Follow requests removed</target>
+        <target state="translated">Žádosti o sledování odstraněny</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">126,124</context>
@@ -7928,7 +7928,7 @@
       </trans-unit>
       <trans-unit id="7233230413667661414" datatype="html">
         <source>You are not following them anymore.</source>
-        <target state="new">You are not following them anymore.</target>
+        <target state="translated">Už je nesledujete.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">84,82</context>
@@ -9179,7 +9179,7 @@
       </trans-unit>
       <trans-unit id="1498264516089100469" datatype="html">
         <source>My synchronizations</source>
-        <target state="new">My synchronizations</target>
+        <target state="translated">Moje synchronizace</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">11</context>
@@ -9258,7 +9258,7 @@
       </trans-unit>
       <trans-unit id="6328603643802633101" datatype="html">
         <source>Create new synchronization</source>
-        <target state="new">Create new synchronization</target>
+        <target state="translated">Vytvořit novou synchronizaci</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context>
           <context context-type="linenumber">153</context>
@@ -10399,7 +10399,7 @@
       </trans-unit>
       <trans-unit id="6149476559621965756" datatype="html">
         <source>Remote channel url is required.</source>
-        <target state="new">Remote channel url is required.</target>
+        <target state="translated">Je vyžadováno url vzdáleného kanálu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">59</context>
@@ -10407,7 +10407,7 @@
       </trans-unit>
       <trans-unit id="7820654428820536159" datatype="html">
         <source>External channel URL must begin with "https://" or "http://"</source>
-        <target state="new">External channel URL must begin with "https://" or "http://"</target>
+        <target state="translated">Adresa URL externího kanálu musí začínat "https://" nebo "http://"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">60</context>
@@ -10415,7 +10415,7 @@
       </trans-unit>
       <trans-unit id="5090406837784732474" datatype="html">
         <source>External channel URL cannot be more than 1000 characters long</source>
-        <target state="new">External channel URL cannot be more than 1000 characters long</target>
+        <target state="translated">Adresa URL externího kanálu nesmí být delší než 1000 znaků</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">61</context>
@@ -10555,7 +10555,7 @@
       </trans-unit>
       <trans-unit id="6989092358991683843" datatype="html">
         <source>Replay is being processed...</source>
-        <target state="new">Replay is being processed...</target>
+        <target state="translated">Přehrávání se zpracovává...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">45</context>
@@ -11133,7 +11133,7 @@
       </trans-unit>
       <trans-unit id="1792453450803202450" datatype="html">
         <source>Accepted follows</source>
-        <target state="new">Accepted follows</target>
+        <target state="translated">Přijaté následující</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">152</context>
@@ -11141,7 +11141,7 @@
       </trans-unit>
       <trans-unit id="1745310805516417209" datatype="html">
         <source>Rejected follows</source>
-        <target state="new">Rejected follows</target>
+        <target state="translated">Odmítnuté sledující</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">156</context>
@@ -11149,7 +11149,7 @@
       </trans-unit>
       <trans-unit id="1810206793608630396" datatype="html">
         <source>Pending follows</source>
-        <target state="new">Pending follows</target>
+        <target state="translated">Čekající sledující</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">160</context>
@@ -11796,7 +11796,7 @@
       </trans-unit>
       <trans-unit id="8315587636588243636" datatype="html">
         <source>Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</source>
-        <target state="new">Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</target>
+        <target state="translated">Určitě chcete odstranit tento <x id="PH" equiv-text="file.resolution.label"/> soubor?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">200</context>
@@ -11804,7 +11804,7 @@
       </trans-unit>
       <trans-unit id="6693349469471580292" datatype="html">
         <source>Delete file</source>
-        <target state="new">Delete file</target>
+        <target state="translated">Smazat soubor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">201</context>
@@ -11812,7 +11812,7 @@
       </trans-unit>
       <trans-unit id="7016764388104297354" datatype="html">
         <source>File removed.</source>
-        <target state="new">File removed.</target>
+        <target state="translated">Soubor odstraněn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">207</context>
@@ -11900,7 +11900,7 @@
       </trans-unit>
       <trans-unit id="3143238830256588661" datatype="html">
         <source>The live stream will be automatically terminated and replays won't be saved.</source>
-        <target state="new">The live stream will be automatically terminated and replays won't be saved.</target>
+        <target state="translated">Živý přenos bude automaticky ukončen a opakování se neuloží.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">233</context>
