@@ -5,7 +5,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  ensureCanManageChannel as ensureCanManageSyncedChannel,
+  ensureCanManageChannelOrAccount,
   ensureSyncExists,
   ensureSyncIsEnabled,
   videoChannelSyncValidator
@@ -21,14 +21,14 @@ videoChannelSyncRouter.post('/',
   authenticate,
   ensureSyncIsEnabled,
   asyncMiddleware(videoChannelSyncValidator),
-  ensureCanManageSyncedChannel,
+  ensureCanManageChannelOrAccount,
   asyncRetryTransactionMiddleware(createVideoChannelSync)
 )
 
 videoChannelSyncRouter.delete('/:id',
   authenticate,
   asyncMiddleware(ensureSyncExists),
-  ensureCanManageSyncedChannel,
+  ensureCanManageChannelOrAccount,
   asyncRetryTransactionMiddleware(removeVideoChannelSync)
 )
 
