@@ -1021,7 +1021,7 @@ describe('Test multiple servers', function () {
 
   describe('With minimum parameters', function () {
     it('Should upload and propagate the video', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       const path = '/api/v1/videos/upload'
 

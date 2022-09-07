@@ -1,5 +1,6 @@
 import { move, pathExists, readdir, remove } from 'fs-extra'
 import { dirname, join } from 'path'
+import { inspect } from 'util'
 import { CONFIG } from '@server/initializers/config'
 import { isVideoFileExtnameValid } from '../custom-validators/videos'
 import { logger, loggerTagsFactory } from '../logger'
@@ -59,13 +60,9 @@ class YoutubeDLWrapper {
       processOptions
     })
 
-    if (!Array.isArray(list)) throw new Error(`YoutubeDL could not get list info from ${this.url}`)
+    if (!Array.isArray(list)) throw new Error(`YoutubeDL could not get list info from ${this.url}: ${inspect(list)}`)
 
-    return list.map(info => {
-      const infoBuilder = new YoutubeDLInfoBuilder(info)
-
-      return infoBuilder.getInfo()
-    })
+    return list.map(info => info.webpage_url)
   }
 
   async getSubtitles (): Promise<YoutubeDLSubs> {

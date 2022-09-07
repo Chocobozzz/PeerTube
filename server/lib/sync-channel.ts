@@ -4,7 +4,7 @@ import { CONFIG } from '@server/initializers/config'
 import { buildYoutubeDLImport } from '@server/lib/video-import'
 import { UserModel } from '@server/models/user/user'
 import { VideoImportModel } from '@server/models/video/video-import'
-import { MChannelAccountDefault, MChannelSync } from '@server/types/models'
+import { MChannel, MChannelAccountDefault, MChannelSync } from '@server/types/models'
 import { VideoChannelSyncState, VideoPrivacy } from '@shared/models'
 import { CreateJobArgument, JobQueue } from './job-queue'
 import { ServerConfigManager } from './server-config-manager'
@@ -31,15 +31,7 @@ export async function synchronizeChannel (options: {
     CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
   )
 
-  const infoList = await youtubeDL.getInfoForListImport({ latestVideosCount: videosCountLimit })
-
-  const targetUrls = infoList
-    .filter(videoInfo => {
-      if (!onlyAfter) return true
-
-      return videoInfo.originallyPublishedAt.getTime() >= onlyAfter.getTime()
-    })
-    .map(videoInfo => videoInfo.webpageUrl)
+  const targetUrls = await youtubeDL.getInfoForListImport({ latestVideosCount: videosCountLimit })
 
   logger.info(
     'Fetched %d candidate URLs for sync channel %s.',
@@ -58,10 +50,7 @@ export async function synchronizeChannel (options: {
   const children: CreateJobArgument[] = []
 
   for (const targetUrl of targetUrls) {
-    if (await VideoImportModel.urlAlreadyImported(channel.id, targetUrl)) {
-      logger.debug('%s is already imported for channel %s, skipping video channel synchronization.', channel.name, targetUrl)
-      continue
-    }
+    if (await skipImport(channel, targetUrl, onlyAfter)) continue
 
     const { job } = await buildYoutubeDLImport({
       user,
@@ -85,4 +74,29 @@ export async function synchronizeChannel (options: {
   }
 
   await JobQueue.Instance.createJobWithChildren(parent, children)
+}
+
+// ---------------------------------------------------------------------------
+
+async function skipImport (channel: MChannel, targetUrl: string, onlyAfter?: Date) {
+  if (await VideoImportModel.urlAlreadyImported(channel.id, targetUrl)) {
+    logger.debug('%s is already imported for channel %s, skipping video channel synchronization.', channel.name, targetUrl)
+    return true
+  }
+
+  if (onlyAfter) {
+    const youtubeDL = new YoutubeDLWrapper(
+      targetUrl,
+      ServerConfigManager.Instance.getEnabledResolutions('vod'),
+      CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+    )
+
+    const videoInfo = await youtubeDL.getInfoForDownload()
+
+    if (videoInfo.originallyPublishedAt.getTime() < onlyAfter.getTime()) {
+      return true
+    }
+  }
+
+  return false
 }
