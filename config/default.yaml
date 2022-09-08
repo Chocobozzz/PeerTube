@@ -152,7 +152,7 @@ object_storage:
     secret_access_key: ''
 
   # Maximum amount to upload in one request to object storage
-  max_upload_part: 2GB
+  max_upload_part: 100MB
 
   streaming_playlists:
     bucket_name: 'streaming-playlists'
