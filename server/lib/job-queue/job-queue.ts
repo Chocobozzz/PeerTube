@@ -45,7 +45,7 @@ import { JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_TTL, REPEAT_
 import { Hooks } from '../plugins/hooks'
 import { processActivityPubCleaner } from './handlers/activitypub-cleaner'
 import { processActivityPubFollow } from './handlers/activitypub-follow'
-import { processActivityPubHttpBroadcast } from './handlers/activitypub-http-broadcast'
+import { processActivityPubHttpSequentialBroadcast, processActivityPubParallelHttpBroadcast } from './handlers/activitypub-http-broadcast'
 import { processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
 import { processActivityPubHttpUnicast } from './handlers/activitypub-http-unicast'
 import { refreshAPObject } from './handlers/activitypub-refresher'
@@ -96,8 +96,8 @@ export type CreateJobOptions = {
 }
 
 const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
-  'activitypub-http-broadcast': processActivityPubHttpBroadcast,
-  'activitypub-http-broadcast-parallel': processActivityPubHttpBroadcast,
+  'activitypub-http-broadcast': processActivityPubHttpSequentialBroadcast,
+  'activitypub-http-broadcast-parallel': processActivityPubParallelHttpBroadcast,
   'activitypub-http-unicast': processActivityPubHttpUnicast,
   'activitypub-http-fetcher': processActivityPubHttpFetcher,
   'activitypub-cleaner': processActivityPubCleaner,
