@@ -50,7 +50,6 @@ import {
   isUserP2PEnabledValid,
   isUserPasswordValid,
   isUserRoleValid,
-  isUserUsernameValid,
   isUserVideoLanguages,
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
@@ -260,7 +259,6 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   password: string
 
   @AllowNull(false)
-  @Is('UserUsername', value => throwIfNotValid(value, isUserUsernameValid, 'user name'))
   @Column
   username: string
 
