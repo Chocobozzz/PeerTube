@@ -24,6 +24,7 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
     subtitleLanguage: 'sc:subtitleLanguage',
     sensitive: 'as:sensitive',
     language: 'sc:inLanguage',
+    identifier: 'sc:identifier',
 
     // TODO: remove in a few versions, introduced in 4.2
     icons: 'as:icon',

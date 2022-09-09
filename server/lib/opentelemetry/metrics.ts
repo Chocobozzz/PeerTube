@@ -1,7 +1,7 @@
 import { Application, Request, Response } from 'express'
 import { Meter, metrics } from '@opentelemetry/api-metrics'
 import { PrometheusExporter } from '@opentelemetry/exporter-prometheus'
-import { MeterProvider } from '@opentelemetry/sdk-metrics-base'
+import { MeterProvider } from '@opentelemetry/sdk-metrics'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { MVideoImmutable } from '@server/types/models'
