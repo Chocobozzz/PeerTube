@@ -41,7 +41,7 @@ export class EventRegistrar {
   public removeListener<T> (name: string, handler: EventHandler<T>) {
     if (!this.eventRegistrations[name]) return false
 
-    this.eventRegistrations[name].registrations = this.eventRegistrations[name].registrations.filter(x => x === handler)
+    this.eventRegistrations[name].registrations = this.eventRegistrations[name].registrations.filter(x => x !== handler)
 
     return true
   }
