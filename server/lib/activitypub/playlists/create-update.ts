@@ -1,5 +1,6 @@
 import { map } from 'bluebird'
 import { isArray } from '@server/helpers/custom-validators/misc'
+import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CRAWL_REQUEST_CONCURRENCY } from '@server/initializers/constants'
 import { sequelizeTypescript } from '@server/initializers/database'
@@ -124,13 +125,13 @@ async function updatePlaylistThumbnail (playlistObject: PlaylistObject, playlist
 async function rebuildVideoPlaylistElements (elementUrls: string[], playlist: MVideoPlaylist) {
   const elementsToCreate = await buildElementsDBAttributes(elementUrls, playlist)
 
-  await sequelizeTypescript.transaction(async t => {
+  await retryTransactionWrapper(() => sequelizeTypescript.transaction(async t => {
     await VideoPlaylistElementModel.deleteAllOf(playlist.id, t)
 
     for (const element of elementsToCreate) {
       await VideoPlaylistElementModel.create(element, { transaction: t })
     }
-  })
+  }))
 
   logger.info('Rebuilt playlist %s with %s elements.', playlist.url, elementsToCreate.length, lTags(playlist.uuid, playlist.url))
 
