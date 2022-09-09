@@ -1,5 +1,7 @@
 # Release
 
+## PeerTube
+
  * Fix remaining important bugs
  * Update [/CHANGELOG.md](/CHANGELOG.md)
  * Check migrations:
@@ -21,3 +23,13 @@ NODE_APP_INSTANCE=6 NODE_ENV=test node dist/server --benchmark-startup
  * Update https://peertube3.cpy.re and check it works correctly
  * Update all other instances and check it works correctly
  * After a couple of days, update https://joinpeertube.org/api/v1/versions.json
+
+
+## @peertube/embed-api
+
+```
+cd client/src/standalone/player
+npm version patch
+npm run build
+npm publish --access=public
+```
