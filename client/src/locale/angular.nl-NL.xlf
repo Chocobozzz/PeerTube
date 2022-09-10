@@ -6940,12 +6940,12 @@ Je kan nu al informatie toevoegen over deze video.
       </trans-unit>
       <trans-unit id="185970110822844952">
         <source>P2P &amp; Privacy</source>
-        <target>Peer-to-peer en privacy</target>
+        <target state="translated">Bandbreedte bijdrage &amp; privacy</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="442017645619017020" datatype="html">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server, but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What follows applies only if you want to keep using the P2P mode of PeerTube.</source>
-        <target state="translated">PeerTube gebruikt standaard het BitTorrent-protocol om bandbreedte te delen tussen gebruikers. Zo vermindert de druk op de server. Je hebt wel de keuze om but terug te schakelen naar normaal video aanbieden enkel vanaf de server. Het volgende is enkel van toepasinng als je de P2P-modus van PeerTube wil blijven gebruiken.</target>
+        <target state="translated">PeerTube gebruikt standaard het BitTorrent protocol om bandbreedte tussen gebruikers te delen om de belasting van de server te helpen verminderen, maar laat je uiteindelijk de keuze om terug te schakelen naar reguliere streaming uitsluitend vanaf de server van de video. Wat volgt is alleen van toepassing als je de bandbreedte bijdrage modus van PeerTube wilt blijven gebruiken.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="6314880288843792309" datatype="html">
