@@ -55,13 +55,16 @@ async function getVideoStreamCodec (path: string) {
     baseProfile = baseProfileMatrix[videoCodec]['High'] // Fallback
   }
 
-  let level = videoStream.level.toString(16)
-  if (level.length === 1) level = `0${level}`
-
   if (videoCodec === 'av01') {
+    let level = videoStream.level.toString()
+    if (level.length === 1) level = `0${level}`
+
     // Guess the tier indicator and bit depth
     return `${videoCodec}.${baseProfile}.${level}M.08`
   }
+
+  let level = videoStream.level.toString(16)
+  if (level.length === 1) level = `0${level}`
 
   // Default, h264 codec
   return `${videoCodec}.${baseProfile}${level}`
