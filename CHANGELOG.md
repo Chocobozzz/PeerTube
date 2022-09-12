@@ -1,6 +1,6 @@
 # Changelog
 
-## v4.3.0 (unreleased, RC planned for September)
+## v4.3.0-rc.1
 
 ### Maintenance
 
@@ -82,6 +82,7 @@
     * Optimized video feed SQL query
     * Process images (resize, convert...) in a dedicated worker thread
     * Optimized emoji markup list rendering in client
+    * Use a worker thread to send ActivityPub Broadcast requests
   * Suffix external auth username/channel name on conflict instead of throwing an exception
 
 ### Bug fixes
@@ -115,6 +116,10 @@
   * Add years in graph legend when grouping video views stats by month
   * Prevent creating multiple lives when clicking multiple times on the "Go Live" button
   * Fix *undefined" resolution in player *Stats for nerds*
+  * Fix not displayed error message in administrator web config
+  * More robust S3 upload [#5231](https://github.com/Chocobozzz/PeerTube/pull/5231)
+  * Fix broken saved live stream with only one resolution
+  * Fix `removeEventListener` player embed api
 
 
 ## v4.2.2
