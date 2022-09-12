@@ -137,7 +137,7 @@
     "webpack": "^5.73.0",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.10.0",
-    "webtorrent": "^1.8.22",
+    "webtorrent": "1.8.26",
     "whatwg-fetch": "^3.0.0",
     "zone.js": "~0.11.4"
   },
