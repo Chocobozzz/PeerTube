@@ -12,6 +12,8 @@ describe('Open Telemetry', function () {
     const metricsUrl = 'http://localhost:9092/metrics'
 
     it('Should not enable open telemetry metrics', async function () {
+      this.timeout(60000)
+
       server = await createSingleServer(1)
 
       let hasError = false

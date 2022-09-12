@@ -506,7 +506,7 @@ describe('Test config', function () {
   })
 
   it('Should have the correct updated video allowed extensions', async function () {
-    this.timeout(10000)
+    this.timeout(30000)
 
     const data = await server.config.getConfig()
 

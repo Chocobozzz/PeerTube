@@ -11,7 +11,7 @@ describe('Test application behind a reverse proxy', function () {
   let videoId: string
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     const config = {
       rates_limit: {
@@ -42,7 +42,7 @@ describe('Test application behind a reverse proxy', function () {
   })
 
   it('Should view a video only once with the same IP by default', async function () {
-    this.timeout(20000)
+    this.timeout(40000)
 
     await server.views.simulateView({ id: videoId })
     await server.views.simulateView({ id: videoId })
