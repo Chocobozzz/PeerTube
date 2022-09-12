@@ -5,7 +5,7 @@
       <trans-unit id="ngb.alert.close" datatype="html">
         <source>Close</source><target state="new">Close</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/alert/alert.ts</context><context context-type="linenumber">79</context></context-group></trans-unit><trans-unit id="ngb.carousel.slide-number" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/alert/alert.ts</context><context context-type="linenumber">42</context></context-group></trans-unit><trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source> Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </source><target state="new"> Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
@@ -17,74 +17,50 @@
         
       <context-group purpose="location"><context context-type="sourcefile">node_modules/src/carousel/carousel.ts</context><context context-type="linenumber">202</context></context-group></trans-unit><trans-unit id="ngb.datepicker.select-month" datatype="html">
         <source>Select month</source><target state="new">Select month</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation-select.ts</context>
-          <context context-type="linenumber">74</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation-select.ts</context>
-          <context context-type="linenumber">74</context>
-        </context-group>
-      </trans-unit><trans-unit id="ngb.datepicker.select-year" datatype="html">
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">41</context></context-group><context-group purpose="location"><context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">41</context></context-group></trans-unit><trans-unit id="ngb.datepicker.select-year" datatype="html">
         <source>Select year</source><target state="new">Select year</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation-select.ts</context>
-          <context context-type="linenumber">74</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation-select.ts</context>
-          <context context-type="linenumber">74</context>
-        </context-group>
-      </trans-unit><trans-unit id="ngb.datepicker.previous-month" datatype="html">
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">41</context></context-group><context-group purpose="location"><context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">41</context></context-group></trans-unit><trans-unit id="ngb.datepicker.previous-month" datatype="html">
         <source>Previous month</source><target state="new">Previous month</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation.ts</context>
-          <context context-type="linenumber">69</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation.ts</context>
-          <context context-type="linenumber">69</context>
-        </context-group>
-      </trans-unit><trans-unit id="ngb.datepicker.next-month" datatype="html">
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">43</context></context-group><context-group purpose="location"><context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">43</context></context-group></trans-unit><trans-unit id="ngb.datepicker.next-month" datatype="html">
         <source>Next month</source><target state="new">Next month</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation.ts</context>
-          <context context-type="linenumber">69</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation.ts</context>
-          <context context-type="linenumber">69</context>
-        </context-group>
-      </trans-unit><trans-unit id="ngb.pagination.first" datatype="html">
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">43</context></context-group><context-group purpose="location"><context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">43</context></context-group></trans-unit><trans-unit id="ngb.pagination.first" datatype="html">
         <source>««</source><target state="new">««</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">247</context></context-group></trans-unit><trans-unit id="ngb.pagination.previous" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">224</context></context-group></trans-unit><trans-unit id="ngb.pagination.previous" datatype="html">
         <source>«</source><target state="new">«</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">266</context></context-group></trans-unit><trans-unit id="ngb.pagination.next" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">224</context></context-group></trans-unit><trans-unit id="ngb.pagination.next" datatype="html">
         <source>»</source><target state="new">»</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">290</context></context-group></trans-unit><trans-unit id="ngb.pagination.last" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">224</context></context-group></trans-unit><trans-unit id="ngb.pagination.last" datatype="html">
         <source>»»</source><target state="new">»»</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">305</context></context-group></trans-unit><trans-unit id="ngb.pagination.first-aria" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">224</context></context-group></trans-unit><trans-unit id="ngb.pagination.first-aria" datatype="html">
         <source>First</source><target state="new">First</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">322</context></context-group></trans-unit><trans-unit id="ngb.pagination.previous-aria" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">224</context></context-group></trans-unit><trans-unit id="ngb.pagination.previous-aria" datatype="html">
         <source>Previous</source><target state="new">Previous</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">337</context></context-group></trans-unit><trans-unit id="ngb.pagination.next-aria" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">224</context></context-group></trans-unit><trans-unit id="ngb.pagination.next-aria" datatype="html">
         <source>Next</source><target state="new">Next</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">349</context></context-group></trans-unit><trans-unit id="ngb.pagination.last-aria" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">224</context></context-group></trans-unit><trans-unit id="ngb.pagination.last-aria" datatype="html">
         <source>Last</source><target state="new">Last</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">359</context></context-group></trans-unit><trans-unit id="ngb.progressbar.value" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">224</context></context-group></trans-unit><trans-unit id="ngb.progressbar.value" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="nd so on.
    *"/></source><target state="new"><x id="INTERPOLATION" equiv-text="nd so on.
    *"/></target>
         
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/progressbar/progressbar.ts</context><context context-type="linenumber">67</context></context-group></trans-unit><trans-unit id="ngb.timepicker.HH" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/progressbar/progressbar.ts</context><context context-type="linenumber">23</context></context-group></trans-unit><trans-unit id="ngb.timepicker.HH" datatype="html">
         <source>HH</source><target state="new">HH</target>
         
       <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">136</context></context-group></trans-unit><trans-unit id="ngb.timepicker.hours" datatype="html">
@@ -105,10 +81,10 @@
       <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">228</context></context-group></trans-unit><trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
         <source>Increment minutes</source><target state="new">Increment minutes</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">249</context></context-group></trans-unit><trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">245</context></context-group></trans-unit><trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
         <source>Decrement minutes</source><target state="new">Decrement minutes</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">272</context></context-group></trans-unit><trans-unit id="ngb.timepicker.SS" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">270</context></context-group></trans-unit><trans-unit id="ngb.timepicker.SS" datatype="html">
         <source>SS</source><target state="new">SS</target>
         
       <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">289</context></context-group></trans-unit><trans-unit id="ngb.timepicker.seconds" datatype="html">
@@ -141,7 +117,7 @@
       </trans-unit><trans-unit id="ngb.toast.close-aria" datatype="html">
         <source>Close</source><target state="new">Close</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/toast/toast.ts</context><context context-type="linenumber">108</context></context-group></trans-unit><trans-unit id="219462505467671767" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">node_modules/src/toast/toast.ts</context><context context-type="linenumber">70</context></context-group></trans-unit><trans-unit id="219462505467671767" datatype="html">
         <source>Close the left menu</source>
         <target state="translated">A bal oldali menü bezárása</target>
         
