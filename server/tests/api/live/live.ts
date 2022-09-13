@@ -3,8 +3,8 @@
 import { expect } from 'chai'
 import { basename, join } from 'path'
 import { ffprobePromise, getVideoStream } from '@server/helpers/ffmpeg'
-import { checkLiveSegmentHash, checkResolutionsInMasterPlaylist, getAllFiles, testImage } from '@server/tests/shared'
-import { wait } from '@shared/core-utils'
+import { checkLiveSegmentHash, checkResolutionsInMasterPlaylist, testImage } from '@server/tests/shared'
+import { getAllFiles, wait } from '@shared/core-utils'
 import {
   HttpStatusCode,
   LiveVideo,

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
+import { getAllFiles } from '@shared/core-utils'
 import {
   cleanupTests,
   createSingleServer,
@@ -11,7 +12,6 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
-import { getAllFiles } from '../shared'
 
 describe('Test update host scripts', function () {
   let server: PeerTubeServer
