@@ -3,6 +3,7 @@
 ## PeerTube
 
  * Fix remaining important bugs
+ * Ensure French translation is 100% (for the screens in the JoinPeerTube blog post)
  * Update [/CHANGELOG.md](/CHANGELOG.md)
  * Check migrations:
 ```
