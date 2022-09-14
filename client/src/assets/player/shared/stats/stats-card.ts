@@ -260,12 +260,13 @@ class StatsCard extends Component {
     const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
     const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
     const pr = (window.devicePixelRatio || 1).toFixed(2)
-    const frames = `${vw}x${vh}*${pr} / ${videoQuality.droppedVideoFrames} dropped of ${videoQuality.totalVideoFrames}`
-
+    const vp = `${vw}x${vh}*${pr}`
+    const { droppedVideoFrames, totalVideoFrames } = videoQuality
+    const frames = player.localize('{1} / {2} dropped of {3}', [ vp, droppedVideoFrames + '', totalVideoFrames + '' ])
     const duration = player.duration()
 
     let volume = `${Math.round(player.volume() * 100)}`
-    if (player.muted()) volume += ' (muted)'
+    if (player.muted()) volume += player.localize(' (muted)')
 
     const networkActivity = playerNetworkInfo.downloadSpeed
       ? `${playerNetworkInfo.downloadSpeed} &dArr; / ${playerNetworkInfo.uploadSpeed} &uArr;`
@@ -274,8 +275,9 @@ class StatsCard extends Component {
     const totalTransferred = playerNetworkInfo.totalDownloaded
       ? `${playerNetworkInfo.totalDownloaded} &dArr; / ${playerNetworkInfo.totalUploaded} &uArr;`
       : undefined
+    const { downloadedFromServer, downloadedFromPeers } = playerNetworkInfo
     const downloadBreakdown = playerNetworkInfo.downloadedFromServer
-      ? `${playerNetworkInfo.downloadedFromServer} from servers · ${playerNetworkInfo.downloadedFromPeers} from peers`
+      ? player.localize('{1} from servers · {2} from peers', [ downloadedFromServer, downloadedFromPeers ])
       : undefined
 
     const bufferProgress = progress !== undefined
