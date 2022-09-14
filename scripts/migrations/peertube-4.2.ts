@@ -27,7 +27,7 @@ async function run () {
   console.log('Generate avatar miniatures from existing avatars.')
 
   await initDatabaseModels(true)
-  JobQueue.Instance.init(true)
+  JobQueue.Instance.init()
 
   const accounts: AccountModel[] = await AccountModel.findAll({
     include: [

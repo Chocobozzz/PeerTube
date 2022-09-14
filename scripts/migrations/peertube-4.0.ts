@@ -21,7 +21,7 @@ async function run () {
 
   await initDatabaseModels(true)
 
-  JobQueue.Instance.init(true)
+  JobQueue.Instance.init()
 
   const ids = await VideoModel.listLocalIds()
 

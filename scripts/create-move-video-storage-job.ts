@@ -37,7 +37,7 @@ run()
 async function run () {
   await initDatabaseModels(true)
 
-  JobQueue.Instance.init(true)
+  JobQueue.Instance.init()
 
   let ids: number[] = []
 

@@ -351,6 +351,12 @@ async function startApplication () {
     ApplicationModel.updateNodeVersions()
       .catch(err => logger.error('Cannot update node versions.', { err }))
 
+    JobQueue.Instance.start()
+      .catch(err => {
+        logger.error('Cannot start job queue.', { err })
+        process.exit(-1)
+      })
+
     logger.info('HTTP server listening on %s:%d', hostname, port)
     logger.info('Web server: %s', WEBSERVER.URL)
 
