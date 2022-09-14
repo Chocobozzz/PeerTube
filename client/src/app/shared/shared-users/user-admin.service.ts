@@ -59,7 +59,6 @@ export class UserAdminService {
 
     return this.authHttp.get<ResultList<UserServerModel>>(UserService.BASE_USERS_URL, { params })
                .pipe(
-                 map(res => this.restExtractor.convertResultListDateToHuman(res)),
                  map(res => this.restExtractor.applyToResultListData(res, this.formatUser.bind(this))),
                  catchError(err => this.restExtractor.handleError(err))
                )
