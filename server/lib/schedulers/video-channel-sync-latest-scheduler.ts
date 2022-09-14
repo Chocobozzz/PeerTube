@@ -16,12 +16,12 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
   }
 
   protected async internalExecute () {
-    logger.debug('Running %s.%s', this.constructor.name, this.internalExecute.name)
-
     if (!CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED) {
-      logger.info('Discard channels synchronization as the feature is disabled')
+      logger.debug('Discard channels synchronization as the feature is disabled')
       return
     }
+
+    logger.info('Checking channels to synchronize')
 
     const channelSyncs = await VideoChannelSyncModel.listSyncs()
 
