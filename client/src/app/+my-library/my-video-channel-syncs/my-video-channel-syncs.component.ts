@@ -75,6 +75,7 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
       .subscribe({
         next: res => {
           this.channelSyncs = res.data
+          this.totalRecords = res.total
         },
         error: err => {
           this.error = err.message
