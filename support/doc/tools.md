@@ -140,7 +140,7 @@ these rules (ensure to customize them to your needs):
 0 0 * * * /usr/bin/npm rebuild youtube-dl --prefix /PATH/TO/PEERTUBE/
 
 # Synchronize the YT channel every sunday at 22:00 all the videos published since last monday included
-0 22 * * 0 /usr/bin/node /PATH/TO/PEERTUBE/dist/server/tools/peertube-import-videos.js -u '__PEERTUBE_URL__' -U '__USER__' --password '__PASSWORD__' --target-url 'https://www.youtube.com/channel/___CHANNEL__' --since $(date --date="-6 days" +%Y-%m-%d)
+0 22 * * 0 /usr/bin/node /PATH/TO/PEERTUBE/dist/server/tools/peertube-import-videos.js -u '__PEERTUBE_URL__' -U '__USER__' --password '__PASSWORD__' --target-url 'https://www.youtube.com/channel/___CHANNEL__' --since $(date --date="-6 days" +\%Y-\%m-\%d)
 ```
 
 Also you may want to subscribe to the PeerTube channel in order to manually check the synchronization is successful.
