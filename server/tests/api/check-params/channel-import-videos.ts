@@ -17,21 +17,26 @@ describe('Test videos import in a channel API validator', function () {
   const userInfo = {
     accessToken: '',
     channelName: 'fake_channel',
+    channelId: -1,
     id: -1,
     videoQuota: -1,
-    videoQuotaDaily: -1
+    videoQuotaDaily: -1,
+    channelSyncId: -1
   }
   let command: ChannelsCommand
 
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
+
+    await server.config.enableImports()
+    await server.config.enableChannelSync()
 
     const userCreds = {
       username: 'fake',
@@ -42,12 +47,27 @@ describe('Test videos import in a channel API validator', function () {
       const user = await server.users.create({ username: userCreds.username, password: userCreds.password })
       userInfo.id = user.id
       userInfo.accessToken = await server.login.getAccessToken(userCreds)
+
+      const info = await server.users.getMyInfo({ token: userInfo.accessToken })
+      userInfo.channelId = info.videoChannels[0].id
+    }
+
+    {
+      const { videoChannelSync } = await server.channelSyncs.create({
+        token: userInfo.accessToken,
+        attributes: {
+          externalChannelUrl: FIXTURE_URLS.youtubeChannel,
+          videoChannelId: userInfo.channelId
+        }
+      })
+      userInfo.channelSyncId = videoChannelSync.id
     }
 
     command = server.channels
   })
 
   it('Should fail when HTTP upload is disabled', async function () {
+    await server.config.disableChannelSync()
     await server.config.disableImports()
 
     await command.importVideos({
@@ -95,6 +115,16 @@ describe('Test videos import in a channel API validator', function () {
       videoChannelSyncId: 42,
       token: server.accessToken,
       expectedStatus: HttpStatusCode.NOT_FOUND_404
+    })
+  })
+
+  it('Should fail with a sync id of another channel', async function () {
+    await command.importVideos({
+      channelName: server.store.channel.name,
+      externalChannelUrl: FIXTURE_URLS.youtubeChannel,
+      videoChannelSyncId: userInfo.channelSyncId,
+      token: server.accessToken,
+      expectedStatus: HttpStatusCode.FORBIDDEN_403
     })
   })
 
