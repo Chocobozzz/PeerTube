@@ -93,7 +93,10 @@ async function skipImport (channel: MChannel, targetUrl: string, onlyAfter?: Dat
 
     const videoInfo = await youtubeDL.getInfoForDownload()
 
-    if (videoInfo.originallyPublishedAt.getTime() < onlyAfter.getTime()) {
+    const onlyAfterWithoutTime = new Date(onlyAfter)
+    onlyAfterWithoutTime.setHours(0, 0, 0)
+
+    if (videoInfo.originallyPublishedAtWithoutTime.getTime() >= onlyAfterWithoutTime.getTime()) {
       return true
     }
   }

@@ -5,7 +5,7 @@ import { synchronizeChannel } from '@server/lib/sync-channel'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { MChannelSync } from '@server/types/models'
-import { VideoChannelImportPayload } from '@shared/models'
+import { VideoChannelImportPayload, VideoChannelSyncState } from '@shared/models'
 
 export async function processVideoChannelImport (job: Job) {
   const payload = job.data as VideoChannelImportPayload
@@ -42,5 +42,7 @@ export async function processVideoChannelImport (job: Job) {
     })
   } catch (err) {
     logger.error(`Failed to import channel ${videoChannel.name}`, { err })
+    channelSync.state = VideoChannelSyncState.FAILED
+    await channelSync.save()
   }
 }
