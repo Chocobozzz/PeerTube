@@ -46,7 +46,7 @@
         ></my-edit-button>
 
         <my-button
-          class="update-button" *ngIf="plugin.installed === false" (click)="install(plugin)"
+          *ngIf="plugin.installed === false" (click)="install(plugin)"
           [loading]="isInstalling(plugin)" label="Install" [responsiveLabel]="true"
           icon="cloud-download" [attr.disabled]="isInstalling(plugin)"
         ></my-button>
