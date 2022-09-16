@@ -145,7 +145,11 @@ export class PluginSearchComponent implements OnInit {
             plugin.installed = true
           },
 
-          error: err => this.notifier.error(err.message)
+          error: err => {
+            this.installing[plugin.npmName] = false
+
+            this.notifier.error(err.message)
+          }
         })
   }
 }
