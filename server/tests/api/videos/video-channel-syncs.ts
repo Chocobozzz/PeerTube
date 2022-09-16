@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
+
 import { expect } from 'chai'
 import { FIXTURE_URLS } from '@server/tests/shared'
 import { areHttpImportTestsDisabled } from '@shared/core-utils'
@@ -76,6 +78,7 @@ describe('Test channel synchronizations', function () {
           })
 
           expect(video.name).to.equal('small video - youtube')
+          expect(video.waitTranscoding).to.be.true
 
           const { total } = await servers[0].videos.listByChannel({ handle: 'root_channel', include: VideoInclude.NOT_PUBLISHED_STATE })
           expect(total).to.equal(1)
@@ -109,6 +112,7 @@ describe('Test channel synchronizations', function () {
           })
           expect(total).to.equal(2)
           expect(data[0].name).to.equal('test')
+          expect(data[0].waitTranscoding).to.be.true
         }
       })
 

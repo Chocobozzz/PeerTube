@@ -115,7 +115,7 @@ async function buildVideoFromImport ({ channelId, importData, importDataOverride
     language: importDataOverride?.language || importData.language,
     commentsEnabled: importDataOverride?.commentsEnabled ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_ENABLED,
     downloadEnabled: importDataOverride?.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
-    waitTranscoding: importDataOverride?.waitTranscoding || false,
+    waitTranscoding: importDataOverride?.waitTranscoding ?? true,
     state: VideoState.TO_IMPORT,
     nsfw: importDataOverride?.nsfw || importData.nsfw || false,
     description: importDataOverride?.description || importData.description,
