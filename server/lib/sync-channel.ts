@@ -80,7 +80,7 @@ export async function synchronizeChannel (options: {
 
 async function skipImport (channel: MChannel, targetUrl: string, onlyAfter?: Date) {
   if (await VideoImportModel.urlAlreadyImported(channel.id, targetUrl)) {
-    logger.debug('%s is already imported for channel %s, skipping video channel synchronization.', channel.name, targetUrl)
+    logger.debug('%s is already imported for channel %s, skipping video channel synchronization.', targetUrl, channel.name)
     return true
   }
 
@@ -94,9 +94,9 @@ async function skipImport (channel: MChannel, targetUrl: string, onlyAfter?: Dat
     const videoInfo = await youtubeDL.getInfoForDownload()
 
     const onlyAfterWithoutTime = new Date(onlyAfter)
-    onlyAfterWithoutTime.setHours(0, 0, 0)
+    onlyAfterWithoutTime.setHours(0, 0, 0, 0)
 
-    if (videoInfo.originallyPublishedAtWithoutTime.getTime() >= onlyAfterWithoutTime.getTime()) {
+    if (videoInfo.originallyPublishedAtWithoutTime.getTime() < onlyAfterWithoutTime.getTime()) {
       return true
     }
   }
