@@ -64,7 +64,6 @@ export class VideoImportService {
                .get<ResultList<VideoImport>>(UserService.BASE_USERS_URL + '/me/videos/imports', { params })
                .pipe(
                  switchMap(res => this.extractVideoImports(res)),
-                 map(res => this.restExtractor.convertResultListDateToHuman(res)),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }

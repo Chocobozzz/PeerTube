@@ -1,6 +1,6 @@
 import { SortMeta } from 'primeng/api'
 import { from, Observable } from 'rxjs'
-import { catchError, concatMap, map, toArray } from 'rxjs/operators'
+import { catchError, concatMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
@@ -40,10 +40,7 @@ export class InstanceFollowService {
     if (actorType) params = params.append('actorType', actorType)
 
     return this.authHttp.get<ResultList<ActorFollow>>(InstanceFollowService.BASE_APPLICATION_URL + '/following', { params })
-               .pipe(
-                 map(res => this.restExtractor.convertResultListDateToHuman(res)),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   getFollowers (options: {
@@ -66,10 +63,7 @@ export class InstanceFollowService {
     if (actorType) params = params.append('actorType', actorType)
 
     return this.authHttp.get<ResultList<ActorFollow>>(InstanceFollowService.BASE_APPLICATION_URL + '/followers', { params })
-               .pipe(
-                 map(res => this.restExtractor.convertResultListDateToHuman(res)),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   follow (hostsOrHandles: string[]) {
