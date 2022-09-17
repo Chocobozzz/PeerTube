@@ -116,6 +116,9 @@ $ sudo -u postgres psql -c "CREATE EXTENSION pg_trgm;" peertube_dev
 $ sudo -u postgres psql -c "CREATE EXTENSION unaccent;" peertube_dev
 ```
 
+Peertube also requires a running redis server, no special setup is needed for
+this.
+
 In dev mode, administrator username is **root** and password is **test**.
 
 ### Online development
