@@ -5451,7 +5451,7 @@
       </trans-unit>
       <trans-unit id="6698240176427495644" datatype="html">
         <source>Resolutions to generate</source>
-        <target state="translated">Разрешения для создания</target>
+        <target state="translated">Разрешения для обработки</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">111</context>
