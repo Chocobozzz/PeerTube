@@ -17,6 +17,7 @@ const FIXTURE_URLS = {
   youtubeHDR: 'https://www.youtube.com/watch?v=RQgnBB9z_N4',
 
   youtubeChannel: 'https://youtube.com/channel/UCtnlZdXv3-xQzxiqfn6cjIA',
+  youtubePlaylist: 'https://youtube.com/playlist?list=PLRGXHPrcPd2yc2KdswlAWOxIJ8G3vgy4h',
 
   // eslint-disable-next-line max-len
   magnet: 'magnet:?xs=https%3A%2F%2Fpeertube2.cpy.re%2Flazy-static%2Ftorrents%2Fb209ca00-c8bb-4b2b-b421-1ede169f3dbc-720.torrent&xt=urn:btih:0f498834733e8057ed5c6f2ee2b4efd8d84a76ee&dn=super+peertube2+video&tr=https%3A%2F%2Fpeertube2.cpy.re%2Ftracker%2Fannounce&tr=wss%3A%2F%2Fpeertube2.cpy.re%3A443%2Ftracker%2Fsocket&ws=https%3A%2F%2Fpeertube2.cpy.re%2Fstatic%2Fwebseed%2Fb209ca00-c8bb-4b2b-b421-1ede169f3dbc-720.mp4',

@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { FIXTURE_URLS } from '@server/tests/shared'
 import { areHttpImportTestsDisabled } from '@shared/core-utils'
-import { HttpStatusCode, VideoChannelSyncState, VideoInclude, VideoPrivacy } from '@shared/models'
+import { VideoChannelSyncState, VideoInclude, VideoPrivacy } from '@shared/models'
 import {
   createMultipleServers,
   getServerImportConfig,
@@ -43,6 +43,25 @@ describe('Test channel synchronizations', function () {
         )
       }
 
+      async function listAllVideosOfChannel (channelName: string) {
+        return servers[0].videos.listByChannel({
+          handle: channelName,
+          include: VideoInclude.NOT_PUBLISHED_STATE
+        })
+      }
+
+      async function forceSyncAll (videoChannelSyncId: number, fromDate = '1970-01-01') {
+        await changeDateForSync(videoChannelSyncId, fromDate)
+
+        await servers[0].debug.sendCommand({
+          body: {
+            command: 'process-video-channel-sync-latest'
+          }
+        })
+
+        await waitJobs(servers)
+      }
+
       before(async function () {
         this.timeout(240_000)
 
@@ -80,7 +99,7 @@ describe('Test channel synchronizations', function () {
           expect(video.name).to.equal('small video - youtube')
           expect(video.waitTranscoding).to.be.true
 
-          const { total } = await servers[0].videos.listByChannel({ handle: 'root_channel', include: VideoInclude.NOT_PUBLISHED_STATE })
+          const { total } = await listAllVideosOfChannel('root_channel')
           expect(total).to.equal(1)
         }
 
@@ -88,28 +107,14 @@ describe('Test channel synchronizations', function () {
           attributes: {
             externalChannelUrl: FIXTURE_URLS.youtubeChannel,
             videoChannelId: servers[0].store.channel.id
-          },
-          token: servers[0].accessToken,
-          expectedStatus: HttpStatusCode.OK_200
+          }
         })
         rootChannelSyncId = videoChannelSync.id
 
-        // Ensure any missing video not already fetched will be considered as new
-        await changeDateForSync(videoChannelSync.id, '1970-01-01')
-
-        await servers[0].debug.sendCommand({
-          body: {
-            command: 'process-video-channel-sync-latest'
-          }
-        })
+        await forceSyncAll(rootChannelSyncId)
 
         {
-          await waitJobs(servers)
-
-          const { total, data } = await servers[0].videos.listByChannel({
-            handle: 'root_channel',
-            include: VideoInclude.NOT_PUBLISHED_STATE
-          })
+          const { total, data } = await listAllVideosOfChannel('root_channel')
           expect(total).to.equal(2)
           expect(data[0].name).to.equal('test')
           expect(data[0].waitTranscoding).to.be.true
@@ -123,16 +128,12 @@ describe('Test channel synchronizations', function () {
           attributes: {
             externalChannelUrl,
             videoChannelId: servers[0].store.channel.id
-          },
-          token: servers[0].accessToken,
-          expectedStatus: HttpStatusCode.OK_200
+          }
         })
 
         expect(videoChannelSync.externalChannelUrl).to.equal(externalChannelUrl)
-        expect(videoChannelSync.channel).to.include({
-          id: servers[0].store.channel.id,
-          name: 'root_channel'
-        })
+        expect(videoChannelSync.channel.id).to.equal(servers[0].store.channel.id)
+        expect(videoChannelSync.channel.name).to.equal('root_channel')
         expect(videoChannelSync.state.id).to.equal(VideoChannelSyncState.WAITING_FIRST_RUN)
         expect(new Date(videoChannelSync.createdAt)).to.be.above(startTestDate).and.to.be.at.most(new Date())
       })
@@ -162,20 +163,9 @@ describe('Test channel synchronizations', function () {
       it('Should only fetch the videos newer than the creation date', async function () {
         this.timeout(120_000)
 
-        await changeDateForSync(userInfo.syncId, '2019-03-01')
+        await forceSyncAll(userInfo.syncId, '2019-03-01')
 
-        await servers[0].debug.sendCommand({
-          body: {
-            command: 'process-video-channel-sync-latest'
-          }
-        })
-
-        await waitJobs(servers)
-
-        const { data, total } = await servers[0].videos.listByChannel({
-          handle: userInfo.channelName,
-          include: VideoInclude.NOT_PUBLISHED_STATE
-        })
+        const { data, total } = await listAllVideosOfChannel(userInfo.channelName)
 
         expect(total).to.equal(1)
         expect(data[0].name).to.equal('test')
@@ -283,6 +273,33 @@ describe('Test channel synchronizations', function () {
       //   expect(total).to.equal(2)
       //   expect(data[0].name).to.equal('remote 2')
       // })
+
+      it('Should fetch the latest videos of a youtube playlist', async function () {
+        this.timeout(120_000)
+
+        const { id: channelId } = await servers[0].channels.create({
+          attributes: {
+            name: 'channel2'
+          }
+        })
+
+        const { videoChannelSync: { id: videoChannelSyncId } } = await servers[0].channelSyncs.create({
+          attributes: {
+            externalChannelUrl: FIXTURE_URLS.youtubePlaylist,
+            videoChannelId: channelId
+          }
+        })
+
+        await forceSyncAll(videoChannelSyncId)
+
+        {
+
+          const { total, data } = await listAllVideosOfChannel('channel2')
+          expect(total).to.equal(2)
+          expect(data[0].name).to.equal('test')
+          expect(data[1].name).to.equal('small video - youtube')
+        }
+      })
 
       after(async function () {
         await killallServers(servers)
