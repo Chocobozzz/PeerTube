@@ -1239,7 +1239,7 @@
       </trans-unit>
       <trans-unit id="175344056589888866" datatype="html">
         <source>Example: john@example.com</source>
-        <target state="new">Example: john@example.com</target>
+        <target state="translated">Örnek: john@example.com</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">46</context>
@@ -1251,7 +1251,7 @@
       </trans-unit>
       <trans-unit id="1758058452376026925" datatype="html">
         <source>⚠️ Most email addresses do not include capital letters.</source>
-        <target state="new"> ⚠️ Most email addresses do not include capital letters. </target>
+        <target state="translated">⚠️ Çoğu e-posta adresi büyük harf içermez.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="1431416938026210429">
@@ -1308,7 +1308,7 @@
       </trans-unit>
       <trans-unit id="87327320394367488" datatype="html">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target state="new">We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</target>
+        <target state="translated">Üzgünüz, şifrenizi kurtaramıyoruz. Örnek yöneticiniz PeerTube e-posta sistemini kurmamıştır, bu nedenle parola kurtarılamaz.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="3188014010833256853" datatype="html">
@@ -1318,8 +1318,7 @@
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
-        <target state="new">An email with the reset password instructions will be sent to <x id="PH"/>.
-The link will expire within 1 hour.</target>
+        <target state="translated">Şifre sıfırlama talimatlarını içeren bir e-posta <x id="PH" equiv-text="this.forgotPasswordEmail"/> adresine gönderilecektir. Bağlantı 1 saat içinde geçersiz hale gelecektir.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">135</context></context-group>
       </trans-unit>
       <trans-unit id="4768749765465246664" datatype="html">
@@ -1347,12 +1346,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="4319634264526091601" datatype="html">
         <source>on this instance</source>
-        <target state="new">on this instance</target>
+        <target state="translated">Bu örnek içinde</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="761579517995454927" datatype="html">
         <source>on the vidiverse</source>
-        <target state="new">on the vidiverse</target>
+        <target state="translated">vidiverse'de</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="8434369348784683733" datatype="html">
@@ -1370,7 +1369,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="2501430660070156325" datatype="html">
         <source>Confirmed password</source>
-        <target state="new">Confirmed password</target>
+        <target state="needs-translation">Şifreyi doğrula</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+reset-password/reset-password.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8547184468496530386" datatype="html">
@@ -1387,7 +1386,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="1779569416352510488" datatype="html">
         <source>Why creating an account?</source>
-        <target state="new">Why creating an account?</target>
+        <target state="translated">Neden bir hesap oluşturmalısınız?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">2</context>
@@ -1435,7 +1434,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5767014923310516" datatype="html">
         <source>Do you use Mastodon, ActivityPub or a RSS feed aggregator?</source>
-        <target state="new">Do you use Mastodon, ActivityPub or a RSS feed aggregator?</target>
+        <target state="translated">Mastodon, ActivityPub veya bir RSS besleme kaynağı kullanıyor musunuz?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">19</context>
@@ -1443,7 +1442,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5853527794391720600" datatype="html">
         <source>You can already follow <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> using your favorite tool. </source>
-        <target state="new"> You can already follow <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> using your favorite tool. </target>
+        <target state="translated">Yukarıda açıklandığı gibi <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> tercih ettiğiniz araçla takip etmek zaten mümkündür. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">21,23</context>
@@ -1505,7 +1504,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="199127249622290422" datatype="html">
         <source>Upload or import videos, parse logs, prune storage directories, reset user password...</source>
-        <target state="new">Upload or import videos, parse logs, prune storage directories, reset user password...</target>
+        <target state="translated">Videoları yükleyin veya içe aktarın, günlükleri ayrıştırın, depolama dizinlerini budayın, kullanıcı parolasını sıfırlayın...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="249453844439446209" datatype="html">
@@ -1515,7 +1514,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5910950876330656326" datatype="html">
         <source>Managing users, following other instances, dealing with spammers...</source>
-        <target state="new">Managing users, following other instances, dealing with spammers...</target>
+        <target state="translated">Kullanıcıları yönetmek, diğer örnekleri takip etmek, spam gönderenlerle başa çıkmak...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="879127294610588497" datatype="html">
@@ -1525,7 +1524,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3848077896245199337" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="new">Setup your account, managing video playlists, discover third-party applications...</target>
+        <target state="translated">Hesabınızı kurun, video oynatma listelerini yönetin, üçüncü taraf uygulamaları keşfedin...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6284442506490785579" datatype="html">
@@ -1551,7 +1550,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="2081626998027585315" datatype="html">
         <source>It's time to configure your instance!</source>
-        <target state="new">It's time to configure your instance!</target>
+        <target state="translated">Örneğinizi yapılandırma zamanı!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="1852111465407058121" datatype="html">
@@ -1574,32 +1573,32 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="7997432701743294657" datatype="html">
         <source>Set up</source>
-        <target state="new"> Set up </target>
+        <target state="translated">Kurulum</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="9202089339019827574" datatype="html">
         <source>Configure my instance</source>
-        <target state="new">Configure my instance</target>
+        <target state="translated">Örneğimi yapılandır</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="9005121595859995793" datatype="html">
         <source>Configuration warning!</source>
-        <target state="new">Configuration warning!</target>
+        <target state="translated">Konfigürasyon uyarısı!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="8901933019590352016" datatype="html">
         <source>You enabled user registration on your instance but did not configure the following fields:</source>
-        <target state="new">You enabled user registration on your instance but did not configure the following fields:</target>
+        <target state="translated">Örneğinizde kullanıcı kaydını etkinleştirdiniz ancak aşağıdaki alanları yapılandırmadınız:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="8948444690892731948" datatype="html">
         <source>Instance name</source>
-        <target state="new">Instance name</target>
+        <target state="translated">Örnek adı</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="966824924873033885" datatype="html">
         <source>Instance short description</source>
-        <target state="new">Instance short description</target>
+        <target state="translated">Örnek kısa açıklama</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="1339481669904426442" datatype="html">
@@ -1609,12 +1608,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5026256683194518810" datatype="html">
         <source>How long you plan to maintain your instance</source>
-        <target state="new">How long you plan to maintain your instance</target>
+        <target state="translated">Örneğinizi ne kadar süreyle korumayı planlıyorsunuz</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="1909672990242291785" datatype="html">
         <source>How you plan to pay for keeping your instance running</source>
-        <target state="new">How you plan to pay for keeping your instance running</target>
+        <target state="translated">Örneğinizi çalışır durumda tutmak için nasıl ödeme yapmayı planlıyorsunuz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1622,12 +1621,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="869943508869906576" datatype="html">
         <source>How you will moderate your instance</source>
-        <target state="new">How you will moderate your instance</target>
+        <target state="translated">Örneğinizi nasıl yöneteceksiniz</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="5032335000394561521" datatype="html">
         <source>Instance terms</source>
-        <target state="new">Instance terms</target>
+        <target state="translated">Örnek kullanım şartları</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="4116024528500133384" datatype="html">
@@ -1638,7 +1637,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="1420294365005204590" datatype="html">
         <source>These settings apply only to your session on this instance.</source>
-        <target state="new">These settings apply only to your session on this instance.</target>
+        <target state="translated">Bu ayarlar yalnızca bu örnekteki oturumunuz için geçerlidir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1646,7 +1645,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="7630362802781892981" datatype="html">
         <source>Interface</source>
-        <target state="new">Interface</target>
+        <target state="translated">Arayüz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1672,19 +1671,19 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="7819314041543176992" datatype="html">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">Kapat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context><context context-type="linenumber">28</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">38</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="4853631149357965563" datatype="html">
         <source>Update live settings</source>
-        <target state="new">Update live settings</target>
+        <target state="translated">Canlı yayın ayarlarını güncelleyin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="1254225561962113354" datatype="html">
         <source>Server too slow</source>
-        <target state="new">Server too slow</target>
+        <target state="translated">Sunucu çok yavaş</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -1692,7 +1691,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="1599290313974118905" datatype="html">
         <source>Live blacklisted</source>
-        <target state="new">Live blacklisted</target>
+        <target state="translated">Canlı yayın kara listeye alındı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">43</context>
@@ -1700,7 +1699,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5274374742436838139" datatype="html">
         <source>Max duration exceeded</source>
-        <target state="new">Max duration exceeded</target>
+        <target state="translated">Maksimum süre aşıldı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -1708,7 +1707,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="1677142486230902467" datatype="html">
         <source>Server error</source>
-        <target state="new">Server error</target>
+        <target state="translated">Sunucu hatası</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -1716,7 +1715,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="189546967059369850" datatype="html">
         <source>Quota exceeded</source>
-        <target state="new">Quota exceeded</target>
+        <target state="translated">Kota aşıldı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -1724,9 +1723,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="6013345175862135505" datatype="html">
         <source>Configure</source>
-        <target state="new">
-       Configure
-    </target>
+        <target state="translated">Yapılandır</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="742596572641738016">
@@ -1761,7 +1758,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3430483831942247060" datatype="html">
         <source>Help share videos</source>
-        <target state="new">Help share videos</target>
+        <target state="translated">Videoların paylaşılmasına yardımcı olun</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="7005745151564974365" datatype="html">
@@ -1777,12 +1774,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="8378304669563824772" datatype="html">
         <source>Get help using PeerTube</source>
-        <target state="new">Get help using PeerTube</target>
+        <target state="translated">PeerTube'u kullanma konusunda yardım alın</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="2497681082724639563" datatype="html">
         <source>powered by PeerTube</source>
-        <target state="new">powered by PeerTube</target>
+        <target state="translated">PeerTube tarafından desteklenmektedir</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="7507948636555938109" datatype="html">
@@ -1809,7 +1806,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3108704604266608109" datatype="html">
         <source>My video imports</source>
-        <target state="new">My video imports</target>
+        <target state="translated">Sizin tarafınızdan içe aktarılmış videolar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="949618577357088829" datatype="html">
@@ -1824,28 +1821,28 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="667372110624203230" datatype="html">
         <source>Import jobs concurrency</source>
-        <target state="new">Import jobs concurrency</target>
+        <target state="translated">Eş zamanlı video içe aktarma işleri</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">254</context></context-group>
       </trans-unit>
       <trans-unit id="2184839376696112704" datatype="html">
         <source>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</source>
-        <target state="new">allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</target>
+        <target state="translated">birden fazla videoyu paralel olarak içe aktarmaya izin verir. ⚠️ PeerTube'un yeniden başlatılmasını gerektirir.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">255</context></context-group>
       </trans-unit>
       <trans-unit id="780513172839038392" datatype="html">
         <source>jobs in parallel</source>
-        <target state="new">jobs in parallel</target>
+        <target state="translated">eş zamanlı işler</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">259</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
       <trans-unit id="5997625369044180192" datatype="html">
         <source>Allow import with HTTP URL (e.g. YouTube)</source>
-        <target state="new">Allow import with HTTP URL (e.g. YouTube)</target>
+        <target state="translated">HTTP URL'si ile içe aktarmaya izin ver (örn. YouTube)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">268</context></context-group>
       </trans-unit>
       <trans-unit id="2095604754338363597" datatype="html">
         <source>⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</source>
-        <target state="new">⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</target>
+        <target state="translated">⚠️ Bu ayarı etkinleştirirseniz, PeerTube sunucunuzun özel URL'nize erişmesini önlemek için <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTP proxy kullanımı<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> tavsiye edilir</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">271</context></context-group>
       </trans-unit>
       <trans-unit id="7627544798203088407" datatype="html">
@@ -1900,7 +1897,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="6090939006626576593" datatype="html">
         <source>My channel</source>
-        <target state="new">My channel</target>
+        <target state="translated">Kanalım</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">75</context>
@@ -1916,7 +1913,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3761381527105312450" datatype="html">
         <source>I don't want to create a channel</source>
-        <target state="new">I don't want to create a channel</target>
+        <target state="translated">Bir kanal oluşturmak istemiyorum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">91,92</context>
@@ -1924,7 +1921,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="1792963373738226329" datatype="html">
         <source>You will be able to create a channel later</source>
-        <target state="new">You will be able to create a channel later</target>
+        <target state="translated">Daha sonra bir kanal oluşturabileceksiniz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">94,95</context>
@@ -1952,7 +1949,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="8278995041812548563" datatype="html">
         <source>Update your notification preferences</source>
-        <target state="new">Update your notification preferences</target>
+        <target state="translated">Bildirim tercihlerinizi güncelleyin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="5842982307680337701" datatype="html">
@@ -1962,12 +1959,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5108072242786374364" datatype="html">
         <source>Welcome to <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>, dear user!</source>
-        <target state="new">Welcome to <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>, dear user!</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> adresine hoş geldiniz, sevgili kullanıcı!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="8821712929823045567" datatype="html">
         <source>It's time to set up your account profile!</source>
-        <target state="new">It's time to set up your account profile!</target>
+        <target state="translated">Hesap profilinizi oluşturma zamanı!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="7239874680342223476" datatype="html">
@@ -1987,7 +1984,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="2218100934178971211" datatype="html">
         <source>Don't show me this anymore</source>
-        <target state="new">Don't show me this anymore</target>
+        <target state="translated">Artık bana bunu gösterme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">23</context>
@@ -2005,12 +2002,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3343007694071351756" datatype="html">
         <source>We couldn't find any video tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
-        <target state="new">We couldn't find any video tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</target>
+        <target state="translated">Aradığınız <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> URL'sine bağlı herhangi bir video bulamadık.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="7366678433039425999" datatype="html">
         <source>We couldn't find any resource tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
-        <target state="new">We couldn't find any resource tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</target>
+        <target state="translated">Aradığınız <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> URL'sine bağlı herhangi bir kaynak bulamadık.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="3522707340816553139" datatype="html">
@@ -2026,12 +2023,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="1171455174603388942" datatype="html">
         <source>The video may have been moved or deleted</source>
-        <target state="new">The video may have been moved or deleted</target>
+        <target state="translated">Video taşınmış veya silinmiş olabilir</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="2213348264902218064" datatype="html">
         <source>The resource may have been moved or deleted</source>
-        <target state="new">The resource may have been moved or deleted</target>
+        <target state="translated">Kaynak taşınmış veya silinmiş olabilir</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="3209594685692897380" datatype="html">
@@ -2041,13 +2038,13 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3290262698447971494" datatype="html">
         <source>You are not authorized here.</source>
-        <target state="new">You are not authorized here.</target>
+        <target state="translated">Burada yetkili değilsiniz.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="8497991113445747319" datatype="html">
         <source>You might need to login to see the video.</source>
-        <target state="new">You might need to login to see the video.</target>
+        <target state="translated">Videoyu görmek için giriş yapmanız gerekebilir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">30</context>
@@ -2055,7 +2052,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="250608669543270729" datatype="html">
         <source>You might need to login to see the resource.</source>
-        <target state="new">You might need to login to see the resource.</target>
+        <target state="translated">Kaynağı görmek için giriş yapmanız gerekebilir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">31</context>
@@ -2063,7 +2060,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="1908285951500318953" datatype="html">
         <source>Login</source>
-        <target state="new"> Login </target>
+        <target state="translated">Oturum aç</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">34,36</context>
@@ -2071,12 +2068,12 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="6209939621665316894" datatype="html">
         <source>You might need to check your account is allowed by the video or instance owner.</source>
-        <target state="new">You might need to check your account is allowed by the video or instance owner.</target>
+        <target state="translated">Hesabınıza video veya örnek sahibi tarafından izin verildiğini kontrol etmeniz gerekebilir.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="3543381263966122204" datatype="html">
         <source>You might need to check your account is allowed by the resource or instance owner.</source>
-        <target state="new">You might need to check your account is allowed by the resource or instance owner.</target>
+        <target state="translated">Hesabınıza kaynak veya örnek sahibi tarafından izin verildiğini kontrol etmeniz gerekebilir.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="7231414106228227962" datatype="html">
@@ -2093,29 +2090,27 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="2971365540217107489" datatype="html">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target state="new">Media is too large for the server. Please contact you administrator if you want to increase the limit size.</target>
+        <target state="translated">Medya sunucu için çok büyük. Limit boyutunu artırmak istiyorsanız lütfen yöneticinizle iletişime geçin.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="5131854469652959713" datatype="html">
         <source>GLOBAL SEARCH</source>
-        <target state="new">GLOBAL SEARCH</target>
+        <target state="translated">GLOBAL ARAMA</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="1843010981261389722" datatype="html">
         <source>using <x id="INTERPOLATION"/></source>
-        <target state="new">using 
-          <x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/>
-        </target>
+        <target state="translated"><x id="INTERPOLATION"/> kullanılıyor</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="4070041848101291003" datatype="html">
         <source>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</source>
-        <target state="new">Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</target>
+        <target state="translated">Arama sonuçlarının sayısı üçüncü taraf arama dizinine bağlıdır. Sadece arama için gerekli olan veriler iletilir.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="2807610143550376912" datatype="html">
         <source>Your query will be matched against video names or descriptions, channel names.</source>
-        <target state="new">Your query will be matched against video names or descriptions, channel names.</target>
+        <target state="translated">Girilen arama terimleri videonun başlığıyla veya açıklamasıyla ya da kanalın adıyla eşleştiğinde, bunlar arama sonuçları olarak görüntülenecektir.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">36</context></context-group>
       </trans-unit>
       <trans-unit id="3801957940570333397" datatype="html">
@@ -2125,28 +2120,28 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="3416071273413341159" datatype="html">
         <source>any instance</source>
-        <target state="new">any instance</target>
+        <target state="translated">herhangi bir örnek</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="1764675694412365696" datatype="html">
         <source>only followed instances</source>
-        <target state="new">only followed instances</target>
+        <target state="translated">sadece takip edilen örnekler</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="6462732349450217281" datatype="html">
         <source>Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</source>
-        <target state="new">Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</target>
+        <target state="translated">Tüm örneklerden herhangi bir içeriğin mi yoksa yalnızca bu örnek tarafından takip edilen örneklerden içeriğin mi aranabileceğini belirtir.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="3710530516408401495" datatype="html">
         <source>will list the matching channel</source>
-        <target state="new">will list the matching channel</target>
+        <target state="translated">eşleşen kanalı listeleyecektir</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">48</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="6913541939335935215" datatype="html">
         <source>will list the matching video</source>
-        <target state="new">will list the matching video</target>
+        <target state="translated">eşleşen videoyu listeleyecektir</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="8854094932942190741">
@@ -2156,17 +2151,17 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="2468689683507870964" datatype="html">
         <source>In this instance's network</source>
-        <target state="new">In this instance's network</target>
+        <target state="translated">Bu örneğin ağında</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="4494942989613184609" datatype="html">
         <source>In the vidiverse</source>
-        <target state="new">In the vidiverse</target>
+        <target state="translated">Vidiverse'de</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="8151924435547335490" datatype="html">
         <source>Upload failed</source>
-        <target state="new">Upload failed</target>
+        <target state="translated">Yükleme başarısız</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">12</context>
@@ -2179,7 +2174,7 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="4540121094340493564" datatype="html">
         <source>Display only</source>
-        <target state="new">Display only</target>
+        <target state="translated">Yalnızca göster</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">21</context>
@@ -2192,17 +2187,17 @@ The link will expire within 1 hour.</target>
       </trans-unit>
       <trans-unit id="5038188980760269298" datatype="html">
         <source>Original publication year</source>
-        <target state="new">Original publication year</target>
+        <target state="translated">Orijinal yayın yılı</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="2316758236788716819" datatype="html">
         <source>After...</source>
-        <target state="new">After...</target>
+        <target state="translated">Sonra...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="5418443214217152433" datatype="html">
         <source>Before...</source>
-        <target state="new">Before...</target>
+        <target state="translated">Önce...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="7410432243549869948" datatype="html">
@@ -10128,7 +10123,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8489397598480880903" datatype="html">
         <source>{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</source>
-        <target state="new">{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</target>
+        <target state="translated">{interval, plural, =1 {1 yıl önce} other {<x id="interval"/> yıl önce}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">7</context>
