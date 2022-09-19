@@ -2260,17 +2260,17 @@
       </trans-unit>
       <trans-unit id="2252476112877289102" datatype="html">
         <source>All of these tags</source>
-        <target state="new">All of these tags</target>
+        <target state="translated">Girilen tüm etiketler</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="4413784616961145955" datatype="html">
         <source>One of these tags</source>
-        <target state="new">One of these tags</target>
+        <target state="translated">Girilen etiketlerden biri</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">170</context></context-group>
       </trans-unit>
       <trans-unit id="5143793904897598509" datatype="html">
         <source>PeerTube instance host</source>
-        <target state="new">PeerTube instance host</target>
+        <target state="translated">PeerTube örneğinin alan adı</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">178</context>
@@ -2278,7 +2278,7 @@
       </trans-unit>
       <trans-unit id="8244789432276387088" datatype="html">
         <source>Result types</source>
-        <target state="new">Result types</target>
+        <target state="translated">Arama sonuçları tipi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">187</context>
@@ -2286,12 +2286,12 @@
       </trans-unit>
       <trans-unit id="283421392567624698" datatype="html">
         <source>Search target</source>
-        <target state="new">Search target</target>
+        <target state="translated">Hedef arama</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">212</context></context-group>
       </trans-unit>
       <trans-unit id="2489767671380266270" datatype="html">
         <source>Vidiverse</source>
-        <target state="new">Vidiverse</target>
+        <target state="translated">Vidiverse</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">222</context></context-group>
       </trans-unit>
       <trans-unit id="5478121364779850827" datatype="html">
@@ -2314,7 +2314,7 @@
       </trans-unit>
       <trans-unit id="8829497237648100098" datatype="html">
         <source>Filter</source>
-        <target state="new">Filter</target>
+        <target state="translated">Filtre</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">233</context></context-group>
       </trans-unit>
       <trans-unit id="6479885129995567639" datatype="html">
@@ -2329,32 +2329,32 @@
       </trans-unit>
       <trans-unit id="753928283782809091" datatype="html">
         <source>Select the caption file</source>
-        <target state="new">Select the caption file</target>
+        <target state="translated">Altyazı dosyasını seçin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="4616828176080418150" datatype="html">
         <source>This will replace an existing caption!</source>
-        <target state="new">This will replace an existing caption!</target>
+        <target state="translated">Mevcut altyazının yerini alacaktır!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="2752121353049766867" datatype="html">
         <source>Add this caption</source>
-        <target state="new">Add this caption</target>
+        <target state="translated">Alt yazı ekleyin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="480001148850006323" datatype="html">
         <source>Edit caption</source>
-        <target state="new">Edit caption</target>
+        <target state="translated">Alt yazıyı düzenle</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal-content/video-caption-edit-modal-content.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="6838559377527923778" datatype="html">
         <source>Caption</source>
-        <target state="new">Caption</target>
+        <target state="translated">Alt Yazı</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal-content/video-caption-edit-modal-content.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="1989971680596153649" datatype="html">
         <source>Edit this caption</source>
-        <target state="new">Edit this caption</target>
+        <target state="translated">Bu alt yazıyı düzenleyin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal-content/video-caption-edit-modal-content.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="5701618810648052610" datatype="html">
@@ -2384,12 +2384,12 @@
       </trans-unit>
       <trans-unit id="3265632123453688399" datatype="html">
         <source>Enter a new tag</source>
-        <target state="new">Enter a new tag</target>
+        <target state="translated">Yeni bir etiket girin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-tags.component.ts</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="6179532215548637839" datatype="html">
         <source>extensions</source>
-        <target state="new">extensions</target>
+        <target state="translated">uzantılar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="8054921481196967348" datatype="html">
@@ -2400,17 +2400,17 @@
       </trans-unit>
       <trans-unit id="6259523075362402245" datatype="html">
         <source>Upload a new banner</source>
-        <target state="new">Upload a new banner</target>
+        <target state="translated">Yeni bir banner yükleyin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="1117672957968812680" datatype="html">
         <source>Change your banner</source>
-        <target state="new">Change your banner</target>
+        <target state="translated">Bannerınızı değiştirin</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="3394080812181176794" datatype="html">
         <source>Remove banner</source>
-        <target state="new">Remove banner</target>
+        <target state="translated">Bannerı kalıdr</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="7306351600905511107" datatype="html">
@@ -2420,12 +2420,12 @@
       </trans-unit>
       <trans-unit id="3220184757632006830" datatype="html">
         <source>Account avatar</source>
-        <target state="new">Account avatar</target>
+        <target state="translated">Hesap avatarı</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="1138964882426023395" datatype="html">
         <source>Channel avatar</source>
-        <target state="new">Channel avatar</target>
+        <target state="translated">Kanal avatarı</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="1358902062258458923" datatype="html">
@@ -2438,7 +2438,7 @@
       </trans-unit>
       <trans-unit id="7976591803735140601" datatype="html">
         <source>Latest published video</source>
-        <target state="new">Latest published video</target>
+        <target state="translated">Yayınlanan son video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context>
           <context context-type="linenumber">24</context>
