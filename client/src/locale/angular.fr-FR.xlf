@@ -1328,7 +1328,7 @@
       </trans-unit>
       <trans-unit id="3514732276382852116" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videos</source>
-        <target state="needs-translation"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Commenter<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> les vidéos</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Commenter<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> les vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">11</context>
@@ -3527,7 +3527,7 @@
       </trans-unit>
       <trans-unit id="4965562695253171955" datatype="html">
         <source>Clear filter</source>
-        <target state="needs-translation">Supprimer le filtre</target>
+        <target state="translated">Supprimer le filtre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">28</context>
@@ -4365,7 +4365,7 @@
       </trans-unit>
       <trans-unit id="8630916846096019339" datatype="html">
         <source>Users can resolve distant content</source>
-        <target state="needs-translation">Les utilisateur·ices peuvent résoudre des contenus distants</target>
+        <target state="translated">Les utilisateur·ices peuvent résoudre des contenus distants</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="3300472325769888962" datatype="html">
@@ -4823,7 +4823,7 @@
       </trans-unit>
       <trans-unit id="371306187337992930" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or add slight <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>customizations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="needs-translation">Utiliser des <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>extensions &amp; thèmes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour des changements plus importants ou ajouter des <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>modifications<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> mineures. </target>
+        <target state="translated">Utilisez des <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/plugins&quot;&gt;"/>extensions &amp; thèmes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour des changements plus importants ou ajouter des <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/admin/config/edit-custom&quot; fragment=&quot;advanced-configuration&quot;&gt;"/>modifications<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> mineures. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">5,7</context>
@@ -5098,7 +5098,7 @@
       </trans-unit>
       <trans-unit id="7295422540935146771" datatype="html">
         <source>Allow anonymous to do remote URI/handle search</source>
-        <target state="needs-translation">Permettre à des utilisateur·ices anonymes de faire des recherches à distance via URI/mot-clé</target>
+        <target state="translated">Permettre à des utilisateur·ices anonymes de faire des recherches à distance via URI/mot-clé</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">374</context></context-group>
       </trans-unit>
       <trans-unit id="7305237807882754643" datatype="html">
@@ -5941,7 +5941,7 @@
       </trans-unit>
       <trans-unit id="4955509738673204025" datatype="html">
         <source>Add synchronization</source>
-        <target state="needs-translation">Ajouter la synchronisation</target>
+        <target state="translated">Ajouter une synchronisation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context>
           <context context-type="linenumber">25</context>
@@ -5973,7 +5973,7 @@
       </trans-unit>
       <trans-unit id="2711346502920265629" datatype="html">
         <source>List imports</source>
-        <target state="needs-translation">Lister les imports</target>
+        <target state="translated">Lister les imports</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context>
           <context context-type="linenumber">84,86</context>
@@ -6039,7 +6039,7 @@
       </trans-unit>
       <trans-unit id="8290237842846954767" datatype="html">
         <source>Options for existing videos on remote channel:</source>
-        <target state="needs-translation">Options des vidéos existantes sur une chaîne distante :</target>
+        <target state="translated">Options pour les vidéos existantes de la chaîne distante :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">42</context>
@@ -6485,7 +6485,7 @@
       </trans-unit>
       <trans-unit id="6154714649766447409" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong class=&quot;underline-orange&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> &gt; Login </source>
-        <target state="needs-translation"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong class=&quot;underline-orange&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> &gt; Connexion </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong class=&quot;underline-orange&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> &gt; Connexion </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">2,5</context>
@@ -9292,7 +9292,7 @@
       </trans-unit>
       <trans-unit id="3856244462638931422" datatype="html">
         <source>Verify account email confirmation</source>
-        <target state="needs-translation">Confirmation de l'email de vérification du compte</target>
+        <target state="translated">Confirmation de l'email de vérification du compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -9746,7 +9746,7 @@
       </trans-unit>
       <trans-unit id="1995871740249853660" datatype="html">
         <source><x id="PH" equiv-text="interval"/> month(s) ago</source>
-        <target state="needs-translation">Il y a <x id="PH" equiv-text="interval"/> mois</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> mois</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">28</context>
@@ -9759,7 +9759,7 @@
       </trans-unit>
       <trans-unit id="3626585509896494177" datatype="html">
         <source><x id="PH" equiv-text="interval"/> week(s) ago</source>
-        <target state="needs-translation">Il y a <x id="PH" equiv-text="interval"/> semaine(s)</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> semaine(s)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">37</context>
@@ -9767,7 +9767,7 @@
       </trans-unit>
       <trans-unit id="4853543308896023917" datatype="html">
         <source><x id="PH" equiv-text="interval"/> day(s) ago</source>
-        <target state="needs-translation">Il y a <x id="PH" equiv-text="interval"/> jour(s)</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> jour(s)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">42</context>
@@ -9775,7 +9775,7 @@
       </trans-unit>
       <trans-unit id="1345947856864087664" datatype="html">
         <source><x id="PH" equiv-text="interval"/> hour(s) ago</source>
-        <target state="needs-translation">Il y a <x id="PH" equiv-text="interval"/> heure(s)</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> heure(s)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">47</context>
@@ -9800,7 +9800,7 @@
       </trans-unit>
       <trans-unit id="8489397598480880903" datatype="html">
         <source>{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</source>
-        <target state="needs-translation">Il y a {interval, plural, =1 {1 an} other {<x id="interval"/> ans}}</target>
+        <target state="translated">Il y a {interval, plural, =1 {1 an} other {<x id="interval"/> ans}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">7</context>
@@ -9808,7 +9808,7 @@
       </trans-unit>
       <trans-unit id="599762045687999334" datatype="html">
         <source>{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</source>
-        <target state="needs-translation">Il y a {interval, plural, =1 {1 mois} other {<x id="interval"/> mois}}</target>
+        <target state="translated">Il y a {interval, plural, =1 {1 mois} other {<x id="interval"/> mois}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">8</context>
@@ -9816,7 +9816,7 @@
       </trans-unit>
       <trans-unit id="4951459525104027759" datatype="html">
         <source>{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</source>
-        <target state="needs-translation">Il y a {interval, plural, =1 {1 semaine} other {<x id="interval"/> semaines}}</target>
+        <target state="translated">Il y a {interval, plural, =1 {1 semaine} other {<x id="interval"/> semaines}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">9</context>
@@ -9824,7 +9824,7 @@
       </trans-unit>
       <trans-unit id="2471141982657856893" datatype="html">
         <source>{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</source>
-        <target state="needs-translation">Il y a {interval, plural, =1 {1 jour} other {<x id="interval"/> jours}}</target>
+        <target state="translated">Il y a {interval, plural, =1 {1 jour} other {<x id="interval"/> jours}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">10</context>
@@ -9832,7 +9832,7 @@
       </trans-unit>
       <trans-unit id="8562677309401914974" datatype="html">
         <source>{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</source>
-        <target state="needs-translation">Il y a {interval, plural, =1 {1 heure} other {<x id="interval"/> heures}}</target>
+        <target state="translated">Il y a {interval, plural, =1 {1 heure} other {<x id="interval"/> heures}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">11</context>
@@ -9840,7 +9840,7 @@
       </trans-unit>
       <trans-unit id="3613007385964514320" datatype="html">
         <source><x id="PH" equiv-text="interval"/> year(s) ago</source>
-        <target state="needs-translation">Il y a <x id="PH" equiv-text="interval"/> ans</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> an(s)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">19</context>
@@ -11079,7 +11079,7 @@
       </trans-unit>
       <trans-unit id="2819927377059070056" datatype="html">
         <source>~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</source>
-        <target state="new">~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</target>
+        <target state="translated">~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -11773,12 +11773,12 @@
       </trans-unit>
       <trans-unit id="8315587636588243636" datatype="html">
         <source>Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</source>
-        <target state="needs-translation">Êtes-vous certain·e de vouloir supprimer ce fichier <x id="PH" equiv-text="file.resolution.label"/> ?</target>
+        <target state="translated">Êtes-vous certain·e de vouloir supprimer ce fichier <x id="PH" equiv-text="file.resolution.label"/> ?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">204</context></context-group>
       </trans-unit>
       <trans-unit id="6693349469471580292" datatype="html">
         <source>Delete file</source>
-        <target state="needs-translation">Supprimer le fichier</target>
+        <target state="translated">Supprimer le fichier</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">205</context></context-group>
       </trans-unit>
       <trans-unit id="7016764388104297354" datatype="html">
@@ -11868,7 +11868,7 @@
       </trans-unit>
       <trans-unit id="3143238830256588661" datatype="html">
         <source>The live stream will be automatically terminated and replays won't be saved.</source>
-        <target state="needs-translation">La diffusion en direct sera automatiquement terminée et les enregistrements ne seront pas conservés.</target>
+        <target state="translated">La diffusion en direct sera automatiquement terminée et les enregistrements ne seront pas conservés.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">233</context>
