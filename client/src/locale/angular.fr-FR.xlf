@@ -941,7 +941,7 @@
       </trans-unit>
       <trans-unit id="7417677567611860270" datatype="html">
         <source>Channel synchronization with other platforms (YouTube, Vimeo, ...)</source>
-        <target state="new">Channel synchronization with other platforms (YouTube, Vimeo, ...)</target>
+        <target state="translated">Synchronisation avec d'autres plateformes (YouTube, Vimeo, ...)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">110</context>
@@ -1048,7 +1048,7 @@
       </trans-unit>
       <trans-unit id="732935381486595265" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</target>
+        <target state="translated">Votre <x id="PH" equiv-text="name"/> fichier n'a pas pu être transféré avant la fin du délai d'expiration du serveur de proxy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">35</context>
@@ -1113,7 +1113,7 @@
       </trans-unit>
       <trans-unit id="901879091817013957" datatype="html">
         <source>{count, plural, =1 {Blocked <x id="videoName"/>.} other {Blocked <x id="count"/> videos.}}</source>
-        <target state="new">{count, plural, =1 {Blocked <x id="videoName"/>.} other {Blocked <x id="count"/> videos.}}</target>
+        <target state="translated">{count, plural, =1 {Bloqué <x id="videoName"/>.} other {Bloqué <x id="count"/> vidéos.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.ts</context>
           <context context-type="linenumber">84</context>
@@ -1147,7 +1147,7 @@
       </trans-unit>
       <trans-unit id="5418570600695268383" datatype="html">
         <source>Request new verification email</source>
-        <target state="new"> Request new verification email </target>
+        <target state="translated">Demander un nouvel email de vérification</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">33,35</context>
@@ -1165,7 +1165,7 @@
       </trans-unit>
       <trans-unit id="175344056589888866" datatype="html">
         <source>Example: john@example.com</source>
-        <target state="new">Example: john@example.com</target>
+        <target state="translated">Exemple : jean@exemple.fr</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">46</context>
@@ -1208,7 +1208,7 @@
       </trans-unit>
       <trans-unit id="6584143415159913044" datatype="html">
         <source>This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Cette instance autorise l'inscription. Cependant, veuillez consulter les  <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> avant de créer un compte. Vous pouvez aussi chercher une autre instance qui correspond à vos besoins sur : <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">15,18</context>
@@ -1216,7 +1216,7 @@
       </trans-unit>
       <trans-unit id="1394326136451741248" datatype="html">
         <source>Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"> Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Actuellement, cette instance n'accepte pas les inscriptions d'utilisateur·ices. Vous pouvez consulter les <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour plus d'informations ou trouver une instance qui vous offre la possibilité de vous inscrire et de téléverser vos vidéos. Trouvez la votre parmi de nombreuses instances sur : <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">20,23</context>
@@ -1312,7 +1312,7 @@
       </trans-unit>
       <trans-unit id="1779569416352510488" datatype="html">
         <source>Why creating an account?</source>
-        <target state="new">Why creating an account?</target>
+        <target state="translated">Pourquoi créer un compte ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">2</context>
@@ -1320,7 +1320,7 @@
       </trans-unit>
       <trans-unit id="4502972592942341883" datatype="html">
         <source>As you probably noticed: creating an account is not necessary to watch video on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </source>
-        <target state="new"> As you probably noticed: creating an account is not necessary to watch video on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </target>
+        <target state="translated">Comme vous l'aurez probablement remarqué : créer un compte n'est pas nécessaire pour regarder une vidéo sur <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>  Cependant, créer un compte sur  <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> vous permettra de : </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">4,8</context>
@@ -1483,7 +1483,7 @@
       </trans-unit>
       <trans-unit id="5329436244765769292" datatype="html">
         <source>If you want to open registrations, please decide what <x id="START_TAG_STRONG"/>your moderation rules<x id="CLOSE_TAG_STRONG"/> and <x id="START_TAG_STRONG"/>instance terms of service<x id="CLOSE_TAG_STRONG"/> are, as well as specify the categories and languages and your moderators speak. This way, you will help users to register on <x id="START_TAG_STRONG"/>the appropriate<x id="CLOSE_TAG_STRONG"/> PeerTube instance. </source>
-        <target state="translated">Si vous souhaitez ouvrir les inscriptions, veuillez décider de <x id="START_TAG_STRONG"/>vos règles de modération<x id="CLOSE_TAG_STRONG"/> et <x id="START_TAG_STRONG"/>termes de service<x id="CLOSE_TAG_STRONG"/>, et veuillez préciser les catégories de contenu auquel votre instance se destine ainsi que les langues que parle votre équipe modération. Vous aiderez ainsi les utilisateurs à mieux choisir une instance PeerTube qui <x id="START_TAG_STRONG"/>leur convient<x id="CLOSE_TAG_STRONG"/>. </target>
+        <target state="translated">Si vous souhaitez ouvrir les inscriptions, veuillez décider de <x id="START_TAG_STRONG"/>vos règles de modération<x id="CLOSE_TAG_STRONG"/> et <x id="START_TAG_STRONG"/>conditions d'utilisation de l'instance<x id="CLOSE_TAG_STRONG"/>, et aussi préciser les catégories de contenu auxquelles votre instance se destine ainsi que les langues que parle votre équipe modération. Vous aiderez ainsi les utilisateur·ices à mieux choisir une instance PeerTube qui <x id="START_TAG_STRONG"/>leur convient<x id="CLOSE_TAG_STRONG"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="5704345824323933019">
@@ -1546,7 +1546,7 @@
       </trans-unit>
       <trans-unit id="5032335000394561521">
         <source>Instance terms</source>
-        <target>Conditions de l'instance</target>
+        <target state="translated">Conditions d'utilisation de l'instance</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="4116024528500133384" datatype="html">
