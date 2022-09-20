@@ -7163,7 +7163,7 @@
       </trans-unit>
       <trans-unit id="5007378598046048755" datatype="html">
         <source>Example: sweetmelodies24</source>
-        <target state="new">Example: sweetmelodies24</target>
+        <target state="translated">Exemple: sweetmelodies24</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">42</context>
@@ -7171,7 +7171,7 @@
       </trans-unit>
       <trans-unit id="6433602064879074151" datatype="html">
         <source>Channel identifier cannot be the same as your account name. You can click on the first step to update your account name.</source>
-        <target state="new"> Channel identifier cannot be the same as your account name. You can click on the first step to update your account name. </target>
+        <target state="translated">L'identifiant de la chaîne ne peut pas être le même que celui de votre compte. Vous pouvez cliquer sur la première étape pour mettre à jour l'identifiant de votre compte.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">50,52</context>
@@ -7196,8 +7196,7 @@
       </trans-unit>
       <trans-unit id="1081343670550705648" datatype="html">
         <source>Video uploads are disabled on this instance, hence your account won't be able to upload videos.</source>
-        <target state="new"> Video uploads are disabled on this instance, hence your account won't be able to upload videos.
-</target>
+        <target state="translated">La publication de vidéos est désactivée sur cette instance. De ce fait votre compte ne pourra pas publier des vidéos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">1,3</context>
@@ -7205,7 +7204,7 @@
       </trans-unit>
       <trans-unit id="7657420986523643151" datatype="html">
         <source>Public name</source>
-        <target state="new">Public name</target>
+        <target state="translated">Nom public</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">9</context>
@@ -7213,7 +7212,7 @@
       </trans-unit>
       <trans-unit id="7536432216862568979" datatype="html">
         <source>This is the name that will be publicly visible by other users.</source>
-        <target state="new"> This is the name that will be publicly visible by other users. </target>
+        <target state="translated">C'est le nom qui sera publiquement visible par les autres utilisateurs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -7221,7 +7220,7 @@
       </trans-unit>
       <trans-unit id="1926625386720791836" datatype="html">
         <source>Example: John Doe</source>
-        <target state="new">Example: John Doe</target>
+        <target state="translated">Exemple: John Doe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">17</context>
@@ -7229,7 +7228,7 @@
       </trans-unit>
       <trans-unit id="8656171949584591423" datatype="html">
         <source>This is the name that will be displayed in your profile URL.</source>
-        <target state="new"> This is the name that will be displayed in your profile URL. </target>
+        <target state="translated">C'est le nom qui sera affiché dans l'URL menant à votre profil.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -7237,7 +7236,7 @@
       </trans-unit>
       <trans-unit id="9199457913561943854" datatype="html">
         <source>Example: john_doe58</source>
-        <target state="new">Example: john_doe58</target>
+        <target state="translated">Exemple: john_doe58</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">34</context>
@@ -7245,7 +7244,7 @@
       </trans-unit>
       <trans-unit id="5856397248272246243" datatype="html">
         <source>This email address will be used to validate your account.</source>
-        <target state="new"> This email address will be used to validate your account. </target>
+        <target state="translated">Cette adresse mail sera utilisé pour valider votre compte.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">48,50</context>
@@ -7253,7 +7252,7 @@
       </trans-unit>
       <trans-unit id="1789116494691736014" datatype="html">
         <source>Request email for account verification</source>
-        <target state="new">Request email for account verification</target>
+        <target state="translated">Demande d'email pour la validation du compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -7269,7 +7268,7 @@
       </trans-unit>
       <trans-unit id="670353405713142439" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="s=&quot;underline-orange&quot;&gt;"/><x id="INTERPOLATION" equiv-text="&lt;/s"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&gt;"/> &gt; Create an account </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="s=&quot;underline-orange&quot;&gt;"/><x id="INTERPOLATION" equiv-text="&lt;/s"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&gt;"/> &gt; Create an account </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="s=&quot;underline-orange&quot;&gt;"/><x id="INTERPOLATION" equiv-text="&lt;/s"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&gt;"/> &gt; Créer un compte </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">9,12</context>
@@ -7454,7 +7453,7 @@
       </trans-unit>
       <trans-unit id="5921284055608402352" datatype="html">
         <source>{value, plural, =1 {thread} other {threads}}</source>
-        <target state="new">{value, plural, =1 {thread} other {threads}}</target>
+        <target state="translated">{value, plural, =1 {thread} other {threads}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-configuration.service.ts</context>
           <context context-type="linenumber">90</context>
@@ -7511,7 +7510,7 @@
       </trans-unit>
       <trans-unit id="8538708819525283296" datatype="html">
         <source>However, you may want to read <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://docs.joinpeertube.org/admin-configuration?id=transcoding&quot;&gt;"/>our guidelines<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before tweaking the following values. </source>
-        <target state="new"> However, you may want to read <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://docs.joinpeertube.org/admin-configuration?id=transcoding&quot;&gt;"/>our guidelines<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before tweaking the following values. </target>
+        <target state="translated">Vous pourriez cependant vouloir lire <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://docs.joinpeertube.org/admin-configuration?id=transcoding&quot;&gt;"/>nos lignes directrices<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> avant de modifier les valeurs suivantes. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">12,14</context>
