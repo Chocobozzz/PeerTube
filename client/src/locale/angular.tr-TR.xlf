@@ -2454,7 +2454,7 @@
       </trans-unit>
       <trans-unit id="3059355667050002541" datatype="html">
         <source>Error in playlist miniature component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in playlist miniature component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Çalma listesinin belirli bir bölümünde bir hata oluştu: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/playlist-miniature-markup.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -2462,12 +2462,12 @@
       </trans-unit>
       <trans-unit id="863691161959989717" datatype="html">
         <source>Error in video miniature component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in video miniature component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Videonun belirli bir bölümünde hata oluştu: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/video-miniature-markup.component.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="1247256698916587400" datatype="html">
         <source>Error in videos list component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in videos list component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Video listesinin belirli bir bölümünde hata oluştu: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -2475,7 +2475,7 @@
       </trans-unit>
       <trans-unit id="1460134385691851101" datatype="html">
         <source>Advanced filters</source>
-        <target state="new">Advanced filters</target>
+        <target state="translated">Gelişmiş filtreler</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">30</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">48</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">44</context></context-group>
@@ -2485,7 +2485,7 @@
       </trans-unit>
       <trans-unit id="2504502765849142619" datatype="html">
         <source>No items found</source>
-        <target state="new">No items found</target>
+        <target state="translated">Hiçbir öğe bulunamadı</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="4902817035128594900" datatype="html">
@@ -2502,7 +2502,7 @@
       </trans-unit>
       <trans-unit id="8740951153302736329" datatype="html">
         <source>Video descriptions are truncated by default and require manual action to expand them.</source>
-        <target state="new">Video descriptions are truncated by default and require manual action to expand them.</target>
+        <target state="translated">Varsayılan olarak, video açıklaması uzunsa, bir kısmı atlanır, bu nedenle manuel olarak 'Daha Fazla'ya tıklamanız gerekir</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="2090254132451149776" datatype="html">
