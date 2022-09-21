@@ -1,6 +1,6 @@
 # Changelog
 
-## v4.3.0-rc.1
+## v4.3.0
 
 ### Maintenance
 
@@ -120,6 +120,11 @@
   * More robust S3 upload [#5231](https://github.com/Chocobozzz/PeerTube/pull/5231)
   * Fix broken saved live stream with only one resolution
   * Fix `removeEventListener` player embed api
+  * Progressively cleanup actor images without width from the database
+  * Fix broken dates on localized pages
+  * Prevent job queue to be started before plugins
+  * Fix old database enum names
+  * Don't display remove file icon in admin videos overviews if we can't delete the file
 
 
 ## v4.2.2
