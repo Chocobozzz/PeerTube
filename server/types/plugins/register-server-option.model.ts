@@ -1,7 +1,6 @@
 import { Response, Router } from 'express'
 import { Logger } from 'winston'
 import { ActorModel } from '@server/models/actor/actor'
-import { PeerTubeSocket } from '@server/lib/peertube-socket'
 import {
   PluginPlaylistPrivacyManager,
   PluginSettingsManager,
@@ -17,7 +16,7 @@ import {
   ThumbnailType,
   VideoBlacklistCreate
 } from '@shared/models'
-import { MUserDefault, MVideoThumbnail } from '../models'
+import { MUserDefault, MVideo, MVideoThumbnail, UserNotificationModelForApi } from '../models'
 import {
   RegisterServerAuthExternalOptions,
   RegisterServerAuthExternalResult,
@@ -87,7 +86,10 @@ export type PeerTubeHelpers = {
     getServerActor: () => Promise<ActorModel>
   }
 
-  socket: PeerTubeSocket
+  socket: {
+    sendNotification: (userId: number, notification: UserNotificationModelForApi) => void
+    sendVideoLiveNewState: (video: MVideo) => void
+  }
 
   plugin: {
     // PeerTube >= 3.2

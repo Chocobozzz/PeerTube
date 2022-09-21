@@ -36,7 +36,7 @@ function buildPluginHelpers (pluginModel: MPlugin, npmName: string): PeerTubeHel
 
   const plugin = buildPluginRelatedHelpers(pluginModel, npmName)
 
-  const socket = PeerTubeSocket.Instance
+  const socket = buildSocketHelpers()
 
   const user = buildUserHelpers()
 
@@ -219,6 +219,17 @@ function buildPluginRelatedHelpers (plugin: MPlugin, npmName: string) {
     getBaseRouterRoute: () => `/plugins/${plugin.name}/${plugin.version}/router/`,
 
     getDataDirectoryPath: () => join(CONFIG.STORAGE.PLUGINS_DIR, 'data', npmName)
+  }
+}
+
+function buildSocketHelpers () {
+  return {
+    sendNotification: (userId, notification) => {
+      PeerTubeSocket.Instance.sendNotification(userId, notification)
+    },
+    sendVideoLiveNewState: (video) => {
+      PeerTubeSocket.Instance.sendVideoLiveNewState(video)
+    }
   }
 }
 

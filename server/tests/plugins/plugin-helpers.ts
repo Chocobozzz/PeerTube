@@ -83,6 +83,30 @@ describe('Test plugin helpers', function () {
     })
   })
 
+  describe('Socket', function () {
+
+    it('Should sendNotification without any exceptions', async () => {
+      await makePostBodyRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/send-notification',
+        fields: {},
+        expectedStatus: HttpStatusCode.CREATED_201
+      })
+    })
+
+    it('Should sendVideoLiveNewState without any exceptions', async () => {
+      const res = await servers[0].videos.quickUpload({ name: 'video server 1' })
+
+      await makePostBodyRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/send-video-live-new-state/' + res.uuid,
+        expectedStatus: HttpStatusCode.CREATED_201
+      })
+
+      await servers[0].videos.remove({ id: res.uuid })
+    })
+  })
+
   describe('Plugin', function () {
 
     it('Should get the base static route', async function () {

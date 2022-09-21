@@ -128,6 +128,22 @@ async function register ({
 
       return res.json(result)
     })
+
+    router.post('/send-notification', async (req, res) => {
+      peertubeHelpers.socket.sendNotification(1, {
+        type: 1,
+        userId: 2
+      })
+
+      return res.sendStatus(201)
+    })
+
+    router.post('/send-video-live-new-state/:uuid', async (req, res) => {
+      const video = await peertubeHelpers.videos.loadByIdOrUUID(req.params.uuid)
+      peertubeHelpers.socket.sendVideoLiveNewState(video)
+
+      return res.sendStatus(201)
+    })
   }
 
 }
