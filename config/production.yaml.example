@@ -648,7 +648,8 @@ instance:
   robots: |
     User-agent: *
     Disallow:
-  # Security.txt rules. To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string
+  # /.well-known/security.txt rules. This endpoint is cached, so you may have to wait a few hours before viewing your changes
+  # To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string
   securitytxt:
     '# If you would like to report a security issue\n# you may report it to:\nContact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md\nContact: mailto:'
 
