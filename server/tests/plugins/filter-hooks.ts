@@ -64,232 +64,289 @@ describe('Test plugin filter hooks', function () {
     })
   })
 
-  it('Should run filter:api.videos.list.params', async function () {
-    const { data } = await servers[0].videos.list({ start: 0, count: 2 })
+  describe('Videos', function () {
 
-    // 2 plugins do +1 to the count parameter
-    expect(data).to.have.lengthOf(4)
-  })
+    it('Should run filter:api.videos.list.params', async function () {
+      const { data } = await servers[0].videos.list({ start: 0, count: 2 })
 
-  it('Should run filter:api.videos.list.result', async function () {
-    const { total } = await servers[0].videos.list({ start: 0, count: 0 })
-
-    // Plugin do +1 to the total result
-    expect(total).to.equal(11)
-  })
-
-  it('Should run filter:api.video-playlist.videos.list.params', async function () {
-    const { data } = await servers[0].playlists.listVideos({
-      count: 2,
-      playlistId: videoPlaylistUUID
+      // 2 plugins do +1 to the count parameter
+      expect(data).to.have.lengthOf(4)
     })
 
-    // 1 plugin do +1 to the count parameter
-    expect(data).to.have.lengthOf(3)
-  })
+    it('Should run filter:api.videos.list.result', async function () {
+      const { total } = await servers[0].videos.list({ start: 0, count: 0 })
 
-  it('Should run filter:api.video-playlist.videos.list.result', async function () {
-    const { total } = await servers[0].playlists.listVideos({
-      count: 0,
-      playlistId: videoPlaylistUUID
+      // Plugin do +1 to the total result
+      expect(total).to.equal(11)
     })
 
-    // Plugin do +1 to the total result
-    expect(total).to.equal(11)
+    it('Should run filter:api.video-playlist.videos.list.params', async function () {
+      const { data } = await servers[0].playlists.listVideos({
+        count: 2,
+        playlistId: videoPlaylistUUID
+      })
+
+      // 1 plugin do +1 to the count parameter
+      expect(data).to.have.lengthOf(3)
+    })
+
+    it('Should run filter:api.video-playlist.videos.list.result', async function () {
+      const { total } = await servers[0].playlists.listVideos({
+        count: 0,
+        playlistId: videoPlaylistUUID
+      })
+
+      // Plugin do +1 to the total result
+      expect(total).to.equal(11)
+    })
+
+    it('Should run filter:api.accounts.videos.list.params', async function () {
+      const { data } = await servers[0].videos.listByAccount({ handle: 'root', start: 0, count: 2 })
+
+      // 1 plugin do +1 to the count parameter
+      expect(data).to.have.lengthOf(3)
+    })
+
+    it('Should run filter:api.accounts.videos.list.result', async function () {
+      const { total } = await servers[0].videos.listByAccount({ handle: 'root', start: 0, count: 2 })
+
+      // Plugin do +2 to the total result
+      expect(total).to.equal(12)
+    })
+
+    it('Should run filter:api.video-channels.videos.list.params', async function () {
+      const { data } = await servers[0].videos.listByChannel({ handle: 'root_channel', start: 0, count: 2 })
+
+      // 1 plugin do +3 to the count parameter
+      expect(data).to.have.lengthOf(5)
+    })
+
+    it('Should run filter:api.video-channels.videos.list.result', async function () {
+      const { total } = await servers[0].videos.listByChannel({ handle: 'root_channel', start: 0, count: 2 })
+
+      // Plugin do +3 to the total result
+      expect(total).to.equal(13)
+    })
+
+    it('Should run filter:api.user.me.videos.list.params', async function () {
+      const { data } = await servers[0].videos.listMyVideos({ start: 0, count: 2 })
+
+      // 1 plugin do +4 to the count parameter
+      expect(data).to.have.lengthOf(6)
+    })
+
+    it('Should run filter:api.user.me.videos.list.result', async function () {
+      const { total } = await servers[0].videos.listMyVideos({ start: 0, count: 2 })
+
+      // Plugin do +4 to the total result
+      expect(total).to.equal(14)
+    })
+
+    it('Should run filter:api.video.get.result', async function () {
+      const video = await servers[0].videos.get({ id: videoUUID })
+      expect(video.name).to.contain('<3')
+    })
   })
 
-  it('Should run filter:api.accounts.videos.list.params', async function () {
-    const { data } = await servers[0].videos.listByAccount({ handle: 'root', start: 0, count: 2 })
+  describe('Video/live/import accept', function () {
 
-    // 1 plugin do +1 to the count parameter
-    expect(data).to.have.lengthOf(3)
-  })
+    it('Should run filter:api.video.upload.accept.result', async function () {
+      await servers[0].videos.upload({ attributes: { name: 'video with bad word' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
 
-  it('Should run filter:api.accounts.videos.list.result', async function () {
-    const { total } = await servers[0].videos.listByAccount({ handle: 'root', start: 0, count: 2 })
-
-    // Plugin do +2 to the total result
-    expect(total).to.equal(12)
-  })
-
-  it('Should run filter:api.video-channels.videos.list.params', async function () {
-    const { data } = await servers[0].videos.listByChannel({ handle: 'root_channel', start: 0, count: 2 })
-
-    // 1 plugin do +3 to the count parameter
-    expect(data).to.have.lengthOf(5)
-  })
-
-  it('Should run filter:api.video-channels.videos.list.result', async function () {
-    const { total } = await servers[0].videos.listByChannel({ handle: 'root_channel', start: 0, count: 2 })
-
-    // Plugin do +3 to the total result
-    expect(total).to.equal(13)
-  })
-
-  it('Should run filter:api.user.me.videos.list.params', async function () {
-    const { data } = await servers[0].videos.listMyVideos({ start: 0, count: 2 })
-
-    // 1 plugin do +4 to the count parameter
-    expect(data).to.have.lengthOf(6)
-  })
-
-  it('Should run filter:api.user.me.videos.list.result', async function () {
-    const { total } = await servers[0].videos.listMyVideos({ start: 0, count: 2 })
-
-    // Plugin do +4 to the total result
-    expect(total).to.equal(14)
-  })
-
-  it('Should run filter:api.video.get.result', async function () {
-    const video = await servers[0].videos.get({ id: videoUUID })
-    expect(video.name).to.contain('<3')
-  })
-
-  it('Should run filter:api.video.upload.accept.result', async function () {
-    await servers[0].videos.upload({ attributes: { name: 'video with bad word' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-  })
-
-  it('Should run filter:api.live-video.create.accept.result', async function () {
-    const attributes = {
-      name: 'video with bad word',
-      privacy: VideoPrivacy.PUBLIC,
-      channelId: servers[0].store.channel.id
-    }
-
-    await servers[0].live.create({ fields: attributes, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-  })
-
-  it('Should run filter:api.video.pre-import-url.accept.result', async function () {
-    const attributes = {
-      name: 'normal title',
-      privacy: VideoPrivacy.PUBLIC,
-      channelId: servers[0].store.channel.id,
-      targetUrl: FIXTURE_URLS.goodVideo + 'bad'
-    }
-    await servers[0].imports.importVideo({ attributes, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-  })
-
-  it('Should run filter:api.video.pre-import-torrent.accept.result', async function () {
-    const attributes = {
-      name: 'bad torrent',
-      privacy: VideoPrivacy.PUBLIC,
-      channelId: servers[0].store.channel.id,
-      torrentfile: 'video-720p.torrent' as any
-    }
-    await servers[0].imports.importVideo({ attributes, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-  })
-
-  it('Should run filter:api.video.post-import-url.accept.result', async function () {
-    this.timeout(60000)
-
-    let videoImportId: number
-
-    {
+    it('Should run filter:api.live-video.create.accept.result', async function () {
       const attributes = {
-        name: 'title with bad word',
+        name: 'video with bad word',
+        privacy: VideoPrivacy.PUBLIC,
+        channelId: servers[0].store.channel.id
+      }
+
+      await servers[0].live.create({ fields: attributes, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should run filter:api.video.pre-import-url.accept.result', async function () {
+      const attributes = {
+        name: 'normal title',
         privacy: VideoPrivacy.PUBLIC,
         channelId: servers[0].store.channel.id,
-        targetUrl: FIXTURE_URLS.goodVideo
+        targetUrl: FIXTURE_URLS.goodVideo + 'bad'
       }
-      const body = await servers[0].imports.importVideo({ attributes })
-      videoImportId = body.id
-    }
+      await servers[0].imports.importVideo({ attributes, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
 
-    await waitJobs(servers)
-
-    {
-      const body = await servers[0].imports.getMyVideoImports()
-      const videoImports = body.data
-
-      const videoImport = videoImports.find(i => i.id === videoImportId)
-
-      expect(videoImport.state.id).to.equal(VideoImportState.REJECTED)
-      expect(videoImport.state.label).to.equal('Rejected')
-    }
-  })
-
-  it('Should run filter:api.video.post-import-torrent.accept.result', async function () {
-    this.timeout(60000)
-
-    let videoImportId: number
-
-    {
+    it('Should run filter:api.video.pre-import-torrent.accept.result', async function () {
       const attributes = {
-        name: 'title with bad word',
+        name: 'bad torrent',
         privacy: VideoPrivacy.PUBLIC,
         channelId: servers[0].store.channel.id,
         torrentfile: 'video-720p.torrent' as any
       }
-      const body = await servers[0].imports.importVideo({ attributes })
-      videoImportId = body.id
-    }
+      await servers[0].imports.importVideo({ attributes, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
 
-    await waitJobs(servers)
+    it('Should run filter:api.video.post-import-url.accept.result', async function () {
+      this.timeout(60000)
 
-    {
-      const { data: videoImports } = await servers[0].imports.getMyVideoImports()
+      let videoImportId: number
 
-      const videoImport = videoImports.find(i => i.id === videoImportId)
+      {
+        const attributes = {
+          name: 'title with bad word',
+          privacy: VideoPrivacy.PUBLIC,
+          channelId: servers[0].store.channel.id,
+          targetUrl: FIXTURE_URLS.goodVideo
+        }
+        const body = await servers[0].imports.importVideo({ attributes })
+        videoImportId = body.id
+      }
 
-      expect(videoImport.state.id).to.equal(VideoImportState.REJECTED)
-      expect(videoImport.state.label).to.equal('Rejected')
-    }
-  })
+      await waitJobs(servers)
 
-  it('Should run filter:api.video-thread.create.accept.result', async function () {
-    await servers[0].comments.createThread({
-      videoId: videoUUID,
-      text: 'comment with bad word',
-      expectedStatus: HttpStatusCode.FORBIDDEN_403
+      {
+        const body = await servers[0].imports.getMyVideoImports()
+        const videoImports = body.data
+
+        const videoImport = videoImports.find(i => i.id === videoImportId)
+
+        expect(videoImport.state.id).to.equal(VideoImportState.REJECTED)
+        expect(videoImport.state.label).to.equal('Rejected')
+      }
+    })
+
+    it('Should run filter:api.video.post-import-torrent.accept.result', async function () {
+      this.timeout(60000)
+
+      let videoImportId: number
+
+      {
+        const attributes = {
+          name: 'title with bad word',
+          privacy: VideoPrivacy.PUBLIC,
+          channelId: servers[0].store.channel.id,
+          torrentfile: 'video-720p.torrent' as any
+        }
+        const body = await servers[0].imports.importVideo({ attributes })
+        videoImportId = body.id
+      }
+
+      await waitJobs(servers)
+
+      {
+        const { data: videoImports } = await servers[0].imports.getMyVideoImports()
+
+        const videoImport = videoImports.find(i => i.id === videoImportId)
+
+        expect(videoImport.state.id).to.equal(VideoImportState.REJECTED)
+        expect(videoImport.state.label).to.equal('Rejected')
+      }
     })
   })
 
-  it('Should run filter:api.video-comment-reply.create.accept.result', async function () {
-    const created = await servers[0].comments.createThread({ videoId: videoUUID, text: 'thread' })
-    threadId = created.id
+  describe('Video comments accept', function () {
 
-    await servers[0].comments.addReply({
-      videoId: videoUUID,
-      toCommentId: threadId,
-      text: 'comment with bad word',
-      expectedStatus: HttpStatusCode.FORBIDDEN_403
+    it('Should run filter:api.video-thread.create.accept.result', async function () {
+      await servers[0].comments.createThread({
+        videoId: videoUUID,
+        text: 'comment with bad word',
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
-    await servers[0].comments.addReply({
-      videoId: videoUUID,
-      toCommentId: threadId,
-      text: 'comment with good word',
-      expectedStatus: HttpStatusCode.OK_200
+
+    it('Should run filter:api.video-comment-reply.create.accept.result', async function () {
+      const created = await servers[0].comments.createThread({ videoId: videoUUID, text: 'thread' })
+      threadId = created.id
+
+      await servers[0].comments.addReply({
+        videoId: videoUUID,
+        toCommentId: threadId,
+        text: 'comment with bad word',
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+      await servers[0].comments.addReply({
+        videoId: videoUUID,
+        toCommentId: threadId,
+        text: 'comment with good word',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    })
+
+    it('Should run filter:activity-pub.remote-video-comment.create.accept.result on a thread creation', async function () {
+      this.timeout(30000)
+
+      await servers[1].comments.createThread({ videoId: videoUUID, text: 'comment with bad word' })
+
+      await waitJobs(servers)
+
+      {
+        const thread = await servers[0].comments.listThreads({ videoId: videoUUID })
+        expect(thread.data).to.have.lengthOf(1)
+        expect(thread.data[0].text).to.not.include(' bad ')
+      }
+
+      {
+        const thread = await servers[1].comments.listThreads({ videoId: videoUUID })
+        expect(thread.data).to.have.lengthOf(2)
+      }
+    })
+
+    it('Should run filter:activity-pub.remote-video-comment.create.accept.result on a reply creation', async function () {
+      this.timeout(30000)
+
+      const { data } = await servers[1].comments.listThreads({ videoId: videoUUID })
+      const threadIdServer2 = data.find(t => t.text === 'thread').id
+
+      await servers[1].comments.addReply({
+        videoId: videoUUID,
+        toCommentId: threadIdServer2,
+        text: 'comment with bad word'
+      })
+
+      await waitJobs(servers)
+
+      {
+        const tree = await servers[0].comments.getThread({ videoId: videoUUID, threadId })
+        expect(tree.children).to.have.lengthOf(1)
+        expect(tree.children[0].comment.text).to.not.include(' bad ')
+      }
+
+      {
+        const tree = await servers[1].comments.getThread({ videoId: videoUUID, threadId: threadIdServer2 })
+        expect(tree.children).to.have.lengthOf(2)
+      }
     })
   })
 
-  it('Should run filter:api.video-threads.list.params', async function () {
-    const { data } = await servers[0].comments.listThreads({ videoId: videoUUID, start: 0, count: 0 })
+  describe('Video comments', function () {
 
-    // our plugin do +1 to the count parameter
-    expect(data).to.have.lengthOf(1)
-  })
+    it('Should run filter:api.video-threads.list.params', async function () {
+      const { data } = await servers[0].comments.listThreads({ videoId: videoUUID, start: 0, count: 0 })
 
-  it('Should run filter:api.video-threads.list.result', async function () {
-    const { total } = await servers[0].comments.listThreads({ videoId: videoUUID, start: 0, count: 0 })
+      // our plugin do +1 to the count parameter
+      expect(data).to.have.lengthOf(1)
+    })
 
-    // Plugin do +1 to the total result
-    expect(total).to.equal(2)
-  })
+    it('Should run filter:api.video-threads.list.result', async function () {
+      const { total } = await servers[0].comments.listThreads({ videoId: videoUUID, start: 0, count: 0 })
 
-  it('Should run filter:api.video-thread-comments.list.params')
+      // Plugin do +1 to the total result
+      expect(total).to.equal(2)
+    })
 
-  it('Should run filter:api.video-thread-comments.list.result', async function () {
-    const thread = await servers[0].comments.getThread({ videoId: videoUUID, threadId })
+    it('Should run filter:api.video-thread-comments.list.params')
 
-    expect(thread.comment.text.endsWith(' <3')).to.be.true
-  })
+    it('Should run filter:api.video-thread-comments.list.result', async function () {
+      const thread = await servers[0].comments.getThread({ videoId: videoUUID, threadId })
 
-  it('Should run filter:api.overviews.videos.list.{params,result}', async function () {
-    await servers[0].overviews.getVideos({ page: 1 })
+      expect(thread.comment.text.endsWith(' <3')).to.be.true
+    })
 
-    // 3 because we get 3 samples per page
-    await servers[0].servers.waitUntilLog('Run hook filter:api.overviews.videos.list.params', 3)
-    await servers[0].servers.waitUntilLog('Run hook filter:api.overviews.videos.list.result', 3)
+    it('Should run filter:api.overviews.videos.list.{params,result}', async function () {
+      await servers[0].overviews.getVideos({ page: 1 })
+
+      // 3 because we get 3 samples per page
+      await servers[0].servers.waitUntilLog('Run hook filter:api.overviews.videos.list.params', 3)
+      await servers[0].servers.waitUntilLog('Run hook filter:api.overviews.videos.list.result', 3)
+    })
   })
 
   describe('filter:video.auto-blacklist.result', function () {

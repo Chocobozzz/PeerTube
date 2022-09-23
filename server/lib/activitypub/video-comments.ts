@@ -4,7 +4,9 @@ import { logger } from '../../helpers/logger'
 import { doJSONRequest } from '../../helpers/requests'
 import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { VideoCommentModel } from '../../models/video/video-comment'
-import { MCommentOwner, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../types/models/video'
+import { MComment, MCommentOwner, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../types/models/video'
+import { isRemoteVideoCommentAccepted } from '../moderation'
+import { Hooks } from '../plugins/hooks'
 import { getOrCreateAPActor } from './actors'
 import { checkUrlsSameHost } from './url'
 import { getOrCreateAPVideo } from './videos'
@@ -103,6 +105,10 @@ async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
     firstReply.changed('updatedAt', true)
     firstReply.Video = video
 
+    if (await isRemoteCommentAccepted(firstReply) !== true) {
+      return undefined
+    }
+
     comments[comments.length - 1] = await firstReply.save()
 
     for (let i = comments.length - 2; i >= 0; i--) {
@@ -112,6 +118,10 @@ async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
       comment.videoId = video.id
       comment.changed('updatedAt', true)
       comment.Video = video
+
+      if (await isRemoteCommentAccepted(comment) !== true) {
+        return undefined
+      }
 
       comments[i] = await comment.save()
     }
@@ -168,4 +178,27 @@ async function resolveRemoteParentComment (params: ResolveThreadParams) {
     comments: comments.concat([ comment ]),
     commentCreated: true
   })
+}
+
+async function isRemoteCommentAccepted (comment: MComment) {
+  // Already created
+  if (comment.id) return true
+
+  const acceptParameters = {
+    comment
+  }
+
+  const acceptedResult = await Hooks.wrapFun(
+    isRemoteVideoCommentAccepted,
+    acceptParameters,
+    'filter:activity-pub.remote-video-comment.create.accept.result'
+  )
+
+  if (!acceptedResult || acceptedResult.accepted !== true) {
+    logger.info('Refused to create a remote comment.', { acceptedResult, acceptParameters })
+
+    return false
+  }
+
+  return true
 }
