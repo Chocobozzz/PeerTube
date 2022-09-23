@@ -97,7 +97,7 @@ export class AuthService {
             let errorMessage = err.message
 
             if (err.status === HttpStatusCode.FORBIDDEN_403) {
-              errorMessage = $localize`Cannot retrieve OAuth Client credentials: ${err.text}.
+              errorMessage = $localize`Cannot retrieve OAuth Client credentials: ${err.message}.
 Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.`
             }
 
