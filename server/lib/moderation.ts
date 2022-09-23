@@ -1,4 +1,4 @@
-import { VideoUploadFile } from 'express'
+import express, { VideoUploadFile } from 'express'
 import { PathLike } from 'fs-extra'
 import { Transaction } from 'sequelize/types'
 import { AbuseAuditView, auditLoggerFactory } from '@server/helpers/audit-logger'
@@ -58,6 +58,7 @@ function isLocalLiveVideoAccepted (object: {
 
 // Stub function that can be filtered by plugins
 function isLocalVideoThreadAccepted (_object: {
+  req: express.Request
   commentBody: VideoCommentCreate
   video: VideoModel
   user: UserModel
@@ -67,6 +68,7 @@ function isLocalVideoThreadAccepted (_object: {
 
 // Stub function that can be filtered by plugins
 function isLocalVideoCommentReplyAccepted (_object: {
+  req: express.Request
   commentBody: VideoCommentCreate
   parentComment: VideoCommentModel
   video: VideoModel
