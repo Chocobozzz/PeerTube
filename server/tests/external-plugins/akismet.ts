@@ -21,7 +21,9 @@ describe('Official plugin Akismet', function () {
     servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
 
-    await servers[0].plugins.install({ npmName: 'peertube-plugin-akismet' })
+    await servers[0].plugins.install({
+      npmName: 'peertube-plugin-akismet'
+    })
 
     if (!process.env.AKISMET_KEY) throw new Error('Missing AKISMET_KEY from env')
 
@@ -71,6 +73,8 @@ describe('Official plugin Akismet', function () {
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'video 1' })
       videoUUID = uuid
+
+      await waitJobs(servers)
     })
 
     it('Should not detect a thread as spam', async function () {
@@ -109,19 +113,44 @@ describe('Official plugin Akismet', function () {
     it('Should detect a thread as spam', async function () {
       this.timeout(30000)
 
-      await servers[1].comments.createThread({ videoId: videoUUID, text: 'remote comment 2' })
       await servers[1].comments.addReplyToLastThread({ text: 'akismet-guaranteed-spam' })
       await waitJobs(servers)
 
       const { data } = await servers[0].comments.listThreads({ videoId: videoUUID })
-      expect(data).to.have.lengthOf(2)
+      expect(data).to.have.lengthOf(1)
 
-      for (const thread of data) {
-        const tree = await servers[0].comments.getThread({ videoId: videoUUID, threadId: thread.id })
-        if (tree.comment.text === 'remote comment 1') continue
+      const thread = data[0]
+      const tree = await servers[0].comments.getThread({ videoId: videoUUID, threadId: thread.id })
+      expect(tree.children).to.have.lengthOf(1)
+    })
+  })
 
-        expect(tree.children).to.have.lengthOf(0)
-      }
+  describe('Signup', function () {
+
+    before(async function () {
+      await servers[0].config.updateExistingSubConfig({
+        newConfig: {
+          signup: {
+            enabled: true
+          }
+        }
+      })
+    })
+
+    it('Should allow signup', async function () {
+      await servers[0].users.register({
+        username: 'user1',
+        displayName: 'user 1'
+      })
+    })
+
+    it('Should detect a signup as SPAM', async function () {
+      await servers[0].users.register({
+        username: 'user2',
+        displayName: 'user 2',
+        email: 'akismet-guaranteed-spam@example.com',
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
   })
 
