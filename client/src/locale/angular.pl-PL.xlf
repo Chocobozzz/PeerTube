@@ -12284,7 +12284,7 @@
       </trans-unit>
       <trans-unit id="2971009377468404076" datatype="html">
         <source>Play/Pause the video</source>
-        <target state="new">Play/Pause the video</target>
+        <target state="translated">Odtwarzanie/Pauza filmu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">749</context></context-group>
       </trans-unit>
       <trans-unit id="4147087312411482964" datatype="html">
@@ -12299,12 +12299,12 @@
       </trans-unit>
       <trans-unit id="3887762369650091344" datatype="html">
         <source>Increase the volume</source>
-        <target state="new">Increase the volume</target>
+        <target state="translated">Zwiększanie głośności</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">754</context></context-group>
       </trans-unit>
       <trans-unit id="1363382131573461910" datatype="html">
         <source>Decrease the volume</source>
-        <target state="new">Decrease the volume</target>
+        <target state="translated">Zmniejszanie głośności</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">755</context></context-group>
       </trans-unit>
       <trans-unit id="2541031516422557760" datatype="html">
