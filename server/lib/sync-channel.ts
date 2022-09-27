@@ -24,56 +24,62 @@ export async function synchronizeChannel (options: {
     await channelSync.save()
   }
 
-  const user = await UserModel.loadByChannelActorId(channel.actorId)
-  const youtubeDL = new YoutubeDLWrapper(
-    externalChannelUrl,
-    ServerConfigManager.Instance.getEnabledResolutions('vod'),
-    CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
-  )
+  try {
+    const user = await UserModel.loadByChannelActorId(channel.actorId)
+    const youtubeDL = new YoutubeDLWrapper(
+      externalChannelUrl,
+      ServerConfigManager.Instance.getEnabledResolutions('vod'),
+      CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+    )
 
-  const targetUrls = await youtubeDL.getInfoForListImport({ latestVideosCount: videosCountLimit })
+    const targetUrls = await youtubeDL.getInfoForListImport({ latestVideosCount: videosCountLimit })
 
-  logger.info(
-    'Fetched %d candidate URLs for sync channel %s.',
-    targetUrls.length, channel.Actor.preferredUsername, { targetUrls }
-  )
+    logger.info(
+      'Fetched %d candidate URLs for sync channel %s.',
+      targetUrls.length, channel.Actor.preferredUsername, { targetUrls }
+    )
 
-  if (targetUrls.length === 0) {
-    if (channelSync) {
-      channelSync.state = VideoChannelSyncState.SYNCED
-      await channelSync.save()
-    }
-
-    return
-  }
-
-  const children: CreateJobArgument[] = []
-
-  for (const targetUrl of targetUrls) {
-    if (await skipImport(channel, targetUrl, onlyAfter)) continue
-
-    const { job } = await buildYoutubeDLImport({
-      user,
-      channel,
-      targetUrl,
-      channelSync,
-      importDataOverride: {
-        privacy: VideoPrivacy.PUBLIC
+    if (targetUrls.length === 0) {
+      if (channelSync) {
+        channelSync.state = VideoChannelSyncState.SYNCED
+        await channelSync.save()
       }
-    })
 
-    children.push(job)
-  }
-
-  // Will update the channel sync status
-  const parent: CreateJobArgument = {
-    type: 'after-video-channel-import',
-    payload: {
-      channelSyncId: channelSync?.id
+      return
     }
-  }
 
-  await JobQueue.Instance.createJobWithChildren(parent, children)
+    const children: CreateJobArgument[] = []
+
+    for (const targetUrl of targetUrls) {
+      if (await skipImport(channel, targetUrl, onlyAfter)) continue
+
+      const { job } = await buildYoutubeDLImport({
+        user,
+        channel,
+        targetUrl,
+        channelSync,
+        importDataOverride: {
+          privacy: VideoPrivacy.PUBLIC
+        }
+      })
+
+      children.push(job)
+    }
+
+    // Will update the channel sync status
+    const parent: CreateJobArgument = {
+      type: 'after-video-channel-import',
+      payload: {
+        channelSyncId: channelSync?.id
+      }
+    }
+
+    await JobQueue.Instance.createJobWithChildren(parent, children)
+  } catch (err) {
+    logger.error(`Failed to import channel ${channel.name}`, { err })
+    channelSync.state = VideoChannelSyncState.FAILED
+    await channelSync.save()
+  }
 }
 
 // ---------------------------------------------------------------------------

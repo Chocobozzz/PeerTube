@@ -2,7 +2,6 @@ import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { VideoChannelModel } from '@server/models/video/video-channel'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
-import { VideoChannelSyncState } from '@shared/models'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 import { synchronizeChannel } from '../sync-channel'
 import { AbstractScheduler } from './abstract-scheduler'
@@ -28,26 +27,20 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
     for (const sync of channelSyncs) {
       const channel = await VideoChannelModel.loadAndPopulateAccount(sync.videoChannelId)
 
-      try {
-        logger.info(
-          'Creating video import jobs for "%s" sync with external channel "%s"',
-          channel.Actor.preferredUsername, sync.externalChannelUrl
-        )
+      logger.info(
+        'Creating video import jobs for "%s" sync with external channel "%s"',
+        channel.Actor.preferredUsername, sync.externalChannelUrl
+      )
 
-        const onlyAfter = sync.lastSyncAt || sync.createdAt
+      const onlyAfter = sync.lastSyncAt || sync.createdAt
 
-        await synchronizeChannel({
-          channel,
-          externalChannelUrl: sync.externalChannelUrl,
-          videosCountLimit: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.VIDEOS_LIMIT_PER_SYNCHRONIZATION,
-          channelSync: sync,
-          onlyAfter
-        })
-      } catch (err) {
-        logger.error(`Failed to synchronize channel ${channel.Actor.preferredUsername}`, { err })
-        sync.state = VideoChannelSyncState.FAILED
-        await sync.save()
-      }
+      await synchronizeChannel({
+        channel,
+        externalChannelUrl: sync.externalChannelUrl,
+        videosCountLimit: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.VIDEOS_LIMIT_PER_SYNCHRONIZATION,
+        channelSync: sync,
+        onlyAfter
+      })
     }
   }
 
