@@ -382,7 +382,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification only to admin when there is a new instance follower', async function () {
-      this.timeout(20000)
+      this.timeout(60000)
 
       await servers[2].follows.follow({ hosts: [ servers[0].url ] })
 
