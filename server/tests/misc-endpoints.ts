@@ -3,6 +3,7 @@
 import { expect } from 'chai'
 import { cleanupTests, createSingleServer, makeGetRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
+import { expectLogDoesNotContain } from './shared'
 
 describe('Test misc endpoints', function () {
   let server: PeerTubeServer
@@ -182,6 +183,23 @@ describe('Test misc endpoints', function () {
 
       expect(res.text).to.contain('<url><loc>http://localhost:' + server.port + '/accounts/user1</loc></url>')
       expect(res.text).to.contain('<url><loc>http://localhost:' + server.port + '/accounts/user2</loc></url>')
+    })
+
+    it('Should not fail with big title/description videos', async function () {
+      const name = 'v'.repeat(115)
+
+      await server.videos.upload({ attributes: { name, description: 'd'.repeat(2500), nsfw: false } })
+
+      const res = await makeGetRequest({
+        url: server.url,
+        path: '/sitemap.xml?t=2', // avoid using cache
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      await expectLogDoesNotContain(server, 'Warning in sitemap generation')
+      await expectLogDoesNotContain(server, 'Error in sitemap generation')
+
+      expect(res.text).to.contain(`<video:title>${'v'.repeat(97)}...</video:title>`)
     })
   })
 

@@ -2,7 +2,16 @@
 
 :warning: **Warning**: dependencies guide is maintained by the community. Some parts may be outdated! :warning:
 
-Follow the below guides, and check their versions match [required external dependencies versions](https://github.com/Chocobozzz/PeerTube/blob/master/engines.yaml). You can check them automatically via `sudo npx engineslist`.
+Follow the below guides, and check their versions match [required external dependencies versions](https://github.com/Chocobozzz/PeerTube/blob/master/engines.yaml).
+
+Main dependencies version supported by PeerTube:
+
+ * `node` >=14.x
+ * `yarn` >=1.x
+ * `postgres` >=10.x
+ * `redis-server` >=5.x
+ * `ffmpeg` >=4.3
+
 
 _note_: only **LTS** versions of external dependencies are supported. If no LTS version matching the version constraint is available, only **release** versions are supported.
 
@@ -64,6 +73,7 @@ sudo apt update
 sudo apt install certbot nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git cron wget
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
+redis-server --version # Should be >= 5.x
 ```
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
@@ -263,6 +273,7 @@ This is necessary because `ffmpeg` is not in the Fedora repos.
 sudo dnf install nginx ffmpeg postgresql-server postgresql-contrib openssl gcc-c++ make redis git vim
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
+redis-server --version # Should be >= 5.x
 ```
 
 8. Configure nginx
