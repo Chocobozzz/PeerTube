@@ -3,7 +3,7 @@ import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { MenuService, ThemeService } from '@app/core'
-import { HTMLServerConfig } from '@shared/models'
+import { HTMLServerConfig, VideoResolution } from '@shared/models'
 import { ConfigService } from '../shared/config.service'
 
 @Component({
@@ -90,6 +90,28 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
 
   isAutoFollowIndexEnabled () {
     return this.form.value['followings']['instance']['autoFollowIndex']['enabled'] === true
+  }
+
+  computeQuotaWithTranscoding () {
+    const transcodingConfig = this.serverConfig.transcoding
+
+    const resolutions = transcodingConfig.enabledResolutions
+    const higherResolution = VideoResolution.H_4K
+    let multiplier = 0
+
+    for (const resolution of resolutions) {
+      multiplier += resolution / higherResolution
+    }
+
+    if (transcodingConfig.hls.enabled) multiplier *= 2
+
+    return multiplier * parseInt(this.form.value['user']['videoQuota'], 10)
+  }
+
+  isTranscodingInformationDisplayed () {
+    const formVideoQuota = parseInt(this.form.value['user']['videoQuota'], 10)
+    return this.serverConfig.transcoding.enabledResolutions.length !== 0 &&
+           formVideoQuota > 0
   }
 
   buildLandingPageOptions () {
