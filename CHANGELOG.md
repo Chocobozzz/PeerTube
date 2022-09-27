@@ -2,6 +2,10 @@
 
 ## v4.3.0
 
+### IMPORTANT NOTES
+
+ * Redis **<** 5.x is not supported anymore
+
 ### Maintenance
 
  * Use `yt-dlp` by default instead of `youtube-dl` for new installations (because of much more dev activity)
