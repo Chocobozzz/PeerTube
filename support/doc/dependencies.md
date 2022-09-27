@@ -10,7 +10,7 @@ Main dependencies version supported by PeerTube:
  * `yarn` >=1.x
  * `postgres` >=10.x
  * `redis-server` >=5.x
- * `ffmpeg` >=4.1
+ * `ffmpeg` >=4.3
 
 
 _note_: only **LTS** versions of external dependencies are supported. If no LTS version matching the version constraint is available, only **release** versions are supported.

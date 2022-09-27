@@ -5,6 +5,7 @@
 ### IMPORTANT NOTES
 
  * Redis **<** 5.x is not supported anymore
+ * FFmpeg **<** 4.3 is not supported anymore
 
 ### Maintenance
 
