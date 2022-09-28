@@ -411,6 +411,13 @@ const usersAskResetPasswordValidator = [
       return res.status(HttpStatusCode.NO_CONTENT_204).end()
     }
 
+    if (res.locals.user.pluginAuth) {
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'Cannot recover password of a user that uses a plugin authentication.'
+      })
+    }
+
     return next()
   }
 ]
@@ -452,6 +459,13 @@ const usersAskSendVerifyEmailValidator = [
       logger.debug('User with email %s does not exist (asking verify email).', req.body.email)
       // Do not leak our emails
       return res.status(HttpStatusCode.NO_CONTENT_204).end()
+    }
+
+    if (res.locals.user.pluginAuth) {
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'Cannot ask verification email of a user that uses a plugin authentication.'
+      })
     }
 
     return next()

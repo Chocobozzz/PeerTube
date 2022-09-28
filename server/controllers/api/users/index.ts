@@ -343,7 +343,7 @@ async function askResetUserPassword (req: express.Request, res: express.Response
 
   const verificationString = await Redis.Instance.setResetPasswordVerificationString(user.id)
   const url = WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
-  await Emailer.Instance.addPasswordResetEmailJob(user.username, user.email, url)
+  Emailer.Instance.addPasswordResetEmailJob(user.username, user.email, url)
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
