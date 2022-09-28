@@ -454,6 +454,18 @@ describe('Test live', function () {
       await stopFfmpeg(ffmpegCommand)
     })
 
+    it('Should transcode audio only RTMP stream', async function () {
+      this.timeout(120000)
+
+      liveVideoId = await createLiveWrapper(false)
+
+      const ffmpegCommand = await commands[0].sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short_no_audio.mp4' })
+      await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
+      await waitJobs(servers)
+
+      await stopFfmpeg(ffmpegCommand)
+    })
+
     it('Should enable transcoding with some resolutions', async function () {
       this.timeout(120000)
 
