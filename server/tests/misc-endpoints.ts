@@ -16,11 +16,7 @@ describe('Test misc endpoints', function () {
 
     await ensureDir(wellKnownPath)
 
-    server = await createSingleServer(1, {
-      storage: {
-        well_known: wellKnownPath
-      }
-    })
+    server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
   })
 
