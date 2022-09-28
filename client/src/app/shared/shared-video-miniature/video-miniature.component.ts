@@ -21,13 +21,15 @@ import { VideoActionsDisplayType } from './video-actions-dropdown.component'
 export type MiniatureDisplayOptions = {
   date?: boolean
   views?: boolean
-  by?: boolean
   avatar?: boolean
   privacyLabel?: boolean
   privacyText?: boolean
   state?: boolean
   blacklistInfo?: boolean
   nsfw?: boolean
+
+  by?: boolean
+  forceChannelInBy?: boolean
 }
 @Component({
   selector: 'my-video-miniature',
@@ -47,7 +49,8 @@ export class VideoMiniatureComponent implements OnInit {
     privacyLabel: false,
     privacyText: false,
     state: false,
-    blacklistInfo: false
+    blacklistInfo: false,
+    forceChannelInBy: false
   }
 
   @Input() displayVideoActions = true
@@ -267,6 +270,11 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   private setUpBy () {
+    if (this.displayOptions.forceChannelInBy) {
+      this.ownerDisplayType = 'videoChannel'
+      return
+    }
+
     const accountName = this.video.account.name
 
     // If the video channel name is an UUID (not really displayable, we changed this behaviour in v1.0.0-beta.12)
