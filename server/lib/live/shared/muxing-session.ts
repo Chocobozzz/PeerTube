@@ -59,6 +59,8 @@ class MuxingSession extends EventEmitter {
   private readonly bitrate: number
   private readonly ratio: number
 
+  private readonly hasAudio: boolean
+
   private readonly videoId: number
   private readonly videoUUID: string
   private readonly saveReplay: boolean
@@ -94,6 +96,7 @@ class MuxingSession extends EventEmitter {
     bitrate: number
     ratio: number
     allResolutions: number[]
+    hasAudio: boolean
   }) {
     super()
 
@@ -107,6 +110,8 @@ class MuxingSession extends EventEmitter {
 
     this.bitrate = options.bitrate
     this.ratio = options.ratio
+
+    this.hasAudio = options.hasAudio
 
     this.allResolutions = options.allResolutions
 
@@ -139,6 +144,8 @@ class MuxingSession extends EventEmitter {
         fps: this.fps,
         bitrate: this.bitrate,
         ratio: this.ratio,
+
+        hasAudio: this.hasAudio,
 
         availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
         profile: CONFIG.LIVE.TRANSCODING.PROFILE
