@@ -24,6 +24,7 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
     subtitleLanguage: 'sc:subtitleLanguage',
     sensitive: 'as:sensitive',
     language: 'sc:inLanguage',
+    identifier: 'sc:identifier',
 
     // TODO: remove in a few versions, introduced in 4.2
     icons: 'as:icon',
@@ -126,7 +127,14 @@ const contextStore: { [ id in ContextType ]: (string | { [ id: string ]: string 
     playlists: {
       '@id': 'pt:playlists',
       '@type': '@id'
-    }
+    },
+    support: {
+      '@type': 'sc:Text',
+      '@id': 'pt:support'
+    },
+
+    // TODO: remove in a few versions, introduced in 4.2
+    icons: 'as:icon'
   }),
 
   WatchAction: buildContext({

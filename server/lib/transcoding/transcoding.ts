@@ -342,6 +342,12 @@ async function generateHlsPlaylistCommon (options: {
   // Move video file
   await move(join(videoTranscodedBasePath, videoFilename), videoFilePath, { overwrite: true })
 
+  // Update video duration if it was not set (in case of a live for example)
+  if (!video.duration) {
+    video.duration = await getVideoStreamDuration(videoFilePath)
+    await video.save()
+  }
+
   const stats = await stat(videoFilePath)
 
   newVideoFile.size = stats.size

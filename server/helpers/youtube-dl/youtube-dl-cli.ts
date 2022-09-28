@@ -142,6 +142,11 @@ export class YoutubeDLCLI {
   }): Promise<{ upload_date: string, webpage_url: string }[]> {
     const additionalYoutubeDLArgs = [ '--skip-download', '--playlist-reverse' ]
 
+    if (CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.NAME === 'yt-dlp') {
+      // Optimize listing videos only when using yt-dlp because it is bugged with youtube-dl when fetching a channel
+      additionalYoutubeDLArgs.push('--flat-playlist')
+    }
+
     if (options.latestVideosCount !== undefined) {
       additionalYoutubeDLArgs.push('--playlist-end', options.latestVideosCount.toString())
     }

@@ -1,6 +1,6 @@
 import { SortMeta } from 'primeng/api'
 import { Observable } from 'rxjs'
-import { catchError, map } from 'rxjs/operators'
+import { catchError } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
@@ -35,10 +35,7 @@ export class VideoOwnershipService {
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     return this.authHttp.get<ResultList<VideoChangeOwnership>>(url, { params })
-      .pipe(
-        map(res => this.restExtractor.convertResultListDateToHuman(res)),
-        catchError(res => this.restExtractor.handleError(res))
-      )
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   acceptOwnership (id: number, input: VideoChangeOwnershipAccept) {

@@ -32,15 +32,11 @@ export async function processVideoChannelImport (job: Job) {
 
   const videoChannel = await VideoChannelModel.loadAndPopulateAccount(payload.videoChannelId)
 
-  try {
-    logger.info(`Starting importing videos from external channel "${payload.externalChannelUrl}" to "${videoChannel.name}" `)
+  logger.info(`Starting importing videos from external channel "${payload.externalChannelUrl}" to "${videoChannel.name}" `)
 
-    await synchronizeChannel({
-      channel: videoChannel,
-      externalChannelUrl: payload.externalChannelUrl,
-      channelSync
-    })
-  } catch (err) {
-    logger.error(`Failed to import channel ${videoChannel.name}`, { err })
-  }
+  await synchronizeChannel({
+    channel: videoChannel,
+    externalChannelUrl: payload.externalChannelUrl,
+    channelSync
+  })
 }

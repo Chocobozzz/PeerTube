@@ -3,6 +3,7 @@ import { pickCommonVideoQuery } from '@server/helpers/query'
 import { ActorFollowModel } from '@server/models/actor/actor-follow'
 import { getServerActor } from '@server/models/application/application'
 import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
+import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { getFormattedObjects } from '../../helpers/utils'
 import { JobQueue } from '../../lib/job-queue'
@@ -25,7 +26,7 @@ import {
   accountsFollowersSortValidator,
   accountsSortValidator,
   ensureAuthUserOwnsAccountValidator,
-  ensureCanManageUser,
+  ensureCanManageChannelOrAccount,
   videoChannelsSortValidator,
   videoChannelStatsValidator,
   videoChannelSyncsSortValidator,
@@ -37,7 +38,6 @@ import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { VideoModel } from '../../models/video/video'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
-import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 
 const accountsRouter = express.Router()
 
@@ -78,7 +78,7 @@ accountsRouter.get('/:accountName/video-channels',
 accountsRouter.get('/:accountName/video-channel-syncs',
   authenticate,
   asyncMiddleware(accountNameWithHostGetValidator),
-  ensureCanManageUser,
+  ensureCanManageChannelOrAccount,
   paginationValidator,
   videoChannelSyncsSortValidator,
   setDefaultSort,

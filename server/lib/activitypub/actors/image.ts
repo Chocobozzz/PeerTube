@@ -13,20 +13,31 @@ type ImageInfo = {
 }
 
 async function updateActorImages (actor: MActorImages, type: ActorImageType, imagesInfo: ImageInfo[], t: Transaction) {
-  const avatarsOrBanners = type === ActorImageType.AVATAR
-    ? actor.Avatars
-    : actor.Banners
+  const getAvatarsOrBanners = () => {
+    const result = type === ActorImageType.AVATAR
+      ? actor.Avatars
+      : actor.Banners
+
+    return result || []
+  }
 
   if (imagesInfo.length === 0) {
     await deleteActorImages(actor, type, t)
   }
 
+  // Cleanup old images that did not have a width
+  for (const oldImageModel of getAvatarsOrBanners()) {
+    if (oldImageModel.width) continue
+
+    await safeDeleteActorImage(actor, oldImageModel, type, t)
+  }
+
   for (const imageInfo of imagesInfo) {
-    const oldImageModel = (avatarsOrBanners || []).find(i => i.width === imageInfo.width)
+    const oldImageModel = getAvatarsOrBanners().find(i => imageInfo.width && i.width === imageInfo.width)
 
     if (oldImageModel) {
       // Don't update the avatar if the file URL did not change
-      if (imageInfo?.fileUrl && oldImageModel.fileUrl === imageInfo.fileUrl) {
+      if (imageInfo.fileUrl && oldImageModel.fileUrl === imageInfo.fileUrl) {
         continue
       }
 

@@ -217,12 +217,13 @@ export class UsersCommand extends AbstractCommand {
     username: string
     password?: string
     displayName?: string
+    email?: string
     channel?: {
       name: string
       displayName: string
     }
   }) {
-    const { username, password = 'password', displayName, channel } = options
+    const { username, password = 'password', displayName, channel, email = username + '@example.com' } = options
     const path = '/api/v1/users/register'
 
     return this.postBodyRequest({
@@ -232,7 +233,7 @@ export class UsersCommand extends AbstractCommand {
       fields: {
         username,
         password,
-        email: username + '@example.com',
+        email,
         displayName,
         channel
       },

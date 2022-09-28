@@ -30,7 +30,7 @@ describe('Test video description', function () {
   })
 
   it('Should upload video with long description', async function () {
-    this.timeout(10000)
+    this.timeout(30000)
 
     const attributes = {
       description: longDescription

@@ -1,7 +1,7 @@
 import { Job } from 'bullmq'
 import { readdir, remove } from 'fs-extra'
 import { join } from 'path'
-import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamDuration } from '@server/helpers/ffmpeg'
+import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo } from '@server/helpers/ffmpeg'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { cleanupPermanentLive, cleanupTMPLiveFiles, cleanupUnsavedNormalLive } from '@server/lib/live'
@@ -203,8 +203,6 @@ async function assignReplayFilesToVideo (options: {
 }) {
   const { video, replayDirectory } = options
 
-  let durationDone = false
-
   const concatenatedTsFiles = await readdir(replayDirectory)
 
   for (const concatenatedTsFile of concatenatedTsFiles) {
@@ -212,22 +210,14 @@ async function assignReplayFilesToVideo (options: {
 
     const probe = await ffprobePromise(concatenatedTsFilePath)
     const { audioStream } = await getAudioStream(concatenatedTsFilePath, probe)
-
     const { resolution } = await getVideoStreamDimensionsInfo(concatenatedTsFilePath, probe)
 
-    const { resolutionPlaylistPath: outputPath } = await generateHlsPlaylistResolutionFromTS({
+    await generateHlsPlaylistResolutionFromTS({
       video,
       concatenatedTsFilePath,
       resolution,
       isAAC: audioStream?.codec_name === 'aac'
     })
-
-    if (!durationDone) {
-      video.duration = await getVideoStreamDuration(outputPath)
-      await video.save()
-
-      durationDone = true
-    }
   }
 
   return video

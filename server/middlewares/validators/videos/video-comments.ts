@@ -208,7 +208,8 @@ async function isVideoCommentAccepted (req: express.Request, res: express.Respon
   const acceptParameters = {
     video,
     commentBody: req.body,
-    user: res.locals.oauth.token.User
+    user: res.locals.oauth.token.User,
+    req
   }
 
   let acceptedResult: AcceptResult
@@ -234,7 +235,7 @@ async function isVideoCommentAccepted (req: express.Request, res: express.Respon
 
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: acceptedResult?.errorMessage || 'Refused local comment'
+      message: acceptedResult?.errorMessage || 'Comment has been rejected.'
     })
     return false
   }

@@ -3,8 +3,8 @@
 import { expect } from 'chai'
 import { basename, join } from 'path'
 import { ffprobePromise, getVideoStream } from '@server/helpers/ffmpeg'
-import { checkLiveSegmentHash, checkResolutionsInMasterPlaylist, getAllFiles, testImage } from '@server/tests/shared'
-import { wait } from '@shared/core-utils'
+import { checkLiveSegmentHash, checkResolutionsInMasterPlaylist, testImage } from '@server/tests/shared'
+import { getAllFiles, wait } from '@shared/core-utils'
 import {
   HttpStatusCode,
   LiveVideo,
@@ -454,6 +454,18 @@ describe('Test live', function () {
       await stopFfmpeg(ffmpegCommand)
     })
 
+    it('Should transcode audio only RTMP stream', async function () {
+      this.timeout(120000)
+
+      liveVideoId = await createLiveWrapper(false)
+
+      const ffmpegCommand = await commands[0].sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short_no_audio.mp4' })
+      await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
+      await waitJobs(servers)
+
+      await stopFfmpeg(ffmpegCommand)
+    })
+
     it('Should enable transcoding with some resolutions', async function () {
       this.timeout(120000)
 
@@ -526,7 +538,7 @@ describe('Test live', function () {
       }
 
       const minBitrateLimits = {
-        720: 5500 * 1000,
+        720: 5000 * 1000,
         360: 1000 * 1000,
         240: 550 * 1000
       }
@@ -557,7 +569,7 @@ describe('Test live', function () {
           if (resolution >= 720) {
             expect(file.fps).to.be.approximately(60, 10)
           } else {
-            expect(file.fps).to.be.approximately(30, 2)
+            expect(file.fps).to.be.approximately(30, 3)
           }
 
           const filename = basename(file.fileUrl)

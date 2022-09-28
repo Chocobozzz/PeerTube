@@ -36,6 +36,10 @@ input[type=number] {
     position: absolute;
     top: 0.2em;
     right: 2.5rem;
+
+    @media screen and (max-width: $mobile-view) {
+      display: none;
+    }
   }
 
   input[disabled] {

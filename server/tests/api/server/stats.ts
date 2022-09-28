@@ -185,7 +185,7 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   it('Should correctly count video file sizes if transcoding is enabled', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     await servers[0].config.updateCustomSubConfig({
       newConfig: {

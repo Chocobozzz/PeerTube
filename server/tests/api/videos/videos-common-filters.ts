@@ -23,7 +23,7 @@ describe('Test videos filter', function () {
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(160000)
+    this.timeout(240000)
 
     servers = await createMultipleServers(2)
 

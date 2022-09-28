@@ -2,8 +2,8 @@ import { readdir } from 'fs-extra'
 import { constants, PerformanceObserver } from 'perf_hooks'
 import * as process from 'process'
 import { Meter, ObservableResult } from '@opentelemetry/api-metrics'
-import { ExplicitBucketHistogramAggregation } from '@opentelemetry/sdk-metrics-base'
-import { View } from '@opentelemetry/sdk-metrics-base/build/src/view/View'
+import { ExplicitBucketHistogramAggregation } from '@opentelemetry/sdk-metrics'
+import { View } from '@opentelemetry/sdk-metrics/build/src/view/View'
 import { logger } from '@server/helpers/logger'
 
 // Thanks to https://github.com/siimon/prom-client

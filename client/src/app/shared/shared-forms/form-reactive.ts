@@ -1,5 +1,5 @@
 
-import { FormGroup } from '@angular/forms'
+import { AbstractControl, FormGroup } from '@angular/forms'
 import { wait } from '@root-helpers/utils'
 import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
 import { FormValidatorService } from './form-validator.service'
@@ -44,6 +44,21 @@ export abstract class FormReactive {
     } while (this.form.status === 'PENDING')
   }
 
+  protected markAllAsDirty (controlsArg?: { [ key: string ]: AbstractControl }) {
+    const controls = controlsArg || this.form.controls
+
+    for (const key of Object.keys(controls)) {
+      const control = controls[key]
+
+      if (control instanceof FormGroup) {
+        this.markAllAsDirty(control.controls)
+        continue
+      }
+
+      control.markAsDirty()
+    }
+  }
+
   protected forceCheck () {
     this.onStatusChanged(this.form, this.formErrors, this.validationMessages, false)
   }
@@ -59,7 +74,8 @@ export abstract class FormReactive {
         this.onStatusChanged(
           form.controls[field] as FormGroup,
           formErrors[field] as FormReactiveErrors,
-          validationMessages[field] as FormReactiveValidationMessages
+          validationMessages[field] as FormReactiveValidationMessages,
+          onlyDirty
         )
         continue
       }

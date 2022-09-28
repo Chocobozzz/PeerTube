@@ -45,7 +45,7 @@ describe('Test video privacy', function () {
   describe('Private and internal videos', function () {
 
     it('Should upload a private and internal videos on server 1', async function () {
-      this.timeout(10000)
+      this.timeout(50000)
 
       for (const privacy of [ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL ]) {
         const attributes = { privacy }

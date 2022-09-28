@@ -914,7 +914,10 @@ If you want to write modern JavaScript, please use a transpiler like [Babel](htt
 
 **Typescript**
 
-If you want to use __Typescript__, you can add __PeerTube__ types as dev dependencies:
+The easiest way to use __Typescript__ for both front-end and backend code is to clone [peertube-plugin-quickstart-typescript](https://github.com/JohnXLivingston/peertube-plugin-quickstart-typescript/) (also available on [framagit](https://framagit.org/Livingston/peertube-plugin-quickstart-typescript/)) instead of `peertube-plugin-quickstart`.
+Please read carefully the [README file](https://github.com/JohnXLivingston/peertube-plugin-quickstart-typescript/blob/main/README.md), as there are some other differences with `peertube-plugin-quickstart` (using SCSS instead of CSS, linting rules, ...).
+
+If you don't want to use `peertube-plugin-quickstart-typescript`, you can also manually add a dev dependency to __Peertube__ types:
 
 ```
 npm install --save-dev @peertube/peertube-types

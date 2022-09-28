@@ -258,9 +258,16 @@ app.use((err, _req, res: express.Response, _next) => {
   if (err) {
     error = err.stack || err.message || err
   }
+
   // Handling Sequelize error traces
-  const sql = err.parent ? err.parent.sql : undefined
-  logger.error('Error in controller.', { err: error, sql })
+  const sql = err?.parent ? err.parent.sql : undefined
+
+  // Help us to debug SequelizeConnectionAcquireTimeoutError errors
+  const activeRequests = err?.name === 'SequelizeConnectionAcquireTimeoutError' && typeof (process as any)._getActiveRequests !== 'function'
+    ? (process as any)._getActiveRequests()
+    : undefined
+
+  logger.error('Error in controller.', { err: error, sql, activeRequests })
 
   return res.fail({
     status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,
@@ -343,6 +350,12 @@ async function startApplication () {
 
     ApplicationModel.updateNodeVersions()
       .catch(err => logger.error('Cannot update node versions.', { err }))
+
+    JobQueue.Instance.start()
+      .catch(err => {
+        logger.error('Cannot start job queue.', { err })
+        process.exit(-1)
+      })
 
     logger.info('HTTP server listening on %s:%d', hostname, port)
     logger.info('Web server: %s', WEBSERVER.URL)

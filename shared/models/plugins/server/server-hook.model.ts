@@ -103,7 +103,9 @@ export const serverFilterHookObject = {
   'filter:job-queue.process.result': true,
 
   'filter:transcoding.manual.resolutions-to-transcode.result': true,
-  'filter:transcoding.auto.resolutions-to-transcode.result': true
+  'filter:transcoding.auto.resolutions-to-transcode.result': true,
+
+  'filter:activity-pub.remote-video-comment.create.accept.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject
