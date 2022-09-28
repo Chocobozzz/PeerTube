@@ -13,4 +13,4 @@ mkdir -p "./dist/server/tools"
 cp -r "./server/tools/node_modules" "./dist/server/tools"
 
 cd ./server/tools
-../../node_modules/.bin/tsc-watch --build --verbose --onSuccess 'sh -c "cd ../../ && npm run resolve-tspaths:all"'
+../../node_modules/.bin/tsc-watch --build --verbose --onSuccess 'sh -c "cd ../../ && npm run resolve-tspaths:server"'
