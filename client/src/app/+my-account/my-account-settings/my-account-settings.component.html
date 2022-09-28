@@ -62,7 +62,7 @@
   </div>
 </div>
 
-<div class="row mt-5"> <!-- email grid -->
+<div class="row mt-5" *ngIf="user.pluginAuth === null"> <!-- email grid -->
   <div class="col-12 col-lg-4 col-xl-3">
     <h2 i18n class="account-title">EMAIL</h2>
   </div>
