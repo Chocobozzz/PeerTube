@@ -49,6 +49,7 @@ import {
   PluginSearchComponent,
   PluginShowInstalledComponent
 } from './plugins'
+import { SharedAdminModule } from './shared'
 import { JobService, LogsComponent, LogsService } from './system'
 import { DebugComponent, DebugService } from './system/debug'
 import { JobsComponent } from './system/jobs/jobs.component'
@@ -69,6 +70,7 @@ import { JobsComponent } from './system/jobs/jobs.component'
     SharedVideoMiniatureModule,
     SharedTablesModule,
     SharedUsersModule,
+    SharedAdminModule,
 
     TableModule,
     ChartModule
