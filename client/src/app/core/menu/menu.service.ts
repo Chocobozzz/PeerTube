@@ -7,6 +7,7 @@ import { ScreenService } from '../wrappers'
 
 export type MenuLink = {
   icon: GlobalIconName
+  iconClass?: string
 
   label: string
   // Used by the left menu for example
@@ -70,6 +71,14 @@ export class MenuService {
     let links: MenuLink[] = []
 
     if (userCanSeeVideosLink) {
+      links.push({
+        path: '/my-library/video-channels',
+        icon: 'channel' as GlobalIconName,
+        iconClass: 'channel-icon',
+        shortLabel: $localize`Channels`,
+        label: $localize`My channels`
+      })
+
       links.push({
         path: '/my-library/videos',
         icon: 'videos' as GlobalIconName,
