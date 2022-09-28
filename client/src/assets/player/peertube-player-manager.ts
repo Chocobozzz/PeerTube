@@ -129,6 +129,28 @@ export class PeertubePlayerManager {
           saveAverageBandwidth(data.bandwidthEstimate)
         })
 
+        const offlineNotificationElem = document.createElement('div')
+        offlineNotificationElem.classList.add('vjs-peertube-offline-notification')
+        offlineNotificationElem.innerText = player.localize('You seem to be offline and the video may not work')
+
+        const handleOnline = () => {
+          player.el().removeChild(offlineNotificationElem)
+          logger.info('The browser is online')
+        }
+
+        const handleOffline = () => {
+          player.el().appendChild(offlineNotificationElem)
+          logger.info('The browser is offline')
+        }
+
+        window.addEventListener('online', handleOnline)
+        window.addEventListener('offline', handleOffline)
+
+        player.on('dispose', () => {
+          window.removeEventListener('online', handleOnline)
+          window.removeEventListener('offline', handleOffline)
+        })
+
         return res(player)
       })
     })

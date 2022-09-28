@@ -115,6 +115,8 @@ class P2pMediaLoaderPlugin extends Plugin {
     this.p2pEngine = this.options.loader.getEngine()
 
     this.p2pEngine.on(Events.SegmentError, (segment: Segment, err) => {
+      if (navigator.onLine === false) return
+
       logger.error(`Segment ${segment.id} error.`, err)
 
       this.options.redundancyUrlManager.removeBySegmentUrl(segment.requestUrl)
