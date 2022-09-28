@@ -152,10 +152,7 @@
             [clearable]="false"
           ></my-select-custom-value>
 
-          <div i18n class="transcoding-information" *ngIf="isTranscodingInformationDisplayed()">
-            Transcoding is enabled. The video quota only takes into account <strong>original</strong> video size. <br />
-            At most, this user could upload ~ {{ computeQuotaWithTranscoding() | bytes: 0 }}.
-          </div>
+          <my-user-real-quota-info [videoQuota]="getUserVideoQuota()"></my-user-real-quota-info>
 
           <div *ngIf="formErrors.videoQuota" class="form-error">
             {{ formErrors.videoQuota }}
