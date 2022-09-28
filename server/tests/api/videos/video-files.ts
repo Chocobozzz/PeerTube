@@ -33,7 +33,7 @@ describe('Test videos files', function () {
     let validId2: string
 
     before(async function () {
-      this.timeout(120_000)
+      this.timeout(360_000)
 
       {
         const { uuid } = await servers[0].videos.quickUpload({ name: 'video 1' })

@@ -75,6 +75,8 @@ jobs:
       - name: Run Test
         # external-plugins tests only run on schedule
         if: github.event_name == 'schedule' || matrix.test_suite != 'external-plugins'
+        env:
+          AKISMET_KEY: ${{ secrets.AKISMET_KEY }}
         run: npm run ci -- ${{ matrix.test_suite }}
 
       - name: Display errors

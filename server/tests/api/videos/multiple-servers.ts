@@ -156,7 +156,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should upload the video on server 2 and propagate on each server', async function () {
-      this.timeout(100000)
+      this.timeout(240000)
 
       const user = {
         username: 'user1',
