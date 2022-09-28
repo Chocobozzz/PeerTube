@@ -1,4 +1,4 @@
-import { VideoUploadFile } from 'express'
+import express, { VideoUploadFile } from 'express'
 import { PathLike } from 'fs-extra'
 import { Transaction } from 'sequelize/types'
 import { AbuseAuditView, auditLoggerFactory } from '@server/helpers/audit-logger'
@@ -13,18 +13,15 @@ import {
   MAbuseFull,
   MAccountDefault,
   MAccountLight,
+  MComment,
   MCommentAbuseAccountVideo,
   MCommentOwnerVideo,
   MUser,
   MVideoAbuseVideoFull,
   MVideoAccountLightBlacklistAllFiles
 } from '@server/types/models'
-import { ActivityCreate } from '../../shared/models/activitypub'
-import { VideoObject } from '../../shared/models/activitypub/objects'
-import { VideoCommentObject } from '../../shared/models/activitypub/objects/video-comment-object'
 import { LiveVideoCreate, VideoCreate, VideoImportCreate } from '../../shared/models/videos'
 import { VideoCommentCreate } from '../../shared/models/videos/comment'
-import { ActorModel } from '../models/actor/actor'
 import { UserModel } from '../models/user/user'
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
@@ -36,7 +33,9 @@ export type AcceptResult = {
   errorMessage?: string
 }
 
-// Can be filtered by plugins
+// ---------------------------------------------------------------------------
+
+// Stub function that can be filtered by plugins
 function isLocalVideoAccepted (object: {
   videoBody: VideoCreate
   videoFile: VideoUploadFile
@@ -45,6 +44,9 @@ function isLocalVideoAccepted (object: {
   return { accepted: true }
 }
 
+// ---------------------------------------------------------------------------
+
+// Stub function that can be filtered by plugins
 function isLocalLiveVideoAccepted (object: {
   liveVideoBody: LiveVideoCreate
   user: UserModel
@@ -52,7 +54,11 @@ function isLocalLiveVideoAccepted (object: {
   return { accepted: true }
 }
 
+// ---------------------------------------------------------------------------
+
+// Stub function that can be filtered by plugins
 function isLocalVideoThreadAccepted (_object: {
+  req: express.Request
   commentBody: VideoCommentCreate
   video: VideoModel
   user: UserModel
@@ -60,7 +66,9 @@ function isLocalVideoThreadAccepted (_object: {
   return { accepted: true }
 }
 
+// Stub function that can be filtered by plugins
 function isLocalVideoCommentReplyAccepted (_object: {
+  req: express.Request
   commentBody: VideoCommentCreate
   parentComment: VideoCommentModel
   video: VideoModel
@@ -69,22 +77,18 @@ function isLocalVideoCommentReplyAccepted (_object: {
   return { accepted: true }
 }
 
-function isRemoteVideoAccepted (_object: {
-  activity: ActivityCreate
-  videoAP: VideoObject
-  byActor: ActorModel
-}): AcceptResult {
-  return { accepted: true }
-}
+// ---------------------------------------------------------------------------
 
+// Stub function that can be filtered by plugins
 function isRemoteVideoCommentAccepted (_object: {
-  activity: ActivityCreate
-  commentAP: VideoCommentObject
-  byActor: ActorModel
+  comment: MComment
 }): AcceptResult {
   return { accepted: true }
 }
 
+// ---------------------------------------------------------------------------
+
+// Stub function that can be filtered by plugins
 function isPreImportVideoAccepted (object: {
   videoImportBody: VideoImportCreate
   user: MUser
@@ -92,6 +96,7 @@ function isPreImportVideoAccepted (object: {
   return { accepted: true }
 }
 
+// Stub function that can be filtered by plugins
 function isPostImportVideoAccepted (object: {
   videoFilePath: PathLike
   videoFile: VideoFileModel
@@ -99,6 +104,8 @@ function isPostImportVideoAccepted (object: {
 }): AcceptResult {
   return { accepted: true }
 }
+
+// ---------------------------------------------------------------------------
 
 async function createVideoAbuse (options: {
   baseAbuse: FilteredModelAttributes<AbuseModel>
@@ -189,12 +196,13 @@ function createAccountAbuse (options: {
   })
 }
 
+// ---------------------------------------------------------------------------
+
 export {
   isLocalLiveVideoAccepted,
 
   isLocalVideoAccepted,
   isLocalVideoThreadAccepted,
-  isRemoteVideoAccepted,
   isRemoteVideoCommentAccepted,
   isLocalVideoCommentReplyAccepted,
   isPreImportVideoAccepted,

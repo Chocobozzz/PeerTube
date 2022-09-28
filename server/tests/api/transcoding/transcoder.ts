@@ -2,8 +2,8 @@
 
 import { expect } from 'chai'
 import { canDoQuickTranscode } from '@server/helpers/ffmpeg'
-import { generateHighBitrateVideo, generateVideoWithFramerate, getAllFiles } from '@server/tests/shared'
-import { buildAbsoluteFixturePath, getMaxBitrate, getMinLimitBitrate, omit } from '@shared/core-utils'
+import { generateHighBitrateVideo, generateVideoWithFramerate } from '@server/tests/shared'
+import { buildAbsoluteFixturePath, getAllFiles, getMaxBitrate, getMinLimitBitrate, omit } from '@shared/core-utils'
 import {
   buildFileMetadata,
   getAudioStream,

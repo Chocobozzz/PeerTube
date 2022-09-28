@@ -281,7 +281,7 @@ Now your instance is up you can:
 
 ### PeerTube instance
 
-**Check the changelog (in particular BREAKING CHANGES!):** https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md
+**Check the changelog (in particular the *IMPORTANT NOTES* section):** https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md
 
 #### Auto
 

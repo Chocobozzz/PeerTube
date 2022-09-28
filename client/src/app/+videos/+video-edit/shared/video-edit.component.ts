@@ -35,10 +35,11 @@ import {
 } from '@shared/models'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
-import { VideoCaptionEditModalComponent } from './video-caption-edit-modal/video-caption-edit-modal.component'
+import { VideoCaptionEditModalContentComponent } from './video-caption-edit-modal-content/video-caption-edit-modal-content.component'
 import { VideoEditType } from './video-edit.type'
 import { VideoSource } from '@shared/models/videos/video-source'
 import { logger } from '@root-helpers/logger'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
 type PluginField = {
@@ -70,7 +71,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() liveVideo: LiveVideo
 
   @ViewChild('videoCaptionAddModal', { static: true }) videoCaptionAddModal: VideoCaptionAddModalComponent
-  @ViewChild('videoCaptionEditModal', { static: true }) editCaptionModal: VideoCaptionEditModalComponent
 
   @Output() formBuilt = new EventEmitter<void>()
   @Output() pluginFieldsAdded = new EventEmitter<void>()
@@ -128,7 +128,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     private i18nPrimengCalendarService: I18nPrimengCalendarService,
     private ngZone: NgZone,
     private hooks: HooksService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private modalService: NgbModal
   ) {
     this.calendarTimezone = this.i18nPrimengCalendarService.getTimezone()
     this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
@@ -284,6 +285,13 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   openAddCaptionModal () {
     this.videoCaptionAddModal.show()
+  }
+
+  openEditCaptionModal (videoCaption: VideoCaptionWithPathEdit) {
+    const modalRef = this.modalService.open(VideoCaptionEditModalContentComponent, { centered: true, keyboard: false })
+    modalRef.componentInstance.videoCaption = videoCaption
+    modalRef.componentInstance.serverConfig = this.serverConfig
+    modalRef.componentInstance.captionEdited.subscribe(this.onCaptionEdited.bind(this))
   }
 
   isSaveReplayEnabled () {

@@ -97,7 +97,7 @@ async function run () {
     }
   }
 
-  JobQueue.Instance.init(true)
+  JobQueue.Instance.init()
 
   video.state = VideoState.TO_TRANSCODE
   await video.save()

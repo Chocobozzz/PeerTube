@@ -82,7 +82,10 @@ async function moveToExternalStorageState (options: {
   if (pendingTranscode !== 0) return false
 
   const previousVideoState = video.state
-  await video.setNewState(VideoState.TO_MOVE_TO_EXTERNAL_STORAGE, isNewVideo, transaction)
+
+  if (video.state !== VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
+    await video.setNewState(VideoState.TO_MOVE_TO_EXTERNAL_STORAGE, isNewVideo, transaction)
+  }
 
   logger.info('Creating external storage move job for video %s.', video.uuid, { tags: [ video.uuid ] })
 

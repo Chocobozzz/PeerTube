@@ -53,6 +53,8 @@
 }
 
 .dropdown-menu {
+  max-width: 75vw;
+
   .dropdown-header {
     padding: 0.2rem 1rem;
   }
@@ -70,5 +72,15 @@
       display: block;
       width: 100%;
     }
+  }
+}
+
+.item-label {
+  display: flex;
+  flex-direction: column;
+  min-width: 1px;
+
+  > * {
+    @include ellipsis;
   }
 }

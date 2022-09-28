@@ -2,7 +2,16 @@
 
 :warning: **Warning**: dependencies guide is maintained by the community. Some parts may be outdated! :warning:
 
-Follow the below guides, and check their versions match [required external dependencies versions](https://github.com/Chocobozzz/PeerTube/blob/master/engines.yaml). You can check them automatically via `sudo npx engineslist`.
+Follow the below guides, and check their versions match [required external dependencies versions](https://github.com/Chocobozzz/PeerTube/blob/master/engines.yaml).
+
+Main dependencies version supported by PeerTube:
+
+ * `node` >=14.x
+ * `yarn` >=1.x
+ * `postgres` >=10.x
+ * `redis-server` >=5.x
+ * `ffmpeg` >=4.3
+
 
 _note_: only **LTS** versions of external dependencies are supported. If no LTS version matching the version constraint is available, only **release** versions are supported.
 
@@ -34,7 +43,7 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
 
 2. It would be wise to disable root access and to continue this tutorial with a user with sudoers group access
 
-3. Install NodeJS 14.x:
+3. Install NodeJS 16.x:
 [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
 4. Install yarn, and be sure to have [a recent version](https://github.com/yarnpkg/yarn/releases/latest):
 [https://yarnpkg.com/en/docs/install#linux-tab](https://yarnpkg.com/en/docs/install#linux-tab)
@@ -64,6 +73,7 @@ sudo apt update
 sudo apt install certbot nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git cron wget
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
+redis-server --version # Should be >= 5.x
 ```
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
@@ -88,7 +98,7 @@ sudo systemctl start redis postgresql
 
 ## CentOS 7
 
-1. Install NodeJS 14.x:
+1. Install NodeJS 16.x:
 [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
 
 2. Install yarn:
@@ -135,7 +145,7 @@ sudo systemctl enable --now postgresql
 
 ## Centos 8
 
-1. Install NodeJS 14.x:
+1. Install NodeJS 16.x:
 [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
 
 2. Install yarn:
@@ -185,9 +195,9 @@ sudo systemctl enable --now postgresql
 sudo dnf update -y
 ```
 
-2. Install NodeJS 14.x:
+2. Install NodeJS 16.x:
 ```
-sudo dnf module install -y nodejs:14
+sudo dnf module install -y nodejs:16
 ```
 
 3. Install yarn:
@@ -244,7 +254,7 @@ su my-peertube-user
 3. (Optional) Install certbot (choose instructions for your distribution):
 [https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
 
-4. Install NodeJS 14.x:
+4. Install NodeJS 16.x:
 [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
 
 5. Install yarn:
@@ -263,6 +273,7 @@ This is necessary because `ffmpeg` is not in the Fedora repos.
 sudo dnf install nginx ffmpeg postgresql-server postgresql-contrib openssl gcc-c++ make redis git vim
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
+redis-server --version # Should be >= 5.x
 ```
 
 8. Configure nginx
@@ -336,7 +347,7 @@ echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo s
 2. Install Node.JS
 
 ```
-sudo dnf module install nodejs:14
+sudo dnf module install nodejs:16
 ```
 
 3. Install Yarn

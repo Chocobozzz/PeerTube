@@ -1,7 +1,8 @@
 import { getServerActor } from '@server/models/application/application'
+import { logger } from '@uploadx/core'
 import express from 'express'
 import { truncate } from 'lodash'
-import { SitemapStream, streamToPromise } from 'sitemap'
+import { SitemapStream, streamToPromise, ErrorLevel } from 'sitemap'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
 import { asyncMiddleware } from '../middlewares'
@@ -34,7 +35,18 @@ async function getSitemap (req: express.Request, res: express.Response) {
   urls = urls.concat(await getSitemapVideoChannelUrls())
   urls = urls.concat(await getSitemapAccountUrls())
 
-  const sitemapStream = new SitemapStream({ hostname: WEBSERVER.URL })
+  const sitemapStream = new SitemapStream({
+    hostname: WEBSERVER.URL,
+    errorHandler: (err: Error, level: ErrorLevel) => {
+      if (level === 'warn') {
+        logger.warn('Warning in sitemap generation.', { err })
+      } else if (level === 'throw') {
+        logger.error('Error in sitemap generation.', { err })
+
+        throw err
+      }
+    }
+  })
 
   for (const urlObj of urls) {
     sitemapStream.write(urlObj)
@@ -83,7 +95,8 @@ async function getSitemapLocalVideoUrls () {
     url: WEBSERVER.URL + v.getWatchStaticPath(),
     video: [
       {
-        title: v.name,
+        // Sitemap title should be < 100 characters
+        title: truncate(v.name, { length: 100, omission: '...' }),
         // Sitemap description should be < 2000 characters
         description: truncate(v.description || v.name, { length: 2000, omission: '...' }),
         player_loc: WEBSERVER.URL + v.getEmbedStaticPath(),

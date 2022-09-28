@@ -169,6 +169,10 @@ Seek to the given position, as specified in seconds into the video.
 
 Add a listener for a specific event. See below for the available events.
 
+## `removeEventListener(eventName : string, handler : Function)`
+
+Remove a listener.
+
 ## `getResolutions() : Promise<PeerTubeResolution[]>`
 
 Get the available resolutions. A `PeerTubeResolution` looks like:

@@ -1,4 +1,3 @@
-
 import { readdir, readFile } from 'fs-extra'
 import { createServer, Server } from 'net'
 import { join } from 'path'
@@ -9,7 +8,8 @@ import {
   getLiveSegmentTime,
   getVideoStreamBitrate,
   getVideoStreamDimensionsInfo,
-  getVideoStreamFPS
+  getVideoStreamFPS,
+  hasAudioStream
 } from '@server/helpers/ffmpeg'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config'
@@ -20,7 +20,7 @@ import { VideoLiveModel } from '@server/models/video/video-live'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { MStreamingPlaylistVideo, MVideo, MVideoLiveSession, MVideoLiveVideo } from '@server/types/models'
-import { wait } from '@shared/core-utils'
+import { pick, wait } from '@shared/core-utils'
 import { LiveVideoError, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { federateVideoIfNeeded } from '../activitypub/videos'
 import { JobQueue } from '../job-queue'
@@ -232,10 +232,11 @@ class LiveManager {
     const now = Date.now()
     const probe = await ffprobePromise(inputUrl)
 
-    const [ { resolution, ratio }, fps, bitrate ] = await Promise.all([
+    const [ { resolution, ratio }, fps, bitrate, hasAudio ] = await Promise.all([
       getVideoStreamDimensionsInfo(inputUrl, probe),
       getVideoStreamFPS(inputUrl, probe),
-      getVideoStreamBitrate(inputUrl, probe)
+      getVideoStreamBitrate(inputUrl, probe),
+      hasAudioStream(inputUrl, probe)
     ])
 
     logger.info(
@@ -259,26 +260,30 @@ class LiveManager {
     return this.runMuxingSession({
       sessionId,
       videoLive,
+
       streamingPlaylist,
       inputUrl,
       fps,
       bitrate,
       ratio,
-      allResolutions
+      allResolutions,
+      hasAudio
     })
   }
 
   private async runMuxingSession (options: {
     sessionId: string
     videoLive: MVideoLiveVideo
+
     streamingPlaylist: MStreamingPlaylistVideo
     inputUrl: string
     fps: number
     bitrate: number
     ratio: number
     allResolutions: number[]
+    hasAudio: boolean
   }) {
-    const { sessionId, videoLive, streamingPlaylist, allResolutions, fps, bitrate, ratio, inputUrl } = options
+    const { sessionId, videoLive } = options
     const videoUUID = videoLive.Video.uuid
     const localLTags = lTags(sessionId, videoUUID)
 
@@ -289,15 +294,11 @@ class LiveManager {
 
     const muxingSession = new MuxingSession({
       context: this.getContext(),
-      user,
       sessionId,
       videoLive,
-      streamingPlaylist,
-      inputUrl,
-      bitrate,
-      ratio,
-      fps,
-      allResolutions
+      user,
+
+      ...pick(options, [ 'streamingPlaylist', 'inputUrl', 'bitrate', 'ratio', 'fps', 'allResolutions', 'hasAudio' ])
     })
 
     muxingSession.on('master-playlist-created', () => this.publishAndFederateLive(videoLive, localLTags))

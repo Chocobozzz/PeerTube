@@ -12,7 +12,7 @@ type YoutubeDLInfo = {
   tags?: string[]
   thumbnailUrl?: string
   ext?: string
-  originallyPublishedAt?: Date
+  originallyPublishedAtWithoutTime?: Date
   webpageUrl?: string
 
   urls?: string[]
@@ -81,7 +81,7 @@ class YoutubeDLInfoBuilder {
       tags: this.getTags(obj.tags),
       thumbnailUrl: obj.thumbnail || undefined,
       urls: this.buildAvailableUrl(obj),
-      originallyPublishedAt: this.buildOriginallyPublishedAt(obj),
+      originallyPublishedAtWithoutTime: this.buildOriginallyPublishedAt(obj),
       ext: obj.ext,
       webpageUrl: obj.webpage_url
     }

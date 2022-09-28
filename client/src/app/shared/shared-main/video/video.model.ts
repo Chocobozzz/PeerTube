@@ -1,8 +1,8 @@
 import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
-import { durationToString, prepareIcu, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
+import { durationToString, getAbsoluteAPIUrl, getAbsoluteEmbedUrl, prepareIcu } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
-import { buildVideoWatchPath } from '@shared/core-utils'
+import { buildVideoWatchPath, getAllFiles } from '@shared/core-utils'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   ActorImage,
@@ -238,6 +238,13 @@ export class Video implements VideoServerModel {
 
   canSeeStats (user: AuthUser) {
     return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.SEE_ALL_VIDEOS))
+  }
+
+  canRemoveOneFile (user: AuthUser) {
+    return this.isLocal &&
+      user && user.hasRight(UserRight.MANAGE_VIDEO_FILES) &&
+      this.state.id !== VideoState.TO_TRANSCODE &&
+      getAllFiles(this).length > 1
   }
 
   canRemoveFiles (user: AuthUser) {

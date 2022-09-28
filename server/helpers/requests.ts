@@ -192,6 +192,8 @@ async function findLatestRedirection (url: string, options: PeerTubeRequestOptio
 // ---------------------------------------------------------------------------
 
 export {
+  PeerTubeRequestOptions,
+
   doRequest,
   doJSONRequest,
   doRequestAndSaveToFile,

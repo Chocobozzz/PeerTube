@@ -2,28 +2,33 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { VIDEO_CAPTION_FILE_CONTENT_VALIDATOR } from '@app/shared/form-validators/video-captions-validators'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { VideoCaptionEdit, VideoCaptionService, VideoCaptionWithPathEdit } from '@app/shared/shared-main'
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
 import { HTMLServerConfig, VideoConstant } from '@shared/models'
 import { ServerService } from '../../../../core'
 
+/**
+ * https://github.com/valor-software/ngx-bootstrap/issues/3825
+ * https://stackblitz.com/edit/angular-t5dfp7
+ * https://medium.com/@izzatnadiri/how-to-pass-data-to-and-receive-from-ng-bootstrap-modals-916f2ad5d66e
+ */
 @Component({
-  selector: 'my-video-caption-edit-modal',
-  styleUrls: [ './video-caption-edit-modal.component.scss' ],
-  templateUrl: './video-caption-edit-modal.component.html'
+  selector: 'my-video-caption-edit-modal-content',
+  styleUrls: [ './video-caption-edit-modal-content.component.scss' ],
+  templateUrl: './video-caption-edit-modal-content.component.html'
 })
 
-export class VideoCaptionEditModalComponent extends FormReactive implements OnInit {
+export class VideoCaptionEditModalContentComponent extends FormReactive implements OnInit {
   @Input() videoCaption: VideoCaptionWithPathEdit
   @Input() serverConfig: HTMLServerConfig
 
   @Output() captionEdited = new EventEmitter<VideoCaptionEdit>()
 
-  @ViewChild('modal', { static: true }) modal: ElementRef
+  @ViewChild('textarea', { static: true }) textarea!: ElementRef
 
   videoCaptionLanguages: VideoConstant<string>[] = []
-  private openedModal: NgbModalRef
 
   constructor (
+    protected openedModal: NgbActiveModal,
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
     private videoCaptionService: VideoCaptionService,
@@ -49,11 +54,14 @@ export class VideoCaptionEditModalComponent extends FormReactive implements OnIn
         this.form.patchValue({
           captionFileContent: res
         })
+        this.resetTextarea()
       })
   }
 
-  show () {
-    this.openedModal = this.modalService.open(this.modal, { centered: true, keyboard: false })
+  resetTextarea () {
+    this.textarea.nativeElement.scrollTop = 0
+    this.textarea.nativeElement.selectionStart = 0
+    this.textarea.nativeElement.selectionEnd = 0
   }
 
   hide () {

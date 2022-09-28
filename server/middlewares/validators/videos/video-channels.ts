@@ -166,6 +166,13 @@ export const videoChannelImportVideosValidator = [
 
     if (body.videoChannelSyncId && !await doesVideoChannelSyncIdExist(body.videoChannelSyncId, res)) return
 
+    if (res.locals.videoChannelSync && res.locals.videoChannelSync.videoChannelId !== res.locals.videoChannel.id) {
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'This channel sync is not owned by this channel'
+      })
+    }
+
     return next()
   }
 ]

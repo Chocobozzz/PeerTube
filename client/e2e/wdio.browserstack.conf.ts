@@ -82,7 +82,7 @@ module.exports = {
       {
         browserName: 'Chrome',
 
-        ...buildBStackMobileOptions('Latest Chrome Android', 'Samsung Galaxy S6', '5.0')
+        ...buildBStackMobileOptions('Latest Chrome Android', 'Samsung Galaxy S8', '7.0')
       },
       {
         browserName: 'Safari',

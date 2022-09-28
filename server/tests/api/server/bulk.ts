@@ -22,7 +22,7 @@ describe('Test bulk actions', function () {
   let bulkCommand: BulkCommand
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(2)
 

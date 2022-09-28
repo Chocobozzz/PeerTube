@@ -40,7 +40,6 @@ export class UserNotificationService {
 
     return this.authHttp.get<ResultList<UserNotification>>(UserNotificationService.BASE_NOTIFICATIONS_URL, { params, context })
                .pipe(
-                 map(res => this.restExtractor.convertResultListDateToHuman(res)),
                  map(res => this.restExtractor.applyToResultListData(res, this.formatNotification.bind(this))),
                  catchError(err => this.restExtractor.handleError(err))
                )

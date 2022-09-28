@@ -84,6 +84,8 @@ class P2pMediaLoaderPlugin extends Plugin {
   }
 
   getCurrentLevel () {
+    if (!this.hlsjs) return undefined
+
     return this.hlsjs.levels[this.hlsjs.currentLevel]
   }
 

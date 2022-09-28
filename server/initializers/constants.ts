@@ -25,7 +25,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 735
+const LAST_MIGRATION_VERSION = 740
 
 // ---------------------------------------------------------------------------
 
@@ -787,6 +787,14 @@ const WORKER_THREADS = {
   PROCESS_IMAGE: {
     CONCURRENCY: 1,
     MAX_THREADS: 5
+  },
+  SEQUENTIAL_HTTP_BROADCAST: {
+    CONCURRENCY: 1,
+    MAX_THREADS: 1
+  },
+  PARALLEL_HTTP_BROADCAST: {
+    CONCURRENCY: JOB_CONCURRENCY['activitypub-http-broadcast-parallel'],
+    MAX_THREADS: 1
   }
 }
 

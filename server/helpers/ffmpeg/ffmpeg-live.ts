@@ -23,11 +23,24 @@ async function getLiveTranscodingCommand (options: {
   fps: number
   bitrate: number
   ratio: number
+  hasAudio: boolean
 
   availableEncoders: AvailableEncoders
   profile: string
 }) {
-  const { inputUrl, outPath, resolutions, fps, bitrate, availableEncoders, profile, masterPlaylistName, ratio, latencyMode } = options
+  const {
+    inputUrl,
+    outPath,
+    resolutions,
+    fps,
+    bitrate,
+    availableEncoders,
+    profile,
+    masterPlaylistName,
+    ratio,
+    latencyMode,
+    hasAudio
+  } = options
 
   const command = getFFmpeg(inputUrl, 'live')
 
@@ -47,6 +60,7 @@ async function getLiveTranscodingCommand (options: {
   addDefaultEncoderGlobalParams(command)
 
   for (let i = 0; i < resolutions.length; i++) {
+    const streamMap: string[] = []
     const resolution = resolutions[i]
     const resolutionFPS = computeFPS(fps, resolution)
 
@@ -94,9 +108,11 @@ async function getLiveTranscodingCommand (options: {
         options: `w=-2:h=${resolution}`,
         outputs: `vout${resolution}`
       })
+
+      streamMap.push(`v:${i}`)
     }
 
-    {
+    if (hasAudio) {
       const streamType: StreamType = 'audio'
       const builderResult = await getEncoderBuilderResult({ ...baseEncoderBuilderParams, streamType })
       if (!builderResult) {
@@ -114,9 +130,11 @@ async function getLiveTranscodingCommand (options: {
 
       command.outputOption(`${buildStreamSuffix('-c:a', i)} ${builderResult.encoder}`)
       applyEncoderOptions(command, builderResult.result)
+
+      streamMap.push(`a:${i}`)
     }
 
-    varStreamMap.push(`v:${i},a:${i}`)
+    varStreamMap.push(streamMap.join(','))
   }
 
   command.complexFilter(complexFilter)
