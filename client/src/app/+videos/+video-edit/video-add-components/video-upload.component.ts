@@ -13,6 +13,7 @@ import { isIOS } from '@root-helpers/web-browser'
 import { HttpStatusCode, VideoCreateResult } from '@shared/models'
 import { UploaderXFormData } from './uploaderx-form-data'
 import { VideoSend } from './video-send'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'my-video-upload',
@@ -56,6 +57,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
   private alreadyRefreshedToken = false
 
+  private uploadServiceSubscription: Subscription
+
   constructor (
     protected formValidatorService: FormValidatorService,
     protected loadingBar: LoadingBarService,
@@ -87,7 +90,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily
         })
 
-    this.resumableUploadService.events
+    this.uploadServiceSubscription = this.resumableUploadService.events
       .subscribe(state => this.onUploadVideoOngoing(state))
   }
 
@@ -96,7 +99,9 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   ngOnDestroy () {
-    this.resumableUploadService.disconnect();
+    this.resumableUploadService.disconnect()
+
+    if (this.uploadServiceSubscription) this.uploadServiceSubscription.unsubscribe()
   }
 
   canDeactivate () {
