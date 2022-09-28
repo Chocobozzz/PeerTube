@@ -37,7 +37,7 @@
     class="btn-group" ngbDropdown autoClose="outside" placement="bottom-right bottom-left bottom auto"
     role="group" aria-label="Multiple ways to subscribe to the current channel" i18n-aria-label
   >
-    <button class="btn dropdown-toggle-split" ngbDropdownToggle aria-label="Open subscription dropdown" i18n-aria-label>
+    <button class="btn dropdown-toggle-split last-in-group" ngbDropdownToggle aria-label="Open subscription dropdown" i18n-aria-label>
       <ng-container
         *ngIf="!isUserLoggedIn(); then userLoggedOut">
       </ng-container>

@@ -3,7 +3,7 @@ import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms'
 import { USER_ROLE_LABELS } from '@shared/core-utils/users'
-import { HTMLServerConfig, UserAdminFlag, UserRole, VideoResolution } from '@shared/models'
+import { HTMLServerConfig, UserAdminFlag, UserRole } from '@shared/models'
 import { SelectOptionsItem } from '../../../../../types/select-options-item.model'
 
 @Directive()
