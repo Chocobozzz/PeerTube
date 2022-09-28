@@ -538,7 +538,7 @@ describe('Test live', function () {
       }
 
       const minBitrateLimits = {
-        720: 5500 * 1000,
+        720: 5000 * 1000,
         360: 1000 * 1000,
         240: 550 * 1000
       }
@@ -569,7 +569,7 @@ describe('Test live', function () {
           if (resolution >= 720) {
             expect(file.fps).to.be.approximately(60, 10)
           } else {
-            expect(file.fps).to.be.approximately(30, 2)
+            expect(file.fps).to.be.approximately(30, 3)
           }
 
           const filename = basename(file.fileUrl)
