@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import { cleanupTests, createSingleServer, makeGetRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import { join } from 'path'
-import { ensureDir, writeJson } from 'fs-extra'
+import { writeJson } from 'fs-extra'
 import { expectLogDoesNotContain } from './shared'
 
 describe('Test misc endpoints', function () {
@@ -13,8 +13,6 @@ describe('Test misc endpoints', function () {
 
   before(async function () {
     this.timeout(120000)
-
-    await ensureDir(wellKnownPath)
 
     server = await createSingleServer(1)
     wellKnownPath = `test${server.internalServerNumber}/well-known/`
