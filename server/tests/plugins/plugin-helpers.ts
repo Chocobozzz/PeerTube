@@ -86,7 +86,7 @@ describe('Test plugin helpers', function () {
   describe('Socket', function () {
 
     it('Should sendNotification without any exceptions', async () => {
-      const user = await servers[0].users.create({ username: 'Notis Redding', password: 'secret1234?' })
+      const user = await servers[0].users.create({ username: 'NotisRedding', password: 'secret1234?' })
       await makePostBodyRequest({
         url: servers[0].url,
         path: '/plugins/test-four/router/send-notification',
