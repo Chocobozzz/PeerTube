@@ -13,7 +13,7 @@ import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
 import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
 import { VideoBlacklistModel } from '@server/models/video/video-blacklist'
-import { MPlugin } from '@server/types/models'
+import { MPlugin, MVideo, UserNotificationModelForApi } from '@server/types/models'
 import { PeerTubeHelpers } from '@server/types/plugins'
 import { VideoBlacklistCreate, VideoStorage } from '@shared/models'
 import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../blocklist'
@@ -224,10 +224,10 @@ function buildPluginRelatedHelpers (plugin: MPlugin, npmName: string) {
 
 function buildSocketHelpers () {
   return {
-    sendNotification: (userId, notification) => {
+    sendNotification: (userId: number, notification: UserNotificationModelForApi) => {
       PeerTubeSocket.Instance.sendNotification(userId, notification)
     },
-    sendVideoLiveNewState: (video) => {
+    sendVideoLiveNewState: (video: MVideo) => {
       PeerTubeSocket.Instance.sendVideoLiveNewState(video)
     }
   }

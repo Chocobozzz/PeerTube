@@ -130,9 +130,9 @@ async function register ({
     })
 
     router.post('/send-notification', async (req, res) => {
-      peertubeHelpers.socket.sendNotification(1, {
+      peertubeHelpers.socket.sendNotification(req.body.userId, {
         type: 1,
-        userId: 2
+        userId: req.body.userId
       })
 
       return res.sendStatus(201)
