@@ -9,7 +9,7 @@ import { expectLogDoesNotContain } from './shared'
 
 describe('Test misc endpoints', function () {
   let server: PeerTubeServer
-  const wellKnownPath = join(process.cwd(), 'test1', 'well-known')
+  let wellKnownPath
 
   before(async function () {
     this.timeout(120000)
@@ -17,6 +17,7 @@ describe('Test misc endpoints', function () {
     await ensureDir(wellKnownPath)
 
     server = await createSingleServer(1)
+    wellKnownPath = `test${server.internalServerNumber}/well-known/`
     await setAccessTokensToServers([ server ])
   })
 
@@ -99,7 +100,7 @@ describe('Test misc endpoints', function () {
       expect(remoteInteract.template).to.equal(server.url + '/remote-interaction?uri={uri}')
     })
 
-    it.skip('Should return 404 for non-existing files in /.well-known', async function () {
+    it('Should return 404 for non-existing files in /.well-known', async function () {
       await makeGetRequest({
         url: server.url,
         path: '/.well-known/non-existing-file',
@@ -107,7 +108,7 @@ describe('Test misc endpoints', function () {
       })
     })
 
-    it.skip('Should return custom file from /.well-known', async function () {
+    it('Should return custom file from /.well-known', async function () {
       const filename = 'existing-file.json'
       const content = {
         iThink: 'therefore I am'

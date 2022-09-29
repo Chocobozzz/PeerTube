@@ -353,7 +353,8 @@ export class PeerTubeServer {
         torrents: `test${this.internalServerNumber}/torrents/`,
         captions: `test${this.internalServerNumber}/captions/`,
         cache: `test${this.internalServerNumber}/cache/`,
-        plugins: `test${this.internalServerNumber}/plugins/`
+        plugins: `test${this.internalServerNumber}/plugins/`,
+        well_known: `test${this.internalServerNumber}/well-known/`
       },
       admin: {
         email: `admin${this.internalServerNumber}@example.com`
