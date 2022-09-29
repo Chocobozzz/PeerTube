@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { cleanupTests, createSingleServer, PeerTubeServer, SearchCommand, setAccessTokensToServers } from '@shared/server-commands'
+import { expect } from 'chai'
 import {
   BooleanBothQuery,
   VideoChannelsSearchQuery,
@@ -11,8 +9,7 @@ import {
   VideoPlaylistType,
   VideosSearchQuery
 } from '@shared/models'
-
-const expect = chai.expect
+import { cleanupTests, createSingleServer, PeerTubeServer, SearchCommand, setAccessTokensToServers } from '@shared/server-commands'
 
 describe('Test index search', function () {
   const localVideoName = 'local video' + new Date().toISOString()

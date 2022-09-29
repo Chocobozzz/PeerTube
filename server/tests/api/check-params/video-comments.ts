@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
 import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import {
@@ -13,8 +12,6 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test video comments API validator', function () {
   let pathThread: string

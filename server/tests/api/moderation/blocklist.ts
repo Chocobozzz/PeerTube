@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { UserNotificationType } from '@shared/models'
 import {
   BlocklistCommand,
@@ -14,8 +13,6 @@ import {
   setDefaultAccountAvatar,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 async function checkAllVideos (server: PeerTubeServer, token: string) {
   {

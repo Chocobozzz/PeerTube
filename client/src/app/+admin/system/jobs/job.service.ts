@@ -34,9 +34,7 @@ export class JobService {
 
     return this.authHttp.get<ResultList<Job>>(JobService.BASE_JOB_URL + `/${jobState || ''}`, { params })
                .pipe(
-                 map(res => {
-                   return this.restExtractor.convertResultListDateToHuman(res, [ 'createdAt', 'processedOn', 'finishedOn' ])
-                 }),
+                 map(res => this.restExtractor.convertResultListDateToHuman(res, [ 'createdAt', 'processedOn', 'finishedOn' ], 'precise')),
                  map(res => this.restExtractor.applyToResultListData(res, this.prettyPrintData)),
                  map(res => this.restExtractor.applyToResultListData(res, this.buildUniqId)),
                  catchError(err => this.restExtractor.handleError(err))

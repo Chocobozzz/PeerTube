@@ -5,7 +5,6 @@ import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { InstallOrUpdatePlugin } from '../../../shared/models/plugins/server/api/install-plugin.model'
 import { exists, isBooleanValid, isSafePath, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { isNpmPluginNameValid, isPluginNameValid, isPluginTypeValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
-import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
 import { PluginModel } from '../../models/server/plugin'
@@ -13,19 +12,19 @@ import { areValidationErrors } from './shared'
 
 const getPluginValidator = (pluginType: PluginType, withVersion = true) => {
   const validators: (ValidationChain | express.Handler)[] = [
-    param('pluginName').custom(isPluginNameValid).withMessage('Should have a valid plugin name')
+    param('pluginName')
+      .custom(isPluginNameValid)
   ]
 
   if (withVersion) {
     validators.push(
-      param('pluginVersion').custom(isPluginVersionValid).withMessage('Should have a valid plugin version')
+      param('pluginVersion')
+        .custom(isPluginVersionValid)
     )
   }
 
   return validators.concat([
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      logger.debug('Checking getPluginValidator parameters', { parameters: req.params })
-
       if (areValidationErrors(req, res)) return
 
       const npmName = PluginModel.buildNpmName(req.params.pluginName, pluginType)
@@ -52,11 +51,10 @@ const getPluginValidator = (pluginType: PluginType, withVersion = true) => {
 }
 
 const getExternalAuthValidator = [
-  param('authName').custom(exists).withMessage('Should have a valid auth name'),
+  param('authName')
+    .custom(exists),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking getExternalAuthValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     const plugin = res.locals.registeredPlugin
@@ -82,11 +80,10 @@ const getExternalAuthValidator = [
 ]
 
 const pluginStaticDirectoryValidator = [
-  param('staticEndpoint').custom(isSafePath).withMessage('Should have a valid static endpoint'),
+  param('staticEndpoint')
+    .custom(isSafePath),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking pluginStaticDirectoryValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -97,15 +94,13 @@ const listPluginsValidator = [
   query('pluginType')
     .optional()
     .customSanitizer(toIntOrNull)
-    .custom(isPluginTypeValid).withMessage('Should have a valid plugin type'),
+    .custom(isPluginTypeValid),
   query('uninstalled')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid uninstalled attribute'),
+    .custom(isBooleanValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking listPluginsValidator parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -115,17 +110,15 @@ const listPluginsValidator = [
 const installOrUpdatePluginValidator = [
   body('npmName')
     .optional()
-    .custom(isNpmPluginNameValid).withMessage('Should have a valid npm name'),
+    .custom(isNpmPluginNameValid),
   body('pluginVersion')
     .optional()
-    .custom(isPluginVersionValid).withMessage('Should have a valid plugin version'),
+    .custom(isPluginVersionValid),
   body('path')
     .optional()
-    .custom(isSafePath).withMessage('Should have a valid safe path'),
+    .custom(isSafePath),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking installOrUpdatePluginValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     const body: InstallOrUpdatePlugin = req.body
@@ -141,11 +134,10 @@ const installOrUpdatePluginValidator = [
 ]
 
 const uninstallPluginValidator = [
-  body('npmName').custom(isNpmPluginNameValid).withMessage('Should have a valid npm name'),
+  body('npmName')
+    .custom(isNpmPluginNameValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking uninstallPluginValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -153,11 +145,10 @@ const uninstallPluginValidator = [
 ]
 
 const existingPluginValidator = [
-  param('npmName').custom(isNpmPluginNameValid).withMessage('Should have a valid plugin name'),
+  param('npmName')
+    .custom(isNpmPluginNameValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking enabledPluginValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     const plugin = await PluginModel.loadByNpmName(req.params.npmName)
@@ -174,11 +165,10 @@ const existingPluginValidator = [
 ]
 
 const updatePluginSettingsValidator = [
-  body('settings').exists().withMessage('Should have settings'),
+  body('settings')
+    .exists(),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking enabledPluginValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -188,18 +178,16 @@ const updatePluginSettingsValidator = [
 const listAvailablePluginsValidator = [
   query('search')
     .optional()
-    .exists().withMessage('Should have a valid search'),
+    .exists(),
   query('pluginType')
     .optional()
     .customSanitizer(toIntOrNull)
-    .custom(isPluginTypeValid).withMessage('Should have a valid plugin type'),
+    .custom(isPluginTypeValid),
   query('currentPeerTubeEngine')
     .optional()
-    .custom(isPluginVersionValid).withMessage('Should have a valid current peertube engine'),
+    .custom(isPluginVersionValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking enabledPluginValidator parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     if (CONFIG.PLUGINS.INDEX.ENABLED === false) {

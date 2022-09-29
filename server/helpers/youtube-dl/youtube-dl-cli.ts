@@ -87,6 +87,7 @@ export class YoutubeDLCLI {
     return result.concat([
       'bestvideo[vcodec!*=av01][vcodec!*=vp9.2]+bestaudio',
       'best[vcodec!*=av01][vcodec!*=vp9.2]', // case fallback for known formats
+      'bestvideo[ext=mp4]+bestaudio[ext=m4a]',
       'best' // Ultimate fallback
     ]).join('/')
   }
@@ -103,11 +104,14 @@ export class YoutubeDLCLI {
     timeout?: number
     additionalYoutubeDLArgs?: string[]
   }) {
+    let args = options.additionalYoutubeDLArgs || []
+    args = args.concat([ '--merge-output-format', 'mp4', '-f', options.format, '-o', options.output ])
+
     return this.run({
       url: options.url,
       processOptions: options.processOptions,
       timeout: options.timeout,
-      args: (options.additionalYoutubeDLArgs || []).concat([ '-f', options.format, '-o', options.output ])
+      args
     })
   }
 
@@ -122,11 +126,37 @@ export class YoutubeDLCLI {
     const completeArgs = additionalYoutubeDLArgs.concat([ '--dump-json', '-f', format ])
 
     const data = await this.run({ url, args: completeArgs, processOptions })
+    if (!data) return undefined
+
     const info = data.map(this.parseInfo)
 
     return info.length === 1
       ? info[0]
       : info
+  }
+
+  getListInfo (options: {
+    url: string
+    latestVideosCount?: number
+    processOptions: execa.NodeOptions
+  }): Promise<{ upload_date: string, webpage_url: string }[]> {
+    const additionalYoutubeDLArgs = [ '--skip-download', '--playlist-reverse' ]
+
+    if (CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.NAME === 'yt-dlp') {
+      // Optimize listing videos only when using yt-dlp because it is bugged with youtube-dl when fetching a channel
+      additionalYoutubeDLArgs.push('--flat-playlist')
+    }
+
+    if (options.latestVideosCount !== undefined) {
+      additionalYoutubeDLArgs.push('--playlist-end', options.latestVideosCount.toString())
+    }
+
+    return this.getInfo({
+      url: options.url,
+      format: YoutubeDLCLI.getYoutubeDLVideoFormat([], false),
+      processOptions: options.processOptions,
+      additionalYoutubeDLArgs
+    })
   }
 
   async getSubs (options: {
@@ -175,7 +205,7 @@ export class YoutubeDLCLI {
 
     const output = await subProcess
 
-    logger.debug('Runned youtube-dl command.', { command: output.command, ...lTags() })
+    logger.debug('Run youtube-dl command.', { command: output.command, ...lTags() })
 
     return output.stdout
       ? output.stdout.trim().split(/\r?\n/)

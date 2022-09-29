@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="ngb.alert.close" datatype="html">
         <source>Close</source>
-        <target>Mbylle</target>
+        <target state="translated">Mbylle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/alert/alert.d.ts</context>
           <context context-type="linenumber">3</context>
@@ -1112,7 +1112,7 @@
       </trans-unit>
       <trans-unit id="8426539297729416784" datatype="html">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</source>
-        <target state="translated">{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</target>
+        <target state="translated">{VAR_SELECT, select, undefined {Shpajtohuni} other {Shpajtohuni nga krejt kanalet} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">31</context>
@@ -4672,7 +4672,7 @@
       </trans-unit>
       <trans-unit id="7046347992315328430" datatype="html">
         <source>Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> At most, this user could upload ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target>Ndërkodimi është i aktivizuar. Kuota video merr parasysh vetëm madhësinë <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>origjinale<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> të videos. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> E shumta, ky përdorues mund të ngarkojë ~ {{ computeQuotaWithTranscoding() | bajte: 0 }}. </target>
+        <target state="translated">Ndërkodimi është i aktivizuar. Kuota video merr parasysh vetëm madhësinë <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>origjinale<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> të videos. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Ky përdorues mund të ngarkojë e shumta ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bajte: 0 }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">148</context>
@@ -7400,7 +7400,7 @@
       </trans-unit>
       <trans-unit id="6469b375536342370eefd959bb72a06dc3d5884b" datatype="html">
         <source>It is a free and open-source software, under the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target>Është <em>software</em> i lirë dhe me burim të hapur, nën <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>licencën AGPLv3<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Është <em>software</em> i lirë dhe me burim të hapët, nën <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>licencën AGPLv3<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">13</context>
@@ -8308,7 +8308,6 @@
       </trans-unit>
       <trans-unit id="1123807fc813c816404598147173403d00117557" datatype="html">
         <source>Redundancy for <x id="INTERPOLATION" equiv-text="{{host}}"/> is <x id="INTERPOLATION_1" equiv-text="{{stateLabel}}"/></source>
-        <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11769,7 +11768,7 @@
       </trans-unit>
       <trans-unit id="c1226821b3c276dc443b3e5a2dce10e14dcd6244" datatype="html">
         <source>Bitrate</source>
-        <target/>
+        <target state="translated">Bitrate</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11889,7 +11888,7 @@
       </trans-unit>
       <trans-unit id="dd9f3264feed4935008861c15d81c947124e4ac3" datatype="html">
         <source>Published</source>
-        <target/>
+        <target state="translated">Botuar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-miniature.component.ts</context>
           <context context-type="linenumber">1</context>

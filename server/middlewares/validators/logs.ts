@@ -3,6 +3,7 @@ import { body, query } from 'express-validator'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
 import { isStringArray } from '@server/helpers/custom-validators/search'
 import { CONFIG } from '@server/initializers/config'
+import { arrayify } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
 import {
   isValidClientLogLevel,
@@ -12,35 +13,32 @@ import {
   isValidClientLogUserAgent,
   isValidLogLevel
 } from '../../helpers/custom-validators/logs'
-import { isDateValid, toArray } from '../../helpers/custom-validators/misc'
-import { logger } from '../../helpers/logger'
+import { isDateValid } from '../../helpers/custom-validators/misc'
 import { areValidationErrors } from './shared'
 
 const createClientLogValidator = [
   body('message')
-    .custom(isValidClientLogMessage).withMessage('Should have a valid log message'),
+    .custom(isValidClientLogMessage),
 
   body('url')
-    .custom(isUrlValid).withMessage('Should have a valid log url'),
+    .custom(isUrlValid),
 
   body('level')
-    .custom(isValidClientLogLevel).withMessage('Should have a valid log message'),
+    .custom(isValidClientLogLevel),
 
   body('stackTrace')
     .optional()
-    .custom(isValidClientLogStackTrace).withMessage('Should have a valid log stack trace'),
+    .custom(isValidClientLogStackTrace),
 
   body('meta')
     .optional()
-    .custom(isValidClientLogMeta).withMessage('Should have a valid log meta'),
+    .custom(isValidClientLogMeta),
 
   body('userAgent')
     .optional()
-    .custom(isValidClientLogUserAgent).withMessage('Should have a valid log user agent'),
+    .custom(isValidClientLogUserAgent),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking createClientLogValidator parameters.', { parameters: req.query })
-
     if (CONFIG.LOG.ACCEPT_CLIENT_LOG !== true) {
       return res.sendStatus(HttpStatusCode.FORBIDDEN_403)
     }
@@ -56,18 +54,16 @@ const getLogsValidator = [
     .custom(isDateValid).withMessage('Should have a start date that conforms to ISO 8601'),
   query('level')
     .optional()
-    .custom(isValidLogLevel).withMessage('Should have a valid level'),
+    .custom(isValidLogLevel),
   query('tagsOneOf')
     .optional()
-    .customSanitizer(toArray)
+    .customSanitizer(arrayify)
     .custom(isStringArray).withMessage('Should have a valid one of tags array'),
   query('endDate')
     .optional()
     .custom(isDateValid).withMessage('Should have an end date that conforms to ISO 8601'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking getLogsValidator parameters.', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -82,8 +78,6 @@ const getAuditLogsValidator = [
     .custom(isDateValid).withMessage('Should have a end date that conforms to ISO 8601'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking getAuditLogsValidator parameters.', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     return next()

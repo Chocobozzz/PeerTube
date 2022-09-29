@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
 import { FIXTURE_URLS } from '@server/tests/shared'
 import { randomInt } from '@shared/core-utils'
@@ -70,7 +69,7 @@ describe('Test upload quota', function () {
     })
 
     it('Should fail to import with HTTP/Torrent/magnet', async function () {
-      this.timeout(120000)
+      this.timeout(120_000)
 
       const baseAttributes = {
         channelId: server.store.channel.id,

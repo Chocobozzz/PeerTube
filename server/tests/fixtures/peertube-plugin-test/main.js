@@ -178,6 +178,8 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     }
   })
 
+  // ---------------------------------------------------------------------------
+
   registerHook({
     target: 'filter:api.video-thread.create.accept.result',
     handler: ({ accepted }, { commentBody }) => checkCommentBadWord(accepted, commentBody)
@@ -187,6 +189,13 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     target: 'filter:api.video-comment-reply.create.accept.result',
     handler: ({ accepted }, { commentBody }) => checkCommentBadWord(accepted, commentBody)
   })
+
+  registerHook({
+    target: 'filter:activity-pub.remote-video-comment.create.accept.result',
+    handler: ({ accepted }, { comment }) => checkCommentBadWord(accepted, comment)
+  })
+
+  // ---------------------------------------------------------------------------
 
   registerHook({
     target: 'filter:api.video-threads.list.params',

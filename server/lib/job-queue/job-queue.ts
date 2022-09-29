@@ -22,6 +22,7 @@ import {
   ActivitypubHttpFetcherPayload,
   ActivitypubHttpUnicastPayload,
   ActorKeysPayload,
+  AfterVideoChannelImportPayload,
   DeleteResumableUploadMetaFilePayload,
   EmailPayload,
   FederateVideoPayload,
@@ -31,6 +32,7 @@ import {
   MoveObjectStoragePayload,
   NotifyPayload,
   RefreshPayload,
+  VideoChannelImportPayload,
   VideoFileImportPayload,
   VideoImportPayload,
   VideoLiveEndingPayload,
@@ -43,16 +45,18 @@ import { JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_TTL, REPEAT_
 import { Hooks } from '../plugins/hooks'
 import { processActivityPubCleaner } from './handlers/activitypub-cleaner'
 import { processActivityPubFollow } from './handlers/activitypub-follow'
-import { processActivityPubHttpBroadcast } from './handlers/activitypub-http-broadcast'
+import { processActivityPubHttpSequentialBroadcast, processActivityPubParallelHttpBroadcast } from './handlers/activitypub-http-broadcast'
 import { processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
 import { processActivityPubHttpUnicast } from './handlers/activitypub-http-unicast'
 import { refreshAPObject } from './handlers/activitypub-refresher'
 import { processActorKeys } from './handlers/actor-keys'
+import { processAfterVideoChannelImport } from './handlers/after-video-channel-import'
 import { processEmail } from './handlers/email'
 import { processFederateVideo } from './handlers/federate-video'
 import { processManageVideoTorrent } from './handlers/manage-video-torrent'
 import { onMoveToObjectStorageFailure, processMoveToObjectStorage } from './handlers/move-to-object-storage'
 import { processNotify } from './handlers/notify'
+import { processVideoChannelImport } from './handlers/video-channel-import'
 import { processVideoFileImport } from './handlers/video-file-import'
 import { processVideoImport } from './handlers/video-import'
 import { processVideoLiveEnding } from './handlers/video-live-ending'
@@ -79,6 +83,9 @@ export type CreateJobArgument =
   { type: 'delete-resumable-upload-meta-file', payload: DeleteResumableUploadMetaFilePayload } |
   { type: 'video-studio-edition', payload: VideoStudioEditionPayload } |
   { type: 'manage-video-torrent', payload: ManageVideoTorrentPayload } |
+  { type: 'move-to-object-storage', payload: MoveObjectStoragePayload } |
+  { type: 'video-channel-import', payload: VideoChannelImportPayload } |
+  { type: 'after-video-channel-import', payload: AfterVideoChannelImportPayload } |
   { type: 'notify', payload: NotifyPayload } |
   { type: 'move-to-object-storage', payload: MoveObjectStoragePayload } |
   { type: 'federate-video', payload: FederateVideoPayload }
@@ -89,8 +96,8 @@ export type CreateJobOptions = {
 }
 
 const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
-  'activitypub-http-broadcast': processActivityPubHttpBroadcast,
-  'activitypub-http-broadcast-parallel': processActivityPubHttpBroadcast,
+  'activitypub-http-broadcast': processActivityPubHttpSequentialBroadcast,
+  'activitypub-http-broadcast-parallel': processActivityPubParallelHttpBroadcast,
   'activitypub-http-unicast': processActivityPubHttpUnicast,
   'activitypub-http-fetcher': processActivityPubHttpFetcher,
   'activitypub-cleaner': processActivityPubCleaner,
@@ -106,8 +113,10 @@ const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
   'video-redundancy': processVideoRedundancy,
   'move-to-object-storage': processMoveToObjectStorage,
   'manage-video-torrent': processManageVideoTorrent,
-  'notify': processNotify,
   'video-studio-edition': processVideoStudioEdition,
+  'video-channel-import': processVideoChannelImport,
+  'after-video-channel-import': processAfterVideoChannelImport,
+  'notify': processNotify,
   'federate-video': processFederateVideo
 }
 
@@ -134,6 +143,8 @@ const jobTypes: JobType[] = [
   'move-to-object-storage',
   'manage-video-torrent',
   'video-studio-edition',
+  'video-channel-import',
+  'after-video-channel-import',
   'notify',
   'federate-video'
 ]
@@ -157,7 +168,7 @@ class JobQueue {
   private constructor () {
   }
 
-  init (produceOnly = false) {
+  init () {
     // Already initialized
     if (this.initialized === true) return
     this.initialized = true
@@ -165,23 +176,24 @@ class JobQueue {
     this.jobRedisPrefix = 'bull-' + WEBSERVER.HOST
 
     for (const handlerName of (Object.keys(handlers) as JobType[])) {
-      this.buildWorker(handlerName, produceOnly)
+      this.buildWorker(handlerName)
       this.buildQueue(handlerName)
-      this.buildQueueScheduler(handlerName, produceOnly)
-      this.buildQueueEvent(handlerName, produceOnly)
+      this.buildQueueScheduler(handlerName)
+      this.buildQueueEvent(handlerName)
     }
 
     this.flowProducer = new FlowProducer({
       connection: this.getRedisConnection(),
       prefix: this.jobRedisPrefix
     })
+    this.flowProducer.on('error', err => { logger.error('Error in flow producer', { err }) })
 
     this.addRepeatableJobs()
   }
 
-  private buildWorker (handlerName: JobType, produceOnly: boolean) {
+  private buildWorker (handlerName: JobType) {
     const workerOptions: WorkerOptions = {
-      autorun: !produceOnly,
+      autorun: false,
       concurrency: this.getJobConcurrency(handlerName),
       prefix: this.jobRedisPrefix,
       connection: this.getRedisConnection()
@@ -217,9 +229,7 @@ class JobQueue {
       }
     })
 
-    worker.on('error', err => {
-      logger.error('Error in job queue %s.', handlerName, { err })
-    })
+    worker.on('error', err => { logger.error('Error in job worker %s.', handlerName, { err }) })
 
     this.workers[handlerName] = worker
   }
@@ -230,26 +240,37 @@ class JobQueue {
       prefix: this.jobRedisPrefix
     }
 
-    this.queues[handlerName] = new Queue(handlerName, queueOptions)
+    const queue = new Queue(handlerName, queueOptions)
+    queue.on('error', err => { logger.error('Error in job queue %s.', handlerName, { err }) })
+
+    this.queues[handlerName] = queue
   }
 
-  private buildQueueScheduler (handlerName: JobType, produceOnly: boolean) {
+  private buildQueueScheduler (handlerName: JobType) {
     const queueSchedulerOptions: QueueSchedulerOptions = {
-      autorun: !produceOnly,
+      autorun: false,
       connection: this.getRedisConnection(),
       prefix: this.jobRedisPrefix,
       maxStalledCount: 10
     }
-    this.queueSchedulers[handlerName] = new QueueScheduler(handlerName, queueSchedulerOptions)
+
+    const queueScheduler = new QueueScheduler(handlerName, queueSchedulerOptions)
+    queueScheduler.on('error', err => { logger.error('Error in job queue scheduler %s.', handlerName, { err }) })
+
+    this.queueSchedulers[handlerName] = queueScheduler
   }
 
-  private buildQueueEvent (handlerName: JobType, produceOnly: boolean) {
+  private buildQueueEvent (handlerName: JobType) {
     const queueEventsOptions: QueueEventsOptions = {
-      autorun: !produceOnly,
+      autorun: false,
       connection: this.getRedisConnection(),
       prefix: this.jobRedisPrefix
     }
-    this.queueEvents[handlerName] = new QueueEvents(handlerName, queueEventsOptions)
+
+    const queueEvents = new QueueEvents(handlerName, queueEventsOptions)
+    queueEvents.on('error', err => { logger.error('Error in job queue events %s.', handlerName, { err }) })
+
+    this.queueEvents[handlerName] = queueEvents
   }
 
   private getRedisConnection () {
@@ -283,6 +304,23 @@ class JobQueue {
     return Promise.all(promises)
   }
 
+  start () {
+    const promises = Object.keys(this.workers)
+      .map(handlerName => {
+        const worker: Worker = this.workers[handlerName]
+        const queueScheduler: QueueScheduler = this.queueSchedulers[handlerName]
+        const queueEvent: QueueEvents = this.queueEvents[handlerName]
+
+        return Promise.all([
+          worker.run(),
+          queueScheduler.run(),
+          queueEvent.run()
+        ])
+      })
+
+    return Promise.all(promises)
+  }
+
   async pause () {
     for (const handlerName of Object.keys(this.workers)) {
       const worker: Worker = this.workers[handlerName]
@@ -306,7 +344,7 @@ class JobQueue {
         .catch(err => logger.error('Cannot create job.', { err, options }))
   }
 
-  async createJob (options: CreateJobArgument & CreateJobOptions) {
+  createJob (options: CreateJobArgument & CreateJobOptions) {
     const queue: Queue = this.queues[options.type]
     if (queue === undefined) {
       logger.error('Unknown queue %s: cannot create job.', options.type)
@@ -318,7 +356,7 @@ class JobQueue {
     return queue.add('job', options.payload, jobOptions)
   }
 
-  async createSequentialJobFlow (...jobs: ((CreateJobArgument & CreateJobOptions) | undefined)[]) {
+  createSequentialJobFlow (...jobs: ((CreateJobArgument & CreateJobOptions) | undefined)[]) {
     let lastJob: FlowJob
 
     for (const job of jobs) {
@@ -336,7 +374,7 @@ class JobQueue {
     return this.flowProducer.add(lastJob)
   }
 
-  async createJobWithChildren (parent: CreateJobArgument & CreateJobOptions, children: (CreateJobArgument & CreateJobOptions)[]) {
+  createJobWithChildren (parent: CreateJobArgument & CreateJobOptions, children: (CreateJobArgument & CreateJobOptions)[]) {
     return this.flowProducer.add({
       ...this.buildJobFlowOption(parent),
 

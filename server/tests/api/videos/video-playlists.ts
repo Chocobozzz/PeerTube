@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { checkPlaylistFilesWereRemoved, testImage } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import {
@@ -25,8 +24,6 @@ import {
   waitJobs
 } from '@shared/server-commands'
 import { uuidToShort } from '@shared/extra-utils'
-
-const expect = chai.expect
 
 async function checkPlaylistElementType (
   servers: PeerTubeServer[],
@@ -75,7 +72,7 @@ describe('Test video playlists', function () {
   let commands: PlaylistsCommand[]
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(240000)
 
     servers = await createMultipleServers(3)
 

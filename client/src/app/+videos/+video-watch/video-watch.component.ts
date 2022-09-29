@@ -628,6 +628,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           : null,
         authorizationHeader: this.authService.getRequestHeaderValue(),
 
+        metricsUrl: environment.apiUrl + '/api/v1/metrics/playback',
+
         embedUrl: video.embedUrl,
         embedTitle: video.name,
         instanceName: this.serverConfig.instance.name,

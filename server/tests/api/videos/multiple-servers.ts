@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import request from 'supertest'
 import {
   checkTmpIsEmpty,
@@ -25,8 +24,6 @@ import {
   waitJobs,
   webtorrentAdd
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test multiple servers', function () {
   let servers: PeerTubeServer[] = []
@@ -159,7 +156,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should upload the video on server 2 and propagate on each server', async function () {
-      this.timeout(100000)
+      this.timeout(240000)
 
       const user = {
         username: 'user1',
@@ -1024,7 +1021,7 @@ describe('Test multiple servers', function () {
 
   describe('With minimum parameters', function () {
     it('Should upload and propagate the video', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       const path = '/api/v1/videos/upload'
 

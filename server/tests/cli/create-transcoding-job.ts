@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { areObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoFile } from '@shared/models'
 import {
@@ -15,8 +14,6 @@ import {
   waitJobs
 } from '@shared/server-commands'
 import { checkResolutionsInMasterPlaylist, expectStartWith } from '../shared'
-
-const expect = chai.expect
 
 async function checkFilesInObjectStorage (files: VideoFile[], type: 'webtorrent' | 'playlist') {
   for (const file of files) {

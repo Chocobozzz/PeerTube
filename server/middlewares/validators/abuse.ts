@@ -22,45 +22,36 @@ import { areValidationErrors, doesAbuseExist, doesAccountIdExist, doesCommentIdE
 const abuseReportValidator = [
   body('account.id')
     .optional()
-    .custom(isIdValid)
-    .withMessage('Should have a valid accountId'),
+    .custom(isIdValid),
 
   body('video.id')
     .optional()
     .customSanitizer(toCompleteUUID)
-    .custom(isIdOrUUIDValid)
-    .withMessage('Should have a valid videoId'),
+    .custom(isIdOrUUIDValid),
   body('video.startAt')
     .optional()
     .customSanitizer(toIntOrNull)
-    .custom(isAbuseTimestampValid)
-    .withMessage('Should have valid starting time value'),
+    .custom(isAbuseTimestampValid),
   body('video.endAt')
     .optional()
     .customSanitizer(toIntOrNull)
     .custom(isAbuseTimestampValid)
-    .withMessage('Should have valid ending time value')
     .bail()
     .custom(isAbuseTimestampCoherent)
     .withMessage('Should have a startAt timestamp beginning before endAt'),
 
   body('comment.id')
     .optional()
-    .custom(isIdValid)
-    .withMessage('Should have a valid commentId'),
+    .custom(isIdValid),
 
   body('reason')
-    .custom(isAbuseReasonValid)
-    .withMessage('Should have a valid reason'),
+    .custom(isAbuseReasonValid),
 
   body('predefinedReasons')
     .optional()
-    .custom(areAbusePredefinedReasonsValid)
-    .withMessage('Should have a valid list of predefined reasons'),
+    .custom(areAbusePredefinedReasonsValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking abuseReport parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     const body: AbuseCreate = req.body
@@ -79,11 +70,10 @@ const abuseReportValidator = [
 ]
 
 const abuseGetValidator = [
-  param('id').custom(isIdValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('id')
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking abuseGetValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await doesAbuseExist(req.params.id, res)) return
 
@@ -92,18 +82,17 @@ const abuseGetValidator = [
 ]
 
 const abuseUpdateValidator = [
-  param('id').custom(isIdValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('id')
+    .custom(isIdValid),
 
   body('state')
     .optional()
-    .custom(isAbuseStateValid).withMessage('Should have a valid abuse state'),
+    .custom(isAbuseStateValid),
   body('moderationComment')
     .optional()
-    .custom(isAbuseModerationCommentValid).withMessage('Should have a valid moderation comment'),
+    .custom(isAbuseModerationCommentValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking abuseUpdateValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await doesAbuseExist(req.params.id, res)) return
 
@@ -114,40 +103,36 @@ const abuseUpdateValidator = [
 const abuseListForAdminsValidator = [
   query('id')
     .optional()
-    .custom(isIdValid).withMessage('Should have a valid id'),
+    .custom(isIdValid),
   query('filter')
     .optional()
-    .custom(isAbuseFilterValid)
-    .withMessage('Should have a valid filter'),
+    .custom(isAbuseFilterValid),
   query('predefinedReason')
     .optional()
-    .custom(isAbusePredefinedReasonValid)
-    .withMessage('Should have a valid predefinedReason'),
+    .custom(isAbusePredefinedReasonValid),
   query('search')
     .optional()
-    .custom(exists).withMessage('Should have a valid search'),
+    .custom(exists),
   query('state')
     .optional()
-    .custom(isAbuseStateValid).withMessage('Should have a valid abuse state'),
+    .custom(isAbuseStateValid),
   query('videoIs')
     .optional()
-    .custom(isAbuseVideoIsValid).withMessage('Should have a valid "video is" attribute'),
+    .custom(isAbuseVideoIsValid),
   query('searchReporter')
     .optional()
-    .custom(exists).withMessage('Should have a valid reporter search'),
+    .custom(exists),
   query('searchReportee')
     .optional()
-    .custom(exists).withMessage('Should have a valid reportee search'),
+    .custom(exists),
   query('searchVideo')
     .optional()
-    .custom(exists).withMessage('Should have a valid video search'),
+    .custom(exists),
   query('searchVideoChannel')
     .optional()
-    .custom(exists).withMessage('Should have a valid video channel search'),
+    .custom(exists),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking abuseListForAdminsValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -157,19 +142,17 @@ const abuseListForAdminsValidator = [
 const abuseListForUserValidator = [
   query('id')
     .optional()
-    .custom(isIdValid).withMessage('Should have a valid id'),
+    .custom(isIdValid),
 
   query('search')
     .optional()
-    .custom(exists).withMessage('Should have a valid search'),
+    .custom(exists),
 
   query('state')
     .optional()
-    .custom(isAbuseStateValid).withMessage('Should have a valid abuse state'),
+    .custom(isAbuseStateValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking abuseListForUserValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -177,11 +160,10 @@ const abuseListForUserValidator = [
 ]
 
 const getAbuseValidator = [
-  param('id').custom(isIdValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('id')
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking getAbuseValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await doesAbuseExist(req.params.id, res)) return
 
@@ -204,8 +186,6 @@ const getAbuseValidator = [
 
 const checkAbuseValidForMessagesValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking checkAbuseValidForMessagesValidator parameters', { parameters: req.body })
-
     const abuse = res.locals.abuse
     if (abuse.ReporterAccount.isOwned() === false) {
       return res.fail({ message: 'This abuse was created by a user of your instance.' })
@@ -216,11 +196,10 @@ const checkAbuseValidForMessagesValidator = [
 ]
 
 const addAbuseMessageValidator = [
-  body('message').custom(isAbuseMessageValid).not().isEmpty().withMessage('Should have a valid abuse message'),
+  body('message')
+    .custom(isAbuseMessageValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking addAbuseMessageValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -228,11 +207,10 @@ const addAbuseMessageValidator = [
 ]
 
 const deleteAbuseMessageValidator = [
-  param('messageId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid message id'),
+  param('messageId')
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking deleteAbuseMessageValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     const user = res.locals.oauth.token.user

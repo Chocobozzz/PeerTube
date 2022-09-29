@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import { expectStartWith, getAllFiles } from '@server/tests/shared'
-import { areObjectStorageTestsDisabled } from '@shared/core-utils'
+import { expectStartWith } from '@server/tests/shared'
+import { areObjectStorageTestsDisabled, getAllFiles } from '@shared/core-utils'
 import { VideoStudioTask } from '@shared/models'
 import {
   cleanupTests,

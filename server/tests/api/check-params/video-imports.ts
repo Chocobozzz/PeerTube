@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import { omit } from 'lodash'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination, FIXTURE_URLS } from '@server/tests/shared'
-import { buildAbsoluteFixturePath } from '@shared/core-utils'
+import { buildAbsoluteFixturePath, omit } from '@shared/core-utils'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
@@ -59,6 +57,15 @@ describe('Test video imports API validator', function () {
       await checkBadSortPagination(server.url, myPath, server.accessToken)
     })
 
+    it('Should fail with a bad videoChannelSyncId param', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: myPath,
+        query: { videoChannelSyncId: 'toto' },
+        token: server.accessToken
+      })
+    })
+
     it('Should success with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path: myPath, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken })
     })
@@ -88,11 +95,17 @@ describe('Test video imports API validator', function () {
 
     it('Should fail with nothing', async function () {
       const fields = {}
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        fields,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
     })
 
     it('Should fail without a target url', async function () {
-      const fields = omit(baseCorrectParams, 'targetUrl')
+      const fields = omit(baseCorrectParams, [ 'targetUrl' ])
       await makePostBodyRequest({
         url: server.url,
         path,
@@ -174,7 +187,7 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should fail without a channel', async function () {
-      const fields = omit(baseCorrectParams, 'channelId')
+      const fields = omit(baseCorrectParams, [ 'channelId' ])
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -256,7 +269,7 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should fail with an invalid torrent file', async function () {
-      const fields = omit(baseCorrectParams, 'targetUrl')
+      const fields = omit(baseCorrectParams, [ 'targetUrl' ])
       const attaches = {
         torrentfile: buildAbsoluteFixturePath('avatar-big.png')
       }
@@ -265,7 +278,7 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should fail with an invalid magnet URI', async function () {
-      let fields = omit(baseCorrectParams, 'targetUrl')
+      let fields = omit(baseCorrectParams, [ 'targetUrl' ])
       fields = { ...fields, magnetUri: 'blabla' }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -324,7 +337,7 @@ describe('Test video imports API validator', function () {
         }
       })
 
-      let fields = omit(baseCorrectParams, 'targetUrl')
+      let fields = omit(baseCorrectParams, [ 'targetUrl' ])
       fields = { ...fields, magnetUri: FIXTURE_URLS.magnet }
 
       await makePostBodyRequest({
@@ -335,7 +348,7 @@ describe('Test video imports API validator', function () {
         expectedStatus: HttpStatusCode.CONFLICT_409
       })
 
-      fields = omit(fields, 'magnetUri')
+      fields = omit(fields, [ 'magnetUri' ])
       const attaches = {
         torrentfile: buildAbsoluteFixturePath('video-720p.torrent')
       }

@@ -79,6 +79,19 @@ While testing, you might want to display a server's logs to understand why they 
 NODE_APP_INSTANCE=1 NODE_ENV=test npm run parse-log -- --level debug | less +GF
 ```
 
+You can also:
+ - checkout only the latest logs (PeerTube >= 5.0):
+
+```bash
+tail -n 100 test1/logs/peertube.log | npm run parse-log -- --level debug --files -
+```
+
+ - continuously print the latests logs (PeerTube >= 5.0):
+
+```bash
+tail -f test1/logs/peertube.log | npm run parse-log -- --level debug --files -
+```
+
 
 ## Client E2E tests
 

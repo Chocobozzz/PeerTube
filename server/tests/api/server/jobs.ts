@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { dateIsValid } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import {
@@ -13,13 +12,11 @@ import {
   waitJobs
 } from '@shared/server-commands'
 
-const expect = chai.expect
-
 describe('Test jobs', function () {
   let servers: PeerTubeServer[]
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(240000)
 
     servers = await createMultipleServers(2)
 
@@ -30,7 +27,7 @@ describe('Test jobs', function () {
   })
 
   it('Should create some jobs', async function () {
-    this.timeout(120000)
+    this.timeout(240000)
 
     await servers[1].videos.upload({ attributes: { name: 'video1' } })
     await servers[1].videos.upload({ attributes: { name: 'video2' } })

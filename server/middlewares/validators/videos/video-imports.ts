@@ -1,5 +1,5 @@
 import express from 'express'
-import { body, param } from 'express-validator'
+import { body, param, query } from 'express-validator'
 import { isResolvingToUnicastOnly } from '@server/helpers/dns'
 import { isPreImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
@@ -19,13 +19,13 @@ import { getCommonVideoEditAttributes } from './videos'
 const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid).withMessage('Should have correct video channel id'),
+    .custom(isIdValid),
   body('targetUrl')
     .optional()
-    .custom(isVideoImportTargetUrlValid).withMessage('Should have a valid video import target URL'),
+    .custom(isVideoImportTargetUrlValid),
   body('magnetUri')
     .optional()
-    .custom(isVideoMagnetUriValid).withMessage('Should have a valid video magnet URI'),
+    .custom(isVideoMagnetUriValid),
   body('torrentfile')
     .custom((value, { req }) => isVideoImportTorrentFile(req.files))
     .withMessage(
@@ -39,8 +39,6 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     ),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoImportAddValidator parameters', { parameters: req.body })
-
     const user = res.locals.oauth.token.User
     const torrentFile = req.files?.['torrentfile'] ? req.files['torrentfile'][0] : undefined
 
@@ -92,13 +90,23 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   }
 ])
 
+const getMyVideoImportsValidator = [
+  query('videoChannelSyncId')
+    .optional()
+    .custom(isIdValid),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
 const videoImportDeleteValidator = [
   param('id')
-    .custom(isIdValid).withMessage('Should have correct import id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoImportDeleteValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoImportExist(parseInt(req.params.id), res)) return
@@ -117,11 +125,9 @@ const videoImportDeleteValidator = [
 
 const videoImportCancelValidator = [
   param('id')
-    .custom(isIdValid).withMessage('Should have correct import id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoImportCancelValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoImportExist(parseInt(req.params.id), res)) return
@@ -143,7 +149,8 @@ const videoImportCancelValidator = [
 export {
   videoImportAddValidator,
   videoImportCancelValidator,
-  videoImportDeleteValidator
+  videoImportDeleteValidator,
+  getMyVideoImportsValidator
 }
 
 // ---------------------------------------------------------------------------

@@ -109,8 +109,10 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: MAc
   let video: MVideoAccountLightBlacklistAllFiles
   let created: boolean
   let comment: MCommentOwnerVideo
+
   try {
     const resolveThreadResult = await resolveThread({ url: commentObject.id, isVideo: false })
+    if (!resolveThreadResult) return // Comment not accepted
 
     video = resolveThreadResult.video
     created = resolveThreadResult.commentCreated

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { wait } from '@shared/core-utils'
 import { VideoPrivacy } from '@shared/models'
 import {
@@ -12,8 +11,6 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 function in10Seconds () {
   const now = new Date()

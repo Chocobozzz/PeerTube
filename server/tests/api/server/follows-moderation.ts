@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { expectStartWith } from '@server/tests/shared'
 import { ActorFollow, FollowState } from '@shared/models'
 import {
@@ -12,8 +11,6 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 async function checkServer1And2HasFollowers (servers: PeerTubeServer[], state = 'accepted') {
   const fns = [
@@ -89,7 +86,7 @@ describe('Test follows moderation', function () {
   let commands: FollowsCommand[]
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(240000)
 
     servers = await createMultipleServers(3)
 

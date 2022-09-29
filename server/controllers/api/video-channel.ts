@@ -6,7 +6,7 @@ import { ActorFollowModel } from '@server/models/actor/actor-follow'
 import { getServerActor } from '@server/models/application/application'
 import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
 import { MChannelBannerAccountDefault } from '@server/types/models'
-import { ActorImageType, HttpStatusCode, VideoChannelCreate, VideoChannelUpdate } from '@shared/models'
+import { ActorImageType, HttpStatusCode, VideoChannelCreate, VideoChannelUpdate, VideosImportInChannelCreate } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { buildNSFWFilter, createReqFiles, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
@@ -23,7 +23,7 @@ import {
   asyncRetryTransactionMiddleware,
   authenticate,
   commonVideosFiltersValidator,
-  ensureCanManageChannel,
+  ensureCanManageChannelOrAccount,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -36,7 +36,9 @@ import {
   videoPlaylistsSortValidator
 } from '../../middlewares'
 import {
+  ensureChannelOwnerCanUpload,
   ensureIsLocalChannel,
+  videoChannelImportVideosValidator,
   videoChannelsFollowersSortValidator,
   videoChannelsListValidator,
   videoChannelsNameWithHostValidator,
@@ -75,7 +77,7 @@ videoChannelRouter.post('/:nameWithHost/avatar/pick',
   reqAvatarFile,
   asyncMiddleware(videoChannelsNameWithHostValidator),
   ensureIsLocalChannel,
-  ensureCanManageChannel,
+  ensureCanManageChannelOrAccount,
   updateAvatarValidator,
   asyncMiddleware(updateVideoChannelAvatar)
 )
@@ -85,7 +87,7 @@ videoChannelRouter.post('/:nameWithHost/banner/pick',
   reqBannerFile,
   asyncMiddleware(videoChannelsNameWithHostValidator),
   ensureIsLocalChannel,
-  ensureCanManageChannel,
+  ensureCanManageChannelOrAccount,
   updateBannerValidator,
   asyncMiddleware(updateVideoChannelBanner)
 )
@@ -94,7 +96,7 @@ videoChannelRouter.delete('/:nameWithHost/avatar',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
   ensureIsLocalChannel,
-  ensureCanManageChannel,
+  ensureCanManageChannelOrAccount,
   asyncMiddleware(deleteVideoChannelAvatar)
 )
 
@@ -102,7 +104,7 @@ videoChannelRouter.delete('/:nameWithHost/banner',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
   ensureIsLocalChannel,
-  ensureCanManageChannel,
+  ensureCanManageChannelOrAccount,
   asyncMiddleware(deleteVideoChannelBanner)
 )
 
@@ -110,7 +112,7 @@ videoChannelRouter.put('/:nameWithHost',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
   ensureIsLocalChannel,
-  ensureCanManageChannel,
+  ensureCanManageChannelOrAccount,
   videoChannelsUpdateValidator,
   asyncRetryTransactionMiddleware(updateVideoChannel)
 )
@@ -119,7 +121,7 @@ videoChannelRouter.delete('/:nameWithHost',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
   ensureIsLocalChannel,
-  ensureCanManageChannel,
+  ensureCanManageChannelOrAccount,
   asyncMiddleware(videoChannelsRemoveValidator),
   asyncRetryTransactionMiddleware(removeVideoChannel)
 )
@@ -153,12 +155,22 @@ videoChannelRouter.get('/:nameWithHost/videos',
 videoChannelRouter.get('/:nameWithHost/followers',
   authenticate,
   asyncMiddleware(videoChannelsNameWithHostValidator),
-  ensureCanManageChannel,
+  ensureCanManageChannelOrAccount,
   paginationValidator,
   videoChannelsFollowersSortValidator,
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listVideoChannelFollowers)
+)
+
+videoChannelRouter.post('/:nameWithHost/import-videos',
+  authenticate,
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  asyncMiddleware(videoChannelImportVideosValidator),
+  ensureIsLocalChannel,
+  ensureCanManageChannelOrAccount,
+  asyncMiddleware(ensureChannelOwnerCanUpload),
+  asyncMiddleware(importVideosInChannel)
 )
 
 // ---------------------------------------------------------------------------
@@ -403,4 +415,21 @@ async function listVideoChannelFollowers (req: express.Request, res: express.Res
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
+}
+
+async function importVideosInChannel (req: express.Request, res: express.Response) {
+  const { externalChannelUrl } = req.body as VideosImportInChannelCreate
+
+  await JobQueue.Instance.createJob({
+    type: 'video-channel-import',
+    payload: {
+      externalChannelUrl,
+      videoChannelId: res.locals.videoChannel.id,
+      partOfChannelSyncId: res.locals.videoChannelSync?.id
+    }
+  })
+
+  logger.info('Video import job for channel "%s" with url "%s" created.', res.locals.videoChannel.name, externalChannelUrl)
+
+  return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }

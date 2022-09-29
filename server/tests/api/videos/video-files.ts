@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
 import { HttpStatusCode } from '@shared/models'
 import {
@@ -34,7 +33,7 @@ describe('Test videos files', function () {
     let validId2: string
 
     before(async function () {
-      this.timeout(120_000)
+      this.timeout(360_000)
 
       {
         const { uuid } = await servers[0].videos.quickUpload({ name: 'video 1' })

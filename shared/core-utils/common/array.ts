@@ -15,7 +15,13 @@ function arrayify <T> (element: T | T[]) {
   return [ element ]
 }
 
+// Avoid conflict with other uniq() functions
+function uniqify <T> (elements: T[]) {
+  return Array.from(new Set(elements))
+}
+
 export {
+  uniqify,
   findCommonElement,
   arrayify
 }

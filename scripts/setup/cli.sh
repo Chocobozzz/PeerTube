@@ -14,5 +14,4 @@ rm -rf ./dist/server/tools/
 
 cp -r "./server/tools/node_modules" "./dist/server/tools"
 
-npm run resolve-tspaths:cli
 npm run resolve-tspaths:server

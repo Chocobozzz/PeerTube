@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { cleanupTests, createSingleServer, PeerTubeServer, PluginsCommand, setAccessTokensToServers } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test plugin translations', function () {
   let server: PeerTubeServer

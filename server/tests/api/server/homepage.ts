@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
@@ -13,8 +12,6 @@ import {
   setDefaultAccountAvatar,
   setDefaultChannelAvatar
 } from '../../../../shared/server-commands/index'
-
-const expect = chai.expect
 
 async function getHomepageState (server: PeerTubeServer) {
   const config = await server.config.getConfig()

@@ -25,11 +25,12 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
     private configService: ConfigService,
     private menuService: MenuService,
     private themeService: ThemeService
-  ) { }
+  ) {}
 
   ngOnInit () {
     this.buildLandingPageOptions()
     this.checkSignupField()
+    this.checkImportSyncField()
 
     this.availableThemes = this.themeService.buildAvailableThemes()
   }
@@ -59,12 +60,24 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
     return !!enabled.find((e: string) => e === algorithm)
   }
 
+  getUserVideoQuota () {
+    return this.form.value['user']['videoQuota']
+  }
+
   isSignupEnabled () {
     return this.form.value['signup']['enabled'] === true
   }
 
   getDisabledSignupClass () {
     return { 'disabled-checkbox-extra': !this.isSignupEnabled() }
+  }
+
+  isImportVideosHttpEnabled (): boolean {
+    return this.form.value['import']['videos']['http']['enabled'] === true
+  }
+
+  importSynchronizationChecked () {
+    return this.isImportVideosHttpEnabled() && this.form.value['import']['videoChannelSynchronization']['enabled']
   }
 
   hasUnlimitedSignup () {
@@ -95,6 +108,21 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
 
   getDefaultThemeLabel () {
     return this.themeService.getDefaultThemeLabel()
+  }
+
+  private checkImportSyncField () {
+    const importSyncControl = this.form.get('import.videoChannelSynchronization.enabled')
+    const importVideosHttpControl = this.form.get('import.videos.http.enabled')
+
+    importVideosHttpControl.valueChanges
+      .subscribe((httpImportEnabled) => {
+        importSyncControl.setValue(httpImportEnabled && importSyncControl.value)
+        if (httpImportEnabled) {
+          importSyncControl.enable()
+        } else {
+          importSyncControl.disable()
+        }
+      })
   }
 
   private checkSignupField () {

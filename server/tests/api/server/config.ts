@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { parallelTests } from '@shared/core-utils'
 import { CustomConfig, HttpStatusCode } from '@shared/models'
 import {
@@ -12,8 +11,6 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.instance.name).to.equal('PeerTube')
@@ -368,6 +365,10 @@ const newCustomConfig: CustomConfig = {
       torrent: {
         enabled: false
       }
+    },
+    videoChannelSynchronization: {
+      enabled: false,
+      maxPerUser: 10
     }
   },
   trending: {
@@ -505,7 +506,7 @@ describe('Test config', function () {
   })
 
   it('Should have the correct updated video allowed extensions', async function () {
-    this.timeout(10000)
+    this.timeout(30000)
 
     const data = await server.config.getConfig()
 

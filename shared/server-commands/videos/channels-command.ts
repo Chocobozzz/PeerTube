@@ -6,7 +6,8 @@ import {
   VideoChannel,
   VideoChannelCreate,
   VideoChannelCreateResult,
-  VideoChannelUpdate
+  VideoChannelUpdate,
+  VideosImportInChannelCreate
 } from '@shared/models'
 import { unwrapBody } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
@@ -179,6 +180,23 @@ export class ChannelsCommand extends AbstractCommand {
       query,
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  importVideos (options: OverrideCommandOptions & VideosImportInChannelCreate & {
+    channelName: string
+  }) {
+    const { channelName, externalChannelUrl, videoChannelSyncId } = options
+
+    const path = `/api/v1/video-channels/${channelName}/import-videos`
+
+    return this.postBodyRequest({
+      ...options,
+
+      path,
+      fields: { externalChannelUrl, videoChannelSyncId },
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
 }

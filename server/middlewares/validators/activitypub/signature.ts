@@ -12,21 +12,21 @@ import { areValidationErrors } from '../shared'
 const signatureValidator = [
   body('signature.type')
     .optional()
-    .custom(isSignatureTypeValid).withMessage('Should have a valid signature type'),
+    .custom(isSignatureTypeValid),
   body('signature.created')
     .optional()
     .custom(isDateValid).withMessage('Should have a signature created date that conforms to ISO 8601'),
   body('signature.creator')
     .optional()
-    .custom(isSignatureCreatorValid).withMessage('Should have a valid signature creator'),
+    .custom(isSignatureCreatorValid),
   body('signature.signatureValue')
     .optional()
-    .custom(isSignatureValueValid).withMessage('Should have a valid signature value'),
+    .custom(isSignatureValueValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking Linked Data Signature parameter', { parameters: { signature: req.body.signature } })
 
-    if (areValidationErrors(req, res)) return
+    if (areValidationErrors(req, res, { omitLog: true })) return
 
     return next()
   }

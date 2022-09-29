@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { wait } from '@shared/core-utils'
 import { ActivityType, VideoPlaylistPrivacy } from '@shared/models'
 import {
@@ -14,8 +13,6 @@ import {
   setDefaultChannelAvatar,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test stats (excluding redundancy)', function () {
   let servers: PeerTubeServer[] = []
@@ -188,7 +185,7 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   it('Should correctly count video file sizes if transcoding is enabled', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     await servers[0].config.updateCustomSubConfig({
       newConfig: {

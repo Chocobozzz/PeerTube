@@ -333,7 +333,10 @@
   .input-group-text > .dropdown-toggle {
     display: flex;
   }
+}
 
+.input-group,
+.btn-group {
   .last-in-group {
     border-top-right-radius: 3px !important;
     border-bottom-right-radius: 3px !important;

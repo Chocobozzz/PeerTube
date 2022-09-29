@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { basename, join } from 'path'
 import {
   checkDirectoryIsEmpty,
@@ -25,8 +24,6 @@ import {
   webtorrentAdd
 } from '@shared/server-commands'
 import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
-
-const expect = chai.expect
 
 async function checkHlsPlaylist (options: {
   servers: PeerTubeServer[]

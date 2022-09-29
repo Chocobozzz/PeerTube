@@ -76,11 +76,14 @@ const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNu
 
   logger.debug('Calculating audio bitrate of %s by AAC encoder.', input, { bitrate: parsedAudio.bitrate, audioCodecName })
 
+  // Force stereo as it causes some issues with HLS playback in Chrome
+  const base = [ '-channel_layout', 'stereo' ]
+
   if (bitrate !== -1) {
-    return { outputOptions: [ buildStreamSuffix('-b:a', streamNum), bitrate + 'k' ] }
+    return { outputOptions: base.concat([ buildStreamSuffix('-b:a', streamNum), bitrate + 'k' ]) }
   }
 
-  return { outputOptions: [ ] }
+  return { outputOptions: base }
 }
 
 const defaultLibFDKAACVODOptionsBuilder: EncoderOptionsBuilder = ({ streamNum }) => {

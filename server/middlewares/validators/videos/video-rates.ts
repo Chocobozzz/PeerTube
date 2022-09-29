@@ -6,18 +6,16 @@ import { isAccountNameValid } from '../../../helpers/custom-validators/accounts'
 import { isIdValid } from '../../../helpers/custom-validators/misc'
 import { isRatingValid } from '../../../helpers/custom-validators/video-rates'
 import { isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
-import { logger } from '../../../helpers/logger'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { areValidationErrors, checkCanSeeVideo, doesVideoExist, isValidVideoIdParam } from '../shared'
 
 const videoUpdateRateValidator = [
   isValidVideoIdParam('id'),
 
-  body('rating').custom(isVideoRatingTypeValid).withMessage('Should have a valid rate type'),
+  body('rating')
+    .custom(isVideoRatingTypeValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoRate parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
 
@@ -29,12 +27,12 @@ const videoUpdateRateValidator = [
 
 const getAccountVideoRateValidatorFactory = function (rateType: VideoRateType) {
   return [
-    param('name').custom(isAccountNameValid).withMessage('Should have a valid account name'),
-    param('videoId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid videoId'),
+    param('name')
+      .custom(isAccountNameValid),
+    param('videoId')
+      .custom(isIdValid),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      logger.debug('Checking videoCommentGetValidator parameters.', { parameters: req.params })
-
       if (areValidationErrors(req, res)) return
 
       const rate = await AccountVideoRateModel.loadLocalAndPopulateVideo(rateType, req.params.name, +req.params.videoId)
@@ -53,11 +51,11 @@ const getAccountVideoRateValidatorFactory = function (rateType: VideoRateType) {
 }
 
 const videoRatingValidator = [
-  query('rating').optional().custom(isRatingValid).withMessage('Value must be one of "like" or "dislike"'),
+  query('rating')
+    .optional()
+    .custom(isRatingValid).withMessage('Value must be one of "like" or "dislike"'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking rating parameter', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     return next()

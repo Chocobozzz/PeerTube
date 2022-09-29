@@ -10,6 +10,19 @@ function pick <O extends object, K extends keyof O> (object: O, keys: K[]): Pick
   return result
 }
 
+function omit <O extends object, K extends keyof O> (object: O, keys: K[]): Exclude<O, K> {
+  const result: any = {}
+  const keysSet = new Set(keys) as Set<string>
+
+  for (const [ key, value ] of Object.entries(object)) {
+    if (keysSet.has(key)) continue
+
+    result[key] = value
+  }
+
+  return result
+}
+
 function getKeys <O extends object, K extends keyof O> (object: O, keys: K[]): K[] {
   return (Object.keys(object) as K[]).filter(k => keys.includes(k))
 }
@@ -30,6 +43,7 @@ function sortObjectComparator (key: string, order: 'asc' | 'desc') {
 
 export {
   pick,
+  omit,
   getKeys,
   sortObjectComparator
 }

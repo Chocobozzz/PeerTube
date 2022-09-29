@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { FIXTURE_URLS } from '@server/tests/shared'
 import { VideoDetails, VideoPrivacy } from '@shared/models'
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers, setDefaultVideoChannel } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test config defaults', function () {
   let server: PeerTubeServer

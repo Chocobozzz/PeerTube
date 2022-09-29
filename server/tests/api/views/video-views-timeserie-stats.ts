@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { prepareViewsServers, prepareViewsVideos, processViewersStats } from '@server/tests/shared'
 import { VideoStatsTimeserie, VideoStatsTimeserieMetric } from '@shared/models'
 import { cleanupTests, PeerTubeServer, stopFfmpeg } from '@shared/server-commands'
-
-const expect = chai.expect
 
 function buildOneMonthAgo () {
   const monthAgo = new Date()

@@ -1,8 +1,8 @@
 import { readFileSync } from 'fs-extra'
-import { isArray, merge } from 'lodash'
+import { merge } from 'lodash'
 import { createTransport, Transporter } from 'nodemailer'
 import { join } from 'path'
-import { root } from '@shared/core-utils'
+import { arrayify, root } from '@shared/core-utils'
 import { EmailPayload } from '@shared/models'
 import { SendEmailDefaultOptions } from '../../shared/models/server/emailer.model'
 import { isTestOrDevInstance } from '../helpers/core-utils'
@@ -158,9 +158,7 @@ class Emailer {
       subjectPrefix: CONFIG.EMAIL.SUBJECT.PREFIX
     })
 
-    const toEmails = isArray(options.to)
-      ? options.to
-      : [ options.to ]
+    const toEmails = arrayify(options.to)
 
     for (const to of toEmails) {
       const baseOptions: SendEmailDefaultOptions = {

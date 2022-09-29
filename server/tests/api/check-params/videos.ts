@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { omit } from 'lodash'
+import { expect } from 'chai'
 import { join } from 'path'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination, checkUploadVideoParam } from '@server/tests/shared'
-import { randomInt, root } from '@shared/core-utils'
+import { omit, randomInt, root } from '@shared/core-utils'
 import { HttpStatusCode, PeerTubeProblemDocument, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
@@ -17,8 +15,6 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test videos API validator', function () {
   const path = '/api/v1/videos/'
@@ -219,7 +215,7 @@ describe('Test videos API validator', function () {
       })
 
       it('Should fail without name', async function () {
-        const fields = omit(baseCorrectParams, 'name')
+        const fields = omit(baseCorrectParams, [ 'name' ])
         const attaches = baseCorrectAttaches
 
         await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
@@ -268,7 +264,7 @@ describe('Test videos API validator', function () {
       })
 
       it('Should fail without a channel', async function () {
-        const fields = omit(baseCorrectParams, 'channelId')
+        const fields = omit(baseCorrectParams, [ 'channelId' ])
         const attaches = baseCorrectAttaches
 
         await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)

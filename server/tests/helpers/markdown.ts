@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { mdToOneLinePlainText } from '@server/helpers/markdown'
 import { expect } from 'chai'
 

@@ -2,7 +2,7 @@ import { ChildProcess, fork } from 'child_process'
 import { copy } from 'fs-extra'
 import { join } from 'path'
 import { parallelTests, randomInt, root } from '@shared/core-utils'
-import { Video, VideoChannel, VideoCreateResult, VideoDetails } from '@shared/models'
+import { Video, VideoChannel, VideoChannelSync, VideoCreateResult, VideoDetails } from '@shared/models'
 import { BulkCommand } from '../bulk'
 import { CLICommand } from '../cli'
 import { CustomPagesCommand } from '../custom-pages'
@@ -19,6 +19,7 @@ import {
   CaptionsCommand,
   ChangeOwnershipCommand,
   ChannelsCommand,
+  ChannelSyncsCommand,
   HistoryCommand,
   ImportsCommand,
   LiveCommand,
@@ -36,6 +37,7 @@ import { ContactFormCommand } from './contact-form-command'
 import { DebugCommand } from './debug-command'
 import { FollowsCommand } from './follows-command'
 import { JobsCommand } from './jobs-command'
+import { MetricsCommand } from './metrics-command'
 import { ObjectStorageCommand } from './object-storage-command'
 import { PluginsCommand } from './plugins-command'
 import { RedundancyCommand } from './redundancy-command'
@@ -79,6 +81,7 @@ export class PeerTubeServer {
     }
 
     channel?: VideoChannel
+    videoChannelSync?: Partial<VideoChannelSync>
 
     video?: Video
     videoCreated?: VideoCreateResult
@@ -102,6 +105,7 @@ export class PeerTubeServer {
   debug?: DebugCommand
   follows?: FollowsCommand
   jobs?: JobsCommand
+  metrics?: MetricsCommand
   plugins?: PluginsCommand
   redundancy?: RedundancyCommand
   stats?: StatsCommand
@@ -118,6 +122,7 @@ export class PeerTubeServer {
   playlists?: PlaylistsCommand
   history?: HistoryCommand
   imports?: ImportsCommand
+  channelSyncs?: ChannelSyncsCommand
   streamingPlaylists?: StreamingPlaylistsCommand
   channels?: ChannelsCommand
   comments?: CommentsCommand
@@ -374,6 +379,7 @@ export class PeerTubeServer {
     this.debug = new DebugCommand(this)
     this.follows = new FollowsCommand(this)
     this.jobs = new JobsCommand(this)
+    this.metrics = new MetricsCommand(this)
     this.plugins = new PluginsCommand(this)
     this.redundancy = new RedundancyCommand(this)
     this.stats = new StatsCommand(this)
@@ -390,6 +396,7 @@ export class PeerTubeServer {
     this.playlists = new PlaylistsCommand(this)
     this.history = new HistoryCommand(this)
     this.imports = new ImportsCommand(this)
+    this.channelSyncs = new ChannelSyncsCommand(this)
     this.streamingPlaylists = new StreamingPlaylistsCommand(this)
     this.channels = new ChannelsCommand(this)
     this.comments = new CommentsCommand(this)

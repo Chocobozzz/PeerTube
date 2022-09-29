@@ -1,5 +1,5 @@
-import { pick } from 'lodash'
 import { Sequelize } from 'sequelize'
+import { pick } from '@shared/core-utils'
 import { VideoInclude } from '@shared/models'
 import { AbstractVideoQueryBuilder } from './shared/abstract-video-query-builder'
 import { VideoFileQueryBuilder } from './shared/video-file-query-builder'

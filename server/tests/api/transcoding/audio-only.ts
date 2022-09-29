@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { getAudioStream, getVideoStreamDimensionsInfo } from '@server/helpers/ffmpeg'
 import {
   cleanupTests,
@@ -11,8 +10,6 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test audio only video transcoding', function () {
   let servers: PeerTubeServer[] = []

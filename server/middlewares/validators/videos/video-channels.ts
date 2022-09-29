@@ -1,29 +1,35 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
+import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
 import { CONFIG } from '@server/initializers/config'
 import { MChannelAccountDefault } from '@server/types/models'
+import { VideosImportInChannelCreate } from '@shared/models'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
-import { isBooleanValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
+import { isBooleanValid, isIdValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
 import {
   isVideoChannelDescriptionValid,
   isVideoChannelDisplayNameValid,
   isVideoChannelSupportValid,
   isVideoChannelUsernameValid
 } from '../../../helpers/custom-validators/video-channels'
-import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/actor/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
-import { areValidationErrors, doesVideoChannelNameWithHostExist } from '../shared'
+import { areValidationErrors, checkUserQuota, doesVideoChannelNameWithHostExist } from '../shared'
+import { doesVideoChannelSyncIdExist } from '../shared/video-channel-syncs'
 
-const videoChannelsAddValidator = [
-  body('name').custom(isVideoChannelUsernameValid).withMessage('Should have a valid channel name'),
-  body('displayName').custom(isVideoChannelDisplayNameValid).withMessage('Should have a valid display name'),
-  body('description').optional().custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
-  body('support').optional().custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
+export const videoChannelsAddValidator = [
+  body('name')
+    .custom(isVideoChannelUsernameValid),
+  body('displayName')
+    .custom(isVideoChannelDisplayNameValid),
+  body('description')
+    .optional()
+    .custom(isVideoChannelDescriptionValid),
+  body('support')
+    .optional()
+    .custom(isVideoChannelSupportValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoChannelsAdd parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     const actor = await ActorModel.loadLocalByName(req.body.name)
@@ -45,46 +51,43 @@ const videoChannelsAddValidator = [
   }
 ]
 
-const videoChannelsUpdateValidator = [
-  param('nameWithHost').exists().withMessage('Should have an video channel name with host'),
+export const videoChannelsUpdateValidator = [
+  param('nameWithHost')
+    .exists(),
+
   body('displayName')
     .optional()
-    .custom(isVideoChannelDisplayNameValid).withMessage('Should have a valid display name'),
+    .custom(isVideoChannelDisplayNameValid),
   body('description')
     .optional()
-    .custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
+    .custom(isVideoChannelDescriptionValid),
   body('support')
     .optional()
-    .custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
+    .custom(isVideoChannelSupportValid),
   body('bulkVideosSupportUpdate')
     .optional()
     .custom(isBooleanValid).withMessage('Should have a valid bulkVideosSupportUpdate boolean field'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoChannelsUpdate parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     return next()
   }
 ]
 
-const videoChannelsRemoveValidator = [
+export const videoChannelsRemoveValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoChannelsRemove parameters', { parameters: req.params })
-
     if (!await checkVideoChannelIsNotTheLastOne(res.locals.videoChannel, res)) return
 
     return next()
   }
 ]
 
-const videoChannelsNameWithHostValidator = [
-  param('nameWithHost').exists().withMessage('Should have an video channel name with host'),
+export const videoChannelsNameWithHostValidator = [
+  param('nameWithHost')
+    .exists(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoChannelsNameWithHostValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoChannelNameWithHostExist(req.params.nameWithHost, res)) return
@@ -93,7 +96,7 @@ const videoChannelsNameWithHostValidator = [
   }
 ]
 
-const ensureIsLocalChannel = [
+export const ensureIsLocalChannel = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (res.locals.videoChannel.Actor.isOwned() === false) {
       return res.fail({
@@ -106,11 +109,22 @@ const ensureIsLocalChannel = [
   }
 ]
 
-const videoChannelStatsValidator = [
+export const ensureChannelOwnerCanUpload = [
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const channel = res.locals.videoChannel
+    const user = { id: channel.Account.userId }
+
+    if (!await checkUserQuota(user, 1, res)) return
+
+    next()
+  }
+]
+
+export const videoChannelStatsValidator = [
   query('withStats')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid stats flag'),
+    .custom(isBooleanValid).withMessage('Should have a valid stats flag boolean'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -118,29 +132,50 @@ const videoChannelStatsValidator = [
   }
 ]
 
-const videoChannelsListValidator = [
-  query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
+export const videoChannelsListValidator = [
+  query('search')
+    .optional()
+    .not().isEmpty(),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking video channels search query', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     return next()
   }
 ]
 
-// ---------------------------------------------------------------------------
+export const videoChannelImportVideosValidator = [
+  body('externalChannelUrl')
+    .custom(isUrlValid),
 
-export {
-  videoChannelsAddValidator,
-  videoChannelsUpdateValidator,
-  videoChannelsRemoveValidator,
-  videoChannelsNameWithHostValidator,
-  ensureIsLocalChannel,
-  videoChannelsListValidator,
-  videoChannelStatsValidator
-}
+  body('videoChannelSyncId')
+    .optional()
+    .custom(isIdValid),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    const body: VideosImportInChannelCreate = req.body
+
+    if (!CONFIG.IMPORT.VIDEOS.HTTP.ENABLED) {
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Channel import is impossible as video upload via HTTP is not enabled on the server'
+      })
+    }
+
+    if (body.videoChannelSyncId && !await doesVideoChannelSyncIdExist(body.videoChannelSyncId, res)) return
+
+    if (res.locals.videoChannelSync && res.locals.videoChannelSync.videoChannelId !== res.locals.videoChannel.id) {
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'This channel sync is not owned by this channel'
+      })
+    }
+
+    return next()
+  }
+]
 
 // ---------------------------------------------------------------------------
 

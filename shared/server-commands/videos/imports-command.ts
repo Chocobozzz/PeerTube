@@ -57,15 +57,17 @@ export class ImportsCommand extends AbstractCommand {
   getMyVideoImports (options: OverrideCommandOptions & {
     sort?: string
     targetUrl?: string
+    videoChannelSyncId?: number
+    search?: string
   } = {}) {
-    const { sort, targetUrl } = options
+    const { sort, targetUrl, videoChannelSyncId, search } = options
     const path = '/api/v1/users/me/videos/imports'
 
     return this.getRequestBody<ResultList<VideoImport>>({
       ...options,
 
       path,
-      query: { sort, targetUrl },
+      query: { sort, targetUrl, videoChannelSyncId, search },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

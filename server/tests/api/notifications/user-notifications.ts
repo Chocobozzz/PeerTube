@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import {
   CheckerBaseParams,
   checkMyVideoImportIsFinished,
@@ -18,8 +17,6 @@ import { wait } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
 import { UserNotification, UserNotificationType, VideoPrivacy, VideoStudioTask } from '@shared/models'
 import { cleanupTests, findExternalSavedVideo, PeerTubeServer, stopFfmpeg, waitJobs } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test user notifications', function () {
   let servers: PeerTubeServer[] = []
@@ -161,7 +158,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a new video notification when a remote video becomes public', async function () {
-      this.timeout(50000)
+      this.timeout(120000)
 
       const data = { privacy: VideoPrivacy.PRIVATE }
       const { name, uuid, shortUUID } = await uploadRandomVideoOnServers(servers, 2, data)
@@ -305,7 +302,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should not send a notification before the video is published', async function () {
-      this.timeout(50000)
+      this.timeout(150000)
 
       const updateAt = new Date(new Date().getTime() + 1000000)
 

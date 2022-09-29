@@ -135,12 +135,11 @@ export {
 // ---------------------------------------------------------------------------
 
 function hashObject (obj: any): Promise<any> {
-  return jsonld.promises
-               .normalize(obj, {
-                 algorithm: 'URDNA2015',
-                 format: 'application/n-quads'
-               })
-               .then(res => sha256(res))
+  return jsonld.promises.normalize(obj, {
+    safe: false,
+    algorithm: 'URDNA2015',
+    format: 'application/n-quads'
+  }).then(res => sha256(res))
 }
 
 function createSignatureHash (signature: any) {

@@ -56,16 +56,17 @@ async function getVideoStreamCodec (path: string) {
   }
 
   if (videoCodec === 'av01') {
-    const level = videoStream.level
+    let level = videoStream.level.toString()
+    if (level.length === 1) level = `0${level}`
 
     // Guess the tier indicator and bit depth
     return `${videoCodec}.${baseProfile}.${level}M.08`
   }
 
-  // Default, h264 codec
   let level = videoStream.level.toString(16)
   if (level.length === 1) level = `0${level}`
 
+  // Default, h264 codec
   return `${videoCodec}.${baseProfile}${level}`
 }
 
@@ -163,7 +164,7 @@ async function canDoQuickAudioTranscode (path: string, probe?: FfprobeData): Pro
 
   const channelLayout = parsedAudio.audioStream['channel_layout']
   // Causes playback issues with Chrome
-  if (!channelLayout || channelLayout === 'unknown') return false
+  if (!channelLayout || channelLayout === 'unknown' || channelLayout === 'quad') return false
 
   return true
 }

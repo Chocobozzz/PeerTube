@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { readdir } from 'fs-extra'
 import magnetUtil from 'magnet-uri'
 import { basename, join } from 'path'
@@ -25,8 +24,6 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 let servers: PeerTubeServer[] = []
 let video1Server2: VideoDetails

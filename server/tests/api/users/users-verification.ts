@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { MockSmtpServer } from '@server/tests/shared'
 import { HttpStatusCode } from '@shared/models'
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test users account verification', function () {
   let server: PeerTubeServer

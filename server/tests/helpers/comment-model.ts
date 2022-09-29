@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { VideoCommentModel } from '../../models/video/video-comment'
-
-const expect = chai.expect
 
 class CommentMock {
   text: string

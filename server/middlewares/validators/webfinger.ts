@@ -3,16 +3,14 @@ import { query } from 'express-validator'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isWebfingerLocalResourceValid } from '../../helpers/custom-validators/webfinger'
 import { getHostWithPort } from '../../helpers/express-utils'
-import { logger } from '../../helpers/logger'
 import { ActorModel } from '../../models/actor/actor'
 import { areValidationErrors } from './shared'
 
 const webfingerValidator = [
-  query('resource').custom(isWebfingerLocalResourceValid).withMessage('Should have a valid webfinger resource'),
+  query('resource')
+    .custom(isWebfingerLocalResourceValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking webfinger parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     // Remove 'acct:' from the beginning of the string

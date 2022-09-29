@@ -54,6 +54,10 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
         {
           value: 'local:false',
           label: $localize`Remote comments`
+        },
+        {
+          value: 'localVideo:true',
+          label: $localize`Comments on local videos`
         }
       ]
     }

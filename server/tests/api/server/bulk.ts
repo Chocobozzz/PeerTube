@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import {
   BulkCommand,
   cleanupTests,
@@ -11,8 +10,6 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test bulk actions', function () {
   const commentsUser3: { videoId: number, commentId: number }[] = []
@@ -25,7 +22,7 @@ describe('Test bulk actions', function () {
   let bulkCommand: BulkCommand
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(2)
 

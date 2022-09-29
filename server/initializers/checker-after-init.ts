@@ -1,7 +1,7 @@
 import config from 'config'
-import { uniq } from 'lodash'
 import { URL } from 'url'
 import { getFFmpegVersion } from '@server/helpers/ffmpeg'
+import { uniqify } from '@shared/core-utils'
 import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
 import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
 import { isProdInstance, parseSemVersion } from '../helpers/core-utils'
@@ -48,6 +48,7 @@ function checkConfig () {
   checkRemoteRedundancyConfig()
   checkStorageConfig()
   checkTranscodingConfig()
+  checkImportConfig()
   checkBroadcastMessageConfig()
   checkSearchConfig()
   checkLiveConfig()
@@ -140,7 +141,7 @@ function checkLocalRedundancyConfig () {
       }
     }
 
-    const filtered = uniq(redundancyVideos.map(r => r.strategy))
+    const filtered = uniqify(redundancyVideos.map(r => r.strategy))
     if (filtered.length !== redundancyVideos.length) {
       throw new Error('Redundancy video entries should have unique strategies')
     }
@@ -197,6 +198,12 @@ function checkTranscodingConfig () {
     if (CONFIG.IMPORT.VIDEOS.CONCURRENCY <= 0) {
       throw new Error('Video import concurrency should be > 0')
     }
+  }
+}
+
+function checkImportConfig () {
+  if (CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED && !CONFIG.IMPORT.VIDEOS.HTTP) {
+    throw new Error('You need to enable HTTP import to allow synchronization')
   }
 }
 

@@ -25,7 +25,13 @@ import {
   usersUpdateMeValidator,
   usersVideoRatingValidator
 } from '../../../middlewares'
-import { deleteMeValidator, usersVideosValidator, videoImportsSortValidator, videosSortValidator } from '../../../middlewares/validators'
+import {
+  deleteMeValidator,
+  getMyVideoImportsValidator,
+  usersVideosValidator,
+  videoImportsSortValidator,
+  videosSortValidator
+} from '../../../middlewares/validators'
 import { updateAvatarValidator } from '../../../middlewares/validators/actor-image'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
@@ -60,6 +66,7 @@ meRouter.get('/me/videos/imports',
   videoImportsSortValidator,
   setDefaultSort,
   setDefaultPagination,
+  getMyVideoImportsValidator,
   asyncMiddleware(getUserVideoImports)
 )
 
@@ -138,7 +145,7 @@ async function getUserVideoImports (req: express.Request, res: express.Response)
   const resultList = await VideoImportModel.listUserVideoImportsForApi({
     userId: user.id,
 
-    ...pick(req.query, [ 'targetUrl', 'start', 'count', 'sort' ])
+    ...pick(req.query, [ 'targetUrl', 'start', 'count', 'sort', 'search', 'videoChannelSyncId' ])
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

@@ -3,9 +3,8 @@
 import { expect } from 'chai'
 import { createReadStream, stat } from 'fs-extra'
 import got, { Response as GotResponse } from 'got'
-import { omit } from 'lodash'
 import validator from 'validator'
-import { buildAbsoluteFixturePath, pick, wait } from '@shared/core-utils'
+import { buildAbsoluteFixturePath, omit, pick, wait } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
 import {
   HttpStatusCode,
@@ -484,7 +483,7 @@ export class VideosCommand extends AbstractCommand {
       },
 
       // Fixture will be sent later
-      attaches: this.buildUploadAttaches(omit(options.attributes, 'fixture')),
+      attaches: this.buildUploadAttaches(omit(options.attributes, [ 'fixture' ])),
       implicitToken: true,
 
       defaultExpectedStatus: null

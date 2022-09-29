@@ -1,4 +1,3 @@
-import { uniq } from 'lodash'
 import { FindOptions, Op, Order, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
@@ -14,8 +13,10 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { exists } from '@server/helpers/custom-validators/misc'
 import { getServerActor } from '@server/models/application/application'
 import { MAccount, MAccountId, MUserAccountId } from '@server/types/models'
+import { uniqify } from '@shared/core-utils'
 import { VideoPrivacy } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { ActivityTagObject, ActivityTombstoneObject } from '../../../shared/models/activitypub/objects/common-objects'
@@ -312,12 +313,13 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
     count: number
     sort: string
 
+    onLocalVideo?: boolean
     isLocal?: boolean
     search?: string
     searchAccount?: string
     searchVideo?: string
   }) {
-    const { start, count, sort, isLocal, search, searchAccount, searchVideo } = parameters
+    const { start, count, sort, isLocal, search, searchAccount, searchVideo, onLocalVideo } = parameters
 
     const where: WhereOptions = {
       deletedAt: null
@@ -361,6 +363,10 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
 
     if (searchVideo) {
       Object.assign(whereVideo, searchAttribute(searchVideo, 'name'))
+    }
+
+    if (exists(onLocalVideo)) {
+      Object.assign(whereVideo, { remote: !onLocalVideo })
     }
 
     const getQuery = (forCount: boolean) => {
@@ -796,7 +802,7 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
       )
     }
 
-    return uniq(result)
+    return uniqify(result)
   }
 
   toFormattedJSON (this: MCommentFormattable) {

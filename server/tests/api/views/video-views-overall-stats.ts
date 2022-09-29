@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { prepareViewsServers, prepareViewsVideos, processViewersStats } from '@server/tests/shared'
 import { cleanupTests, PeerTubeServer, stopFfmpeg, waitJobs } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test views overall stats', function () {
   let servers: PeerTubeServer[]

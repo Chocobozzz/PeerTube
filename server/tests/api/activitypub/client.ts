@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { processViewersStats } from '@server/tests/shared'
 import { HttpStatusCode, VideoPlaylistPrivacy, WatchActionObject } from '@shared/models'
 import {
@@ -13,8 +12,6 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test activitypub', function () {
   let servers: PeerTubeServer[] = []

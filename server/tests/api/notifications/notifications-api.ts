@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import {
   CheckerBaseParams,
   checkNewVideoFromSubscription,
@@ -11,8 +10,6 @@ import {
 } from '@server/tests/shared'
 import { UserNotification, UserNotificationSettingValue } from '@shared/models'
 import { cleanupTests, PeerTubeServer, waitJobs } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test notifications API', function () {
   let server: PeerTubeServer

@@ -1,5 +1,5 @@
 import { SequelizeInstrumentation } from 'opentelemetry-instrumentation-sequelize'
-import { diag, DiagLogLevel, trace } from '@opentelemetry/api'
+import { context, diag, DiagLogLevel, trace } from '@opentelemetry/api'
 import { JaegerExporter } from '@opentelemetry/exporter-jaeger'
 import { registerInstrumentations } from '@opentelemetry/instrumentation'
 import { DnsInstrumentation } from '@opentelemetry/instrumentation-dns'
@@ -14,6 +14,8 @@ import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node'
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
+
+const tracer = trace.getTracer('peertube')
 
 function registerOpentelemetryTracing () {
   if (CONFIG.OPEN_TELEMETRY.TRACING.ENABLED !== true) return
@@ -75,9 +77,18 @@ function registerOpentelemetryTracing () {
   tracerProvider.register()
 }
 
-const tracer = trace.getTracer('peertube')
+async function wrapWithSpanAndContext <T> (spanName: string, cb: () => Promise<T>) {
+  const span = tracer.startSpan(spanName)
+  const activeContext = trace.setSpan(context.active(), span)
+
+  const result = await context.with(activeContext, () => cb())
+  span.end()
+
+  return result
+}
 
 export {
   registerOpentelemetryTracing,
-  tracer
+  tracer,
+  wrapWithSpanAndContext
 }

@@ -144,6 +144,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           torrent: {
             enabled: null
           }
+        },
+        videoChannelSynchronization: {
+          enabled: null
         }
       },
       trending: {
@@ -289,6 +292,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   }
 
   formValidated () {
+    this.forceCheck()
+    if (!this.form.valid) return
+
     const value: ComponentCustomConfig = this.form.getRawValue()
 
     forkJoin([
@@ -378,8 +384,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         this.customConfig = { ...config, instanceCustomHomepage: homepage }
 
         this.updateForm()
-        // Force form validation
-        this.forceCheck()
+        this.markAllAsDirty()
       },
 
       error: err => this.notifier.error(err.message)

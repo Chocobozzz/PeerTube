@@ -3,7 +3,32 @@ import { param, validationResult } from 'express-validator'
 import { isIdOrUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
 import { logger } from '../../../helpers/logger'
 
-function areValidationErrors (req: express.Request, res: express.Response) {
+function areValidationErrors (
+  req: express.Request,
+  res: express.Response,
+  options: {
+    omitLog?: boolean
+    omitBodyLog?: boolean
+    tags?: string[]
+  } = {}) {
+  const { omitLog = false, omitBodyLog = false, tags = [] } = options
+
+  if (!omitLog) {
+    logger.debug(
+      'Checking %s - %s parameters',
+      req.method, req.originalUrl,
+      {
+        body: omitBodyLog
+          ? 'omitted'
+          : req.body,
+        params: req.params,
+        query: req.query,
+        files: req.files,
+        tags
+      }
+    )
+  }
+
   const errors = validationResult(req)
 
   if (!errors.isEmpty()) {
@@ -26,13 +51,13 @@ function areValidationErrors (req: express.Request, res: express.Response) {
 function isValidVideoIdParam (paramName: string) {
   return param(paramName)
     .customSanitizer(toCompleteUUID)
-    .custom(isIdOrUUIDValid).withMessage('Should have a valid video id')
+    .custom(isIdOrUUIDValid).withMessage('Should have a valid video id (id, short UUID or UUID)')
 }
 
 function isValidPlaylistIdParam (paramName: string) {
   return param(paramName)
     .customSanitizer(toCompleteUUID)
-    .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id')
+    .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id (id, short UUID or UUID)')
 }
 
 // ---------------------------------------------------------------------------

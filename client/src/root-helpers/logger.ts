@@ -95,9 +95,9 @@ class Logger {
   }
 
   private buildStackServerLogPayload (message: LoggerMessage, meta?: LoggerMeta) {
-    if (message instanceof Error) return message.stack
-    if (meta instanceof Error) return meta.stack
-    if (meta?.err instanceof Error) return meta.err.stack
+    if (message instanceof Error) return this.buildStack(message)
+    if (meta instanceof Error) return this.buildStack(meta)
+    if (meta?.err instanceof Error) return this.buildStack(meta.err)
 
     return undefined
   }
@@ -127,6 +127,10 @@ class Logger {
 
       hookObj.hook(message, meta)
     }
+  }
+
+  private buildStack (err: Error) {
+    return `${err.message}\n${err.stack || ''}`
   }
 }
 

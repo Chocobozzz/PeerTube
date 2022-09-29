@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { snakeCase } from 'lodash'
 import validator from 'validator'
 import { getAverageBitrate, getMaxBitrate } from '@shared/core-utils'
 import { VideoResolution } from '@shared/models'
 import { objectConverter, parseBytes, parseDurationToMs } from '../../helpers/core-utils'
-
-const expect = chai.expect
 
 describe('Parse Bytes', function () {
 

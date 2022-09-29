@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { isActorDeleteActivityValid } from '@server/helpers/custom-validators/activitypub/actor'
 import { getAPId } from '@server/lib/activitypub/activity'
+import { wrapWithSpanAndContext } from '@server/lib/opentelemetry/tracing'
 import { ActivityDelete, ActivityPubSignature, HttpStatusCode } from '@shared/models'
 import { logger } from '../helpers/logger'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../helpers/peertube-crypto'
@@ -61,91 +62,95 @@ export {
 // ---------------------------------------------------------------------------
 
 async function checkHttpSignature (req: Request, res: Response) {
-  // FIXME: compatibility with http-signature < v1.3
-  const sig = req.headers[HTTP_SIGNATURE.HEADER_NAME] as string
-  if (sig && sig.startsWith('Signature ') === true) req.headers[HTTP_SIGNATURE.HEADER_NAME] = sig.replace(/^Signature /, '')
+  return wrapWithSpanAndContext('peertube.activitypub.checkHTTPSignature', async () => {
+    // FIXME: compatibility with http-signature < v1.3
+    const sig = req.headers[HTTP_SIGNATURE.HEADER_NAME] as string
+    if (sig && sig.startsWith('Signature ') === true) req.headers[HTTP_SIGNATURE.HEADER_NAME] = sig.replace(/^Signature /, '')
 
-  let parsed: any
+    let parsed: any
 
-  try {
-    parsed = parseHTTPSignature(req, HTTP_SIGNATURE.CLOCK_SKEW_SECONDS)
-  } catch (err) {
-    logger.warn('Invalid signature because of exception in signature parser', { reqBody: req.body, err })
+    try {
+      parsed = parseHTTPSignature(req, HTTP_SIGNATURE.CLOCK_SKEW_SECONDS)
+    } catch (err) {
+      logger.warn('Invalid signature because of exception in signature parser', { reqBody: req.body, err })
 
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: err.message
-    })
-    return false
-  }
+      res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: err.message
+      })
+      return false
+    }
 
-  const keyId = parsed.keyId
-  if (!keyId) {
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Invalid key ID',
-      data: {
-        keyId
-      }
-    })
-    return false
-  }
+    const keyId = parsed.keyId
+    if (!keyId) {
+      res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Invalid key ID',
+        data: {
+          keyId
+        }
+      })
+      return false
+    }
 
-  logger.debug('Checking HTTP signature of actor %s...', keyId)
+    logger.debug('Checking HTTP signature of actor %s...', keyId)
 
-  let [ actorUrl ] = keyId.split('#')
-  if (actorUrl.startsWith('acct:')) {
-    actorUrl = await loadActorUrlOrGetFromWebfinger(actorUrl.replace(/^acct:/, ''))
-  }
+    let [ actorUrl ] = keyId.split('#')
+    if (actorUrl.startsWith('acct:')) {
+      actorUrl = await loadActorUrlOrGetFromWebfinger(actorUrl.replace(/^acct:/, ''))
+    }
 
-  const actor = await getOrCreateAPActor(actorUrl)
+    const actor = await getOrCreateAPActor(actorUrl)
 
-  const verified = isHTTPSignatureVerified(parsed, actor)
-  if (verified !== true) {
-    logger.warn('Signature from %s is invalid', actorUrl, { parsed })
+    const verified = isHTTPSignatureVerified(parsed, actor)
+    if (verified !== true) {
+      logger.warn('Signature from %s is invalid', actorUrl, { parsed })
 
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Invalid signature',
-      data: {
-        actorUrl
-      }
-    })
-    return false
-  }
+      res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Invalid signature',
+        data: {
+          actorUrl
+        }
+      })
+      return false
+    }
 
-  res.locals.signature = { actor }
-  return true
+    res.locals.signature = { actor }
+    return true
+  })
 }
 
 async function checkJsonLDSignature (req: Request, res: Response) {
-  const signatureObject: ActivityPubSignature = req.body.signature
+  return wrapWithSpanAndContext('peertube.activitypub.JSONLDSignature', async () => {
+    const signatureObject: ActivityPubSignature = req.body.signature
 
-  if (!signatureObject || !signatureObject.creator) {
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Object and creator signature do not match'
-    })
-    return false
-  }
+    if (!signatureObject || !signatureObject.creator) {
+      res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Object and creator signature do not match'
+      })
+      return false
+    }
 
-  const [ creator ] = signatureObject.creator.split('#')
+    const [ creator ] = signatureObject.creator.split('#')
 
-  logger.debug('Checking JsonLD signature of actor %s...', creator)
+    logger.debug('Checking JsonLD signature of actor %s...', creator)
 
-  const actor = await getOrCreateAPActor(creator)
-  const verified = await isJsonLDSignatureVerified(actor, req.body)
+    const actor = await getOrCreateAPActor(creator)
+    const verified = await isJsonLDSignatureVerified(actor, req.body)
 
-  if (verified !== true) {
-    logger.warn('Signature not verified.', req.body)
+    if (verified !== true) {
+      logger.warn('Signature not verified.', req.body)
 
-    res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
-      message: 'Signature could not be verified'
-    })
-    return false
-  }
+      res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Signature could not be verified'
+      })
+      return false
+    }
 
-  res.locals.signature = { actor }
-  return true
+    res.locals.signature = { actor }
+    return true
+  })
 }

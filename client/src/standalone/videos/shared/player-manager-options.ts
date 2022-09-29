@@ -6,6 +6,7 @@ import {
   VideoCaption,
   VideoDetails,
   VideoPlaylistElement,
+  VideoState,
   VideoStreamingPlaylistType
 } from '../../../../../shared/models'
 import { P2PMediaLoaderOptions, PeertubePlayerManagerOptions, PlayerMode, VideoJSCaption } from '../../../assets/player'
@@ -108,6 +109,10 @@ export class PlayerManagerOptions {
       const params = new URL(window.location.toString()).searchParams
 
       this.autoplay = getParamToggle(params, 'autoplay', false)
+      // Disable auto play on live videos that are not streamed
+      if (video.state.id === VideoState.LIVE_ENDED || video.state.id === VideoState.WAITING_FOR_LIVE) {
+        this.autoplay = false
+      }
 
       this.controls = getParamToggle(params, 'controls', true)
       this.controlBar = getParamToggle(params, 'controlBar', true)
@@ -198,6 +203,7 @@ export class PlayerManagerOptions {
         videoCaptions,
         inactivityTimeout: 2500,
         videoViewUrl: this.videoFetcher.getVideoViewsUrl(video.uuid),
+        metricsUrl: window.location.origin + '/api/v1/metrics/playback',
 
         videoShortUUID: video.shortUUID,
         videoUUID: video.uuid,

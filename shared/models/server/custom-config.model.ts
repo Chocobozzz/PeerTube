@@ -165,6 +165,10 @@ export interface CustomConfig {
         enabled: boolean
       }
     }
+    videoChannelSynchronization: {
+      enabled: boolean
+      maxPerUser: number
+    }
   }
 
   trending: {

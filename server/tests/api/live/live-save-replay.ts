@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { FfmpegCommand } from 'fluent-ffmpeg'
 import { checkLiveCleanup } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
@@ -22,8 +21,6 @@ import {
   waitUntilLiveReplacedByReplayOnAllServers,
   waitUntilLiveWaitingOnAllServers
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Save replay setting', function () {
   let servers: PeerTubeServer[] = []

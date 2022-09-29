@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { omit } from 'lodash'
+import { expect } from 'chai'
+import { omit } from '@shared/core-utils'
 import {
   Account,
   HTMLServerConfig,
@@ -24,14 +23,12 @@ import {
   waitJobs
 } from '../../shared/server-commands'
 
-const expect = chai.expect
-
 function checkIndexTags (html: string, title: string, description: string, css: string, config: ServerConfig) {
   expect(html).to.contain('<title>' + title + '</title>')
   expect(html).to.contain('<meta name="description" content="' + description + '" />')
   expect(html).to.contain('<style class="custom-css-style">' + css + '</style>')
 
-  const htmlConfig: HTMLServerConfig = omit(config, 'signup')
+  const htmlConfig: HTMLServerConfig = omit(config, [ 'signup' ])
   const configObjectString = JSON.stringify(htmlConfig)
   const configEscapedString = JSON.stringify(configObjectString)
 

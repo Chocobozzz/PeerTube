@@ -254,6 +254,8 @@ tags:
       download it for you, saving you as much bandwidth and avoiding any instability or limitation your network might have.
   - name: Video Imports
     description: Operations dealing with listing, adding and removing video imports.
+  - name: Channels Sync
+    description: Operations dealing with synchronizing PeerTube user's channel with channels of other platforms
   - name: Video Captions
     description: Operations dealing with listing, adding and removing closed captions of a video.
   - name: Video Channels
@@ -327,6 +329,7 @@ x-tagGroups:
       - Video Transcoding
       - Live Videos
       - Feeds
+      - Channels Sync
   - name: Search
     tags:
       - Search
@@ -1184,6 +1187,27 @@ paths:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
+        -
+          name: targetUrl
+          in: query
+          required: false
+          description: Filter on import target URL
+          schema:
+            type: string
+        -
+          name: videoChannelSyncId
+          in: query
+          required: false
+          description: Filter on imports created by a specific channel synchronization
+          schema:
+            type: number
+        -
+          name: search
+          in: query
+          required: false
+          description: Search in video names
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -3050,7 +3074,7 @@ paths:
       tags:
         - Video Channels
       responses:
-        '204':
+        '200':
           description: successful operation
           content:
             application/json:
@@ -3287,6 +3311,79 @@ paths:
       responses:
         '204':
           description: successful operation
+
+  '/video-channels/{channelHandle}/import-videos':
+    post:
+      summary: Import videos in channel
+      description: Import a remote channel/playlist videos into a channel
+      security:
+        - OAuth2: []
+      tags:
+        - Video Channels
+        - Channels Sync
+      parameters:
+        - $ref: '#/components/parameters/channelHandle'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportVideosInChannelCreate'
+      responses:
+        '204':
+          description: successful operation
+
+  '/video-channel-syncs':
+    post:
+      summary: Create a synchronization for a video channel
+      operationId: addVideoChannelSync
+      security:
+        - OAuth2: []
+      tags:
+        - Channels Sync
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoChannelSyncCreate'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  videoChannelSync:
+                    $ref: "#/components/schemas/VideoChannelSync"
+
+  '/video-channel-syncs/{channelSyncId}':
+    delete:
+      summary: Delete a video channel synchronization
+      operationId: delVideoChannelSync
+      security:
+        - OAuth2: []
+      tags:
+        - Channels Sync
+      parameters:
+        - $ref: '#/components/parameters/channelSyncId'
+      responses:
+        '204':
+          description: successful operation
+
+  '/video-channel-syncs/{channelSyncId}/sync':
+    post:
+      summary: Triggers the channel synchronization job, fetching all the videos from the remote channel
+      operationId: triggerVideoChannelSync
+      security:
+        - OAuth2: []
+      tags:
+        - Channels Sync
+      parameters:
+        - $ref: '#/components/parameters/channelSyncId'
+      responses:
+        '204':
+          description: successful operation
+
 
   /video-playlists/privacies:
     get:
@@ -3658,6 +3755,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoChannelList'
+
+  '/accounts/{name}/video-channel-syncs':
+    get:
+      summary: List the synchronizations of video channels of an account
+      tags:
+        - Video Channels
+        - Channels Sync
+        - Accounts
+      parameters:
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoChannelSyncList'
 
   '/accounts/{name}/ratings':
     get:
@@ -4892,6 +5009,21 @@ paths:
         '404':
           description: plugin not found
 
+  /metrics/playback:
+    post:
+      summary: Create playback metrics
+      description: These metrics are exposed by OpenTelemetry metrics exporter if enabled.
+      tags:
+        - Stats
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlaybackMetricCreate'
+      responses:
+        '204':
+          description: successful operation
+
 servers:
   - url: 'https://peertube2.cpy.re/api/v1'
     description: Live Test Server (live data - latest nightly version)
@@ -5141,6 +5273,13 @@ components:
       schema:
         type: string
         example: my_username | my_username@example.com
+    channelSyncId:
+      name: channelSyncId
+      in: path
+      required: true
+      description: Channel Sync id
+      schema:
+        $ref: '#/components/schemas/Abuse/properties/id'
     subscriptionHandle:
       name: subscriptionHandle
       in: path
@@ -5347,6 +5486,7 @@ components:
           - activitypub-refresher
           - video-redundancy
           - video-live-ending
+          - video-channel-import
     followState:
       name: state
       in: query
@@ -6497,6 +6637,11 @@ components:
                   properties:
                     enabled:
                       type: boolean
+            videoChannelSynchronization:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
         autoBlacklist:
           type: object
           properties:
@@ -6861,6 +7006,11 @@ components:
                   properties:
                     enabled:
                       type: boolean
+            video_channel_synchronization:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
         autoBlacklist:
           type: object
           properties:
@@ -6953,6 +7103,7 @@ components:
             - videos-views-stats
             - activitypub-refresher
             - video-redundancy
+            - video-channel-import
         data:
           type: object
           additionalProperties: true
@@ -7473,6 +7624,7 @@ components:
                   type: integer
                 uuid:
                   $ref: '#/components/schemas/UUIDv4'
+
     VideoChannelCreate:
       allOf:
         - $ref: '#/components/schemas/VideoChannel'
@@ -7503,6 +7655,63 @@ components:
               - $ref: '#/components/schemas/VideoChannel'
               - $ref: '#/components/schemas/Actor'
 
+    ImportVideosInChannelCreate:
+      type: object
+      properties:
+        externalChannelUrl:
+          type: string
+          example: https://youtube.com/c/UC_myfancychannel
+        videoChannelSyncId:
+          type: integer
+          description: If part of a channel sync process, specify its id to assign video imports to this channel synchronization
+      required:
+        - 'externalChannelUrl'
+
+    VideoChannelSync:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        state:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 2
+            label:
+              type: string
+              example: PROCESSING
+        externalChannelUrl:
+          type: string
+          example: 'https://youtube.com/c/UC_myfancychannel'
+        createdAt:
+          type: string
+          format: date-time
+        lastSyncAt:
+          type: string
+          format: date-time
+          nullable: true
+        channel:
+          $ref: '#/components/schemas/VideoChannel'
+    VideoChannelSyncList:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 1
+        data:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/VideoChannelSync'
+    VideoChannelSyncCreate:
+      type: object
+      properties:
+        externalChannelUrl:
+          type: string
+          example: https://youtube.com/c/UC_myfancychannel
+        videoChannelId:
+          $ref: '#/components/schemas/id'
     MRSSPeerLink:
       type: object
       xml:
@@ -8001,44 +8210,86 @@ components:
                     format: binary
 
     LiveVideoSessionResponse:
-        properties:
-          id:
-            type: integer
-          startDate:
-            type: string
-            format: date-time
-            description: Start date of the live session
-          endDate:
-            type: string
-            format: date-time
-            nullable: true
-            description: End date of the live session
-          error:
-            type: integer
-            enum:
-              - 1
-              - 2
-              - 3
-              - 4
-              - 5
-            nullable: true
-            description: >
-              Error type if an error occurred during the live session:
-                - `1`: Bad socket health (transcoding is too slow)
-                - `2`: Max duration exceeded
-                - `3`: Quota exceeded
-                - `4`: Quota FFmpeg error
-                - `5`: Video has been blacklisted during the live
-          replayVideo:
-            type: object
-            description: Video replay information
-            properties:
-              id:
-                type: number
-              uuid:
-                $ref: '#/components/schemas/UUIDv4'
-              shortUUID:
-                $ref: '#/components/schemas/shortUUID'
+      properties:
+        id:
+          type: integer
+        startDate:
+          type: string
+          format: date-time
+          description: Start date of the live session
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+          description: End date of the live session
+        error:
+          type: integer
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+          nullable: true
+          description: >
+            Error type if an error occurred during the live session:
+              - `1`: Bad socket health (transcoding is too slow)
+              - `2`: Max duration exceeded
+              - `3`: Quota exceeded
+              - `4`: Quota FFmpeg error
+              - `5`: Video has been blacklisted during the live
+        replayVideo:
+          type: object
+          description: Video replay information
+          properties:
+            id:
+              type: number
+            uuid:
+              $ref: '#/components/schemas/UUIDv4'
+            shortUUID:
+              $ref: '#/components/schemas/shortUUID'
+
+    PlaybackMetricCreate:
+      properties:
+        playerMode:
+          type: string
+          enum:
+            - 'p2p-media-loader'
+            - 'webtorrent'
+        resolution:
+          type: number
+          description: Current player video resolution
+        fps:
+          type: number
+          description: Current player video fps
+        resolutionChanges:
+          type: number
+          description: How many resolution changes occured since the last metric creation
+        errors:
+          type: number
+          description: How many errors occured since the last metric creation
+        downloadedBytesP2P:
+          type: number
+          description: How many bytes were downloaded with P2P since the last metric creation
+        downloadedBytesHTTP:
+          type: number
+          description: How many bytes were downloaded with HTTP since the last metric creation
+        uploadedBytesP2P:
+          type: number
+          description: How many bytes were uploaded with P2P since the last metric creation
+        videoId:
+          oneOf:
+            - $ref: '#/components/schemas/id'
+            - $ref: '#/components/schemas/UUIDv4'
+            - $ref: '#/components/schemas/shortUUID'
+      required:
+        - playerMode
+        - resolutionChanges
+        - errors
+        - downloadedBytesP2P
+        - downloadedBytesHTTP
+        - uploadedBytesP2P
+        - videoId
 
   callbacks:
     searchIndex:

@@ -69,7 +69,7 @@
         <ng-container *ngIf="hasProgress(job)">{{ getProgress(job) }}</ng-container>
       </td>
 
-      <td class="job-date c-hand" [pRowToggler]="job">{{ job.createdAt | date: 'short' }}</td>
+      <td class="job-date c-hand" [pRowToggler]="job">{{ job.createdAt }}</td>
     </tr>
   </ng-template>
 

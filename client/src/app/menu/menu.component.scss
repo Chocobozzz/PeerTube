@@ -391,26 +391,17 @@ my-actor-avatar {
 }
 
 my-global-icon {
-  &[iconName=playlists] {
+  position: relative;
+  top: -1px;
+
+  .playlist-icon {
     @include margin-right(16px);
 
     height: 24px;
     width: 24px;
   }
 
-  &[iconName=videos] {
-    position: relative;
-    right: -1px;
-  }
-
-  &[iconName=channel] {
-    margin-top: -2px;
-  }
-
-  &[iconName='sign-out'] {
-    position: relative;
-    right: -2px;
-    height: 20px;
-    width: 20px;
+  &.channel-icon {
+    top: -2px;
   }
 }

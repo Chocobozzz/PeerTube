@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { omit } from 'lodash'
+import { expect } from 'chai'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
-import { buildAbsoluteFixturePath } from '@shared/core-utils'
+import { buildAbsoluteFixturePath, omit } from '@shared/core-utils'
 import { HttpStatusCode, VideoChannelUpdate } from '@shared/models'
 import {
   ChannelsCommand,
@@ -18,12 +16,16 @@ import {
   setAccessTokensToServers
 } from '@shared/server-commands'
 
-const expect = chai.expect
-
 describe('Test video channels API validator', function () {
   const videoChannelPath = '/api/v1/video-channels'
   let server: PeerTubeServer
-  let accessTokenUser: string
+  const userInfo = {
+    accessToken: '',
+    channelName: 'fake_channel',
+    id: -1,
+    videoQuota: -1,
+    videoQuotaDaily: -1
+  }
   let command: ChannelsCommand
 
   // ---------------------------------------------------------------
@@ -35,14 +37,15 @@ describe('Test video channels API validator', function () {
 
     await setAccessTokensToServers([ server ])
 
-    const user = {
+    const userCreds = {
       username: 'fake',
       password: 'fake_password'
     }
 
     {
-      await server.users.create({ username: user.username, password: user.password })
-      accessTokenUser = await server.login.getAccessToken(user)
+      const user = await server.users.create({ username: userCreds.username, password: userCreds.password })
+      userInfo.id = user.id
+      userInfo.accessToken = await server.login.getAccessToken(userCreds)
     }
 
     command = server.channels
@@ -114,7 +117,7 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail without a name', async function () {
-      const fields = omit(baseCorrectParams, 'name')
+      const fields = omit(baseCorrectParams, [ 'name' ])
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 
@@ -124,7 +127,7 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail without a name', async function () {
-      const fields = omit(baseCorrectParams, 'displayName')
+      const fields = omit(baseCorrectParams, [ 'displayName' ])
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 
@@ -191,7 +194,7 @@ describe('Test video channels API validator', function () {
       await makePutBodyRequest({
         url: server.url,
         path,
-        token: accessTokenUser,
+        token: userInfo.accessToken,
         fields: baseCorrectParams,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
@@ -339,7 +342,7 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with a another user', async function () {
-      await makeGetRequest({ url: server.url, path, token: accessTokenUser, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await makeGetRequest({ url: server.url, path, token: userInfo.accessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should succeed with the correct params', async function () {
@@ -353,7 +356,7 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with another authenticated user', async function () {
-      await command.delete({ token: accessTokenUser, channelName: 'super_channel', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await command.delete({ token: userInfo.accessToken, channelName: 'super_channel', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
 
     it('Should fail with an unknown video channel id', async function () {

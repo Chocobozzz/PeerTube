@@ -12,17 +12,16 @@ import { CONFIG } from '@server/initializers/config'
 import { approximateIntroOutroAdditionalSize, getTaskFile } from '@server/lib/video-studio'
 import { isAudioFile } from '@shared/extra-utils'
 import { HttpStatusCode, UserRight, VideoState, VideoStudioCreateEdition, VideoStudioTask } from '@shared/models'
-import { logger } from '../../../helpers/logger'
 import { areValidationErrors, checkUserCanManageVideo, checkUserQuota, doesVideoExist } from '../shared'
 
 const videoStudioAddEditionValidator = [
-  param('videoId').custom(isIdOrUUIDValid).withMessage('Should have a valid video id/uuid'),
+  param('videoId')
+    .custom(isIdOrUUIDValid).withMessage('Should have a valid video id/uuid/short uuid'),
 
-  body('tasks').custom(isValidStudioTasksArray).withMessage('Should have a valid array of tasks'),
+  body('tasks')
+    .custom(isValidStudioTasksArray).withMessage('Should have a valid array of tasks'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoStudioAddEditionValidator parameters.', { parameters: req.params, body: req.body, files: req.files })
-
     if (CONFIG.VIDEO_STUDIO.ENABLED !== true) {
       res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,

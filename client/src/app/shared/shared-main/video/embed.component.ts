@@ -20,15 +20,15 @@ export class EmbedComponent implements OnInit {
   }
 
   ngOnInit () {
-    const html = buildVideoOrPlaylistEmbed(
-      decorateVideoLink({
+    const html = buildVideoOrPlaylistEmbed({
+      embedUrl: decorateVideoLink({
         url: buildVideoEmbedLink(this.video, environment.originServerUrl),
 
         title: false,
         warningTitle: false
       }),
-      this.video.name
-    )
+      embedTitle: this.video.name
+    })
 
     this.embedHTML = this.sanitizer.bypassSecurityTrustHtml(html)
   }

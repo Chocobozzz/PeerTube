@@ -1,4 +1,3 @@
-import 'mocha'
 import { cleanupTests, CLICommand, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
 describe('Test reset password scripts', function () {

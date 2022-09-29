@@ -21,6 +21,6 @@ export class EmbedMarkupComponent implements CustomMarkupComponent, OnInit {
       ? buildVideoEmbedLink({ uuid: this.uuid }, environment.originServerUrl)
       : buildPlaylistEmbedLink({ uuid: this.uuid }, environment.originServerUrl)
 
-    this.el.nativeElement.innerHTML = buildVideoOrPlaylistEmbed(link, this.uuid)
+    this.el.nativeElement.innerHTML = buildVideoOrPlaylistEmbed({ embedUrl: link, embedTitle: this.uuid })
   }
 }

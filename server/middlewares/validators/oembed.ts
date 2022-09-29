@@ -7,7 +7,6 @@ import { VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isTestOrDevInstance } from '../../helpers/core-utils'
 import { isIdOrUUIDValid, isUUIDValid, toCompleteUUID } from '../../helpers/custom-validators/misc'
-import { logger } from '../../helpers/logger'
 import { WEBSERVER } from '../../initializers/constants'
 import { areValidationErrors } from './shared'
 
@@ -39,14 +38,19 @@ if (isTestOrDevInstance()) {
 }
 
 const oembedValidator = [
-  query('url').isURL(isURLOptions).withMessage('Should have a valid url'),
-  query('maxwidth').optional().isInt().withMessage('Should have a valid max width'),
-  query('maxheight').optional().isInt().withMessage('Should have a valid max height'),
-  query('format').optional().isIn([ 'xml', 'json' ]).withMessage('Should have a valid format'),
+  query('url')
+    .isURL(isURLOptions),
+  query('maxwidth')
+    .optional()
+    .isInt(),
+  query('maxheight')
+    .optional()
+    .isInt(),
+  query('format')
+    .optional()
+    .isIn([ 'xml', 'json' ]),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking oembed parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     if (req.query.format !== undefined && req.query.format !== 'json') {

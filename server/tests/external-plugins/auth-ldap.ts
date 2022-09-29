@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 import { HttpStatusCode } from '@shared/models'
@@ -93,6 +92,14 @@ describe('Official plugin auth-ldap', function () {
     await server.users.unbanUser({ userId })
 
     await server.login.login({ user: { username: 'fry@planetexpress.com', password: 'fry' } })
+  })
+
+  it('Should not be able to ask password reset', async function () {
+    await server.users.askResetPassword({ email: 'fry@planetexpress.com', expectedStatus: HttpStatusCode.CONFLICT_409 })
+  })
+
+  it('Should not be able to ask email verification', async function () {
+    await server.users.askSendVerifyEmail({ email: 'fry@planetexpress.com', expectedStatus: HttpStatusCode.CONFLICT_409 })
   })
 
   it('Should not login if the plugin is uninstalled', async function () {

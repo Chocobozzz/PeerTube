@@ -2,7 +2,6 @@ import express from 'express'
 import { param } from 'express-validator'
 import { isIdValid } from '@server/helpers/custom-validators/misc'
 import { checkUserCanTerminateOwnershipChange } from '@server/helpers/custom-validators/video-ownership'
-import { logger } from '@server/helpers/logger'
 import { AccountModel } from '@server/models/account/account'
 import { MVideoWithAllFiles } from '@server/types/models'
 import { HttpStatusCode, UserRight, VideoChangeOwnershipAccept, VideoChangeOwnershipStatus, VideoState } from '@shared/models'
@@ -20,8 +19,6 @@ const videosChangeOwnershipValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking changeOwnership parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
@@ -41,11 +38,9 @@ const videosChangeOwnershipValidator = [
 
 const videosTerminateChangeOwnershipValidator = [
   param('id')
-    .custom(isIdValid).withMessage('Should have a valid id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking changeOwnership parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesChangeVideoOwnershipExist(req.params.id, res)) return
 

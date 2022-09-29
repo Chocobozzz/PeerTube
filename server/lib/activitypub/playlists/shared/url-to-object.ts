@@ -1,5 +1,5 @@
-import { isArray } from 'lodash'
 import { isPlaylistElementObjectValid, isPlaylistObjectValid } from '@server/helpers/custom-validators/activitypub/playlist'
+import { isArray } from '@server/helpers/custom-validators/misc'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { doJSONRequest } from '@server/helpers/requests'
 import { PlaylistElementObject, PlaylistObject } from '@shared/models'

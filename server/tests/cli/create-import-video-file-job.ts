@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { areObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoDetails, VideoFile, VideoInclude } from '@shared/models'
 import {
@@ -15,8 +14,6 @@ import {
   waitJobs
 } from '@shared/server-commands'
 import { expectStartWith } from '../shared'
-
-const expect = chai.expect
 
 function assertVideoProperties (video: VideoFile, resolution: number, extname: string, size?: number) {
   expect(video).to.have.nested.property('resolution.id', resolution)

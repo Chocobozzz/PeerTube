@@ -29,6 +29,8 @@ import { MyVideoPlaylistUpdateComponent } from './my-video-playlists/my-video-pl
 import { MyVideoPlaylistsComponent } from './my-video-playlists/my-video-playlists.component'
 import { VideoChangeOwnershipComponent } from './my-videos/modals/video-change-ownership.component'
 import { MyVideosComponent } from './my-videos/my-videos.component'
+import { MyVideoChannelSyncsComponent } from './my-video-channel-syncs/my-video-channel-syncs.component'
+import { VideoChannelSyncEditComponent } from './my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component'
 
 @NgModule({
   imports: [
@@ -63,6 +65,8 @@ import { MyVideosComponent } from './my-videos/my-videos.component'
     MyOwnershipComponent,
     MyAcceptOwnershipComponent,
     MyVideoImportsComponent,
+    MyVideoChannelSyncsComponent,
+    VideoChannelSyncEditComponent,
     MySubscriptionsComponent,
     MyFollowersComponent,
     MyHistoryComponent,

@@ -87,9 +87,9 @@ class P2pInfoButton extends Button {
       const httpStats = data.http
 
       const downloadSpeed = bytes(p2pStats.downloadSpeed + httpStats.downloadSpeed)
-      const uploadSpeed = bytes(p2pStats.uploadSpeed + httpStats.uploadSpeed)
+      const uploadSpeed = bytes(p2pStats.uploadSpeed)
       const totalDownloaded = bytes(p2pStats.downloaded + httpStats.downloaded)
-      const totalUploaded = bytes(p2pStats.uploaded + httpStats.uploaded)
+      const totalUploaded = bytes(p2pStats.uploaded)
       const numPeers = p2pStats.numPeers
 
       subDivWebtorrent.title = this.player().localize('Total downloaded: ') + totalDownloaded.join(' ') + '\n'

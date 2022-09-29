@@ -80,13 +80,18 @@ export class FindInBulkService {
           map(result => result.response.data),
           map(data => data.find(finder))
         )
-        .subscribe(result => {
-          if (!result) {
-            obs.error(new Error($localize`Element ${param} not found`))
-          } else {
+        .subscribe({
+          next: result => {
+            if (!result) {
+              obs.error(new Error($localize`Element ${param} not found`))
+              return
+            }
+
             obs.next(result)
             obs.complete()
-          }
+          },
+
+          error: err => obs.error(err)
         })
 
       observableObject.notifier.next(param)

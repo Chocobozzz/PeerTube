@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { wait } from '@shared/core-utils'
 import { LiveVideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 import {
@@ -15,8 +14,6 @@ import {
   stopFfmpeg,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Permanent live', function () {
   let servers: PeerTubeServer[] = []
@@ -99,7 +96,7 @@ describe('Permanent live', function () {
   })
 
   it('Should stream into this permanent live', async function () {
-    this.timeout(120000)
+    this.timeout(240_000)
 
     const beforePublication = new Date()
     const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUID })

@@ -33,12 +33,16 @@ export class MyVideoImportsComponent extends RestTable implements OnInit {
     switch (state) {
       case VideoImportState.FAILED:
         return 'badge-red'
+
       case VideoImportState.REJECTED:
         return 'badge-banned'
+
       case VideoImportState.PENDING:
         return 'badge-yellow'
+
       case VideoImportState.PROCESSING:
         return 'badge-blue'
+
       default:
         return 'badge-green'
     }
@@ -87,7 +91,7 @@ export class MyVideoImportsComponent extends RestTable implements OnInit {
   }
 
   protected reloadData () {
-    this.videoImportService.getMyVideoImports(this.pagination, this.sort)
+    this.videoImportService.getMyVideoImports(this.pagination, this.sort, this.search)
         .subscribe({
           next: resultList => {
             this.videoImports = resultList.data

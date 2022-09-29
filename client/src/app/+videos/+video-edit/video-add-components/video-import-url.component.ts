@@ -64,6 +64,10 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
     return this.targetUrl?.match(/https?:\/\//)
   }
 
+  isChannelSyncEnabled () {
+    return this.serverConfig.import.videoChannelSynchronization.enabled
+  }
+
   importVideo () {
     this.isImportingVideo = true
 

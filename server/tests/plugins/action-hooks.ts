@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,

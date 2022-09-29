@@ -1,17 +1,14 @@
 import express from 'express'
+import { param } from 'express-validator'
+import { isIdValid } from '@server/helpers/custom-validators/misc'
 import { MVideo } from '@server/types/models'
 import { HttpStatusCode } from '@shared/models'
-import { logger } from '../../../helpers/logger'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
-import { isIdValid } from '@server/helpers/custom-validators/misc'
-import { param } from 'express-validator'
 
 const videoFilesDeleteWebTorrentValidator = [
   isValidVideoIdParam('id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoFilesDeleteWebTorrent parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
 
@@ -41,11 +38,9 @@ const videoFilesDeleteWebTorrentFileValidator = [
   isValidVideoIdParam('id'),
 
   param('videoFileId')
-    .custom(isIdValid).withMessage('Should have a valid file id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoFilesDeleteWebTorrentFile parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
 
@@ -78,8 +73,6 @@ const videoFilesDeleteHLSValidator = [
   isValidVideoIdParam('id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoFilesDeleteHLS parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
 
@@ -109,11 +102,9 @@ const videoFilesDeleteHLSFileValidator = [
   isValidVideoIdParam('id'),
 
   param('videoFileId')
-    .custom(isIdValid).withMessage('Should have a valid file id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoFilesDeleteHLSFile parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
 

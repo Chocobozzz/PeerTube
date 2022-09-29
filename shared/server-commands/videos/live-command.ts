@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { readdir } from 'fs-extra'
-import { omit } from 'lodash'
 import { join } from 'path'
-import { wait } from '@shared/core-utils'
+import { omit, wait } from '@shared/core-utils'
 import {
   HttpStatusCode,
   LiveVideo,
@@ -103,7 +102,7 @@ export class LiveCommand extends AbstractCommand {
 
       path,
       attaches,
-      fields: omit(fields, 'thumbnailfile', 'previewfile'),
+      fields: omit(fields, [ 'thumbnailfile', 'previewfile' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))

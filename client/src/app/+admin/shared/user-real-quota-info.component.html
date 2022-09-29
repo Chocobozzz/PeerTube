@@ -1,0 +1,4 @@
+<div i18n class="transcoding-information" *ngIf="isTranscodingInformationDisplayed()">
+  The video quota only takes into account <strong>original</strong> video size. <br />
+  Since transcoding is enabled, videos size can be at most ~ {{ computeQuotaWithTranscoding() | bytes: 0 }}.
+</div>

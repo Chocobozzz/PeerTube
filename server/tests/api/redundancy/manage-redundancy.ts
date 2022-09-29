@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import {
   cleanupTests,
   createMultipleServers,
@@ -12,8 +11,6 @@ import {
   waitJobs
 } from '@shared/server-commands'
 import { VideoPrivacy, VideoRedundanciesTarget } from '@shared/models'
-
-const expect = chai.expect
 
 describe('Test manage videos redundancy', function () {
   const targets: VideoRedundanciesTarget[] = [ 'my-videos', 'remote-videos' ]

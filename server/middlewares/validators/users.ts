@@ -1,6 +1,5 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { omit } from 'lodash'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { MUserDefault } from '@server/types/models'
 import { HttpStatusCode, UserRegister, UserRight, UserRole } from '@shared/models'
@@ -38,11 +37,9 @@ const usersListValidator = [
   query('blocked')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .isBoolean().withMessage('Should be a valid boolean banned state'),
+    .isBoolean().withMessage('Should be a valid blocked boolena'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersList parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -50,24 +47,33 @@ const usersListValidator = [
 ]
 
 const usersAddValidator = [
-  body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
-  body('password').custom(isUserPasswordValidOrEmpty).withMessage('Should have a valid password'),
-  body('email').isEmail().withMessage('Should have a valid email'),
+  body('username')
+    .custom(isUserUsernameValid)
+    .withMessage('Should have a valid username (lowercase alphanumeric characters)'),
+  body('password')
+    .custom(isUserPasswordValidOrEmpty),
+  body('email')
+    .isEmail(),
 
-  body('channelName').optional().custom(isVideoChannelUsernameValid).withMessage('Should have a valid channel name'),
+  body('channelName')
+    .optional()
+    .custom(isVideoChannelUsernameValid),
 
-  body('videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
-  body('videoQuotaDaily').custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
+  body('videoQuota')
+    .custom(isUserVideoQuotaValid),
+  body('videoQuotaDaily')
+    .custom(isUserVideoQuotaDailyValid),
 
   body('role')
     .customSanitizer(toIntOrNull)
-    .custom(isUserRoleValid).withMessage('Should have a valid role'),
-  body('adminFlags').optional().custom(isUserAdminFlagsValid).withMessage('Should have a valid admin flags'),
+    .custom(isUserRoleValid),
+
+  body('adminFlags')
+    .optional()
+    .custom(isUserAdminFlagsValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersAdd parameters', { parameters: omit(req.body, 'password') })
-
-    if (areValidationErrors(req, res)) return
+    if (areValidationErrors(req, res, { omitBodyLog: true })) return
     if (!await checkUserNameOrEmailDoesNotAlreadyExist(req.body.username, req.body.email, res)) return
 
     const authUser = res.locals.oauth.token.User
@@ -97,24 +103,25 @@ const usersAddValidator = [
 ]
 
 const usersRegisterValidator = [
-  body('username').custom(isUserUsernameValid).withMessage('Should have a valid username'),
-  body('password').custom(isUserPasswordValid).withMessage('Should have a valid password'),
-  body('email').isEmail().withMessage('Should have a valid email'),
+  body('username')
+    .custom(isUserUsernameValid),
+  body('password')
+    .custom(isUserPasswordValid),
+  body('email')
+    .isEmail(),
   body('displayName')
     .optional()
-    .custom(isUserDisplayNameValid).withMessage('Should have a valid display name'),
+    .custom(isUserDisplayNameValid),
 
   body('channel.name')
     .optional()
-    .custom(isVideoChannelUsernameValid).withMessage('Should have a valid channel name'),
+    .custom(isVideoChannelUsernameValid),
   body('channel.displayName')
     .optional()
-    .custom(isVideoChannelDisplayNameValid).withMessage('Should have a valid display name'),
+    .custom(isVideoChannelDisplayNameValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersRegister parameters', { parameters: omit(req.body, 'password') })
-
-    if (areValidationErrors(req, res)) return
+    if (areValidationErrors(req, res, { omitBodyLog: true })) return
     if (!await checkUserNameOrEmailDoesNotAlreadyExist(req.body.username, req.body.email, res)) return
 
     const body: UserRegister = req.body
@@ -141,11 +148,10 @@ const usersRegisterValidator = [
 ]
 
 const usersRemoveValidator = [
-  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+  param('id')
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersRemove parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return
 
@@ -159,12 +165,13 @@ const usersRemoveValidator = [
 ]
 
 const usersBlockingValidator = [
-  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
-  body('reason').optional().custom(isUserBlockedReasonValid).withMessage('Should have a valid blocking reason'),
+  param('id')
+    .custom(isIdValid),
+  body('reason')
+    .optional()
+    .custom(isUserBlockedReasonValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersBlocking parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return
 
@@ -189,24 +196,36 @@ const deleteMeValidator = [
 ]
 
 const usersUpdateValidator = [
-  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+  param('id').custom(isIdValid),
 
-  body('password').optional().custom(isUserPasswordValid).withMessage('Should have a valid password'),
-  body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
-  body('emailVerified').optional().isBoolean().withMessage('Should have a valid email verified attribute'),
-  body('videoQuota').optional().custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
-  body('videoQuotaDaily').optional().custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
-  body('pluginAuth').optional(),
+  body('password')
+    .optional()
+    .custom(isUserPasswordValid),
+  body('email')
+    .optional()
+    .isEmail(),
+  body('emailVerified')
+    .optional()
+    .isBoolean(),
+  body('videoQuota')
+    .optional()
+    .custom(isUserVideoQuotaValid),
+  body('videoQuotaDaily')
+    .optional()
+    .custom(isUserVideoQuotaDailyValid),
+  body('pluginAuth')
+    .optional()
+    .exists(),
   body('role')
     .optional()
     .customSanitizer(toIntOrNull)
-    .custom(isUserRoleValid).withMessage('Should have a valid role'),
-  body('adminFlags').optional().custom(isUserAdminFlagsValid).withMessage('Should have a valid admin flags'),
+    .custom(isUserRoleValid),
+  body('adminFlags')
+    .optional()
+    .custom(isUserAdminFlagsValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersUpdate parameters', { parameters: req.body })
-
-    if (areValidationErrors(req, res)) return
+    if (areValidationErrors(req, res, { omitBodyLog: true })) return
     if (!await checkUserIdExist(req.params.id, res)) return
 
     const user = res.locals.user
@@ -221,37 +240,37 @@ const usersUpdateValidator = [
 const usersUpdateMeValidator = [
   body('displayName')
     .optional()
-    .custom(isUserDisplayNameValid).withMessage('Should have a valid display name'),
+    .custom(isUserDisplayNameValid),
   body('description')
     .optional()
-    .custom(isUserDescriptionValid).withMessage('Should have a valid description'),
+    .custom(isUserDescriptionValid),
   body('currentPassword')
     .optional()
-    .custom(isUserPasswordValid).withMessage('Should have a valid current password'),
+    .custom(isUserPasswordValid),
   body('password')
     .optional()
-    .custom(isUserPasswordValid).withMessage('Should have a valid password'),
+    .custom(isUserPasswordValid),
   body('email')
     .optional()
-    .isEmail().withMessage('Should have a valid email attribute'),
+    .isEmail(),
   body('nsfwPolicy')
     .optional()
-    .custom(isUserNSFWPolicyValid).withMessage('Should have a valid display Not Safe For Work policy'),
+    .custom(isUserNSFWPolicyValid),
   body('autoPlayVideo')
     .optional()
-    .custom(isUserAutoPlayVideoValid).withMessage('Should have a valid automatically plays video attribute'),
+    .custom(isUserAutoPlayVideoValid),
   body('p2pEnabled')
     .optional()
     .custom(isUserP2PEnabledValid).withMessage('Should have a valid p2p enabled boolean'),
   body('videoLanguages')
     .optional()
-    .custom(isUserVideoLanguages).withMessage('Should have a valid video languages attribute'),
+    .custom(isUserVideoLanguages),
   body('videosHistoryEnabled')
     .optional()
-    .custom(isUserVideosHistoryEnabledValid).withMessage('Should have a valid videos history enabled attribute'),
+    .custom(isUserVideosHistoryEnabledValid).withMessage('Should have a valid videos history enabled boolean'),
   body('theme')
     .optional()
-    .custom(v => isThemeNameValid(v) && isThemeRegistered(v)).withMessage('Should have a valid theme'),
+    .custom(v => isThemeNameValid(v) && isThemeRegistered(v)),
 
   body('noInstanceConfigWarningModal')
     .optional()
@@ -268,8 +287,6 @@ const usersUpdateMeValidator = [
     .custom(v => isUserAutoPlayNextVideoValid(v)).withMessage('Should have a valid autoPlayNextVideo boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersUpdateMe parameters', { parameters: omit(req.body, 'password') })
-
     const user = res.locals.oauth.token.User
 
     if (req.body.password || req.body.email) {
@@ -289,19 +306,20 @@ const usersUpdateMeValidator = [
       }
     }
 
-    if (areValidationErrors(req, res)) return
+    if (areValidationErrors(req, res, { omitBodyLog: true })) return
 
     return next()
   }
 ]
 
 const usersGetValidator = [
-  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
-  query('withStats').optional().isBoolean().withMessage('Should have a valid stats flag'),
+  param('id')
+    .custom(isIdValid),
+  query('withStats')
+    .optional()
+    .isBoolean().withMessage('Should have a valid withStats boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersGet parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res, req.query.withStats)) return
 
@@ -313,8 +331,6 @@ const usersVideoRatingValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersVideoRating parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'id')) return
 
@@ -326,16 +342,14 @@ const usersVideosValidator = [
   query('isLive')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid live boolean'),
+    .custom(isBooleanValid).withMessage('Should have a valid isLive boolean'),
 
   query('channelId')
     .optional()
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid).withMessage('Should have a valid channel id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersVideosValidator parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     if (req.query.channelId && !await doesVideoChannelIdExist(req.query.channelId, res)) return
@@ -384,11 +398,10 @@ const ensureUserRegistrationAllowedForIP = [
 ]
 
 const usersAskResetPasswordValidator = [
-  body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),
+  body('email')
+    .isEmail(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersAskResetPassword parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
     const exists = await checkUserEmailExist(req.body.email, res, false)
@@ -398,18 +411,26 @@ const usersAskResetPasswordValidator = [
       return res.status(HttpStatusCode.NO_CONTENT_204).end()
     }
 
+    if (res.locals.user.pluginAuth) {
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'Cannot recover password of a user that uses a plugin authentication.'
+      })
+    }
+
     return next()
   }
 ]
 
 const usersResetPasswordValidator = [
-  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
-  body('verificationString').not().isEmpty().withMessage('Should have a valid verification string'),
-  body('password').custom(isUserPasswordValid).withMessage('Should have a valid password'),
+  param('id')
+    .custom(isIdValid),
+  body('verificationString')
+    .not().isEmpty(),
+  body('password')
+    .custom(isUserPasswordValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersResetPassword parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return
 
@@ -431,14 +452,20 @@ const usersAskSendVerifyEmailValidator = [
   body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking askUsersSendVerifyEmail parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
+
     const exists = await checkUserEmailExist(req.body.email, res, false)
     if (!exists) {
       logger.debug('User with email %s does not exist (asking verify email).', req.body.email)
       // Do not leak our emails
       return res.status(HttpStatusCode.NO_CONTENT_204).end()
+    }
+
+    if (res.locals.user.pluginAuth) {
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'Cannot ask verification email of a user that uses a plugin authentication.'
+      })
     }
 
     return next()
@@ -456,8 +483,6 @@ const usersVerifyEmailValidator = [
     .customSanitizer(toBooleanOrNull),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersVerifyEmail parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return
 
@@ -476,7 +501,9 @@ const usersVerifyEmailValidator = [
 ]
 
 const userAutocompleteValidator = [
-  param('search').isString().not().isEmpty().withMessage('Should have a search parameter')
+  param('search')
+    .isString()
+    .not().isEmpty()
 ]
 
 const ensureAuthUserOwnsAccountValidator = [
@@ -494,13 +521,14 @@ const ensureAuthUserOwnsAccountValidator = [
   }
 ]
 
-const ensureCanManageChannel = [
+const ensureCanManageChannelOrAccount = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.user
-    const isUserOwner = res.locals.videoChannel.Account.userId === user.id
+    const account = res.locals.videoChannel?.Account ?? res.locals.account
+    const isUserOwner = account.userId === user.id
 
     if (!isUserOwner && user.hasRight(UserRight.MANAGE_ANY_VIDEO_CHANNEL) === false) {
-      const message = `User ${user.username} does not have right to manage channel ${req.params.nameWithHost}.`
+      const message = `User ${user.username} does not have right this channel or account.`
 
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
@@ -512,7 +540,7 @@ const ensureCanManageChannel = [
   }
 ]
 
-const ensureCanManageUser = [
+const ensureCanModerateUser = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const authUser = res.locals.oauth.token.User
     const onUser = res.locals.user
@@ -522,7 +550,7 @@ const ensureCanManageUser = [
 
     return res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
-      message: 'A moderator can only manager users.'
+      message: 'A moderator can only manage users.'
     })
   }
 ]
@@ -549,8 +577,8 @@ export {
   usersVerifyEmailValidator,
   userAutocompleteValidator,
   ensureAuthUserOwnsAccountValidator,
-  ensureCanManageUser,
-  ensureCanManageChannel
+  ensureCanModerateUser,
+  ensureCanManageChannelOrAccount
 }
 
 // ---------------------------------------------------------------------------

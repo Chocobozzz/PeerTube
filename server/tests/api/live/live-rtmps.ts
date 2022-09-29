@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { buildAbsoluteFixturePath } from '@shared/core-utils'
 import { VideoPrivacy } from '@shared/models'
 import {
@@ -15,8 +14,6 @@ import {
   testFfmpegStreamError,
   waitUntilLivePublishedOnAllServers
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test live RTMPS', function () {
   let server: PeerTubeServer

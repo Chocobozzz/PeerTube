@@ -27,6 +27,8 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
   firstStepPermanentLive: boolean
 
   isInUpdateForm = false
+  isUpdatingVideo = false
+  isOrHasGoingLive = false
 
   liveVideo: LiveVideo
 
@@ -64,6 +66,9 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
   }
 
   goLive () {
+    if (this.isOrHasGoingLive) return
+    this.isOrHasGoingLive = true
+
     const name = 'Live'
 
     const video: LiveVideoCreate = {
@@ -115,6 +120,8 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
   async updateSecondStep () {
     if (!await this.isFormValid()) return
 
+    this.isUpdatingVideo = true
+
     const video = new VideoEdit()
     video.patch(this.form.value)
     video.id = this.videoId
@@ -134,6 +141,8 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
       this.liveVideoService.updateLive(this.videoId, liveVideoUpdate)
     ]).subscribe({
       next: () => {
+        this.isUpdatingVideo = false
+
         this.notifier.success($localize`Live published.`)
 
         this.router.navigateByUrl(Video.buildWatchUrl(video))

@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { wait } from '@shared/core-utils'
 import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import { cleanupTests, createSingleServer, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test video privacy', function () {
   const servers: PeerTubeServer[] = []
@@ -48,7 +45,7 @@ describe('Test video privacy', function () {
   describe('Private and internal videos', function () {
 
     it('Should upload a private and internal videos on server 1', async function () {
-      this.timeout(10000)
+      this.timeout(50000)
 
       for (const privacy of [ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL ]) {
         const attributes = { privacy }

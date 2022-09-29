@@ -6,7 +6,6 @@ import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import {
-  NgbButtonsModule,
   NgbCollapseModule,
   NgbDropdownModule,
   NgbModalModule,
@@ -66,7 +65,6 @@ import { VideoChannelService } from './video-channel'
     NgbNavModule,
     NgbTooltipModule,
     NgbCollapseModule,
-    NgbButtonsModule,
 
     ClipboardModule,
 
@@ -129,7 +127,6 @@ import { VideoChannelService } from './video-channel'
     NgbNavModule,
     NgbTooltipModule,
     NgbCollapseModule,
-    NgbButtonsModule,
 
     ClipboardModule,
 

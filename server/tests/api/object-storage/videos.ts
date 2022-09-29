@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import bytes from 'bytes'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { stat } from 'fs-extra'
 import { merge } from 'lodash'
 import {
@@ -27,8 +26,6 @@ import {
   waitJobs,
   webtorrentAdd
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 async function checkFiles (options: {
   video: VideoDetails

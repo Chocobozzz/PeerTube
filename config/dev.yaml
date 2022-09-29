@@ -81,6 +81,11 @@ import:
       enabled: true
     torrent:
       enabled: true
+  video_channel_synchronization:
+    enabled: true
+    max_per_user: 10
+    check_interval: 5 minutes
+    videos_limit_per_synchronization: 3
 
 instance:
   default_nsfw_policy: 'display'

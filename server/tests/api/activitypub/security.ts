@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { buildDigest } from '@server/helpers/peertube-crypto'
 import { HTTP_SIGNATURE } from '@server/initializers/constants'
 import { activityPubContextify } from '@server/lib/activitypub/context'
@@ -10,8 +9,6 @@ import { makeFollowRequest, makePOSTAPRequest } from '@server/tests/shared'
 import { buildAbsoluteFixturePath, wait } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
 import { cleanupTests, createMultipleServers, killallServers, PeerTubeServer } from '@shared/server-commands'
-
-const expect = chai.expect
 
 function setKeysOfServer (onServer: PeerTubeServer, ofServer: PeerTubeServer, publicKey: string, privateKey: string) {
   const url = 'http://localhost:' + ofServer.port + '/accounts/peertube'

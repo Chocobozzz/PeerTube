@@ -1,0 +1,17 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+$form-base-input-width: 480px;
+
+input[type=text] {
+  @include peertube-input-text($form-base-input-width);
+}
+
+.video-channel-sync-title {
+  @include settings-big-title;
+}
+
+my-select-channel {
+  display: block;
+  max-width: $form-base-input-width;
+}

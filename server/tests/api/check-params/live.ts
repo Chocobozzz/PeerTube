@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
-import { omit } from 'lodash'
-import { buildAbsoluteFixturePath } from '@shared/core-utils'
+import { buildAbsoluteFixturePath, omit } from '@shared/core-utils'
 import { HttpStatusCode, LiveVideoLatencyMode, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
@@ -132,7 +130,7 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail without a channel', async function () {
-      const fields = omit(baseCorrectParams, 'channelId')
+      const fields = omit(baseCorrectParams, [ 'channelId' ])
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { createFile, readdir } from 'fs-extra'
 import { join } from 'path'
 import { wait } from '@shared/core-utils'
@@ -19,8 +18,6 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 async function countFiles (server: PeerTubeServer, directory: string) {
   const files = await readdir(server.servers.buildDirectory(directory))

@@ -1,20 +1,17 @@
 import express from 'express'
 import { body, param } from 'express-validator'
 import { isVideoTimeValid } from '@server/helpers/custom-validators/video-view'
+import { getCachedVideoDuration } from '@server/lib/video'
 import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { exists, isIdValid, isIntOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
-import { logger } from '../../../helpers/logger'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
-import { getCachedVideoDuration } from '@server/lib/video'
 
 const getVideoLocalViewerValidator = [
   param('localViewerId')
-    .custom(isIdValid).withMessage('Should have a valid local viewer id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking getVideoLocalViewerValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     const localViewer = await LocalVideoViewerModel.loadFullById(+req.params.localViewerId)
@@ -37,11 +34,9 @@ const videoViewValidator = [
   body('currentTime')
     .optional() // TODO: remove optional in a few versions, introduced in 4.2
     .customSanitizer(toIntOrNull)
-    .custom(isIntOrNull).withMessage('Should have correct current time'),
+    .custom(isIntOrNull),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoView parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'only-immutable-attributes')) return
 

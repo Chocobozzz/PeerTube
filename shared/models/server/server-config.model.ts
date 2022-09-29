@@ -188,6 +188,9 @@ export interface ServerConfig {
         enabled: boolean
       }
     }
+    videoChannelSynchronization: {
+      enabled: boolean
+    }
   }
 
   autoBlacklist: {

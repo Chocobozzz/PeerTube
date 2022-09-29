@@ -2,7 +2,8 @@
   "root": true,
   "ignorePatterns": [
     "projects/**/*",
-    "node_modules/"
+    "node_modules/",
+    "src/standalone/player/dist"
   ],
   "overrides": [
     {

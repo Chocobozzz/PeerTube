@@ -4,7 +4,6 @@ import { isDateValid } from '@server/helpers/custom-validators/misc'
 import { isValidStatTimeserieMetric } from '@server/helpers/custom-validators/video-stats'
 import { STATS_TIMESERIE } from '@server/initializers/constants'
 import { HttpStatusCode, UserRight, VideoStatsTimeserieQuery } from '@shared/models'
-import { logger } from '../../../helpers/logger'
 import { areValidationErrors, checkUserCanManageVideo, doesVideoExist, isValidVideoIdParam } from '../shared'
 
 const videoOverallStatsValidator = [
@@ -12,17 +11,13 @@ const videoOverallStatsValidator = [
 
   query('startDate')
     .optional()
-    .custom(isDateValid)
-    .withMessage('Should have a valid start date'),
+    .custom(isDateValid),
 
   query('endDate')
     .optional()
-    .custom(isDateValid)
-    .withMessage('Should have a valid end date'),
+    .custom(isDateValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoOverallStatsValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await commonStatsCheck(req, res)) return
 
@@ -34,8 +29,6 @@ const videoRetentionStatsValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoRetentionStatsValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await commonStatsCheck(req, res)) return
 
@@ -54,22 +47,17 @@ const videoTimeserieStatsValidator = [
   isValidVideoIdParam('videoId'),
 
   param('metric')
-    .custom(isValidStatTimeserieMetric)
-    .withMessage('Should have a valid timeserie metric'),
+    .custom(isValidStatTimeserieMetric),
 
   query('startDate')
     .optional()
-    .custom(isDateValid)
-    .withMessage('Should have a valid start date'),
+    .custom(isDateValid),
 
   query('endDate')
     .optional()
-    .custom(isDateValid)
-    .withMessage('Should have a valid end date'),
+    .custom(isDateValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoTimeserieStatsValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
     if (!await commonStatsCheck(req, res)) return
 

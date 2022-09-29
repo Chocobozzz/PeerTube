@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
 import { pathExists, readdir, remove } from 'fs-extra'
 import { join } from 'path'
@@ -12,6 +11,7 @@ import {
   createMultipleServers,
   createSingleServer,
   doubleFollow,
+  getServerImportConfig,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -84,24 +84,9 @@ describe('Test video imports', function () {
       let servers: PeerTubeServer[] = []
 
       before(async function () {
-        this.timeout(30_000)
+        this.timeout(60_000)
 
-        // Run servers
-        servers = await createMultipleServers(2, {
-          import: {
-            videos: {
-              http: {
-                youtube_dl_release: {
-                  url: mode === 'youtube-dl'
-                    ? 'https://yt-dl.org/downloads/latest/youtube-dl'
-                    : 'https://api.github.com/repos/yt-dlp/yt-dlp/releases',
-
-                  name: mode
-                }
-              }
-            }
-          }
-        })
+        servers = await createMultipleServers(2, getServerImportConfig(mode))
 
         await setAccessTokensToServers(servers)
         await setDefaultVideoChannel(servers)
@@ -240,6 +225,15 @@ describe('Test video imports', function () {
         expect(videoImports).to.have.lengthOf(1)
 
         expect(videoImports[0].targetUrl).to.equal(FIXTURE_URLS.youtube)
+      })
+
+      it('Should search in my imports', async function () {
+        const { total, data: videoImports } = await servers[0].imports.getMyVideoImports({ search: 'peertube2' })
+        expect(total).to.equal(1)
+        expect(videoImports).to.have.lengthOf(1)
+
+        expect(videoImports[0].magnetUri).to.equal(FIXTURE_URLS.magnet)
+        expect(videoImports[0].video.name).to.equal('super peertube2 video')
       })
 
       it('Should have the video listed on the two instances', async function () {

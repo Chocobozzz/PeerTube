@@ -1,5 +1,4 @@
 import { writeJSON } from 'fs-extra'
-import { values } from 'lodash'
 import { join } from 'path'
 import { root } from '@shared/core-utils'
 import {
@@ -59,19 +58,22 @@ const playerKeys = {
   'Play in loop': 'Play in loop',
   'This live has not started yet.': 'This live has not started yet.',
   'This live has ended.': 'This live has ended.',
-  'The video failed to play, will try to fast forward.': 'The video failed to play, will try to fast forward.'
+  'The video failed to play, will try to fast forward.': 'The video failed to play, will try to fast forward.',
+  '{1} / {2} dropped of {3}': '{1} / {2} dropped of {3}',
+  ' (muted)': ' (muted)',
+  '{1} from servers · {2} from peers': '{1} from servers · {2} from peers'
 }
 Object.assign(playerKeys, videojs)
 
 // Server keys
 const serverKeys: any = {}
-values(VIDEO_CATEGORIES)
-  .concat(values(VIDEO_LICENCES))
-  .concat(values(VIDEO_PRIVACIES))
-  .concat(values(VIDEO_STATES))
-  .concat(values(VIDEO_IMPORT_STATES))
-  .concat(values(VIDEO_PLAYLIST_PRIVACIES))
-  .concat(values(VIDEO_PLAYLIST_TYPES))
+Object.values(VIDEO_CATEGORIES)
+  .concat(Object.values(VIDEO_LICENCES))
+  .concat(Object.values(VIDEO_PRIVACIES))
+  .concat(Object.values(VIDEO_STATES))
+  .concat(Object.values(VIDEO_IMPORT_STATES))
+  .concat(Object.values(VIDEO_PLAYLIST_PRIVACIES))
+  .concat(Object.values(VIDEO_PLAYLIST_TYPES))
   .concat([
     'This video does not exist.',
     'We cannot fetch the video. Please try again later.',

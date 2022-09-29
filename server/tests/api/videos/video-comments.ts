@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { dateIsValid, testImage } from '@server/tests/shared'
 import {
   cleanupTests,
@@ -12,8 +11,6 @@ import {
   setDefaultAccountAvatar,
   setDefaultChannelAvatar
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test video comments', function () {
   let server: PeerTubeServer
@@ -252,6 +249,22 @@ describe('Test video comments', function () {
 
       expect(data).to.have.lengthOf(0)
       expect(total).to.equal(0)
+    })
+
+    it('Should filter instance comments by onLocalVideo', async function () {
+      {
+        const { total, data } = await command.listForAdmin({ onLocalVideo: false })
+
+        expect(data).to.have.lengthOf(0)
+        expect(total).to.equal(0)
+      }
+
+      {
+        const { total, data } = await command.listForAdmin({ onLocalVideo: true })
+
+        expect(data).to.not.have.lengthOf(0)
+        expect(total).to.not.equal(0)
+      }
     })
 
     it('Should search instance comments by account', async function () {

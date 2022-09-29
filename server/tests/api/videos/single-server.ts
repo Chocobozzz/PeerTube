@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { checkVideoFilesWereRemoved, completeVideoCheck, testImage } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { Video, VideoPrivacy } from '@shared/models'
@@ -11,10 +10,9 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
-  setDefaultChannelAvatar
+  setDefaultChannelAvatar,
+  waitJobs
 } from '@shared/server-commands'
-
-const expect = chai.expect
 
 describe('Test a single server', function () {
 
@@ -357,6 +355,8 @@ describe('Test a single server', function () {
 
     it('Should have the video updated', async function () {
       this.timeout(60000)
+
+      await waitJobs([ server ])
 
       const video = await server.videos.get({ id: videoId })
 

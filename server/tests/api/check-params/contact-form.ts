@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { MockSmtpServer } from '@server/tests/shared'
 import { HttpStatusCode } from '@shared/models'
 import { cleanupTests, ContactFormCommand, createSingleServer, killallServers, PeerTubeServer } from '@shared/server-commands'

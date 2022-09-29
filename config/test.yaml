@@ -148,3 +148,8 @@ geo_ip:
 
 video_studio:
   enabled: true
+
+open_telemetry:
+  metrics:
+    prometheus_exporter:
+      port: 9092

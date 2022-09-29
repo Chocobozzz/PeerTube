@@ -1,6 +1,6 @@
 import { FfmpegCommand } from 'fluent-ffmpeg'
-import { pick } from 'lodash'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
+import { pick } from '@shared/core-utils'
 import { AvailableEncoders, EncoderOptions } from '@shared/models'
 import { buildStreamSuffix, getScaleFilter, StreamType } from './ffmpeg-commons'
 import { getEncoderBuilderResult } from './ffmpeg-encoders'

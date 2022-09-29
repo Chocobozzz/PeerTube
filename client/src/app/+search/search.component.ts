@@ -98,7 +98,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           this.search()
         },
 
-        error: err => this.notifier.error(err.text)
+        error: err => this.notifier.error(err.message)
       })
 
     this.userService.getAnonymousOrLoggedUser()

@@ -1,0 +1,22 @@
+$height: 40px;
+
+.vjs-peertube-offline-notification {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $height;
+  color: #000;
+  background-color: var(--mainColorLightest);
+  text-align: center;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vjs-modal-dialog
+.vjs-modal-dialog-content,
+.video-js .vjs-modal-dialog {
+  top: $height;
+}

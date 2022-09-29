@@ -1,6 +1,11 @@
 import { HTMLServerConfig, Video } from '@shared/models'
 
-function buildVideoOrPlaylistEmbed (embedUrl: string, embedTitle: string) {
+function buildVideoOrPlaylistEmbed (options: {
+  embedUrl: string
+  embedTitle: string
+}) {
+  const { embedUrl, embedTitle } = options
+
   const iframe = document.createElement('iframe')
 
   iframe.title = embedTitle

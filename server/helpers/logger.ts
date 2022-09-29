@@ -1,11 +1,11 @@
 import { stat } from 'fs-extra'
-import { omit } from 'lodash'
 import { join } from 'path'
 import { format as sqlFormat } from 'sql-formatter'
 import { createLogger, format, transports } from 'winston'
 import { FileTransportOptions } from 'winston/lib/winston/transports'
 import { context } from '@opentelemetry/api'
 import { getSpanContext } from '@opentelemetry/api/build/src/trace/context-utils'
+import { omit } from '@shared/core-utils'
 import { CONFIG } from '../initializers/config'
 import { LOG_FILENAME } from '../initializers/constants'
 
@@ -204,5 +204,5 @@ function removeCyclicValues () {
 function getAdditionalInfo (info: any) {
   const toOmit = [ 'label', 'timestamp', 'level', 'message', 'sql', 'tags' ]
 
-  return omit(info, ...toOmit)
+  return omit(info, toOmit)
 }

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
@@ -13,8 +12,6 @@ import {
   waitJobs
 } from '@shared/server-commands'
 
-const expect = chai.expect
-
 describe('Test user videos', function () {
   let server: PeerTubeServer
   let videoId: number
@@ -23,7 +20,7 @@ describe('Test user videos', function () {
   let anotherUserToken: string
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     server = await createSingleServer(1)
 

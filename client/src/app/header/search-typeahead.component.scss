@@ -75,6 +75,7 @@ li.suggestion {
 
 #typeahead-container {
   font-size: 14px;
+  margin: 0 10px;
 
   input {
     border: 1px solid pvar(--mainBackgroundColor) !important;
@@ -83,15 +84,15 @@ li.suggestion {
     transition: box-shadow .3s ease, width .2s ease;
   }
 
-  @media screen and (min-width: $mobile-view) {
-    @include margin-left(10px);
+  @media screen and (max-width: $small-view) {
+    input {
+      width: 200px;
+    }
   }
 
-  @media screen and (max-width: $small-view) {
-    flex: 1;
-
+  @media screen and (max-width: $mobile-view) {
     input {
-      width: 70px;
+      width: 150px;
     }
   }
 

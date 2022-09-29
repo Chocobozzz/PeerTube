@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
 import { HttpStatusCode, VideoBlacklistType } from '@shared/models'

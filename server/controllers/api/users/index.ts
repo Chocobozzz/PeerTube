@@ -36,7 +36,7 @@ import {
   usersUpdateValidator
 } from '../../../middlewares'
 import {
-  ensureCanManageUser,
+  ensureCanModerateUser,
   usersAskResetPasswordValidator,
   usersAskSendVerifyEmailValidator,
   usersBlockingValidator,
@@ -95,14 +95,14 @@ usersRouter.post('/:id/block',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
   asyncMiddleware(usersBlockingValidator),
-  ensureCanManageUser,
+  ensureCanModerateUser,
   asyncMiddleware(blockUser)
 )
 usersRouter.post('/:id/unblock',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
   asyncMiddleware(usersBlockingValidator),
-  ensureCanManageUser,
+  ensureCanModerateUser,
   asyncMiddleware(unblockUser)
 )
 
@@ -132,7 +132,7 @@ usersRouter.put('/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
   asyncMiddleware(usersUpdateValidator),
-  ensureCanManageUser,
+  ensureCanModerateUser,
   asyncMiddleware(updateUser)
 )
 
@@ -140,7 +140,7 @@ usersRouter.delete('/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
   asyncMiddleware(usersRemoveValidator),
-  ensureCanManageUser,
+  ensureCanModerateUser,
   asyncMiddleware(removeUser)
 )
 
@@ -343,7 +343,7 @@ async function askResetUserPassword (req: express.Request, res: express.Response
 
   const verificationString = await Redis.Instance.setResetPasswordVerificationString(user.id)
   const url = WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
-  await Emailer.Instance.addPasswordResetEmailJob(user.username, user.email, url)
+  Emailer.Instance.addPasswordResetEmailJob(user.username, user.email, url)
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

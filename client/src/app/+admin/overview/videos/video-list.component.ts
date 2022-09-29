@@ -166,6 +166,10 @@ export class VideoListComponent extends RestTable implements OnInit {
     return video.files.length !== 0
   }
 
+  canRemoveOneFile (video: Video) {
+    return video.canRemoveOneFile(this.authUser)
+  }
+
   getFilesSize (video: Video) {
     let files = video.files
 
