@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
+import short from 'short-uuid'
 import { testImage } from '@server/tests/shared'
 import { AbuseState, HttpStatusCode, OAuth2ErrorCode, UserAdminFlag, UserRole, VideoPlaylistType } from '@shared/models'
 import {
@@ -11,6 +12,8 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@shared/server-commands'
+
+const translator = short()
 
 describe('Test users', function () {
   let server: PeerTubeServer
@@ -229,6 +232,7 @@ describe('Test users', function () {
       expect(userGet.adminFlags).to.equal(UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST)
 
       expect(userMe.specialPlaylists).to.have.lengthOf(1)
+      expect(userMe.specialPlaylists[0].shortUUID).to.have.lengthOf(translator.maxLength)
       expect(userMe.specialPlaylists[0].type).to.equal(VideoPlaylistType.WATCH_LATER)
 
       // Check stats are included with withStats
