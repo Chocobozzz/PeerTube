@@ -67,6 +67,7 @@ export interface User {
 export interface MyUserSpecialPlaylist {
   id: number
   name: string
+  shortUUID: string
   type: VideoPlaylistType
 }
 

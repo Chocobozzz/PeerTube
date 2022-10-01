@@ -70,6 +70,7 @@ import { VideoImportModel } from '../video/video-import'
 import { VideoLiveModel } from '../video/video-live'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { UserNotificationSettingModel } from './user-notification-setting'
+import { uuidToShort } from '@shared/extra-utils'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',
@@ -960,7 +961,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
     const formatted = this.toFormattedJSON({ withAdminFlags: true })
 
     const specialPlaylists = this.Account.VideoPlaylists
-                                 .map(p => ({ id: p.id, name: p.name, type: p.type }))
+                                 .map(p => ({ id: p.id, name: p.name, shortUUID: uuidToShort(p.uuid), type: p.type }))
 
     return Object.assign(formatted, { specialPlaylists })
   }

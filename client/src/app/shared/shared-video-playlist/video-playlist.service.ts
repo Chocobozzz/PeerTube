@@ -8,6 +8,7 @@ import { buildBulkObservable, objectToFormData } from '@app/helpers'
 import { Account, AccountService, VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { NGX_LOADING_BAR_IGNORED } from '@ngx-loading-bar/http-client'
 import {
+  VideoPlaylistSummary,
   ResultList,
   VideoExistInPlaylist,
   VideoPlaylist as VideoPlaylistServerModel,
@@ -17,7 +18,8 @@ import {
   VideoPlaylistElementUpdate,
   VideoPlaylistReorder,
   VideoPlaylistUpdate,
-  VideosExistInPlaylists
+  VideosExistInPlaylists,
+  VideoPlaylistCreateResult
 } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { VideoPlaylistElement } from './video-playlist-element.model'
@@ -25,7 +27,7 @@ import { VideoPlaylist } from './video-playlist.model'
 
 const debugLogger = debug('peertube:playlists:VideoPlaylistService')
 
-export type CachedPlaylist = VideoPlaylist | { id: number, displayName: string }
+export type CachedPlaylist = VideoPlaylist | VideoPlaylistSummary
 
 @Injectable()
 export class VideoPlaylistService {
@@ -139,7 +141,7 @@ export class VideoPlaylistService {
   createVideoPlaylist (body: VideoPlaylistCreate) {
     const data = objectToFormData(body)
 
-    return this.authHttp.post<{ videoPlaylist: { id: number } }>(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL, data)
+    return this.authHttp.post<{ videoPlaylist: VideoPlaylistCreateResult }>(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL, data)
                .pipe(
                  tap(res => {
                    if (!this.myAccountPlaylistCache) return
@@ -148,7 +150,8 @@ export class VideoPlaylistService {
 
                    this.myAccountPlaylistCache.data.push({
                      id: res.videoPlaylist.id,
-                     displayName: body.displayName
+                     displayName: body.displayName,
+                     shortUUID: res.videoPlaylist.shortUUID
                    })
 
                    this.myAccountPlaylistCacheSubject.next(this.myAccountPlaylistCache)
@@ -190,12 +193,23 @@ export class VideoPlaylistService {
                )
   }
 
-  addVideoInPlaylist (playlistId: number, body: VideoPlaylistElementCreate) {
-    const url = VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos'
+  addVideoInPlaylist (playlist: VideoPlaylistSummary, body: VideoPlaylistElementCreate) {
+    const url = VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlist.id + '/videos'
 
     return this.authHttp.post<{ videoPlaylistElement: { id: number } }>(url, body)
                .pipe(
                  tap(res => {
+                   const existsResult = this.videoExistsCache[body.videoId]
+
+                   existsResult.push({
+                     playlistElementId: res.videoPlaylistElement.id,
+                     playlistId: playlist.id,
+                     playlistDisplayName: playlist.displayName,
+                     playlistShortUUID: playlist.shortUUID,
+                     startTimestamp: body.startTimestamp,
+                     stopTimestamp: body.stopTimestamp
+                   })
+
                    this.runPlaylistCheck(body.videoId)
                  }),
                  catchError(err => this.restExtractor.handleError(err))

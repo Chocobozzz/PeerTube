@@ -10,3 +10,9 @@ export type VideoExistInPlaylist = {
   startTimestamp?: number
   stopTimestamp?: number
 }
+
+export type VideoPlaylistSummary = {
+  id: number
+  displayName: string
+  shortUUID: string
+}
