@@ -308,6 +308,14 @@ describe('Test syndication feeds', () => {
     })
   })
 
+  it('Should carry the channel avatar', async function () {
+    {
+      const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelId }, ignoreCache: true })
+      const jsonObj = JSON.parse(json)
+      expect(jsonObj.icon).to.equal(servers[0].url + '/avatar.png')
+    }
+  })
+
   describe('Video comments feed', function () {
 
     it('Should contain valid comments (covers JSON feed 1.0 endpoint) and not from unlisted videos', async function () {

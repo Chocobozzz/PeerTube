@@ -84,20 +84,25 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
 
   let name: string
   let description: string
+  let avatarUrl: string
 
   if (videoChannel) {
     name = videoChannel.getDisplayName()
     description = videoChannel.description
+    avatarUrl = videoChannel.getAvatar()
   } else if (account) {
     name = account.getDisplayName()
     description = account.description
+    avatarUrl = account.getAvatar()
   } else {
     name = video ? video.name : CONFIG.INSTANCE.NAME
     description = video ? video.description : CONFIG.INSTANCE.DESCRIPTION
+    avatarUrl = WEBSERVER.URL + '/client/assets/images/icons/icon-96x96.png',
   }
   const feed = initFeed({
     name,
     description,
+    avatarUrl,
     resourceType: 'video-comments',
     queryString: new URL(WEBSERVER.URL + req.originalUrl).search
   })
@@ -139,21 +144,26 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
 
   let name: string
   let description: string
+  let avatarUrl: string
 
   if (videoChannel) {
     name = videoChannel.getDisplayName()
     description = videoChannel.description
+    avatarUrl = videoChannel.getAvatar()
   } else if (account) {
     name = account.getDisplayName()
     description = account.description
+    avatarUrl = account.getAvatar()
   } else {
     name = CONFIG.INSTANCE.NAME
     description = CONFIG.INSTANCE.DESCRIPTION
+    avatarUrl = WEBSERVER.URL + '/client/assets/images/icons/icon-96x96.png',
   }
 
   const feed = initFeed({
     name,
     description,
+    avatarUrl,
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search
   })
@@ -192,10 +202,12 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
   const nsfw = buildNSFWFilter(res, req.query.nsfw)
   const name = account.getDisplayName()
   const description = account.description
+  const avatarUrl = account.getAvatar()
 
   const feed = initFeed({
     name,
     description,
+    avatarUrl,
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search
   })
@@ -229,6 +241,7 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
 function initFeed (parameters: {
   name: string
   description: string
+  avatarUrl: string
   resourceType?: 'videos' | 'video-comments'
   queryString?: string
 }) {
@@ -241,7 +254,7 @@ function initFeed (parameters: {
     // updated: TODO: somehowGetLatestUpdate, // optional, default = today
     id: webserverUrl,
     link: webserverUrl,
-    image: webserverUrl + '/client/assets/images/icons/icon-96x96.png',
+    image: avatarUrl,
     favicon: webserverUrl + '/client/assets/images/favicon.png',
     copyright: `All rights reserved, unless otherwise specified in the terms specified at ${webserverUrl}/about` +
     ` and potential licenses granted by each content's rightholder.`,

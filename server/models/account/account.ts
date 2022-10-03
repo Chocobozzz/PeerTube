@@ -455,6 +455,10 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
     return this.name
   }
 
+  getAvatar () {
+    return this.Actor.avatar
+  }
+
   getLocalUrl (this: MAccountActor | MChannelActor) {
     return WEBSERVER.URL + `/accounts/` + this.Actor.preferredUsername
   }
