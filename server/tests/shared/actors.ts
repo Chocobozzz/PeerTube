@@ -2,8 +2,6 @@
 
 import { expect } from 'chai'
 import { pathExists, readdir } from 'fs-extra'
-import { join } from 'path'
-import { root } from '@shared/core-utils'
 import { Account, VideoChannel } from '@shared/models'
 import { PeerTubeServer } from '@shared/server-commands'
 
@@ -31,11 +29,9 @@ async function expectAccountFollows (options: {
   return expectActorFollow({ ...options, data })
 }
 
-async function checkActorFilesWereRemoved (filename: string, serverNumber: number) {
-  const testDirectory = 'test' + serverNumber
-
+async function checkActorFilesWereRemoved (filename: string, server: PeerTubeServer) {
   for (const directory of [ 'avatars' ]) {
-    const directoryPath = join(root(), testDirectory, directory)
+    const directoryPath = server.getDirectoryPath(directory)
 
     const directoryExists = await pathExists(directoryPath)
     expect(directoryExists).to.be.true

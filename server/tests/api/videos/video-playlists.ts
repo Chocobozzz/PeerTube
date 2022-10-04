@@ -1049,7 +1049,7 @@ describe('Test video playlists', function () {
       this.timeout(30000)
 
       for (const server of servers) {
-        await checkPlaylistFilesWereRemoved(playlistServer1UUID, server.internalServerNumber)
+        await checkPlaylistFilesWereRemoved(playlistServer1UUID, server)
       }
     })
 

@@ -9,14 +9,16 @@ import { expectLogDoesNotContain } from './shared'
 
 describe('Test misc endpoints', function () {
   let server: PeerTubeServer
-  let wellKnownPath
+  let wellKnownPath: string
 
   before(async function () {
     this.timeout(120000)
 
     server = await createSingleServer(1)
-    wellKnownPath = `test${server.internalServerNumber}/well-known/`
+
     await setAccessTokensToServers([ server ])
+
+    wellKnownPath = server.getDirectoryPath('well-known')
   })
 
   describe('Test a well known endpoints', function () {
