@@ -232,7 +232,7 @@ describe('Test videos filter', function () {
     })
 
     it('Should display only remote videos', async function () {
-      this.timeout(40000)
+      this.timeout(120000)
 
       await servers[1].videos.upload({ attributes: { name: 'remote video' } })
 
