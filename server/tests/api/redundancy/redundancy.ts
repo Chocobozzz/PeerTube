@@ -159,8 +159,8 @@ async function check2Webseeds (videoUUID?: string) {
   const { webtorrentFilenames } = await ensureSameFilenames(videoUUID)
 
   const directories = [
-    'test' + servers[0].internalServerNumber + '/redundancy',
-    'test' + servers[1].internalServerNumber + '/videos'
+    servers[0].getDirectoryPath('redundancy'),
+    servers[1].getDirectoryPath('videos')
   ]
 
   for (const directory of directories) {
@@ -214,8 +214,8 @@ async function check1PlaylistRedundancies (videoUUID?: string) {
   const { hlsFilenames } = await ensureSameFilenames(videoUUID)
 
   const directories = [
-    'test' + servers[0].internalServerNumber + '/redundancy/hls',
-    'test' + servers[1].internalServerNumber + '/streaming-playlists/hls'
+    servers[0].getDirectoryPath('redundancy/hls'),
+    servers[1].getDirectoryPath('streaming-playlists/hls')
   ]
 
   for (const directory of directories) {

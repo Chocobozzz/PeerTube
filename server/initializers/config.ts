@@ -107,7 +107,8 @@ const CONFIG = {
     TORRENTS_DIR: buildPath(config.get<string>('storage.torrents')),
     CACHE_DIR: buildPath(config.get<string>('storage.cache')),
     PLUGINS_DIR: buildPath(config.get<string>('storage.plugins')),
-    CLIENT_OVERRIDES_DIR: buildPath(config.get<string>('storage.client_overrides'))
+    CLIENT_OVERRIDES_DIR: buildPath(config.get<string>('storage.client_overrides')),
+    WELL_KNOWN_DIR: buildPath(config.get<string>('storage.well_known'))
   },
   OBJECT_STORAGE: {
     ENABLED: config.get<boolean>('object_storage.enabled'),

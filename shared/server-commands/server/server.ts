@@ -182,6 +182,12 @@ export class PeerTubeServer {
     this.port = parseInt(parsed.port)
   }
 
+  getDirectoryPath (directoryName: string) {
+    const testDirectory = 'test' + this.internalServerNumber
+
+    return join(root(), testDirectory, directoryName)
+  }
+
   async flushAndRun (configOverride?: Object, options: RunServerOptions = {}) {
     await ServersCommand.flushTests(this.internalServerNumber)
 
@@ -341,19 +347,20 @@ export class PeerTubeServer {
         suffix: '_test' + this.internalServerNumber
       },
       storage: {
-        tmp: `test${this.internalServerNumber}/tmp/`,
-        bin: `test${this.internalServerNumber}/bin/`,
-        avatars: `test${this.internalServerNumber}/avatars/`,
-        videos: `test${this.internalServerNumber}/videos/`,
-        streaming_playlists: `test${this.internalServerNumber}/streaming-playlists/`,
-        redundancy: `test${this.internalServerNumber}/redundancy/`,
-        logs: `test${this.internalServerNumber}/logs/`,
-        previews: `test${this.internalServerNumber}/previews/`,
-        thumbnails: `test${this.internalServerNumber}/thumbnails/`,
-        torrents: `test${this.internalServerNumber}/torrents/`,
-        captions: `test${this.internalServerNumber}/captions/`,
-        cache: `test${this.internalServerNumber}/cache/`,
-        plugins: `test${this.internalServerNumber}/plugins/`
+        tmp: this.getDirectoryPath('tmp') + '/',
+        bin: this.getDirectoryPath('bin') + '/',
+        avatars: this.getDirectoryPath('avatars') + '/',
+        videos: this.getDirectoryPath('videos') + '/',
+        streaming_playlists: this.getDirectoryPath('streaming-playlists') + '/',
+        redundancy: this.getDirectoryPath('redundancy') + '/',
+        logs: this.getDirectoryPath('logs') + '/',
+        previews: this.getDirectoryPath('previews') + '/',
+        thumbnails: this.getDirectoryPath('thumbnails') + '/',
+        torrents: this.getDirectoryPath('torrents') + '/',
+        captions: this.getDirectoryPath('captions') + '/',
+        cache: this.getDirectoryPath('cache') + '/',
+        plugins: this.getDirectoryPath('plugins') + '/',
+        well_known: this.getDirectoryPath('well-known') + '/'
       },
       admin: {
         email: `admin${this.internalServerNumber}@example.com`

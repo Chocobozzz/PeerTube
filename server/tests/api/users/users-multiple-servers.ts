@@ -197,7 +197,7 @@ describe('Test users with multiple servers', function () {
   it('Should not have actor files', async () => {
     for (const server of servers) {
       for (const userAvatarFilename of userAvatarFilenames) {
-        await checkActorFilesWereRemoved(userAvatarFilename, server.internalServerNumber)
+        await checkActorFilesWereRemoved(userAvatarFilename, server)
       }
     }
   })

@@ -1,18 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { cleanupTests, createSingleServer, makeGetRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
+import { writeJson } from 'fs-extra'
+import { join } from 'path'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
+import { cleanupTests, createSingleServer, makeGetRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 import { expectLogDoesNotContain } from './shared'
 
 describe('Test misc endpoints', function () {
   let server: PeerTubeServer
+  let wellKnownPath: string
 
   before(async function () {
     this.timeout(120000)
 
     server = await createSingleServer(1)
+
     await setAccessTokensToServers([ server ])
+
+    wellKnownPath = server.getDirectoryPath('well-known')
   })
 
   describe('Test a well known endpoints', function () {
@@ -92,6 +98,28 @@ describe('Test misc endpoints', function () {
       const remoteInteract = data.links.find(l => l.rel === 'http://ostatus.org/schema/1.0/subscribe')
       expect(remoteInteract).to.exist
       expect(remoteInteract.template).to.equal(server.url + '/remote-interaction?uri={uri}')
+    })
+
+    it('Should return 404 for non-existing files in /.well-known', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: '/.well-known/non-existing-file',
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
+      })
+    })
+
+    it('Should return custom file from /.well-known', async function () {
+      const filename = 'existing-file.json'
+
+      await writeJson(join(wellKnownPath, filename), { iThink: 'therefore I am' })
+
+      const { body } = await makeGetRequest({
+        url: server.url,
+        path: '/.well-known/' + filename,
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      expect(body.iThink).to.equal('therefore I am')
     })
   })
 
