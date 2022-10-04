@@ -37,7 +37,7 @@ describe('Test admin notifications', function () {
       plugins: {
         index: {
           enabled: true,
-          check_latest_versions_interval: '5 seconds'
+          check_latest_versions_interval: '3 seconds'
         }
       }
     }
@@ -62,7 +62,7 @@ describe('Test admin notifications', function () {
 
   describe('Latest PeerTube version notification', function () {
 
-    it('Should not send a notification to admins if there is not a new version', async function () {
+    it('Should not send a notification to admins if there is no new version', async function () {
       this.timeout(30000)
 
       joinPeerTubeServer.setLatestVersion('1.4.2')
@@ -71,7 +71,7 @@ describe('Test admin notifications', function () {
       await checkNewPeerTubeVersion({ ...baseParams, latestVersion: '1.4.2', checkType: 'absence' })
     })
 
-    it('Should send a notification to admins on new plugin version', async function () {
+    it('Should send a notification to admins on new version', async function () {
       this.timeout(30000)
 
       joinPeerTubeServer.setLatestVersion('15.4.2')
