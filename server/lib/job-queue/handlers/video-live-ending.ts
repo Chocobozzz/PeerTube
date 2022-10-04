@@ -4,7 +4,7 @@ import { join } from 'path'
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo } from '@server/helpers/ffmpeg'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
-import { cleanupPermanentLive, cleanupTMPLiveFiles, cleanupUnsavedNormalLive } from '@server/lib/live'
+import { cleanupAndDestroyPermanentLive, cleanupTMPLiveFiles, cleanupUnsavedNormalLive } from '@server/lib/live'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getLiveReplayBaseDirectory } from '@server/lib/paths'
 import { generateVideoMiniature } from '@server/lib/thumbnail'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/transcoding'
@@ -141,23 +141,22 @@ async function replaceLiveByReplay (options: {
 }) {
   const { video, liveSession, live, permanentLive, replayDirectory } = options
 
-  await cleanupTMPLiveFiles(video)
+  const videoWithFiles = await VideoModel.loadFull(video.id)
+  const hlsPlaylist = videoWithFiles.getHLSPlaylist()
+
+  await cleanupTMPLiveFiles(videoWithFiles, hlsPlaylist)
 
   await live.destroy()
 
-  video.isLive = false
-  video.waitTranscoding = true
-  video.state = VideoState.TO_TRANSCODE
+  videoWithFiles.isLive = false
+  videoWithFiles.waitTranscoding = true
+  videoWithFiles.state = VideoState.TO_TRANSCODE
 
-  await video.save()
+  await videoWithFiles.save()
 
-  liveSession.replayVideoId = video.id
+  liveSession.replayVideoId = videoWithFiles.id
   await liveSession.save()
 
-  // Remove old HLS playlist video files
-  const videoWithFiles = await VideoModel.loadFull(video.id)
-
-  const hlsPlaylist = videoWithFiles.getHLSPlaylist()
   await VideoFileModel.removeHLSFilesOfVideoId(hlsPlaylist.id)
 
   // Reset playlist
@@ -234,7 +233,7 @@ async function cleanupLiveAndFederate (options: {
 
   if (streamingPlaylist) {
     if (permanentLive) {
-      await cleanupPermanentLive(video, streamingPlaylist)
+      await cleanupAndDestroyPermanentLive(video, streamingPlaylist)
     } else {
       await cleanupUnsavedNormalLive(video, streamingPlaylist)
     }

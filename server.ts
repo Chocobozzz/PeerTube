@@ -102,7 +102,6 @@ import {
   wellKnownRouter,
   lazyStaticRouter,
   servicesRouter,
-  liveRouter,
   pluginsRouter,
   webfingerRouter,
   trackerRouter,
@@ -220,9 +219,6 @@ app.use(apiRoute, apiRouter)
 
 // Services (oembed...)
 app.use('/services', servicesRouter)
-
-// Live streaming
-app.use('/live', liveRouter)
 
 // Plugins & themes
 app.use('/', pluginsRouter)

@@ -15,6 +15,7 @@ import {
   VideoState
 } from '@shared/models'
 import { unwrapBody } from '../requests'
+import { ObjectStorageCommand } from '../server'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 import { sendRTMPStream, testFfmpegStreamError } from './live'
 
@@ -33,6 +34,8 @@ export class LiveCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
+
+  // ---------------------------------------------------------------------------
 
   listSessions (options: OverrideCommandOptions & {
     videoId: number | string
@@ -69,6 +72,8 @@ export class LiveCommand extends AbstractCommand {
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
+
+  // ---------------------------------------------------------------------------
 
   update (options: OverrideCommandOptions & {
     videoId: number | string
@@ -110,6 +115,8 @@ export class LiveCommand extends AbstractCommand {
     return body.video
   }
 
+  // ---------------------------------------------------------------------------
+
   async sendRTMPStreamInVideo (options: OverrideCommandOptions & {
     videoId: number | string
     fixtureName?: string
@@ -129,6 +136,8 @@ export class LiveCommand extends AbstractCommand {
 
     return testFfmpegStreamError(command, options.shouldHaveError)
   }
+
+  // ---------------------------------------------------------------------------
 
   waitUntilPublished (options: OverrideCommandOptions & {
     videoId: number | string
@@ -163,25 +172,6 @@ export class LiveCommand extends AbstractCommand {
     return this.server.servers.waitUntilLog(`${videoUUID}/${segmentName}`, totalSessions * 2, false)
   }
 
-  getSegment (options: OverrideCommandOptions & {
-    videoUUID: string
-    playlistNumber: number
-    segment: number
-  }) {
-    const { playlistNumber, segment, videoUUID } = options
-
-    const segmentName = `${playlistNumber}-00000${segment}.ts`
-    const url = `${this.server.url}/static/streaming-playlists/hls/${videoUUID}/${segmentName}`
-
-    return this.getRawRequest({
-      ...options,
-
-      url,
-      implicitToken: false,
-      defaultExpectedStatus: HttpStatusCode.OK_200
-    })
-  }
-
   async waitUntilReplacedByReplay (options: OverrideCommandOptions & {
     videoId: number | string
   }) {
@@ -193,6 +183,56 @@ export class LiveCommand extends AbstractCommand {
       await wait(500)
     } while (video.isLive === true || video.state.id !== VideoState.PUBLISHED)
   }
+
+  // ---------------------------------------------------------------------------
+
+  getSegmentFile (options: OverrideCommandOptions & {
+    videoUUID: string
+    playlistNumber: number
+    segment: number
+    objectStorage?: boolean // default false
+  }) {
+    const { playlistNumber, segment, videoUUID, objectStorage = false } = options
+
+    const segmentName = `${playlistNumber}-00000${segment}.ts`
+    const baseUrl = objectStorage
+      ? ObjectStorageCommand.getPlaylistBaseUrl()
+      : `${this.server.url}/static/streaming-playlists/hls`
+
+    const url = `${baseUrl}/${videoUUID}/${segmentName}`
+
+    return this.getRawRequest({
+      ...options,
+
+      url,
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  getPlaylistFile (options: OverrideCommandOptions & {
+    videoUUID: string
+    playlistName: string
+    objectStorage?: boolean // default false
+  }) {
+    const { playlistName, videoUUID, objectStorage = false } = options
+
+    const baseUrl = objectStorage
+      ? ObjectStorageCommand.getPlaylistBaseUrl()
+      : `${this.server.url}/static/streaming-playlists/hls`
+
+    const url = `${baseUrl}/${videoUUID}/${playlistName}`
+
+    return this.getRawRequest({
+      ...options,
+
+      url,
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  // ---------------------------------------------------------------------------
 
   async countPlaylists (options: OverrideCommandOptions & {
     videoUUID: string

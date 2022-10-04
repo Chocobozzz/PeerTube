@@ -145,7 +145,6 @@ info:
     | `/api/*`                    |
     | `/download/*`               |
     | `/lazy-static/*`            |
-    | `/live/segments-sha256/*`   |
     | `/.well-known/webfinger`    |
 
     In addition, all routes serving ActivityPub are CORS-enabled for all origins.

@@ -16,7 +16,7 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
     }))
   }
 
-  getSegment (options: OverrideCommandOptions & {
+  getFragmentedSegment (options: OverrideCommandOptions & {
     url: string
     range?: string
   }) {

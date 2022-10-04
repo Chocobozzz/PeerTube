@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { basename, join } from 'path'
 import { ffprobePromise, getVideoStream } from '@server/helpers/ffmpeg'
-import { checkLiveSegmentHash, checkResolutionsInMasterPlaylist, testImage } from '@server/tests/shared'
+import { testImage, testVideoResolutions } from '@server/tests/shared'
 import { getAllFiles, wait } from '@shared/core-utils'
 import {
   HttpStatusCode,
@@ -372,46 +372,6 @@ describe('Test live', function () {
       return uuid
     }
 
-    async function testVideoResolutions (liveVideoId: string, resolutions: number[]) {
-      for (const server of servers) {
-        const { data } = await server.videos.list()
-        expect(data.find(v => v.uuid === liveVideoId)).to.exist
-
-        const video = await server.videos.get({ id: liveVideoId })
-
-        expect(video.streamingPlaylists).to.have.lengthOf(1)
-
-        const hlsPlaylist = video.streamingPlaylists.find(s => s.type === VideoStreamingPlaylistType.HLS)
-        expect(hlsPlaylist).to.exist
-
-        // Only finite files are displayed
-        expect(hlsPlaylist.files).to.have.lengthOf(0)
-
-        await checkResolutionsInMasterPlaylist({ server, playlistUrl: hlsPlaylist.playlistUrl, resolutions })
-
-        for (let i = 0; i < resolutions.length; i++) {
-          const segmentNum = 3
-          const segmentName = `${i}-00000${segmentNum}.ts`
-          await commands[0].waitUntilSegmentGeneration({ videoUUID: video.uuid, playlistNumber: i, segment: segmentNum })
-
-          const subPlaylist = await servers[0].streamingPlaylists.get({
-            url: `${servers[0].url}/static/streaming-playlists/hls/${video.uuid}/${i}.m3u8`
-          })
-
-          expect(subPlaylist).to.contain(segmentName)
-
-          const baseUrlAndPath = servers[0].url + '/static/streaming-playlists/hls'
-          await checkLiveSegmentHash({
-            server,
-            baseUrlSegment: baseUrlAndPath,
-            videoUUID: video.uuid,
-            segmentName,
-            hlsPlaylist
-          })
-        }
-      }
-    }
-
     function updateConf (resolutions: number[]) {
       return servers[0].config.updateCustomSubConfig({
         newConfig: {
@@ -449,7 +409,14 @@ describe('Test live', function () {
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
       await waitJobs(servers)
 
-      await testVideoResolutions(liveVideoId, [ 720 ])
+      await testVideoResolutions({
+        originServer: servers[0],
+        servers,
+        liveVideoId,
+        resolutions: [ 720 ],
+        objectStorage: false,
+        transcoded: true
+      })
 
       await stopFfmpeg(ffmpegCommand)
     })
@@ -477,7 +444,14 @@ describe('Test live', function () {
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
       await waitJobs(servers)
 
-      await testVideoResolutions(liveVideoId, resolutions.concat([ 720 ]))
+      await testVideoResolutions({
+        originServer: servers[0],
+        servers,
+        liveVideoId,
+        resolutions: resolutions.concat([ 720 ]),
+        objectStorage: false,
+        transcoded: true
+      })
 
       await stopFfmpeg(ffmpegCommand)
     })
@@ -522,7 +496,14 @@ describe('Test live', function () {
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
       await waitJobs(servers)
 
-      await testVideoResolutions(liveVideoId, resolutions)
+      await testVideoResolutions({
+        originServer: servers[0],
+        servers,
+        liveVideoId,
+        resolutions,
+        objectStorage: false,
+        transcoded: true
+      })
 
       await stopFfmpeg(ffmpegCommand)
       await commands[0].waitUntilEnded({ videoId: liveVideoId })
@@ -611,7 +592,14 @@ describe('Test live', function () {
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
       await waitJobs(servers)
 
-      await testVideoResolutions(liveVideoId, resolutions)
+      await testVideoResolutions({
+        originServer: servers[0],
+        servers,
+        liveVideoId,
+        resolutions,
+        objectStorage: false,
+        transcoded: true
+      })
 
       await stopFfmpeg(ffmpegCommand)
       await commands[0].waitUntilEnded({ videoId: liveVideoId })
@@ -640,7 +628,14 @@ describe('Test live', function () {
       await waitUntilLivePublishedOnAllServers(servers, liveVideoId)
       await waitJobs(servers)
 
-      await testVideoResolutions(liveVideoId, [ 720 ])
+      await testVideoResolutions({
+        originServer: servers[0],
+        servers,
+        liveVideoId,
+        resolutions: [ 720 ],
+        objectStorage: false,
+        transcoded: true
+      })
 
       await stopFfmpeg(ffmpegCommand)
       await commands[0].waitUntilEnded({ videoId: liveVideoId })

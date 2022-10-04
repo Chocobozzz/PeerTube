@@ -21,14 +21,14 @@ import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { MStreamingPlaylistVideo, MVideo, MVideoLiveSession, MVideoLiveVideo } from '@server/types/models'
 import { pick, wait } from '@shared/core-utils'
-import { LiveVideoError, VideoState, VideoStreamingPlaylistType } from '@shared/models'
+import { LiveVideoError, VideoState, VideoStorage, VideoStreamingPlaylistType } from '@shared/models'
 import { federateVideoIfNeeded } from '../activitypub/videos'
 import { JobQueue } from '../job-queue'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getLiveReplayBaseDirectory } from '../paths'
 import { PeerTubeSocket } from '../peertube-socket'
 import { Hooks } from '../plugins/hooks'
 import { LiveQuotaStore } from './live-quota-store'
-import { cleanupPermanentLive } from './live-utils'
+import { cleanupAndDestroyPermanentLive } from './live-utils'
 import { MuxingSession } from './shared'
 
 const NodeRtmpSession = require('node-media-server/src/node_rtmp_session')
@@ -224,7 +224,7 @@ class LiveManager {
     if (oldStreamingPlaylist) {
       if (!videoLive.permanentLive) throw new Error('Found previous session in a non permanent live: ' + video.uuid)
 
-      await cleanupPermanentLive(video, oldStreamingPlaylist)
+      await cleanupAndDestroyPermanentLive(video, oldStreamingPlaylist)
     }
 
     this.videoSessions.set(video.id, sessionId)
@@ -301,7 +301,7 @@ class LiveManager {
       ...pick(options, [ 'streamingPlaylist', 'inputUrl', 'bitrate', 'ratio', 'fps', 'allResolutions', 'hasAudio' ])
     })
 
-    muxingSession.on('master-playlist-created', () => this.publishAndFederateLive(videoLive, localLTags))
+    muxingSession.on('live-ready', () => this.publishAndFederateLive(videoLive, localLTags))
 
     muxingSession.on('bad-socket-health', ({ videoId }) => {
       logger.error(
@@ -484,6 +484,10 @@ class LiveManager {
     playlist.type = VideoStreamingPlaylistType.HLS
 
     playlist.assignP2PMediaLoaderInfoHashes(video, allResolutions)
+
+    playlist.storage = CONFIG.OBJECT_STORAGE.ENABLED
+      ? VideoStorage.OBJECT_STORAGE
+      : VideoStorage.FILE_SYSTEM
 
     return playlist.save()
   }

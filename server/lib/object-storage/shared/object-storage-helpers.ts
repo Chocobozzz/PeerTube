@@ -22,6 +22,24 @@ type BucketInfo = {
   PREFIX?: string
 }
 
+async function listKeysOfPrefix (prefix: string, bucketInfo: BucketInfo) {
+  const s3Client = getClient()
+
+  const commandPrefix = bucketInfo.PREFIX + prefix
+  const listCommand = new ListObjectsV2Command({
+    Bucket: bucketInfo.BUCKET_NAME,
+    Prefix: commandPrefix
+  })
+
+  const listedObjects = await s3Client.send(listCommand)
+
+  if (isArray(listedObjects.Contents) !== true) return []
+
+  return listedObjects.Contents.map(c => c.Key)
+}
+
+// ---------------------------------------------------------------------------
+
 async function storeObject (options: {
   inputPath: string
   objectStorageKey: string
@@ -35,6 +53,8 @@ async function storeObject (options: {
 
   return uploadToStorage({ objectStorageKey, content: fileStream, bucketInfo })
 }
+
+// ---------------------------------------------------------------------------
 
 async function removeObject (filename: string, bucketInfo: BucketInfo) {
   const command = new DeleteObjectCommand({
@@ -89,6 +109,8 @@ async function removePrefix (prefix: string, bucketInfo: BucketInfo) {
   if (listedObjects.IsTruncated) await removePrefix(prefix, bucketInfo)
 }
 
+// ---------------------------------------------------------------------------
+
 async function makeAvailable (options: {
   key: string
   destination: string
@@ -122,7 +144,8 @@ export {
   storeObject,
   removeObject,
   removePrefix,
-  makeAvailable
+  makeAvailable,
+  listKeysOfPrefix
 }
 
 // ---------------------------------------------------------------------------

@@ -26,7 +26,7 @@ async function checkSegmentHash (options: {
   const offset = parseInt(matches[2], 10)
   const range = `${offset}-${offset + length - 1}`
 
-  const segmentBody = await command.getSegment({
+  const segmentBody = await command.getFragmentedSegment({
     url: `${baseUrlSegment}/${videoName}`,
     expectedStatus: HttpStatusCode.PARTIAL_CONTENT_206,
     range: `bytes=${range}`
@@ -46,7 +46,7 @@ async function checkLiveSegmentHash (options: {
   const { server, baseUrlSegment, videoUUID, segmentName, hlsPlaylist } = options
   const command = server.streamingPlaylists
 
-  const segmentBody = await command.getSegment({ url: `${baseUrlSegment}/${videoUUID}/${segmentName}` })
+  const segmentBody = await command.getFragmentedSegment({ url: `${baseUrlSegment}/${videoUUID}/${segmentName}` })
   const shaBody = await command.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url })
 
   expect(sha256(segmentBody)).to.equal(shaBody[segmentName])
@@ -56,15 +56,16 @@ async function checkResolutionsInMasterPlaylist (options: {
   server: PeerTubeServer
   playlistUrl: string
   resolutions: number[]
+  transcoded?: boolean // default true
 }) {
-  const { server, playlistUrl, resolutions } = options
+  const { server, playlistUrl, resolutions, transcoded = true } = options
 
   const masterPlaylist = await server.streamingPlaylists.get({ url: playlistUrl })
 
   for (const resolution of resolutions) {
-    const reg = new RegExp(
-      '#EXT-X-STREAM-INF:BANDWIDTH=\\d+,RESOLUTION=\\d+x' + resolution + ',(FRAME-RATE=\\d+,)?CODECS="avc1.64001f,mp4a.40.2"'
-    )
+    const reg = transcoded
+      ? new RegExp('#EXT-X-STREAM-INF:BANDWIDTH=\\d+,RESOLUTION=\\d+x' + resolution + ',(FRAME-RATE=\\d+,)?CODECS="avc1.64001f,mp4a.40.2"')
+      : new RegExp('#EXT-X-STREAM-INF:BANDWIDTH=\\d+,RESOLUTION=\\d+x' + resolution + '')
 
     expect(masterPlaylist).to.match(reg)
   }

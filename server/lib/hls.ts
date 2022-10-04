@@ -15,7 +15,7 @@ import { P2P_MEDIA_LOADER_PEER_VERSION, REQUEST_TIMEOUTS } from '../initializers
 import { sequelizeTypescript } from '../initializers/database'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
-import { storeHLSFile } from './object-storage'
+import { storeHLSFileFromFilename } from './object-storage'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getHlsResolutionPlaylistFilename } from './paths'
 import { VideoPathManager } from './video-path-manager'
 
@@ -95,7 +95,7 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
     await writeFile(masterPlaylistPath, masterPlaylists.join('\n') + '\n')
 
     if (playlist.storage === VideoStorage.OBJECT_STORAGE) {
-      playlist.playlistUrl = await storeHLSFile(playlist, playlist.playlistFilename)
+      playlist.playlistUrl = await storeHLSFileFromFilename(playlist, playlist.playlistFilename)
       await remove(masterPlaylistPath)
     }
 
@@ -146,7 +146,7 @@ function updateSha256VODSegments (video: MVideo, playlistArg: MStreamingPlaylist
     await outputJSON(outputPath, json)
 
     if (playlist.storage === VideoStorage.OBJECT_STORAGE) {
-      playlist.segmentsSha256Url = await storeHLSFile(playlist, playlist.segmentsSha256Filename)
+      playlist.segmentsSha256Url = await storeHLSFileFromFilename(playlist, playlist.segmentsSha256Filename)
       await remove(outputPath)
     }
 

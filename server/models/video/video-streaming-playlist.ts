@@ -245,21 +245,25 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   }
 
   getMasterPlaylistUrl (video: MVideo) {
-    if (this.storage === VideoStorage.OBJECT_STORAGE) {
-      return getHLSPublicFileUrl(this.playlistUrl)
-    }
+    if (video.isOwned()) {
+      if (this.storage === VideoStorage.OBJECT_STORAGE) {
+        return getHLSPublicFileUrl(this.playlistUrl)
+      }
 
-    if (video.isOwned()) return WEBSERVER.URL + this.getMasterPlaylistStaticPath(video.uuid)
+      return WEBSERVER.URL + this.getMasterPlaylistStaticPath(video.uuid)
+    }
 
     return this.playlistUrl
   }
 
   getSha256SegmentsUrl (video: MVideo) {
-    if (this.storage === VideoStorage.OBJECT_STORAGE) {
-      return getHLSPublicFileUrl(this.segmentsSha256Url)
-    }
+    if (video.isOwned()) {
+      if (this.storage === VideoStorage.OBJECT_STORAGE) {
+        return getHLSPublicFileUrl(this.segmentsSha256Url)
+      }
 
-    if (video.isOwned()) return WEBSERVER.URL + this.getSha256SegmentsStaticPath(video.uuid, video.isLive)
+      return WEBSERVER.URL + this.getSha256SegmentsStaticPath(video.uuid)
+    }
 
     return this.segmentsSha256Url
   }
@@ -287,9 +291,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
     return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, videoUUID, this.playlistFilename)
   }
 
-  private getSha256SegmentsStaticPath (videoUUID: string, isLive: boolean) {
-    if (isLive) return join('/live', 'segments-sha256', videoUUID)
-
+  private getSha256SegmentsStaticPath (videoUUID: string) {
     return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, videoUUID, this.segmentsSha256Filename)
   }
 }
