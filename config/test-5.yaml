@@ -23,6 +23,7 @@ storage:
   captions: 'test5/captions/'
   cache: 'test5/cache/'
   plugins: 'test5/plugins/'
+  well_known: 'test5/well-known/'
   client_overrides: 'test5/client-overrides/'
 
 admin:

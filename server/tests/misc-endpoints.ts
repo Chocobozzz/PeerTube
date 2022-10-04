@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { cleanupTests, createSingleServer, makeGetRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
-import { HttpStatusCode, VideoPrivacy } from '@shared/models'
-import { join } from 'path'
 import { writeJson } from 'fs-extra'
+import { join } from 'path'
+import { HttpStatusCode, VideoPrivacy } from '@shared/models'
+import { cleanupTests, createSingleServer, makeGetRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 import { expectLogDoesNotContain } from './shared'
 
 describe('Test misc endpoints', function () {
@@ -110,17 +110,16 @@ describe('Test misc endpoints', function () {
 
     it('Should return custom file from /.well-known', async function () {
       const filename = 'existing-file.json'
-      const content = {
-        iThink: 'therefore I am'
-      }
-      await writeJson(join(wellKnownPath, filename), content)
-      const response = await makeGetRequest({
+
+      await writeJson(join(wellKnownPath, filename), { iThink: 'therefore I am' })
+
+      const { body } = await makeGetRequest({
         url: server.url,
         path: '/.well-known/' + filename,
         expectedStatus: HttpStatusCode.OK_200
       })
 
-      expect(response.body).to.eql(content)
+      expect(body.iThink).to.equal('therefore I am')
     })
   })
 
