@@ -34,12 +34,12 @@ async function processVideoLiveEnding (job: Job) {
   const live = await VideoLiveModel.loadByVideoId(payload.videoId)
   const liveSession = await VideoLiveSessionModel.load(payload.liveSessionId)
 
-  const permanentLive = live.permanentLive
-
   if (!video || !live || !liveSession) {
     logError()
     return
   }
+
+  const permanentLive = live.permanentLive
 
   liveSession.endingProcessed = true
   await liveSession.save()
