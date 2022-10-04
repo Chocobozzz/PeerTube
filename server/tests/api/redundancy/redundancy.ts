@@ -5,7 +5,7 @@ import { readdir } from 'fs-extra'
 import magnetUtil from 'magnet-uri'
 import { basename, join } from 'path'
 import { checkSegmentHash, checkVideoFilesWereRemoved, saveVideoInServers } from '@server/tests/shared'
-import { root, wait } from '@shared/core-utils'
+import { wait } from '@shared/core-utils'
 import {
   HttpStatusCode,
   VideoDetails,
@@ -164,7 +164,7 @@ async function check2Webseeds (videoUUID?: string) {
   ]
 
   for (const directory of directories) {
-    const files = await readdir(join(root(), directory))
+    const files = await readdir(directory)
     expect(files).to.have.length.at.least(4)
 
     // Ensure we files exist on disk
@@ -219,7 +219,7 @@ async function check1PlaylistRedundancies (videoUUID?: string) {
   ]
 
   for (const directory of directories) {
-    const files = await readdir(join(root(), directory, videoUUID))
+    const files = await readdir(join(directory, videoUUID))
     expect(files).to.have.length.at.least(4)
 
     // Ensure we files exist on disk

@@ -134,7 +134,12 @@ function unwrapText (test: request.Test): Promise<string> {
 function unwrapBodyOrDecodeToJSON <T> (test: request.Test): Promise<T> {
   return test.then(res => {
     if (res.body instanceof Buffer) {
-      return JSON.parse(new TextDecoder().decode(res.body))
+      try {
+        return JSON.parse(new TextDecoder().decode(res.body))
+      } catch (err) {
+        console.error('Cannot decode JSON.', res.body)
+        throw err
+      }
     }
 
     return res.body
