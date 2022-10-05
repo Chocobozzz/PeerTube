@@ -13,7 +13,15 @@ import { AbusesCommand } from '../moderation'
 import { OverviewsCommand } from '../overviews'
 import { SearchCommand } from '../search'
 import { SocketIOCommand } from '../socket'
-import { AccountsCommand, BlocklistCommand, LoginCommand, NotificationsCommand, SubscriptionsCommand, UsersCommand } from '../users'
+import {
+  AccountsCommand,
+  BlocklistCommand,
+  LoginCommand,
+  NotificationsCommand,
+  SubscriptionsCommand,
+  TwoFactorCommand,
+  UsersCommand
+} from '../users'
 import {
   BlacklistCommand,
   CaptionsCommand,
@@ -136,6 +144,7 @@ export class PeerTubeServer {
   videos?: VideosCommand
   videoStats?: VideoStatsCommand
   views?: ViewsCommand
+  twoFactor?: TwoFactorCommand
 
   constructor (options: { serverNumber: number } | { url: string }) {
     if ((options as any).url) {
@@ -417,5 +426,6 @@ export class PeerTubeServer {
     this.videoStudio = new VideoStudioCommand(this)
     this.videoStats = new VideoStatsCommand(this)
     this.views = new ViewsCommand(this)
+    this.twoFactor = new TwoFactorCommand(this)
   }
 }

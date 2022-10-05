@@ -11,8 +11,20 @@ import OAuth2Server, {
 import { randomBytesPromise } from '@server/helpers/core-utils'
 import { MOAuthClient } from '@server/types/models'
 import { sha1 } from '@shared/extra-utils'
-import { OAUTH_LIFETIME } from '../../initializers/constants'
+import { HttpStatusCode } from '@shared/models'
+import { OAUTH_LIFETIME, OTP } from '../../initializers/constants'
 import { BypassLogin, getClient, getRefreshToken, getUser, revokeToken, saveToken } from './oauth-model'
+import { isOTPValid } from '@server/helpers/otp'
+
+class MissingTwoFactorError extends Error {
+  code = HttpStatusCode.UNAUTHORIZED_401
+  name = 'missing_two_factor'
+}
+
+class InvalidTwoFactorError extends Error {
+  code = HttpStatusCode.BAD_REQUEST_400
+  name = 'invalid_two_factor'
+}
 
 /**
  *
@@ -94,6 +106,9 @@ function handleOAuthAuthenticate (
 }
 
 export {
+  MissingTwoFactorError,
+  InvalidTwoFactorError,
+
   handleOAuthToken,
   handleOAuthAuthenticate
 }
@@ -117,6 +132,16 @@ async function handlePasswordGrant (options: {
 
   const user = await getUser(request.body.username, request.body.password, bypassLogin)
   if (!user) throw new InvalidGrantError('Invalid grant: user credentials are invalid')
+
+  if (user.otpSecret) {
+    if (!request.headers[OTP.HEADER_NAME]) {
+      throw new MissingTwoFactorError('Missing two factor header')
+    }
+
+    if (isOTPValid({ secret: user.otpSecret, token: request.headers[OTP.HEADER_NAME] }) !== true) {
+      throw new InvalidTwoFactorError('Invalid two factor header')
+    }
+  }
 
   const token = await buildToken()
 

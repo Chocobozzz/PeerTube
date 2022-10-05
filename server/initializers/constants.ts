@@ -25,7 +25,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 740
+const LAST_MIGRATION_VERSION = 745
 
 // ---------------------------------------------------------------------------
 
@@ -640,6 +640,8 @@ const BCRYPT_SALT_SIZE = 10
 const USER_PASSWORD_RESET_LIFETIME = 60000 * 60 // 60 minutes
 const USER_PASSWORD_CREATE_LIFETIME = 60000 * 60 * 24 * 7 // 7 days
 
+const TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME = 60000 * 10 // 10 minutes
+
 const USER_EMAIL_VERIFY_LIFETIME = 60000 * 60 // 60 minutes
 
 const NSFW_POLICY_TYPES: { [ id: string ]: NSFWPolicyType } = {
@@ -805,6 +807,10 @@ const REDUNDANCY = {
 }
 
 const ACCEPT_HEADERS = [ 'html', 'application/json' ].concat(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS)
+const OTP = {
+  HEADER_NAME: 'x-peertube-otp',
+  HEADER_REQUIRED_VALUE: 'required; app'
+}
 
 const ASSETS_PATH = {
   DEFAULT_AUDIO_BACKGROUND: join(root(), 'dist', 'server', 'assets', 'default-audio-background.jpg'),
@@ -986,6 +992,7 @@ export {
   FOLLOW_STATES,
   DEFAULT_USER_THEME_NAME,
   SERVER_ACTOR_NAME,
+  TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME,
   PLUGIN_GLOBAL_CSS_FILE_NAME,
   PLUGIN_GLOBAL_CSS_PATH,
   PRIVATE_RSA_KEY_SIZE,
@@ -1041,6 +1048,7 @@ export {
   PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME,
   ASSETS_PATH,
   FILES_CONTENT_HASH,
+  OTP,
   loadLanguages,
   buildLanguages,
   generateContentHash

@@ -1,3 +1,4 @@
+import './two-factor'
 import './user-subscriptions'
 import './user-videos'
 import './users'

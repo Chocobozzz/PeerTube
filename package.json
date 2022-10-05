@@ -147,6 +147,7 @@
     "node-media-server": "^2.1.4",
     "nodemailer": "^6.0.0",
     "opentelemetry-instrumentation-sequelize": "^0.29.0",
+    "otpauth": "^8.0.3",
     "p-queue": "^6",
     "parse-torrent": "^9.1.0",
     "password-generator": "^2.0.2",

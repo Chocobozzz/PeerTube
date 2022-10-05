@@ -62,6 +62,8 @@ export interface User {
   pluginAuth: string | null
 
   lastLoginDate: Date | null
+
+  twoFactorEnabled: boolean
 }
 
 export interface MyUserSpecialPlaylist {
