@@ -1,7 +1,7 @@
 import express from 'express'
 import { generateOTPSecret, isOTPValid } from '@server/helpers/otp'
 import { Redis } from '@server/lib/redis'
-import { asyncMiddleware, authenticate, usersCheckCurrentPassword } from '@server/middlewares'
+import { asyncMiddleware, authenticate, usersCheckCurrentPasswordFactory } from '@server/middlewares'
 import {
   confirmTwoFactorValidator,
   disableTwoFactorValidator,
@@ -13,7 +13,7 @@ const twoFactorRouter = express.Router()
 
 twoFactorRouter.post('/:id/two-factor/request',
   authenticate,
-  asyncMiddleware(usersCheckCurrentPassword),
+  asyncMiddleware(usersCheckCurrentPasswordFactory(req => req.params.id)),
   asyncMiddleware(requestOrConfirmTwoFactorValidator),
   asyncMiddleware(requestTwoFactor)
 )
@@ -27,7 +27,7 @@ twoFactorRouter.post('/:id/two-factor/confirm-request',
 
 twoFactorRouter.post('/:id/two-factor/disable',
   authenticate,
-  asyncMiddleware(usersCheckCurrentPassword),
+  asyncMiddleware(usersCheckCurrentPasswordFactory(req => req.params.id)),
   asyncMiddleware(disableTwoFactorValidator),
   asyncMiddleware(disableTwoFactor)
 )

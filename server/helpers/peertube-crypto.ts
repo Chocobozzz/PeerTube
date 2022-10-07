@@ -24,6 +24,8 @@ function createPrivateAndPublicKeys () {
 // User password checks
 
 function comparePassword (plainPassword: string, hashPassword: string) {
+  if (!plainPassword) return Promise.resolve(false)
+
   return bcryptComparePromise(plainPassword, hashPassword)
 }
 

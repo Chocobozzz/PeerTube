@@ -4,7 +4,7 @@ import { Router } from '@angular/router'
 import { AuthService, Notifier, User } from '@app/core'
 import { USER_EXISTING_PASSWORD_VALIDATOR, USER_OTP_TOKEN_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactiveService } from '@app/shared/shared-forms'
-import { TwoFactorService } from './two-factor.service'
+import { TwoFactorService } from '@app/shared/shared-users'
 
 @Component({
   selector: 'my-account-two-factor',

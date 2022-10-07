@@ -11,6 +11,7 @@ import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
 import { SharedShareModal } from '@app/shared/shared-share-modal'
 import { SharedUserInterfaceSettingsModule } from '@app/shared/shared-user-settings'
+import { SharedUsersModule } from '@app/shared/shared-users'
 import { SharedActorImageModule } from '../shared/shared-actor-image/shared-actor-image.module'
 import { MyAccountAbusesListComponent } from './my-account-abuses/my-account-abuses-list.component'
 import { MyAccountApplicationsComponent } from './my-account-applications/my-account-applications.component'
@@ -24,11 +25,7 @@ import { MyAccountDangerZoneComponent } from './my-account-settings/my-account-d
 import { MyAccountNotificationPreferencesComponent } from './my-account-settings/my-account-notification-preferences'
 import { MyAccountProfileComponent } from './my-account-settings/my-account-profile/my-account-profile.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
-import {
-  MyAccountTwoFactorButtonComponent,
-  MyAccountTwoFactorComponent,
-  TwoFactorService
-} from './my-account-settings/my-account-two-factor'
+import { MyAccountTwoFactorButtonComponent, MyAccountTwoFactorComponent } from './my-account-settings/my-account-two-factor'
 import { MyAccountComponent } from './my-account.component'
 
 @NgModule({
@@ -44,6 +41,7 @@ import { MyAccountComponent } from './my-account.component'
     SharedFormModule,
     SharedModerationModule,
     SharedUserInterfaceSettingsModule,
+    SharedUsersModule,
     SharedGlobalIconModule,
     SharedAbuseListModule,
     SharedShareModal,
@@ -74,9 +72,7 @@ import { MyAccountComponent } from './my-account.component'
     MyAccountComponent
   ],
 
-  providers: [
-    TwoFactorService
-  ]
+  providers: []
 })
 export class MyAccountModule {
 }

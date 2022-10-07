@@ -506,23 +506,40 @@ const usersVerifyEmailValidator = [
   }
 ]
 
-const usersCheckCurrentPassword = [
-  body('currentPassword').custom(exists),
+const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: express.Request) => number | string) => {
+  return [
+    body('currentPassword').optional().custom(exists),
 
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res)) return
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      if (areValidationErrors(req, res)) return
 
-    const user = res.locals.oauth.token.User
-    if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'currentPassword is invalid.'
-      })
+      const user = res.locals.oauth.token.User
+      const isAdminOrModerator = user.role === UserRole.ADMINISTRATOR || user.role === UserRole.MODERATOR
+      const targetUserId = parseInt(targetUserIdGetter(req) + '')
+
+      // Admin/moderator action on another user, skip the password check
+      if (isAdminOrModerator && targetUserId !== user.id) {
+        return next()
+      }
+
+      if (!req.body.currentPassword) {
+        return res.fail({
+          status: HttpStatusCode.BAD_REQUEST_400,
+          message: 'currentPassword is missing'
+        })
+      }
+
+      if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
+        return res.fail({
+          status: HttpStatusCode.FORBIDDEN_403,
+          message: 'currentPassword is invalid.'
+        })
+      }
+
+      return next()
     }
-
-    return next()
-  }
-]
+  ]
+}
 
 const userAutocompleteValidator = [
   param('search')
@@ -591,7 +608,7 @@ export {
   usersUpdateValidator,
   usersUpdateMeValidator,
   usersVideoRatingValidator,
-  usersCheckCurrentPassword,
+  usersCheckCurrentPasswordFactory,
   ensureUserRegistrationAllowed,
   ensureUserRegistrationAllowedForIP,
   usersGetValidator,

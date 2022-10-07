@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs'
 import { Component, Input, OnInit } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, User } from '@app/core'
-import { TwoFactorService } from './two-factor.service'
+import { TwoFactorService } from '@app/shared/shared-users'
 
 @Component({
   selector: 'my-account-two-factor-button',

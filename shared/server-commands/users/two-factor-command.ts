@@ -21,7 +21,7 @@ export class TwoFactorCommand extends AbstractCommand {
 
   request (options: OverrideCommandOptions & {
     userId: number
-    currentPassword: string
+    currentPassword?: string
   }) {
     const { currentPassword, userId } = options
 
@@ -58,7 +58,7 @@ export class TwoFactorCommand extends AbstractCommand {
 
   disable (options: OverrideCommandOptions & {
     userId: number
-    currentPassword: string
+    currentPassword?: string
   }) {
     const { userId, currentPassword } = options
     const path = '/api/v1/users/' + userId + '/two-factor/disable'
@@ -71,5 +71,22 @@ export class TwoFactorCommand extends AbstractCommand {
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
+  }
+
+  async requestAndConfirm (options: OverrideCommandOptions & {
+    userId: number
+    currentPassword?: string
+  }) {
+    const { userId, currentPassword } = options
+
+    const { otpRequest } = await this.request({ userId, currentPassword })
+
+    await this.confirmRequest({
+      userId,
+      requestToken: otpRequest.requestToken,
+      otpToken: TwoFactorCommand.buildOTP({ secret: otpRequest.secret }).generate()
+    })
+
+    return otpRequest
   }
 }

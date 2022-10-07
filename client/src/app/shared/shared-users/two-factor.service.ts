@@ -40,7 +40,7 @@ export class TwoFactorService {
 
   disableTwoFactor (options: {
     userId: number
-    currentPassword: string
+    currentPassword?: string
   }) {
     const { userId, currentPassword } = options
 

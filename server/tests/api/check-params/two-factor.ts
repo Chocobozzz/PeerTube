@@ -86,6 +86,15 @@ describe('Test two factor API validators', function () {
       })
     })
 
+    it('Should succeed to request two factor without a password when targeting a remote user with an admin account', async function () {
+      await server.twoFactor.request({ userId })
+    })
+
+    it('Should fail to request two factor without a password when targeting myself with an admin account', async function () {
+      await server.twoFactor.request({ userId: rootId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await server.twoFactor.request({ userId: rootId, currentPassword: 'bad', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
     it('Should succeed to request my two factor auth', async function () {
       {
         const { otpRequest } = await server.twoFactor.request({ userId, token: userToken, currentPassword: userPassword })
@@ -234,7 +243,7 @@ describe('Test two factor API validators', function () {
       })
     })
 
-    it('Should fail to disabled two factor with an incorrect password', async function () {
+    it('Should fail to disable two factor with an incorrect password', async function () {
       await server.twoFactor.disable({
         userId,
         token: userToken,
@@ -243,16 +252,20 @@ describe('Test two factor API validators', function () {
       })
     })
 
+    it('Should succeed to disable two factor without a password when targeting a remote user with an admin account', async function () {
+      await server.twoFactor.disable({ userId })
+      await server.twoFactor.requestAndConfirm({ userId })
+    })
+
+    it('Should fail to disable two factor without a password when targeting myself with an admin account', async function () {
+      await server.twoFactor.disable({ userId: rootId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await server.twoFactor.disable({ userId: rootId, currentPassword: 'bad', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
     it('Should succeed to disable another user two factor with the appropriate rights', async function () {
       await server.twoFactor.disable({ userId, currentPassword: rootPassword })
 
-      // Reinit
-      const { otpRequest } = await server.twoFactor.request({ userId, currentPassword: rootPassword })
-      await server.twoFactor.confirmRequest({
-        userId,
-        requestToken: otpRequest.requestToken,
-        otpToken: TwoFactorCommand.buildOTP({ secret: otpRequest.secret }).generate()
-      })
+      await server.twoFactor.requestAndConfirm({ userId })
     })
 
     it('Should succeed to update my two factor auth', async function () {
