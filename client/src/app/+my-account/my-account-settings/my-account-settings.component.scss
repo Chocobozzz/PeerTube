@@ -1,6 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
-@use '~bootstrap/scss/functions' as *;
+@use 'bootstrap/scss/functions' as *;
 
 .account-title {
   @include settings-big-title;

@@ -1,8 +1,8 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
 
 label {
   display: block;

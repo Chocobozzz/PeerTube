@@ -15,7 +15,7 @@ $ng-select-height: 30px;
 $ng-select-value-padding-left: 15px;
 $ng-select-value-font-size: $form-input-font-size;
 
-@import '~@ng-select/ng-select/scss/default.theme';
+@import '@ng-select/ng-select/scss/default.theme';
 
 .ng-select {
   font-size: $ng-select-value-font-size;
