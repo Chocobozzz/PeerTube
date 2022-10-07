@@ -21,6 +21,8 @@ export class ConfirmComponent implements OnInit {
   inputValue = ''
   confirmButtonText = ''
 
+  isPasswordInput = false
+
   private openedModal: NgbModalRef
 
   constructor (
@@ -31,11 +33,27 @@ export class ConfirmComponent implements OnInit {
 
   ngOnInit () {
     this.confirmService.showConfirm.subscribe(
-      ({ title, message, expectedInputValue, inputLabel, confirmButtonText }) => {
+      payload => {
+        // Reinit fields
+        this.title = ''
+        this.message = ''
+        this.expectedInputValue = ''
+        this.inputLabel = ''
+        this.inputValue = ''
+        this.confirmButtonText = ''
+        this.isPasswordInput = false
+
+        const { type, title, message, confirmButtonText } = payload
+
         this.title = title
 
-        this.inputLabel = inputLabel
-        this.expectedInputValue = expectedInputValue
+        if (type === 'confirm-expected-input') {
+          this.inputLabel = payload.inputLabel
+          this.expectedInputValue = payload.expectedInputValue
+        } else if (type === 'confirm-password') {
+          this.inputLabel = $localize`Confirm your password`
+          this.isPasswordInput = true
+        }
 
         this.confirmButtonText = confirmButtonText || $localize`Confirm`
 
@@ -66,11 +84,13 @@ export class ConfirmComponent implements OnInit {
     this.openedModal = this.modalService.open(this.confirmModal, { centered: true })
 
     this.openedModal.result
-        .then(() => this.confirmService.confirmResponse.next(true))
+        .then(() => {
+          this.confirmService.confirmResponse.next({ confirmed: true, value: this.inputValue })
+        })
         .catch((reason: string) => {
           // If the reason was that the user used the back button, we don't care about the confirm dialog result
           if (!reason || reason !== POP_STATE_MODAL_DISMISS) {
-            this.confirmService.confirmResponse.next(false)
+            this.confirmService.confirmResponse.next({ confirmed: false, value: this.inputValue })
           }
         })
   }

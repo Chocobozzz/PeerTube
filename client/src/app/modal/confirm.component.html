@@ -9,9 +9,12 @@
   <div class="modal-body" >
     <div [innerHtml]="message"></div>
 
-    <div *ngIf="inputLabel && expectedInputValue" class="form-group mt-3">
+    <div *ngIf="inputLabel" class="form-group mt-3">
       <label for="confirmInput">{{ inputLabel }}</label>
-      <input type="text" id="confirmInput" name="confirmInput" [(ngModel)]="inputValue" />
+
+      <input *ngIf="!isPasswordInput" type="text" id="confirmInput" name="confirmInput" [(ngModel)]="inputValue" />
+
+      <my-input-text inputId="confirmInput" [(ngModel)]="inputValue"></my-input-text>
     </div>
   </div>
 

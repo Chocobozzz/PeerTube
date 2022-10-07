@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { AsyncValidatorFn, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms'
 import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
-import { FormReactiveErrors, FormReactiveValidationMessages } from './form-reactive'
+import { FormReactiveErrors, FormReactiveValidationMessages } from './form-reactive.service'
 
 @Injectable()
 export class FormValidatorService {

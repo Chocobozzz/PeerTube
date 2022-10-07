@@ -62,6 +62,16 @@
   </div>
 </div>
 
+<div class="row mt-5" *ngIf="user.pluginAuth === null"> <!-- two factor auth grid -->
+  <div class="col-12 col-lg-4 col-xl-3">
+    <h2 i18n class="account-title">Two-factor authentication</h2>
+  </div>
+
+  <div class="col-12 col-lg-8 col-xl-9">
+    <my-account-two-factor-button [user]="user"  [userInformationLoaded]="userInformationLoaded"></my-account-two-factor-button>
+  </div>
+</div>
+
 <div class="row mt-5" *ngIf="user.pluginAuth === null"> <!-- email grid -->
   <div class="col-12 col-lg-4 col-xl-3">
     <h2 i18n class="account-title">EMAIL</h2>

@@ -40,7 +40,7 @@ export class MyVideoChannelsComponent {
   }
 
   async deleteVideoChannel (videoChannel: VideoChannel) {
-    const res = await this.confirmService.confirmWithInput(
+    const res = await this.confirmService.confirmWithExpectedInput(
       $localize`Do you really want to delete ${videoChannel.displayName}?
 It will delete ${videoChannel.videosCount} videos uploaded in this channel, and you will not be able to create another
 channel with the same name (${videoChannel.name})!`,

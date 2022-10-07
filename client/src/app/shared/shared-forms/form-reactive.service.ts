@@ -1,46 +1,48 @@
+import { Injectable } from '@angular/core'
 import { AbstractControl, FormGroup } from '@angular/forms'
 import { wait } from '@root-helpers/utils'
 import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
-import { FormReactiveErrors, FormReactiveValidationMessages } from './form-reactive.service'
 import { FormValidatorService } from './form-validator.service'
 
-export abstract class FormReactive {
-  protected abstract formValidatorService: FormValidatorService
-  protected formChanged = false
+export type FormReactiveErrors = { [ id: string ]: string | FormReactiveErrors }
+export type FormReactiveValidationMessages = {
+  [ id: string ]: { [ name: string ]: string } | FormReactiveValidationMessages
+}
 
-  form: FormGroup
-  formErrors: any // To avoid casting in template because of string | FormReactiveErrors
-  validationMessages: FormReactiveValidationMessages
+@Injectable()
+export class FormReactiveService {
+
+  constructor (private formValidatorService: FormValidatorService) {
+
+  }
 
   buildForm (obj: BuildFormArgument, defaultValues: BuildFormDefaultValues = {}) {
     const { formErrors, validationMessages, form } = this.formValidatorService.buildForm(obj, defaultValues)
 
-    this.form = form
-    this.formErrors = formErrors
-    this.validationMessages = validationMessages
-
-    this.form.statusChanges.subscribe(async () => {
+    form.statusChanges.subscribe(async () => {
       // FIXME: remove when https://github.com/angular/angular/issues/41519 is fixed
-      await this.waitPendingCheck()
+      await this.waitPendingCheck(form)
 
-      this.onStatusChanged(this.form, this.formErrors, this.validationMessages)
+      this.onStatusChanged({ form, formErrors, validationMessages })
     })
+
+    return { form, formErrors, validationMessages }
   }
 
-  protected async waitPendingCheck () {
-    if (this.form.status !== 'PENDING') return
+  async waitPendingCheck (form: FormGroup) {
+    if (form.status !== 'PENDING') return
 
     // FIXME: the following line does not work: https://github.com/angular/angular/issues/41519
-    // return firstValueFrom(this.form.statusChanges.pipe(filter(status => status !== 'PENDING')))
+    // return firstValueFrom(form.statusChanges.pipe(filter(status => status !== 'PENDING')))
     // So we have to fallback to active wait :/
 
     do {
       await wait(10)
-    } while (this.form.status === 'PENDING')
+    } while (form.status === 'PENDING')
   }
 
-  protected markAllAsDirty (controlsArg?: { [ key: string ]: AbstractControl }) {
-    const controls = controlsArg || this.form.controls
+  markAllAsDirty (controlsArg: { [ key: string ]: AbstractControl }) {
+    const controls = controlsArg
 
     for (const key of Object.keys(controls)) {
       const control = controls[key]
@@ -54,32 +56,33 @@ export abstract class FormReactive {
     }
   }
 
-  protected forceCheck () {
-    this.onStatusChanged(this.form, this.formErrors, this.validationMessages, false)
+  protected forceCheck (form: FormGroup, formErrors: any, validationMessages: FormReactiveValidationMessages) {
+    this.onStatusChanged({ form, formErrors, validationMessages, onlyDirty: false })
   }
 
-  private onStatusChanged (
-    form: FormGroup,
-    formErrors: FormReactiveErrors,
-    validationMessages: FormReactiveValidationMessages,
-    onlyDirty = true
-  ) {
+  private onStatusChanged (options: {
+    form: FormGroup
+    formErrors: FormReactiveErrors
+    validationMessages: FormReactiveValidationMessages
+    onlyDirty?: boolean // default true
+  }) {
+    const { form, formErrors, validationMessages, onlyDirty = true } = options
+
     for (const field of Object.keys(formErrors)) {
       if (formErrors[field] && typeof formErrors[field] === 'object') {
-        this.onStatusChanged(
-          form.controls[field] as FormGroup,
-          formErrors[field] as FormReactiveErrors,
-          validationMessages[field] as FormReactiveValidationMessages,
+        this.onStatusChanged({
+          form: form.controls[field] as FormGroup,
+          formErrors: formErrors[field] as FormReactiveErrors,
+          validationMessages: validationMessages[field] as FormReactiveValidationMessages,
           onlyDirty
-        )
+        })
+
         continue
       }
 
       // clear previous error message (if any)
       formErrors[field] = ''
       const control = form.get(field)
-
-      if (control.dirty) this.formChanged = true
 
       if (!control || (onlyDirty && !control.dirty) || !control.enabled || !control.errors) continue
 

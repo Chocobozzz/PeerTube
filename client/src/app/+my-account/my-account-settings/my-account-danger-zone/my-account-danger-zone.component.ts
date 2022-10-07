@@ -18,7 +18,7 @@ export class MyAccountDangerZoneComponent {
   ) { }
 
   async deleteMe () {
-    const res = await this.confirmService.confirmWithInput(
+    const res = await this.confirmService.confirmWithExpectedInput(
       $localize`Are you sure you want to delete your account?` +
         '<br /><br />' +
         // eslint-disable-next-line max-len

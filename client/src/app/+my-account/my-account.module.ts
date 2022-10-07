@@ -1,3 +1,4 @@
+import { QRCodeModule } from 'angularx-qrcode'
 import { AutoCompleteModule } from 'primeng/autocomplete'
 import { TableModule } from 'primeng/table'
 import { DragDropModule } from '@angular/cdk/drag-drop'
@@ -23,12 +24,18 @@ import { MyAccountDangerZoneComponent } from './my-account-settings/my-account-d
 import { MyAccountNotificationPreferencesComponent } from './my-account-settings/my-account-notification-preferences'
 import { MyAccountProfileComponent } from './my-account-settings/my-account-profile/my-account-profile.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
+import {
+  MyAccountTwoFactorButtonComponent,
+  MyAccountTwoFactorComponent,
+  TwoFactorService
+} from './my-account-settings/my-account-two-factor'
 import { MyAccountComponent } from './my-account.component'
 
 @NgModule({
   imports: [
     MyAccountRoutingModule,
 
+    QRCodeModule,
     AutoCompleteModule,
     TableModule,
     DragDropModule,
@@ -52,6 +59,9 @@ import { MyAccountComponent } from './my-account.component'
     MyAccountChangeEmailComponent,
     MyAccountApplicationsComponent,
 
+    MyAccountTwoFactorButtonComponent,
+    MyAccountTwoFactorComponent,
+
     MyAccountDangerZoneComponent,
     MyAccountBlocklistComponent,
     MyAccountAbusesListComponent,
@@ -64,7 +74,9 @@ import { MyAccountComponent } from './my-account.component'
     MyAccountComponent
   ],
 
-  providers: []
+  providers: [
+    TwoFactorService
+  ]
 })
 export class MyAccountModule {
 }
