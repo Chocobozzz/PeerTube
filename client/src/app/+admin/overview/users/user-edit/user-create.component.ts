@@ -12,7 +12,7 @@ import {
   USER_VIDEO_QUOTA_DAILY_VALIDATOR,
   USER_VIDEO_QUOTA_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
-import { FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactiveService } from '@app/shared/shared-forms'
 import { UserAdminService } from '@app/shared/shared-users'
 import { UserCreate, UserRole } from '@shared/models'
 import { UserEdit } from './user-edit'
@@ -27,7 +27,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
 
   constructor (
     protected serverService: ServerService,
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     protected configService: ConfigService,
     protected screenService: ScreenService,
     protected auth: AuthService,

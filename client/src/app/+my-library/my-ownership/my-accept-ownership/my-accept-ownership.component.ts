@@ -3,7 +3,7 @@ import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '
 import { AuthService, Notifier } from '@app/core'
 import { listUserChannelsForSelect } from '@app/helpers'
 import { OWNERSHIP_CHANGE_CHANNEL_VALIDATOR } from '@app/shared/form-validators/video-ownership-change-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { VideoOwnershipService } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoChangeOwnership } from '@shared/models'
@@ -24,7 +24,7 @@ export class MyAcceptOwnershipComponent extends FormReactive implements OnInit {
   error: string = null
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private videoOwnershipService: VideoOwnershipService,
     private notifier: Notifier,
     private authService: AuthService,

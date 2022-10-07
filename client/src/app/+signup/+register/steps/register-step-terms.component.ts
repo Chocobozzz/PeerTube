@@ -1,9 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormGroup } from '@angular/forms'
-import {
-  USER_TERMS_VALIDATOR
-} from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { USER_TERMS_VALIDATOR } from '@app/shared/form-validators/user-validators'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 
 @Component({
   selector: 'my-register-step-terms',
@@ -19,7 +17,7 @@ export class RegisterStepTermsComponent extends FormReactive implements OnInit {
   @Output() codeOfConductClick = new EventEmitter<void>()
 
   constructor (
-    protected formValidatorService: FormValidatorService
+    protected formReactiveService: FormReactiveService
   ) {
     super()
   }

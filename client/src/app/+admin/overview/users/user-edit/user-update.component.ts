@@ -9,7 +9,7 @@ import {
   USER_VIDEO_QUOTA_DAILY_VALIDATOR,
   USER_VIDEO_QUOTA_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
-import { FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactiveService } from '@app/shared/shared-forms'
 import { TwoFactorService, UserAdminService } from '@app/shared/shared-users'
 import { User as UserType, UserAdminFlag, UserRole, UserUpdate } from '@shared/models'
 import { UserEdit } from './user-edit'
@@ -25,7 +25,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   private paramsSub: Subscription
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     protected serverService: ServerService,
     protected configService: ConfigService,
     protected screenService: ScreenService,

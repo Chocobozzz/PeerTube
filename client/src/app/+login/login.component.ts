@@ -1,11 +1,10 @@
-
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, Notifier, RedirectService, SessionStorageService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { LOGIN_PASSWORD_VALIDATOR, LOGIN_USERNAME_VALIDATOR } from '@app/shared/form-validators/login-validators'
 import { USER_OTP_TOKEN_VALIDATOR } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormValidatorService, InputTextComponent } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService, InputTextComponent } from '@app/shared/shared-forms'
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 import { NgbAccordion, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { PluginsManager } from '@root-helpers/plugins-manager'
@@ -45,7 +44,7 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   private serverConfig: ServerConfig
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private route: ActivatedRoute,
     private modalService: NgbModal,
     private authService: AuthService,

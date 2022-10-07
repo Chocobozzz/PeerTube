@@ -3,7 +3,7 @@ import { Subject, Subscription } from 'rxjs'
 import { debounceTime, filter } from 'rxjs/operators'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { AuthService, DisableForReuseHook, Notifier } from '@app/core'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { secondsToTime } from '@shared/core-utils'
 import {
   Video,
@@ -59,7 +59,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   private pendingAddId: number
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private authService: AuthService,
     private notifier: Notifier,
     private videoPlaylistService: VideoPlaylistService,

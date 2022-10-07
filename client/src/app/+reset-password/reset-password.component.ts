@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Notifier, UserService } from '@app/core'
 import { RESET_PASSWORD_CONFIRM_VALIDATOR } from '@app/shared/form-validators/reset-password-validators'
 import { USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 
 @Component({
   selector: 'my-login',
@@ -16,7 +16,7 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
   private verificationString: string
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private userService: UserService,
     private notifier: Notifier,
     private router: Router,

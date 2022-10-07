@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { HooksService, Notifier, PluginService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { PeerTubePlugin, RegisterServerSettingOptions } from '@shared/models'
 import { PluginApiService } from '../shared/plugin-api.service'
 
@@ -22,7 +22,7 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
   private npmName: string
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private pluginService: PluginService,
     private pluginAPIService: PluginApiService,
     private notifier: Notifier,

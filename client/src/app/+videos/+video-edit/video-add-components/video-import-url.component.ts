@@ -4,7 +4,7 @@ import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular
 import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
-import { FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactiveService } from '@app/shared/shared-forms'
 import { VideoCaptionService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
@@ -34,7 +34,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
   error: string
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     protected loadingBar: LoadingBarService,
     protected notifier: Notifier,
     protected authService: AuthService,

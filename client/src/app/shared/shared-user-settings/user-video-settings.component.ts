@@ -3,7 +3,7 @@ import { Subject, Subscription } from 'rxjs'
 import { first } from 'rxjs/operators'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { AuthService, Notifier, ServerService, User, UserService } from '@app/core'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { UserUpdateMe } from '@shared/models'
 import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
 
@@ -22,7 +22,7 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
   formValuesWatcher: Subscription
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private authService: AuthService,
     private notifier: Notifier,
     private userService: UserService,

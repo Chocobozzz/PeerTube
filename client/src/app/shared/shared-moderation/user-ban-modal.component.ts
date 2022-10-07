@@ -2,7 +2,7 @@ import { forkJoin } from 'rxjs'
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { prepareIcu } from '@app/helpers'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { User } from '@shared/models'
@@ -25,7 +25,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
   modalMessage = ''
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private modalService: NgbModal,
     private notifier: Notifier,
     private userAdminService: UserAdminService,

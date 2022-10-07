@@ -56,7 +56,7 @@ export class FormReactiveService {
     }
   }
 
-  protected forceCheck (form: FormGroup, formErrors: any, validationMessages: FormReactiveValidationMessages) {
+  forceCheck (form: FormGroup, formErrors: any, validationMessages: FormReactiveValidationMessages) {
     this.onStatusChanged({ form, formErrors, validationMessages, onlyDirty: false })
   }
 

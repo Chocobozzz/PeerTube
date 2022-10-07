@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/cor
 import { Notifier } from '@app/core'
 import { prepareIcu } from '@app/helpers'
 import { splitAndGetNotEmpty, UNIQUE_HOSTS_OR_HANDLE_VALIDATOR } from '@app/shared/form-validators/host-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { InstanceFollowService } from '@app/shared/shared-instance'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
@@ -22,7 +22,7 @@ export class FollowModalComponent extends FormReactive implements OnInit {
   private openedModal: NgbModalRef
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private modalService: NgbModal,
     private followService: InstanceFollowService,
     private notifier: Notifier

@@ -18,15 +18,15 @@ import {
   MAX_INSTANCE_LIVES_VALIDATOR,
   MAX_LIVE_DURATION_VALIDATOR,
   MAX_USER_LIVES_VALIDATOR,
+  MAX_VIDEO_CHANNELS_PER_USER_VALIDATOR,
   SEARCH_INDEX_URL_VALIDATOR,
   SERVICES_TWITTER_USERNAME_VALIDATOR,
   SIGNUP_LIMIT_VALIDATOR,
   SIGNUP_MINIMUM_AGE_VALIDATOR,
-  TRANSCODING_THREADS_VALIDATOR,
-  MAX_VIDEO_CHANNELS_PER_USER_VALIDATOR
+  TRANSCODING_THREADS_VALIDATOR
 } from '@app/shared/form-validators/custom-config-validators'
 import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { CustomPageService } from '@app/shared/shared-main/custom-page'
 import { CustomConfig, CustomPage, HTMLServerConfig } from '@shared/models'
 import { EditConfigurationService } from './edit-configuration.service'
@@ -52,9 +52,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   categoryItems: SelectOptionsItem[] = []
 
   constructor (
+    protected formReactiveService: FormReactiveService,
     private router: Router,
     private route: ActivatedRoute,
-    protected formValidatorService: FormValidatorService,
     private notifier: Notifier,
     private configService: ConfigService,
     private customPage: CustomPageService,

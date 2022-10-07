@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { splitAndGetNotEmpty, UNIQUE_HOSTS_VALIDATOR } from '../form-validators/host-validators'
@@ -18,7 +18,7 @@ export class BatchDomainsModalComponent extends FormReactive implements OnInit {
   private openedModal: NgbModalRef
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private modalService: NgbModal
   ) {
     super()
