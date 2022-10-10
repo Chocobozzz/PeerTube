@@ -10,10 +10,10 @@
 @use './custom-markup';
 @use './ng-select';
 
-@import './bootstrap';
-@import './primeng-custom';
+@use './bootstrap';
+@use './primeng-custom';
 
-@import './z-index';
+@use './z-index';
 
 body {
   /*** theme ***/
