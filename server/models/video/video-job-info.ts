@@ -84,7 +84,7 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
   static async decrease (videoUUID: string, column: VideoJobInfoColumnType): Promise<number> {
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
 
-    const [ { pendingMove } ] = await VideoJobInfoModel.sequelize.query<{ pendingMove: number }>(`
+    const result = await VideoJobInfoModel.sequelize.query<{ pendingMove: number }>(`
     UPDATE
       "videoJobInfo"
     SET
@@ -97,7 +97,9 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
       "${column}";
     `, options)
 
-    return pendingMove
+    if (result.length === 0) return undefined
+
+    return result[0].pendingMove
   }
 
   static async abortAllTasks (videoUUID: string, column: VideoJobInfoColumnType): Promise<void> {
