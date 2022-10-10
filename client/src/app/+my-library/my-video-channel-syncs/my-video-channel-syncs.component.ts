@@ -46,6 +46,13 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
     this.videoChannelSyncActions = [
       [
         {
+          label: $localize`List imports`,
+          linkBuilder: (videoChannelSync) => [ `/my-library/video-imports?search=videoChannelSyncId:${videoChannelSync.id}` ],
+          iconName: 'cloud-download'
+        }
+      ],
+      [
+        {
           label: $localize`Delete`,
           iconName: 'delete',
           handler: videoChannelSync => this.deleteSync(videoChannelSync)

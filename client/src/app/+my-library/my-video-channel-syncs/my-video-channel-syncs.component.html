@@ -36,7 +36,6 @@
       <th style="width: 10%" i18n pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
       <th style="width: 10%" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th style="width: 10%" i18n pSortableColumn="lastSyncAt">Last synchronization at <p-sortIcon field="lastSyncAt"></p-sortIcon></th>
-      <th></th>
     </tr>
   </ng-template>
 
@@ -79,12 +78,6 @@
 
       <td>{{ videoChannelSync.createdAt | date: 'short' }}</td>
       <td>{{ videoChannelSync.lastSyncAt | date: 'short' }}</td>
-
-      <td>
-        <a i18n routerLink="/my-library/video-imports" [queryParams]="{ search: 'videoChannelSyncId:' + videoChannelSync.id }" class="peertube-button-link grey-button">
-          List imports
-        </a>
-      </td>
     </tr>
   </ng-template>
 </p-table>
