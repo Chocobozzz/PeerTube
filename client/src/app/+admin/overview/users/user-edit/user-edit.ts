@@ -62,7 +62,8 @@ export abstract class UserEdit extends FormReactive implements OnInit {
 
   displayDangerZone () {
     if (this.isCreation()) return false
-    if (this.user?.pluginAuth) return false
+    if (!this.user) return false
+    if (this.user.pluginAuth) return false
     if (this.auth.getUser().id === this.user.id) return false
 
     return true
