@@ -2,7 +2,7 @@ import { Observable, ReplaySubject } from 'rxjs'
 import { catchError, map, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
+import { ComponentPaginationLight, RestExtractor, RestService, ServerService } from '@app/core'
 import {
   ActorImage,
   ResultList,
@@ -25,7 +25,8 @@ export class VideoChannelService {
   constructor (
     private authHttp: HttpClient,
     private restService: RestService,
-    private restExtractor: RestExtractor
+    private restExtractor: RestExtractor,
+    private serverService: ServerService
   ) { }
 
   static extractVideoChannels (result: ResultList<VideoChannelServer>) {
@@ -56,9 +57,11 @@ export class VideoChannelService {
   }): Observable<ResultList<VideoChannel>> {
     const { account, componentPagination, withStats = false, sort, search } = options
 
+    const defaultCount = this.serverService.getHTMLConfig().videoChannels.maxPerUser
+
     const pagination = componentPagination
       ? this.restService.componentToRestPagination(componentPagination)
-      : { start: 0, count: 20 }
+      : { start: 0, count: defaultCount }
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
