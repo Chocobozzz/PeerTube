@@ -1,5 +1,7 @@
 import express from 'express'
 import { generateOTPSecret, isOTPValid } from '@server/helpers/otp'
+import { encrypt } from '@server/helpers/peertube-crypto'
+import { CONFIG } from '@server/initializers/config'
 import { Redis } from '@server/lib/redis'
 import { asyncMiddleware, authenticate, usersCheckCurrentPasswordFactory } from '@server/middlewares'
 import {
@@ -44,7 +46,9 @@ async function requestTwoFactor (req: express.Request, res: express.Response) {
   const user = res.locals.user
 
   const { secret, uri } = generateOTPSecret(user.email)
-  const requestToken = await Redis.Instance.setTwoFactorRequest(user.id, secret)
+
+  const encryptedSecret = await encrypt(secret, CONFIG.SECRETS.PEERTUBE)
+  const requestToken = await Redis.Instance.setTwoFactorRequest(user.id, encryptedSecret)
 
   return res.json({
     otpRequest: {
@@ -60,22 +64,22 @@ async function confirmRequestTwoFactor (req: express.Request, res: express.Respo
   const otpToken = req.body.otpToken
   const user = res.locals.user
 
-  const secret = await Redis.Instance.getTwoFactorRequestToken(user.id, requestToken)
-  if (!secret) {
+  const encryptedSecret = await Redis.Instance.getTwoFactorRequestToken(user.id, requestToken)
+  if (!encryptedSecret) {
     return res.fail({
       message: 'Invalid request token',
       status: HttpStatusCode.FORBIDDEN_403
     })
   }
 
-  if (isOTPValid({ secret, token: otpToken }) !== true) {
+  if (await isOTPValid({ encryptedSecret, token: otpToken }) !== true) {
     return res.fail({
       message: 'Invalid OTP token',
       status: HttpStatusCode.FORBIDDEN_403
     })
   }
 
-  user.otpSecret = secret
+  user.otpSecret = encryptedSecret
   await user.save()
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)

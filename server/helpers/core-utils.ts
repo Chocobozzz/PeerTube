@@ -6,7 +6,7 @@
 */
 
 import { exec, ExecOptions } from 'child_process'
-import { ED25519KeyPairOptions, generateKeyPair, randomBytes, RSAKeyPairOptions } from 'crypto'
+import { ED25519KeyPairOptions, generateKeyPair, randomBytes, RSAKeyPairOptions, scrypt } from 'crypto'
 import { truncate } from 'lodash'
 import { pipeline } from 'stream'
 import { URL } from 'url'
@@ -311,7 +311,17 @@ function promisify2<T, U, A> (func: (arg1: T, arg2: U, cb: (err: any, result: A)
   }
 }
 
+// eslint-disable-next-line max-len
+function promisify3<T, U, V, A> (func: (arg1: T, arg2: U, arg3: V, cb: (err: any, result: A) => void) => void): (arg1: T, arg2: U, arg3: V) => Promise<A> {
+  return function promisified (arg1: T, arg2: U, arg3: V): Promise<A> {
+    return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {
+      func.apply(null, [ arg1, arg2, arg3, (err: any, res: A) => err ? reject(err) : resolve(res) ])
+    })
+  }
+}
+
 const randomBytesPromise = promisify1<number, Buffer>(randomBytes)
+const scryptPromise = promisify3<string, string, number, Buffer>(scrypt)
 const execPromise2 = promisify2<string, any, string>(exec)
 const execPromise = promisify1<string, string>(exec)
 const pipelinePromise = promisify(pipeline)
@@ -338,6 +348,8 @@ export {
   promisify0,
   promisify1,
   promisify2,
+
+  scryptPromise,
 
   randomBytesPromise,
 

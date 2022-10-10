@@ -5,6 +5,9 @@ listen:
 webserver:
   https: false
 
+secrets:
+  peertube: 'my super secret'
+
 rates_limit:
   signup:
     window: 10 minutes

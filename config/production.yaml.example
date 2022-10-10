@@ -8,6 +8,10 @@ webserver:
   hostname: 'example.com'
   port: 443
 
+# Secrets you need to generate the first time you run PeerTube
+secret:
+  peertube: ''
+
 rates_limit:
   api:
     # 50 attempts in 10 seconds

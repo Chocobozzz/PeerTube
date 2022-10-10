@@ -11,6 +11,7 @@ const config: IConfig = require('config')
 function checkMissedConfig () {
   const required = [ 'listen.port', 'listen.hostname',
     'webserver.https', 'webserver.hostname', 'webserver.port',
+    'secrets.peertube',
     'trust_proxy',
     'database.hostname', 'database.port', 'database.username', 'database.password', 'database.pool.max',
     'smtp.hostname', 'smtp.port', 'smtp.username', 'smtp.password', 'smtp.tls', 'smtp.from_address',

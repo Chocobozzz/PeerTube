@@ -1,5 +1,5 @@
 import { RepeatOptions } from 'bullmq'
-import { randomBytes } from 'crypto'
+import { Encoding, randomBytes } from 'crypto'
 import { invert } from 'lodash'
 import { join } from 'path'
 import { randomInt, root } from '@shared/core-utils'
@@ -637,6 +637,13 @@ let PRIVATE_RSA_KEY_SIZE = 2048
 // Password encryption
 const BCRYPT_SALT_SIZE = 10
 
+const ENCRYPTION = {
+  ALGORITHM: 'aes-256-cbc',
+  IV: 16,
+  SALT: 'peertube',
+  ENCODING: 'hex' as Encoding
+}
+
 const USER_PASSWORD_RESET_LIFETIME = 60000 * 60 // 60 minutes
 const USER_PASSWORD_CREATE_LIFETIME = 60000 * 60 * 24 * 7 // 7 days
 
@@ -959,6 +966,7 @@ const VIDEO_FILTERS = {
 export {
   WEBSERVER,
   API_VERSION,
+  ENCRYPTION,
   VIDEO_LIVE,
   PEERTUBE_VERSION,
   LAZY_STATIC_PATHS,

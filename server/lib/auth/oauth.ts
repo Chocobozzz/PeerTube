@@ -9,12 +9,12 @@ import OAuth2Server, {
   UnsupportedGrantTypeError
 } from '@node-oauth/oauth2-server'
 import { randomBytesPromise } from '@server/helpers/core-utils'
+import { isOTPValid } from '@server/helpers/otp'
 import { MOAuthClient } from '@server/types/models'
 import { sha1 } from '@shared/extra-utils'
 import { HttpStatusCode } from '@shared/models'
 import { OAUTH_LIFETIME, OTP } from '../../initializers/constants'
 import { BypassLogin, getClient, getRefreshToken, getUser, revokeToken, saveToken } from './oauth-model'
-import { isOTPValid } from '@server/helpers/otp'
 
 class MissingTwoFactorError extends Error {
   code = HttpStatusCode.UNAUTHORIZED_401
@@ -138,7 +138,7 @@ async function handlePasswordGrant (options: {
       throw new MissingTwoFactorError('Missing two factor header')
     }
 
-    if (isOTPValid({ secret: user.otpSecret, token: request.headers[OTP.HEADER_NAME] }) !== true) {
+    if (await isOTPValid({ encryptedSecret: user.otpSecret, token: request.headers[OTP.HEADER_NAME] }) !== true) {
       throw new InvalidTwoFactorError('Invalid two factor header')
     }
   }
