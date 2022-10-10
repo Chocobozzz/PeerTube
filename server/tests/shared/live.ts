@@ -58,13 +58,16 @@ async function testVideoResolutions (options: {
         : originServer.url + '/static/streaming-playlists/hls'
 
       if (objectStorage) {
-        // Playlist file upload
-        await wait(500)
+        await originServer.live.waitUntilSegmentUpload({ playlistNumber: i, segment: segmentNum })
+        await wait(1000)
 
         expect(hlsPlaylist.segmentsSha256Url).to.contain(ObjectStorageCommand.getPlaylistBaseUrl())
       }
 
-      const subPlaylist = await originServer.streamingPlaylists.get({ url: `${baseUrl}/${video.uuid}/${i}.m3u8` })
+      const subPlaylist = await originServer.streamingPlaylists.get({
+        url: `${baseUrl}/${video.uuid}/${i}.m3u8`,
+        withRetry: objectStorage // With object storage, the request may fail because of inconsistent data in S3
+      })
 
       expect(subPlaylist).to.contain(segmentName)
 

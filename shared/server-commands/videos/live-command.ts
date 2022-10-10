@@ -172,6 +172,17 @@ export class LiveCommand extends AbstractCommand {
     return this.server.servers.waitUntilLog(`${videoUUID}/${segmentName}`, totalSessions * 2, false)
   }
 
+  waitUntilSegmentUpload (options: OverrideCommandOptions & {
+    playlistNumber: number
+    segment: number
+    totalSessions?: number
+  }) {
+    const { playlistNumber, segment, totalSessions = 1 } = options
+    const segmentName = `${playlistNumber}-00000${segment}.ts`
+
+    return this.server.servers.waitUntilLog(`${segmentName} in bucket `, totalSessions * 2, false)
+  }
+
   async waitUntilReplacedByReplay (options: OverrideCommandOptions & {
     videoId: number | string
   }) {
