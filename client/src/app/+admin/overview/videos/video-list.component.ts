@@ -8,6 +8,7 @@ import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { VideoBlockComponent, VideoBlockService } from '@app/shared/shared-moderation'
 import { VideoActionsDisplayType } from '@app/shared/shared-video-miniature'
+import { getAllFiles } from '@shared/core-utils'
 import { UserRight, VideoFile, VideoPrivacy, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { VideoAdminService } from './video-admin.service'
 
@@ -164,6 +165,14 @@ export class VideoListComponent extends RestTable implements OnInit {
 
   isWebTorrent (video: Video) {
     return video.files.length !== 0
+  }
+
+  hasObjectStorage (video: Video) {
+    if (!video.isLocal) return false
+
+    const files = getAllFiles(video)
+
+    return files.some(f => !f.fileUrl.startsWith(window.location.origin))
   }
 
   canRemoveOneFile (video: Video) {
