@@ -128,14 +128,14 @@ export class YoutubeDLCLI {
     const data = await this.run({ url, args: completeArgs, processOptions })
     if (!data) return undefined
 
-    const info = data.map(this.parseInfo)
+    const info = data.map(d => JSON.parse(d))
 
     return info.length === 1
       ? info[0]
       : info
   }
 
-  getListInfo (options: {
+  async getListInfo (options: {
     url: string
     latestVideosCount?: number
     processOptions: execa.NodeOptions
@@ -151,12 +151,17 @@ export class YoutubeDLCLI {
       additionalYoutubeDLArgs.push('--playlist-end', options.latestVideosCount.toString())
     }
 
-    return this.getInfo({
+    const result = await this.getInfo({
       url: options.url,
       format: YoutubeDLCLI.getYoutubeDLVideoFormat([], false),
       processOptions: options.processOptions,
       additionalYoutubeDLArgs
     })
+
+    if (!result) return result
+    if (!Array.isArray(result)) return [ result ]
+
+    return result
   }
 
   async getSubs (options: {
@@ -240,9 +245,5 @@ export class YoutubeDLCLI {
     }
 
     return args
-  }
-
-  private parseInfo (data: string) {
-    return JSON.parse(data)
   }
 }
