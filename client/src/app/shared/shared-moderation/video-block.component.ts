@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { prepareIcu } from '@app/helpers'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { Video } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
@@ -25,7 +25,7 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
   private openedModal: NgbModalRef
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private modalService: NgbModal,
     private videoBlocklistService: VideoBlockService,
     private notifier: Notifier

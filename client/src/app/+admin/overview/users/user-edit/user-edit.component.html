@@ -204,7 +204,7 @@
 </div>
 
 
-<div *ngIf="!isCreation() && user && user.pluginAuth === null" class="row mt-4"> <!-- danger zone grid -->
+<div *ngIf="displayDangerZone()" class="row mt-4"> <!-- danger zone grid -->
   <div class="col-12 col-lg-4 col-xl-3">
     <div class="anchor" id="danger"></div> <!-- danger zone anchor -->
     <div i18n class="account-title account-title-danger">DANGER ZONE</div>
@@ -213,7 +213,7 @@
   <div class="col-12 col-lg-8 col-xl-9">
 
     <div class="danger-zone">
-      <div class="form-group reset-password-email">
+      <div class="form-group">
         <label i18n>Send a link to reset the password by email to the user</label>
         <button (click)="resetPassword()" i18n>Ask for new password</button>
       </div>
@@ -221,6 +221,11 @@
       <div class="form-group">
         <label i18n>Manually set the user password</label>
         <my-user-password [userId]="user.id"></my-user-password>
+      </div>
+
+      <div *ngIf="user.twoFactorEnabled" class="form-group">
+        <label i18n>This user has two factor authentication enabled</label>
+        <button (click)="disableTwoFactorAuth()" i18n>Disable two factor authentication</button>
       </div>
     </div>
 

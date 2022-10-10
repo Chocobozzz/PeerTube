@@ -3,7 +3,7 @@ import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular
 import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
-import { FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactiveService } from '@app/shared/shared-forms'
 import { Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
@@ -39,7 +39,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
   error: string
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     protected loadingBar: LoadingBarService,
     protected notifier: Notifier,
     protected authService: AuthService,

@@ -11,7 +11,7 @@ import {
   VIDEO_PLAYLIST_DISPLAY_NAME_VALIDATOR,
   VIDEO_PLAYLIST_PRIVACY_VALIDATOR
 } from '@app/shared/form-validators/video-playlist-validators'
-import { FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactiveService } from '@app/shared/shared-forms'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { VideoPlaylistUpdate } from '@shared/models'
 import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
@@ -27,7 +27,7 @@ export class MyVideoPlaylistUpdateComponent extends MyVideoPlaylistEdit implemen
   private paramsSub: Subscription
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private authService: AuthService,
     private notifier: Notifier,
     private router: Router,

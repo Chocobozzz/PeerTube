@@ -1,4 +1,5 @@
 export * from './advanced-input-filter.component'
+export * from './form-reactive.service'
 export * from './form-reactive'
 export * from './form-validator.service'
 export * from './form-validator.service'

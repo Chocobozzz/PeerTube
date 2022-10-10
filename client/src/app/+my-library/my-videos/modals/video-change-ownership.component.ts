@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { Notifier, UserService } from '@app/core'
 import { OWNERSHIP_CHANGE_USERNAME_VALIDATOR } from '@app/shared/form-validators/video-ownership-change-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { Video, VideoOwnershipService } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 
@@ -20,7 +20,7 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
   private video: Video | undefined = undefined
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private videoOwnershipService: VideoOwnershipService,
     private notifier: Notifier,
     private userService: UserService,

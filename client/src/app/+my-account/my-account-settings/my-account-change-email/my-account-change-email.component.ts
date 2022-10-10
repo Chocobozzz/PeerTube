@@ -3,8 +3,8 @@ import { tap } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { AuthService, ServerService, UserService } from '@app/core'
 import { USER_EMAIL_VALIDATOR, USER_PASSWORD_VALIDATOR } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { User } from '@shared/models'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
+import { HttpStatusCode, User } from '@shared/models'
 
 @Component({
   selector: 'my-account-change-email',
@@ -17,7 +17,7 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
   user: User = null
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private authService: AuthService,
     private userService: UserService,
     private serverService: ServerService
@@ -57,7 +57,7 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
         },
 
         error: err => {
-          if (err.status === 401) {
+          if (err.status === HttpStatusCode.UNAUTHORIZED_401) {
             this.error = $localize`You current password is invalid.`
             return
           }

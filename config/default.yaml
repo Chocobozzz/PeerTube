@@ -10,6 +10,11 @@ webserver:
   hostname: 'localhost'
   port: 9000
 
+# Secrets you need to generate the first time you run PeerTube
+secrets:
+  # Generate one using `openssl rand -hex 32`
+  peertube: ''
+
 rates_limit:
   api:
     # 50 attempts in 10 seconds

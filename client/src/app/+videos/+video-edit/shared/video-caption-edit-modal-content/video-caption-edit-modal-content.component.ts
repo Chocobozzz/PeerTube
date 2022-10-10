@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { VIDEO_CAPTION_FILE_CONTENT_VALIDATOR } from '@app/shared/form-validators/video-captions-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { VideoCaptionEdit, VideoCaptionService, VideoCaptionWithPathEdit } from '@app/shared/shared-main'
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
 import { HTMLServerConfig, VideoConstant } from '@shared/models'
 import { ServerService } from '../../../../core'
 
@@ -29,8 +29,7 @@ export class VideoCaptionEditModalContentComponent extends FormReactive implemen
 
   constructor (
     protected openedModal: NgbActiveModal,
-    protected formValidatorService: FormValidatorService,
-    private modalService: NgbModal,
+    protected formReactiveService: FormReactiveService,
     private videoCaptionService: VideoCaptionService,
     private serverService: ServerService
   ) {

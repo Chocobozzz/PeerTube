@@ -4,6 +4,7 @@ import { Router } from '@angular/router'
 import { DateFormat, dateToHuman } from '@app/helpers'
 import { logger } from '@root-helpers/logger'
 import { HttpStatusCode, ResultList } from '@shared/models'
+import { HttpHeaderResponse } from '@angular/common/http'
 
 @Injectable()
 export class RestExtractor {
@@ -54,10 +55,11 @@ export class RestExtractor {
   handleError (err: any) {
     const errorMessage = this.buildErrorMessage(err)
 
-    const errorObj: { message: string, status: string, body: string } = {
+    const errorObj: { message: string, status: string, body: string, headers: HttpHeaderResponse } = {
       message: errorMessage,
       status: undefined,
-      body: undefined
+      body: undefined,
+      headers: err.headers
     }
 
     if (err.status) {

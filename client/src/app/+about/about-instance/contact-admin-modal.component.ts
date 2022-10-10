@@ -7,7 +7,7 @@ import {
   FROM_NAME_VALIDATOR,
   SUBJECT_VALIDATOR
 } from '@app/shared/form-validators/instance-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
@@ -32,7 +32,7 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
   private serverConfig: HTMLServerConfig
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private router: Router,
     private modalService: NgbModal,
     private instanceService: InstanceService,

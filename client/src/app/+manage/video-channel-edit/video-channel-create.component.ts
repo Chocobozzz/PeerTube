@@ -9,7 +9,7 @@ import {
   VIDEO_CHANNEL_NAME_VALIDATOR,
   VIDEO_CHANNEL_SUPPORT_VALIDATOR
 } from '@app/shared/form-validators/video-channel-validators'
-import { FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactiveService } from '@app/shared/shared-forms'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { HttpStatusCode, VideoChannelCreate } from '@shared/models'
 import { VideoChannelEdit } from './video-channel-edit'
@@ -26,7 +26,7 @@ export class VideoChannelCreateComponent extends VideoChannelEdit implements OnI
   private banner: FormData
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private authService: AuthService,
     private notifier: Notifier,
     private router: Router,

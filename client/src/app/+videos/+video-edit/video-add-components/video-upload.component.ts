@@ -5,7 +5,7 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, 
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, MetaService, Notifier, ServerService, UserService } from '@app/core'
 import { genericUploadErrorHandler, scrollToTop } from '@app/helpers'
-import { FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactiveService } from '@app/shared/shared-forms'
 import { BytesPipe, Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
@@ -60,7 +60,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   private uploadServiceSubscription: Subscription
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     protected loadingBar: LoadingBarService,
     protected notifier: Notifier,
     protected authService: AuthService,

@@ -5,6 +5,9 @@ listen:
 webserver:
   https: false
 
+secrets:
+  peertube: 'my super dev secret'
+
 database:
   hostname: 'localhost'
   port: 5432

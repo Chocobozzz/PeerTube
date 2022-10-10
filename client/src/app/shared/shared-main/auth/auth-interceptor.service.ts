@@ -27,13 +27,16 @@ export class AuthInterceptor implements HttpInterceptor {
                .pipe(
                  catchError((err: HttpErrorResponse) => {
                    const error = err.error as PeerTubeProblemDocument
+                   const isOTPMissingError = this.authService.isOTPMissingError(err)
 
-                   if (err.status === HttpStatusCode.UNAUTHORIZED_401 && error && error.code === OAuth2ErrorCode.INVALID_TOKEN) {
-                     return this.handleTokenExpired(req, next)
-                   }
+                   if (!isOTPMissingError) {
+                     if (err.status === HttpStatusCode.UNAUTHORIZED_401 && error && error.code === OAuth2ErrorCode.INVALID_TOKEN) {
+                       return this.handleTokenExpired(req, next)
+                     }
 
-                   if (err.status === HttpStatusCode.UNAUTHORIZED_401) {
-                     return this.handleNotAuthenticated(err)
+                     if (err.status === HttpStatusCode.UNAUTHORIZED_401) {
+                       return this.handleNotAuthenticated(err)
+                     }
                    }
 
                    return observableThrowError(() => err)

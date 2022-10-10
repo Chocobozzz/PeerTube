@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Notifier, RedirectService, ServerService } from '@app/core'
 import { USER_EMAIL_VALIDATOR } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { UserSignupService } from '@app/shared/shared-users'
 
 @Component({
@@ -14,7 +14,7 @@ export class VerifyAccountAskSendEmailComponent extends FormReactive implements 
   requiresEmailVerification = false
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private userSignupService: UserSignupService,
     private serverService: ServerService,
     private notifier: Notifier,

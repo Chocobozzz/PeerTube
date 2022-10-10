@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, Notifier, ServerService } from '@app/core'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { VideoDetails } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { logger } from '@root-helpers/logger'
@@ -20,7 +20,7 @@ export class VideoStudioEditComponent extends FormReactive implements OnInit {
   video: VideoDetails
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private serverService: ServerService,
     private notifier: Notifier,
     private router: Router,

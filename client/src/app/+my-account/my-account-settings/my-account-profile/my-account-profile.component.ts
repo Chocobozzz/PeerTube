@@ -2,7 +2,7 @@ import { Subject } from 'rxjs'
 import { Component, Input, OnInit } from '@angular/core'
 import { Notifier, User, UserService } from '@app/core'
 import { USER_DESCRIPTION_VALIDATOR, USER_DISPLAY_NAME_REQUIRED_VALIDATOR } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 
 @Component({
   selector: 'my-account-profile',
@@ -16,7 +16,7 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
   error: string = null
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private notifier: Notifier,
     private userService: UserService
   ) {

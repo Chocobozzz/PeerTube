@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { AuthService, HtmlRendererService, Notifier } from '@app/core'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { logger } from '@root-helpers/logger'
@@ -29,7 +29,7 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
   private abuse: UserAbuse
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private modalService: NgbModal,
     private htmlRenderer: HtmlRendererService,
     private auth: AuthService,

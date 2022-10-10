@@ -48,17 +48,13 @@ my-user-real-quota-info {
 }
 
 .danger-zone {
-  .reset-password-email {
-    margin-bottom: 30px;
+  button {
+    @include peertube-button;
+    @include danger-button;
+    @include disable-outline;
 
-    button {
-      @include peertube-button;
-      @include danger-button;
-      @include disable-outline;
-
-      display: block;
-      margin-top: 0;
-    }
+    display: block;
+    margin-top: 0;
   }
 }
 

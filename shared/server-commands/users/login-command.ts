@@ -2,34 +2,27 @@ import { HttpStatusCode, PeerTubeProblemDocument } from '@shared/models'
 import { unwrapBody } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
+type LoginOptions = OverrideCommandOptions & {
+  client?: { id?: string, secret?: string }
+  user?: { username: string, password?: string }
+  otpToken?: string
+}
+
 export class LoginCommand extends AbstractCommand {
 
-  login (options: OverrideCommandOptions & {
-    client?: { id?: string, secret?: string }
-    user?: { username: string, password?: string }
-  } = {}) {
-    const { client = this.server.store.client, user = this.server.store.user } = options
-    const path = '/api/v1/users/token'
+  async login (options: LoginOptions = {}) {
+    const res = await this._login(options)
 
-    const body = {
-      client_id: client.id,
-      client_secret: client.secret,
-      username: user.username,
-      password: user.password ?? 'password',
-      response_type: 'code',
-      grant_type: 'password',
-      scope: 'upload'
+    return this.unwrapLoginBody(res.body)
+  }
+
+  async loginAndGetResponse (options: LoginOptions = {}) {
+    const res = await this._login(options)
+
+    return {
+      res,
+      body: this.unwrapLoginBody(res.body)
     }
-
-    return unwrapBody<{ access_token: string, refresh_token: string } & PeerTubeProblemDocument>(this.postBodyRequest({
-      ...options,
-
-      path,
-      requestType: 'form',
-      fields: body,
-      implicitToken: false,
-      defaultExpectedStatus: HttpStatusCode.OK_200
-    }))
   }
 
   getAccessToken (arg1?: { username: string, password?: string }): Promise<string>
@@ -128,5 +121,39 @@ export class LoginCommand extends AbstractCommand {
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
+  }
+
+  private _login (options: LoginOptions) {
+    const { client = this.server.store.client, user = this.server.store.user, otpToken } = options
+    const path = '/api/v1/users/token'
+
+    const body = {
+      client_id: client.id,
+      client_secret: client.secret,
+      username: user.username,
+      password: user.password ?? 'password',
+      response_type: 'code',
+      grant_type: 'password',
+      scope: 'upload'
+    }
+
+    const headers = otpToken
+      ? { 'x-peertube-otp': otpToken }
+      : {}
+
+    return this.postBodyRequest({
+      ...options,
+
+      path,
+      headers,
+      requestType: 'form',
+      fields: body,
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  private unwrapLoginBody (body: any) {
+    return body as { access_token: string, refresh_token: string } & PeerTubeProblemDocument
   }
 }

@@ -9,7 +9,7 @@ import {
   VIDEO_PLAYLIST_DISPLAY_NAME_VALIDATOR,
   VIDEO_PLAYLIST_PRIVACY_VALIDATOR
 } from '@app/shared/form-validators/video-playlist-validators'
-import { FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactiveService } from '@app/shared/shared-forms'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { VideoPlaylistCreate } from '@shared/models/videos/playlist/video-playlist-create.model'
 import { VideoPlaylistPrivacy } from '@shared/models/videos/playlist/video-playlist-privacy.model'
@@ -23,7 +23,7 @@ export class MyVideoPlaylistCreateComponent extends MyVideoPlaylistEdit implemen
   error: string
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private authService: AuthService,
     private notifier: Notifier,
     private router: Router,

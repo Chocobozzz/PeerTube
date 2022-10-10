@@ -61,6 +61,15 @@ export const USER_EXISTING_PASSWORD_VALIDATOR: BuildFormValidator = {
   }
 }
 
+export const USER_OTP_TOKEN_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [
+    Validators.required
+  ],
+  MESSAGES: {
+    required: $localize`OTP token is required.`
+  }
+}
+
 export const USER_PASSWORD_VALIDATOR = {
   VALIDATORS: [
     Validators.required,

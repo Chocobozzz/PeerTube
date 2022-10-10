@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core'
+import { Component, ElementRef, forwardRef, Input, ViewChild } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Notifier } from '@app/core'
 
@@ -15,6 +15,8 @@ import { Notifier } from '@app/core'
   ]
 })
 export class InputTextComponent implements ControlValueAccessor {
+  @ViewChild('input') inputElement: ElementRef
+
   @Input() inputId = Math.random().toString(11).slice(2, 8) // id cannot be left empty or undefined
   @Input() value = ''
   @Input() autocomplete = 'off'
@@ -64,5 +66,11 @@ export class InputTextComponent implements ControlValueAccessor {
 
   update () {
     this.propagateChange(this.value)
+  }
+
+  focus () {
+    const el: HTMLElement = this.inputElement.nativeElement
+
+    el.focus({ preventScroll: true })
   }
 }

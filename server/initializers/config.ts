@@ -20,6 +20,9 @@ const CONFIG = {
     PORT: config.get<number>('listen.port'),
     HOSTNAME: config.get<string>('listen.hostname')
   },
+  SECRETS: {
+    PEERTUBE: config.get<string>('secrets.peertube')
+  },
   DATABASE: {
     DBNAME: config.has('database.name') ? config.get<string>('database.name') : 'peertube' + config.get<string>('database.suffix'),
     HOSTNAME: config.get<string>('database.hostname'),

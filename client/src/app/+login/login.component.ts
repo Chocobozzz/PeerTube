@@ -1,10 +1,10 @@
-
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, Notifier, RedirectService, SessionStorageService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { LOGIN_PASSWORD_VALIDATOR, LOGIN_USERNAME_VALIDATOR } from '@app/shared/form-validators/login-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { USER_OTP_TOKEN_VALIDATOR } from '@app/shared/form-validators/user-validators'
+import { FormReactive, FormReactiveService, InputTextComponent } from '@app/shared/shared-forms'
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 import { NgbAccordion, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { PluginsManager } from '@root-helpers/plugins-manager'
@@ -20,6 +20,7 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   private static SESSION_STORAGE_REDIRECT_URL_KEY = 'login-previous-url'
 
   @ViewChild('forgotPasswordModal', { static: true }) forgotPasswordModal: ElementRef
+  @ViewChild('otpTokenInput') otpTokenInput: InputTextComponent
 
   accordion: NgbAccordion
   error: string = null
@@ -37,11 +38,13 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     codeOfConduct: false
   }
 
+  otpStep = false
+
   private openedForgotPasswordModal: NgbModalRef
   private serverConfig: ServerConfig
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private route: ActivatedRoute,
     private modalService: NgbModal,
     private authService: AuthService,
@@ -82,7 +85,11 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     // Avoid undefined errors when accessing form error properties
     this.buildForm({
       username: LOGIN_USERNAME_VALIDATOR,
-      password: LOGIN_PASSWORD_VALIDATOR
+      password: LOGIN_PASSWORD_VALIDATOR,
+      'otp-token': {
+        VALIDATORS: [], // Will be set dynamically
+        MESSAGES: USER_OTP_TOKEN_VALIDATOR.MESSAGES
+      }
     })
 
     this.serverConfig = snapshot.data.serverConfig
@@ -118,13 +125,20 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
   login () {
     this.error = null
 
-    const { username, password } = this.form.value
+    const options = {
+      username: this.form.value['username'],
+      password: this.form.value['password'],
+      otpToken: this.form.value['otp-token']
+    }
 
-    this.authService.login(username, password)
+    this.authService.login(options)
+      .pipe()
       .subscribe({
         next: () => this.redirectService.redirectToPreviousRoute(),
 
-        error: err => this.handleError(err)
+        error: err => {
+          this.handleError(err)
+        }
       })
   }
 
@@ -162,7 +176,7 @@ The link will expire within 1 hour.`
   private loadExternalAuthToken (username: string, token: string) {
     this.isAuthenticatedWithExternalAuth = true
 
-    this.authService.login(username, null, token)
+    this.authService.login({ username, password: null, token })
       .subscribe({
         next: () => {
           const redirectUrl = this.storage.getItem(LoginComponent.SESSION_STORAGE_REDIRECT_URL_KEY)
@@ -182,6 +196,17 @@ The link will expire within 1 hour.`
   }
 
   private handleError (err: any) {
+    if (this.authService.isOTPMissingError(err)) {
+      this.otpStep = true
+
+      setTimeout(() => {
+        this.form.get('otp-token').setValidators(USER_OTP_TOKEN_VALIDATOR.VALIDATORS)
+        this.otpTokenInput.focus()
+      })
+
+      return
+    }
+
     if (err.message.indexOf('credentials are invalid') !== -1) this.error = $localize`Incorrect username or password.`
     else if (err.message.indexOf('blocked') !== -1) this.error = $localize`Your account is blocked.`
     else this.error = err.message

@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { ServerService } from '@app/core'
 import { VIDEO_CAPTION_FILE_VALIDATOR, VIDEO_CAPTION_LANGUAGE_VALIDATOR } from '@app/shared/form-validators/video-captions-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { VideoCaptionEdit } from '@app/shared/shared-main'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { HTMLServerConfig, VideoConstant } from '@shared/models'
@@ -26,7 +26,7 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
   private closingModal = false
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private modalService: NgbModal,
     private serverService: ServerService
   ) {

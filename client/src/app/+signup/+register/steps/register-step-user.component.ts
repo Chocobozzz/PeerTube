@@ -8,7 +8,7 @@ import {
   USER_PASSWORD_VALIDATOR,
   USER_USERNAME_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { UserSignupService } from '@app/shared/shared-users'
 
 @Component({
@@ -23,7 +23,7 @@ export class RegisterStepUserComponent extends FormReactive implements OnInit {
   @Output() formBuilt = new EventEmitter<FormGroup>()
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private userSignupService: UserSignupService
   ) {
     super()

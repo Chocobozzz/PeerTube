@@ -1,6 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
-@use '~bootstrap/scss/functions' as *;
+@use 'bootstrap/scss/functions' as *;
 
 .add-button {
   @include create-button;

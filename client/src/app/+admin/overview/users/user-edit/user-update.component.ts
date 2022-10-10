@@ -9,8 +9,8 @@ import {
   USER_VIDEO_QUOTA_DAILY_VALIDATOR,
   USER_VIDEO_QUOTA_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
-import { FormValidatorService } from '@app/shared/shared-forms'
-import { UserAdminService } from '@app/shared/shared-users'
+import { FormReactiveService } from '@app/shared/shared-forms'
+import { TwoFactorService, UserAdminService } from '@app/shared/shared-users'
 import { User as UserType, UserAdminFlag, UserRole, UserUpdate } from '@shared/models'
 import { UserEdit } from './user-edit'
 
@@ -25,7 +25,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   private paramsSub: Subscription
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     protected serverService: ServerService,
     protected configService: ConfigService,
     protected screenService: ScreenService,
@@ -34,6 +34,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     private router: Router,
     private notifier: Notifier,
     private userService: UserService,
+    private twoFactorService: TwoFactorService,
     private userAdminService: UserAdminService
   ) {
     super()
@@ -120,10 +121,22 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
           this.notifier.success($localize`An email asking for password reset has been sent to ${this.user.username}.`)
         },
 
-        error: err => {
-          this.error = err.message
-        }
+        error: err => this.notifier.error(err.message)
       })
+  }
+
+  disableTwoFactorAuth () {
+    this.twoFactorService.disableTwoFactor({ userId: this.user.id })
+      .subscribe({
+        next: () => {
+          this.user.twoFactorEnabled = false
+
+          this.notifier.success($localize`Two factor authentication of ${this.user.username} disabled.`)
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+
   }
 
   private onUserFetched (userJson: UserType) {

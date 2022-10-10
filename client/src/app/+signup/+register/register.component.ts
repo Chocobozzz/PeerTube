@@ -158,7 +158,7 @@ export class RegisterComponent implements OnInit {
         }
 
         // Auto login
-        this.authService.login(body.username, body.password)
+        this.authService.login({ username: body.username, password: body.password })
           .subscribe({
             next: () => {
               this.signupSuccess = true

@@ -5,7 +5,7 @@ import { Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
 import { listUserChannelsForSelect } from '@app/helpers'
 import { VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR } from '@app/shared/form-validators/video-channel-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { VideoChannelService, VideoChannelSyncService } from '@app/shared/shared-main'
 import { VideoChannelSyncCreate } from '@shared/models/videos'
 
@@ -20,7 +20,7 @@ export class VideoChannelSyncEditComponent extends FormReactive implements OnIni
   existingVideosStrategy: string
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private authService: AuthService,
     private router: Router,
     private notifier: Notifier,

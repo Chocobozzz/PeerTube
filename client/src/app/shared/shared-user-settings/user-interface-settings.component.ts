@@ -1,7 +1,7 @@
 import { Subject, Subscription } from 'rxjs'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { AuthService, Notifier, ServerService, ThemeService, UserService } from '@app/core'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { HTMLServerConfig, User, UserUpdateMe } from '@shared/models'
 import { SelectOptionsItem } from 'src/types'
 
@@ -22,7 +22,7 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
   private serverConfig: HTMLServerConfig
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private authService: AuthService,
     private notifier: Notifier,
     private userService: UserService,

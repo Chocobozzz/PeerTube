@@ -66,6 +66,8 @@ export class User implements UserServerModel {
 
   lastLoginDate: Date | null
 
+  twoFactorEnabled: boolean
+
   createdAt: Date
 
   constructor (hash: Partial<UserServerModel>) {
@@ -107,6 +109,8 @@ export class User implements UserServerModel {
     this.noAccountSetupWarningModal = hash.noAccountSetupWarningModal
 
     this.notificationSettings = hash.notificationSettings
+
+    this.twoFactorEnabled = hash.twoFactorEnabled
 
     this.createdAt = hash.createdAt
 

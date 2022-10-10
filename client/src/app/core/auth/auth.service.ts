@@ -1,7 +1,7 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { Observable, ReplaySubject, Subject, throwError as observableThrowError } from 'rxjs'
 import { catchError, map, mergeMap, share, tap } from 'rxjs/operators'
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { Notifier } from '@app/core/notification/notifier.service'
@@ -141,7 +141,14 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
     return !!this.getAccessToken()
   }
 
-  login (username: string, password: string, token?: string) {
+  login (options: {
+    username: string
+    password: string
+    otpToken?: string
+    token?: string
+  }) {
+    const { username, password, token, otpToken } = options
+
     // Form url encoded
     const body = {
       client_id: this.clientId,
@@ -155,7 +162,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
 
     if (token) Object.assign(body, { externalAuthToken: token })
 
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    if (otpToken) headers = headers.set('x-peertube-otp', otpToken)
+
     return this.http.post<UserLogin>(AuthService.BASE_TOKEN_URL, objectToUrlEncoded(body), { headers })
                .pipe(
                  map(res => Object.assign(res, { username })),
@@ -243,6 +252,14 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
             this.userInformationLoaded.next(true)
           }
         })
+  }
+
+  isOTPMissingError (err: HttpErrorResponse) {
+    if (err.status !== HttpStatusCode.UNAUTHORIZED_401) return false
+
+    if (err.headers.get('x-peertube-otp') !== 'required; app') return false
+
+    return true
   }
 
   private mergeUserInformation (obj: UserLoginWithUsername): Observable<UserLoginWithUserInformation> {

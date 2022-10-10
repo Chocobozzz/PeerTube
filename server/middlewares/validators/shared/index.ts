@@ -1,5 +1,6 @@
 export * from './abuses'
 export * from './accounts'
+export * from './users'
 export * from './utils'
 export * from './video-blacklists'
 export * from './video-captions'

@@ -403,6 +403,11 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   @Column
   lastLoginDate: Date
 
+  @AllowNull(true)
+  @Default(null)
+  @Column
+  otpSecret: string
+
   @CreatedAt
   createdAt: Date
 
@@ -935,7 +940,9 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
       pluginAuth: this.pluginAuth,
 
-      lastLoginDate: this.lastLoginDate
+      lastLoginDate: this.lastLoginDate,
+
+      twoFactorEnabled: !!this.otpSecret
     }
 
     if (parameters.withAdminFlags) {

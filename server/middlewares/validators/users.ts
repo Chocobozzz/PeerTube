@@ -1,9 +1,8 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { MUserDefault } from '@server/types/models'
 import { HttpStatusCode, UserRegister, UserRight, UserRole } from '@shared/models'
-import { isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
   isUserAdminFlagsValid,
@@ -30,8 +29,15 @@ import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { Redis } from '../../lib/redis'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../lib/signup'
 import { ActorModel } from '../../models/actor/actor'
-import { UserModel } from '../../models/user/user'
-import { areValidationErrors, doesVideoChannelIdExist, doesVideoExist, isValidVideoIdParam } from './shared'
+import {
+  areValidationErrors,
+  checkUserEmailExist,
+  checkUserIdExist,
+  checkUserNameOrEmailDoesNotAlreadyExist,
+  doesVideoChannelIdExist,
+  doesVideoExist,
+  isValidVideoIdParam
+} from './shared'
 
 const usersListValidator = [
   query('blocked')
@@ -435,7 +441,7 @@ const usersResetPasswordValidator = [
     if (!await checkUserIdExist(req.params.id, res)) return
 
     const user = res.locals.user
-    const redisVerificationString = await Redis.Instance.getResetPasswordLink(user.id)
+    const redisVerificationString = await Redis.Instance.getResetPasswordVerificationString(user.id)
 
     if (redisVerificationString !== req.body.verificationString) {
       return res.fail({
@@ -499,6 +505,41 @@ const usersVerifyEmailValidator = [
     return next()
   }
 ]
+
+const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: express.Request) => number | string) => {
+  return [
+    body('currentPassword').optional().custom(exists),
+
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      if (areValidationErrors(req, res)) return
+
+      const user = res.locals.oauth.token.User
+      const isAdminOrModerator = user.role === UserRole.ADMINISTRATOR || user.role === UserRole.MODERATOR
+      const targetUserId = parseInt(targetUserIdGetter(req) + '')
+
+      // Admin/moderator action on another user, skip the password check
+      if (isAdminOrModerator && targetUserId !== user.id) {
+        return next()
+      }
+
+      if (!req.body.currentPassword) {
+        return res.fail({
+          status: HttpStatusCode.BAD_REQUEST_400,
+          message: 'currentPassword is missing'
+        })
+      }
+
+      if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
+        return res.fail({
+          status: HttpStatusCode.FORBIDDEN_403,
+          message: 'currentPassword is invalid.'
+        })
+      }
+
+      return next()
+    }
+  ]
+}
 
 const userAutocompleteValidator = [
   param('search')
@@ -567,6 +608,7 @@ export {
   usersUpdateValidator,
   usersUpdateMeValidator,
   usersVideoRatingValidator,
+  usersCheckCurrentPasswordFactory,
   ensureUserRegistrationAllowed,
   ensureUserRegistrationAllowedForIP,
   usersGetValidator,
@@ -579,56 +621,4 @@ export {
   ensureAuthUserOwnsAccountValidator,
   ensureCanModerateUser,
   ensureCanManageChannelOrAccount
-}
-
-// ---------------------------------------------------------------------------
-
-function checkUserIdExist (idArg: number | string, res: express.Response, withStats = false) {
-  const id = parseInt(idArg + '', 10)
-  return checkUserExist(() => UserModel.loadByIdWithChannels(id, withStats), res)
-}
-
-function checkUserEmailExist (email: string, res: express.Response, abortResponse = true) {
-  return checkUserExist(() => UserModel.loadByEmail(email), res, abortResponse)
-}
-
-async function checkUserNameOrEmailDoesNotAlreadyExist (username: string, email: string, res: express.Response) {
-  const user = await UserModel.loadByUsernameOrEmail(username, email)
-
-  if (user) {
-    res.fail({
-      status: HttpStatusCode.CONFLICT_409,
-      message: 'User with this username or email already exists.'
-    })
-    return false
-  }
-
-  const actor = await ActorModel.loadLocalByName(username)
-  if (actor) {
-    res.fail({
-      status: HttpStatusCode.CONFLICT_409,
-      message: 'Another actor (account/channel) with this name on this instance already exists or has already existed.'
-    })
-    return false
-  }
-
-  return true
-}
-
-async function checkUserExist (finder: () => Promise<MUserDefault>, res: express.Response, abortResponse = true) {
-  const user = await finder()
-
-  if (!user) {
-    if (abortResponse === true) {
-      res.fail({
-        status: HttpStatusCode.NOT_FOUND_404,
-        message: 'User not found'
-      })
-    }
-
-    return false
-  }
-
-  res.locals.user = user
-  return true
 }

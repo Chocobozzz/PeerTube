@@ -42,6 +42,7 @@ function checkConfig () {
     logger.warn('services.csp-logger configuration has been renamed to csp.report_uri. Please update your configuration file.')
   }
 
+  checkSecretsConfig()
   checkEmailConfig()
   checkNSFWPolicyConfig()
   checkLocalRedundancyConfig()
@@ -102,6 +103,12 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+function checkSecretsConfig () {
+  if (!CONFIG.SECRETS.PEERTUBE) {
+    throw new Error('secrets.peertube is missing in config. Generate one using `openssl rand -hex 32`')
+  }
+}
 
 function checkEmailConfig () {
   if (!isEmailEnabled()) {

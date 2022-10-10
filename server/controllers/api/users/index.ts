@@ -51,6 +51,7 @@ import { myVideosHistoryRouter } from './my-history'
 import { myNotificationsRouter } from './my-notifications'
 import { mySubscriptionsRouter } from './my-subscriptions'
 import { myVideoPlaylistsRouter } from './my-video-playlists'
+import { twoFactorRouter } from './two-factor'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -66,6 +67,7 @@ const askSendEmailLimiter = buildRateLimiter({
 })
 
 const usersRouter = express.Router()
+usersRouter.use('/', twoFactorRouter)
 usersRouter.use('/', tokensRouter)
 usersRouter.use('/', myNotificationsRouter)
 usersRouter.use('/', mySubscriptionsRouter)

@@ -9,6 +9,7 @@ import {
   CONTACT_FORM_LIFETIME,
   RESUMABLE_UPLOAD_SESSION_LIFETIME,
   TRACKER_RATE_LIMITS,
+  TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME,
   USER_EMAIL_VERIFY_LIFETIME,
   USER_PASSWORD_CREATE_LIFETIME,
   USER_PASSWORD_RESET_LIFETIME,
@@ -108,8 +109,22 @@ class Redis {
     return this.removeValue(this.generateResetPasswordKey(userId))
   }
 
-  async getResetPasswordLink (userId: number) {
+  async getResetPasswordVerificationString (userId: number) {
     return this.getValue(this.generateResetPasswordKey(userId))
+  }
+
+  /* ************ Two factor auth request ************ */
+
+  async setTwoFactorRequest (userId: number, otpSecret: string) {
+    const requestToken = await generateRandomString(32)
+
+    await this.setValue(this.generateTwoFactorRequestKey(userId, requestToken), otpSecret, TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME)
+
+    return requestToken
+  }
+
+  async getTwoFactorRequestToken (userId: number, requestToken: string) {
+    return this.getValue(this.generateTwoFactorRequestKey(userId, requestToken))
   }
 
   /* ************ Email verification ************ */
@@ -342,6 +357,10 @@ class Redis {
     return 'reset-password-' + userId
   }
 
+  private generateTwoFactorRequestKey (userId: number, token: string) {
+    return 'two-factor-request-' + userId + '-' + token
+  }
+
   private generateVerifyEmailKey (userId: number) {
     return 'verify-email-' + userId
   }
@@ -391,8 +410,8 @@ class Redis {
     return JSON.parse(value)
   }
 
-  private setObject (key: string, value: { [ id: string ]: number | string }) {
-    return this.setValue(key, JSON.stringify(value))
+  private setObject (key: string, value: { [ id: string ]: number | string }, expirationMilliseconds?: number) {
+    return this.setValue(key, JSON.stringify(value), expirationMilliseconds)
   }
 
   private async setValue (key: string, value: string, expirationMilliseconds?: number) {

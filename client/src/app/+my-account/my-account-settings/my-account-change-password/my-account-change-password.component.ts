@@ -6,8 +6,8 @@ import {
   USER_EXISTING_PASSWORD_VALIDATOR,
   USER_PASSWORD_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
-import { User } from '@shared/models'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
+import { HttpStatusCode, User } from '@shared/models'
 
 @Component({
   selector: 'my-account-change-password',
@@ -19,7 +19,7 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
   user: User = null
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private notifier: Notifier,
     private authService: AuthService,
     private userService: UserService
@@ -57,7 +57,7 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
         },
 
         error: err => {
-          if (err.status === 401) {
+          if (err.status === HttpStatusCode.UNAUTHORIZED_401) {
             this.error = $localize`You current password is invalid.`
             return
           }
