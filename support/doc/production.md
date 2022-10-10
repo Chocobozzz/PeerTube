@@ -115,8 +115,14 @@ $ cd /var/www/peertube
 $ sudo -u peertube cp peertube-latest/config/production.yaml.example config/production.yaml
 ```
 
-Then edit the `config/production.yaml` file according to your webserver
-and database configuration (`webserver`, `database`, `redis`, `smtp` and `admin.email` sections in particular).
+Then edit the `config/production.yaml` file according to your webserver and database configuration. In particular:
+ * `webserver`: Reverse proxy public information
+ * `secrets`: Secret strings you must generate manually (PeerTube version >= 5.0)
+ * `database`: PostgreSQL settings
+ * `redis`: Redis settings
+ * `smtp`: If you want to use emails
+ * `admin.email`: To correctly fill `root` user email
+
 Keys defined in `config/production.yaml` will override keys defined in `config/default.yaml`.
 
 **PeerTube does not support webserver host change**. Even though [PeerTube CLI can help you to switch hostname](https://docs.joinpeertube.org/maintain-tools?id=update-hostjs) there's no official support for that since it is a risky operation that might result in unforeseen errors.

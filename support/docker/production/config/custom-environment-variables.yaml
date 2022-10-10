@@ -7,6 +7,9 @@ webserver:
     __name: "PEERTUBE_WEBSERVER_HTTPS"
     __format: "json"
 
+secrets:
+  peertube: "PEERTUBE_SECRET"
+
 trust_proxy:
   __name: "PEERTUBE_TRUST_PROXY"
   __format: "json"
