@@ -52,6 +52,23 @@
           </div>
         </div>
       </div>
+
+      <div class="col-12 col-lg-4 col-xl-3">
+        <div class="video-channel-sync-title" i18n>ADVANCED OPTIONS</div>
+      </div>
+
+      <div class="col-12 col-lg-8 col-xl-9">
+        <div class="form-group">
+          <label i18n for="licence">Videos license:</label>
+          <my-select-options
+              placeholder="{{ getLicencePlaceholder() }}" [items]="videoLicences" formControlName="licence" [clearable]="true"></my-select-options>
+        </div>
+        <div class="form-group">
+          <label i18n for="language">Videos language:</label>
+          <my-select-options
+              placeholder="{{ getLanguagePlaceholder() }}" [items]="videoLanguages" formControlName="language" [clearable]="true"></my-select-options>
+        </div>
+      </div>
     </div>
 
     <div class="row"> <!-- submit placement block -->

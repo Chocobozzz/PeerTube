@@ -21,6 +21,7 @@ export class SelectOptionsComponent implements ControlValueAccessor {
   @Input() groupBy: string
   @Input() labelForId: string
   @Input() searchFn: any
+  @Input() placeholder: string
 
   selectedId: number | string
   disabled = false

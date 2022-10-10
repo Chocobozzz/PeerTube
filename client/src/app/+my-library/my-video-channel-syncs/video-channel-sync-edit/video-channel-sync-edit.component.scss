@@ -11,7 +11,7 @@ input[type=text] {
   @include settings-big-title;
 }
 
-my-select-channel {
+my-select-channel, my-select-options {
   display: block;
   max-width: $form-base-input-width;
 }
