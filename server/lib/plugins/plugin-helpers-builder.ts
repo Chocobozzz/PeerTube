@@ -13,13 +13,14 @@ import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
 import { UserModel } from '@server/models/user/user'
 import { VideoModel } from '@server/models/video/video'
 import { VideoBlacklistModel } from '@server/models/video/video-blacklist'
-import { MPlugin } from '@server/types/models'
+import { MPlugin, MVideo, UserNotificationModelForApi } from '@server/types/models'
 import { PeerTubeHelpers } from '@server/types/plugins'
 import { VideoBlacklistCreate, VideoStorage } from '@shared/models'
 import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../blocklist'
 import { ServerConfigManager } from '../server-config-manager'
 import { blacklistVideo, unblacklistVideo } from '../video-blacklist'
 import { VideoPathManager } from '../video-path-manager'
+import { PeerTubeSocket } from '../peertube-socket'
 
 function buildPluginHelpers (pluginModel: MPlugin, npmName: string): PeerTubeHelpers {
   const logger = buildPluginLogger(npmName)
@@ -35,6 +36,8 @@ function buildPluginHelpers (pluginModel: MPlugin, npmName: string): PeerTubeHel
 
   const plugin = buildPluginRelatedHelpers(pluginModel, npmName)
 
+  const socket = buildSocketHelpers()
+
   const user = buildUserHelpers()
 
   return {
@@ -45,6 +48,7 @@ function buildPluginHelpers (pluginModel: MPlugin, npmName: string): PeerTubeHel
     moderation,
     plugin,
     server,
+    socket,
     user
   }
 }
@@ -215,6 +219,17 @@ function buildPluginRelatedHelpers (plugin: MPlugin, npmName: string) {
     getBaseRouterRoute: () => `/plugins/${plugin.name}/${plugin.version}/router/`,
 
     getDataDirectoryPath: () => join(CONFIG.STORAGE.PLUGINS_DIR, 'data', npmName)
+  }
+}
+
+function buildSocketHelpers () {
+  return {
+    sendNotification: (userId: number, notification: UserNotificationModelForApi) => {
+      PeerTubeSocket.Instance.sendNotification(userId, notification)
+    },
+    sendVideoLiveNewState: (video: MVideo) => {
+      PeerTubeSocket.Instance.sendVideoLiveNewState(video)
+    }
   }
 }
 

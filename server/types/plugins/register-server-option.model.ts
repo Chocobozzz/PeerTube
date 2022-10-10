@@ -16,7 +16,7 @@ import {
   ThumbnailType,
   VideoBlacklistCreate
 } from '@shared/models'
-import { MUserDefault, MVideoThumbnail } from '../models'
+import { MUserDefault, MVideo, MVideoThumbnail, UserNotificationModelForApi } from '../models'
 import {
   RegisterServerAuthExternalOptions,
   RegisterServerAuthExternalResult,
@@ -84,6 +84,11 @@ export type PeerTubeHelpers = {
 
   server: {
     getServerActor: () => Promise<ActorModel>
+  }
+
+  socket: {
+    sendNotification: (userId: number, notification: UserNotificationModelForApi) => void
+    sendVideoLiveNewState: (video: MVideo) => void
   }
 
   plugin: {
