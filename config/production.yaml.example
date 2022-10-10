@@ -9,7 +9,7 @@ webserver:
   port: 443
 
 # Secrets you need to generate the first time you run PeerTube
-secret:
+secrets:
   # Generate one using `openssl rand -hex 32`
   peertube: ''
 
