@@ -27,6 +27,7 @@
   /* Fallback for non-webkit */
   display: -webkit-box; /* stylelint-disable-line value-no-vendor-prefix */
   -webkit-line-clamp: $number-of-lines;
+  -webkit-box-orient: vertical;
   /* Fallback for non-webkit */
   font-size: $font-size;
   line-height: $font-size;
