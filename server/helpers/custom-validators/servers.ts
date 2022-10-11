@@ -1,6 +1,6 @@
 import validator from 'validator'
+import { CONFIG } from '@server/initializers/config'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
-import { isTestOrDevInstance } from '../core-utils'
 import { exists, isArray } from './misc'
 
 function isHostValid (host: string) {
@@ -10,7 +10,7 @@ function isHostValid (host: string) {
   }
 
   // We validate 'localhost', so we don't have the top level domain
-  if (isTestOrDevInstance()) {
+  if (CONFIG.WEBSERVER.HOSTNAME === 'localhost') {
     isURLOptions.require_tld = false
   }
 
