@@ -9,6 +9,7 @@ import {
   createSingleServer,
   doubleFollow,
   makeGetRequest,
+  makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultChannelAvatar,
@@ -306,14 +307,15 @@ describe('Test syndication feeds', () => {
 
       await stopFfmpeg(ffmpeg)
     })
-  })
 
-  it('Should carry the channel avatar', async function () {
-    {
+    it('Should have the channel avatar as feed icon', async function () {
       const json = await servers[0].feed.getJSON({ feed: 'videos', query: { videoChannelId: rootChannelId }, ignoreCache: true })
+
       const jsonObj = JSON.parse(json)
-      expect(jsonObj.icon).to.equal(servers[0].url + '/avatar.png')
-    }
+      const imageUrl = jsonObj.icon
+      expect(imageUrl).to.include('/lazy-static/avatars/')
+      await makeRawRequest(imageUrl)
+    })
   })
 
   describe('Video comments feed', function () {

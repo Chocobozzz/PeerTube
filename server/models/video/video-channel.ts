@@ -827,10 +827,6 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
     return this.name
   }
 
-  getAvatar () {
-    return this.Actor.avatar
-  }
-
   isOutdated () {
     return this.Actor.isOutdated()
   }
