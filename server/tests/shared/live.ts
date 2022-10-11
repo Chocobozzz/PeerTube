@@ -56,15 +56,19 @@ async function testVideoResolutions (options: {
     for (let i = 0; i < resolutions.length; i++) {
       const segmentNum = 3
       const segmentName = `${i}-00000${segmentNum}.ts`
-      await originServer.live.waitUntilSegmentGeneration({ videoUUID: video.uuid, playlistNumber: i, segment: segmentNum })
+      await originServer.live.waitUntilSegmentGeneration({
+        server: originServer,
+        videoUUID: video.uuid,
+        playlistNumber: i,
+        segment: segmentNum,
+        objectStorage
+      })
 
       const baseUrl = objectStorage
         ? ObjectStorageCommand.getPlaylistBaseUrl() + 'hls'
         : originServer.url + '/static/streaming-playlists/hls'
 
       if (objectStorage) {
-        await originServer.live.waitUntilSegmentUpload({ playlistNumber: i, segment: segmentNum })
-
         expect(hlsPlaylist.segmentsSha256Url).to.contain(ObjectStorageCommand.getPlaylistBaseUrl())
       }
 

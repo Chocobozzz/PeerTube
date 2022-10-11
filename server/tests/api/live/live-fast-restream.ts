@@ -43,12 +43,31 @@ describe('Fast restream in live', function () {
     // Streaming session #1
     let ffmpegCommand = await server.live.sendRTMPStreamInVideo(rtmpOptions)
     await server.live.waitUntilPublished({ videoId: liveVideoUUID })
+
+    const video = await server.videos.get({ id: liveVideoUUID })
+    const session1PlaylistId = video.streamingPlaylists[0].id
+
     await stopFfmpeg(ffmpegCommand)
     await server.live.waitUntilWaiting({ videoId: liveVideoUUID })
 
     // Streaming session #2
     ffmpegCommand = await server.live.sendRTMPStreamInVideo(rtmpOptions)
-    await server.live.waitUntilSegmentGeneration({ videoUUID: liveVideoUUID, segment: 0, playlistNumber: 0, totalSessions: 2 })
+
+    let hasNewPlaylist = false
+    do {
+      const video = await server.videos.get({ id: liveVideoUUID })
+      hasNewPlaylist = video.streamingPlaylists.length === 1 && video.streamingPlaylists[0].id !== session1PlaylistId
+
+      await wait(100)
+    } while (!hasNewPlaylist)
+
+    await server.live.waitUntilSegmentGeneration({
+      server,
+      videoUUID: liveVideoUUID,
+      segment: 1,
+      playlistNumber: 0,
+      objectStorage: false
+    })
 
     return { ffmpegCommand, liveVideoUUID }
   }

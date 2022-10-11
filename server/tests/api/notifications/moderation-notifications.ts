@@ -545,7 +545,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send unblacklist but not published/subscription notes after unblacklisted if scheduled update pending', async function () {
-      this.timeout(40000)
+      this.timeout(120000)
 
       const updateAt = new Date(new Date().getTime() + 1000000)
 
