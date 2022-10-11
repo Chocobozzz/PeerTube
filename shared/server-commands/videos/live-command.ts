@@ -186,6 +186,15 @@ export class LiveCommand extends AbstractCommand {
           defaultExpectedStatus: HttpStatusCode.OK_200
         })
 
+        const video = await server.videos.get({ id: videoUUID })
+        const hlsPlaylist = video.streamingPlaylists[0]
+
+        const shaBody = await server.streamingPlaylists.getSegmentSha256({ url: hlsPlaylist.segmentsSha256Url })
+
+        if (!shaBody[segmentName]) {
+          throw new Error('Segment SHA does not exist')
+        }
+
         error = false
       } catch {
         error = true

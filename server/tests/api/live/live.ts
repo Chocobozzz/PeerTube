@@ -519,7 +519,7 @@ describe('Test live', function () {
       }
 
       const minBitrateLimits = {
-        720: 5000 * 1000,
+        720: 4800 * 1000,
         360: 1000 * 1000,
         240: 550 * 1000
       }
