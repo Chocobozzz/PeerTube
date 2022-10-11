@@ -202,6 +202,11 @@ export class PluginService implements ClientHook {
         return environment.apiUrl + `${pathPrefix}/${plugin.name}/${plugin.version}/router`
       },
 
+      getBaseWebSocketRoute: () => {
+        const pathPrefix = PluginsManager.getPluginPathPrefix(pluginInfo.isTheme)
+        return environment.apiUrl + `${pathPrefix}/${plugin.name}/${plugin.version}/ws`
+      },
+
       getBasePluginClientPath: () => {
         return '/p'
       },

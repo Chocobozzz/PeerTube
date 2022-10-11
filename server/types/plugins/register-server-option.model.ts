@@ -1,4 +1,5 @@
 import { Response, Router } from 'express'
+import { Server } from 'http'
 import { Logger } from 'winston'
 import { ActorModel } from '@server/models/actor/actor'
 import {
@@ -22,6 +23,7 @@ import {
   RegisterServerAuthExternalResult,
   RegisterServerAuthPassOptions
 } from './register-server-auth.model'
+import { RegisterServerWebSocketRouteOptions } from './register-server-websocket-route.model'
 
 export type PeerTubeHelpers = {
   logger: Logger
@@ -83,6 +85,9 @@ export type PeerTubeHelpers = {
   }
 
   server: {
+    // PeerTube >= 5.0
+    getHTTPServer: () => Server
+
     getServerActor: () => Promise<ActorModel>
   }
 
@@ -97,6 +102,8 @@ export type PeerTubeHelpers = {
 
     // PeerTube >= 3.2
     getBaseRouterRoute: () => string
+    // PeerTube >= 5.0
+    getBaseWebSocketRoute: () => string
 
     // PeerTube >= 3.2
     getDataDirectoryPath: () => string
@@ -139,6 +146,13 @@ export type RegisterServerOptions = {
   //  * /plugins/:pluginName/:pluginVersion/router/...
   //  * /plugins/:pluginName/router/...
   getRouter(): Router
+
+  // PeerTube >= 5.0
+  // Register WebSocket route
+  // Base routes of the WebSocket router are
+  //  * /plugins/:pluginName/:pluginVersion/ws/...
+  //  * /plugins/:pluginName/ws/...
+  registerWebSocketRoute: (options: RegisterServerWebSocketRouteOptions) => void
 
   peertubeHelpers: PeerTubeHelpers
 }

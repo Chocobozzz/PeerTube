@@ -1,4 +1,5 @@
 import express from 'express'
+import { Server } from 'http'
 import { join } from 'path'
 import { ffprobePromise } from '@server/helpers/ffmpeg/ffprobe-utils'
 import { buildLogger } from '@server/helpers/logger'
@@ -17,12 +18,12 @@ import { MPlugin, MVideo, UserNotificationModelForApi } from '@server/types/mode
 import { PeerTubeHelpers } from '@server/types/plugins'
 import { VideoBlacklistCreate, VideoStorage } from '@shared/models'
 import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../blocklist'
+import { PeerTubeSocket } from '../peertube-socket'
 import { ServerConfigManager } from '../server-config-manager'
 import { blacklistVideo, unblacklistVideo } from '../video-blacklist'
 import { VideoPathManager } from '../video-path-manager'
-import { PeerTubeSocket } from '../peertube-socket'
 
-function buildPluginHelpers (pluginModel: MPlugin, npmName: string): PeerTubeHelpers {
+function buildPluginHelpers (httpServer: Server, pluginModel: MPlugin, npmName: string): PeerTubeHelpers {
   const logger = buildPluginLogger(npmName)
 
   const database = buildDatabaseHelpers()
@@ -30,7 +31,7 @@ function buildPluginHelpers (pluginModel: MPlugin, npmName: string): PeerTubeHel
 
   const config = buildConfigHelpers()
 
-  const server = buildServerHelpers()
+  const server = buildServerHelpers(httpServer)
 
   const moderation = buildModerationHelpers()
 
@@ -69,8 +70,10 @@ function buildDatabaseHelpers () {
   }
 }
 
-function buildServerHelpers () {
+function buildServerHelpers (httpServer: Server) {
   return {
+    getHTTPServer: () => httpServer,
+
     getServerActor: () => getServerActor()
   }
 }
@@ -217,6 +220,8 @@ function buildPluginRelatedHelpers (plugin: MPlugin, npmName: string) {
     getBaseStaticRoute: () => `/plugins/${plugin.name}/${plugin.version}/static/`,
 
     getBaseRouterRoute: () => `/plugins/${plugin.name}/${plugin.version}/router/`,
+
+    getBaseWebSocketRoute: () => `/plugins/${plugin.name}/${plugin.version}/ws/`,
 
     getDataDirectoryPath: () => join(CONFIG.STORAGE.PLUGINS_DIR, 'data', npmName)
   }

@@ -1,4 +1,5 @@
 import express from 'express'
+import { Server } from 'http'
 import { logger } from '@server/helpers/logger'
 import { onExternalUserAuthenticated } from '@server/lib/auth/external-auth'
 import { VideoConstantManagerFactory } from '@server/lib/plugins/video-constant-manager-factory'
@@ -8,7 +9,8 @@ import {
   RegisterServerAuthExternalResult,
   RegisterServerAuthPassOptions,
   RegisterServerExternalAuthenticatedResult,
-  RegisterServerOptions
+  RegisterServerOptions,
+  RegisterServerWebSocketRouteOptions
 } from '@server/types/plugins'
 import {
   EncoderOptionsBuilder,
@@ -49,12 +51,15 @@ export class RegisterHelpers {
 
   private readonly onSettingsChangeCallbacks: SettingsChangeCallback[] = []
 
+  private readonly webSocketRoutes: RegisterServerWebSocketRouteOptions[] = []
+
   private readonly router: express.Router
   private readonly videoConstantManagerFactory: VideoConstantManagerFactory
 
   constructor (
     private readonly npmName: string,
     private readonly plugin: PluginModel,
+    private readonly server: Server,
     private readonly onHookAdded: (options: RegisterServerHookOptions) => void
   ) {
     this.router = express.Router()
@@ -66,6 +71,7 @@ export class RegisterHelpers {
     const registerSetting = this.buildRegisterSetting()
 
     const getRouter = this.buildGetRouter()
+    const registerWebSocketRoute = this.buildRegisterWebSocketRoute()
 
     const settingsManager = this.buildSettingsManager()
     const storageManager = this.buildStorageManager()
@@ -85,13 +91,14 @@ export class RegisterHelpers {
     const unregisterIdAndPassAuth = this.buildUnregisterIdAndPassAuth()
     const unregisterExternalAuth = this.buildUnregisterExternalAuth()
 
-    const peertubeHelpers = buildPluginHelpers(this.plugin, this.npmName)
+    const peertubeHelpers = buildPluginHelpers(this.server, this.plugin, this.npmName)
 
     return {
       registerHook,
       registerSetting,
 
       getRouter,
+      registerWebSocketRoute,
 
       settingsManager,
       storageManager,
@@ -180,8 +187,18 @@ export class RegisterHelpers {
     return this.onSettingsChangeCallbacks
   }
 
+  getWebSocketRoutes () {
+    return this.webSocketRoutes
+  }
+
   private buildGetRouter () {
     return () => this.router
+  }
+
+  private buildRegisterWebSocketRoute () {
+    return (options: RegisterServerWebSocketRouteOptions) => {
+      this.webSocketRoutes.push(options)
+    }
   }
 
   private buildRegisterSetting () {

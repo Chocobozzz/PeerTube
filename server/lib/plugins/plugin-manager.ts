@@ -1,6 +1,7 @@
 import express from 'express'
 import { createReadStream, createWriteStream } from 'fs'
 import { ensureDir, outputFile, readJSON } from 'fs-extra'
+import { Server } from 'http'
 import { basename, join } from 'path'
 import { decachePlugin } from '@server/helpers/decache'
 import { ApplicationModel } from '@server/models/application/application'
@@ -67,7 +68,35 @@ export class PluginManager implements ServerHook {
   private hooks: { [name: string]: HookInformationValue[] } = {}
   private translations: PluginLocalesTranslations = {}
 
+  private server: Server
+
   private constructor () {
+  }
+
+  init (server: Server) {
+    this.server = server
+  }
+
+  registerWebSocketRouter () {
+    this.server.on('upgrade', (request, socket, head) => {
+      const url = request.url
+
+      const matched = url.match(`/plugins/([^/]+)/([^/]+/)?ws(/.*)`)
+      if (!matched) return
+
+      const npmName = PluginModel.buildNpmName(matched[1], PluginType.PLUGIN)
+      const subRoute = matched[3]
+
+      const result = this.getRegisteredPluginOrTheme(npmName)
+      if (!result) return
+
+      const routes = result.registerHelpers.getWebSocketRoutes()
+
+      const wss = routes.find(r => r.route.startsWith(subRoute))
+      if (!wss) return
+
+      wss.handler(request, socket, head)
+    })
   }
 
   // ###################### Getters ######################
@@ -581,7 +610,7 @@ export class PluginManager implements ServerHook {
       })
     }
 
-    const registerHelpers = new RegisterHelpers(npmName, plugin, onHookAdded.bind(this))
+    const registerHelpers = new RegisterHelpers(npmName, plugin, this.server, onHookAdded.bind(this))
 
     return {
       registerStore: registerHelpers,

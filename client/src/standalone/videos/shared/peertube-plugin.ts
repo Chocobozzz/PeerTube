@@ -43,6 +43,7 @@ export class PeerTubePlugin {
     return {
       getBaseStaticRoute: unimplemented,
       getBaseRouterRoute: unimplemented,
+      getBaseWebSocketRoute: unimplemented,
       getBasePluginClientPath: unimplemented,
 
       getSettings: () => {

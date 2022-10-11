@@ -328,6 +328,10 @@ async function startApplication () {
   GeoIPUpdateScheduler.Instance.enable()
   OpenTelemetryMetrics.Instance.registerMetrics()
 
+  PluginManager.Instance.init(server)
+  // Before PeerTubeSocket init
+  PluginManager.Instance.registerWebSocketRouter()
+
   PeerTubeSocket.Instance.init(server)
   VideoViewsManager.Instance.init()
 

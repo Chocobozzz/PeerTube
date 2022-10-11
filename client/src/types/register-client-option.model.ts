@@ -24,6 +24,9 @@ export type RegisterClientHelpers = {
 
   getBaseRouterRoute: () => string
 
+  // PeerTube >= 5.0
+  getBaseWebSocketRoute: () => string
+
   getBasePluginClientPath: () => string
 
   isLoggedIn: () => boolean

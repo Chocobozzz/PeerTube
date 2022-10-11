@@ -132,6 +132,11 @@ server {
     try_files /dev/null @api_websocket;
   }
 
+  # Plugin websocket routes
+  location ~ ^/plugins/[^/]+(/[^/]+)?/ws/ {
+    try_files /dev/null @api_websocket;
+  }
+
   ##
   # Performance optimizations
   # For extra performance please refer to https://github.com/denji/nginx-tuning
