@@ -4,7 +4,8 @@ import { Feed } from '@peertube/feed'
 import { mdToOneLinePlainText, toSafeHtml } from '@server/helpers/markdown'
 import { getServerActor } from '@server/models/application/application'
 import { getCategoryLabel } from '@server/models/video/formatter/video-format-utils'
-import { VideoInclude } from '@shared/models'
+import { MAccountDefault, MChannelBannerAccountDefault, MVideoFullLight } from '@server/types/models'
+import { ActorImageType, VideoInclude } from '@shared/models'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
 import { MIMETYPES, PREVIEWS_SIZE, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
@@ -82,22 +83,12 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
     videoChannelId: videoChannel ? videoChannel.id : undefined
   })
 
-  let name: string
-  let description: string
+  const { name, description, imageUrl } = buildFeedMetadata({ video, account, videoChannel })
 
-  if (videoChannel) {
-    name = videoChannel.getDisplayName()
-    description = videoChannel.description
-  } else if (account) {
-    name = account.getDisplayName()
-    description = account.description
-  } else {
-    name = video ? video.name : CONFIG.INSTANCE.NAME
-    description = video ? video.description : CONFIG.INSTANCE.DESCRIPTION
-  }
   const feed = initFeed({
     name,
     description,
+    imageUrl,
     resourceType: 'video-comments',
     queryString: new URL(WEBSERVER.URL + req.originalUrl).search
   })
@@ -137,23 +128,12 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
   const nsfw = buildNSFWFilter(res, req.query.nsfw)
 
-  let name: string
-  let description: string
-
-  if (videoChannel) {
-    name = videoChannel.getDisplayName()
-    description = videoChannel.description
-  } else if (account) {
-    name = account.getDisplayName()
-    description = account.description
-  } else {
-    name = CONFIG.INSTANCE.NAME
-    description = CONFIG.INSTANCE.DESCRIPTION
-  }
+  const { name, description, imageUrl } = buildFeedMetadata({ videoChannel, account })
 
   const feed = initFeed({
     name,
     description,
+    imageUrl,
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search
   })
@@ -190,12 +170,13 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
   const start = 0
   const account = res.locals.account
   const nsfw = buildNSFWFilter(res, req.query.nsfw)
-  const name = account.getDisplayName()
-  const description = account.description
+
+  const { name, description, imageUrl } = buildFeedMetadata({ account })
 
   const feed = initFeed({
     name,
     description,
+    imageUrl,
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search
   })
@@ -229,11 +210,12 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
 function initFeed (parameters: {
   name: string
   description: string
+  imageUrl: string
   resourceType?: 'videos' | 'video-comments'
   queryString?: string
 }) {
   const webserverUrl = WEBSERVER.URL
-  const { name, description, resourceType, queryString } = parameters
+  const { name, description, resourceType, queryString, imageUrl } = parameters
 
   return new Feed({
     title: name,
@@ -241,7 +223,7 @@ function initFeed (parameters: {
     // updated: TODO: somehowGetLatestUpdate, // optional, default = today
     id: webserverUrl,
     link: webserverUrl,
-    image: webserverUrl + '/client/assets/images/icons/icon-96x96.png',
+    image: imageUrl,
     favicon: webserverUrl + '/client/assets/images/favicon.png',
     copyright: `All rights reserved, unless otherwise specified in the terms specified at ${webserverUrl}/about` +
     ` and potential licenses granted by each content's rightholder.`,
@@ -368,4 +350,40 @@ function sendFeed (feed: Feed, req: express.Request, res: express.Response) {
   }
 
   return res.send(feed.rss2()).end()
+}
+
+function buildFeedMetadata (options: {
+  videoChannel?: MChannelBannerAccountDefault
+  account?: MAccountDefault
+  video?: MVideoFullLight
+}) {
+  const { video, videoChannel, account } = options
+
+  let imageUrl = WEBSERVER.URL + '/client/assets/images/icons/icon-96x96.png'
+  let name: string
+  let description: string
+
+  if (videoChannel) {
+    name = videoChannel.getDisplayName()
+    description = videoChannel.description
+
+    if (videoChannel.Actor.hasImage(ActorImageType.AVATAR)) {
+      imageUrl = WEBSERVER.URL + videoChannel.Actor.Avatars[0].getStaticPath()
+    }
+  } else if (account) {
+    name = account.getDisplayName()
+    description = account.description
+
+    if (account.Actor.hasImage(ActorImageType.AVATAR)) {
+      imageUrl = WEBSERVER.URL + account.Actor.Avatars[0].getStaticPath()
+    }
+  } else if (video) {
+    name = video.name
+    description = video.description
+  } else {
+    name = CONFIG.INSTANCE.NAME
+    description = CONFIG.INSTANCE.DESCRIPTION
+  }
+
+  return { name, description, imageUrl }
 }
