@@ -1,7 +1,7 @@
 import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
 import { buildAbsoluteFixturePath, wait } from '@shared/core-utils'
-import { PeerTubeServer } from '../server/server'
 import { VideoDetails, VideoInclude } from '@shared/models'
+import { PeerTubeServer } from '../server/server'
 
 function sendRTMPStream (options: {
   rtmpBaseUrl: string

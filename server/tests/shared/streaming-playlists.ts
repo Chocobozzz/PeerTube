@@ -57,10 +57,11 @@ async function checkResolutionsInMasterPlaylist (options: {
   playlistUrl: string
   resolutions: number[]
   transcoded?: boolean // default true
+  withRetry?: boolean // default false
 }) {
-  const { server, playlistUrl, resolutions, transcoded = true } = options
+  const { server, playlistUrl, resolutions, withRetry = false, transcoded = true } = options
 
-  const masterPlaylist = await server.streamingPlaylists.get({ url: playlistUrl })
+  const masterPlaylist = await server.streamingPlaylists.get({ url: playlistUrl, withRetry })
 
   for (const resolution of resolutions) {
     const reg = transcoded

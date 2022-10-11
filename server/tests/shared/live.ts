@@ -3,7 +3,6 @@
 import { expect } from 'chai'
 import { pathExists, readdir } from 'fs-extra'
 import { join } from 'path'
-import { wait } from '@shared/core-utils'
 import { LiveVideo, VideoStreamingPlaylistType } from '@shared/models'
 import { ObjectStorageCommand, PeerTubeServer } from '@shared/server-commands'
 import { checkLiveSegmentHash, checkResolutionsInMasterPlaylist } from './streaming-playlists'
@@ -42,7 +41,13 @@ async function testVideoResolutions (options: {
     expect(hlsPlaylist).to.exist
     expect(hlsPlaylist.files).to.have.lengthOf(0) // Only fragmented mp4 files are displayed
 
-    await checkResolutionsInMasterPlaylist({ server, playlistUrl: hlsPlaylist.playlistUrl, resolutions, transcoded })
+    await checkResolutionsInMasterPlaylist({
+      server,
+      playlistUrl: hlsPlaylist.playlistUrl,
+      resolutions,
+      transcoded,
+      withRetry: objectStorage
+    })
 
     if (objectStorage) {
       expect(hlsPlaylist.playlistUrl).to.contain(ObjectStorageCommand.getPlaylistBaseUrl())
@@ -59,7 +64,6 @@ async function testVideoResolutions (options: {
 
       if (objectStorage) {
         await originServer.live.waitUntilSegmentUpload({ playlistNumber: i, segment: segmentNum })
-        await wait(1000)
 
         expect(hlsPlaylist.segmentsSha256Url).to.contain(ObjectStorageCommand.getPlaylistBaseUrl())
       }
