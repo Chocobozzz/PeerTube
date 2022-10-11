@@ -47,7 +47,7 @@ async function processFollow (byActor: MActorSignature, activityId: string, targ
       byActor,
       targetActor,
       activityId,
-      state: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL
+      state: await isFollowingInstance(targetActor) && CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL
         ? 'pending'
         : 'accepted',
       transaction: t
@@ -134,7 +134,7 @@ async function acceptIfNeeded (actorFollow: MActorFollow, targetActor: MActorFul
   // Or if the instance automatically accepts followers
   if (actorFollow.state === 'accepted') return
   if (!await isFollowingInstance(targetActor)) return
-  if (CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === true) return
+  if (CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === true && await isFollowingInstance(targetActor)) return
 
   actorFollow.state = 'accepted'
 
