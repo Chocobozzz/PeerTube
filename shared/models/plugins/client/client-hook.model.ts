@@ -88,7 +88,10 @@ export const clientFilterHookObject = {
   'filter:share.video-playlist-url.build.result': true,
 
   // Filter videojs options built for PeerTube player
-  'filter:internal.player.videojs.options.result': true
+  'filter:internal.player.videojs.options.result': true,
+
+  // Filter p2p media loader options built for PeerTube player
+  'filter:internal.player.p2p-media-loader.options.result': true
 }
 
 export type ClientFilterHookName = keyof typeof clientFilterHookObject

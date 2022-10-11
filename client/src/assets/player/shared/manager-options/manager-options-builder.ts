@@ -20,7 +20,7 @@ export class ManagerOptionsBuilder {
 
   }
 
-  getVideojsOptions (alreadyPlayed: boolean): videojs.PlayerOptions {
+  async getVideojsOptions (alreadyPlayed: boolean): Promise<videojs.PlayerOptions> {
     const commonOptions = this.options.common
 
     let autoplay = this.getAutoPlayValue(commonOptions.autoplay, alreadyPlayed)
@@ -61,7 +61,7 @@ export class ManagerOptionsBuilder {
 
     if (this.mode === 'p2p-media-loader') {
       const hlsOptionsBuilder = new HLSOptionsBuilder(this.options, this.p2pMediaLoaderModule)
-      const options = hlsOptionsBuilder.getPluginOptions()
+      const options = await hlsOptionsBuilder.getPluginOptions()
 
       Object.assign(plugins, pick(options, [ 'hlsjs', 'p2pMediaLoader' ]))
       Object.assign(html5, options.html5)

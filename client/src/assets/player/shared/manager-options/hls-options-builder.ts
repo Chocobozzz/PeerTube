@@ -19,12 +19,15 @@ export class HLSOptionsBuilder {
 
   }
 
-  getPluginOptions () {
+  async getPluginOptions () {
     const commonOptions = this.options.common
 
     const redundancyUrlManager = new RedundancyUrlManager(this.options.p2pMediaLoader.redundancyBaseUrls)
 
-    const p2pMediaLoaderConfig = this.getP2PMediaLoaderOptions(redundancyUrlManager)
+    const p2pMediaLoaderConfig = await this.options.pluginsManager.runHook(
+      'filter:internal.player.p2p-media-loader.options.result',
+      this.getP2PMediaLoaderOptions(redundancyUrlManager)
+    )
     const loader = new this.p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass() as P2PMediaLoader
 
     const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
