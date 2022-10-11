@@ -89,7 +89,7 @@ jobs:
           echo "parse-log.js script does not exist, skipping."
 
       - name: Upload logs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: test-storages-${{ matrix.test_suite }}
