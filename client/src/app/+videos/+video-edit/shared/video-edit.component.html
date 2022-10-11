@@ -141,7 +141,7 @@
               </ng-template>
             </my-peertube-checkbox>
 
-            <my-peertube-checkbox *ngIf="waitTranscodingEnabled" inputName="waitTranscoding" formControlName="waitTranscoding" helpPlacement="bottom-right">
+            <my-peertube-checkbox *ngIf="!hideWaitTranscoding" inputName="waitTranscoding" formControlName="waitTranscoding" helpPlacement="bottom-right">
               <ng-template ptTemplate="label">
                 <ng-container i18n>Publish after transcoding</ng-container>
               </ng-template>

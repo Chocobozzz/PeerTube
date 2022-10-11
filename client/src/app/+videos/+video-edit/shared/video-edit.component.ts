@@ -22,6 +22,8 @@ import {
 import { FormReactiveValidationMessages, FormValidatorService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
 import { VideoCaptionEdit, VideoCaptionWithPathEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { logger } from '@root-helpers/logger'
 import { PluginInfo } from '@root-helpers/plugins-manager'
 import {
   HTMLServerConfig,
@@ -33,13 +35,11 @@ import {
   VideoDetails,
   VideoPrivacy
 } from '@shared/models'
+import { VideoSource } from '@shared/models/videos/video-source'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
 import { VideoCaptionEditModalContentComponent } from './video-caption-edit-modal-content/video-caption-edit-modal-content.component'
 import { VideoEditType } from './video-edit.type'
-import { VideoSource } from '@shared/models/videos/video-source'
-import { logger } from '@root-helpers/logger'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
 type PluginField = {
@@ -66,7 +66,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() videoCaptions: VideoCaptionWithPathEdit[] = []
   @Input() videoSource: VideoSource
 
-  @Input() waitTranscodingEnabled = true
+  @Input() hideWaitTranscoding = false
+
   @Input() type: VideoEditType
   @Input() liveVideo: LiveVideo
 
@@ -140,7 +141,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       nsfw: 'false',
       commentsEnabled: this.serverConfig.defaults.publish.commentsEnabled,
       downloadEnabled: this.serverConfig.defaults.publish.downloadEnabled,
-      waitTranscoding: 'true',
+      waitTranscoding: true,
       licence: this.serverConfig.defaults.publish.licence,
       tags: []
     }

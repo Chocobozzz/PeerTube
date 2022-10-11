@@ -160,10 +160,6 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
     return this.serverConfig.live.maxDuration / 1000
   }
 
-  isWaitTranscodingEnabled () {
-    return this.form.value['saveReplay'] === true
-  }
-
   getNormalLiveDescription () {
     if (this.isReplayAllowed()) {
       return $localize`Stream only once, replay will replace your live`

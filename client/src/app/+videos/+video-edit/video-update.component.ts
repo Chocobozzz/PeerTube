@@ -28,7 +28,6 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
   isUpdatingVideo = false
   forbidScheduledPublication = false
-  waitTranscodingEnabled = true
 
   private updateDone = false
 
@@ -96,16 +95,12 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     return { canDeactivate: this.formChanged === false, text }
   }
 
-  isWaitTranscodingEnabled () {
+  isWaitTranscodingHidden () {
     if (this.videoDetails.getFiles().length > 1) { // Already transcoded
-      return false
+      return true
     }
 
-    if (this.liveVideo && this.form.value['saveReplay'] !== true) {
-      return false
-    }
-
-    return true
+    return false
   }
 
   async update () {
