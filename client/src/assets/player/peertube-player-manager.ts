@@ -81,7 +81,7 @@ export class PeertubePlayerManager {
 
     const videojsOptions = await this.pluginsManager.runHook(
       'filter:internal.player.videojs.options.result',
-      await videojsOptionsBuilder.getVideojsOptions(this.alreadyPlayed)
+      videojsOptionsBuilder.getVideojsOptions(this.alreadyPlayed)
     )
 
     const self = this
