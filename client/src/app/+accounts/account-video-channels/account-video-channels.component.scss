@@ -112,7 +112,7 @@ my-subscribe-button {
   display: none;
 }
 
-@media screen and (max-width: $mobile-view) {
+@include on-small-main-col {
   .channel {
     padding: 15px;
   }
