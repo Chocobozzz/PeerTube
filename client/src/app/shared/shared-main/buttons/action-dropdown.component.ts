@@ -48,6 +48,12 @@ export class ActionDropdownComponent<T> {
     return [ this.actions as DropdownAction<T>[] ]
   }
 
+  getQueryParams (action: DropdownAction<T>, entry: T) {
+    if (action.queryParamsBuilder) return action.queryParamsBuilder(entry)
+
+    return {}
+  }
+
   areActionsDisplayed (actions: Array<DropdownAction<T> | DropdownAction<T>[]>, entry: T): boolean {
     return actions.some(a => {
       if (Array.isArray(a)) return this.areActionsDisplayed(a, entry)
