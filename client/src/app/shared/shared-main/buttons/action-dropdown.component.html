@@ -26,7 +26,7 @@
 
           <a
             *ngIf="action.linkBuilder && !action.isHeader" [ngClass]="{ 'with-icon': !!action.iconName }"
-            class="dropdown-item"  [routerLink]="action.linkBuilder(entry)" [title]="action.title || ''"
+            class="dropdown-item"  [routerLink]="action.linkBuilder(entry)" [queryParams]="action.queryParamsBuilder(entry)" [title]="action.title || ''"
           >
             <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
           </a>
