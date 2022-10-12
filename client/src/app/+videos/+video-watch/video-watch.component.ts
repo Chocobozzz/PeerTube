@@ -20,12 +20,12 @@ import {
 } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { isXPercentInViewport, scrollToTop } from '@app/helpers'
-import { Video, VideoCaptionService, VideoDetails, VideoService } from '@app/shared/shared-main'
+import { Video, VideoCaptionService, VideoDetails, VideoFileTokenService, VideoService } from '@app/shared/shared-main'
 import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { logger } from '@root-helpers/logger'
-import { isP2PEnabled } from '@root-helpers/video'
+import { isP2PEnabled, videoRequiresAuth } from '@root-helpers/video'
 import { timeToInt } from '@shared/core-utils'
 import {
   HTMLServerConfig,
@@ -78,6 +78,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private nextVideoUUID = ''
   private nextVideoTitle = ''
 
+  private videoFileToken: string
+
   private currentTime: number
 
   private paramsSub: Subscription
@@ -110,6 +112,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private pluginService: PluginService,
     private peertubeSocket: PeerTubeSocket,
     private screenService: ScreenService,
+    private videoFileTokenService: VideoFileTokenService,
     private location: PlatformLocation,
     @Inject(LOCALE_ID) private localeId: string
   ) { }
@@ -252,12 +255,19 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       'filter:api.video-watch.video.get.result'
     )
 
-    const videoAndLiveObs: Observable<{ video: VideoDetails, live?: LiveVideo }> = videoObs.pipe(
+    const videoAndLiveObs: Observable<{ video: VideoDetails, live?: LiveVideo, videoFileToken?: string }> = videoObs.pipe(
       switchMap(video => {
-        if (!video.isLive) return of({ video })
+        if (!video.isLive) return of({ video, live: undefined })
 
         return this.liveVideoService.getVideoLive(video.uuid)
           .pipe(map(live => ({ live, video })))
+      }),
+
+      switchMap(({ video, live }) => {
+        if (!videoRequiresAuth(video)) return of({ video, live, videoFileToken: undefined })
+
+        return this.videoFileTokenService.getVideoFileToken(video.uuid)
+          .pipe(map(({ token }) => ({ video, live, videoFileToken: token })))
       })
     )
 
@@ -266,7 +276,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.videoCaptionService.listCaptions(videoId),
       this.userService.getAnonymousOrLoggedUser()
     ]).subscribe({
-      next: ([ { video, live }, captionsResult, loggedInOrAnonymousUser ]) => {
+      next: ([ { video, live, videoFileToken }, captionsResult, loggedInOrAnonymousUser ]) => {
         const queryParams = this.route.snapshot.queryParams
 
         const urlOptions = {
@@ -283,7 +293,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           peertubeLink: false
         }
 
-        this.onVideoFetched({ video, live, videoCaptions: captionsResult.data, loggedInOrAnonymousUser, urlOptions })
+        this.onVideoFetched({ video, live, videoCaptions: captionsResult.data, videoFileToken, loggedInOrAnonymousUser, urlOptions })
             .catch(err => this.handleGlobalError(err))
       },
 
@@ -356,16 +366,19 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     video: VideoDetails
     live: LiveVideo
     videoCaptions: VideoCaption[]
+    videoFileToken: string
+
     urlOptions: URLOptions
     loggedInOrAnonymousUser: User
   }) {
-    const { video, live, videoCaptions, urlOptions, loggedInOrAnonymousUser } = options
+    const { video, live, videoCaptions, urlOptions, videoFileToken, loggedInOrAnonymousUser } = options
 
     this.subscribeToLiveEventsIfNeeded(this.video, video)
 
     this.video = video
     this.videoCaptions = videoCaptions
     this.liveVideo = live
+    this.videoFileToken = videoFileToken
 
     // Re init attributes
     this.playerPlaceholderImgSrc = undefined
@@ -414,6 +427,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       video: this.video,
       videoCaptions: this.videoCaptions,
       liveVideo: this.liveVideo,
+      videoFileToken: this.videoFileToken,
       urlOptions,
       loggedInOrAnonymousUser,
       user: this.user
@@ -561,11 +575,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     video: VideoDetails
     liveVideo: LiveVideo
     videoCaptions: VideoCaption[]
+
+    videoFileToken: string
+
     urlOptions: CustomizationOptions & { playerMode: PlayerMode }
+
     loggedInOrAnonymousUser: User
     user?: AuthUser // Keep for plugins
   }) {
-    const { video, liveVideo, videoCaptions, urlOptions, loggedInOrAnonymousUser } = params
+    const { video, liveVideo, videoCaptions, videoFileToken, urlOptions, loggedInOrAnonymousUser } = params
 
     const getStartTime = () => {
       const byUrl = urlOptions.startTime !== undefined
@@ -623,13 +641,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         theaterButton: true,
         captions: videoCaptions.length !== 0,
 
-        videoViewUrl: video.privacy.id !== VideoPrivacy.PRIVATE
-          ? this.videoService.getVideoViewUrl(video.uuid)
-          : null,
-        authorizationHeader: this.authService.getRequestHeaderValue(),
-
-        metricsUrl: environment.apiUrl + '/api/v1/metrics/playback',
-
         embedUrl: video.embedUrl,
         embedTitle: video.name,
         instanceName: this.serverConfig.instance.name,
@@ -639,7 +650,17 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         language: this.localeId,
 
-        serverUrl: environment.apiUrl,
+        metricsUrl: environment.apiUrl + '/api/v1/metrics/playback',
+
+        videoViewUrl: video.privacy.id !== VideoPrivacy.PRIVATE
+          ? this.videoService.getVideoViewUrl(video.uuid)
+          : null,
+        authorizationHeader: () => this.authService.getRequestHeaderValue(),
+
+        serverUrl: environment.originServerUrl,
+
+        videoFileToken: () => videoFileToken,
+        requiresAuth: videoRequiresAuth(video),
 
         videoCaptions: playerCaptions,
 

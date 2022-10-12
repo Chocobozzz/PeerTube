@@ -48,7 +48,7 @@ async function checkFilesExist (servers: PeerTubeServer[], videoUUID: string, nu
     for (const file of files) {
       expectStartWith(file.fileUrl, ObjectStorageCommand.getPlaylistBaseUrl())
 
-      await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+      await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
     }
   }
 }

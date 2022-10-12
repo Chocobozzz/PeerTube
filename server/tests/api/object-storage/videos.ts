@@ -59,11 +59,11 @@ async function checkFiles (options: {
 
     expectStartWith(file.fileUrl, start)
 
-    const res = await makeRawRequest(file.fileDownloadUrl, HttpStatusCode.FOUND_302)
+    const res = await makeRawRequest({ url: file.fileDownloadUrl, expectedStatus: HttpStatusCode.FOUND_302 })
     const location = res.headers['location']
     expectStartWith(location, start)
 
-    await makeRawRequest(location, HttpStatusCode.OK_200)
+    await makeRawRequest({ url: location, expectedStatus: HttpStatusCode.OK_200 })
   }
 
   const hls = video.streamingPlaylists[0]
@@ -81,19 +81,19 @@ async function checkFiles (options: {
     expectStartWith(hls.playlistUrl, start)
     expectStartWith(hls.segmentsSha256Url, start)
 
-    await makeRawRequest(hls.playlistUrl, HttpStatusCode.OK_200)
+    await makeRawRequest({ url: hls.playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
 
-    const resSha = await makeRawRequest(hls.segmentsSha256Url, HttpStatusCode.OK_200)
+    const resSha = await makeRawRequest({ url: hls.segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
     expect(JSON.stringify(resSha.body)).to.not.throw
 
     for (const file of hls.files) {
       expectStartWith(file.fileUrl, start)
 
-      const res = await makeRawRequest(file.fileDownloadUrl, HttpStatusCode.FOUND_302)
+      const res = await makeRawRequest({ url: file.fileDownloadUrl, expectedStatus: HttpStatusCode.FOUND_302 })
       const location = res.headers['location']
       expectStartWith(location, start)
 
-      await makeRawRequest(location, HttpStatusCode.OK_200)
+      await makeRawRequest({ url: location, expectedStatus: HttpStatusCode.OK_200 })
     }
   }
 
@@ -104,7 +104,7 @@ async function checkFiles (options: {
     expect(torrent.files.length).to.equal(1)
     expect(torrent.files[0].path).to.exist.and.to.not.equal('')
 
-    const res = await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+    const res = await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
     expect(res.body).to.have.length.above(100)
   }
 
@@ -220,7 +220,7 @@ function runTestSuite (options: {
 
   it('Should fetch correctly all the files', async function () {
     for (const url of deletedUrls.concat(keptUrls)) {
-      await makeRawRequest(url, HttpStatusCode.OK_200)
+      await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
     }
   })
 
@@ -231,13 +231,13 @@ function runTestSuite (options: {
     await waitJobs(servers)
 
     for (const url of deletedUrls) {
-      await makeRawRequest(url, HttpStatusCode.NOT_FOUND_404)
+      await makeRawRequest({ url, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     }
   })
 
   it('Should have kept other files', async function () {
     for (const url of keptUrls) {
-      await makeRawRequest(url, HttpStatusCode.OK_200)
+      await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
     }
   })
 

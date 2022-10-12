@@ -164,7 +164,10 @@ function generateMagnetUri (
 ) {
   const xs = videoFile.getTorrentUrl()
   const announce = trackerUrls
-  let urlList = [ videoFile.getFileUrl(video) ]
+
+  let urlList = video.requiresAuth(video.uuid)
+    ? []
+    : [ videoFile.getFileUrl(video) ]
 
   const redundancies = videoFile.RedundancyVideos
   if (isArray(redundancies)) urlList = urlList.concat(redundancies.map(r => r.fileUrl))
@@ -240,6 +243,8 @@ function buildAnnounceList () {
 }
 
 function buildUrlList (video: MVideo, videoFile: MVideoFile) {
+  if (video.requiresAuth(video.uuid)) return []
+
   return [ videoFile.getFileUrl(video) ]
 }
 

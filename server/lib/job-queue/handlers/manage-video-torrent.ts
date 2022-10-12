@@ -82,7 +82,7 @@ async function loadStreamingPlaylistOrLog (streamingPlaylistId: number) {
 async function loadFileOrLog (videoFileId: number) {
   if (!videoFileId) return undefined
 
-  const file = await VideoFileModel.loadWithVideo(videoFileId)
+  const file = await VideoFileModel.load(videoFileId)
 
   if (!file) {
     logger.debug('Do not process torrent for file %d: does not exist anymore.', videoFileId)

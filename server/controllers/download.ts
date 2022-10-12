@@ -7,7 +7,7 @@ import { VideoPathManager } from '@server/lib/video-path-manager'
 import { MStreamingPlaylist, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { HttpStatusCode, VideoStorage, VideoStreamingPlaylistType } from '@shared/models'
 import { STATIC_DOWNLOAD_PATHS } from '../initializers/constants'
-import { asyncMiddleware, videosDownloadValidator } from '../middlewares'
+import { asyncMiddleware, optionalAuthenticate, videosDownloadValidator } from '../middlewares'
 
 const downloadRouter = express.Router()
 
@@ -20,12 +20,14 @@ downloadRouter.use(
 
 downloadRouter.use(
   STATIC_DOWNLOAD_PATHS.VIDEOS + ':id-:resolution([0-9]+).:extension',
+  optionalAuthenticate,
   asyncMiddleware(videosDownloadValidator),
   asyncMiddleware(downloadVideoFile)
 )
 
 downloadRouter.use(
   STATIC_DOWNLOAD_PATHS.HLS_VIDEOS + ':id-:resolution([0-9]+)-fragmented.:extension',
+  optionalAuthenticate,
   asyncMiddleware(videosDownloadValidator),
   asyncMiddleware(downloadHLSVideoFile)
 )

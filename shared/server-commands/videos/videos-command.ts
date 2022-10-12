@@ -342,8 +342,9 @@ export class VideosCommand extends AbstractCommand {
   async upload (options: OverrideCommandOptions & {
     attributes?: VideoEdit
     mode?: 'legacy' | 'resumable' // default legacy
+    waitTorrentGeneration?: boolean // default true
   } = {}) {
-    const { mode = 'legacy' } = options
+    const { mode = 'legacy', waitTorrentGeneration } = options
     let defaultChannelId = 1
 
     try {
@@ -377,7 +378,7 @@ export class VideosCommand extends AbstractCommand {
 
     // Wait torrent generation
     const expectedStatus = this.buildExpectedStatus({ ...options, defaultExpectedStatus: HttpStatusCode.OK_200 })
-    if (expectedStatus === HttpStatusCode.OK_200) {
+    if (expectedStatus === HttpStatusCode.OK_200 && waitTorrentGeneration) {
       let video: VideoDetails
 
       do {
@@ -692,6 +693,7 @@ export class VideosCommand extends AbstractCommand {
       'categoryOneOf',
       'licenceOneOf',
       'languageOneOf',
+      'privacyOneOf',
       'tagsOneOf',
       'tagsAllOf',
       'isLocal',

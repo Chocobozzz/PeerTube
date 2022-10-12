@@ -36,6 +36,7 @@ import {
   StreamingPlaylistsCommand,
   VideosCommand,
   VideoStudioCommand,
+  VideoTokenCommand,
   ViewsCommand
 } from '../videos'
 import { CommentsCommand } from '../videos/comments-command'
@@ -145,6 +146,7 @@ export class PeerTubeServer {
   videoStats?: VideoStatsCommand
   views?: ViewsCommand
   twoFactor?: TwoFactorCommand
+  videoToken?: VideoTokenCommand
 
   constructor (options: { serverNumber: number } | { url: string }) {
     if ((options as any).url) {
@@ -427,5 +429,6 @@ export class PeerTubeServer {
     this.videoStats = new VideoStatsCommand(this)
     this.views = new ViewsCommand(this)
     this.twoFactor = new TwoFactorCommand(this)
+    this.videoToken = new VideoTokenCommand(this)
   }
 }

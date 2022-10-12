@@ -1,5 +1,5 @@
 import { HttpStatusCode, OAuth2ErrorCode, UserRefreshToken } from '../../../../../shared/models'
-import { objectToUrlEncoded, UserTokens } from '../../../root-helpers'
+import { OAuthUserTokens, objectToUrlEncoded } from '../../../root-helpers'
 import { peertubeLocalStorage } from '../../../root-helpers/peertube-web-storage'
 
 export class AuthHTTP {
@@ -8,30 +8,30 @@ export class AuthHTTP {
     CLIENT_SECRET: 'client_secret'
   }
 
-  private userTokens: UserTokens
+  private userOAuthTokens: OAuthUserTokens
 
   private headers = new Headers()
 
   constructor () {
-    this.userTokens = UserTokens.getUserTokens(peertubeLocalStorage)
+    this.userOAuthTokens = OAuthUserTokens.getUserTokens(peertubeLocalStorage)
 
-    if (this.userTokens) this.setHeadersFromTokens()
+    if (this.userOAuthTokens) this.setHeadersFromTokens()
   }
 
-  fetch (url: string, { optionalAuth }: { optionalAuth: boolean }) {
+  fetch (url: string, { optionalAuth, method }: { optionalAuth: boolean, method?: string }) {
     const refreshFetchOptions = optionalAuth
       ? { headers: this.headers }
       : {}
 
-    return this.refreshFetch(url.toString(), refreshFetchOptions)
+    return this.refreshFetch(url.toString(), { ...refreshFetchOptions, method })
   }
 
   getHeaderTokenValue () {
-    return `${this.userTokens.tokenType} ${this.userTokens.accessToken}`
+    return `${this.userOAuthTokens.tokenType} ${this.userOAuthTokens.accessToken}`
   }
 
   isLoggedIn () {
-    return !!this.userTokens
+    return !!this.userOAuthTokens
   }
 
   private refreshFetch (url: string, options?: RequestInit) {
@@ -47,7 +47,7 @@ export class AuthHTTP {
           headers.set('Content-Type', 'application/x-www-form-urlencoded')
 
           const data = {
-            refresh_token: this.userTokens.refreshToken,
+            refresh_token: this.userOAuthTokens.refreshToken,
             client_id: clientId,
             client_secret: clientSecret,
             response_type: 'code',
@@ -64,15 +64,15 @@ export class AuthHTTP {
             return res.json()
           }).then((obj: UserRefreshToken & { code?: OAuth2ErrorCode }) => {
             if (!obj || obj.code === OAuth2ErrorCode.INVALID_GRANT) {
-              UserTokens.flushLocalStorage(peertubeLocalStorage)
+              OAuthUserTokens.flushLocalStorage(peertubeLocalStorage)
               this.removeTokensFromHeaders()
 
               return resolve()
             }
 
-            this.userTokens.accessToken = obj.access_token
-            this.userTokens.refreshToken = obj.refresh_token
-            UserTokens.saveToLocalStorage(peertubeLocalStorage, this.userTokens)
+            this.userOAuthTokens.accessToken = obj.access_token
+            this.userOAuthTokens.refreshToken = obj.refresh_token
+            OAuthUserTokens.saveToLocalStorage(peertubeLocalStorage, this.userOAuthTokens)
 
             this.setHeadersFromTokens()
 
@@ -84,7 +84,7 @@ export class AuthHTTP {
 
         return refreshingTokenPromise
           .catch(() => {
-            UserTokens.flushLocalStorage(peertubeLocalStorage)
+            OAuthUserTokens.flushLocalStorage(peertubeLocalStorage)
 
             this.removeTokensFromHeaders()
           }).then(() => fetch(url, {

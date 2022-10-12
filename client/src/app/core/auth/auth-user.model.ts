@@ -1,7 +1,7 @@
 import { Observable, of } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { User } from '@app/core/users/user.model'
-import { UserTokens } from '@root-helpers/users'
+import { OAuthUserTokens } from '@root-helpers/users'
 import { hasUserRight } from '@shared/core-utils/users'
 import {
   MyUser as ServerMyUserModel,
@@ -13,33 +13,33 @@ import {
 } from '@shared/models'
 
 export class AuthUser extends User implements ServerMyUserModel {
-  tokens: UserTokens
+  oauthTokens: OAuthUserTokens
   specialPlaylists: MyUserSpecialPlaylist[]
 
   canSeeVideosLink = true
 
-  constructor (userHash: Partial<ServerMyUserModel>, hashTokens: Partial<UserTokens>) {
+  constructor (userHash: Partial<ServerMyUserModel>, hashTokens: Partial<OAuthUserTokens>) {
     super(userHash)
 
-    this.tokens = new UserTokens(hashTokens)
+    this.oauthTokens = new OAuthUserTokens(hashTokens)
     this.specialPlaylists = userHash.specialPlaylists
   }
 
   getAccessToken () {
-    return this.tokens.accessToken
+    return this.oauthTokens.accessToken
   }
 
   getRefreshToken () {
-    return this.tokens.refreshToken
+    return this.oauthTokens.refreshToken
   }
 
   getTokenType () {
-    return this.tokens.tokenType
+    return this.oauthTokens.tokenType
   }
 
   refreshTokens (accessToken: string, refreshToken: string) {
-    this.tokens.accessToken = accessToken
-    this.tokens.refreshToken = refreshToken
+    this.oauthTokens.accessToken = accessToken
+    this.oauthTokens.refreshToken = refreshToken
   }
 
   hasRight (right: UserRight) {

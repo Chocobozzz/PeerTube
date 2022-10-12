@@ -1,6 +1,6 @@
 import { ClientLogCreate } from '@shared/models/server'
 import { peertubeLocalStorage } from './peertube-web-storage'
-import { UserTokens } from './users'
+import { OAuthUserTokens } from './users'
 
 export type LoggerHook = (message: LoggerMessage, meta?: LoggerMeta) => void
 export type LoggerLevel = 'info' | 'warn' | 'error'
@@ -56,7 +56,7 @@ class Logger {
     })
 
     try {
-      const tokens = UserTokens.getUserTokens(peertubeLocalStorage)
+      const tokens = OAuthUserTokens.getUserTokens(peertubeLocalStorage)
 
       if (tokens) headers.set('Authorization', `${tokens.tokenType} ${tokens.accessToken}`)
     } catch (err) {

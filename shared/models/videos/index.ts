@@ -33,6 +33,8 @@ export * from './video-storage.enum'
 export * from './video-streaming-playlist.model'
 export * from './video-streaming-playlist.type'
 
+export * from './video-token.model'
+
 export * from './video-update.model'
 export * from './video-view.model'
 export * from './video.model'

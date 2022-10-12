@@ -103,6 +103,7 @@
     "@peertube/http-signature": "^1.7.0",
     "@uploadx/core": "^6.0.0",
     "async-lru": "^1.1.1",
+    "async-mutex": "^0.4.0",
     "bcrypt": "5.0.1",
     "bencode": "^2.0.2",
     "bittorrent-tracker": "^9.0.0",
@@ -177,7 +178,6 @@
   },
   "devDependencies": {
     "@peertube/maildev": "^1.2.0",
-    "@types/async-lock": "^1.1.0",
     "@types/bcrypt": "^5.0.0",
     "@types/bencode": "^2.0.0",
     "@types/bluebird": "^3.5.33",

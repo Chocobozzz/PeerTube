@@ -1,3 +1,4 @@
+import { MutexInterface } from 'async-mutex'
 import { Job } from 'bullmq'
 import { copyFile, ensureDir, move, remove, stat } from 'fs-extra'
 import { basename, extname as extnameUtil, join } from 'path'
@@ -6,11 +7,13 @@ import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
+import { pick } from '@shared/core-utils'
 import { VideoResolution, VideoStorage } from '../../../shared/models/videos'
 import {
   buildFileMetadata,
   canDoQuickTranscode,
   computeResolutionsToTranscode,
+  ffprobePromise,
   getVideoStreamDuration,
   getVideoStreamFPS,
   transcodeVOD,
@@ -33,7 +36,7 @@ import { VideoTranscodingProfilesManager } from './default-transcoding-profiles'
  */
 
 // Optimize the original video file and replace it. The resolution is not changed.
-function optimizeOriginalVideofile (options: {
+async function optimizeOriginalVideofile (options: {
   video: MVideoFullLight
   inputVideoFile: MVideoFile
   job: Job
@@ -43,49 +46,61 @@ function optimizeOriginalVideofile (options: {
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
 
-  return VideoPathManager.Instance.makeAvailableVideoFile(inputVideoFile.withVideoOrPlaylist(video), async videoInputPath => {
-    const videoTranscodedPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
+  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-    const transcodeType: TranscodeVODOptionsType = await canDoQuickTranscode(videoInputPath)
-      ? 'quick-transcode'
-      : 'video'
+  try {
+    await video.reload()
 
-    const resolution = buildOriginalFileResolution(inputVideoFile.resolution)
+    const fileWithVideoOrPlaylist = inputVideoFile.withVideoOrPlaylist(video)
 
-    const transcodeOptions: TranscodeVODOptions = {
-      type: transcodeType,
+    const result = await VideoPathManager.Instance.makeAvailableVideoFile(fileWithVideoOrPlaylist, async videoInputPath => {
+      const videoTranscodedPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
-      inputPath: videoInputPath,
-      outputPath: videoTranscodedPath,
+      const transcodeType: TranscodeVODOptionsType = await canDoQuickTranscode(videoInputPath)
+        ? 'quick-transcode'
+        : 'video'
 
-      availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
-      profile: CONFIG.TRANSCODING.PROFILE,
+      const resolution = buildOriginalFileResolution(inputVideoFile.resolution)
 
-      resolution,
+      const transcodeOptions: TranscodeVODOptions = {
+        type: transcodeType,
 
-      job
-    }
+        inputPath: videoInputPath,
+        outputPath: videoTranscodedPath,
 
-    // Could be very long!
-    await transcodeVOD(transcodeOptions)
+        inputFileMutexReleaser,
 
-    // Important to do this before getVideoFilename() to take in account the new filename
-    inputVideoFile.resolution = resolution
-    inputVideoFile.extname = newExtname
-    inputVideoFile.filename = generateWebTorrentVideoFilename(resolution, newExtname)
-    inputVideoFile.storage = VideoStorage.FILE_SYSTEM
+        availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
+        profile: CONFIG.TRANSCODING.PROFILE,
 
-    const videoOutputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, inputVideoFile)
+        resolution,
 
-    const { videoFile } = await onWebTorrentVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
-    await remove(videoInputPath)
+        job
+      }
 
-    return { transcodeType, videoFile }
-  })
+      // Could be very long!
+      await transcodeVOD(transcodeOptions)
+
+      // Important to do this before getVideoFilename() to take in account the new filename
+      inputVideoFile.resolution = resolution
+      inputVideoFile.extname = newExtname
+      inputVideoFile.filename = generateWebTorrentVideoFilename(resolution, newExtname)
+      inputVideoFile.storage = VideoStorage.FILE_SYSTEM
+
+      const { videoFile } = await onWebTorrentVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, inputVideoFile)
+      await remove(videoInputPath)
+
+      return { transcodeType, videoFile }
+    })
+
+    return result
+  } finally {
+    inputFileMutexReleaser()
+  }
 }
 
 // Transcode the original video file to a lower resolution compatible with WebTorrent
-function transcodeNewWebTorrentResolution (options: {
+async function transcodeNewWebTorrentResolution (options: {
   video: MVideoFullLight
   resolution: VideoResolution
   job: Job
@@ -95,53 +110,68 @@ function transcodeNewWebTorrentResolution (options: {
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
 
-  return VideoPathManager.Instance.makeAvailableVideoFile(video.getMaxQualityFile().withVideoOrPlaylist(video), async videoInputPath => {
-    const newVideoFile = new VideoFileModel({
-      resolution,
-      extname: newExtname,
-      filename: generateWebTorrentVideoFilename(resolution, newExtname),
-      size: 0,
-      videoId: video.id
+  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+
+  try {
+    await video.reload()
+
+    const file = video.getMaxQualityFile().withVideoOrPlaylist(video)
+
+    const result = await VideoPathManager.Instance.makeAvailableVideoFile(file, async videoInputPath => {
+      const newVideoFile = new VideoFileModel({
+        resolution,
+        extname: newExtname,
+        filename: generateWebTorrentVideoFilename(resolution, newExtname),
+        size: 0,
+        videoId: video.id
+      })
+
+      const videoTranscodedPath = join(transcodeDirectory, newVideoFile.filename)
+
+      const transcodeOptions = resolution === VideoResolution.H_NOVIDEO
+        ? {
+          type: 'only-audio' as 'only-audio',
+
+          inputPath: videoInputPath,
+          outputPath: videoTranscodedPath,
+
+          inputFileMutexReleaser,
+
+          availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
+          profile: CONFIG.TRANSCODING.PROFILE,
+
+          resolution,
+
+          job
+        }
+        : {
+          type: 'video' as 'video',
+          inputPath: videoInputPath,
+          outputPath: videoTranscodedPath,
+
+          inputFileMutexReleaser,
+
+          availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
+          profile: CONFIG.TRANSCODING.PROFILE,
+
+          resolution,
+
+          job
+        }
+
+      await transcodeVOD(transcodeOptions)
+
+      return onWebTorrentVideoFileTranscoding(video, newVideoFile, videoTranscodedPath, newVideoFile)
     })
 
-    const videoOutputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, newVideoFile)
-    const videoTranscodedPath = join(transcodeDirectory, newVideoFile.filename)
-
-    const transcodeOptions = resolution === VideoResolution.H_NOVIDEO
-      ? {
-        type: 'only-audio' as 'only-audio',
-
-        inputPath: videoInputPath,
-        outputPath: videoTranscodedPath,
-
-        availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
-        profile: CONFIG.TRANSCODING.PROFILE,
-
-        resolution,
-
-        job
-      }
-      : {
-        type: 'video' as 'video',
-        inputPath: videoInputPath,
-        outputPath: videoTranscodedPath,
-
-        availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
-        profile: CONFIG.TRANSCODING.PROFILE,
-
-        resolution,
-
-        job
-      }
-
-    await transcodeVOD(transcodeOptions)
-
-    return onWebTorrentVideoFileTranscoding(video, newVideoFile, videoTranscodedPath, videoOutputPath)
-  })
+    return result
+  } finally {
+    inputFileMutexReleaser()
+  }
 }
 
 // Merge an image with an audio file to create a video
-function mergeAudioVideofile (options: {
+async function mergeAudioVideofile (options: {
   video: MVideoFullLight
   resolution: VideoResolution
   job: Job
@@ -151,54 +181,67 @@ function mergeAudioVideofile (options: {
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
 
-  const inputVideoFile = video.getMinQualityFile()
+  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-  return VideoPathManager.Instance.makeAvailableVideoFile(inputVideoFile.withVideoOrPlaylist(video), async audioInputPath => {
-    const videoTranscodedPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
+  try {
+    await video.reload()
 
-    // If the user updates the video preview during transcoding
-    const previewPath = video.getPreview().getPath()
-    const tmpPreviewPath = join(CONFIG.STORAGE.TMP_DIR, basename(previewPath))
-    await copyFile(previewPath, tmpPreviewPath)
+    const inputVideoFile = video.getMinQualityFile()
 
-    const transcodeOptions = {
-      type: 'merge-audio' as 'merge-audio',
+    const fileWithVideoOrPlaylist = inputVideoFile.withVideoOrPlaylist(video)
 
-      inputPath: tmpPreviewPath,
-      outputPath: videoTranscodedPath,
+    const result = await VideoPathManager.Instance.makeAvailableVideoFile(fileWithVideoOrPlaylist, async audioInputPath => {
+      const videoTranscodedPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
-      availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
-      profile: CONFIG.TRANSCODING.PROFILE,
+      // If the user updates the video preview during transcoding
+      const previewPath = video.getPreview().getPath()
+      const tmpPreviewPath = join(CONFIG.STORAGE.TMP_DIR, basename(previewPath))
+      await copyFile(previewPath, tmpPreviewPath)
 
-      audioPath: audioInputPath,
-      resolution,
+      const transcodeOptions = {
+        type: 'merge-audio' as 'merge-audio',
 
-      job
-    }
+        inputPath: tmpPreviewPath,
+        outputPath: videoTranscodedPath,
 
-    try {
-      await transcodeVOD(transcodeOptions)
+        inputFileMutexReleaser,
 
-      await remove(audioInputPath)
-      await remove(tmpPreviewPath)
-    } catch (err) {
-      await remove(tmpPreviewPath)
-      throw err
-    }
+        availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
+        profile: CONFIG.TRANSCODING.PROFILE,
 
-    // Important to do this before getVideoFilename() to take in account the new file extension
-    inputVideoFile.extname = newExtname
-    inputVideoFile.resolution = resolution
-    inputVideoFile.filename = generateWebTorrentVideoFilename(inputVideoFile.resolution, newExtname)
+        audioPath: audioInputPath,
+        resolution,
 
-    const videoOutputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, inputVideoFile)
-    // ffmpeg generated a new video file, so update the video duration
-    // See https://trac.ffmpeg.org/ticket/5456
-    video.duration = await getVideoStreamDuration(videoTranscodedPath)
-    await video.save()
+        job
+      }
 
-    return onWebTorrentVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
-  })
+      try {
+        await transcodeVOD(transcodeOptions)
+
+        await remove(audioInputPath)
+        await remove(tmpPreviewPath)
+      } catch (err) {
+        await remove(tmpPreviewPath)
+        throw err
+      }
+
+      // Important to do this before getVideoFilename() to take in account the new file extension
+      inputVideoFile.extname = newExtname
+      inputVideoFile.resolution = resolution
+      inputVideoFile.filename = generateWebTorrentVideoFilename(inputVideoFile.resolution, newExtname)
+
+      // ffmpeg generated a new video file, so update the video duration
+      // See https://trac.ffmpeg.org/ticket/5456
+      video.duration = await getVideoStreamDuration(videoTranscodedPath)
+      await video.save()
+
+      return onWebTorrentVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, inputVideoFile)
+    })
+
+    return result
+  } finally {
+    inputFileMutexReleaser()
+  }
 }
 
 // Concat TS segments from a live video to a fragmented mp4 HLS playlist
@@ -207,13 +250,13 @@ async function generateHlsPlaylistResolutionFromTS (options: {
   concatenatedTsFilePath: string
   resolution: VideoResolution
   isAAC: boolean
+  inputFileMutexReleaser: MutexInterface.Releaser
 }) {
   return generateHlsPlaylistCommon({
-    video: options.video,
-    resolution: options.resolution,
-    inputPath: options.concatenatedTsFilePath,
     type: 'hls-from-ts' as 'hls-from-ts',
-    isAAC: options.isAAC
+    inputPath: options.concatenatedTsFilePath,
+
+    ...pick(options, [ 'video', 'resolution', 'inputFileMutexReleaser', 'isAAC' ])
   })
 }
 
@@ -223,15 +266,14 @@ function generateHlsPlaylistResolution (options: {
   videoInputPath: string
   resolution: VideoResolution
   copyCodecs: boolean
+  inputFileMutexReleaser: MutexInterface.Releaser
   job?: Job
 }) {
   return generateHlsPlaylistCommon({
-    video: options.video,
-    resolution: options.resolution,
-    copyCodecs: options.copyCodecs,
-    inputPath: options.videoInputPath,
     type: 'hls' as 'hls',
-    job: options.job
+    inputPath: options.videoInputPath,
+
+    ...pick(options, [ 'video', 'resolution', 'copyCodecs', 'inputFileMutexReleaser', 'job' ])
   })
 }
 
@@ -251,27 +293,39 @@ async function onWebTorrentVideoFileTranscoding (
   video: MVideoFullLight,
   videoFile: MVideoFile,
   transcodingPath: string,
-  outputPath: string
+  newVideoFile: MVideoFile
 ) {
-  const stats = await stat(transcodingPath)
-  const fps = await getVideoStreamFPS(transcodingPath)
-  const metadata = await buildFileMetadata(transcodingPath)
+  const mutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-  await move(transcodingPath, outputPath, { overwrite: true })
+  try {
+    await video.reload()
 
-  videoFile.size = stats.size
-  videoFile.fps = fps
-  videoFile.metadata = metadata
+    const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, newVideoFile)
 
-  await createTorrentAndSetInfoHash(video, videoFile)
+    const stats = await stat(transcodingPath)
 
-  const oldFile = await VideoFileModel.loadWebTorrentFile({ videoId: video.id, fps: videoFile.fps, resolution: videoFile.resolution })
-  if (oldFile) await video.removeWebTorrentFile(oldFile)
+    const probe = await ffprobePromise(transcodingPath)
+    const fps = await getVideoStreamFPS(transcodingPath, probe)
+    const metadata = await buildFileMetadata(transcodingPath, probe)
 
-  await VideoFileModel.customUpsert(videoFile, 'video', undefined)
-  video.VideoFiles = await video.$get('VideoFiles')
+    await move(transcodingPath, outputPath, { overwrite: true })
 
-  return { video, videoFile }
+    videoFile.size = stats.size
+    videoFile.fps = fps
+    videoFile.metadata = metadata
+
+    await createTorrentAndSetInfoHash(video, videoFile)
+
+    const oldFile = await VideoFileModel.loadWebTorrentFile({ videoId: video.id, fps: videoFile.fps, resolution: videoFile.resolution })
+    if (oldFile) await video.removeWebTorrentFile(oldFile)
+
+    await VideoFileModel.customUpsert(videoFile, 'video', undefined)
+    video.VideoFiles = await video.$get('VideoFiles')
+
+    return { video, videoFile }
+  } finally {
+    mutexReleaser()
+  }
 }
 
 async function generateHlsPlaylistCommon (options: {
@@ -279,12 +333,15 @@ async function generateHlsPlaylistCommon (options: {
   video: MVideo
   inputPath: string
   resolution: VideoResolution
+
+  inputFileMutexReleaser: MutexInterface.Releaser
+
   copyCodecs?: boolean
   isAAC?: boolean
 
   job?: Job
 }) {
-  const { type, video, inputPath, resolution, copyCodecs, isAAC, job } = options
+  const { type, video, inputPath, resolution, copyCodecs, isAAC, job, inputFileMutexReleaser } = options
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
 
   const videoTranscodedBasePath = join(transcodeDirectory, type)
@@ -307,6 +364,8 @@ async function generateHlsPlaylistCommon (options: {
     copyCodecs,
 
     isAAC,
+
+    inputFileMutexReleaser,
 
     hlsPlaylist: {
       videoFilename
@@ -333,40 +392,54 @@ async function generateHlsPlaylistCommon (options: {
     videoStreamingPlaylistId: playlist.id
   })
 
-  const videoFilePath = VideoPathManager.Instance.getFSVideoFileOutputPath(playlist, newVideoFile)
-  await ensureDir(VideoPathManager.Instance.getFSHLSOutputPath(video))
+  const mutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-  // Move playlist file
-  const resolutionPlaylistPath = VideoPathManager.Instance.getFSHLSOutputPath(video, resolutionPlaylistFilename)
-  await move(resolutionPlaylistFileTranscodePath, resolutionPlaylistPath, { overwrite: true })
-  // Move video file
-  await move(join(videoTranscodedBasePath, videoFilename), videoFilePath, { overwrite: true })
+  try {
+    // VOD transcoding is a long task, refresh video attributes
+    await video.reload()
 
-  // Update video duration if it was not set (in case of a live for example)
-  if (!video.duration) {
-    video.duration = await getVideoStreamDuration(videoFilePath)
-    await video.save()
+    const videoFilePath = VideoPathManager.Instance.getFSVideoFileOutputPath(playlist, newVideoFile)
+    await ensureDir(VideoPathManager.Instance.getFSHLSOutputPath(video))
+
+    // Move playlist file
+    const resolutionPlaylistPath = VideoPathManager.Instance.getFSHLSOutputPath(video, resolutionPlaylistFilename)
+    await move(resolutionPlaylistFileTranscodePath, resolutionPlaylistPath, { overwrite: true })
+    // Move video file
+    await move(join(videoTranscodedBasePath, videoFilename), videoFilePath, { overwrite: true })
+
+    // Update video duration if it was not set (in case of a live for example)
+    if (!video.duration) {
+      video.duration = await getVideoStreamDuration(videoFilePath)
+      await video.save()
+    }
+
+    const stats = await stat(videoFilePath)
+
+    newVideoFile.size = stats.size
+    newVideoFile.fps = await getVideoStreamFPS(videoFilePath)
+    newVideoFile.metadata = await buildFileMetadata(videoFilePath)
+
+    await createTorrentAndSetInfoHash(playlist, newVideoFile)
+
+    const oldFile = await VideoFileModel.loadHLSFile({
+      playlistId: playlist.id,
+      fps: newVideoFile.fps,
+      resolution: newVideoFile.resolution
+    })
+
+    if (oldFile) {
+      await video.removeStreamingPlaylistVideoFile(playlist, oldFile)
+      await oldFile.destroy()
+    }
+
+    const savedVideoFile = await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', undefined)
+
+    await updatePlaylistAfterFileChange(video, playlist)
+
+    return { resolutionPlaylistPath, videoFile: savedVideoFile }
+  } finally {
+    mutexReleaser()
   }
-
-  const stats = await stat(videoFilePath)
-
-  newVideoFile.size = stats.size
-  newVideoFile.fps = await getVideoStreamFPS(videoFilePath)
-  newVideoFile.metadata = await buildFileMetadata(videoFilePath)
-
-  await createTorrentAndSetInfoHash(playlist, newVideoFile)
-
-  const oldFile = await VideoFileModel.loadHLSFile({ playlistId: playlist.id, fps: newVideoFile.fps, resolution: newVideoFile.resolution })
-  if (oldFile) {
-    await video.removeStreamingPlaylistVideoFile(playlist, oldFile)
-    await oldFile.destroy()
-  }
-
-  const savedVideoFile = await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', undefined)
-
-  await updatePlaylistAfterFileChange(video, playlist)
-
-  return { resolutionPlaylistPath, videoFile: savedVideoFile }
 }
 
 function buildOriginalFileResolution (inputResolution: number) {

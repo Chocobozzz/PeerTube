@@ -1,8 +1,9 @@
 import { basename, join } from 'path'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
-import { MStreamingPlaylistVideo, MVideoFile } from '@server/types/models'
+import { MStreamingPlaylistVideo, MVideo, MVideoFile } from '@server/types/models'
 import { getHLSDirectory } from '../paths'
+import { VideoPathManager } from '../video-path-manager'
 import { generateHLSObjectBaseStorageKey, generateHLSObjectStorageKey, generateWebTorrentObjectStorageKey } from './keys'
 import { listKeysOfPrefix, lTags, makeAvailable, removeObject, removePrefix, storeObject } from './shared'
 
@@ -30,10 +31,10 @@ function storeHLSFileFromPath (playlist: MStreamingPlaylistVideo, path: string) 
 
 // ---------------------------------------------------------------------------
 
-function storeWebTorrentFile (filename: string) {
+function storeWebTorrentFile (video: MVideo, file: MVideoFile) {
   return storeObject({
-    inputPath: join(CONFIG.STORAGE.VIDEOS_DIR, filename),
-    objectStorageKey: generateWebTorrentObjectStorageKey(filename),
+    inputPath: VideoPathManager.Instance.getFSVideoFileOutputPath(video, file),
+    objectStorageKey: generateWebTorrentObjectStorageKey(file.filename),
     bucketInfo: CONFIG.OBJECT_STORAGE.VIDEOS
   })
 }

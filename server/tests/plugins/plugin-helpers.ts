@@ -307,7 +307,7 @@ describe('Test plugin helpers', function () {
             expect(file.fps).to.equal(25)
 
             expect(await pathExists(file.path)).to.be.true
-            await makeRawRequest(file.url, HttpStatusCode.OK_200)
+            await makeRawRequest({ url: file.url, expectedStatus: HttpStatusCode.OK_200 })
           }
         }
 
@@ -321,12 +321,12 @@ describe('Test plugin helpers', function () {
         const miniature = body.thumbnails.find(t => t.type === ThumbnailType.MINIATURE)
         expect(miniature).to.exist
         expect(await pathExists(miniature.path)).to.be.true
-        await makeRawRequest(miniature.url, HttpStatusCode.OK_200)
+        await makeRawRequest({ url: miniature.url, expectedStatus: HttpStatusCode.OK_200 })
 
         const preview = body.thumbnails.find(t => t.type === ThumbnailType.PREVIEW)
         expect(preview).to.exist
         expect(await pathExists(preview.path)).to.be.true
-        await makeRawRequest(preview.url, HttpStatusCode.OK_200)
+        await makeRawRequest({ url: preview.url, expectedStatus: HttpStatusCode.OK_200 })
       }
     })
 

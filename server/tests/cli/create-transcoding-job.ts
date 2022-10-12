@@ -23,7 +23,7 @@ async function checkFilesInObjectStorage (files: VideoFile[], type: 'webtorrent'
 
     expectStartWith(file.fileUrl, shouldStartWith)
 
-    await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+    await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 }
 

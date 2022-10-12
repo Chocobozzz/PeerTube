@@ -18,7 +18,7 @@ describe('Open Telemetry', function () {
 
       let hasError = false
       try {
-        await makeRawRequest(metricsUrl, HttpStatusCode.NOT_FOUND_404)
+        await makeRawRequest({ url: metricsUrl, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
       } catch (err) {
         hasError = err.message.includes('ECONNREFUSED')
       }
@@ -37,7 +37,7 @@ describe('Open Telemetry', function () {
         }
       })
 
-      const res = await makeRawRequest(metricsUrl, HttpStatusCode.OK_200)
+      const res = await makeRawRequest({ url: metricsUrl, expectedStatus: HttpStatusCode.OK_200 })
       expect(res.text).to.contain('peertube_job_queue_total{')
     })
 
@@ -60,7 +60,7 @@ describe('Open Telemetry', function () {
         }
       })
 
-      const res = await makeRawRequest(metricsUrl, HttpStatusCode.OK_200)
+      const res = await makeRawRequest({ url: metricsUrl, expectedStatus: HttpStatusCode.OK_200 })
       expect(res.text).to.contain('peertube_playback_http_downloaded_bytes_total{')
     })
 

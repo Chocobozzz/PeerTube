@@ -20,7 +20,7 @@ import {
 async function checkFilesInObjectStorage (video: VideoDetails) {
   for (const file of video.files) {
     expectStartWith(file.fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())
-    await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+    await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 
   if (video.streamingPlaylists.length === 0) return
@@ -28,14 +28,14 @@ async function checkFilesInObjectStorage (video: VideoDetails) {
   const hlsPlaylist = video.streamingPlaylists[0]
   for (const file of hlsPlaylist.files) {
     expectStartWith(file.fileUrl, ObjectStorageCommand.getPlaylistBaseUrl())
-    await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+    await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 
   expectStartWith(hlsPlaylist.playlistUrl, ObjectStorageCommand.getPlaylistBaseUrl())
-  await makeRawRequest(hlsPlaylist.playlistUrl, HttpStatusCode.OK_200)
+  await makeRawRequest({ url: hlsPlaylist.playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
 
   expectStartWith(hlsPlaylist.segmentsSha256Url, ObjectStorageCommand.getPlaylistBaseUrl())
-  await makeRawRequest(hlsPlaylist.segmentsSha256Url, HttpStatusCode.OK_200)
+  await makeRawRequest({ url: hlsPlaylist.segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
 }
 
 function runTests (objectStorage: boolean) {
@@ -234,7 +234,7 @@ function runTests (objectStorage: boolean) {
 
   it('Should have correctly deleted previous files', async function () {
     for (const fileUrl of shouldBeDeleted) {
-      await makeRawRequest(fileUrl, HttpStatusCode.NOT_FOUND_404)
+      await makeRawRequest({ url: fileUrl, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     }
   })
 
