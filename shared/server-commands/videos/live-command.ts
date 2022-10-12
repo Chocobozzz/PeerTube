@@ -12,6 +12,7 @@ import {
   ResultList,
   VideoCreateResult,
   VideoDetails,
+  VideoPrivacy,
   VideoState
 } from '@shared/models'
 import { unwrapBody } from '../requests'
@@ -113,6 +114,31 @@ export class LiveCommand extends AbstractCommand {
     }))
 
     return body.video
+  }
+
+  async quickCreate (options: OverrideCommandOptions & {
+    saveReplay: boolean
+    permanentLive: boolean
+    privacy?: VideoPrivacy
+  }) {
+    const { saveReplay, permanentLive, privacy } = options
+
+    const { uuid } = await this.create({
+      ...options,
+
+      fields: {
+        name: 'live',
+        permanentLive,
+        saveReplay,
+        channelId: this.server.store.channel.id,
+        privacy
+      }
+    })
+
+    const video = await this.server.videos.getWithToken({ id: uuid })
+    const live = await this.get({ videoId: uuid })
+
+    return { video, live }
   }
 
   // ---------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-import { HTMLServerConfig, Video } from '@shared/models'
+import { HTMLServerConfig, Video, VideoPrivacy } from '@shared/models'
 
 function buildVideoOrPlaylistEmbed (options: {
   embedUrl: string
@@ -26,9 +26,14 @@ function isP2PEnabled (video: Video, config: HTMLServerConfig, userP2PEnabled: b
   return userP2PEnabled
 }
 
+function videoRequiresAuth (video: Video) {
+  return new Set([ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL ]).has(video.privacy.id)
+}
+
 export {
   buildVideoOrPlaylistEmbed,
-  isP2PEnabled
+  isP2PEnabled,
+  videoRequiresAuth
 }
 
 // ---------------------------------------------------------------------------

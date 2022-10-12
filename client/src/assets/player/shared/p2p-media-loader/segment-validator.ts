@@ -2,13 +2,22 @@ import { basename } from 'path'
 import { Segment } from '@peertube/p2p-media-loader-core'
 import { logger } from '@root-helpers/logger'
 import { wait } from '@root-helpers/utils'
+import { isSameOrigin } from '../common'
 
 type SegmentsJSON = { [filename: string]: string | { [byterange: string]: string } }
 
 const maxRetries = 3
 
-function segmentValidatorFactory (segmentsSha256Url: string, isLive: boolean) {
-  let segmentsJSON = fetchSha256Segments(segmentsSha256Url)
+function segmentValidatorFactory (options: {
+  serverUrl: string
+  segmentsSha256Url: string
+  isLive: boolean
+  authorizationHeader: () => string
+  requiresAuth: boolean
+}) {
+  const { serverUrl, segmentsSha256Url, isLive, authorizationHeader, requiresAuth } = options
+
+  let segmentsJSON = fetchSha256Segments({ serverUrl, segmentsSha256Url, authorizationHeader, requiresAuth })
   const regex = /bytes=(\d+)-(\d+)/
 
   return async function segmentValidator (segment: Segment, _method: string, _peerId: string, retry = 1) {
@@ -28,7 +37,7 @@ function segmentValidatorFactory (segmentsSha256Url: string, isLive: boolean) {
 
       await wait(1000)
 
-      segmentsJSON = fetchSha256Segments(segmentsSha256Url)
+      segmentsJSON = fetchSha256Segments({ serverUrl, segmentsSha256Url, authorizationHeader, requiresAuth })
       await segmentValidator(segment, _method, _peerId, retry + 1)
 
       return
@@ -68,8 +77,19 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function fetchSha256Segments (url: string) {
-  return fetch(url)
+function fetchSha256Segments (options: {
+  serverUrl: string
+  segmentsSha256Url: string
+  authorizationHeader: () => string
+  requiresAuth: boolean
+}) {
+  const { serverUrl, segmentsSha256Url, requiresAuth, authorizationHeader } = options
+
+  const headers = requiresAuth && isSameOrigin(serverUrl, segmentsSha256Url)
+    ? { Authorization: authorizationHeader() }
+    : {}
+
+  return fetch(segmentsSha256Url, { headers })
     .then(res => res.json() as Promise<SegmentsJSON>)
     .catch(err => {
       logger.error('Cannot get sha256 segments', err)

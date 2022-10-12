@@ -125,9 +125,9 @@ async function completeVideoCheck (
     expect(file.fileDownloadUrl).to.match(new RegExp(`http://${originHost}/download/videos/${uuidRegex}-${file.resolution.id}${extension}`))
 
     await Promise.all([
-      makeRawRequest(file.torrentUrl, 200),
-      makeRawRequest(file.torrentDownloadUrl, 200),
-      makeRawRequest(file.metadataUrl, 200)
+      makeRawRequest({ url: file.torrentUrl, expectedStatus: HttpStatusCode.OK_200 }),
+      makeRawRequest({ url: file.torrentDownloadUrl, expectedStatus: HttpStatusCode.OK_200 }),
+      makeRawRequest({ url: file.metadataUrl, expectedStatus: HttpStatusCode.OK_200 })
     ])
 
     expect(file.resolution.id).to.equal(attributeFile.resolution)

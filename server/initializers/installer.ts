@@ -10,7 +10,7 @@ import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { applicationExist, clientsExist, usersExist } from './checker-after-init'
 import { CONFIG } from './config'
-import { FILES_CACHE, HLS_STREAMING_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION, RESUMABLE_UPLOAD_DIRECTORY } from './constants'
+import { DIRECTORIES, FILES_CACHE, LAST_MIGRATION_VERSION } from './constants'
 import { sequelizeTypescript } from './database'
 
 async function installApplication () {
@@ -92,11 +92,13 @@ function createDirectoriesIfNotExist () {
     tasks.push(ensureDir(dir))
   }
 
-  // Playlist directories
-  tasks.push(ensureDir(HLS_STREAMING_PLAYLIST_DIRECTORY))
+  tasks.push(ensureDir(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE))
+  tasks.push(ensureDir(DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC))
+  tasks.push(ensureDir(DIRECTORIES.VIDEOS.PUBLIC))
+  tasks.push(ensureDir(DIRECTORIES.VIDEOS.PRIVATE))
 
   // Resumable upload directory
-  tasks.push(ensureDir(RESUMABLE_UPLOAD_DIRECTORY))
+  tasks.push(ensureDir(DIRECTORIES.RESUMABLE_UPLOAD))
 
   return Promise.all(tasks)
 }

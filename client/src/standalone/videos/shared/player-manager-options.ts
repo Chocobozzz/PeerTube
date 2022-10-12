@@ -17,7 +17,8 @@ import {
   isP2PEnabled,
   logger,
   peertubeLocalStorage,
-  UserLocalStorageKeys
+  UserLocalStorageKeys,
+  videoRequiresAuth
 } from '../../../root-helpers'
 import { PeerTubePlugin } from './peertube-plugin'
 import { PlayerHTML } from './player-html'
@@ -154,6 +155,9 @@ export class PlayerManagerOptions {
     captionsResponse: Response
     live?: LiveVideo
 
+    authorizationHeader: () => string
+    videoFileToken: () => string
+
     serverConfig: HTMLServerConfig
 
     alreadyHadPlayer: boolean
@@ -169,9 +173,11 @@ export class PlayerManagerOptions {
       video,
       captionsResponse,
       alreadyHadPlayer,
+      videoFileToken,
       translations,
       playlistTracker,
       live,
+      authorizationHeader,
       serverConfig
     } = options
 
@@ -226,6 +232,10 @@ export class PlayerManagerOptions {
         language: navigator.language,
         embedUrl: window.location.origin + video.embedPath,
         embedTitle: video.name,
+
+        requiresAuth: videoRequiresAuth(video),
+        authorizationHeader,
+        videoFileToken,
 
         errorNotifier: () => {
           // Empty, we don't have a notifier in the embed

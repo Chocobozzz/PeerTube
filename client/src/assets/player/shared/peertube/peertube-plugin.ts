@@ -22,7 +22,7 @@ const Plugin = videojs.getPlugin('plugin')
 
 class PeerTubePlugin extends Plugin {
   private readonly videoViewUrl: string
-  private readonly authorizationHeader: string
+  private readonly authorizationHeader: () => string
 
   private readonly videoUUID: string
   private readonly startTime: number
@@ -228,7 +228,7 @@ class PeerTubePlugin extends Plugin {
       'Content-type': 'application/json; charset=UTF-8'
     })
 
-    if (this.authorizationHeader) headers.set('Authorization', this.authorizationHeader)
+    if (this.authorizationHeader) headers.set('Authorization', this.authorizationHeader())
 
     return fetch(this.videoViewUrl, { method: 'POST', body: JSON.stringify(body), headers })
   }

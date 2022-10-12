@@ -1,10 +1,10 @@
 import { join } from 'path'
-import { RESUMABLE_UPLOAD_DIRECTORY } from '../initializers/constants'
+import { DIRECTORIES } from '@server/initializers/constants'
 
 function getResumableUploadPath (filename?: string) {
-  if (filename) return join(RESUMABLE_UPLOAD_DIRECTORY, filename)
+  if (filename) return join(DIRECTORIES.RESUMABLE_UPLOAD, filename)
 
-  return RESUMABLE_UPLOAD_DIRECTORY
+  return DIRECTORIES.RESUMABLE_UPLOAD
 }
 
 // ---------------------------------------------------------------------------

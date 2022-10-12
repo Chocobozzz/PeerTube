@@ -7,7 +7,7 @@ import { getServerActor } from '@server/models/application/application'
 import { ExpressPromiseHandler } from '@server/types/express-handler'
 import { MUserAccountId, MVideoFullLight } from '@server/types/models'
 import { arrayify, getAllPrivacies } from '@shared/core-utils'
-import { HttpStatusCode, ServerErrorCode, UserRight, VideoInclude } from '@shared/models'
+import { HttpStatusCode, ServerErrorCode, UserRight, VideoInclude, VideoState } from '@shared/models'
 import {
   exists,
   isBooleanValid,
@@ -48,6 +48,7 @@ import { Hooks } from '../../../lib/plugins/hooks'
 import { VideoModel } from '../../../models/video/video'
 import {
   areValidationErrors,
+  checkCanAccessVideoStaticFiles,
   checkCanSeeVideo,
   checkUserCanManageVideo,
   checkUserQuota,
@@ -232,6 +233,11 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
     if (areErrorsInScheduleUpdate(req, res)) return cleanUpReqFiles(req)
     if (!await doesVideoExist(req.params.id, res)) return cleanUpReqFiles(req)
 
+    const video = getVideoWithAttributes(res)
+    if (req.body.privacy && video.isLive && video.state !== VideoState.WAITING_FOR_LIVE) {
+      return res.fail({ message: 'Cannot update privacy of a live that has already started' })
+    }
+
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
     if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
@@ -271,10 +277,7 @@ async function checkVideoFollowConstraints (req: express.Request, res: express.R
   })
 }
 
-const videosCustomGetValidator = (
-  fetchType: 'for-api' | 'all' | 'only-video' | 'only-immutable-attributes',
-  authenticateInQuery = false
-) => {
+const videosCustomGetValidator = (fetchType: 'for-api' | 'all' | 'only-video' | 'only-immutable-attributes') => {
   return [
     isValidVideoIdParam('id'),
 
@@ -287,7 +290,7 @@ const videosCustomGetValidator = (
 
       const video = getVideoWithAttributes(res) as MVideoFullLight
 
-      if (!await checkCanSeeVideo({ req, res, video, paramId: req.params.id, authenticateInQuery })) return
+      if (!await checkCanSeeVideo({ req, res, video, paramId: req.params.id })) return
 
       return next()
     }
@@ -295,7 +298,6 @@ const videosCustomGetValidator = (
 }
 
 const videosGetValidator = videosCustomGetValidator('all')
-const videosDownloadValidator = videosCustomGetValidator('all', true)
 
 const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
   isValidVideoIdParam('id'),
@@ -310,6 +312,21 @@ const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
     return next()
   }
 ])
+
+const videosDownloadValidator = [
+  isValidVideoIdParam('id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+    if (!await doesVideoExist(req.params.id, res, 'all')) return
+
+    const video = getVideoWithAttributes(res)
+
+    if (!await checkCanAccessVideoStaticFiles({ req, res, video, paramId: req.params.id })) return
+
+    return next()
+  }
+]
 
 const videosRemoveValidator = [
   isValidVideoIdParam('id'),
@@ -372,7 +389,7 @@ function getCommonVideoEditAttributes () {
       .custom(isBooleanValid).withMessage('Should have a valid waitTranscoding boolean'),
     body('privacy')
       .optional()
-      .customSanitizer(toValueOrNull)
+      .customSanitizer(toIntOrNull)
       .custom(isVideoPrivacyValid),
     body('description')
       .optional()

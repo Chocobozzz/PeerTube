@@ -24,6 +24,7 @@ import { extractVideo } from '@server/helpers/video'
 import { buildRemoteVideoBaseUrl } from '@server/lib/activitypub/url'
 import { getHLSPublicFileUrl, getWebTorrentPublicFileUrl } from '@server/lib/object-storage'
 import { getFSTorrentFilePath } from '@server/lib/paths'
+import { isVideoInPrivateDirectory } from '@server/lib/video-privacy'
 import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/models'
 import { VideoResolution, VideoStorage } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
@@ -295,6 +296,16 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     return VideoFileModel.findOne(query)
   }
 
+  static loadWithVideoByFilename (filename: string): Promise<MVideoFileVideo | MVideoFileStreamingPlaylistVideo> {
+    const query = {
+      where: {
+        filename
+      }
+    }
+
+    return VideoFileModel.scope(ScopeNames.WITH_VIDEO_OR_PLAYLIST).findOne(query)
+  }
+
   static loadWithVideoOrPlaylistByTorrentFilename (filename: string) {
     const query = {
       where: {
@@ -303,6 +314,10 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     }
 
     return VideoFileModel.scope(ScopeNames.WITH_VIDEO_OR_PLAYLIST).findOne(query)
+  }
+
+  static load (id: number): Promise<MVideoFile> {
+    return VideoFileModel.findByPk(id)
   }
 
   static loadWithMetadata (id: number) {
@@ -467,7 +482,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   }
 
   getVideoOrStreamingPlaylist (this: MVideoFileVideo | MVideoFileStreamingPlaylistVideo): MVideo | MStreamingPlaylistVideo {
-    if (this.videoId) return (this as MVideoFileVideo).Video
+    if (this.videoId || (this as MVideoFileVideo).Video) return (this as MVideoFileVideo).Video
 
     return (this as MVideoFileStreamingPlaylistVideo).VideoStreamingPlaylist
   }
@@ -508,7 +523,17 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   }
 
   getFileStaticPath (video: MVideo) {
-    if (this.isHLS()) return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, video.uuid, this.filename)
+    if (this.isHLS()) {
+      if (isVideoInPrivateDirectory(video.privacy)) {
+        return join(STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS, video.uuid, this.filename)
+      }
+
+      return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, video.uuid, this.filename)
+    }
+
+    if (isVideoInPrivateDirectory(video.privacy)) {
+      return join(STATIC_PATHS.PRIVATE_WEBSEED, this.filename)
+    }
 
     return join(STATIC_PATHS.WEBSEED, this.filename)
   }

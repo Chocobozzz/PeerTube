@@ -66,7 +66,7 @@ describe('Object storage for video import', function () {
       const fileUrl = video.files[0].fileUrl
       expectStartWith(fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())
 
-      await makeRawRequest(fileUrl, HttpStatusCode.OK_200)
+      await makeRawRequest({ url: fileUrl, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -91,13 +91,13 @@ describe('Object storage for video import', function () {
       for (const file of video.files) {
         expectStartWith(file.fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())
 
-        await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+        await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
       }
 
       for (const file of video.streamingPlaylists[0].files) {
         expectStartWith(file.fileUrl, ObjectStorageCommand.getPlaylistBaseUrl())
 
-        await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+        await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
       }
     })
   })

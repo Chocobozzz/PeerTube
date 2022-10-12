@@ -29,7 +29,7 @@ async function checkFiles (video: VideoDetails, objectStorage: boolean) {
   for (const file of video.files) {
     if (objectStorage) expectStartWith(file.fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())
 
-    await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+    await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 }
 

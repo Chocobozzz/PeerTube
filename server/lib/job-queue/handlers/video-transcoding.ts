@@ -94,15 +94,24 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, video: MV
 
   const videoOrStreamingPlaylist = videoFileInput.getVideoOrStreamingPlaylist()
 
-  await VideoPathManager.Instance.makeAvailableVideoFile(videoFileInput.withVideoOrPlaylist(videoOrStreamingPlaylist), videoInputPath => {
-    return generateHlsPlaylistResolution({
-      video,
-      videoInputPath,
-      resolution: payload.resolution,
-      copyCodecs: payload.copyCodecs,
-      job
+  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+
+  try {
+    await videoFileInput.getVideo().reload()
+
+    await VideoPathManager.Instance.makeAvailableVideoFile(videoFileInput.withVideoOrPlaylist(videoOrStreamingPlaylist), videoInputPath => {
+      return generateHlsPlaylistResolution({
+        video,
+        videoInputPath,
+        inputFileMutexReleaser,
+        resolution: payload.resolution,
+        copyCodecs: payload.copyCodecs,
+        job
+      })
     })
-  })
+  } finally {
+    inputFileMutexReleaser()
+  }
 
   logger.info('HLS transcoding job for %s ended.', video.uuid, lTags(video.uuid))
 
@@ -177,38 +186,44 @@ async function onVideoFirstWebTorrentTranscoding (
   transcodeType: TranscodeVODOptionsType,
   user: MUserId
 ) {
-  const { resolution, audioStream } = await videoArg.probeMaxQualityFile()
+  const mutexReleaser = await VideoPathManager.Instance.lockFiles(videoArg.uuid)
 
-  // Maybe the video changed in database, refresh it
-  const videoDatabase = await VideoModel.loadFull(videoArg.uuid)
-  // Video does not exist anymore
-  if (!videoDatabase) return undefined
+  try {
+    // Maybe the video changed in database, refresh it
+    const videoDatabase = await VideoModel.loadFull(videoArg.uuid)
+    // Video does not exist anymore
+    if (!videoDatabase) return undefined
 
-  // Generate HLS version of the original file
-  const originalFileHLSPayload = {
-    ...payload,
+    const { resolution, audioStream } = await videoDatabase.probeMaxQualityFile()
 
-    hasAudio: !!audioStream,
-    resolution: videoDatabase.getMaxQualityFile().resolution,
-    // If we quick transcoded original file, force transcoding for HLS to avoid some weird playback issues
-    copyCodecs: transcodeType !== 'quick-transcode',
-    isMaxQuality: true
-  }
-  const hasHls = await createHlsJobIfEnabled(user, originalFileHLSPayload)
-  const hasNewResolutions = await createLowerResolutionsJobs({
-    video: videoDatabase,
-    user,
-    videoFileResolution: resolution,
-    hasAudio: !!audioStream,
-    type: 'webtorrent',
-    isNewVideo: payload.isNewVideo ?? true
-  })
+    // Generate HLS version of the original file
+    const originalFileHLSPayload = {
+      ...payload,
 
-  await VideoJobInfoModel.decrease(videoDatabase.uuid, 'pendingTranscode')
+      hasAudio: !!audioStream,
+      resolution: videoDatabase.getMaxQualityFile().resolution,
+      // If we quick transcoded original file, force transcoding for HLS to avoid some weird playback issues
+      copyCodecs: transcodeType !== 'quick-transcode',
+      isMaxQuality: true
+    }
+    const hasHls = await createHlsJobIfEnabled(user, originalFileHLSPayload)
+    const hasNewResolutions = await createLowerResolutionsJobs({
+      video: videoDatabase,
+      user,
+      videoFileResolution: resolution,
+      hasAudio: !!audioStream,
+      type: 'webtorrent',
+      isNewVideo: payload.isNewVideo ?? true
+    })
 
-  // Move to next state if there are no other resolutions to generate
-  if (!hasHls && !hasNewResolutions) {
-    await retryTransactionWrapper(moveToNextState, { video: videoDatabase, isNewVideo: payload.isNewVideo })
+    await VideoJobInfoModel.decrease(videoDatabase.uuid, 'pendingTranscode')
+
+    // Move to next state if there are no other resolutions to generate
+    if (!hasHls && !hasNewResolutions) {
+      await retryTransactionWrapper(moveToNextState, { video: videoDatabase, isNewVideo: payload.isNewVideo })
+    }
+  } finally {
+    mutexReleaser()
   }
 }
 

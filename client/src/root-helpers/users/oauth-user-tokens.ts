@@ -1,11 +1,11 @@
 import { UserTokenLocalStorageKeys } from './user-local-storage-keys'
 
-export class UserTokens {
+export class OAuthUserTokens {
   accessToken: string
   refreshToken: string
   tokenType: string
 
-  constructor (hash?: Partial<UserTokens>) {
+  constructor (hash?: Partial<OAuthUserTokens>) {
     if (hash) {
       this.accessToken = hash.accessToken
       this.refreshToken = hash.refreshToken
@@ -25,14 +25,14 @@ export class UserTokens {
 
     if (!accessTokenLocalStorage || !refreshTokenLocalStorage || !tokenTypeLocalStorage) return null
 
-    return new UserTokens({
+    return new OAuthUserTokens({
       accessToken: accessTokenLocalStorage,
       refreshToken: refreshTokenLocalStorage,
       tokenType: tokenTypeLocalStorage
     })
   }
 
-  static saveToLocalStorage (localStorage: Pick<Storage, 'setItem'>, tokens: UserTokens) {
+  static saveToLocalStorage (localStorage: Pick<Storage, 'setItem'>, tokens: OAuthUserTokens) {
     localStorage.setItem(UserTokenLocalStorageKeys.ACCESS_TOKEN, tokens.accessToken)
     localStorage.setItem(UserTokenLocalStorageKeys.REFRESH_TOKEN, tokens.refreshToken)
     localStorage.setItem(UserTokenLocalStorageKeys.TOKEN_TYPE, tokens.tokenType)

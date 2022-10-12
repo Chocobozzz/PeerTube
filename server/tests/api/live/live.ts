@@ -21,6 +21,7 @@ import {
   doubleFollow,
   killallServers,
   LiveCommand,
+  makeGetRequest,
   makeRawRequest,
   PeerTubeServer,
   sendRTMPStream,
@@ -157,8 +158,8 @@ describe('Test live', function () {
         expect(video.privacy.id).to.equal(VideoPrivacy.UNLISTED)
         expect(video.nsfw).to.be.true
 
-        await makeRawRequest(server.url + video.thumbnailPath, HttpStatusCode.OK_200)
-        await makeRawRequest(server.url + video.previewPath, HttpStatusCode.OK_200)
+        await makeGetRequest({ url: server.url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
+        await makeGetRequest({ url: server.url, path: video.previewPath, expectedStatus: HttpStatusCode.OK_200 })
       }
     })
 
@@ -532,8 +533,8 @@ describe('Test live', function () {
         expect(video.files).to.have.lengthOf(0)
 
         const hlsPlaylist = video.streamingPlaylists.find(s => s.type === VideoStreamingPlaylistType.HLS)
-        await makeRawRequest(hlsPlaylist.playlistUrl, HttpStatusCode.OK_200)
-        await makeRawRequest(hlsPlaylist.segmentsSha256Url, HttpStatusCode.OK_200)
+        await makeRawRequest({ url: hlsPlaylist.playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url: hlsPlaylist.segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
 
         // We should have generated random filenames
         expect(basename(hlsPlaylist.playlistUrl)).to.not.equal('master.m3u8')
@@ -564,8 +565,8 @@ describe('Test live', function () {
           expect(probe.format.bit_rate).to.be.below(maxBitrateLimits[videoStream.height])
           expect(probe.format.bit_rate).to.be.at.least(minBitrateLimits[videoStream.height])
 
-          await makeRawRequest(file.torrentUrl, HttpStatusCode.OK_200)
-          await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+          await makeRawRequest({ url: file.torrentUrl, expectedStatus: HttpStatusCode.OK_200 })
+          await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
         }
       }
     })

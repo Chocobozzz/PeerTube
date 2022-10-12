@@ -214,6 +214,10 @@ server {
     try_files $uri @api;
   }
 
+  location ~ ^/static/(webseed|streaming-playlists)/private/ {
+    try_files /dev/null @api;
+  }
+
   # Bypass PeerTube for performance reasons. Optional.
   location ~ ^/static/(webseed|redundancy|streaming-playlists)/ {
     limit_rate_after            5M;

@@ -153,7 +153,7 @@ describe('Test videos files', function () {
         expect(video.streamingPlaylists[0].files).to.have.lengthOf(files.length - 1)
         expect(video.streamingPlaylists[0].files.find(f => f.id === toDelete.id)).to.not.exist
 
-        const { text } = await makeRawRequest(video.streamingPlaylists[0].playlistUrl)
+        const { text } = await makeRawRequest({ url: video.streamingPlaylists[0].playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
 
         expect(text.includes(`-${toDelete.resolution.id}.m3u8`)).to.be.false
         expect(text.includes(`-${video.streamingPlaylists[0].files[0].resolution.id}.m3u8`)).to.be.true

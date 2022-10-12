@@ -52,7 +52,7 @@ import {
 import { AttributesOnly } from '@shared/typescript-utils'
 import { peertubeTruncate } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { exists, isBooleanValid } from '../../helpers/custom-validators/misc'
+import { exists, isBooleanValid, isUUIDValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoDescriptionValid,
   isVideoDurationValid,
@@ -1696,12 +1696,12 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     let files: VideoFile[] = []
 
     if (Array.isArray(this.VideoFiles)) {
-      const result = videoFilesModelToFormattedJSON(this, this.VideoFiles, includeMagnet)
+      const result = videoFilesModelToFormattedJSON(this, this.VideoFiles, { includeMagnet })
       files = files.concat(result)
     }
 
     for (const p of (this.VideoStreamingPlaylists || [])) {
-      const result = videoFilesModelToFormattedJSON(this, p.VideoFiles, includeMagnet)
+      const result = videoFilesModelToFormattedJSON(this, p.VideoFiles, { includeMagnet })
       files = files.concat(result)
     }
 
@@ -1868,22 +1868,14 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return setAsUpdated('video', this.id, transaction)
   }
 
-  requiresAuth () {
-    return this.privacy === VideoPrivacy.PRIVATE || this.privacy === VideoPrivacy.INTERNAL || !!this.VideoBlacklist
-  }
+  requiresAuth (paramId: string) {
+    if (this.privacy === VideoPrivacy.UNLISTED) {
+      if (!isUUIDValid(paramId)) return true
 
-  setPrivacy (newPrivacy: VideoPrivacy) {
-    if (this.privacy === VideoPrivacy.PRIVATE && newPrivacy !== VideoPrivacy.PRIVATE) {
-      this.publishedAt = new Date()
+      return false
     }
 
-    this.privacy = newPrivacy
-  }
-
-  isConfidential () {
-    return this.privacy === VideoPrivacy.PRIVATE ||
-      this.privacy === VideoPrivacy.UNLISTED ||
-      this.privacy === VideoPrivacy.INTERNAL
+    return this.privacy === VideoPrivacy.PRIVATE || this.privacy === VideoPrivacy.INTERNAL || !!this.VideoBlacklist
   }
 
   async setNewState (newState: VideoState, isNewVideo: boolean, transaction: Transaction) {

@@ -5,7 +5,7 @@ import { createFile, readdir } from 'fs-extra'
 import { join } from 'path'
 import { wait } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
-import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
+import { HttpStatusCode, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   CLICommand,
@@ -36,22 +36,28 @@ async function assertNotExists (server: PeerTubeServer, directory: string, subst
 async function assertCountAreOkay (servers: PeerTubeServer[]) {
   for (const server of servers) {
     const videosCount = await countFiles(server, 'videos')
-    expect(videosCount).to.equal(8)
+    expect(videosCount).to.equal(9) // 2 videos with 4 resolutions + private directory
+
+    const privateVideosCount = await countFiles(server, 'videos/private')
+    expect(privateVideosCount).to.equal(4)
 
     const torrentsCount = await countFiles(server, 'torrents')
-    expect(torrentsCount).to.equal(16)
+    expect(torrentsCount).to.equal(24)
 
     const previewsCount = await countFiles(server, 'previews')
-    expect(previewsCount).to.equal(2)
+    expect(previewsCount).to.equal(3)
 
     const thumbnailsCount = await countFiles(server, 'thumbnails')
-    expect(thumbnailsCount).to.equal(6)
+    expect(thumbnailsCount).to.equal(7) // 3 local videos, 1 local playlist, 2 remotes videos and 1 remote playlist
 
     const avatarsCount = await countFiles(server, 'avatars')
     expect(avatarsCount).to.equal(4)
 
-    const hlsRootCount = await countFiles(server, 'streaming-playlists/hls')
-    expect(hlsRootCount).to.equal(2)
+    const hlsRootCount = await countFiles(server, join('streaming-playlists', 'hls'))
+    expect(hlsRootCount).to.equal(3) // 2 videos + private directory
+
+    const hlsPrivateRootCount = await countFiles(server, join('streaming-playlists', 'hls', 'private'))
+    expect(hlsPrivateRootCount).to.equal(1)
   }
 }
 
@@ -67,8 +73,10 @@ describe('Test prune storage scripts', function () {
     await setDefaultVideoChannel(servers)
 
     for (const server of servers) {
-      await server.videos.upload({ attributes: { name: 'video 1' } })
-      await server.videos.upload({ attributes: { name: 'video 2' } })
+      await server.videos.upload({ attributes: { name: 'video 1', privacy: VideoPrivacy.PUBLIC } })
+      await server.videos.upload({ attributes: { name: 'video 2', privacy: VideoPrivacy.PUBLIC } })
+
+      await server.videos.upload({ attributes: { name: 'video 3', privacy: VideoPrivacy.PRIVATE } })
 
       await server.users.updateMyAvatar({ fixture: 'avatar.png' })
 
@@ -123,13 +131,16 @@ describe('Test prune storage scripts', function () {
   it('Should create some dirty files', async function () {
     for (let i = 0; i < 2; i++) {
       {
-        const base = servers[0].servers.buildDirectory('videos')
+        const basePublic = servers[0].servers.buildDirectory('videos')
+        const basePrivate = servers[0].servers.buildDirectory(join('videos', 'private'))
 
         const n1 = buildUUID() + '.mp4'
         const n2 = buildUUID() + '.webm'
 
-        await createFile(join(base, n1))
-        await createFile(join(base, n2))
+        await createFile(join(basePublic, n1))
+        await createFile(join(basePublic, n2))
+        await createFile(join(basePrivate, n1))
+        await createFile(join(basePrivate, n2))
 
         badNames['videos'] = [ n1, n2 ]
       }
@@ -184,10 +195,12 @@ describe('Test prune storage scripts', function () {
 
       {
         const directory = join('streaming-playlists', 'hls')
-        const base = servers[0].servers.buildDirectory(directory)
+        const basePublic = servers[0].servers.buildDirectory(directory)
+        const basePrivate = servers[0].servers.buildDirectory(join(directory, 'private'))
 
         const n1 = buildUUID()
-        await createFile(join(base, n1))
+        await createFile(join(basePublic, n1))
+        await createFile(join(basePrivate, n1))
         badNames[directory] = [ n1 ]
       }
     }

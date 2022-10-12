@@ -3,7 +3,7 @@
 import { decode } from 'querystring'
 import request from 'supertest'
 import { URL } from 'url'
-import { buildAbsoluteFixturePath } from '@shared/core-utils'
+import { buildAbsoluteFixturePath, pick } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
 
 export type CommonRequestParams = {
@@ -21,10 +21,21 @@ export type CommonRequestParams = {
   expectedStatus?: HttpStatusCode
 }
 
-function makeRawRequest (url: string, expectedStatus?: HttpStatusCode, range?: string) {
-  const { host, protocol, pathname } = new URL(url)
+function makeRawRequest (options: {
+  url: string
+  token?: string
+  expectedStatus?: HttpStatusCode
+  range?: string
+  query?: { [ id: string ]: string }
+}) {
+  const { host, protocol, pathname } = new URL(options.url)
 
-  return makeGetRequest({ url: `${protocol}//${host}`, path: pathname, expectedStatus, range })
+  return makeGetRequest({
+    url: `${protocol}//${host}`,
+    path: pathname,
+
+    ...pick(options, [ 'expectedStatus', 'range', 'token', 'query' ])
+  })
 }
 
 function makeGetRequest (options: CommonRequestParams & {

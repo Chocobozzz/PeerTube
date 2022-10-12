@@ -17,6 +17,7 @@ import {
 } from 'sequelize-typescript'
 import { getHLSPublicFileUrl } from '@server/lib/object-storage'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename } from '@server/lib/paths'
+import { isVideoInPrivateDirectory } from '@server/lib/video-privacy'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { MStreamingPlaylist, MStreamingPlaylistFilesVideo, MVideo } from '@server/types/models'
 import { sha1 } from '@shared/extra-utils'
@@ -250,7 +251,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
         return getHLSPublicFileUrl(this.playlistUrl)
       }
 
-      return WEBSERVER.URL + this.getMasterPlaylistStaticPath(video.uuid)
+      return WEBSERVER.URL + this.getMasterPlaylistStaticPath(video)
     }
 
     return this.playlistUrl
@@ -262,7 +263,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
         return getHLSPublicFileUrl(this.segmentsSha256Url)
       }
 
-      return WEBSERVER.URL + this.getSha256SegmentsStaticPath(video.uuid)
+      return WEBSERVER.URL + this.getSha256SegmentsStaticPath(video)
     }
 
     return this.segmentsSha256Url
@@ -287,11 +288,19 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
     return Object.assign(this, { Video: video })
   }
 
-  private getMasterPlaylistStaticPath (videoUUID: string) {
-    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, videoUUID, this.playlistFilename)
+  private getMasterPlaylistStaticPath (video: MVideo) {
+    if (isVideoInPrivateDirectory(video.privacy)) {
+      return join(STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS, video.uuid, this.playlistFilename)
+    }
+
+    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, video.uuid, this.playlistFilename)
   }
 
-  private getSha256SegmentsStaticPath (videoUUID: string) {
-    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, videoUUID, this.segmentsSha256Filename)
+  private getSha256SegmentsStaticPath (video: MVideo) {
+    if (isVideoInPrivateDirectory(video.privacy)) {
+      return join(STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS, video.uuid, this.segmentsSha256Filename)
+    }
+
+    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, video.uuid, this.segmentsSha256Filename)
   }
 }

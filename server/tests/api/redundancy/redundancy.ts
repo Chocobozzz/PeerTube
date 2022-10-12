@@ -39,7 +39,7 @@ async function checkMagnetWebseeds (file: VideoFile, baseWebseeds: string[], ser
   expect(parsed.urlList).to.have.lengthOf(baseWebseeds.length)
 
   for (const url of parsed.urlList) {
-    await makeRawRequest(url, HttpStatusCode.OK_200)
+    await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
   }
 }
 

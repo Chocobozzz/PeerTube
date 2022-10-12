@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core'
 import { AuthService, AuthStatus } from '@app/core/auth'
 import { getBoolOrDefault } from '@root-helpers/local-storage-utils'
 import { logger } from '@root-helpers/logger'
-import { UserLocalStorageKeys, UserTokens } from '@root-helpers/users'
+import { UserLocalStorageKeys, OAuthUserTokens } from '@root-helpers/users'
 import { UserRole, UserUpdateMe } from '@shared/models'
 import { NSFWPolicyType } from '@shared/models/videos'
 import { ServerService } from '../server'
@@ -24,7 +24,7 @@ export class UserLocalStorageService {
 
         this.setLoggedInUser(user)
         this.setUserInfo(user)
-        this.setTokens(user.tokens)
+        this.setTokens(user.oauthTokens)
       }
     })
 
@@ -43,7 +43,7 @@ export class UserLocalStorageService {
         next: () => {
           const user = this.authService.getUser()
 
-          this.setTokens(user.tokens)
+          this.setTokens(user.oauthTokens)
         }
       })
   }
@@ -174,14 +174,14 @@ export class UserLocalStorageService {
   // ---------------------------------------------------------------------------
 
   getTokens () {
-    return UserTokens.getUserTokens(this.localStorageService)
+    return OAuthUserTokens.getUserTokens(this.localStorageService)
   }
 
-  setTokens (tokens: UserTokens) {
-    UserTokens.saveToLocalStorage(this.localStorageService, tokens)
+  setTokens (tokens: OAuthUserTokens) {
+    OAuthUserTokens.saveToLocalStorage(this.localStorageService, tokens)
   }
 
   flushTokens () {
-    UserTokens.flushLocalStorage(this.localStorageService)
+    OAuthUserTokens.flushLocalStorage(this.localStorageService)
   }
 }

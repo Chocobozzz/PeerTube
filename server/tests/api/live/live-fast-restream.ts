@@ -79,8 +79,8 @@ describe('Fast restream in live', function () {
       expect(video.streamingPlaylists).to.have.lengthOf(1)
 
       await server.live.getSegmentFile({ videoUUID: liveId, segment: 0, playlistNumber: 0 })
-      await makeRawRequest(video.streamingPlaylists[0].playlistUrl, HttpStatusCode.OK_200)
-      await makeRawRequest(video.streamingPlaylists[0].segmentsSha256Url, HttpStatusCode.OK_200)
+      await makeRawRequest({ url: video.streamingPlaylists[0].playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url: video.streamingPlaylists[0].segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
 
       await wait(100)
     }

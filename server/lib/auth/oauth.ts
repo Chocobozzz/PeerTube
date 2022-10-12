@@ -95,14 +95,9 @@ async function handleOAuthToken (req: express.Request, options: { refreshTokenAu
 
 function handleOAuthAuthenticate (
   req: express.Request,
-  res: express.Response,
-  authenticateInQuery = false
+  res: express.Response
 ) {
-  const options = authenticateInQuery
-    ? { allowBearerTokensInQueryString: true }
-    : {}
-
-  return oAuthServer.authenticate(new Request(req), new Response(res), options)
+  return oAuthServer.authenticate(new Request(req), new Response(res))
 }
 
 export {

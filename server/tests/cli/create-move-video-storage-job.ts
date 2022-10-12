@@ -22,7 +22,7 @@ async function checkFiles (origin: PeerTubeServer, video: VideoDetails, inObject
 
     expectStartWith(file.fileUrl, start)
 
-    await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+    await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 
   const start = inObjectStorage
@@ -36,7 +36,7 @@ async function checkFiles (origin: PeerTubeServer, video: VideoDetails, inObject
   for (const file of hls.files) {
     expectStartWith(file.fileUrl, start)
 
-    await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+    await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 }
 

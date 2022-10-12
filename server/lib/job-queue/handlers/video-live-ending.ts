@@ -18,6 +18,7 @@ import { VideoStreamingPlaylistModel } from '@server/models/video/video-streamin
 import { MVideo, MVideoLive, MVideoLiveSession, MVideoWithAllFiles } from '@server/types/models'
 import { ThumbnailType, VideoLiveEndingPayload, VideoState } from '@shared/models'
 import { logger, loggerTagsFactory } from '../../../helpers/logger'
+import { VideoPathManager } from '@server/lib/video-path-manager'
 
 const lTags = loggerTagsFactory('live', 'job')
 
@@ -205,18 +206,27 @@ async function assignReplayFilesToVideo (options: {
   const concatenatedTsFiles = await readdir(replayDirectory)
 
   for (const concatenatedTsFile of concatenatedTsFiles) {
+    const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+
     const concatenatedTsFilePath = join(replayDirectory, concatenatedTsFile)
 
     const probe = await ffprobePromise(concatenatedTsFilePath)
     const { audioStream } = await getAudioStream(concatenatedTsFilePath, probe)
     const { resolution } = await getVideoStreamDimensionsInfo(concatenatedTsFilePath, probe)
 
-    await generateHlsPlaylistResolutionFromTS({
-      video,
-      concatenatedTsFilePath,
-      resolution,
-      isAAC: audioStream?.codec_name === 'aac'
-    })
+    try {
+      await generateHlsPlaylistResolutionFromTS({
+        video,
+        inputFileMutexReleaser,
+        concatenatedTsFilePath,
+        resolution,
+        isAAC: audioStream?.codec_name === 'aac'
+      })
+    } catch (err) {
+      logger.error('Cannot generate HLS playlist resolution from TS files.', { err })
+    }
+
+    inputFileMutexReleaser()
   }
 
   return video

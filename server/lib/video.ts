@@ -7,10 +7,11 @@ import { TagModel } from '@server/models/video/tag'
 import { VideoModel } from '@server/models/video/video'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { FilteredModelAttributes } from '@server/types'
-import { MThumbnail, MUserId, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
-import { ThumbnailType, VideoCreate, VideoPrivacy, VideoState, VideoTranscodingPayload } from '@shared/models'
-import { CreateJobOptions } from './job-queue/job-queue'
+import { MThumbnail, MUserId, MVideoFile, MVideoFullLight, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
+import { ManageVideoTorrentPayload, ThumbnailType, VideoCreate, VideoPrivacy, VideoState, VideoTranscodingPayload } from '@shared/models'
+import { CreateJobArgument, CreateJobOptions, JobQueue } from './job-queue/job-queue'
 import { updateVideoMiniatureFromExisting } from './thumbnail'
+import { moveFilesIfPrivacyChanged } from './video-privacy'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
   return {
@@ -177,6 +178,59 @@ const getCachedVideoDuration = memoizee(getVideoDuration, {
 
 // ---------------------------------------------------------------------------
 
+async function addVideoJobsAfterUpdate (options: {
+  video: MVideoFullLight
+  isNewVideo: boolean
+
+  nameChanged: boolean
+  oldPrivacy: VideoPrivacy
+}) {
+  const { video, nameChanged, oldPrivacy, isNewVideo } = options
+  const jobs: CreateJobArgument[] = []
+
+  const filePathChanged = await moveFilesIfPrivacyChanged(video, oldPrivacy)
+
+  if (!video.isLive && (nameChanged || filePathChanged)) {
+    for (const file of (video.VideoFiles || [])) {
+      const payload: ManageVideoTorrentPayload = { action: 'update-metadata', videoId: video.id, videoFileId: file.id }
+
+      jobs.push({ type: 'manage-video-torrent', payload })
+    }
+
+    const hls = video.getHLSPlaylist()
+
+    for (const file of (hls?.VideoFiles || [])) {
+      const payload: ManageVideoTorrentPayload = { action: 'update-metadata', streamingPlaylistId: hls.id, videoFileId: file.id }
+
+      jobs.push({ type: 'manage-video-torrent', payload })
+    }
+  }
+
+  jobs.push({
+    type: 'federate-video',
+    payload: {
+      videoUUID: video.uuid,
+      isNewVideo
+    }
+  })
+
+  const wasConfidentialVideo = new Set([ VideoPrivacy.PRIVATE, VideoPrivacy.UNLISTED, VideoPrivacy.INTERNAL ]).has(oldPrivacy)
+
+  if (wasConfidentialVideo) {
+    jobs.push({
+      type: 'notify',
+      payload: {
+        action: 'new-video',
+        videoUUID: video.uuid
+      }
+    })
+  }
+
+  return JobQueue.Instance.createSequentialJobFlow(...jobs)
+}
+
+// ---------------------------------------------------------------------------
+
 export {
   buildLocalVideoFromReq,
   buildVideoThumbnailsFromReq,
@@ -185,5 +239,6 @@ export {
   buildTranscodingJob,
   buildMoveToObjectStorageJob,
   getTranscodingJobPriority,
+  addVideoJobsAfterUpdate,
   getCachedVideoDuration
 }

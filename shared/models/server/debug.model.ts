@@ -8,4 +8,5 @@ export interface SendDebugCommand {
   | 'process-video-views-buffer'
   | 'process-video-viewers'
   | 'process-video-channel-sync-latest'
+  | 'process-update-videos-scheduler'
 }

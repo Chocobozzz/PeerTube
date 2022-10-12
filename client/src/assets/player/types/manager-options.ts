@@ -57,7 +57,7 @@ export interface CommonOptions extends CustomizationOptions {
   captions: boolean
 
   videoViewUrl: string
-  authorizationHeader?: string
+  authorizationHeader?: () => string
 
   metricsUrl: string
 
@@ -77,6 +77,8 @@ export interface CommonOptions extends CustomizationOptions {
   videoShortUUID: string
 
   serverUrl: string
+  requiresAuth: boolean
+  videoFileToken: () => string
 
   errorNotifier: (message: string) => void
 }
