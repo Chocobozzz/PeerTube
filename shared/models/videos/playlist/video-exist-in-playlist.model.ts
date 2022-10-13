@@ -1,12 +1,18 @@
 export type VideosExistInPlaylists = {
   [videoId: number ]: VideoExistInPlaylist[]
 }
+export type CachedVideosExistInPlaylists = {
+  [videoId: number ]: CachedVideoExistInPlaylist[]
+}
 
-export type VideoExistInPlaylist = {
+export type CachedVideoExistInPlaylist = {
   playlistElementId: number
   playlistId: number
-  playlistDisplayName: string
-  playlistShortUUID: string
   startTimestamp?: number
   stopTimestamp?: number
+}
+
+export type VideoExistInPlaylist = CachedVideoExistInPlaylist & {
+  playlistDisplayName: string
+  playlistShortUUID: string
 }

@@ -8,6 +8,8 @@ import { buildBulkObservable, objectToFormData } from '@app/helpers'
 import { Account, AccountService, VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { NGX_LOADING_BAR_IGNORED } from '@ngx-loading-bar/http-client'
 import {
+  CachedVideoExistInPlaylist,
+  CachedVideosExistInPlaylists,
   ResultList,
   VideoExistInPlaylist,
   VideoPlaylist as VideoPlaylistServerModel,
@@ -34,11 +36,11 @@ export class VideoPlaylistService {
 
   // Use a replay subject because we "next" a value before subscribing
   private videoExistsInPlaylistNotifier = new ReplaySubject<number>(1)
-  private videoExistsInPlaylistCacheSubject = new Subject<VideosExistInPlaylists>()
-  private readonly videoExistsInPlaylistObservable: Observable<VideosExistInPlaylists>
+  private videoExistsInPlaylistCacheSubject = new Subject<CachedVideosExistInPlaylists>()
+  private readonly videoExistsInPlaylistObservable: Observable<CachedVideosExistInPlaylists>
 
-  private videoExistsObservableCache: { [ id: number ]: Observable<VideoExistInPlaylist[]> } = {}
-  private videoExistsCache: { [ id: number ]: VideoExistInPlaylist[] } = {}
+  private videoExistsObservableCache: { [ id: number ]: Observable<CachedVideoExistInPlaylist[]> } = {}
+  private videoExistsCache: { [ id: number ]: CachedVideoExistInPlaylist[] } = {}
 
   private myAccountPlaylistCache: ResultList<CachedPlaylist> = undefined
   private myAccountPlaylistCacheRunning: Observable<ResultList<CachedPlaylist>>
@@ -196,6 +198,14 @@ export class VideoPlaylistService {
     return this.authHttp.post<{ videoPlaylistElement: { id: number } }>(url, body)
                .pipe(
                  tap(res => {
+                   const existsResult = this.videoExistsCache[body.videoId]
+                   existsResult.push({
+                     playlistId,
+                     playlistElementId: res.videoPlaylistElement.id,
+                     startTimestamp: body.startTimestamp,
+                     stopTimestamp: body.stopTimestamp
+                   })
+
                    this.runPlaylistCheck(body.videoId)
                  }),
                  catchError(err => this.restExtractor.handleError(err))
