@@ -6,7 +6,6 @@ import { AuthService, DisableForReuseHook, Notifier } from '@app/core'
 import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { secondsToTime } from '@shared/core-utils'
 import {
-  VideoPlaylistSummary,
   Video,
   VideoExistInPlaylist,
   VideoPlaylistCreate,
@@ -26,8 +25,11 @@ type PlaylistElement = {
   stopTimestamp?: number
 }
 
-type PlaylistSummaryWithElements = VideoPlaylistSummary & {
+type PlaylistSummary = {
+  id: number
+  displayName: string
   optionalRowDisplayed: boolean
+
   elements: PlaylistElement[]
 }
 
@@ -47,7 +49,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   videoPlaylistSearch: string
   videoPlaylistSearchChanged = new Subject<void>()
 
-  videoPlaylists: PlaylistSummaryWithElements[] = []
+  videoPlaylists: PlaylistSummary[] = []
 
   private disabled = false
 
@@ -143,7 +145,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     this.isNewPlaylistBlockOpened = true
   }
 
-  toggleMainPlaylist (e: Event, playlist: PlaylistSummaryWithElements) {
+  toggleMainPlaylist (e: Event, playlist: PlaylistSummary) {
     e.preventDefault()
 
     if (this.isPresentMultipleTimes(playlist) || playlist.optionalRowDisplayed) return
@@ -165,13 +167,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     this.cd.markForCheck()
   }
 
-  toggleOptionalPlaylist (
-    e: Event,
-    playlist: PlaylistSummaryWithElements,
-    element: PlaylistElement,
-    startTimestamp: number,
-    stopTimestamp: number
-  ) {
+  toggleOptionalPlaylist (e: Event, playlist: PlaylistSummary, element: PlaylistElement, startTimestamp: number, stopTimestamp: number) {
     e.preventDefault()
 
     if (element.enabled) {
@@ -220,23 +216,23 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     this.videoPlaylistSearchChanged.next()
   }
 
-  isPrimaryCheckboxChecked (playlist: PlaylistSummaryWithElements) {
+  isPrimaryCheckboxChecked (playlist: PlaylistSummary) {
     // Reduce latency when adding a video to a playlist using pendingAddId
     return this.pendingAddId === playlist.id ||
       playlist.elements.filter(e => e.enabled).length !== 0
   }
 
-  toggleOptionalRow (playlist: PlaylistSummaryWithElements) {
+  toggleOptionalRow (playlist: PlaylistSummary) {
     playlist.optionalRowDisplayed = !playlist.optionalRowDisplayed
 
     this.cd.markForCheck()
   }
 
-  getPrimaryInputName (playlist: PlaylistSummaryWithElements) {
+  getPrimaryInputName (playlist: PlaylistSummary) {
     return 'in-playlist-primary-' + playlist.id
   }
 
-  getOptionalInputName (playlist: PlaylistSummaryWithElements, element?: PlaylistElement) {
+  getOptionalInputName (playlist: PlaylistSummary, element?: PlaylistElement) {
     const suffix = element
       ? '-' + element.playlistElementId
       : ''
@@ -244,7 +240,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     return 'in-playlist-optional-' + playlist.id + suffix
   }
 
-  buildOptionalRowElements (playlist: PlaylistSummaryWithElements) {
+  buildOptionalRowElements (playlist: PlaylistSummary) {
     const elements = playlist.elements
 
     const lastElement = elements.length === 0
@@ -263,11 +259,11 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     return elements
   }
 
-  isPresentMultipleTimes (playlist: PlaylistSummaryWithElements) {
+  isPresentMultipleTimes (playlist: PlaylistSummary) {
     return playlist.elements.filter(e => e.enabled === true).length > 1
   }
 
-  onElementTimestampUpdate (playlist: PlaylistSummaryWithElements, element: PlaylistElement) {
+  onElementTimestampUpdate (playlist: PlaylistSummary, element: PlaylistElement) {
     if (!element.playlistElementId || element.enabled === false) return
 
     const body: VideoPlaylistElementUpdate = {
@@ -287,7 +283,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
         })
   }
 
-  private isOptionalRowDisplayed (playlist: PlaylistSummaryWithElements) {
+  private isOptionalRowDisplayed (playlist: PlaylistSummary) {
     const elements = playlist.elements.filter(e => e.enabled)
 
     if (elements.length > 1) return true
@@ -306,7 +302,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     return false
   }
 
-  private removeVideoFromPlaylist (playlist: PlaylistSummaryWithElements, elementId: number) {
+  private removeVideoFromPlaylist (playlist: PlaylistSummary, elementId: number) {
     this.videoPlaylistService.removeVideoFromPlaylist(playlist.id, elementId, this.video.id)
         .subscribe({
           next: () => {
@@ -352,8 +348,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
           playlistElementId: e.playlistElementId,
           startTimestamp: e.startTimestamp || 0,
           stopTimestamp: e.stopTimestamp || this.video.duration
-        })),
-        shortUUID: playlist.shortUUID
+        }))
       }
 
       const oldPlaylist = oldPlaylists.find(p => p.id === playlist.id)
@@ -369,7 +364,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     this.cd.markForCheck()
   }
 
-  private addVideoInPlaylist (playlist: PlaylistSummaryWithElements, element: PlaylistElement) {
+  private addVideoInPlaylist (playlist: PlaylistSummary, element: PlaylistElement) {
     const body: VideoPlaylistElementCreate = { videoId: this.video.id }
 
     if (element.startTimestamp) body.startTimestamp = element.startTimestamp
@@ -377,7 +372,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
 
     this.pendingAddId = playlist.id
 
-    this.videoPlaylistService.addVideoInPlaylist(playlist, body)
+    this.videoPlaylistService.addVideoInPlaylist(playlist.id, body)
       .subscribe({
         next: res => {
           const message = body.startTimestamp || body.stopTimestamp

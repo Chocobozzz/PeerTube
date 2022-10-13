@@ -88,10 +88,8 @@ export class VideoMiniatureComponent implements OnInit {
   channelLinkTitle = ''
 
   watchLaterPlaylist: {
-    displayName: string
     id: number
     playlistElementId?: number
-    shortUUID: string
   }
 
   videoRouterLink: string | any[] = []
@@ -247,7 +245,7 @@ export class VideoMiniatureComponent implements OnInit {
   addToWatchLater () {
     const body = { videoId: this.video.id }
 
-    this.videoPlaylistService.addVideoInPlaylist(this.watchLaterPlaylist, body)
+    this.videoPlaylistService.addVideoInPlaylist(this.watchLaterPlaylist.id, body)
       .subscribe(
         res => {
           this.watchLaterPlaylist.playlistElementId = res.videoPlaylistElement.id
@@ -305,9 +303,7 @@ export class VideoMiniatureComponent implements OnInit {
           this.inWatchLaterPlaylist = false
 
           this.watchLaterPlaylist = {
-            id: watchLaterPlaylist.id,
-            displayName: watchLaterPlaylist.name,
-            shortUUID: watchLaterPlaylist.shortUUID
+            id: watchLaterPlaylist.id
           }
 
           if (existsInWatchLater) {
