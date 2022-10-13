@@ -1968,7 +1968,7 @@ Geen resultaten gevonden</target>
       </trans-unit>
       <trans-unit id="3290262698447971494" datatype="html">
         <source>You are not authorized here.</source>
-        <target state="translated">U bent hier niet bevoegd.</target>
+        <target state="translated">U bent hier niet tot bevoegd.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
