@@ -113,7 +113,7 @@ enum ScopeNames {
             ]
           },
           {
-            attributes: [ 'id', 'name', 'type', 'uuid' ],
+            attributes: [ 'id', 'name', 'type' ],
             model: VideoPlaylistModel.unscoped(),
             required: true,
             where: {
