@@ -33,7 +33,7 @@ import { updateVideoMiniatureFromExisting, updateVideoMiniatureFromUrl } from '.
 
 class YoutubeDlImportError extends Error {
   code: YoutubeDlImportError.CODE
-  cause?: Error // Property to remove once ES2022 is used
+  cause?: Error // TODO: Property to remove once ES2022 is used
   constructor ({ message, code }) {
     super(message)
     this.code = code
@@ -42,7 +42,7 @@ class YoutubeDlImportError extends Error {
   static fromError (err: Error, code: YoutubeDlImportError.CODE, message?: string) {
     const ytDlErr = new this({ message: message ?? err.message, code })
     ytDlErr.cause = err
-    ytDlErr.stack = err.stack // Useless once ES2022 is used
+    ytDlErr.stack = err.stack // TODO: Useless once ES2022 is used
     return ytDlErr
   }
 }

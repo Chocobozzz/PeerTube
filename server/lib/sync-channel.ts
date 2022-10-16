@@ -1,5 +1,5 @@
-import { logger } from '@server/helpers/logger'
-import { YoutubeDLWrapper } from '@server/helpers/youtube-dl'
+import { logger, loggerTagsFactory } from '@server/helpers/logger'
+import { YoutubeDLInfo, YoutubeDLWrapper } from '@server/helpers/youtube-dl'
 import { CONFIG } from '@server/initializers/config'
 import { buildYoutubeDLImport } from '@server/lib/video-import'
 import { UserModel } from '@server/models/user/user'
@@ -8,6 +8,8 @@ import { MChannel, MChannelAccountDefault, MChannelSync } from '@server/types/mo
 import { VideoChannelSyncState, VideoPrivacy } from '@shared/models'
 import { CreateJobArgument, JobQueue } from './job-queue'
 import { ServerConfigManager } from './server-config-manager'
+
+const lTags = loggerTagsFactory('channel-sync')
 
 export async function synchronizeChannel (options: {
   channel: MChannelAccountDefault
@@ -36,7 +38,7 @@ export async function synchronizeChannel (options: {
 
     logger.info(
       'Fetched %d candidate URLs for sync channel %s.',
-      targetUrls.length, channel.Actor.preferredUsername, { targetUrls }
+      targetUrls.length, channel.Actor.preferredUsername, { targetUrls, ...lTags() }
     )
 
     if (targetUrls.length === 0) {
@@ -76,7 +78,7 @@ export async function synchronizeChannel (options: {
 
     await JobQueue.Instance.createJobWithChildren(parent, children)
   } catch (err) {
-    logger.error(`Failed to import channel ${channel.name}`, { err })
+    logger.error(`Failed to import channel ${channel.name}`, { err, ...lTags() })
     channelSync.state = VideoChannelSyncState.FAILED
     await channelSync.save()
   }
@@ -86,19 +88,25 @@ export async function synchronizeChannel (options: {
 
 async function skipImport (channel: MChannel, targetUrl: string, onlyAfter?: Date) {
   if (await VideoImportModel.urlAlreadyImported(channel.id, targetUrl)) {
-    logger.debug('%s is already imported for channel %s, skipping video channel synchronization.', targetUrl, channel.name)
+    logger.debug('%s is already imported for channel %s, skipping video channel synchronization.', targetUrl, channel.name, lTags())
+    return true
+  }
+
+  const youtubeDL = new YoutubeDLWrapper(
+    targetUrl,
+    ServerConfigManager.Instance.getEnabledResolutions('vod'),
+    CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+  )
+
+  let videoInfo: YoutubeDLInfo
+  try {
+    videoInfo = await youtubeDL.getInfoForDownload()
+  } catch (err) {
+    logger.error(`Cannot fetch information from import for URL ${targetUrl} channel ${channel.name}, skipping import`, { err, ...lTags() })
     return true
   }
 
   if (onlyAfter) {
-    const youtubeDL = new YoutubeDLWrapper(
-      targetUrl,
-      ServerConfigManager.Instance.getEnabledResolutions('vod'),
-      CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
-    )
-
-    const videoInfo = await youtubeDL.getInfoForDownload()
-
     const onlyAfterWithoutTime = new Date(onlyAfter)
     onlyAfterWithoutTime.setHours(0, 0, 0, 0)
 

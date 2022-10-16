@@ -11,7 +11,32 @@ const lTags = loggerTagsFactory('youtube-dl')
 
 const youtubeDLBinaryPath = join(CONFIG.STORAGE.BIN_DIR, CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.NAME)
 
-export class YoutubeDLCLI {
+type YoutubeDLCLIResult = {
+  title?: string
+  description?: string
+  categories?: string[]
+  license?: string
+  language?: string
+  age_limit?: number
+  tags?: string[]
+  thumbnail?: string
+  url?: string
+  urls?: string[] | string
+  // TODO: structure for formats
+  formats?: any[]
+  // TODO: structure for thumbnails
+  thumbnails?: any[]
+  // TODO: structure for subtitles
+  subtitles?: any[]
+  upload_date?: string
+  ext: string
+  webpage_url: string
+  live_status?: string
+  ie_key?: string
+  duration?: number
+}
+
+class YoutubeDLCLI {
 
   static async safeGet () {
     if (!await pathExists(youtubeDLBinaryPath)) {
@@ -120,7 +145,7 @@ export class YoutubeDLCLI {
     format: string
     processOptions: execa.NodeOptions
     additionalYoutubeDLArgs?: string[]
-  }) {
+  }): Promise<YoutubeDLCLIResult | YoutubeDLCLIResult[]> {
     const { url, format, additionalYoutubeDLArgs = [], processOptions } = options
 
     const completeArgs = additionalYoutubeDLArgs.concat([ '--dump-json', '-f', format ])
@@ -139,7 +164,7 @@ export class YoutubeDLCLI {
     url: string
     latestVideosCount?: number
     processOptions: execa.NodeOptions
-  }): Promise<{ upload_date: string, webpage_url: string }[]> {
+  }): Promise<Partial<YoutubeDLCLIResult> | Partial<YoutubeDLCLIResult>[]> {
     const additionalYoutubeDLArgs = [ '--skip-download', '--playlist-reverse' ]
 
     if (CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.NAME === 'yt-dlp') {
@@ -246,4 +271,11 @@ export class YoutubeDLCLI {
 
     return args
   }
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  YoutubeDLCLIResult,
+  YoutubeDLCLI
 }

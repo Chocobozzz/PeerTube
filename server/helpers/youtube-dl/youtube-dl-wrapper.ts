@@ -7,14 +7,12 @@ import { logger, loggerTagsFactory } from '../logger'
 import { generateVideoImportTmpPath } from '../utils'
 import { YoutubeDLCLI } from './youtube-dl-cli'
 import { YoutubeDLInfo, YoutubeDLInfoBuilder } from './youtube-dl-info-builder'
+import { YoutubeDLListBuilder } from './youtube-dl-list-builder'
+import { YoutubeDLLiveStatus } from './youtube-dl-live-status.enum'
+import { YoutubeDLError } from './youtube-dl-error'
+import { YoutubeDLSubs } from './youtube-dl-subs'
 
 const lTags = loggerTagsFactory('youtube-dl')
-
-export type YoutubeDLSubs = {
-  language: string
-  filename: string
-  path: string
-}[]
 
 const processOptions = {
   maxBuffer: 1024 * 1024 * 30 // 30MB
@@ -42,16 +40,24 @@ class YoutubeDLWrapper {
 
     if (!info) throw new Error(`YoutubeDL could not get info from ${this.url}`)
 
-    if (info.is_live === true) throw new Error('Cannot download a live streaming.')
+    const builder = new YoutubeDLInfoBuilder(info)
+    const serializedInfo = builder.getInfo()
 
-    const infoBuilder = new YoutubeDLInfoBuilder(info)
+    try {
+      this.checkAvailability(serializedInfo)
+      this.checkFormats(serializedInfo)
+    } catch (err) {
+      throw YoutubeDLError.fromError(
+        err, YoutubeDLError.STATUS.VIDEO_AVAILABILITY_ERROR, this.url
+      )
+    }
 
-    return infoBuilder.getInfo()
+    return serializedInfo
   }
 
   async getInfoForListImport (options: {
     latestVideosCount?: number
-  }) {
+  }): Promise<string[]> {
     const youtubeDL = await YoutubeDLCLI.safeGet()
 
     const list = await youtubeDL.getListInfo({
@@ -62,7 +68,10 @@ class YoutubeDLWrapper {
 
     if (!Array.isArray(list)) throw new Error(`YoutubeDL could not get list info from ${this.url}: ${inspect(list)}`)
 
-    return list.map(info => info.webpage_url)
+    const builder = new YoutubeDLListBuilder(list)
+    const serializedList = builder.getList()
+
+    return serializedList.map(info => info.webpageUrl)
   }
 
   async getSubtitles (): Promise<YoutubeDLSubs> {
@@ -144,6 +153,25 @@ class YoutubeDLWrapper {
     const directoryContent = await readdir(dirname(tmpPath))
 
     throw new Error(`Cannot guess path of ${tmpPath}. Directory content: ${directoryContent.join(', ')}`)
+  }
+
+  private checkFormats (info: YoutubeDLInfo) {
+    if (info.formats.length > 0) {
+      return
+    }
+
+    throw new YoutubeDLError({ status: YoutubeDLError.STATUS.NO_FORMATS_AVAILABLE, url: info.webpageUrl })
+  }
+
+  private checkAvailability (info: YoutubeDLInfo | Partial<YoutubeDLInfo>) {
+    switch (info.liveStatus) {
+      case YoutubeDLLiveStatus.LIVE:
+        throw new YoutubeDLError({ status: YoutubeDLError.STATUS.IS_LIVE, url: info.webpageUrl })
+      case YoutubeDLLiveStatus.POST_PROCESSING:
+        throw new YoutubeDLError({ status: YoutubeDLError.STATUS.NOT_POST_PROCESSED, url: info.webpageUrl })
+      case YoutubeDLLiveStatus.TO_BE_PUBLISHED:
+        throw new YoutubeDLError({ status: YoutubeDLError.STATUS.TO_BE_PUBLISHED, url: info.webpageUrl })
+    }
   }
 }
 
