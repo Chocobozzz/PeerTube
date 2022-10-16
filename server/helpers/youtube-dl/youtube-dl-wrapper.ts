@@ -57,7 +57,7 @@ class YoutubeDLWrapper {
 
   async getInfoForListImport (options: {
     latestVideosCount?: number
-  }): Promise<string[]> {
+  }): Promise<Partial<YoutubeDLInfo>[]> {
     const youtubeDL = await YoutubeDLCLI.safeGet()
 
     const list = await youtubeDL.getListInfo({
@@ -71,7 +71,7 @@ class YoutubeDLWrapper {
     const builder = new YoutubeDLListBuilder(list)
     const serializedList = builder.getList()
 
-    return serializedList.map(info => info.webpageUrl)
+    return serializedList
   }
 
   async getSubtitles (): Promise<YoutubeDLSubs> {

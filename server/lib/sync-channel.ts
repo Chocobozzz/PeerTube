@@ -5,7 +5,7 @@ import { buildYoutubeDLImport } from '@server/lib/video-import'
 import { UserModel } from '@server/models/user/user'
 import { VideoImportModel } from '@server/models/video/video-import'
 import { MChannel, MChannelAccountDefault, MChannelSync } from '@server/types/models'
-import { VideoChannelSyncState, VideoPrivacy } from '@shared/models'
+import { VideoChannelSyncState, VideoImportCreate, VideoPrivacy } from '@shared/models'
 import { CreateJobArgument, JobQueue } from './job-queue'
 import { ServerConfigManager } from './server-config-manager'
 
@@ -34,14 +34,9 @@ export async function synchronizeChannel (options: {
       CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
     )
 
-    const targetUrls = await youtubeDL.getInfoForListImport({ latestVideosCount: videosCountLimit })
+    const entries = await youtubeDL.getInfoForListImport({ latestVideosCount: videosCountLimit })
 
-    logger.info(
-      'Fetched %d candidate URLs for sync channel %s.',
-      targetUrls.length, channel.Actor.preferredUsername, { targetUrls, ...lTags() }
-    )
-
-    if (targetUrls.length === 0) {
+    if (entries.length === 0) {
       if (channelSync) {
         channelSync.state = VideoChannelSyncState.SYNCED
         await channelSync.save()
@@ -50,19 +45,34 @@ export async function synchronizeChannel (options: {
       return
     }
 
+    const targetUrls = entries.map(item => item.webpageUrl)
+
+    logger.info(
+      'Fetched %d candidate URLs for sync channel %s.',
+      entries.length, channel.Actor.preferredUsername, { targetUrls, ...lTags() }
+    )
+
     const children: CreateJobArgument[] = []
 
-    for (const targetUrl of targetUrls) {
-      if (await skipImport(channel, targetUrl, onlyAfter)) continue
+    for (const entry of entries) {
+      if (await skipImport(channel, entry.webpageUrl, onlyAfter)) continue
+
+      const importDataOverride: Partial<VideoImportCreate> = {
+        // TODO: allow configuring video privacy per channel sync
+        privacy: VideoPrivacy.PUBLIC
+      }
+
+      // only override if available
+      if (entry.originallyPublishedAt !== null) {
+        importDataOverride.originallyPublishedAt = entry.originallyPublishedAt
+      }
 
       const { job } = await buildYoutubeDLImport({
         user,
         channel,
-        targetUrl,
+        targetUrl: entry.webpageUrl,
         channelSync,
-        importDataOverride: {
-          privacy: VideoPrivacy.PUBLIC
-        }
+        importDataOverride
       })
 
       children.push(job)
@@ -110,7 +120,7 @@ async function skipImport (channel: MChannel, targetUrl: string, onlyAfter?: Dat
     const onlyAfterWithoutTime = new Date(onlyAfter)
     onlyAfterWithoutTime.setHours(0, 0, 0, 0)
 
-    if (videoInfo.originallyPublishedAtWithoutTime.getTime() < onlyAfterWithoutTime.getTime()) {
+    if (videoInfo.originallyPublishedAt.getTime() < onlyAfterWithoutTime.getTime()) {
       return true
     }
   }

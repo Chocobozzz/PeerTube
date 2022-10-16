@@ -34,6 +34,7 @@ type YoutubeDLCLIResult = {
   live_status?: string
   ie_key?: string
   duration?: number
+  timestamp?: number
 }
 
 class YoutubeDLCLI {
@@ -148,7 +149,17 @@ class YoutubeDLCLI {
   }): Promise<YoutubeDLCLIResult | YoutubeDLCLIResult[]> {
     const { url, format, additionalYoutubeDLArgs = [], processOptions } = options
 
-    const completeArgs = additionalYoutubeDLArgs.concat([ '--dump-json', '-f', format ])
+    if (CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.NAME === 'yt-dlp') {
+      // Extract epoch of date and time when using yt-dlp
+      additionalYoutubeDLArgs.push('--extractor-args', 'youtubetab:approximate-date')
+    }
+
+    // Either use format template or JSON output
+    if (!additionalYoutubeDLArgs.includes('--print') && !additionalYoutubeDLArgs.includes('-O')) {
+      additionalYoutubeDLArgs.push('--dump-json')
+    }
+
+    const completeArgs = additionalYoutubeDLArgs.concat([ '-f', format ])
 
     const data = await this.run({ url, args: completeArgs, processOptions })
     if (!data) return undefined
@@ -170,6 +181,10 @@ class YoutubeDLCLI {
     if (CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.NAME === 'yt-dlp') {
       // Optimize listing videos only when using yt-dlp because it is bugged with youtube-dl when fetching a channel
       additionalYoutubeDLArgs.push('--flat-playlist')
+
+      // Limit yt-dlp output to only the data we're interested in
+      // Decreases chance of process output buffer exhaustion on big channels
+      additionalYoutubeDLArgs.push('-O', '%(.{webpage_url,timestamp})j')
     }
 
     if (options.latestVideosCount !== undefined) {

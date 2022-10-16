@@ -133,8 +133,8 @@ async function processVideo (parameters: {
 
   if (
     options.since &&
-    videoInfo.originallyPublishedAtWithoutTime &&
-    videoInfo.originallyPublishedAtWithoutTime.getTime() < options.since.getTime()
+    videoInfo.originallyPublishedAt &&
+    videoInfo.originallyPublishedAt.getTime() < options.since.getTime()
   ) {
     log.info('Video "%s" has been published before "%s", don\'t upload it.\n', videoInfo.name, formatDate(options.since))
     return true
@@ -142,8 +142,8 @@ async function processVideo (parameters: {
 
   if (
     options.until &&
-    videoInfo.originallyPublishedAtWithoutTime &&
-    videoInfo.originallyPublishedAtWithoutTime.getTime() > options.until.getTime()
+    videoInfo.originallyPublishedAt &&
+    videoInfo.originallyPublishedAt.getTime() > options.until.getTime()
   ) {
     log.info('Video "%s" has been published after "%s", don\'t upload it.\n', videoInfo.name, formatDate(options.until))
     return true
@@ -220,8 +220,8 @@ async function uploadVideoOnPeerTube (parameters: {
   const attributes = {
     ...baseAttributes,
 
-    originallyPublishedAtWithoutTime: videoInfo.originallyPublishedAtWithoutTime
-      ? videoInfo.originallyPublishedAtWithoutTime.toISOString()
+    originallyPublishedAt: videoInfo.originallyPublishedAt
+      ? videoInfo.originallyPublishedAt.toISOString()
       : null,
 
     thumbnailfile,

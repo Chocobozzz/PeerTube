@@ -23,7 +23,8 @@ class YoutubeDLListBuilder extends YoutubeDLBaseBuilder {
   private buildList (entries: Partial<YoutubeDLCLIResult>[]): Partial<YoutubeDLInfo>[] {
     return entries.map((item) => {
       const info: Partial<YoutubeDLInfo> = {
-        webpageUrl: item.webpage_url
+        webpageUrl: item.webpage_url,
+        originallyPublishedAt: this.buildOriginallyPublishedAt(item)
       }
 
       return info

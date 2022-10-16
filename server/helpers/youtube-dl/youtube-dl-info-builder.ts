@@ -14,7 +14,7 @@ type YoutubeDLInfo = {
   tags?: string[]
   thumbnailUrl?: string
   ext?: string
-  originallyPublishedAtWithoutTime?: Date
+  originallyPublishedAt?: Date
   webpageUrl?: string
   liveStatus?: string
   urls?: string[]
@@ -36,25 +36,6 @@ class YoutubeDLInfoBuilder extends YoutubeDLBaseBuilder {
     return obj
   }
 
-  private buildOriginallyPublishedAt (obj: any): Date {
-    let originallyPublishedAt: Date = null
-
-    const uploadDateMatcher = /^(\d{4})(\d{2})(\d{2})$/.exec(obj.upload_date)
-    if (uploadDateMatcher) {
-      originallyPublishedAt = new Date()
-      originallyPublishedAt.setHours(0, 0, 0, 0)
-
-      const year = parseInt(uploadDateMatcher[1], 10)
-      // Month starts from 0
-      const month = parseInt(uploadDateMatcher[2], 10) - 1
-      const day = parseInt(uploadDateMatcher[3], 10)
-
-      originallyPublishedAt.setFullYear(year, month, day)
-    }
-
-    return originallyPublishedAt
-  }
-
   private buildVideoInfo (obj: YoutubeDLCLIResult): YoutubeDLInfo {
     const info: Partial<YoutubeDLInfo> = {
       name: this.titleTruncation(obj.title),
@@ -67,7 +48,7 @@ class YoutubeDLInfoBuilder extends YoutubeDLBaseBuilder {
       thumbnailUrl: obj.thumbnail || undefined,
       urls: this.buildAvailableUrl(obj),
       formats: obj.formats || [],
-      originallyPublishedAtWithoutTime: this.buildOriginallyPublishedAt(obj),
+      originallyPublishedAt: this.buildOriginallyPublishedAt(obj),
       ext: obj.ext,
       webpageUrl: obj.webpage_url,
       liveStatus: obj.live_status

@@ -125,7 +125,7 @@ async function buildVideoFromImport ({ channelId, importData, importDataOverride
     channelId,
     originallyPublishedAt: importDataOverride?.originallyPublishedAt
       ? new Date(importDataOverride?.originallyPublishedAt)
-      : importData.originallyPublishedAtWithoutTime
+      : importData.originallyPublishedAt
   }
 
   videoData = await Hooks.wrapObject(
