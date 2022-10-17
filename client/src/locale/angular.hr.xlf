@@ -3164,8 +3164,7 @@
       </trans-unit>
       <trans-unit id="4202012170513622087" datatype="html">
         <source>The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Since transcoding is enabled, videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target state="new"> The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Since transcoding is enabled, videos size can be at most ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
-</target>
+        <target state="translated">Kontingent za videa uzima u obzir samo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>izvornu<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> veličinu videa. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Budući da je transkodiranje aktivirano, veličina videa može biti najviše ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/shared/user-real-quota-info.component.html</context>
           <context context-type="linenumber">1,4</context>
@@ -4650,7 +4649,7 @@
       </trans-unit>
       <trans-unit id="4309045590850686400" datatype="html">
         <source>Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</source>
-        <target state="new">Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</target>
+        <target state="translated">Dvofaktorska autentifikacija dodaje dodatnu sigurnost tvom računu zahtijevajući numerički kȏd od drugog uređaja (najčešće mobitela) tijekom prijave.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -9519,7 +9518,7 @@
       </trans-unit>
       <trans-unit id="3381033584543723394" datatype="html">
         <source>Scan this QR code into a TOTP app on your phone. This app will generate tokens that you will have to enter when logging in.</source>
-        <target state="new"> Scan this QR code into a TOTP app on your phone. This app will generate tokens that you will have to enter when logging in. </target>
+        <target state="translated">Snimi ovaj QR kȏd u program za izradu vremenski ograničene jednokratna lozinka na svom telefonu. Ovaj program će generirati tokene koje ćeš morati unijeti tijekom prijave.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -9527,7 +9526,7 @@
       </trans-unit>
       <trans-unit id="7990066577913542327" datatype="html">
         <source>If you can't scan the QR code and need to enter it manually, here is the plain-text secret:</source>
-        <target state="new"> If you can't scan the QR code and need to enter it manually, here is the plain-text secret: </target>
+        <target state="translated">Ako ne možeš snimiti QR kȏd i ako ga moraš ga unijeti ručno, ovo je tajna u obliku običnog teksta:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">34,36</context>
