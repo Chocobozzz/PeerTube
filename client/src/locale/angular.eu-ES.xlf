@@ -114,22 +114,22 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-hours" datatype="html">
         <source>Increment hours</source>
-        <target state="new">Increment hours</target>
+        <target state="translated">Orduak gehitu</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">206</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
         <source>Decrement hours</source>
-        <target state="new">Decrement hours</target>
+        <target state="translated">Orduak murriztu</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">228</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
         <source>Increment minutes</source>
-        <target state="new">Increment minutes</target>
+        <target state="translated">Minutuak gehitu</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">245</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
         <source>Decrement minutes</source>
-        <target state="new">Decrement minutes</target>
+        <target state="translated">Minutuak murriztu</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">270</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.SS" datatype="html">
@@ -144,7 +144,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
         <source>Increment seconds</source>
-        <target state="new">Increment seconds</target>
+        <target state="translated">Gehitu segundoak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">295</context>
@@ -152,7 +152,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html">
         <source>Decrement seconds</source>
-        <target state="new">Decrement seconds</target>
+        <target state="translated">Murriztu segundoak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">295</context>
@@ -412,7 +412,7 @@
       </trans-unit>
       <trans-unit id="8817917090143649804" datatype="html">
         <source>Account muted</source>
-        <target state="new">Account muted</target>
+        <target state="translated">Mututako kontua</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="1684597533616494551" datatype="html">
