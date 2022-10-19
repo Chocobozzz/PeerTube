@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { expectNotStartWith, expectStartWith, FIXTURE_URLS, MockProxy } from '@server/tests/shared'
-import { areObjectStorageTestsDisabled } from '@shared/core-utils'
+import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
@@ -120,40 +120,40 @@ describe('Test proxy', function () {
   })
 
   describe('Object storage', function () {
-    if (areObjectStorageTestsDisabled()) return
+    if (areMockObjectStorageTestsDisabled()) return
 
     before(async function () {
       this.timeout(30000)
 
-      await ObjectStorageCommand.prepareDefaultBuckets()
+      await ObjectStorageCommand.prepareDefaultMockBuckets()
     })
 
     it('Should succeed to upload to object storage with the appropriate proxy config', async function () {
       this.timeout(120000)
 
       await servers[0].kill()
-      await servers[0].run(ObjectStorageCommand.getDefaultConfig(), { env: goodEnv })
+      await servers[0].run(ObjectStorageCommand.getDefaultMockConfig(), { env: goodEnv })
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
       await waitJobs(servers)
 
       const video = await servers[0].videos.get({ id: uuid })
 
-      expectStartWith(video.files[0].fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())
+      expectStartWith(video.files[0].fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
     })
 
     it('Should fail to upload to object storage with a wrong proxy config', async function () {
       this.timeout(120000)
 
       await servers[0].kill()
-      await servers[0].run(ObjectStorageCommand.getDefaultConfig(), { env: badEnv })
+      await servers[0].run(ObjectStorageCommand.getDefaultMockConfig(), { env: badEnv })
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
       await waitJobs(servers)
 
       const video = await servers[0].videos.get({ id: uuid })
 
-      expectNotStartWith(video.files[0].fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())
+      expectNotStartWith(video.files[0].fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
     })
   })
 

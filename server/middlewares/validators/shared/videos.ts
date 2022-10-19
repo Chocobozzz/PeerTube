@@ -111,7 +111,7 @@ async function checkCanSeeVideo (options: {
 }) {
   const { req, res, video, paramId } = options
 
-  if (video.requiresAuth(paramId)) {
+  if (video.requiresAuth({ urlParamId: paramId, checkBlacklist: true })) {
     return checkCanSeeAuthVideo(req, res, video)
   }
 
@@ -174,13 +174,13 @@ async function checkCanAccessVideoStaticFiles (options: {
   res: Response
   paramId: string
 }) {
-  const { video, req, res, paramId } = options
+  const { video, req, res } = options
 
   if (res.locals.oauth?.token.User) {
     return checkCanSeeVideo(options)
   }
 
-  if (!video.requiresAuth(paramId)) return true
+  if (!video.hasPrivateStaticPath()) return true
 
   const videoFileToken = req.query.videoFileToken
   if (!videoFileToken) {

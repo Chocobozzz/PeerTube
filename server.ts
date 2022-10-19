@@ -107,6 +107,7 @@ import {
   wellKnownRouter,
   lazyStaticRouter,
   servicesRouter,
+  objectStorageProxyRouter,
   pluginsRouter,
   webfingerRouter,
   trackerRouter,
@@ -240,6 +241,7 @@ app.use('/', wellKnownRouter)
 app.use('/', miscRouter)
 app.use('/', downloadRouter)
 app.use('/', lazyStaticRouter)
+app.use('/', objectStorageProxyRouter)
 
 // Client files, last valid routes!
 const cliOptions = cli.opts<{ client: boolean, plugins: boolean }>()

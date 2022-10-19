@@ -165,7 +165,7 @@ function generateMagnetUri (
   const xs = videoFile.getTorrentUrl()
   const announce = trackerUrls
 
-  let urlList = video.requiresAuth(video.uuid)
+  let urlList = video.hasPrivateStaticPath()
     ? []
     : [ videoFile.getFileUrl(video) ]
 
@@ -243,7 +243,7 @@ function buildAnnounceList () {
 }
 
 function buildUrlList (video: MVideo, videoFile: MVideoFile) {
-  if (video.requiresAuth(video.uuid)) return []
+  if (video.hasPrivateStaticPath()) return []
 
   return [ videoFile.getFileUrl(video) ]
 }

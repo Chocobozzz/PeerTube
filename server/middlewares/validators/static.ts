@@ -7,10 +7,17 @@ import { logger } from '@server/helpers/logger'
 import { LRU_CACHE } from '@server/initializers/constants'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
+import { MStreamingPlaylist, MVideoFile, MVideoThumbnail } from '@server/types/models'
 import { HttpStatusCode } from '@shared/models'
 import { areValidationErrors, checkCanAccessVideoStaticFiles } from './shared'
 
-const staticFileTokenBypass = new LRUCache<string, boolean>({
+type LRUValue = {
+  allowed: boolean
+  video?: MVideoThumbnail
+  file?: MVideoFile
+  playlist?: MStreamingPlaylist }
+
+const staticFileTokenBypass = new LRUCache<string, LRUValue>({
   max: LRU_CACHE.STATIC_VIDEO_FILES_RIGHTS_CHECK.MAX_SIZE,
   ttl: LRU_CACHE.STATIC_VIDEO_FILES_RIGHTS_CHECK.TTL
 })
@@ -27,18 +34,26 @@ const ensureCanAccessVideoPrivateWebTorrentFiles = [
     const cacheKey = token + '-' + req.originalUrl
 
     if (staticFileTokenBypass.has(cacheKey)) {
-      const allowedFromCache = staticFileTokenBypass.get(cacheKey)
+      const { allowed, file, video } = staticFileTokenBypass.get(cacheKey)
 
-      if (allowedFromCache === true) return next()
+      if (allowed === true) {
+        res.locals.onlyVideo = video
+        res.locals.videoFile = file
+
+        return next()
+      }
 
       return res.sendStatus(HttpStatusCode.FORBIDDEN_403)
     }
 
-    const allowed = await isWebTorrentAllowed(req, res)
+    const result = await isWebTorrentAllowed(req, res)
 
-    staticFileTokenBypass.set(cacheKey, allowed)
+    staticFileTokenBypass.set(cacheKey, result)
 
-    if (allowed !== true) return
+    if (result.allowed !== true) return
+
+    res.locals.onlyVideo = result.video
+    res.locals.videoFile = result.file
 
     return next()
   }
@@ -64,18 +79,28 @@ const ensureCanAccessPrivateVideoHLSFiles = [
     const cacheKey = token + '-' + videoUUID
 
     if (staticFileTokenBypass.has(cacheKey)) {
-      const allowedFromCache = staticFileTokenBypass.get(cacheKey)
+      const { allowed, file, playlist, video } = staticFileTokenBypass.get(cacheKey)
 
-      if (allowedFromCache === true) return next()
+      if (allowed === true) {
+        res.locals.onlyVideo = video
+        res.locals.videoFile = file
+        res.locals.videoStreamingPlaylist = playlist
+
+        return next()
+      }
 
       return res.sendStatus(HttpStatusCode.FORBIDDEN_403)
     }
 
-    const allowed = await isHLSAllowed(req, res, videoUUID)
+    const result = await isHLSAllowed(req, res, videoUUID)
 
-    staticFileTokenBypass.set(cacheKey, allowed)
+    staticFileTokenBypass.set(cacheKey, result)
 
-    if (allowed !== true) return
+    if (result.allowed !== true) return
+
+    res.locals.onlyVideo = result.video
+    res.locals.videoFile = result.file
+    res.locals.videoStreamingPlaylist = result.playlist
 
     return next()
   }
@@ -96,25 +121,38 @@ async function isWebTorrentAllowed (req: express.Request, res: express.Response)
     logger.debug('Unknown static file %s to serve', req.originalUrl, { filename })
 
     res.sendStatus(HttpStatusCode.FORBIDDEN_403)
-    return false
+    return { allowed: false }
   }
 
-  const video = file.getVideo()
+  const video = await VideoModel.load(file.getVideo().id)
 
-  return checkCanAccessVideoStaticFiles({ req, res, video, paramId: video.uuid })
+  return {
+    file,
+    video,
+    allowed: await checkCanAccessVideoStaticFiles({ req, res, video, paramId: video.uuid })
+  }
 }
 
 async function isHLSAllowed (req: express.Request, res: express.Response, videoUUID: string) {
-  const video = await VideoModel.load(videoUUID)
+  const filename = basename(req.path)
+
+  const video = await VideoModel.loadWithFiles(videoUUID)
 
   if (!video) {
     logger.debug('Unknown static file %s to serve', req.originalUrl, { videoUUID })
 
     res.sendStatus(HttpStatusCode.FORBIDDEN_403)
-    return false
+    return { allowed: false }
   }
 
-  return checkCanAccessVideoStaticFiles({ req, res, video, paramId: video.uuid })
+  const file = await VideoFileModel.loadByFilename(filename)
+
+  return {
+    file,
+    video,
+    playlist: video.getHLSPlaylist(),
+    allowed: await checkCanAccessVideoStaticFiles({ req, res, video, paramId: video.uuid })
+  }
 }
 
 function extractTokenOrDie (req: express.Request, res: express.Response) {

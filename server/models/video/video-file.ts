@@ -22,7 +22,12 @@ import validator from 'validator'
 import { logger } from '@server/helpers/logger'
 import { extractVideo } from '@server/helpers/video'
 import { buildRemoteVideoBaseUrl } from '@server/lib/activitypub/url'
-import { getHLSPublicFileUrl, getWebTorrentPublicFileUrl } from '@server/lib/object-storage'
+import {
+  getHLSPrivateFileUrl,
+  getHLSPublicFileUrl,
+  getWebTorrentPrivateFileUrl,
+  getWebTorrentPublicFileUrl
+} from '@server/lib/object-storage'
 import { getFSTorrentFilePath } from '@server/lib/paths'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy'
 import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/models'
@@ -503,7 +508,25 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     return !!this.videoStreamingPlaylistId
   }
 
-  getObjectStorageUrl () {
+  // ---------------------------------------------------------------------------
+
+  getObjectStorageUrl (video: MVideo) {
+    if (video.hasPrivateStaticPath()) {
+      return this.getPrivateObjectStorageUrl(video)
+    }
+
+    return this.getPublicObjectStorageUrl()
+  }
+
+  private getPrivateObjectStorageUrl (video: MVideo) {
+    if (this.isHLS()) {
+      return getHLSPrivateFileUrl(video, this.filename)
+    }
+
+    return getWebTorrentPrivateFileUrl(this.filename)
+  }
+
+  private getPublicObjectStorageUrl () {
     if (this.isHLS()) {
       return getHLSPublicFileUrl(this.fileUrl)
     }
@@ -511,32 +534,45 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     return getWebTorrentPublicFileUrl(this.fileUrl)
   }
 
-  getFileUrl (video: MVideo) {
-    if (this.storage === VideoStorage.OBJECT_STORAGE) {
-      return this.getObjectStorageUrl()
-    }
+  // ---------------------------------------------------------------------------
 
-    if (!this.Video) this.Video = video as VideoModel
-    if (video.isOwned()) return WEBSERVER.URL + this.getFileStaticPath(video)
+  getFileUrl (video: MVideo) {
+    if (video.isOwned()) {
+      if (this.storage === VideoStorage.OBJECT_STORAGE) {
+        return this.getObjectStorageUrl(video)
+      }
+
+      return WEBSERVER.URL + this.getFileStaticPath(video)
+    }
 
     return this.fileUrl
   }
 
+  // ---------------------------------------------------------------------------
+
   getFileStaticPath (video: MVideo) {
-    if (this.isHLS()) {
-      if (isVideoInPrivateDirectory(video.privacy)) {
-        return join(STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS, video.uuid, this.filename)
-      }
+    if (this.isHLS()) return this.getHLSFileStaticPath(video)
 
-      return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, video.uuid, this.filename)
-    }
+    return this.getWebTorrentFileStaticPath(video)
+  }
 
+  private getWebTorrentFileStaticPath (video: MVideo) {
     if (isVideoInPrivateDirectory(video.privacy)) {
       return join(STATIC_PATHS.PRIVATE_WEBSEED, this.filename)
     }
 
     return join(STATIC_PATHS.WEBSEED, this.filename)
   }
+
+  private getHLSFileStaticPath (video: MVideo) {
+    if (isVideoInPrivateDirectory(video.privacy)) {
+      return join(STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS, video.uuid, this.filename)
+    }
+
+    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, video.uuid, this.filename)
+  }
+
+  // ---------------------------------------------------------------------------
 
   getFileDownloadUrl (video: MVideoWithHost) {
     const path = this.isHLS()

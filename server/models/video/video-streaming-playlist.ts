@@ -15,7 +15,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { getHLSPublicFileUrl } from '@server/lib/object-storage'
+import { getHLSPrivateFileUrl, getHLSPublicFileUrl } from '@server/lib/object-storage'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename } from '@server/lib/paths'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy'
 import { VideoFileModel } from '@server/models/video/video-file'
@@ -245,10 +245,12 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
     this.p2pMediaLoaderInfohashes = VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(masterPlaylistUrl, files)
   }
 
+  // ---------------------------------------------------------------------------
+
   getMasterPlaylistUrl (video: MVideo) {
     if (video.isOwned()) {
       if (this.storage === VideoStorage.OBJECT_STORAGE) {
-        return getHLSPublicFileUrl(this.playlistUrl)
+        return this.getMasterPlaylistObjectStorageUrl(video)
       }
 
       return WEBSERVER.URL + this.getMasterPlaylistStaticPath(video)
@@ -257,10 +259,20 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
     return this.playlistUrl
   }
 
+  private getMasterPlaylistObjectStorageUrl (video: MVideo) {
+    if (video.hasPrivateStaticPath()) {
+      return getHLSPrivateFileUrl(video, this.playlistFilename)
+    }
+
+    return getHLSPublicFileUrl(this.playlistUrl)
+  }
+
+  // ---------------------------------------------------------------------------
+
   getSha256SegmentsUrl (video: MVideo) {
     if (video.isOwned()) {
       if (this.storage === VideoStorage.OBJECT_STORAGE) {
-        return getHLSPublicFileUrl(this.segmentsSha256Url)
+        return this.getSha256SegmentsObjectStorageUrl(video)
       }
 
       return WEBSERVER.URL + this.getSha256SegmentsStaticPath(video)
@@ -268,6 +280,16 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
 
     return this.segmentsSha256Url
   }
+
+  private getSha256SegmentsObjectStorageUrl (video: MVideo) {
+    if (video.hasPrivateStaticPath()) {
+      return getHLSPrivateFileUrl(video, this.segmentsSha256Filename)
+    }
+
+    return getHLSPublicFileUrl(this.segmentsSha256Url)
+  }
+
+  // ---------------------------------------------------------------------------
 
   getStringType () {
     if (this.type === VideoStreamingPlaylistType.HLS) return 'hls'

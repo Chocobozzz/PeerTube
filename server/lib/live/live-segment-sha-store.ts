@@ -5,6 +5,7 @@ import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { MStreamingPlaylistVideo } from '@server/types/models'
 import { buildSha256Segment } from '../hls'
 import { storeHLSFileFromPath } from '../object-storage'
+import PQueue from 'p-queue'
 
 const lTags = loggerTagsFactory('live')
 
@@ -16,6 +17,7 @@ class LiveSegmentShaStore {
   private readonly sha256Path: string
   private readonly streamingPlaylist: MStreamingPlaylistVideo
   private readonly sendToObjectStorage: boolean
+  private readonly writeQueue = new PQueue({ concurrency: 1 })
 
   constructor (options: {
     videoUUID: string
@@ -37,7 +39,11 @@ class LiveSegmentShaStore {
     const segmentName = basename(segmentPath)
     this.segmentsSha256.set(segmentName, shaResult)
 
-    await this.writeToDisk()
+    try {
+      await this.writeToDisk()
+    } catch (err) {
+      logger.error('Cannot write sha segments to disk.', { err })
+    }
   }
 
   async removeSegmentSha (segmentPath: string) {
@@ -55,19 +61,20 @@ class LiveSegmentShaStore {
     await this.writeToDisk()
   }
 
-  private async writeToDisk () {
-    await writeJson(this.sha256Path, mapToJSON(this.segmentsSha256))
+  private writeToDisk () {
+    return this.writeQueue.add(async () => {
+      await writeJson(this.sha256Path, mapToJSON(this.segmentsSha256))
 
-    if (this.sendToObjectStorage) {
-      const url = await storeHLSFileFromPath(this.streamingPlaylist, this.sha256Path)
+      if (this.sendToObjectStorage) {
+        const url = await storeHLSFileFromPath(this.streamingPlaylist, this.sha256Path)
 
-      if (this.streamingPlaylist.segmentsSha256Url !== url) {
-        this.streamingPlaylist.segmentsSha256Url = url
-        await this.streamingPlaylist.save()
+        if (this.streamingPlaylist.segmentsSha256Url !== url) {
+          this.streamingPlaylist.segmentsSha256Url = url
+          await this.streamingPlaylist.save()
+        }
       }
-    }
+    })
   }
-
 }
 
 export {

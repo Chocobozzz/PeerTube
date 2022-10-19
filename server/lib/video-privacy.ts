@@ -2,8 +2,9 @@ import { move } from 'fs-extra'
 import { join } from 'path'
 import { logger } from '@server/helpers/logger'
 import { DIRECTORIES } from '@server/initializers/constants'
-import { MVideo, MVideoFullLight } from '@server/types/models'
-import { VideoPrivacy } from '@shared/models'
+import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
+import { VideoPrivacy, VideoStorage } from '@shared/models'
+import { updateHLSFilesACL, updateWebTorrentFileACL } from './object-storage'
 
 function setVideoPrivacy (video: MVideo, newPrivacy: VideoPrivacy) {
   if (video.privacy === VideoPrivacy.PRIVATE && newPrivacy !== VideoPrivacy.PRIVATE) {
@@ -50,47 +51,77 @@ export {
 
 // ---------------------------------------------------------------------------
 
+type MoveType = 'private-to-public' | 'public-to-private'
+
 async function moveFiles (options: {
-  type: 'private-to-public' | 'public-to-private'
+  type: MoveType
   video: MVideoFullLight
 }) {
   const { type, video } = options
 
-  const directories = type === 'private-to-public'
-    ? {
-      webtorrent: { old: DIRECTORIES.VIDEOS.PRIVATE, new: DIRECTORIES.VIDEOS.PUBLIC },
-      hls: { old: DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, new: DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC }
-    }
-    : {
-      webtorrent: { old: DIRECTORIES.VIDEOS.PUBLIC, new: DIRECTORIES.VIDEOS.PRIVATE },
-      hls: { old: DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC, new: DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE }
-    }
-
   for (const file of video.VideoFiles) {
-    const source = join(directories.webtorrent.old, file.filename)
-    const destination = join(directories.webtorrent.new, file.filename)
-
-    try {
-      logger.info('Moving WebTorrent files of %s after privacy change (%s -> %s).', video.uuid, source, destination)
-
-      await move(source, destination)
-    } catch (err) {
-      logger.error('Cannot move webtorrent file %s to %s after privacy change', source, destination, { err })
+    if (file.storage === VideoStorage.FILE_SYSTEM) {
+      await moveWebTorrentFileOnFS(type, video, file)
+    } else {
+      await updateWebTorrentFileACL(video, file)
     }
   }
 
   const hls = video.getHLSPlaylist()
 
   if (hls) {
-    const source = join(directories.hls.old, video.uuid)
-    const destination = join(directories.hls.new, video.uuid)
-
-    try {
-      logger.info('Moving HLS files of %s after privacy change (%s -> %s).', video.uuid, source, destination)
-
-      await move(source, destination)
-    } catch (err) {
-      logger.error('Cannot move HLS file %s to %s after privacy change', source, destination, { err })
+    if (hls.storage === VideoStorage.FILE_SYSTEM) {
+      await moveHLSFilesOnFS(type, video)
+    } else {
+      await updateHLSFilesACL(hls)
     }
   }
+}
+
+async function moveWebTorrentFileOnFS (type: MoveType, video: MVideo, file: MVideoFile) {
+  const directories = getWebTorrentDirectories(type)
+
+  const source = join(directories.old, file.filename)
+  const destination = join(directories.new, file.filename)
+
+  try {
+    logger.info('Moving WebTorrent files of %s after privacy change (%s -> %s).', video.uuid, source, destination)
+
+    await move(source, destination)
+  } catch (err) {
+    logger.error('Cannot move webtorrent file %s to %s after privacy change', source, destination, { err })
+  }
+}
+
+function getWebTorrentDirectories (moveType: MoveType) {
+  if (moveType === 'private-to-public') {
+    return { old: DIRECTORIES.VIDEOS.PRIVATE, new: DIRECTORIES.VIDEOS.PUBLIC }
+  }
+
+  return { old: DIRECTORIES.VIDEOS.PUBLIC, new: DIRECTORIES.VIDEOS.PRIVATE }
+}
+
+// ---------------------------------------------------------------------------
+
+async function moveHLSFilesOnFS (type: MoveType, video: MVideo) {
+  const directories = getHLSDirectories(type)
+
+  const source = join(directories.old, video.uuid)
+  const destination = join(directories.new, video.uuid)
+
+  try {
+    logger.info('Moving HLS files of %s after privacy change (%s -> %s).', video.uuid, source, destination)
+
+    await move(source, destination)
+  } catch (err) {
+    logger.error('Cannot move HLS file %s to %s after privacy change', source, destination, { err })
+  }
+}
+
+function getHLSDirectories (moveType: MoveType) {
+  if (moveType === 'private-to-public') {
+    return { old: DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, new: DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC }
+  }
+
+  return { old: DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC, new: DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE }
 }

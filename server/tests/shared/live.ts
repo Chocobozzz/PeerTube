@@ -50,7 +50,7 @@ async function testVideoResolutions (options: {
     })
 
     if (objectStorage) {
-      expect(hlsPlaylist.playlistUrl).to.contain(ObjectStorageCommand.getPlaylistBaseUrl())
+      expect(hlsPlaylist.playlistUrl).to.contain(ObjectStorageCommand.getMockPlaylistBaseUrl())
     }
 
     for (let i = 0; i < resolutions.length; i++) {
@@ -65,11 +65,11 @@ async function testVideoResolutions (options: {
       })
 
       const baseUrl = objectStorage
-        ? ObjectStorageCommand.getPlaylistBaseUrl() + 'hls'
+        ? ObjectStorageCommand.getMockPlaylistBaseUrl() + 'hls'
         : originServer.url + '/static/streaming-playlists/hls'
 
       if (objectStorage) {
-        expect(hlsPlaylist.segmentsSha256Url).to.contain(ObjectStorageCommand.getPlaylistBaseUrl())
+        expect(hlsPlaylist.segmentsSha256Url).to.contain(ObjectStorageCommand.getMockPlaylistBaseUrl())
       }
 
       const subPlaylist = await originServer.streamingPlaylists.get({

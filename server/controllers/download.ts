@@ -5,6 +5,7 @@ import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache
 import { Hooks } from '@server/lib/plugins/hooks'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { MStreamingPlaylist, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
+import { addQueryParams } from '@shared/core-utils'
 import { HttpStatusCode, VideoStorage, VideoStreamingPlaylistType } from '@shared/models'
 import { STATIC_DOWNLOAD_PATHS } from '../initializers/constants'
 import { asyncMiddleware, optionalAuthenticate, videosDownloadValidator } from '../middlewares'
@@ -84,7 +85,7 @@ async function downloadVideoFile (req: express.Request, res: express.Response) {
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
   if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
-    return res.redirect(videoFile.getObjectStorageUrl())
+    return redirectToObjectStorage({ req, res, video, file: videoFile })
   }
 
   await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), path => {
@@ -120,7 +121,7 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
   if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
-    return res.redirect(videoFile.getObjectStorageUrl())
+    return redirectToObjectStorage({ req, res, video, file: videoFile })
   }
 
   await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(streamingPlaylist), path => {
@@ -173,4 +174,21 @@ function checkAllowResult (res: express.Response, allowParameters: any, result?:
   }
 
   return true
+}
+
+function redirectToObjectStorage (options: {
+  req: express.Request
+  res: express.Response
+  video: MVideo
+  file: MVideoFile
+}) {
+  const { req, res, video, file } = options
+
+  const baseUrl = file.getObjectStorageUrl(video)
+
+  const url = video.hasPrivateStaticPath() && req.query.videoFileToken
+    ? addQueryParams(baseUrl, { videoFileToken: req.query.videoFileToken })
+    : baseUrl
+
+  return res.redirect(url)
 }

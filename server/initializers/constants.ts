@@ -685,6 +685,13 @@ const LAZY_STATIC_PATHS = {
   VIDEO_CAPTIONS: '/lazy-static/video-captions/',
   TORRENTS: '/lazy-static/torrents/'
 }
+const OBJECT_STORAGE_PROXY_PATHS = {
+  PRIVATE_WEBSEED: '/object-storage-proxy/webseed/private/',
+
+  STREAMING_PLAYLISTS: {
+    PRIVATE_HLS: '/object-storage-proxy/streaming-playlists/hls/private/'
+  }
+}
 
 // Cache control
 const STATIC_MAX_AGE = {
@@ -995,6 +1002,7 @@ export {
   VIDEO_LIVE,
   PEERTUBE_VERSION,
   LAZY_STATIC_PATHS,
+  OBJECT_STORAGE_PROXY_PATHS,
   SEARCH_INDEX,
   DIRECTORIES,
   RESUMABLE_UPLOAD_SESSION_LIFETIME,

@@ -148,8 +148,11 @@ object_storage:
 
   region: 'us-east-1'
 
-  # Set this ACL on each uploaded object
-  upload_acl: 'public-read'
+  upload_acl:
+    # Set this ACL on each uploaded object of public/unlisted videos
+    public: 'public-read'
+      # Set this ACL on each uploaded object of private/internal videos
+    private: 'private'
 
   credentials:
     # You can also use AWS_ACCESS_KEY_ID env variable

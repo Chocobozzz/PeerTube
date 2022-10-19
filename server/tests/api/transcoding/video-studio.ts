@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { expectStartWith } from '@server/tests/shared'
-import { areObjectStorageTestsDisabled, getAllFiles } from '@shared/core-utils'
+import { areMockObjectStorageTestsDisabled, getAllFiles } from '@shared/core-utils'
 import { VideoStudioTask } from '@shared/models'
 import {
   cleanupTests,
@@ -315,13 +315,13 @@ describe('Test video studio', function () {
   })
 
   describe('Object storage video edition', function () {
-    if (areObjectStorageTestsDisabled()) return
+    if (areMockObjectStorageTestsDisabled()) return
 
     before(async function () {
-      await ObjectStorageCommand.prepareDefaultBuckets()
+      await ObjectStorageCommand.prepareDefaultMockBuckets()
 
       await servers[0].kill()
-      await servers[0].run(ObjectStorageCommand.getDefaultConfig())
+      await servers[0].run(ObjectStorageCommand.getDefaultMockConfig())
 
       await servers[0].config.enableMinimumTranscoding()
     })
@@ -344,11 +344,11 @@ describe('Test video studio', function () {
         }
 
         for (const webtorrentFile of video.files) {
-          expectStartWith(webtorrentFile.fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())
+          expectStartWith(webtorrentFile.fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
         }
 
         for (const hlsFile of video.streamingPlaylists[0].files) {
-          expectStartWith(hlsFile.fileUrl, ObjectStorageCommand.getPlaylistBaseUrl())
+          expectStartWith(hlsFile.fileUrl, ObjectStorageCommand.getMockPlaylistBaseUrl())
         }
 
         await checkDuration(server, 9)
