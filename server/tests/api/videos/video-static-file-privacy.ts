@@ -37,7 +37,7 @@ describe('Test video static file privacy', function () {
 
     function runSuite () {
 
-      async function checkPrivateWebTorrentFiles (uuid: string) {
+      async function checkPrivateFiles (uuid: string) {
         const video = await server.videos.getWithToken({ id: uuid })
 
         for (const file of video.files) {
@@ -63,7 +63,7 @@ describe('Test video static file privacy', function () {
         }
       }
 
-      async function checkPublicWebTorrentFiles (uuid: string) {
+      async function checkPublicFiles (uuid: string) {
         const video = await server.videos.get({ id: uuid })
 
         for (const file of getAllFiles(video)) {
@@ -98,7 +98,7 @@ describe('Test video static file privacy', function () {
           const { uuid } = await server.videos.quickUpload({ name: 'video', privacy })
           await waitJobs([ server ])
 
-          await checkPrivateWebTorrentFiles(uuid)
+          await checkPrivateFiles(uuid)
         }
       })
 
@@ -112,7 +112,7 @@ describe('Test video static file privacy', function () {
           await server.videos.update({ id: uuid, attributes: { privacy } })
           await waitJobs([ server ])
 
-          await checkPrivateWebTorrentFiles(uuid)
+          await checkPrivateFiles(uuid)
         }
       })
 
@@ -125,7 +125,7 @@ describe('Test video static file privacy', function () {
         await server.videos.update({ id: uuid, attributes: { privacy: VideoPrivacy.UNLISTED } })
         await waitJobs([ server ])
 
-        await checkPublicWebTorrentFiles(uuid)
+        await checkPublicFiles(uuid)
       })
 
       it('Should upload an internal video and update it to public to have a public static path', async function () {
@@ -137,7 +137,7 @@ describe('Test video static file privacy', function () {
         await server.videos.update({ id: uuid, attributes: { privacy: VideoPrivacy.PUBLIC } })
         await waitJobs([ server ])
 
-        await checkPublicWebTorrentFiles(uuid)
+        await checkPublicFiles(uuid)
       })
 
       it('Should upload an internal video and schedule a public publish', async function () {
@@ -160,7 +160,7 @@ describe('Test video static file privacy', function () {
 
         await waitJobs([ server ])
 
-        await checkPublicWebTorrentFiles(uuid)
+        await checkPublicFiles(uuid)
       })
     }
 

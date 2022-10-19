@@ -30,6 +30,7 @@ import { removeHLSFileObjectStorage, removeHLSObjectStorage, removeWebTorrentObj
 import { tracer } from '@server/lib/opentelemetry/tracing'
 import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths'
 import { VideoPathManager } from '@server/lib/video-path-manager'
+import { isVideoInPrivateDirectory } from '@server/lib/video-privacy'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
 import { buildVideoEmbedPath, buildVideoWatchPath, pick } from '@shared/core-utils'
@@ -1764,9 +1765,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     const playlist = this.VideoStreamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
     if (!playlist) return undefined
 
-    playlist.Video = this
-
-    return playlist
+    return playlist.withVideo(this)
   }
 
   setHLSPlaylist (playlist: MStreamingPlaylist) {
@@ -1868,15 +1867,38 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return setAsUpdated('video', this.id, transaction)
   }
 
-  requiresAuth (paramId: string) {
+  // ---------------------------------------------------------------------------
+
+  requiresAuth (options: {
+    urlParamId: string
+    checkBlacklist: boolean
+  }) {
+    const { urlParamId, checkBlacklist } = options
+
+    if (this.privacy === VideoPrivacy.PRIVATE || this.privacy === VideoPrivacy.INTERNAL) {
+      return true
+    }
+
     if (this.privacy === VideoPrivacy.UNLISTED) {
-      if (!isUUIDValid(paramId)) return true
+      if (urlParamId && !isUUIDValid(urlParamId)) return true
 
       return false
     }
 
-    return this.privacy === VideoPrivacy.PRIVATE || this.privacy === VideoPrivacy.INTERNAL || !!this.VideoBlacklist
+    if (checkBlacklist && this.VideoBlacklist) return true
+
+    if (this.privacy !== VideoPrivacy.PUBLIC) {
+      throw new Error(`Unknown video privacy ${this.privacy} to know if the video requires auth`)
+    }
+
+    return false
   }
+
+  hasPrivateStaticPath () {
+    return isVideoInPrivateDirectory(this.privacy)
+  }
+
+  // ---------------------------------------------------------------------------
 
   async setNewState (newState: VideoState, isNewVideo: boolean, transaction: Transaction) {
     if (this.state === newState) throw new Error('Cannot use same state ' + newState)

@@ -2,7 +2,7 @@
 
 import { join } from 'path'
 import { checkDirectoryIsEmpty, checkTmpIsEmpty, completeCheckHlsPlaylist } from '@server/tests/shared'
-import { areObjectStorageTestsDisabled } from '@shared/core-utils'
+import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
@@ -150,19 +150,19 @@ describe('Test HLS videos', function () {
   })
 
   describe('With object storage enabled', function () {
-    if (areObjectStorageTestsDisabled()) return
+    if (areMockObjectStorageTestsDisabled()) return
 
     before(async function () {
       this.timeout(120000)
 
-      const configOverride = ObjectStorageCommand.getDefaultConfig()
-      await ObjectStorageCommand.prepareDefaultBuckets()
+      const configOverride = ObjectStorageCommand.getDefaultMockConfig()
+      await ObjectStorageCommand.prepareDefaultMockBuckets()
 
       await servers[0].kill()
       await servers[0].run(configOverride)
     })
 
-    runTestSuite(true, ObjectStorageCommand.getPlaylistBaseUrl())
+    runTestSuite(true, ObjectStorageCommand.getMockPlaylistBaseUrl())
   })
 
   after(async function () {

@@ -118,7 +118,10 @@ const CONFIG = {
     MAX_UPLOAD_PART: bytes.parse(config.get<string>('object_storage.max_upload_part')),
     ENDPOINT: config.get<string>('object_storage.endpoint'),
     REGION: config.get<string>('object_storage.region'),
-    UPLOAD_ACL: config.get<string>('object_storage.upload_acl'),
+    UPLOAD_ACL: {
+      PUBLIC: config.get<string>('object_storage.upload_acl.public'),
+      PRIVATE: config.get<string>('object_storage.upload_acl.private')
+    },
     CREDENTIALS: {
       ACCESS_KEY_ID: config.get<string>('object_storage.credentials.access_key_id'),
       SECRET_ACCESS_KEY: config.get<string>('object_storage.credentials.secret_access_key')

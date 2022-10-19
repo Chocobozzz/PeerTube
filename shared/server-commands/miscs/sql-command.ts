@@ -23,6 +23,11 @@ export class SQLCommand extends AbstractCommand {
     return parseInt(total, 10)
   }
 
+  async getInternalFileUrl (fileId: number) {
+    return this.selectQuery(`SELECT "fileUrl" FROM "videoFile" WHERE id = ${fileId}`)
+      .then(rows => rows[0].fileUrl as string)
+  }
+
   setActorField (to: string, field: string, value: string) {
     const seq = this.getSequelize()
 

@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { checkResolutionsInMasterPlaylist, expectStartWith } from '@server/tests/shared'
-import { areObjectStorageTestsDisabled } from '@shared/core-utils'
+import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoDetails } from '@shared/models'
 import {
   cleanupTests,
@@ -19,7 +19,7 @@ import {
 
 async function checkFilesInObjectStorage (video: VideoDetails) {
   for (const file of video.files) {
-    expectStartWith(file.fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())
+    expectStartWith(file.fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
     await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 
@@ -27,14 +27,14 @@ async function checkFilesInObjectStorage (video: VideoDetails) {
 
   const hlsPlaylist = video.streamingPlaylists[0]
   for (const file of hlsPlaylist.files) {
-    expectStartWith(file.fileUrl, ObjectStorageCommand.getPlaylistBaseUrl())
+    expectStartWith(file.fileUrl, ObjectStorageCommand.getMockPlaylistBaseUrl())
     await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 
-  expectStartWith(hlsPlaylist.playlistUrl, ObjectStorageCommand.getPlaylistBaseUrl())
+  expectStartWith(hlsPlaylist.playlistUrl, ObjectStorageCommand.getMockPlaylistBaseUrl())
   await makeRawRequest({ url: hlsPlaylist.playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
 
-  expectStartWith(hlsPlaylist.segmentsSha256Url, ObjectStorageCommand.getPlaylistBaseUrl())
+  expectStartWith(hlsPlaylist.segmentsSha256Url, ObjectStorageCommand.getMockPlaylistBaseUrl())
   await makeRawRequest({ url: hlsPlaylist.segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
 }
 
@@ -49,7 +49,7 @@ function runTests (objectStorage: boolean) {
     this.timeout(120000)
 
     const config = objectStorage
-      ? ObjectStorageCommand.getDefaultConfig()
+      ? ObjectStorageCommand.getDefaultMockConfig()
       : {}
 
     // Run server 2 to have transcoding enabled
@@ -60,7 +60,7 @@ function runTests (objectStorage: boolean) {
 
     await doubleFollow(servers[0], servers[1])
 
-    if (objectStorage) await ObjectStorageCommand.prepareDefaultBuckets()
+    if (objectStorage) await ObjectStorageCommand.prepareDefaultMockBuckets()
 
     const { shortUUID } = await servers[0].videos.quickUpload({ name: 'video' })
     videoUUID = shortUUID
@@ -256,7 +256,7 @@ describe('Test create transcoding jobs from API', function () {
   })
 
   describe('On object storage', function () {
-    if (areObjectStorageTestsDisabled()) return
+    if (areMockObjectStorageTestsDisabled()) return
 
     runTests(true)
   })

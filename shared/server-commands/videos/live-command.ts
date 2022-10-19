@@ -197,7 +197,7 @@ export class LiveCommand extends AbstractCommand {
 
     const segmentName = `${playlistNumber}-00000${segment}.ts`
     const baseUrl = objectStorage
-      ? ObjectStorageCommand.getPlaylistBaseUrl() + 'hls'
+      ? ObjectStorageCommand.getMockPlaylistBaseUrl() + 'hls'
       : server.url + '/static/streaming-playlists/hls'
 
     let error = true
@@ -253,7 +253,7 @@ export class LiveCommand extends AbstractCommand {
 
     const segmentName = `${playlistNumber}-00000${segment}.ts`
     const baseUrl = objectStorage
-      ? ObjectStorageCommand.getPlaylistBaseUrl()
+      ? ObjectStorageCommand.getMockPlaylistBaseUrl()
       : `${this.server.url}/static/streaming-playlists/hls`
 
     const url = `${baseUrl}/${videoUUID}/${segmentName}`
@@ -275,7 +275,7 @@ export class LiveCommand extends AbstractCommand {
     const { playlistName, videoUUID, objectStorage = false } = options
 
     const baseUrl = objectStorage
-      ? ObjectStorageCommand.getPlaylistBaseUrl()
+      ? ObjectStorageCommand.getMockPlaylistBaseUrl()
       : `${this.server.url}/static/streaming-playlists/hls`
 
     const url = `${baseUrl}/${videoUUID}/${playlistName}`

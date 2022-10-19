@@ -97,7 +97,7 @@ declare module 'express' {
 
       title?: string
       status?: number
-      type?: ServerErrorCode
+      type?: ServerErrorCode | string
       instance?: string
 
       data?: PeerTubeProblemDocumentData
