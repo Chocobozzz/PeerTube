@@ -125,7 +125,7 @@ async function check1WebSeed (videoUUID?: string) {
   if (!videoUUID) videoUUID = video1Server2.uuid
 
   const webseeds = [
-    `http://localhost:${servers[1].port}/static/webseed/`
+    `${servers[1].url}/static/webseed/`
   ]
 
   for (const server of servers) {
@@ -144,8 +144,8 @@ async function check2Webseeds (videoUUID?: string) {
   if (!videoUUID) videoUUID = video1Server2.uuid
 
   const webseeds = [
-    `http://localhost:${servers[0].port}/static/redundancy/`,
-    `http://localhost:${servers[1].port}/static/webseed/`
+    `${servers[0].url}/static/redundancy/`,
+    `${servers[1].url}/static/webseed/`
   ]
 
   for (const server of servers) {
