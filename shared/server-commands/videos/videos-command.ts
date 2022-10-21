@@ -344,7 +344,7 @@ export class VideosCommand extends AbstractCommand {
     mode?: 'legacy' | 'resumable' // default legacy
     waitTorrentGeneration?: boolean // default true
   } = {}) {
-    const { mode = 'legacy', waitTorrentGeneration } = options
+    const { mode = 'legacy', waitTorrentGeneration = true } = options
     let defaultChannelId = 1
 
     try {
