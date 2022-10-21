@@ -31,6 +31,8 @@ export class HLSOptionsBuilder {
     const loader = new this.p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass() as P2PMediaLoader
 
     const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
+      requiresAuth: commonOptions.requiresAuth,
+
       redundancyUrlManager,
       type: 'application/x-mpegURL',
       startTime: commonOptions.startTime,

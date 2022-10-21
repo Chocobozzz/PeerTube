@@ -166,6 +166,8 @@ type P2PMediaLoaderPluginOptions = {
   startTime: number | string
 
   loader: P2PMediaLoader
+
+  requiresAuth: boolean
 }
 
 export type P2PMediaLoader = {
