@@ -1,4 +1,4 @@
-import { createClient, RedisClientOptions, RedisModules } from 'redis'
+import IoRedis, { RedisOptions } from 'ioredis'
 import { exists } from '@server/helpers/custom-validators/misc'
 import { sha256 } from '@shared/extra-utils'
 import { logger } from '../helpers/logger'
@@ -22,7 +22,7 @@ class Redis {
   private static instance: Redis
   private initialized = false
   private connected = false
-  private client: ReturnType<typeof createClient>
+  private client: IoRedis
   private prefix: string
 
   private constructor () {
@@ -33,29 +33,34 @@ class Redis {
     if (this.initialized === true) return
     this.initialized = true
 
-    this.client = createClient(Redis.getRedisClientOptions())
-    this.client.on('error', err => logger.error('Redis Client Error', { err }))
-
     logger.info('Connecting to redis...')
 
-    this.client.connect()
-      .then(() => {
-        logger.info('Connected to redis.')
+    this.client = new IoRedis(Redis.getRedisClientOptions())
+    this.client.on('error', err => logger.error('Redis Client Error', { err }))
+    this.client.on('connect', () => {
+      logger.info('Connected to redis.')
 
-        this.connected = true
-      }).catch(err => {
-        logger.error('Cannot connect to redis', { err })
-        process.exit(-1)
-      })
+      this.connected = true
+    })
+    this.client.on('reconnecting', () => {
+      logger.info('Reconnecting to redis.')
+    })
+    this.client.on('close', () => {
+      logger.info('Connection to redis has closed.')
+      this.connected = false
+    })
+    this.client.on('error', (err) => {
+      logger.error('Cannot connect to redis', { err })
+      process.exit(-1)
+    })
 
     this.prefix = 'redis-' + WEBSERVER.HOST + '-'
   }
 
   static getRedisClientOptions () {
-    let config: RedisClientOptions<RedisModules, {}> = {
-      socket: {
-        connectTimeout: 20000 // Could be slow since node use sync call to compile PeerTube
-      }
+    let config: RedisOptions = {
+      connectionName: 'PeerTube',
+      connectTimeout: 20000 // Could be slow since node use sync call to compile PeerTube
     }
 
     if (CONFIG.REDIS.AUTH) {
@@ -63,13 +68,13 @@ class Redis {
     }
 
     if (CONFIG.REDIS.DB) {
-      config = { ...config, database: CONFIG.REDIS.DB }
+      config = { ...config, db: CONFIG.REDIS.DB }
     }
 
     if (CONFIG.REDIS.HOSTNAME && CONFIG.REDIS.PORT) {
-      config.socket = { ...config.socket, host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT }
+      config = { ...config, host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT }
     } else {
-      config.socket = { ...config.socket, path: CONFIG.REDIS.SOCKET }
+      config = { ...config, path: CONFIG.REDIS.SOCKET }
     }
 
     return config
@@ -388,15 +393,15 @@ class Redis {
   }
 
   private getSet (key: string) {
-    return this.client.sMembers(this.prefix + key)
+    return this.client.smembers(this.prefix + key)
   }
 
   private addToSet (key: string, value: string) {
-    return this.client.sAdd(this.prefix + key, value)
+    return this.client.sadd(this.prefix + key, value)
   }
 
   private deleteFromSet (key: string, value: string) {
-    return this.client.sRem(this.prefix + key, value)
+    return this.client.srem(this.prefix + key, value)
   }
 
   private deleteKey (key: string) {
