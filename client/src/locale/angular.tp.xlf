@@ -282,6 +282,7 @@
       </trans-unit>
       <trans-unit id="8438752523256358076" datatype="html">
         <source>Show full list</source>
+        <target state="translated">lukin e ijo ale</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">12</context>
@@ -431,6 +432,7 @@
       </trans-unit>
       <trans-unit id="4127416011499804250" datatype="html">
         <source>Code of conduct</source>
+        <target state="translated">nasin lawa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">155</context>
@@ -465,6 +467,7 @@
       </trans-unit>
       <trans-unit id="9178042134345945115" datatype="html">
         <source>OTHER INFORMATION</source>
+        <target state="translated">sona ante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">185,187</context>
