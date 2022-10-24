@@ -1,11 +1,11 @@
-import { concat, Observable } from 'rxjs'
-import { switchMap, tap, toArray } from 'rxjs/operators'
 import { uniqBy } from 'lodash'
+import { concat, Observable } from 'rxjs'
+import { tap, toArray } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService, User } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
-import { prepareIcu, immutableAssign } from '@app/helpers'
+import { immutableAssign, prepareIcu } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { LiveStreamInformationComponent } from '@app/shared/shared-video-live'
@@ -15,9 +15,9 @@ import {
   VideoActionsDisplayType,
   VideosSelectionComponent
 } from '@app/shared/shared-video-miniature'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { VideoChannel, VideoExistInPlaylist, VideosExistInPlaylists, VideoSortField } from '@shared/models'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist'
 
 @Component({
   templateUrl: './my-videos.component.html',
@@ -28,7 +28,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   @ViewChild('videoChangeOwnershipModal', { static: true }) videoChangeOwnershipModal: VideoChangeOwnershipComponent
   @ViewChild('liveStreamInformationModal', { static: true }) liveStreamInformationModal: LiveStreamInformationComponent
 
-  videosContainedInPlaylists: VideosExistInPlaylists
+  videosContainedInPlaylists: VideosExistInPlaylists = {}
   titlePage: string
   selection: SelectionType = {}
   pagination: ComponentPagination = {
@@ -101,15 +101,6 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
       this.search = this.route.snapshot.queryParams['search']
     }
 
-    this.getVideosObservable(this.pagination.currentPage)
-      .pipe(switchMap(({ data }) => this.playlistService.doVideosExistInPlaylist(data.map(v => v.id))))
-      .subscribe(result => {
-        this.videosContainedInPlaylists = Object.keys(result).reduce((acc, videoId) => ({
-          ...acc,
-          [videoId]: uniqBy(result[videoId], (p: VideoExistInPlaylist) => p.playlistId)
-        }), {})
-      })
-
     this.authService.userInformationLoaded.subscribe(() => {
       this.user = this.authService.getUser()
       this.userChannels = this.user.videoChannels
@@ -169,10 +160,20 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
       sort: this.sort,
       userChannels: this.userChannels,
       search: this.search
-    })
-      .pipe(
-        tap(res => this.pagination.totalItems = res.total)
-      )
+    }).pipe(
+      tap(res => this.pagination.totalItems = res.total),
+      tap(({ data }) => this.fetchVideosContainedInPlaylists(data))
+    )
+  }
+
+  private fetchVideosContainedInPlaylists (videos: Video[]) {
+    this.playlistService.doVideosExistInPlaylist(videos.map(v => v.id))
+      .subscribe(result => {
+        this.videosContainedInPlaylists = Object.keys(result).reduce((acc, videoId) => ({
+          ...acc,
+          [videoId]: uniqBy(result[videoId], (p: VideoExistInPlaylist) => p.playlistId)
+        }), this.videosContainedInPlaylists)
+      })
   }
 
   async deleteSelectedVideos () {
