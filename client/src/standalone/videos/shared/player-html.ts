@@ -79,7 +79,10 @@ export class PlayerHTML {
   }
 
   removeInformation () {
+    if (!this.informationElement) return
+
     this.removeElement(this.informationElement)
+    this.informationElement = undefined
   }
 
   private getPlaceholderElement () {

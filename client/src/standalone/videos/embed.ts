@@ -259,6 +259,7 @@ export class PeerTubeEmbed {
 
     if (this.player) {
       this.player.dispose()
+      this.player = undefined
       alreadyHadPlayer = true
     }
 
