@@ -6,8 +6,8 @@ import { AuthService, DisableForReuseHook, Notifier } from '@app/core'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { secondsToTime } from '@shared/core-utils'
 import {
+  CachedVideoExistInPlaylist,
   Video,
-  VideoExistInPlaylist,
   VideoPlaylistCreate,
   VideoPlaylistElementCreate,
   VideoPlaylistElementUpdate,
@@ -330,7 +330,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     }
   }
 
-  private rebuildPlaylists (existResult: VideoExistInPlaylist[]) {
+  private rebuildPlaylists (existResult: CachedVideoExistInPlaylist[]) {
     debugLogger('Got existing results for %d.', this.video.id, existResult)
 
     const oldPlaylists = this.videoPlaylists

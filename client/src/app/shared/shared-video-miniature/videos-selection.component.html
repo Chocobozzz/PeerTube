@@ -12,6 +12,7 @@
     </div>
 
     <my-video-miniature
+      [containedInPlaylists]="videosContainedInPlaylists ? videosContainedInPlaylists[video.id] : undefined"
       [video]="video" [displayAsRow]="true" [displayOptions]="miniatureDisplayOptions"
       [displayVideoActions]="false" [user]="user"
     ></my-video-miniature>
