@@ -657,7 +657,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           : null,
         authorizationHeader: () => this.authService.getRequestHeaderValue(),
 
-        serverUrl: environment.originServerUrl,
+        serverUrl: environment.originServerUrl || window.location.origin,
 
         videoFileToken: () => videoFileToken,
         requiresAuth: videoRequiresAuth(video),
