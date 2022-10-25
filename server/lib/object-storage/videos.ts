@@ -11,6 +11,7 @@ import {
   lTags,
   makeAvailable,
   removeObject,
+  removeObjectByFullKey,
   removePrefix,
   storeObject,
   updateObjectACL,
@@ -76,8 +77,16 @@ function removeHLSObjectStorage (playlist: MStreamingPlaylistVideo) {
   return removePrefix(generateHLSObjectBaseStorageKey(playlist), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
-function removeHLSFileObjectStorage (playlist: MStreamingPlaylistVideo, filename: string) {
+function removeHLSFileObjectStorageByFilename (playlist: MStreamingPlaylistVideo, filename: string) {
   return removeObject(generateHLSObjectStorageKey(playlist, filename), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+}
+
+function removeHLSFileObjectStorageByPath (playlist: MStreamingPlaylistVideo, path: string) {
+  return removeObject(generateHLSObjectStorageKey(playlist, basename(path)), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+}
+
+function removeHLSFileObjectStorageByFullKey (key: string) {
+  return removeObjectByFullKey(key, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
 // ---------------------------------------------------------------------------
@@ -162,7 +171,10 @@ export {
   updateHLSFilesACL,
 
   removeHLSObjectStorage,
-  removeHLSFileObjectStorage,
+  removeHLSFileObjectStorageByFilename,
+  removeHLSFileObjectStorageByPath,
+  removeHLSFileObjectStorageByFullKey,
+
   removeWebTorrentObjectStorage,
 
   makeWebTorrentFileAvailable,

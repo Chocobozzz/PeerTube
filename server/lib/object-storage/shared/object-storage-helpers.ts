@@ -110,11 +110,15 @@ function updatePrefixACL (options: {
 function removeObject (objectStorageKey: string, bucketInfo: BucketInfo) {
   const key = buildKey(objectStorageKey, bucketInfo)
 
-  logger.debug('Removing file %s in bucket %s', key, bucketInfo.BUCKET_NAME, lTags())
+  return removeObjectByFullKey(key, bucketInfo)
+}
+
+function removeObjectByFullKey (fullKey: string, bucketInfo: BucketInfo) {
+  logger.debug('Removing file %s in bucket %s', fullKey, bucketInfo.BUCKET_NAME, lTags())
 
   const command = new DeleteObjectCommand({
     Bucket: bucketInfo.BUCKET_NAME,
-    Key: key
+    Key: fullKey
   })
 
   return getClient().send(command)
@@ -195,6 +199,7 @@ export {
   storeObject,
 
   removeObject,
+  removeObjectByFullKey,
   removePrefix,
 
   makeAvailable,

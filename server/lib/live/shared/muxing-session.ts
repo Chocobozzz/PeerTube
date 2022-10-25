@@ -10,7 +10,7 @@ import { getLiveMuxingCommand, getLiveTranscodingCommand } from '@server/helpers
 import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { MEMOIZE_TTL, VIDEO_LIVE } from '@server/initializers/constants'
-import { removeHLSFileObjectStorage, storeHLSFileFromFilename, storeHLSFileFromPath } from '@server/lib/object-storage'
+import { removeHLSFileObjectStorageByPath, storeHLSFileFromFilename, storeHLSFileFromPath } from '@server/lib/object-storage'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { MStreamingPlaylistVideo, MUserId, MVideoLiveVideo } from '@server/types/models'
 import { VideoStorage } from '@shared/models'
@@ -341,7 +341,7 @@ class MuxingSession extends EventEmitter {
 
       if (this.streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
         try {
-          await removeHLSFileObjectStorage(this.streamingPlaylist, segmentPath)
+          await removeHLSFileObjectStorageByPath(this.streamingPlaylist, segmentPath)
         } catch (err) {
           logger.error('Cannot remove segment %s from object storage', segmentPath, { err, ...this.lTags() })
         }

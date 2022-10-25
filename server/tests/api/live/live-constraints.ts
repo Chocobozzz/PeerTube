@@ -49,7 +49,7 @@ describe('Test live constraints', function () {
       expect(video.duration).to.be.greaterThan(0)
     }
 
-    await checkLiveCleanup(servers[0], videoId, resolutions)
+    await checkLiveCleanup({ server: servers[0], permanent: false, videoUUID: videoId, savedResolutions: resolutions })
   }
 
   function updateQuota (options: { total: number, daily: number }) {

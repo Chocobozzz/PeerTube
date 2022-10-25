@@ -26,7 +26,7 @@ import {
 } from 'sequelize-typescript'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live/live-manager'
-import { removeHLSFileObjectStorage, removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'
+import { removeHLSFileObjectStorageByFilename, removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'
 import { tracer } from '@server/lib/opentelemetry/tracing'
 import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths'
 import { VideoPathManager } from '@server/lib/video-path-manager'
@@ -1830,8 +1830,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     await remove(VideoPathManager.Instance.getFSHLSOutputPath(this, resolutionFilename))
 
     if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
-      await removeHLSFileObjectStorage(streamingPlaylist.withVideo(this), videoFile.filename)
-      await removeHLSFileObjectStorage(streamingPlaylist.withVideo(this), resolutionFilename)
+      await removeHLSFileObjectStorageByFilename(streamingPlaylist.withVideo(this), videoFile.filename)
+      await removeHLSFileObjectStorageByFilename(streamingPlaylist.withVideo(this), resolutionFilename)
     }
   }
 
@@ -1840,7 +1840,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     await remove(filePath)
 
     if (streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
-      await removeHLSFileObjectStorage(streamingPlaylist.withVideo(this), filename)
+      await removeHLSFileObjectStorageByFilename(streamingPlaylist.withVideo(this), filename)
     }
   }
 
