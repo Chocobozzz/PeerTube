@@ -214,8 +214,16 @@ server {
     try_files $uri @api;
   }
 
-  location ~ ^/static/(webseed|streaming-playlists)/private/ {
-    try_files /dev/null @api;
+  location ~ ^(/static/(webseed|streaming-playlists)/private/)|^/download {
+    # We can't rate limit a try_files directive, so we need to duplicate @api
+
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host            $host;
+    proxy_set_header X-Real-IP       $remote_addr;
+
+    proxy_limit_rate 5M;
+
+    proxy_pass http://backend;
   }
 
   # Bypass PeerTube for performance reasons. Optional.
@@ -231,9 +239,9 @@ server {
     }
 
     # Use this line with nginx >= 1.17.0
-    #limit_rate $peertube_limit_rate;
-    # Or this line if your nginx < 1.17.0
-    set $limit_rate $peertube_limit_rate;
+    limit_rate $peertube_limit_rate;
+    # Or this line with nginx < 1.17.0
+    # set $limit_rate $peertube_limit_rate;
 
     if ($request_method = 'OPTIONS') {
       add_header Access-Control-Allow-Origin  '*';
