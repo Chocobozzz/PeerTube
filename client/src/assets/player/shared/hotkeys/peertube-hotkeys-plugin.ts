@@ -160,7 +160,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
     // 0-9 key handlers
     for (let i = 0; i < 10; i++) {
       handlers.push({
-        accept: e => e.key === i + '' && !e.ctrlKey, // If using ctrl key, it's a web browser hotkey
+        accept: e => this.isNakedOrShift(e, i + ''),
         cb: e => {
           e.preventDefault()
 
@@ -189,6 +189,10 @@ class PeerTubeHotkeysPlugin extends Plugin {
 
   private isNaked (event: KeyboardEvent, key: string) {
     return (!event.ctrlKey && !event.altKey && !event.metaKey && !event.shiftKey && event.key === key)
+  }
+
+  private isNakedOrShift (event: KeyboardEvent, key: string) {
+    return (!event.ctrlKey && !event.altKey && !event.metaKey && event.key === key)
   }
 }
 
