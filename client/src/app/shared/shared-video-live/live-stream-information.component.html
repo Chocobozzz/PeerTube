@@ -32,7 +32,7 @@
       <div class="form-group-description" i18n>⚠️ Never share your stream key with anyone.</div>
     </div>
 
-    <div class="journal">
+    <div class="journal" *ngIf="latestLiveSessions.length !== 0">
       <label i18n>Latest live sessions</label>
 
       <div class="journal-session" *ngFor="let session of latestLiveSessions">
