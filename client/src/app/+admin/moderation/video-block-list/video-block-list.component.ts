@@ -98,7 +98,10 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
 
             this.videoService.removeVideo(videoBlock.video.id)
               .subscribe({
-                next: () => this.notifier.success($localize`Video deleted.`),
+                next: () => {
+                  this.notifier.success($localize`Video deleted.`)
+                  this.reloadData()
+                },
 
                 error: err => this.notifier.error(err.message)
               })
