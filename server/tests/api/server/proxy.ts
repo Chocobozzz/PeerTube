@@ -149,7 +149,7 @@ describe('Test proxy', function () {
       await servers[0].run(ObjectStorageCommand.getDefaultMockConfig(), { env: badEnv })
 
       const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
-      await waitJobs(servers)
+      await waitJobs(servers, { skipDelayed: true })
 
       const video = await servers[0].videos.get({ id: uuid })
 

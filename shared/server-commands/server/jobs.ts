@@ -4,7 +4,14 @@ import { wait } from '@shared/core-utils'
 import { JobState, JobType } from '../../models'
 import { PeerTubeServer } from './server'
 
-async function waitJobs (serversArg: PeerTubeServer[] | PeerTubeServer, skipDelayed = false) {
+async function waitJobs (
+  serversArg: PeerTubeServer[] | PeerTubeServer,
+  options: {
+    skipDelayed?: boolean // default false
+  } = {}
+) {
+  const { skipDelayed = false } = options
+
   const pendingJobWait = process.env.NODE_PENDING_JOB_WAIT
     ? parseInt(process.env.NODE_PENDING_JOB_WAIT, 10)
     : 250

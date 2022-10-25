@@ -323,7 +323,7 @@ describe('Object storage for videos', function () {
 
       const { uuid } = await server.videos.quickUpload({ name: 'video' })
 
-      await waitJobs([ server ], true)
+      await waitJobs([ server ], { skipDelayed: true })
       const video = await server.videos.get({ id: uuid })
 
       expectStartWith(video.files[0].fileUrl, server.url)
@@ -358,7 +358,7 @@ describe('Object storage for videos', function () {
 
       const { uuid } = await server.videos.quickUpload({ name: 'video' })
 
-      await waitJobs([ server ], true)
+      await waitJobs([ server ], { skipDelayed: true })
       const video = await server.videos.get({ id: uuid })
 
       expectStartWith(video.files[0].fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
