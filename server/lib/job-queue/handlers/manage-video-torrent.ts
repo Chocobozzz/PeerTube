@@ -1,5 +1,7 @@
 import { Job } from 'bullmq'
+import { extractVideo } from '@server/helpers/video'
 import { createTorrentAndSetInfoHash, updateTorrentMetadata } from '@server/helpers/webtorrent'
+import { VideoPathManager } from '@server/lib/video-path-manager'
 import { VideoModel } from '@server/models/video/video'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
@@ -30,17 +32,23 @@ async function doCreateAction (payload: ManageVideoTorrentPayload & { action: 'c
 
   if (!video || !file) return
 
-  await createTorrentAndSetInfoHash(video, file)
+  const fileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-  // Refresh videoFile because the createTorrentAndSetInfoHash could be long
-  const refreshedFile = await VideoFileModel.loadWithVideo(file.id)
-  // File does not exist anymore, remove the generated torrent
-  if (!refreshedFile) return file.removeTorrent()
+  try {
+    await createTorrentAndSetInfoHash(video, file)
 
-  refreshedFile.infoHash = file.infoHash
-  refreshedFile.torrentFilename = file.torrentFilename
+    // Refresh videoFile because the createTorrentAndSetInfoHash could be long
+    const refreshedFile = await VideoFileModel.loadWithVideo(file.id)
+    // File does not exist anymore, remove the generated torrent
+    if (!refreshedFile) return file.removeTorrent()
 
-  return refreshedFile.save()
+    refreshedFile.infoHash = file.infoHash
+    refreshedFile.torrentFilename = file.torrentFilename
+
+    await refreshedFile.save()
+  } finally {
+    fileMutexReleaser()
+  }
 }
 
 async function doUpdateMetadataAction (payload: ManageVideoTorrentPayload & { action: 'update-metadata' }) {
@@ -52,9 +60,16 @@ async function doUpdateMetadataAction (payload: ManageVideoTorrentPayload & { ac
 
   if ((!video && !streamingPlaylist) || !file) return
 
-  await updateTorrentMetadata(video || streamingPlaylist, file)
+  const extractedVideo = extractVideo(video || streamingPlaylist)
+  const fileMutexReleaser = await VideoPathManager.Instance.lockFiles(extractedVideo.uuid)
 
-  await file.save()
+  try {
+    await updateTorrentMetadata(video || streamingPlaylist, file)
+
+    await file.save()
+  } finally {
+    fileMutexReleaser()
+  }
 }
 
 async function loadVideoOrLog (videoId: number) {

@@ -28,6 +28,8 @@ export async function processMoveToObjectStorage (job: Job) {
 
   const lTags = lTagsBase(video.uuid, video.url)
 
+  const fileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+
   try {
     if (video.VideoFiles) {
       logger.debug('Moving %d webtorrent files for video %s.', video.VideoFiles.length, video.uuid, lTags)
@@ -49,6 +51,10 @@ export async function processMoveToObjectStorage (job: Job) {
     }
   } catch (err) {
     await onMoveToObjectStorageFailure(job, err)
+
+    throw err
+  } finally {
+    fileMutexReleaser()
   }
 
   return payload.videoUUID
