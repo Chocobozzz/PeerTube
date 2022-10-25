@@ -1,3 +1,4 @@
+import { map } from 'bluebird'
 import { createReadStream, createWriteStream, ensureDir, ReadStream } from 'fs-extra'
 import { dirname } from 'path'
 import { Readable } from 'stream'
@@ -93,6 +94,8 @@ function updatePrefixACL (options: {
     prefix,
     bucketInfo,
     commandBuilder: obj => {
+      logger.debug('Updating ACL of %s inside prefix %s in bucket %s', obj.Key, prefix, bucketInfo.BUCKET_NAME, lTags())
+
       return new PutObjectAclCommand({
         Bucket: bucketInfo.BUCKET_NAME,
         Key: obj.Key,
@@ -117,7 +120,7 @@ function removeObject (objectStorageKey: string, bucketInfo: BucketInfo) {
   return getClient().send(command)
 }
 
-function removePrefix (prefix: string, bucketInfo: BucketInfo) {
+async function removePrefix (prefix: string, bucketInfo: BucketInfo) {
   // FIXME: use bulk delete when s3ninja will support this operation
 
   logger.debug('Removing prefix %s in bucket %s', prefix, bucketInfo.BUCKET_NAME, lTags())
@@ -126,6 +129,8 @@ function removePrefix (prefix: string, bucketInfo: BucketInfo) {
     prefix,
     bucketInfo,
     commandBuilder: obj => {
+      logger.debug('Removing %s inside prefix %s in bucket %s', obj.Key, prefix, bucketInfo.BUCKET_NAME, lTags())
+
       return new DeleteObjectCommand({
         Bucket: bucketInfo.BUCKET_NAME,
         Key: obj.Key
@@ -259,7 +264,7 @@ async function applyOnPrefix (options: {
 
   const s3Client = getClient()
 
-  const commandPrefix = bucketInfo.PREFIX + prefix
+  const commandPrefix = buildKey(prefix, bucketInfo)
   const listCommand = new ListObjectsV2Command({
     Bucket: bucketInfo.BUCKET_NAME,
     Prefix: commandPrefix,
@@ -275,11 +280,11 @@ async function applyOnPrefix (options: {
     throw new Error(message)
   }
 
-  for (const object of listedObjects.Contents) {
+  await map(listedObjects.Contents, object => {
     const command = commandBuilder(object)
 
-    await s3Client.send(command)
-  }
+    return s3Client.send(command)
+  }, { concurrency: 10 })
 
   // Repeat if not all objects could be listed at once (limit of 1000?)
   if (listedObjects.IsTruncated) {

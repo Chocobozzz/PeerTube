@@ -192,16 +192,6 @@ describe('Object storage for video static file privacy', function () {
 
       await checkPublicFiles(publicVideoUUID)
     })
-
-    after(async function () {
-      this.timeout(30000)
-
-      if (privateVideoUUID) await server.videos.remove({ id: privateVideoUUID })
-      if (publicVideoUUID) await server.videos.remove({ id: publicVideoUUID })
-      if (userPrivateVideoUUID) await server.videos.remove({ id: userPrivateVideoUUID })
-
-      await waitJobs([ server ])
-    })
   })
 
   describe('Live', function () {
@@ -331,6 +321,18 @@ describe('Object storage for video static file privacy', function () {
   })
 
   after(async function () {
+    this.timeout(60000)
+
+    const { data } = await server.videos.listAllForAdmin()
+
+    for (const v of data) {
+      await server.videos.remove({ id: v.uuid })
+    }
+
+    for (const v of data) {
+      await server.servers.waitUntilLog('Removed files of video ' + v.url, 1, true)
+    }
+
     await cleanupTests([ server ])
   })
 })

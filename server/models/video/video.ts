@@ -785,9 +785,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     // Do not wait video deletion because we could be in a transaction
     Promise.all(tasks)
-           .catch(err => {
-             logger.error('Some errors when removing files of video %s in before destroy hook.', instance.uuid, { err })
-           })
+      .then(() => logger.info('Removed files of video %s.', instance.url))
+      .catch(err => logger.error('Some errors when removing files of video %s in before destroy hook.', instance.uuid, { err }))
 
     return undefined
   }

@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import { createReadStream, stat } from 'fs-extra'
 import got, { Response as GotResponse } from 'got'
 import validator from 'validator'
-import { buildAbsoluteFixturePath, omit, pick, wait } from '@shared/core-utils'
+import { buildAbsoluteFixturePath, getAllPrivacies, omit, pick, wait } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
 import {
   HttpStatusCode,
@@ -15,6 +15,7 @@ import {
   VideoCreateResult,
   VideoDetails,
   VideoFileMetadata,
+  VideoInclude,
   VideoPrivacy,
   VideosCommonQuery,
   VideoTranscodingCreate
@@ -229,6 +230,22 @@ export class VideosCommand extends AbstractCommand {
   listWithToken (options: OverrideCommandOptions & VideosCommonQuery = {}) {
     return this.list({
       ...options,
+
+      token: this.buildCommonRequestToken({ ...options, implicitToken: true })
+    })
+  }
+
+  listAllForAdmin (options: OverrideCommandOptions & VideosCommonQuery = {}) {
+    const include = VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.BLACKLISTED | VideoInclude.BLOCKED_OWNER
+    const nsfw = 'both'
+    const privacyOneOf = getAllPrivacies()
+
+    return this.list({
+      ...options,
+
+      include,
+      nsfw,
+      privacyOneOf,
 
       token: this.buildCommonRequestToken({ ...options, implicitToken: true })
     })
