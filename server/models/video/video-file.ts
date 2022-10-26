@@ -54,6 +54,7 @@ import { doesExist } from '../shared'
 import { parseAggregateResult, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
+import { CONFIG } from '@server/initializers/config'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO',
@@ -511,7 +512,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   // ---------------------------------------------------------------------------
 
   getObjectStorageUrl (video: MVideo) {
-    if (video.hasPrivateStaticPath()) {
+    if (video.hasPrivateStaticPath() && CONFIG.OBJECT_STORAGE.PROXY.PROXIFY_PRIVATE_FILES === true) {
       return this.getPrivateObjectStorageUrl(video)
     }
 

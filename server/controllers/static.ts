@@ -15,11 +15,17 @@ const staticRouter = express.Router()
 // Cors is very important to let other servers access torrent and video files
 staticRouter.use(cors())
 
+// ---------------------------------------------------------------------------
 // WebTorrent/Classic videos
+// ---------------------------------------------------------------------------
+
+const privateWebTorrentStaticMiddlewares = CONFIG.STATIC_FILES.PRIVATE_FILES_REQUIRE_AUTH === true
+  ? [ optionalAuthenticate, asyncMiddleware(ensureCanAccessVideoPrivateWebTorrentFiles) ]
+  : []
+
 staticRouter.use(
   STATIC_PATHS.PRIVATE_WEBSEED,
-  optionalAuthenticate,
-  asyncMiddleware(ensureCanAccessVideoPrivateWebTorrentFiles),
+  ...privateWebTorrentStaticMiddlewares,
   express.static(DIRECTORIES.VIDEOS.PRIVATE, { fallthrough: false }),
   handleStaticError
 )
@@ -35,11 +41,17 @@ staticRouter.use(
   handleStaticError
 )
 
+// ---------------------------------------------------------------------------
 // HLS
+// ---------------------------------------------------------------------------
+
+const privateHLSStaticMiddlewares = CONFIG.STATIC_FILES.PRIVATE_FILES_REQUIRE_AUTH === true
+  ? [ optionalAuthenticate, asyncMiddleware(ensureCanAccessPrivateVideoHLSFiles) ]
+  : []
+
 staticRouter.use(
   STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS,
-  optionalAuthenticate,
-  asyncMiddleware(ensureCanAccessPrivateVideoHLSFiles),
+  ...privateHLSStaticMiddlewares,
   express.static(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, { fallthrough: false }),
   handleStaticError
 )

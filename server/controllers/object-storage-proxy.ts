@@ -1,11 +1,13 @@
 import cors from 'cors'
 import express from 'express'
+import { logger } from '@server/helpers/logger'
 import { OBJECT_STORAGE_PROXY_PATHS } from '@server/initializers/constants'
 import { getHLSFileReadStream, getWebTorrentFileReadStream } from '@server/lib/object-storage'
 import {
   asyncMiddleware,
   ensureCanAccessPrivateVideoHLSFiles,
   ensureCanAccessVideoPrivateWebTorrentFiles,
+  ensurePrivateObjectStorageProxyIsEnabled,
   optionalAuthenticate
 } from '@server/middlewares'
 import { HttpStatusCode } from '@shared/models'
@@ -15,12 +17,14 @@ const objectStorageProxyRouter = express.Router()
 objectStorageProxyRouter.use(cors())
 
 objectStorageProxyRouter.get(OBJECT_STORAGE_PROXY_PATHS.PRIVATE_WEBSEED + ':filename',
+  ensurePrivateObjectStorageProxyIsEnabled,
   optionalAuthenticate,
   asyncMiddleware(ensureCanAccessVideoPrivateWebTorrentFiles),
   asyncMiddleware(proxifyWebTorrent)
 )
 
 objectStorageProxyRouter.get(OBJECT_STORAGE_PROXY_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:filename',
+  ensurePrivateObjectStorageProxyIsEnabled,
   optionalAuthenticate,
   asyncMiddleware(ensureCanAccessPrivateVideoHLSFiles),
   asyncMiddleware(proxifyHLS)
@@ -34,6 +38,8 @@ export {
 
 async function proxifyWebTorrent (req: express.Request, res: express.Response) {
   const filename = req.params.filename
+
+  logger.debug('Proxifying WebTorrent file %s from object storage.', filename)
 
   try {
     const stream = await getWebTorrentFileReadStream({
@@ -51,6 +57,8 @@ async function proxifyHLS (req: express.Request, res: express.Response) {
   const playlist = res.locals.videoStreamingPlaylist
   const video = res.locals.onlyVideo
   const filename = req.params.filename
+
+  logger.debug('Proxifying HLS file %s from object storage.', filename)
 
   try {
     const stream = await getHLSFileReadStream({

@@ -19,6 +19,12 @@ import {
   waitJobs
 } from '@shared/server-commands'
 
+function extractFilenameFromUrl (url: string) {
+  const parts = basename(url).split(':')
+
+  return parts[parts.length - 1]
+}
+
 describe('Object storage for video static file privacy', function () {
   // We need real world object storage to check ACL
   if (areScalewayObjectStorageTestsDisabled()) return
@@ -26,10 +32,67 @@ describe('Object storage for video static file privacy', function () {
   let server: PeerTubeServer
   let userToken: string
 
+  // ---------------------------------------------------------------------------
+
+  async function checkPrivateVODFiles (uuid: string) {
+    const video = await server.videos.getWithToken({ id: uuid })
+
+    for (const file of video.files) {
+      expectStartWith(file.fileUrl, server.url + '/object-storage-proxy/webseed/private/')
+
+      await makeRawRequest({ url: file.fileUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+    }
+
+    for (const file of getAllFiles(video)) {
+      const internalFileUrl = await server.sql.getInternalFileUrl(file.id)
+      expectStartWith(internalFileUrl, ObjectStorageCommand.getScalewayBaseUrl())
+      await makeRawRequest({ url: internalFileUrl, token: server.accessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    }
+
+    const hls = getHLS(video)
+
+    if (hls) {
+      for (const url of [ hls.playlistUrl, hls.segmentsSha256Url ]) {
+        expectStartWith(url, server.url + '/object-storage-proxy/streaming-playlists/hls/private/')
+      }
+
+      await makeRawRequest({ url: hls.playlistUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url: hls.segmentsSha256Url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+
+      for (const file of hls.files) {
+        expectStartWith(file.fileUrl, server.url + '/object-storage-proxy/streaming-playlists/hls/private/')
+
+        await makeRawRequest({ url: file.fileUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+      }
+    }
+  }
+
+  async function checkPublicVODFiles (uuid: string) {
+    const video = await server.videos.getWithToken({ id: uuid })
+
+    for (const file of getAllFiles(video)) {
+      expectStartWith(file.fileUrl, ObjectStorageCommand.getScalewayBaseUrl())
+
+      await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+    }
+
+    const hls = getHLS(video)
+
+    if (hls) {
+      expectStartWith(hls.playlistUrl, ObjectStorageCommand.getScalewayBaseUrl())
+      expectStartWith(hls.segmentsSha256Url, ObjectStorageCommand.getScalewayBaseUrl())
+
+      await makeRawRequest({ url: hls.playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url: hls.segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+
   before(async function () {
     this.timeout(120000)
 
-    server = await createSingleServer(1, ObjectStorageCommand.getDefaultScalewayConfig(1))
+    server = await createSingleServer(1, ObjectStorageCommand.getDefaultScalewayConfig({ serverNumber: 1 }))
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
@@ -43,58 +106,7 @@ describe('Object storage for video static file privacy', function () {
     let publicVideoUUID: string
     let userPrivateVideoUUID: string
 
-    async function checkPrivateFiles (uuid: string) {
-      const video = await server.videos.getWithToken({ id: uuid })
-
-      for (const file of video.files) {
-        expectStartWith(file.fileUrl, server.url + '/object-storage-proxy/webseed/private/')
-
-        await makeRawRequest({ url: file.fileUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
-      }
-
-      for (const file of getAllFiles(video)) {
-        const internalFileUrl = await server.sql.getInternalFileUrl(file.id)
-        expectStartWith(internalFileUrl, ObjectStorageCommand.getScalewayBaseUrl())
-        await makeRawRequest({ url: internalFileUrl, token: server.accessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
-      }
-
-      const hls = getHLS(video)
-
-      if (hls) {
-        for (const url of [ hls.playlistUrl, hls.segmentsSha256Url ]) {
-          expectStartWith(url, server.url + '/object-storage-proxy/streaming-playlists/hls/private/')
-        }
-
-        await makeRawRequest({ url: hls.playlistUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
-        await makeRawRequest({ url: hls.segmentsSha256Url, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
-
-        for (const file of hls.files) {
-          expectStartWith(file.fileUrl, server.url + '/object-storage-proxy/streaming-playlists/hls/private/')
-
-          await makeRawRequest({ url: file.fileUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
-        }
-      }
-    }
-
-    async function checkPublicFiles (uuid: string) {
-      const video = await server.videos.getWithToken({ id: uuid })
-
-      for (const file of getAllFiles(video)) {
-        expectStartWith(file.fileUrl, ObjectStorageCommand.getScalewayBaseUrl())
-
-        await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
-      }
-
-      const hls = getHLS(video)
-
-      if (hls) {
-        expectStartWith(hls.playlistUrl, ObjectStorageCommand.getScalewayBaseUrl())
-        expectStartWith(hls.segmentsSha256Url, ObjectStorageCommand.getScalewayBaseUrl())
-
-        await makeRawRequest({ url: hls.playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
-        await makeRawRequest({ url: hls.segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
-      }
-    }
+    // ---------------------------------------------------------------------------
 
     async function getSampleFileUrls (videoId: string) {
       const video = await server.videos.getWithToken({ id: videoId })
@@ -104,6 +116,8 @@ describe('Object storage for video static file privacy', function () {
         hlsFile: getHLS(video).files[0].fileUrl
       }
     }
+
+    // ---------------------------------------------------------------------------
 
     it('Should upload a private video and have appropriate object storage ACL', async function () {
       this.timeout(60000)
@@ -120,7 +134,7 @@ describe('Object storage for video static file privacy', function () {
 
       await waitJobs([ server ])
 
-      await checkPrivateFiles(privateVideoUUID)
+      await checkPrivateVODFiles(privateVideoUUID)
     })
 
     it('Should upload a public video and have appropriate object storage ACL', async function () {
@@ -131,7 +145,7 @@ describe('Object storage for video static file privacy', function () {
 
       publicVideoUUID = uuid
 
-      await checkPublicFiles(publicVideoUUID)
+      await checkPublicVODFiles(publicVideoUUID)
     })
 
     it('Should not get files without appropriate OAuth token', async function () {
@@ -182,7 +196,7 @@ describe('Object storage for video static file privacy', function () {
 
       await server.videos.update({ id: publicVideoUUID, attributes: { privacy: VideoPrivacy.INTERNAL } })
 
-      await checkPrivateFiles(publicVideoUUID)
+      await checkPrivateVODFiles(publicVideoUUID)
     })
 
     it('Should update private video to public', async function () {
@@ -190,7 +204,7 @@ describe('Object storage for video static file privacy', function () {
 
       await server.videos.update({ id: publicVideoUUID, attributes: { privacy: VideoPrivacy.PUBLIC } })
 
-      await checkPublicFiles(publicVideoUUID)
+      await checkPublicVODFiles(publicVideoUUID)
     })
   })
 
@@ -202,6 +216,8 @@ describe('Object storage for video static file privacy', function () {
     let permanentLive: LiveVideo
 
     let unrelatedFileToken: string
+
+    // ---------------------------------------------------------------------------
 
     async function checkLiveFiles (live: LiveVideo, liveId: string) {
       const ffmpegCommand = sendRTMPStream({ rtmpBaseUrl: live.rtmpUrl, streamKey: live.streamKey })
@@ -260,6 +276,8 @@ describe('Object storage for video static file privacy', function () {
       }
     }
 
+    // ---------------------------------------------------------------------------
+
     before(async function () {
       await server.config.enableMinimumTranscoding()
 
@@ -317,6 +335,52 @@ describe('Object storage for video static file privacy', function () {
       const replay = await server.videos.getWithToken({ id: replayFromList.id })
 
       await checkReplay(replay)
+    })
+  })
+
+  describe('With private files proxy disabled and public ACL for private files', function () {
+    let videoUUID: string
+
+    before(async function () {
+      this.timeout(240000)
+
+      await server.kill()
+
+      const config = ObjectStorageCommand.getDefaultScalewayConfig({
+        serverNumber: server.internalServerNumber,
+        enablePrivateProxy: false,
+        privateACL: 'public-read'
+      })
+      await server.run(config)
+
+      const { uuid } = await server.videos.quickUpload({ name: 'video', privacy: VideoPrivacy.PRIVATE })
+      videoUUID = uuid
+
+      await waitJobs([ server ])
+    })
+
+    it('Should display object storage path for a private video and be able to access them', async function () {
+      this.timeout(60000)
+
+      await checkPublicVODFiles(videoUUID)
+    })
+
+    it('Should not be able to access object storage proxy', async function () {
+      const privateVideo = await server.videos.getWithToken({ id: videoUUID })
+      const webtorrentFilename = extractFilenameFromUrl(privateVideo.files[0].fileUrl)
+      const hlsFilename = extractFilenameFromUrl(getHLS(privateVideo).files[0].fileUrl)
+
+      await makeRawRequest({
+        url: server.url + '/object-storage-proxy/webseed/private/' + webtorrentFilename,
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      await makeRawRequest({
+        url: server.url + '/object-storage-proxy/streaming-playlists/hls/private/' + videoUUID + '/' + hlsFilename,
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
     })
   })
 

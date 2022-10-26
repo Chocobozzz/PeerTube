@@ -81,7 +81,13 @@ export class ObjectStorageCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  static getDefaultScalewayConfig (serverNumber: number) {
+  static getDefaultScalewayConfig (options: {
+    serverNumber: number
+    enablePrivateProxy?: boolean // default true
+    privateACL?: 'private' | 'public-read' // default 'private'
+  }) {
+    const { serverNumber, enablePrivateProxy = true, privateACL = 'private' } = options
+
     return {
       object_storage: {
         enabled: true,
@@ -89,6 +95,14 @@ export class ObjectStorageCommand extends AbstractCommand {
         region: this.getScalewayRegion(),
 
         credentials: this.getScalewayCredentialsConfig(),
+
+        upload_acl: {
+          private: privateACL
+        },
+
+        proxy: {
+          proxify_private_files: enablePrivateProxy
+        },
 
         streaming_playlists: {
           bucket_name: this.DEFAULT_SCALEWAY_BUCKET,

@@ -383,6 +383,39 @@ describe('Test video static file privacy', function () {
     })
   })
 
+  describe('With static file right check disabled', function () {
+    let videoUUID: string
+
+    before(async function () {
+      this.timeout(240000)
+
+      await server.kill()
+
+      await server.run({
+        static_files: {
+          private_files_require_auth: false
+        }
+      })
+
+      const { uuid } = await server.videos.quickUpload({ name: 'video', privacy: VideoPrivacy.INTERNAL })
+      videoUUID = uuid
+
+      await waitJobs([ server ])
+    })
+
+    it('Should not check auth for private static files', async function () {
+      const video = await server.videos.getWithToken({ id: videoUUID })
+
+      for (const file of getAllFiles(video)) {
+        await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+      }
+
+      const hls = video.streamingPlaylists[0]
+      await makeRawRequest({ url: hls.playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url: hls.segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
+    })
+  })
+
   after(async function () {
     await cleanupTests([ server ])
   })

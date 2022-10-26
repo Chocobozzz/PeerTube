@@ -15,6 +15,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { CONFIG } from '@server/initializers/config'
 import { getHLSPrivateFileUrl, getHLSPublicFileUrl } from '@server/lib/object-storage'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename } from '@server/lib/paths'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy'
@@ -260,7 +261,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   }
 
   private getMasterPlaylistObjectStorageUrl (video: MVideo) {
-    if (video.hasPrivateStaticPath()) {
+    if (video.hasPrivateStaticPath() && CONFIG.OBJECT_STORAGE.PROXY.PROXIFY_PRIVATE_FILES === true) {
       return getHLSPrivateFileUrl(video, this.playlistFilename)
     }
 
@@ -282,7 +283,7 @@ export class VideoStreamingPlaylistModel extends Model<Partial<AttributesOnly<Vi
   }
 
   private getSha256SegmentsObjectStorageUrl (video: MVideo) {
-    if (video.hasPrivateStaticPath()) {
+    if (video.hasPrivateStaticPath() && CONFIG.OBJECT_STORAGE.PROXY.PROXIFY_PRIVATE_FILES === true) {
       return getHLSPrivateFileUrl(video, this.segmentsSha256Filename)
     }
 
