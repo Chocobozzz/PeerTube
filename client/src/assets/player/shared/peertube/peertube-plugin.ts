@@ -210,7 +210,7 @@ class PeerTubePlugin extends Plugin {
       lastViewEvent = undefined
 
       // Server won't save history, so save the video position in local storage
-      if (!this.authorizationHeader) {
+      if (!this.authorizationHeader()) {
         saveVideoWatchHistory(this.videoUUID, currentTime)
       }
     }, this.CONSTANTS.USER_VIEW_VIDEO_INTERVAL)
@@ -228,7 +228,7 @@ class PeerTubePlugin extends Plugin {
       'Content-type': 'application/json; charset=UTF-8'
     })
 
-    if (this.authorizationHeader) headers.set('Authorization', this.authorizationHeader())
+    if (this.authorizationHeader()) headers.set('Authorization', this.authorizationHeader())
 
     return fetch(this.videoViewUrl, { method: 'POST', body: JSON.stringify(body), headers })
   }

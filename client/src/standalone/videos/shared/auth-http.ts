@@ -27,6 +27,8 @@ export class AuthHTTP {
   }
 
   getHeaderTokenValue () {
+    if (!this.userOAuthTokens) return null
+
     return `${this.userOAuthTokens.tokenType} ${this.userOAuthTokens.accessToken}`
   }
 
