@@ -1,6 +1,6 @@
 import { decode, encode } from 'bencode'
 import createTorrent from 'create-torrent'
-import { createWriteStream, ensureDir, readFile, remove, writeFile } from 'fs-extra'
+import { createWriteStream, ensureDir, pathExists, readFile, remove, writeFile } from 'fs-extra'
 import magnetUtil from 'magnet-uri'
 import parseTorrent from 'parse-torrent'
 import { dirname, join } from 'path'
@@ -134,6 +134,11 @@ async function updateTorrentMetadata (videoOrPlaylist: MVideo | MStreamingPlayli
 
   const oldTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename)
 
+  if (!await pathExists(oldTorrentPath)) {
+    logger.info('Do not update torrent metadata %s of video %s because the file does not exist anymore.', video.uuid, oldTorrentPath)
+    return
+  }
+
   const torrentContent = await readFile(oldTorrentPath)
   const decoded = decode(torrentContent)
 
@@ -151,7 +156,7 @@ async function updateTorrentMetadata (videoOrPlaylist: MVideo | MStreamingPlayli
   logger.info('Updating torrent metadata %s -> %s.', oldTorrentPath, newTorrentPath)
 
   await writeFile(newTorrentPath, encode(decoded))
-  await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
+  await remove(oldTorrentPath)
 
   videoFile.torrentFilename = newTorrentFilename
   videoFile.infoHash = sha1(encode(decoded.info))

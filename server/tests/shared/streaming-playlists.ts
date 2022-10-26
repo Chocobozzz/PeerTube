@@ -113,7 +113,7 @@ async function completeCheckHlsPlaylist (options: {
 
       expect(file.magnetUri).to.have.lengthOf.above(2)
       expect(file.torrentUrl).to.match(
-        new RegExp(`http://${server.host}/lazy-static/torrents/${uuidRegex}-${file.resolution.id}-hls.torrent`)
+        new RegExp(`${server.url}/lazy-static/torrents/${uuidRegex}-${file.resolution.id}-hls.torrent`)
       )
 
       if (objectStorageBaseUrl) {
