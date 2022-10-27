@@ -409,11 +409,7 @@ class Redis {
   }
 
   private async setValue (key: string, value: string, expirationMilliseconds?: number) {
-    const options = expirationMilliseconds
-      ? { PX: expirationMilliseconds }
-      : {}
-
-    const result = await this.client.set(this.prefix + key, value, options)
+    const result = await this.client.set(this.prefix + key, value, 'PX', expirationMilliseconds)
 
     if (result !== 'OK') throw new Error('Redis set result is not OK.')
   }
