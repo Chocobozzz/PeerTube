@@ -1,4 +1,4 @@
-import IoRedis, { RedisOptions } from 'ioredis'
+import IoRedis from 'ioredis'
 import { exists } from '@server/helpers/custom-validators/misc'
 import { sha256 } from '@shared/extra-utils'
 import { logger } from '../helpers/logger'
@@ -57,27 +57,16 @@ class Redis {
     this.prefix = 'redis-' + WEBSERVER.HOST + '-'
   }
 
-  static getRedisClientOptions () {
-    let config: RedisOptions = {
-      connectionName: 'PeerTube',
-      connectTimeout: 20000 // Could be slow since node use sync call to compile PeerTube
+  static getRedisClientOptions (connectionName?: string) {
+    return {
+      connectionName: [ 'PeerTube', connectionName ].join(''),
+      connectTimeout: 20000, // Could be slow since node use sync call to compile PeerTube
+      password: CONFIG.REDIS.AUTH,
+      db: CONFIG.REDIS.DB,
+      host: CONFIG.REDIS.HOSTNAME,
+      port: CONFIG.REDIS.PORT,
+      path: CONFIG.REDIS.SOCKET
     }
-
-    if (CONFIG.REDIS.AUTH) {
-      config = { ...config, password: CONFIG.REDIS.AUTH }
-    }
-
-    if (CONFIG.REDIS.DB) {
-      config = { ...config, db: CONFIG.REDIS.DB }
-    }
-
-    if (CONFIG.REDIS.HOSTNAME && CONFIG.REDIS.PORT) {
-      config = { ...config, host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT }
-    } else {
-      config = { ...config, path: CONFIG.REDIS.SOCKET }
-    }
-
-    return config
   }
 
   getClient () {
