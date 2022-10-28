@@ -54,7 +54,16 @@ class P2pMediaLoaderPlugin extends Plugin {
       if (message) {
         logger.warn(message)
 
-        player.ready(() => player.trigger('error', new Error(message)))
+        const error: MediaError = {
+          code: MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED,
+          message,
+          MEDIA_ERR_ABORTED: MediaError.MEDIA_ERR_ABORTED,
+          MEDIA_ERR_DECODE: MediaError.MEDIA_ERR_DECODE,
+          MEDIA_ERR_NETWORK: MediaError.MEDIA_ERR_NETWORK,
+          MEDIA_ERR_SRC_NOT_SUPPORTED: MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED
+        }
+
+        player.ready(() => player.error(error))
         return
       }
     } else {
