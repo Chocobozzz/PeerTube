@@ -181,7 +181,7 @@ describe('Test users', function () {
     })
 
     it('Should refresh the token', async function () {
-      this.timeout(15000)
+      this.timeout(50000)
 
       const futureDate = new Date(new Date().getTime() + 1000 * 60).toISOString()
       await server.sql.setTokenField(server.accessToken, 'refreshTokenExpiresAt', futureDate)

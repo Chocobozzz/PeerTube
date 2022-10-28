@@ -138,6 +138,10 @@ storage:
   # If not, peertube will fallback to the default file
   client_overrides: '/var/www/peertube/storage/client-overrides/'
 
+static_files:
+  # Require and check user authentication when accessing private files (internal/private video files)
+  private_files_require_auth: true
+
 object_storage:
   enabled: false
 
@@ -149,8 +153,16 @@ object_storage:
   upload_acl:
     # Set this ACL on each uploaded object of public/unlisted videos
     public: 'public-read'
-      # Set this ACL on each uploaded object of private/internal videos
+    # Set this ACL on each uploaded object of private/internal videos
+    # PeerTube can proxify requests to private objects so your users can access them
     private: 'private'
+
+  proxy:
+    # If private files (private/internal video files) have a private ACL, users can't access directly the ressource
+    # PeerTube can proxify requests between your object storage service and your users
+    # If you disable PeerTube proxy, ensure you use your own proxy that is able to access the private files
+    # Or you can also set a public ACL for private files in object storage if you don't want to use a proxy
+    proxify_private_files: true
 
   credentials:
     # You can also use AWS_ACCESS_KEY_ID env variable

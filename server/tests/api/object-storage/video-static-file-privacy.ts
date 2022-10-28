@@ -385,7 +385,7 @@ describe('Object storage for video static file privacy', function () {
   })
 
   after(async function () {
-    this.timeout(60000)
+    this.timeout(240000)
 
     const { data } = await server.videos.listAllForAdmin()
 
