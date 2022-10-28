@@ -7522,13 +7522,16 @@ components:
         nsfwPolicy:
           $ref: '#/components/schemas/NSFWPolicy'
         role:
-          $ref: '#/components/schemas/UserRole'
-        roleLabel:
-          type: string
-          enum:
-            - User
-            - Moderator
-            - Administrator
+          type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/UserRole'
+            label:
+              type: string
+              enum:
+                - User
+                - Moderator
+                - Administrator
         theme:
           type: string
           description: Theme enabled by this user

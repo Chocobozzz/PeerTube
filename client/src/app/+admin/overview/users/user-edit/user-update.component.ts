@@ -144,7 +144,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
     this.form.patchValue({
       email: userJson.email,
-      role: userJson.role.toString(),
+      role: userJson.role.id.toString(),
       videoQuota: userJson.videoQuota,
       videoQuotaDaily: userJson.videoQuotaDaily,
       pluginAuth: userJson.pluginAuth,

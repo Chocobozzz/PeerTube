@@ -43,16 +43,16 @@ export class AuthUser extends User implements ServerMyUserModel {
   }
 
   hasRight (right: UserRight) {
-    return hasUserRight(this.role, right)
+    return hasUserRight(this.role.id, right)
   }
 
   canManage (user: ServerUserModel) {
-    const myRole = this.role
+    const myRole = this.role.id
 
     if (myRole === UserRole.ADMINISTRATOR) return true
 
     // I'm a moderator: I can only manage users
-    return user.role === UserRole.USER
+    return user.role.id === UserRole.USER
   }
 
   computeCanSeeVideosLink (quotaObservable: Observable<UserVideoQuota>): Observable<boolean> {

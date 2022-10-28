@@ -49,7 +49,7 @@ export abstract class UserEdit extends FormReactive implements OnInit {
   buildRoles () {
     const authUser = this.auth.getUser()
 
-    if (authUser.role === UserRole.ADMINISTRATOR) {
+    if (authUser.role.id === UserRole.ADMINISTRATOR) {
       this.roles = Object.keys(USER_ROLE_LABELS)
             .map(key => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
       return

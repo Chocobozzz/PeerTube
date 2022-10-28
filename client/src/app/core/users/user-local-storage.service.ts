@@ -59,7 +59,10 @@ export class UserLocalStorageService {
       id: parseInt(this.localStorageService.getItem(UserLocalStorageKeys.ID), 10),
       username: this.localStorageService.getItem(UserLocalStorageKeys.USERNAME),
       email: this.localStorageService.getItem(UserLocalStorageKeys.EMAIL),
-      role: parseInt(this.localStorageService.getItem(UserLocalStorageKeys.ROLE), 10) as UserRole,
+      role: {
+        id: parseInt(this.localStorageService.getItem(UserLocalStorageKeys.ROLE), 10) as UserRole,
+        label: ''
+      },
 
       ...this.getUserInfo()
     }
@@ -69,12 +72,14 @@ export class UserLocalStorageService {
     id: number
     username: string
     email: string
-    role: UserRole
+    role: {
+      id: UserRole
+    }
   }) {
     this.localStorageService.setItem(UserLocalStorageKeys.ID, user.id.toString())
     this.localStorageService.setItem(UserLocalStorageKeys.USERNAME, user.username)
     this.localStorageService.setItem(UserLocalStorageKeys.EMAIL, user.email)
-    this.localStorageService.setItem(UserLocalStorageKeys.ROLE, user.role.toString())
+    this.localStorageService.setItem(UserLocalStorageKeys.ROLE, user.role.id.toString())
   }
 
   flushLoggedInUser () {
