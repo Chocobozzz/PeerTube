@@ -11,8 +11,8 @@ export class VideoUploadPage {
     await $('.upload-video-container').waitForDisplayed()
   }
 
-  async uploadVideo () {
-    const fileToUpload = join(__dirname, '../../fixtures/video.mp4')
+  async uploadVideo (fixtureName: 'video.mp4' | 'video2.mp4' | 'video3.mp4') {
+    const fileToUpload = join(__dirname, '../../fixtures/' + fixtureName)
     const fileInputSelector = '.upload-video-container input[type=file]'
     const parentFileInput = '.upload-video-container .button-file'
 
@@ -36,6 +36,7 @@ export class VideoUploadPage {
 
   async setAsNSFW () {
     const checkbox = await getCheckbox('nsfw')
+    await checkbox.waitForClickable()
 
     return checkbox.click()
   }
@@ -45,7 +46,10 @@ export class VideoUploadPage {
     await nameInput.clearValue()
     await nameInput.setValue(videoName)
 
-    await this.getSecondStepSubmitButton().click()
+    const button = this.getSecondStepSubmitButton()
+    await button.waitForClickable()
+
+    await button.click()
 
     return browser.waitUntil(async () => {
       return (await browser.getUrl()).includes('/w/')

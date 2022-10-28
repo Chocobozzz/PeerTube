@@ -14,8 +14,14 @@ export class AdminConfigPage {
     await $('.inner-form-title=' + waitTitles[tab]).waitForDisplayed()
   }
 
-  updateNSFWSetting (newValue: 'do_not_list' | 'blur' | 'display') {
-    return $('#instanceDefaultNSFWPolicy').selectByAttribute('value', newValue)
+  async updateNSFWSetting (newValue: 'do_not_list' | 'blur' | 'display') {
+    const elem = $('#instanceDefaultNSFWPolicy')
+
+    await elem.waitForDisplayed()
+    await elem.scrollIntoView(false) // Avoid issues with fixed header on firefox
+    await elem.waitForClickable()
+
+    return elem.selectByAttribute('value', newValue)
   }
 
   updateHomepage (newValue: string) {
@@ -24,11 +30,15 @@ export class AdminConfigPage {
 
   async toggleSignup () {
     const checkbox = await getCheckbox('signupEnabled')
+
+    await checkbox.waitForClickable()
     await checkbox.click()
   }
 
   async save () {
     const button = $('input[type=submit]')
+
+    await button.waitForClickable()
     await button.click()
   }
 }

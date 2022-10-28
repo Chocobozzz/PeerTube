@@ -49,7 +49,7 @@ describe('Videos all workflow', () => {
     videoUploadPage = new VideoUploadPage()
     videoUpdatePage = new VideoUpdatePage()
     myAccountPage = new MyAccountPage()
-    loginPage = new LoginPage()
+    loginPage = new LoginPage(isMobileDevice())
     playerPage = new PlayerPage()
     videoListPage = new VideoListPage(isMobileDevice(), isSafari())
 
@@ -72,7 +72,7 @@ describe('Videos all workflow', () => {
 
     await videoUploadPage.navigateTo()
 
-    await videoUploadPage.uploadVideo()
+    await videoUploadPage.uploadVideo('video.mp4')
     return videoUploadPage.validSecondUploadStep(videoName)
   })
 
@@ -147,7 +147,7 @@ describe('Videos all workflow', () => {
 
     await videoUploadPage.navigateTo()
 
-    await videoUploadPage.uploadVideo()
+    await videoUploadPage.uploadVideo('video2.mp4')
     await videoUploadPage.validSecondUploadStep(video2Name)
 
     await videoWatchPage.clickOnSave()

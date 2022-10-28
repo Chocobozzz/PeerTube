@@ -25,6 +25,8 @@ export class MyAccountPage {
 
     await nsfw.waitForDisplayed()
     await nsfw.scrollIntoView(false) // Avoid issues with fixed header on firefox
+    await nsfw.waitForClickable()
+
     await nsfw.selectByAttribute('value', newValue)
 
     await this.submitVideoSettings()
@@ -43,6 +45,8 @@ export class MyAccountPage {
 
   private async submitVideoSettings () {
     const submit = $('my-user-video-settings input[type=submit]')
+
+    await submit.waitForClickable()
     await submit.scrollIntoView(false)
     await submit.click()
   }

@@ -9,7 +9,7 @@ export class SignupPage {
   async clickOnRegisterInMenu () {
     const button = this.getRegisterMenuButton()
 
-    await button.waitForDisplayed()
+    await button.waitForClickable()
     await button.click()
   }
 
@@ -22,6 +22,7 @@ export class SignupPage {
 
   async checkTerms () {
     const terms = await getCheckbox('terms')
+    await terms.waitForClickable()
 
     return terms.click()
   }

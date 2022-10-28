@@ -1,7 +1,7 @@
 import { AdminPluginPage } from '../po/admin-plugin.po'
 import { LoginPage } from '../po/login.po'
 import { VideoUploadPage } from '../po/video-upload.po'
-import { getCheckbox, waitServerUp } from '../utils'
+import { getCheckbox, isMobileDevice, waitServerUp } from '../utils'
 
 describe('Plugins', () => {
   let videoUploadPage: VideoUploadPage
@@ -24,7 +24,7 @@ describe('Plugins', () => {
   })
 
   beforeEach(async () => {
-    loginPage = new LoginPage()
+    loginPage = new LoginPage(isMobileDevice())
     videoUploadPage = new VideoUploadPage()
     adminPluginPage = new AdminPluginPage()
 
@@ -42,7 +42,7 @@ describe('Plugins', () => {
 
   it('Should have checkbox in video edit page', async () => {
     await videoUploadPage.navigateTo()
-    await videoUploadPage.uploadVideo()
+    await videoUploadPage.uploadVideo('video.mp4')
 
     await $('span=Super field 4 in main tab').waitForDisplayed()
 
@@ -54,6 +54,8 @@ describe('Plugins', () => {
 
   it('Should check the checkbox and be able to submit the video', async function () {
     const checkbox = await getPluginCheckbox()
+
+    await checkbox.waitForClickable()
     await checkbox.click()
 
     await expectSubmitState({ disabled: false })
@@ -61,6 +63,8 @@ describe('Plugins', () => {
 
   it('Should uncheck the checkbox and not be able to submit the video', async function () {
     const checkbox = await getPluginCheckbox()
+
+    await checkbox.waitForClickable()
     await checkbox.click()
 
     await expectSubmitState({ disabled: true })
