@@ -65,7 +65,8 @@ class Redis {
       db: CONFIG.REDIS.DB,
       host: CONFIG.REDIS.HOSTNAME,
       port: CONFIG.REDIS.PORT,
-      path: CONFIG.REDIS.SOCKET
+      path: CONFIG.REDIS.SOCKET,
+      showFriendlyErrorStack: true
     }
   }
 
