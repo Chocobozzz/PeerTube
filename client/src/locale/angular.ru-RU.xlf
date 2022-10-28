@@ -874,7 +874,7 @@
       </trans-unit>
       <trans-unit id="8135461567542503937" datatype="html">
         <source>Transcode live video in multiple resolutions</source>
-        <target state="translated">Транскодировать потокое видео в несколько разрешении</target>
+        <target state="translated">Транскодировать потоковое видео в несколько разрешении</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="4990508956923223990" datatype="html">
