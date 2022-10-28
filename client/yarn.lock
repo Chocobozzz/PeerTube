@@ -2629,20 +2629,10 @@
     split2 "^4.0.0"
     stream-buffers "^3.0.2"
 
-"@wdio/logger@7.19.0":
+"@wdio/logger@7.19.0", "@wdio/logger@^7.19.0", "@wdio/logger@^7.5.3":
   version "7.19.0"
   resolved "https://registry.yarnpkg.com/@wdio/logger/-/logger-7.19.0.tgz#23697a4b4aaea56c3bd477a0393af2a5c175fc85"
   integrity sha512-xR7SN/kGei1QJD1aagzxs3KMuzNxdT/7LYYx+lt6BII49+fqL/SO+5X0FDCZD0Ds93AuQvvz9eGyzrBI2FFXmQ==
-  dependencies:
-    chalk "^4.0.0"
-    loglevel "^1.6.0"
-    loglevel-plugin-prefix "^0.8.4"
-    strip-ansi "^6.0.0"
-
-"@wdio/logger@^8.0.0-alpha.219":
-  version "8.0.0-alpha.412"
-  resolved "https://registry.yarnpkg.com/@wdio/logger/-/logger-8.0.0-alpha.412.tgz#ac483688a295d5882d6ad78efd25c214dbcae3be"
-  integrity sha512-p1jAM/viND/kAicRvIf2mXGLbQD3B0X9eC4CcpHfw4YUBr9+EMyLgo+CPIe3qJogug/pbhbVKpTuvE+wemv8Mg==
   dependencies:
     chalk "^4.0.0"
     loglevel "^1.6.0"
@@ -3244,6 +3234,11 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
+
+at-least-node@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
+  integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
 
 atob@^2.1.2:
   version "2.1.2"
@@ -5695,6 +5690,16 @@ fs-extra@^10.0.0, fs-extra@^10.1.0:
     jsonfile "^6.0.1"
     universalify "^2.0.0"
 
+fs-extra@^9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-9.1.0.tgz#5954460c764a8da2094ba3554bf839e6b9a7c86d"
+  integrity sha512-hcg3ZmepS30/7BSFqRvoo3DOMQu7IjqxO5nCDt+zM9XWjb33Wg7ziNT+Qvqbuc3+gWpzO02JubVyk2G4Zvo1OQ==
+  dependencies:
+    at-least-node "^1.0.0"
+    graceful-fs "^4.2.0"
+    jsonfile "^6.0.1"
+    universalify "^2.0.0"
+
 fs-minipass@^2.0.0, fs-minipass@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/fs-minipass/-/fs-minipass-2.1.0.tgz#7f5036fdbf12c63c169190cbe4199c852271f9fb"
@@ -5808,10 +5813,10 @@ get-package-type@^0.1.0:
   resolved "https://registry.yarnpkg.com/get-package-type/-/get-package-type-0.1.0.tgz#8de2d803cff44df3bc6c456e6668b36c3926e11a"
   integrity sha512-pjzuKtY64GYfWizNAJ0fr9VqttZkNiK2iS430LtIHzjBEr6bX8Am2zm4sW4Ro5wjWW5cAlRL1qAMTcXbjNAO2Q==
 
-get-port@^6.1.2:
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/get-port/-/get-port-6.1.2.tgz#c1228abb67ba0e17fb346da33b15187833b9c08a"
-  integrity sha512-BrGGraKm2uPqurfGVj/z97/zv8dPleC6x9JBNRTrDNtCkkRF4rPwrQXFgL7+I+q8QSdU4ntLQX2D7KIxSy8nGw==
+get-port@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/get-port/-/get-port-5.1.1.tgz#0469ed07563479de6efb986baf053dcd7d4e3193"
+  integrity sha512-g/Q1aTSDOxFpchXC4i8ZWvxA1lnPqx/JHqcpIw0/LX9T8x/GBbi6YnlN5nhaKIFkT8oFsscUKgDJYxfwfS6QsQ==
 
 get-stdin@^8.0.0:
   version "8.0.0"
@@ -9433,7 +9438,7 @@ readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.5:
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
-readable-stream@^3.0.2, readable-stream@^3.0.6, readable-stream@^3.1.1, readable-stream@^3.4.0, readable-stream@^3.5.0, readable-stream@^3.6.0:
+readable-stream@^3.0.0, readable-stream@^3.0.2, readable-stream@^3.0.6, readable-stream@^3.1.1, readable-stream@^3.4.0, readable-stream@^3.5.0, readable-stream@^3.6.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.6.0.tgz#337bbda3adc0706bd3e024426a286d4b4b2c9198"
   integrity sha512-BViHy7LKeTz4oNnkcLJ+lVSL6vpiFeX6/d3oSH8zCW7UxP2onchk+vTGB143xuFjHS3deTgkKoXXymXqymiIdA==
@@ -10281,6 +10286,13 @@ speedometer@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/speedometer/-/speedometer-1.1.0.tgz#a30b13abda45687a1a76977012c060f2ac8a7934"
   integrity sha512-z/wAiTESw2XVPssY2XRcme4niTc4S5FkkJ4gknudtVoc33Zil8TdTxHy5torRcgqMqksJV2Yz8HQcvtbsnw0mQ==
+
+split2@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/split2/-/split2-3.2.2.tgz#bf2cf2a37d838312c249c89206fd7a17dd12365f"
+  integrity sha512-9NThjpgZnifTkJpzTZ7Eue85S49QwpNhZTq6GRJwObb6jnLFNGB7Qm73V5HewTROPyxD0C29xqmaI68bQtV+hg==
+  dependencies:
+    readable-stream "^3.0.0"
 
 split2@^4.0.0, split2@^4.1.0:
   version "4.1.0"
@@ -11302,24 +11314,24 @@ wcwidth@^1.0.1:
   dependencies:
     defaults "^1.0.3"
 
-wdio-chromedriver-service@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/wdio-chromedriver-service/-/wdio-chromedriver-service-8.0.0.tgz#875a23afe9eebf90d35e31504f4ca5c2dc7d9e1d"
-  integrity sha512-sgx092o3WForNeRb9O3n+WkQBdEHihQD8FUrIuBM2Iui652yYzTsob7fza4VeJnOX2JijFlJb8S79ocbusz06Q==
+wdio-chromedriver-service@^7.3.2:
+  version "7.3.2"
+  resolved "https://registry.yarnpkg.com/wdio-chromedriver-service/-/wdio-chromedriver-service-7.3.2.tgz#569053df4ceaf6ce9e43bebcdd540197f516e313"
+  integrity sha512-4M3OqFzBSC4FdbqkfwOrUMeroMEuyIFCHfcUebkU6tJ1w5GenWO61YweJ8NKlhPZx9nkO8223+20MpvBjv+fTg==
   dependencies:
-    "@wdio/logger" "^8.0.0-alpha.219"
-    fs-extra "^10.1.0"
-    split2 "^4.1.0"
-    tcp-port-used "^1.0.2"
+    "@wdio/logger" "^7.5.3"
+    fs-extra "^9.1.0"
+    split2 "^3.2.2"
+    tcp-port-used "^1.0.1"
 
-wdio-geckodriver-service@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/wdio-geckodriver-service/-/wdio-geckodriver-service-4.0.0.tgz#0118dab14b025a72174d30bde5a711d58e6c14ca"
-  integrity sha512-aqkxRxr3+npQtEHjQUhKvX5BSollu6ACjEY4R3F16gUXF4hgLixq3MW/IK4eXlrjHl8doRrJA1aTKQBYVWy2Ww==
+wdio-geckodriver-service@^3.0.2:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/wdio-geckodriver-service/-/wdio-geckodriver-service-3.0.6.tgz#f7bc2be2f372b88a0af97525078002e2e6e90fdd"
+  integrity sha512-PBAIj2YHnKizA8Xc2FC0RJwohSXzW56NwiP4yD3bkNaCWqETo/rDTQSsZgzIkUxDEXGxRKFM34WwX81vezeUbA==
   dependencies:
-    "@wdio/logger" "^8.0.0-alpha.219"
+    "@wdio/logger" "^7.19.0"
     fs-extra "^10.1.0"
-    get-port "^6.1.2"
+    get-port "^5.1.1"
     split2 "^4.1.0"
     tcp-port-used "^1.0.2"
 
