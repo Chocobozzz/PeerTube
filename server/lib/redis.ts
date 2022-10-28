@@ -66,6 +66,7 @@ class Redis {
       host: CONFIG.REDIS.HOSTNAME,
       port: CONFIG.REDIS.PORT,
       path: CONFIG.REDIS.SOCKET,
+      enableAutoPipelining: true,
       showFriendlyErrorStack: true
     }
   }
