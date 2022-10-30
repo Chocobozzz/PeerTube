@@ -1,4 +1,4 @@
-import IoRedis from 'ioredis'
+import IoRedis, { RedisOptions } from 'ioredis'
 import { exists } from '@server/helpers/custom-validators/misc'
 import { sha256 } from '@shared/extra-utils'
 import { logger } from '../helpers/logger'
@@ -35,7 +35,7 @@ class Redis {
 
     logger.info('Connecting to redis...')
 
-    this.client = new IoRedis(Redis.getRedisClientOptions())
+    this.client = new IoRedis(Redis.getRedisClientOptions('', { enableAutoPipelining: true }))
     this.client.on('error', err => logger.error('Redis Client Error', { err }))
     this.client.on('connect', () => {
       logger.info('Connected to redis.')
@@ -57,7 +57,7 @@ class Redis {
     this.prefix = 'redis-' + WEBSERVER.HOST + '-'
   }
 
-  static getRedisClientOptions (connectionName?: string) {
+  static getRedisClientOptions (connectionName?: string, options: RedisOptions = {}): RedisOptions {
     return {
       connectionName: [ 'PeerTube', connectionName ].join(''),
       connectTimeout: 20000, // Could be slow since node use sync call to compile PeerTube
@@ -66,8 +66,8 @@ class Redis {
       host: CONFIG.REDIS.HOSTNAME,
       port: CONFIG.REDIS.PORT,
       path: CONFIG.REDIS.SOCKET,
-      enableAutoPipelining: true,
-      showFriendlyErrorStack: true
+      showFriendlyErrorStack: true,
+      ...options
     }
   }
 
