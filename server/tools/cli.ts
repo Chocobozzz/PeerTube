@@ -20,7 +20,7 @@ async function getAdminTokenOrDie (server: PeerTubeServer, username: string, pas
   const token = await server.login.getAccessToken(username, password)
   const me = await server.users.getMyInfo({ token })
 
-  if (me.role !== UserRole.ADMINISTRATOR) {
+  if (me.role.id !== UserRole.ADMINISTRATOR) {
     console.error('You must be an administrator.')
     process.exit(-1)
   }
