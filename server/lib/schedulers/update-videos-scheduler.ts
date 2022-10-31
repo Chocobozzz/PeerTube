@@ -53,7 +53,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
     const video = await sequelizeTypescript.transaction(async t => {
       const video = await VideoModel.loadFull(schedule.videoId, t)
-      if (video.state === VideoState.TO_TRANSCODE) return
+      if (video.state === VideoState.TO_TRANSCODE) return null
 
       logger.info('Executing scheduled video update on %s.', video.uuid)
 
@@ -73,6 +73,10 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
       return video
     })
+
+    if (!video) {
+      return { video, published: false }
+    }
 
     await addVideoJobsAfterUpdate({ video, oldPrivacy, isNewVideo, nameChanged: false })
 
