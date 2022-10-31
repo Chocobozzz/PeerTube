@@ -46,6 +46,7 @@ async function optimizeOriginalVideofile (options: {
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
 
+  // Will be released by our transcodeVOD function once ffmpeg is ran
   const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
   try {

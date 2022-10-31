@@ -1,7 +1,7 @@
 import { logger } from '@server/helpers/logger'
 import { YoutubeDLWrapper } from '@server/helpers/youtube-dl'
 import { CONFIG } from '@server/initializers/config'
-import { buildYoutubeDLImport } from '@server/lib/video-import'
+import { buildYoutubeDLImport } from '@server/lib/video-pre-import'
 import { UserModel } from '@server/models/user/user'
 import { VideoImportModel } from '@server/models/video/video-import'
 import { MChannel, MChannelAccountDefault, MChannelSync } from '@server/types/models'
