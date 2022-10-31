@@ -1,4 +1,4 @@
-import uniqBy from 'lodash/uniqBy'
+import { uniqBy } from 'lodash-es'
 import { concat, Observable } from 'rxjs'
 import { tap, toArray } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
