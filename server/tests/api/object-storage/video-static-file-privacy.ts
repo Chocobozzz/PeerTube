@@ -347,7 +347,7 @@ describe('Object storage for video static file privacy', function () {
       await server.kill()
 
       const config = ObjectStorageCommand.getDefaultScalewayConfig({
-        serverNumber: server.internalServerNumber,
+        serverNumber: 1,
         enablePrivateProxy: false,
         privateACL: 'public-read'
       })
@@ -394,7 +394,7 @@ describe('Object storage for video static file privacy', function () {
     }
 
     for (const v of data) {
-      await server.servers.waitUntilLog('Removed files of video ' + v.url, 1, true)
+      await server.servers.waitUntilLog('Removed files of video ' + v.url)
     }
 
     await cleanupTests([ server ])
