@@ -20,18 +20,18 @@ export class LoginPage {
 
     await $('form input[type=submit]').click()
 
-    const menuToggle = $('.top-left-block span[role=button]')
-
     if (this.isMobileDevice) {
-      await browser.pause(1000)
+      const menuToggle = $('.top-left-block span[role=button]')
+
+      await $('h2=Our content selection').waitForDisplayed()
 
       await menuToggle.click()
-    }
 
-    await this.ensureIsLoggedInAs(username)
+      await this.ensureIsLoggedInAs(username)
 
-    if (this.isMobileDevice) {
       await menuToggle.click()
+    } else {
+      await this.ensureIsLoggedInAs(username)
     }
   }
 
