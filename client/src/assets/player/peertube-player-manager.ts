@@ -43,6 +43,8 @@ CaptionsButton.prototype.label_ = ' '
 
 export class PeertubePlayerManager {
   private static playerElementClassName: string
+  private static playerElementAttributes: { name: string, value: string }[] = []
+
   private static onPlayerChange: (player: videojs.Player) => void
   private static alreadyPlayed = false
   private static pluginsManager: PluginsManager
@@ -59,7 +61,12 @@ export class PeertubePlayerManager {
     this.pluginsManager = options.pluginsManager
 
     this.onPlayerChange = onPlayerChange
+
     this.playerElementClassName = options.common.playerElement.className
+
+    for (const name of options.common.playerElement.getAttributeNames()) {
+      this.playerElementAttributes.push({ name, value: options.common.playerElement.getAttribute(name) })
+    }
 
     if (mode === 'webtorrent') await import('./shared/webtorrent/webtorrent-plugin')
     if (mode === 'p2p-media-loader') {
@@ -216,7 +223,14 @@ export class PeertubePlayerManager {
 
   private static rebuildAndUpdateVideoElement (player: videojs.Player, commonOptions: CommonOptions) {
     const newVideoElement = document.createElement('video')
+
+    // Reset class
     newVideoElement.className = this.playerElementClassName
+
+    // Reapply attributes
+    for (const { name, value } of this.playerElementAttributes) {
+      newVideoElement.setAttribute(name, value)
+    }
 
     // VideoJS wraps our video element inside a div
     let currentParentPlayerElement = commonOptions.playerElement.parentNode

@@ -173,7 +173,7 @@ describe('Videos all workflow', () => {
 
     await myAccountPage.playPlaylist()
 
-    await videoWatchPage.waitUntilVideoName(video2Name, 30 * 1000)
+    await videoWatchPage.waitUntilVideoName(video2Name, 40 * 1000)
   })
 
   it('Should watch the webtorrent playlist in the embed', async () => {
