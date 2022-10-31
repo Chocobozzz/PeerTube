@@ -167,7 +167,7 @@ export class PeertubePlayerManager {
   }
 
   private static async tryToRecoverHLSError (err: any, currentPlayer: videojs.Player, options: PeertubePlayerManagerOptions) {
-    if (err.code === 3) { // Decode error
+    if (err.code === MediaError.MEDIA_ERR_DECODE) {
 
       // Display a notification to user
       if (this.videojsDecodeErrors === 0) {
