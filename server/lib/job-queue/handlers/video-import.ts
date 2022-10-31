@@ -277,7 +277,7 @@ async function generateMiniature (videoImportWithFiles: MVideoImportDefaultFiles
   const miniatureModel = await generateVideoMiniature({
     video: videoImportWithFiles.Video,
     videoFile,
-    type: ThumbnailType.MINIATURE
+    type: thumbnailType
   })
   const miniatureJSONSave = miniatureModel.toJSON()
 
