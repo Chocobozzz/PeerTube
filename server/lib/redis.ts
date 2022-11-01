@@ -36,22 +36,22 @@ class Redis {
     logger.info('Connecting to redis...')
 
     this.client = new IoRedis(Redis.getRedisClientOptions('', { enableAutoPipelining: true }))
-    this.client.on('error', err => logger.error('Redis Client Error', { err }))
+    this.client.on('error', err => logger.error('Redis failed to connect', { err }))
     this.client.on('connect', () => {
       logger.info('Connected to redis.')
 
       this.connected = true
     })
-    this.client.on('reconnecting', () => {
-      logger.info('Reconnecting to redis.')
+    this.client.on('reconnecting', (ms) => {
+      logger.error(`Reconnecting to redis in ${ms}.`)
     })
     this.client.on('close', () => {
-      logger.info('Connection to redis has closed.')
+      logger.error('Connection to redis has closed.')
       this.connected = false
     })
-    this.client.on('error', (err) => {
-      logger.error('Cannot connect to redis', { err })
-      process.exit(-1)
+
+    this.client.on('end', () => {
+      logger.error('Connection to redis has closed and no more reconnects will be done.')
     })
 
     this.prefix = 'redis-' + WEBSERVER.HOST + '-'
