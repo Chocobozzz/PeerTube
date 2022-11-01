@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core'
 import { AuthService, AuthStatus } from '@app/core/auth'
 import { getBoolOrDefault } from '@root-helpers/local-storage-utils'
 import { logger } from '@root-helpers/logger'
-import { UserLocalStorageKeys, UserTokens } from '@root-helpers/users'
+import { UserLocalStorageKeys, OAuthUserTokens } from '@root-helpers/users'
 import { UserRole, UserUpdateMe } from '@shared/models'
 import { NSFWPolicyType } from '@shared/models/videos'
 import { ServerService } from '../server'
@@ -24,7 +24,7 @@ export class UserLocalStorageService {
 
         this.setLoggedInUser(user)
         this.setUserInfo(user)
-        this.setTokens(user.tokens)
+        this.setTokens(user.oauthTokens)
       }
     })
 
@@ -43,7 +43,7 @@ export class UserLocalStorageService {
         next: () => {
           const user = this.authService.getUser()
 
-          this.setTokens(user.tokens)
+          this.setTokens(user.oauthTokens)
         }
       })
   }
@@ -59,7 +59,10 @@ export class UserLocalStorageService {
       id: parseInt(this.localStorageService.getItem(UserLocalStorageKeys.ID), 10),
       username: this.localStorageService.getItem(UserLocalStorageKeys.USERNAME),
       email: this.localStorageService.getItem(UserLocalStorageKeys.EMAIL),
-      role: parseInt(this.localStorageService.getItem(UserLocalStorageKeys.ROLE), 10) as UserRole,
+      role: {
+        id: parseInt(this.localStorageService.getItem(UserLocalStorageKeys.ROLE), 10) as UserRole,
+        label: ''
+      },
 
       ...this.getUserInfo()
     }
@@ -69,12 +72,14 @@ export class UserLocalStorageService {
     id: number
     username: string
     email: string
-    role: UserRole
+    role: {
+      id: UserRole
+    }
   }) {
     this.localStorageService.setItem(UserLocalStorageKeys.ID, user.id.toString())
     this.localStorageService.setItem(UserLocalStorageKeys.USERNAME, user.username)
     this.localStorageService.setItem(UserLocalStorageKeys.EMAIL, user.email)
-    this.localStorageService.setItem(UserLocalStorageKeys.ROLE, user.role.toString())
+    this.localStorageService.setItem(UserLocalStorageKeys.ROLE, user.role.id.toString())
   }
 
   flushLoggedInUser () {
@@ -174,14 +179,14 @@ export class UserLocalStorageService {
   // ---------------------------------------------------------------------------
 
   getTokens () {
-    return UserTokens.getUserTokens(this.localStorageService)
+    return OAuthUserTokens.getUserTokens(this.localStorageService)
   }
 
-  setTokens (tokens: UserTokens) {
-    UserTokens.saveToLocalStorage(this.localStorageService, tokens)
+  setTokens (tokens: OAuthUserTokens) {
+    OAuthUserTokens.saveToLocalStorage(this.localStorageService, tokens)
   }
 
   flushTokens () {
-    UserTokens.flushLocalStorage(this.localStorageService)
+    OAuthUserTokens.flushLocalStorage(this.localStorageService)
   }
 }

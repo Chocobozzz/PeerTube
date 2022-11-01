@@ -113,15 +113,24 @@ const CONFIG = {
     CLIENT_OVERRIDES_DIR: buildPath(config.get<string>('storage.client_overrides')),
     WELL_KNOWN_DIR: buildPath(config.get<string>('storage.well_known'))
   },
+  STATIC_FILES: {
+    PRIVATE_FILES_REQUIRE_AUTH: config.get<boolean>('static_files.private_files_require_auth')
+  },
   OBJECT_STORAGE: {
     ENABLED: config.get<boolean>('object_storage.enabled'),
     MAX_UPLOAD_PART: bytes.parse(config.get<string>('object_storage.max_upload_part')),
     ENDPOINT: config.get<string>('object_storage.endpoint'),
     REGION: config.get<string>('object_storage.region'),
-    UPLOAD_ACL: config.get<string>('object_storage.upload_acl'),
+    UPLOAD_ACL: {
+      PUBLIC: config.get<string>('object_storage.upload_acl.public'),
+      PRIVATE: config.get<string>('object_storage.upload_acl.private')
+    },
     CREDENTIALS: {
       ACCESS_KEY_ID: config.get<string>('object_storage.credentials.access_key_id'),
       SECRET_ACCESS_KEY: config.get<string>('object_storage.credentials.secret_access_key')
+    },
+    PROXY: {
+      PROXIFY_PRIVATE_FILES: config.get<boolean>('object_storage.proxy.proxify_private_files')
     },
     VIDEOS: {
       BUCKET_NAME: config.get<string>('object_storage.videos.bucket_name'),

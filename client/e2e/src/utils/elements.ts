@@ -6,7 +6,10 @@ async function getCheckbox (name: string) {
 }
 
 async function selectCustomSelect (id: string, valueLabel: string) {
-  await $(`[formcontrolname=${id}] .ng-arrow-wrapper`).click()
+  const wrapper = $(`[formcontrolname=${id}] .ng-arrow-wrapper`)
+
+  await wrapper.waitForClickable()
+  await wrapper.click()
 
   const option = await $$(`[formcontrolname=${id}] .ng-option`).filter(async o => {
     const text = await o.getText()

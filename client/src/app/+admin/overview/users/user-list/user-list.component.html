@@ -106,8 +106,8 @@
       </td>
 
       <td *ngIf="isSelected('role')">
-        <span *ngIf="user.blocked" class="pt-badge badge-banned" i18n-title title="The user was banned">{{ user.roleLabel }}</span>
-        <span *ngIf="!user.blocked" class="pt-badge" [ngClass]="getRoleClass(user.role)">{{ user.roleLabel }}</span>
+        <span *ngIf="user.blocked" class="pt-badge badge-banned" i18n-title title="The user was banned">{{ user.role.label }}</span>
+        <span *ngIf="!user.blocked" class="pt-badge" [ngClass]="getRoleClass(user.role.id)">{{ user.role.label }}</span>
       </td>
 
       <td *ngIf="isSelected('email')" [title]="user.email">

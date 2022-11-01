@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { Params } from '@angular/router'
 import { GlobalIconName } from '@app/shared/shared-icons'
 
@@ -25,7 +25,8 @@ export type DropdownDirection = 'horizontal' | 'vertical'
 @Component({
   selector: 'my-action-dropdown',
   styleUrls: [ './action-dropdown.component.scss' ],
-  templateUrl: './action-dropdown.component.html'
+  templateUrl: './action-dropdown.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ActionDropdownComponent<T> {

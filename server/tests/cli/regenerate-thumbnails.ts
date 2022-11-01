@@ -6,7 +6,7 @@ import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  makeRawRequest,
+  makeGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
@@ -16,8 +16,8 @@ async function testThumbnail (server: PeerTubeServer, videoId: number | string) 
   const video = await server.videos.get({ id: videoId })
 
   const requests = [
-    makeRawRequest(join(server.url, video.thumbnailPath), HttpStatusCode.OK_200),
-    makeRawRequest(join(server.url, video.thumbnailPath), HttpStatusCode.OK_200)
+    makeGetRequest({ url: server.url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 }),
+    makeGetRequest({ url: server.url, path: video.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
   ]
 
   for (const req of requests) {
@@ -69,17 +69,17 @@ describe('Test regenerate thumbnails script', function () {
 
   it('Should have empty thumbnails', async function () {
     {
-      const res = await makeRawRequest(join(servers[0].url, video1.thumbnailPath), HttpStatusCode.OK_200)
+      const res = await makeGetRequest({ url: servers[0].url, path: video1.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
       expect(res.body).to.have.lengthOf(0)
     }
 
     {
-      const res = await makeRawRequest(join(servers[0].url, video2.thumbnailPath), HttpStatusCode.OK_200)
+      const res = await makeGetRequest({ url: servers[0].url, path: video2.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
       expect(res.body).to.not.have.lengthOf(0)
     }
 
     {
-      const res = await makeRawRequest(join(servers[0].url, remoteVideo.thumbnailPath), HttpStatusCode.OK_200)
+      const res = await makeGetRequest({ url: servers[0].url, path: remoteVideo.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
       expect(res.body).to.have.lengthOf(0)
     }
   })
@@ -94,21 +94,21 @@ describe('Test regenerate thumbnails script', function () {
     await testThumbnail(servers[0], video1.uuid)
     await testThumbnail(servers[0], video2.uuid)
 
-    const res = await makeRawRequest(join(servers[0].url, remoteVideo.thumbnailPath), HttpStatusCode.OK_200)
+    const res = await makeGetRequest({ url: servers[0].url, path: remoteVideo.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
     expect(res.body).to.have.lengthOf(0)
   })
 
   it('Should have deleted old thumbnail files', async function () {
     {
-      await makeRawRequest(join(servers[0].url, video1.thumbnailPath), HttpStatusCode.NOT_FOUND_404)
+      await makeGetRequest({ url: servers[0].url, path: video1.thumbnailPath, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     }
 
     {
-      await makeRawRequest(join(servers[0].url, video2.thumbnailPath), HttpStatusCode.NOT_FOUND_404)
+      await makeGetRequest({ url: servers[0].url, path: video2.thumbnailPath, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     }
 
     {
-      const res = await makeRawRequest(join(servers[0].url, remoteVideo.thumbnailPath), HttpStatusCode.OK_200)
+      const res = await makeGetRequest({ url: servers[0].url, path: remoteVideo.thumbnailPath, expectedStatus: HttpStatusCode.OK_200 })
       expect(res.body).to.have.lengthOf(0)
     }
   })

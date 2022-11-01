@@ -3,10 +3,10 @@ import '../../assets/player/shared/dock/peertube-dock-component'
 import '../../assets/player/shared/dock/peertube-dock-plugin'
 import videojs from 'video.js'
 import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
-import { HTMLServerConfig, LiveVideo, ResultList, VideoDetails, VideoPlaylist, VideoPlaylistElement } from '../../../../shared/models'
+import { HTMLServerConfig, ResultList, VideoDetails, VideoPlaylist, VideoPlaylistElement } from '../../../../shared/models'
 import { PeertubePlayerManager } from '../../assets/player'
 import { TranslationsManager } from '../../assets/player/translations-manager'
-import { getParamString, logger } from '../../root-helpers'
+import { getParamString, logger, videoRequiresAuth } from '../../root-helpers'
 import { PeerTubeEmbedApi } from './embed-api'
 import { AuthHTTP, LiveManager, PeerTubePlugin, PlayerManagerOptions, PlaylistFetcher, PlaylistTracker, VideoFetcher } from './shared'
 import { PlayerHTML } from './shared/player-html'
@@ -167,22 +167,25 @@ export class PeerTubeEmbed {
   private async buildVideoPlayer (videoResponse: Response, captionsPromise: Promise<Response>) {
     const alreadyHadPlayer = this.resetPlayerElement()
 
-    const videoInfoPromise: Promise<{ video: VideoDetails, live?: LiveVideo }> = videoResponse.json()
-      .then((videoInfo: VideoDetails) => {
+    const videoInfoPromise = videoResponse.json()
+      .then(async (videoInfo: VideoDetails) => {
         this.playerManagerOptions.loadParams(this.config, videoInfo)
 
         if (!alreadyHadPlayer && !this.playerManagerOptions.hasAutoplay()) {
           this.playerHTML.buildPlaceholder(videoInfo)
         }
+        const live = videoInfo.isLive
+          ? await this.videoFetcher.loadLive(videoInfo)
+          : undefined
 
-        if (!videoInfo.isLive) {
-          return { video: videoInfo }
-        }
+        const videoFileToken = videoRequiresAuth(videoInfo)
+          ? await this.videoFetcher.loadVideoToken(videoInfo)
+          : undefined
 
-        return this.videoFetcher.loadVideoWithLive(videoInfo)
+        return { live, video: videoInfo, videoFileToken }
       })
 
-    const [ { video, live }, translations, captionsResponse, PeertubePlayerManagerModule ] = await Promise.all([
+    const [ { video, live, videoFileToken }, translations, captionsResponse, PeertubePlayerManagerModule ] = await Promise.all([
       videoInfoPromise,
       this.translationsPromise,
       captionsPromise,
@@ -199,6 +202,9 @@ export class PeerTubeEmbed {
       alreadyHadPlayer,
       translations,
       serverConfig: this.config,
+
+      authorizationHeader: () => this.http.getHeaderTokenValue(),
+      videoFileToken: () => videoFileToken,
 
       onVideoUpdate: (uuid: string) => this.loadVideoAndBuildPlayer(uuid),
 
@@ -259,6 +265,7 @@ export class PeerTubeEmbed {
 
     if (this.player) {
       this.player.dispose()
+      this.player = undefined
       alreadyHadPlayer = true
     }
 

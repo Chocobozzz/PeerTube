@@ -2,7 +2,7 @@ import { map } from 'bluebird'
 import { readdir, remove, stat } from 'fs-extra'
 import { basename, join } from 'path'
 import { get, start } from 'prompt'
-import { HLS_REDUNDANCY_DIRECTORY, HLS_STREAMING_PLAYLIST_DIRECTORY } from '@server/initializers/constants'
+import { DIRECTORIES } from '@server/initializers/constants'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { uniqify } from '@shared/core-utils'
@@ -37,9 +37,11 @@ async function run () {
   console.log('Detecting files to remove, it could take a while...')
 
   toDelete = toDelete.concat(
-    await pruneDirectory(CONFIG.STORAGE.VIDEOS_DIR, doesWebTorrentFileExist()),
+    await pruneDirectory(DIRECTORIES.VIDEOS.PUBLIC, doesWebTorrentFileExist()),
+    await pruneDirectory(DIRECTORIES.VIDEOS.PRIVATE, doesWebTorrentFileExist()),
 
-    await pruneDirectory(HLS_STREAMING_PLAYLIST_DIRECTORY, doesHLSPlaylistExist()),
+    await pruneDirectory(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, doesHLSPlaylistExist()),
+    await pruneDirectory(DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC, doesHLSPlaylistExist()),
 
     await pruneDirectory(CONFIG.STORAGE.TORRENTS_DIR, doesTorrentFileExist()),
 
@@ -75,7 +77,7 @@ async function run () {
   }
 }
 
-type ExistFun = (file: string) => Promise<boolean>
+type ExistFun = (file: string) => Promise<boolean> | boolean
 async function pruneDirectory (directory: string, existFun: ExistFun) {
   const files = await readdir(directory)
 
@@ -92,11 +94,21 @@ async function pruneDirectory (directory: string, existFun: ExistFun) {
 }
 
 function doesWebTorrentFileExist () {
-  return (filePath: string) => VideoFileModel.doesOwnedWebTorrentVideoFileExist(basename(filePath))
+  return (filePath: string) => {
+    // Don't delete private directory
+    if (filePath === DIRECTORIES.VIDEOS.PRIVATE) return true
+
+    return VideoFileModel.doesOwnedWebTorrentVideoFileExist(basename(filePath))
+  }
 }
 
 function doesHLSPlaylistExist () {
-  return (hlsPath: string) => VideoStreamingPlaylistModel.doesOwnedHLSPlaylistExist(basename(hlsPath))
+  return (hlsPath: string) => {
+    // Don't delete private directory
+    if (hlsPath === DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE) return true
+
+    return VideoStreamingPlaylistModel.doesOwnedHLSPlaylistExist(basename(hlsPath))
+  }
 }
 
 function doesTorrentFileExist () {
@@ -127,8 +139,8 @@ async function doesRedundancyExist (filePath: string) {
   const isPlaylist = (await stat(filePath)).isDirectory()
 
   if (isPlaylist) {
-    // Don't delete HLS directory
-    if (filePath === HLS_REDUNDANCY_DIRECTORY) return true
+    // Don't delete HLS redundancy directory
+    if (filePath === DIRECTORIES.HLS_REDUNDANCY) return true
 
     const uuid = getUUIDFromFilename(filePath)
     const video = await VideoModel.loadWithFiles(uuid)

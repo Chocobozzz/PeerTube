@@ -448,7 +448,10 @@
   [type=radio]:checked,
   [type=radio]:not(:checked) {
     position: absolute;
-    left: -9999px;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
   }
 
   [type=radio]:checked + label,

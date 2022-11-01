@@ -1,10 +1,11 @@
-import { Component, Input, OnChanges } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core'
 import { GlobalIconName } from '@app/shared/shared-icons'
 
 @Component({
   selector: 'my-button',
   styleUrls: [ './button.component.scss' ],
-  templateUrl: './button.component.html'
+  templateUrl: './button.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ButtonComponent implements OnChanges {

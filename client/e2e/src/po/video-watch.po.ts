@@ -49,7 +49,11 @@ export class VideoWatchPage {
     url = url.replace(':3333', ':9001')
 
     await go(url)
-    await $('.vjs-big-play-button').waitForDisplayed()
+    await this.waitEmbedForDisplayed()
+  }
+
+  waitEmbedForDisplayed () {
+    return $('.vjs-big-play-button').waitForDisplayed()
   }
 
   isEmbedWarningDisplayed () {

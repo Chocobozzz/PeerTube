@@ -1,4 +1,4 @@
-import { HttpStatusCode, LiveVideo, VideoDetails } from '../../../../../shared/models'
+import { HttpStatusCode, LiveVideo, VideoDetails, VideoToken } from '../../../../../shared/models'
 import { logger } from '../../../root-helpers'
 import { AuthHTTP } from './auth-http'
 
@@ -36,10 +36,15 @@ export class VideoFetcher {
     return { captionsPromise, videoResponse }
   }
 
-  loadVideoWithLive (video: VideoDetails) {
+  loadLive (video: VideoDetails) {
     return this.http.fetch(this.getLiveUrl(video.uuid), { optionalAuth: true })
-      .then(res => res.json())
-      .then((live: LiveVideo) => ({ video, live }))
+      .then(res => res.json() as Promise<LiveVideo>)
+  }
+
+  loadVideoToken (video: VideoDetails) {
+    return this.http.fetch(this.getVideoTokenUrl(video.uuid), { optionalAuth: true, method: 'POST' })
+      .then(res => res.json() as Promise<VideoToken>)
+      .then(token => token.files.token)
   }
 
   getVideoViewsUrl (videoUUID: string) {
@@ -60,5 +65,9 @@ export class VideoFetcher {
 
   private getLiveUrl (videoId: string) {
     return window.location.origin + '/api/v1/videos/live/' + videoId
+  }
+
+  private getVideoTokenUrl (id: string) {
+    return this.getVideoUrl(id) + '/token'
   }
 }

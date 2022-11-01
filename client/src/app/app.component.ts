@@ -247,12 +247,12 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     // Admin modal
     userSub.pipe(
-      filter(user => user.role === UserRole.ADMINISTRATOR)
+      filter(user => user.role.id === UserRole.ADMINISTRATOR)
     ).subscribe(user => this.openAdminModalsIfNeeded(user))
 
     // Account modal
     userSub.pipe(
-      filter(user => user.role !== UserRole.ADMINISTRATOR)
+      filter(user => user.role.id !== UserRole.ADMINISTRATOR)
     ).subscribe(user => this.openAccountModalsIfNeeded(user))
   }
 

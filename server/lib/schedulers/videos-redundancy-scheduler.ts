@@ -16,7 +16,7 @@ import { VideosRedundancyStrategy } from '../../../shared/models/redundancy'
 import { logger, loggerTagsFactory } from '../../helpers/logger'
 import { downloadWebTorrentVideo } from '../../helpers/webtorrent'
 import { CONFIG } from '../../initializers/config'
-import { HLS_REDUNDANCY_DIRECTORY, REDUNDANCY, VIDEO_IMPORT_TIMEOUT } from '../../initializers/constants'
+import { DIRECTORIES, REDUNDANCY, VIDEO_IMPORT_TIMEOUT } from '../../initializers/constants'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { sendCreateCacheFile, sendUpdateCacheFile } from '../activitypub/send'
 import { getLocalVideoCacheFileActivityPubUrl, getLocalVideoCacheStreamingPlaylistActivityPubUrl } from '../activitypub/url'
@@ -115,16 +115,29 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     for (const redundancyModel of expired) {
       try {
         const redundancyConfig = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES.find(s => s.strategy === redundancyModel.strategy)
+
+        // If the admin disabled the redundancy, remove this redundancy instead of extending it
+        if (!redundancyConfig) {
+          logger.info(
+            'Destroying redundancy %s because the redundancy %s does not exist anymore.',
+            redundancyModel.url, redundancyModel.strategy
+          )
+
+          await removeVideoRedundancy(redundancyModel)
+          continue
+        }
+
         const { totalUsed } = await VideoRedundancyModel.getStats(redundancyConfig.strategy)
 
-        // If the administrator disabled the redundancy or decreased the cache size, remove this redundancy instead of extending it
-        if (!redundancyConfig || totalUsed > redundancyConfig.size) {
+        // If the admin decreased the cache size, remove this redundancy instead of extending it
+        if (totalUsed > redundancyConfig.size) {
           logger.info('Destroying redundancy %s because the cache size %s is too heavy.', redundancyModel.url, redundancyModel.strategy)
 
           await removeVideoRedundancy(redundancyModel)
-        } else {
-          await this.extendsRedundancy(redundancyModel)
+          continue
         }
+
+        await this.extendsRedundancy(redundancyModel)
       } catch (err) {
         logger.error(
           'Cannot extend or remove expiration of %s video from our redundancy system.',
@@ -262,7 +275,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
     logger.info('Duplicating %s streaming playlist in videos redundancy with "%s" strategy.', video.url, strategy, lTags(video.uuid))
 
-    const destDirectory = join(HLS_REDUNDANCY_DIRECTORY, video.uuid)
+    const destDirectory = join(DIRECTORIES.HLS_REDUNDANCY, video.uuid)
     const masterPlaylistUrl = playlist.getMasterPlaylistUrl(video)
 
     const maxSizeKB = this.getTotalFileSizes([], [ playlist ]) / 1000

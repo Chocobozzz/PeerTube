@@ -14,6 +14,10 @@ export type MVideoPlaylist = Omit<VideoPlaylistModel, 'OwnerAccount' | 'VideoCha
 // ############################################################################
 
 export type MVideoPlaylistId = Pick<MVideoPlaylist, 'id'>
+export type MVideoPlaylistSummary =
+  Pick<MVideoPlaylist, 'id'> &
+  Pick<MVideoPlaylist, 'name'> &
+  Pick<MVideoPlaylist, 'uuid'>
 export type MVideoPlaylistPrivacy = Pick<MVideoPlaylist, 'privacy'>
 export type MVideoPlaylistUUID = Pick<MVideoPlaylist, 'uuid'>
 export type MVideoPlaylistVideosLength = MVideoPlaylist & { videosLength?: number }
@@ -22,12 +26,8 @@ export type MVideoPlaylistVideosLength = MVideoPlaylist & { videosLength?: numbe
 
 // With elements
 
-export type MVideoPlaylistWithElements =
-  MVideoPlaylist &
-  Use<'VideoPlaylistElements', MVideoPlaylistElementLight[]>
-
-export type MVideoPlaylistIdWithElements =
-  MVideoPlaylistId &
+export type MVideoPlaylistSummaryWithElements =
+  MVideoPlaylistSummary &
   Use<'VideoPlaylistElements', MVideoPlaylistElementLight[]>
 
 // ############################################################################

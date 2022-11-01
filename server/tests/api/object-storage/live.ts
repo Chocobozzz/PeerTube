@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { expectStartWith, testVideoResolutions } from '@server/tests/shared'
-import { areObjectStorageTestsDisabled } from '@shared/core-utils'
+import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, LiveVideoCreate, VideoPrivacy } from '@shared/models'
 import {
   createMultipleServers,
@@ -46,9 +46,9 @@ async function checkFilesExist (servers: PeerTubeServer[], videoUUID: string, nu
     expect(files).to.have.lengthOf(numberOfFiles)
 
     for (const file of files) {
-      expectStartWith(file.fileUrl, ObjectStorageCommand.getPlaylistBaseUrl())
+      expectStartWith(file.fileUrl, ObjectStorageCommand.getMockPlaylistBaseUrl())
 
-      await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+      await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
     }
   }
 }
@@ -75,16 +75,16 @@ async function checkFilesCleanup (server: PeerTubeServer, videoUUID: string, res
 }
 
 describe('Object storage for lives', function () {
-  if (areObjectStorageTestsDisabled()) return
+  if (areMockObjectStorageTestsDisabled()) return
 
   let servers: PeerTubeServer[]
 
   before(async function () {
     this.timeout(120000)
 
-    await ObjectStorageCommand.prepareDefaultBuckets()
+    await ObjectStorageCommand.prepareDefaultMockBuckets()
 
-    servers = await createMultipleServers(2, ObjectStorageCommand.getDefaultConfig())
+    servers = await createMultipleServers(2, ObjectStorageCommand.getDefaultMockConfig())
 
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)

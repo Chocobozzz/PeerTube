@@ -26,9 +26,18 @@ module.exports = {
           prefs
         }
       }
+      // {
+      //   browserName: 'firefox',
+      //   'moz:firefoxOptions': {
+      //     binary: '/usr/bin/firefox-developer-edition',
+      //     args: [ '--headless', '--window-size=1280,1024' ],
+
+      //     prefs
+      //   }
+      // }
     ],
 
-    services: [ 'chromedriver' ],
+    services: [ 'chromedriver', 'geckodriver' ],
 
     beforeSession: beforeLocalSession,
     beforeSuite: beforeLocalSuite,

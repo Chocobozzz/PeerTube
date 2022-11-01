@@ -2,7 +2,6 @@ import * as debug from 'debug'
 import truncate from 'lodash-es/truncate'
 import { SortMeta } from 'primeng/api'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
-import { DomSanitizer } from '@angular/platform-browser'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
 import { Account, Actor, DropdownAction, Video, VideoService } from '@app/shared/shared-main'
@@ -73,8 +72,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
     private videoService: VideoService,
     private videoBlocklistService: VideoBlockService,
     private confirmService: ConfirmService,
-    private markdownRenderer: MarkdownService,
-    private sanitizer: DomSanitizer
+    private markdownRenderer: MarkdownService
   ) {
     super()
   }
@@ -274,7 +272,8 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
       },
       {
         label: $localize`Delete report`,
-        handler: abuse => this.isAdminView() && this.removeAbuse(abuse)
+        handler: abuse => this.removeAbuse(abuse),
+        isDisplayed: () => this.isAdminView()
       }
     ]
   }

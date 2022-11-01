@@ -68,5 +68,13 @@ function buildConfig (suiteFile: string = undefined) {
     }
   }
 
+  if (filename === 'signup.e2e-spec.ts') {
+    return {
+      signup: {
+        enabled: true
+      }
+    }
+  }
+
   return {}
 }

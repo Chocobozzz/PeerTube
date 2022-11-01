@@ -175,6 +175,8 @@ $ # Add webroot_path = /var/www/certbot
 $ sudo vim /etc/letsencrypt/renewal/your-domain.com.conf
 ```
 
+If you plan to have many concurrent viewers on your PeerTube instance, consider increasing `worker_connections` value: https://nginx.org/en/docs/ngx_core_module.html#worker_connections.
+
 **FreeBSD**
 On FreeBSD you can use [Dehydrated](https://dehydrated.io/) `security/dehydrated` for [Let's Encrypt](https://letsencrypt.org/)
 

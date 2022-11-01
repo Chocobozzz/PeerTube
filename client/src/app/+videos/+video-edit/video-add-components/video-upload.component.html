@@ -76,10 +76,8 @@
     </div>
   </div>
 
-  <div class="btn-group" role="group">
-    <input type="button" class="btn" i18n-value="Retry failed upload of a video" value="Retry" (click)="retryUpload()" />
-    <input type="button" class="btn" i18n-value="Cancel ongoing upload of a video" value="Cancel" (click)="cancelUpload()" />
-  </div>
+  <input type="button" class="peertube-button grey-button ms-1" i18n-value="Retry failed upload of a video" value="Retry" (click)="retryUpload()" />
+  <input type="button" class="peertube-button grey-button ms-1" i18n-value="Cancel ongoing upload of a video" value="Cancel" (click)="cancelUpload()" />
 </div>
 
 <div *ngIf="error && !enableRetryAfterError" class="alert alert-danger">

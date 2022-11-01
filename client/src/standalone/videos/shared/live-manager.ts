@@ -6,6 +6,8 @@ import { Translations } from './translations'
 export class LiveManager {
   private liveSocket: Socket
 
+  private listeners = new Map<string, (payload: LiveVideoEventPayload) => void>()
+
   constructor (
     private readonly playerHTML: PlayerHTML
   ) {
@@ -26,18 +28,26 @@ export class LiveManager {
       this.liveSocket = io(window.location.origin + '/live-videos')
     }
 
-    this.liveSocket.on('state-change', (payload: LiveVideoEventPayload) => {
+    const listener = (payload: LiveVideoEventPayload) => {
       if (payload.state === VideoState.PUBLISHED) {
         this.playerHTML.removeInformation()
         onPublishedVideo()
         return
       }
-    })
+    }
+
+    this.liveSocket.on('state-change', listener)
+    this.listeners.set(video.uuid, listener)
 
     this.liveSocket.emit('subscribe', { videoId: video.id })
   }
 
   stopListeningForChanges (video: VideoDetails) {
+    const listener = this.listeners.get(video.uuid)
+    if (listener) {
+      this.liveSocket.off('state-change', listener)
+    }
+
     this.liveSocket.emit('unsubscribe', { videoId: video.id })
   }
 

@@ -3,7 +3,7 @@ import { basename, join } from 'path'
 import { logger } from '@server/helpers/logger'
 import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideo } from '@server/types/models'
 import { VideoStorage } from '@shared/models'
-import { listHLSFileKeysOf, removeHLSFileObjectStorage, removeHLSObjectStorage } from '../object-storage'
+import { listHLSFileKeysOf, removeHLSFileObjectStorageByFullKey, removeHLSObjectStorage } from '../object-storage'
 import { getLiveDirectory } from '../paths'
 
 function buildConcatenatedName (segmentOrPlaylistPath: string) {
@@ -77,11 +77,13 @@ async function cleanupTMPLiveFilesFromFilesystem (video: MVideo) {
 async function cleanupTMPLiveFilesFromObjectStorage (streamingPlaylist: MStreamingPlaylistVideo) {
   if (streamingPlaylist.storage !== VideoStorage.OBJECT_STORAGE) return
 
+  logger.info('Cleanup TMP live files from object storage for %s.', streamingPlaylist.Video.uuid)
+
   const keys = await listHLSFileKeysOf(streamingPlaylist)
 
   for (const key of keys) {
     if (isTMPLiveFile(key)) {
-      await removeHLSFileObjectStorage(streamingPlaylist, key)
+      await removeHLSFileObjectStorageByFullKey(key)
     }
   }
 }

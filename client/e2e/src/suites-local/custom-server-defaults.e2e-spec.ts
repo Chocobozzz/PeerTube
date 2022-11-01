@@ -11,7 +11,7 @@ describe('Custom server defaults', () => {
   before(async () => {
     await waitServerUp()
 
-    loginPage = new LoginPage()
+    loginPage = new LoginPage(isMobileDevice())
     videoUploadPage = new VideoUploadPage()
     videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
 
@@ -25,7 +25,7 @@ describe('Custom server defaults', () => {
 
     it('Should upload a video with custom default values', async function () {
       await videoUploadPage.navigateTo()
-      await videoUploadPage.uploadVideo()
+      await videoUploadPage.uploadVideo('video.mp4')
       await videoUploadPage.validSecondUploadStep('video')
 
       await videoWatchPage.waitWatchVideoName('video')
@@ -60,7 +60,7 @@ describe('Custom server defaults', () => {
     before(async () => {
       await loginPage.loginAsRootUser()
       await videoUploadPage.navigateTo()
-      await videoUploadPage.uploadVideo()
+      await videoUploadPage.uploadVideo('video2.mp4')
       await videoUploadPage.setAsPublic()
       await videoUploadPage.validSecondUploadStep('video')
 

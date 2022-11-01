@@ -6,6 +6,7 @@ import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
+  makeGetRequest,
   makeRawRequest,
   PeerTubeServer,
   PluginsCommand,
@@ -461,30 +462,41 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should run filter:api.download.torrent.allowed.result', async function () {
-      const res = await makeRawRequest(downloadVideos[0].files[0].torrentDownloadUrl, 403)
+      const res = await makeRawRequest({ url: downloadVideos[0].files[0].torrentDownloadUrl, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
       expect(res.body.error).to.equal('Liu Bei')
 
-      await makeRawRequest(downloadVideos[1].files[0].torrentDownloadUrl, 200)
-      await makeRawRequest(downloadVideos[2].files[0].torrentDownloadUrl, 200)
+      await makeRawRequest({ url: downloadVideos[1].files[0].torrentDownloadUrl, expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url: downloadVideos[2].files[0].torrentDownloadUrl, expectedStatus: HttpStatusCode.OK_200 })
     })
 
     it('Should run filter:api.download.video.allowed.result', async function () {
       {
-        const res = await makeRawRequest(downloadVideos[1].files[0].fileDownloadUrl, 403)
+        const res = await makeRawRequest({ url: downloadVideos[1].files[0].fileDownloadUrl, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         expect(res.body.error).to.equal('Cao Cao')
 
-        await makeRawRequest(downloadVideos[0].files[0].fileDownloadUrl, 200)
-        await makeRawRequest(downloadVideos[2].files[0].fileDownloadUrl, 200)
+        await makeRawRequest({ url: downloadVideos[0].files[0].fileDownloadUrl, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url: downloadVideos[2].files[0].fileDownloadUrl, expectedStatus: HttpStatusCode.OK_200 })
       }
 
       {
-        const res = await makeRawRequest(downloadVideos[2].streamingPlaylists[0].files[0].fileDownloadUrl, 403)
+        const res = await makeRawRequest({
+          url: downloadVideos[2].streamingPlaylists[0].files[0].fileDownloadUrl,
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+
         expect(res.body.error).to.equal('Sun Jian')
 
-        await makeRawRequest(downloadVideos[2].files[0].fileDownloadUrl, 200)
+        await makeRawRequest({ url: downloadVideos[2].files[0].fileDownloadUrl, expectedStatus: HttpStatusCode.OK_200 })
 
-        await makeRawRequest(downloadVideos[0].streamingPlaylists[0].files[0].fileDownloadUrl, 200)
-        await makeRawRequest(downloadVideos[1].streamingPlaylists[0].files[0].fileDownloadUrl, 200)
+        await makeRawRequest({
+          url: downloadVideos[0].streamingPlaylists[0].files[0].fileDownloadUrl,
+          expectedStatus: HttpStatusCode.OK_200
+        })
+
+        await makeRawRequest({
+          url: downloadVideos[1].streamingPlaylists[0].files[0].fileDownloadUrl,
+          expectedStatus: HttpStatusCode.OK_200
+        })
       }
     })
   })
@@ -515,12 +527,12 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should run filter:html.embed.video.allowed.result', async function () {
-      const res = await makeRawRequest(servers[0].url + embedVideos[0].embedPath, 200)
+      const res = await makeGetRequest({ url: servers[0].url, path: embedVideos[0].embedPath, expectedStatus: HttpStatusCode.OK_200 })
       expect(res.text).to.equal('Lu Bu')
     })
 
     it('Should run filter:html.embed.video-playlist.allowed.result', async function () {
-      const res = await makeRawRequest(servers[0].url + embedPlaylists[0].embedPath, 200)
+      const res = await makeGetRequest({ url: servers[0].url, path: embedPlaylists[0].embedPath, expectedStatus: HttpStatusCode.OK_200 })
       expect(res.text).to.equal('Diao Chan')
     })
   })

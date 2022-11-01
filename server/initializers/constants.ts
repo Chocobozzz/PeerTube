@@ -662,10 +662,15 @@ const NSFW_POLICY_TYPES: { [ id: string ]: NSFWPolicyType } = {
 // Express static paths (router)
 const STATIC_PATHS = {
   THUMBNAILS: '/static/thumbnails/',
+
   WEBSEED: '/static/webseed/',
+  PRIVATE_WEBSEED: '/static/webseed/private/',
+
   REDUNDANCY: '/static/redundancy/',
+
   STREAMING_PLAYLISTS: {
-    HLS: '/static/streaming-playlists/hls'
+    HLS: '/static/streaming-playlists/hls',
+    PRIVATE_HLS: '/static/streaming-playlists/hls/private/'
   }
 }
 const STATIC_DOWNLOAD_PATHS = {
@@ -679,6 +684,13 @@ const LAZY_STATIC_PATHS = {
   PREVIEWS: '/lazy-static/previews/',
   VIDEO_CAPTIONS: '/lazy-static/video-captions/',
   TORRENTS: '/lazy-static/torrents/'
+}
+const OBJECT_STORAGE_PROXY_PATHS = {
+  PRIVATE_WEBSEED: '/object-storage-proxy/webseed/private/',
+
+  STREAMING_PLAYLISTS: {
+    PRIVATE_HLS: '/object-storage-proxy/streaming-playlists/hls/private/'
+  }
 }
 
 // Cache control
@@ -745,12 +757,32 @@ const LRU_CACHE = {
   },
   ACTOR_IMAGE_STATIC: {
     MAX_SIZE: 500
+  },
+  STATIC_VIDEO_FILES_RIGHTS_CHECK: {
+    MAX_SIZE: 5000,
+    TTL: parseDurationToMs('10 seconds')
+  },
+  VIDEO_TOKENS: {
+    MAX_SIZE: 100_000,
+    TTL: parseDurationToMs('8 hours')
   }
 }
 
-const RESUMABLE_UPLOAD_DIRECTORY = join(CONFIG.STORAGE.TMP_DIR, 'resumable-uploads')
-const HLS_STREAMING_PLAYLIST_DIRECTORY = join(CONFIG.STORAGE.STREAMING_PLAYLISTS_DIR, 'hls')
-const HLS_REDUNDANCY_DIRECTORY = join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
+const DIRECTORIES = {
+  RESUMABLE_UPLOAD: join(CONFIG.STORAGE.TMP_DIR, 'resumable-uploads'),
+
+  HLS_STREAMING_PLAYLIST: {
+    PUBLIC: join(CONFIG.STORAGE.STREAMING_PLAYLISTS_DIR, 'hls'),
+    PRIVATE: join(CONFIG.STORAGE.STREAMING_PLAYLISTS_DIR, 'hls', 'private')
+  },
+
+  VIDEOS: {
+    PUBLIC: CONFIG.STORAGE.VIDEOS_DIR,
+    PRIVATE: join(CONFIG.STORAGE.VIDEOS_DIR, 'private')
+  },
+
+  HLS_REDUNDANCY: join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
+}
 
 const RESUMABLE_UPLOAD_SESSION_LIFETIME = SCHEDULER_INTERVALS_MS.REMOVE_DANGLING_RESUMABLE_UPLOADS
 
@@ -970,10 +1002,10 @@ export {
   VIDEO_LIVE,
   PEERTUBE_VERSION,
   LAZY_STATIC_PATHS,
+  OBJECT_STORAGE_PROXY_PATHS,
   SEARCH_INDEX,
-  RESUMABLE_UPLOAD_DIRECTORY,
+  DIRECTORIES,
   RESUMABLE_UPLOAD_SESSION_LIFETIME,
-  HLS_REDUNDANCY_DIRECTORY,
   P2P_MEDIA_LOADER_PEER_VERSION,
   ACTOR_IMAGES_SIZE,
   ACCEPT_HEADERS,
@@ -1007,7 +1039,6 @@ export {
   VIDEO_FILTERS,
   ROUTE_CACHE_LIFETIME,
   SORTABLE_COLUMNS,
-  HLS_STREAMING_PLAYLIST_DIRECTORY,
   JOB_TTL,
   DEFAULT_THEME_NAME,
   NSFW_POLICY_TYPES,

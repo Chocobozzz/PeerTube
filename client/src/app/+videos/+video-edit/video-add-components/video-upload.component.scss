@@ -42,10 +42,4 @@
       }
     }
   }
-
-  input {
-    @include peertube-button;
-    @include grey-button;
-    @include margin-left(10px);
-  }
 }

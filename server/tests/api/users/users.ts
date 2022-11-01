@@ -181,7 +181,7 @@ describe('Test users', function () {
     })
 
     it('Should refresh the token', async function () {
-      this.timeout(15000)
+      this.timeout(50000)
 
       const futureDate = new Date(new Date().getTime() + 1000 * 60).toISOString()
       await server.sql.setTokenField(server.accessToken, 'refreshTokenExpiresAt', futureDate)
@@ -219,7 +219,7 @@ describe('Test users', function () {
         expect(user.email).to.equal('user_1@example.com')
         expect(user.nsfwPolicy).to.equal('display')
         expect(user.videoQuota).to.equal(2 * 1024 * 1024)
-        expect(user.roleLabel).to.equal('User')
+        expect(user.role.label).to.equal('User')
         expect(user.id).to.be.a('number')
         expect(user.account.displayName).to.equal('user_1')
         expect(user.account.description).to.be.null
@@ -277,7 +277,7 @@ describe('Test users', function () {
       const user = data[0]
       expect(user.username).to.equal('root')
       expect(user.email).to.equal('admin' + server.internalServerNumber + '@example.com')
-      expect(user.roleLabel).to.equal('Administrator')
+      expect(user.role.label).to.equal('Administrator')
       expect(user.nsfwPolicy).to.equal('display')
     })
 
@@ -531,7 +531,7 @@ describe('Test users', function () {
       expect(user.emailVerified).to.be.true
       expect(user.nsfwPolicy).to.equal('do_not_list')
       expect(user.videoQuota).to.equal(42)
-      expect(user.roleLabel).to.equal('Moderator')
+      expect(user.role.label).to.equal('Moderator')
       expect(user.id).to.be.a('number')
       expect(user.adminFlags).to.equal(UserAdminFlag.NONE)
       expect(user.pluginAuth).to.equal('toto')

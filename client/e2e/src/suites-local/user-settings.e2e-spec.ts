@@ -15,7 +15,7 @@ describe('User settings', () => {
   before(async () => {
     await waitServerUp()
 
-    loginPage = new LoginPage()
+    loginPage = new LoginPage(isMobileDevice())
     videoUploadPage = new VideoUploadPage()
     videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
     myAccountPage = new MyAccountPage()
@@ -43,7 +43,7 @@ describe('User settings', () => {
     before(async () => {
       await loginPage.loginAsRootUser()
       await videoUploadPage.navigateTo()
-      await videoUploadPage.uploadVideo()
+      await videoUploadPage.uploadVideo('video.mp4')
       await videoUploadPage.validSecondUploadStep('video')
 
       await videoWatchPage.waitWatchVideoName('video')

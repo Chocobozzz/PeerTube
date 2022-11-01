@@ -12,7 +12,8 @@ import { buildMoveToObjectStorageJob, buildOptimizeOrMergeAudioJob } from '@serv
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { buildNextVideoState } from '@server/lib/video-state'
 import { ThumbnailModel } from '@server/models/video/thumbnail'
-import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import'
+import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models'
+import { MVideoImport, MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import'
 import { getLowercaseExtension } from '@shared/core-utils'
 import { isAudioFile } from '@shared/extra-utils'
 import {
@@ -36,7 +37,6 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { VideoImportModel } from '../../../models/video/video-import'
-import { MThumbnail } from '../../../types/models/video/thumbnail'
 import { federateVideoIfNeeded } from '../../activitypub/videos'
 import { Notifier } from '../../notifier'
 import { generateVideoMiniature } from '../../thumbnail'
@@ -178,125 +178,159 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     }
 
     // Video is accepted, resuming preparation
-    const videoWithFiles = Object.assign(videoImport.Video, { VideoFiles: [ videoFile ], VideoStreamingPlaylists: [] })
-    // To clean files if the import fails
-    const videoImportWithFiles: MVideoImportDefaultFiles = Object.assign(videoImport, { Video: videoWithFiles })
+    const videoFileLockReleaser = await VideoPathManager.Instance.lockFiles(videoImport.Video.uuid)
 
-    // Move file
-    const videoDestFile = VideoPathManager.Instance.getFSVideoFileOutputPath(videoImportWithFiles.Video, videoFile)
-    await move(tempVideoPath, videoDestFile)
-    tempVideoPath = null // This path is not used anymore
-
-    // Generate miniature if the import did not created it
-    let thumbnailModel: MThumbnail
-    let thumbnailSave: object
-    if (!videoImportWithFiles.Video.getMiniature()) {
-      thumbnailModel = await generateVideoMiniature({
-        video: videoImportWithFiles.Video,
-        videoFile,
-        type: ThumbnailType.MINIATURE
-      })
-      thumbnailSave = thumbnailModel.toJSON()
-    }
-
-    // Generate preview if the import did not created it
-    let previewModel: MThumbnail
-    let previewSave: object
-    if (!videoImportWithFiles.Video.getPreview()) {
-      previewModel = await generateVideoMiniature({
-        video: videoImportWithFiles.Video,
-        videoFile,
-        type: ThumbnailType.PREVIEW
-      })
-      previewSave = previewModel.toJSON()
-    }
-
-    // Create torrent
-    await createTorrentAndSetInfoHash(videoImportWithFiles.Video, videoFile)
-
-    const videoFileSave = videoFile.toJSON()
-
-    const { videoImportUpdated, video } = await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async t => {
-        const videoImportToUpdate = videoImportWithFiles as MVideoImportVideo
-
-        // Refresh video
-        const video = await VideoModel.load(videoImportToUpdate.videoId, t)
-        if (!video) throw new Error('Video linked to import ' + videoImportToUpdate.videoId + ' does not exist anymore.')
-
-        const videoFileCreated = await videoFile.save({ transaction: t })
-
-        // Update video DB object
-        video.duration = duration
-        video.state = buildNextVideoState(video.state)
-        await video.save({ transaction: t })
-
-        if (thumbnailModel) await video.addAndSaveThumbnail(thumbnailModel, t)
-        if (previewModel) await video.addAndSaveThumbnail(previewModel, t)
-
-        // Now we can federate the video (reload from database, we need more attributes)
-        const videoForFederation = await VideoModel.loadFull(video.uuid, t)
-        await federateVideoIfNeeded(videoForFederation, true, t)
-
-        // Update video import object
-        videoImportToUpdate.state = VideoImportState.SUCCESS
-        const videoImportUpdated = await videoImportToUpdate.save({ transaction: t }) as MVideoImportVideo
-        videoImportUpdated.Video = video
-
-        videoImportToUpdate.Video = Object.assign(video, { VideoFiles: [ videoFileCreated ] })
-
-        logger.info('Video %s imported.', video.uuid)
-
-        return { videoImportUpdated, video: videoForFederation }
-      }).catch(err => {
-        // Reset fields
-        if (thumbnailModel) thumbnailModel = new ThumbnailModel(thumbnailSave)
-        if (previewModel) previewModel = new ThumbnailModel(previewSave)
-
-        videoFile = new VideoFileModel(videoFileSave)
-
-        throw err
-      })
-    })
-
-    Notifier.Instance.notifyOnFinishedVideoImport({ videoImport: videoImportUpdated, success: true })
-
-    if (video.isBlacklisted()) {
-      const videoBlacklist = Object.assign(video.VideoBlacklist, { Video: video })
-
-      Notifier.Instance.notifyOnVideoAutoBlacklist(videoBlacklist)
-    } else {
-      Notifier.Instance.notifyOnNewVideoIfNeeded(video)
-    }
-
-    if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-      await JobQueue.Instance.createJob(
-        await buildMoveToObjectStorageJob({ video: videoImportUpdated.Video, previousVideoState: VideoState.TO_IMPORT })
-      )
-    }
-
-    // Create transcoding jobs?
-    if (video.state === VideoState.TO_TRANSCODE) {
-      await JobQueue.Instance.createJob(
-        await buildOptimizeOrMergeAudioJob({ video: videoImportUpdated.Video, videoFile, user: videoImport.User })
-      )
-    }
-
-  } catch (err) {
     try {
-      if (tempVideoPath) await remove(tempVideoPath)
-    } catch (errUnlink) {
-      logger.warn('Cannot cleanup files after a video import error.', { err: errUnlink })
-    }
+      const videoImportWithFiles = await refreshVideoImportFromDB(videoImport, videoFile)
 
-    videoImport.error = err.message
-    if (videoImport.state !== VideoImportState.REJECTED) {
-      videoImport.state = VideoImportState.FAILED
-    }
-    await videoImport.save()
+      // Move file
+      const videoDestFile = VideoPathManager.Instance.getFSVideoFileOutputPath(videoImportWithFiles.Video, videoFile)
+      await move(tempVideoPath, videoDestFile)
 
-    Notifier.Instance.notifyOnFinishedVideoImport({ videoImport, success: false })
+      tempVideoPath = null // This path is not used anymore
+
+      let {
+        miniatureModel: thumbnailModel,
+        miniatureJSONSave: thumbnailSave
+      } = await generateMiniature(videoImportWithFiles, videoFile, ThumbnailType.MINIATURE)
+
+      let {
+        miniatureModel: previewModel,
+        miniatureJSONSave: previewSave
+      } = await generateMiniature(videoImportWithFiles, videoFile, ThumbnailType.PREVIEW)
+
+      // Create torrent
+      await createTorrentAndSetInfoHash(videoImportWithFiles.Video, videoFile)
+
+      const videoFileSave = videoFile.toJSON()
+
+      const { videoImportUpdated, video } = await retryTransactionWrapper(() => {
+        return sequelizeTypescript.transaction(async t => {
+          // Refresh video
+          const video = await VideoModel.load(videoImportWithFiles.videoId, t)
+          if (!video) throw new Error('Video linked to import ' + videoImportWithFiles.videoId + ' does not exist anymore.')
+
+          await videoFile.save({ transaction: t })
+
+          // Update video DB object
+          video.duration = duration
+          video.state = buildNextVideoState(video.state)
+          await video.save({ transaction: t })
+
+          if (thumbnailModel) await video.addAndSaveThumbnail(thumbnailModel, t)
+          if (previewModel) await video.addAndSaveThumbnail(previewModel, t)
+
+          // Now we can federate the video (reload from database, we need more attributes)
+          const videoForFederation = await VideoModel.loadFull(video.uuid, t)
+          await federateVideoIfNeeded(videoForFederation, true, t)
+
+          // Update video import object
+          videoImportWithFiles.state = VideoImportState.SUCCESS
+          const videoImportUpdated = await videoImportWithFiles.save({ transaction: t }) as MVideoImport
+
+          logger.info('Video %s imported.', video.uuid)
+
+          return { videoImportUpdated, video: videoForFederation }
+        }).catch(err => {
+          // Reset fields
+          if (thumbnailModel) thumbnailModel = new ThumbnailModel(thumbnailSave)
+          if (previewModel) previewModel = new ThumbnailModel(previewSave)
+
+          videoFile = new VideoFileModel(videoFileSave)
+
+          throw err
+        })
+      })
+
+      await afterImportSuccess({ videoImport: videoImportUpdated, video, videoFile, user: videoImport.User })
+    } finally {
+      videoFileLockReleaser()
+    }
+  } catch (err) {
+    await onImportError(err, tempVideoPath, videoImport)
 
     throw err
   }
+}
+
+async function refreshVideoImportFromDB (videoImport: MVideoImportDefault, videoFile: MVideoFile): Promise<MVideoImportDefaultFiles> {
+  // Refresh video, privacy may have changed
+  const video = await videoImport.Video.reload()
+  const videoWithFiles = Object.assign(video, { VideoFiles: [ videoFile ], VideoStreamingPlaylists: [] })
+
+  return Object.assign(videoImport, { Video: videoWithFiles })
+}
+
+async function generateMiniature (videoImportWithFiles: MVideoImportDefaultFiles, videoFile: MVideoFile, thumbnailType: ThumbnailType) {
+  // Generate miniature if the import did not created it
+  const needsMiniature = thumbnailType === ThumbnailType.MINIATURE
+    ? !videoImportWithFiles.Video.getMiniature()
+    : !videoImportWithFiles.Video.getPreview()
+
+  if (!needsMiniature) {
+    return {
+      miniatureModel: null,
+      miniatureJSONSave: null
+    }
+  }
+
+  const miniatureModel = await generateVideoMiniature({
+    video: videoImportWithFiles.Video,
+    videoFile,
+    type: thumbnailType
+  })
+  const miniatureJSONSave = miniatureModel.toJSON()
+
+  return {
+    miniatureModel,
+    miniatureJSONSave
+  }
+}
+
+async function afterImportSuccess (options: {
+  videoImport: MVideoImport
+  video: MVideoFullLight
+  videoFile: MVideoFile
+  user: MUserId
+}) {
+  const { video, videoFile, videoImport, user } = options
+
+  Notifier.Instance.notifyOnFinishedVideoImport({ videoImport: Object.assign(videoImport, { Video: video }), success: true })
+
+  if (video.isBlacklisted()) {
+    const videoBlacklist = Object.assign(video.VideoBlacklist, { Video: video })
+
+    Notifier.Instance.notifyOnVideoAutoBlacklist(videoBlacklist)
+  } else {
+    Notifier.Instance.notifyOnNewVideoIfNeeded(video)
+  }
+
+  if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
+    await JobQueue.Instance.createJob(
+      await buildMoveToObjectStorageJob({ video, previousVideoState: VideoState.TO_IMPORT })
+    )
+    return
+  }
+
+  if (video.state === VideoState.TO_TRANSCODE) { // Create transcoding jobs?
+    await JobQueue.Instance.createJob(
+      await buildOptimizeOrMergeAudioJob({ video, videoFile, user })
+    )
+  }
+}
+
+async function onImportError (err: Error, tempVideoPath: string, videoImport: MVideoImportVideo) {
+  try {
+    if (tempVideoPath) await remove(tempVideoPath)
+  } catch (errUnlink) {
+    logger.warn('Cannot cleanup files after a video import error.', { err: errUnlink })
+  }
+
+  videoImport.error = err.message
+  if (videoImport.state !== VideoImportState.REJECTED) {
+    videoImport.state = VideoImportState.FAILED
+  }
+  await videoImport.save()
+
+  Notifier.Instance.notifyOnFinishedVideoImport({ videoImport, success: false })
 }

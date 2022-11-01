@@ -52,6 +52,10 @@ function getRtcConfig () {
   }
 }
 
+function isSameOrigin (current: string, target: string) {
+  return new URL(current).origin === new URL(target).origin
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -60,5 +64,7 @@ export {
 
   videoFileMaxByResolution,
   videoFileMinByResolution,
-  bytes
+  bytes,
+
+  isSameOrigin
 }

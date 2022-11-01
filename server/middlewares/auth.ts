@@ -5,8 +5,8 @@ import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { logger } from '../helpers/logger'
 import { handleOAuthAuthenticate } from '../lib/auth/oauth'
 
-function authenticate (req: express.Request, res: express.Response, next: express.NextFunction, authenticateInQuery = false) {
-  handleOAuthAuthenticate(req, res, authenticateInQuery)
+function authenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
+  handleOAuthAuthenticate(req, res)
     .then((token: any) => {
       res.locals.oauth = { token }
       res.locals.authenticated = true
@@ -47,7 +47,7 @@ function authenticateSocket (socket: Socket, next: (err?: any) => void) {
     .catch(err => logger.error('Cannot get access token.', { err }))
 }
 
-function authenticatePromise (req: express.Request, res: express.Response, authenticateInQuery = false) {
+function authenticatePromise (req: express.Request, res: express.Response) {
   return new Promise<void>(resolve => {
     // Already authenticated? (or tried to)
     if (res.locals.oauth?.token.User) return resolve()
@@ -59,7 +59,7 @@ function authenticatePromise (req: express.Request, res: express.Response, authe
       })
     }
 
-    authenticate(req, res, () => resolve(), authenticateInQuery)
+    authenticate(req, res, () => resolve())
   })
 }
 

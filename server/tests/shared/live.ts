@@ -7,9 +7,24 @@ import { LiveVideo, VideoStreamingPlaylistType } from '@shared/models'
 import { ObjectStorageCommand, PeerTubeServer } from '@shared/server-commands'
 import { checkLiveSegmentHash, checkResolutionsInMasterPlaylist } from './streaming-playlists'
 
-async function checkLiveCleanup (server: PeerTubeServer, videoUUID: string, savedResolutions: number[] = []) {
+async function checkLiveCleanup (options: {
+  server: PeerTubeServer
+  videoUUID: string
+  permanent: boolean
+  savedResolutions?: number[]
+}) {
+  const { server, videoUUID, permanent, savedResolutions = [] } = options
+
   const basePath = server.servers.buildDirectory('streaming-playlists')
   const hlsPath = join(basePath, 'hls', videoUUID)
+
+  if (permanent) {
+    if (!await pathExists(hlsPath)) return
+
+    const files = await readdir(hlsPath)
+    expect(files).to.have.lengthOf(0)
+    return
+  }
 
   if (savedResolutions.length === 0) {
     return checkUnsavedLiveCleanup(server, videoUUID, hlsPath)
@@ -50,7 +65,7 @@ async function testVideoResolutions (options: {
     })
 
     if (objectStorage) {
-      expect(hlsPlaylist.playlistUrl).to.contain(ObjectStorageCommand.getPlaylistBaseUrl())
+      expect(hlsPlaylist.playlistUrl).to.contain(ObjectStorageCommand.getMockPlaylistBaseUrl())
     }
 
     for (let i = 0; i < resolutions.length; i++) {
@@ -65,11 +80,11 @@ async function testVideoResolutions (options: {
       })
 
       const baseUrl = objectStorage
-        ? ObjectStorageCommand.getPlaylistBaseUrl() + 'hls'
+        ? ObjectStorageCommand.getMockPlaylistBaseUrl() + 'hls'
         : originServer.url + '/static/streaming-playlists/hls'
 
       if (objectStorage) {
-        expect(hlsPlaylist.segmentsSha256Url).to.contain(ObjectStorageCommand.getPlaylistBaseUrl())
+        expect(hlsPlaylist.segmentsSha256Url).to.contain(ObjectStorageCommand.getMockPlaylistBaseUrl())
       }
 
       const subPlaylist = await originServer.streamingPlaylists.get({

@@ -44,11 +44,26 @@ class P2pMediaLoaderPlugin extends Plugin {
     if (!(videojs as any).Html5Hlsjs) {
       logger.warn('HLS.js does not seem to be supported. Try to fallback to built in HLS.')
 
+      let message: string
       if (!player.canPlayType('application/vnd.apple.mpegurl')) {
-        const message = 'Cannot fallback to built-in HLS'
+        message = 'Cannot fallback to built-in HLS'
+      } else if (options.requiresAuth) {
+        message = 'Video requires auth which is not compatible to build-in HLS player'
+      }
+
+      if (message) {
         logger.warn(message)
 
-        player.ready(() => player.trigger('error', new Error(message)))
+        const error: MediaError = {
+          code: MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED,
+          message,
+          MEDIA_ERR_ABORTED: MediaError.MEDIA_ERR_ABORTED,
+          MEDIA_ERR_DECODE: MediaError.MEDIA_ERR_DECODE,
+          MEDIA_ERR_NETWORK: MediaError.MEDIA_ERR_NETWORK,
+          MEDIA_ERR_SRC_NOT_SUPPORTED: MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED
+        }
+
+        player.ready(() => player.error(error))
         return
       }
     } else {

@@ -155,7 +155,7 @@ describe('Test external auth plugins', function () {
       expect(body.username).to.equal('cyan')
       expect(body.account.displayName).to.equal('cyan')
       expect(body.email).to.equal('cyan@example.com')
-      expect(body.role).to.equal(UserRole.USER)
+      expect(body.role.id).to.equal(UserRole.USER)
     }
   })
 
@@ -177,7 +177,7 @@ describe('Test external auth plugins', function () {
       expect(body.username).to.equal('kefka')
       expect(body.account.displayName).to.equal('Kefka Palazzo')
       expect(body.email).to.equal('kefka@example.com')
-      expect(body.role).to.equal(UserRole.ADMINISTRATOR)
+      expect(body.role.id).to.equal(UserRole.ADMINISTRATOR)
     }
   })
 
@@ -237,7 +237,7 @@ describe('Test external auth plugins', function () {
     expect(body.username).to.equal('cyan')
     expect(body.account.displayName).to.equal('Cyan Garamonde')
     expect(body.account.description).to.equal('Retainer to the king of Doma')
-    expect(body.role).to.equal(UserRole.USER)
+    expect(body.role.id).to.equal(UserRole.USER)
   })
 
   it('Should not update an external auth email', async function () {

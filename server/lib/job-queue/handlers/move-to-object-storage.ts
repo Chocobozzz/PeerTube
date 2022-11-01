@@ -3,10 +3,10 @@ import { remove } from 'fs-extra'
 import { join } from 'path'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { updateTorrentMetadata } from '@server/helpers/webtorrent'
-import { CONFIG } from '@server/initializers/config'
 import { P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants'
 import { storeHLSFileFromFilename, storeWebTorrentFile } from '@server/lib/object-storage'
 import { getHLSDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths'
+import { VideoPathManager } from '@server/lib/video-path-manager'
 import { moveToFailedMoveToObjectStorageState, moveToNextState } from '@server/lib/video-state'
 import { VideoModel } from '@server/models/video/video'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
@@ -27,6 +27,8 @@ export async function processMoveToObjectStorage (job: Job) {
   }
 
   const lTags = lTagsBase(video.uuid, video.url)
+
+  const fileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
   try {
     if (video.VideoFiles) {
@@ -49,6 +51,10 @@ export async function processMoveToObjectStorage (job: Job) {
     }
   } catch (err) {
     await onMoveToObjectStorageFailure(job, err)
+
+    throw err
+  } finally {
+    fileMutexReleaser()
   }
 
   return payload.videoUUID
@@ -72,9 +78,9 @@ async function moveWebTorrentFiles (video: MVideoWithAllFiles) {
   for (const file of video.VideoFiles) {
     if (file.storage !== VideoStorage.FILE_SYSTEM) continue
 
-    const fileUrl = await storeWebTorrentFile(file.filename)
+    const fileUrl = await storeWebTorrentFile(video, file)
 
-    const oldPath = join(CONFIG.STORAGE.VIDEOS_DIR, file.filename)
+    const oldPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, file)
     await onFileMoved({ videoOrPlaylist: video, file, fileUrl, oldPath })
   }
 }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { areObjectStorageTestsDisabled } from '@shared/core-utils'
+import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoDetails } from '@shared/models'
 import {
   cleanupTests,
@@ -17,16 +17,16 @@ import { expectStartWith } from '../shared'
 async function checkFiles (origin: PeerTubeServer, video: VideoDetails, inObjectStorage: boolean) {
   for (const file of video.files) {
     const start = inObjectStorage
-      ? ObjectStorageCommand.getWebTorrentBaseUrl()
+      ? ObjectStorageCommand.getMockWebTorrentBaseUrl()
       : origin.url
 
     expectStartWith(file.fileUrl, start)
 
-    await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+    await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 
   const start = inObjectStorage
-    ? ObjectStorageCommand.getPlaylistBaseUrl()
+    ? ObjectStorageCommand.getMockPlaylistBaseUrl()
     : origin.url
 
   const hls = video.streamingPlaylists[0]
@@ -36,12 +36,12 @@ async function checkFiles (origin: PeerTubeServer, video: VideoDetails, inObject
   for (const file of hls.files) {
     expectStartWith(file.fileUrl, start)
 
-    await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+    await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 }
 
 describe('Test create move video storage job', function () {
-  if (areObjectStorageTestsDisabled()) return
+  if (areMockObjectStorageTestsDisabled()) return
 
   let servers: PeerTubeServer[] = []
   const uuids: string[] = []
@@ -55,7 +55,7 @@ describe('Test create move video storage job', function () {
 
     await doubleFollow(servers[0], servers[1])
 
-    await ObjectStorageCommand.prepareDefaultBuckets()
+    await ObjectStorageCommand.prepareDefaultMockBuckets()
 
     await servers[0].config.enableTranscoding()
 
@@ -67,14 +67,14 @@ describe('Test create move video storage job', function () {
     await waitJobs(servers)
 
     await servers[0].kill()
-    await servers[0].run(ObjectStorageCommand.getDefaultConfig())
+    await servers[0].run(ObjectStorageCommand.getDefaultMockConfig())
   })
 
   it('Should move only one file', async function () {
     this.timeout(120000)
 
     const command = `npm run create-move-video-storage-job -- --to-object-storage -v ${uuids[1]}`
-    await servers[0].cli.execWithEnv(command, ObjectStorageCommand.getDefaultConfig())
+    await servers[0].cli.execWithEnv(command, ObjectStorageCommand.getDefaultMockConfig())
     await waitJobs(servers)
 
     for (const server of servers) {
@@ -94,7 +94,7 @@ describe('Test create move video storage job', function () {
     this.timeout(120000)
 
     const command = `npm run create-move-video-storage-job -- --to-object-storage --all-videos`
-    await servers[0].cli.execWithEnv(command, ObjectStorageCommand.getDefaultConfig())
+    await servers[0].cli.execWithEnv(command, ObjectStorageCommand.getDefaultMockConfig())
     await waitJobs(servers)
 
     for (const server of servers) {

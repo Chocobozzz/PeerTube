@@ -5,7 +5,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { Notifier } from '@app/core/notification/notifier.service'
-import { logger, objectToUrlEncoded, peertubeLocalStorage, UserTokens } from '@root-helpers/index'
+import { logger, OAuthUserTokens, objectToUrlEncoded, peertubeLocalStorage } from '@root-helpers/index'
 import { HttpStatusCode, MyUser as UserServerModel, OAuthClientLocal, User, UserLogin, UserRefreshToken } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest/rest-extractor.service'
@@ -74,7 +74,7 @@ export class AuthService {
     ]
   }
 
-  buildAuthUser (userInfo: Partial<User>, tokens: UserTokens) {
+  buildAuthUser (userInfo: Partial<User>, tokens: OAuthUserTokens) {
     this.user = new AuthUser(userInfo, tokens)
   }
 

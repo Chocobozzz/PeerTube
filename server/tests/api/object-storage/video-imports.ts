@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { expectStartWith, FIXTURE_URLS } from '@server/tests/shared'
-import { areObjectStorageTestsDisabled } from '@shared/core-utils'
+import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import {
   createSingleServer,
@@ -29,16 +29,16 @@ async function importVideo (server: PeerTubeServer) {
 }
 
 describe('Object storage for video import', function () {
-  if (areObjectStorageTestsDisabled()) return
+  if (areMockObjectStorageTestsDisabled()) return
 
   let server: PeerTubeServer
 
   before(async function () {
     this.timeout(120000)
 
-    await ObjectStorageCommand.prepareDefaultBuckets()
+    await ObjectStorageCommand.prepareDefaultMockBuckets()
 
-    server = await createSingleServer(1, ObjectStorageCommand.getDefaultConfig())
+    server = await createSingleServer(1, ObjectStorageCommand.getDefaultMockConfig())
 
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
@@ -64,9 +64,9 @@ describe('Object storage for video import', function () {
       expect(video.streamingPlaylists).to.have.lengthOf(0)
 
       const fileUrl = video.files[0].fileUrl
-      expectStartWith(fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())
+      expectStartWith(fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
 
-      await makeRawRequest(fileUrl, HttpStatusCode.OK_200)
+      await makeRawRequest({ url: fileUrl, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -89,15 +89,15 @@ describe('Object storage for video import', function () {
       expect(video.streamingPlaylists[0].files).to.have.lengthOf(5)
 
       for (const file of video.files) {
-        expectStartWith(file.fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())
+        expectStartWith(file.fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
 
-        await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+        await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
       }
 
       for (const file of video.streamingPlaylists[0].files) {
-        expectStartWith(file.fileUrl, ObjectStorageCommand.getPlaylistBaseUrl())
+        expectStartWith(file.fileUrl, ObjectStorageCommand.getMockPlaylistBaseUrl())
 
-        await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+        await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
       }
     })
   })

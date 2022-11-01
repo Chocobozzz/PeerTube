@@ -54,8 +54,9 @@ function objectToFormData (obj: any, form?: FormData, namespace?: string) {
 }
 
 export {
-  objectToFormData,
   getAbsoluteAPIUrl,
   getAPIHost,
-  getAbsoluteEmbedUrl
+  getAbsoluteEmbedUrl,
+
+  objectToFormData
 }

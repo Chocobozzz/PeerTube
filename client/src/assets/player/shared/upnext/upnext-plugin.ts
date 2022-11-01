@@ -19,6 +19,9 @@ class UpNextPlugin extends Plugin {
 
     super(player)
 
+    // UpNext plugin can be called later, so ensure the player is not disposed
+    if (this.player.isDisposed()) return
+
     this.player.ready(() => {
       player.addClass('vjs-upnext')
     })

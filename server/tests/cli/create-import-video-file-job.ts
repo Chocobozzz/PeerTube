@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { areObjectStorageTestsDisabled } from '@shared/core-utils'
+import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoDetails, VideoFile, VideoInclude } from '@shared/models'
 import {
   cleanupTests,
@@ -27,9 +27,9 @@ function assertVideoProperties (video: VideoFile, resolution: number, extname: s
 
 async function checkFiles (video: VideoDetails, objectStorage: boolean) {
   for (const file of video.files) {
-    if (objectStorage) expectStartWith(file.fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())
+    if (objectStorage) expectStartWith(file.fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
 
-    await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+    await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 }
 
@@ -43,7 +43,7 @@ function runTests (objectStorage: boolean) {
     this.timeout(90000)
 
     const config = objectStorage
-      ? ObjectStorageCommand.getDefaultConfig()
+      ? ObjectStorageCommand.getDefaultMockConfig()
       : {}
 
     // Run server 2 to have transcoding enabled
@@ -52,7 +52,7 @@ function runTests (objectStorage: boolean) {
 
     await doubleFollow(servers[0], servers[1])
 
-    if (objectStorage) await ObjectStorageCommand.prepareDefaultBuckets()
+    if (objectStorage) await ObjectStorageCommand.prepareDefaultMockBuckets()
 
     // Upload two videos for our needs
     {
@@ -157,7 +157,7 @@ describe('Test create import video jobs', function () {
   })
 
   describe('On object storage', function () {
-    if (areObjectStorageTestsDisabled()) return
+    if (areMockObjectStorageTestsDisabled()) return
 
     runTests(true)
   })

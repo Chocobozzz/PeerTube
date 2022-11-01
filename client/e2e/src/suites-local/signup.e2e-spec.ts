@@ -1,7 +1,7 @@
 import { AdminConfigPage } from '../po/admin-config.po'
 import { LoginPage } from '../po/login.po'
 import { SignupPage } from '../po/signup.po'
-import { waitServerUp } from '../utils'
+import { isMobileDevice, waitServerUp } from '../utils'
 
 describe('Signup', () => {
   let loginPage: LoginPage
@@ -13,7 +13,7 @@ describe('Signup', () => {
   })
 
   beforeEach(async () => {
-    loginPage = new LoginPage()
+    loginPage = new LoginPage(isMobileDevice())
     adminConfigPage = new AdminConfigPage()
     signupPage = new SignupPage()
 

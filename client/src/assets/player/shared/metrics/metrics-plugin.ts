@@ -104,6 +104,8 @@ class MetricsPlugin extends Plugin {
 
   private trackBytes () {
     this.player.on('p2pInfo', (_event, data: PlayerNetworkInfo) => {
+      if (!data) return
+
       this.downloadedBytesHTTP += data.http.downloaded - (this.lastPlayerNetworkInfo?.http.downloaded || 0)
       this.downloadedBytesP2P += data.p2p.downloaded - (this.lastPlayerNetworkInfo?.p2p.downloaded || 0)
 

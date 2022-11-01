@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
+import { checkLiveCleanup } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
 import { LiveVideoCreate, VideoPrivacy, VideoState } from '@shared/models'
 import {
@@ -129,6 +130,8 @@ describe('Permanent live', function () {
 
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(0)
     }
+
+    await checkLiveCleanup({ server: servers[0], permanent: true, videoUUID })
   })
 
   it('Should have set this live to waiting for live state', async function () {
@@ -184,6 +187,15 @@ describe('Permanent live', function () {
 
       expect(session.error).to.not.exist
     }
+  })
+
+  it('Should remove the live and have cleaned up the directory', async function () {
+    this.timeout(60000)
+
+    await servers[0].videos.remove({ id: videoUUID })
+    await waitJobs(servers)
+
+    await checkLiveCleanup({ server: servers[0], permanent: true, videoUUID })
   })
 
   after(async function () {

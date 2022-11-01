@@ -12,6 +12,7 @@ import {
   ResultList,
   VideoCreateResult,
   VideoDetails,
+  VideoPrivacy,
   VideoState
 } from '@shared/models'
 import { unwrapBody } from '../requests'
@@ -115,6 +116,31 @@ export class LiveCommand extends AbstractCommand {
     return body.video
   }
 
+  async quickCreate (options: OverrideCommandOptions & {
+    saveReplay: boolean
+    permanentLive: boolean
+    privacy?: VideoPrivacy
+  }) {
+    const { saveReplay, permanentLive, privacy } = options
+
+    const { uuid } = await this.create({
+      ...options,
+
+      fields: {
+        name: 'live',
+        permanentLive,
+        saveReplay,
+        channelId: this.server.store.channel.id,
+        privacy
+      }
+    })
+
+    const video = await this.server.videos.getWithToken({ id: uuid })
+    const live = await this.get({ videoId: uuid })
+
+    return { video, live }
+  }
+
   // ---------------------------------------------------------------------------
 
   async sendRTMPStreamInVideo (options: OverrideCommandOptions & {
@@ -171,7 +197,7 @@ export class LiveCommand extends AbstractCommand {
 
     const segmentName = `${playlistNumber}-00000${segment}.ts`
     const baseUrl = objectStorage
-      ? ObjectStorageCommand.getPlaylistBaseUrl() + 'hls'
+      ? ObjectStorageCommand.getMockPlaylistBaseUrl() + 'hls'
       : server.url + '/static/streaming-playlists/hls'
 
     let error = true
@@ -227,7 +253,7 @@ export class LiveCommand extends AbstractCommand {
 
     const segmentName = `${playlistNumber}-00000${segment}.ts`
     const baseUrl = objectStorage
-      ? ObjectStorageCommand.getPlaylistBaseUrl()
+      ? ObjectStorageCommand.getMockPlaylistBaseUrl()
       : `${this.server.url}/static/streaming-playlists/hls`
 
     const url = `${baseUrl}/${videoUUID}/${segmentName}`
@@ -249,7 +275,7 @@ export class LiveCommand extends AbstractCommand {
     const { playlistName, videoUUID, objectStorage = false } = options
 
     const baseUrl = objectStorage
-      ? ObjectStorageCommand.getPlaylistBaseUrl()
+      ? ObjectStorageCommand.getMockPlaylistBaseUrl()
       : `${this.server.url}/static/streaming-playlists/hls`
 
     const url = `${baseUrl}/${videoUUID}/${playlistName}`

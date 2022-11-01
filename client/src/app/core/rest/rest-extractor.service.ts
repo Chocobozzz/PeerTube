@@ -37,6 +37,8 @@ export class RestExtractor {
 
   convertDateToHuman (target: any, fieldsToConvert: string[], format?: DateFormat) {
     fieldsToConvert.forEach(field => {
+      if (!target[field]) return
+
       target[field] = dateToHuman(this.localeId, new Date(target[field]), format)
     })
 

@@ -48,10 +48,7 @@
 
           <ng-template ngbNavContent>
             <div class="nav-content">
-              <my-input-text
-                *ngIf="!isConfidentialVideo()"
-                [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getLink()"
-              ></my-input-text>
+              <my-input-text [show]="true" [readonly]="true" [withCopy]="true" [withToggle]="false" [value]="getLink()"></my-input-text>
             </div>
           </ng-template>
         </ng-container>

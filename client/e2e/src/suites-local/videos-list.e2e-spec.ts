@@ -106,7 +106,7 @@ describe('Videos list', () => {
   beforeEach(async () => {
     videoListPage = new VideoListPage(isMobileDevice(), isSafari())
     adminConfigPage = new AdminConfigPage()
-    loginPage = new LoginPage()
+    loginPage = new LoginPage(isMobileDevice())
     videoUploadPage = new VideoUploadPage()
     myAccountPage = new MyAccountPage()
     videoSearchPage = new VideoSearchPage()
@@ -128,12 +128,12 @@ describe('Videos list', () => {
 
   it('Should upload 2 videos (NSFW and classic videos)', async () => {
     await videoUploadPage.navigateTo()
-    await videoUploadPage.uploadVideo()
+    await videoUploadPage.uploadVideo('video.mp4')
     await videoUploadPage.setAsNSFW()
     await videoUploadPage.validSecondUploadStep(nsfwVideo)
 
     await videoUploadPage.navigateTo()
-    await videoUploadPage.uploadVideo()
+    await videoUploadPage.uploadVideo('video2.mp4')
     await videoUploadPage.validSecondUploadStep(normalVideo)
   })
 
@@ -205,7 +205,7 @@ describe('Videos list', () => {
     it('Should have default video values', async function () {
       await loginPage.loginAsRootUser()
       await videoUploadPage.navigateTo()
-      await videoUploadPage.uploadVideo()
+      await videoUploadPage.uploadVideo('video3.mp4')
       await videoUploadPage.validSecondUploadStep('video')
 
       await videoWatchPage.waitWatchVideoName('video')

@@ -39,7 +39,7 @@ async function checkMagnetWebseeds (file: VideoFile, baseWebseeds: string[], ser
   expect(parsed.urlList).to.have.lengthOf(baseWebseeds.length)
 
   for (const url of parsed.urlList) {
-    await makeRawRequest(url, HttpStatusCode.OK_200)
+    await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
   }
 }
 
@@ -125,7 +125,7 @@ async function check1WebSeed (videoUUID?: string) {
   if (!videoUUID) videoUUID = video1Server2.uuid
 
   const webseeds = [
-    `http://localhost:${servers[1].port}/static/webseed/`
+    `${servers[1].url}/static/webseed/`
   ]
 
   for (const server of servers) {
@@ -144,8 +144,8 @@ async function check2Webseeds (videoUUID?: string) {
   if (!videoUUID) videoUUID = video1Server2.uuid
 
   const webseeds = [
-    `http://localhost:${servers[0].port}/static/redundancy/`,
-    `http://localhost:${servers[1].port}/static/webseed/`
+    `${servers[0].url}/static/redundancy/`,
+    `${servers[1].url}/static/webseed/`
   ]
 
   for (const server of servers) {

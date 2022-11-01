@@ -34,8 +34,10 @@ export class User implements UserServerModel {
   videosHistoryEnabled: boolean
   videoLanguages: string[]
 
-  role: UserRole
-  roleLabel: string
+  role: {
+    id: UserRole
+    label: string
+  }
 
   videoQuota: number
   videoQuotaDaily: number
@@ -123,7 +125,7 @@ export class User implements UserServerModel {
   }
 
   hasRight (right: UserRight) {
-    return hasUserRight(this.role, right)
+    return hasUserRight(this.role.id, right)
   }
 
   patch (obj: UserServerModel) {
@@ -148,6 +150,6 @@ export class User implements UserServerModel {
   isAutoBlocked (serverConfig: HTMLServerConfig) {
     if (serverConfig.autoBlacklist.videos.ofUsers.enabled !== true) return false
 
-    return this.role === UserRole.USER && this.adminFlags !== UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST
+    return this.role.id === UserRole.USER && this.adminFlags !== UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST
   }
 }

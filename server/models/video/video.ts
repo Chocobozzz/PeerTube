@@ -26,10 +26,11 @@ import {
 } from 'sequelize-typescript'
 import { getPrivaciesForFederation, isPrivacyForFederation, isStateForFederation } from '@server/helpers/video'
 import { LiveManager } from '@server/lib/live/live-manager'
-import { removeHLSFileObjectStorage, removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'
+import { removeHLSFileObjectStorageByFilename, removeHLSObjectStorage, removeWebTorrentObjectStorage } from '@server/lib/object-storage'
 import { tracer } from '@server/lib/opentelemetry/tracing'
 import { getHLSDirectory, getHLSRedundancyDirectory, getHlsResolutionPlaylistFilename } from '@server/lib/paths'
 import { VideoPathManager } from '@server/lib/video-path-manager'
+import { isVideoInPrivateDirectory } from '@server/lib/video-privacy'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
 import { buildVideoEmbedPath, buildVideoWatchPath, pick } from '@shared/core-utils'
@@ -52,7 +53,7 @@ import {
 import { AttributesOnly } from '@shared/typescript-utils'
 import { peertubeTruncate } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { exists, isBooleanValid } from '../../helpers/custom-validators/misc'
+import { exists, isBooleanValid, isUUIDValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoDescriptionValid,
   isVideoDurationValid,
@@ -784,9 +785,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
 
     // Do not wait video deletion because we could be in a transaction
     Promise.all(tasks)
-           .catch(err => {
-             logger.error('Some errors when removing files of video %s in before destroy hook.', instance.uuid, { err })
-           })
+      .then(() => logger.info('Removed files of video %s.', instance.url))
+      .catch(err => logger.error('Some errors when removing files of video %s in before destroy hook.', instance.uuid, { err }))
 
     return undefined
   }
@@ -1696,12 +1696,12 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     let files: VideoFile[] = []
 
     if (Array.isArray(this.VideoFiles)) {
-      const result = videoFilesModelToFormattedJSON(this, this.VideoFiles, includeMagnet)
+      const result = videoFilesModelToFormattedJSON(this, this.VideoFiles, { includeMagnet })
       files = files.concat(result)
     }
 
     for (const p of (this.VideoStreamingPlaylists || [])) {
-      const result = videoFilesModelToFormattedJSON(this, p.VideoFiles, includeMagnet)
+      const result = videoFilesModelToFormattedJSON(this, p.VideoFiles, { includeMagnet })
       files = files.concat(result)
     }
 
@@ -1764,9 +1764,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     const playlist = this.VideoStreamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
     if (!playlist) return undefined
 
-    playlist.Video = this
-
-    return playlist
+    return playlist.withVideo(this)
   }
 
   setHLSPlaylist (playlist: MStreamingPlaylist) {
@@ -1832,8 +1830,8 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     await remove(VideoPathManager.Instance.getFSHLSOutputPath(this, resolutionFilename))
 
     if (videoFile.storage === VideoStorage.OBJECT_STORAGE) {
-      await removeHLSFileObjectStorage(streamingPlaylist.withVideo(this), videoFile.filename)
-      await removeHLSFileObjectStorage(streamingPlaylist.withVideo(this), resolutionFilename)
+      await removeHLSFileObjectStorageByFilename(streamingPlaylist.withVideo(this), videoFile.filename)
+      await removeHLSFileObjectStorageByFilename(streamingPlaylist.withVideo(this), resolutionFilename)
     }
   }
 
@@ -1842,7 +1840,7 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     await remove(filePath)
 
     if (streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
-      await removeHLSFileObjectStorage(streamingPlaylist.withVideo(this), filename)
+      await removeHLSFileObjectStorageByFilename(streamingPlaylist.withVideo(this), filename)
     }
   }
 
@@ -1868,23 +1866,38 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     return setAsUpdated('video', this.id, transaction)
   }
 
-  requiresAuth () {
-    return this.privacy === VideoPrivacy.PRIVATE || this.privacy === VideoPrivacy.INTERNAL || !!this.VideoBlacklist
-  }
+  // ---------------------------------------------------------------------------
 
-  setPrivacy (newPrivacy: VideoPrivacy) {
-    if (this.privacy === VideoPrivacy.PRIVATE && newPrivacy !== VideoPrivacy.PRIVATE) {
-      this.publishedAt = new Date()
+  requiresAuth (options: {
+    urlParamId: string
+    checkBlacklist: boolean
+  }) {
+    const { urlParamId, checkBlacklist } = options
+
+    if (this.privacy === VideoPrivacy.PRIVATE || this.privacy === VideoPrivacy.INTERNAL) {
+      return true
     }
 
-    this.privacy = newPrivacy
+    if (this.privacy === VideoPrivacy.UNLISTED) {
+      if (urlParamId && !isUUIDValid(urlParamId)) return true
+
+      return false
+    }
+
+    if (checkBlacklist && this.VideoBlacklist) return true
+
+    if (this.privacy !== VideoPrivacy.PUBLIC) {
+      throw new Error(`Unknown video privacy ${this.privacy} to know if the video requires auth`)
+    }
+
+    return false
   }
 
-  isConfidential () {
-    return this.privacy === VideoPrivacy.PRIVATE ||
-      this.privacy === VideoPrivacy.UNLISTED ||
-      this.privacy === VideoPrivacy.INTERNAL
+  hasPrivateStaticPath () {
+    return isVideoInPrivateDirectory(this.privacy)
   }
+
+  // ---------------------------------------------------------------------------
 
   async setNewState (newState: VideoState, isNewVideo: boolean, transaction: Transaction) {
     if (this.state === newState) throw new Error('Cannot use same state ' + newState)

@@ -43,6 +43,8 @@ CaptionsButton.prototype.label_ = ' '
 
 export class PeertubePlayerManager {
   private static playerElementClassName: string
+  private static playerElementAttributes: { name: string, value: string }[] = []
+
   private static onPlayerChange: (player: videojs.Player) => void
   private static alreadyPlayed = false
   private static pluginsManager: PluginsManager
@@ -59,7 +61,12 @@ export class PeertubePlayerManager {
     this.pluginsManager = options.pluginsManager
 
     this.onPlayerChange = onPlayerChange
+
     this.playerElementClassName = options.common.playerElement.className
+
+    for (const name of options.common.playerElement.getAttributeNames()) {
+      this.playerElementAttributes.push({ name, value: options.common.playerElement.getAttribute(name) })
+    }
 
     if (mode === 'webtorrent') await import('./shared/webtorrent/webtorrent-plugin')
     if (mode === 'p2p-media-loader') {
@@ -133,13 +140,23 @@ export class PeertubePlayerManager {
         offlineNotificationElem.classList.add('vjs-peertube-offline-notification')
         offlineNotificationElem.innerText = player.localize('You seem to be offline and the video may not work')
 
+        let offlineNotificationElemAdded = false
+
         const handleOnline = () => {
+          if (!offlineNotificationElemAdded) return
+
           player.el().removeChild(offlineNotificationElem)
+          offlineNotificationElemAdded = false
+
           logger.info('The browser is online')
         }
 
         const handleOffline = () => {
+          if (offlineNotificationElemAdded) return
+
           player.el().appendChild(offlineNotificationElem)
+          offlineNotificationElemAdded = true
+
           logger.info('The browser is offline')
         }
 
@@ -157,7 +174,7 @@ export class PeertubePlayerManager {
   }
 
   private static async tryToRecoverHLSError (err: any, currentPlayer: videojs.Player, options: PeertubePlayerManagerOptions) {
-    if (err.code === 3) { // Decode error
+    if (err.code === MediaError.MEDIA_ERR_DECODE) {
 
       // Display a notification to user
       if (this.videojsDecodeErrors === 0) {
@@ -206,7 +223,14 @@ export class PeertubePlayerManager {
 
   private static rebuildAndUpdateVideoElement (player: videojs.Player, commonOptions: CommonOptions) {
     const newVideoElement = document.createElement('video')
+
+    // Reset class
     newVideoElement.className = this.playerElementClassName
+
+    // Reapply attributes
+    for (const { name, value } of this.playerElementAttributes) {
+      newVideoElement.setAttribute(name, value)
+    }
 
     // VideoJS wraps our video element inside a div
     let currentParentPlayerElement = commonOptions.playerElement.parentNode

@@ -37,16 +37,18 @@
 
       <a i18n class="button-show-channel peertube-button-link orange-button-inverted" [routerLink]="getVideoChannelLink(videoChannel)">Show this channel</a>
 
-      <div class="videos">
-        <div class="no-results" i18n *ngIf="getTotalVideosOf(videoChannel) === 0">This channel doesn't have any videos.</div>
+      <div class="videos-overflow-workaround">
+        <div class="videos">
+          <div class="no-results" i18n *ngIf="getTotalVideosOf(videoChannel) === 0">This channel doesn't have any videos.</div>
 
-        <my-video-miniature
-          *ngFor="let video of getVideosOf(videoChannel)"
-          [video]="video" [user]="userMiniature" [displayVideoActions]="true" [displayOptions]="miniatureDisplayOptions"
-        ></my-video-miniature>
+          <my-video-miniature
+            *ngFor="let video of getVideosOf(videoChannel)"
+            [video]="video" [user]="userMiniature" [displayVideoActions]="true" [displayOptions]="miniatureDisplayOptions"
+          ></my-video-miniature>
 
-        <div *ngIf="getTotalVideosOf(videoChannel)" class="miniature-show-channel">
-          <a i18n [routerLink]="getVideoChannelLink(videoChannel)">SHOW THIS CHANNEL ></a>
+          <div *ngIf="getTotalVideosOf(videoChannel)" class="miniature-show-channel">
+            <a i18n [routerLink]="getVideoChannelLink(videoChannel)">SHOW THIS CHANNEL ></a>
+          </div>
         </div>
       </div>
     </div>

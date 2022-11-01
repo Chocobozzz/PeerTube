@@ -34,6 +34,7 @@ import {
 import {
   MServer,
   MStreamingPlaylistRedundanciesOpt,
+  MUserId,
   MVideo,
   MVideoAP,
   MVideoFile,
@@ -245,8 +246,12 @@ function sortByResolutionDesc (fileA: MVideoFile, fileB: MVideoFile) {
 function videoFilesModelToFormattedJSON (
   video: MVideoFormattable,
   videoFiles: MVideoFileRedundanciesOpt[],
-  includeMagnet = true
+  options: {
+    includeMagnet?: boolean // default true
+  } = {}
 ): VideoFile[] {
+  const { includeMagnet = true } = options
+
   const trackerUrls = includeMagnet
     ? video.getTrackerUrls()
     : []
@@ -281,11 +286,14 @@ function videoFilesModelToFormattedJSON (
     })
 }
 
-function addVideoFilesInAPAcc (
-  acc: ActivityUrlObject[] | ActivityTagObject[],
-  video: MVideo,
+function addVideoFilesInAPAcc (options: {
+  acc: ActivityUrlObject[] | ActivityTagObject[]
+  video: MVideo
   files: MVideoFile[]
-) {
+  user?: MUserId
+}) {
+  const { acc, video, files } = options
+
   const trackerUrls = video.getTrackerUrls()
 
   const sortedFiles = (files || [])
@@ -370,7 +378,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     }
   ]
 
-  addVideoFilesInAPAcc(url, video, video.VideoFiles || [])
+  addVideoFilesInAPAcc({ acc: url, video, files: video.VideoFiles || [] })
 
   for (const playlist of (video.VideoStreamingPlaylists || [])) {
     const tag = playlist.p2pMediaLoaderInfohashes
@@ -382,7 +390,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
       href: playlist.getSha256SegmentsUrl(video)
     })
 
-    addVideoFilesInAPAcc(tag, video, playlist.VideoFiles || [])
+    addVideoFilesInAPAcc({ acc: tag, video, files: playlist.VideoFiles || [] })
 
     url.push({
       type: 'Link',

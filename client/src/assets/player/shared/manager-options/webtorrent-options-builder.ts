@@ -1,4 +1,5 @@
-import { PeertubePlayerManagerOptions } from '../../types'
+import { addQueryParams } from '../../../../../../shared/core-utils'
+import { PeertubePlayerManagerOptions, WebtorrentPluginOptions } from '../../types'
 
 export class WebTorrentOptionsBuilder {
 
@@ -16,12 +17,22 @@ export class WebTorrentOptionsBuilder {
 
     const autoplay = this.autoPlayValue === 'play'
 
-    const webtorrent = {
+    const webtorrent: WebtorrentPluginOptions = {
       autoplay,
 
       playerRefusedP2P: commonOptions.p2pEnabled === false,
       videoDuration: commonOptions.videoDuration,
       playerElement: commonOptions.playerElement,
+
+      videoFileToken: commonOptions.videoFileToken,
+
+      requiresAuth: commonOptions.requiresAuth,
+
+      buildWebSeedUrls: file => {
+        if (!commonOptions.requiresAuth) return []
+
+        return [ addQueryParams(file.fileUrl, { videoFileToken: commonOptions.videoFileToken() }) ]
+      },
 
       videoFiles: webtorrentOptions.videoFiles.length !== 0
         ? webtorrentOptions.videoFiles

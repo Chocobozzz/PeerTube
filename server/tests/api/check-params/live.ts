@@ -502,6 +502,23 @@ describe('Test video lives API validator', function () {
       await stopFfmpeg(ffmpegCommand)
     })
 
+    it('Should fail to change live privacy if it has already started', async function () {
+      this.timeout(40000)
+
+      const live = await command.get({ videoId: video.id })
+
+      const ffmpegCommand = sendRTMPStream({ rtmpBaseUrl: live.rtmpUrl, streamKey: live.streamKey })
+
+      await command.waitUntilPublished({ videoId: video.id })
+      await server.videos.update({
+        id: video.id,
+        attributes: { privacy: VideoPrivacy.PUBLIC },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      await stopFfmpeg(ffmpegCommand)
+    })
+
     it('Should fail to stream twice in the save live', async function () {
       this.timeout(40000)
 

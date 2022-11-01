@@ -136,7 +136,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   onUploadVideoOngoing (state: UploadState) {
     switch (state.status) {
       case 'error': {
-        if (!this.alreadyRefreshedToken && state.response.status === HttpStatusCode.UNAUTHORIZED_401) {
+        if (!this.alreadyRefreshedToken && state.responseStatus === HttpStatusCode.UNAUTHORIZED_401) {
           this.alreadyRefreshedToken = true
 
           return this.refereshTokenAndRetryUpload()

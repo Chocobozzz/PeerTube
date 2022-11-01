@@ -78,9 +78,9 @@
     "jpeg-js": "0.4.4"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.23.0",
-    "@aws-sdk/lib-storage": "^3.72.0",
-    "@aws-sdk/node-http-handler": "^3.82.0",
+    "@aws-sdk/client-s3": "^3.190.0",
+    "@aws-sdk/lib-storage": "^3.190.0",
+    "@aws-sdk/node-http-handler": "^3.190.0",
     "@babel/parser": "^7.17.8",
     "@node-oauth/oauth2-server": "^4.2.0",
     "@opentelemetry/api": "^1.1.0",
@@ -103,6 +103,7 @@
     "@peertube/http-signature": "^1.7.0",
     "@uploadx/core": "^6.0.0",
     "async-lru": "^1.1.1",
+    "async-mutex": "^0.4.0",
     "bcrypt": "5.0.1",
     "bencode": "^2.0.2",
     "bittorrent-tracker": "^9.0.0",
@@ -177,7 +178,6 @@
   },
   "devDependencies": {
     "@peertube/maildev": "^1.2.0",
-    "@types/async-lock": "^1.1.0",
     "@types/bcrypt": "^5.0.0",
     "@types/bencode": "^2.0.0",
     "@types/bluebird": "^3.5.33",

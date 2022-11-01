@@ -1,10 +1,22 @@
 import { basename, join } from 'path'
 import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
-import { MStreamingPlaylistVideo, MVideoFile } from '@server/types/models'
+import { MStreamingPlaylistVideo, MVideo, MVideoFile } from '@server/types/models'
 import { getHLSDirectory } from '../paths'
+import { VideoPathManager } from '../video-path-manager'
 import { generateHLSObjectBaseStorageKey, generateHLSObjectStorageKey, generateWebTorrentObjectStorageKey } from './keys'
-import { listKeysOfPrefix, lTags, makeAvailable, removeObject, removePrefix, storeObject } from './shared'
+import {
+  createObjectReadStream,
+  listKeysOfPrefix,
+  lTags,
+  makeAvailable,
+  removeObject,
+  removeObjectByFullKey,
+  removePrefix,
+  storeObject,
+  updateObjectACL,
+  updatePrefixACL
+} from './shared'
 
 function listHLSFileKeysOf (playlist: MStreamingPlaylistVideo) {
   return listKeysOfPrefix(generateHLSObjectBaseStorageKey(playlist), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
@@ -16,7 +28,8 @@ function storeHLSFileFromFilename (playlist: MStreamingPlaylistVideo, filename: 
   return storeObject({
     inputPath: join(getHLSDirectory(playlist.Video), filename),
     objectStorageKey: generateHLSObjectStorageKey(playlist, filename),
-    bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
+    bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
+    isPrivate: playlist.Video.hasPrivateStaticPath()
   })
 }
 
@@ -24,17 +37,37 @@ function storeHLSFileFromPath (playlist: MStreamingPlaylistVideo, path: string) 
   return storeObject({
     inputPath: path,
     objectStorageKey: generateHLSObjectStorageKey(playlist, basename(path)),
-    bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
+    bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
+    isPrivate: playlist.Video.hasPrivateStaticPath()
   })
 }
 
 // ---------------------------------------------------------------------------
 
-function storeWebTorrentFile (filename: string) {
+function storeWebTorrentFile (video: MVideo, file: MVideoFile) {
   return storeObject({
-    inputPath: join(CONFIG.STORAGE.VIDEOS_DIR, filename),
-    objectStorageKey: generateWebTorrentObjectStorageKey(filename),
-    bucketInfo: CONFIG.OBJECT_STORAGE.VIDEOS
+    inputPath: VideoPathManager.Instance.getFSVideoFileOutputPath(video, file),
+    objectStorageKey: generateWebTorrentObjectStorageKey(file.filename),
+    bucketInfo: CONFIG.OBJECT_STORAGE.VIDEOS,
+    isPrivate: video.hasPrivateStaticPath()
+  })
+}
+
+// ---------------------------------------------------------------------------
+
+function updateWebTorrentFileACL (video: MVideo, file: MVideoFile) {
+  return updateObjectACL({
+    objectStorageKey: generateWebTorrentObjectStorageKey(file.filename),
+    bucketInfo: CONFIG.OBJECT_STORAGE.VIDEOS,
+    isPrivate: video.hasPrivateStaticPath()
+  })
+}
+
+function updateHLSFilesACL (playlist: MStreamingPlaylistVideo) {
+  return updatePrefixACL({
+    prefix: generateHLSObjectBaseStorageKey(playlist),
+    bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
+    isPrivate: playlist.Video.hasPrivateStaticPath()
   })
 }
 
@@ -44,8 +77,16 @@ function removeHLSObjectStorage (playlist: MStreamingPlaylistVideo) {
   return removePrefix(generateHLSObjectBaseStorageKey(playlist), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
-function removeHLSFileObjectStorage (playlist: MStreamingPlaylistVideo, filename: string) {
+function removeHLSFileObjectStorageByFilename (playlist: MStreamingPlaylistVideo, filename: string) {
   return removeObject(generateHLSObjectStorageKey(playlist, filename), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+}
+
+function removeHLSFileObjectStorageByPath (playlist: MStreamingPlaylistVideo, path: string) {
+  return removeObject(generateHLSObjectStorageKey(playlist, basename(path)), CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
+}
+
+function removeHLSFileObjectStorageByFullKey (key: string) {
+  return removeObjectByFullKey(key, CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS)
 }
 
 // ---------------------------------------------------------------------------
@@ -86,6 +127,39 @@ async function makeWebTorrentFileAvailable (filename: string, destination: strin
 
 // ---------------------------------------------------------------------------
 
+function getWebTorrentFileReadStream (options: {
+  filename: string
+  rangeHeader: string
+}) {
+  const { filename, rangeHeader } = options
+
+  const key = generateWebTorrentObjectStorageKey(filename)
+
+  return createObjectReadStream({
+    key,
+    bucketInfo: CONFIG.OBJECT_STORAGE.VIDEOS,
+    rangeHeader
+  })
+}
+
+function getHLSFileReadStream (options: {
+  playlist: MStreamingPlaylistVideo
+  filename: string
+  rangeHeader: string
+}) {
+  const { playlist, filename, rangeHeader } = options
+
+  const key = generateHLSObjectStorageKey(playlist, filename)
+
+  return createObjectReadStream({
+    key,
+    bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
+    rangeHeader
+  })
+}
+
+// ---------------------------------------------------------------------------
+
 export {
   listHLSFileKeysOf,
 
@@ -93,10 +167,19 @@ export {
   storeHLSFileFromFilename,
   storeHLSFileFromPath,
 
+  updateWebTorrentFileACL,
+  updateHLSFilesACL,
+
   removeHLSObjectStorage,
-  removeHLSFileObjectStorage,
+  removeHLSFileObjectStorageByFilename,
+  removeHLSFileObjectStorageByPath,
+  removeHLSFileObjectStorageByFullKey,
+
   removeWebTorrentObjectStorage,
 
   makeWebTorrentFileAvailable,
-  makeHLSFileAvailable
+  makeHLSFileAvailable,
+
+  getWebTorrentFileReadStream,
+  getHLSFileReadStream
 }

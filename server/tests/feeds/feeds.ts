@@ -314,7 +314,7 @@ describe('Test syndication feeds', () => {
       const jsonObj = JSON.parse(json)
       const imageUrl = jsonObj.icon
       expect(imageUrl).to.include('/lazy-static/avatars/')
-      await makeRawRequest(imageUrl)
+      await makeRawRequest({ url: imageUrl, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 

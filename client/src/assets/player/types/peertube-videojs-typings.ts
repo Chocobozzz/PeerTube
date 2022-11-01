@@ -95,7 +95,7 @@ type PeerTubePluginOptions = {
   videoDuration: number
 
   videoViewUrl: string
-  authorizationHeader?: string
+  authorizationHeader?: () => string
 
   subtitle?: string
 
@@ -151,6 +151,11 @@ type WebtorrentPluginOptions = {
   startTime: number | string
 
   playerRefusedP2P: boolean
+
+  requiresAuth: boolean
+  videoFileToken: () => string
+
+  buildWebSeedUrls: (file: VideoFile) => string[]
 }
 
 type P2PMediaLoaderPluginOptions = {
@@ -161,6 +166,8 @@ type P2PMediaLoaderPluginOptions = {
   startTime: number | string
 
   loader: P2PMediaLoader
+
+  requiresAuth: boolean
 }
 
 export type P2PMediaLoader = {
