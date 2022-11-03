@@ -850,7 +850,7 @@
       </trans-unit>
       <trans-unit id="5975923297757530070">
         <source><x id="START_TAG_DIV"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>can be redefined by the users<x id="CLOSE_TAG_DIV"/></source>
-        <target><x id="START_TAG_DIV"/>預設的 NSFW／敏感影片政策<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>可以被使用者重新定義<x id="CLOSE_TAG_DIV"/></target>
+        <target state="translated"><x id="START_TAG_DIV"/>預設的 NSFW／敏感影片原則<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>可以被使用者重新定義<x id="CLOSE_TAG_DIV"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="3386631781603205915">
@@ -4784,7 +4784,7 @@
       </trans-unit>
       <trans-unit id="5056489767203690328" datatype="html">
         <source>Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</source>
-        <target state="translated">誰管理此站臺？對 NSFW 影片有何政策？政治影片呢？等等</target>
+        <target state="translated">誰管理此站臺？對 NSFW 影片有何原則？政治影片呢？等等</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">144</context></context-group>
       </trans-unit>
       <trans-unit id="2047672753819413550" datatype="html">
@@ -5911,7 +5911,7 @@
       </trans-unit>
       <trans-unit id="7377817702119089263">
         <source>Default policy on videos containing sensitive content</source>
-        <target>包含敏感內容的影片的預設政策</target>
+        <target state="translated">包含敏感內容的影片的預設原則</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="7350483582490037954" datatype="html">
@@ -5922,7 +5922,7 @@
       </trans-unit>
       <trans-unit id="4409859601539810260" datatype="html">
         <source>Policy for sensitive videos</source>
-        <target state="translated">敏感影片的政策</target>
+        <target state="translated">敏感影片的原則</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">114</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
