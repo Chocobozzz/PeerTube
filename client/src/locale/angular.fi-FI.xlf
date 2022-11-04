@@ -6758,7 +6758,7 @@
       </trans-unit>
       <trans-unit id="7766488542631150871" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Ei videoita} =1 {1 video} other {<x id="INTERPOLATION"/> videoita}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Ei videoita} =1 {1 video} other {<x id="INTERPOLATION"/> videota}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">29</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">39</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">47</context></context-group>
@@ -9628,7 +9628,7 @@
       </trans-unit>
       <trans-unit id="4024404994702813072" datatype="html">
         <source>In my library</source>
-        <target state="translated">Kirjastossani</target>
+        <target state="translated">Kirjastoni</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="232050922346936574" datatype="html">
@@ -11253,16 +11253,12 @@
       </trans-unit>
       <trans-unit id="6028521920505655348">
         <source><x id="PH"/> of full HD videos </source>
-        <target>
-          <x id="PH"/> Full HD videoita
-        </target>
+        <target state="translated"><x id="PH"/> Full HD videota </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="117588083391484998">
         <source><x id="PH"/> of HD videos </source>
-        <target>
-          <x id="PH"/> HD videoita
-        </target>
+        <target state="translated"><x id="PH"/> HD videota </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
       <trans-unit id="6636555695556123073" datatype="html">
