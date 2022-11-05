@@ -1667,7 +1667,7 @@
       </trans-unit>
       <trans-unit id="5464118521750361406" datatype="html">
         <source>Public profile</source>
-        <target state="translated">Julkinen profiili</target>
+        <target state="translated">Julkinen profiilisi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="7773271640656013365" datatype="html">
@@ -1724,7 +1724,7 @@
       </trans-unit>
       <trans-unit id="6371572688505952303" datatype="html">
         <source>My library</source>
-        <target state="translated">Kirjasto</target>
+        <target state="translated">Kirjastoni</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="2308975396733519902">
