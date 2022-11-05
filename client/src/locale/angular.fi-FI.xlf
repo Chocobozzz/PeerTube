@@ -1329,7 +1329,7 @@
       </trans-unit>
       <trans-unit id="4502972592942341883" datatype="html">
         <source>As you probably noticed: creating an account is not necessary to watch video on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </source>
-        <target state="translated">Kuten luultavasti huomasit: tilin luominen ei ole välttämätöntä videoiden katsomiseen <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Tilin luominen kuitenkin <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> antaa sinun: </target>
+        <target state="translated">Kuten luultavasti huomasit: tilin luominen ei ole välttämätöntä videoiden katsomiseen <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>ssa. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Tilin luominen kuitenkin <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> antaa sinun: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">4,8</context>
@@ -7879,7 +7879,7 @@
       </trans-unit>
       <trans-unit id="7972984083338607724" datatype="html">
         <source>Follow requests accepted</source>
-        <target state="translated">Seuraa-pyynnöt hyväksytty</target>
+        <target state="translated">Seuraamispyynnöt hyväksytty</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">69,67</context>
@@ -7895,7 +7895,7 @@
       </trans-unit>
       <trans-unit id="4955506044513787741" datatype="html">
         <source>Do you really want to reject these follow requests?</source>
-        <target state="translated">Haluatko todella hylätä nämä seuraa-pyynnöt?</target>
+        <target state="translated">Haluatko todella hylätä nämä seuraamispyynnöt?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">84,82</context>
@@ -7911,7 +7911,7 @@
       </trans-unit>
       <trans-unit id="9188906783046017162" datatype="html">
         <source>Follow requests rejected</source>
-        <target state="translated">Seuraa-pyynnöt hylätty</target>
+        <target state="translated">Seuraamispyynnöt hylätty</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">96,94</context>
@@ -7935,7 +7935,7 @@
       </trans-unit>
       <trans-unit id="320661315515678647" datatype="html">
         <source>Do you really want to delete these follow requests?</source>
-        <target state="translated">Haluatko todella poistaa nämä seuraa-pyynnöt?</target>
+        <target state="translated">Haluatko todella poistaa nämä seuraamispyynnöt?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">114,112</context>
@@ -7951,7 +7951,7 @@
       </trans-unit>
       <trans-unit id="4586043076686454232" datatype="html">
         <source>Follow requests removed</source>
-        <target state="translated">Seuraa-pyynnöt poistettu</target>
+        <target state="translated">Seuraamispyynnöt poistettu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">126,124</context>
