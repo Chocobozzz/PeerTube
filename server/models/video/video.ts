@@ -1458,6 +1458,12 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     const query = 'SELECT 1 FROM "videoShare" ' +
       'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
       'WHERE "actorFollow"."actorId" = $followerActorId AND "actorFollow"."state" = \'accepted\' AND "videoShare"."videoId" = $videoId ' +
+      'UNION ' +
+      'SELECT 1 FROM "video" ' +
+      'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+      'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+      'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "account"."actorId" ' +
+      'WHERE "actorFollow"."actorId" = $followerActorId AND "actorFollow"."state" = \'accepted\' AND "video"."id" = $videoId ' +
       'LIMIT 1'
 
     const options = {
