@@ -245,7 +245,7 @@ class LiveManager {
     )
 
     const allResolutions = await Hooks.wrapObject(
-      this.buildAllResolutionsToTranscode(resolution),
+      this.buildAllResolutionsToTranscode(resolution, hasAudio),
       'filter:transcoding.auto.resolutions-to-transcode.result',
       { video }
     )
@@ -460,11 +460,11 @@ class LiveManager {
     return join(directory, files.sort().reverse()[0])
   }
 
-  private buildAllResolutionsToTranscode (originResolution: number) {
+  private buildAllResolutionsToTranscode (originResolution: number, hasAudio: boolean) {
     const includeInput = CONFIG.LIVE.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
 
     const resolutionsEnabled = CONFIG.LIVE.TRANSCODING.ENABLED
-      ? computeResolutionsToTranscode({ input: originResolution, type: 'live', includeInput, strictLower: false })
+      ? computeResolutionsToTranscode({ input: originResolution, type: 'live', includeInput, strictLower: false, hasAudio })
       : []
 
     if (resolutionsEnabled.length === 0) {

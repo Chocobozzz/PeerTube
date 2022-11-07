@@ -34,7 +34,7 @@ import { isVideoInPrivateDirectory } from '@server/lib/video-privacy'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
 import { buildVideoEmbedPath, buildVideoWatchPath, pick } from '@shared/core-utils'
-import { ffprobePromise, getAudioStream, uuidToShort } from '@shared/extra-utils'
+import { ffprobePromise, getAudioStream, hasAudioStream, uuidToShort } from '@shared/extra-utils'
 import {
   ResultList,
   ThumbnailType,
@@ -1751,9 +1751,11 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       const probe = await ffprobePromise(originalFilePath)
 
       const { audioStream } = await getAudioStream(originalFilePath, probe)
+      const hasAudio = await hasAudioStream(originalFilePath, probe)
 
       return {
         audioStream,
+        hasAudio,
 
         ...await getVideoStreamDimensionsInfo(originalFilePath, probe)
       }

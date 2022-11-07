@@ -32,9 +32,10 @@ async function createTranscoding (req: express.Request, res: express.Response) {
 
   const body: VideoTranscodingCreate = req.body
 
-  const { resolution: maxResolution, audioStream } = await video.probeMaxQualityFile()
+  const { resolution: maxResolution, hasAudio } = await video.probeMaxQualityFile()
+
   const resolutions = await Hooks.wrapObject(
-    computeResolutionsToTranscode({ input: maxResolution, type: 'vod', includeInput: true, strictLower: false }),
+    computeResolutionsToTranscode({ input: maxResolution, type: 'vod', includeInput: true, strictLower: false, hasAudio }),
     'filter:transcoding.manual.resolutions-to-transcode.result',
     body
   )
@@ -46,7 +47,6 @@ async function createTranscoding (req: express.Request, res: express.Response) {
   video.state = VideoState.TO_TRANSCODE
   await video.save()
 
-  const hasAudio = !!audioStream
   const childrenResolutions = resolutions.filter(r => r !== maxResolution)
 
   const children = await Bluebird.mapSeries(childrenResolutions, resolution => {

@@ -96,8 +96,9 @@ function computeResolutionsToTranscode (options: {
   type: 'vod' | 'live'
   includeInput: boolean
   strictLower: boolean
+  hasAudio: boolean
 }) {
-  const { input, type, includeInput, strictLower } = options
+  const { input, type, includeInput, strictLower, hasAudio } = options
 
   const configResolutions = type === 'vod'
     ? CONFIG.TRANSCODING.RESOLUTIONS
@@ -125,6 +126,8 @@ function computeResolutionsToTranscode (options: {
     if (input < resolution) continue
     // We only want lower resolutions than input file
     if (strictLower && input === resolution) continue
+    // Audio resolutio but no audio in the video
+    if (resolution === VideoResolution.H_NOVIDEO && !hasAudio) continue
 
     resolutionsEnabled.add(resolution)
   }

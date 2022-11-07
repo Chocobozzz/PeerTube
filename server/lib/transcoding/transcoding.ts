@@ -446,7 +446,15 @@ async function generateHlsPlaylistCommon (options: {
 function buildOriginalFileResolution (inputResolution: number) {
   if (CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION === true) return toEven(inputResolution)
 
-  const resolutions = computeResolutionsToTranscode({ input: inputResolution, type: 'vod', includeInput: false, strictLower: false })
+  const resolutions = computeResolutionsToTranscode({
+    input: inputResolution,
+    type: 'vod',
+    includeInput: false,
+    strictLower: false,
+    // We don't really care about the audio resolution in this context
+    hasAudio: true
+  })
+
   if (resolutions.length === 0) return toEven(inputResolution)
 
   return Math.max(...resolutions)
