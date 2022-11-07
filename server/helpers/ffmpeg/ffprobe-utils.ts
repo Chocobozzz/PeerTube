@@ -15,6 +15,7 @@ import {
 import { VideoResolution, VideoTranscodingFPS } from '@shared/models'
 import { CONFIG } from '../../initializers/config'
 import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
+import { toEven } from '../core-utils'
 import { logger } from '../logger'
 
 /**
@@ -133,7 +134,8 @@ function computeResolutionsToTranscode (options: {
   }
 
   if (includeInput) {
-    resolutionsEnabled.add(input)
+    // Always use an even resolution to avoid issues with ffmpeg
+    resolutionsEnabled.add(toEven(input))
   }
 
   return Array.from(resolutionsEnabled)
