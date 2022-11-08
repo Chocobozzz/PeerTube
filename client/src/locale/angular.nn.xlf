@@ -941,92 +941,109 @@
       </trans-unit>
       <trans-unit id="554741830445276244" datatype="html">
         <source>Hot videos</source>
+        <target state="translated">Populære filmar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="4203746847864415875" datatype="html">
         <source>Most viewed videos</source>
+        <target state="translated">Mest sette filmar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="8177374861384376651" datatype="html">
         <source>Most liked videos</source>
+        <target state="translated">Mest likte filmar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="5862227717871131052" datatype="html">
         <source>Prefer author display name in video miniature</source>
-        <target state="new">Prefer author display name in video miniature</target>
+        <target state="translated">Bruk helst visingsnamnet på forfattaren i filmminiatyren</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="5444889468197427724" datatype="html">
         <source>Redirect users on single external auth when users click on the login button in menu</source>
-        <target state="new">Redirect users on single external auth when users click on the login button in menu</target>
+        <target state="translated">Vidaresend brukarar til ekstern innlogging når brukarar klikkar på logg inn-knappen i menyen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="2138469194506455231" datatype="html">
         <source>⚠️ You don't have any external auth plugin enabled.</source>
-        <target state="new">⚠️ You don't have any external auth plugin enabled.</target>
+        <target state="translated">⚠️ Du har ikkje skrudd på noko eksternt innloggingstillegg.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
       <trans-unit id="6608125149782412086" datatype="html">
         <source>⚠️ You have multiple external auth plugins enabled.</source>
-        <target state="new">⚠️ You have multiple external auth plugins enabled.</target>
+        <target state="translated">⚠️ Du har skrudd på fleire eksterne innloggingstillegg.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="4809162812315301010" datatype="html">
         <source>BROADCAST MESSAGE</source>
+        <target state="translated">KRINGKASTA MELDING</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="7097094470713539753" datatype="html">
         <source>Display a message on your instance</source>
+        <target state="translated">Vis ei melding på nettstaden din</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="4686199497574248459" datatype="html">
         <source>Enable broadcast message</source>
+        <target state="translated">Skru på kringkasta melding</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="9192050065623241777" datatype="html">
         <source>Allow users to dismiss the broadcast message</source>
+        <target state="translated">Lat brukarar sjå bort frå den kringasta meldinga</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="6582848618760132901" datatype="html">
         <source>Broadcast message level</source>
+        <target state="translated">Nivå på kringkasta melding</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">118</context></context-group>
       </trans-unit>
       <trans-unit id="8066608938393600549" datatype="html">
         <source>Message</source>
+        <target state="translated">Melding</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">132</context></context-group>
       </trans-unit>
       <trans-unit id="5631159720194597622" datatype="html">
         <source>NEW USERS</source>
+        <target state="translated">NYE BRUKARAR</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">149</context></context-group>
       </trans-unit>
       <trans-unit id="2669509104300979449" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to set their quota individually. </source>
+        <target state="translated">Styr <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>brukarar<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for å setja kvoten deira individuelt. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="7456307533995141215" datatype="html">
         <source>Enable Signup</source>
+        <target state="translated">Skru på brukarregistrering</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">161</context></context-group>
       </trans-unit>
       <trans-unit id="2092224316392295720" datatype="html">
         <source>⚠️ This functionality requires a lot of attention and extra moderation.</source>
+        <target state="translated">⚠️ Denne funksjonen krev mykje tid og ekstra kontroll med innhaldet.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">164</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">480</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">493</context></context-group>
       </trans-unit>
       <trans-unit id="4497115134891299867" datatype="html">
         <source>Signup requires email verification</source>
+        <target state="translated">Registrering krev stadfesting av epostadressa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">172</context></context-group>
       </trans-unit>
       <trans-unit id="8133107840061687919" datatype="html">
         <source>Signup limit</source>
+        <target state="translated">Grense for registrering</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">176</context></context-group>
       </trans-unit>
       <trans-unit id="8497774075394617130" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {user} other {users}}</source>
+        <target state="translated">{VAR_PLURAL, plural, =1 {person} other {folk}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">183</context></context-group>
       </trans-unit>
       <trans-unit id="5620049714977547431" datatype="html">
         <source>Signup won't be limited to a fixed number of users.</source>
+        <target state="translated">Det er inga øvre grense for kor mange brukarar.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">188</context></context-group>
       </trans-unit>
       <trans-unit id="1663379405062033606" datatype="html">
@@ -1036,15 +1053,17 @@
       </trans-unit>
       <trans-unit id="8342879272354516454" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {year old} other {years old}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {year old} other {years old}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {år gamal} other {år gamal}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">199</context></context-group>
       </trans-unit>
       <trans-unit id="502260296951057925" datatype="html">
         <source>Default video quota per user</source>
+        <target state="translated">Standard videokvote per brukar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">211</context></context-group>
       </trans-unit>
       <trans-unit id="7169210802367807492" datatype="html">
         <source>bytes</source>
+        <target state="translated">bytar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">217</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">233</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">151</context></context-group>
@@ -1054,29 +1073,35 @@
       </trans-unit>
       <trans-unit id="8509882464852636851" datatype="html">
         <source>Default daily upload limit per user</source>
+        <target state="translated">Standard dagleg opplastingsgrense per brukar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">227</context></context-group>
       </trans-unit>
       <trans-unit id="1504521795586863905" datatype="html">
         <source>VIDEOS</source>
+        <target state="translated">FILMAR</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">81</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">246</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="667372110624203230" datatype="html">
         <source>Import jobs concurrency</source>
+        <target state="translated">Samstundes importjobbar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">256</context></context-group>
       </trans-unit>
       <trans-unit id="2184839376696112704" datatype="html">
         <source>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</source>
+        <target state="translated">tillet å importera fleire filmar om gongen. ⚠️ Krev omstart av PeerTube.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">257</context></context-group>
       </trans-unit>
       <trans-unit id="780513172839038392" datatype="html">
         <source>jobs in parallel</source>
+        <target state="translated">jobbar parallelt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">261</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
       <trans-unit id="5997625369044180192" datatype="html">
         <source>Allow import with HTTP URL (e.g. YouTube)</source>
+        <target state="translated">Tillat import med HTTP-adresse (td. YouTube)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">270</context></context-group>
       </trans-unit>
       <trans-unit id="2095604754338363597" datatype="html">
