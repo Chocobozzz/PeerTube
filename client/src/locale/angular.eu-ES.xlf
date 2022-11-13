@@ -623,14 +623,12 @@
       </trans-unit>
       <trans-unit id="7688104409544625220" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {bistaratze 1} other {
-          <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> bistaratze} }
-        </target>
+        <target state="needs-translation">{VAR_PLURAL, plural, =1 {bistaratze 1} other { <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> bistaratze} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="8562063050145802350" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {ikusle bat} other {<x id="INTERPOLATION"/> ikusle}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Ikusle bat} other {<x id="INTERPOLATION"/> ikusle}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">7</context>
@@ -668,52 +666,52 @@
       </trans-unit>
       <trans-unit id="5779580280418408097" datatype="html">
         <source>Deleted {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="new">Deleted {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</target>
+        <target state="translated">{count, plural, =1 {Bideo bat} other {<x id="count"/> bideo}} ezabatuta.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">241</context></context-group>
       </trans-unit>
       <trans-unit id="6630644917521475697" datatype="html">
         <source>Deleted <x id="PH" equiv-text="videos.length"/> videos.</source>
-        <target state="new">Deleted <x id="PH" equiv-text="videos.length"/> videos.</target>
+        <target state="translated"><x id="PH" equiv-text="videos.length"/> bideo ezabatuta.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">243</context></context-group>
       </trans-unit>
       <trans-unit id="9164541937317586242" datatype="html">
         <source>Unblocked {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="new">Unblocked {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</target>
+        <target state="translated">{count, plural, =1 {Bideo bat} other {<x id="count"/> bideo}} desblokeatuta.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">259</context></context-group>
       </trans-unit>
       <trans-unit id="2870417795706430145" datatype="html">
         <source>Unblocked <x id="PH" equiv-text="videos.length"/> videos.</source>
-        <target state="new">Unblocked <x id="PH" equiv-text="videos.length"/> videos.</target>
+        <target state="translated"><x id="PH" equiv-text="videos.length"/> bideo desblokeatuta.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">261</context></context-group>
       </trans-unit>
       <trans-unit id="6228449077605046873" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</source>
-        <target state="new">Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</target>
+        <target state="translated">Ziur zaude {count, plural, =1 {HLS igorpeneko erreprodukzio zerrenda bat ezabatu nahi duzula} other {HLS igorpeneko <x id="count"/> erreprodukzio zerrenda ezabatu nahi dituzula}}?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">277</context></context-group>
       </trans-unit>
       <trans-unit id="9088099192924395359" datatype="html">
         <source>Are you sure you want to delete <x id="PH" equiv-text="videos.length"/> HLS streaming playlists?</source>
-        <target state="new">Are you sure you want to delete <x id="PH" equiv-text="videos.length"/> HLS streaming playlists?</target>
+        <target state="translated">Ziur zaude HLS igorpeneko <x id="PH" equiv-text="videos.length"/> erreprodukzio zerrenda ezabatu nahi dituzula?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">279</context></context-group>
       </trans-unit>
       <trans-unit id="653148876380254581" datatype="html">
         <source>Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</source>
-        <target state="new">Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</target>
+        <target state="translated">Ziur zaude {count, plural, =1 {bideo bateko} other {<x id="count"/> bideotako}} WebTorrent fitxategiak ezabatu nahi dituzula?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">283</context></context-group>
       </trans-unit>
       <trans-unit id="5442133371267277333" datatype="html">
         <source>Are you sure you want to delete WebTorrent files of <x id="PH" equiv-text="videos.length"/> videos?</source>
-        <target state="new">Are you sure you want to delete WebTorrent files of <x id="PH" equiv-text="videos.length"/> videos?</target>
+        <target state="translated">Ziur zaude <x id="PH" equiv-text="videos.length"/> bideotako WebTorrent fitxategiak ezabatu nahi dituzula?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">285</context></context-group>
       </trans-unit>
       <trans-unit id="1571742433738679426" datatype="html">
         <source>Files were removed.</source>
-        <target state="new">Files were removed.</target>
+        <target state="translated">Fitxategiak ezabatuak izan dira.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">295</context></context-group>
       </trans-unit>
       <trans-unit id="7054344823477412274" datatype="html">
         <source>Transcoding jobs created.</source>
-        <target state="new">Transcoding jobs created.</target>
+        <target state="translated">Transkodetze lanak sortuak.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">307</context></context-group>
       </trans-unit>
       <trans-unit id="3514509630940272440" datatype="html">
@@ -773,12 +771,12 @@
       </trans-unit>
       <trans-unit id="158575725114802951" datatype="html">
         <source>Only live videos</source>
-        <target state="new">Only live videos</target>
+        <target state="translated">Zuzeneko bideoak bakarrik</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="9157178301885999151" datatype="html">
         <source>Do you really want to delete {length, plural, =1 {this video} other {<x id="length"/> videos}}?</source>
-        <target state="new">Do you really want to delete {length, plural, =1 {this video} other {<x id="length"/> videos}}?</target>
+        <target state="translated">Ziur zaude {length, plural, =1 {bideo hau ezabatu nahi duzula} other {<x id="length"/> bideo hauek ezabatu nahi dituzula}}?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">185</context></context-group>
       </trans-unit>
       <trans-unit id="7585826646011739428">
@@ -816,7 +814,7 @@
       </trans-unit>
       <trans-unit id="80975420989930934" datatype="html">
         <source>(extensions: <x id="PH" equiv-text="this.videoImageExtensions"/>, <x id="PH_1" equiv-text="this.maxSizeText"/>: <x id="PH_2" equiv-text="this.maxVideoImageSizeInBytes"/>)</source>
-        <target state="new">(extensions: <x id="PH" equiv-text="this.videoImageExtensions"/>, <x id="PH_1" equiv-text="this.maxSizeText"/>: <x id="PH_2" equiv-text="this.maxVideoImageSizeInBytes"/>)</target>
+        <target state="translated">(gehigarriak: <x id="PH" equiv-text="this.videoImageExtensions"/>, <x id="PH_1" equiv-text="this.maxSizeText"/>: <x id="PH_2" equiv-text="this.maxVideoImageSizeInBytes"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/preview-upload.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -844,27 +842,27 @@
       </trans-unit>
       <trans-unit id="8023282004085823427" datatype="html">
         <source><x id="PH" equiv-text="this.video.name"/> will be duplicated by your instance.</source>
-        <target state="new"><x id="PH" equiv-text="this.video.name"/> will be duplicated by your instance.</target>
+        <target state="translated"><x id="PH" equiv-text="this.video.name"/> zure instantziak bikoiztu egingo du.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">254</context></context-group>
       </trans-unit>
       <trans-unit id="4140366911638662173" datatype="html">
         <source>Do you really want to remove "<x id="PH" equiv-text="this.video.name"/>" files?</source>
-        <target state="new">Do you really want to remove "<x id="PH" equiv-text="this.video.name"/>" files?</target>
+        <target state="translated">Ziur zaude "<x id="PH" equiv-text="this.video.name"/>"-ko fitxategiak ezabatu nahi dituzula?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">277</context></context-group>
       </trans-unit>
       <trans-unit id="2955645766721124100" datatype="html">
         <source>Remove "<x id="PH" equiv-text="this.video.name"/>" files</source>
-        <target state="new">Remove "<x id="PH" equiv-text="this.video.name"/>" files</target>
+        <target state="translated">"<x id="PH" equiv-text="this.video.name"/>"-ko fitxategiak ezabatu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">279</context></context-group>
       </trans-unit>
       <trans-unit id="7758350391886784213" datatype="html">
         <source>Removed files of <x id="PH" equiv-text="video.name"/>.</source>
-        <target state="new">Removed files of <x id="PH" equiv-text="video.name"/>.</target>
+        <target state="translated"><x id="PH" equiv-text="video.name"/>-ko ezabatutako fitxategiak.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">285</context></context-group>
       </trans-unit>
       <trans-unit id="6279087330074580345" datatype="html">
         <source>Transcoding jobs created for <x id="PH" equiv-text="video.name"/>.</source>
-        <target state="new">Transcoding jobs created for <x id="PH" equiv-text="video.name"/>.</target>
+        <target state="translated"><x id="PH" equiv-text="video.name"/> bideorako transkodetze lanak sortuak.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">297</context></context-group>
       </trans-unit>
       <trans-unit id="2949829240129672512">
@@ -894,12 +892,12 @@
       </trans-unit>
       <trans-unit id="6462281745850371027" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="new"> You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example). </target>
+        <target state="translated">Kanalera ActivityPub motako fedibertsoko edozein instantzia bidez harpidetu zaitezke (PeerTube, Mastodon edo Pleroma, adibidez).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="20374890400263257" datatype="html">
         <source>You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="new"> You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example). </target>
+        <target state="translated">ActivityPub motako fedibertsoko edozein instantziarekin izan dezakezu honekin elkarrekintza (PeerTube, Mastodon edo Pleroma, adibidez).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="6751395526297887552" datatype="html">
@@ -1005,7 +1003,7 @@
       </trans-unit>
       <trans-unit id="7417677567611860270" datatype="html">
         <source>Channel synchronization with other platforms (YouTube, Vimeo, ...)</source>
-        <target state="new">Channel synchronization with other platforms (YouTube, Vimeo, ...)</target>
+        <target state="translated">Beste plataforma batzuekin kanalen sinkronizazioa (YouTube, Vimeo, ...)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">110</context>
@@ -1018,7 +1016,7 @@
       </trans-unit>
       <trans-unit id="5851173629316588976" datatype="html">
         <source>By users on this instance</source>
-        <target state="new">By users on this instance</target>
+        <target state="translated">Instantzia honetako erabiltzaileekiko</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1042,7 +1040,7 @@
       </trans-unit>
       <trans-unit id="1408045022812097780" datatype="html">
         <source>views</source>
-        <target state="new">views</target>
+        <target state="translated">bistaratzeak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1050,7 +1048,7 @@
       </trans-unit>
       <trans-unit id="117954017715534854" datatype="html">
         <source>comments</source>
-        <target state="new">comments</target>
+        <target state="translated">iruzkinak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">41</context>
@@ -1062,7 +1060,7 @@
       </trans-unit>
       <trans-unit id="6090561122481711127" datatype="html">
         <source>hosted video</source>
-        <target state="new">hosted video</target>
+        <target state="translated">ostatatutako bideoa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">51</context>
@@ -1070,7 +1068,7 @@
       </trans-unit>
       <trans-unit id="6827125739942610231" datatype="html">
         <source>In this instance federation</source>
-        <target state="new">In this instance federation</target>
+        <target state="translated">Instantzia honetan federazioa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">58</context>
@@ -1078,14 +1076,14 @@
       </trans-unit>
       <trans-unit id="8726138323871139597" datatype="html">
         <source>Following</source>
-        <target state="new">Following</target>
+        <target state="translated">Jarraitzen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">75</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/follows.routes.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="4914577418256256836" datatype="html">
         <source>Followers</source>
-        <target state="new">Followers</target>
+        <target state="translated">Jarraitzaileak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">80</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/follows.routes.ts</context><context context-type="linenumber">35</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">72</context></context-group>
@@ -1107,12 +1105,12 @@
       </trans-unit>
       <trans-unit id="4499233456830047129" datatype="html">
         <source>The server encountered an error</source>
-        <target state="new">The server encountered an error</target>
+        <target state="translated">Zerbitzariak errore bat izan du</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="732935381486595265" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</target>
+        <target state="translated">Zure <x id="PH" equiv-text="name"/> fitxategia ezin izan da proxy zerbitzariaren itxarote denbora baino lehen transferitu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">35</context>
@@ -1120,7 +1118,7 @@
       </trans-unit>
       <trans-unit id="8530934870279569179" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file was too large (max. size: <x id="PH_1" equiv-text="maxFileSize"/>)</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file was too large (max. size: <x id="PH_1" equiv-text="maxFileSize"/>)</target>
+        <target state="translated">Zure <x id="PH" equiv-text="name"/> fitxategia handiegia da (max. size: <x id="PH_1" equiv-text="maxFileSize"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="7908493851025027368">
@@ -1147,7 +1145,7 @@
       </trans-unit>
       <trans-unit id="9133713232258232158" datatype="html">
         <source>Unfederate</source>
-        <target state="new">Unfederate</target>
+        <target state="translated">Ez federatua</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">31</context>
