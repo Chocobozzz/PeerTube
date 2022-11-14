@@ -2,6 +2,7 @@ import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
+import { escapeHTML } from '@shared/core-utils/renderer'
 import { Job, JobState, JobType } from '@shared/models'
 import { JobStateClient } from '../../../../types/job-state-client.type'
 import { JobTypeClient } from '../../../../types/job-type-client.type'
@@ -142,7 +143,10 @@ export class JobsComponent extends RestTable implements OnInit {
 
   private loadJobStateAndType () {
     const state = peertubeLocalStorage.getItem(JobsComponent.LOCAL_STORAGE_STATE)
-    if (state) this.jobState = state as JobState
+
+    // FIXME: We use <ng-option> that doesn't escape HTML
+    // https://github.com/ng-select/ng-select/issues/1363
+    if (state) this.jobState = escapeHTML(state) as JobState
 
     const type = peertubeLocalStorage.getItem(JobsComponent.LOCAL_STORAGE_TYPE)
     if (type) this.jobType = type as JobType
