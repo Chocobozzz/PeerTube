@@ -58,7 +58,7 @@ export class CustomMarkupService {
   }
 
   async buildElement (text: string) {
-    const html = await this.markdown.customPageMarkdownToHTML(text, this.getSupportedTags())
+    const html = await this.markdown.customPageMarkdownToHTML({ markdown: text, additionalAllowedTags: this.getSupportedTags() })
 
     const rootElement = document.createElement('div')
     rootElement.innerHTML = html

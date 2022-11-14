@@ -115,7 +115,7 @@ export class VideoCommentListComponent extends RestTable implements OnInit {
   }
 
   toHtml (text: string) {
-    return this.markdownRenderer.textMarkdownToHTML(text, true, true)
+    return this.markdownRenderer.textMarkdownToHTML({ markdown: text, withHtml: true, withEmoji: true })
   }
 
   isInSelectionMode () {

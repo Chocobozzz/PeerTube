@@ -62,23 +62,40 @@ export class MarkdownService {
 
   constructor (private htmlRenderer: HtmlRendererService) {}
 
-  textMarkdownToHTML (markdown: string, withHtml = false, withEmoji = false) {
+  textMarkdownToHTML (options: {
+    markdown: string
+    withHtml?: boolean
+    withEmoji?: boolean
+  }) {
+    const { markdown, withHtml = false, withEmoji = false } = options
+
     if (withHtml) return this.render({ name: 'textWithHTMLMarkdownIt', markdown, withEmoji })
 
     return this.render({ name: 'textMarkdownIt', markdown, withEmoji })
   }
 
-  enhancedMarkdownToHTML (markdown: string, withHtml = false, withEmoji = false) {
+  enhancedMarkdownToHTML (options: {
+    markdown: string
+    withHtml?: boolean
+    withEmoji?: boolean
+  }) {
+    const { markdown, withHtml = false, withEmoji = false } = options
+
     if (withHtml) return this.render({ name: 'enhancedWithHTMLMarkdownIt', markdown, withEmoji })
 
     return this.render({ name: 'enhancedMarkdownIt', markdown, withEmoji })
   }
 
-  unsafeMarkdownToHTML (markdown: string, _trustedInput: true) {
-    return this.render({ name: 'unsafeMarkdownIt', markdown, withEmoji: true })
+  markdownToUnsafeHTML (options: { markdown: string }) {
+    return this.render({ name: 'unsafeMarkdownIt', markdown: options.markdown, withEmoji: true })
   }
 
-  customPageMarkdownToHTML (markdown: string, additionalAllowedTags: string[]) {
+  customPageMarkdownToHTML (options: {
+    markdown: string
+    additionalAllowedTags: string[]
+  }) {
+    const { markdown, additionalAllowedTags } = options
+
     return this.render({ name: 'customPageMarkdownIt', markdown, withEmoji: true, additionalAllowedTags })
   }
 

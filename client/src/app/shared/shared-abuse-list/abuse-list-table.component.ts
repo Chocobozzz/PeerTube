@@ -214,8 +214,8 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
               abuse.truncatedCommentHtml = abuse.commentHtml = $localize`Deleted comment`
             } else {
               const truncated = truncate(abuse.comment.text, { length: 100 })
-              abuse.truncatedCommentHtml = await this.markdownRenderer.textMarkdownToHTML(truncated, true)
-              abuse.commentHtml = await this.markdownRenderer.textMarkdownToHTML(abuse.comment.text, true)
+              abuse.truncatedCommentHtml = await this.markdownRenderer.textMarkdownToHTML({ markdown: truncated, withHtml: true })
+              abuse.commentHtml = await this.markdownRenderer.textMarkdownToHTML({ markdown: abuse.comment.text, withHtml: true })
             }
           }
 
@@ -451,6 +451,6 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
   }
 
   private toHtml (text: string) {
-    return this.markdownRenderer.textMarkdownToHTML(text)
+    return this.markdownRenderer.textMarkdownToHTML({ markdown: text })
   }
 }
