@@ -15,6 +15,7 @@ import {
 import { VideoResolution, VideoTranscodingFPS } from '@shared/models'
 import { CONFIG } from '../../initializers/config'
 import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
+import { toEven } from '../core-utils'
 import { logger } from '../logger'
 
 /**
@@ -96,8 +97,9 @@ function computeResolutionsToTranscode (options: {
   type: 'vod' | 'live'
   includeInput: boolean
   strictLower: boolean
+  hasAudio: boolean
 }) {
-  const { input, type, includeInput, strictLower } = options
+  const { input, type, includeInput, strictLower, hasAudio } = options
 
   const configResolutions = type === 'vod'
     ? CONFIG.TRANSCODING.RESOLUTIONS
@@ -125,12 +127,15 @@ function computeResolutionsToTranscode (options: {
     if (input < resolution) continue
     // We only want lower resolutions than input file
     if (strictLower && input === resolution) continue
+    // Audio resolutio but no audio in the video
+    if (resolution === VideoResolution.H_NOVIDEO && !hasAudio) continue
 
     resolutionsEnabled.add(resolution)
   }
 
   if (includeInput) {
-    resolutionsEnabled.add(input)
+    // Always use an even resolution to avoid issues with ffmpeg
+    resolutionsEnabled.add(toEven(input))
   }
 
   return Array.from(resolutionsEnabled)

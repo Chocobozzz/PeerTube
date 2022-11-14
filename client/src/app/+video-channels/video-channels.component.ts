@@ -56,8 +56,17 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
                           ]))
                         )
                         .subscribe(async videoChannel => {
-                          this.channelDescriptionHTML = await this.markdown.textMarkdownToHTML(videoChannel.description)
-                          this.ownerDescriptionHTML = await this.markdown.textMarkdownToHTML(videoChannel.ownerAccount.description)
+                          this.channelDescriptionHTML = await this.markdown.textMarkdownToHTML({
+                            markdown: videoChannel.description,
+                            withEmoji: true,
+                            withHtml: true
+                          })
+
+                          this.ownerDescriptionHTML = await this.markdown.textMarkdownToHTML({
+                            markdown: videoChannel.ownerAccount.description,
+                            withEmoji: true,
+                            withHtml: true
+                          })
 
                           // After the markdown renderer to avoid layout changes
                           this.videoChannel = videoChannel

@@ -144,9 +144,9 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
 
       html = result
     } else if (this.markdownType === 'text') {
-      html = await this.markdownService.textMarkdownToHTML(text)
+      html = await this.markdownService.textMarkdownToHTML({ markdown: text })
     } else {
-      html = await this.markdownService.enhancedMarkdownToHTML(text)
+      html = await this.markdownService.enhancedMarkdownToHTML({ markdown: text })
     }
 
     if (this.markdownVideo) {

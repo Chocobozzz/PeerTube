@@ -34,7 +34,7 @@ import { isVideoInPrivateDirectory } from '@server/lib/video-privacy'
 import { getServerActor } from '@server/models/application/application'
 import { ModelCache } from '@server/models/model-cache'
 import { buildVideoEmbedPath, buildVideoWatchPath, pick } from '@shared/core-utils'
-import { ffprobePromise, getAudioStream, uuidToShort } from '@shared/extra-utils'
+import { ffprobePromise, getAudioStream, hasAudioStream, uuidToShort } from '@shared/extra-utils'
 import {
   ResultList,
   ThumbnailType,
@@ -1458,6 +1458,12 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
     const query = 'SELECT 1 FROM "videoShare" ' +
       'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
       'WHERE "actorFollow"."actorId" = $followerActorId AND "actorFollow"."state" = \'accepted\' AND "videoShare"."videoId" = $videoId ' +
+      'UNION ' +
+      'SELECT 1 FROM "video" ' +
+      'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+      'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+      'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "account"."actorId" ' +
+      'WHERE "actorFollow"."actorId" = $followerActorId AND "actorFollow"."state" = \'accepted\' AND "video"."id" = $videoId ' +
       'LIMIT 1'
 
     const options = {
@@ -1745,9 +1751,11 @@ export class VideoModel extends Model<Partial<AttributesOnly<VideoModel>>> {
       const probe = await ffprobePromise(originalFilePath)
 
       const { audioStream } = await getAudioStream(originalFilePath, probe)
+      const hasAudio = await hasAudioStream(originalFilePath, probe)
 
       return {
         audioStream,
+        hasAudio,
 
         ...await getVideoStreamDimensionsInfo(originalFilePath, probe)
       }

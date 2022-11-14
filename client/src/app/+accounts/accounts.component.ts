@@ -142,7 +142,11 @@ export class AccountsComponent implements OnInit, OnDestroy {
   }
 
   private async onAccount (account: Account) {
-    this.accountDescriptionHTML = await this.markdown.textMarkdownToHTML(account.description)
+    this.accountDescriptionHTML = await this.markdown.textMarkdownToHTML({
+      markdown: account.description,
+      withEmoji: true,
+      withHtml: true
+    })
 
     // After the markdown renderer to avoid layout changes
     this.account = account

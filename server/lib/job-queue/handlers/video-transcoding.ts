@@ -13,7 +13,6 @@ import {
   MergeAudioTranscodingPayload,
   NewWebTorrentResolutionTranscodingPayload,
   OptimizeTranscodingPayload,
-  VideoResolution,
   VideoTranscodingPayload
 } from '@shared/models'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
@@ -281,7 +280,7 @@ async function createLowerResolutionsJobs (options: {
 
   // Create transcoding jobs if there are enabled resolutions
   const resolutionsEnabled = await Hooks.wrapObject(
-    computeResolutionsToTranscode({ input: videoFileResolution, type: 'vod', includeInput: false, strictLower: true }),
+    computeResolutionsToTranscode({ input: videoFileResolution, type: 'vod', includeInput: false, strictLower: true, hasAudio }),
     'filter:transcoding.auto.resolutions-to-transcode.result',
     options
   )
@@ -289,8 +288,6 @@ async function createLowerResolutionsJobs (options: {
   const resolutionCreated: string[] = []
 
   for (const resolution of resolutionsEnabled) {
-    if (resolution === VideoResolution.H_NOVIDEO && hasAudio === false) continue
-
     let dataInput: VideoTranscodingPayload
 
     if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED && type === 'webtorrent') {

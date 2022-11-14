@@ -12,8 +12,8 @@ import { ServerConfigManager } from './server-config-manager'
 export async function synchronizeChannel (options: {
   channel: MChannelAccountDefault
   externalChannelUrl: string
+  videosCountLimit: number
   channelSync?: MChannelSync
-  videosCountLimit?: number
   onlyAfter?: Date
 }) {
   const { channel, externalChannelUrl, videosCountLimit, onlyAfter, channelSync } = options

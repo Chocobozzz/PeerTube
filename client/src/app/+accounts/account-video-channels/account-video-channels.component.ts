@@ -105,7 +105,11 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(async ({ videoChannel, videos, total }) => {
-        this.channelsDescriptionHTML[videoChannel.id] = await this.markdown.textMarkdownToHTML(videoChannel.description)
+        this.channelsDescriptionHTML[videoChannel.id] = await this.markdown.textMarkdownToHTML({
+          markdown: videoChannel.description,
+          withEmoji: true,
+          withHtml: true
+        })
 
         this.videoChannels.push(videoChannel)
 

@@ -220,7 +220,7 @@ describe('Test channel synchronizations', function () {
         expect(total).to.equal(0)
       })
 
-      // FIXME: youtube-dl doesn't work when speicifying a port after the hostname
+      // FIXME: youtube-dl/yt-dlp doesn't work when speicifying a port after the hostname
       // it('Should import a remote PeerTube channel', async function () {
       //   this.timeout(240_000)
 

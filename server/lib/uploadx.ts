@@ -1,7 +1,10 @@
 import express from 'express'
 import { buildLogger } from '@server/helpers/logger'
 import { getResumableUploadPath } from '@server/helpers/upload'
-import { Uploadx } from '@uploadx/core'
+import { CONFIG } from '@server/initializers/config'
+import { LogLevel, Uploadx } from '@uploadx/core'
+
+const logger = buildLogger('uploadx')
 
 const uploadx = new Uploadx({
   directory: getResumableUploadPath(),
@@ -11,7 +14,13 @@ const uploadx = new Uploadx({
   // Could be big with thumbnails/previews
   maxMetadataSize: '10MB',
 
-  logger: buildLogger('uploadx'),
+  logger: {
+    logLevel: CONFIG.LOG.LEVEL as LogLevel,
+    debug: logger.debug.bind(logger),
+    info: logger.info.bind(logger),
+    warn: logger.warn.bind(logger),
+    error: logger.error.bind(logger)
+  },
 
   userIdentifier: (_, res: express.Response) => {
     if (!res.locals.oauth) return undefined

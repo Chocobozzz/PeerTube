@@ -588,6 +588,9 @@ import:
     # Number of latest published videos to check and to potentially import when syncing a channel
     videos_limit_per_synchronization: 10
 
+    # Max number of videos to import when the user asks for full sync
+    full_sync_videos_limit: 1000
+
 auto_blacklist:
   # New videos automatically blacklisted so moderators can review before publishing
   videos:

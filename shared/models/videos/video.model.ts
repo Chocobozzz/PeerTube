@@ -20,7 +20,11 @@ export interface Video {
   licence: VideoConstant<number>
   language: VideoConstant<string>
   privacy: VideoConstant<VideoPrivacy>
+
+  // Deprecated in 5.0 in favour of truncatedDescription
   description: string
+  truncatedDescription: string
+
   duration: number
   isLocal: boolean
   name: string
@@ -70,7 +74,9 @@ export interface Video {
 }
 
 export interface VideoDetails extends Video {
+  // Deprecated in 5.0
   descriptionPath: string
+
   support: string
   channel: VideoChannel
   account: Account

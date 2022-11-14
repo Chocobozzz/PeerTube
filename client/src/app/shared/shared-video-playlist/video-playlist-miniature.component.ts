@@ -32,7 +32,7 @@ export class VideoPlaylistMiniatureComponent implements OnInit {
   async ngOnInit () {
     this.buildPlaylistUrl()
     if (this.displayDescription) {
-      this.playlistDescription = await this.markdownService.textMarkdownToHTML(this.playlist.description)
+      this.playlistDescription = await this.markdownService.textMarkdownToHTML({ markdown: this.playlist.description })
     }
   }
 

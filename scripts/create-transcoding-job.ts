@@ -49,11 +49,14 @@ async function run () {
   const dataInput: VideoTranscodingPayload[] = []
   const maxResolution = video.getMaxQualityFile().resolution
 
+  // FIXME: check the file has audio
+  const hasAudio = true
+
   // Generate HLS files
   if (options.generateHls || CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
     const resolutionsEnabled = options.resolution
       ? [ parseInt(options.resolution) ]
-      : computeResolutionsToTranscode({ input: maxResolution, type: 'vod', includeInput: true, strictLower: false })
+      : computeResolutionsToTranscode({ input: maxResolution, type: 'vod', includeInput: true, strictLower: false, hasAudio })
 
     for (const resolution of resolutionsEnabled) {
       dataInput.push({
@@ -61,7 +64,7 @@ async function run () {
         videoUUID: video.uuid,
         resolution,
 
-        hasAudio: true,
+        hasAudio,
 
         copyCodecs: false,
         isNewVideo: false,
@@ -77,8 +80,7 @@ async function run () {
 
         createHLSIfNeeded: true,
 
-        // FIXME: check the file has audio
-        hasAudio: true,
+        hasAudio,
 
         isNewVideo: false,
         resolution: parseInt(options.resolution)

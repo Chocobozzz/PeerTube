@@ -13,6 +13,12 @@ export class PeerTubeEmbedApi {
   private isReady = false
   private resolutions: PeerTubeResolution[] = []
 
+  private oldVideoElement: HTMLVideoElement
+  private videoElPlayListener: () => void
+  private videoElPauseListener: () => void
+  private videoElEndedListener: () => void
+  private videoElInterval: any
+
   constructor (private readonly embed: PeerTubeEmbed) {
 
   }
@@ -24,6 +30,11 @@ export class PeerTubeEmbedApi {
     // We're ready!
 
     this.notifyReady()
+  }
+
+  reInit () {
+    this.disposeStateTracking()
+    this.setupStateTracking()
   }
 
   private get element () {
@@ -101,7 +112,7 @@ export class PeerTubeEmbedApi {
   private setupStateTracking () {
     let currentState: 'playing' | 'paused' | 'unstarted' | 'ended' = 'unstarted'
 
-    setInterval(() => {
+    this.videoElInterval = setInterval(() => {
       const position = this.element.currentTime
       const volume = this.element.volume
 
@@ -116,20 +127,29 @@ export class PeerTubeEmbedApi {
       })
     }, 500)
 
-    this.element.addEventListener('play', ev => {
+    // ---------------------------------------------------------------------------
+
+    this.videoElPlayListener = () => {
       currentState = 'playing'
       this.channel.notify({ method: 'playbackStatusChange', params: 'playing' })
-    })
+    }
+    this.element.addEventListener('play', this.videoElPlayListener)
 
-    this.element.addEventListener('pause', ev => {
+    this.videoElPauseListener = () => {
       currentState = 'paused'
       this.channel.notify({ method: 'playbackStatusChange', params: 'paused' })
-    })
+    }
+    this.element.addEventListener('pause', this.videoElPauseListener)
 
-    this.element.addEventListener('ended', ev => {
+    this.videoElEndedListener = () => {
       currentState = 'ended'
       this.channel.notify({ method: 'playbackStatusChange', params: 'ended' })
-    })
+    }
+    this.element.addEventListener('ended', this.videoElEndedListener)
+
+    this.oldVideoElement = this.element
+
+    // ---------------------------------------------------------------------------
 
     // PeerTube specific capabilities
     this.embed.player.peertubeResolutions().on('resolutionsAdded', () => this.loadResolutions())
@@ -143,6 +163,18 @@ export class PeerTubeEmbedApi {
         params: this.embed.player.volume()
       })
     })
+  }
+
+  private disposeStateTracking () {
+    if (!this.oldVideoElement) return
+
+    this.oldVideoElement.removeEventListener('play', this.videoElPlayListener)
+    this.oldVideoElement.removeEventListener('pause', this.videoElPauseListener)
+    this.oldVideoElement.removeEventListener('ended', this.videoElEndedListener)
+
+    clearInterval(this.videoElInterval)
+
+    this.oldVideoElement = undefined
   }
 
   private loadResolutions () {

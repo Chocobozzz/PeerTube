@@ -37,6 +37,7 @@ export async function processVideoChannelImport (job: Job) {
   await synchronizeChannel({
     channel: videoChannel,
     externalChannelUrl: payload.externalChannelUrl,
-    channelSync
+    channelSync,
+    videosCountLimit: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.FULL_SYNC_VIDEOS_LIMIT
   })
 }

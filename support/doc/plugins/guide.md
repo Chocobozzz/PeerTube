@@ -320,6 +320,8 @@ The `ping` route can be accessed using:
 
 #### Add custom WebSocket handlers
 
+**PeerTube >= 5.0**
+
 You can create custom WebSocket servers (like [ws](https://github.com/websockets/ws) for example) using `registerWebSocketRoute`:
 
 ```js

@@ -2,21 +2,21 @@
   <h1 class="visually-hidden" i18n>Follows</h1>
 
   <div class="col-xl-6 col-md-12">
-    <h2 i18n class="subtitle">Follower instances ({{ followersPagination.totalItems }})</h2>
+    <h2 i18n class="subtitle">Followers of {{ instanceName }} ({{ followersPagination.totalItems }})</h2>
 
-    <div i18n class="no-results" *ngIf="followersPagination.totalItems === 0">This instance does not have instances followers.</div>
+    <div i18n class="no-results" *ngIf="followersPagination.totalItems === 0">{{ instanceName }} does not have followers.</div>
 
     <a *ngFor="let follower of followers" [href]="buildLink(follower)" target="_blank" rel="noopener noreferrer">
-      {{ follower}}
+      {{ follower }}
     </a>
 
     <button i18n class="show-more" *ngIf="!loadedAllFollowers && canLoadMoreFollowers()" (click)="loadAllFollowers()">Show full list</button>
   </div>
 
   <div class="col-xl-6 col-md-12">
-    <h2 i18n class="subtitle">Following instances ({{ followingsPagination.totalItems }})</h2>
+    <h2 i18n class="subtitle">Subscriptions of {{ instanceName }} ({{ followingsPagination.totalItems }})</h2>
 
-    <div i18n class="no-results" *ngIf="followingsPagination.totalItems === 0">This instance is not following any other.</div>
+    <div i18n class="no-results" *ngIf="followingsPagination.totalItems === 0">{{ instanceName }} does not have subscriptions.</div>
 
     <a *ngFor="let following of followings" [href]="buildLink(following)" target="_blank" rel="noopener noreferrer">
       {{ following }}

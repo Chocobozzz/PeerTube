@@ -21,7 +21,7 @@ describe('Test plugin action hooks', function () {
   }
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)

@@ -127,7 +127,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
   }
 
   toHtml (text: string) {
-    return this.markdownRenderer.textMarkdownToHTML(text)
+    return this.markdownRenderer.textMarkdownToHTML({ markdown: text })
   }
 
   async unblockVideo (entry: VideoBlacklist) {

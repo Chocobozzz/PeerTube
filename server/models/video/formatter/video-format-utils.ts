@@ -103,6 +103,7 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options: VideoForm
     },
     nsfw: video.nsfw,
 
+    truncatedDescription: video.getTruncatedDescription(),
     description: options && options.completeDescription === true
       ? video.description
       : video.getTruncatedDescription(),
@@ -181,6 +182,7 @@ function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): Vid
   const span = tracer.startSpan('peertube.VideoModel.toFormattedDetailsJSON')
 
   const videoJSON = video.toFormattedJSON({
+    completeDescription: true,
     additionalAttributes: {
       scheduledUpdate: true,
       blacklistInfo: true,

@@ -51,7 +51,7 @@ export class InstanceService {
     }
 
     for (const key of Object.keys(html)) {
-      html[key] = await this.markdownService.textMarkdownToHTML(about.instance[key])
+      html[key] = await this.markdownService.textMarkdownToHTML({ markdown: about.instance[key] })
     }
 
     return html
