@@ -24,7 +24,13 @@ describe('Test CLI wrapper', function () {
   before(async function () {
     this.timeout(30000)
 
-    server = await createSingleServer(1)
+    server = await createSingleServer(1, {
+      rates_limit: {
+        login: {
+          max: 30
+        }
+      }
+    })
     await setAccessTokensToServers([ server ])
 
     await server.users.create({ username: 'user_1', password: 'super_password' })
@@ -239,6 +245,19 @@ describe('Test CLI wrapper', function () {
       const res = await cliCommand.execWithEnv(`${cmd} plugins uninstall --npm-name peertube-plugin-hello-world`)
 
       expect(res).to.not.contain('peertube-plugin-hello-world')
+    })
+
+    it('Should install a plugin in requested beta version', async function () {
+      this.timeout(60000)
+
+      await cliCommand.execWithEnv(`${cmd} plugins install --npm-name peertube-plugin-hello-world --plugin-version 0.0.21-beta.1`)
+
+      const res = await cliCommand.execWithEnv(`${cmd} plugins list`)
+
+      expect(res).to.contain('peertube-plugin-hello-world')
+      expect(res).to.contain('0.0.21-beta.1')
+
+      await cliCommand.execWithEnv(`${cmd} plugins uninstall --npm-name peertube-plugin-hello-world`)
     })
   })
 

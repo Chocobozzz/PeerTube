@@ -2,7 +2,7 @@ import express from 'express'
 import { param } from 'express-validator'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { isSafePath } from '../../helpers/custom-validators/misc'
-import { isPluginNameValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
+import { isPluginNameValid, isPluginStableOrUnstableVersionValid } from '../../helpers/custom-validators/plugins'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
 import { areValidationErrors } from './shared'
 
@@ -10,7 +10,7 @@ const serveThemeCSSValidator = [
   param('themeName')
     .custom(isPluginNameValid),
   param('themeVersion')
-    .custom(isPluginVersionValid),
+    .custom(isPluginStableOrUnstableVersionValid),
   param('staticEndpoint')
     .custom(isSafePath),
 

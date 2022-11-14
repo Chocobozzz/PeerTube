@@ -69,7 +69,7 @@ async function pluginsListCLI (command: Command, options: OptionValues) {
 
   const table = new CliTable3({
     head: [ 'name', 'version', 'homepage' ],
-    colWidths: [ 50, 10, 50 ]
+    colWidths: [ 50, 20, 50 ]
   }) as any
 
   for (const plugin of data) {

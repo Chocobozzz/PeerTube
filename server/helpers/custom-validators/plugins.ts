@@ -1,9 +1,9 @@
-import { exists, isArray, isSafePath } from './misc'
 import validator from 'validator'
+import { PluginPackageJSON } from '../../../shared/models/plugins/plugin-package-json.model'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
-import { PluginPackageJSON } from '../../../shared/models/plugins/plugin-package-json.model'
 import { isUrlValid } from './activitypub/misc'
+import { exists, isArray, isSafePath } from './misc'
 
 const PLUGINS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.PLUGINS
 
@@ -29,12 +29,25 @@ function isPluginDescriptionValid (value: string) {
   return exists(value) && validator.isLength(value, PLUGINS_CONSTRAINTS_FIELDS.DESCRIPTION)
 }
 
-function isPluginVersionValid (value: string) {
+function isPluginStableVersionValid (value: string) {
   if (!exists(value)) return false
 
   const parts = (value + '').split('.')
 
   return parts.length === 3 && parts.every(p => validator.isInt(p))
+}
+
+function isPluginStableOrUnstableVersionValid (value: string) {
+  if (!exists(value)) return false
+
+  // suffix is beta.x or alpha.x
+  const [ stable, suffix ] = value.split('-')
+  if (!isPluginStableVersionValid(stable)) return false
+
+  const suffixRegex = /^(rc|alpha|beta)\.\d+$/
+  if (suffix && !suffixRegex.test(suffix)) return false
+
+  return true
 }
 
 function isPluginEngineValid (engine: any) {
@@ -156,7 +169,8 @@ export {
   isPackageJSONValid,
   isThemeNameValid,
   isPluginHomepage,
-  isPluginVersionValid,
+  isPluginStableVersionValid,
+  isPluginStableOrUnstableVersionValid,
   isPluginNameValid,
   isPluginDescriptionValid,
   isLibraryCodeValid,

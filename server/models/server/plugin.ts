@@ -7,8 +7,9 @@ import {
   isPluginDescriptionValid,
   isPluginHomepage,
   isPluginNameValid,
-  isPluginTypeValid,
-  isPluginVersionValid
+  isPluginStableOrUnstableVersionValid,
+  isPluginStableVersionValid,
+  isPluginTypeValid
 } from '../../helpers/custom-validators/plugins'
 import { getSort, throwIfNotValid } from '../utils'
 
@@ -40,12 +41,12 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
   type: number
 
   @AllowNull(false)
-  @Is('PluginVersion', value => throwIfNotValid(value, isPluginVersionValid, 'version'))
+  @Is('PluginVersion', value => throwIfNotValid(value, isPluginStableOrUnstableVersionValid, 'version'))
   @Column
   version: string
 
   @AllowNull(true)
-  @Is('PluginLatestVersion', value => throwIfNotValid(value, isPluginVersionValid, 'version'))
+  @Is('PluginLatestVersion', value => throwIfNotValid(value, isPluginStableVersionValid, 'version'))
   @Column
   latestVersion: string
 

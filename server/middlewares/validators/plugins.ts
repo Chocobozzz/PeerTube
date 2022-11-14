@@ -4,7 +4,12 @@ import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { InstallOrUpdatePlugin } from '../../../shared/models/plugins/server/api/install-plugin.model'
 import { exists, isBooleanValid, isSafePath, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
-import { isNpmPluginNameValid, isPluginNameValid, isPluginTypeValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
+import {
+  isNpmPluginNameValid,
+  isPluginNameValid,
+  isPluginStableOrUnstableVersionValid,
+  isPluginTypeValid
+} from '../../helpers/custom-validators/plugins'
 import { CONFIG } from '../../initializers/config'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
 import { PluginModel } from '../../models/server/plugin'
@@ -19,7 +24,7 @@ const getPluginValidator = (pluginType: PluginType, withVersion = true) => {
   if (withVersion) {
     validators.push(
       param('pluginVersion')
-        .custom(isPluginVersionValid)
+        .custom(isPluginStableOrUnstableVersionValid)
     )
   }
 
@@ -113,7 +118,7 @@ const installOrUpdatePluginValidator = [
     .custom(isNpmPluginNameValid),
   body('pluginVersion')
     .optional()
-    .custom(isPluginVersionValid),
+    .custom(isPluginStableOrUnstableVersionValid),
   body('path')
     .optional()
     .custom(isSafePath),
@@ -185,7 +190,7 @@ const listAvailablePluginsValidator = [
     .custom(isPluginTypeValid),
   query('currentPeerTubeEngine')
     .optional()
-    .custom(isPluginVersionValid),
+    .custom(isPluginStableOrUnstableVersionValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
