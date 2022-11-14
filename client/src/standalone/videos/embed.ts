@@ -117,6 +117,11 @@ export class PeerTubeEmbed {
 
   private initializeApi () {
     if (this.playerManagerOptions.hasAPIEnabled()) {
+      if (this.api) {
+        this.api.reInit()
+        return
+      }
+
       this.api = new PeerTubeEmbedApi(this)
       this.api.initialize()
     }
