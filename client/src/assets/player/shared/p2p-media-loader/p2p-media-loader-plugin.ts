@@ -66,6 +66,9 @@ class P2pMediaLoaderPlugin extends Plugin {
         player.ready(() => player.error(error))
         return
       }
+
+      // Workaround to force video.js to not re create a video element
+      (this.player as any).playerElIngest_ = this.player.el().parentNode
     } else {
       // FIXME: typings https://github.com/Microsoft/TypeScript/issues/14080
       (videojs as any).Html5Hlsjs.addHook('beforeinitialize', (videojsPlayer: any, hlsjs: any) => {
