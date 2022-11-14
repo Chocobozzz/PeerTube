@@ -1,7 +1,8 @@
 import { splitIntoArray, toBoolean } from '@app/helpers'
 import { getAllPrivacies } from '@shared/core-utils'
-import { AttributesOnly } from '@shared/typescript-utils'
+import { escapeHTML } from '@shared/core-utils/renderer'
 import { BooleanBothQuery, NSFWPolicyType, VideoInclude, VideoPrivacy, VideoSortField } from '@shared/models'
+import { AttributesOnly } from '@shared/typescript-utils'
 
 type VideoFiltersKeys = {
   [ id in keyof AttributesOnly<VideoFilters> ]: any
@@ -90,19 +91,28 @@ export class VideoFilters {
   }
 
   load (obj: Partial<AttributesOnly<VideoFilters>>) {
-    if (obj.sort !== undefined) this.sort = obj.sort
+    // FIXME: We may use <ng-option> that doesn't escape HTML so prefer to escape things
+    // https://github.com/ng-select/ng-select/issues/1363
 
-    if (obj.nsfw !== undefined) this.nsfw = obj.nsfw
+    const escapeIfNeeded = (value: any) => {
+      if (typeof value === 'string') return escapeHTML(value)
 
-    if (obj.languageOneOf !== undefined) this.languageOneOf = splitIntoArray(obj.languageOneOf)
-    if (obj.categoryOneOf !== undefined) this.categoryOneOf = splitIntoArray(obj.categoryOneOf)
+      return value
+    }
 
-    if (obj.scope !== undefined) this.scope = obj.scope
+    if (obj.sort !== undefined) this.sort = escapeIfNeeded(obj.sort) as VideoSortField
+
+    if (obj.nsfw !== undefined) this.nsfw = escapeIfNeeded(obj.nsfw) as BooleanBothQuery
+
+    if (obj.languageOneOf !== undefined) this.languageOneOf = splitIntoArray(escapeIfNeeded(obj.languageOneOf))
+    if (obj.categoryOneOf !== undefined) this.categoryOneOf = splitIntoArray(escapeIfNeeded(obj.categoryOneOf))
+
+    if (obj.scope !== undefined) this.scope = escapeIfNeeded(obj.scope) as VideoFilterScope
     if (obj.allVideos !== undefined) this.allVideos = toBoolean(obj.allVideos)
 
-    if (obj.live !== undefined) this.live = obj.live
+    if (obj.live !== undefined) this.live = escapeIfNeeded(obj.live) as BooleanBothQuery
 
-    if (obj.search !== undefined) this.search = obj.search
+    if (obj.search !== undefined) this.search = escapeIfNeeded(obj.search)
 
     this.buildActiveFilters()
   }

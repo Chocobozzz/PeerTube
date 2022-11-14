@@ -39,8 +39,10 @@ export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
 
   propagateChange = (_: any) => { /* empty */ }
 
-  writeValue (id: number) {
-    this.selectedId = id
+  writeValue (id: number | string) {
+    this.selectedId = typeof id === 'string'
+      ? parseInt(id, 10)
+      : id
   }
 
   registerOnChange (fn: (_: any) => void) {
