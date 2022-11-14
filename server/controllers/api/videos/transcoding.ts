@@ -49,6 +49,8 @@ async function createTranscoding (req: express.Request, res: express.Response) {
 
   const childrenResolutions = resolutions.filter(r => r !== maxResolution)
 
+  logger.info('Manually creating transcoding jobs for %s.', body.transcodingType, { childrenResolutions, maxResolution })
+
   const children = await Bluebird.mapSeries(childrenResolutions, resolution => {
     if (body.transcodingType === 'hls') {
       return buildHLSJobOption({
