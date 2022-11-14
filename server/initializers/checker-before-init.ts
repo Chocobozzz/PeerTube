@@ -35,6 +35,7 @@ function checkMissedConfig () {
     'import.videos.http.enabled', 'import.videos.torrent.enabled', 'import.videos.concurrency', 'import.videos.timeout',
     'import.video_channel_synchronization.enabled', 'import.video_channel_synchronization.max_per_user',
     'import.video_channel_synchronization.check_interval', 'import.video_channel_synchronization.videos_limit_per_synchronization',
+    'import.video_channel_synchronization.full_sync_videos_limit',
     'auto_blacklist.videos.of_users.enabled', 'trending.videos.interval_days',
     'client.videos.miniature.display_author_avatar',
     'client.videos.miniature.prefer_author_display_name', 'client.menu.login.redirect_on_single_external_auth',
