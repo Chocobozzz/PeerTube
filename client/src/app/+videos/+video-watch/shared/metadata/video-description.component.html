@@ -1,7 +1,7 @@
 <div class="video-info-description">
   <div
     class="video-info-description-html"
-    [innerHTML]="videoHTMLDescription"
+    [innerHTML]="getHTMLDescription()"
     (timestampClicked)="onTimestampClicked($event)"
     myTimestampRouteTransformer
   ></div>

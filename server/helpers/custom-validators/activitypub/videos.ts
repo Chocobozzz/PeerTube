@@ -7,11 +7,11 @@ import { peertubeTruncate } from '../../core-utils'
 import { isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc'
 import { isLiveLatencyModeValid } from '../video-lives'
 import {
+  isVideoDescriptionValid,
   isVideoDurationValid,
   isVideoNameValid,
   isVideoStateValid,
   isVideoTagValid,
-  isVideoTruncatedDescriptionValid,
   isVideoViewsValid
 } from '../videos'
 import { isActivityPubUrlValid, isActivityPubVideoDurationValid, isBaseActivityValid, setValidAttributedTo } from './misc'
@@ -32,7 +32,7 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
     logger.debug('Video has invalid urls', { video })
     return false
   }
-  if (!setRemoteVideoTruncatedContent(video)) {
+  if (!setRemoteVideoContent(video)) {
     logger.debug('Video has invalid content', { video })
     return false
   }
@@ -168,7 +168,7 @@ function isRemoteStringIdentifierValid (data: any) {
 }
 
 function isRemoteVideoContentValid (mediaType: string, content: string) {
-  return mediaType === 'text/markdown' && isVideoTruncatedDescriptionValid(content)
+  return mediaType === 'text/markdown' && isVideoDescriptionValid(content)
 }
 
 function setValidRemoteIcon (video: any) {
@@ -194,9 +194,9 @@ function setValidRemoteVideoUrls (video: any) {
   return true
 }
 
-function setRemoteVideoTruncatedContent (video: any) {
+function setRemoteVideoContent (video: any) {
   if (video.content) {
-    video.content = peertubeTruncate(video.content, { length: CONSTRAINTS_FIELDS.VIDEOS.TRUNCATED_DESCRIPTION.max })
+    video.content = peertubeTruncate(video.content, { length: CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max })
   }
 
   return true

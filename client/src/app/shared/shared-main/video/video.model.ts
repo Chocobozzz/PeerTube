@@ -34,6 +34,7 @@ export class Video implements VideoServerModel {
   language: VideoConstant<string>
   privacy: VideoConstant<VideoPrivacy>
 
+  truncatedDescription: string
   description: string
 
   duration: number
@@ -134,6 +135,8 @@ export class Video implements VideoServerModel {
     this.privacy = hash.privacy
     this.waitTranscoding = hash.waitTranscoding
     this.state = hash.state
+
+    this.truncatedDescription = hash.truncatedDescription
     this.description = hash.description
 
     this.isLive = hash.isLive

@@ -45,10 +45,6 @@ function isVideoDurationValid (value: string) {
   return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DURATION)
 }
 
-function isVideoTruncatedDescriptionValid (value: string) {
-  return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.TRUNCATED_DESCRIPTION)
-}
-
 function isVideoDescriptionValid (value: string) {
   return value === null || (exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION))
 }
@@ -151,7 +147,6 @@ export {
   isVideoCategoryValid,
   isVideoLicenceValid,
   isVideoLanguageValid,
-  isVideoTruncatedDescriptionValid,
   isVideoDescriptionValid,
   isVideoFileInfoHashValid,
   isVideoNameValid,
