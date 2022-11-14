@@ -63,6 +63,7 @@ import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoStudioEdition } from './handlers/video-studio-edition'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViewsStats } from './handlers/video-views-stats'
+import { Redis } from '../redis'
 
 export type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -183,7 +184,7 @@ class JobQueue {
     }
 
     this.flowProducer = new FlowProducer({
-      connection: this.getRedisConnection(),
+      connection: Redis.getRedisClientOptions('FlowProducer'),
       prefix: this.jobRedisPrefix
     })
     this.flowProducer.on('error', err => { logger.error('Error in flow producer', { err }) })
@@ -196,7 +197,7 @@ class JobQueue {
       autorun: false,
       concurrency: this.getJobConcurrency(handlerName),
       prefix: this.jobRedisPrefix,
-      connection: this.getRedisConnection()
+      connection: Redis.getRedisClientOptions('Worker')
     }
 
     const handler = function (job: Job) {
@@ -236,7 +237,7 @@ class JobQueue {
 
   private buildQueue (handlerName: JobType) {
     const queueOptions: QueueOptions = {
-      connection: this.getRedisConnection(),
+      connection: Redis.getRedisClientOptions('Queue'),
       prefix: this.jobRedisPrefix
     }
 
@@ -249,7 +250,7 @@ class JobQueue {
   private buildQueueScheduler (handlerName: JobType) {
     const queueSchedulerOptions: QueueSchedulerOptions = {
       autorun: false,
-      connection: this.getRedisConnection(),
+      connection: Redis.getRedisClientOptions('QueueScheduler'),
       prefix: this.jobRedisPrefix,
       maxStalledCount: 10
     }
@@ -263,7 +264,7 @@ class JobQueue {
   private buildQueueEvent (handlerName: JobType) {
     const queueEventsOptions: QueueEventsOptions = {
       autorun: false,
-      connection: this.getRedisConnection(),
+      connection: Redis.getRedisClientOptions('QueueEvent'),
       prefix: this.jobRedisPrefix
     }
 
@@ -271,16 +272,6 @@ class JobQueue {
     queueEvents.on('error', err => { logger.error('Error in job queue events %s.', handlerName, { err }) })
 
     this.queueEvents[handlerName] = queueEvents
-  }
-
-  private getRedisConnection () {
-    return {
-      password: CONFIG.REDIS.AUTH,
-      db: CONFIG.REDIS.DB,
-      host: CONFIG.REDIS.HOSTNAME,
-      port: CONFIG.REDIS.PORT,
-      path: CONFIG.REDIS.SOCKET
-    }
   }
 
   // ---------------------------------------------------------------------------

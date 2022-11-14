@@ -49,7 +49,7 @@ export class ApiCache {
         if (!Redis.Instance.isConnected()) return this.makeResponseCacheable(res, next, key, duration)
 
         try {
-          const obj = await redis.hGetAll(key)
+          const obj = await redis.hgetall(key)
           if (obj?.response) {
             return this.sendCachedResponse(req, res, JSON.parse(obj.response), duration)
           }
@@ -100,8 +100,8 @@ export class ApiCache {
 
     if (Redis.Instance.isConnected()) {
       await Promise.all([
-        redis.hSet(key, 'response', JSON.stringify(value)),
-        redis.hSet(key, 'duration', duration + ''),
+        redis.hset(key, 'response', JSON.stringify(value)),
+        redis.hset(key, 'duration', duration + ''),
         redis.expire(key, duration / 1000)
       ])
     }
