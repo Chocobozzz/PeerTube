@@ -32,7 +32,7 @@ export class PlaylistTracker {
 
     const next = this.playlistElements.find(e => e.position === position)
 
-    if (!next || !next.video) {
+    if (!next?.video) {
       return this.getNextPlaylistElement(position + 1)
     }
 
@@ -52,7 +52,7 @@ export class PlaylistTracker {
 
     const prev = this.playlistElements.find(e => e.position === position)
 
-    if (!prev || !prev.video) {
+    if (!prev?.video) {
       return this.getNextPlaylistElement(position - 1)
     }
 
@@ -68,7 +68,7 @@ export class PlaylistTracker {
 
   setPosition (position: number) {
     this.currentPlaylistElement = this.playlistElements.find(e => e.position === position)
-    if (!this.currentPlaylistElement || !this.currentPlaylistElement.video) {
+    if (!this.currentPlaylistElement?.video) {
       logger.error('Current playlist element is not valid.', this.currentPlaylistElement)
       this.currentPlaylistElement = this.getNextPlaylistElement()
     }

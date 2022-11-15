@@ -10,7 +10,7 @@ import { VideoCaption, VideoFile, VideoPrivacy } from '@shared/models'
 import { BytesPipe, NumberFormatterPipe, VideoDetails, VideoFileTokenService, VideoService } from '../shared-main'
 
 type DownloadType = 'video' | 'subtitles'
-type FileMetadata = { [key: string]: { label: string, value: string }}
+type FileMetadata = { [key: string]: { label: string, value: string } }
 
 @Component({
   selector: 'my-video-download',

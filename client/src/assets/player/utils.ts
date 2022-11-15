@@ -32,7 +32,7 @@ function isSafari () {
 
 // https://github.com/danrevah/ngx-pipes/blob/master/src/pipes/math/bytes.ts
 // Don't import all Angular stuff, just copy the code with shame
-const dictionaryBytes: Array<{max: number, type: string}> = [
+const dictionaryBytes: Array<{ max: number, type: string }> = [
   { max: 1024, type: 'B' },
   { max: 1048576, type: 'KB' },
   { max: 1073741824, type: 'MB' },

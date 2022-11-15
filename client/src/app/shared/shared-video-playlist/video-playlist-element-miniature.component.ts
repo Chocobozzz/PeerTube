@@ -74,7 +74,7 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
   }
 
   buildRouterQuery () {
-    if (!this.playlistElement || !this.playlistElement.video) return {}
+    if (!this.playlistElement?.video) return {}
 
     return {
       playlistPosition: this.playlistElement.position,

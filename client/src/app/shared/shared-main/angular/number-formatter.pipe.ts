@@ -13,11 +13,11 @@ export class NumberFormatterPipe implements PipeTransform {
   static getDecimalForNumber (x: number, n = 1) {
     const v = x.toString().split('.')
     const f = v[1] || ''
-    if (f.length > n) return +f.substr(0, n)
+    if (f.length > n) return +f.substring(0, n)
     return +f
   }
 
-  private dictionary: Array<{max: number, type: string}> = [
+  private dictionary: Array<{ max: number, type: string }> = [
     { max: 1000, type: '' },
     { max: 1000000, type: 'K' },
     { max: 1000000000, type: 'M' }

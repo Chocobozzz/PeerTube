@@ -1,7 +1,7 @@
 {
   "extends": "../../../tsconfig.json",
   "include": [
-    "src/standalone/videos/embed.ts",
-    "src/standalone/videos/test-embed.ts"
+    "./embed.ts",
+    "./test-embed.ts"
   ]
 }
