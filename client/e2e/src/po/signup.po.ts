@@ -42,6 +42,9 @@ export class SignupPage {
     }
 
     if (options.email) {
+      // Fix weird bug on firefox that "cannot scroll into view" when using just `setValue`
+      await $('#email').scrollIntoView(false)
+      await $('#email').waitForClickable()
       await $('#email').setValue(options.email)
     }
 
