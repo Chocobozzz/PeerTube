@@ -207,13 +207,15 @@ log:
   # Accept warn/error logs coming from the client
   accept_client_log: true
 
-# Highly experimental support of Open Telemetry
+# Support of Open Telemetry metrics and tracing
+# For more information: https://docs.joinpeertube.org/maintain-observability
 open_telemetry:
   metrics:
     enabled: false
 
     # Create a prometheus exporter server on this port so prometheus server can scrape PeerTube metrics
     prometheus_exporter:
+      hostname: '127.0.0.1'
       port: 9091
 
   tracing:

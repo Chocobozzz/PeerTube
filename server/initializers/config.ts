@@ -190,6 +190,7 @@ const CONFIG = {
       ENABLED: config.get<boolean>('open_telemetry.metrics.enabled'),
 
       PROMETHEUS_EXPORTER: {
+        HOSTNAME: config.get<string>('open_telemetry.metrics.prometheus_exporter.hostname'),
         PORT: config.get<number>('open_telemetry.metrics.prometheus_exporter.port')
       }
     },

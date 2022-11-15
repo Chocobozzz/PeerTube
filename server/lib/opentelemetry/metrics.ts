@@ -1,5 +1,5 @@
 import { Application, Request, Response } from 'express'
-import { Meter, metrics } from '@opentelemetry/api-metrics'
+import { Meter, metrics } from '@opentelemetry/api'
 import { PrometheusExporter } from '@opentelemetry/exporter-prometheus'
 import { MeterProvider } from '@opentelemetry/sdk-metrics'
 import { logger } from '@server/helpers/logger'
@@ -52,7 +52,10 @@ class OpenTelemetryMetrics {
       ]
     })
 
-    provider.addMetricReader(new PrometheusExporter({ port: CONFIG.OPEN_TELEMETRY.METRICS.PROMETHEUS_EXPORTER.PORT }))
+    provider.addMetricReader(new PrometheusExporter({
+      host: CONFIG.OPEN_TELEMETRY.METRICS.PROMETHEUS_EXPORTER.HOSTNAME,
+      port: CONFIG.OPEN_TELEMETRY.METRICS.PROMETHEUS_EXPORTER.PORT
+    }))
 
     metrics.setGlobalMeterProvider(provider)
 
