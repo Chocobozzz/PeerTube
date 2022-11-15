@@ -81,28 +81,6 @@ describe('Test index search', function () {
       const body = await command.searchChannels({ search: 'root' })
       expect(body.total).to.be.greaterThan(2)
     })
-
-    it('Should make an index videos search if local search is disabled', async function () {
-      await server.config.updateCustomSubConfig({
-        newConfig: {
-          search: {
-            searchIndex: {
-              enabled: true,
-              isDefaultSearch: false,
-              disableLocalSearch: true
-            }
-          }
-        }
-      })
-
-      const body = await command.searchVideos({ search: 'local video' })
-      expect(body.total).to.be.greaterThan(2)
-    })
-
-    it('Should make an index channels search if local search is disabled', async function () {
-      const body = await command.searchChannels({ search: 'root' })
-      expect(body.total).to.be.greaterThan(2)
-    })
   })
 
   describe('Videos search', async function () {

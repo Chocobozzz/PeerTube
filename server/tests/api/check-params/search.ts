@@ -252,11 +252,6 @@ describe('Test videos API validator', function () {
         await updateSearchIndex(server, true, true)
 
         {
-          const customQuery = { ...query, searchTarget: 'local' }
-          await makeGetRequest({ url: server.url, path, query: customQuery, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
-        }
-
-        {
           const customQuery = { ...query, searchTarget: 'search-index' }
           await makeGetRequest({ url: server.url, path, query: customQuery, expectedStatus: HttpStatusCode.OK_200 })
         }
