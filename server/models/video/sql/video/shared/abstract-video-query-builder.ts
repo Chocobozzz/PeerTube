@@ -302,7 +302,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
   }
 
   protected buildAttributesObject (prefixKey: string, attributeKeys: string[]) {
-    const result: { [id: string]: string} = {}
+    const result: { [id: string]: string } = {}
 
     const prefixValue = prefixKey.replace(/->/g, '.')
 

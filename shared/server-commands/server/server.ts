@@ -259,7 +259,7 @@ export class PeerTubeServer {
 
       const onPeerTubeExit = () => rej(new Error('Process exited:\n' + aggregatedLogs))
       const onParentExit = () => {
-        if (!this.app || !this.app.pid) return
+        if (!this.app?.pid) return
 
         try {
           process.kill(self.app.pid)

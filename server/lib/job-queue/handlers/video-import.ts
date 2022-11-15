@@ -107,7 +107,7 @@ async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefaul
 
 async function getVideoImportOrDie (payload: VideoImportPayload) {
   const videoImport = await VideoImportModel.loadAndPopulateVideo(payload.videoImportId)
-  if (!videoImport || !videoImport.Video) {
+  if (!videoImport?.Video) {
     throw new Error(`Cannot import video ${payload.videoImportId}: the video import or video linked to this import does not exist anymore.`)
   }
 

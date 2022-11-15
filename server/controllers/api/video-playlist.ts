@@ -4,6 +4,7 @@ import { scheduleRefreshIfNeeded } from '@server/lib/activitypub/playlists'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { getServerActor } from '@server/models/application/application'
 import { MVideoPlaylistFull, MVideoPlaylistThumbnail, MVideoThumbnail } from '@server/types/models'
+import { forceNumber } from '@shared/core-utils'
 import { uuidToShort } from '@shared/extra-utils'
 import { VideoPlaylistCreateResult, VideoPlaylistElementCreateResult } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
@@ -46,7 +47,6 @@ import {
 import { AccountModel } from '../../models/account/account'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
-import { forceNumber } from '@shared/core-utils'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
@@ -425,7 +425,13 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
 
     const endOldPosition = oldPosition + reorderLength - 1
     // Insert our reordered elements in their place (update)
-    await VideoPlaylistElementModel.reassignPositionOf({ videoPlaylistId: videoPlaylist.id, firstPosition: oldPosition, endPosition: endOldPosition, newPosition, transaction: t })
+    await VideoPlaylistElementModel.reassignPositionOf({
+      videoPlaylistId: videoPlaylist.id,
+      firstPosition: oldPosition,
+      endPosition: endOldPosition,
+      newPosition,
+      transaction: t
+    })
 
     // Decrease positions of elements after the old position of our ordered elements (decrease)
     await VideoPlaylistElementModel.increasePositionOf(videoPlaylist.id, oldPosition, -reorderLength, t)

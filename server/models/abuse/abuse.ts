@@ -436,7 +436,7 @@ export class AbuseModel extends Model<Partial<AttributesOnly<AbuseModel>>> {
 
   buildBaseVideoCommentAbuse (this: MAbuseUserFormattable) {
     // Associated video comment could have been destroyed if the video has been deleted
-    if (!this.VideoCommentAbuse || !this.VideoCommentAbuse.VideoComment) return null
+    if (!this.VideoCommentAbuse?.VideoComment) return null
 
     const entity = this.VideoCommentAbuse.VideoComment
 

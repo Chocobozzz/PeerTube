@@ -125,7 +125,7 @@ async function checkJsonLDSignature (req: Request, res: Response) {
   return wrapWithSpanAndContext('peertube.activitypub.JSONLDSignature', async () => {
     const signatureObject: ActivityPubSignature = req.body.signature
 
-    if (!signatureObject || !signatureObject.creator) {
+    if (!signatureObject?.creator) {
       res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
         message: 'Object and creator signature do not match'

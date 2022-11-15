@@ -58,7 +58,7 @@ export type VideoFormattingJSONOptions = {
 }
 
 function guessAdditionalAttributesFromQuery (query: VideosCommonQueryAfterSanitize): VideoFormattingJSONOptions {
-  if (!query || !query.include) return {}
+  if (!query?.include) return {}
 
   return {
     additionalAttributes: {

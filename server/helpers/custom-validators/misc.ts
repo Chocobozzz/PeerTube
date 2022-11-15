@@ -86,7 +86,7 @@ function isFileValid (options: {
 
   // The file exists
   const file = fileArray[0]
-  if (!file || !file.originalname) return false
+  if (!file?.originalname) return false
 
   // Check size
   if ((maxSize !== null) && file.size > maxSize) return false

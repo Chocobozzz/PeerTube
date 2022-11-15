@@ -77,7 +77,7 @@ class YoutubeDLWrapper {
 
     const subtitles = files.reduce((acc, filename) => {
       const matched = filename.match(/\.([a-z]{2})(-[a-z]+)?\.(vtt|ttml)/i)
-      if (!matched || !matched[1]) return acc
+      if (!matched?.[1]) return acc
 
       return [
         ...acc,

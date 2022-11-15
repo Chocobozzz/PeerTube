@@ -38,7 +38,7 @@ function getFFmpegVersion () {
       return execPromise(`${ffmpegPath} -version`)
         .then(stdout => {
           const parsed = stdout.match(/ffmpeg version .?(\d+\.\d+(\.\d+)?)/)
-          if (!parsed || !parsed[1]) return rej(new Error(`Could not find ffmpeg version in ${stdout}`))
+          if (!parsed?.[1]) return rej(new Error(`Could not find ffmpeg version in ${stdout}`))
 
           // Fix ffmpeg version that does not include patch version (4.4 for example)
           let version = parsed[1]

@@ -57,7 +57,7 @@ export {
 
 async function addVideoShare (shareUrl: string, video: MVideoId) {
   const { body } = await doJSONRequest<any>(shareUrl, { activityPub: true })
-  if (!body || !body.actor) throw new Error('Body or body actor is invalid')
+  if (!body?.actor) throw new Error('Body or body actor is invalid')
 
   const actorUrl = getAPId(body.actor)
   if (checkUrlsSameHost(shareUrl, actorUrl) !== true) {

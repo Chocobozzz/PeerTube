@@ -220,7 +220,7 @@ async function createAbuse (options: {
   base: FilteredModelAttributes<AbuseModel>
   reporterAccount: MAccountDefault
   flaggedAccount: MAccountLight
-  associateFun: (abuseInstance: MAbuseFull) => Promise<{ isOwned: boolean} >
+  associateFun: (abuseInstance: MAbuseFull) => Promise<{ isOwned: boolean }>
   skipNotification: boolean
   transaction: Transaction
 }) {

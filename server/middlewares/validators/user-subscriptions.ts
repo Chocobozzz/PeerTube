@@ -1,6 +1,6 @@
-import { arrayify } from '@shared/core-utils'
 import express from 'express'
 import { body, param, query } from 'express-validator'
+import { arrayify } from '@shared/core-utils'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { areValidActorHandles, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
 import { WEBSERVER } from '../../initializers/constants'
@@ -60,7 +60,7 @@ const userSubscriptionGetValidator = [
       state: 'accepted'
     })
 
-    if (!subscription || !subscription.ActorFollowing.VideoChannel) {
+    if (!subscription?.ActorFollowing.VideoChannel) {
       return res.fail({
         status: HttpStatusCode.NOT_FOUND_404,
         message: `Subscription ${req.params.uri} not found.`

@@ -82,7 +82,7 @@ export function isDefaultLocale (locale: string) {
 }
 
 export function peertubeTranslate (str: string, translations?: { [ id: string ]: string }) {
-  if (!translations || !translations[str]) return str
+  if (!translations?.[str]) return str
 
   return translations[str]
 }

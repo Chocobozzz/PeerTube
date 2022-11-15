@@ -130,7 +130,7 @@ describe('Fast restream in live', function () {
   })
 
   it('Should correctly fast reastream in a permanent live with and without save replay', async function () {
-    this.timeout(240000)
+    this.timeout(480000)
 
     // A test can take a long time, so prefer to run them in parallel
     await Promise.all([

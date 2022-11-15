@@ -122,7 +122,7 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
 
     return PluginModel.findOne(query)
       .then(p => {
-        if (!p || !p.settings || p.settings === undefined) {
+        if (!p?.settings || p.settings === undefined) {
           const registered = registeredSettings.find(s => s.name === settingName)
           if (!registered || registered.default === undefined) return undefined
 
@@ -152,7 +152,7 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
         const result: SettingEntries = {}
 
         for (const name of settingNames) {
-          if (!p || !p.settings || p.settings[name] === undefined) {
+          if (!p?.settings || p.settings[name] === undefined) {
             const registered = registeredSettings.find(s => s.name === name)
 
             if (registered?.default !== undefined) {

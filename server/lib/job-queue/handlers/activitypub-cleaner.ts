@@ -88,7 +88,7 @@ async function updateObjectIfNeeded <T> (options: {
     const { body } = await doJSONRequest<any>(url, { activityPub: true })
 
     // If not same id, check same host and update
-    if (!body || !body.id || !bodyValidator(body)) throw new Error(`Body or body id of ${url} is invalid`)
+    if (!body?.id || !bodyValidator(body)) throw new Error(`Body or body id of ${url} is invalid`)
 
     if (body.type === 'Tombstone') {
       return on404OrTombstone()
