@@ -1,6 +1,7 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
 import { Hooks } from '@server/lib/plugins/hooks'
+import { forceNumber } from '@shared/core-utils'
 import { HttpStatusCode, UserRegister, UserRight, UserRole } from '@shared/models'
 import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
@@ -515,7 +516,7 @@ const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: express.Requ
 
       const user = res.locals.oauth.token.User
       const isAdminOrModerator = user.role === UserRole.ADMINISTRATOR || user.role === UserRole.MODERATOR
-      const targetUserId = parseInt(targetUserIdGetter(req) + '')
+      const targetUserId = forceNumber(targetUserIdGetter(req))
 
       // Admin/moderator action on another user, skip the password check
       if (isAdminOrModerator && targetUserId !== user.id) {

@@ -18,7 +18,7 @@ import {
 import { activityPubContextify } from '@server/lib/activitypub/context'
 import { getBiggestActorImage } from '@server/lib/actor-image'
 import { ModelCache } from '@server/models/model-cache'
-import { getLowercaseExtension } from '@shared/core-utils'
+import { forceNumber, getLowercaseExtension } from '@shared/core-utils'
 import { ActivityIconObject, ActivityPubActorType, ActorImageType } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import {
@@ -446,7 +446,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
   }
 
   static rebuildFollowsCount (ofId: number, type: 'followers' | 'following', transaction?: Transaction) {
-    const sanitizedOfId = parseInt(ofId + '', 10)
+    const sanitizedOfId = forceNumber(ofId)
     const where = { id: sanitizedOfId }
 
     let columnToUpdate: string

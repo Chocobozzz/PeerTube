@@ -4,6 +4,7 @@ import { escapeHTML } from '@shared/core-utils/renderer'
 import { EMBED_SIZE, PREVIEWS_SIZE, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants'
 import { asyncMiddleware, oembedValidator } from '../middlewares'
 import { accountNameWithHostGetValidator } from '../middlewares/validators'
+import { forceNumber } from '@shared/core-utils'
 
 const servicesRouter = express.Router()
 
@@ -108,8 +109,8 @@ function buildOEmbed (options: {
   const { req, previewSize, previewPath, title, channel, embedPath } = options
 
   const webserverUrl = WEBSERVER.URL
-  const maxHeight = parseInt(req.query.maxheight, 10)
-  const maxWidth = parseInt(req.query.maxwidth, 10)
+  const maxHeight = forceNumber(req.query.maxheight)
+  const maxWidth = forceNumber(req.query.maxwidth)
 
   const embedUrl = webserverUrl + embedPath
   const embedTitle = escapeHTML(title)

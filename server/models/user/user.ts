@@ -70,6 +70,7 @@ import { VideoImportModel } from '../video/video-import'
 import { VideoLiveModel } from '../video/video-live'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { UserNotificationSettingModel } from './user-notification-setting'
+import { forceNumber } from '@shared/core-utils'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',
@@ -900,27 +901,27 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
       videoQuotaDaily: this.videoQuotaDaily,
 
       videoQuotaUsed: videoQuotaUsed !== undefined
-        ? parseInt(videoQuotaUsed + '', 10) + LiveQuotaStore.Instance.getLiveQuotaOf(this.id)
+        ? forceNumber(videoQuotaUsed) + LiveQuotaStore.Instance.getLiveQuotaOf(this.id)
         : undefined,
 
       videoQuotaUsedDaily: videoQuotaUsedDaily !== undefined
-        ? parseInt(videoQuotaUsedDaily + '', 10) + LiveQuotaStore.Instance.getLiveQuotaOf(this.id)
+        ? forceNumber(videoQuotaUsedDaily) + LiveQuotaStore.Instance.getLiveQuotaOf(this.id)
         : undefined,
 
       videosCount: videosCount !== undefined
-        ? parseInt(videosCount + '', 10)
+        ? forceNumber(videosCount)
         : undefined,
       abusesCount: abusesCount
-        ? parseInt(abusesCount, 10)
+        ? forceNumber(abusesCount)
         : undefined,
       abusesAcceptedCount: abusesAcceptedCount
-        ? parseInt(abusesAcceptedCount, 10)
+        ? forceNumber(abusesAcceptedCount)
         : undefined,
       abusesCreatedCount: abusesCreatedCount !== undefined
-        ? parseInt(abusesCreatedCount + '', 10)
+        ? forceNumber(abusesCreatedCount)
         : undefined,
       videoCommentsCount: videoCommentsCount !== undefined
-        ? parseInt(videoCommentsCount + '', 10)
+        ? forceNumber(videoCommentsCount)
         : undefined,
 
       noInstanceConfigWarningModal: this.noInstanceConfigWarningModal,

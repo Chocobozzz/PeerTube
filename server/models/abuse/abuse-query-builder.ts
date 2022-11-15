@@ -1,5 +1,6 @@
 
 import { exists } from '@server/helpers/custom-validators/misc'
+import { forceNumber } from '@shared/core-utils'
 import { AbuseFilter, AbuseState, AbuseVideoIs } from '@shared/models'
 import { buildBlockedAccountSQL, buildDirectionAndField } from '../utils'
 
@@ -135,12 +136,12 @@ function buildAbuseListQuery (options: BuildAbusesQueryOptions, type: 'count' | 
     }
 
     if (exists(options.count)) {
-      const count = parseInt(options.count + '', 10)
+      const count = forceNumber(options.count)
       suffix += `LIMIT ${count} `
     }
 
     if (exists(options.start)) {
-      const start = parseInt(options.start + '', 10)
+      const start = forceNumber(options.start)
       suffix += `OFFSET ${start} `
     }
   }

@@ -4,6 +4,7 @@ import { buildTaskFileFieldname } from '@server/lib/video-studio'
 import { VideoStudioTask } from '@shared/models'
 import { isArray } from './misc'
 import { isVideoFileMimeTypeValid, isVideoImageValid } from './videos'
+import { forceNumber } from '@shared/core-utils'
 
 function isValidStudioTasksArray (tasks: any) {
   if (!isArray(tasks)) return false
@@ -24,7 +25,7 @@ function isStudioCutTaskValid (task: VideoStudioTask) {
 
   if (!start || !end) return true
 
-  return parseInt(start + '') < parseInt(end + '')
+  return forceNumber(start) < forceNumber(end)
 }
 
 function isStudioTaskAddIntroOutroValid (task: VideoStudioTask, indice: number, files: Express.Multer.File[]) {

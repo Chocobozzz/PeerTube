@@ -2,6 +2,7 @@ import express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
 import { ExpressPromiseHandler } from '@server/types/express-handler'
 import { MUserAccountId } from '@server/types/models'
+import { forceNumber } from '@shared/core-utils'
 import {
   HttpStatusCode,
   UserRight,
@@ -258,7 +259,7 @@ const videoPlaylistElementAPGetValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    const playlistElementId = parseInt(req.params.playlistElementId + '', 10)
+    const playlistElementId = forceNumber(req.params.playlistElementId)
     const playlistId = req.params.playlistId
 
     const videoPlaylistElement = await VideoPlaylistElementModel.loadByPlaylistAndElementIdForAP(playlistId, playlistElementId)

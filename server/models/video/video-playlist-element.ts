@@ -23,6 +23,7 @@ import {
   MVideoPlaylistElementVideoUrlPlaylistPrivacy,
   MVideoPlaylistVideoThumbnail
 } from '@server/types/models/video/video-playlist-element'
+import { forceNumber } from '@shared/core-utils'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { PlaylistElementObject } from '../../../shared/models/activitypub/objects/playlist-element-object'
 import { VideoPrivacy } from '../../../shared/models/videos'
@@ -185,7 +186,9 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
     playlistId: number | string,
     playlistElementId: number
   ): Promise<MVideoPlaylistElementVideoUrlPlaylistPrivacy> {
-    const playlistWhere = validator.isUUID('' + playlistId) ? { uuid: playlistId } : { id: playlistId }
+    const playlistWhere = validator.isUUID('' + playlistId)
+      ? { uuid: playlistId }
+      : { id: playlistId }
 
     const query = {
       include: [
@@ -262,13 +265,15 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
       .then(position => position ? position + 1 : 1)
   }
 
-  static reassignPositionOf (
-    videoPlaylistId: number,
-    firstPosition: number,
-    endPosition: number,
-    newPosition: number,
+  static reassignPositionOf (options: {
+    videoPlaylistId: number
+    firstPosition: number
+    endPosition: number
+    newPosition: number
     transaction?: Transaction
-  ) {
+  }) {
+    const { videoPlaylistId, firstPosition, endPosition, newPosition, transaction } = options
+
     const query = {
       where: {
         videoPlaylistId,
@@ -281,7 +286,7 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
       validate: false // We use a literal to update the position
     }
 
-    const positionQuery = Sequelize.literal(`${newPosition} + "position" - ${firstPosition}`)
+    const positionQuery = Sequelize.literal(`${forceNumber(newPosition)} + "position" - ${forceNumber(firstPosition)}`)
     return VideoPlaylistElementModel.update({ position: positionQuery }, query)
   }
 

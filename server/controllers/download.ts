@@ -5,7 +5,7 @@ import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache
 import { Hooks } from '@server/lib/plugins/hooks'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { MStreamingPlaylist, MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
-import { addQueryParams } from '@shared/core-utils'
+import { addQueryParams, forceNumber } from '@shared/core-utils'
 import { HttpStatusCode, VideoStorage, VideoStreamingPlaylistType } from '@shared/models'
 import { STATIC_DOWNLOAD_PATHS } from '../initializers/constants'
 import { asyncMiddleware, optionalAuthenticate, videosDownloadValidator } from '../middlewares'
@@ -132,7 +132,7 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
 }
 
 function getVideoFile (req: express.Request, files: MVideoFile[]) {
-  const resolution = parseInt(req.params.resolution, 10)
+  const resolution = forceNumber(req.params.resolution)
   return files.find(f => f.resolution === resolution)
 }
 

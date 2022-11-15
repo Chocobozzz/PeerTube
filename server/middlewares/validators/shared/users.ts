@@ -2,10 +2,11 @@ import express from 'express'
 import { ActorModel } from '@server/models/actor/actor'
 import { UserModel } from '@server/models/user/user'
 import { MUserDefault } from '@server/types/models'
+import { forceNumber } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
 
 function checkUserIdExist (idArg: number | string, res: express.Response, withStats = false) {
-  const id = parseInt(idArg + '', 10)
+  const id = forceNumber(idArg)
   return checkUserExist(() => UserModel.loadByIdWithChannels(id, withStats), res)
 }
 

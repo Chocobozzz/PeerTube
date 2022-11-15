@@ -2,7 +2,7 @@ import CliTable3 from 'cli-table3'
 import { Command, program } from 'commander'
 import { URL } from 'url'
 import validator from 'validator'
-import { uniqify } from '@shared/core-utils'
+import { forceNumber, uniqify } from '@shared/core-utils'
 import { HttpStatusCode, VideoRedundanciesTarget } from '@shared/models'
 import { assignToken, buildServer, getServerCredentials } from './cli'
 
@@ -138,7 +138,7 @@ async function removeRedundancyCLI (options: { video: number }, command: Command
     process.exit(-1)
   }
 
-  const videoId = parseInt(options.video + '', 10)
+  const videoId = forceNumber(options.video)
 
   const myVideoRedundancies = await server.redundancy.listVideos({ target: 'my-videos' })
   let videoRedundancy = myVideoRedundancies.data.find(r => videoId === r.id)

@@ -1,5 +1,6 @@
 import { literal, Op, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { forceNumber } from '@shared/core-utils'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
@@ -123,7 +124,7 @@ export class VideoShareModel extends Model<Partial<AttributesOnly<VideoShareMode
   }
 
   static loadActorsWhoSharedVideosOf (actorOwnerId: number, t: Transaction): Promise<MActorDefault[]> {
-    const safeOwnerId = parseInt(actorOwnerId + '', 10)
+    const safeOwnerId = forceNumber(actorOwnerId)
 
     // /!\ On actor model
     const query = {
@@ -148,7 +149,7 @@ export class VideoShareModel extends Model<Partial<AttributesOnly<VideoShareMode
   }
 
   static loadActorsByVideoChannel (videoChannelId: number, t: Transaction): Promise<MActorDefault[]> {
-    const safeChannelId = parseInt(videoChannelId + '', 10)
+    const safeChannelId = forceNumber(videoChannelId)
 
     // /!\ On actor model
     const query = {

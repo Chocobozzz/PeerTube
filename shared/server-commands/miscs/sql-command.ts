@@ -1,4 +1,5 @@
 import { QueryTypes, Sequelize } from 'sequelize'
+import { forceNumber } from '@shared/core-utils'
 import { AbstractCommand } from '../shared'
 
 export class SQLCommand extends AbstractCommand {
@@ -63,7 +64,7 @@ export class SQLCommand extends AbstractCommand {
 
     if (!total) return 0
 
-    return parseInt(total + '', 10)
+    return forceNumber(total)
   }
 
   getActorImage (filename: string) {

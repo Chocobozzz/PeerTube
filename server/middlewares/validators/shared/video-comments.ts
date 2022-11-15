@@ -1,10 +1,11 @@
 import express from 'express'
 import { VideoCommentModel } from '@server/models/video/video-comment'
 import { MVideoId } from '@server/types/models'
+import { forceNumber } from '@shared/core-utils'
 import { HttpStatusCode, ServerErrorCode } from '@shared/models'
 
 async function doesVideoCommentThreadExist (idArg: number | string, video: MVideoId, res: express.Response) {
-  const id = parseInt(idArg + '', 10)
+  const id = forceNumber(idArg)
   const videoComment = await VideoCommentModel.loadById(id)
 
   if (!videoComment) {
@@ -33,7 +34,7 @@ async function doesVideoCommentThreadExist (idArg: number | string, video: MVide
 }
 
 async function doesVideoCommentExist (idArg: number | string, video: MVideoId, res: express.Response) {
-  const id = parseInt(idArg + '', 10)
+  const id = forceNumber(idArg)
   const videoComment = await VideoCommentModel.loadByIdAndPopulateVideoAndAccountAndReply(id)
 
   if (!videoComment) {
@@ -57,7 +58,7 @@ async function doesVideoCommentExist (idArg: number | string, video: MVideoId, r
 }
 
 async function doesCommentIdExist (idArg: number | string, res: express.Response) {
-  const id = parseInt(idArg + '', 10)
+  const id = forceNumber(idArg)
   const videoComment = await VideoCommentModel.loadByIdAndPopulateVideoAndAccountAndReply(id)
 
   if (!videoComment) {

@@ -1,5 +1,6 @@
 import { literal, Op, OrderItem, Sequelize } from 'sequelize'
 import validator from 'validator'
+import { forceNumber } from '@shared/core-utils'
 
 type SortType = { sortModel: string, sortValue: string }
 
@@ -202,7 +203,7 @@ function buildBlockedAccountSQLOptimized (columnNameJoin: string, blockerIds: nu
 }
 
 function buildServerIdsFollowedBy (actorId: any) {
-  const actorIdNumber = parseInt(actorId + '', 10)
+  const actorIdNumber = forceNumber(actorId)
 
   return '(' +
     'SELECT "actor"."serverId" FROM "actorFollow" ' +
@@ -218,7 +219,7 @@ function buildWhereIdOrUUID (id: number | string) {
 function parseAggregateResult (result: any) {
   if (!result) return 0
 
-  const total = parseInt(result + '', 10)
+  const total = forceNumber(result)
   if (isNaN(total)) return 0
 
   return total

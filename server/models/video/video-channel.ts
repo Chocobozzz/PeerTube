@@ -19,7 +19,7 @@ import {
 } from 'sequelize-typescript'
 import { CONFIG } from '@server/initializers/config'
 import { MAccountActor } from '@server/types/models'
-import { pick } from '@shared/core-utils'
+import { forceNumber, pick } from '@shared/core-utils'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
@@ -280,7 +280,7 @@ export type SummaryOptions = {
     ]
   },
   [ScopeNames.WITH_STATS]: (options: AvailableWithStatsOptions = { daysPrior: 30 }) => {
-    const daysPrior = parseInt(options.daysPrior + '', 10)
+    const daysPrior = forceNumber(options.daysPrior)
 
     return {
       attributes: {

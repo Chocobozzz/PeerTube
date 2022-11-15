@@ -105,8 +105,6 @@ export class ManagerOptionsBuilder {
       Object.assign(videojsOptions, { language: commonOptions.language })
     }
 
-    console.log(videojsOptions)
-
     return videojsOptions
   }
 

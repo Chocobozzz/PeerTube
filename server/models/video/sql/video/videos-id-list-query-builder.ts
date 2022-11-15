@@ -6,6 +6,7 @@ import { buildDirectionAndField, createSafeIn, parseRowCountResult } from '@serv
 import { MUserAccountId, MUserId } from '@server/types/models'
 import { VideoInclude, VideoPrivacy, VideoState } from '@shared/models'
 import { AbstractRunQuery } from '../../../shared/abstract-run-query'
+import { forceNumber } from '@shared/core-utils'
 
 /**
  *
@@ -689,12 +690,12 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   }
 
   private setLimit (countArg: number) {
-    const count = parseInt(countArg + '', 10)
+    const count = forceNumber(countArg)
     this.limit = `LIMIT ${count}`
   }
 
   private setOffset (startArg: number) {
-    const start = parseInt(startArg + '', 10)
+    const start = forceNumber(startArg)
     this.offset = `OFFSET ${start}`
   }
 }

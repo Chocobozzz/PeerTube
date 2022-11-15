@@ -1,3 +1,4 @@
+import { forceNumber } from '@shared/core-utils'
 import express from 'express'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { getFormattedObjects } from '../../../helpers/utils'
@@ -55,7 +56,7 @@ async function listMyVideosHistory (req: express.Request, res: express.Response)
 async function removeUserHistoryElement (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
 
-  await UserVideoHistoryModel.removeUserHistoryElement(user, parseInt(req.params.videoId + ''))
+  await UserVideoHistoryModel.removeUserHistoryElement(user, forceNumber(req.params.videoId))
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

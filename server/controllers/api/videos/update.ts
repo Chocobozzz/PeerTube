@@ -19,6 +19,7 @@ import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videosU
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
+import { forceNumber } from '@shared/core-utils'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -174,7 +175,7 @@ async function updateVideoPrivacy (options: {
   const { videoInstance, videoInfoToUpdate, hadPrivacyForFederation, transaction } = options
   const isNewVideo = videoInstance.isNewVideo(videoInfoToUpdate.privacy)
 
-  const newPrivacy = parseInt(videoInfoToUpdate.privacy.toString(), 10)
+  const newPrivacy = forceNumber(videoInfoToUpdate.privacy)
   setVideoPrivacy(videoInstance, newPrivacy)
 
   // Unfederate the video if the new privacy is not compatible with federation

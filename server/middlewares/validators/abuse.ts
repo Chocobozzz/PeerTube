@@ -18,6 +18,7 @@ import { AbuseMessageModel } from '@server/models/abuse/abuse-message'
 import { AbuseCreate, UserRight } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { areValidationErrors, doesAbuseExist, doesAccountIdExist, doesCommentIdExist, doesVideoExist } from './shared'
+import { forceNumber } from '@shared/core-utils'
 
 const abuseReportValidator = [
   body('account.id')
@@ -216,7 +217,7 @@ const deleteAbuseMessageValidator = [
     const user = res.locals.oauth.token.user
     const abuse = res.locals.abuse
 
-    const messageId = parseInt(req.params.messageId + '', 10)
+    const messageId = forceNumber(req.params.messageId)
     const abuseMessage = await AbuseMessageModel.loadByIdAndAbuseId(messageId, abuse.id)
 
     if (!abuseMessage) {

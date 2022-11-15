@@ -3,6 +3,7 @@ import validator from 'validator'
 import { pageToStartAndCount } from '@server/helpers/core-utils'
 import { ACTIVITY_PUB } from '@server/initializers/constants'
 import { ResultList } from '@shared/models'
+import { forceNumber } from '@shared/core-utils'
 
 type ActivityPubCollectionPaginationHandler = (start: number, count: number) => Bluebird<ResultList<any>> | Promise<ResultList<any>>
 
@@ -33,7 +34,7 @@ async function activityPubCollectionPagination (
   let prev: string | undefined
 
   // Assert page is a number
-  page = parseInt(page, 10)
+  page = forceNumber(page)
 
   // There are more results
   if (result.total > page * size) {

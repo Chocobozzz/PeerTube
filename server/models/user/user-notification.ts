@@ -2,6 +2,7 @@ import { ModelIndexesOptions, Op, WhereOptions } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { getBiggestActorImage } from '@server/lib/actor-image'
 import { UserNotificationIncludes, UserNotificationModelForApi } from '@server/types/models/user'
+import { forceNumber } from '@shared/core-utils'
 import { uuidToShort } from '@shared/extra-utils'
 import { UserNotification, UserNotificationType } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
@@ -284,7 +285,7 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
   }
 
   static removeNotificationsOf (options: { id: number, type: 'account' | 'server', forUserId?: number }) {
-    const id = parseInt(options.id + '', 10)
+    const id = forceNumber(options.id)
 
     function buildAccountWhereQuery (base: string) {
       const whereSuffix = options.forUserId

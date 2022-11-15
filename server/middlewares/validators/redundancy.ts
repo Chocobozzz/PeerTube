@@ -1,6 +1,7 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
 import { isVideoRedundancyTarget } from '@server/helpers/custom-validators/video-redundancies'
+import { forceNumber } from '@shared/core-utils'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import {
   exists,
@@ -171,7 +172,7 @@ const removeVideoRedundancyValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    const redundancy = await VideoRedundancyModel.loadByIdWithVideo(parseInt(req.params.redundancyId, 10))
+    const redundancy = await VideoRedundancyModel.loadByIdWithVideo(forceNumber(req.params.redundancyId))
     if (!redundancy) {
       return res.fail({
         status: HttpStatusCode.NOT_FOUND_404,

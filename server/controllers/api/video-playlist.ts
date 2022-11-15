@@ -46,6 +46,7 @@ import {
 import { AccountModel } from '../../models/account/account'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
+import { forceNumber } from '@shared/core-utils'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
@@ -245,7 +246,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
       if (videoPlaylistInfoToUpdate.description !== undefined) videoPlaylistInstance.description = videoPlaylistInfoToUpdate.description
 
       if (videoPlaylistInfoToUpdate.privacy !== undefined) {
-        videoPlaylistInstance.privacy = parseInt(videoPlaylistInfoToUpdate.privacy.toString(), 10)
+        videoPlaylistInstance.privacy = forceNumber(videoPlaylistInfoToUpdate.privacy)
 
         if (wasNotPrivatePlaylist === true && videoPlaylistInstance.privacy === VideoPlaylistPrivacy.PRIVATE) {
           await sendDeleteVideoPlaylist(videoPlaylistInstance, t)
@@ -424,7 +425,7 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
 
     const endOldPosition = oldPosition + reorderLength - 1
     // Insert our reordered elements in their place (update)
-    await VideoPlaylistElementModel.reassignPositionOf(videoPlaylist.id, oldPosition, endOldPosition, newPosition, t)
+    await VideoPlaylistElementModel.reassignPositionOf({ videoPlaylistId: videoPlaylist.id, firstPosition: oldPosition, endPosition: endOldPosition, newPosition, transaction: t })
 
     // Decrease positions of elements after the old position of our ordered elements (decrease)
     await VideoPlaylistElementModel.increasePositionOf(videoPlaylist.id, oldPosition, -reorderLength, t)

@@ -1,4 +1,5 @@
 import { ffprobe, FfprobeData } from 'fluent-ffmpeg'
+import { forceNumber } from '@shared/core-utils'
 import { VideoFileMetadata, VideoResolution } from '@shared/models/videos'
 
 /**
@@ -55,7 +56,7 @@ async function getAudioStream (videoPath: string, existingProbe?: FfprobeData) {
       return {
         absolutePath: data.format.filename,
         audioStream,
-        bitrate: parseInt(audioStream['bit_rate'] + '', 10)
+        bitrate: forceNumber(audioStream['bit_rate'])
       }
     }
   }

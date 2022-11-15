@@ -4,6 +4,7 @@ import { isResolvingToUnicastOnly } from '@server/helpers/dns'
 import { isPreImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { MUserAccountId, MVideoImport } from '@server/types/models'
+import { forceNumber } from '@shared/core-utils'
 import { HttpStatusCode, UserRight, VideoImportState } from '@shared/models'
 import { VideoImportCreate } from '@shared/models/videos/import/video-import-create.model'
 import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
@@ -130,7 +131,7 @@ const videoImportCancelValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (!await doesVideoImportExist(parseInt(req.params.id), res)) return
+    if (!await doesVideoImportExist(forceNumber(req.params.id), res)) return
     if (!checkUserCanManageImport(res.locals.oauth.token.user, res.locals.videoImport, res)) return
 
     if (res.locals.videoImport.state !== VideoImportState.PENDING) {
