@@ -33,6 +33,7 @@ function makeRawRequest (options: {
   return makeGetRequest({
     url: `${protocol}//${host}`,
     path: pathname,
+    contentType: undefined,
 
     ...pick(options, [ 'expectedStatus', 'range', 'token', 'query' ])
   })
