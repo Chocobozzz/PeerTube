@@ -79,6 +79,7 @@ export interface VideoDetails extends Video {
   commentsEnabled: boolean
   downloadEnabled: boolean
   host : string
+  from ? : string
   aspectRatio : number
 
   // Not optional in details (unlike in parent Video)

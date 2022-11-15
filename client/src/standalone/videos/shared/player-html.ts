@@ -113,10 +113,39 @@ export class PlayerHTML {
     this.removeElement(this.informationElement)
   }
 
+  thumbImage(src){
+	var image = new Image()
+
+	return new Promise((resolve : any, reject : any) => {
+
+		var resolved = false
+		var c = function(){
+			if(!resolved){
+				resolve()
+			}
+
+			resolved = true
+		}
+		image.src = src
+		image.onload = () => {
+			c()
+		}
+
+		image.onerror = () => {
+			c()
+		}
+
+		setTimeout(() => {
+			c()
+		}, 1000)
+
+	})
+	
+  }
+
   thumbPlayer(videoInfo: VideoDetails, addplaybutton : Boolean){
-
-	const url = videoInfo.host + videoInfo.previewPath
-
+	
+	const url = (videoInfo.from ? 'https://' + videoInfo.from : videoInfo.host) + videoInfo.previewPath
 
 	var poster = document.createElement("div");
 		poster.className = "vjs-thumb video-js";
@@ -134,10 +163,13 @@ export class PlayerHTML {
 		poster.appendChild(playbutton)
 	}
 
-	
 
 	this.wrapperElement.innerHTML = "";
 	this.wrapperElement.appendChild(poster);
+
+	this.thumbImage(url).then(() => {
+		poster.style.opacity = '1'
+	})
 
 
 	return poster

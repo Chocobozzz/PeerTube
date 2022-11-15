@@ -118,13 +118,14 @@ class StatsCard extends Component {
   show () {
     this.containerEl.style.display = 'block'
 
-    this.updateInterval = setInterval(async () => {
+    this.updateInterval = setInterval(() => {
       try {
         const options = this.mode === 'p2p-media-loader'
-          ? this.buildHLSOptions()
-          : await this.buildWebTorrentOptions() // Default
+          ? this.buildHLSOptions() : null;
+          //: this.buildWebTorrentOptions() // Default
 
-        this.populateInfoValues(options)
+        if(options)
+          this.populateInfoValues(options)
       } catch (err) {
         logger.error('Cannot update stats.', err)
         clearInterval(this.updateInterval)

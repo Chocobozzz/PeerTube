@@ -89,11 +89,15 @@ function getRtcConfig () {
   return {
     iceServers: [
       {
-        urls: 'stun:stun.stunprotocol.org'
+        urls: "stun:turn.pocketnet.app",
+        username: "stunuser",
+        credential: "q1w2e3r4t5ASD!@#",
       },
       {
-        urls: 'stun:stun.framasoft.org'
-      }
+        urls: "turn:turn.pocketnet.app",
+        username: "stunuser",
+        credential: "q1w2e3r4t5ASD!@#",
+      },
     ]
   }
 }

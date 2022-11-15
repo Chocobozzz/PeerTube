@@ -190,6 +190,8 @@ export class PlayerManagerOptions {
       poster
     } = options
 
+    console.log('video', video)
+
     //const videoCaptions = await this.buildCaptions(captionsResponse, translations)
 
     const playerOptions: PeertubePlayerManagerOptions = {
@@ -229,7 +231,7 @@ export class PlayerManagerOptions {
         peertubeLink: this.peertubeLink,
         //instanceName: serverConfig.instance.name,
 
-        poster: poster ? poster : video.host + video.previewPath,
+        poster: poster ? poster : (video.from ? 'https://' + video.from : video.host) + video.previewPath,
         theaterButton: false,
 
         serverUrl: video.host,

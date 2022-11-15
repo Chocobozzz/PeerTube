@@ -37,10 +37,13 @@ class P2pMediaLoaderPlugin extends Plugin {
 
   private networkInfoInterval: any
 
-  constructor (player: videojs.Player, options?: P2PMediaLoaderPluginOptions) {
+  constructor (player: videojs.Player, options?: P2PMediaLoaderPluginOptions | any) {
     super(player)
 
     this.options = options
+
+    if(!this.options) return
+
 
     // FIXME: typings https://github.com/Microsoft/TypeScript/issues/14080
     if (!(videojs as any).Html5Hlsjs) {
@@ -55,22 +58,31 @@ class P2pMediaLoaderPlugin extends Plugin {
       }
     } else {
       // FIXME: typings https://github.com/Microsoft/TypeScript/issues/14080
-      (videojs as any).Html5Hlsjs.addHook('beforeinitialize', (videojsPlayer: any, hlsjs: any) => {
+      /*(videojs as any).Html5Hlsjs.addHook('beforeinitialize', (videojsPlayer: any, hlsjs: any) => {
+
+        console.log('beforeinitialize')
+
         this.hlsjs = hlsjs
-      })
+      })*/
 
       initVideoJsContribHlsJsPlayer(player)
     }
 
-    this.startTime = timeToInt(options.startTime)
+    this.startTime = timeToInt(this.options.startTime)
 
     player.src({
-      type: options.type,
-      src: options.src
+      type: this.options.type,
+      src: this.options.src
     })
 
     player.ready(() => {
       this.initializeCore()
+
+
+      this.hlsjs = (player as any).hls
+
+      console.log("READY", player, (player as any).hls )
+
 
       if ((videojs as any).Html5Hlsjs) {
         this.initializePlugin()
@@ -79,6 +91,7 @@ class P2pMediaLoaderPlugin extends Plugin {
   }
 
   dispose () {
+
     if (this.hlsjs) this.hlsjs.destroy()
     if (this.p2pEngine) this.p2pEngine.destroy()
 

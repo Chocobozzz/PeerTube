@@ -190,6 +190,7 @@ export class PeertubePlayerManager {
 
   private static videojsDecodeErrors = 0
 
+
   private static p2pMediaLoaderModule: any
 
   static initState () {

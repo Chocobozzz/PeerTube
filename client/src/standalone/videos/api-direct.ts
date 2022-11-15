@@ -276,10 +276,12 @@ export class PeerTubeEmbedApi {
 
 				console.log("data", data)
 
+				
+
 				if (data.details == "bufferStalledError"){
 					slf.answer({ method: 'hlsError', params: {
 						data : data,
-						message: `HLS.js error: ${data.type} - fatal: ${data.fatal} - ${data.details}`
+						message: `HLS.js error: ${data.type} - fatal: ${data.fatal} - ${data.details}; Q:${this.embed.player.p2pMediaLoader().getHLSJS().currentLevel || 'undefined'}`
 					}})
 				}
 
@@ -326,12 +328,25 @@ export class PeerTubeEmbedApi {
 
 		this.embed.player.on('fullscreenchange', () => {
 
+			console.log("fullscreenchange", this.embed.player.isFullscreen())
+
 			this.answer({
 				method: 'fullscreenchange',
 				params: this.embed.player.isFullscreen()
 			})
 
 		})
+
+		/*this.embed.player.tech({ IWillNotUseThisInPlugins: true }).el().addEventListener('webkitendfullscreen', () => {
+			this.answer({
+				method: 'fullscreenchange',
+				params: false
+			})
+		})*/
+
+		/*this.embed.player.on("webkitendfullscreen", function(){
+			videoExitedFullscreen(video);
+		}, false);*/
 
 		this.embed.player.on('volumechange', () => {
 

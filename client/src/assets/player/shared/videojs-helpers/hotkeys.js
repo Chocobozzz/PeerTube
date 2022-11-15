@@ -22,7 +22,6 @@
       window['videojs_hotkeys'] = { version: "0.2.27" };
     }
 
-    console.log("????????????????")
   
     var hotkeys = function(options) {
       var player = this;
@@ -127,7 +126,6 @@
       });
   
       var keyDown = function keyDown(event) {
-        console.log(event)
         var ewhich = event.which, wasPlaying, seekTime;
         var ePreventDefault = event.preventDefault.bind(event);
         var duration = player.duration();
@@ -428,11 +426,9 @@
 
       var active = false
 
-      console.log("HEREEE")
 
       player.on('enablehotkeys', function(){
 
-        console.log('enablehotkeys')
 
         player.on('keydown', keyDown);
         player.on('dblclick', doubleClick);

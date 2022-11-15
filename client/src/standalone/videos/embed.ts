@@ -11,6 +11,8 @@ import { AuthHTTP, LiveManager, PlayerManagerOptions, VideoFetcher } from './sha
 import { PlayerHTML } from './shared/player-html'
 require("videojs-overlay");
 
+var {P2PMediaManager} = require ('p2p-media-loader-core-basyton/dist/p2p-media-manager')
+
 export class PeerTubeEmbed {
 	player: videojs.Player
 	details : VideoDetails
@@ -137,7 +139,6 @@ export class PeerTubeEmbed {
 	// ---------------------------------------------------------------------------
 
 	private async loadVideoAndBuildPlayer(host: string, uuid: string, parameters: any, clbk : any) {
-		console.log('uuid, host', uuid, host)
 		try {
 			const { videoDetails } = await this.videoFetcher.loadVideoCache(uuid, host)
 
@@ -220,7 +221,6 @@ export class PeerTubeEmbed {
 	}
 
 	private stopWaiting(){
-		console.log('stopWaiting')
 		if(this.statusInterval){
 			clearInterval(this.statusInterval)
 			this.statusInterval = null
@@ -249,13 +249,9 @@ export class PeerTubeEmbed {
 				
 				this.statusInterval = null
 
-				console.log("R", r)
 
 				if (r){
 
-					console.log("BUILD")
-
-					
 
 					this.buildVideoPlayer(this.details, host, parameters, clbk)
 
@@ -312,14 +308,11 @@ export class PeerTubeEmbed {
 
 			var statuses = [2, 4, 5]
 
-			console.log('video.state.id', video.state.id)
 
 			if (statuses.indexOf(video.state.id) > -1){
 
 				this.playerHTML.thumbPlayer(videoDetails, false)
 				this.playerHTML.transcodingMessage()
-
-				console.log("INIT WAIT TRA")
 
 				this.initWaiting(host, parameters, clbk)
 
@@ -329,7 +322,6 @@ export class PeerTubeEmbed {
 
 
 		const PlayerManager: typeof PeertubePlayerManager = PeertubePlayerManagerModule.PeertubePlayerManager
-
 		const options = await this.playerManagerOptions.getPlayerOptions({
 			video,
 			//captionsResponse,
@@ -460,6 +452,8 @@ export class PeerTubeEmbed {
 
 	destroy(){
 
+		console.log("DESTRY", this)
+
 		this.stopWaiting()
 
 		if (this.player){
@@ -483,4 +477,4 @@ PeerTubeEmbed.main()
 */
 
 // @ts-ignore
-window.PeerTubeEmbeding = PeerTubeEmbed;
+window.PeerTubeEmbeding = PeerTubeEmbed; window.P2PMediaManager = P2PMediaManager

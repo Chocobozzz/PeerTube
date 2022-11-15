@@ -8,6 +8,7 @@
 
 
     &.vjs-fullscreen {
+        contain: strict;
         video {
             max-width: none!important;
             max-height: 100%;
@@ -178,6 +179,16 @@
         width: 100%;
         background : #000;
         background-size: 100% auto;
+        opacity: 0;
+        -webkit-transition: opacity .3s, outline .3s, opacity .3s;
+        -moz-transition: opacity .3s, outline .3s, opacity .3s;
+        -ms-transition: opacity .3s, outline .3s, opacity .3s;
+        -o-transition: opacity .3s, outline .3s, opacity .3s;
+        transition: opacity .3s, outline .3s, opacity .3s;
+
+        &.active{
+            opacity: 1;
+        }
     }
 
     .vjs-time-tooltip {
@@ -259,11 +270,11 @@
         border-radius: 50%;
         color: #fff;
         font-size: 40px;
-        -webkit-transition: border-color .4s, outline .4s, background-color .4s;
-        -moz-transition: border-color .4s, outline .4s, background-color .4s;
-        -ms-transition: border-color .4s, outline .4s, background-color .4s;
-        -o-transition: border-color .4s, outline .4s, background-color .4s;
-        transition: border-color .4s, outline .4s, background-color .4s;
+        -webkit-transition: border-color .3s, outline .3s, background-color .3s;
+        -moz-transition: border-color .3s, outline .3s, background-color .3s;
+        -ms-transition: border-color .3s, outline .3s, background-color .3s;
+        -o-transition: border-color .3s, outline .3s, background-color .3s;
+        transition: border-color .3s, outline .3s, background-color .3s;
         text-shadow: -1px -1px 1px rgba(255,255,255,.1), 1px 1px 1px rgba(0,0,0,.5);
         background: transparent;
 

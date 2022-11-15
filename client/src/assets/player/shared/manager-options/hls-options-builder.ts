@@ -84,7 +84,7 @@ export class HLSOptionsBuilder {
         simultaneousHttpDownloads: 1,
         httpFailedSegmentTimeout: 1000,
 
-        segmentValidator: segmentValidatorFactory(this.options.p2pMediaLoader.segmentsSha256Url, this.options.common.isLive),
+        segmentValidator:  !this.options.common.localTransport ? segmentValidatorFactory(this.options.p2pMediaLoader.segmentsSha256Url, this.options.common.isLive) : undefined,
         segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager),
 
         useP2P: this.options.common.p2pEnabled,

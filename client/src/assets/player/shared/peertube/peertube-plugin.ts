@@ -202,7 +202,9 @@ class PeerTubePlugin extends Plugin {
 
     if (this.authorizationHeader) headers.set('Authorization', this.authorizationHeader)
 
-    return fetch(this.videoViewUrl, { method: 'POST', body: JSON.stringify(body), headers })
+    return fetch(this.videoViewUrl, { method: 'POST', body: JSON.stringify(body), headers }).catch(e => {
+      return Promise.resolve()
+    })
   }
 
   private listenFullScreenChange () {

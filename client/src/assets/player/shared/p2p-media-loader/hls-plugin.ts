@@ -44,8 +44,11 @@ const registerSourceHandler = function (vjs: typeof videojs) {
 
     handleSource: function (source: videojs.Tech.SourceObject, tech: VideoJSTechHLS) {
       if (tech.hlsProvider) {
+        console.log("HERE")
         tech.hlsProvider.dispose()
       }
+
+      console.log("???ASD")
 
       tech.hlsProvider = new Html5Hlsjs(vjs, source, tech)
 
@@ -184,6 +187,8 @@ class Html5Hlsjs {
       // empty
     }
 
+    console.log("DESTROY", this.hls)
+
     this.hls.destroy()
   }
 
@@ -215,6 +220,24 @@ class Html5Hlsjs {
   }
 
   private _handleMediaError (error: any) {
+
+    if(error.code == 3){
+
+      var time = this.player.currentTime() + 2
+
+      this.dispose()
+      this._initHlsjs()
+
+      this.player.currentTime(time)
+      this.player.play()
+      this.hls.once(Hlsjs.Events.FRAG_LOADED, () => {
+        this.player.play()
+      })
+
+
+      return
+    }
+
     if (this.errorCounts[Hlsjs.ErrorTypes.MEDIA_ERROR] === 1) {
       logger.info('trying to recover media error')
       this.hls.recoverMediaError()
@@ -370,7 +393,11 @@ class Html5Hlsjs {
 
     this.hls = new Hlsjs(this.hlsjsConfig)
 
-    this._executeHooksFor('beforeinitialize')
+    //@ts-ignore
+    this.player.hls = this.hls;
+    //(this.player as any).hls = this.hls;
+
+    //this._executeHooksFor('beforeinitialize')
 
     this.hls.on(Hlsjs.Events.ERROR, (event, data) => this._onError(event, data))
     this.hls.on(Hlsjs.Events.MANIFEST_PARSED, (event, data) => this._onMetaData(event, data))
