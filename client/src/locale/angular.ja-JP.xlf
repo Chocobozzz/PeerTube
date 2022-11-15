@@ -5317,12 +5317,12 @@
       </trans-unit>
       <trans-unit id="4240037618955024499" datatype="html">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
-        <target state="translated">動画 <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </target>
+        <target state="translated">は、VOD動画の変換で、<x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/>要求します </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">148</context></context-group>
       </trans-unit>
       <trans-unit id="8489317904250057957" datatype="html">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
-        <target state="translated">VOD動画の変換においては最低でも<x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/>スレッド使用します。 </target>
+        <target state="translated">は、VOD動画の変換で、最低でも<x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/>要求します </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">152</context></context-group>
       </trans-unit>
       <trans-unit id="1417246074503129277" datatype="html">
@@ -5405,7 +5405,7 @@
       </trans-unit>
       <trans-unit id="5698272164915890247" datatype="html">
         <source>Allows users to upload videos with additional extensions than .mp4, .ogv and .webm (for example: .avi, .mov, .mkv etc).</source>
-        <target state="translated">ユーザーに .mp4 .ogv .webm 以外の拡張子の動画のアップロードを許可する(例えば .avi .mov .mkv など)。</target>
+        <target state="translated">ユーザーに .mp4 .ogv .webm 以外の拡張子の動画のアップロードを許可します(例えば .avi .mov .mkv など)。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="1823941382992046371" datatype="html">
@@ -5415,7 +5415,7 @@
       </trans-unit>
       <trans-unit id="8340360585610503574" datatype="html">
         <source>Allows users to upload .mp3, .ogg, .wma, .flac, .aac, or .ac3 audio files.</source>
-        <target state="translated">音声ファイル( .mp3 .ogg .wma .flac .aac .ac3)のアップロードをユーザーに許可する。</target>
+        <target state="translated">音声ファイル( .mp3 .ogg .wma .flac .aac .ac3)のアップロードをユーザーに許可します。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="5867513506373651775" datatype="html">
@@ -5445,12 +5445,12 @@
       </trans-unit>
       <trans-unit id="7334484418359079994" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with plain WebTorrent:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;                             "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ffmpeg &gt;= 4.1が必要<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>HLSプレイリストの生成とフラグメントかされたMP4ファイルは、プレーンWebトレントを使用した際にスムーズな再生が可能になります:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;                             "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback especially with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ffmpeg 4.1以上が必要<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>HLSプレイリストの生成とフラグメントかされたMP4ファイルは、プレーンWebトレントを使用した際にスムーズな再生が可能になります:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;                             "/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>解像度の変更がスムーズになる<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>特に長時間の動画において再生の開始が早くなる<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>より安定した再生 (より少ないバグ/無限読込み)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>HLSサポートも有効になっている場合、2倍のストレージスペースが必要になります<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="6698240176427495644" datatype="html">
         <source>Resolutions to generate</source>
-        <target state="new">Resolutions to generate</target>
+        <target state="translated">生成する解像度</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">111</context>
@@ -5458,7 +5458,7 @@
       </trans-unit>
       <trans-unit id="4437374135745051281" datatype="html">
         <source>Always transcode original resolution</source>
-        <target state="new">Always transcode original resolution</target>
+        <target state="translated">オリジナル解像度も変換する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">116</context>
@@ -5476,22 +5476,22 @@
       </trans-unit>
       <trans-unit id="7815122216882553289" datatype="html">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="new"> will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </target>
+        <target state="translated">は、ライブ配信の変換で <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/>を要求します </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">148</context></context-group>
       </trans-unit>
       <trans-unit id="8685484763568827375" datatype="html">
         <source>will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </source>
-        <target state="new"> will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </target>
+        <target state="translated">は、ライブ配信の変換で<x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/>を要求します </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">152</context></context-group>
       </trans-unit>
       <trans-unit id="7185278676178506632" datatype="html">
         <source>Transcoding jobs concurrency</source>
-        <target state="translated">同時並行トランスコードのジョブ</target>
+        <target state="translated">同時並行変換処理のジョブ数</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">168</context></context-group>
       </trans-unit>
       <trans-unit id="1969393594784140832" datatype="html">
         <source>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</source>
-        <target state="translated">複数のファイルの同時トランスコードを許可する ⚠️ PeerTubeの再起動が必要です</target>
+        <target state="translated">複数ファイルの同時変換を許可します ⚠️ PeerTubeの再起動が必要です</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">169</context></context-group>
       </trans-unit>
       <trans-unit id="2184317712452071847" datatype="html">
@@ -5511,7 +5511,7 @@
       </trans-unit>
       <trans-unit id="4078329985026583770" datatype="html">
         <source>Allows your users to edit their video (cut, add intro/outro, add a watermark etc)</source>
-        <target state="translated">ユーザーに動画の編集を許可する（切り取り、イントロダクションやエンディングの追加、ウォーターマークの追加など）</target>
+        <target state="translated">ユーザーに動画の編集を許可します (切り取り、イントロダクションやエンディングの追加、ウォーターマークの追加など)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">201</context></context-group>
       </trans-unit>
       <trans-unit id="252604800845369275" datatype="html">
@@ -5521,7 +5521,7 @@
       </trans-unit>
       <trans-unit id="3313548535394806921" datatype="html">
         <source>⚠️ You need to enable transcoding first to enable video studio</source>
-        <target state="translated">⚠️ 動画スタジオを有効にするためには、最初にトランスコードを有効にする必要があります</target>
+        <target state="translated">⚠️ 動画スタジオを有効にするためには、最初に変換を有効にする必要があります</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">215</context></context-group>
       </trans-unit>
       <trans-unit id="6879611446286948126" datatype="html">
@@ -5536,7 +5536,7 @@
       </trans-unit>
       <trans-unit id="4382565260112874406" datatype="html">
         <source>Number of previews to keep in cache</source>
-        <target state="translated">動画プレビューの残存キャッシュ</target>
+        <target state="translated">キャッシュに保持する動画プレビュー数</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="3710881484246327863" datatype="html">
@@ -5549,7 +5549,7 @@
       </trans-unit>
       <trans-unit id="2279905277031617076" datatype="html">
         <source>Number of video captions to keep in cache</source>
-        <target state="translated">動画のキャプションの残存キャッシュ</target>
+        <target state="translated">キャッシュに保持する動画キャプション数</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6193666854590647323" datatype="html">
@@ -5562,7 +5562,7 @@
       </trans-unit>
       <trans-unit id="330647913034301472" datatype="html">
         <source>Number of video torrents to keep in cache</source>
-        <target state="translated">動画torrentの残存キャッシュ</target>
+        <target state="translated">キャッシュに保持する動画torrent数</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">43</context>
@@ -5583,7 +5583,7 @@
       </trans-unit>
       <trans-unit id="1714039296068260295" datatype="html">
         <source>Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.</source>
-        <target state="translated">作成したプラグインまたはテーマに問題があった場合に、PeerTubeインスタンスを微修正しましょう。</target>
+        <target state="translated">プラグインまたはテーマの作成まで必要がない場合は、小さなカスタマイズで対応できます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="6180346896314915203">
@@ -5593,17 +5593,17 @@
       </trans-unit>
       <trans-unit id="4067880101082150743" datatype="html">
         <source>Write JavaScript code directly.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="translated">JavaScriptのコードを直接入力しましょう。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>例: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated">JavaScriptのコードを直接入力してください。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>例: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="5464209657969421100" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="translated">CSSのコードを直接入力しましょう。例:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated">CSSのコードを直接入力してください。例:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="283725429207896837" datatype="html">
         <source>You cannot allow live replay if you don't enable transcoding.</source>
-        <target state="translated">トランスコードを有効にしていない場合、リプレイ動画の再生をユーザーに許可できません。</target>
+        <target state="translated">変換を有効にしていない場合、ライブ配信のプレイをユーザーに許可できません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="4249062553881932496" datatype="html">
@@ -5646,7 +5646,7 @@
       </trans-unit>
       <trans-unit id="3892825090402620438" datatype="html">
         <source>Two-factor authentication</source>
-        <target state="new">Two-factor authentication</target>
+        <target state="translated">2段階認証</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">67</context>
@@ -5654,7 +5654,7 @@
       </trans-unit>
       <trans-unit id="9012586956848595996" datatype="html">
         <source>EMAIL</source>
-        <target state="translated">Eメール</target>
+        <target state="translated">2段階認証Eメール</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="4309045590850686400" datatype="html">
