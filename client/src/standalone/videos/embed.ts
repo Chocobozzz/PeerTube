@@ -3,12 +3,12 @@ import '../../assets/player/shared/dock/peertube-dock-component'
 import '../../assets/player/shared/dock/peertube-dock-plugin'
 import videojs from 'video.js'
 import { peertubeTranslate } from '../../../../shared/core-utils/i18n'
-import { HTMLServerConfig, ResultList, VideoDetails, VideoPlaylist, VideoPlaylistElement } from '../../../../shared/models'
+import { HTMLServerConfig, ResultList, VideoDetails, VideoPlaylist, VideoPlaylistElement, VideoState } from '../../../../shared/models'
 import { PeertubePlayerManager } from '../../assets/player'
 import { TranslationsManager } from '../../assets/player/translations-manager'
 import { getParamString, logger, videoRequiresAuth } from '../../root-helpers'
 import { PeerTubeEmbedApi } from './embed-api'
-import { AuthHTTP, LiveManager, PeerTubePlugin, PlayerManagerOptions, PlaylistFetcher, PlaylistTracker, VideoFetcher } from './shared'
+import { AuthHTTP, LiveManager, PeerTubePlugin, PlayerManagerOptions, PlaylistFetcher, PlaylistTracker, Translations, VideoFetcher } from './shared'
 import { PlayerHTML } from './shared/player-html'
 
 export class PeerTubeEmbed {
@@ -251,18 +251,25 @@ export class PeerTubeEmbed {
       })
     }
 
-    this.peertubePlugin.getPluginsManager().runHook('action:embed.player.loaded', undefined, { player: this.player, videojs, video })
-
     if (video.isLive) {
-      this.liveManager.displayInfoAndListenForChanges({
+      this.liveManager.listenForChanges({
         video,
-        translations,
         onPublishedVideo: () => {
           this.liveManager.stopListeningForChanges(video)
           this.loadVideoAndBuildPlayer(video.uuid)
         }
       })
+
+      if (video.state.id === VideoState.WAITING_FOR_LIVE || video.state.id === VideoState.LIVE_ENDED) {
+        this.liveManager.displayInfo({ state: video.state.id, translations })
+
+        this.disablePlayer()
+      } else {
+        this.correctlyHandleLiveEnding(translations)
+      }
     }
+
+    this.peertubePlugin.getPluginsManager().runHook('action:embed.player.loaded', undefined, { player: this.player, videojs, video })
   }
 
   private resetPlayerElement () {
@@ -351,6 +358,31 @@ export class PeerTubeEmbed {
   private isPlaylistEmbed () {
     return window.location.pathname.split('/')[1] === 'video-playlists'
   }
+
+  // ---------------------------------------------------------------------------
+
+  private correctlyHandleLiveEnding (translations: Translations) {
+    this.player.one('ended', () => {
+      // Display the live ended information
+      this.liveManager.displayInfo({ state: VideoState.LIVE_ENDED, translations })
+
+      this.disablePlayer()
+    })
+  }
+
+  private disablePlayer () {
+    if (this.player.isFullscreen()) {
+      this.player.exitFullscreen()
+    }
+
+    // Disable player
+    this.player.hasStarted(false)
+    this.player.removeClass('vjs-has-autoplay')
+    this.player.bigPlayButton.hide();
+
+    (this.player.el() as HTMLElement).style.pointerEvents = 'none'
+  }
+
 }
 
 PeerTubeEmbed.main()

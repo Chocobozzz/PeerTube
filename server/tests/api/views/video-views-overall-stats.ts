@@ -20,7 +20,7 @@ describe('Test views overall stats', function () {
     let command: FfmpegCommand
 
     before(async function () {
-      this.timeout(120000);
+      this.timeout(240000);
 
       ({ vodVideoId, liveVideoId, ffmpegCommand: command } = await prepareViewsVideos({ servers, live: true, vod: true }))
     })
@@ -179,7 +179,7 @@ describe('Test views overall stats', function () {
     let before2Watchers: Date
 
     before(async function () {
-      this.timeout(120000);
+      this.timeout(240000);
 
       ({ vodVideoId: videoUUID } = await prepareViewsVideos({ servers, live: true, vod: true }))
     })

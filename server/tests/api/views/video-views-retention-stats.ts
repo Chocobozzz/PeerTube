@@ -17,7 +17,7 @@ describe('Test views retention stats', function () {
     let vodVideoId: string
 
     before(async function () {
-      this.timeout(120000);
+      this.timeout(240000);
 
       ({ vodVideoId } = await prepareViewsVideos({ servers, live: false, vod: true }))
     })

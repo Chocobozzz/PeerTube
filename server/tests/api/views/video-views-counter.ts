@@ -76,7 +76,7 @@ describe('Test video views/viewers counters', function () {
     let command: FfmpegCommand
 
     before(async function () {
-      this.timeout(120000);
+      this.timeout(240000);
 
       ({ vodVideoId, liveVideoId, ffmpegCommand: command } = await prepareViewsVideos({ servers, live: true, vod: true }))
     })

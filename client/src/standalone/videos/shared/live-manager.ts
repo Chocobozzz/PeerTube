@@ -14,14 +14,11 @@ export class LiveManager {
 
   }
 
-  async displayInfoAndListenForChanges (options: {
+  async listenForChanges (options: {
     video: VideoDetails
-    translations: Translations
     onPublishedVideo: () => any
   }) {
     const { video, onPublishedVideo } = options
-
-    this.displayAppropriateInfo(options)
 
     if (!this.liveSocket) {
       const io = (await import('socket.io-client')).io
@@ -51,18 +48,18 @@ export class LiveManager {
     this.liveSocket.emit('unsubscribe', { videoId: video.id })
   }
 
-  private displayAppropriateInfo (options: {
-    video: VideoDetails
+  displayInfo (options: {
+    state: VideoState
     translations: Translations
   }) {
-    const { video, translations } = options
+    const { state, translations } = options
 
-    if (video.state.id === VideoState.WAITING_FOR_LIVE) {
+    if (state === VideoState.WAITING_FOR_LIVE) {
       this.displayWaitingForLiveInfo(translations)
       return
     }
 
-    if (video.state.id === VideoState.LIVE_ENDED) {
+    if (state === VideoState.LIVE_ENDED) {
       this.displayEndedLiveInfo(translations)
       return
     }

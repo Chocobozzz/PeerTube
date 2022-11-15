@@ -30,7 +30,7 @@ describe('Test views timeserie stats', function () {
     let vodVideoId: string
 
     before(async function () {
-      this.timeout(120000);
+      this.timeout(240000);
 
       ({ vodVideoId } = await prepareViewsVideos({ servers, live: false, vod: true }))
     })
@@ -81,7 +81,7 @@ describe('Test views timeserie stats', function () {
     }
 
     before(async function () {
-      this.timeout(120000);
+      this.timeout(240000);
 
       ({ vodVideoId, liveVideoId, ffmpegCommand: command } = await prepareViewsVideos({ servers, live: true, vod: true }))
     })
