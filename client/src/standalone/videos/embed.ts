@@ -8,7 +8,16 @@ import { PeertubePlayerManager } from '../../assets/player'
 import { TranslationsManager } from '../../assets/player/translations-manager'
 import { getParamString, logger, videoRequiresAuth } from '../../root-helpers'
 import { PeerTubeEmbedApi } from './embed-api'
-import { AuthHTTP, LiveManager, PeerTubePlugin, PlayerManagerOptions, PlaylistFetcher, PlaylistTracker, Translations, VideoFetcher } from './shared'
+import {
+  AuthHTTP,
+  LiveManager,
+  PeerTubePlugin,
+  PlayerManagerOptions,
+  PlaylistFetcher,
+  PlaylistTracker,
+  Translations,
+  VideoFetcher
+} from './shared'
 import { PlayerHTML } from './shared/player-html'
 
 export class PeerTubeEmbed {
@@ -81,7 +90,7 @@ export class PeerTubeEmbed {
 
     if (!videoId) return
 
-    return this.loadVideoAndBuildPlayer(videoId)
+    return this.loadVideoAndBuildPlayer({ uuid: videoId, forceAutoplay: false })
   }
 
   private async initPlaylist () {
@@ -138,7 +147,7 @@ export class PeerTubeEmbed {
 
     this.playlistTracker.setCurrentElement(next)
 
-    return this.loadVideoAndBuildPlayer(next.video.uuid)
+    return this.loadVideoAndBuildPlayer({ uuid: next.video.uuid, forceAutoplay: false })
   }
 
   async playPreviousPlaylistVideo () {
@@ -150,7 +159,7 @@ export class PeerTubeEmbed {
 
     this.playlistTracker.setCurrentElement(previous)
 
-    await this.loadVideoAndBuildPlayer(previous.video.uuid)
+    await this.loadVideoAndBuildPlayer({ uuid: previous.video.uuid, forceAutoplay: false })
   }
 
   getCurrentPlaylistPosition () {
@@ -159,17 +168,28 @@ export class PeerTubeEmbed {
 
   // ---------------------------------------------------------------------------
 
-  private async loadVideoAndBuildPlayer (uuid: string) {
+  private async loadVideoAndBuildPlayer (options: {
+    uuid: string
+    forceAutoplay: boolean
+  }) {
+    const { uuid, forceAutoplay } = options
+
     try {
       const { videoResponse, captionsPromise } = await this.videoFetcher.loadVideo(uuid)
 
-      return this.buildVideoPlayer(videoResponse, captionsPromise)
+      return this.buildVideoPlayer({ videoResponse, captionsPromise, forceAutoplay })
     } catch (err) {
       this.playerHTML.displayError(err.message, await this.translationsPromise)
     }
   }
 
-  private async buildVideoPlayer (videoResponse: Response, captionsPromise: Promise<Response>) {
+  private async buildVideoPlayer (options: {
+    videoResponse: Response
+    captionsPromise: Promise<Response>
+    forceAutoplay: boolean
+  }) {
+    const { videoResponse, captionsPromise, forceAutoplay } = options
+
     const alreadyHadPlayer = this.resetPlayerElement()
 
     const videoInfoPromise = videoResponse.json()
@@ -201,7 +221,7 @@ export class PeerTubeEmbed {
 
     const PlayerManager: typeof PeertubePlayerManager = PeertubePlayerManagerModule.PeertubePlayerManager
 
-    const options = await this.playerManagerOptions.getPlayerOptions({
+    const playerOptions = await this.playerManagerOptions.getPlayerOptions({
       video,
       captionsResponse,
       alreadyHadPlayer,
@@ -211,16 +231,17 @@ export class PeerTubeEmbed {
       authorizationHeader: () => this.http.getHeaderTokenValue(),
       videoFileToken: () => videoFileToken,
 
-      onVideoUpdate: (uuid: string) => this.loadVideoAndBuildPlayer(uuid),
+      onVideoUpdate: (uuid: string) => this.loadVideoAndBuildPlayer({ uuid, forceAutoplay: false }),
 
       playlistTracker: this.playlistTracker,
       playNextPlaylistVideo: () => this.playNextPlaylistVideo(),
       playPreviousPlaylistVideo: () => this.playPreviousPlaylistVideo(),
 
-      live
+      live,
+      forceAutoplay
     })
 
-    this.player = await PlayerManager.initialize(this.playerManagerOptions.getMode(), options, (player: videojs.Player) => {
+    this.player = await PlayerManager.initialize(this.playerManagerOptions.getMode(), playerOptions, (player: videojs.Player) => {
       this.player = player
     })
 
@@ -256,7 +277,7 @@ export class PeerTubeEmbed {
         video,
         onPublishedVideo: () => {
           this.liveManager.stopListeningForChanges(video)
-          this.loadVideoAndBuildPlayer(video.uuid)
+          this.loadVideoAndBuildPlayer({ uuid: video.uuid, forceAutoplay: true })
         }
       })
 

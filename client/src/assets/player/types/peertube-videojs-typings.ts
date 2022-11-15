@@ -91,7 +91,7 @@ type VideoJSCaption = {
 type PeerTubePluginOptions = {
   mode: PlayerMode
 
-  autoplay: boolean
+  autoplay: videojs.Autoplay
   videoDuration: number
 
   videoViewUrl: string
@@ -143,7 +143,7 @@ type PeerTubeP2PInfoButtonOptions = {
 type WebtorrentPluginOptions = {
   playerElement: HTMLVideoElement
 
-  autoplay: boolean
+  autoplay: videojs.Autoplay
   videoDuration: number
 
   videoFiles: VideoFile[]

@@ -180,7 +180,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   onPlaylistVideoFound (videoId: string) {
-    this.loadVideo(videoId)
+    this.loadVideo({ videoId, forceAutoplay: false })
   }
 
   onPlaylistNoVideoFound () {
@@ -212,7 +212,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private loadRouteParams () {
     this.paramsSub = this.route.params.subscribe(routeParams => {
       const videoId = routeParams['videoId']
-      if (videoId) return this.loadVideo(videoId)
+      if (videoId) return this.loadVideo({ videoId, forceAutoplay: false })
 
       const playlistId = routeParams['playlistId']
       if (playlistId) return this.loadPlaylist(playlistId)
@@ -240,7 +240,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     })
   }
 
-  private loadVideo (videoId: string) {
+  private loadVideo (options: {
+    videoId: string
+    forceAutoplay: boolean
+  }) {
+    const { videoId, forceAutoplay } = options
+
     if (this.isSameElement(this.video, videoId)) return
 
     if (this.player) this.player.pause()
@@ -293,8 +298,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           peertubeLink: false
         }
 
-        this.onVideoFetched({ video, live, videoCaptions: captionsResult.data, videoFileToken, loggedInOrAnonymousUser, urlOptions })
-            .catch(err => this.handleGlobalError(err))
+        this.onVideoFetched({
+          video,
+          live,
+          videoCaptions: captionsResult.data,
+          videoFileToken,
+          loggedInOrAnonymousUser,
+          urlOptions,
+          forceAutoplay
+        }).catch(err => this.handleGlobalError(err))
       },
 
       error: err => this.handleRequestError(err)
@@ -370,8 +382,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     urlOptions: URLOptions
     loggedInOrAnonymousUser: User
+    forceAutoplay: boolean
   }) {
-    const { video, live, videoCaptions, urlOptions, videoFileToken, loggedInOrAnonymousUser } = options
+    const { video, live, videoCaptions, urlOptions, videoFileToken, loggedInOrAnonymousUser, forceAutoplay } = options
 
     this.subscribeToLiveEventsIfNeeded(this.video, video)
 
@@ -393,7 +406,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (res === false) return this.location.back()
     }
 
-    this.buildPlayer(urlOptions, loggedInOrAnonymousUser)
+    this.buildPlayer({ urlOptions, loggedInOrAnonymousUser, forceAutoplay })
       .catch(err => logger.error('Cannot build the player', err))
 
     this.setOpenGraphTags()
@@ -406,7 +419,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.hooks.runAction('action:video-watch.video.loaded', 'video-watch', hookOptions)
   }
 
-  private async buildPlayer (urlOptions: URLOptions, loggedInOrAnonymousUser: User) {
+  private async buildPlayer (options: {
+    urlOptions: URLOptions
+    loggedInOrAnonymousUser: User
+    forceAutoplay: boolean
+  }) {
+    const { urlOptions, loggedInOrAnonymousUser, forceAutoplay } = options
+
     // Flush old player if needed
     this.flushPlayer()
 
@@ -430,6 +449,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       videoFileToken: this.videoFileToken,
       urlOptions,
       loggedInOrAnonymousUser,
+      forceAutoplay,
       user: this.user
     }
     const { playerMode, playerOptions } = await this.hooks.wrapFun(
@@ -581,9 +601,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     urlOptions: CustomizationOptions & { playerMode: PlayerMode }
 
     loggedInOrAnonymousUser: User
+    forceAutoplay: boolean
     user?: AuthUser // Keep for plugins
   }) {
-    const { video, liveVideo, videoCaptions, videoFileToken, urlOptions, loggedInOrAnonymousUser } = params
+    const { video, liveVideo, videoCaptions, videoFileToken, urlOptions, loggedInOrAnonymousUser, forceAutoplay } = params
 
     const getStartTime = () => {
       const byUrl = urlOptions.startTime !== undefined
@@ -615,6 +636,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const options: PeertubePlayerManagerOptions = {
       common: {
         autoplay: this.isAutoplay(),
+        forceAutoplay,
         p2pEnabled: isP2PEnabled(video, this.serverConfig, loggedInOrAnonymousUser.p2pEnabled),
 
         hasNextVideo: () => this.hasNextVideo(),
@@ -749,7 +771,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     // Reset to force refresh the video
     this.video = undefined
-    this.loadVideo(videoUUID)
+    this.loadVideo({ videoId: videoUUID, forceAutoplay: true })
   }
 
   private handleLiveViewsChange (newViewers: number) {

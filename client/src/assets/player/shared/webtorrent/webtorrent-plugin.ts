@@ -25,7 +25,7 @@ class WebTorrentPlugin extends Plugin {
 
   private readonly playerElement: HTMLVideoElement
 
-  private readonly autoplay: boolean = false
+  private readonly autoplay: boolean | string = false
   private readonly startTime: number = 0
   private readonly savePlayerSrcFunction: videojs.Player['src']
   private readonly videoDuration: number
@@ -449,7 +449,7 @@ class WebTorrentPlugin extends Plugin {
       return
     }
 
-    if (this.autoplay) {
+    if (this.autoplay !== false) {
       this.player.posterImage.hide()
 
       return this.updateVideoFile(undefined, { forcePlay: true, seek: this.startTime })

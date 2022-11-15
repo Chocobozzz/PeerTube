@@ -155,6 +155,8 @@ export class PlayerManagerOptions {
     captionsResponse: Response
     live?: LiveVideo
 
+    forceAutoplay: boolean
+
     authorizationHeader: () => string
     videoFileToken: () => string
 
@@ -175,6 +177,7 @@ export class PlayerManagerOptions {
       alreadyHadPlayer,
       videoFileToken,
       translations,
+      forceAutoplay,
       playlistTracker,
       live,
       authorizationHeader,
@@ -187,6 +190,7 @@ export class PlayerManagerOptions {
       common: {
         // Autoplay in playlist mode
         autoplay: alreadyHadPlayer ? true : this.autoplay,
+        forceAutoplay,
 
         controls: this.controls,
         controlBar: this.controlBar,

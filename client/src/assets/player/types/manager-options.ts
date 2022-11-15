@@ -36,6 +36,8 @@ export interface CommonOptions extends CustomizationOptions {
   onPlayerElementChange: (element: HTMLVideoElement) => void
 
   autoplay: boolean
+  forceAutoplay: boolean
+
   p2pEnabled: boolean
 
   nextVideo?: () => void
