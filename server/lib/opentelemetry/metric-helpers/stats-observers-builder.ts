@@ -1,5 +1,5 @@
 import memoizee from 'memoizee'
-import { Meter } from '@opentelemetry/api-metrics'
+import { Meter } from '@opentelemetry/api'
 import { MEMOIZE_TTL } from '@server/initializers/constants'
 import { buildAvailableActivities } from '@server/lib/activitypub/activity'
 import { StatsManager } from '@server/lib/stat-manager'

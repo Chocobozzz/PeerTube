@@ -1,4 +1,4 @@
-import { Meter } from '@opentelemetry/api-metrics'
+import { Meter } from '@opentelemetry/api'
 import { JobQueue } from '@server/lib/job-queue'
 
 export class JobQueueObserversBuilder {

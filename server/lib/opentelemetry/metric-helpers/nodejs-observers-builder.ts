@@ -1,7 +1,7 @@
 import { readdir } from 'fs-extra'
 import { constants, PerformanceObserver } from 'perf_hooks'
 import * as process from 'process'
-import { Meter, ObservableResult } from '@opentelemetry/api-metrics'
+import { Meter, ObservableResult } from '@opentelemetry/api'
 import { ExplicitBucketHistogramAggregation } from '@opentelemetry/sdk-metrics'
 import { View } from '@opentelemetry/sdk-metrics/build/src/view/View'
 import { logger } from '@server/helpers/logger'

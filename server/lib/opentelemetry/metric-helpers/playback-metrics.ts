@@ -1,4 +1,4 @@
-import { Counter, Meter } from '@opentelemetry/api-metrics'
+import { Counter, Meter } from '@opentelemetry/api'
 import { MVideoImmutable } from '@server/types/models'
 import { PlaybackMetricCreate } from '@shared/models'
 

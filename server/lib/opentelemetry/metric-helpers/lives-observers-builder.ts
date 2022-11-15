@@ -1,4 +1,4 @@
-import { Meter } from '@opentelemetry/api-metrics'
+import { Meter } from '@opentelemetry/api'
 import { VideoModel } from '@server/models/video/video'
 
 export class LivesObserversBuilder {

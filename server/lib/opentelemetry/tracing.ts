@@ -6,8 +6,8 @@ import { DnsInstrumentation } from '@opentelemetry/instrumentation-dns'
 import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express'
 import FsInstrumentation from '@opentelemetry/instrumentation-fs'
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http'
+import { IORedisInstrumentation } from '@opentelemetry/instrumentation-ioredis'
 import { PgInstrumentation } from '@opentelemetry/instrumentation-pg'
-import { RedisInstrumentation } from '@opentelemetry/instrumentation-redis-4'
 import { Resource } from '@opentelemetry/resources'
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node'
@@ -58,7 +58,7 @@ function registerOpentelemetryTracing () {
       new DnsInstrumentation(),
       new HttpInstrumentation(),
       new ExpressInstrumentation(),
-      new RedisInstrumentation({
+      new IORedisInstrumentation({
         dbStatementSerializer: function (cmdName, cmdArgs) {
           return [ cmdName, ...cmdArgs ].join(' ')
         }

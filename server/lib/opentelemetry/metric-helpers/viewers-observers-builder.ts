@@ -1,4 +1,4 @@
-import { Meter } from '@opentelemetry/api-metrics'
+import { Meter } from '@opentelemetry/api'
 import { VideoScope, ViewerScope } from '@server/lib/views/shared'
 import { VideoViewsManager } from '@server/lib/views/video-views-manager'
 
