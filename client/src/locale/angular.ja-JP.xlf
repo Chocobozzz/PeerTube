@@ -5659,7 +5659,7 @@
       </trans-unit>
       <trans-unit id="4309045590850686400" datatype="html">
         <source>Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</source>
-        <target state="new">Two factor authentication adds an additional layer of security to your account by requiring a numeric code from another device (most commonly mobile phones) when you log in.</target>
+        <target state="translated">2段階認証を使用すると、アカウントに追加のセキュリティを提供し、ログイン時に別のデバイス(主にスマートフォン)で生成される数字コードを入力するよう求められます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -5667,7 +5667,7 @@
       </trans-unit>
       <trans-unit id="2955617286542082394" datatype="html">
         <source>Enable two-factor authentication</source>
-        <target state="new">Enable two-factor authentication</target>
+        <target state="translated">2段階認証を有効にする</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">5</context>
@@ -5675,7 +5675,7 @@
       </trans-unit>
       <trans-unit id="2658424416565652268" datatype="html">
         <source>Disable two-factor authentication</source>
-        <target state="new">Disable two-factor authentication</target>
+        <target state="translated">2段階認証を無効にする</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.html</context>
           <context context-type="linenumber">9</context>
@@ -5683,7 +5683,7 @@
       </trans-unit>
       <trans-unit id="4561231095368496452" datatype="html">
         <source>Are you sure you want to disable two factor authentication of your account?</source>
-        <target state="new">Are you sure you want to disable two factor authentication of your account?</target>
+        <target state="translated">アカウントの2段階認証を無効にしてもよろしいですか？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -5691,7 +5691,7 @@
       </trans-unit>
       <trans-unit id="3757273554886026258" datatype="html">
         <source>Disable two factor</source>
-        <target state="new">Disable two factor</target>
+        <target state="translated">2段階認証を無効</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -5699,7 +5699,7 @@
       </trans-unit>
       <trans-unit id="7121657131608757909" datatype="html">
         <source>Two factor authentication disabled</source>
-        <target state="new">Two factor authentication disabled</target>
+        <target state="translated">2段階認証は無効になっています</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">43</context>
@@ -5707,8 +5707,7 @@
       </trans-unit>
       <trans-unit id="872237557319890340" datatype="html">
         <source>Two factor authentication is already enabled.</source>
-        <target state="new"> Two factor authentication is already enabled.
-</target>
+        <target state="translated">2段階認証はすでに有効になっています</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -5716,7 +5715,7 @@
       </trans-unit>
       <trans-unit id="4921687518561446633" datatype="html">
         <source>Your password</source>
-        <target state="new">Your password</target>
+        <target state="translated">パスワード</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">14</context>
@@ -5724,7 +5723,7 @@
       </trans-unit>
       <trans-unit id="2990026202987449106" datatype="html">
         <source>Confirm your password to enable two factor authentication</source>
-        <target state="new">Confirm your password to enable two factor authentication</target>
+        <target state="translated">2段階認証を有効にするには、パスワードを入力してください</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">15</context>
@@ -5749,7 +5748,7 @@
       </trans-unit>
       <trans-unit id="7814358426066520520" datatype="html">
         <source>Aspect ratio</source>
-        <target state="translated">比率</target>
+        <target state="translated">アスペクト比</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">254</context></context-group>
       </trans-unit>
       <trans-unit id="44862519224794374" datatype="html">
@@ -5769,7 +5768,7 @@
       </trans-unit>
       <trans-unit id="5403856660543890284" datatype="html">
         <source>Channel Layout</source>
-        <target state="translated">ステレオ・モノラル等</target>
+        <target state="translated">チャンネル・レイアウト</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">261</context></context-group>
       </trans-unit>
       <trans-unit id="6317170736181476800" datatype="html">
