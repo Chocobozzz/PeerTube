@@ -80,6 +80,15 @@ module.exports = function () {
           test: /\.ts$/,
           use: [
             {
+              loader: "babel-loader",
+              options: {
+                "presets": [
+                  "@babel/preset-env"
+                ],
+                "plugins": ["@babel/plugin-transform-spread", "@babel/plugin-transform-classes", "@babel/plugin-proposal-object-rest-spread", "@babel/plugin-transform-async-to-generator", "transform-es2015-constants"]
+              }
+            },
+            {
               loader: 'ts-loader',
               options: {
                 configFile: helpers.root('src/standalone/videos/tsconfig.json')
@@ -95,13 +104,11 @@ module.exports = function () {
               options: {
                 presets: [
                   [
-                    '@babel/preset-env', {
-                      targets: 'last 1 Chrome version, last 2 Edge major versions, Firefox ESR, Safari >= 11, ios_saf >= 11'
-                    }
+                    '@babel/preset-env'
                   ]
                 ],
 
-                plugins : ["@babel/plugin-transform-spread", "@babel/plugin-transform-classes", "@babel/plugin-proposal-object-rest-spread"]
+                plugins : ["@babel/plugin-transform-spread", "@babel/plugin-transform-classes", "@babel/plugin-proposal-object-rest-spread", "@babel/plugin-transform-async-to-generator", "transform-es2015-constants"]
               }
             }
           ]

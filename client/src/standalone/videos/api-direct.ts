@@ -86,10 +86,6 @@ export class PeerTubeEmbedApi {
 
 			pr.catch((e: any) => {
 
-				console.log("E", e)
-
-				
-
 				if (e && e.toString) {
 					e = e.toString()
 
@@ -219,8 +215,6 @@ export class PeerTubeEmbedApi {
 	public enableHotKeys(){
 		if(!this.embed.player) return
 
-		console.log('enableHotKeys')
-
 			this.embed.player.trigger('enablehotkeys')
 	}
 
@@ -251,6 +245,7 @@ export class PeerTubeEmbedApi {
 
 			this.state = currentState
 
+
 			this.answer({
 				method: 'playbackStatusUpdate',
 				params: {
@@ -273,10 +268,6 @@ export class PeerTubeEmbedApi {
 		if (hls){
 
 			hls.on('hlsError', (event : any, data : any) => {
-
-				console.log("data", data)
-
-				
 
 				if (data.details == "bufferStalledError"){
 					slf.answer({ method: 'hlsError', params: {
@@ -327,8 +318,6 @@ export class PeerTubeEmbedApi {
 		})
 
 		this.embed.player.on('fullscreenchange', () => {
-
-			console.log("fullscreenchange", this.embed.player.isFullscreen())
 
 			this.answer({
 				method: 'fullscreenchange',

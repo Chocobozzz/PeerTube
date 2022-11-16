@@ -143,8 +143,6 @@ export class PlayerManagerOptions {
 
       if(params.localVideo) this.mode = 'localvideo'
 
-      console.log("LOCALVIDEO", this)
-
       /*if (modeParam) {
         if (modeParam === 'p2p-media-loader') this.mode = 'p2p-media-loader'
         else this.mode = 'webtorrent'
@@ -189,8 +187,6 @@ export class PlayerManagerOptions {
       sources,
       poster
     } = options
-
-    console.log('video', video)
 
     //const videoCaptions = await this.buildCaptions(captionsResponse, translations)
 

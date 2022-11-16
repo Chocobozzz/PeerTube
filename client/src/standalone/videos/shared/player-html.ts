@@ -27,7 +27,6 @@ export class PlayerHTML {
   }
 
   removeErrorBlock(){
-	console.log('this.errorBlock', this.errorBlock)
 	if (this.errorBlock){
 		this.wrapperElement.removeChild(this.errorBlock);
 	}
@@ -39,8 +38,6 @@ export class PlayerHTML {
 
   displayError (text: string, style : string = "noncritical" /* translations: Translations*/) {
     logger.error(text)
-
-	console.log('text', text)
 
     const errorBlock = document.createElement("div");
 		errorBlock.className = "error-block " + style;
@@ -201,8 +198,6 @@ export class PlayerHTML {
 
 	setARElement(videoInfo: VideoDetails, element : any) {
 
-		console.log('element', element)
-
 		try {
 
 			var aslayer = this.createARElement(videoInfo)
@@ -214,7 +209,6 @@ export class PlayerHTML {
 
 		}
 		catch (e) {
-			console.log("E", e)
 		}
 
 	}

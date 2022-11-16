@@ -265,7 +265,6 @@ export class PeerTubeEmbed {
 
 
 			}).catch((e : any) => {
-				console.log('e', e)
 			})
 
 		}, 30000)
@@ -451,8 +450,6 @@ export class PeerTubeEmbed {
 
 
 	destroy(){
-
-		console.log("DESTRY", this)
 
 		this.stopWaiting()
 

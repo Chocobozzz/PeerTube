@@ -1973,6 +1973,20 @@
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.3.1"
 
+"babel-plugin-transform-es2015-constants@^6.1.4":
+  "integrity" "sha512-eocUwrbNfbDBwc+IPKIiX38HEW26RziwiJiCPppU3KwxkcBwhh7RomO0Q926IfP1mearM4LBCpUQNpQfyxKMYg=="
+  "resolved" "https://registry.npmjs.org/babel-plugin-transform-es2015-constants/-/babel-plugin-transform-es2015-constants-6.1.4.tgz"
+  "version" "6.1.4"
+  dependencies:
+    "babel-runtime" "^5.0.0"
+
+"babel-runtime@^5.0.0":
+  "integrity" "sha512-KpgoA8VE/pMmNCrnEeeXqFG24TIH11Z3ZaimIhJWsin8EbfZy3WzFKUTIan10ZIDgRVvi9EkLbruJElJC9dRlg=="
+  "resolved" "https://registry.npmjs.org/babel-runtime/-/babel-runtime-5.8.38.tgz"
+  "version" "5.8.38"
+  dependencies:
+    "core-js" "^1.0.0"
+
 "balanced-match@^1.0.0":
   "integrity" "sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw=="
   "resolved" "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz"
@@ -2544,6 +2558,11 @@
   dependencies:
     "browserslist" "^4.21.2"
     "semver" "7.0.0"
+
+"core-js@^1.0.0":
+  "integrity" "sha512-ZiPp9pZlgxpWRu0M+YWbm6+aQ84XEfH1JRXvfOc/fILWI0VKhLC2LX13X1NYq4fULzLMq7Hfh43CSo2/aIaUPA=="
+  "resolved" "https://registry.npmjs.org/core-js/-/core-js-1.2.7.tgz"
+  "version" "1.2.7"
 
 "core-js@^3.22.8":
   "integrity" "sha512-IeOyT8A6iK37Ep4kZDD423mpi6JfPRoPUdQwEWYiGolvn4o6j2diaRzNfDfpTdu3a5qMbrGUzKUpYpRY8jXCkQ=="
@@ -4964,10 +4983,10 @@
   "resolved" "https://registry.npmjs.org/p-try/-/p-try-2.2.0.tgz"
   "version" "2.2.0"
 
-"p2p-media-loader-core-basyton@^1.0.15":
-  "integrity" "sha512-lvSVDfIsek8lXsiTTwFaEemuQWVIjmqT9d4kaoeXmLG3Iq1lX0oT2syl/0gvxVHJ9W2TuJO1QAr5qZjWqObzdQ=="
-  "resolved" "https://registry.npmjs.org/p2p-media-loader-core-basyton/-/p2p-media-loader-core-basyton-1.0.15.tgz"
-  "version" "1.0.15"
+"p2p-media-loader-core-basyton@^1.0.17":
+  "integrity" "sha512-Xqxu5HDovAJDZWy2oiPz6+DdLFq9+4d0CSPa4fXFmH63zhNom7KBVgRS2wq2bcJAn2nhc7O+T6Xr69PmVFzuqA=="
+  "resolved" "https://registry.npmjs.org/p2p-media-loader-core-basyton/-/p2p-media-loader-core-basyton-1.0.17.tgz"
+  "version" "1.0.17"
   dependencies:
     "bittorrent-tracker" "^9.19.0"
     "debug" "^4.3.4"
@@ -4975,15 +4994,15 @@
     "sha.js" "^2.4.11"
     "simple-peer" "^9.11.1"
 
-"p2p-media-loader-hlsjs-basyton@^1.0.15":
-  "integrity" "sha512-Zy2u6pLdJAAkdQ0UeXPvurG1jQ9TkzIMpalwQ11ezu1I6746YMbjqRbrbnQg3PkbEw18VdR2By00rDpF0ST9Sg=="
-  "resolved" "https://registry.npmjs.org/p2p-media-loader-hlsjs-basyton/-/p2p-media-loader-hlsjs-basyton-1.0.15.tgz"
-  "version" "1.0.15"
+"p2p-media-loader-hlsjs-basyton@^1.0.17":
+  "integrity" "sha512-fg87i/ivF//mnA1WB9JqnAXaubB/gG++nB1I/BVBiWo/N4IkdEKyhucRMvpBDlWYJj2/M3hNyPtKYDYMEkGpOg=="
+  "resolved" "https://registry.npmjs.org/p2p-media-loader-hlsjs-basyton/-/p2p-media-loader-hlsjs-basyton-1.0.17.tgz"
+  "version" "1.0.17"
   dependencies:
     "debug" "^4.3.4"
     "events" "^3.3.0"
     "m3u8-parser" "^4.7.1"
-    "p2p-media-loader-core-basyton" "^1.0.15"
+    "p2p-media-loader-core-basyton" "^1.0.17"
 
 "package-json-versionify@^1.0.4":
   "integrity" "sha512-mtKKtCeSZMtWcc5hHJS6OlEGP7J9g7WN6vWCCZi2hCXFag/Zmjokh6WFFTQb9TuMnBcZpRjhhMQyOyglPCAahw=="

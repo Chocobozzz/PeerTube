@@ -81,9 +81,6 @@ class P2pMediaLoaderPlugin extends Plugin {
 
       this.hlsjs = (player as any).hls
 
-      console.log("READY", player, (player as any).hls )
-
-
       if ((videojs as any).Html5Hlsjs) {
         this.initializePlugin()
       }
