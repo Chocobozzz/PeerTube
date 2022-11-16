@@ -1,7 +1,7 @@
 import { Job } from 'bullmq'
 import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from '@server/lib/activitypub/send'
 import { ActorFollowHealthCache } from '@server/lib/actor-follow-health-cache'
-import { sequentialHTTPBroadcastFromWorker } from '@server/lib/worker/parent-process'
+import { parallelHTTPBroadcastFromWorker, sequentialHTTPBroadcastFromWorker } from '@server/lib/worker/parent-process'
 import { ActivitypubHttpBroadcastPayload } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 
@@ -22,7 +22,7 @@ async function processActivityPubParallelHttpBroadcast (job: Job<ActivitypubHttp
 
   const requestOptions = await buildRequestOptions(job.data)
 
-  const { badUrls, goodUrls } = await sequentialHTTPBroadcastFromWorker({ uris: job.data.uris, requestOptions })
+  const { badUrls, goodUrls } = await parallelHTTPBroadcastFromWorker({ uris: job.data.uris, requestOptions })
 
   return ActorFollowHealthCache.Instance.updateActorFollowsHealth(goodUrls, badUrls)
 }

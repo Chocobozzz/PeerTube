@@ -1,7 +1,7 @@
 import { join } from 'path'
 import Piscina from 'piscina'
 import { processImage } from '@server/helpers/image-utils'
-import { WORKER_THREADS } from '@server/initializers/constants'
+import { JOB_CONCURRENCY, WORKER_THREADS } from '@server/initializers/constants'
 import { httpBroadcast } from './workers/http-broadcast'
 import { downloadImage } from './workers/image-downloader'
 
@@ -43,8 +43,9 @@ function parallelHTTPBroadcastFromWorker (options: Parameters<typeof httpBroadca
   if (!parallelHTTPBroadcastWorker) {
     parallelHTTPBroadcastWorker = new Piscina({
       filename: join(__dirname, 'workers', 'http-broadcast.js'),
-      concurrentTasksPerWorker: WORKER_THREADS.PARALLEL_HTTP_BROADCAST.CONCURRENCY,
-      maxThreads: WORKER_THREADS.PARALLEL_HTTP_BROADCAST.MAX_THREADS
+      // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
+      concurrentTasksPerWorker: JOB_CONCURRENCY['activitypub-http-broadcast-parallel'],
+      maxThreads: 1
     })
   }
 
@@ -59,8 +60,9 @@ function sequentialHTTPBroadcastFromWorker (options: Parameters<typeof httpBroad
   if (!sequentialHTTPBroadcastWorker) {
     sequentialHTTPBroadcastWorker = new Piscina({
       filename: join(__dirname, 'workers', 'http-broadcast.js'),
-      concurrentTasksPerWorker: WORKER_THREADS.SEQUENTIAL_HTTP_BROADCAST.CONCURRENCY,
-      maxThreads: WORKER_THREADS.SEQUENTIAL_HTTP_BROADCAST.MAX_THREADS
+      // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
+      concurrentTasksPerWorker: JOB_CONCURRENCY['activitypub-http-broadcast'],
+      maxThreads: 1
     })
   }
 
