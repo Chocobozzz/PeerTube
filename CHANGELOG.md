@@ -1,5 +1,27 @@
 # Changelog
 
+## v4.3.1
+
+### IMPORTANT NOTES
+
+ * If you upgrade from PeerTube **< 4.3.0**, please follow 4.3.0 IMPORTANT NOTES
+
+### SECURITY
+
+ * Prevent XSS in sort select on pages that list videos. Thanks to Anthony Roth who reported the vulnerability!
+
+### Bug fixes
+
+ * Fix broken embed player on live reload
+ * Fix channel follow when manually approve instance followers is enabled
+ * Fix input with number overflow on small screen
+ * Fix moderation dropdown overflow on mobile
+ * Clearer instance subscription page title in admin
+ * Prevent "Cannot use same state" video error
+ * Correctly handle RTMP streams without audio
+ * Correctly process broadcast parallel job in parallel
+
+
 ## v4.3.0
 
 ### IMPORTANT NOTES
