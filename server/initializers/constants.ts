@@ -808,7 +808,7 @@ const VIDEO_LIVE = {
 
 const MEMOIZE_TTL = {
   OVERVIEWS_SAMPLE: 1000 * 3600 * 4, // 4 hours
-  INFO_HASH_EXISTS: 1000 * 3600 * 12, // 12 hours
+  INFO_HASH_EXISTS: 1000 * 60, // 1 minute
   VIDEO_DURATION: 1000 * 10, // 10 seconds
   LIVE_ABLE_TO_UPLOAD: 1000 * 60, // 1 minute
   LIVE_CHECK_SOCKET_HEALTH: 1000 * 60, // 1 minute
