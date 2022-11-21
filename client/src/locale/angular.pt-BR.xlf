@@ -3402,20 +3402,17 @@
       </trans-unit>
       <trans-unit id="4262297989675590582" datatype="html">
         <source>This live has not started yet.</source>
-        <target state="new"> This live has not started yet.
-</target>
+        <target state="translated">Esta transmissão ao vivo ainda não iniciou.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="4926204350710628499" datatype="html">
         <source>This live has ended.</source>
-        <target state="new"> This live has ended.
-</target>
+        <target state="translated">Esta transmissão ao vivo terminou.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="7365478703093390233" datatype="html">
         <source>There are no videos available in this playlist.</source>
-        <target state="new"> There are no videos available in this playlist.
-</target>
+        <target state="translated">Não existem vídeos disponíveis nesta lista de reprodução.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">37,39</context>
@@ -3423,9 +3420,7 @@
       </trans-unit>
       <trans-unit id="8518611938109939710" datatype="html">
         <source>SORT BY</source>
-        <target state="new">
-        SORT BY
-      </target>
+        <target state="translated">ORDENAR POR</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="6448160249466325288" datatype="html">
@@ -3494,7 +3489,7 @@
       </trans-unit>
       <trans-unit id="723038562278401061" datatype="html">
         <source>Friendly Reminder:</source>
-        <target state="new">Friendly Reminder:</target>
+        <target state="translated">Recado amigável:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context>
           <context context-type="linenumber">4</context>
@@ -3507,7 +3502,7 @@
       </trans-unit>
       <trans-unit id="982956590420630883" datatype="html">
         <source>Markdown compatible</source>
-        <target state="new">Markdown compatible</target>
+        <target state="translated">Compatível com Markdown</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="5793595564950675122" datatype="html">
@@ -3517,7 +3512,7 @@
       </trans-unit>
       <trans-unit id="8422216333877786919" datatype="html">
         <source>Auto generated links</source>
-        <target state="new">Auto generated links</target>
+        <target state="translated">Links gerados automaticamente</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="6365822416124232422" datatype="html">
@@ -3527,27 +3522,27 @@
       </trans-unit>
       <trans-unit id="2810844969104710423" datatype="html">
         <source>bold</source>
-        <target state="new">bold</target>
+        <target state="translated">negrito</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="8497278965577453274" datatype="html">
         <source>italic</source>
-        <target state="new">italic</target>
+        <target state="translated">itálico</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="7227611412155083002" datatype="html">
         <source>Emoji shortcuts</source>
-        <target state="new">Emoji shortcuts</target>
+        <target state="translated">Atalhos de Emoji</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6608581312644027413" datatype="html">
         <source>Emoji markup</source>
-        <target state="new">Emoji markup</target>
+        <target state="translated">Marcação de Emoji</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="381522038671562286" datatype="html">
         <source>See complete list</source>
-        <target state="new">See complete list</target>
+        <target state="translated">Ver lista completa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="2263890353858735493">
@@ -3557,7 +3552,7 @@
       </trans-unit>
       <trans-unit id="7508177761852352782" datatype="html">
         <source>You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example).</source>
-        <target state="new"> You can comment using an account on any ActivityPub-compatible instance (PeerTube/Mastodon/Pleroma account for example). </target>
+        <target state="translated">Você pode comentar utilizando um conta em qualquer instância compatível com ActivityPub (conta do PeerTube/Mastodon/Pleroma por exemplo).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="2958389355547305739" datatype="html">
@@ -3588,7 +3583,7 @@
       </trans-unit>
       <trans-unit id="9031514421077169181" datatype="html">
         <source>Video redundancies</source>
-        <target state="new">Video redundancies</target>
+        <target state="translated">Redundâncias de vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="3516494528184217808">
@@ -3616,7 +3611,7 @@
       </trans-unit>
       <trans-unit id="3029923402309610616" datatype="html">
         <source>Token renewed. Update your client configuration accordingly.</source>
-        <target state="new">Token renewed. Update your client configuration accordingly.</target>
+        <target state="translated">Token renovado. Atualize a configuração de seu cliente apropriadamente.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -3660,7 +3655,7 @@
       </trans-unit>
       <trans-unit id="4965562695253171955" datatype="html">
         <source>Clear filter</source>
-        <target state="new">Clear filter</target>
+        <target state="translated">Limpar filtro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">28</context>
@@ -3672,7 +3667,7 @@
       </trans-unit>
       <trans-unit id="4266779970063047572" datatype="html">
         <source>Video/Comment/Account</source>
-        <target state="new">Video/Comment/Account</target>
+        <target state="translated">Vídeo/Comentário/Conta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="8040881171107393560">
@@ -3718,7 +3713,7 @@
       </trans-unit>
       <trans-unit id="4188654437346976139" datatype="html">
         <source>Rejected</source>
-        <target state="new">Rejected</target>
+        <target state="translated">Rejeitado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">65,66</context>
@@ -3812,7 +3807,7 @@
       </trans-unit>
       <trans-unit id="9216117865911519658" datatype="html">
         <source>Action</source>
-        <target state="new">Action</target>
+        <target state="translated">Ação</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">40</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">28</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">23</context></context-group>
@@ -3822,7 +3817,7 @@
       </trans-unit>
       <trans-unit id="5968342253366599875" datatype="html">
         <source>Videos redundancies</source>
-        <target state="new">Videos redundancies</target>
+        <target state="translated">Redundâncias de vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="4937132637898470918" datatype="html">
@@ -3837,17 +3832,17 @@
       </trans-unit>
       <trans-unit id="8363291180171434623" datatype="html">
         <source>Table parameters</source>
-        <target state="new">Table parameters</target>
+        <target state="translated">Parâmetros de tabela</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="5230110096688656830" datatype="html">
         <source>Select columns</source>
-        <target state="new">Select columns</target>
+        <target state="translated">Selecionar colunas</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="5893518121808195081" datatype="html">
         <source>Highlight banned users</source>
-        <target state="new">Highlight banned users</target>
+        <target state="translated">Destacar usuários banidos</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="5248717555542428023">
@@ -3893,7 +3888,7 @@
       </trans-unit>
       <trans-unit id="2622255144026150901" datatype="html">
         <source>Auth plugin</source>
-        <target state="new">Auth plugin</target>
+        <target state="translated">Plugin de autenticação</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">179</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">179</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">139</context></context-group>
