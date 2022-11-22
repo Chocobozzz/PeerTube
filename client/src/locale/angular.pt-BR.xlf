@@ -6620,19 +6620,12 @@ color: red;
       </trans-unit>
       <trans-unit id="2427149618141327033" datatype="html">
         <source>Browse videos on PeerTube to add them in your playlist.</source>
-        <target state="new">
-        Browse videos on PeerTube to add them in your playlist.
-      </target>
+        <target state="translated">Busque vídeos no PeerTube e adicione-os em sua lista de reprodução.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="8901774330683812267" datatype="html">
         <source>See the <x id="START_LINK"/>documentation<x id="CLOSE_LINK"/> for more information. </source>
-        <target state="new">
-        See the 
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>documentation
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information.
-      
-        </target>
+        <target state="translated">Consulte a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>documentação<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> para mais informação. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="3461985498881453026" datatype="html">
@@ -6645,7 +6638,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8844610145426272276" datatype="html">
         <source>To help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, don't forget to <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot;&gt;"/>set up your account profile<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> by adding an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="new"> To help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, don't forget to <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot;&gt;"/>set up your account profile<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> by adding an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">Para ajudar os moderadores e outros usuários conhecer <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>quem você é<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, não se esqueça de  <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot;&gt;"/>configurar o seu perfil de usuário<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> adicionando um <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> e uma <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>descrição<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8479900728400966992" datatype="html">
@@ -7469,7 +7462,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="1421502666684458815" datatype="html">
         <source>This is the name that will be displayed in your profile URL.</source>
-        <target state="new">This is the name that will be displayed in your profile URL.</target>
+        <target state="translated">Este é o nome que será exibido em sua URL de perfil.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">38</context>
@@ -7477,7 +7470,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="5007378598046048755" datatype="html">
         <source>Example: sweetmelodies24</source>
-        <target state="new">Example: sweetmelodies24</target>
+        <target state="translated">Exemplo: sweetmelodies24</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">42</context>
@@ -7485,7 +7478,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="6433602064879074151" datatype="html">
         <source>Channel identifier cannot be the same as your account name. You can click on the first step to update your account name.</source>
-        <target state="new"> Channel identifier cannot be the same as your account name. You can click on the first step to update your account name. </target>
+        <target state="translated">Identificador de canal não pode ser o mesmo que o seu nome de conta. Você pode clicar no primeiro passo e atualizar o seu nome de conta.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">50,52</context>
@@ -7499,7 +7492,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8463487834152954723" datatype="html">
         <source>john_channel</source>
-        <target state="new">john_channel</target>
+        <target state="translated">canal_do_joao</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">96</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
@@ -8676,7 +8669,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8772116786769251214" datatype="html">
         <source>error</source>
-        <target state="new">error</target>
+        <target state="translated">erro</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
       <trans-unit id="3422890808980876594" datatype="html">
@@ -8693,12 +8686,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="4116911651502837995" datatype="html">
         <source>Files</source>
-        <target state="new">Files</target>
+        <target state="translated">Arquivos</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="4767765747214995164" datatype="html">
         <source>Published <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="new">Published <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">Publicado <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="6759205696902713848">
@@ -8708,7 +8701,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="6410650387447929805" datatype="html">
         <source>Light/Orange or Dark</source>
-        <target state="new">Light/Orange or Dark</target>
+        <target state="translated">Claro/Laranja ou Escuro</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/theme/theme.service.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="1519954996184640001">
@@ -8736,18 +8729,18 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8286337167859377104" datatype="html">
         <source>Create user</source>
-        <target state="new">Create user</target>
+        <target state="translated">Criar usuário</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-create.component.ts</context><context context-type="linenumber">97</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="7098180453085889026" datatype="html">
         <source>Blocked videos</source>
-        <target state="new">Blocked videos</target>
+        <target state="translated">Vídeos bloqueados</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="7805059636749367886" datatype="html">
         <source>Muted instances</source>
-        <target state="new">Muted instances</target>
+        <target state="translated">Instâncias silenciadas</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.routes.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="5974506725502681113" datatype="html">
@@ -8764,9 +8757,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="780323526182667308" datatype="html">
         <source>User <x id="PH"/> updated.</source>
-        <target state="new">User 
-          <x id="PH"/> updated.
-        </target>
+        <target state="translated">Usuário <x id="PH"/> atualizado.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-update.component.ts</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="1349763489797682899">
@@ -8783,7 +8774,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="5679185794144903715" datatype="html">
         <source>Two factor authentication of <x id="PH" equiv-text="this.user.username"/> disabled.</source>
-        <target state="new">Two factor authentication of <x id="PH" equiv-text="this.user.username"/> disabled.</target>
+        <target state="translated">Autenticação em dois fatores de <x id="PH" equiv-text="this.user.username"/> desabilitada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">134</context>
@@ -8791,22 +8782,22 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="7483807629538115183" datatype="html">
         <source>Users list</source>
-        <target state="new">Users list</target>
+        <target state="translated">Lista de usuários</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/users.routes.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="1525334987774465166" datatype="html">
         <source>Create a user</source>
-        <target state="new">Create a user</target>
+        <target state="translated">Criar um usuário</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/users.routes.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="5552039423287890133" datatype="html">
         <source>Update a user</source>
-        <target state="new">Update a user</target>
+        <target state="translated">Atualizar um usuário</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/users.routes.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="2005509140164856243" datatype="html">
         <source>Video type</source>
-        <target state="new">Video type</target>
+        <target state="translated">Tipo de vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="1878553503929537171" datatype="html">
@@ -8816,7 +8807,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8610504659433544583" datatype="html">
         <source>Live</source>
-        <target state="new">Live</target>
+        <target state="translated">Transmissão ao vivo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">53</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
@@ -8827,12 +8818,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="5876109550513228304" datatype="html">
         <source>With WebTorrent</source>
-        <target state="new">With WebTorrent</target>
+        <target state="translated">Com WebTorrent</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="9036202975131076885" datatype="html">
         <source>Without WebTorrent</source>
-        <target state="new">Without WebTorrent</target>
+        <target state="translated">Sem WebTorrent</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="7468888924775619361" datatype="html">
@@ -8924,7 +8915,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="738031253894929036" datatype="html">
         <source>{count, plural, =1 {1 user unbanned.} other {<x id="count"/> users unbanned.}}</source>
-        <target state="new">{count, plural, =1 {1 user unbanned.} other {<x id="count"/> users unbanned.}}</target>
+        <target state="translated">{count, plural, =1 {1 usuário desbanido.} other {<x id="count"/> usuários desbanidos.}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">227</context></context-group>
       </trans-unit>
       <trans-unit id="8712248120167780385">
