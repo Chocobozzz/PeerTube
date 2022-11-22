@@ -7090,9 +7090,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="1970848297295860531" datatype="html">
         <source>ADMINISTRATORS &amp; SUSTAINABILITY</source>
-        <target state="new">
-        ADMINISTRATORS &amp; SUSTAINABILITY
-      </target>
+        <target state="translated">ADMINISTRADORES &amp; SUSTENTABILIDADE</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="6741838149332998818" datatype="html">
@@ -7120,23 +7118,17 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="7707185552909365717" datatype="html">
         <source>INFORMATION</source>
-        <target state="new">
-        INFORMATION
-      </target>
+        <target state="translated">INFORMAÇÃO</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="8685905644837116382" datatype="html">
         <source>MODERATION</source>
-        <target state="new">
-        MODERATION
-      </target>
+        <target state="translated">MODERAÇÃO</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">129</context></context-group>
       </trans-unit>
       <trans-unit id="9178042134345945115" datatype="html">
         <source>OTHER INFORMATION</source>
-        <target state="new">
-        OTHER INFORMATION
-      </target>
+        <target state="translated">OUTRA INFORMAÇÃO</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">186</context></context-group>
       </trans-unit>
       <trans-unit id="4281738631669138686" datatype="html">
@@ -7157,7 +7149,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8932880935037645502" datatype="html">
         <source>STATISTICS</source>
-        <target state="new">STATISTICS</target>
+        <target state="translated">ESTATÍSTICAS</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">219</context></context-group>
       </trans-unit>
       <trans-unit id="1161141363959659794" datatype="html">
@@ -7326,7 +7318,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8438752523256358076" datatype="html">
         <source>Show full list</source>
-        <target state="new">Show full list</target>
+        <target state="translated">Exibir lista completa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">13</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
@@ -7348,12 +7340,12 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="4195286790385468087" datatype="html">
         <source>About this instance</source>
-        <target state="new">About this instance</target>
+        <target state="translated">Sobre esta instância</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-routing.module.ts</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="8773846522957677259" datatype="html">
         <source>About PeerTube</source>
-        <target state="new">About PeerTube</target>
+        <target state="translated">Sobre PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-routing.module.ts</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="1812900507515561988" datatype="html">
@@ -7376,7 +7368,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="9082008222523034483" datatype="html">
         <source>Get help</source>
-        <target state="new">Get help</target>
+        <target state="translated">Obtenha ajuda</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="6386856862203107763" datatype="html">
@@ -7386,7 +7378,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="4331636419103456800" datatype="html">
         <source>Done!</source>
-        <target state="new">Done!</target>
+        <target state="translated">Feito!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">103</context>
@@ -7430,7 +7422,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="5659987171239176484" datatype="html">
         <source>Terms of <x id="PH" equiv-text="this.about.instance.name"/></source>
-        <target state="new">Terms of <x id="PH" equiv-text="this.about.instance.name"/></target>
+        <target state="translated">Termos de <x id="PH" equiv-text="this.about.instance.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-about-accordion.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -7443,7 +7435,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="8980375993935541237" datatype="html">
         <source>Step</source>
-        <target state="new">Step</target>
+        <target state="translated">Passo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/custom-stepper.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="8583412279916132438" datatype="html">
@@ -7469,7 +7461,7 @@ channel with the same name (<x id="PH_2"/>)!</target>
       </trans-unit>
       <trans-unit id="1346553616305614767" datatype="html">
         <source>Channel identifier</source>
-        <target state="new">Channel identifier</target>
+        <target state="translated">Identificador de canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">36</context>
