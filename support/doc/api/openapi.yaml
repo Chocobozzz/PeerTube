@@ -4477,6 +4477,7 @@ paths:
         - $ref: '#/components/parameters/isLocal'
         - $ref: '#/components/parameters/include'
         - $ref: '#/components/parameters/privacyOneOf'
+        - $ref: '#/components/parameters/uuids'
         - $ref: '#/components/parameters/hasHLSFiles'
         - $ref: '#/components/parameters/hasWebtorrentFiles'
         - $ref: '#/components/parameters/skipCount'
@@ -5606,6 +5607,14 @@ components:
       schema:
         $ref: '#/components/schemas/VideoPrivacySet'
       description: '**PeerTube >= 4.0** Display only videos in this specific privacy/privacies'
+    uuids:
+      name: uuids
+      in: query
+      required: false
+      schema:
+        items:
+          type: string
+      description: 'Find videos with specific UUIDs'
     include:
       name: include
       in: query
