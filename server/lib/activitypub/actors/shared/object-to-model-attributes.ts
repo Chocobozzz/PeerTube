@@ -35,31 +35,33 @@ function getImagesInfoFromObject (actorObject: ActivityPubActor, type: ActorImag
     ? actorObject.icons || actorObject.icon
     : actorObject.image
 
-  return normalizeIconOrImage(iconsOrImages).map(iconOrImage => {
-    const mimetypes = MIMETYPES.IMAGE
+  return normalizeIconOrImage(iconsOrImages)
+    .map(iconOrImage => {
+      const mimetypes = MIMETYPES.IMAGE
 
-    if (iconOrImage.type !== 'Image' || !isActivityPubUrlValid(iconOrImage.url)) return undefined
+      if (iconOrImage.type !== 'Image' || !isActivityPubUrlValid(iconOrImage.url)) return undefined
 
-    let extension: string
+      let extension: string
 
-    if (iconOrImage.mediaType) {
-      extension = mimetypes.MIMETYPE_EXT[iconOrImage.mediaType]
-    } else {
-      const tmp = getLowercaseExtension(iconOrImage.url)
+      if (iconOrImage.mediaType) {
+        extension = mimetypes.MIMETYPE_EXT[iconOrImage.mediaType]
+      } else {
+        const tmp = getLowercaseExtension(iconOrImage.url)
 
-      if (mimetypes.EXT_MIMETYPE[tmp] !== undefined) extension = tmp
-    }
+        if (mimetypes.EXT_MIMETYPE[tmp] !== undefined) extension = tmp
+      }
 
-    if (!extension) return undefined
+      if (!extension) return undefined
 
-    return {
-      name: buildUUID() + extension,
-      fileUrl: iconOrImage.url,
-      height: iconOrImage.height,
-      width: iconOrImage.width,
-      type
-    }
-  })
+      return {
+        name: buildUUID() + extension,
+        fileUrl: iconOrImage.url,
+        height: iconOrImage.height,
+        width: iconOrImage.width,
+        type
+      }
+    })
+    .filter(i => !!i)
 }
 
 function getActorDisplayNameFromObject (actorObject: ActivityPubActor) {
