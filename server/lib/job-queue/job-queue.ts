@@ -41,8 +41,16 @@ import {
   VideoTranscodingPayload
 } from '../../../shared/models'
 import { logger } from '../../helpers/logger'
-import { JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants'
+import {
+  JOB_ATTEMPTS,
+  JOB_CONCURRENCY,
+  JOB_REMOVAL_OPTIONS,
+  JOB_TTL,
+  REPEAT_JOBS,
+  WEBSERVER
+} from '../../initializers/constants'
 import { Hooks } from '../plugins/hooks'
+import { Redis } from '../redis'
 import { processActivityPubCleaner } from './handlers/activitypub-cleaner'
 import { processActivityPubFollow } from './handlers/activitypub-follow'
 import { processActivityPubHttpSequentialBroadcast, processActivityPubParallelHttpBroadcast } from './handlers/activitypub-http-broadcast'
@@ -63,7 +71,7 @@ import { processVideoLiveEnding } from './handlers/video-live-ending'
 import { processVideoStudioEdition } from './handlers/video-studio-edition'
 import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processVideosViewsStats } from './handlers/video-views-stats'
-import { Redis } from '../redis'
+import { parseDurationToMs } from '@server/helpers/core-utils'
 
 export type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -373,7 +381,7 @@ class JobQueue {
     })
   }
 
-  private buildJobFlowOption (job: CreateJobArgument & CreateJobOptions) {
+  private buildJobFlowOption (job: CreateJobArgument & CreateJobOptions): FlowJob {
     return {
       name: 'job',
       data: job.payload,
@@ -387,7 +395,9 @@ class JobQueue {
       backoff: { delay: 60 * 1000, type: 'exponential' },
       attempts: JOB_ATTEMPTS[type],
       priority: options.priority,
-      delay: options.delay
+      delay: options.delay,
+
+      ...this.buildJobRemovalOptions(type)
     }
   }
 
@@ -482,18 +492,23 @@ class JobQueue {
   async removeOldJobs () {
     for (const key of Object.keys(this.queues)) {
       const queue: Queue = this.queues[key]
-      await queue.clean(JOB_COMPLETED_LIFETIME, 100, 'completed')
+      await queue.clean(parseDurationToMs('7 days'), 100, 'completed')
+      await queue.clean(parseDurationToMs('7 days'), 100, 'failed')
     }
   }
 
   private addRepeatableJobs () {
     this.queues['videos-views-stats'].add('job', {}, {
-      repeat: REPEAT_JOBS['videos-views-stats']
+      repeat: REPEAT_JOBS['videos-views-stats'],
+
+      ...this.buildJobRemovalOptions('videos-views-stats')
     }).catch(err => logger.error('Cannot add repeatable job.', { err }))
 
     if (CONFIG.FEDERATION.VIDEOS.CLEANUP_REMOTE_INTERACTIONS) {
       this.queues['activitypub-cleaner'].add('job', {}, {
-        repeat: REPEAT_JOBS['activitypub-cleaner']
+        repeat: REPEAT_JOBS['activitypub-cleaner'],
+
+        ...this.buildJobRemovalOptions('activitypub-cleaner')
       }).catch(err => logger.error('Cannot add repeatable job.', { err }))
     }
   }
@@ -503,6 +518,23 @@ class JobQueue {
     if (jobType === 'video-import') return CONFIG.IMPORT.VIDEOS.CONCURRENCY
 
     return JOB_CONCURRENCY[jobType]
+  }
+
+  private buildJobRemovalOptions (queueName: string) {
+    return {
+      removeOnComplete: {
+        // Wants seconds
+        age: (JOB_REMOVAL_OPTIONS.SUCCESS[queueName] || JOB_REMOVAL_OPTIONS.SUCCESS.DEFAULT) / 1000,
+
+        count: JOB_REMOVAL_OPTIONS.COUNT
+      },
+      removeOnFail: {
+        // Wants seconds
+        age: (JOB_REMOVAL_OPTIONS.FAILURE[queueName] || JOB_REMOVAL_OPTIONS.FAILURE.DEFAULT) / 1000,
+
+        count: JOB_REMOVAL_OPTIONS.COUNT / 1000
+      }
+    }
   }
 
   static get Instance () {
