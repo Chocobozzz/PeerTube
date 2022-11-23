@@ -730,9 +730,9 @@ search:
     # You should deploy your own with https://framagit.org/framasoft/peertube/search-index,
     # and can use https://search.joinpeertube.org/ for tests, but keep in mind the latter is an unmoderated search index
     url: ''
-    # You can disable local search, so users only use the search index
+    # You can disable local search in the client, so users only use the search index
     disable_local_search: false
-    # If you did not disable local search, you can decide to use the search index by default
+    # If you did not disable local search in the client, you can decide to use the search index by default
     is_default_search: false
 
 # PeerTube client/interface configuration
