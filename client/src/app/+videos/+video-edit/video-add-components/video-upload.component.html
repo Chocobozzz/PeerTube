@@ -66,7 +66,10 @@
       <span *ngIf="videoUploadPercents !== 100 || videoUploaded">{{ videoUploadPercents }}%</span>
     </div>
   </div>
-  <input *ngIf="videoUploaded === false" type="button" i18n-value="Cancel ongoing upload of a video" value="Cancel" (click)="cancelUpload()" />
+  <input
+    *ngIf="videoUploaded === false"
+    type="button" class="peertube-button grey-button ms-1" i18n-value="Cancel ongoing upload of a video" value="Cancel" (click)="cancelUpload()"
+  />
 </div>
 
 <div *ngIf="error && enableRetryAfterError" class="upload-progress-retry">
