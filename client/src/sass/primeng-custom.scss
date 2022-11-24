@@ -667,7 +667,7 @@ p-table {
           @include margin-right(10px);
 
           .p-paginator-icon {
-            @extend .chevron-left !optional;
+            @include chevron-left-default;
           }
         }
 
@@ -675,7 +675,7 @@ p-table {
           @include margin-left(10px);
 
           .p-paginator-icon {
-            @extend .chevron-right !optional;
+            @include chevron-right-default;
           }
         }
 
@@ -769,7 +769,7 @@ p-calendar .p-datepicker {
     }
 
     .p-datepicker-next {
-      @extend .chevron-right !optional;
+      @include chevron-right-default;
 
       color: #000 !important;
       text-align: end;
@@ -780,7 +780,7 @@ p-calendar .p-datepicker {
     }
 
     .p-datepicker-prev {
-      @extend .chevron-left !optional;
+      @include chevron-left-default;
 
       color: #000 !important;
       text-align: start;
@@ -794,13 +794,13 @@ p-calendar .p-datepicker {
   .p-timepicker {
 
     .pi.pi-chevron-up {
-      @extend .chevron-up !optional;
+      @include chevron-up-default;
 
       color: #000 !important;
     }
 
     .pi.pi-chevron-down {
-      @extend .chevron-down !optional;
+      @include chevron-down-default;
 
       color: #000 !important;
     }

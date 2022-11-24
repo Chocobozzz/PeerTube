@@ -2,6 +2,7 @@
 @use '_mixins' as *;
 @use '_badges' as *;
 @use '_icons' as *;
+@use '_fonts' as *;
 
 .link-orange {
   color: pvar(--mainForegroundColor);
@@ -62,7 +63,7 @@
 // ---------------------------------------------------------------------------
 
 .muted {
-  color: pvar(--greyForegroundColor) !important;
+  @include muted;
 }
 
 // ---------------------------------------------------------------------------
@@ -111,7 +112,7 @@
 }
 
 .form-group-description {
-  @extend .muted !optional;
+  @include muted;
 
   font-size: 14px;
   margin-top: 10px;
@@ -219,27 +220,19 @@ label + .form-group-description {
 // ---------------------------------------------------------------------------
 
 .chevron-down {
-  @include chevron-down(0.55rem, 0.15rem);
-
-  margin: 0 8px;
+  @include chevron-down-default;
 }
 
 .chevron-up {
-  @include chevron-up(0.55rem, 0.15rem);
-
-  margin: 0 8px;
+  @include chevron-up-default;
 }
 
 .chevron-right {
-  @include chevron-right(0.55rem, 0.15rem);
-
-  margin: 0 8px;
+  @include chevron-right-default;
 }
 
 .chevron-left {
-  @include chevron-left(0.55rem, 0.15rem);
-
-  margin: 0 8px;
+  @include chevron-left-default;
 }
 
 // ---------------------------------------------------------------------------

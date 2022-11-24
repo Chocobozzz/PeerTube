@@ -18,11 +18,23 @@
   transform: rotate(45deg);
 }
 
+@mixin chevron-right-default {
+  @include chevron-right(0.55rem, 0.15rem);
+
+  margin: 0 8px;
+}
+
 @mixin chevron-down ($size, $border-width) {
   @include chevron($size, $border-width);
 
   bottom: 0.15em;
   transform: rotate(135deg);
+}
+
+@mixin chevron-down-default {
+  @include chevron-down(0.55rem, 0.15rem);
+
+  margin: 0 8px;
 }
 
 @mixin chevron-up ($size, $border-width) {
@@ -32,11 +44,23 @@
   transform: rotate(-45deg);
 }
 
+@mixin chevron-up-default {
+  @include chevron-up(0.55rem, 0.15rem);
+
+  margin: 0 8px;
+}
+
 @mixin chevron-left ($size, $border-width) {
   @include chevron($size, $border-width);
 
   left: 0.25em;
   transform: rotate(-135deg);
+}
+
+@mixin chevron-left-default {
+  @include chevron-left(0.55rem, 0.15rem);
+
+  margin: 0 8px;
 }
 
 // ---------------------------------------------------------------------------
