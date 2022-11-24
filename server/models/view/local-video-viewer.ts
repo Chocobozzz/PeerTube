@@ -112,58 +112,88 @@ export class LocalVideoViewerModel extends Model<Partial<AttributesOnly<LocalVid
       replacements: { videoId: video.id } as any
     }
 
-    let dateWhere = ''
+    if (startDate) queryOptions.replacements.startDate = startDate
+    if (endDate) queryOptions.replacements.endDate = endDate
 
-    if (startDate) {
-      dateWhere += ' AND "localVideoViewer"."startDate" >= :startDate'
-      queryOptions.replacements.startDate = startDate
+    const buildWatchTimePromise = () => {
+      let watchTimeDateWhere = ''
+
+      if (startDate) watchTimeDateWhere += ' AND "localVideoViewer"."startDate" >= :startDate'
+      if (endDate) watchTimeDateWhere += ' AND "localVideoViewer"."endDate" <= :endDate'
+
+      const watchTimeQuery = `SELECT ` +
+        `COUNT("localVideoViewer"."id") AS "totalViewers", ` +
+        `SUM("localVideoViewer"."watchTime") AS "totalWatchTime", ` +
+        `AVG("localVideoViewer"."watchTime") AS "averageWatchTime" ` +
+        `FROM "localVideoViewer" ` +
+        `INNER JOIN "video" ON "video"."id" = "localVideoViewer"."videoId" ` +
+        `WHERE "videoId" = :videoId ${watchTimeDateWhere}`
+
+      return LocalVideoViewerModel.sequelize.query<any>(watchTimeQuery, queryOptions)
     }
 
-    if (endDate) {
-      dateWhere += ' AND "localVideoViewer"."endDate" <= :endDate'
-      queryOptions.replacements.endDate = endDate
+    const buildWatchPeakPromise = () => {
+      let watchPeakDateWhereStart = ''
+      let watchPeakDateWhereEnd = ''
+
+      if (startDate) {
+        watchPeakDateWhereStart += ' AND "localVideoViewer"."startDate" >= :startDate'
+        watchPeakDateWhereEnd += ' AND "localVideoViewer"."endDate" >= :startDate'
+      }
+
+      if (endDate) {
+        watchPeakDateWhereStart += ' AND "localVideoViewer"."startDate" <= :endDate'
+        watchPeakDateWhereEnd += ' AND "localVideoViewer"."endDate" <= :endDate'
+      }
+
+      // Add viewers that were already here, before our start date
+      const beforeWatchersQuery = startDate
+        // eslint-disable-next-line max-len
+        ? `SELECT COUNT(*) AS "total" FROM "localVideoViewer" WHERE "localVideoViewer"."startDate" < :startDate AND "localVideoViewer"."endDate" >= :startDate`
+        : `SELECT 0 AS "total"`
+
+      const watchPeakQuery = `WITH
+        "beforeWatchers" AS (${beforeWatchersQuery}),
+        "watchPeakValues" AS (
+          SELECT "startDate" AS "dateBreakpoint", 1 AS "inc"
+          FROM "localVideoViewer"
+          WHERE "videoId" = :videoId ${watchPeakDateWhereStart}
+          UNION ALL
+          SELECT "endDate" AS "dateBreakpoint", -1 AS "inc"
+          FROM "localVideoViewer"
+          WHERE "videoId" = :videoId ${watchPeakDateWhereEnd}
+        )
+        SELECT "dateBreakpoint", "concurrent"
+        FROM (
+          SELECT "dateBreakpoint", SUM(SUM("inc")) OVER (ORDER BY "dateBreakpoint") + (SELECT "total" FROM "beforeWatchers") AS "concurrent"
+          FROM "watchPeakValues"
+          GROUP BY "dateBreakpoint"
+        ) tmp
+        ORDER BY "concurrent" DESC
+        FETCH FIRST 1 ROW ONLY`
+
+      return LocalVideoViewerModel.sequelize.query<any>(watchPeakQuery, queryOptions)
     }
 
-    const watchTimeQuery = `SELECT ` +
-      `COUNT("localVideoViewer"."id") AS "totalViewers", ` +
-      `SUM("localVideoViewer"."watchTime") AS "totalWatchTime", ` +
-      `AVG("localVideoViewer"."watchTime") AS "averageWatchTime" ` +
-      `FROM "localVideoViewer" ` +
-      `INNER JOIN "video" ON "video"."id" = "localVideoViewer"."videoId" ` +
-      `WHERE "videoId" = :videoId ${dateWhere}`
+    const buildCountriesPromise = () => {
+      let countryDateWhere = ''
 
-    const watchTimePromise = LocalVideoViewerModel.sequelize.query<any>(watchTimeQuery, queryOptions)
+      if (startDate) countryDateWhere += ' AND "localVideoViewer"."endDate" >= :startDate'
+      if (endDate) countryDateWhere += ' AND "localVideoViewer"."startDate" <= :endDate'
 
-    const watchPeakQuery = `WITH "watchPeakValues" AS (
-        SELECT "startDate" AS "dateBreakpoint", 1 AS "inc"
-        FROM "localVideoViewer"
-        WHERE "videoId" = :videoId ${dateWhere}
-        UNION ALL
-        SELECT "endDate" AS "dateBreakpoint", -1 AS "inc"
-        FROM "localVideoViewer"
-        WHERE "videoId" = :videoId ${dateWhere}
-      )
-      SELECT "dateBreakpoint", "concurrent"
-      FROM (
-        SELECT "dateBreakpoint", SUM(SUM("inc")) OVER (ORDER BY "dateBreakpoint") AS "concurrent"
-        FROM "watchPeakValues"
-        GROUP BY "dateBreakpoint"
-      ) tmp
-      ORDER BY "concurrent" DESC
-      FETCH FIRST 1 ROW ONLY`
-    const watchPeakPromise = LocalVideoViewerModel.sequelize.query<any>(watchPeakQuery, queryOptions)
+      const countriesQuery = `SELECT country, COUNT(country) as viewers ` +
+        `FROM "localVideoViewer" ` +
+        `WHERE "videoId" = :videoId AND country IS NOT NULL ${countryDateWhere} ` +
+        `GROUP BY country ` +
+        `ORDER BY viewers DESC`
 
-    const countriesQuery = `SELECT country, COUNT(country) as viewers ` +
-      `FROM "localVideoViewer" ` +
-      `WHERE "videoId" = :videoId AND country IS NOT NULL ${dateWhere} ` +
-      `GROUP BY country ` +
-      `ORDER BY viewers DESC`
-    const countriesPromise = LocalVideoViewerModel.sequelize.query<any>(countriesQuery, queryOptions)
+      return LocalVideoViewerModel.sequelize.query<any>(countriesQuery, queryOptions)
+    }
 
     const [ rowsWatchTime, rowsWatchPeak, rowsCountries ] = await Promise.all([
-      watchTimePromise,
-      watchPeakPromise,
-      countriesPromise
+      buildWatchTimePromise(),
+      buildWatchPeakPromise(),
+      buildCountriesPromise()
     ])
 
     const viewersPeak = rowsWatchPeak.length !== 0
