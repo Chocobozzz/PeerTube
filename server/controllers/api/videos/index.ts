@@ -94,6 +94,7 @@ videosRouter.get('/',
   asyncMiddleware(listVideos)
 )
 
+// TODO: remove, deprecated in 5.0 now we send the complete description in VideoDetails
 videosRouter.get('/:id/description',
   openapiOperationDoc({ operationId: 'getVideoDesc' }),
   asyncMiddleware(videosGetValidator),

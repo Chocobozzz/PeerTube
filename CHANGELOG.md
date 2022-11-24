@@ -1,5 +1,101 @@
 # Changelog
 
+## v5.0.0-rc.1 (not released yet)
+
+### IMPORTANT NOTES
+
+ * **Important** Private and internal video files are now protected. See [#5370](https://github.com/Chocobozzz/PeerTube/pull/5370) for more information, but see below for most important information:
+   * For private/internal videos on filesystem:
+     * These videos are now under a `private/` subdirectory in `videos/` and `streaming-playlists/` directories
+     * Nginx doesn't serve these private files anymore, the requests are forwarded to PeerTube that will check authentication
+   * For private/internal videos in object storage:
+     * These videos have now a private ACL
+     * PeerTube proxifies requests to private object storage (using pre-signed URLs is not possible as explained in [#5370](https://github.com/Chocobozzz/PeerTube/pull/5370))
+   * Torrent files and magnet URIs of private/internal videos don't contain a webseed URL anymore since they require authentication
+ * **Important** You need to manually execute a migration script after your upgrade to migrate private/internal video files:
+   * Classic installation: `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-5.0.js`
+   * Docker installation: `cd /var/www/peertube-docker && docker-compose exec -u peertube peertube node dist/scripts/migrations/peertube-5.0.js`
+ * There is a new `secrets.peertube` configuration. You must fill it before running PeerTube v5
+ * You must update your nginx configuration:
+   * We introduced a new `location` for plugin websocket routes
+   * We introduced a new `location` for private videos files
+
+### Documentation
+
+ * Add [Monitoring/Observability documentation](https://docs.joinpeertube.org/maintain-observability) using PeerTube OpenTelemetry feature
+
+### Maintenance
+
+ * REST API breaking change:
+    * `role` is now `role.id` and `roleLabel` is `role.label` in user response
+    * We now store the complete remote video description:
+      * Deprecate `description` in favour of `truncatedDescription` when listing videos
+      * Complete description is sent by the server in `description` when getting a specific video
+      * Deprecate `/api/v1/videos/:id/description` endpoint
+ * `search.disable_local_search` disables local search in client search bar only and doesn't disable it on server side anymore [#5411](https://github.com/Chocobozzz/PeerTube/pull/5411)
+
+### Plugins/Themes/Embed API
+
+  * Add server plugin hooks (https://docs.joinpeertube.org/api-plugins):
+    * `filter:activity-pub.remote-video-comment.create.accept.result`
+  * Add server plugin helpers
+    * `socket.sendNotification` and `socket.sendVideoLiveNewState` [#5239](https://github.com/Chocobozzz/PeerTube/pull/5239)
+  * Add ability for plugins to register a websocket route using `registerWebSocketRoute`
+  * Add client plugin hooks (https://docs.joinpeertube.org/api-plugins):
+    * `filter:internal.player.p2p-media-loader.options.result` [#5318](https://github.com/Chocobozzz/PeerTube/pull/5318)
+
+### CLI tools
+
+ * Add ability to install alpha/beta/rc plugin versions
+
+### Features
+
+ * :tada: Support object storage for live streams :tada:
+ * :tada: Support Two Factor authentication (OTP) :tada:
+ * UX:
+   * Add explanation on disk space used for user quota admin config [#5305](https://github.com/Chocobozzz/PeerTube/pull/5305)
+   * Display channel in my videos list
+   * Show which playlists videos are added to in my videos list
+   * Add *Channels* link in left menu
+   * Add `...` after the truncated video name in miniature
+   * Add object storage info badge in videos admin overview
+   * Add links to video files in videos admin overview
+   * Better indicate the live ended in embed by displaying a message and the live preview
+   * Force live autoplay by muting the video if necessary when the user was waiting for the live
+ * Handle network issues in video player [#5138](https://github.com/Chocobozzz/PeerTube/pull/5138)
+ * Cache chunks to upload in server to resume upload later [#5224](https://github.com/Chocobozzz/PeerTube/pull/5224)
+ * Add ability to serve custom static files under `/.well-known` URL path [#5214](https://github.com/Chocobozzz/PeerTube/pull/5214)
+ * Use account/channel avatar in account/channel RSS feeds [#5325](https://github.com/Chocobozzz/PeerTube/pull/5325)
+ * Add filter to sort videos by name [#5351](https://github.com/Chocobozzz/PeerTube/pull/5351)
+ * Add ability to configure OpenTelemetry Prometheus exporter listening hostname
+
+### Bug fixes
+
+ * Hide all user email block if we can't change it (remote auth for example)
+ * Display an error if trying to reset password of user configured to use a remote authentication
+ * Fix peers info width in live
+ * Fix video job error when video has been deleted
+ * Fix user channels list with increased max counter
+ * More robust channel/playlist import/sync
+ * Hide useless *Wait Transcoding* input for lives
+ * Fix responsive in account channels list
+ * Fix slow page response when listing many videos
+ * Reload data when deleting a blocked video
+ * Prevent error with metrics in HTTP player if no P2P info is available
+ * Fix playlist overflow in account channels page
+ * Fix invalid date display for jobs
+ * Fix conflict with player hotkeys and `alt + number` web browser hotkey
+ * Fix horizontal overflow on rtl languages
+ * Fix actor follow constraint error on remote videos when *Allow users to do remote URI/handle search* is disabled
+ * Fix running again transcoding on a video that doesn't contain audio or on a video that doesn't contain video
+ * Fix re-transcoding of video with odd resolution
+ * Fix embed API with playlists
+ * Fix not working P2P with permanent live
+ * Fix following/fetching remote Pleroma actor
+ * Prevent high Redis memory usage when having many jobs
+ * Fix overall viewers stats with start/end dates
+
+
 ## v4.3.1
 
 ### IMPORTANT NOTES
