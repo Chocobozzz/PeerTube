@@ -6698,12 +6698,12 @@
       </trans-unit>
       <trans-unit id="3068011377000255023" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 videos} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1つの動画} other {<x id="INTERPOLATION"/>個の動画}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1件の動画} other {<x id="INTERPOLATION"/>件の動画}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
         <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
-        <target state="translated"><x id="ICU" xid="1730926218636655979" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {0個の動画} =1 {1つの動画} other {{{ getTotalVideosOf(videoChannel) }}個の動画}}"/> </target>
+        <target state="translated">{getTotalVideosOf(videoChannel), plural, =0 {動画がありません} =1 {1動画} other {{{ getTotalVideosOf(videoChannel) }}動画}} </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">29</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">39</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">43</context></context-group>
@@ -11551,12 +11551,12 @@
       </trans-unit>
       <trans-unit id="6746743143272021955" datatype="html">
         <source>Violent or repulsive</source>
-        <target state="translated">暴力的または非常に不快</target>
+        <target state="translated">暴力的または不快</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">124</context></context-group>
       </trans-unit>
       <trans-unit id="5272553814105457319" datatype="html">
         <source>Contains offensive, violent, or coarse language or iconography.</source>
-        <target state="translated">攻撃的、暴力的、下品な言葉。または、そのようなシンボルが含まれる場合。</target>
+        <target state="translated">攻撃的、暴力的、または下品な言葉や図像が含まれている。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="6979166468838302269" datatype="html">
