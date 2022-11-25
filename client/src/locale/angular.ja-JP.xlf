@@ -12365,7 +12365,7 @@
       </trans-unit>
       <trans-unit id="5856931617181450881" datatype="html">
         <source>Enter/exit fullscreen</source>
-        <target state="translated">全画面を切り替える</target>
+        <target state="translated">全画面モードを切り替える</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">791</context></context-group>
       </trans-unit>
       <trans-unit id="2971009377468404076" datatype="html">
