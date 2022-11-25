@@ -7,7 +7,7 @@
     "peer": "ピア",
     "Go to the video page": "動画ページにアクセス",
     "Settings": "設定",
-    "Watching this video may reveal your IP address to others.": "この動画を再生すると、あなたの公開IPアドレスが第三者に漏洩する可能性があります。",
+    "Watching this video may reveal your IP address to others.": "この動画を再生すると、あなたの公開IPアドレスが第三者に公開される可能性があります。",
     "Copy the video URL": "動画のURLをコピー",
     "Copy the video URL at the current time": "現在の再生時間を含めた動画URLをコピー",
     "Copy embed code": "埋め込み動画向けのコードをコピー",
