@@ -11571,7 +11571,7 @@
       </trans-unit>
       <trans-unit id="5413552012131573970" datatype="html">
         <source>Spam, ad or false news</source>
-        <target state="translated">スパム、広告または虚偽報道</target>
+        <target state="translated">スパムまたは誤解を招く内容</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="6374940465448453212" datatype="html">
@@ -11586,7 +11586,7 @@
       </trans-unit>
       <trans-unit id="8363008638081993167" datatype="html">
         <source>Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</source>
-        <target state="translated">特定個人の追跡、本人の特定、現実での接触の試み、なりすまし等に使われかねない個人情報（例えば、名前・住所・電話番号・メールアドレス・クレジットカード情報など）が含まれる場合。</target>
+        <target state="translated">特定個人の追跡、本人の特定、現実での接触の試み、なりすまし等に使われかねない個人情報（例えば、名前・住所・電話番号・メールアドレス・クレジットカード情報など）が含まれている。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">142</context></context-group>
       </trans-unit>
       <trans-unit id="380450014369168564" datatype="html">
@@ -11606,7 +11606,7 @@
       </trans-unit>
       <trans-unit id="8700771664729810984" datatype="html">
         <source>The above can only be seen in thumbnails.</source>
-        <target state="translated">上記のいずれかの通報理由がサムネイルに見られる場合。</target>
+        <target state="translated">上記のいずれかの通報理由がサムネイルに認められる場合。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="2602773901491715295" datatype="html">
@@ -11658,12 +11658,12 @@
       </trans-unit>
       <trans-unit id="7070823964189404459" datatype="html">
         <source>Unsubscribed from all channels of <x id="PH"/> </source>
-        <target state="translated"><x id="PH"/> の全てのチャンネルの登録を解除しました </target>
+        <target state="translated"><x id="PH"/>の全てのチャンネルの登録を解除しました </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="9201562016527884133">
         <source>Unsubscribed from <x id="PH"/> </source>
-        <target state="translated"><x id="PH"/> のチャンネル登録を解除しました </target>
+        <target state="translated"><x id="PH"/>のチャンネル登録を解除しました </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="516954136005961440">
@@ -11696,40 +11696,40 @@
       </trans-unit>
       <trans-unit id="3723085768598852106">
         <source>Video removed from <x id="PH"/> </source>
-        <target state="translated">動画は <x id="PH"/> から削除されました。 </target>
+        <target state="translated">動画は<x id="PH"/>から削除されました </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">309</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="1056145626640340519">
         <source>Video added in <x id="PH"/> at timestamps <x id="PH_1"/></source>
-        <target state="translated">動画が追加されました<x id="PH"/> 追加日時<x id="PH_1"/></target>
+        <target state="translated">動画が<x id="PH"/>でタイムスタンプ<x id="PH_1"/>に追加されました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">379</context></context-group>
       </trans-unit>
       <trans-unit id="7754186870520534716">
         <source>Video added in <x id="PH"/> </source>
-        <target state="translated">動画は <x id="PH"/> に追加されました。 </target>
+        <target state="translated">動画は<x id="PH"/>に追加されました </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">380</context></context-group>
       </trans-unit>
       <trans-unit id="985751964589921228">
         <source>Timestamps updated</source>
-        <target state="translated">追加日時を更新しました</target>
+        <target state="translated">タイムスタンプを更新しました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.ts</context><context context-type="linenumber">277</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">116</context></context-group>
       </trans-unit>
       <trans-unit id="6421445850411984665" datatype="html">
         <source>Starts at</source>
-        <target state="translated">動画の再生開始位置</target>
+        <target state="translated">再生開始位置</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">139</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">142</context></context-group>
       </trans-unit>
       <trans-unit id="7145200412085189912" datatype="html">
         <source>Stops at</source>
-        <target state="translated">動画の再生停止位置</target>
+        <target state="translated">再生停止位置</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="921225940108335688" datatype="html">
         <source>and stops at</source>
-        <target state="translated">動画の再生停止位置</target>
+        <target state="translated">と再生停止位置</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.ts</context><context context-type="linenumber">142</context></context-group>
       </trans-unit>
       <trans-unit id="2909684945706361544" datatype="html">
@@ -11765,7 +11765,7 @@
       </trans-unit>
       <trans-unit id="2331557444464201331" datatype="html">
         <source>Format name</source>
-        <target state="translated">ファイルフォーマット</target>
+        <target state="translated">フォーマット名</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">220</context></context-group>
       </trans-unit>
       <trans-unit id="45739481977493163" datatype="html">
@@ -11868,19 +11868,19 @@
       </trans-unit>
       <trans-unit id="5972374600810542430" datatype="html">
         <source>Delete HLS files</source>
-        <target state="translated">HLSファイルの削除</target>
+        <target state="translated">HLSファイルを削除</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">110</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">403</context></context-group>
       </trans-unit>
       <trans-unit id="3844238590532933757" datatype="html">
         <source>Delete WebTorrent files</source>
-        <target state="translated">WebTorrentファイルの削除</target>
+        <target state="translated">WebTorrentファイルを削除</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">116</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">409</context></context-group>
       </trans-unit>
       <trans-unit id="8315587636588243636" datatype="html">
         <source>Are you sure you want to delete this <x id="PH" equiv-text="file.resolution.label"/> file?</source>
-        <target state="translated">本当にこのファイル<x id="PH" equiv-text="file.resolution.label"/>を削除しますか？</target>
+        <target state="translated">本当にこの<x id="PH" equiv-text="file.resolution.label"/>ファイルを削除しますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">213</context></context-group>
       </trans-unit>
       <trans-unit id="6693349469471580292" datatype="html">
@@ -11890,7 +11890,7 @@
       </trans-unit>
       <trans-unit id="7016764388104297354" datatype="html">
         <source>File removed.</source>
-        <target state="translated">ファイルが削除されました.</target>
+        <target state="translated">ファイルが削除されました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">220</context></context-group>
       </trans-unit>
       <trans-unit id="1314383205093440631" datatype="html">
@@ -11900,7 +11900,7 @@
       </trans-unit>
       <trans-unit id="1950057220179636309" datatype="html">
         <source>Save to playlist</source>
-        <target state="translated">プレイリストに保存する</target>
+        <target state="translated">プレイリストへ保存</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context><context context-type="linenumber">59</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">321</context></context-group>
       </trans-unit>
