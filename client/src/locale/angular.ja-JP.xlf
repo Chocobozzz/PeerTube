@@ -11478,37 +11478,37 @@
       </trans-unit>
       <trans-unit id="4537735378779630558" datatype="html">
         <source>Hide any content from that instance for you.</source>
-        <target state="translated">このユーザーが属するインスタンスの全てのコンテンツを非表示にします。</target>
+        <target state="translated">インスタンスの全てのコンテンツをあなたに非表示にします。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">309</context></context-group>
       </trans-unit>
       <trans-unit id="6247487021683085858">
         <source>Unmute the instance</source>
-        <target state="translated">このアカウントが属するインスタンスのミュートを解除</target>
+        <target state="translated">インスタンスのミュートを解除</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">314</context></context-group>
       </trans-unit>
       <trans-unit id="4024846984475742259" datatype="html">
         <source>Show back content from that instance for you.</source>
-        <target state="translated">このユーザーが属するインスタンスの全てのコンテンツを再度表示するようにする。</target>
+        <target state="translated">インスタンスの全てのコンテンツをあなたに表示します。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">315</context></context-group>
       </trans-unit>
       <trans-unit id="3108200185023875257" datatype="html">
         <source>Remove comments from your videos</source>
-        <target state="translated">あなたの動画へのコメントを削除</target>
+        <target state="translated">あなたの動画からコメントを削除</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">320</context></context-group>
       </trans-unit>
       <trans-unit id="4810478487244286994" datatype="html">
         <source>Remove comments made by this account on your videos.</source>
-        <target state="translated">このアカウントによって作成された、あなたの動画へのコメントを削除する。</target>
+        <target state="translated">このアカウントによって作成された、あなたの動画へのコメントを削除します。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">321</context></context-group>
       </trans-unit>
       <trans-unit id="2077144178298031252" datatype="html">
         <source>Hide any content from that user from you, your instance and its users.</source>
-        <target state="translated">このユーザーの全てのコンテンツを非表示にします。対象はあなた、あなたのインスタンス、そしてあなたのインスタンスのユーザーです。</target>
+        <target state="translated">このユーザーの全てのコンテンツをあなた、あなたのインスタンス、あなたのインスタンスのユーザーで非表示にします。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">375</context></context-group>
       </trans-unit>
       <trans-unit id="7675070596643104983" datatype="html">
         <source>Show this user's content to the users of this instance again.</source>
-        <target state="translated">このユーザーのコンテンツを再度表示します。対象はあなたのインスタンスのユーザーです。</target>
+        <target state="translated">このユーザーのコンテンツをあなたのインスタンスのユーザーで再度表示します。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">381</context></context-group>
       </trans-unit>
       <trans-unit id="525915681688649453" datatype="html">
