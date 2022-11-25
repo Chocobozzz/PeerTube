@@ -5045,7 +5045,7 @@
       </trans-unit>
       <trans-unit id="2634326893148077182" datatype="html">
         <source>Allow channel synchronization with channel of other platforms like YouTube (requires allowing import with HTTP URL)</source>
-        <target state="translated">YouTubeのなどの他の動画サイトのチャンネルとのチャンネル同期を許可する (HTTP URLでのインポートを許可する必要があります)</target>
+        <target state="translated">YouTubeのなどの他の動画サイトのチャンネルとのチャンネル同期を許可する (HTTPから始まるURLでのインポートを許可する必要があります)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">295</context></context-group>
       </trans-unit>
       <trans-unit id="7404104645798703279" datatype="html">
