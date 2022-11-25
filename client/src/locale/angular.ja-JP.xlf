@@ -6126,7 +6126,7 @@
       </trans-unit>
       <trans-unit id="1469193438847554223" datatype="html">
         <source>Only watch for new publications</source>
-        <target state="translated">Only watch for new publications</target>
+        <target state="translated">これから新しい動画がないか監視する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">51</context>
