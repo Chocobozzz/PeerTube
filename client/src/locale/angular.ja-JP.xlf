@@ -11895,7 +11895,7 @@
       </trans-unit>
       <trans-unit id="1314383205093440631" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</source>
-        <target state="translated">本当に{count, plural, =1 {つのこの動画} other {これらの<x id="count"/>つの動画}}を削除しますか?</target>
+        <target state="translated">本当に{count, plural, =1 {この動画} other {これら<x id="count"/>件の動画}}を削除しますか?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">229</context></context-group>
       </trans-unit>
       <trans-unit id="1950057220179636309" datatype="html">
@@ -11929,7 +11929,7 @@
       </trans-unit>
       <trans-unit id="6871668720687277843" datatype="html">
         <source>Remove &amp; re-draft</source>
-        <target state="translated">削除して書き直す</target>
+        <target state="translated">削除して下書きへ移動</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.ts</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="60216491008745400" datatype="html">
@@ -12050,7 +12050,7 @@
       </trans-unit>
       <trans-unit id="118687079501751948" datatype="html">
         <source>Move to external storage failed</source>
-        <target state="translated">外部ストレージへの移動は失敗しました</target>
+        <target state="translated">外部ストレージへの移動が失敗しました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">190</context></context-group>
       </trans-unit>
       <trans-unit id="4887724548587271148">
@@ -12111,7 +12111,7 @@
       </trans-unit>
       <trans-unit id="8498940878158860248" datatype="html">
         <source>Remove from watch later</source>
-        <target state="translated">「後で見る」から外す</target>
+        <target state="translated">「後で見る」から削除する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="435589893738610428" datatype="html">
@@ -12134,7 +12134,7 @@
       </trans-unit>
       <trans-unit id="2439066254855913806">
         <source>Only I can see this video</source>
-        <target state="translated">自分だけがライブ配信を視聴することができます</target>
+        <target state="translated">自分だけがこの動画を視聴できます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">385</context></context-group>
       </trans-unit>
       <trans-unit id="6767380569816110388" datatype="html">
@@ -12144,17 +12144,17 @@
       </trans-unit>
       <trans-unit id="6828965264297239528">
         <source>Anyone can see this video</source>
-        <target state="translated">誰でもライブ配信を視聴することができます</target>
+        <target state="translated">誰でもこの動画を視聴できます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">387</context></context-group>
       </trans-unit>
       <trans-unit id="1425933035739773115" datatype="html">
         <source>Only users of this instance can see this video</source>
-        <target state="translated">このインスタンスのユーザーのみがライブ配信を視聴できます</target>
+        <target state="translated">このインスタンスのユーザーのみこの動画を視聴できます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">388</context></context-group>
       </trans-unit>
       <trans-unit id="5210096066382592800">
         <source>Video to import updated.</source>
-        <target state="translated">動画のインポートが完了しました。</target>
+        <target state="translated">動画のインポートを更新しました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.ts</context><context context-type="linenumber">135</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.ts</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
@@ -12195,7 +12195,7 @@
       </trans-unit>
       <trans-unit id="764164089183618119">
         <source>You have unsaved changes! If you leave, your changes will be lost.</source>
-        <target state="translated">未保存の変更があります。 ページを移動すると、変更した内容は失われます。</target>
+        <target state="translated">未保存の変更があります！ページを移動すると、変更した内容は失われます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="8306050839443016954">
@@ -12211,22 +12211,22 @@
       </trans-unit>
       <trans-unit id="2763845919408843325" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the beginning of the video</source>
-        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>"は動画の最初に追加されます</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>"が動画の最初に追加されます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="4952096817126306891" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the end of the video</source>
-        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>"は動画の最後に追加されます</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>"が動画の最後に追加されます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">127</context></context-group>
       </trans-unit>
       <trans-unit id="665518679871959619" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" image watermark will be added to the video</source>
-        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>"のウォーターマーク画像が動画に追加されます</target>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>"がウォーターマークとして動画に追加されます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">131</context></context-group>
       </trans-unit>
       <trans-unit id="2677581013897190613" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></source>
-        <target state="translated">動画は<x id="PH" equiv-text="secondsToTime(start)"/>から再生が始まり、<x id="PH_1" equiv-text="secondsToTime(end)"/>で再生を停止します</target>
+        <target state="translated">動画は<x id="PH" equiv-text="secondsToTime(start)"/>から<x id="PH_1" equiv-text="secondsToTime(end)"/>でトリミングされます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">138</context></context-group>
       </trans-unit>
       <trans-unit id="2299077646120636288" datatype="html">
@@ -12256,12 +12256,12 @@
       </trans-unit>
       <trans-unit id="5964038603724691720" datatype="html">
         <source>Delete and re-draft</source>
-        <target state="translated">コメントの削除と書き直し</target>
+        <target state="translated">コメントを削除して下書きへ移動</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">214</context></context-group>
       </trans-unit>
       <trans-unit id="7163633882758007711" datatype="html">
         <source>Do you really want to delete and re-draft this comment?</source>
-        <target state="translated">本当にこのコメントを削除し、書き直しますか？</target>
+        <target state="translated">本当にこのコメントを削除し、下書きに移動しますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">215</context></context-group>
       </trans-unit>
       <trans-unit id="723038562278401061" datatype="html">
@@ -12330,7 +12330,7 @@
       </trans-unit>
       <trans-unit id="1755474755114288376" datatype="html">
         <source>Up Next</source>
-        <target state="translated">次の動画</target>
+        <target state="translated">次に再生</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">485</context></context-group>
       </trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
