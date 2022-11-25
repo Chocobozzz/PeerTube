@@ -4151,7 +4151,7 @@
       </trans-unit>
       <trans-unit id="1359961255805685312" datatype="html">
         <source>This video has been reported multiple times.</source>
-        <target state="translated">この動画は複数回通報されています。</target>
+        <target state="translated">この動画は複数回通報を受けています。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="8103613717136753118" datatype="html">
@@ -4161,7 +4161,7 @@
       </trans-unit>
       <trans-unit id="5021295327106206941" datatype="html">
         <source>by <x id="INTERPOLATION"/> on <x id="INTERPOLATION_1"/> </source>
-        <target state="translated"><x id="INTERPOLATION_1"/>の動画 <x id="INTERPOLATION"/>によって </target>
+        <target state="translated"><x id="INTERPOLATION_1"/>上の<x id="INTERPOLATION"/>によって </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="1443698606045744844" datatype="html">
@@ -4204,17 +4204,17 @@
       </trans-unit>
       <trans-unit id="9173448803033928792" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> reports</source>
-        <target state="translated"><x id="INTERPOLATION"/>-<x id="INTERPOLATION_1"/>の通報を表示 合計<x id="INTERPOLATION_2"/>通報</target>
+        <target state="translated"><x id="INTERPOLATION"/>-<x id="INTERPOLATION_1"/>件の通報を表示中 合計<x id="INTERPOLATION_2"/>件の通報</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="3109314382334906782" datatype="html">
         <source>Reportee</source>
-        <target state="translated">通報された人</target>
+        <target state="translated">通報されたユーザー</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6540177673229220400" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION"/> reports}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 通報} other {<x id="INTERPOLATION"/> 通報}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1件の通報} other {<x id="INTERPOLATION"/>件の通報}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">22</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
@@ -4225,7 +4225,7 @@
       </trans-unit>
       <trans-unit id="6409548912081699487" datatype="html">
         <source>Mute domain</source>
-        <target state="translated">PeerTubeインスタンスをミュートする</target>
+        <target state="translated">ドメインをミュートする</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">19</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
@@ -4261,13 +4261,13 @@
       </trans-unit>
       <trans-unit id="299774363533169870" datatype="html">
         <source>No server found.</source>
-        <target state="translated">インスタンスは見つかりませんでした。</target>
+        <target state="translated">サーバーは見つかりませんでした。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">57</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="6250599179731937899" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> muted instances</source>
-        <target state="translated"><x id="INTERPOLATION"/> -<x id="INTERPOLATION_1"/>のミュートしたインスタンスを表示 合計<x id="INTERPOLATION_2"/>のミュートしたインスタンス</target>
+        <target state="translated"><x id="INTERPOLATION"/>-<x id="INTERPOLATION_1"/>件のミュートしたインスタンスを表示中 合計<x id="INTERPOLATION_2"/>件のミュートしたインスタンス</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">12</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
@@ -4278,7 +4278,7 @@
       </trans-unit>
       <trans-unit id="2959657578684395250" datatype="html">
         <source>{count, plural, =1 {Follow request sent!} other {Follow requests sent!}}</source>
-        <target state="translated">{count, plural, =1 {件のフォローリクエストを送信しました！} other {件のフォローリクエストを送信しました！}}</target>
+        <target state="translated">{count, plural, =1 {フォローリクエストを送信しました！} other {フォローリクエストを送信しました！}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -4286,7 +4286,7 @@
       </trans-unit>
       <trans-unit id="4058814854824495833" datatype="html">
         <source>Mute domains</source>
-        <target state="translated">PeerTubeインスタンスをミュートする</target>
+        <target state="translated">ドメインをミュートする</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">64</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
@@ -4299,7 +4299,7 @@
       </trans-unit>
       <trans-unit id="8564972645418093229" datatype="html">
         <source>No account found matching current filters.</source>
-        <target state="translated">現在のフィルターでは、一致したアカウントはありません。</target>
+        <target state="translated">現在のフィルターに一致するアカウントはありません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">54</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
@@ -4311,28 +4311,28 @@
       </trans-unit>
       <trans-unit id="2338185419645468935" datatype="html">
         <source>List installed plugins</source>
-        <target state="translated">インストールされているプラグインを表示する</target>
+        <target state="translated">インストールされているプラグインリスト</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugins.routes.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="8897412584195581488" datatype="html">
         <source>Search plugins</source>
-        <target state="translated">プラグインを検索する</target>
+        <target state="translated">プラグインを検索</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugins.routes.ts</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="4994333937800672218" datatype="html">
         <source>Show plugin</source>
-        <target state="translated">プラグインを表示する</target>
+        <target state="translated">プラグインを表示</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugins.routes.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="602667807232759122" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> muted accounts</source>
-        <target state="translated"><x id="INTERPOLATION"/>-<x id="INTERPOLATION_1"/>のミュートしたアカウントを表示 合計<x id="INTERPOLATION_2"/>のミュートしたアカウント</target>
+        <target state="translated"><x id="INTERPOLATION"/>-<x id="INTERPOLATION_1"/>件のミュートしたアカウントを表示中 合計<x id="INTERPOLATION_2"/>件のミュートしたアカウント</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">11</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="8259696070728377358" datatype="html">
         <source>Plugins/Themes</source>
-        <target state="translated">プラグインとテーマ</target>
+        <target state="translated">プラグイン/テーマ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">142</context></context-group>
       </trans-unit>
       <trans-unit id="4894835484717268716" datatype="html">
@@ -4362,7 +4362,7 @@
       </trans-unit>
       <trans-unit id="3981257963098530375" datatype="html">
         <source>Navigate between installed plugins and themes or find new ones</source>
-        <target state="translated">Navigate between installed plugins and themes or find new ones</target>
+        <target state="translated">インストール済みプラグインとテーマまたは検索間をナビゲート</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-navigation.component.html</context>
           <context context-type="linenumber">2</context>
@@ -4370,7 +4370,7 @@
       </trans-unit>
       <trans-unit id="8630916846096019339" datatype="html">
         <source>Users can resolve distant content</source>
-        <target state="translated">他のインスタンスのコンテンツ</target>
+        <target state="translated">ユーザーに外部コンテンツを許可する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="3300472325769888962" datatype="html">
@@ -4396,27 +4396,27 @@
       </trans-unit>
       <trans-unit id="2144158274184161635" datatype="html">
         <source>Videos with the most interactions for recent videos</source>
-        <target state="translated">最近の動画のうち、インタラクションが多かった動画が表示されます</target>
+        <target state="translated">最近の動画のうち、インタラクションが多かった動画</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">208</context></context-group>
       </trans-unit>
       <trans-unit id="8312243926314494468" datatype="html">
         <source>Videos with the most views during the last 24 hours</source>
-        <target state="translated">過去24時間の間で再生回数の多かった動画を表示します</target>
+        <target state="translated">過去24時間の間で再生回数の多かった動画</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">224</context></context-group>
       </trans-unit>
       <trans-unit id="8731139416455609016" datatype="html">
         <source>Videos with the most views during the last <x id="PH" equiv-text="this.trendingDays"/> days</source>
-        <target state="translated">過去<x id="PH" equiv-text="this.trendingDays"/>日間で、再生回数が多かった動画が表示されます</target>
+        <target state="translated">過去<x id="PH" equiv-text="this.trendingDays"/>日間で、再生回数が多かった動画</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">228</context></context-group>
       </trans-unit>
       <trans-unit id="1671858302647356245" datatype="html">
         <source>Videos that have the most likes</source>
-        <target state="translated">高評価が多かった動画を表示します</target>
+        <target state="translated">高評価が多かった動画</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">213</context></context-group>
       </trans-unit>
       <trans-unit id="2006841089844688970" datatype="html">
         <source>To load your new installed plugins or themes, refresh the page.</source>
-        <target state="translated">新しくインストールしたプラグインやテーマを適用するには、ページを更新して下さい。</target>
+        <target state="translated">新しくインストールしたプラグインやテーマを読み込むには、ページを再読み込みして下さい。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="7577430199525157466" datatype="html">
@@ -4453,7 +4453,7 @@
       </trans-unit>
       <trans-unit id="2601639465696257054" datatype="html">
         <source>This <x id="INTERPOLATION"/> does not have settings. </source>
-        <target state="translated"><x id="INTERPOLATION"/>が設定されていません。 </target>
+        <target state="translated">この<x id="INTERPOLATION"/>には設定項目がありません。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="29832309535656200" datatype="html">
@@ -4478,17 +4478,17 @@
       </trans-unit>
       <trans-unit id="1271241007621398467" datatype="html">
         <source>{count, plural, =1 {1 comment deleted.} other {<x id="count"/> comments deleted.}}</source>
-        <target state="translated">{count, plural, =1 {1個のコメントが削除されました。} other {<x id="count"/>個のコメントが削除されました。}}</target>
+        <target state="translated">{count, plural, =1 {1件のコメントが削除されました。} other {<x id="count"/>件のコメントが削除されました。}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="264978617337249011" datatype="html">
         <source><x id="PH" equiv-text="commentArgs.length"/> comment(s) deleted.</source>
-        <target state="translated"><x id="PH" equiv-text="commentArgs.length"/>コメントが削除されました。</target>
+        <target state="translated"><x id="PH" equiv-text="commentArgs.length"/>件のコメントが削除されました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">156</context></context-group>
       </trans-unit>
       <trans-unit id="379090446060940062" datatype="html">
         <source>Do you really want to delete all comments of <x id="PH"/>?</source>
-        <target state="translated">本当に <x id="PH"/>の全てのコメントを削除しますか？</target>
+        <target state="translated">本当に<x id="PH"/>の全てのコメントを削除しますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">179</context></context-group>
       </trans-unit>
       <trans-unit id="4539246224625965241" datatype="html">
@@ -4521,7 +4521,7 @@
       </trans-unit>
       <trans-unit id="6110554376228744887" datatype="html">
         <source>Select all rows</source>
-        <target state="translated">全ての列を選択</target>
+        <target state="translated">全ての行を選択</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">33</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">38</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">39</context></context-group>
@@ -4549,7 +4549,7 @@
       </trans-unit>
       <trans-unit id="3067132953487445901" datatype="html">
         <source>Showing <x id="INTERPOLATION"/> to <x id="INTERPOLATION_1"/> of <x id="INTERPOLATION_2"/> jobs</source>
-        <target state="translated"><x id="INTERPOLATION"/>-<x id="INTERPOLATION_1"/>のジョブを表示 合計<x id="INTERPOLATION_2"/>ジョブ</target>
+        <target state="translated"><x id="INTERPOLATION"/>-<x id="INTERPOLATION_1"/>件のジョブを表示中 合計<x id="INTERPOLATION_2"/>件のジョブ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="8650499415827640724">
@@ -4580,22 +4580,22 @@
       </trans-unit>
       <trans-unit id="2713421326605345655" datatype="html">
         <source>No <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/> jobs found.</source>
-        <target state="translated"><x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/>ジョブは見つかりませんでした。</target>
+        <target state="translated"><x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/><x id="INTERPOLATION" equiv-text="{{ jobType }}"/><x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt; "/>のジョブは見つかりませんでした。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="2384897339170501794" datatype="html">
         <source>No <x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/> jobs found.</source>
-        <target state="translated"><x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/>ジョブは見つかりませんでした。</target>
+        <target state="translated"><x id="START_TAG_SPAN"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_SPAN"/>のジョブは見つかりませんでした。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="4457061340457477073" datatype="html">
         <source>No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</source>
-        <target state="translated">No <x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/> jobs found that are <x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>.</target>
+        <target state="translated"><x id="START_TAG_SPAN"/><x id="INTERPOLATION_1"/><x id="CLOSE_TAG_SPAN"/>の<x id="START_TAG_CODE"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_CODE"/>ジョブは見つかりませんでした。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="1102717806459547726">
         <source>Refresh</source>
-        <target state="translated">受け入れる</target>
+        <target state="translated">更新</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">31</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">30</context></context-group>
@@ -4608,7 +4608,7 @@
       </trans-unit>
       <trans-unit id="8984988128489304664" datatype="html">
         <source>Filter logs by tags</source>
-        <target state="translated">タグでログにフィルターをかける</target>
+        <target state="translated">タグで絞り込み</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">31</context>
@@ -4616,12 +4616,12 @@
       </trans-unit>
       <trans-unit id="3894950702316166331" datatype="html">
         <source>Loading...</source>
-        <target state="translated">読み込んでいます...</target>
+        <target state="translated">読み込み中...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="1570003374195931619" datatype="html">
         <source>No log.</source>
-        <target state="translated">ログはありません。</target>
+        <target state="translated">ログはがありません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">40</context>
