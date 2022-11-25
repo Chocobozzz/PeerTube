@@ -4914,7 +4914,7 @@
       </trans-unit>
       <trans-unit id="2669509104300979449" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> to set their quota individually. </source>
-        <target state="translated">それぞれのユーザーの動画容量制限を設定する場合は、<x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>ユーザー<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/>から実施してください。 </target>
+        <target state="translated">それぞれのユーザーの動画容量制限を設定する場合は、<x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/users&quot;&gt;"/>ユーザー<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/>から設定してください。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="4497115134891299867">
