@@ -5496,7 +5496,7 @@
       </trans-unit>
       <trans-unit id="4078329985026583770" datatype="html">
         <source>Allows your users to edit their video (cut, add intro/outro, add a watermark etc)</source>
-        <target state="translated">ユーザーに動画の編集を許可する（切り取り、イントロダクションやエンディングの追加、ウォーターマークの追加など）</target>
+        <target state="translated">ユーザーに動画の編集を許可します (切り取り、イントロダクションやエンディングの追加、ウォーターマークの追加など)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">201</context></context-group>
       </trans-unit>
       <trans-unit id="252604800845369275" datatype="html">
@@ -5516,12 +5516,12 @@
       </trans-unit>
       <trans-unit id="5511334650211127631" datatype="html">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
-        <target state="translated">いくつかのファイルが連合されておらず、必要な時にそれらがフェッチされています。キャッシュポリシーを設定して下さい。</target>
+        <target state="translated">いくつかのファイルは連合されておらず、必要な時にそれらがフェッチされます。キャッシュポリシーを設定して下さい。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="4382565260112874406" datatype="html">
         <source>Number of previews to keep in cache</source>
-        <target state="translated">動画プレビューの残存キャッシュ</target>
+        <target state="translated">キャッシュに保持する動画プレビュー数</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="3710881484246327863" datatype="html">
@@ -5534,7 +5534,7 @@
       </trans-unit>
       <trans-unit id="2279905277031617076" datatype="html">
         <source>Number of video captions to keep in cache</source>
-        <target state="translated">動画のキャプションの残存キャッシュ</target>
+        <target state="translated">キャッシュに保持する動画キャプション数</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6193666854590647323" datatype="html">
@@ -5547,7 +5547,7 @@
       </trans-unit>
       <trans-unit id="330647913034301472" datatype="html">
         <source>Number of video torrents to keep in cache</source>
-        <target state="translated">動画torrentの残存キャッシュ</target>
+        <target state="translated">キャッシュに保持する動画torrent数</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">43</context>
@@ -5578,12 +5578,12 @@
       </trans-unit>
       <trans-unit id="4067880101082150743" datatype="html">
         <source>Write JavaScript code directly.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="translated">JavaScriptのコードを直接入力しましょう。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>例: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated">JavaScriptのコードを直接入力してください。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>例: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="5464209657969421100" datatype="html">
         <source>Write CSS code directly. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
-        <target state="translated">CSSのコードを直接入力しましょう。例:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
+        <target state="translated">CSSコードを直接入力してください。 例:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> スタイルを上書きするには、先頭に<x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>をつけてください。 例:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>#custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="283725429207896837" datatype="html">
@@ -5639,7 +5639,7 @@
       </trans-unit>
       <trans-unit id="9012586956848595996" datatype="html">
         <source>EMAIL</source>
-        <target state="translated">Eメール</target>
+        <target state="translated">メール</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="4309045590850686400" datatype="html">
@@ -5723,7 +5723,7 @@
       </trans-unit>
       <trans-unit id="4915431133669985304">
         <source>Profile</source>
-        <target state="translated">プロファイル</target>
+        <target state="translated">プロフィール</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">244</context></context-group>
       </trans-unit>
       <trans-unit id="1963136290621768454" datatype="html">
@@ -5733,7 +5733,7 @@
       </trans-unit>
       <trans-unit id="7814358426066520520" datatype="html">
         <source>Aspect ratio</source>
-        <target state="translated">比率</target>
+        <target state="translated">アスペクト比</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">254</context></context-group>
       </trans-unit>
       <trans-unit id="44862519224794374" datatype="html">
@@ -5743,7 +5743,7 @@
       </trans-unit>
       <trans-unit id="5053683525387462246" datatype="html">
         <source>Pixel format</source>
-        <target state="translated">ピクセル形式</target>
+        <target state="translated">ピクセルフォーマット</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">256</context></context-group>
       </trans-unit>
       <trans-unit id="7858676566953242358" datatype="html">
@@ -5753,7 +5753,7 @@
       </trans-unit>
       <trans-unit id="5403856660543890284" datatype="html">
         <source>Channel Layout</source>
-        <target state="translated">ステレオ・モノラル等</target>
+        <target state="translated">チャンネル・レイアウト</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.ts</context><context context-type="linenumber">261</context></context-group>
       </trans-unit>
       <trans-unit id="6317170736181476800" datatype="html">
@@ -5779,12 +5779,12 @@
       </trans-unit>
       <trans-unit id="7028708681117573961" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Recently Added"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>最近投稿された動画<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"最近投稿された動画順"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>で並び替え</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="762510264401369759" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Original Publication Date"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>動画が投稿された順<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"動画が投稿された順"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>で並び替え</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="4860917424154224190" datatype="html">
@@ -5794,22 +5794,22 @@
       </trans-unit>
       <trans-unit id="8190023086228606960" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Recent Views"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>最近再生された動画<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"最近再生された動画順"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>で並び替え</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="3224510615614621760" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Hot"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>話題の動画<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"話題の動画順"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>で並び替え</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="4322133526902910662" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Likes"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>高評価が多い動画<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"高評価が多い動画順"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>で並び替え</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="322705536187172989" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Global Views"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>再生回数が多い動画<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"再生回数が多い動画順"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>で並び替え</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="2343321245279384373" datatype="html">
@@ -5824,12 +5824,12 @@
       </trans-unit>
       <trans-unit id="5723033003381016192" datatype="html">
         <source>Scope:</source>
-        <target state="translated">対象の動画:</target>
+        <target state="translated">対象:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="8481241275509347668" datatype="html">
         <source>Local videos (this instance)</source>
-        <target state="translated">ローカル動画（このインスタンスの）</target>
+        <target state="translated">ローカル動画（このインスタンス内）</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="8383401711408398806" datatype="html">
@@ -5839,7 +5839,7 @@
       </trans-unit>
       <trans-unit id="2736556170366900089" datatype="html">
         <source>Type:</source>
-        <target state="translated">動画タイプ:</target>
+        <target state="translated">タイプ:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">98</context></context-group>
       </trans-unit>
       <trans-unit id="1744425032255703211" datatype="html">
@@ -5877,7 +5877,7 @@
       </trans-unit>
       <trans-unit id="8656126574213649581">
         <source>Confirm new password</source>
-        <target state="translated">新しいパスワードをもう一度</target>
+        <target state="translated">新しいパスワード(確認)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="7377817702119089263">
@@ -5887,7 +5887,7 @@
       </trans-unit>
       <trans-unit id="7350483582490037954" datatype="html">
         <source>With <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Hide<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video. </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>「表示しない」<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>または<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>「サムネイルをぼかす」<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>の設定の場合、動画を見る際に確認を求められます。 </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>「非表示」<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>または<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>「サムネイルをぼかす」<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>の設定の場合、動画を見る際に確認を求められます。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">106</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
@@ -5909,7 +5909,7 @@
       </trans-unit>
       <trans-unit id="2658703380934466003" datatype="html">
         <source>Add a new language</source>
-        <target state="translated">新しく言語を加える</target>
+        <target state="translated">新しい言語を追加</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">68</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
@@ -5931,7 +5931,7 @@
       </trans-unit>
       <trans-unit id="4561174610228620528">
         <source>Select the next owner</source>
-        <target state="translated">次の動画所有者を入力</target>
+        <target state="translated">次の所有者を選択</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/modals/video-change-ownership.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="1788875035518441092" datatype="html">
@@ -5966,7 +5966,7 @@
       </trans-unit>
       <trans-unit id="321229234608559490" datatype="html">
         <source>Select a channel to receive the video</source>
-        <target state="translated">動画を受け取るためのチャンネルを選ぶ</target>
+        <target state="translated">動画を受け取るためのチャンネルを選択</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-accept-ownership/my-accept-ownership.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="3610344835750059476" datatype="html">
@@ -5976,7 +5976,7 @@
       </trans-unit>
       <trans-unit id="7391040346436232576">
         <source>Initiator</source>
-        <target state="translated">動画の最初の所有者</target>
+        <target state="translated">最初の所有者</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="3963749584812225989">
@@ -5997,7 +5997,7 @@
       </trans-unit>
       <trans-unit id="2000373220662583633" datatype="html">
         <source>No ownership change request found.</source>
-        <target state="translated">動画の所有権変更へのリクエストはありません。</target>
+        <target state="translated">所有権変更のリクエストはありません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership/my-ownership.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="2091927708110728875" datatype="html">
@@ -6010,7 +6010,7 @@
       </trans-unit>
       <trans-unit id="8730712384733110957" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> synchronizations</source>
-        <target state="translated">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> synchronizations</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{'{first}'}}"/>-<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/>件の同期を表示中 合計<x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/>件の同期</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context>
           <context context-type="linenumber">17</context>
@@ -6018,7 +6018,7 @@
       </trans-unit>
       <trans-unit id="4955509738673204025" datatype="html">
         <source>Add synchronization</source>
-        <target state="translated">チャンネル同期を追加する</target>
+        <target state="translated">チャンネル同期を追加</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context>
           <context context-type="linenumber">25</context>
@@ -6042,7 +6042,7 @@
       </trans-unit>
       <trans-unit id="858570813277742962" datatype="html">
         <source>Last synchronization at <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;lastSyncAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="translated">最後にチャンネル同期をした日付は<x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;lastSyncAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">最終チャンネル同期日 <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;lastSyncAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context>
           <context context-type="linenumber">38</context>
@@ -6050,7 +6050,7 @@
       </trans-unit>
       <trans-unit id="2015493719998914454" datatype="html">
         <source>List imports</source>
-        <target state="translated">リストのインポート</target>
+        <target state="translated">インポートリスト</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -6058,12 +6058,12 @@
       </trans-unit>
       <trans-unit id="6587439290311664751" datatype="html">
         <source>Fully synchronize the channel</source>
-        <target state="translated">Fully synchronize the channel</target>
+        <target state="translated">チャンネルを完全同期</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="2070181811140868440" datatype="html">
         <source>This fetches any missing videos on the local channel</source>
-        <target state="translated">This fetches any missing videos on the local channel</target>
+        <target state="translated">これにより、ローカルチャンネルに存在しない動画が取得されます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="3997040276213089746" datatype="html">
