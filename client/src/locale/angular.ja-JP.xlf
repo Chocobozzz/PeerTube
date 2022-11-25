@@ -11478,7 +11478,7 @@
       </trans-unit>
       <trans-unit id="4537735378779630558" datatype="html">
         <source>Hide any content from that instance for you.</source>
-        <target state="translated">インスタンスの全てのコンテンツをあなたに非表示にします。</target>
+        <target state="translated">インスタンスの全てのコンテンツを非表示にします。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">309</context></context-group>
       </trans-unit>
       <trans-unit id="6247487021683085858">
