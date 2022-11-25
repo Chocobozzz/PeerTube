@@ -9,41 +9,41 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html">
         <source>Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </source>
-        <target state="translated">スライド<x id="INTERPOLATION" equiv-text="get wrap("/>の<x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
+        <target state="translated">スライド <x id="INTERPOLATION" equiv-text="get wrap("/> / <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.previous" datatype="html">
         <source>Previous</source>
-        <target state="translated">前</target>
+        <target state="translated">前へ</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.next" datatype="html">
         <source>Next</source>
-        <target state="translated">次</target>
+        <target state="translated">次へ</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-month" datatype="html">
         <source>Select month</source>
-        <target state="translated">月を選ぶ</target>
+        <target state="translated">月を選択</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-year" datatype="html">
         <source>Select year</source>
-        <target state="translated">年を選ぶ</target>
+        <target state="translated">年を選択</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.datepicker.previous-month" datatype="html">
         <source>Previous month</source>
-        <target state="translated">前の月</target>
+        <target state="translated">前月</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">61</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.datepicker.next-month" datatype="html">
         <source>Next month</source>
-        <target state="translated">次の月</target>
+        <target state="translated">次月</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">86</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/datepicker/datepicker-navigation.ts</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
@@ -74,12 +74,12 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.previous-aria" datatype="html">
         <source>Previous</source>
-        <target state="translated">前</target>
+        <target state="translated">前へ</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.next-aria" datatype="html">
         <source>Next</source>
-        <target state="translated">次</target>
+        <target state="translated">次へ</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.last-aria" datatype="html">
@@ -94,7 +94,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.HH" datatype="html">
         <source>HH</source>
-        <target state="translated">時間</target>
+        <target state="translated">hh</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.hours" datatype="html">
@@ -104,7 +104,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.MM" datatype="html">
         <source>MM</source>
-        <target state="translated">分</target>
+        <target state="translated">mm</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.minutes" datatype="html">
@@ -114,27 +114,27 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-hours" datatype="html">
         <source>Increment hours</source>
-        <target state="translated">Increment hours</target>
+        <target state="translated">時間を進める</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
         <source>Decrement hours</source>
-        <target state="translated">Decrement hours</target>
+        <target state="translated">時間を戻す</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
         <source>Increment minutes</source>
-        <target state="translated">Increment minutes</target>
+        <target state="translated">分を進める</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
         <source>Decrement minutes</source>
-        <target state="translated">Decrement minutes</target>
+        <target state="translated">分を戻す</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.SS" datatype="html">
         <source>SS</source>
-        <target state="translated">秒</target>
+        <target state="translated">ss</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.seconds" datatype="html">
@@ -144,12 +144,12 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
         <source>Increment seconds</source>
-        <target state="translated">Increment seconds</target>
+        <target state="translated">秒を進める</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html">
         <source>Decrement seconds</source>
-        <target state="translated">Decrement seconds</target>
+        <target state="translated">秒を戻す</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
@@ -169,12 +169,12 @@
       </trans-unit>
       <trans-unit id="219462505467671767" datatype="html">
         <source>Close the left menu</source>
-        <target state="translated">メニューを閉じる</target>
+        <target state="translated">左メニューを閉じる</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">139</context></context-group>
       </trans-unit>
       <trans-unit id="3455550526898419928" datatype="html">
         <source>Open the left menu</source>
-        <target state="translated">メニューを開く</target>
+        <target state="translated">左メニューを開く</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="9075761896562520962">
@@ -184,7 +184,7 @@
       </trans-unit>
       <trans-unit id="3780281836273462589" datatype="html">
         <source><x id="INTERPOLATION"/> published a new video: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="INTERPOLATION"/>は新しい動画を投稿しました<x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="INTERPOLATION"/>さんが新しい動画を投稿しました: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="3861380964267994829" datatype="html">
@@ -194,12 +194,12 @@
       </trans-unit>
       <trans-unit id="5067946665521007036" datatype="html">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been unblocked </source>
-        <target state="translated">あなたの動画は<x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/>ブロック解除されました </target>
+        <target state="translated">あなたの動画「<x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/>」はブロック解除されました </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="7127745751169269971" datatype="html">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been blocked </source>
-        <target state="translated">あなたの動画は<x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/>ブロックされました </target>
+        <target state="translated">あなたの動画「<x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/>」はブロックされました </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="506794214492992969" datatype="html">
@@ -1151,7 +1151,7 @@
       </trans-unit>
       <trans-unit id="3997350348765083892">
         <source>Username or email address</source>
-        <target state="translated">ユーザーネームまたはメールアドレス</target>
+        <target state="translated">ユーザー名またはメールアドレス</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="175344056589888866" datatype="html">
@@ -3690,7 +3690,7 @@
       </trans-unit>
       <trans-unit id="5248717555542428023">
         <source>Username</source>
-        <target state="translated">ユーザーネーム</target>
+        <target state="translated">ユーザー名</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">83</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">83</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">131</context></context-group>
@@ -5222,7 +5222,7 @@
       </trans-unit>
       <trans-unit id="4087837092261487511">
         <source>Your Twitter username</source>
-        <target state="translated">Twitterのユーザーネーム</target>
+        <target state="translated">TwitterのID</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">563</context></context-group>
       </trans-unit>
       <trans-unit id="5648651824279408711" datatype="html">
@@ -7244,7 +7244,7 @@
       </trans-unit>
       <trans-unit id="6433602064879074151" datatype="html">
         <source>Channel identifier cannot be the same as your account name. You can click on the first step to update your account name.</source>
-        <target state="translated">チャンネルIDをユーザーネームと同じものにすることはできません。最初のステップに戻って、ユーザーネームを変更することができます。</target>
+        <target state="translated">チャンネルIDをアカウント名と同じものにすることはできません。最初のステップに戻って、アカウント名を変更することができます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">50,52</context>
@@ -7301,7 +7301,7 @@
       </trans-unit>
       <trans-unit id="8656171949584591423" datatype="html">
         <source>This is the name that will be displayed in your profile URL.</source>
-        <target state="translated">ユーザーネームはあなたのプロフィールで表示されます。</target>
+        <target state="translated">ユーザー名はあなたのプロフィールURLで表示されます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -8672,12 +8672,12 @@
       </trans-unit>
       <trans-unit id="5945924096465496818" datatype="html">
         <source>&lt;p&gt;You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p&gt;</source>
-        <target state="translated">&lt;p&gt;削除されたユーザーやチャンネルで既に利用されていたユーザーネームを用いて、ユーザーまたはチャンネルを新たに作成することはできません。&lt;/p&gt;</target>
+        <target state="translated">&lt;p&gt;削除されたユーザーやチャンネルで利用されていたユーザー名を用いて、ユーザーまたはチャンネルを新たに作成することはできません。&lt;/p&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">245</context></context-group>
       </trans-unit>
       <trans-unit id="5643060985393782358" datatype="html">
         <source>It means the following usernames will be permanently deleted and cannot be recovered:</source>
-        <target state="translated">つまり、以下のユーザーネームは永久に削除され、戻すことはできません:</target>
+        <target state="translated">次のユーザー名は永久に削除され、戻すことができないという事を意味します:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">246</context></context-group>
       </trans-unit>
       <trans-unit id="1301767781765127363" datatype="html">
@@ -8757,7 +8757,7 @@
       </trans-unit>
       <trans-unit id="6897292459203320054">
         <source>Type your username to confirm</source>
-        <target state="translated">確認のためにユーザーネームを入力してください</target>
+        <target state="translated">確認のためにユーザー名を入力してください</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="3122895472333547524" datatype="html">
@@ -8776,7 +8776,7 @@
       </trans-unit>
       <trans-unit id="2740531699780274491" datatype="html">
         <source>This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "<x id="PH" equiv-text="this.user.username"/>" username.</source>
-        <target state="translated">あなたのチャンネル、動画、コメントを含んだ全てのデータが削除され、このインスタンスではユーザーネーム "<x id="PH" equiv-text="this.user.username"/>"を利用して他のアカウントを作成することはできなくなります。</target>
+        <target state="translated">あなたのチャンネル、動画、コメントを含めた全てのデータが削除され、このインスタンスでユーザー名"<x id="PH" equiv-text="this.user.username"/>"を利用してアカウントを作成することができなくなります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -9614,7 +9614,7 @@
       </trans-unit>
       <trans-unit id="1266887509445371246">
         <source>Incorrect username or password.</source>
-        <target state="translated">ユーザーネームまたはパスワードが違います。</target>
+        <target state="translated">ユーザー名またはパスワードが違います。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">210</context></context-group>
       </trans-unit>
       <trans-unit id="6974874606619467663" datatype="html">
@@ -9985,7 +9985,7 @@
       </trans-unit>
       <trans-unit id="6033463036257195528">
         <source>Twitter username is required.</source>
-        <target state="translated">Twitterのユーザーネームは必須です。</target>
+        <target state="translated">TwitterのIDは必須です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="8198703669620791633">
@@ -10231,7 +10231,7 @@
       </trans-unit>
       <trans-unit id="3868123820758341861">
         <source>Username is required.</source>
-        <target state="translated">ユーザーネームは必須です。</target>
+        <target state="translated">ユーザー名は必須です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context><context context-type="linenumber">9</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
@@ -10249,17 +10249,17 @@
       </trans-unit>
       <trans-unit id="4786141633412279939">
         <source>Username must be at least 1 character long.</source>
-        <target state="translated">ユーザーネームは必ず 1 文字以上にしてください。</target>
+        <target state="translated">ユーザー名は必ず1文字以上にしてください。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="1019755749203839300">
         <source>Username cannot be more than 50 characters long.</source>
-        <target state="translated">ユーザーネームは50文字以上にはできません。</target>
+        <target state="translated">ユーザー名は50文字以上にはできません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="5621067256208426608">
         <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="translated">ユーザーネームには小文字の英数字とドット(.)、アンダースコア(_)が利用できます。</target>
+        <target state="translated">ユーザー名には小文字の英数字とドット(.)、アンダースコア(_)が利用できます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6288154707582132676" datatype="html">
@@ -10453,7 +10453,7 @@
       </trans-unit>
       <trans-unit id="7365924714339585574">
         <source>The username is required.</source>
-        <target state="translated">ユーザーネームは必須です。</target>
+        <target state="translated">ユーザー名は必須です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="3954099618513992825">
@@ -10743,7 +10743,7 @@
       </trans-unit>
       <trans-unit id="5604677701754367707" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</source>
-        <target state="translated">PeerTubeはこのような拡張子のファイルを処理できません。処理可能なファイルの拡張子は<x id="PH" equiv-text="this.allowedExtensionsMessage"/>。</target>
+        <target state="translated">PeerTubeはこのようなファイルを処理できません。処理可能なファイルの拡張子は<x id="PH" equiv-text="this.allowedExtensionsMessage"/>です。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -10759,7 +10759,7 @@
       </trans-unit>
       <trans-unit id="8280589137189201687" datatype="html">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
-        <target state="translated">{maxItems, plural, =1 {1アイテム} other {<x id="maxItems"/>アイテム}}以上を選択する事はできません。</target>
+        <target state="translated">{maxItems, plural, =1 {1アイテム} other {<x id="maxItems"/>アイテム}}以上選択する事はできません</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -11022,7 +11022,7 @@
       </trans-unit>
       <trans-unit id="1799348348510504995" datatype="html">
         <source>Jan</source>
-        <target state="translated">1</target>
+        <target state="translated">1月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">55</context>
@@ -11032,7 +11032,7 @@
       </trans-unit>
       <trans-unit id="2980544278361296608" datatype="html">
         <source>Feb</source>
-        <target state="translated">2</target>
+        <target state="translated">2月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">56</context>
@@ -11042,7 +11042,7 @@
       </trans-unit>
       <trans-unit id="3124926955462217092" datatype="html">
         <source>Mar</source>
-        <target state="translated">3</target>
+        <target state="translated">3月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">57</context>
@@ -11052,7 +11052,7 @@
       </trans-unit>
       <trans-unit id="9658641661863772" datatype="html">
         <source>Apr</source>
-        <target state="translated">4</target>
+        <target state="translated">4月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">58</context>
@@ -11062,7 +11062,7 @@
       </trans-unit>
       <trans-unit id="502512326533496869" datatype="html">
         <source>May</source>
-        <target state="translated">5</target>
+        <target state="translated">5月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">59</context>
@@ -11072,7 +11072,7 @@
       </trans-unit>
       <trans-unit id="3044090977322782161" datatype="html">
         <source>Jun</source>
-        <target state="translated">6</target>
+        <target state="translated">6月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">60</context>
@@ -11082,7 +11082,7 @@
       </trans-unit>
       <trans-unit id="8066434078267346927" datatype="html">
         <source>Jul</source>
-        <target state="translated">7</target>
+        <target state="translated">7月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">61</context>
@@ -11092,7 +11092,7 @@
       </trans-unit>
       <trans-unit id="1796563865253467834" datatype="html">
         <source>Aug</source>
-        <target state="translated">8</target>
+        <target state="translated">8月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">62</context>
@@ -11102,7 +11102,7 @@
       </trans-unit>
       <trans-unit id="5865190625753625986" datatype="html">
         <source>Sep</source>
-        <target state="translated">9</target>
+        <target state="translated">9月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">63</context>
@@ -11112,7 +11112,7 @@
       </trans-unit>
       <trans-unit id="4011114601374284323" datatype="html">
         <source>Oct</source>
-        <target state="translated">10</target>
+        <target state="translated">10月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">64</context>
@@ -11122,7 +11122,7 @@
       </trans-unit>
       <trans-unit id="5063734982204786445" datatype="html">
         <source>Nov</source>
-        <target state="translated">11</target>
+        <target state="translated">11月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">65</context>
@@ -11132,7 +11132,7 @@
       </trans-unit>
       <trans-unit id="4789897150069082503" datatype="html">
         <source>Dec</source>
-        <target state="translated">12</target>
+        <target state="translated">12月</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">66</context>
@@ -11245,14 +11245,14 @@
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
         <source><x id="PH"/> (channel page) </source>
-        <target state="translated"><x id="PH"/> (のチャンネルページへ) </target>
+        <target state="translated"><x id="PH"/> (チャンネルページ) </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">20</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">40</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">132</context></context-group>
       </trans-unit>
       <trans-unit id="1209500590333005801" datatype="html">
         <source><x id="PH"/> (account page) </source>
-        <target state="translated"><x id="PH"/> (アカウントページへ) </target>
+        <target state="translated"><x id="PH"/> (アカウントページ) </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context><context context-type="linenumber">21</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image/actor-avatar.component.ts</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
@@ -11290,7 +11290,7 @@
       </trans-unit>
       <trans-unit id="5708680277917691451">
         <source><x id="PH"/> users banned. </source>
-        <target state="translated"><x id="PH"/>人のユーザーを凍結しました。 </target>
+        <target state="translated"><x id="PH"/>ユーザーを凍結しました。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="2448281151916042849">
@@ -11308,27 +11308,27 @@
       </trans-unit>
       <trans-unit id="3160979325245958752" datatype="html">
         <source>Ban <x id="PH" equiv-text="this.usersToBan.length"/> users</source>
-        <target state="translated"><x id="PH" equiv-text="this.usersToBan.length"/>のユーザーを凍結する</target>
+        <target state="translated"><x id="PH" equiv-text="this.usersToBan.length"/>ユーザーを凍結</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="8088707210191809175" datatype="html">
         <source>Ban "<x id="PH" equiv-text="this.usersToBan.username"/>"</source>
-        <target state="translated">ユーザー"<x id="PH" equiv-text="this.usersToBan.username"/>"を凍結する</target>
+        <target state="translated">ユーザー"<x id="PH" equiv-text="this.usersToBan.username"/>"を凍結</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="8269144351796756896">
         <source>Do you really want to unban <x id="PH"/>?</source>
-        <target state="translated">本当に <x id="PH"/> の凍結を解除しますか?</target>
+        <target state="translated">本当に<x id="PH"/>の凍結を解除しますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="1794219875546376069">
         <source>User <x id="PH"/> unbanned.</source>
-        <target state="translated">ユーザー <x id="PH"/> の凍結を解除しました。</target>
+        <target state="translated">ユーザー<x id="PH"/>の凍結を解除しました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="4350392487994839749" datatype="html">
         <source>If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</source>
-        <target state="translated">このユーザーを削除すると、そのユーザーネーム&lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt;で他のユーザーやチャンネルを作成することができなくなります！</target>
+        <target state="translated">このユーザーを削除すると、ユーザー名&lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt;で他のユーザーやチャンネルを作成できなくなります！</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -11336,35 +11336,35 @@
       </trans-unit>
       <trans-unit id="6307826440781941134" datatype="html">
         <source>Delete <x id="PH" equiv-text="user.username"/></source>
-        <target state="translated">ユーザー<x id="PH" equiv-text="user.username"/>を削除する</target>
+        <target state="translated"><x id="PH" equiv-text="user.username"/>を削除</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">105</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">236</context></context-group>
       </trans-unit>
       <trans-unit id="6301381219225831298">
         <source>User <x id="PH"/> deleted.</source>
-        <target state="translated">ユーザー <x id="PH"/> を削除しました。</target>
+        <target state="translated">ユーザー<x id="PH"/>を削除しました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">111</context></context-group>
       </trans-unit>
       <trans-unit id="3896582359861826661">
         <source>User <x id="PH"/> email set as verified</source>
-        <target state="translated">ユーザー <x id="PH"/> のメールアドレスが認証されました</target>
+        <target state="translated">ユーザー<x id="PH"/>のメールアドレスが認証されました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">123</context></context-group>
       </trans-unit>
       <trans-unit id="8150022485860412528">
         <source>Account <x id="PH"/> muted.</source>
-        <target state="translated">アカウント <x id="PH"/> をミュートしました。</target>
+        <target state="translated">アカウント<x id="PH"/>をミュートしました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">135</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">268</context></context-group>
       </trans-unit>
       <trans-unit id="1598375456114200087">
         <source>Instance <x id="PH"/> muted. </source>
-        <target state="translated">インスタンス <x id="PH"/> をミュートしました。 </target>
+        <target state="translated">インスタンス<x id="PH"/>をミュートしました。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">68</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">163</context></context-group>
       </trans-unit>
       <trans-unit id="2558977494773636050">
         <source>Account <x id="PH"/> muted by the instance.</source>
-        <target state="translated">アカウント <x id="PH"/> をあなたのインスタンスからミュートしました。</target>
+        <target state="translated">アカウント<x id="PH"/>をあなたのインスタンスでミュートしました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">434</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">191</context></context-group>
       </trans-unit>
@@ -11375,32 +11375,32 @@
       </trans-unit>
       <trans-unit id="8014491157078444256" datatype="html">
         <source>Server <x id="PH"/> muted by the instance.</source>
-        <target state="translated">サーバー<x id="PH"/>をあなたのインスタンスからミュートしました。</target>
+        <target state="translated">サーバー<x id="PH"/>をあなたのインスタンスでミュートしました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">446</context></context-group>
       </trans-unit>
       <trans-unit id="2044813052587776285" datatype="html">
         <source>Add a message to communicate with the reporter</source>
-        <target state="translated">通報者と連絡を取り合うためにメッセージを加える</target>
+        <target state="translated">通報者と連絡を取り合うためにメッセージを追加</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.ts</context><context context-type="linenumber">101</context></context-group>
       </trans-unit>
       <trans-unit id="4117663541503607703" datatype="html">
         <source>Add a message to communicate with the moderation team</source>
-        <target state="translated">モデレーションチームと連絡を取り合うためにメッセージを加える</target>
+        <target state="translated">モデレーションチームと連絡を取り合うためにメッセージを追加</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-message-modal.component.ts</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="3085641638748358969">
         <source>Account <x id="PH"/> unmuted by the instance.</source>
-        <target state="translated">アカウント <x id="PH"/>をあなたのインスタンスからミュート解除しました。</target>
+        <target state="translated">アカウント<x id="PH"/>をあなたのインスタンスでミュート解除しました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">205</context></context-group>
       </trans-unit>
       <trans-unit id="4991892477258601737">
         <source>Instance <x id="PH"/> muted by the instance.</source>
-        <target state="translated">インスタンス <x id="PH"/> をあなたのインスタンスがミュートしました。</target>
+        <target state="translated">インスタンス<x id="PH"/>をあなたのインスタンスでミュートしました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">219</context></context-group>
       </trans-unit>
       <trans-unit id="4379430340167561220">
         <source>Instance <x id="PH"/> unmuted by the instance.</source>
-        <target state="translated">インスタンス <x id="PH"/> をあなたのインスタンスからミュート解除しました。</target>
+        <target state="translated">インスタンス<x id="PH"/>をあなたのインスタンスでミュート解除しました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">233</context></context-group>
       </trans-unit>
       <trans-unit id="8173437618471379044" datatype="html">
@@ -11430,7 +11430,7 @@
       </trans-unit>
       <trans-unit id="4728427543536046034" datatype="html">
         <source>Change quota, role, and more.</source>
-        <target state="translated">動画容量の制限、ユーザータイプ、その他について変更。</target>
+        <target state="translated">動画の容量制限、アカウントの権限などを変更できます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">341</context></context-group>
       </trans-unit>
       <trans-unit id="7913022656086109932" datatype="html">
@@ -11445,7 +11445,7 @@
       </trans-unit>
       <trans-unit id="3508163549683020253" datatype="html">
         <source>Allow the user to login and create videos/comments again</source>
-        <target state="translated">再びユーザーにログインや動画、コメントの作成を許可する</target>
+        <target state="translated">再度、ユーザーにログイン、動画とコメントの作成を許可します</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">358</context></context-group>
       </trans-unit>
       <trans-unit id="1888272455383898478">
