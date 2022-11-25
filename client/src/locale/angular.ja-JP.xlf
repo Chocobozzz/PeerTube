@@ -11420,7 +11420,7 @@
       </trans-unit>
       <trans-unit id="4268530178786707817" datatype="html">
         <source>My account moderation</source>
-        <target state="translated">他ユーザーへのモデレーション</target>
+        <target state="translated">アカウントのモデレーション</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">291</context></context-group>
       </trans-unit>
       <trans-unit id="7187838764371214919" datatype="html">
@@ -11467,7 +11467,7 @@
       </trans-unit>
       <trans-unit id="2843593344827160627" datatype="html">
         <source>Show back content from that user for you.</source>
-        <target state="translated">このユーザーの全てのコンテンツを再度表示するようにする。</target>
+        <target state="translated">このユーザーの全てのコンテンツを再度表示します。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">303</context></context-group>
       </trans-unit>
       <trans-unit id="6198109035280957164">
