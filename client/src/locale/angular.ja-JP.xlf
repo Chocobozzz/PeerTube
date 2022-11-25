@@ -6719,7 +6719,7 @@
       </trans-unit>
       <trans-unit id="7766488542631150871" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {0個の動画} =1 {1 つの動画} other {<x id="INTERPOLATION"/>個の動画}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {0件の動画} =1 {1件の動画} other {<x id="INTERPOLATION"/>件の動画}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context><context context-type="linenumber">29</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">39</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">47</context></context-group>
@@ -9168,12 +9168,12 @@
       </trans-unit>
       <trans-unit id="8197117721861453263">
         <source>Do you really want to delete <x id="PH"/> videos?</source>
-        <target state="translated">本当に <x id="PH"/> 個の動画を削除しますか?</target>
+        <target state="translated">本当に<x id="PH"/>件の動画を削除しますか?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">187</context></context-group>
       </trans-unit>
       <trans-unit id="696910741870112536" datatype="html">
         <source>{length, plural, =1 {Video has been deleted} other {<x id="length"/> videos have been deleted}}</source>
-        <target state="translated">{length, plural, =1 {つの動画が削除されました} other {<x id="length"/>個の動画が削除されました}}</target>
+        <target state="translated">{length, plural, =1 {1件の動画が削除されました} other {<x id="length"/>件の動画が削除されました}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">206</context></context-group>
       </trans-unit>
       <trans-unit id="3255171236149541417" datatype="html">
@@ -11513,17 +11513,17 @@
       </trans-unit>
       <trans-unit id="525915681688649453" datatype="html">
         <source>Hide any content from that instance from you, your instance and its users.</source>
-        <target state="translated">このインスタンスの全てのコンテンツを非表示にします。対象はあなた、あなたのインスタンス、そしてあなたのインスタンスのユーザーです。</target>
+        <target state="translated">このユーザーの全てのコンテンツをあなた、あなたのインスタンス、あなたのインスタンスのユーザーで非表示にします。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">393</context></context-group>
       </trans-unit>
       <trans-unit id="5325628963747139770">
         <source>Unmute the instance by your instance</source>
-        <target state="translated">あなたのインスタンスからインスタンスのミュートを解除</target>
+        <target state="translated">あなたのインスタンスでインスタンスのミュートを解除</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">398</context></context-group>
       </trans-unit>
       <trans-unit id="758471033841077314" datatype="html">
         <source>Show back content from that instance for you, your instance and its users.</source>
-        <target state="translated">このインスタンスのコンテンツを再度表示します。対象はあなた、あなたのインスタンス、あなたのインスタンスのユーザーです。</target>
+        <target state="translated">このインスタンスのコンテンツをあなた、あなたのインスタンス、あなたのインスタンスのユーザーで再度表示します。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">399</context></context-group>
       </trans-unit>
       <trans-unit id="3785095284194008197" datatype="html">
@@ -11533,7 +11533,7 @@
       </trans-unit>
       <trans-unit id="4809327075591089709" datatype="html">
         <source>Remove comments made by this account from your instance.</source>
-        <target state="translated">あなたのインスタンスの、このアカウントが作成したコメントを削除。</target>
+        <target state="translated">あなたのインスタンスのこのアカウントが作成したコメントを削除します。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">410</context></context-group>
       </trans-unit>
       <trans-unit id="6504240011224861621" datatype="html">
@@ -11543,7 +11543,7 @@
       </trans-unit>
       <trans-unit id="8546847443058492245" datatype="html">
         <source>Block <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> videos</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> 動画をブロック</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ videos.length }}"/>件の動画をブロック</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">4</context>
