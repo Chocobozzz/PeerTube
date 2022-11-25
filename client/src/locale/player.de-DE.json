@@ -45,7 +45,7 @@
     "The video failed to play, will try to fast forward.": "Das Video lässt sich nicht abspielen, ich werde versuchen, vorzuspulen.",
     "{1} / {2} dropped of {3}": "{1} / {2} dropped of {3}",
     " (muted)": " (muted)",
-    "{1} from servers · {2} from peers": "{1} from servers · {2} from peers",
+    "{1} from servers · {2} from peers": "{1} von Servern · {2} von Peers",
     "Audio Player": "Audio-Player",
     "Video Player": "Video-Player",
     "Play": "Wiedergabe",
