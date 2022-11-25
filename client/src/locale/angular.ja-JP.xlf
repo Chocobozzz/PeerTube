@@ -6063,7 +6063,7 @@
       </trans-unit>
       <trans-unit id="2070181811140868440" datatype="html">
         <source>This fetches any missing videos on the local channel</source>
-        <target state="translated">これにより、ローカルチャンネルに存在しない動画が取得されます</target>
+        <target state="translated">これにより、ローカルチャンネルに存在しない動画がフェッチされます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="3997040276213089746" datatype="html">
