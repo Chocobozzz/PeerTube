@@ -4919,7 +4919,7 @@
       </trans-unit>
       <trans-unit id="4497115134891299867">
         <source>Signup requires email verification</source>
-        <target state="translated">アカウント登録にはEメールの認証が必要です</target>
+        <target state="translated">アカウント登録でメールアドレス認証を必須にする</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">172</context></context-group>
       </trans-unit>
       <trans-unit id="8133107840061687919">
@@ -5015,7 +5015,7 @@
       </trans-unit>
       <trans-unit id="502260296951057925" datatype="html">
         <source>Default video quota per user</source>
-        <target state="translated">1ユーザーごとのデフォルトの動画容量の制限</target>
+        <target state="translated">1ユーザーごとのデフォルトの動画アップロード制限</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">211</context></context-group>
       </trans-unit>
       <trans-unit id="7169210802367807492" datatype="html">
@@ -5040,12 +5040,12 @@
       </trans-unit>
       <trans-unit id="6801844913630625451" datatype="html">
         <source>⚠️ We don't recommend to enable this feature if you don't trust your users</source>
-        <target state="translated">⚠️ インスタンスのユーザーを信頼できない場合、この機能を有効にすることをPeerTubeは推奨しません</target>
+        <target state="translated">⚠️ インスタンスのユーザーを信頼できない場合、この機能を有効にすることは推奨されません</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">284</context></context-group>
       </trans-unit>
       <trans-unit id="2634326893148077182" datatype="html">
         <source>Allow channel synchronization with channel of other platforms like YouTube (requires allowing import with HTTP URL)</source>
-        <target state="translated">YouTubeのような、その他の動画サイトのチャンネルとのチャンネル同期を許可する (HTTPから始まるURLでのインポートを許可する必要があります)</target>
+        <target state="translated">YouTubeのなどの他の動画サイトのチャンネルとのチャンネル同期を許可する (HTTP URLでのインポートを許可する必要があります)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">295</context></context-group>
       </trans-unit>
       <trans-unit id="7404104645798703279" datatype="html">
