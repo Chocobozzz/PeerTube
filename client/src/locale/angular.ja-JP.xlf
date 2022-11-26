@@ -2804,7 +2804,7 @@
       </trans-unit>
       <trans-unit id="285180972645018518" datatype="html">
         <source>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</source>
-        <target state="translated">申し訳ありませんが、あなたのアカウントではアップロード機能が無効になっています。動画をアップロードしたい場合、運営者があなたの動画容量の制限を解除する必要があります。</target>
+        <target state="translated">申し訳ありませんが、あなたのアカウントではアップロード機能が無効になっています。動画をアップロードしたい場合、運営者があなたの動画のアップロード制限を解除する必要があります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="1138810463037464722" datatype="html">
