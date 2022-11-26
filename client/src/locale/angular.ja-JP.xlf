@@ -2849,7 +2849,7 @@
       </trans-unit>
       <trans-unit id="6173286379208830044">
         <source>Paste magnet URI</source>
-        <target state="translated">Magnet URIを入力</target>
+        <target state="translated">Magnet URIを貼り付け</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="2424051823705402833">
@@ -2929,7 +2929,7 @@
       </trans-unit>
       <trans-unit id="2061223017941329156">
         <source>Import with URL</source>
-        <target state="translated">URLを入力してインポートする</target>
+        <target state="translated">URLを入力してインポート</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="8740142697043012403">
@@ -7699,7 +7699,7 @@
       </trans-unit>
       <trans-unit id="6759198394434886237" datatype="html">
         <source>Hosts or handles contain duplicates.</source>
-        <target state="translated">重複したホストまたはアカウントIDが入力されています。</target>
+        <target state="translated">重複したホストまたはハンドルが入力されています。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">103</context>
@@ -10211,7 +10211,7 @@
       </trans-unit>
       <trans-unit id="5905189237950302829" datatype="html">
         <source>The subject cannot be more than 120 characters long.</source>
-        <target state="translated">タイトルは120文字以上は入力できません。</target>
+        <target state="translated">件名は120文字以上は入力できません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="847704400962945123">
