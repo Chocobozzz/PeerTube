@@ -551,7 +551,7 @@
       </trans-unit>
       <trans-unit id="2466846716878254816" datatype="html">
         <source>Element <x id="PH" equiv-text="param"/> not found</source>
-        <target state="translated"><x id="PH" equiv-text="param"/>のエレメントは見つかりませんでした</target>
+        <target state="translated">エレメント「<x id="PH" equiv-text="param"/>」が見つかりませんでした</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-search/find-in-bulk.service.ts</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="7539427273132299890">
@@ -607,27 +607,27 @@
       </trans-unit>
       <trans-unit id="870586304593427318" datatype="html">
         <source>Are you sure you want to delete these <x id="PH" equiv-text="videos.length"/> videos?</source>
-        <target state="translated">本当に<x id="PH" equiv-text="videos.length"/>の動画を削除しますか？</target>
+        <target state="translated">本当に<x id="PH" equiv-text="videos.length"/>件の動画を削除しますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">231</context></context-group>
       </trans-unit>
       <trans-unit id="5779580280418408097" datatype="html">
         <source>Deleted {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="translated">{count, plural, =1 {1つの動画} other {<x id="count"/>の動画}}を削除しました。</target>
+        <target state="translated">{count, plural, =1 {1件の動画} other {<x id="count"/>件の動画}}を削除しました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">241</context></context-group>
       </trans-unit>
       <trans-unit id="6630644917521475697" datatype="html">
         <source>Deleted <x id="PH" equiv-text="videos.length"/> videos.</source>
-        <target state="translated"><x id="PH" equiv-text="videos.length"/>の動画を削除しました。</target>
+        <target state="translated"><x id="PH" equiv-text="videos.length"/>件の動画を削除しました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">243</context></context-group>
       </trans-unit>
       <trans-unit id="9164541937317586242" datatype="html">
         <source>Unblocked {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="translated">{count, plural, =1 {1つの動画} other {<x id="count"/>の動画}}のブロックを解除しました。</target>
+        <target state="translated">{count, plural, =1 {1件の動画} other {<x id="count"/>件の動画}}をブロック解除しました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">259</context></context-group>
       </trans-unit>
       <trans-unit id="2870417795706430145" datatype="html">
         <source>Unblocked <x id="PH" equiv-text="videos.length"/> videos.</source>
-        <target state="translated"><x id="PH" equiv-text="videos.length"/>の動画のブロックを解除しました。</target>
+        <target state="translated"><x id="PH" equiv-text="videos.length"/>件の動画をブロック解除しました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">261</context></context-group>
       </trans-unit>
       <trans-unit id="6228449077605046873" datatype="html">
@@ -642,12 +642,12 @@
       </trans-unit>
       <trans-unit id="653148876380254581" datatype="html">
         <source>Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</source>
-        <target state="translated">本当に{count, plural, =1 {1つの動画} other {<x id="count"/>の動画}}のWebTorrentファイルを削除しますか?</target>
+        <target state="translated">本当に{count, plural, =1 {1件の動画} other {<x id="count"/>件の動画}}のWebTorrentファイルを削除しますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">283</context></context-group>
       </trans-unit>
       <trans-unit id="5442133371267277333" datatype="html">
         <source>Are you sure you want to delete WebTorrent files of <x id="PH" equiv-text="videos.length"/> videos?</source>
-        <target state="translated">本当に<x id="PH" equiv-text="videos.length"/>の動画のWebTorrentファイルを削除しますか？</target>
+        <target state="translated">本当に<x id="PH" equiv-text="videos.length"/>件の動画のWebTorrentファイルを削除しますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">285</context></context-group>
       </trans-unit>
       <trans-unit id="1571742433738679426" datatype="html">
@@ -674,12 +674,12 @@
       </trans-unit>
       <trans-unit id="3044142083883783523">
         <source>Updated <x id="INTERPOLATION"/></source>
-        <target state="translated">更新 <x id="INTERPOLATION"/></target>
+        <target state="translated"><x id="INTERPOLATION"/>が更新されました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-miniature.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="5643561794785412000" datatype="html">
         <source>Unavailable</source>
-        <target state="translated">動画がありません</target>
+        <target state="translated">利用できません</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="6381490568322624964" datatype="html">
@@ -720,7 +720,7 @@
       </trans-unit>
       <trans-unit id="9157178301885999151" datatype="html">
         <source>Do you really want to delete {length, plural, =1 {this video} other {<x id="length"/> videos}}?</source>
-        <target state="translated">本当に{length, plural, =1 {この動画} other {<x id="length"/>の動画}}を削除しますか?</target>
+        <target state="translated">本当に{length, plural, =1 {この動画} other {<x id="length"/>件の動画}}を削除しますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">185</context></context-group>
       </trans-unit>
       <trans-unit id="7585826646011739428">
@@ -2817,7 +2817,7 @@
       </trans-unit>
       <trans-unit id="438743381693904838" datatype="html">
         <source>Your daily video quota is insufficient. If you want to add more videos, you must wait for 24 hours or an admin must increase your daily quota.</source>
-        <target state="translated">一日あたりの動画容量制限を超えています。より多くの動画をアップロードしたい場合、1日待つか、運営者が一日あたりのユーザーの動画容量を増やさなければなりません。</target>
+        <target state="translated">一日あたりの動画アップロード制限を超えています。より多くの動画をアップロードしたい場合、一日待つか、運営者が一日あたりのユーザーの動画容量を増やす必要があります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context>
           <context context-type="linenumber">106</context>
@@ -2825,7 +2825,7 @@
       </trans-unit>
       <trans-unit id="6796692581512042469" datatype="html">
         <source>Your video quota is insufficient. If you want to add more videos, an admin must increase your quota.</source>
-        <target state="translated">動画容量制限を超えています。より多くの動画を加えたい場合、運営者がユーザーの動画容量を増やさなければなりません。</target>
+        <target state="translated">動画アップロード制限を超えています。より多くの動画をアップロードしたい場合、運営者がユーザーの動画容量を増やす必要があります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context>
           <context context-type="linenumber">108</context>
@@ -8630,7 +8630,7 @@
       </trans-unit>
       <trans-unit id="8140268298586972139" datatype="html">
         <source>Daily quota</source>
-        <target state="translated">一日あたり</target>
+        <target state="translated">一日あたりの制限</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">138</context></context-group>
       </trans-unit>
       <trans-unit id="7910076708497708162" datatype="html">
