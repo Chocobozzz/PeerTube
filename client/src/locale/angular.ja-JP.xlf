@@ -1459,7 +1459,7 @@
       </trans-unit>
       <trans-unit id="5170617864166788170" datatype="html">
         <source>Official PeerTube website (news, support, contribute...): <x id="START_LINK"/>https://joinpeertube.org<x id="CLOSE_LINK"/></source>
-        <target state="translated">PeerTube公式ウェブサイト（PeerTubeのニュース、サポート、コントリビュートなど）: <x id="START_LINK"/>https://joinpeertube.org<x id="CLOSE_LINK"/></target>
+        <target state="translated">PeerTube公式ウェブサイト(PeerTubeのニュース、サポート、コントリビュートなど): <x id="START_LINK"/>https://joinpeertube.org<x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="4614992717645869756" datatype="html">
@@ -1469,7 +1469,7 @@
       </trans-unit>
       <trans-unit id="2081626998027585315" datatype="html">
         <source>It's time to configure your instance!</source>
-        <target state="translated">あなたのインスタンスの設定を行いましょう！</target>
+        <target state="translated">インスタンスの設定を行いましょう！</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="1852111465407058121" datatype="html">
@@ -1487,7 +1487,7 @@
       </trans-unit>
       <trans-unit id="5704345824323933019" datatype="html">
         <source>Remind me later</source>
-        <target state="translated">後ほど通知させる</target>
+        <target state="translated">後ほど通知する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="7997432701743294657" datatype="html">
@@ -1510,12 +1510,12 @@
       </trans-unit>
       <trans-unit id="9005121595859995793" datatype="html">
         <source>Configuration warning!</source>
-        <target state="translated">設定についての警告！</target>
+        <target state="translated">設定に関する警告！</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="8901933019590352016" datatype="html">
         <source>You enabled user registration on your instance but did not configure the following fields:</source>
-        <target state="translated">あなたのインスタンスではアカウント登録が有効になっていますが、次の項目が設定されていません。</target>
+        <target state="translated">あなたのインスタンスではアカウント登録が有効になっていますが、次の項目が設定されていません:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="8948444690892731948" datatype="html">
@@ -1530,7 +1530,7 @@
       </trans-unit>
       <trans-unit id="1339481669904426442" datatype="html">
         <source>Who you are</source>
-        <target state="translated">運営者は誰ですか</target>
+        <target state="translated">運営者について</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="5026256683194518810" datatype="html">
@@ -1564,7 +1564,7 @@
       </trans-unit>
       <trans-unit id="1420294365005204590" datatype="html">
         <source>These settings apply only to your session on this instance.</source>
-        <target state="translated">以下の設定は、このインスタンスでの現在のセッションにのみ適用されます。</target>
+        <target state="translated">これらの設定は、このインスタンスでの現在のセッションにのみ適用されます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">8</context>
@@ -1602,7 +1602,7 @@
       </trans-unit>
       <trans-unit id="1254225561962113354" datatype="html">
         <source>Server too slow</source>
-        <target state="translated">サーバーがとても重くなっています</target>
+        <target state="translated">サーバーに負荷がかかっています</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -1610,7 +1610,7 @@
       </trans-unit>
       <trans-unit id="1599290313974118905" datatype="html">
         <source>Live blacklisted</source>
-        <target state="translated">ライブ配信がブラックリストに載せられました</target>
+        <target state="translated">ライブ配信がブラックリストに追加されました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">43</context>
@@ -1618,7 +1618,7 @@
       </trans-unit>
       <trans-unit id="5274374742436838139" datatype="html">
         <source>Max duration exceeded</source>
-        <target state="translated">最大再生時間を越えました</target>
+        <target state="translated">最大再生時間を超過</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -1652,7 +1652,7 @@
       </trans-unit>
       <trans-unit id="2964653499524716819">
         <source>Help to translate PeerTube!</source>
-        <target state="translated">PeerTubeの翻訳にご協力下さい!</target>
+        <target state="translated">PeerTubeの翻訳にご協力下さい！</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/language-chooser.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="5464118521750361406" datatype="html">
@@ -1746,12 +1746,12 @@
       </trans-unit>
       <trans-unit id="2184839376696112704" datatype="html">
         <source>allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</source>
-        <target state="translated">複数の動画を並行してインポートすることを許可する。 ⚠️ PeerTubeの再起動が必要です。</target>
+        <target state="translated">複数の動画を並行してインポートすることを許可します。⚠️ PeerTubeの再起動が必要です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">257</context></context-group>
       </trans-unit>
       <trans-unit id="780513172839038392" datatype="html">
         <source>jobs in parallel</source>
-        <target state="translated">同時並行のジョブ</target>
+        <target state="translated">同時並行のジョブ数</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">261</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
@@ -1762,7 +1762,7 @@
       </trans-unit>
       <trans-unit id="2095604754338363597" datatype="html">
         <source>⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</source>
-        <target state="translated">⚠️ この設定を有効にした場合、あなたのPeerTubeサーバーからプライべートURLへのアクセスを防ぐため、<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTPプロキシ<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>の利用を推奨します</target>
+        <target state="translated">⚠️ この設定を有効にした場合、PeerTubeサーバーからのプライベートURLアクセスを防止するため、<x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>HTTPプロキシ<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>の利用を推奨します</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">273</context></context-group>
       </trans-unit>
       <trans-unit id="7627544798203088407" datatype="html">
@@ -1773,7 +1773,7 @@
       </trans-unit>
       <trans-unit id="7844706011418789951">
         <source>Administration</source>
-        <target state="translated">運営</target>
+        <target state="translated">管理画面</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">82</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
@@ -1833,7 +1833,7 @@
       </trans-unit>
       <trans-unit id="3761381527105312450" datatype="html">
         <source>I don't want to create a channel</source>
-        <target state="translated">チャンネルを作成しません</target>
+        <target state="translated">チャンネルを作成しない</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">91,92</context>
@@ -1841,7 +1841,7 @@
       </trans-unit>
       <trans-unit id="1792963373738226329" datatype="html">
         <source>You will be able to create a channel later</source>
-        <target state="translated">後でチャンネルを作成することができます</target>
+        <target state="translated">後でチャンネルを作成できます</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">94,95</context>
@@ -1889,7 +1889,7 @@
       </trans-unit>
       <trans-unit id="7239874680342223476" datatype="html">
         <source>Help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> by:</source>
-        <target state="translated">モデレーターや他のユーザーに<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>あなたが誰か<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>を知ってもらうために、下記の事をしてみましょう。</target>
+        <target state="translated">モデレーターや他のユーザーに<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>あなたが誰か<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>を知ってもらうために、次の事をやってみましょう:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="5856432243446401016" datatype="html">
@@ -1922,12 +1922,12 @@
       </trans-unit>
       <trans-unit id="3343007694071351756" datatype="html">
         <source>We couldn't find any video tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
-        <target state="translated">あなたが探していた動画URL<x id="INTERPOLATION" equiv-text="{{ pathname }}"/>の動画は見つかりませんでした。</target>
+        <target state="translated">あなたが探していた動画URL(<x id="INTERPOLATION" equiv-text="{{ pathname }}"/>)の動画は見つかりませんでした。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="7366678433039425999" datatype="html">
         <source>We couldn't find any resource tied to the URL <x id="INTERPOLATION" equiv-text="{{ pathname }}"/> you were looking for.</source>
-        <target state="translated">あなたが探していたコンテンツのURL<x id="INTERPOLATION" equiv-text="{{ pathname }}"/>のコンテンツは見つかりませんでした。</target>
+        <target state="translated">あなたが探していたコンテンツのURL(<x id="INTERPOLATION" equiv-text="{{ pathname }}"/>)のコンテンツは見つかりませんでした。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="3522707340816553139" datatype="html">
@@ -1938,33 +1938,33 @@
       </trans-unit>
       <trans-unit id="6925335998927745197" datatype="html">
         <source>You may have used an outdated or broken link</source>
-        <target state="translated">期限切れまたは壊れたリンクにアクセスしたかもしれません</target>
+        <target state="translated">期限切れまたは壊れたリンクにアクセスした</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="1171455174603388942" datatype="html">
         <source>The video may have been moved or deleted</source>
-        <target state="translated">この動画は移動されたか、削除されたかもしれません</target>
+        <target state="translated">この動画は移動されたか、削除された</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="2213348264902218064" datatype="html">
         <source>The resource may have been moved or deleted</source>
-        <target state="translated">このコンテンツは移動したか、削除されたかもしれません</target>
+        <target state="translated">このコンテンツは移動したか、削除された</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="3209594685692897380" datatype="html">
         <source>You may have typed the address or URL incorrectly</source>
-        <target state="translated">サイトアドレスまたはURLを間違って入力したかもしれません</target>
+        <target state="translated">間違ったアドレスまたはURLを入力した</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="3290262698447971494" datatype="html">
         <source>You are not authorized here.</source>
-        <target state="translated">あなたのアクセスは認められていません。</target>
+        <target state="translated">アクセス権限がありません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="8497991113445747319" datatype="html">
         <source>You might need to login to see the video.</source>
-        <target state="translated">動画を見るために、ログインする必要があるかもしれません。</target>
+        <target state="translated">動画を見るためにはログインが必要かもしれません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">30</context>
@@ -1972,7 +1972,7 @@
       </trans-unit>
       <trans-unit id="250608669543270729" datatype="html">
         <source>You might need to login to see the resource.</source>
-        <target state="translated">コンテンツを見るために、ログインする必要があるかもしれません。</target>
+        <target state="translated">コンテンツを見るためにはログインが必要かもしれません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">31</context>
@@ -2010,7 +2010,7 @@
       </trans-unit>
       <trans-unit id="2971365540217107489" datatype="html">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target state="translated">メディアのサイズがPeerTubeサーバーに対して大きすぎます。サーバーのサイズ上限を上げたい場合は、インスタンス運営者に連絡を取って下さい。</target>
+        <target state="translated">メディアのサイズがサーバーに対して大きすぎます。サーバーのサイズ上限を上げたい場合は、インスタンス運営者に連絡を取って下さい。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
       <trans-unit id="5131854469652959713" datatype="html">
@@ -2020,7 +2020,7 @@
       </trans-unit>
       <trans-unit id="1843010981261389722" datatype="html">
         <source>using <x id="INTERPOLATION"/></source>
-        <target state="translated"><x id="INTERPOLATION"/>を利用します</target>
+        <target state="translated"><x id="INTERPOLATION"/>を使用中</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="4070041848101291003" datatype="html">
