@@ -632,12 +632,12 @@
       </trans-unit>
       <trans-unit id="6228449077605046873" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</source>
-        <target state="translated">Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</target>
+        <target state="translated">本当に{count, plural, =1 {1 件のHLSストリーミングプレイリスト} other {<x id="count"/> 件のHLSストリーミングプレイリスト}}を削除してもよろしいですか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">277</context></context-group>
       </trans-unit>
       <trans-unit id="9088099192924395359" datatype="html">
         <source>Are you sure you want to delete <x id="PH" equiv-text="videos.length"/> HLS streaming playlists?</source>
-        <target state="translated">HLS配信のプレイリスト<x id="PH" equiv-text="videos.length"/>を本当に削除しますか？</target>
+        <target state="translated"><x id="PH" equiv-text="videos.length"/>件のHLSストリーミングプレイリストを本当に削除しますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">279</context></context-group>
       </trans-unit>
       <trans-unit id="653148876380254581" datatype="html">
@@ -8411,12 +8411,12 @@
       </trans-unit>
       <trans-unit id="3379167598974960777" datatype="html">
         <source>warning</source>
-        <target state="translated">注意</target>
+        <target state="translated">warning</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="8772116786769251214" datatype="html">
         <source>error</source>
-        <target state="translated">エラー</target>
+        <target state="translated">error</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
       <trans-unit id="3422890808980876594" datatype="html">
@@ -8459,7 +8459,7 @@
       </trans-unit>
       <trans-unit id="5076187961693950167" datatype="html">
         <source>Standard logs</source>
-        <target state="translated">標準のログ</target>
+        <target state="translated">標準ログ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="4737341634746310376" datatype="html">
@@ -8469,7 +8469,7 @@
       </trans-unit>
       <trans-unit id="1886888801485703107">
         <source>User <x id="PH"/> created.</source>
-        <target state="translated">ユーザー <x id="PH"/> を作成しました。</target>
+        <target state="translated">ユーザー<x id="PH"/>を作成しました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-create.component.ts</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="8286337167859377104" datatype="html">
@@ -8490,7 +8490,7 @@
       </trans-unit>
       <trans-unit id="5974506725502681113">
         <source>Password changed for user <x id="PH"/>.</source>
-        <target state="translated">ユーザー <x id="PH"/> のパスワードを変更しました。</target>
+        <target state="translated">ユーザー<x id="PH"/>のパスワードを変更しました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-password.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="149953821752893163">
@@ -8505,12 +8505,12 @@
       </trans-unit>
       <trans-unit id="1349763489797682899">
         <source>Update user</source>
-        <target state="translated">ユーザーの設定を更新</target>
+        <target state="translated">ユーザーを更新</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-update.component.ts</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
       <trans-unit id="8819563010322372715">
         <source>An email asking for password reset has been sent to <x id="PH"/>.</source>
-        <target state="translated">パスワードの再設定の手順が記載されたメールが <x id="PH"/> に送信されました。</target>
+        <target state="translated">パスワードの再設定の手順が記載されたメールが<x id="PH"/>に送信されました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-update.component.ts</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="5679185794144903715" datatype="html">
@@ -8559,22 +8559,22 @@
       </trans-unit>
       <trans-unit id="5876109550513228304" datatype="html">
         <source>With WebTorrent</source>
-        <target state="translated">WebTorrentの有効</target>
+        <target state="translated">WebTorrent有効</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="9036202975131076885" datatype="html">
         <source>Without WebTorrent</source>
-        <target state="translated">WebTorrentの無効</target>
+        <target state="translated">WebTorrent無効</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="7468888924775619361" datatype="html">
         <source>With HLS</source>
-        <target state="translated">HLSファイルを有効</target>
+        <target state="translated">HLS有効</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="5489331826268601489" datatype="html">
         <source>Without HLS</source>
-        <target state="translated">HLSファイルを無効</target>
+        <target state="translated">HLS無効</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="7091163288887549392" datatype="html">
@@ -8606,7 +8606,7 @@
       </trans-unit>
       <trans-unit id="3855396975723886053" datatype="html">
         <source>User won't be able to login anymore, but videos and comments will be kept as is.</source>
-        <target state="translated">ユーザーがログイン出来なくなりますが、動画とコメントがそのまま残ります。</target>
+        <target state="translated">ユーザーがログイン出来なくなりますが、動画とコメントはそのまま残ります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">108</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">352</context></context-group>
       </trans-unit>
@@ -8635,12 +8635,12 @@
       </trans-unit>
       <trans-unit id="7910076708497708162" datatype="html">
         <source>Last login</source>
-        <target state="translated">最後のログイン</target>
+        <target state="translated">最終ログイン</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="3403978719736970622">
         <source>You cannot ban root.</source>
-        <target state="translated">rootは凍結できません。</target>
+        <target state="translated">rootアカウントは凍結できません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">200</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
@@ -8651,22 +8651,22 @@
       </trans-unit>
       <trans-unit id="4884272193574287483">
         <source>Do you really want to unban <x id="PH"/> users?</source>
-        <target state="translated"><x id="PH"/> 人の凍結を解除しますか?</target>
+        <target state="translated"><x id="PH"/>ユーザーの凍結を解除しますか?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">216</context></context-group>
       </trans-unit>
       <trans-unit id="738031253894929036" datatype="html">
         <source>{count, plural, =1 {1 user unbanned.} other {<x id="count"/> users unbanned.}}</source>
-        <target state="translated">{count, plural, =1 {1人のユーザーの凍結が解除されました。} other {<x id="count"/>人のユーザーの凍結が解除されました。}}</target>
+        <target state="translated">{count, plural, =1 {1ユーザーの凍結が解除されました。} other {<x id="count"/>ユーザーの凍結が解除されました。}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">227</context></context-group>
       </trans-unit>
       <trans-unit id="8712248120167780385">
         <source><x id="PH"/> users unbanned. </source>
-        <target state="translated"><x id="PH"/> 人の凍結を解除しました。 </target>
+        <target state="translated"><x id="PH"/>ユーザーの凍結を解除しました。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">229</context></context-group>
       </trans-unit>
       <trans-unit id="5325873477837320044">
         <source>You cannot delete root.</source>
-        <target state="translated">rootは削除できません。</target>
+        <target state="translated">rootアカウントは削除できません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">241</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">99</context></context-group>
       </trans-unit>
@@ -8682,22 +8682,22 @@
       </trans-unit>
       <trans-unit id="1301767781765127363" datatype="html">
         <source>{count, plural, =1 {1 user deleted.} other {<x id="count"/> users deleted.}}</source>
-        <target state="translated">{count, plural, =1 {1人のユーザーが削除されました。} other {<x id="count"/>人のユーザーが削除されました。}}</target>
+        <target state="translated">{count, plural, =1 {1ユーザーが削除されました。} other {<x id="count"/>ユーザーが削除されました。}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">256</context></context-group>
       </trans-unit>
       <trans-unit id="7166936623843420016">
         <source><x id="PH"/> users deleted. </source>
-        <target state="translated"><x id="PH"/> 名のユーザーが削除されました。 </target>
+        <target state="translated"><x id="PH"/>ユーザーが削除されました。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">258</context></context-group>
       </trans-unit>
       <trans-unit id="3104427236147521673" datatype="html">
         <source>{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</source>
-        <target state="translated">{count, plural, =1 {1人のユーザーのメールアドレスが認証されました。} other {<x id="count"/>人のユーザーのメールアドレスが認証されました。}}</target>
+        <target state="translated">{count, plural, =1 {1ユーザーのメールアドレスが認証されました。} other {<x id="count"/>ユーザーのメールアドレスが認証されました。}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">274</context></context-group>
       </trans-unit>
       <trans-unit id="8360664597512051242">
         <source><x id="PH"/> users email set as verified. </source>
-        <target state="translated">ユーザー <x id="PH"/> 名のメールアドレスは認証済として設定されています。 </target>
+        <target state="translated"><x id="PH"/>ユーザーのメールアドレスは認証済として設定されています。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">276</context></context-group>
       </trans-unit>
       <trans-unit id="7390990800435887351">
@@ -8708,7 +8708,7 @@
       </trans-unit>
       <trans-unit id="7246356397085094208">
         <source>Instance <x id="PH"/> unmuted.</source>
-        <target state="translated">インスタンス <x id="PH"/> のミュートを解除しました。</target>
+        <target state="translated">インスタンス<x id="PH"/>のミュートを解除しました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context><context context-type="linenumber">45</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
@@ -8784,7 +8784,7 @@
       </trans-unit>
       <trans-unit id="5422897685524094185" datatype="html">
         <source>Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="translated">他のサーバーやサードパーティーによってキャッシュされたコンテンツは、削除されるのに時間がかかるかもしれません。</target>
+        <target state="translated">他のサーバーやサードパーティーによってキャッシュされたコンテンツは、削除されるのに時間がかかる場合があります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -9721,12 +9721,12 @@
       </trans-unit>
       <trans-unit id="8487565500496466433">
         <source>Short (&lt; 4 min)</source>
-        <target state="translated">短い(&lt; 4 分)</target>
+        <target state="translated">短い (&lt; 4分)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="3642535017283477339">
         <source>Medium (4-10 min)</source>
-        <target state="translated">中間(4 ～ 10 分)</target>
+        <target state="translated">中間 (4～10分)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">63</context></context-group>
       </trans-unit>
       <trans-unit id="6613870447286561244">
