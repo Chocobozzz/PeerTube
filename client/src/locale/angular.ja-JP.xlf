@@ -10333,7 +10333,7 @@
       </trans-unit>
       <trans-unit id="4717982586356605243">
         <source>Description cannot be more than 1000 characters long.</source>
-        <target state="translated">説明は1,000文字以上は書けません。</target>
+        <target state="translated">説明は1000文字以上は書けません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">135</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">37</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">34</context></context-group>
@@ -10468,12 +10468,12 @@
       </trans-unit>
       <trans-unit id="4006797705713167676">
         <source>Name must be at least 1 character long.</source>
-        <target state="translated">名前は 1 文字以上にする必要があります。</target>
+        <target state="translated">名前は1文字以上にする必要があります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="2233809696503670883">
         <source>Name cannot be more than 50 characters long.</source>
-        <target state="translated">名前は 50 文字以内でなければなりません。</target>
+        <target state="translated">名前は50文字以内でなければなりません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="7915656854942800659">
@@ -10483,7 +10483,7 @@
       </trans-unit>
       <trans-unit id="6880459830525364741">
         <source>Support text must be at least 3 characters long.</source>
-        <target state="translated">応援コメントは、最低でも 3 文字必要です。</target>
+        <target state="translated">応援テキストは、最低でも3文字必要です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="6122525173522570480" datatype="html">
@@ -10496,7 +10496,7 @@
       </trans-unit>
       <trans-unit id="6149476559621965756" datatype="html">
         <source>Remote channel url is required.</source>
-        <target state="translated">外部の動画サイトのチャンネルのURLは必須です。</target>
+        <target state="translated">外部の動画サイトのチャンネルURLは必須です。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">59</context>
