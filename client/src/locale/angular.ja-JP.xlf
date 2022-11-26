@@ -10504,7 +10504,7 @@
       </trans-unit>
       <trans-unit id="7820654428820536159" datatype="html">
         <source>External channel URL must begin with "https://" or "http://"</source>
-        <target state="translated">外部の動画サイトのチャンネルのURLは、「https://」または「http://」で始まらなければいけません</target>
+        <target state="translated">外部の動画サイトのチャンネルURLは、「https://」または「http://」で始まっている必要があります</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">60</context>
