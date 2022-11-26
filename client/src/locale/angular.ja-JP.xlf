@@ -9731,7 +9731,7 @@
       </trans-unit>
       <trans-unit id="6613870447286561244">
         <source>Long (&gt; 10 min)</source>
-        <target state="translated">長い(&gt; 10 分)</target>
+        <target state="translated">長い (&gt; 10分)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="1787083504545967">
@@ -10693,12 +10693,12 @@
       </trans-unit>
       <trans-unit id="3959376623771116873">
         <source>Video description must be at least 3 characters long.</source>
-        <target state="translated">動画の説明は 3 文字以上にする必要があります。</target>
+        <target state="translated">動画の説明は3文字以上にする必要があります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="725195891739570830">
         <source>Video description cannot be more than 10000 characters long.</source>
-        <target state="translated">動画の説明は、10,000 文字以上は書けません。</target>
+        <target state="translated">動画の説明は、10000文字以上は入力できません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="142488285332434408">
