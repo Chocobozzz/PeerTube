@@ -720,7 +720,7 @@
       </trans-unit>
       <trans-unit id="9157178301885999151" datatype="html">
         <source>Do you really want to delete {length, plural, =1 {this video} other {<x id="length"/> videos}}?</source>
-        <target state="translated">本当に{length, plural, =1 {この動画} other {<x id="length"/>件の動画}}を削除しますか？</target>
+        <target state="translated">本当に{length, plural, =1 {件の動画} other {<x id="length"/>件の動画}}を削除しますか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">185</context></context-group>
       </trans-unit>
       <trans-unit id="7585826646011739428">
