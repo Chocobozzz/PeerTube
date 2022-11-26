@@ -275,7 +275,7 @@
       </trans-unit>
       <trans-unit id="5504059606863599420" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> mentioned you on <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/>video <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>コメントをしました。 <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/>動画 <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>さんが<x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/>動画「<x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>」であなたに対して返信しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">164</context>
@@ -447,7 +447,7 @@
       </trans-unit>
       <trans-unit id="5496771215105419189" datatype="html">
         <source>Audio stream</source>
-        <target state="translated">オーディオストリーム</target>
+        <target state="translated">音声ストリーム</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="6316149158173629264">
@@ -478,12 +478,12 @@
       </trans-unit>
       <trans-unit id="6995024616159044376" datatype="html">
         <source>Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="translated">アップロード容量制限を越えました(この動画のサイズ: <x id="PH" equiv-text="videoSizeBytes"/>、アップロード済み動画のサイズ合計: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>、アップロード容量制限: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
+        <target state="translated">あなたのアップロード容量制限が次の動画により超過しました (動画サイズ: <x id="PH" equiv-text="videoSizeBytes"/>、使用済み: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, アップロード容量制限: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">345</context></context-group>
       </trans-unit>
       <trans-unit id="7873395933409147217" datatype="html">
         <source>Your daily video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</source>
-        <target state="translated">一日当たりのアップロード容量制限を越えました(この動画のサイズ: <x id="PH" equiv-text="videoSizeBytes"/>、アップロード済み動画のサイズ合計: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>、アップロード容量制限: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
+        <target state="translated">あなたの1日あたりのアップロード容量制限が次の動画により超過しました (動画サイズ: <x id="PH" equiv-text="videoSizeBytes"/>、使用済み: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, アップロード容量制限: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">364</context></context-group>
       </trans-unit>
       <trans-unit id="5235042777215655908" datatype="html">
@@ -897,7 +897,7 @@
       </trans-unit>
       <trans-unit id="2602586221576511475">
         <source>Video quota</source>
-        <target state="translated">動画容量の制限</target>
+        <target state="translated">動画のアップロード容量制限</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">145</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">145</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">134</context></context-group>
@@ -2777,7 +2777,7 @@
       </trans-unit>
       <trans-unit id="2127094963121208963" datatype="html">
         <source>Total video quota</source>
-        <target state="translated">合計の動画容量の制限</target>
+        <target state="translated">合計動画アップロード制限</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">131</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-quota.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
@@ -10530,7 +10530,7 @@
       </trans-unit>
       <trans-unit id="71132671234491945">
         <source>Comment must be at least 2 characters long.</source>
-        <target state="translated">コメントは 2 文字以上にする必要があります。</target>
+        <target state="translated">コメントは2文字以上にする必要があります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="4148250392704331190">
@@ -10652,7 +10652,7 @@
       </trans-unit>
       <trans-unit id="6989092358991683843" datatype="html">
         <source>Replay is being processed...</source>
-        <target state="translated">リプレイ動画が生成されています...</target>
+        <target state="translated">リプレイ動画は生成中です...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">45</context>
@@ -10665,12 +10665,12 @@
       </trans-unit>
       <trans-unit id="2807676084745266104">
         <source>Video name must be at least 3 characters long.</source>
-        <target state="translated">動画名は 3 文字以上にする必要があります。</target>
+        <target state="translated">動画名は3文字以上にする必要があります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="2155414141025589556">
         <source>Video name cannot be more than 120 characters long.</source>
-        <target state="translated">動画名は120 文字以内でなければなりません。</target>
+        <target state="translated">動画名は120文字以内でなければなりません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="1074634769552897790" datatype="html">
@@ -10683,7 +10683,7 @@
       </trans-unit>
       <trans-unit id="9115337161597088460">
         <source>Video privacy is required.</source>
-        <target state="translated">動画の公開設定が必要です。</target>
+        <target state="translated">動画の公開設定は必須です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="7309902991450450996">
