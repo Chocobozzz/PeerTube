@@ -10723,7 +10723,7 @@
       </trans-unit>
       <trans-unit id="4806300480558315727">
         <source>Video support must be at least 3 characters long.</source>
-        <target state="translated">動画への応援コメントは、最低でも 3 文字必要です。</target>
+        <target state="translated">動画への応援テキストは、最低でも3文字必要です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">83</context></context-group>
       </trans-unit>
       <trans-unit id="6655773021893755977">
