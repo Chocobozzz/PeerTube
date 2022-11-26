@@ -478,12 +478,12 @@
       </trans-unit>
       <trans-unit id="6995024616159044376" datatype="html">
         <source>Your video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, quota: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</source>
-        <target state="translated">あなたのアップロード容量制限が次の動画により超過しました (動画サイズ: <x id="PH" equiv-text="videoSizeBytes"/>、使用済み: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, アップロード容量制限: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
+        <target state="translated">あなたの動画のアップロード容量制限が次の動画により超過しました (動画サイズ: <x id="PH" equiv-text="videoSizeBytes"/>、使用済み: <x id="PH_1" equiv-text="videoQuotaUsedBytes"/>, アップロード容量制限: <x id="PH_2" equiv-text="videoQuotaBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">345</context></context-group>
       </trans-unit>
       <trans-unit id="7873395933409147217" datatype="html">
         <source>Your daily video quota is exceeded with this video (video size: <x id="PH" equiv-text="videoSizeBytes"/>, used: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, quota: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</source>
-        <target state="translated">あなたの1日あたりのアップロード容量制限が次の動画により超過しました (動画サイズ: <x id="PH" equiv-text="videoSizeBytes"/>、使用済み: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, アップロード容量制限: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
+        <target state="translated">あなたの1日あたりの動画のアップロード容量制限が次の動画により超過しました (動画サイズ: <x id="PH" equiv-text="videoSizeBytes"/>、使用済み: <x id="PH_1" equiv-text="quotaUsedDailyBytes"/>, アップロード容量制限: <x id="PH_2" equiv-text="quotaDailyBytes"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">364</context></context-group>
       </trans-unit>
       <trans-unit id="5235042777215655908" datatype="html">
@@ -2777,7 +2777,7 @@
       </trans-unit>
       <trans-unit id="2127094963121208963" datatype="html">
         <source>Total video quota</source>
-        <target state="translated">合計動画アップロード制限</target>
+        <target state="translated">合計の動画アップロード容量制限</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context><context context-type="linenumber">131</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-quota.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
