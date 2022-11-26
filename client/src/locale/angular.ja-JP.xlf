@@ -1912,7 +1912,7 @@
       </trans-unit>
       <trans-unit id="4424964105331349857" datatype="html">
         <source>I'm a teapot</source>
-        <target state="translated">I'm a teapot</target>
+        <target state="translated">私はティーポットです</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="1597262876035959248" datatype="html">
@@ -1998,13 +1998,13 @@
       </trans-unit>
       <trans-unit id="7231414106228227962" datatype="html">
         <source>The requested entity body blends sweet bits with a mellow earthiness.</source>
-        <target state="translated">The requested entity body blends sweet bits with a mellow earthiness.</target>
+        <target state="translated">要求されたエンティティ・ボディーは、甘いビットとまろやかな素朴さをブレンドします。</target>
         <note priority="1" from="description">Description of a tea flavour, keeping the 'requested entity body' as a technical expression referring to a web request</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="2933819425721221134" datatype="html">
         <source>Sepia seems to like it.</source>
-        <target state="translated">Sepia seems to like it.</target>
+        <target state="translated">セピアはそれを気に入っているようです。</target>
         <note priority="1" from="description">This is about Sepia's tea</note>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+error-page/error-page.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
@@ -10415,7 +10415,7 @@
       </trans-unit>
       <trans-unit id="7989186574443390119" datatype="html">
         <source>Abuse message cannot be more than 3000 characters long.</source>
-        <target state="translated">不正行為に関する通報へのメッセージは、3,000文字以上は書けません。</target>
+        <target state="translated">不正行為に関する通報へのメッセージは、3000文字以上入力できません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="6700357678556223012">
@@ -10430,7 +10430,7 @@
       </trans-unit>
       <trans-unit id="8581623418602419755" datatype="html">
         <source>Block reason cannot be more than 300 characters long.</source>
-        <target state="translated">ブロック理由は300文字以上は書けません。</target>
+        <target state="translated">ブロック理由は300文字以上入力できません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="1099619384694370156">
