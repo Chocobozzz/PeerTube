@@ -1439,7 +1439,7 @@
       </trans-unit>
       <trans-unit id="5910950876330656326" datatype="html">
         <source>Managing users, following other instances, dealing with spammers...</source>
-        <target state="translated">ユーザーを管理する、他のインスタンスをフォローする、スパムを対処する...</target>
+        <target state="translated">ユーザーを管理する、他のインスタンスをフォローする、スパムに対処する...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="879127294610588497" datatype="html">
