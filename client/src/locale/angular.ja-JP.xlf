@@ -2849,7 +2849,7 @@
       </trans-unit>
       <trans-unit id="6173286379208830044">
         <source>Paste magnet URI</source>
-        <target state="translated">Magnet URIを貼り付け</target>
+        <target state="translated">マグネットURIを貼り付け</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="2424051823705402833">
