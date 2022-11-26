@@ -10535,7 +10535,7 @@
       </trans-unit>
       <trans-unit id="4148250392704331190">
         <source>Comment cannot be more than 3000 characters long.</source>
-        <target state="translated">コメントは3,000文字以上は書けません。</target>
+        <target state="translated">コメントは3000文字以上は書けません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="6854100952145697527">
