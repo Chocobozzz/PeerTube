@@ -121,7 +121,7 @@
     "sass": "^1.52.3",
     "sass-loader": "^13.0.0",
     "sha.js": "^2.4.11",
-    "socket.io-client": "^4.5.1",
+    "socket.io-client": "^4.5.4",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.0.0",
     "stylelint": "^14.9.1",
