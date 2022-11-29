@@ -1,6 +1,6 @@
 # Changelog
 
-## v5.0.0-rc.1 (not released yet)
+## v5.0.0-rc.1
 
 ### IMPORTANT NOTES
 
