@@ -1199,7 +1199,7 @@
       </trans-unit>
       <trans-unit id="892063502898494584" datatype="html">
         <source>I forgot my password</source>
-        <target state="translated">パスワードを忘れました</target>
+        <target state="translated">パスワードを忘れた</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">84</context></context-group>
       </trans-unit>
       <trans-unit id="2101170466365500913" datatype="html">
@@ -6972,7 +6972,7 @@
       </trans-unit>
       <trans-unit id="442017645619017020" datatype="html">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server, but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What follows applies only if you want to keep using the P2P mode of PeerTube.</source>
-        <target state="translated">PeerTubeは、初期設定でサーバーの負荷を減らすためにユーザー間で帯域幅を共有するBitTorrentプロトコルを利用していますが、最終的にはは、動画のサーバーからのみストリーミングする通常の配信方法に切り替えるための選択肢が与えられています。PeerTubeのP2P機能を継続して利用したい場合にのみ、上記の初期設定が適用されます。</target>
+        <target state="translated">PeerTubeは、初期設定でサーバーの負荷を減らすためにユーザー間で帯域幅を共有するBitTorrentプロトコルを利用していますが、最終的には、動画のあるサーバーからのみストリーミングする通常の配信方法に切り替えるための選択肢が与えられています。PeerTubeのP2P機能を継続して利用したい場合にのみ、上記の初期設定が適用されます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="6314880288843792309" datatype="html">
