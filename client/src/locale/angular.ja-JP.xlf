@@ -3486,7 +3486,7 @@
       </trans-unit>
       <trans-unit id="7944777648309302794" datatype="html">
         <source>Feed URL</source>
-        <target state="translated">フィードのURL</target>
+        <target state="translated">RSSフィードのURL</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="6086365181226161548" datatype="html">
