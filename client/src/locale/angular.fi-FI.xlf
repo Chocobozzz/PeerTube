@@ -1704,7 +1704,7 @@
       </trans-unit>
       <trans-unit id="2497681082724639563" datatype="html">
         <source>powered by PeerTube</source>
-        <target state="translated">moottorina PeerTube</target>
+        <target state="translated">PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="7507948636555938109">
@@ -2454,7 +2454,7 @@
       </trans-unit>
       <trans-unit id="7366542359085748162" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2022</source>
-        <target state="translated">Moottorina PeerTube - CopyLeft 2015-2022</target>
+        <target state="translated">PeerTube - CopyLeft 2015-2022</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">149</context></context-group>
       </trans-unit>
       <trans-unit id="3722967224215437913" datatype="html">
@@ -5807,7 +5807,7 @@
       </trans-unit>
       <trans-unit id="4860917424154224190" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Name"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">Lajittelu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Nimi"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Järjestä <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Nimi"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="8190023086228606960" datatype="html">
@@ -6356,7 +6356,7 @@
       </trans-unit>
       <trans-unit id="5511928240200239994" datatype="html">
         <source>Some of your channels are not fully set up. Make them welcoming and explicit about what you publish by adding a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>banner<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</source>
-        <target state="translated">Joitakin kanaviasi ei ole määritetty kokonaan. Tee heistä tervetulleita ja kerro julkaisuistasi selkeästi lisäämällä <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>banneri<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, tai <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ja <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>kuvaus<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
+        <target state="translated">Joitakin kanaviasi ei ole määritetty kokonaan. Tee niistä houkuttelevia ja kerro julkaisuistasi selkeästi lisäämällä <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>banneri<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, tai <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ja <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>kuvaus<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/channels-setup-message.component.html</context>
           <context context-type="linenumber">5</context>
@@ -11976,7 +11976,7 @@
       </trans-unit>
       <trans-unit id="992317512448454409" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {kommenttia} =1 {1 kommentti} other {<x id="INTERPOLATION"/> kommenttia}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Kommentit} =1 {1 kommentti} other {<x id="INTERPOLATION"/> kommenttia}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="4903651219400691248" datatype="html">
