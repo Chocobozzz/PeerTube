@@ -2788,7 +2788,7 @@
       </trans-unit>
       <trans-unit id="3768339632235914548">
         <source>Publish will be available when upload is finished</source>
-        <target state="translated">アップロードが完了した段階で公開されます</target>
+        <target state="translated">アップロードが完了した段階で投稿されます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="7430416142942514215">
