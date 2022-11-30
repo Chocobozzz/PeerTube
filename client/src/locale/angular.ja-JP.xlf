@@ -7858,7 +7858,7 @@
       </trans-unit>
       <trans-unit id="8823680466537853782" datatype="html">
         <source>Do you really want to reject {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
-        <target state="translated">本当に{count, plural, =1 {<x id="followerName"/>のフォローリクエスト拒否しますか？} other {<x id="count"/>件のフォローリクエストを拒否しますか？}}</target>
+        <target state="translated">本当に{count, plural, =1 {<x id="followerName"/>のフォローリクエストを拒否しますか？} other {<x id="count"/>件のフォローリクエストを拒否しますか？}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -7874,7 +7874,7 @@
       </trans-unit>
       <trans-unit id="7182104881582756649" datatype="html">
         <source>Rejected {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="translated">拒否しました {count, plural, =1 {<x id="followerName"/>件のフォローリクエスト} other {<x id="count"/>件のフォローリクエスト}}</target>
+        <target state="translated">拒否しました {count, plural, =1 {<x id="followerName"/>のフォローリクエスト} other {<x id="count"/>件のフォローリクエスト}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">94</context>
