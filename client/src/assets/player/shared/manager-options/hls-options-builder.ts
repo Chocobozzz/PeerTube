@@ -32,6 +32,7 @@ export class HLSOptionsBuilder {
 
     const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
       requiresAuth: commonOptions.requiresAuth,
+      videoFileToken: commonOptions.videoFileToken,
 
       redundancyUrlManager,
       type: 'application/x-mpegURL',

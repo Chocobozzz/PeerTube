@@ -202,6 +202,10 @@ body {
   }
 }
 
+.vjs-modal-dialog-content {
+  padding-top: 40px !important;
+}
+
 // Error display disabled
 .vjs-error:not(.vjs-error-display-enabled) {
   .vjs-custom-error-display {

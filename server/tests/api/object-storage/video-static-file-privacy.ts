@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { basename } from 'path'
-import { expectStartWith } from '@server/tests/shared'
+import { checkVideoFileTokenReinjection, expectStartWith } from '@server/tests/shared'
 import { areScalewayObjectStorageTestsDisabled, getAllFiles, getHLS } from '@shared/core-utils'
 import { HttpStatusCode, LiveVideo, VideoDetails, VideoPrivacy } from '@shared/models'
 import {
@@ -191,6 +191,20 @@ describe('Object storage for video static file privacy', function () {
       }
     })
 
+    it('Should reinject video file token', async function () {
+      this.timeout(120000)
+
+      const videoFileToken = await server.videoToken.getVideoFileToken({ videoId: privateVideoUUID })
+
+      await checkVideoFileTokenReinjection({
+        server,
+        videoUUID: privateVideoUUID,
+        videoFileToken,
+        resolutions: [ 240, 720 ],
+        isLive: false
+      })
+    })
+
     it('Should update public video to private', async function () {
       this.timeout(60000)
 
@@ -313,6 +327,26 @@ describe('Object storage for video static file privacy', function () {
       this.timeout(240000)
 
       await checkLiveFiles(permanentLive, permanentLiveId)
+    })
+
+    it('Should reinject video file token in permanent live', async function () {
+      this.timeout(240000)
+
+      const ffmpegCommand = sendRTMPStream({ rtmpBaseUrl: permanentLive.rtmpUrl, streamKey: permanentLive.streamKey })
+      await server.live.waitUntilPublished({ videoId: permanentLiveId })
+
+      const video = await server.videos.getWithToken({ id: permanentLiveId })
+      const videoFileToken = await server.videoToken.getVideoFileToken({ videoId: video.uuid })
+
+      await checkVideoFileTokenReinjection({
+        server,
+        videoUUID: permanentLiveId,
+        videoFileToken,
+        resolutions: [ 720 ],
+        isLive: true
+      })
+
+      await stopFfmpeg(ffmpegCommand)
     })
 
     it('Should have created a replay of the normal live with a private static path', async function () {

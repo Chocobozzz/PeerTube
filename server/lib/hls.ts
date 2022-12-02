@@ -234,13 +234,20 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
 
 // ---------------------------------------------------------------------------
 
+function injectQueryToPlaylistUrls (content: string, queryString: string) {
+  return content.replace(/\.(m3u8|ts|mp4)/gm, '.$1?' + queryString)
+}
+
+// ---------------------------------------------------------------------------
+
 export {
   updateMasterHLSPlaylist,
   updateSha256VODSegments,
   buildSha256Segment,
   downloadPlaylistSegments,
   updateStreamingPlaylistsInfohashesIfNeeded,
-  updatePlaylistAfterFileChange
+  updatePlaylistAfterFileChange,
+  injectQueryToPlaylistUrls
 }
 
 // ---------------------------------------------------------------------------

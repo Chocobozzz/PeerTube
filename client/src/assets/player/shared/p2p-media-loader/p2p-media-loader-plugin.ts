@@ -3,7 +3,7 @@ import videojs from 'video.js'
 import { Events, Segment } from '@peertube/p2p-media-loader-core'
 import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from '@peertube/p2p-media-loader-hlsjs'
 import { logger } from '@root-helpers/logger'
-import { timeToInt } from '@shared/core-utils'
+import { addQueryParams, timeToInt } from '@shared/core-utils'
 import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo } from '../../types'
 import { registerConfigPlugin, registerSourceHandler } from './hls-plugin'
 
@@ -39,46 +39,37 @@ class P2pMediaLoaderPlugin extends Plugin {
     super(player)
 
     this.options = options
+    this.startTime = timeToInt(options.startTime)
 
     // FIXME: typings https://github.com/Microsoft/TypeScript/issues/14080
     if (!(videojs as any).Html5Hlsjs) {
-      logger.warn('HLS.js does not seem to be supported. Try to fallback to built in HLS.')
-
-      let message: string
-      if (!player.canPlayType('application/vnd.apple.mpegurl')) {
-        message = 'Cannot fallback to built-in HLS'
-      } else if (options.requiresAuth) {
-        message = 'Video requires auth which is not compatible to build-in HLS player'
-      }
-
-      if (message) {
-        logger.warn(message)
-
-        const error: MediaError = {
-          code: MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED,
-          message,
-          MEDIA_ERR_ABORTED: MediaError.MEDIA_ERR_ABORTED,
-          MEDIA_ERR_DECODE: MediaError.MEDIA_ERR_DECODE,
-          MEDIA_ERR_NETWORK: MediaError.MEDIA_ERR_NETWORK,
-          MEDIA_ERR_SRC_NOT_SUPPORTED: MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED
-        }
-
-        player.ready(() => player.error(error))
+      if (player.canPlayType('application/vnd.apple.mpegurl')) {
+        this.fallbackToBuiltInIOS()
         return
       }
 
-      // Workaround to force video.js to not re create a video element
-      (this.player as any).playerElIngest_ = this.player.el().parentNode
-    } else {
-      // FIXME: typings https://github.com/Microsoft/TypeScript/issues/14080
-      (videojs as any).Html5Hlsjs.addHook('beforeinitialize', (videojsPlayer: any, hlsjs: any) => {
-        this.hlsjs = hlsjs
-      })
+      const message = 'HLS.js does not seem to be supported. Cannot fallback to built-in HLS'
+      logger.warn(message)
 
-      initVideoJsContribHlsJsPlayer(player)
+      const error: MediaError = {
+        code: MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED,
+        message,
+        MEDIA_ERR_ABORTED: MediaError.MEDIA_ERR_ABORTED,
+        MEDIA_ERR_DECODE: MediaError.MEDIA_ERR_DECODE,
+        MEDIA_ERR_NETWORK: MediaError.MEDIA_ERR_NETWORK,
+        MEDIA_ERR_SRC_NOT_SUPPORTED: MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED
+      }
+
+      player.ready(() => player.error(error))
+      return
     }
 
-    this.startTime = timeToInt(options.startTime)
+    // FIXME: typings https://github.com/Microsoft/TypeScript/issues/14080
+    (videojs as any).Html5Hlsjs.addHook('beforeinitialize', (_videojsPlayer: any, hlsjs: any) => {
+      this.hlsjs = hlsjs
+    })
+
+    initVideoJsContribHlsJsPlayer(player)
 
     player.src({
       type: options.type,
@@ -88,9 +79,7 @@ class P2pMediaLoaderPlugin extends Plugin {
     player.ready(() => {
       this.initializeCore()
 
-      if ((videojs as any).Html5Hlsjs) {
-        this.initializePlugin()
-      }
+      this.initializePlugin()
     })
   }
 
@@ -198,6 +187,25 @@ class P2pMediaLoaderPlugin extends Plugin {
 
   private arraySum (data: number[]) {
     return data.reduce((a: number, b: number) => a + b, 0)
+  }
+
+  private fallbackToBuiltInIOS () {
+    logger.info('HLS.js does not seem to be supported. Fallback to built-in HLS.');
+
+    // Workaround to force video.js to not re create a video element
+    (this.player as any).playerElIngest_ = this.player.el().parentNode
+
+    this.player.src({
+      type: this.options.type,
+      src: addQueryParams(this.options.src, {
+        videoFileToken: this.options.videoFileToken(),
+        reinjectVideoFileToken: 'true'
+      })
+    })
+
+    this.player.ready(() => {
+      this.initializeCore()
+    })
   }
 }
 

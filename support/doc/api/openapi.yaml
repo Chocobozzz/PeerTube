@@ -408,6 +408,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/staticFilename'
         - $ref: '#/components/parameters/videoFileToken'
+        - $ref: '#/components/parameters/reinjectVideoFileToken'
       security:
         - OAuth2: []
       responses:
@@ -5711,7 +5712,13 @@ components:
       description: Video file token [generated](#operation/requestVideoToken) by PeerTube so you don't need to provide an OAuth token in the request header.
       schema:
         type: string
-
+    reinjectVideoFileToken:
+      name: reinjectVideoFileToken
+      in: query
+      required: false
+      description: Ask the server to reinject videoFileToken in URLs in m3u8 playlist
+      schema:
+        type: boolean
 
   securitySchemes:
     OAuth2:

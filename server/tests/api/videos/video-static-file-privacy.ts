@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { decode } from 'magnet-uri'
-import { expectStartWith } from '@server/tests/shared'
+import { checkVideoFileTokenReinjection, expectStartWith } from '@server/tests/shared'
 import { getAllFiles, wait } from '@shared/core-utils'
 import { HttpStatusCode, LiveVideo, VideoDetails, VideoPrivacy } from '@shared/models'
 import {
@@ -248,6 +248,35 @@ describe('Test video static file privacy', function () {
       await checkVideoFiles({ id: uuid, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken, videoFileToken })
     })
 
+    it('Should reinject video file token', async function () {
+      this.timeout(120000)
+
+      const { uuid } = await server.videos.quickUpload({ name: 'video', privacy: VideoPrivacy.PRIVATE })
+
+      const videoFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid })
+      await waitJobs([ server ])
+
+      const video = await server.videos.getWithToken({ id: uuid })
+      const hls = video.streamingPlaylists[0]
+
+      {
+        const query = { videoFileToken }
+        const { text } = await makeRawRequest({ url: hls.playlistUrl, query, expectedStatus: HttpStatusCode.OK_200 })
+
+        expect(text).to.not.include(videoFileToken)
+      }
+
+      {
+        await checkVideoFileTokenReinjection({
+          server,
+          videoUUID: uuid,
+          videoFileToken,
+          resolutions: [ 240, 720 ],
+          isLive: false
+        })
+      }
+    })
+
     it('Should be able to access a private video of another user with an admin OAuth token or file token', async function () {
       this.timeout(120000)
 
@@ -358,6 +387,36 @@ describe('Test video static file privacy', function () {
       this.timeout(240000)
 
       await checkLiveFiles(permanentLive, permanentLiveId)
+    })
+
+    it('Should reinject video file token on permanent live', async function () {
+      this.timeout(240000)
+
+      const ffmpegCommand = sendRTMPStream({ rtmpBaseUrl: permanentLive.rtmpUrl, streamKey: permanentLive.streamKey })
+      await server.live.waitUntilPublished({ videoId: permanentLiveId })
+
+      const video = await server.videos.getWithToken({ id: permanentLiveId })
+      const videoFileToken = await server.videoToken.getVideoFileToken({ videoId: video.uuid })
+      const hls = video.streamingPlaylists[0]
+
+      {
+        const query = { videoFileToken }
+        const { text } = await makeRawRequest({ url: hls.playlistUrl, query, expectedStatus: HttpStatusCode.OK_200 })
+
+        expect(text).to.not.include(videoFileToken)
+      }
+
+      {
+        await checkVideoFileTokenReinjection({
+          server,
+          videoUUID: permanentLiveId,
+          videoFileToken,
+          resolutions: [ 720 ],
+          isLive: true
+        })
+      }
+
+      await stopFfmpeg(ffmpegCommand)
     })
 
     it('Should have created a replay of the normal live with a private static path', async function () {

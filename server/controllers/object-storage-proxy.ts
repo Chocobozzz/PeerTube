@@ -1,7 +1,10 @@
 import cors from 'cors'
 import express from 'express'
+import { PassThrough, pipeline } from 'stream'
 import { logger } from '@server/helpers/logger'
+import { StreamReplacer } from '@server/helpers/stream-replacer'
 import { OBJECT_STORAGE_PROXY_PATHS } from '@server/initializers/constants'
+import { injectQueryToPlaylistUrls } from '@server/lib/hls'
 import { getHLSFileReadStream, getWebTorrentFileReadStream } from '@server/lib/object-storage'
 import {
   asyncMiddleware,
@@ -11,6 +14,7 @@ import {
   optionalAuthenticate
 } from '@server/middlewares'
 import { HttpStatusCode } from '@shared/models'
+import { buildReinjectVideoFileTokenQuery, doReinjectVideoFileToken } from './shared/m3u8-playlist'
 
 const objectStorageProxyRouter = express.Router()
 
@@ -67,7 +71,20 @@ async function proxifyHLS (req: express.Request, res: express.Response) {
       rangeHeader: req.header('range')
     })
 
-    return stream.pipe(res)
+    const streamReplacer = filename.endsWith('.m3u8') && doReinjectVideoFileToken(req)
+      ? new StreamReplacer(line => injectQueryToPlaylistUrls(line, buildReinjectVideoFileTokenQuery(req)))
+      : new PassThrough()
+
+    return pipeline(
+      stream,
+      streamReplacer,
+      res,
+      err => {
+        if (!err) return
+
+        handleObjectStorageFailure(res, err)
+      }
+    )
   } catch (err) {
     return handleObjectStorageFailure(res, err)
   }
@@ -75,6 +92,7 @@ async function proxifyHLS (req: express.Request, res: express.Response) {
 
 function handleObjectStorageFailure (res: express.Response, err: Error) {
   if (err.name === 'NoSuchKey') {
+    logger.debug('Could not find key in object storage to proxify private HLS video file.', { err })
     return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
   }
 

@@ -44,7 +44,7 @@ const usersListValidator = [
   query('blocked')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .isBoolean().withMessage('Should be a valid blocked boolena'),
+    .isBoolean().withMessage('Should be a valid blocked boolean'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

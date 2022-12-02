@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { basename } from 'path'
+import { basename, dirname, join } from 'path'
 import { removeFragmentedMP4Ext, uuidRegex } from '@shared/core-utils'
 import { sha256 } from '@shared/extra-utils'
 import { HttpStatusCode, VideoStreamingPlaylist, VideoStreamingPlaylistType } from '@shared/models'
@@ -188,9 +188,55 @@ async function completeCheckHlsPlaylist (options: {
   }
 }
 
+async function checkVideoFileTokenReinjection (options: {
+  server: PeerTubeServer
+  videoUUID: string
+  videoFileToken: string
+  resolutions: number[]
+  isLive: boolean
+}) {
+  const { server, resolutions, videoFileToken, videoUUID, isLive } = options
+
+  const video = await server.videos.getWithToken({ id: videoUUID })
+  const hls = video.streamingPlaylists[0]
+
+  const query = { videoFileToken, reinjectVideoFileToken: 'true' }
+  const { text } = await makeRawRequest({ url: hls.playlistUrl, query, expectedStatus: HttpStatusCode.OK_200 })
+
+  for (let i = 0; i < resolutions.length; i++) {
+    const resolution = resolutions[i]
+
+    const suffix = isLive
+      ? i
+      : `-${resolution}`
+
+    expect(text).to.contain(`${suffix}.m3u8?videoFileToken=${videoFileToken}`)
+  }
+
+  const resolutionPlaylists = extractResolutionPlaylistUrls(hls.playlistUrl, text)
+  expect(resolutionPlaylists).to.have.lengthOf(resolutions.length)
+
+  for (const url of resolutionPlaylists) {
+    const { text } = await makeRawRequest({ url, query, expectedStatus: HttpStatusCode.OK_200 })
+
+    const extension = isLive
+      ? '.ts'
+      : '.mp4'
+
+    expect(text).to.contain(`${extension}?videoFileToken=${videoFileToken}`)
+  }
+}
+
+function extractResolutionPlaylistUrls (masterPath: string, masterContent: string) {
+  return masterContent.match(/^([^.]+\.m3u8.*)/mg)
+    .map(filename => join(dirname(masterPath), filename))
+}
+
 export {
   checkSegmentHash,
   checkLiveSegmentHash,
   checkResolutionsInMasterPlaylist,
-  completeCheckHlsPlaylist
+  completeCheckHlsPlaylist,
+  extractResolutionPlaylistUrls,
+  checkVideoFileTokenReinjection
 }
