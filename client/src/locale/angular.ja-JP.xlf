@@ -11895,7 +11895,7 @@
       </trans-unit>
       <trans-unit id="1314383205093440631" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</source>
-        <target state="translated">本当に{count, plural, =1 {本の動画} other {<x id="count"/>本の動画}}を削除しますか?</target>
+        <target state="translated">本当に{count, plural, =1 {この動画} other {<x id="count"/>本の動画}}を削除しますか?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">229</context></context-group>
       </trans-unit>
       <trans-unit id="1950057220179636309" datatype="html">
