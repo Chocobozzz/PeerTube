@@ -323,7 +323,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private wherePrivacyAvailable (user?: MUserAccountId) {
     if (user) {
       this.and.push(
-        `("video"."privacy" = ${VideoPrivacy.PUBLIC} OR "video"."privacy" = ${VideoPrivacy.INTERNAL})`
+        `("video"."privacy" = ${VideoPrivacy.PUBLIC} OR ` +
+        `"video"."privacy" = ${VideoPrivacy.INTERNAL} OR ` +
+        `("video"."privacy" = ${VideoPrivacy.PRIVATE} AND "account"."id" = ${user.Account.id}) )`
       )
     } else { // Or only public videos
       this.and.push(
