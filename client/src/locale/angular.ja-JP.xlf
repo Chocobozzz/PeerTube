@@ -3242,7 +3242,7 @@
       </trans-unit>
       <trans-unit id="4512155674928869984">
         <source>Get more information</source>
-        <target state="translated">詳細情報を入手</target>
+        <target state="translated">詳しくはこちら</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="5184373289520493569" datatype="html">
@@ -5443,7 +5443,7 @@
       </trans-unit>
       <trans-unit id="4437374135745051281" datatype="html">
         <source>Always transcode original resolution</source>
-        <target state="needs-translation">オリジナル解像度も変換する</target>
+        <target state="translated">常にオリジナル解像度も変換</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">116</context>
