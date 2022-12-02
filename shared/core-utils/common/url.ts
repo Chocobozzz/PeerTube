@@ -11,6 +11,14 @@ function addQueryParams (url: string, params: { [ id: string ]: string }) {
   return objUrl.toString()
 }
 
+function removeQueryParams (url: string) {
+  const objUrl = new URL(url)
+
+  objUrl.searchParams.forEach((_v, k) => objUrl.searchParams.delete(k))
+
+  return objUrl.toString()
+}
+
 function buildPlaylistLink (playlist: Pick<VideoPlaylist, 'shortUUID'>, base?: string) {
   return (base ?? window.location.origin) + buildPlaylistWatchPath(playlist)
 }
@@ -114,6 +122,7 @@ function decoratePlaylistLink (options: {
 
 export {
   addQueryParams,
+  removeQueryParams,
 
   buildPlaylistLink,
   buildVideoLink,

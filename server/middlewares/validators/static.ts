@@ -2,7 +2,7 @@ import express from 'express'
 import { query } from 'express-validator'
 import LRUCache from 'lru-cache'
 import { basename, dirname } from 'path'
-import { exists, isUUIDValid } from '@server/helpers/custom-validators/misc'
+import { exists, isUUIDValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc'
 import { logger } from '@server/helpers/logger'
 import { LRU_CACHE } from '@server/initializers/constants'
 import { VideoModel } from '@server/models/video/video'
@@ -60,7 +60,14 @@ const ensureCanAccessVideoPrivateWebTorrentFiles = [
 ]
 
 const ensureCanAccessPrivateVideoHLSFiles = [
-  query('videoFileToken').optional().custom(exists),
+  query('videoFileToken')
+    .optional()
+    .custom(exists),
+
+  query('reinjectVideoFileToken')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .isBoolean().withMessage('Should be a valid reinjectVideoFileToken boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

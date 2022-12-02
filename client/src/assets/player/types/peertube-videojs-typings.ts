@@ -168,6 +168,7 @@ type P2PMediaLoaderPluginOptions = {
   loader: P2PMediaLoader
 
   requiresAuth: boolean
+  videoFileToken: () => string
 }
 
 export type P2PMediaLoader = {

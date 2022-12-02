@@ -7,16 +7,24 @@ export class StreamingPlaylistsCommand extends AbstractCommand {
 
   async get (options: OverrideCommandOptions & {
     url: string
+
+    videoFileToken?: string
+    reinjectVideoFileToken?: boolean
+
     withRetry?: boolean // default false
     currentRetry?: number
   }) {
-    const { withRetry, currentRetry = 1 } = options
+    const { videoFileToken, reinjectVideoFileToken, withRetry, currentRetry = 1 } = options
 
     try {
       const result = await unwrapTextOrDecode(this.getRawRequest({
         ...options,
 
         url: options.url,
+        query: {
+          videoFileToken,
+          reinjectVideoFileToken
+        },
         implicitToken: false,
         defaultExpectedStatus: HttpStatusCode.OK_200
       }))

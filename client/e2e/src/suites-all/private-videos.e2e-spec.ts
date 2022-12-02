@@ -15,6 +15,7 @@ describe('Private videos all workflow', () => {
   let playerPage: PlayerPage
 
   const internalVideoName = 'Internal E2E test'
+  const internalHLSOnlyVideoName = 'Internal E2E test - HLS only'
 
   beforeEach(async () => {
     videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
@@ -44,6 +45,13 @@ describe('Private videos all workflow', () => {
     await checkCorrectlyPlay(playerPage)
   })
 
+  it('Should play an internal HLS only video', async () => {
+    await go(FIXTURE_URLS.INTERNAL_HLS_ONLY_VIDEO)
+
+    await videoWatchPage.waitWatchVideoName(internalHLSOnlyVideoName)
+    await checkCorrectlyPlay(playerPage)
+  })
+
   it('Should play an internal WebTorrent video in embed', async () => {
     await go(FIXTURE_URLS.INTERNAL_EMBED_WEBTORRENT_VIDEO)
 
@@ -53,6 +61,13 @@ describe('Private videos all workflow', () => {
 
   it('Should play an internal HLS video in embed', async () => {
     await go(FIXTURE_URLS.INTERNAL_EMBED_HLS_VIDEO)
+
+    await videoWatchPage.waitEmbedForDisplayed()
+    await checkCorrectlyPlay(playerPage)
+  })
+
+  it('Should play an internal HLS only video in embed', async () => {
+    await go(FIXTURE_URLS.INTERNAL_EMBED_HLS_ONLY_VIDEO)
 
     await videoWatchPage.waitEmbedForDisplayed()
     await checkCorrectlyPlay(playerPage)

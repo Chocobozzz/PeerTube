@@ -2,6 +2,7 @@ import { basename } from 'path'
 import { Segment } from '@peertube/p2p-media-loader-core'
 import { logger } from '@root-helpers/logger'
 import { wait } from '@root-helpers/utils'
+import { removeQueryParams } from '@shared/core-utils'
 import { isSameOrigin } from '../common'
 
 type SegmentsJSON = { [filename: string]: string | { [byterange: string]: string } }
@@ -24,7 +25,7 @@ function segmentValidatorFactory (options: {
     // Wait for hash generation from the server
     if (isLive) await wait(1000)
 
-    const filename = basename(segment.url)
+    const filename = basename(removeQueryParams(segment.url))
 
     const segmentValue = (await segmentsJSON)[filename]
 
