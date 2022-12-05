@@ -934,7 +934,7 @@
       </trans-unit>
       <trans-unit id="7417677567611860270" datatype="html">
         <source>Channel synchronization with other platforms (YouTube, Vimeo, ...)</source>
-        <target state="translated">Kanalsynchronisierung mit anderen Plattformen (YouTube, Vimeo, ...)</target>
+        <target state="translated">Synchronisation des Kanals mit anderen Plattformen (YouTube, Vimeo, ...)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context>
           <context context-type="linenumber">110</context>
