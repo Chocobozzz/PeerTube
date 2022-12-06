@@ -50,7 +50,12 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
     })
   }
 
-  const allowParameters = { torrentPath: result.path, downloadName: result.downloadName }
+  const allowParameters = {
+    req,
+    res,
+    torrentPath: result.path,
+    downloadName: result.downloadName
+  }
 
   const allowedResult = await Hooks.wrapFun(
     isTorrentDownloadAllowed,
@@ -74,7 +79,12 @@ async function downloadVideoFile (req: express.Request, res: express.Response) {
     })
   }
 
-  const allowParameters = { video, videoFile }
+  const allowParameters = {
+    req,
+    res,
+    video,
+    videoFile
+  }
 
   const allowedResult = await Hooks.wrapFun(
     isVideoDownloadAllowed,
@@ -110,7 +120,13 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
     })
   }
 
-  const allowParameters = { video, streamingPlaylist, videoFile }
+  const allowParameters = {
+    req,
+    res,
+    video,
+    streamingPlaylist,
+    videoFile
+  }
 
   const allowedResult = await Hooks.wrapFun(
     isVideoDownloadAllowed,
