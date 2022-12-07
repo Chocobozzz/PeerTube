@@ -45,7 +45,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should not send a new comment notification after a comment on another video', async function () {
-      this.timeout(20000)
+      this.timeout(30000)
 
       const { uuid, shortUUID } = await servers[0].videos.upload({ attributes: { name: 'super video' } })
 
@@ -57,7 +57,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should not send a new comment notification if I comment my own video', async function () {
-      this.timeout(20000)
+      this.timeout(30000)
 
       const { uuid, shortUUID } = await servers[0].videos.upload({ token: userToken, attributes: { name: 'super video' } })
 
@@ -69,7 +69,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should not send a new comment notification if the account is muted', async function () {
-      this.timeout(20000)
+      this.timeout(30000)
 
       await servers[0].blocklist.addToMyBlocklist({ token: userToken, account: 'root' })
 
@@ -85,7 +85,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should send a new comment notification after a local comment on my video', async function () {
-      this.timeout(20000)
+      this.timeout(30000)
 
       const { uuid, shortUUID } = await servers[0].videos.upload({ token: userToken, attributes: { name: 'super video' } })
 
@@ -97,7 +97,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should send a new comment notification after a remote comment on my video', async function () {
-      this.timeout(20000)
+      this.timeout(30000)
 
       const { uuid, shortUUID } = await servers[0].videos.upload({ token: userToken, attributes: { name: 'super video' } })
 
@@ -115,7 +115,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should send a new comment notification after a local reply on my video', async function () {
-      this.timeout(20000)
+      this.timeout(30000)
 
       const { uuid, shortUUID } = await servers[0].videos.upload({ token: userToken, attributes: { name: 'super video' } })
 
@@ -128,7 +128,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should send a new comment notification after a remote reply on my video', async function () {
-      this.timeout(20000)
+      this.timeout(30000)
 
       const { uuid, shortUUID } = await servers[0].videos.upload({ token: userToken, attributes: { name: 'super video' } })
       await waitJobs(servers)
@@ -154,7 +154,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should convert markdown in comment to html', async function () {
-      this.timeout(20000)
+      this.timeout(30000)
 
       const { uuid } = await servers[0].videos.upload({ token: userToken, attributes: { name: 'cool video' } })
 
@@ -184,7 +184,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should not send a new mention comment notification if I mention the video owner', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { uuid, shortUUID } = await servers[0].videos.upload({ token: userToken, attributes: { name: 'super video' } })
 
@@ -195,7 +195,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should not send a new mention comment notification if I mention myself', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { uuid, shortUUID } = await servers[0].videos.upload({ attributes: { name: 'super video' } })
 
@@ -206,7 +206,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should not send a new mention notification if the account is muted', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       await servers[0].blocklist.addToMyBlocklist({ token: userToken, account: 'root' })
 
@@ -221,7 +221,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should not send a new mention notification if the remote account mention a local account', async function () {
-      this.timeout(20000)
+      this.timeout(30000)
 
       const { uuid, shortUUID } = await servers[0].videos.upload({ attributes: { name: 'super video' } })
 
@@ -235,7 +235,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should send a new mention notification after local comments', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { uuid, shortUUID } = await servers[0].videos.upload({ attributes: { name: 'super video' } })
 
@@ -251,7 +251,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should send a new mention notification after remote comments', async function () {
-      this.timeout(20000)
+      this.timeout(30000)
 
       const { uuid, shortUUID } = await servers[0].videos.upload({ attributes: { name: 'super video' } })
 
@@ -283,7 +283,7 @@ describe('Test comments notifications', function () {
     })
 
     it('Should convert markdown in comment to html', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { uuid } = await servers[0].videos.upload({ attributes: { name: 'super video' } })
 
