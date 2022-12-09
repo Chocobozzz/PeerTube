@@ -1076,7 +1076,7 @@
       </trans-unit>
       <trans-unit id="1904720062363293328" datatype="html">
         <source>You need to enable at least 1 video language.</source>
-        <target>Vous devez activer au moins 1 langue de vidéo.</target>
+        <target state="translated">Vous devez activer au moins 1 langue pour les vidéos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
           <context context-type="linenumber">107</context>
@@ -1308,7 +1308,7 @@
       </trans-unit>
       <trans-unit id="7838476952710404110" datatype="html">
         <source>New lines</source>
-        <target>Les retours à la ligne</target>
+        <target state="translated">Nouvelles lignes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -1661,7 +1661,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
         <source>Decrement hours</source>
-        <target>Décrémenter les heures</target>
+        <target state="translated">Diminuer les heures</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">73,74</context>
@@ -1669,7 +1669,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
         <source>Increment minutes</source>
-        <target>Incrémenter les minutes</target>
+        <target state="translated">Augmenter les minutes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">80,82</context>
@@ -1677,7 +1677,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html">
         <source>Decrement minutes</source>
-        <target>Décrémenter les minutes</target>
+        <target state="translated">Diminuer les minutes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">86,88</context>
@@ -1701,7 +1701,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds" datatype="html">
         <source>Increment seconds</source>
-        <target>Incrémenter les secondes</target>
+        <target state="translated">Augmenter les secondes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">103,104</context>
@@ -1709,7 +1709,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html">
         <source>Decrement seconds</source>
-        <target>Décrémenter les secondes</target>
+        <target state="translated">Diminuer les secondes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">109,115</context>
@@ -1953,7 +1953,7 @@
       </trans-unit>
       <trans-unit id="5891040073345002614" datatype="html">
         <source><x id="PH" equiv-text="interval"/> years ago</source>
-        <target state="translated"><x id="PH" equiv-text="interval"/> années auparavant</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> années</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">12</context>
@@ -1961,7 +1961,7 @@
       </trans-unit>
       <trans-unit id="6852474139781331706" datatype="html">
         <source><x id="PH" equiv-text="interval"/> year ago</source>
-        <target state="translated"><x id="PH" equiv-text="interval"/> année auparavant</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> année</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">13</context>
@@ -1969,7 +1969,7 @@
       </trans-unit>
       <trans-unit id="9022576335789205254" datatype="html">
         <source><x id="PH" equiv-text="interval"/> months ago</source>
-        <target><x id="PH" equiv-text="interval"/> mois auparavant</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> mois</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">16</context>
@@ -1977,7 +1977,7 @@
       </trans-unit>
       <trans-unit id="9139359498077914820" datatype="html">
         <source><x id="PH" equiv-text="interval"/> month ago</source>
-        <target state="translated"><x id="PH" equiv-text="interval"/> mois auparavant</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> mois</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">17</context>
@@ -1985,7 +1985,7 @@
       </trans-unit>
       <trans-unit id="6473426250245763193" datatype="html">
         <source><x id="PH" equiv-text="interval"/> weeks ago</source>
-        <target state="translated"><x id="PH" equiv-text="interval"/> semaines auparavant</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> semaines</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">20</context>
@@ -1993,7 +1993,7 @@
       </trans-unit>
       <trans-unit id="3334373857036457679" datatype="html">
         <source><x id="PH" equiv-text="interval"/> week ago</source>
-        <target><x id="PH" equiv-text="interval"/> semaine auparavant</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> semaine</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">21</context>
@@ -2001,7 +2001,7 @@
       </trans-unit>
       <trans-unit id="5186107770140555014" datatype="html">
         <source><x id="PH" equiv-text="interval"/> days ago</source>
-        <target state="translated"><x id="PH" equiv-text="interval"/> jours auparavant</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> jours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">24</context>
@@ -2009,7 +2009,7 @@
       </trans-unit>
       <trans-unit id="5968335347732866388" datatype="html">
         <source><x id="PH" equiv-text="interval"/> day ago</source>
-        <target state="translated"><x id="PH" equiv-text="interval"/> jour auparavant</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> jour</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">25</context>
@@ -2017,7 +2017,7 @@
       </trans-unit>
       <trans-unit id="6522428509564266583" datatype="html">
         <source><x id="PH" equiv-text="interval"/> hours ago</source>
-        <target state="translated"><x id="PH" equiv-text="interval"/> heures auparavant</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> heures</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">28</context>
@@ -2025,7 +2025,7 @@
       </trans-unit>
       <trans-unit id="1791228261125511283" datatype="html">
         <source><x id="PH" equiv-text="interval"/> hour ago</source>
-        <target><x id="PH" equiv-text="interval"/> heure auparavant</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> heure</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">29</context>
@@ -2033,7 +2033,7 @@
       </trans-unit>
       <trans-unit id="8256466313580256940" datatype="html">
         <source><x id="PH" equiv-text="interval"/> min ago</source>
-        <target><x id="PH" equiv-text="interval"/> minutes auparavant</target>
+        <target state="translated">Il y a <x id="PH" equiv-text="interval"/> minutes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">32</context>
@@ -3024,7 +3024,7 @@
       </trans-unit>
       <trans-unit id="1009095940160473792" datatype="html">
         <source>URL parameter is missing in URL parameters</source>
-        <target state="translated">Le paramètre URL est manquant dans les paramètres URL</target>
+        <target state="translated">Un paramètre URL est manquant dans les paramètres URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -12331,7 +12331,7 @@
       </trans-unit>
       <trans-unit id="2516633974298697807" datatype="html">
         <source>Emphasis</source>
-        <target state="translated">L'emphase</target>
+        <target state="translated">Insistance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">22</context>
