@@ -33,7 +33,7 @@ describe('Test emails', function () {
 
     const overrideConfig = {
       smtp: {
-        hostname: 'localhost',
+        hostname: '127.0.0.1',
         port: emailPort
       }
     }
@@ -66,8 +66,6 @@ describe('Test emails', function () {
   describe('When resetting user password', function () {
 
     it('Should ask to reset the password', async function () {
-      this.timeout(10000)
-
       await server.users.askResetPassword({ email: 'user_1@example.com' })
 
       await waitJobs(server)
@@ -76,7 +74,7 @@ describe('Test emails', function () {
       const email = emails[0]
 
       expect(email['from'][0]['name']).equal('PeerTube')
-      expect(email['from'][0]['address']).equal('test-admin@localhost')
+      expect(email['from'][0]['address']).equal('test-admin@127.0.0.1')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains('password')
 
@@ -135,7 +133,7 @@ describe('Test emails', function () {
       const email = emails[1]
 
       expect(email['from'][0]['name']).equal('PeerTube')
-      expect(email['from'][0]['address']).equal('test-admin@localhost')
+      expect(email['from'][0]['address']).equal('test-admin@127.0.0.1')
       expect(email['to'][0]['address']).equal('create_password@example.com')
       expect(email['subject']).contains('account')
       expect(email['subject']).contains('password')
@@ -191,7 +189,7 @@ describe('Test emails', function () {
       const email = emails[2]
 
       expect(email['from'][0]['name']).equal('PeerTube')
-      expect(email['from'][0]['address']).equal('test-admin@localhost')
+      expect(email['from'][0]['address']).equal('test-admin@127.0.0.1')
       expect(email['to'][0]['address']).equal('admin' + server.internalServerNumber + '@example.com')
       expect(email['subject']).contains('abuse')
       expect(email['text']).contains(videoShortUUID)
@@ -212,7 +210,7 @@ describe('Test emails', function () {
       const email = emails[3]
 
       expect(email['from'][0]['name']).equal('PeerTube')
-      expect(email['from'][0]['address']).equal('test-admin@localhost')
+      expect(email['from'][0]['address']).equal('test-admin@127.0.0.1')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' blocked')
       expect(email['text']).contains(' blocked')
@@ -230,7 +228,7 @@ describe('Test emails', function () {
       const email = emails[4]
 
       expect(email['from'][0]['name']).equal('PeerTube')
-      expect(email['from'][0]['address']).equal('test-admin@localhost')
+      expect(email['from'][0]['address']).equal('test-admin@127.0.0.1')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' unblocked')
       expect(email['text']).contains(' unblocked')
@@ -250,7 +248,7 @@ describe('Test emails', function () {
       const email = emails[5]
 
       expect(email['from'][0]['name']).equal('PeerTube')
-      expect(email['from'][0]['address']).equal('test-admin@localhost')
+      expect(email['from'][0]['address']).equal('test-admin@127.0.0.1')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' blacklisted')
       expect(email['text']).contains('my super user video')
@@ -268,7 +266,7 @@ describe('Test emails', function () {
       const email = emails[6]
 
       expect(email['from'][0]['name']).equal('PeerTube')
-      expect(email['from'][0]['address']).equal('test-admin@localhost')
+      expect(email['from'][0]['address']).equal('test-admin@127.0.0.1')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' unblacklisted')
       expect(email['text']).contains('my super user video')
@@ -293,7 +291,7 @@ describe('Test emails', function () {
       const email = emails[7]
 
       expect(email['from'][0]['name']).equal('PeerTube')
-      expect(email['from'][0]['address']).equal('test-admin@localhost')
+      expect(email['from'][0]['address']).equal('test-admin@127.0.0.1')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains('Verify')
 

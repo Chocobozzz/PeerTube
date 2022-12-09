@@ -371,7 +371,7 @@ async function checkNewCommentOnMyVideo (options: CheckerBaseParams & {
     }
   }
 
-  const commentUrl = `http://localhost:${server.port}/w/${shortUUID};threadId=${threadId}`
+  const commentUrl = `${server.url}/w/${shortUUID};threadId=${threadId}`
 
   function emailNotificationFinder (email: object) {
     return email['text'].indexOf(commentUrl) !== -1
@@ -674,7 +674,7 @@ async function prepareNotificationsTest (serversCount = 3, overrideConfigArg: an
 
   const overrideConfig = {
     smtp: {
-      hostname: 'localhost',
+      hostname: '127.0.0.1',
       port
     },
     signup: {

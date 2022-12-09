@@ -11,7 +11,7 @@ import { HttpStatusCode } from '@shared/models'
 import { cleanupTests, createMultipleServers, killallServers, PeerTubeServer } from '@shared/server-commands'
 
 function setKeysOfServer (onServer: PeerTubeServer, ofServer: PeerTubeServer, publicKey: string, privateKey: string) {
-  const url = 'http://localhost:' + ofServer.port + '/accounts/peertube'
+  const url = ofServer.url + '/accounts/peertube'
 
   return Promise.all([
     onServer.sql.setActorField(url, 'publicKey', publicKey),
@@ -20,7 +20,7 @@ function setKeysOfServer (onServer: PeerTubeServer, ofServer: PeerTubeServer, pu
 }
 
 function setUpdatedAtOfServer (onServer: PeerTubeServer, ofServer: PeerTubeServer, updatedAt: string) {
-  const url = 'http://localhost:' + ofServer.port + '/accounts/peertube'
+  const url = ofServer.url + '/accounts/peertube'
 
   return Promise.all([
     onServer.sql.setActorField(url, 'createdAt', updatedAt),
@@ -52,7 +52,7 @@ describe('Test ActivityPub security', function () {
   const baseHttpSignature = () => ({
     algorithm: HTTP_SIGNATURE.ALGORITHM,
     authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME,
-    keyId: 'acct:peertube@localhost:' + servers[1].port,
+    keyId: 'acct:peertube@' + servers[1].host,
     key: keys.privateKey,
     headers: HTTP_SIGNATURE.HEADERS_TO_SIGN
   })
@@ -69,8 +69,8 @@ describe('Test ActivityPub security', function () {
     await setKeysOfServer(servers[0], servers[1], keys.publicKey, null)
     await setKeysOfServer(servers[1], servers[1], keys.publicKey, keys.privateKey)
 
-    const to = { url: 'http://localhost:' + servers[0].port + '/accounts/peertube' }
-    const by = { url: 'http://localhost:' + servers[1].port + '/accounts/peertube', privateKey: keys.privateKey }
+    const to = { url: servers[0].url + '/accounts/peertube' }
+    const by = { url: servers[1].url + '/accounts/peertube', privateKey: keys.privateKey }
     await makeFollowRequest(to, by)
   })
 
@@ -196,8 +196,8 @@ describe('Test ActivityPub security', function () {
       await setKeysOfServer(servers[1], servers[1], keys.publicKey, keys.privateKey)
       await setKeysOfServer(servers[2], servers[2], keys.publicKey, keys.privateKey)
 
-      const to = { url: 'http://localhost:' + servers[0].port + '/accounts/peertube' }
-      const by = { url: 'http://localhost:' + servers[2].port + '/accounts/peertube', privateKey: keys.privateKey }
+      const to = { url: servers[0].url + '/accounts/peertube' }
+      const by = { url: servers[2].url + '/accounts/peertube', privateKey: keys.privateKey }
       await makeFollowRequest(to, by)
     })
 
@@ -208,9 +208,9 @@ describe('Test ActivityPub security', function () {
       await setKeysOfServer(servers[2], servers[2], invalidKeys.publicKey, invalidKeys.privateKey)
 
       const body = getAnnounceWithoutContext(servers[1])
-      body.actor = 'http://localhost:' + servers[2].port + '/accounts/peertube'
+      body.actor = servers[2].url + '/accounts/peertube'
 
-      const signer: any = { privateKey: invalidKeys.privateKey, url: 'http://localhost:' + servers[2].port + '/accounts/peertube' }
+      const signer: any = { privateKey: invalidKeys.privateKey, url: servers[2].url + '/accounts/peertube' }
       const signedBody = await signAndContextify(signer, body, 'Announce')
 
       const headers = buildGlobalHeaders(signedBody)
@@ -230,12 +230,12 @@ describe('Test ActivityPub security', function () {
       await setKeysOfServer(servers[0], servers[2], keys.publicKey, keys.privateKey)
 
       const body = getAnnounceWithoutContext(servers[1])
-      body.actor = 'http://localhost:' + servers[2].port + '/accounts/peertube'
+      body.actor = servers[2].url + '/accounts/peertube'
 
-      const signer: any = { privateKey: keys.privateKey, url: 'http://localhost:' + servers[2].port + '/accounts/peertube' }
+      const signer: any = { privateKey: keys.privateKey, url: servers[2].url + '/accounts/peertube' }
       const signedBody = await signAndContextify(signer, body, 'Announce')
 
-      signedBody.actor = 'http://localhost:' + servers[2].port + '/account/peertube'
+      signedBody.actor = servers[2].url + '/account/peertube'
 
       const headers = buildGlobalHeaders(signedBody)
 
@@ -251,9 +251,9 @@ describe('Test ActivityPub security', function () {
       this.timeout(10000)
 
       const body = getAnnounceWithoutContext(servers[1])
-      body.actor = 'http://localhost:' + servers[2].port + '/accounts/peertube'
+      body.actor = servers[2].url + '/accounts/peertube'
 
-      const signer: any = { privateKey: keys.privateKey, url: 'http://localhost:' + servers[2].port + '/accounts/peertube' }
+      const signer: any = { privateKey: keys.privateKey, url: servers[2].url + '/accounts/peertube' }
       const signedBody = await signAndContextify(signer, body, 'Announce')
 
       const headers = buildGlobalHeaders(signedBody)
@@ -273,9 +273,9 @@ describe('Test ActivityPub security', function () {
       await setKeysOfServer(servers[2], servers[2], invalidKeys.publicKey, invalidKeys.privateKey)
 
       const body = getAnnounceWithoutContext(servers[1])
-      body.actor = 'http://localhost:' + servers[2].port + '/accounts/peertube'
+      body.actor = servers[2].url + '/accounts/peertube'
 
-      const signer: any = { privateKey: keys.privateKey, url: 'http://localhost:' + servers[2].port + '/accounts/peertube' }
+      const signer: any = { privateKey: keys.privateKey, url: servers[2].url + '/accounts/peertube' }
       const signedBody = await signAndContextify(signer, body, 'Announce')
 
       const headers = buildGlobalHeaders(signedBody)

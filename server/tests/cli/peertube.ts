@@ -300,7 +300,7 @@ describe('Test CLI wrapper', function () {
         const stdout = await cliCommand.execWithEnv(`${cmd} redundancy ${params}`)
 
         expect(stdout).to.contain('super video')
-        expect(stdout).to.contain(`localhost:${server.port}`)
+        expect(stdout).to.contain(server.host)
       }
     })
 

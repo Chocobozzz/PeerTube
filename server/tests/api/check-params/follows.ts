@@ -48,7 +48,7 @@ describe('Test server follows API validators', function () {
         await makePostBodyRequest({
           url: server.url,
           path,
-          fields: { hosts: [ 'localhost:9002', 'localhost:coucou' ] },
+          fields: { hosts: [ '127.0.0.1:9002', '127.0.0.1:coucou' ] },
           token: server.accessToken,
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
@@ -58,7 +58,7 @@ describe('Test server follows API validators', function () {
         await makePostBodyRequest({
           url: server.url,
           path,
-          fields: { hosts: [ 'localhost:9002', 'http://localhost:9003' ] },
+          fields: { hosts: [ '127.0.0.1:9002', 'http://127.0.0.1:9003' ] },
           token: server.accessToken,
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
@@ -68,7 +68,7 @@ describe('Test server follows API validators', function () {
         await makePostBodyRequest({
           url: server.url,
           path,
-          fields: { urls: [ 'localhost:9002', 'localhost:9002' ] },
+          fields: { urls: [ '127.0.0.1:9002', '127.0.0.1:9002' ] },
           token: server.accessToken,
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
@@ -78,7 +78,7 @@ describe('Test server follows API validators', function () {
         await makePostBodyRequest({
           url: server.url,
           path,
-          fields: { handles: [ 'hello@example.com', 'localhost:9001' ] },
+          fields: { handles: [ 'hello@example.com', '127.0.0.1:9001' ] },
           token: server.accessToken,
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
@@ -98,7 +98,7 @@ describe('Test server follows API validators', function () {
         await makePostBodyRequest({
           url: server.url,
           path,
-          fields: { hosts: [ 'localhost:9002' ] },
+          fields: { hosts: [ '127.0.0.1:9002' ] },
           token: 'fake_token',
           expectedStatus: HttpStatusCode.UNAUTHORIZED_401
         })
@@ -108,7 +108,7 @@ describe('Test server follows API validators', function () {
         await makePostBodyRequest({
           url: server.url,
           path,
-          fields: { hosts: [ 'localhost:9002' ] },
+          fields: { hosts: [ '127.0.0.1:9002' ] },
           token: userAccessToken,
           expectedStatus: HttpStatusCode.FORBIDDEN_403
         })
@@ -217,7 +217,7 @@ describe('Test server follows API validators', function () {
       it('Should fail with an invalid token', async function () {
         await makeDeleteRequest({
           url: server.url,
-          path: path + '/toto@localhost:9002',
+          path: path + '/toto@127.0.0.1:9002',
           token: 'fake_token',
           expectedStatus: HttpStatusCode.UNAUTHORIZED_401
         })
@@ -226,7 +226,7 @@ describe('Test server follows API validators', function () {
       it('Should fail if the user is not an administrator', async function () {
         await makeDeleteRequest({
           url: server.url,
-          path: path + '/toto@localhost:9002',
+          path: path + '/toto@127.0.0.1:9002',
           token: userAccessToken,
           expectedStatus: HttpStatusCode.FORBIDDEN_403
         })
@@ -244,7 +244,7 @@ describe('Test server follows API validators', function () {
       it('Should fail with an unknown follower', async function () {
         await makeDeleteRequest({
           url: server.url,
-          path: path + '/toto@localhost:9003',
+          path: path + '/toto@127.0.0.1:9003',
           token: server.accessToken,
           expectedStatus: HttpStatusCode.NOT_FOUND_404
         })
@@ -257,7 +257,7 @@ describe('Test server follows API validators', function () {
       it('Should fail with an invalid token', async function () {
         await makePostBodyRequest({
           url: server.url,
-          path: path + '/toto@localhost:9002/accept',
+          path: path + '/toto@127.0.0.1:9002/accept',
           token: 'fake_token',
           expectedStatus: HttpStatusCode.UNAUTHORIZED_401
         })
@@ -266,7 +266,7 @@ describe('Test server follows API validators', function () {
       it('Should fail if the user is not an administrator', async function () {
         await makePostBodyRequest({
           url: server.url,
-          path: path + '/toto@localhost:9002/accept',
+          path: path + '/toto@127.0.0.1:9002/accept',
           token: userAccessToken,
           expectedStatus: HttpStatusCode.FORBIDDEN_403
         })
@@ -284,7 +284,7 @@ describe('Test server follows API validators', function () {
       it('Should fail with an unknown follower', async function () {
         await makePostBodyRequest({
           url: server.url,
-          path: path + '/toto@localhost:9003/accept',
+          path: path + '/toto@127.0.0.1:9003/accept',
           token: server.accessToken,
           expectedStatus: HttpStatusCode.NOT_FOUND_404
         })
@@ -297,7 +297,7 @@ describe('Test server follows API validators', function () {
       it('Should fail with an invalid token', async function () {
         await makePostBodyRequest({
           url: server.url,
-          path: path + '/toto@localhost:9002/reject',
+          path: path + '/toto@127.0.0.1:9002/reject',
           token: 'fake_token',
           expectedStatus: HttpStatusCode.UNAUTHORIZED_401
         })
@@ -306,7 +306,7 @@ describe('Test server follows API validators', function () {
       it('Should fail if the user is not an administrator', async function () {
         await makePostBodyRequest({
           url: server.url,
-          path: path + '/toto@localhost:9002/reject',
+          path: path + '/toto@127.0.0.1:9002/reject',
           token: userAccessToken,
           expectedStatus: HttpStatusCode.FORBIDDEN_403
         })
@@ -324,7 +324,7 @@ describe('Test server follows API validators', function () {
       it('Should fail with an unknown follower', async function () {
         await makePostBodyRequest({
           url: server.url,
-          path: path + '/toto@localhost:9003/reject',
+          path: path + '/toto@127.0.0.1:9003/reject',
           token: server.accessToken,
           expectedStatus: HttpStatusCode.NOT_FOUND_404
         })
@@ -337,7 +337,7 @@ describe('Test server follows API validators', function () {
       it('Should fail with an invalid token', async function () {
         await makeDeleteRequest({
           url: server.url,
-          path: path + '/localhost:9002',
+          path: path + '/127.0.0.1:9002',
           token: 'fake_token',
           expectedStatus: HttpStatusCode.UNAUTHORIZED_401
         })
@@ -346,7 +346,7 @@ describe('Test server follows API validators', function () {
       it('Should fail if the user is not an administrator', async function () {
         await makeDeleteRequest({
           url: server.url,
-          path: path + '/localhost:9002',
+          path: path + '/127.0.0.1:9002',
           token: userAccessToken,
           expectedStatus: HttpStatusCode.FORBIDDEN_403
         })

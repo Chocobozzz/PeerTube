@@ -257,7 +257,7 @@ describe('Test comments notifications', function () {
 
       await waitJobs(servers)
 
-      const text1 = `hello @user_1@localhost:${servers[0].port} 1`
+      const text1 = `hello @user_1@${servers[0].host} 1`
       const { id: server2ThreadId } = await servers[1].comments.createThread({ videoId: uuid, text: text1 })
 
       await waitJobs(servers)
@@ -269,7 +269,7 @@ describe('Test comments notifications', function () {
       const threadId = data[0].id
       await checkCommentMention({ ...baseParams, shortUUID, commentId: threadId, threadId, byAccountDisplayName, checkType: 'presence' })
 
-      const text2 = `@user_1@localhost:${servers[0].port} hello 2 @root@localhost:${servers[0].port}`
+      const text2 = `@user_1@${servers[0].host} hello 2 @root@${servers[0].host}`
       await servers[1].comments.addReply({ videoId: uuid, toCommentId: server2ThreadId, text: text2 })
 
       await waitJobs(servers)

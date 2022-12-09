@@ -31,7 +31,7 @@ describe('Test admin notifications', function () {
       peertube: {
         check_latest_version: {
           enabled: true,
-          url: `http://localhost:${port}/versions.json`
+          url: `http://127.0.0.1:${port}/versions.json`
         }
       },
       plugins: {

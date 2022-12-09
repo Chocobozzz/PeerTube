@@ -77,7 +77,7 @@ describe('Test bulk actions', function () {
           const { data } = await servers[1].comments.listThreads({ videoId: video.id })
           const comment = data.find(c => c.text === 'comment by user 3')
 
-          if (video.account.host === 'localhost:' + servers[0].port) {
+          if (video.account.host === servers[0].host) {
             expect(comment).to.not.exist
           } else {
             expect(comment).to.exist
@@ -151,7 +151,7 @@ describe('Test bulk actions', function () {
 
       await bulkCommand.removeCommentsOf({
         attributes: {
-          accountName: 'user3@localhost:' + servers[1].port,
+          accountName: 'user3@' + servers[1].host,
           scope: 'instance'
         }
       })

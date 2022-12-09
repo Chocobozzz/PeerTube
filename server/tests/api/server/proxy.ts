@@ -20,7 +20,7 @@ describe('Test proxy', function () {
   let proxy: MockProxy
 
   const goodEnv = { HTTP_PROXY: '' }
-  const badEnv = { HTTP_PROXY: 'http://localhost:9000' }
+  const badEnv = { HTTP_PROXY: 'http://127.0.0.1:9000' }
 
   before(async function () {
     this.timeout(120000)
@@ -30,7 +30,7 @@ describe('Test proxy', function () {
     const proxyPort = await proxy.initialize()
     servers = await createMultipleServers(2)
 
-    goodEnv.HTTP_PROXY = 'http://localhost:' + proxyPort
+    goodEnv.HTTP_PROXY = 'http://127.0.0.1:' + proxyPort
 
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)

@@ -18,11 +18,11 @@ removeFiles () {
 
 dropRedis () {
   port=$((9000+$1))
-  host="localhost"
+  host="127.0.0.1"
 
-  redis-cli -h "$host" KEYS "bull-localhost:$port*" | grep -v empty | xargs -r redis-cli -h "$host" DEL
-  redis-cli -h "$host" KEYS "redis-localhost:$port*" | grep -v empty | xargs -r redis-cli -h "$host" DEL
-  redis-cli -h "$host" KEYS "*redis-localhost:$port-" | grep -v empty | xargs -r redis-cli -h "$host" DEL
+  redis-cli -h "$host" KEYS "bull-127.0.0.1:$port*" | grep -v empty | xargs -r redis-cli -h "$host" DEL
+  redis-cli -h "$host" KEYS "redis-127.0.0.1:$port*" | grep -v empty | xargs -r redis-cli -h "$host" DEL
+  redis-cli -h "$host" KEYS "*redis-127.0.0.1:$port-" | grep -v empty | xargs -r redis-cli -h "$host" DEL
 }
 
 seq=$(seq 1 6)

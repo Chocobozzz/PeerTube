@@ -9,7 +9,7 @@ describe('Open Telemetry', function () {
   let server: PeerTubeServer
 
   describe('Metrics', function () {
-    const metricsUrl = 'http://localhost:9092/metrics'
+    const metricsUrl = 'http://127.0.0.1:9092/metrics'
 
     it('Should not enable open telemetry metrics', async function () {
       this.timeout(60000)
@@ -92,7 +92,7 @@ describe('Open Telemetry', function () {
           tracing: {
             enabled: true,
             jaeger_exporter: {
-              endpoint: 'http://localhost:' + mockPort
+              endpoint: 'http://127.0.0.1:' + mockPort
             }
           }
         }

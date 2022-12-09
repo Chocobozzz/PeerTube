@@ -63,8 +63,8 @@ describe('Test users subscriptions', function () {
     it('User of server 1 should follow user of server 3 and root of server 1', async function () {
       this.timeout(60000)
 
-      await command.add({ token: users[0].accessToken, targetUri: 'user3_channel@localhost:' + servers[2].port })
-      await command.add({ token: users[0].accessToken, targetUri: 'root_channel@localhost:' + servers[0].port })
+      await command.add({ token: users[0].accessToken, targetUri: 'user3_channel@' + servers[2].host })
+      await command.add({ token: users[0].accessToken, targetUri: 'root_channel@' + servers[0].host })
 
       await waitJobs(servers)
 
@@ -112,20 +112,20 @@ describe('Test users subscriptions', function () {
 
     it('Should get subscription', async function () {
       {
-        const videoChannel = await command.get({ token: users[0].accessToken, uri: 'user3_channel@localhost:' + servers[2].port })
+        const videoChannel = await command.get({ token: users[0].accessToken, uri: 'user3_channel@' + servers[2].host })
 
         expect(videoChannel.name).to.equal('user3_channel')
-        expect(videoChannel.host).to.equal('localhost:' + servers[2].port)
+        expect(videoChannel.host).to.equal(servers[2].host)
         expect(videoChannel.displayName).to.equal('Main user3 channel')
         expect(videoChannel.followingCount).to.equal(0)
         expect(videoChannel.followersCount).to.equal(1)
       }
 
       {
-        const videoChannel = await command.get({ token: users[0].accessToken, uri: 'root_channel@localhost:' + servers[0].port })
+        const videoChannel = await command.get({ token: users[0].accessToken, uri: 'root_channel@' + servers[0].host })
 
         expect(videoChannel.name).to.equal('root_channel')
-        expect(videoChannel.host).to.equal('localhost:' + servers[0].port)
+        expect(videoChannel.host).to.equal(servers[0].host)
         expect(videoChannel.displayName).to.equal('Main root channel')
         expect(videoChannel.followingCount).to.equal(0)
         expect(videoChannel.followersCount).to.equal(1)
@@ -134,18 +134,18 @@ describe('Test users subscriptions', function () {
 
     it('Should return the existing subscriptions', async function () {
       const uris = [
-        'user3_channel@localhost:' + servers[2].port,
-        'root2_channel@localhost:' + servers[0].port,
-        'root_channel@localhost:' + servers[0].port,
-        'user3_channel@localhost:' + servers[0].port
+        'user3_channel@' + servers[2].host,
+        'root2_channel@' + servers[0].host,
+        'root_channel@' + servers[0].host,
+        'user3_channel@' + servers[0].host
       ]
 
       const body = await command.exist({ token: users[0].accessToken, uris })
 
-      expect(body['user3_channel@localhost:' + servers[2].port]).to.be.true
-      expect(body['root2_channel@localhost:' + servers[0].port]).to.be.false
-      expect(body['root_channel@localhost:' + servers[0].port]).to.be.true
-      expect(body['user3_channel@localhost:' + servers[0].port]).to.be.false
+      expect(body['user3_channel@' + servers[2].host]).to.be.true
+      expect(body['root2_channel@' + servers[0].host]).to.be.false
+      expect(body['root_channel@' + servers[0].host]).to.be.true
+      expect(body['user3_channel@' + servers[0].host]).to.be.false
     })
 
     it('Should search among subscriptions', async function () {
@@ -305,7 +305,7 @@ describe('Test users subscriptions', function () {
     it('Should remove user of server 3 subscription', async function () {
       this.timeout(30000)
 
-      await command.remove({ token: users[0].accessToken, uri: 'user3_channel@localhost:' + servers[2].port })
+      await command.remove({ token: users[0].accessToken, uri: 'user3_channel@' + servers[2].host })
 
       await waitJobs(servers)
     })
@@ -324,7 +324,7 @@ describe('Test users subscriptions', function () {
     it('Should remove the root subscription and not display the videos anymore', async function () {
       this.timeout(30000)
 
-      await command.remove({ token: users[0].accessToken, uri: 'root_channel@localhost:' + servers[0].port })
+      await command.remove({ token: users[0].accessToken, uri: 'root_channel@' + servers[0].host })
 
       await waitJobs(servers)
 
@@ -355,7 +355,7 @@ describe('Test users subscriptions', function () {
     it('Should follow user of server 3 again', async function () {
       this.timeout(60000)
 
-      await command.add({ token: users[0].accessToken, targetUri: 'user3_channel@localhost:' + servers[2].port })
+      await command.add({ token: users[0].accessToken, targetUri: 'user3_channel@' + servers[2].host })
 
       await waitJobs(servers)
 
@@ -389,8 +389,8 @@ describe('Test users subscriptions', function () {
 
       await servers[2].channels.create({ token: users[2].accessToken, attributes: { name: 'user3_channel2' } })
 
-      await servers[2].subscriptions.add({ token: servers[2].accessToken, targetUri: 'user3_channel@localhost:' + servers[2].port })
-      await servers[2].subscriptions.add({ token: servers[2].accessToken, targetUri: 'user3_channel2@localhost:' + servers[2].port })
+      await servers[2].subscriptions.add({ token: servers[2].accessToken, targetUri: 'user3_channel@' + servers[2].host })
+      await servers[2].subscriptions.add({ token: servers[2].accessToken, targetUri: 'user3_channel2@' + servers[2].host })
 
       await waitJobs(servers)
     })

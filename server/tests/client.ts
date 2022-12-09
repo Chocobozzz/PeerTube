@@ -134,11 +134,9 @@ describe('Test a client controllers', function () {
             expectedStatus: HttpStatusCode.OK_200
           })
 
-          const port = servers[0].port
-
-          const expectedLink = '<link rel="alternate" type="application/json+oembed" href="http://localhost:' + port + '/services/oembed?' +
-            `url=http%3A%2F%2Flocalhost%3A${port}%2Fw%2F${servers[0].store.video.shortUUID}" ` +
-            `title="${servers[0].store.video.name}" />`
+          const expectedLink = `<link rel="alternate" type="application/json+oembed" href="${servers[0].url}/services/oembed?` +
+          `url=http%3A%2F%2F${servers[0].hostname}%3A${servers[0].port}%2Fw%2F${servers[0].store.video.shortUUID}" ` +
+          `title="${servers[0].store.video.name}" />`
 
           expect(res.text).to.contain(expectedLink)
         }
@@ -155,10 +153,8 @@ describe('Test a client controllers', function () {
             expectedStatus: HttpStatusCode.OK_200
           })
 
-          const port = servers[0].port
-
-          const expectedLink = '<link rel="alternate" type="application/json+oembed" href="http://localhost:' + port + '/services/oembed?' +
-            `url=http%3A%2F%2Flocalhost%3A${port}%2Fw%2Fp%2F${playlist.shortUUID}" ` +
+          const expectedLink = `<link rel="alternate" type="application/json+oembed" href="${servers[0].url}/services/oembed?` +
+            `url=http%3A%2F%2F${servers[0].hostname}%3A${servers[0].port}%2Fw%2Fp%2F${playlist.shortUUID}" ` +
             `title="${playlistName}" />`
 
           expect(res.text).to.contain(expectedLink)

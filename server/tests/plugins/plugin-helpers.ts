@@ -46,7 +46,7 @@ describe('Test plugin helpers', function () {
   describe('Logger', function () {
 
     it('Should have logged things', async function () {
-      await servers[0].servers.waitUntilLog('localhost:' + servers[0].port + ' peertube-plugin-test-four', 1, false)
+      await servers[0].servers.waitUntilLog(servers[0].host + ' peertube-plugin-test-four', 1, false)
       await servers[0].servers.waitUntilLog('Hello world from plugin four', 1)
     })
   })
@@ -61,7 +61,7 @@ describe('Test plugin helpers', function () {
   describe('Config', function () {
 
     it('Should have the correct webserver url', async function () {
-      await servers[0].servers.waitUntilLog(`server url is http://localhost:${servers[0].port}`)
+      await servers[0].servers.waitUntilLog(`server url is ${servers[0].url}`)
     })
 
     it('Should have the correct config', async function () {
@@ -208,7 +208,7 @@ describe('Test plugin helpers', function () {
 
     it('Should mute server 2', async function () {
       this.timeout(10000)
-      await postCommand(servers[0], 'blockServer', { hostToBlock: `localhost:${servers[1].port}` })
+      await postCommand(servers[0], 'blockServer', { hostToBlock: servers[1].host })
 
       const { data } = await servers[0].videos.list()
 
@@ -217,7 +217,7 @@ describe('Test plugin helpers', function () {
     })
 
     it('Should unmute server 2', async function () {
-      await postCommand(servers[0], 'unblockServer', { hostToUnblock: `localhost:${servers[1].port}` })
+      await postCommand(servers[0], 'unblockServer', { hostToUnblock: servers[1].host })
 
       const { data } = await servers[0].videos.list()
 
@@ -225,7 +225,7 @@ describe('Test plugin helpers', function () {
     })
 
     it('Should mute account of server 2', async function () {
-      await postCommand(servers[0], 'blockAccount', { handleToBlock: `root@localhost:${servers[1].port}` })
+      await postCommand(servers[0], 'blockAccount', { handleToBlock: `root@${servers[1].host}` })
 
       const { data } = await servers[0].videos.list()
 
@@ -234,7 +234,7 @@ describe('Test plugin helpers', function () {
     })
 
     it('Should unmute account of server 2', async function () {
-      await postCommand(servers[0], 'unblockAccount', { handleToUnblock: `root@localhost:${servers[1].port}` })
+      await postCommand(servers[0], 'unblockAccount', { handleToUnblock: `root@${servers[1].host}` })
 
       const { data } = await servers[0].videos.list()
 

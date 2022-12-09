@@ -150,7 +150,7 @@ describe('Test auto follows', function () {
         followings: {
           instance: {
             autoFollowIndex: {
-              indexUrl: `http://localhost:${port}/api/v1/instances/hosts`,
+              indexUrl: `http://127.0.0.1:${port}/api/v1/instances/hosts`,
               enabled: true
             }
           }

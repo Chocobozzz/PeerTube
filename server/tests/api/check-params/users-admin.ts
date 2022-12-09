@@ -158,7 +158,7 @@ describe('Test users admin API validators', function () {
 
       const config = {
         smtp: {
-          hostname: 'localhost',
+          hostname: '127.0.0.1',
           port: emailPort
         }
       }

@@ -35,13 +35,13 @@ describe('Test ActivityPub fetcher', function () {
     await servers[0].videos.upload({ token: userAccessToken, attributes: { name: 'video user' } })
 
     {
-      const to = 'http://localhost:' + servers[0].port + '/accounts/user1'
-      const value = 'http://localhost:' + servers[1].port + '/accounts/user1'
+      const to = servers[0].url + '/accounts/user1'
+      const value = servers[1].url + '/accounts/user1'
       await servers[0].sql.setActorField(to, 'url', value)
     }
 
     {
-      const value = 'http://localhost:' + servers[2].port + '/videos/watch/' + uuid
+      const value = servers[2].url + '/videos/watch/' + uuid
       await servers[0].sql.setVideoField(uuid, 'url', value)
     }
   })

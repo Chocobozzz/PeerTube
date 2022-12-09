@@ -63,8 +63,8 @@ describe('Test video comments', function () {
       expect(comment.videoId).to.equal(videoId)
       expect(comment.id).to.equal(comment.threadId)
       expect(comment.account.name).to.equal('root')
-      expect(comment.account.host).to.equal('localhost:' + server.port)
-      expect(comment.account.url).to.equal('http://localhost:' + server.port + '/accounts/root')
+      expect(comment.account.host).to.equal(server.host)
+      expect(comment.account.url).to.equal(server.url + '/accounts/root')
       expect(comment.totalReplies).to.equal(0)
       expect(comment.totalRepliesFromVideoAuthor).to.equal(0)
       expect(dateIsValid(comment.createdAt as string)).to.be.true
@@ -85,7 +85,7 @@ describe('Test video comments', function () {
       expect(comment.videoId).to.equal(videoId)
       expect(comment.id).to.equal(comment.threadId)
       expect(comment.account.name).to.equal('root')
-      expect(comment.account.host).to.equal('localhost:' + server.port)
+      expect(comment.account.host).to.equal(server.host)
 
       for (const avatar of comment.account.avatars) {
         await testImage(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, '.png')

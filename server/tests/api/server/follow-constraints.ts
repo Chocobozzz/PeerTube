@@ -57,21 +57,21 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list local account videos', async function () {
-        const { total, data } = await servers[0].videos.listByAccount({ handle: 'root@localhost:' + servers[0].port })
+        const { total, data } = await servers[0].videos.listByAccount({ handle: 'root@' + servers[0].host })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)
       })
 
       it('Should list remote account videos', async function () {
-        const { total, data } = await servers[0].videos.listByAccount({ handle: 'root@localhost:' + servers[1].port })
+        const { total, data } = await servers[0].videos.listByAccount({ handle: 'root@' + servers[1].host })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)
       })
 
       it('Should list local channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[0].port
+        const handle = 'root_channel@' + servers[0].host
         const { total, data } = await servers[0].videos.listByChannel({ handle })
 
         expect(total).to.equal(1)
@@ -79,7 +79,7 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list remote channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[1].port
+        const handle = 'root_channel@' + servers[1].host
         const { total, data } = await servers[0].videos.listByChannel({ handle })
 
         expect(total).to.equal(1)
@@ -97,21 +97,21 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list local account videos', async function () {
-        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@localhost:' + servers[0].port })
+        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@' + servers[0].host })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)
       })
 
       it('Should list remote account videos', async function () {
-        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@localhost:' + servers[1].port })
+        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@' + servers[1].host })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)
       })
 
       it('Should list local channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[0].port
+        const handle = 'root_channel@' + servers[0].host
         const { total, data } = await servers[0].videos.listByChannel({ token: userToken, handle })
 
         expect(total).to.equal(1)
@@ -119,7 +119,7 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list remote channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[1].port
+        const handle = 'root_channel@' + servers[1].host
         const { total, data } = await servers[0].videos.listByChannel({ token: userToken, handle })
 
         expect(total).to.equal(1)
@@ -161,7 +161,7 @@ describe('Test follow constraints', function () {
       it('Should list local account videos', async function () {
         const { total, data } = await servers[0].videos.listByAccount({
           token: null,
-          handle: 'root@localhost:' + servers[0].port
+          handle: 'root@' + servers[0].host
         })
 
         expect(total).to.equal(1)
@@ -171,7 +171,7 @@ describe('Test follow constraints', function () {
       it('Should not list remote account videos', async function () {
         const { total, data } = await servers[0].videos.listByAccount({
           token: null,
-          handle: 'root@localhost:' + servers[1].port
+          handle: 'root@' + servers[1].host
         })
 
         expect(total).to.equal(0)
@@ -179,7 +179,7 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list local channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[0].port
+        const handle = 'root_channel@' + servers[0].host
         const { total, data } = await servers[0].videos.listByChannel({ token: null, handle })
 
         expect(total).to.equal(1)
@@ -187,7 +187,7 @@ describe('Test follow constraints', function () {
       })
 
       it('Should not list remote channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[1].port
+        const handle = 'root_channel@' + servers[1].host
         const { total, data } = await servers[0].videos.listByChannel({ token: null, handle })
 
         expect(total).to.equal(0)
@@ -206,21 +206,21 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list local account videos', async function () {
-        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@localhost:' + servers[0].port })
+        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@' + servers[0].host })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)
       })
 
       it('Should list remote account videos', async function () {
-        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@localhost:' + servers[1].port })
+        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@' + servers[1].host })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)
       })
 
       it('Should list local channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[0].port
+        const handle = 'root_channel@' + servers[0].host
         const { total, data } = await servers[0].videos.listByChannel({ token: userToken, handle })
 
         expect(total).to.equal(1)
@@ -228,7 +228,7 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list remote channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[1].port
+        const handle = 'root_channel@' + servers[1].host
         const { total, data } = await servers[0].videos.listByChannel({ token: userToken, handle })
 
         expect(total).to.equal(1)

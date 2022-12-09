@@ -265,8 +265,8 @@ async function checkStatsWithoutRedundancy (strategy: VideoRedundancyStrategyWit
 async function findServerFollows () {
   const body = await servers[0].follows.getFollowings({ start: 0, count: 5, sort: '-createdAt' })
   const follows = body.data
-  const server2 = follows.find(f => f.following.host === `localhost:${servers[1].port}`)
-  const server3 = follows.find(f => f.following.host === `localhost:${servers[2].port}`)
+  const server2 = follows.find(f => f.following.host === `${servers[1].host}`)
+  const server3 = follows.find(f => f.following.host === `${servers[2].host}`)
 
   return { server2, server3 }
 }
@@ -639,12 +639,12 @@ describe('Test videos redundancy', function () {
       await wait(10000)
 
       try {
-        await checkContains(servers, 'http%3A%2F%2Flocalhost%3A' + servers[0].port)
+        await checkContains(servers, 'http%3A%2F%2F' + servers[0].hostname + '%3A' + servers[0].port)
       } catch {
         // Maybe a server deleted a redundancy in the scheduler
         await wait(2000)
 
-        await checkContains(servers, 'http%3A%2F%2Flocalhost%3A' + servers[0].port)
+        await checkContains(servers, 'http%3A%2F%2F' + servers[0].hostname + '%3A' + servers[0].port)
       }
     })
 
@@ -655,7 +655,7 @@ describe('Test videos redundancy', function () {
 
       await wait(15000)
 
-      await checkNotContains([ servers[1], servers[2] ], 'http%3A%2F%2Flocalhost%3A' + servers[0].port)
+      await checkNotContains([ servers[1], servers[2] ], 'http%3A%2F%2F' + servers[0].port + '%3A' + servers[0].port)
     })
 
     after(async function () {

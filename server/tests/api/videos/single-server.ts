@@ -33,7 +33,7 @@ describe('Test a single server', function () {
       support: 'my super support text',
       account: {
         name: 'root',
-        host: 'localhost:' + server.port
+        host: server.host
       },
       isLocal: true,
       duration: 5,
@@ -66,7 +66,7 @@ describe('Test a single server', function () {
       support: 'my super support text updated',
       account: {
         name: 'root',
-        host: 'localhost:' + server.port
+        host: server.host
       },
       isLocal: true,
       tags: [ 'tagup1', 'tagup2' ],

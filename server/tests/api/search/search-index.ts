@@ -57,7 +57,7 @@ describe('Test index search', function () {
 
       expect(body.total).to.equal(1)
       expect(body.data[0].name).to.equal('root_channel')
-      expect(body.data[0].host).to.equal('localhost:' + server.port)
+      expect(body.data[0].host).to.equal(server.host)
     })
 
     it('Should make an index videos search by default', async function () {

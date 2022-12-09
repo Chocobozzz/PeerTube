@@ -373,7 +373,7 @@ describe('Test video channels', function () {
     this.timeout(10000)
 
     for (const server of servers) {
-      const channelURI = 'second_video_channel@localhost:' + servers[0].port
+      const channelURI = 'second_video_channel@' + servers[0].host
       const { total, data } = await server.videos.listByChannel({ handle: channelURI })
 
       expect(total).to.equal(1)
@@ -396,13 +396,13 @@ describe('Test video channels', function () {
 
     for (const server of servers) {
       {
-        const secondChannelURI = 'second_video_channel@localhost:' + servers[0].port
+        const secondChannelURI = 'second_video_channel@' + servers[0].host
         const { total } = await server.videos.listByChannel({ handle: secondChannelURI })
         expect(total).to.equal(0)
       }
 
       {
-        const channelURI = 'root_channel@localhost:' + servers[0].port
+        const channelURI = 'root_channel@' + servers[0].host
         const { total, data } = await server.videos.listByChannel({ handle: channelURI })
         expect(total).to.equal(1)
 

@@ -23,7 +23,7 @@ describe('Test activitypub', function () {
     const object = res.body
 
     expect(object.type).to.equal('Person')
-    expect(object.id).to.equal('http://localhost:' + servers[0].port + '/accounts/root')
+    expect(object.id).to.equal(servers[0].url + '/accounts/root')
     expect(object.name).to.equal('root')
     expect(object.preferredUsername).to.equal('root')
   }
@@ -33,7 +33,7 @@ describe('Test activitypub', function () {
     const object = res.body
 
     expect(object.type).to.equal('Group')
-    expect(object.id).to.equal('http://localhost:' + servers[0].port + '/video-channels/root_channel')
+    expect(object.id).to.equal(servers[0].url + '/video-channels/root_channel')
     expect(object.name).to.equal('Main root channel')
     expect(object.preferredUsername).to.equal('root_channel')
   }
@@ -43,7 +43,7 @@ describe('Test activitypub', function () {
     const object = res.body
 
     expect(object.type).to.equal('Video')
-    expect(object.id).to.equal('http://localhost:' + servers[0].port + '/videos/watch/' + video.uuid)
+    expect(object.id).to.equal(servers[0].url + '/videos/watch/' + video.uuid)
     expect(object.name).to.equal('video')
   }
 
@@ -52,7 +52,7 @@ describe('Test activitypub', function () {
     const object = res.body
 
     expect(object.type).to.equal('Playlist')
-    expect(object.id).to.equal('http://localhost:' + servers[0].port + '/video-playlists/' + playlist.uuid)
+    expect(object.id).to.equal(servers[0].url + '/video-playlists/' + playlist.uuid)
     expect(object.name).to.equal('playlist')
   }
 
@@ -110,7 +110,7 @@ describe('Test activitypub', function () {
   it('Should redirect to the origin video object', async function () {
     const res = await makeActivityPubGetRequest(servers[1].url, '/videos/watch/' + video.uuid, HttpStatusCode.FOUND_302)
 
-    expect(res.header.location).to.equal('http://localhost:' + servers[0].port + '/videos/watch/' + video.uuid)
+    expect(res.header.location).to.equal(servers[0].url + '/videos/watch/' + video.uuid)
   })
 
   it('Should return the watch action', async function () {

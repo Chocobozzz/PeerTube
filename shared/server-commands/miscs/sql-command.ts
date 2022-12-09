@@ -131,7 +131,7 @@ export class SQLCommand extends AbstractCommand {
     const dbname = 'peertube_test' + this.server.internalServerNumber
     const username = 'peertube'
     const password = 'peertube'
-    const host = 'localhost'
+    const host = '127.0.0.1'
     const port = 5432
 
     this.sequelize = new Sequelize(dbname, username, password, {

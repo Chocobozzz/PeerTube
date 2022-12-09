@@ -94,7 +94,7 @@ describe('Test prune storage scripts', function () {
 
     // Lazy load the remote avatars
     {
-      const account = await servers[0].accounts.get({ accountName: 'root@localhost:' + servers[1].port })
+      const account = await servers[0].accounts.get({ accountName: 'root@' + servers[1].host })
 
       for (const avatar of account.avatars) {
         await makeGetRequest({
@@ -106,7 +106,7 @@ describe('Test prune storage scripts', function () {
     }
 
     {
-      const account = await servers[1].accounts.get({ accountName: 'root@localhost:' + servers[0].port })
+      const account = await servers[1].accounts.get({ accountName: 'root@' + servers[0].host })
       for (const avatar of account.avatars) {
         await makeGetRequest({
           url: servers[1].url,

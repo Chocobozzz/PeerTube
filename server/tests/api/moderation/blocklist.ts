@@ -154,7 +154,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote account', async function () {
-        await command.addToMyBlocklist({ account: 'user2@localhost:' + servers[1].port })
+        await command.addToMyBlocklist({ account: 'user2@' + servers[1].host })
       })
 
       it('Should hide its videos', async function () {
@@ -217,7 +217,7 @@ describe('Test blocklist', function () {
             server: servers[0],
             token: userToken1,
             videoUUID: videoUUID2,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'absence')
         }
@@ -237,7 +237,7 @@ describe('Test blocklist', function () {
           expect(block.byAccount.name).to.equal('root')
           expect(block.blockedAccount.displayName).to.equal('user2')
           expect(block.blockedAccount.name).to.equal('user2')
-          expect(block.blockedAccount.host).to.equal('localhost:' + servers[1].port)
+          expect(block.blockedAccount.host).to.equal('' + servers[1].host)
         }
 
         {
@@ -249,7 +249,7 @@ describe('Test blocklist', function () {
           expect(block.byAccount.name).to.equal('root')
           expect(block.blockedAccount.displayName).to.equal('user1')
           expect(block.blockedAccount.name).to.equal('user1')
-          expect(block.blockedAccount.host).to.equal('localhost:' + servers[0].port)
+          expect(block.blockedAccount.host).to.equal('' + servers[0].host)
         }
       })
 
@@ -347,7 +347,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should unblock the remote account', async function () {
-        await command.removeFromMyBlocklist({ account: 'user2@localhost:' + servers[1].port })
+        await command.removeFromMyBlocklist({ account: 'user2@' + servers[1].host })
       })
 
       it('Should display its videos', async function () {
@@ -401,7 +401,7 @@ describe('Test blocklist', function () {
             server: servers[0],
             token: userToken1,
             videoUUID: videoUUID2,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'presence')
         }
@@ -419,7 +419,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote server', async function () {
-        await command.addToMyBlocklist({ server: 'localhost:' + servers[1].port })
+        await command.addToMyBlocklist({ server: '' + servers[1].host })
       })
 
       it('Should hide its videos', async function () {
@@ -463,7 +463,7 @@ describe('Test blocklist', function () {
             server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'absence')
         }
@@ -476,7 +476,7 @@ describe('Test blocklist', function () {
         const block = body.data[0]
         expect(block.byAccount.displayName).to.equal('root')
         expect(block.byAccount.name).to.equal('root')
-        expect(block.blockedServer.host).to.equal('localhost:' + servers[1].port)
+        expect(block.blockedServer.host).to.equal('' + servers[1].host)
       })
 
       it('Should search blocked servers', async function () {
@@ -516,7 +516,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should unblock the remote server', async function () {
-        await command.removeFromMyBlocklist({ server: 'localhost:' + servers[1].port })
+        await command.removeFromMyBlocklist({ server: '' + servers[1].host })
       })
 
       it('Should display its videos', function () {
@@ -540,7 +540,7 @@ describe('Test blocklist', function () {
             server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'presence')
         }
@@ -564,7 +564,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote account', async function () {
-        await command.addToServerBlocklist({ account: 'user2@localhost:' + servers[1].port })
+        await command.addToServerBlocklist({ account: 'user2@' + servers[1].host })
       })
 
       it('Should hide its videos', async function () {
@@ -624,7 +624,7 @@ describe('Test blocklist', function () {
             server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'absence')
         }
@@ -640,7 +640,7 @@ describe('Test blocklist', function () {
           expect(block.byAccount.name).to.equal('peertube')
           expect(block.blockedAccount.displayName).to.equal('user2')
           expect(block.blockedAccount.name).to.equal('user2')
-          expect(block.blockedAccount.host).to.equal('localhost:' + servers[1].port)
+          expect(block.blockedAccount.host).to.equal('' + servers[1].host)
         }
 
         {
@@ -652,7 +652,7 @@ describe('Test blocklist', function () {
           expect(block.byAccount.name).to.equal('peertube')
           expect(block.blockedAccount.displayName).to.equal('user1')
           expect(block.blockedAccount.name).to.equal('user1')
-          expect(block.blockedAccount.host).to.equal('localhost:' + servers[0].port)
+          expect(block.blockedAccount.host).to.equal('' + servers[0].host)
         }
       })
 
@@ -685,7 +685,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should unblock the remote account', async function () {
-        await command.removeFromServerBlocklist({ account: 'user2@localhost:' + servers[1].port })
+        await command.removeFromServerBlocklist({ account: 'user2@' + servers[1].host })
       })
 
       it('Should display its videos', async function () {
@@ -721,7 +721,7 @@ describe('Test blocklist', function () {
             server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'presence')
         }
@@ -743,7 +743,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote server', async function () {
-        await command.addToServerBlocklist({ server: 'localhost:' + servers[1].port })
+        await command.addToServerBlocklist({ server: '' + servers[1].host })
       })
 
       it('Should hide its videos', async function () {
@@ -791,7 +791,7 @@ describe('Test blocklist', function () {
             server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'absence')
         }
@@ -820,7 +820,7 @@ describe('Test blocklist', function () {
         const block = body.data[0]
         expect(block.byAccount.displayName).to.equal('peertube')
         expect(block.byAccount.name).to.equal('peertube')
-        expect(block.blockedServer.host).to.equal('localhost:' + servers[1].port)
+        expect(block.blockedServer.host).to.equal('' + servers[1].host)
       })
 
       it('Should search blocked servers', async function () {
@@ -848,7 +848,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should unblock the remote server', async function () {
-        await command.removeFromServerBlocklist({ server: 'localhost:' + servers[1].port })
+        await command.removeFromServerBlocklist({ server: '' + servers[1].host })
       })
 
       it('Should list all videos', async function () {
@@ -876,7 +876,7 @@ describe('Test blocklist', function () {
             server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'presence')
         }

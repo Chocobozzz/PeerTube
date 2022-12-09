@@ -32,7 +32,7 @@ describe('Official plugin auth-ldap', function () {
         'mail-property': 'mail',
         'search-base': 'ou=people,dc=planetexpress,dc=com',
         'search-filter': '(|(mail={{username}})(uid={{username}}))',
-        'url': 'ldap://localhost:390',
+        'url': 'ldap://127.0.0.1:390',
         'username-property': 'uid'
       }
     })
@@ -50,7 +50,7 @@ describe('Official plugin auth-ldap', function () {
         'mail-property': 'mail',
         'search-base': 'ou=people,dc=planetexpress,dc=com',
         'search-filter': '(|(mail={{username}})(uid={{username}}))',
-        'url': 'ldap://localhost:10389',
+        'url': 'ldap://127.0.0.1:10389',
         'username-property': 'uid'
       }
     })

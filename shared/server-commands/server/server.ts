@@ -179,9 +179,9 @@ export class PeerTubeServer {
     this.rtmpsPort = this.parallel ? this.randomRTMP() : 1937
     this.port = 9000 + this.internalServerNumber
 
-    this.url = `http://localhost:${this.port}`
-    this.host = `localhost:${this.port}`
-    this.hostname = 'localhost'
+    this.url = `http://127.0.0.1:${this.port}`
+    this.host = `127.0.0.1:${this.port}`
+    this.hostname = '127.0.0.1'
   }
 
   setUrl (url: string) {

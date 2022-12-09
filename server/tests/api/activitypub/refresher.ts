@@ -112,16 +112,16 @@ describe('Test AP refresher', function () {
       await wait(10000)
 
       // Change actor name so the remote server returns a 404
-      const to = 'http://localhost:' + servers[1].port + '/accounts/user2'
+      const to = servers[1].url + '/accounts/user2'
       await servers[1].sql.setActorField(to, 'preferredUsername', 'toto')
 
-      await command.get({ accountName: 'user1@localhost:' + servers[1].port })
-      await command.get({ accountName: 'user2@localhost:' + servers[1].port })
+      await command.get({ accountName: 'user1@' + servers[1].host })
+      await command.get({ accountName: 'user2@' + servers[1].host })
 
       await waitJobs(servers)
 
-      await command.get({ accountName: 'user1@localhost:' + servers[1].port, expectedStatus: HttpStatusCode.OK_200 })
-      await command.get({ accountName: 'user2@localhost:' + servers[1].port, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await command.get({ accountName: 'user1@' + servers[1].host, expectedStatus: HttpStatusCode.OK_200 })
+      await command.get({ accountName: 'user2@' + servers[1].host, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
   })
 

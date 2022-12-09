@@ -41,7 +41,7 @@ describe('Request helpers', function () {
     const port = await mock.initialize()
 
     const before = new Date().getTime()
-    await doRequest('http://localhost:' + port)
+    await doRequest('http://127.0.0.1:' + port)
 
     expect(new Date().getTime() - before).to.be.greaterThan(2000)
 

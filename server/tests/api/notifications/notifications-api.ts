@@ -26,7 +26,7 @@ describe('Test notifications API', function () {
     userNotifications = res.userNotifications
     server = res.servers[0]
 
-    await server.subscriptions.add({ token: userToken, targetUri: 'root_channel@localhost:' + server.port })
+    await server.subscriptions.add({ token: userToken, targetUri: 'root_channel@' + server.host })
 
     for (let i = 0; i < 10; i++) {
       await server.videos.randomUpload({ wait: false })

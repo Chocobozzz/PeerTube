@@ -43,7 +43,7 @@ describe('Official plugin auto-mute', function () {
     await servers[0].plugins.updateSettings({
       npmName: 'peertube-plugin-auto-mute',
       settings: {
-        'blocklist-urls': `http://localhost:${port}/blocklist`,
+        'blocklist-urls': `http://127.0.0.1:${port}/blocklist`,
         'check-seconds-interval': 1
       }
     })
@@ -55,7 +55,7 @@ describe('Official plugin auto-mute', function () {
     blocklistServer.replace({
       data: [
         {
-          value: 'localhost:' + servers[1].port
+          value: servers[1].host
         }
       ]
     })
@@ -72,7 +72,7 @@ describe('Official plugin auto-mute', function () {
     blocklistServer.replace({
       data: [
         {
-          value: 'localhost:' + servers[1].port,
+          value: servers[1].host,
           action: 'remove'
         }
       ]
@@ -90,7 +90,7 @@ describe('Official plugin auto-mute', function () {
     blocklistServer.replace({
       data: [
         {
-          value: 'root@localhost:' + servers[1].port
+          value: 'root@' + servers[1].host
         }
       ]
     })
@@ -107,7 +107,7 @@ describe('Official plugin auto-mute', function () {
     blocklistServer.replace({
       data: [
         {
-          value: 'root@localhost:' + servers[1].port,
+          value: 'root@' + servers[1].host,
           action: 'remove'
         }
       ]
@@ -122,7 +122,7 @@ describe('Official plugin auto-mute', function () {
   it('Should auto mute an account, manually unmute it and do not remute it automatically', async function () {
     this.timeout(20000)
 
-    const account = 'root@localhost:' + servers[1].port
+    const account = 'root@' + servers[1].host
 
     blocklistServer.replace({
       data: [
@@ -188,14 +188,14 @@ describe('Official plugin auto-mute', function () {
     await servers[1].plugins.updateSettings({
       npmName: 'peertube-plugin-auto-mute',
       settings: {
-        'blocklist-urls': 'http://localhost:' + servers[0].port + autoMuteListPath,
+        'blocklist-urls': 'http://' + servers[0].host + autoMuteListPath,
         'check-seconds-interval': 1,
         'expose-mute-list': false
       }
     })
 
-    await servers[0].blocklist.addToServerBlocklist({ account: 'root@localhost:' + servers[1].port })
-    await servers[0].blocklist.addToMyBlocklist({ server: 'localhost:' + servers[1].port })
+    await servers[0].blocklist.addToServerBlocklist({ account: 'root@' + servers[1].host })
+    await servers[0].blocklist.addToMyBlocklist({ server: servers[1].host })
 
     const res = await makeGetRequest({
       url: servers[0].url,
@@ -206,7 +206,7 @@ describe('Official plugin auto-mute', function () {
     const data = res.body.data
     expect(data).to.have.lengthOf(1)
     expect(data[0].updatedAt).to.exist
-    expect(data[0].value).to.equal('root@localhost:' + servers[1].port)
+    expect(data[0].value).to.equal('root@' + servers[1].host)
 
     await wait(2000)
 

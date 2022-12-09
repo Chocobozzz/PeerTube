@@ -3,6 +3,7 @@ listen:
   port: 9000
 
 webserver:
+  hostname: '127.0.0.1'
   https: false
 
 secrets:
@@ -20,18 +21,18 @@ rates_limit:
     max: 500
 
 database:
-  hostname: 'localhost'
+  hostname: '127.0.0.1'
   port: 5432
 
 redis:
-  hostname: 'localhost'
+  hostname: '127.0.0.1'
 
 smtp:
   hostname: null
   port: 1025
   tls: false
   disable_starttls: true
-  from_address: 'test-admin@localhost'
+  from_address: 'test-admin@127.0.0.1'
   username: null
   password: null
 

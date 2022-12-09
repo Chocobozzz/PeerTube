@@ -373,7 +373,7 @@ describe('Test moderation notifications', function () {
         followings: {
           instance: {
             autoFollowIndex: {
-              indexUrl: `http://localhost:${port}/api/v1/instances/hosts`,
+              indexUrl: `http://127.0.0.1:${port}/api/v1/instances/hosts`,
               enabled: true
             }
           }
@@ -388,10 +388,10 @@ describe('Test moderation notifications', function () {
 
       await waitJobs(servers)
 
-      await checkNewInstanceFollower({ ...baseParams, followerHost: 'localhost:' + servers[2].port, checkType: 'presence' })
+      await checkNewInstanceFollower({ ...baseParams, followerHost: servers[2].host, checkType: 'presence' })
 
       const userOverride = { socketNotifications: userNotifications, token: userToken1, check: { web: true, mail: false } }
-      await checkNewInstanceFollower({ ...baseParams, ...userOverride, followerHost: 'localhost:' + servers[2].port, checkType: 'absence' })
+      await checkNewInstanceFollower({ ...baseParams, ...userOverride, followerHost: servers[2].host, checkType: 'absence' })
     })
 
     it('Should send a notification on auto follow back', async function () {
@@ -495,8 +495,8 @@ describe('Test moderation notifications', function () {
       autoBlacklistTestsCustomConfig.transcoding.enabled = true
       await servers[0].config.updateCustomConfig({ newCustomConfig: autoBlacklistTestsCustomConfig })
 
-      await servers[0].subscriptions.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
-      await servers[1].subscriptions.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
+      await servers[0].subscriptions.add({ targetUri: 'user_1_channel@' + servers[0].host })
+      await servers[1].subscriptions.add({ targetUri: 'user_1_channel@' + servers[0].host })
     })
 
     it('Should send notification to moderators on new video with auto-blacklist', async function () {
@@ -615,8 +615,8 @@ describe('Test moderation notifications', function () {
     after(async () => {
       await servers[0].config.updateCustomConfig({ newCustomConfig: currentCustomConfig })
 
-      await servers[0].subscriptions.remove({ uri: 'user_1_channel@localhost:' + servers[0].port })
-      await servers[1].subscriptions.remove({ uri: 'user_1_channel@localhost:' + servers[0].port })
+      await servers[0].subscriptions.remove({ uri: 'user_1_channel@' + servers[0].host })
+      await servers[1].subscriptions.remove({ uri: 'user_1_channel@' + servers[0].host })
     })
   })
 

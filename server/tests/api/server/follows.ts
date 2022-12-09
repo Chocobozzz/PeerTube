@@ -88,7 +88,7 @@ describe('Test follows', function () {
       const follows = body.data
       expect(follows).to.be.an('array')
       expect(follows).to.have.lengthOf(1)
-      expect(follows[0].follower.host).to.equal('localhost:' + servers[0].port)
+      expect(follows[0].follower.host).to.equal(servers[0].host)
     })
 
     it('Should have 0 followers on server 1 and 2', async function () {

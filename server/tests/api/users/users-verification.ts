@@ -28,7 +28,7 @@ describe('Test users account verification', function () {
 
     const overrideConfig = {
       smtp: {
-        hostname: 'localhost',
+        hostname: '127.0.0.1',
         port
       }
     }

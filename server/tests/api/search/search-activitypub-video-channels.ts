@@ -87,7 +87,7 @@ describe('Test ActivityPub video channels search', function () {
   it('Should search a local video channel', async function () {
     const searches = [
       servers[0].url + '/video-channels/channel1_server1',
-      'channel1_server1@localhost:' + servers[0].port
+      'channel1_server1@' + servers[0].host
     ]
 
     for (const search of searches) {
@@ -139,7 +139,7 @@ describe('Test ActivityPub video channels search', function () {
       servers[1].url + '/video-channels/channel1_server2',
       servers[1].url + '/c/channel1_server2',
       servers[1].url + '/c/channel1_server2/videos',
-      'channel1_server2@localhost:' + servers[1].port
+      'channel1_server2@' + servers[1].host
     ]
 
     for (const search of searches) {
@@ -169,7 +169,7 @@ describe('Test ActivityPub video channels search', function () {
 
     const { total, data } = await servers[0].videos.listByChannel({
       token: null,
-      handle: 'channel1_server2@localhost:' + servers[1].port
+      handle: 'channel1_server2@' + servers[1].host
     })
     expect(total).to.equal(0)
     expect(data).to.have.lengthOf(0)
@@ -177,7 +177,7 @@ describe('Test ActivityPub video channels search', function () {
 
   it('Should list video channel videos of server 2 with token', async function () {
     const { total, data } = await servers[0].videos.listByChannel({
-      handle: 'channel1_server2@localhost:' + servers[1].port
+      handle: 'channel1_server2@' + servers[1].host
     })
 
     expect(total).to.equal(1)
@@ -226,7 +226,7 @@ describe('Test ActivityPub video channels search', function () {
 
     await waitJobs(servers)
 
-    const handle = 'channel1_server2@localhost:' + servers[1].port
+    const handle = 'channel1_server2@' + servers[1].host
     const { total, data } = await servers[0].videos.listByChannel({ handle, sort: '-createdAt' })
 
     expect(total).to.equal(2)

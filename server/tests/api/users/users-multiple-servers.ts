@@ -111,7 +111,7 @@ describe('Test users with multiple servers', function () {
     for (const server of servers) {
       const body = await server.accounts.list({ sort: '-createdAt' })
 
-      const resList = body.data.find(a => a.name === 'root' && a.host === 'localhost:' + servers[0].port)
+      const resList = body.data.find(a => a.name === 'root' && a.host === servers[0].host)
       expect(resList).not.to.be.undefined
 
       const account = await server.accounts.get({ accountName: resList.name + '@' + resList.host })
@@ -119,7 +119,7 @@ describe('Test users with multiple servers', function () {
       if (!createdAt) createdAt = account.createdAt
 
       expect(account.name).to.equal('root')
-      expect(account.host).to.equal('localhost:' + servers[0].port)
+      expect(account.host).to.equal(servers[0].host)
       expect(account.displayName).to.equal('my super display name')
       expect(account.description).to.equal('my super description updated')
       expect(createdAt).to.equal(account.createdAt)
@@ -138,7 +138,7 @@ describe('Test users with multiple servers', function () {
 
   it('Should list account videos', async function () {
     for (const server of servers) {
-      const { total, data } = await server.videos.listByAccount({ handle: 'user1@localhost:' + servers[0].port })
+      const { total, data } = await server.videos.listByAccount({ handle: 'user1@' + servers[0].host })
 
       expect(total).to.equal(1)
       expect(data).to.be.an('array')
@@ -155,7 +155,7 @@ describe('Test users with multiple servers', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { total, data } = await server.videos.listByAccount({ handle: 'user1@localhost:' + servers[0].port, search: 'Kami' })
+      const { total, data } = await server.videos.listByAccount({ handle: 'user1@' + servers[0].host, search: 'Kami' })
 
       expect(total).to.equal(1)
       expect(data).to.be.an('array')
@@ -170,11 +170,11 @@ describe('Test users with multiple servers', function () {
     for (const server of servers) {
       const body = await server.accounts.list({ sort: '-createdAt' })
 
-      const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port)
+      const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === servers[0].host)
       expect(accountDeleted).not.to.be.undefined
 
       const { data } = await server.channels.list()
-      const videoChannelDeleted = data.find(a => a.displayName === 'Main user1 channel' && a.host === 'localhost:' + servers[0].port)
+      const videoChannelDeleted = data.find(a => a.displayName === 'Main user1 channel' && a.host === servers[0].host)
       expect(videoChannelDeleted).not.to.be.undefined
     }
 
@@ -185,11 +185,11 @@ describe('Test users with multiple servers', function () {
     for (const server of servers) {
       const body = await server.accounts.list({ sort: '-createdAt' })
 
-      const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port)
+      const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === servers[0].host)
       expect(accountDeleted).to.be.undefined
 
       const { data } = await server.channels.list()
-      const videoChannelDeleted = data.find(a => a.name === 'Main user1 channel' && a.host === 'localhost:' + servers[0].port)
+      const videoChannelDeleted = data.find(a => a.name === 'Main user1 channel' && a.host === servers[0].host)
       expect(videoChannelDeleted).to.be.undefined
     }
   })

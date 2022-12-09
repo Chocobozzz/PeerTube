@@ -69,7 +69,7 @@ describe('Test user notifications', function () {
     it('Should send a new video notification if the user follows the local video publisher', async function () {
       this.timeout(15000)
 
-      await servers[0].subscriptions.add({ token: userAccessToken, targetUri: 'root_channel@localhost:' + servers[0].port })
+      await servers[0].subscriptions.add({ token: userAccessToken, targetUri: 'root_channel@' + servers[0].host })
       await waitJobs(servers)
 
       const { name, shortUUID } = await uploadRandomVideoOnServers(servers, 1)
@@ -79,7 +79,7 @@ describe('Test user notifications', function () {
     it('Should send a new video notification from a remote account', async function () {
       this.timeout(150000) // Server 2 has transcoding enabled
 
-      await servers[0].subscriptions.add({ token: userAccessToken, targetUri: 'root_channel@localhost:' + servers[1].port })
+      await servers[0].subscriptions.add({ token: userAccessToken, targetUri: 'root_channel@' + servers[1].host })
       await waitJobs(servers)
 
       const { name, shortUUID } = await uploadRandomVideoOnServers(servers, 2)
@@ -509,7 +509,7 @@ describe('Test user notifications', function () {
     it('Should notify when a local channel is following one of our channel', async function () {
       this.timeout(50000)
 
-      await servers[0].subscriptions.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
+      await servers[0].subscriptions.add({ targetUri: 'user_1_channel@' + servers[0].host })
       await waitJobs(servers)
 
       await checkNewActorFollow({
@@ -521,13 +521,13 @@ describe('Test user notifications', function () {
         checkType: 'presence'
       })
 
-      await servers[0].subscriptions.remove({ uri: 'user_1_channel@localhost:' + servers[0].port })
+      await servers[0].subscriptions.remove({ uri: 'user_1_channel@' + servers[0].host })
     })
 
     it('Should notify when a remote channel is following one of our channel', async function () {
       this.timeout(50000)
 
-      await servers[1].subscriptions.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
+      await servers[1].subscriptions.add({ targetUri: 'user_1_channel@' + servers[0].host })
       await waitJobs(servers)
 
       await checkNewActorFollow({
@@ -539,14 +539,14 @@ describe('Test user notifications', function () {
         checkType: 'presence'
       })
 
-      await servers[1].subscriptions.remove({ uri: 'user_1_channel@localhost:' + servers[0].port })
+      await servers[1].subscriptions.remove({ uri: 'user_1_channel@' + servers[0].host })
     })
 
     // PeerTube does not support account -> account follows
     // it('Should notify when a local account is following one of our channel', async function () {
     //   this.timeout(50000)
     //
-    //   await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1@localhost:' + servers[0].port)
+    //   await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1@' + servers[0].host)
     //
     //   await waitJobs(servers)
     //
@@ -556,7 +556,7 @@ describe('Test user notifications', function () {
     // it('Should notify when a remote account is following one of our channel', async function () {
     //   this.timeout(50000)
     //
-    //   await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1@localhost:' + servers[0].port)
+    //   await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1@' + servers[0].host)
     //
     //   await waitJobs(servers)
     //

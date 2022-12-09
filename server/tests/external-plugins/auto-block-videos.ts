@@ -64,7 +64,7 @@ describe('Official plugin auto-block videos', function () {
     await servers[0].plugins.updateSettings({
       npmName: 'peertube-plugin-auto-block-videos',
       settings: {
-        'blocklist-urls': `http://localhost:${port}/blocklist`,
+        'blocklist-urls': `http://127.0.0.1:${port}/blocklist`,
         'check-seconds-interval': 1
       }
     })

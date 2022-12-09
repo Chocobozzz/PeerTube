@@ -166,7 +166,7 @@ describe('Test misc endpoints', function () {
       })
 
       expect(res.text).to.contain('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')
-      expect(res.text).to.contain('<url><loc>http://localhost:' + server.port + '/about/instance</loc></url>')
+      expect(res.text).to.contain('<url><loc>' + server.url + '/about/instance</loc></url>')
     })
 
     it('Should get the empty cached sitemap', async function () {
@@ -177,7 +177,7 @@ describe('Test misc endpoints', function () {
       })
 
       expect(res.text).to.contain('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')
-      expect(res.text).to.contain('<url><loc>http://localhost:' + server.port + '/about/instance</loc></url>')
+      expect(res.text).to.contain('<url><loc>' + server.url + '/about/instance</loc></url>')
     })
 
     it('Should add videos, channel and accounts and get sitemap', async function () {
@@ -200,17 +200,17 @@ describe('Test misc endpoints', function () {
       })
 
       expect(res.text).to.contain('xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"')
-      expect(res.text).to.contain('<url><loc>http://localhost:' + server.port + '/about/instance</loc></url>')
+      expect(res.text).to.contain('<url><loc>' + server.url + '/about/instance</loc></url>')
 
       expect(res.text).to.contain('<video:title>video 1</video:title>')
       expect(res.text).to.contain('<video:title>video 2</video:title>')
       expect(res.text).to.not.contain('<video:title>video 3</video:title>')
 
-      expect(res.text).to.contain('<url><loc>http://localhost:' + server.port + '/video-channels/channel1</loc></url>')
-      expect(res.text).to.contain('<url><loc>http://localhost:' + server.port + '/video-channels/channel2</loc></url>')
+      expect(res.text).to.contain('<url><loc>' + server.url + '/video-channels/channel1</loc></url>')
+      expect(res.text).to.contain('<url><loc>' + server.url + '/video-channels/channel2</loc></url>')
 
-      expect(res.text).to.contain('<url><loc>http://localhost:' + server.port + '/accounts/user1</loc></url>')
-      expect(res.text).to.contain('<url><loc>http://localhost:' + server.port + '/accounts/user2</loc></url>')
+      expect(res.text).to.contain('<url><loc>' + server.url + '/accounts/user1</loc></url>')
+      expect(res.text).to.contain('<url><loc>' + server.url + '/accounts/user2</loc></url>')
     })
 
     it('Should not fail with big title/description videos', async function () {

@@ -139,7 +139,7 @@ function runTestSuite (options: {
     this.timeout(120000)
 
     const port = await mockObjectStorage.initialize()
-    baseMockUrl = options.useMockBaseUrl ? `http://localhost:${port}` : undefined
+    baseMockUrl = options.useMockBaseUrl ? `http://127.0.0.1:${port}` : undefined
 
     await ObjectStorageCommand.createMockBucket(options.playlistBucket)
     await ObjectStorageCommand.createMockBucket(options.webtorrentBucket)
