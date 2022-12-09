@@ -1905,7 +1905,7 @@
       </trans-unit>
       <trans-unit id="2971365540217107489" datatype="html">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target>Ce média est trop lourd pour le serveur. Veuillez contacter votre administrateur pour augmenter la limite de poids de fichier.</target>
+        <target state="translated">Ce média est trop volumineux pour le serveur. Veuillez contacter votre administrateur si vous souhaitez augmenter cette limite.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">62</context>
@@ -11267,7 +11267,7 @@
       </trans-unit>
       <trans-unit id="19872047295276660" datatype="html">
         <source>This instance is dedicated to sensitive/NSFW content.</source>
-        <target state="translated">Cette instance est destinée à des contenus vidéos à caractère sensible et sexuellement explicite.</target>
+        <target state="translated">Cette instance est destinée à des contenus vidéos à caractère sensible et/ou sexuellement explicite.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">19</context>
