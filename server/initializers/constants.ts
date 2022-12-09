@@ -1234,6 +1234,7 @@ function buildLanguages () {
   const additionalLanguages = {
     sgn: true, // Sign languages (macro language)
     ase: true, // American sign language
+    asq: true, // Austrian sign language
     sdl: true, // Arabian sign language
     bfi: true, // British sign language
     bzs: true, // Brazilian sign language
