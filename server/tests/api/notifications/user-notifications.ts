@@ -247,7 +247,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a notification even if the video is not transcoded in other resolutions', async function () {
-      this.timeout(50000)
+      this.timeout(100_000)
 
       const { name, shortUUID } = await uploadRandomVideoOnServers(servers, 2, { waitTranscoding: true, fixture: 'video_short_240p.mp4' })
       await waitJobs(servers)
@@ -256,7 +256,7 @@ describe('Test user notifications', function () {
     })
 
     it('Should send a notification with a transcoded video', async function () {
-      this.timeout(50000)
+      this.timeout(100_000)
 
       const { name, shortUUID } = await uploadRandomVideoOnServers(servers, 2, { waitTranscoding: true })
       await waitJobs(servers)
