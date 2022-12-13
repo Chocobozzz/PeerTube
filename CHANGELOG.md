@@ -1,6 +1,6 @@
 # Changelog
 
-## v5.0.0-rc.1
+## v5.0.0
 
 ### IMPORTANT NOTES
 
@@ -94,6 +94,7 @@
  * Fix following/fetching remote Pleroma actor
  * Prevent high Redis memory usage when having many jobs
  * Fix overall viewers stats with start/end dates
+ * Remove limit of countries displayed in video/live stats
 
 
 ## v4.3.1
