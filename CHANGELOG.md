@@ -15,7 +15,9 @@
  * **Important** You need to manually execute a migration script after your upgrade to migrate private/internal video files:
    * Classic installation: `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-5.0.js`
    * Docker installation: `cd /var/www/peertube-docker && docker-compose exec -u peertube peertube node dist/scripts/migrations/peertube-5.0.js`
- * There is a new `secrets.peertube` configuration. You must fill it before running PeerTube v5
+ * Configuration changes (`config/production.yaml`):
+   * There is a new `secrets.peertube` configuration. You must fill it before running PeerTube v5
+   * `object_storage.upload_acl` is now a parent key that you must update
  * You must update your nginx configuration:
    * We introduced a new `location` for plugin websocket routes
    * We introduced a new `location` for private videos files
