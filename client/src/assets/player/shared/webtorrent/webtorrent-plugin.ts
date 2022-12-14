@@ -90,6 +90,8 @@ class WebTorrentPlugin extends Plugin {
       const muted = playerOptions.muted !== undefined ? playerOptions.muted : getStoredMute()
       if (muted !== undefined) this.player.muted(muted)
 
+      console.log("CHANGE DURATION", options.videoDuration)
+
       this.player.duration(options.videoDuration)
 
       this.initializePlayer()

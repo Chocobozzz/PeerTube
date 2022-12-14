@@ -48,7 +48,7 @@ const registerSourceHandler = function (vjs: typeof videojs) {
         tech.hlsProvider.dispose()
       }
 
-      console.log("???ASD")
+      console.log("???ASD222")
 
       tech.hlsProvider = new Html5Hlsjs(vjs, source, tech)
 
@@ -260,6 +260,9 @@ class Html5Hlsjs {
   }
 
   private _handleNetworkError (error: any) {
+
+    if (navigator.onLine === false) return
+    
     if (this.errorCounts[Hlsjs.ErrorTypes.NETWORK_ERROR] <= this.maxNetworkErrorRecovery) {
       logger.info('trying to recover network error')
 
@@ -289,7 +292,7 @@ class Html5Hlsjs {
     if (this.errorCounts[data.type]) this.errorCounts[data.type] += 1
     else this.errorCounts[data.type] = 1
 
-    if (data.fatal) logger.warn(error.message)
+    if(!data.fatal) logger.warn(error.message)
     else logger.error(error.message, { data })
 
     if (data.type === Hlsjs.ErrorTypes.NETWORK_ERROR) {
@@ -388,8 +391,12 @@ class Html5Hlsjs {
       this.videoElement.addEventListener('play', this.handlers.play)
     }
 
+    console.log("HERE")
+
     //@ts-ignore
     this.hlsjsConfig.capLevelController = CapLevelController
+
+    //this.hlsjsConfig.debug = true
 
     this.hls = new Hlsjs(this.hlsjsConfig)
 

@@ -103,6 +103,8 @@ class PeerTubePlugin extends Plugin {
 
       //this.player.on('sourcechange', () => this.initCaptions())
 
+      console.log("SETDURATION", options.videoDuration)
+
       this.player.duration(options.videoDuration)
 
       this.initializePlayer()

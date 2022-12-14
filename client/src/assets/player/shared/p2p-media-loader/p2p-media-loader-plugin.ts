@@ -122,12 +122,15 @@ class P2pMediaLoaderPlugin extends Plugin {
   private initializePlugin () {
     initHlsJsPlayer(this.hlsjs)
 
+    console.log('initializePlugin')
+
     this.p2pEngine = this.options.loader.getEngine()
 
     this.p2pEngine.on(Events.SegmentError, (segment: Segment, err) => {
       logger.error(`Segment ${segment.id} error.`, err)
 
-      this.options.redundancyUrlManager.removeBySegmentUrl(segment.requestUrl)
+      if(segment.requestUrl)
+        this.options.redundancyUrlManager.removeBySegmentUrl(segment.requestUrl)
     })
 
     this.statsP2PBytes.numPeers = 1 + this.options.redundancyUrlManager.countBaseUrls()

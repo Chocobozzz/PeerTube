@@ -190,6 +190,8 @@ export class PlayerManagerOptions {
 
     //const videoCaptions = await this.buildCaptions(captionsResponse, translations)
 
+    console.log('video', video)
+
     const playerOptions: PeertubePlayerManagerOptions = {
       common: {
         // Autoplay in playlist mode
