@@ -6992,12 +6992,12 @@
       </trans-unit>
       <trans-unit id="442017645619017020" datatype="html">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server, but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What follows applies only if you want to keep using the P2P mode of PeerTube.</source>
-        <target state="translated">PeerTube käyttää BitTorrent-protokollaa kaistanleveyden jakamiseen käyttäjien välillä, palvelimen kuormituksen vähentämiseksi. Se jättää sinulle mahdollisuuden siirtyä takaisin tavalliseen suoratoistoon palvelimelta. Seuraava koskee vain, jos haluat jatkaa PeerTuben vertaisverkkotilan käyttöä.</target>
+        <target state="translated">PeerTube käyttää BitTorrent-protokollaa kaistanleveyden jakamiseen käyttäjien välillä, palvelimen kuormituksen vähentämiseksi. Voit myös halutessasi kytkeä tavallisen streamauksen päälle. Seuraava teksti koskee sinua vain jos käytät vertaisverkkoja.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="6314880288843792309" datatype="html">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
-        <target state="translated">Suurin BitTorrentin aiheuttama uhka yksityisyytellesi on se, että julkinen IP-osoitteesi tallennetaan instanssin BitTorrent träkkerille, niin kauan kuin lataat tai katsot videota.</target>
+        <target state="translated">Suurin BitTorrenttiin liittyvä uhka yksityisyytellesi on se, että julkinen IP-osoitteesi tallennetaan instanssin BitTorrent träkkerille niin kauan kuin lataat tai katsot videota.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="6868048887248005916">
@@ -8928,7 +8928,7 @@
       </trans-unit>
       <trans-unit id="2560339336098442670" datatype="html">
         <source>One of your plugin/theme has a new available version</source>
-        <target state="translated">Yhdellä laajennuksesllasi/teemallasi on uusi versio saatavilla</target>
+        <target state="translated">Yhdellä laajennuksistasi tai teemoistasi on uusi versio saatavilla</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">47</context>
