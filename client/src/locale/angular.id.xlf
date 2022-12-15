@@ -253,7 +253,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="Step: number;  "/></source>
-        <target/>
+        <target state="translated"><x id="INTERPOLASI" equiv-text="Langkah: angka; "/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">116,123</context>
@@ -261,7 +261,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="sible.    */   "/></source>
-        <target/>
+        <target state="translated"><x id="INTERPOLASI" equiv-text="sible.    */ "/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">125,130</context>
@@ -1213,7 +1213,7 @@
       </trans-unit>
       <trans-unit id="302022805144581075" datatype="html">
         <source>Muted by your instance</source>
-        <target/>
+        <target state="translated">Disenyapkan oleh instansi Anda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1221,7 +1221,7 @@
       </trans-unit>
       <trans-unit id="6860866645734090311" datatype="html">
         <source>Instance muted by your instance</source>
-        <target/>
+        <target state="translated">Instance disenyapkan oleh instance Anda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">22</context>
@@ -1229,7 +1229,7 @@
       </trans-unit>
       <trans-unit id="1b9099f59dd3baaeeaac2c29fe653dc1b0436157" datatype="html">
         <source>Manage account</source>
-        <target/>
+        <target state="translated">Kelola akun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">36</context>
@@ -1305,7 +1305,7 @@
       </trans-unit>
       <trans-unit id="4856575356061361269" datatype="html">
         <source><x id="PH" equiv-text="followers"/> direct account followers</source>
-        <target/>
+        <target state="translated"><x id="PH" equiv-text="pengikut"/> pengikut akun langsung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">127</context>
@@ -1313,7 +1313,7 @@
       </trans-unit>
       <trans-unit id="6250999352462648289" datatype="html">
         <source>Report this account</source>
-        <target/>
+        <target state="translated">Laporkan akun ini</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">133</context>
@@ -1345,7 +1345,7 @@
       </trans-unit>
       <trans-unit id="9031514421077169181" datatype="html">
         <source>Video redundancies</source>
-        <target/>
+        <target state="translated">Redundansi video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -1353,7 +1353,7 @@
       </trans-unit>
       <trans-unit id="2049290282534091182" datatype="html">
         <source>Moderation</source>
-        <target/>
+        <target state="translated">Moderasi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -1449,7 +1449,7 @@
       </trans-unit>
       <trans-unit id="8259696070728377358" datatype="html">
         <source>Plugins/Themes</source>
-        <target/>
+        <target state="translated">Plugin/Tema</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -1457,7 +1457,7 @@
       </trans-unit>
       <trans-unit id="29832309535656200" datatype="html">
         <source>System</source>
-        <target/>
+        <target state="translated">Sistem</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">103</context>
@@ -1465,7 +1465,7 @@
       </trans-unit>
       <trans-unit id="6284468333579755406" datatype="html">
         <source>Edit custom configuration</source>
-        <target/>
+        <target state="translated">Edit konfigurasi khusus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">26</context>
@@ -1473,7 +1473,7 @@
       </trans-unit>
       <trans-unit id="6879611446286948126" datatype="html">
         <source>CACHE</source>
-        <target/>
+        <target state="translated">CACHE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1481,7 +1481,7 @@
       </trans-unit>
       <trans-unit id="5511334650211127631" datatype="html">
         <source>Some files are not federated, and fetched when necessary. Define their caching policies.</source>
-        <target/>
+        <target state="translated">Beberapa file tidak difederasi, dan diambil saat diperlukan. Tentukan kebijakan caching mereka.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -2269,7 +2269,7 @@
       </trans-unit>
       <trans-unit id="3008420115644088420" datatype="html">
         <source>Configuration</source>
-        <target/>
+        <target state="translated">Konfigurasi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">1</context>
@@ -3225,7 +3225,7 @@
       </trans-unit>
       <trans-unit id="8899833753704589712" datatype="html">
         <source>Instances following you</source>
-        <target/>
+        <target state="translated">Instance yang mengikuti Anda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -3621,7 +3621,7 @@
       </trans-unit>
       <trans-unit id="4682675125751819107" datatype="html">
         <source>Instances you follow</source>
-        <target/>
+        <target state="translated">Instance yang Anda ikuti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -3929,7 +3929,7 @@
       </trans-unit>
       <trans-unit id="1868606282505332204" datatype="html">
         <source>Reports</source>
-        <target/>
+        <target state="translated">Laporan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/abuse-list/abuse-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -3957,7 +3957,7 @@
       </trans-unit>
       <trans-unit id="746099155736913817" datatype="html">
         <source>Video blocks</source>
-        <target/>
+        <target state="translated">Blok video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -4225,7 +4225,7 @@
       </trans-unit>
       <trans-unit id="7427986413651551775" datatype="html">
         <source>Video comments</source>
-        <target/>
+        <target state="translated">Komentar video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-comment-list/video-comment-list.component.html</context>
           <context context-type="linenumber">3</context>
@@ -5002,7 +5002,7 @@
       </trans-unit>
       <trans-unit id="4555457172864212828" datatype="html">
         <source>Users</source>
-        <target/>
+        <target state="translated">Pengguna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">4</context>
@@ -13888,7 +13888,7 @@
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
         <source>Federation</source>
-        <target/>
+        <target state="translated">Federasi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">58</context>
@@ -14572,7 +14572,7 @@
       </trans-unit>
       <trans-unit id="7815838401315213887" datatype="html">
         <source>Muted accounts</source>
-        <target/>
+        <target state="translated">Akun yang disenyapkan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context>
           <context context-type="linenumber">3</context>
@@ -14844,7 +14844,7 @@
       </trans-unit>
       <trans-unit id="5668793810321242853" datatype="html">
         <source>Muted servers</source>
-        <target/>
+        <target state="translated">Server yang disenyapkan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context>
           <context context-type="linenumber">3</context>
