@@ -829,7 +829,7 @@
       </trans-unit>
       <trans-unit id="4042605201005159699" datatype="html">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
-        <target/>
+        <target state="translated">Untuk setiap permintaan yang dikirim, pelacak mengembalikan peer secara acak dengan jumlah yang terbatas. Misalnya, jika ada 1000 peer dalam swarm dan pelacak hanya mengirim 20 peer untuk setiap permintaan, harus ada setidaknya 50 permintaan yang dikirim untuk mengetahui setiap peer dalam swarm</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">99,102</context>
@@ -861,7 +861,7 @@
       </trans-unit>
       <trans-unit id="1120376809358109718" datatype="html">
         <source>Web peers are not publicly accessible: because we use the websocket transport, the protocol is different from classic BitTorrent tracker. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information </source>
-        <target/>
+        <target state="translated">Peer web tidak dapat diakses oleh publik: karena kami menggunakan transport websocket, protokolnya berbeda dengan pelacak BitTorrent klasik. Ketika Anda berada di peramban web, Anda mengirim sinyal yang berisi alamat IP Anda ke pelacak yang akan secara acak memilih rekan-rekan lain untuk meneruskan informasi. Lihat <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst&quot;&gt;"/> dokumen ini<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> untuk informasi lebih lanjut </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">118,122</context>
@@ -869,7 +869,7 @@
       </trans-unit>
       <trans-unit id="7812408733559506009" datatype="html">
         <source>The worst-case scenario of an average person spying on their friends is quite unlikely. There are much more effective ways to get that kind of information.</source>
-        <target/>
+        <target state="translated">Skenario terburuk dari rata-rata orang yang memata-matai teman mereka sangat tidak mungkin. Ada banyak cara yang lebih efektif untuk mendapatkan informasi semacam itu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">126,128</context>
@@ -877,7 +877,7 @@
       </trans-unit>
       <trans-unit id="8484650229450883706" datatype="html">
         <source>How does PeerTube compare with YouTube?</source>
-        <target/>
+        <target state="translated">Bagaimana PeerTube dibandingkan dengan YouTube?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">130</context>
@@ -885,7 +885,7 @@
       </trans-unit>
       <trans-unit id="6213340208914097303" datatype="html">
         <source>The threats to privacy with YouTube are different from PeerTube's. In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you. Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).</source>
-        <target/>
+        <target state="translated">Ancaman terhadap privasi dengan YouTube berbeda dengan PeerTube. Dalam kasus YouTube, platform ini mengumpulkan sejumlah besar informasi pribadi Anda (tidak hanya IP Anda) untuk menganalisisnya dan melacak Anda. Selain itu, YouTube dimiliki oleh Google/Alphabet, sebuah perusahaan yang melacak Anda di banyak situs web (melalui AdSense atau Google Analytics).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">133,136</context>
@@ -901,7 +901,7 @@
       </trans-unit>
       <trans-unit id="8804946818315976118" datatype="html">
         <source>Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more. PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser. Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.</source>
-        <target/>
+        <target state="translated">Alamat IP Anda bersifat publik, jadi setiap kali Anda mengunjungi sebuah situs web, ada sejumlah aktor (selain situs web terakhir) yang melihat IP Anda di log koneksi mereka: ISP/router/tracker/CDN dan banyak lagi. PeerTube transparan tentang hal ini: kami memperingatkan Anda bahwa jika Anda ingin menjaga IP Anda tetap pribadi, Anda harus menggunakan VPN atau Tor Browser. Berpikir bahwa menghapus P2P dari PeerTube akan mengembalikan anonimitas Anda tidak masuk akal.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">141,145</context>
@@ -917,7 +917,7 @@
       </trans-unit>
       <trans-unit id="7404776804526394585" datatype="html">
         <source>PeerTube wants to deliver the best countermeasures possible, to give you more choice and render attacks less likely. Here is what we put in place so far:</source>
-        <target/>
+        <target state="translated">PeerTube ingin memberikan penanggulangan terbaik, untuk memberi Anda lebih banyak pilihan dan mengurangi kemungkinan serangan. Inilah yang kami terapkan sejauh ini:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">150,152</context>
@@ -925,7 +925,7 @@
       </trans-unit>
       <trans-unit id="8635362984201852982" datatype="html">
         <source>We set a limit to the number of peers sent by the tracker</source>
-        <target/>
+        <target state="translated">Kami menetapkan batas jumlah peers yang dikirim oleh pelacak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">155</context>
@@ -933,7 +933,7 @@
       </trans-unit>
       <trans-unit id="8903417899533541365" datatype="html">
         <source>We set a limit on the request frequency received by the tracker</source>
-        <target/>
+        <target state="translated">Kami menetapkan batas pada frekuensi permintaan yang diterima oleh pelacak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">156</context>
@@ -941,7 +941,7 @@
       </trans-unit>
       <trans-unit id="2470460396724373169" datatype="html">
         <source>Allow instance admins to disable P2P from the administration interface</source>
-        <target/>
+        <target state="translated">Izinkan admin instance untuk menonaktifkan P2P dari antarmuka administrasi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">157</context>
@@ -949,7 +949,7 @@
       </trans-unit>
       <trans-unit id="5991790391344625653" datatype="html">
         <source>Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling WebRTC in your browser.</source>
-        <target/>
+        <target state="translated">Pada akhirnya, ingatlah bahwa Anda selalu dapat menonaktifkan P2P dengan mengalihkannya di pemutar video, atau hanya dengan menonaktifkan WebRTC di peramban Anda.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">161,163</context>
@@ -1073,7 +1073,7 @@
       </trans-unit>
       <trans-unit id="1096694538966074574" datatype="html">
         <source>Published <x id="PH" equiv-text="total"/> videos matching "<x id="PH_1" equiv-text="this.search"/>"</source>
-        <target/>
+        <target state="translated">Diterbitkan <x id="PH" equiv-text="total"/> video yang cocok dengan "<x id="PH_1" equiv-text="this.search"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-search/account-search.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -1081,7 +1081,7 @@
       </trans-unit>
       <trans-unit id="3755500631176893489" datatype="html">
         <source>Published <x id="PH" equiv-text="total"/> videos</source>
-        <target/>
+        <target state="translated">Diterbitkan <x id="PH" equiv-text="total"/> video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-search/account-search.component.ts</context>
           <context context-type="linenumber">90</context>
@@ -1121,7 +1121,7 @@
       </trans-unit>
       <trans-unit id="403587185492002456" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target/>
+        <target state="translated">{VAR_PLURAL, jamak, =1 {1 pelanggan} lainnya {<x id="INTERPOLASI"/> pelanggan}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">13</context>
@@ -1153,7 +1153,7 @@
       </trans-unit>
       <trans-unit id="6823616469362610020" datatype="html">
         <source>Account video channels</source>
-        <target/>
+        <target state="translated">Saluran video akun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context>
           <context context-type="linenumber">30</context>
@@ -1193,7 +1193,7 @@
       </trans-unit>
       <trans-unit id="3959826834147169200" datatype="html">
         <source>Muted</source>
-        <target/>
+        <target state="translated">Suara disenyapkan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">19</context>
@@ -1205,7 +1205,7 @@
       </trans-unit>
       <trans-unit id="4572885137800697555" datatype="html">
         <source>Instance muted</source>
-        <target/>
+        <target state="translated">Instance dibisukan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">20</context>
