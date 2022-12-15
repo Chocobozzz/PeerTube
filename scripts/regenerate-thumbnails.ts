@@ -1,13 +1,10 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import { map } from 'bluebird'
 import { program } from 'commander'
 import { pathExists, remove } from 'fs-extra'
 import { generateImageFilename, processImage } from '@server/helpers/image-utils'
 import { THUMBNAILS_SIZE } from '@server/initializers/constants'
-import { VideoModel } from '@server/models/video/video'
 import { initDatabaseModels } from '@server/initializers/database'
+import { VideoModel } from '@server/models/video/video'
 
 program
   .description('Regenerate local thumbnails using preview files')
@@ -55,7 +52,7 @@ async function processVideo (id: number) {
   thumbnail.height = size.height
 
   const thumbnailPath = thumbnail.getPath()
-  await processImage(previewPath, thumbnailPath, size, true)
+  await processImage({ path: previewPath, destination: thumbnailPath, newSize: size, keepOriginal: true })
 
   // Save new attributes
   await thumbnail.save()

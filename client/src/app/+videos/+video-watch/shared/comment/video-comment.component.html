@@ -1,6 +1,10 @@
 <div *ngIf="isCommentDisplayed()" class="root-comment" [ngClass]="{ 'is-child': isChild() }">
   <div class="left">
-    <my-actor-avatar *ngIf="!comment.isDeleted" [href]="comment.account.url" [account]="comment.account"></my-actor-avatar>
+    <my-actor-avatar
+      *ngIf="!comment.isDeleted" [href]="comment.account.url"
+      [actor]="comment.account" actorType="account" [size]="isChild() ? '25' : '36'"
+    ></my-actor-avatar>
+
     <div class="vertical-border"></div>
   </div>
 
@@ -16,7 +20,7 @@
                 {{ comment.account.displayName }}
               </span>
 
-              <span class="comment-account-fid ml-1">{{ comment.by }}</span>
+              <span class="comment-account-fid ms-1">{{ comment.by }}</span>
             </a>
           </div>
 

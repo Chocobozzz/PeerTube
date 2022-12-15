@@ -2,7 +2,6 @@ listen:
   port: 9004
 
 webserver:
-  hostname: 'localhost'
   port: 9004
 
 database:
@@ -23,10 +22,14 @@ storage:
   captions: 'test4/captions/'
   cache: 'test4/cache/'
   plugins: 'test4/plugins/'
+  well_known: 'test4/well-known/'
   client_overrides: 'test4/client-overrides/'
 
 admin:
   email: 'admin4@example.com'
 
 transcoding:
+  enabled: false
+
+video_studio:
   enabled: false

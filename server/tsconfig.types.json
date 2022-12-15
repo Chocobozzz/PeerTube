@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../packages/types/dist/server",
+    "stripInternal": true,
+    "removeComments": false,
+    "emitDeclarationOnly": true
+  },
+  "references": [
+    { "path": "../shared/tsconfig.types.json" }
+  ],
+  "exclude": [
+    "tools/",
+    "tests/"
+  ]
+}

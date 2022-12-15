@@ -1,9 +1,11 @@
-import { isTestInstance } from '../../helpers/core-utils'
+import { isTestOrDevInstance } from '../../helpers/core-utils'
 import { logger } from '../../helpers/logger'
+import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 import { JobQueue } from '../job-queue'
 import { AbstractScheduler } from './abstract-scheduler'
-import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 
+// FIXME: delete this scheduler in a few versions (introduced in 5.0)
+// We introduced job removal directly using bullmq option but we still need to delete old jobs
 export class RemoveOldJobsScheduler extends AbstractScheduler {
 
   private static instance: AbstractScheduler
@@ -15,7 +17,7 @@ export class RemoveOldJobsScheduler extends AbstractScheduler {
   }
 
   protected internalExecute () {
-    if (!isTestInstance()) logger.info('Removing old jobs in scheduler.')
+    if (!isTestOrDevInstance()) logger.info('Removing old jobs in scheduler.')
 
     return JobQueue.Instance.removeOldJobs()
   }

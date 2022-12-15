@@ -116,6 +116,9 @@ $ sudo -u postgres psql -c "CREATE EXTENSION pg_trgm;" peertube_dev
 $ sudo -u postgres psql -c "CREATE EXTENSION unaccent;" peertube_dev
 ```
 
+Peertube also requires a running redis server, no special setup is needed for
+this.
+
 In dev mode, administrator username is **root** and password is **test**.
 
 ### Online development
@@ -126,7 +129,7 @@ You can get a complete PeerTube development setup with Gitpod, a free one-click 
 
 ### Server side
 
-You can find a documentation of the server code/architecture [here](https://docs.joinpeertube.org/#/contribute-architecture?id=server-code).
+You can find a documentation of the server code/architecture [here](https://docs.joinpeertube.org/contribute-architecture?id=server-code).
 
 To develop on the server-side:
 
@@ -141,7 +144,7 @@ restart.
 ### Client side
 
 You can find a documentation of the client code/architecture
-[here](https://docs.joinpeertube.org/#/contribute-architecture?id=client-code).
+[here](https://docs.joinpeertube.org/contribute-architecture?id=client-code).
 
 
 To develop on the client side:
@@ -216,8 +219,20 @@ Instance configurations are in `config/test-{1,2,3}.yaml`.
 To test emails with PeerTube:
 
  * Run [mailslurper](http://mailslurper.com/)
- * Run PeerTube using mailslurper SMTP port: `NODE_CONFIG='{ "smtp": { "hostname": "localhost", "port": 2500, "tls": false } }' NODE_ENV=test npm start`
+ * Run PeerTube using mailslurper SMTP port: `NODE_CONFIG='{ "smtp": { "hostname": "localhost", "port": 2500, "tls": false } }' NODE_ENV=dev node dist/server`
+
+### Environment variables
+
+PeerTube can be configured using environment variables.
+See the list on https://docs.joinpeertube.org/maintain-configuration?id=environment-variables
+
+Additionally to these ones, we provide some environment for dev/test purpose:
+
+ * `PRODUCTION_CONSTANTS=true`: in `NODE_ENV=dev` or `NODE_ENV=test` PeerTube customizes some constants. To prevent this behaviour, you can set `PRODUCTION_CONSTANTS` env to
+ `true`
+ * `PEERTUBE_LOCAL_CONFIG`: directory to find the local configuration file (used by web admin)
+ * `NODE_DB_LOG=false`: disable SQL request logging
 
 ## Plugins & Themes
 
-See the dedicated documentation: https://docs.joinpeertube.org/#/contribute-plugins
+See the dedicated documentation: https://docs.joinpeertube.org/contribute-plugins

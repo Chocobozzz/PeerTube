@@ -1,20 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { checkVideoFilesWereRemoved, completeVideoCheck, testImage } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
+import { Video, VideoPrivacy } from '@shared/models'
 import {
-  checkVideoFilesWereRemoved,
   cleanupTests,
-  completeVideoCheck,
   createSingleServer,
   PeerTubeServer,
   setAccessTokensToServers,
-  testImage,
-  wait
-} from '@shared/extra-utils'
-import { Video, VideoPrivacy } from '@shared/models'
-
-const expect = chai.expect
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar,
+  waitJobs
+} from '@shared/server-commands'
 
 describe('Test a single server', function () {
 
@@ -35,7 +33,7 @@ describe('Test a single server', function () {
       support: 'my super support text',
       account: {
         name: 'root',
-        host: 'localhost:' + server.port
+        host: server.host
       },
       isLocal: true,
       duration: 5,
@@ -68,7 +66,7 @@ describe('Test a single server', function () {
       support: 'my super support text updated',
       account: {
         name: 'root',
-        host: 'localhost:' + server.port
+        host: server.host
       },
       isLocal: true,
       tags: [ 'tagup1', 'tagup2' ],
@@ -97,6 +95,8 @@ describe('Test a single server', function () {
       server = await createSingleServer(1)
 
       await setAccessTokensToServers([ server ])
+      await setDefaultChannelAvatar(server)
+      await setDefaultAccountAvatar(server)
     })
 
     it('Should list video categories', async function () {
@@ -177,22 +177,21 @@ describe('Test a single server', function () {
     it('Should have the views updated', async function () {
       this.timeout(20000)
 
-      await server.videos.view({ id: videoId })
-      await server.videos.view({ id: videoId })
-      await server.videos.view({ id: videoId })
+      await server.views.simulateView({ id: videoId })
+      await server.views.simulateView({ id: videoId })
+      await server.views.simulateView({ id: videoId })
 
       await wait(1500)
 
-      await server.videos.view({ id: videoId })
-      await server.videos.view({ id: videoId })
+      await server.views.simulateView({ id: videoId })
+      await server.views.simulateView({ id: videoId })
 
       await wait(1500)
 
-      await server.videos.view({ id: videoId })
-      await server.videos.view({ id: videoId })
+      await server.views.simulateView({ id: videoId })
+      await server.views.simulateView({ id: videoId })
 
-      // Wait the repeatable job
-      await wait(8000)
+      await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
 
       const video = await server.videos.get({ id: videoId })
       expect(video.views).to.equal(3)
@@ -356,6 +355,8 @@ describe('Test a single server', function () {
 
     it('Should have the video updated', async function () {
       this.timeout(60000)
+
+      await waitJobs([ server ])
 
       const video = await server.videos.get({ id: videoId })
 

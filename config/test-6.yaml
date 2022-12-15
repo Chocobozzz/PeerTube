@@ -2,7 +2,6 @@ listen:
   port: 9006
 
 webserver:
-  hostname: 'localhost'
   port: 9006
 
 database:
@@ -23,10 +22,14 @@ storage:
   captions: 'test6/captions/'
   cache: 'test6/cache/'
   plugins: 'test6/plugins/'
+  well_known: 'test6/well-known/'
   client_overrides: 'test6/client-overrides/'
 
 admin:
   email: 'admin6@example.com'
 
 transcoding:
+  enabled: false
+
+video_studio:
   enabled: false

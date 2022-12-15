@@ -1,9 +1,10 @@
-import { getAPId } from '@server/helpers/activitypub'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
+import { logger } from '@server/helpers/logger'
 import { JobQueue } from '@server/lib/job-queue'
 import { loadVideoByUrl, VideoLoadByUrlType } from '@server/lib/model-loaders'
 import { MVideoAccountLightBlacklistAllFiles, MVideoImmutable, MVideoThumbnail } from '@server/types/models'
 import { APObject } from '@shared/models'
+import { getAPId } from '../activity'
 import { refreshVideoIfNeeded } from './refresh'
 import { APVideoCreator, fetchRemoteVideo, SyncParam, syncVideoExternalAttributes } from './shared'
 
@@ -42,7 +43,7 @@ async function getOrCreateAPVideo (
   options: GetVideoParamAll | GetVideoParamImmutable | GetVideoParamOther
 ): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable> {
   // Default params
-  const syncParam = options.syncParam || { likes: true, dislikes: true, shares: true, comments: true, thumbnail: true, refreshVideo: false }
+  const syncParam = options.syncParam || { rates: true, shares: true, comments: true, thumbnail: true, refreshVideo: false }
   const fetchType = options.fetchType || 'all'
   const allowRefresh = options.allowRefresh !== false
 
@@ -77,6 +78,8 @@ async function getOrCreateAPVideo (
     if (err.name === 'SequelizeUniqueConstraintError') {
       const alreadyCreatedVideo = await loadVideoByUrl(videoUrl, fetchType)
       if (alreadyCreatedVideo) return { video: alreadyCreatedVideo, created: false }
+
+      logger.error('Cannot create video %s because of SequelizeUniqueConstraintError error, but cannot find it in database.', videoUrl)
     }
 
     throw err
@@ -104,7 +107,7 @@ async function scheduleRefresh (video: MVideoThumbnail, fetchType: VideoLoadByUr
     return refreshVideoIfNeeded(refreshOptions)
   }
 
-  await JobQueue.Instance.createJobWithPromise({
+  await JobQueue.Instance.createJob({
     type: 'activitypub-refresher',
     payload: { type: 'video', url: video.url }
   })

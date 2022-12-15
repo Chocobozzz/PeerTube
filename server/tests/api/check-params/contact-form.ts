@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import { cleanupTests, createSingleServer, killallServers, MockSmtpServer, PeerTubeServer } from '@shared/extra-utils'
-import { ContactFormCommand } from '@shared/extra-utils/server'
+import { MockSmtpServer } from '@server/tests/shared'
 import { HttpStatusCode } from '@shared/models'
+import { cleanupTests, ContactFormCommand, createSingleServer, killallServers, PeerTubeServer } from '@shared/server-commands'
 
 describe('Test contact form API validators', function () {
   let server: PeerTubeServer
@@ -39,7 +38,7 @@ describe('Test contact form API validators', function () {
     await killallServers([ server ])
 
     // Contact form is disabled
-    await server.run({ smtp: { hostname: 'localhost', port: emailPort }, contact_form: { enabled: false } })
+    await server.run({ smtp: { hostname: '127.0.0.1', port: emailPort }, contact_form: { enabled: false } })
     await command.send({ ...defaultBody, expectedStatus: HttpStatusCode.CONFLICT_409 })
   })
 
@@ -49,7 +48,7 @@ describe('Test contact form API validators', function () {
     await killallServers([ server ])
 
     // Email & contact form enabled
-    await server.run({ smtp: { hostname: 'localhost', port: emailPort } })
+    await server.run({ smtp: { hostname: '127.0.0.1', port: emailPort } })
 
     await command.send({ ...defaultBody, fromEmail: 'badEmail', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     await command.send({ ...defaultBody, fromEmail: 'badEmail@', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })

@@ -1,0 +1,23 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.step-content-title {
+  text-align: center;
+  margin: auto;
+  margin-bottom: 45px;
+
+  h2 {
+    font-size: 32px;
+    font-weight: normal;
+    max-width: 300px;
+    margin: 15px auto 0;
+  }
+}
+
+.step-content-title-separator {
+  height: 6px;
+  width: 60px;
+  border-radius: 4px;
+  background-color: pvar(--mainColor);
+  margin: 5px auto 0;
+}

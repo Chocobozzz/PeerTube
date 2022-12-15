@@ -1,5 +1,5 @@
 /** HTTP request method to indicate the desired action to be performed for a given resource. */
-export enum HttpMethod {
+export const enum HttpMethod {
   /** The CONNECT method establishes a tunnel to the server identified by the target resource. */
   CONNECT = 'CONNECT',
   /** The DELETE method deletes the specified resource. */

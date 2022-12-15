@@ -30,8 +30,8 @@ export class NewVideoForSubscribers extends AbstractNotification <MVideoAccountL
     return this.users
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION,
       userId: user.id,
       videoId: this.payload.id

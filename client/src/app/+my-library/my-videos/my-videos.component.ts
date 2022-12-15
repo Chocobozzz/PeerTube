@@ -1,15 +1,22 @@
+import { uniqBy } from 'lodash-es'
 import { concat, Observable } from 'rxjs'
 import { tap, toArray } from 'rxjs/operators'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, Notifier, ScreenService, ServerService, User } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
-import { immutableAssign } from '@app/helpers'
+import { immutableAssign, prepareIcu } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { LiveStreamInformationComponent } from '@app/shared/shared-video-live'
-import { MiniatureDisplayOptions, SelectionType, VideosSelectionComponent } from '@app/shared/shared-video-miniature'
-import { VideoChannel, VideoSortField } from '@shared/models'
+import {
+  MiniatureDisplayOptions,
+  SelectionType,
+  VideoActionsDisplayType,
+  VideosSelectionComponent
+} from '@app/shared/shared-video-miniature'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist'
+import { VideoChannel, VideoExistInPlaylist, VideosExistInPlaylists, VideoSortField } from '@shared/models'
 import { VideoChangeOwnershipComponent } from './modals/video-change-ownership.component'
 
 @Component({
@@ -21,6 +28,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   @ViewChild('videoChangeOwnershipModal', { static: true }) videoChangeOwnershipModal: VideoChangeOwnershipComponent
   @ViewChild('liveStreamInformationModal', { static: true }) liveStreamInformationModal: LiveStreamInformationComponent
 
+  videosContainedInPlaylists: VideosExistInPlaylists = {}
   titlePage: string
   selection: SelectionType = {}
   pagination: ComponentPagination = {
@@ -35,10 +43,26 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     privacyLabel: false,
     privacyText: true,
     state: true,
-    blacklistInfo: true
+    blacklistInfo: true,
+    forceChannelInBy: true
+  }
+  videoDropdownDisplayOptions: VideoActionsDisplayType = {
+    playlist: false,
+    download: false,
+    update: false,
+    blacklist: false,
+    delete: true,
+    report: false,
+    duplicate: false,
+    mute: false,
+    liveInfo: true,
+    removeFiles: false,
+    transcoding: false,
+    studio: true,
+    stats: true
   }
 
-  videoActions: DropdownAction<{ video: Video }>[] = []
+  moreVideoActions: DropdownAction<{ video: Video }>[][] = []
 
   videos: Video[] = []
   getVideosObservableFunction = this.getVideosObservable.bind(this)
@@ -47,7 +71,7 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
 
   user: User
 
-  inputFilters: AdvancedInputFilter[]
+  inputFilters: AdvancedInputFilter[] = []
 
   disabled = false
 
@@ -62,7 +86,8 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
     protected notifier: Notifier,
     protected screenService: ScreenService,
     private confirmService: ConfirmService,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private playlistService: VideoPlaylistService
   ) {
     this.titlePage = $localize`My videos`
   }
@@ -135,10 +160,20 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
       sort: this.sort,
       userChannels: this.userChannels,
       search: this.search
-    })
-      .pipe(
-        tap(res => this.pagination.totalItems = res.total)
-      )
+    }).pipe(
+      tap(res => this.pagination.totalItems = res.total),
+      tap(({ data }) => this.fetchVideosContainedInPlaylists(data))
+    )
+  }
+
+  private fetchVideosContainedInPlaylists (videos: Video[]) {
+    this.playlistService.doVideosExistInPlaylist(videos.map(v => v.id))
+      .subscribe(result => {
+        this.videosContainedInPlaylists = Object.keys(result).reduce((acc, videoId) => ({
+          ...acc,
+          [videoId]: uniqBy(result[videoId], (p: VideoExistInPlaylist) => p.playlistId)
+        }), this.videosContainedInPlaylists)
+      })
   }
 
   async deleteSelectedVideos () {
@@ -147,7 +182,10 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
                                     .map(k => parseInt(k, 10))
 
     const res = await this.confirmService.confirm(
-      $localize`Do you really want to delete ${toDeleteVideosIds.length} videos?`,
+      prepareIcu($localize`Do you really want to delete {length, plural, =1 {this video} other {{length} videos}}?`)(
+        { length: toDeleteVideosIds.length },
+        $localize`Do you really want to delete ${toDeleteVideosIds.length} videos?`
+      ),
       $localize`Delete`
     )
     if (res === false) return
@@ -164,7 +202,13 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
       .pipe(toArray())
       .subscribe({
         next: () => {
-          this.notifier.success($localize`${toDeleteVideosIds.length} videos deleted.`)
+          this.notifier.success(
+            prepareIcu($localize`{length, plural, =1 {Video has been deleted} other {{length} videos have been deleted}}`)(
+              { length: toDeleteVideosIds.length },
+              $localize`${toDeleteVideosIds.length} have been deleted.`
+            )
+          )
+
           this.selection = {}
         },
 
@@ -172,30 +216,12 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
       })
   }
 
-  async deleteVideo (video: Video) {
-    const res = await this.confirmService.confirm(
-      $localize`Do you really want to delete ${video.name}?`,
-      $localize`Delete`
-    )
-    if (res === false) return
-
-    this.videoService.removeVideo(video.id)
-        .subscribe({
-          next: () => {
-            this.notifier.success($localize`Video ${video.name} deleted.`)
-            this.removeVideoFromArray(video.id)
-          },
-
-          error: err => this.notifier.error(err.message)
-        })
+  onVideoRemoved (video: Video) {
+    this.removeVideoFromArray(video.id)
   }
 
   changeOwnership (video: Video) {
     this.videoChangeOwnershipModal.show(video)
-  }
-
-  displayLiveInformation (video: Video) {
-    this.liveStreamInformationModal.show(video)
   }
 
   private removeVideoFromArray (id: number) {
@@ -203,23 +229,14 @@ export class MyVideosComponent implements OnInit, DisableForReuseHook {
   }
 
   private buildActions () {
-    this.videoActions = [
-      {
-        label: $localize`Display live information`,
-        handler: ({ video }) => this.displayLiveInformation(video),
-        isDisplayed: ({ video }) => video.isLive,
-        iconName: 'live'
-      },
-      {
-        label: $localize`Change ownership`,
-        handler: ({ video }) => this.changeOwnership(video),
-        iconName: 'ownership-change'
-      },
-      {
-        label: $localize`Delete`,
-        handler: ({ video }) => this.deleteVideo(video),
-        iconName: 'delete'
-      }
+    this.moreVideoActions = [
+      [
+        {
+          label: $localize`Change ownership`,
+          handler: ({ video }) => this.changeOwnership(video),
+          iconName: 'ownership-change'
+        }
+      ]
     ]
   }
 }

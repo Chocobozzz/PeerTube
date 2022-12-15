@@ -1,20 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { wait } from '@shared/core-utils'
+import { VideoPlaylistPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
   PeerTubeServer,
   SearchCommand,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
   setDefaultVideoChannel,
-  wait,
   waitJobs
-} from '@shared/extra-utils'
-import { VideoPlaylistPrivacy } from '@shared/models'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 describe('Test ActivityPub playlists search', function () {
   let servers: PeerTubeServer[]
@@ -31,6 +29,7 @@ describe('Test ActivityPub playlists search', function () {
 
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
+    await setDefaultAccountAvatar(servers)
 
     {
       const video1 = (await servers[0].videos.quickUpload({ name: 'video 1' })).uuid

@@ -1,29 +1,31 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import bytes from 'bytes'
+import { expect } from 'chai'
+import { stat } from 'fs-extra'
 import { merge } from 'lodash'
 import {
-  areObjectStorageTestsDisabled,
   checkTmpIsEmpty,
+  expectLogDoesNotContain,
+  expectStartWith,
+  generateHighBitrateVideo,
+  MockObjectStorage
+} from '@server/tests/shared'
+import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
+import { HttpStatusCode, VideoDetails } from '@shared/models'
+import {
   cleanupTests,
   createMultipleServers,
   createSingleServer,
   doubleFollow,
-  expectLogDoesNotContain,
-  expectStartWith,
   killallServers,
   makeRawRequest,
-  MockObjectStorage,
   ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs,
   webtorrentAdd
-} from '@shared/extra-utils'
-import { HttpStatusCode, VideoDetails } from '@shared/models'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 async function checkFiles (options: {
   video: VideoDetails
@@ -50,18 +52,18 @@ async function checkFiles (options: {
   for (const file of video.files) {
     const baseUrl = baseMockUrl
       ? `${baseMockUrl}/${webtorrentBucket}/`
-      : `http://${webtorrentBucket}.${ObjectStorageCommand.getEndpointHost()}/`
+      : `http://${webtorrentBucket}.${ObjectStorageCommand.getMockEndpointHost()}/`
 
     const prefix = webtorrentPrefix || ''
     const start = baseUrl + prefix
 
     expectStartWith(file.fileUrl, start)
 
-    const res = await makeRawRequest(file.fileDownloadUrl, HttpStatusCode.FOUND_302)
+    const res = await makeRawRequest({ url: file.fileDownloadUrl, expectedStatus: HttpStatusCode.FOUND_302 })
     const location = res.headers['location']
     expectStartWith(location, start)
 
-    await makeRawRequest(location, HttpStatusCode.OK_200)
+    await makeRawRequest({ url: location, expectedStatus: HttpStatusCode.OK_200 })
   }
 
   const hls = video.streamingPlaylists[0]
@@ -71,7 +73,7 @@ async function checkFiles (options: {
 
     const baseUrl = baseMockUrl
       ? `${baseMockUrl}/${playlistBucket}/`
-      : `http://${playlistBucket}.${ObjectStorageCommand.getEndpointHost()}/`
+      : `http://${playlistBucket}.${ObjectStorageCommand.getMockEndpointHost()}/`
 
     const prefix = playlistPrefix || ''
     const start = baseUrl + prefix
@@ -79,19 +81,19 @@ async function checkFiles (options: {
     expectStartWith(hls.playlistUrl, start)
     expectStartWith(hls.segmentsSha256Url, start)
 
-    await makeRawRequest(hls.playlistUrl, HttpStatusCode.OK_200)
+    await makeRawRequest({ url: hls.playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
 
-    const resSha = await makeRawRequest(hls.segmentsSha256Url, HttpStatusCode.OK_200)
+    const resSha = await makeRawRequest({ url: hls.segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
     expect(JSON.stringify(resSha.body)).to.not.throw
 
     for (const file of hls.files) {
       expectStartWith(file.fileUrl, start)
 
-      const res = await makeRawRequest(file.fileDownloadUrl, HttpStatusCode.FOUND_302)
+      const res = await makeRawRequest({ url: file.fileDownloadUrl, expectedStatus: HttpStatusCode.FOUND_302 })
       const location = res.headers['location']
       expectStartWith(location, start)
 
-      await makeRawRequest(location, HttpStatusCode.OK_200)
+      await makeRawRequest({ url: location, expectedStatus: HttpStatusCode.OK_200 })
     }
   }
 
@@ -102,7 +104,7 @@ async function checkFiles (options: {
     expect(torrent.files.length).to.equal(1)
     expect(torrent.files[0].path).to.exist.and.to.not.equal('')
 
-    const res = await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+    const res = await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
     expect(res.body).to.have.length.above(100)
   }
 
@@ -110,6 +112,10 @@ async function checkFiles (options: {
 }
 
 function runTestSuite (options: {
+  fixture?: string
+
+  maxUploadPart?: string
+
   playlistBucket: string
   playlistPrefix?: string
 
@@ -117,10 +123,9 @@ function runTestSuite (options: {
   webtorrentPrefix?: string
 
   useMockBaseUrl?: boolean
-
-  maxUploadPart?: string
 }) {
   const mockObjectStorage = new MockObjectStorage()
+  const { fixture } = options
   let baseMockUrl: string
 
   let servers: PeerTubeServer[]
@@ -134,20 +139,20 @@ function runTestSuite (options: {
     this.timeout(120000)
 
     const port = await mockObjectStorage.initialize()
-    baseMockUrl = options.useMockBaseUrl ? `http://localhost:${port}` : undefined
+    baseMockUrl = options.useMockBaseUrl ? `http://127.0.0.1:${port}` : undefined
 
-    await ObjectStorageCommand.createBucket(options.playlistBucket)
-    await ObjectStorageCommand.createBucket(options.webtorrentBucket)
+    await ObjectStorageCommand.createMockBucket(options.playlistBucket)
+    await ObjectStorageCommand.createMockBucket(options.webtorrentBucket)
 
     const config = {
       object_storage: {
         enabled: true,
-        endpoint: 'http://' + ObjectStorageCommand.getEndpointHost(),
-        region: ObjectStorageCommand.getRegion(),
+        endpoint: 'http://' + ObjectStorageCommand.getMockEndpointHost(),
+        region: ObjectStorageCommand.getMockRegion(),
 
-        credentials: ObjectStorageCommand.getCredentialsConfig(),
+        credentials: ObjectStorageCommand.getMockCredentialsConfig(),
 
-        max_upload_part: options.maxUploadPart || '2MB',
+        max_upload_part: options.maxUploadPart || '5MB',
 
         streaming_playlists: {
           bucket_name: options.playlistBucket,
@@ -184,7 +189,7 @@ function runTestSuite (options: {
   it('Should upload a video and move it to the object storage without transcoding', async function () {
     this.timeout(40000)
 
-    const { uuid } = await servers[0].videos.quickUpload({ name: 'video 1' })
+    const { uuid } = await servers[0].videos.quickUpload({ name: 'video 1', fixture })
     uuidsToDelete.push(uuid)
 
     await waitJobs(servers)
@@ -200,7 +205,7 @@ function runTestSuite (options: {
   it('Should upload a video and move it to the object storage with transcoding', async function () {
     this.timeout(120000)
 
-    const { uuid } = await servers[1].videos.quickUpload({ name: 'video 2' })
+    const { uuid } = await servers[1].videos.quickUpload({ name: 'video 2', fixture })
     uuidsToDelete.push(uuid)
 
     await waitJobs(servers)
@@ -215,7 +220,7 @@ function runTestSuite (options: {
 
   it('Should fetch correctly all the files', async function () {
     for (const url of deletedUrls.concat(keptUrls)) {
-      await makeRawRequest(url, HttpStatusCode.OK_200)
+      await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
     }
   })
 
@@ -226,13 +231,13 @@ function runTestSuite (options: {
     await waitJobs(servers)
 
     for (const url of deletedUrls) {
-      await makeRawRequest(url, HttpStatusCode.NOT_FOUND_404)
+      await makeRawRequest({ url, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     }
   })
 
   it('Should have kept other files', async function () {
     for (const url of keptUrls) {
-      await makeRawRequest(url, HttpStatusCode.OK_200)
+      await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
     }
   })
 
@@ -256,7 +261,7 @@ function runTestSuite (options: {
 }
 
 describe('Object storage for videos', function () {
-  if (areObjectStorageTestsDisabled()) return
+  if (areMockObjectStorageTestsDisabled()) return
 
   describe('Test config', function () {
     let server: PeerTubeServer
@@ -264,17 +269,17 @@ describe('Object storage for videos', function () {
     const baseConfig = {
       object_storage: {
         enabled: true,
-        endpoint: 'http://' + ObjectStorageCommand.getEndpointHost(),
-        region: ObjectStorageCommand.getRegion(),
+        endpoint: 'http://' + ObjectStorageCommand.getMockEndpointHost(),
+        region: ObjectStorageCommand.getMockRegion(),
 
-        credentials: ObjectStorageCommand.getCredentialsConfig(),
+        credentials: ObjectStorageCommand.getMockCredentialsConfig(),
 
         streaming_playlists: {
-          bucket_name: ObjectStorageCommand.DEFAULT_PLAYLIST_BUCKET
+          bucket_name: ObjectStorageCommand.DEFAULT_PLAYLIST_MOCK_BUCKET
         },
 
         videos: {
-          bucket_name: ObjectStorageCommand.DEFAULT_WEBTORRENT_BUCKET
+          bucket_name: ObjectStorageCommand.DEFAULT_WEBTORRENT_MOCK_BUCKET
         }
       }
     }
@@ -305,7 +310,7 @@ describe('Object storage for videos', function () {
     it('Should fail with bad credentials', async function () {
       this.timeout(60000)
 
-      await ObjectStorageCommand.prepareDefaultBuckets()
+      await ObjectStorageCommand.prepareDefaultMockBuckets()
 
       const config = merge({}, baseConfig, {
         object_storage: {
@@ -318,7 +323,7 @@ describe('Object storage for videos', function () {
 
       const { uuid } = await server.videos.quickUpload({ name: 'video' })
 
-      await waitJobs([ server ], true)
+      await waitJobs([ server ], { skipDelayed: true })
       const video = await server.videos.get({ id: uuid })
 
       expectStartWith(video.files[0].fileUrl, server.url)
@@ -329,7 +334,7 @@ describe('Object storage for videos', function () {
     it('Should succeed with credentials from env', async function () {
       this.timeout(60000)
 
-      await ObjectStorageCommand.prepareDefaultBuckets()
+      await ObjectStorageCommand.prepareDefaultMockBuckets()
 
       const config = merge({}, baseConfig, {
         object_storage: {
@@ -340,7 +345,7 @@ describe('Object storage for videos', function () {
         }
       })
 
-      const goodCredentials = ObjectStorageCommand.getCredentialsConfig()
+      const goodCredentials = ObjectStorageCommand.getMockCredentialsConfig()
 
       server = await createSingleServer(1, config, {
         env: {
@@ -353,10 +358,10 @@ describe('Object storage for videos', function () {
 
       const { uuid } = await server.videos.quickUpload({ name: 'video' })
 
-      await waitJobs([ server ], true)
+      await waitJobs([ server ], { skipDelayed: true })
       const video = await server.videos.get({ id: uuid })
 
-      expectStartWith(video.files[0].fileUrl, ObjectStorageCommand.getWebTorrentBaseUrl())
+      expectStartWith(video.files[0].fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
     })
 
     after(async function () {
@@ -393,12 +398,27 @@ describe('Object storage for videos', function () {
     })
   })
 
-  describe('Test object storage with small upload part', function () {
+  describe('Test object storage with file bigger than upload part', function () {
+    let fixture: string
+    const maxUploadPart = '5MB'
+
+    before(async function () {
+      this.timeout(120000)
+
+      fixture = await generateHighBitrateVideo()
+
+      const { size } = await stat(fixture)
+
+      if (bytes.parse(maxUploadPart) > size) {
+        throw Error(`Fixture file is too small (${size}) to make sense for this test.`)
+      }
+    })
+
     runTestSuite({
+      maxUploadPart,
       playlistBucket: 'streaming-playlists',
       webtorrentBucket: 'videos',
-
-      maxUploadPart: '5KB'
+      fixture
     })
   })
 })

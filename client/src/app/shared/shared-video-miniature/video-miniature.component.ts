@@ -11,7 +11,7 @@ import {
   Output
 } from '@angular/core'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
-import { HTMLServerConfig, VideoPlaylistType, VideoPrivacy, VideoState } from '@shared/models'
+import { HTMLServerConfig, VideoExistInPlaylist, VideoPlaylistType, VideoPrivacy, VideoState } from '@shared/models'
 import { LinkType } from '../../../types/link.type'
 import { ActorAvatarSize } from '../shared-actor-image/actor-avatar.component'
 import { Video } from '../shared-main'
@@ -21,13 +21,15 @@ import { VideoActionsDisplayType } from './video-actions-dropdown.component'
 export type MiniatureDisplayOptions = {
   date?: boolean
   views?: boolean
-  by?: boolean
   avatar?: boolean
   privacyLabel?: boolean
   privacyText?: boolean
   state?: boolean
   blacklistInfo?: boolean
   nsfw?: boolean
+
+  by?: boolean
+  forceChannelInBy?: boolean
 }
 @Component({
   selector: 'my-video-miniature',
@@ -38,6 +40,7 @@ export type MiniatureDisplayOptions = {
 export class VideoMiniatureComponent implements OnInit {
   @Input() user: User
   @Input() video: Video
+  @Input() containedInPlaylists: VideoExistInPlaylist[]
 
   @Input() displayOptions: MiniatureDisplayOptions = {
     date: true,
@@ -47,9 +50,23 @@ export class VideoMiniatureComponent implements OnInit {
     privacyLabel: false,
     privacyText: false,
     state: false,
-    blacklistInfo: false
+    blacklistInfo: false,
+    forceChannelInBy: false
   }
+
   @Input() displayVideoActions = true
+  @Input() videoActionsDisplayOptions: VideoActionsDisplayType = {
+    playlist: true,
+    download: false,
+    update: true,
+    blacklist: true,
+    delete: true,
+    report: true,
+    duplicate: true,
+    mute: true,
+    studio: false,
+    stats: false
+  }
 
   @Input() actorImageSize: ActorAvatarSize = '40'
 
@@ -62,16 +79,6 @@ export class VideoMiniatureComponent implements OnInit {
   @Output() videoRemoved = new EventEmitter()
   @Output() videoAccountMuted = new EventEmitter()
 
-  videoActionsDisplayOptions: VideoActionsDisplayType = {
-    playlist: true,
-    download: false,
-    update: true,
-    blacklist: true,
-    delete: true,
-    report: true,
-    duplicate: true,
-    mute: true
-  }
   showActions = false
   serverConfig: HTMLServerConfig
 
@@ -172,11 +179,15 @@ export class VideoMiniatureComponent implements OnInit {
 
     if (video.scheduledUpdate) {
       const updateAt = new Date(video.scheduledUpdate.updateAt.toString()).toLocaleString(this.localeId)
-      return $localize`Publication scheduled on ` + updateAt
+      return $localize`Publication scheduled on ${updateAt}`
     }
 
     if (video.state.id === VideoState.TRANSCODING_FAILED) {
       return $localize`Transcoding failed`
+    }
+
+    if (video.state.id === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED) {
+      return $localize`Move to external storage failed`
     }
 
     if (video.state.id === VideoState.TO_TRANSCODE && video.waitTranscoding === true) {
@@ -189,6 +200,10 @@ export class VideoMiniatureComponent implements OnInit {
 
     if (video.state.id === VideoState.TO_IMPORT) {
       return $localize`To import`
+    }
+
+    if (video.state.id === VideoState.TO_EDIT) {
+      return $localize`To edit`
     }
 
     return ''
@@ -256,6 +271,11 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   private setUpBy () {
+    if (this.displayOptions.forceChannelInBy) {
+      this.ownerDisplayType = 'videoChannel'
+      return
+    }
+
     const accountName = this.video.account.name
 
     // If the video channel name is an UUID (not really displayable, we changed this behaviour in v1.0.0-beta.12)

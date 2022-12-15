@@ -1,10 +1,12 @@
+import { switchMap } from 'rxjs'
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
-import { FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactiveService } from '@app/shared/shared-forms'
 import { VideoCaptionService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
+import { logger } from '@root-helpers/logger'
 import { PeerTubeProblemDocument, ServerErrorCode, VideoUpdate } from '@shared/models'
 import { hydrateFormFromVideo } from '../shared/video-edit-utils'
 import { VideoSend } from './video-send'
@@ -33,7 +35,7 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Af
   error: string
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     protected loadingBar: LoadingBarService,
     protected notifier: Notifier,
     protected authService: AuthService,
@@ -81,29 +83,22 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Af
     const videoUpdate: VideoUpdate = {
       privacy: this.highestPrivacy,
       waitTranscoding: false,
-      commentsEnabled: true,
-      downloadEnabled: true,
       channelId: this.firstStepChannelId
     }
 
     this.loadingBar.useRef().start()
 
     this.videoImportService.importVideoTorrent(torrentfile || this.magnetUri, videoUpdate)
+      .pipe(switchMap(({ video }) => this.videoService.getVideo({ videoId: video.uuid })))
       .subscribe({
-        next: res => {
+        next: video => {
           this.loadingBar.useRef().complete()
-          this.firstStepDone.emit(res.video.name)
+          this.firstStepDone.emit(video.name)
           this.isImportingVideo = false
           this.hasImportedVideo = true
 
-          this.video = new VideoEdit(Object.assign(res.video, {
-            commentsEnabled: videoUpdate.commentsEnabled,
-            downloadEnabled: videoUpdate.downloadEnabled,
-            privacy: { id: this.firstStepPrivacyId },
-            support: null,
-            thumbnailUrl: null,
-            previewUrl: null
-          }))
+          this.video = new VideoEdit(video)
+          this.video.patch({ privacy: this.firstStepPrivacyId })
 
           hydrateFormFromVideo(this.form, this.video, false)
         },
@@ -125,10 +120,8 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Af
       })
   }
 
-  updateSecondStep () {
-    if (this.checkForm() === false) {
-      return
-    }
+  async updateSecondStep () {
+    if (!await this.isFormValid()) return
 
     this.video.patch(this.form.value)
 
@@ -147,7 +140,7 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Af
           error: err => {
             this.error = err.message
             scrollToTop()
-            console.error(err)
+            logger.error(err)
           }
         })
   }

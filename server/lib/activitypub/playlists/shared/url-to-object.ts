@@ -1,9 +1,9 @@
-import { isArray } from 'lodash'
-import { checkUrlsSameHost } from '@server/helpers/activitypub'
 import { isPlaylistElementObjectValid, isPlaylistObjectValid } from '@server/helpers/custom-validators/activitypub/playlist'
+import { isArray } from '@server/helpers/custom-validators/misc'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { doJSONRequest } from '@server/helpers/requests'
 import { PlaylistElementObject, PlaylistObject } from '@shared/models'
+import { checkUrlsSameHost } from '../../url'
 
 async function fetchRemoteVideoPlaylist (playlistUrl: string): Promise<{ statusCode: number, playlistObject: PlaylistObject }> {
   const lTags = loggerTagsFactory('ap', 'video-playlist', playlistUrl)

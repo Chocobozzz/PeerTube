@@ -1,31 +1,28 @@
-import express from 'express'
-import { createClient, RedisClient } from 'redis'
+import IoRedis, { RedisOptions } from 'ioredis'
+import { exists } from '@server/helpers/custom-validators/misc'
+import { sha256 } from '@shared/extra-utils'
 import { logger } from '../helpers/logger'
 import { generateRandomString } from '../helpers/utils'
-import {
-  CONTACT_FORM_LIFETIME,
-  USER_EMAIL_VERIFY_LIFETIME,
-  USER_PASSWORD_RESET_LIFETIME,
-  USER_PASSWORD_CREATE_LIFETIME,
-  VIEW_LIFETIME,
-  WEBSERVER,
-  TRACKER_RATE_LIMITS,
-  RESUMABLE_UPLOAD_SESSION_LIFETIME
-} from '../initializers/constants'
 import { CONFIG } from '../initializers/config'
-import { exists } from '@server/helpers/custom-validators/misc'
-
-type CachedRoute = {
-  body: string
-  contentType?: string
-  statusCode?: string
-}
+import {
+  AP_CLEANER,
+  CONTACT_FORM_LIFETIME,
+  RESUMABLE_UPLOAD_SESSION_LIFETIME,
+  TRACKER_RATE_LIMITS,
+  TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME,
+  USER_EMAIL_VERIFY_LIFETIME,
+  USER_PASSWORD_CREATE_LIFETIME,
+  USER_PASSWORD_RESET_LIFETIME,
+  VIEW_LIFETIME,
+  WEBSERVER
+} from '../initializers/constants'
 
 class Redis {
 
   private static instance: Redis
   private initialized = false
-  private client: RedisClient
+  private connected = false
+  private client: IoRedis
   private prefix: string
 
   private constructor () {
@@ -36,28 +33,42 @@ class Redis {
     if (this.initialized === true) return
     this.initialized = true
 
-    this.client = createClient(Redis.getRedisClientOptions())
+    logger.info('Connecting to redis...')
 
-    this.client.on('error', err => {
-      logger.error('Error in Redis client.', { err })
-      process.exit(-1)
+    this.client = new IoRedis(Redis.getRedisClientOptions('', { enableAutoPipelining: true }))
+    this.client.on('error', err => logger.error('Redis failed to connect', { err }))
+    this.client.on('connect', () => {
+      logger.info('Connected to redis.')
+
+      this.connected = true
+    })
+    this.client.on('reconnecting', (ms) => {
+      logger.error(`Reconnecting to redis in ${ms}.`)
+    })
+    this.client.on('close', () => {
+      logger.error('Connection to redis has closed.')
+      this.connected = false
     })
 
-    if (CONFIG.REDIS.AUTH) {
-      this.client.auth(CONFIG.REDIS.AUTH)
-    }
+    this.client.on('end', () => {
+      logger.error('Connection to redis has closed and no more reconnects will be done.')
+    })
 
     this.prefix = 'redis-' + WEBSERVER.HOST + '-'
   }
 
-  static getRedisClientOptions () {
-    return Object.assign({},
-      (CONFIG.REDIS.AUTH && CONFIG.REDIS.AUTH != null) ? { password: CONFIG.REDIS.AUTH } : {},
-      (CONFIG.REDIS.DB) ? { db: CONFIG.REDIS.DB } : {},
-      (CONFIG.REDIS.HOSTNAME && CONFIG.REDIS.PORT)
-        ? { host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT }
-        : { path: CONFIG.REDIS.SOCKET }
-    )
+  static getRedisClientOptions (connectionName?: string, options: RedisOptions = {}): RedisOptions {
+    return {
+      connectionName: [ 'PeerTube', connectionName ].join(''),
+      connectTimeout: 20000, // Could be slow since node use sync call to compile PeerTube
+      password: CONFIG.REDIS.AUTH,
+      db: CONFIG.REDIS.DB,
+      host: CONFIG.REDIS.HOSTNAME,
+      port: CONFIG.REDIS.PORT,
+      path: CONFIG.REDIS.SOCKET,
+      showFriendlyErrorStack: true,
+      ...options
+    }
   }
 
   getClient () {
@@ -66,6 +77,10 @@ class Redis {
 
   getPrefix () {
     return this.prefix
+  }
+
+  isConnected () {
+    return this.connected
   }
 
   /* ************ Forgot password ************ */
@@ -90,8 +105,22 @@ class Redis {
     return this.removeValue(this.generateResetPasswordKey(userId))
   }
 
-  async getResetPasswordLink (userId: number) {
+  async getResetPasswordVerificationString (userId: number) {
     return this.getValue(this.generateResetPasswordKey(userId))
+  }
+
+  /* ************ Two factor auth request ************ */
+
+  async setTwoFactorRequest (userId: number, otpSecret: string) {
+    const requestToken = await generateRandomString(32)
+
+    await this.setValue(this.generateTwoFactorRequestKey(userId, requestToken), otpSecret, TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME)
+
+    return requestToken
+  }
+
+  async getTwoFactorRequestToken (userId: number, requestToken: string) {
+    return this.getValue(this.generateTwoFactorRequestKey(userId, requestToken))
   }
 
   /* ************ Email verification ************ */
@@ -124,16 +153,8 @@ class Redis {
     return this.setValue(this.generateIPViewKey(ip, videoUUID), '1', VIEW_LIFETIME.VIEW)
   }
 
-  setIPVideoViewer (ip: string, videoUUID: string) {
-    return this.setValue(this.generateIPViewerKey(ip, videoUUID), '1', VIEW_LIFETIME.VIEWER)
-  }
-
   async doesVideoIPViewExist (ip: string, videoUUID: string) {
     return this.exists(this.generateIPViewKey(ip, videoUUID))
-  }
-
-  async doesVideoIPViewerExist (ip: string, videoUUID: string) {
-    return this.exists(this.generateIPViewerKey(ip, videoUUID))
   }
 
   /* ************ Tracker IP block ************ */
@@ -144,25 +165,6 @@ class Redis {
 
   async doesTrackerBlockIPExist (ip: string) {
     return this.exists(this.generateTrackerBlockIPKey(ip))
-  }
-
-  /* ************ API cache ************ */
-
-  async getCachedRoute (req: express.Request) {
-    const cached = await this.getObject(this.generateCachedRouteKey(req))
-
-    return cached as CachedRoute
-  }
-
-  setCachedRoute (req: express.Request, body: any, lifetime: number, contentType?: string, statusCode?: number) {
-    const cached: CachedRoute = Object.assign(
-      {},
-      { body: body.toString() },
-      (contentType) ? { contentType } : null,
-      (statusCode) ? { statusCode: statusCode.toString() } : null
-    )
-
-    return this.setObject(this.generateCachedRouteKey(req), cached, lifetime)
   }
 
   /* ************ Video views stats ************ */
@@ -247,6 +249,45 @@ class Redis {
     ])
   }
 
+  /* ************ Video viewers stats ************ */
+
+  getLocalVideoViewer (options: {
+    key?: string
+    // Or
+    ip?: string
+    videoId?: number
+  }) {
+    if (options.key) return this.getObject(options.key)
+
+    const { viewerKey } = this.generateLocalVideoViewerKeys(options.ip, options.videoId)
+
+    return this.getObject(viewerKey)
+  }
+
+  setLocalVideoViewer (ip: string, videoId: number, object: any) {
+    const { setKey, viewerKey } = this.generateLocalVideoViewerKeys(ip, videoId)
+
+    return Promise.all([
+      this.addToSet(setKey, viewerKey),
+      this.setObject(viewerKey, object)
+    ])
+  }
+
+  listLocalVideoViewerKeys () {
+    const { setKey } = this.generateLocalVideoViewerKeys()
+
+    return this.getSet(setKey)
+  }
+
+  deleteLocalVideoViewersKeys (key: string) {
+    const { setKey } = this.generateLocalVideoViewerKeys()
+
+    return Promise.all([
+      this.deleteFromSet(setKey, key),
+      this.deleteKey(key)
+    ])
+  }
+
   /* ************ Resumable uploads final responses ************ */
 
   setUploadSession (uploadId: string, response?: { video: { id: number, shortUUID: string, uuid: string } }) {
@@ -275,14 +316,29 @@ class Redis {
     return this.deleteKey('resumable-upload-' + uploadId)
   }
 
-  /* ************ Keys generation ************ */
+  /* ************ AP resource unavailability ************ */
 
-  generateCachedRouteKey (req: express.Request) {
-    return req.method + '-' + req.originalUrl
+  async addAPUnavailability (url: string) {
+    const key = this.generateAPUnavailabilityKey(url)
+
+    const value = await this.increment(key)
+    await this.setExpiration(key, AP_CLEANER.PERIOD * 2)
+
+    return value
   }
 
-  private generateLocalVideoViewsKeys (videoId?: Number) {
+  /* ************ Keys generation ************ */
+
+  private generateLocalVideoViewsKeys (videoId: number): { setKey: string, videoKey: string }
+  private generateLocalVideoViewsKeys (): { setKey: string }
+  private generateLocalVideoViewsKeys (videoId?: number) {
     return { setKey: `local-video-views-buffer`, videoKey: `local-video-views-buffer-${videoId}` }
+  }
+
+  private generateLocalVideoViewerKeys (ip: string, videoId: number): { setKey: string, viewerKey: string }
+  private generateLocalVideoViewerKeys (): { setKey: string }
+  private generateLocalVideoViewerKeys (ip?: string, videoId?: number) {
+    return { setKey: `local-video-viewer-stats-keys`, viewerKey: `local-video-viewer-stats-${ip}-${videoId}` }
   }
 
   private generateVideoViewStatsKeys (options: { videoId?: number, hour?: number }) {
@@ -297,16 +353,16 @@ class Redis {
     return 'reset-password-' + userId
   }
 
+  private generateTwoFactorRequestKey (userId: number, token: string) {
+    return 'two-factor-request-' + userId + '-' + token
+  }
+
   private generateVerifyEmailKey (userId: number) {
     return 'verify-email-' + userId
   }
 
   private generateIPViewKey (ip: string, videoUUID: string) {
     return `views-${videoUUID}-${ip}`
-  }
-
-  private generateIPViewerKey (ip: string, videoUUID: string) {
-    return `viewer-${videoUUID}-${ip}`
   }
 
   private generateTrackerBlockIPKey (ip: string) {
@@ -317,128 +373,67 @@ class Redis {
     return 'contact-form-' + ip
   }
 
+  private generateAPUnavailabilityKey (url: string) {
+    return 'ap-unavailability-' + sha256(url)
+  }
+
   /* ************ Redis helpers ************ */
 
   private getValue (key: string) {
-    return new Promise<string>((res, rej) => {
-      this.client.get(this.prefix + key, (err, value) => {
-        if (err) return rej(err)
-
-        return res(value)
-      })
-    })
+    return this.client.get(this.prefix + key)
   }
 
   private getSet (key: string) {
-    return new Promise<string[]>((res, rej) => {
-      this.client.smembers(this.prefix + key, (err, value) => {
-        if (err) return rej(err)
-
-        return res(value)
-      })
-    })
+    return this.client.smembers(this.prefix + key)
   }
 
   private addToSet (key: string, value: string) {
-    return new Promise<void>((res, rej) => {
-      this.client.sadd(this.prefix + key, value, err => err ? rej(err) : res())
-    })
+    return this.client.sadd(this.prefix + key, value)
   }
 
   private deleteFromSet (key: string, value: string) {
-    return new Promise<void>((res, rej) => {
-      this.client.srem(this.prefix + key, value, err => err ? rej(err) : res())
-    })
+    return this.client.srem(this.prefix + key, value)
   }
 
   private deleteKey (key: string) {
-    return new Promise<void>((res, rej) => {
-      this.client.del(this.prefix + key, err => err ? rej(err) : res())
-    })
+    return this.client.del(this.prefix + key)
   }
 
-  private deleteFieldInHash (key: string, field: string) {
-    return new Promise<void>((res, rej) => {
-      this.client.hdel(this.prefix + key, field, err => err ? rej(err) : res())
-    })
+  private async getObject (key: string) {
+    const value = await this.getValue(key)
+    if (!value) return null
+
+    return JSON.parse(value)
   }
 
-  private setValue (key: string, value: string, expirationMilliseconds: number) {
-    return new Promise<void>((res, rej) => {
-      this.client.set(this.prefix + key, value, 'PX', expirationMilliseconds, (err, ok) => {
-        if (err) return rej(err)
+  private setObject (key: string, value: { [ id: string ]: number | string }, expirationMilliseconds?: number) {
+    return this.setValue(key, JSON.stringify(value), expirationMilliseconds)
+  }
 
-        if (ok !== 'OK') return rej(new Error('Redis set result is not OK.'))
+  private async setValue (key: string, value: string, expirationMilliseconds?: number) {
+    const result = expirationMilliseconds !== undefined
+      ? await this.client.set(this.prefix + key, value, 'PX', expirationMilliseconds)
+      : await this.client.set(this.prefix + key, value)
 
-        return res()
-      })
-    })
+    if (result !== 'OK') throw new Error('Redis set result is not OK.')
   }
 
   private removeValue (key: string) {
-    return new Promise<void>((res, rej) => {
-      this.client.del(this.prefix + key, err => {
-        if (err) return rej(err)
-
-        return res()
-      })
-    })
-  }
-
-  private setObject (key: string, obj: { [id: string]: string }, expirationMilliseconds: number) {
-    return new Promise<void>((res, rej) => {
-      this.client.hmset(this.prefix + key, obj, (err, ok) => {
-        if (err) return rej(err)
-        if (!ok) return rej(new Error('Redis mset result is not OK.'))
-
-        this.client.pexpire(this.prefix + key, expirationMilliseconds, (err, ok) => {
-          if (err) return rej(err)
-          if (!ok) return rej(new Error('Redis expiration result is not OK.'))
-
-          return res()
-        })
-      })
-    })
-  }
-
-  private getObject (key: string) {
-    return new Promise<{ [id: string]: string }>((res, rej) => {
-      this.client.hgetall(this.prefix + key, (err, value) => {
-        if (err) return rej(err)
-
-        return res(value)
-      })
-    })
-  }
-
-  private setValueInHash (key: string, field: string, value: string) {
-    return new Promise<void>((res, rej) => {
-      this.client.hset(this.prefix + key, field, value, (err) => {
-        if (err) return rej(err)
-
-        return res()
-      })
-    })
+    return this.client.del(this.prefix + key)
   }
 
   private increment (key: string) {
-    return new Promise<number>((res, rej) => {
-      this.client.incr(this.prefix + key, (err, value) => {
-        if (err) return rej(err)
-
-        return res(value)
-      })
-    })
+    return this.client.incr(this.prefix + key)
   }
 
-  private exists (key: string) {
-    return new Promise<boolean>((res, rej) => {
-      this.client.exists(this.prefix + key, (err, existsNumber) => {
-        if (err) return rej(err)
+  private async exists (key: string) {
+    const result = await this.client.exists(this.prefix + key)
 
-        return res(existsNumber === 1)
-      })
-    })
+    return result !== 0
+  }
+
+  private setExpiration (key: string, ms: number) {
+    return this.client.expire(this.prefix + key, ms / 1000)
   }
 
   static get Instance () {

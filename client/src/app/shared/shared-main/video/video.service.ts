@@ -1,10 +1,11 @@
 import { SortMeta } from 'primeng/api'
-import { from, Observable } from 'rxjs'
+import { from, Observable, of } from 'rxjs'
 import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
+import { AuthService, ComponentPaginationLight, RestExtractor, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
+import { arrayify } from '@shared/core-utils'
 import {
   BooleanBothQuery,
   FeedFormat,
@@ -24,6 +25,7 @@ import {
   VideoTranscodingCreate,
   VideoUpdate
 } from '@shared/models'
+import { VideoSource } from '@shared/models/videos/video-source'
 import { environment } from '../../../../environments/environment'
 import { Account } from '../account/account.model'
 import { AccountService } from '../account/account.service'
@@ -55,6 +57,7 @@ export class VideoService {
   static BASE_SUBSCRIPTION_FEEDS_URL = environment.apiUrl + '/feeds/subscriptions.'
 
   constructor (
+    private auth: AuthService,
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private restService: RestService,
@@ -63,10 +66,6 @@ export class VideoService {
 
   getVideoViewUrl (uuid: string) {
     return `${VideoService.BASE_VIDEO_URL}/${uuid}/views`
-  }
-
-  getUserWatchingVideoUrl (uuid: string) {
-    return `${VideoService.BASE_VIDEO_URL}/${uuid}/watching`
   }
 
   getVideo (options: { videoId: string }): Observable<VideoDetails> {
@@ -114,10 +113,7 @@ export class VideoService {
     const data = objectToFormData(body)
 
     return this.authHttp.put(`${VideoService.BASE_VIDEO_URL}/${video.id}`, data)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   uploadVideo (video: FormData) {
@@ -299,7 +295,7 @@ export class VideoService {
   }
 
   removeVideo (idArg: number | number[]) {
-    const ids = Array.isArray(idArg) ? idArg : [ idArg ]
+    const ids = arrayify(idArg)
 
     return from(ids)
       .pipe(
@@ -316,6 +312,11 @@ export class VideoService {
         toArray(),
         catchError(err => this.restExtractor.handleError(err))
       )
+  }
+
+  removeFile (videoId: number | string, fileId: number, type: 'hls' | 'webtorrent') {
+    return this.authHttp.delete(VideoService.BASE_VIDEO_URL + '/' + videoId + '/' + type + '/' + fileId)
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   runTranscoding (videoIds: (number | string)[], type: 'hls' | 'webtorrent') {
@@ -338,19 +339,33 @@ export class VideoService {
                )
   }
 
-  setVideoLike (id: number) {
+  getSource (videoId: number) {
+    return this.authHttp
+               .get<{ source: VideoSource }>(VideoService.BASE_VIDEO_URL + '/' + videoId + '/source')
+               .pipe(
+                 catchError(err => {
+                   if (err.status === 404) {
+                     return of(undefined)
+                   }
+
+                   this.restExtractor.handleError(err)
+                 })
+               )
+  }
+
+  setVideoLike (id: string) {
     return this.setVideoRate(id, 'like')
   }
 
-  setVideoDislike (id: number) {
+  setVideoDislike (id: string) {
     return this.setVideoRate(id, 'dislike')
   }
 
-  unsetVideoLike (id: number) {
+  unsetVideoLike (id: string) {
     return this.setVideoRate(id, 'none')
   }
 
-  getUserVideoRating (id: number) {
+  getUserVideoRating (id: string) {
     const url = UserService.BASE_USERS_URL + 'me/videos/' + id + '/rating'
 
     return this.authHttp.get<UserVideoRate>(url)
@@ -434,23 +449,39 @@ export class VideoService {
       ? this.restService.componentToRestPagination(videoPagination)
       : undefined
 
-    let newParams = this.restService.addRestGetParams(params, pagination, sort)
+    let newParams = this.restService.addRestGetParams(params, pagination, this.buildListSort(sort))
 
     if (skipCount) newParams = newParams.set('skipCount', skipCount + '')
 
-    if (isLocal) newParams = newParams.set('isLocal', isLocal)
-    if (include) newParams = newParams.set('include', include)
-    if (isLive) newParams = newParams.set('isLive', isLive)
-    if (nsfw) newParams = newParams.set('nsfw', nsfw)
-    if (nsfwPolicy) newParams = newParams.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
-    if (languageOneOf) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
-    if (categoryOneOf) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
-    if (privacyOneOf) newParams = this.restService.addArrayParams(newParams, 'privacyOneOf', privacyOneOf)
+    if (isLocal !== undefined) newParams = newParams.set('isLocal', isLocal)
+    if (include !== undefined) newParams = newParams.set('include', include)
+    if (isLive !== undefined) newParams = newParams.set('isLive', isLive)
+    if (nsfw !== undefined) newParams = newParams.set('nsfw', nsfw)
+    if (nsfwPolicy !== undefined) newParams = newParams.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
+    if (languageOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'languageOneOf', languageOneOf)
+    if (categoryOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'categoryOneOf', categoryOneOf)
+    if (privacyOneOf !== undefined) newParams = this.restService.addArrayParams(newParams, 'privacyOneOf', privacyOneOf)
 
     return newParams
   }
 
-  private setVideoRate (id: number, rateType: UserVideoRateType) {
+  private buildListSort (sortArg: VideoSortField | SortMeta) {
+    const sort = this.restService.buildSortString(sortArg)
+
+    if (typeof sort === 'string') {
+      // Silently use the best algorithm for logged in users if they chose the hot algorithm
+      if (
+        this.auth.isLoggedIn() &&
+        (sort === 'hot' || sort === '-hot')
+      ) {
+        return sort.replace('hot', 'best')
+      }
+
+      return sort
+    }
+  }
+
+  private setVideoRate (id: string, rateType: UserVideoRateType) {
     const url = `${VideoService.BASE_VIDEO_URL}/${id}/rate`
     const body: UserVideoRateUpdate = {
       rating: rateType
@@ -458,9 +489,6 @@ export class VideoService {
 
     return this.authHttp
                .put(url, body)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }

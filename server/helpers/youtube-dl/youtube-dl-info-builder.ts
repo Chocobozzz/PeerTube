@@ -1,5 +1,6 @@
 import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES } from '../../initializers/constants'
 import { peertubeTruncate } from '../core-utils'
+import { isUrlValid } from '../custom-validators/activitypub/misc'
 
 type YoutubeDLInfo = {
   name?: string
@@ -11,7 +12,10 @@ type YoutubeDLInfo = {
   tags?: string[]
   thumbnailUrl?: string
   ext?: string
-  originallyPublishedAt?: Date
+  originallyPublishedAtWithoutTime?: Date
+  webpageUrl?: string
+
+  urls?: string[]
 }
 
 class YoutubeDLInfoBuilder {
@@ -76,9 +80,56 @@ class YoutubeDLInfoBuilder {
       nsfw: this.isNSFW(obj),
       tags: this.getTags(obj.tags),
       thumbnailUrl: obj.thumbnail || undefined,
-      originallyPublishedAt: this.buildOriginallyPublishedAt(obj),
-      ext: obj.ext
+      urls: this.buildAvailableUrl(obj),
+      originallyPublishedAtWithoutTime: this.buildOriginallyPublishedAt(obj),
+      ext: obj.ext,
+      webpageUrl: obj.webpage_url
     }
+  }
+
+  private buildAvailableUrl (obj: any) {
+    const urls: string[] = []
+
+    if (obj.url) urls.push(obj.url)
+    if (obj.urls) {
+      if (Array.isArray(obj.urls)) urls.push(...obj.urls)
+      else urls.push(obj.urls)
+    }
+
+    const formats = Array.isArray(obj.formats)
+      ? obj.formats
+      : []
+
+    for (const format of formats) {
+      if (!format.url) continue
+
+      urls.push(format.url)
+    }
+
+    const thumbnails = Array.isArray(obj.thumbnails)
+      ? obj.thumbnails
+      : []
+
+    for (const thumbnail of thumbnails) {
+      if (!thumbnail.url) continue
+
+      urls.push(thumbnail.url)
+    }
+
+    if (obj.thumbnail) urls.push(obj.thumbnail)
+
+    for (const subtitleKey of Object.keys(obj.subtitles || {})) {
+      const subtitles = obj.subtitles[subtitleKey]
+      if (!Array.isArray(subtitles)) continue
+
+      for (const subtitle of subtitles) {
+        if (!subtitle.url) continue
+
+        urls.push(subtitle.url)
+      }
+    }
+
+    return urls.filter(u => u && isUrlValid(u))
   }
 
   private titleTruncation (title: string) {

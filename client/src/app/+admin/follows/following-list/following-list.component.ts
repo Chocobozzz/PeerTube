@@ -1,9 +1,12 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
+import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { InstanceFollowService } from '@app/shared/shared-instance'
 import { ActorFollow } from '@shared/models'
 import { FollowModalComponent } from './follow-modal.component'
+import { DropdownAction } from '@app/shared/shared-main'
+import { prepareIcu } from '@app/helpers'
 
 @Component({
   templateUrl: './following-list.component.html',
@@ -17,6 +20,11 @@ export class FollowingListComponent extends RestTable implements OnInit {
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
+  searchFilters: AdvancedInputFilter[] = []
+
+  selectedFollows: ActorFollow[] = []
+  bulkFollowsActions: DropdownAction<ActorFollow[]>[] = []
+
   constructor (
     private notifier: Notifier,
     private confirmService: ConfirmService,
@@ -27,6 +35,15 @@ export class FollowingListComponent extends RestTable implements OnInit {
 
   ngOnInit () {
     this.initialize()
+
+    this.searchFilters = this.followService.buildFollowsListFilters()
+
+    this.bulkFollowsActions = [
+      {
+        label: $localize`Delete`,
+        handler: follows => this.removeFollowing(follows)
+      }
+    ]
   }
 
   getIdentifier () {
@@ -41,17 +58,33 @@ export class FollowingListComponent extends RestTable implements OnInit {
     return follow.following.name === 'peertube'
   }
 
-  async removeFollowing (follow: ActorFollow) {
-    const res = await this.confirmService.confirm(
-      $localize`Do you really want to unfollow ${follow.following.host}?`,
-      $localize`Unfollow`
+  isInSelectionMode () {
+    return this.selectedFollows.length !== 0
+  }
+
+  buildFollowingName (follow: ActorFollow) {
+    return follow.following.name + '@' + follow.following.host
+  }
+
+  async removeFollowing (follows: ActorFollow[]) {
+    const message = prepareIcu($localize`Do you really want to unfollow {count, plural, =1 {{entryName}?} other {{count} entries?}}`)(
+      { count: follows.length, entryName: this.buildFollowingName(follows[0]) },
+      $localize`Do you really want to unfollow these entries?`
     )
+
+    const res = await this.confirmService.confirm(message, $localize`Unfollow`)
     if (res === false) return
 
-    this.followService.unfollow(follow)
+    this.followService.unfollow(follows)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`You are not following ${follow.following.host} anymore.`)
+          // eslint-disable-next-line max-len
+          const message = prepareIcu($localize`You are not following {count, plural, =1 {{entryName} anymore.} other {these {count} entries anymore.}}`)(
+            { count: follows.length, entryName: this.buildFollowingName(follows[0]) },
+            $localize`You are not following them anymore.`
+          )
+
+          this.notifier.success(message)
           this.reloadData()
         },
 

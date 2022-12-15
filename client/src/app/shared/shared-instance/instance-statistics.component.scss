@@ -1,3 +1,5 @@
+@use '_variables' as *;
+@use '_mixins' as *;
 
 h3 {
   font-size: 1.25rem;
@@ -19,22 +21,19 @@ h3 {
     margin: 0;
   }
 
-  .glyphicon {
-    opacity: 0.12;
-    position: absolute;
-    left: 16px;
-    top: -24px;
-
-    &.icon-bottom {
-      top: 4px;
-    }
-
-    &::before {
-      font-size: 8em;
-    }
-  }
-
   .card-body {
     z-index: 2;
+  }
+}
+
+my-global-icon {
+  opacity: 0.12;
+  position: absolute;
+  left: 16px;
+  top: -24px;
+  width: 110px;
+
+  &.icon-bottom {
+    top: 4px;
   }
 }

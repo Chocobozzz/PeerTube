@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { cleanupTests, createMultipleServers, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { expect } from 'chai'
 import { UserNotificationType } from '@shared/models'
-
-const expect = chai.expect
+import {
+  cleanupTests,
+  createMultipleServers,
+  doubleFollow,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  waitJobs
+} from '@shared/server-commands'
 
 async function checkNotifications (server: PeerTubeServer, token: string, expected: UserNotificationType[]) {
   const { data } = await server.notifications.list({ token, start: 0, count: 10, unread: true })
@@ -16,7 +20,7 @@ async function checkNotifications (server: PeerTubeServer, token: string, expect
   }
 }
 
-describe('Test blocklist', function () {
+describe('Test blocklist notifications', function () {
   let servers: PeerTubeServer[]
   let videoUUID: string
 

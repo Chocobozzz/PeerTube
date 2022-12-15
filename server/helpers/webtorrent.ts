@@ -1,6 +1,6 @@
 import { decode, encode } from 'bencode'
 import createTorrent from 'create-torrent'
-import { createWriteStream, ensureDir, readFile, remove, writeFile } from 'fs-extra'
+import { createWriteStream, ensureDir, pathExists, readFile, remove, writeFile } from 'fs-extra'
 import magnetUtil from 'magnet-uri'
 import parseTorrent from 'parse-torrent'
 import { dirname, join } from 'path'
@@ -13,6 +13,7 @@ import { VideoPathManager } from '@server/lib/video-path-manager'
 import { MVideo } from '@server/types/models/video/video'
 import { MVideoFile, MVideoFileRedundanciesOpt } from '@server/types/models/video/video-file'
 import { MStreamingPlaylistVideo } from '@server/types/models/video/video-streaming-playlist'
+import { sha1 } from '@shared/extra-utils'
 import { CONFIG } from '../initializers/config'
 import { promisify2 } from './core-utils'
 import { logger } from './logger'
@@ -90,40 +91,53 @@ async function downloadWebTorrentVideo (target: { uri: string, torrentName?: str
 }
 
 function createTorrentAndSetInfoHash (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
+  return VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(videoOrPlaylist), videoPath => {
+    return createTorrentAndSetInfoHashFromPath(videoOrPlaylist, videoFile, videoPath)
+  })
+}
+
+async function createTorrentAndSetInfoHashFromPath (
+  videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
+  videoFile: MVideoFile,
+  filePath: string
+) {
   const video = extractVideo(videoOrPlaylist)
 
   const options = {
     // Keep the extname, it's used by the client to stream the file inside a web browser
-    name: `${video.name} ${videoFile.resolution}p${videoFile.extname}`,
+    name: buildInfoName(video, videoFile),
     createdBy: 'PeerTube',
     announceList: buildAnnounceList(),
     urlList: buildUrlList(video, videoFile)
   }
 
-  return VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(videoOrPlaylist), async videoPath => {
-    const torrentContent = await createTorrentPromise(videoPath, options)
+  const torrentContent = await createTorrentPromise(filePath, options)
 
-    const torrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
-    const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, torrentFilename)
-    logger.info('Creating torrent %s.', torrentPath)
+  const torrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
+  const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, torrentFilename)
+  logger.info('Creating torrent %s.', torrentPath)
 
-    await writeFile(torrentPath, torrentContent)
+  await writeFile(torrentPath, torrentContent)
 
-    // Remove old torrent file if it existed
-    if (videoFile.hasTorrent()) {
-      await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
-    }
+  // Remove old torrent file if it existed
+  if (videoFile.hasTorrent()) {
+    await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
+  }
 
-    const parsedTorrent = parseTorrent(torrentContent)
-    videoFile.infoHash = parsedTorrent.infoHash
-    videoFile.torrentFilename = torrentFilename
-  })
+  const parsedTorrent = parseTorrent(torrentContent)
+  videoFile.infoHash = parsedTorrent.infoHash
+  videoFile.torrentFilename = torrentFilename
 }
 
-async function updateTorrentUrls (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
+async function updateTorrentMetadata (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
   const video = extractVideo(videoOrPlaylist)
 
   const oldTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename)
+
+  if (!await pathExists(oldTorrentPath)) {
+    logger.info('Do not update torrent metadata %s of video %s because the file does not exist anymore.', video.uuid, oldTorrentPath)
+    return
+  }
 
   const torrentContent = await readFile(oldTorrentPath)
   const decoded = decode(torrentContent)
@@ -133,15 +147,19 @@ async function updateTorrentUrls (videoOrPlaylist: MVideo | MStreamingPlaylistVi
 
   decoded['url-list'] = buildUrlList(video, videoFile)
 
+  decoded.info.name = buildInfoName(video, videoFile)
+  decoded['creation date'] = Math.ceil(Date.now() / 1000)
+
   const newTorrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
   const newTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, newTorrentFilename)
 
-  logger.info('Updating torrent URLs %s -> %s.', oldTorrentPath, newTorrentPath)
+  logger.info('Updating torrent metadata %s -> %s.', oldTorrentPath, newTorrentPath)
 
   await writeFile(newTorrentPath, encode(decoded))
-  await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
+  await remove(oldTorrentPath)
 
   videoFile.torrentFilename = newTorrentFilename
+  videoFile.infoHash = sha1(encode(decoded.info))
 }
 
 function generateMagnetUri (
@@ -151,7 +169,10 @@ function generateMagnetUri (
 ) {
   const xs = videoFile.getTorrentUrl()
   const announce = trackerUrls
-  let urlList = [ videoFile.getFileUrl(video) ]
+
+  let urlList = video.hasPrivateStaticPath()
+    ? []
+    : [ videoFile.getFileUrl(video) ]
 
   const redundancies = videoFile.RedundancyVideos
   if (isArray(redundancies)) urlList = urlList.concat(redundancies.map(r => r.fileUrl))
@@ -171,8 +192,11 @@ function generateMagnetUri (
 
 export {
   createTorrentPromise,
-  updateTorrentUrls,
+  updateTorrentMetadata,
+
   createTorrentAndSetInfoHash,
+  createTorrentAndSetInfoHashFromPath,
+
   generateMagnetUri,
   downloadWebTorrentVideo
 }
@@ -224,5 +248,11 @@ function buildAnnounceList () {
 }
 
 function buildUrlList (video: MVideo, videoFile: MVideoFile) {
+  if (video.hasPrivateStaticPath()) return []
+
   return [ videoFile.getFileUrl(video) ]
+}
+
+function buildInfoName (video: MVideo, videoFile: MVideoFile) {
+  return `${video.name} ${videoFile.resolution}p${videoFile.extname}`
 }

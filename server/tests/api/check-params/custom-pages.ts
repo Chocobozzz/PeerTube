@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
+import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -8,8 +8,7 @@ import {
   makePutBodyRequest,
   PeerTubeServer,
   setAccessTokensToServers
-} from '@shared/extra-utils'
-import { HttpStatusCode } from '@shared/models'
+} from '@shared/server-commands'
 
 describe('Test custom pages validators', function () {
   const path = '/api/v1/custom-pages/homepage/instance'

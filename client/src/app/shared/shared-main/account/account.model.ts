@@ -1,4 +1,4 @@
-import { Account as ServerAccount, ActorImage } from '@shared/models'
+import { Account as ServerAccount, ActorImage, BlockStatus } from '@shared/models'
 import { Actor } from './actor.model'
 
 export class Account extends Actor implements ServerAccount {
@@ -17,11 +17,15 @@ export class Account extends Actor implements ServerAccount {
 
   userId?: number
 
-  static GET_ACTOR_AVATAR_URL (actor: { avatar?: { url?: string, path: string } }) {
-    return Actor.GET_ACTOR_AVATAR_URL(actor)
+  static GET_ACTOR_AVATAR_URL (actor: { avatars: { width: number, url?: string, path: string }[] }, size?: number) {
+    return Actor.GET_ACTOR_AVATAR_URL(actor, size)
   }
 
-  static GET_DEFAULT_AVATAR_URL () {
+  static GET_DEFAULT_AVATAR_URL (size?: number) {
+    if (size && size <= 48) {
+      return `${window.location.origin}/client/assets/images/default-avatar-account-48x48.png`
+    }
+
     return `${window.location.origin}/client/assets/images/default-avatar-account.png`
   }
 
@@ -42,11 +46,18 @@ export class Account extends Actor implements ServerAccount {
     this.mutedServerByInstance = false
   }
 
-  updateAvatar (newAvatar: ActorImage) {
-    this.avatar = newAvatar
+  updateAvatar (newAvatars: ActorImage[]) {
+    this.avatars = newAvatars
   }
 
   resetAvatar () {
-    this.avatar = null
+    this.avatars = []
+  }
+
+  updateBlockStatus (blockStatus: BlockStatus) {
+    this.mutedByInstance = blockStatus.accounts[this.nameWithHostForced].blockedByServer
+    this.mutedByUser = blockStatus.accounts[this.nameWithHostForced].blockedByUser
+    this.mutedServerByUser = blockStatus.hosts[this.host].blockedByUser
+    this.mutedServerByInstance = blockStatus.hosts[this.host].blockedByServer
   }
 }

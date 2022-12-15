@@ -85,7 +85,7 @@ server {
     try_files /dev/null @api;
   }
 
-  location = /api/v1/videos/upload {
+  location ~ ^/api/v1/videos/(upload|([^/]+/studio/edit))$ {
     limit_except POST HEAD { deny all; }
 
     # This is the maximum upload size, which roughly matches the maximum size of a video file.
@@ -132,6 +132,11 @@ server {
     try_files /dev/null @api_websocket;
   }
 
+  # Plugin websocket routes
+  location ~ ^/plugins/[^/]+(/[^/]+)?/ws/ {
+    try_files /dev/null @api_websocket;
+  }
+
   ##
   # Performance optimizations
   # For extra performance please refer to https://github.com/denji/nginx-tuning
@@ -172,7 +177,7 @@ server {
 
   # Bypass PeerTube for performance reasons. Optional.
   # Should be consistent with client-overrides assets list in /server/controllers/client.ts
-  location ~ ^/client/(assets/images/(icons/icon-36x36\.png|icons/icon-48x48\.png|icons/icon-72x72\.png|icons/icon-96x96\.png|icons/icon-144x144\.png|icons/icon-192x192\.png|icons/icon-512x512\.png|logo\.svg|favicon\.png|default-playlist\.jpg|default-avatar-account\.png|default-avatar-video-channel\.png))$ {
+  location ~ ^/client/(assets/images/(icons/icon-36x36\.png|icons/icon-48x48\.png|icons/icon-72x72\.png|icons/icon-96x96\.png|icons/icon-144x144\.png|icons/icon-192x192\.png|icons/icon-512x512\.png|logo\.svg|favicon\.png|default-playlist\.jpg|default-avatar-account\.png|default-avatar-account-48x48\.png|default-avatar-video-channel\.png|default-avatar-video-channel-48x48\.png))$ {
     add_header Cache-Control "public, max-age=31536000, immutable"; # Cache 1 year
 
     root /var/www/peertube;
@@ -209,6 +214,18 @@ server {
     try_files $uri @api;
   }
 
+  location ~ ^(/static/(webseed|streaming-playlists)/private/)|^/download {
+    # We can't rate limit a try_files directive, so we need to duplicate @api
+
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host            $host;
+    proxy_set_header X-Real-IP       $remote_addr;
+
+    proxy_limit_rate 5M;
+
+    proxy_pass http://backend;
+  }
+
   # Bypass PeerTube for performance reasons. Optional.
   location ~ ^/static/(webseed|redundancy|streaming-playlists)/ {
     limit_rate_after            5M;
@@ -222,9 +239,9 @@ server {
     }
 
     # Use this line with nginx >= 1.17.0
-    #limit_rate $peertube_limit_rate;
-    # Or this line if your nginx < 1.17.0
-    set $limit_rate $peertube_limit_rate;
+    limit_rate $peertube_limit_rate;
+    # Or this line with nginx < 1.17.0
+    # set $limit_rate $peertube_limit_rate;
 
     if ($request_method = 'OPTIONS') {
       add_header Access-Control-Allow-Origin  '*';

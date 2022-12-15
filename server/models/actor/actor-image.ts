@@ -1,21 +1,39 @@
 import { remove } from 'fs-extra'
 import { join } from 'path'
-import { AfterDestroy, AllowNull, Column, CreatedAt, Default, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { MActorImageFormattable } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
-import { ActorImageType } from '@shared/models'
+import {
+  AfterDestroy,
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  Default,
+  ForeignKey,
+  Is,
+  Model,
+  Table,
+  UpdatedAt
+} from 'sequelize-typescript'
+import { MActorImage, MActorImageFormattable } from '@server/types/models'
+import { getLowercaseExtension } from '@shared/core-utils'
+import { ActivityIconObject, ActorImageType } from '@shared/models'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { ActorImage } from '../../../shared/models/actors/actor-image.model'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
-import { LAZY_STATIC_PATHS } from '../../initializers/constants'
+import { LAZY_STATIC_PATHS, MIMETYPES, WEBSERVER } from '../../initializers/constants'
 import { throwIfNotValid } from '../utils'
+import { ActorModel } from './actor'
 
 @Table({
   tableName: 'actorImage',
   indexes: [
     {
       fields: [ 'filename' ],
+      unique: true
+    },
+    {
+      fields: [ 'actorId', 'type', 'width' ],
       unique: true
     }
   ]
@@ -55,13 +73,25 @@ export class ActorImageModel extends Model<Partial<AttributesOnly<ActorImageMode
   @UpdatedAt
   updatedAt: Date
 
+  @ForeignKey(() => ActorModel)
+  @Column
+  actorId: number
+
+  @BelongsTo(() => ActorModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'CASCADE'
+  })
+  Actor: ActorModel
+
   @AfterDestroy
   static removeFilesAndSendDelete (instance: ActorImageModel) {
     logger.info('Removing actor image file %s.', instance.filename)
 
     // Don't block the transaction
     instance.removeImage()
-      .catch(err => logger.error('Cannot remove actor image file %s.', instance.filename, err))
+      .catch(err => logger.error('Cannot remove actor image file %s.', instance.filename, { err }))
   }
 
   static loadByName (filename: string) {
@@ -74,20 +104,44 @@ export class ActorImageModel extends Model<Partial<AttributesOnly<ActorImageMode
     return ActorImageModel.findOne(query)
   }
 
+  static getImageUrl (image: MActorImage) {
+    if (!image) return undefined
+
+    return WEBSERVER.URL + image.getStaticPath()
+  }
+
   toFormattedJSON (this: MActorImageFormattable): ActorImage {
     return {
+      width: this.width,
       path: this.getStaticPath(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }
   }
 
-  getStaticPath () {
-    if (this.type === ActorImageType.AVATAR) {
-      return join(LAZY_STATIC_PATHS.AVATARS, this.filename)
-    }
+  toActivityPubObject (): ActivityIconObject {
+    const extension = getLowercaseExtension(this.filename)
 
-    return join(LAZY_STATIC_PATHS.BANNERS, this.filename)
+    return {
+      type: 'Image',
+      mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extension],
+      height: this.height,
+      width: this.width,
+      url: ActorImageModel.getImageUrl(this)
+    }
+  }
+
+  getStaticPath () {
+    switch (this.type) {
+      case ActorImageType.AVATAR:
+        return join(LAZY_STATIC_PATHS.AVATARS, this.filename)
+
+      case ActorImageType.BANNER:
+        return join(LAZY_STATIC_PATHS.BANNERS, this.filename)
+
+      default:
+        throw new Error('Unknown actor image type: ' + this.type)
+    }
   }
 
   getPath () {

@@ -1,4 +1,4 @@
-import { PickWith } from '@shared/core-utils'
+import { PickWith } from '@shared/typescript-utils'
 import { ActorFollowModel } from '../../../models/actor/actor-follow'
 import {
   MActor,

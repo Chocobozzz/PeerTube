@@ -1,14 +1,14 @@
 <p-table
-  [value]="abuses" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true"
+  [value]="abuses" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
+  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true"
   [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} reports"
-  (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
+  [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
-      <div class="ml-auto">
+      <div class="ms-auto">
         <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
     </div>
@@ -43,7 +43,7 @@
       <td *ngIf="isAdminView()">
         <a *ngIf="abuse.reporterAccount" [href]="abuse.reporterAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="chip two-lines">
-            <my-actor-avatar [account]="abuse.reporterAccount"></my-actor-avatar>
+            <my-actor-avatar [actor]="abuse.reporterAccount" actorType="account" size="32"></my-actor-avatar>
             <div>
               {{ abuse.reporterAccount.displayName }}
               <span>{{ abuse.reporterAccount.nameWithHost }}</span>
@@ -70,7 +70,7 @@
             </span>
 
             <span name>
-              <span *ngIf="abuse.video.blacklisted" i18n-title title="The video was blocked" class="glyphicon glyphicon-ban-circle"></span>
+              <my-global-icon *ngIf="abuse.video.blacklisted" iconName="no" i18n-title title="The video was blocked"></my-global-icon>
             </span>
           </my-video-cell>
         </td>
@@ -80,7 +80,7 @@
             <div class="table-video-text">
               <div>
                 {{ abuse.video.name }}
-                <span class="glyphicon glyphicon-trash"></span>
+                <my-global-icon iconName="delete"></my-global-icon>
               </div>
               <div i18n>by {{ abuse.video.channel?.displayName }} on {{ abuse.video.channel?.host }} </div>
             </div>
@@ -116,8 +116,8 @@
       <td class="c-hand" [pRowToggler]="abuse">{{ abuse.createdAt | date: 'short'  }}</td>
 
       <td class="c-hand abuse-states" [pRowToggler]="abuse">
-        <span *ngIf="isAbuseAccepted(abuse)" [title]="abuse.state.label" class="glyphicon glyphicon-ok"></span>
-        <span *ngIf="isAbuseRejected(abuse)" [title]="abuse.state.label" class="glyphicon glyphicon-remove"></span>
+        <my-global-icon *ngIf="isAbuseAccepted(abuse)" [title]="abuse.state.label" iconName="tick"></my-global-icon>
+        <my-global-icon *ngIf="isAbuseRejected(abuse)" [title]="abuse.state.label" iconName="cross"></my-global-icon>
       </td>
 
       <td class="c-hand abuse-messages" (click)="openAbuseMessagesModal(abuse)">

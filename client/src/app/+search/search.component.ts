@@ -47,10 +47,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   private subActivatedRoute: Subscription
   private isInitialLoad = false // set to false to show the search filters on first arrival
 
-  private channelsPerPage = 2
-  private playlistsPerPage = 2
-  private videosPerPage = 10
-
   private hasMoreResults = true
   private isSearching = false
 
@@ -102,7 +98,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           this.search()
         },
 
-        error: err => this.notifier.error(err.text)
+        error: err => this.notifier.error(err.message)
       })
 
     this.userService.getAnonymousOrLoggedUser()
@@ -247,17 +243,16 @@ export class SearchComponent implements OnInit, OnDestroy {
   private resetPagination () {
     this.pagination.currentPage = 1
     this.pagination.totalItems = null
-    this.channelsPerPage = 2
 
     this.results = []
   }
 
   private updateTitle () {
-    const suffix = this.currentSearch
-      ? ' ' + this.currentSearch
-      : ''
+    const title = this.currentSearch
+      ? $localize`Search ${this.currentSearch}`
+      : $localize`Search`
 
-    this.metaService.setTitle($localize`Search` + suffix)
+    this.metaService.setTitle(title)
   }
 
   private updateUrlFromAdvancedSearch () {
@@ -272,7 +267,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private getVideosObs () {
     const params = {
       search: this.currentSearch,
-      componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.videosPerPage }),
+      componentPagination: immutableAssign(this.pagination, { itemsPerPage: 10 }),
       advancedSearch: this.advancedSearch
     }
 
@@ -288,7 +283,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private getVideoChannelObs () {
     const params = {
       search: this.currentSearch,
-      componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.channelsPerPage }),
+      componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.buildChannelsPerPage() }),
       advancedSearch: this.advancedSearch
     }
 
@@ -304,7 +299,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private getVideoPlaylistObs () {
     const params = {
       search: this.currentSearch,
-      componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.playlistsPerPage }),
+      componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.buildPlaylistsPerPage() }),
       advancedSearch: this.advancedSearch
     }
 
@@ -333,5 +328,17 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     return undefined
+  }
+
+  private buildChannelsPerPage () {
+    if (this.advancedSearch.resultType === 'channels') return 10
+
+    return 2
+  }
+
+  private buildPlaylistsPerPage () {
+    if (this.advancedSearch.resultType === 'playlists') return 10
+
+    return 2
   }
 }

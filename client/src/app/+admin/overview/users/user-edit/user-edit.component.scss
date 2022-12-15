@@ -4,11 +4,6 @@
 
 $form-base-input-width: 340px;
 
-label {
-  font-weight: $font-regular;
-  font-size: 100%;
-}
-
 .account-title {
   @include settings-big-title;
 
@@ -22,7 +17,7 @@ input:not([type=submit]) {
   display: block;
 }
 
-my-input-toggle-hidden {
+my-input-text {
   @include responsive-width($form-base-input-width);
 
   display: block;
@@ -46,23 +41,20 @@ button {
   margin-top: 10px;
 }
 
-.transcoding-information {
+my-user-real-quota-info {
+  display: block;
   margin-top: 5px;
   font-size: 11px;
 }
 
 .danger-zone {
-  .reset-password-email {
-    margin-bottom: 30px;
+  button {
+    @include peertube-button;
+    @include danger-button;
+    @include disable-outline;
 
-    button {
-      @include peertube-button;
-      @include danger-button;
-      @include disable-outline;
-
-      display: block;
-      margin-top: 0;
-    }
+    display: block;
+    margin-top: 0;
   }
 }
 

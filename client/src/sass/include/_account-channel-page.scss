@@ -26,10 +26,6 @@
   grid-column: 1;
   margin-bottom: 30px;
 
-  .main-avatar {
-    @include actor-avatar-size(120px);
-  }
-
   > div {
     @include margin-left($img-margin);
 
@@ -72,6 +68,10 @@
     content: '•';
     margin: 0 10px;
     color: pvar(--mainColor);
+  }
+
+  .main-avatar {
+    @include actor-avatar-size(120px);
   }
 
   @media screen and (max-width: $mobile-view) {

@@ -1,9 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
-import { cleanupTests, createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 import { VideoPrivacy } from '@shared/models'
+import {
+  cleanupTests,
+  createSingleServer,
+  killallServers,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  waitJobs
+} from '@shared/server-commands'
 
 describe('Test redundancy constraints', function () {
   let remoteServer: PeerTubeServer

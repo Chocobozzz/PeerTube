@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import {
   checkActorFilesWereRemoved,
   checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
+  saveVideoInServers,
+  testImage
+} from '@server/tests/shared'
+import { MyUser } from '@shared/models'
+import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
   PeerTubeServer,
-  saveVideoInServers,
   setAccessTokensToServers,
-  testImage,
+  setDefaultChannelAvatar,
   waitJobs
-} from '@shared/extra-utils'
-import { MyUser } from '@shared/models'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 describe('Test users with multiple servers', function () {
   let servers: PeerTubeServer[] = []
@@ -27,7 +27,7 @@ describe('Test users with multiple servers', function () {
 
   let videoUUID: string
   let userAccessToken: string
-  let userAvatarFilename: string
+  let userAvatarFilenames: string[]
 
   before(async function () {
     this.timeout(120_000)
@@ -36,6 +36,7 @@ describe('Test users with multiple servers', function () {
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
+    await setDefaultChannelAvatar(servers)
 
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])
@@ -95,9 +96,11 @@ describe('Test users with multiple servers', function () {
     await servers[0].users.updateMyAvatar({ fixture })
 
     user = await servers[0].users.getMyInfo()
-    userAvatarFilename = user.account.avatar.path
+    userAvatarFilenames = user.account.avatars.map(({ path }) => path)
 
-    await testImage(servers[0].url, 'avatar2-resized', userAvatarFilename, '.png')
+    for (const avatar of user.account.avatars) {
+      await testImage(servers[0].url, `avatar2-resized-${avatar.width}x${avatar.width}`, avatar.path, '.png')
+    }
 
     await waitJobs(servers)
   })
@@ -108,7 +111,7 @@ describe('Test users with multiple servers', function () {
     for (const server of servers) {
       const body = await server.accounts.list({ sort: '-createdAt' })
 
-      const resList = body.data.find(a => a.name === 'root' && a.host === 'localhost:' + servers[0].port)
+      const resList = body.data.find(a => a.name === 'root' && a.host === servers[0].host)
       expect(resList).not.to.be.undefined
 
       const account = await server.accounts.get({ accountName: resList.name + '@' + resList.host })
@@ -116,7 +119,7 @@ describe('Test users with multiple servers', function () {
       if (!createdAt) createdAt = account.createdAt
 
       expect(account.name).to.equal('root')
-      expect(account.host).to.equal('localhost:' + servers[0].port)
+      expect(account.host).to.equal(servers[0].host)
       expect(account.displayName).to.equal('my super display name')
       expect(account.description).to.equal('my super description updated')
       expect(createdAt).to.equal(account.createdAt)
@@ -127,13 +130,15 @@ describe('Test users with multiple servers', function () {
         expect(account.userId).to.be.undefined
       }
 
-      await testImage(server.url, 'avatar2-resized', account.avatar.path, '.png')
+      for (const avatar of account.avatars) {
+        await testImage(server.url, `avatar2-resized-${avatar.width}x${avatar.width}`, avatar.path, '.png')
+      }
     }
   })
 
   it('Should list account videos', async function () {
     for (const server of servers) {
-      const { total, data } = await server.videos.listByAccount({ handle: 'user1@localhost:' + servers[0].port })
+      const { total, data } = await server.videos.listByAccount({ handle: 'user1@' + servers[0].host })
 
       expect(total).to.equal(1)
       expect(data).to.be.an('array')
@@ -150,7 +155,7 @@ describe('Test users with multiple servers', function () {
     await waitJobs(servers)
 
     for (const server of servers) {
-      const { total, data } = await server.videos.listByAccount({ handle: 'user1@localhost:' + servers[0].port, search: 'Kami' })
+      const { total, data } = await server.videos.listByAccount({ handle: 'user1@' + servers[0].host, search: 'Kami' })
 
       expect(total).to.equal(1)
       expect(data).to.be.an('array')
@@ -165,11 +170,11 @@ describe('Test users with multiple servers', function () {
     for (const server of servers) {
       const body = await server.accounts.list({ sort: '-createdAt' })
 
-      const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port)
+      const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === servers[0].host)
       expect(accountDeleted).not.to.be.undefined
 
       const { data } = await server.channels.list()
-      const videoChannelDeleted = data.find(a => a.displayName === 'Main user1 channel' && a.host === 'localhost:' + servers[0].port)
+      const videoChannelDeleted = data.find(a => a.displayName === 'Main user1 channel' && a.host === servers[0].host)
       expect(videoChannelDeleted).not.to.be.undefined
     }
 
@@ -180,18 +185,20 @@ describe('Test users with multiple servers', function () {
     for (const server of servers) {
       const body = await server.accounts.list({ sort: '-createdAt' })
 
-      const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === 'localhost:' + servers[0].port)
+      const accountDeleted = body.data.find(a => a.name === 'user1' && a.host === servers[0].host)
       expect(accountDeleted).to.be.undefined
 
       const { data } = await server.channels.list()
-      const videoChannelDeleted = data.find(a => a.name === 'Main user1 channel' && a.host === 'localhost:' + servers[0].port)
+      const videoChannelDeleted = data.find(a => a.name === 'Main user1 channel' && a.host === servers[0].host)
       expect(videoChannelDeleted).to.be.undefined
     }
   })
 
   it('Should not have actor files', async () => {
     for (const server of servers) {
-      await checkActorFilesWereRemoved(userAvatarFilename, server.internalServerNumber)
+      for (const userAvatarFilename of userAvatarFilenames) {
+        await checkActorFilesWereRemoved(userAvatarFilename, server)
+      }
     }
   })
 

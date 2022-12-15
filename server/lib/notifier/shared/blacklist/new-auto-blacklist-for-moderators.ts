@@ -26,8 +26,8 @@ export class NewAutoBlacklistForModerators extends AbstractNotification <MVideoB
     return this.moderators
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS,
       userId: user.id,
       videoBlacklistId: this.payload.id

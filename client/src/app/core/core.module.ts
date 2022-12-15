@@ -30,7 +30,7 @@ import { ServerConfigResolver } from './routing/server-config-resolver.service'
 import { ScopedTokensService } from './scoped-tokens'
 import { ServerService } from './server'
 import { ThemeService } from './theme'
-import { UserService } from './users'
+import { UserLocalStorageService, UserService } from './users'
 import { LocalStorageService, ScreenService, SessionStorageService } from './wrappers'
 
 @NgModule({
@@ -41,7 +41,9 @@ import { LocalStorageService, ScreenService, SessionStorageService } from './wra
     ToastModule,
 
     HotkeyModule.forRoot({
-      cheatSheetCloseEsc: true
+      cheatSheetCloseEsc: true,
+      cheatSheetDescription: $localize`Show/hide this help menu`,
+      cheatSheetCloseEscDescription: $localize`Hide this help menu`
     })
   ],
 
@@ -79,6 +81,7 @@ import { LocalStorageService, ScreenService, SessionStorageService } from './wra
     RestService,
 
     UserService,
+    UserLocalStorageService,
 
     ScreenService,
     LocalStorageService,

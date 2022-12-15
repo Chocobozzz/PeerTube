@@ -50,6 +50,10 @@ export class PreviewUploadComponent implements OnInit, ControlValueAccessor {
     return this.bytesPipe.transform(this.maxVideoImageSize)
   }
 
+  getReactiveFileButtonTooltip () {
+    return $localize`(extensions: ${this.videoImageExtensions}, ${this.maxSizeText}\: ${this.maxVideoImageSizeInBytes})`
+  }
+
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 

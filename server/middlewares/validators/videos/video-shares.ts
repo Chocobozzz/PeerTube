@@ -2,7 +2,6 @@ import express from 'express'
 import { param } from 'express-validator'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { isIdValid } from '../../../helpers/custom-validators/misc'
-import { logger } from '../../../helpers/logger'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared'
 
@@ -10,11 +9,9 @@ const videosShareValidator = [
   isValidVideoIdParam('id'),
 
   param('actorId')
-    .custom(isIdValid).not().isEmpty().withMessage('Should have a valid actor id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoShare parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
 

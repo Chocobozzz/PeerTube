@@ -7,6 +7,7 @@ import { objectToFormData, sortBy } from '@app/helpers'
 import { VideoService } from '@app/shared/shared-main/video'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
 import { ResultList, VideoCaption } from '@shared/models'
+import { environment } from '../../../../environments/environment'
 import { VideoCaptionEdit } from './video-caption-edit.model'
 
 @Injectable()
@@ -17,7 +18,7 @@ export class VideoCaptionService {
     private restExtractor: RestExtractor
   ) {}
 
-  listCaptions (videoId: number | string): Observable<ResultList<VideoCaption>> {
+  listCaptions (videoId: string): Observable<ResultList<VideoCaption>> {
     return this.authHttp.get<ResultList<VideoCaption>>(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions`)
                .pipe(
                  switchMap(captionsResult => {
@@ -42,10 +43,7 @@ export class VideoCaptionService {
 
   removeCaption (videoId: number | string, language: string) {
     return this.authHttp.delete(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions/${language}`)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   addCaption (videoId: number | string, language: string, captionfile: File) {
@@ -53,17 +51,14 @@ export class VideoCaptionService {
     const data = objectToFormData(body)
 
     return this.authHttp.put(`${VideoService.BASE_VIDEO_URL}/${videoId}/captions/${language}`, data)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   updateCaptions (videoId: number | string, videoCaptions: VideoCaptionEdit[]) {
-    let obs = of(true)
+    let obs: Observable<any> = of(undefined)
 
     for (const videoCaption of videoCaptions) {
-      if (videoCaption.action === 'CREATE') {
+      if (videoCaption.action === 'CREATE' || videoCaption.action === 'UPDATE') {
         obs = obs.pipe(switchMap(() => this.addCaption(videoId, videoCaption.language.id, videoCaption.captionfile)))
       } else if (videoCaption.action === 'REMOVE') {
         obs = obs.pipe(switchMap(() => this.removeCaption(videoId, videoCaption.language.id)))
@@ -71,5 +66,9 @@ export class VideoCaptionService {
     }
 
     return obs
+  }
+
+  getCaptionContent ({ captionPath }: Pick<VideoCaption, 'captionPath'>) {
+    return this.authHttp.get(environment.originServerUrl + captionPath, { responseType: 'text' })
   }
 }

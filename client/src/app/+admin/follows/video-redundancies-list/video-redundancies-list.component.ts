@@ -90,19 +90,31 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
   }
 
   buildPieData (stats: VideosRedundancyStats) {
-    const totalSize = stats.totalSize
-      ? stats.totalSize - stats.totalUsed
-      : stats.totalUsed
+    if (stats.totalSize === 0) return
 
-    if (totalSize === 0) return
+    const totalAvailable = stats.totalSize
+      ? stats.totalSize - stats.totalUsed
+      : null
+
+    const labels = [ $localize`Used (${this.bytesToHuman(stats.totalUsed)})` ]
+    const data = [ stats.totalUsed ]
+
+    // Not in manual strategy
+    if (totalAvailable) {
+      labels.push(
+        $localize`Available (${this.bytesToHuman(totalAvailable)})`
+      )
+
+      data.push(totalAvailable)
+    }
 
     this.redundanciesGraphsData.push({
       stats,
       graphData: {
-        labels: [ $localize`Used`, $localize`Available` ],
+        labels,
         datasets: [
           {
-            data: [ stats.totalUsed, totalSize ],
+            data,
             backgroundColor: [
               '#FF6384',
               '#36A2EB'
@@ -124,12 +136,7 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
           tooltip: {
             callbacks: {
               label: (tooltip: TooltipItem<any>) => {
-                let label = tooltip.label || ''
-                if (label) label += ': '
-
-                label += this.bytesPipe.transform(tooltip.raw as number, 1)
-
-                return label
+                return tooltip.label
               }
             }
           }
@@ -180,5 +187,9 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
 
   private saveSelectLocalStorage () {
     peertubeLocalStorage.setItem(VideoRedundanciesListComponent.LOCAL_STORAGE_DISPLAY_TYPE, this.displayType)
+  }
+
+  private bytesToHuman (bytes: number) {
+    return this.bytesPipe.transform(bytes, 1)
   }
 }

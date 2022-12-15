@@ -1,14 +1,10 @@
 import { Transaction } from 'sequelize'
-import { ActivityAudience, ActivityUpdate } from '../../../../shared/models/activitypub'
-import { VideoPrivacy } from '../../../../shared/models/videos'
+import { getServerActor } from '@server/models/application/application'
+import { ActivityAudience, ActivityUpdate, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
+import { logger } from '../../../helpers/logger'
 import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
 import { VideoShareModel } from '../../../models/video/video-share'
-import { getUpdateActivityPubUrl } from '../url'
-import { broadcastToFollowers, sendVideoRelatedActivity } from './utils'
-import { audiencify, getActorsInvolvedInVideo, getAudience } from '../audience'
-import { logger } from '../../../helpers/logger'
-import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import {
   MAccountDefault,
   MActor,
@@ -19,22 +15,25 @@ import {
   MVideoPlaylistFull,
   MVideoRedundancyVideo
 } from '../../../types/models'
-import { getServerActor } from '@server/models/application/application'
+import { audiencify, getAudience } from '../audience'
+import { getUpdateActivityPubUrl } from '../url'
+import { getActorsInvolvedInVideo } from './shared'
+import { broadcastToFollowers, sendVideoRelatedActivity } from './shared/send-utils'
 
-async function sendUpdateVideo (videoArg: MVideoAPWithoutCaption, t: Transaction, overrodeByActor?: MActor) {
+async function sendUpdateVideo (videoArg: MVideoAPWithoutCaption, transaction: Transaction, overriddenByActor?: MActor) {
   const video = videoArg as MVideoAP
 
   if (!video.hasPrivacyForFederation()) return undefined
 
   logger.info('Creating job to update video %s.', video.url)
 
-  const byActor = overrodeByActor || video.VideoChannel.Account.Actor
+  const byActor = overriddenByActor || video.VideoChannel.Account.Actor
 
   const url = getUpdateActivityPubUrl(video.url, video.updatedAt.toISOString())
 
   // Needed to build the AP object
   if (!video.VideoCaptions) {
-    video.VideoCaptions = await video.$get('VideoCaptions', { transaction: t })
+    video.VideoCaptions = await video.$get('VideoCaptions', { transaction })
   }
 
   const videoObject = video.toActivityPubObject()
@@ -42,13 +41,19 @@ async function sendUpdateVideo (videoArg: MVideoAPWithoutCaption, t: Transaction
 
   const updateActivity = buildUpdateActivity(url, byActor, videoObject, audience)
 
-  const actorsInvolved = await getActorsInvolvedInVideo(video, t)
-  if (overrodeByActor) actorsInvolved.push(overrodeByActor)
+  const actorsInvolved = await getActorsInvolvedInVideo(video, transaction)
+  if (overriddenByActor) actorsInvolved.push(overriddenByActor)
 
-  return broadcastToFollowers(updateActivity, byActor, actorsInvolved, t)
+  return broadcastToFollowers({
+    data: updateActivity,
+    byActor,
+    toFollowersOf: actorsInvolved,
+    contextType: 'Video',
+    transaction
+  })
 }
 
-async function sendUpdateActor (accountOrChannel: MChannelDefault | MAccountDefault, t: Transaction) {
+async function sendUpdateActor (accountOrChannel: MChannelDefault | MAccountDefault, transaction: Transaction) {
   const byActor = accountOrChannel.Actor
 
   logger.info('Creating job to update actor %s.', byActor.url)
@@ -61,15 +66,21 @@ async function sendUpdateActor (accountOrChannel: MChannelDefault | MAccountDefa
   let actorsInvolved: MActor[]
   if (accountOrChannel instanceof AccountModel) {
     // Actors that shared my videos are involved too
-    actorsInvolved = await VideoShareModel.loadActorsWhoSharedVideosOf(byActor.id, t)
+    actorsInvolved = await VideoShareModel.loadActorsWhoSharedVideosOf(byActor.id, transaction)
   } else {
     // Actors that shared videos of my channel are involved too
-    actorsInvolved = await VideoShareModel.loadActorsByVideoChannel(accountOrChannel.id, t)
+    actorsInvolved = await VideoShareModel.loadActorsByVideoChannel(accountOrChannel.id, transaction)
   }
 
   actorsInvolved.push(byActor)
 
-  return broadcastToFollowers(updateActivity, byActor, actorsInvolved, t)
+  return broadcastToFollowers({
+    data: updateActivity,
+    byActor,
+    toFollowersOf: actorsInvolved,
+    transaction,
+    contextType: 'Actor'
+  })
 }
 
 async function sendUpdateCacheFile (byActor: MActorLight, redundancyModel: MVideoRedundancyVideo) {
@@ -81,7 +92,7 @@ async function sendUpdateCacheFile (byActor: MActorLight, redundancyModel: MVide
     return
   }
 
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(associatedVideo.id)
+  const video = await VideoModel.loadFull(associatedVideo.id)
 
   const activityBuilder = (audience: ActivityAudience) => {
     const redundancyObject = redundancyModel.toActivityPubObject()
@@ -93,7 +104,7 @@ async function sendUpdateCacheFile (byActor: MActorLight, redundancyModel: MVide
   return sendVideoRelatedActivity(activityBuilder, { byActor, video, contextType: 'CacheFile' })
 }
 
-async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull, t: Transaction) {
+async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull, transaction: Transaction) {
   if (videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) return undefined
 
   const byActor = videoPlaylist.OwnerAccount.Actor
@@ -102,7 +113,7 @@ async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull, t: Tr
 
   const url = getUpdateActivityPubUrl(videoPlaylist.url, videoPlaylist.updatedAt.toISOString())
 
-  const object = await videoPlaylist.toActivityPubObject(null, t)
+  const object = await videoPlaylist.toActivityPubObject(null, transaction)
   const audience = getAudience(byActor, videoPlaylist.privacy === VideoPlaylistPrivacy.PUBLIC)
 
   const updateActivity = buildUpdateActivity(url, byActor, object, audience)
@@ -112,7 +123,13 @@ async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull, t: Tr
 
   if (videoPlaylist.VideoChannel) toFollowersOf.push(videoPlaylist.VideoChannel.Actor)
 
-  return broadcastToFollowers(updateActivity, byActor, toFollowersOf, t)
+  return broadcastToFollowers({
+    data: updateActivity,
+    byActor,
+    toFollowersOf,
+    transaction,
+    contextType: 'Playlist'
+  })
 }
 
 // ---------------------------------------------------------------------------

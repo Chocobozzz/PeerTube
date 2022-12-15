@@ -1,3 +1,5 @@
+import { logger } from '@root-helpers/logger'
+
 function getStoredVolume () {
   const value = getLocalStorage('volume')
   if (value !== null && value !== undefined) {
@@ -8,14 +10,6 @@ function getStoredVolume () {
   }
 
   return undefined
-}
-
-function getStoredP2PEnabled (): boolean {
-  const value = getLocalStorage('webtorrent_enabled')
-  if (value !== null && value !== undefined) return value === 'true'
-
-  // By default webtorrent is enabled
-  return true
 }
 
 function getStoredMute () {
@@ -89,7 +83,7 @@ function getStoredVideoWatchHistory (videoUUID?: string) {
 
     data = JSON.parse(value)
   } catch (error) {
-    console.error('Cannot parse video watch history from local storage: ', error)
+    logger.error('Cannot parse video watch history from local storage/', error)
   }
 
   data = data || {}
@@ -123,7 +117,6 @@ function cleanupVideoWatch () {
 
 export {
   getStoredVolume,
-  getStoredP2PEnabled,
   getStoredMute,
   getStoredTheater,
   saveVolumeInStore,

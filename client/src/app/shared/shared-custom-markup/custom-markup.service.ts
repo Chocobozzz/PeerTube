@@ -20,6 +20,7 @@ import {
   VideosListMarkupComponent
 } from './peertube-custom-tags'
 import { CustomMarkupComponent } from './peertube-custom-tags/shared'
+import { logger } from '@root-helpers/logger'
 
 type AngularBuilderFunction = (el: HTMLElement) => ComponentRef<CustomMarkupComponent>
 type HTMLBuilderFunction = (el: HTMLElement) => HTMLElement
@@ -57,7 +58,7 @@ export class CustomMarkupService {
   }
 
   async buildElement (text: string) {
-    const html = await this.markdown.customPageMarkdownToHTML(text, this.getSupportedTags())
+    const html = await this.markdown.customPageMarkdownToHTML({ markdown: text, additionalAllowedTags: this.getSupportedTags() })
 
     const rootElement = document.createElement('div')
     rootElement.innerHTML = html
@@ -70,7 +71,7 @@ export class CustomMarkupService {
             // Insert as first child
             e.insertBefore(element, e.firstChild)
           } catch (err) {
-            console.error('Cannot inject component %s.', selector, err)
+            logger.error(`Cannot inject component ${selector}`, err)
           }
         })
     }
@@ -90,7 +91,7 @@ export class CustomMarkupService {
 
             this.dynamicElementService.injectElement(e, component)
           } catch (err) {
-            console.error('Cannot inject component %s.', selector, err)
+            logger.error(`Cannot inject component ${selector}`, err)
           }
         })
     }

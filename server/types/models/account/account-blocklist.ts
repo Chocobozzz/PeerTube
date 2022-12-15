@@ -1,5 +1,5 @@
 import { AccountBlocklistModel } from '../../../models/account/account-blocklist'
-import { PickWith } from '@shared/core-utils'
+import { PickWith } from '@shared/typescript-utils'
 import { MAccountDefault, MAccountFormattable } from './account'
 
 type Use<K extends keyof AccountBlocklistModel, M> = PickWith<AccountBlocklistModel, K, M>

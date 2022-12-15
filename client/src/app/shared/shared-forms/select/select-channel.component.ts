@@ -31,7 +31,7 @@ export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
     this.channels = this.items.map(c => {
       const avatarPath = c.avatarPath
         ? c.avatarPath
-        : VideoChannel.GET_DEFAULT_AVATAR_URL()
+        : VideoChannel.GET_DEFAULT_AVATAR_URL(20)
 
       return Object.assign({}, c, { avatarPath })
     })
@@ -39,8 +39,10 @@ export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
 
   propagateChange = (_: any) => { /* empty */ }
 
-  writeValue (id: number) {
-    this.selectedId = id
+  writeValue (id: number | string) {
+    this.selectedId = typeof id === 'string'
+      ? parseInt(id, 10)
+      : id
   }
 
   registerOnChange (fn: (_: any) => void) {

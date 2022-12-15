@@ -1,4 +1,3 @@
-import { values } from 'lodash'
 import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import {
@@ -6,14 +5,13 @@ import {
   MAccountVideoRateAccountUrl,
   MAccountVideoRateAccountVideo,
   MAccountVideoRateFormattable
-} from '@server/types/models/video/video-rate'
-import { AttributesOnly } from '@shared/core-utils'
-import { AccountVideoRate } from '../../../shared'
-import { VideoRateType } from '../../../shared/models/videos'
+} from '@server/types/models'
+import { AccountVideoRate, VideoRateType } from '@shared/models'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers/constants'
 import { ActorModel } from '../actor/actor'
-import { buildLocalAccountIdsIn, getSort, throwIfNotValid } from '../utils'
+import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from './account'
@@ -46,7 +44,7 @@ import { AccountModel } from './account'
 export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountVideoRateModel>>> {
 
   @AllowNull(false)
-  @Column(DataType.ENUM(...values(VIDEO_RATE_TYPES)))
+  @Column(DataType.ENUM(...Object.values(VIDEO_RATE_TYPES)))
   type: VideoRateType
 
   @AllowNull(false)
@@ -122,29 +120,40 @@ export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountV
     type?: string
     accountId: number
   }) {
-    const query: FindOptions = {
-      offset: options.start,
-      limit: options.count,
-      order: getSort(options.sort),
-      where: {
-        accountId: options.accountId
-      },
-      include: [
-        {
-          model: VideoModel,
-          required: true,
-          include: [
-            {
-              model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: true } as SummaryOptions ] }),
-              required: true
-            }
-          ]
+    const getQuery = (forCount: boolean) => {
+      const query: FindOptions = {
+        offset: options.start,
+        limit: options.count,
+        order: getSort(options.sort),
+        where: {
+          accountId: options.accountId
         }
-      ]
-    }
-    if (options.type) query.where['type'] = options.type
+      }
 
-    return AccountVideoRateModel.findAndCountAll(query)
+      if (options.type) query.where['type'] = options.type
+
+      if (forCount !== true) {
+        query.include = [
+          {
+            model: VideoModel,
+            required: true,
+            include: [
+              {
+                model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: true } as SummaryOptions ] }),
+                required: true
+              }
+            ]
+          }
+        ]
+      }
+
+      return query
+    }
+
+    return Promise.all([
+      AccountVideoRateModel.count(getQuery(true)),
+      AccountVideoRateModel.findAll(getQuery(false))
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static listRemoteRateUrlsOfLocalVideos () {
@@ -233,29 +242,10 @@ export class AccountVideoRateModel extends Model<Partial<AttributesOnly<AccountV
       ]
     }
 
-    return AccountVideoRateModel.findAndCountAll<MAccountVideoRateAccountUrl>(query)
-  }
-
-  static cleanOldRatesOf (videoId: number, type: VideoRateType, beforeUpdatedAt: Date) {
-    return AccountVideoRateModel.sequelize.transaction(async t => {
-      const query = {
-        where: {
-          updatedAt: {
-            [Op.lt]: beforeUpdatedAt
-          },
-          videoId,
-          type,
-          accountId: {
-            [Op.notIn]: buildLocalAccountIdsIn()
-          }
-        },
-        transaction: t
-      }
-
-      await AccountVideoRateModel.destroy(query)
-
-      return VideoModel.updateRatesOf(videoId, type, t)
-    })
+    return Promise.all([
+      AccountVideoRateModel.count(query),
+      AccountVideoRateModel.findAll<MAccountVideoRateAccountUrl>(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   toFormattedJSON (this: MAccountVideoRateFormattable): AccountVideoRate {

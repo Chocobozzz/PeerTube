@@ -29,48 +29,15 @@ jobs:
     env:
       PGUSER: peertube
       PGHOST: localhost
-      NODE_PENDING_JOB_WAIT: 500
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      - uses: './.github/actions/reusable-prepare-peertube-build'
         with:
-          node-version: '12.x'
+          node-version: '14.x'
 
-      - name: Setup system dependencies
-        run: |
-          sudo apt-get install postgresql-client-common redis-tools parallel
-          wget --quiet --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-4.3.1-64bit-static.tar.xz"
-          tar xf ffmpeg-release-4.3.1-64bit-static.tar.xz
-          mkdir -p $HOME/bin
-          cp ffmpeg-*/{ffmpeg,ffprobe} $HOME/bin
-          echo "$HOME/bin" >> $GITHUB_PATH
-
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            **/node_modules
-          key: ${{ runner.OS }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.OS }}-node-
-            ${{ runner.OS }}-
-
-      - name: Cache fixtures
-        uses: actions/cache@v2
-        with:
-          path: |
-            fixtures
-          key: ${{ runner.OS }}-fixtures-${{ matrix.test_suite }}-${{ hashFiles('fixtures/*') }}
-          restore-keys: |
-            ${{ runner.OS }}-fixtures-${{ matrix.test_suite }}-
-            ${{ runner.OS }}-fixtures-
-            ${{ runner.OS }}-
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - uses: './.github/actions/reusable-prepare-peertube-run'
 
       - name: Build
         run: |
@@ -104,34 +71,18 @@ jobs:
 
       - name: Run benchmark
         run: |
-          node dist/scripts/benchmark.js benchmark.json
+          node dist/scripts/benchmark.js -o benchmark.json
 
       - name: Display result
         run: |
           cat benchmark.json build-time.json startup-time.json
 
       - name: Upload benchmark result
-        env:
-          STATS_DEPLOYEMENT_KNOWN_HOSTS: ${{ secrets.STATS_DEPLOYEMENT_KNOWN_HOSTS }}
-          STATS_DEPLOYEMENT_KEY: ${{ secrets.STATS_DEPLOYEMENT_KEY }}
-          STATS_DEPLOYEMENT_USER: ${{ secrets.STATS_DEPLOYEMENT_USER }}
-          STATS_DEPLOYEMENT_HOST: ${{ secrets.STATS_DEPLOYEMENT_HOST }}
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700  ~/.ssh
-          if [ ! -z ${STATS_DEPLOYEMENT_KNOWN_HOSTS+x} ]; then
-            echo "Adding ssh key to known hosts"
-            echo -e "${STATS_DEPLOYEMENT_KNOWN_HOSTS}" > ~/.ssh/known_hosts;
-          fi
-
-          eval `ssh-agent -s`
-
-          if [ ! -z ${STATS_DEPLOYEMENT_KEY+x} ]; then
-            echo "Adding ssh reployement key"
-            ssh-add <(echo "${STATS_DEPLOYEMENT_KEY}");
-          fi
-
-          if [ ! -z ${STATS_DEPLOYEMENT_KEY+x} ]; then
-            echo "Uploading files"
-            scp benchmark.json build-time.json startup-time.json ${STATS_DEPLOYEMENT_USER}@${STATS_DEPLOYEMENT_HOST}:../../web/peertube-stats;
-          fi
+        uses: './.github/actions/reusable-deploy'
+        with:
+          source: benchmark.json build-time.json startup-time.json
+          destination: peertube-stats
+          knownHosts: ${{ secrets.STATS_DEPLOYEMENT_KNOWN_HOSTS }}
+          deployKey: ${{ secrets.STATS_DEPLOYEMENT_KEY }}
+          deployUser: ${{ secrets.STATS_DEPLOYEMENT_USER }}
+          deployHost: ${{ secrets.STATS_DEPLOYEMENT_HOST }}

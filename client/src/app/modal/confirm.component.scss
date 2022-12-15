@@ -1,10 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.modal-body {
-  font-size: 15px;
-}
-
 .button {
   padding: 0 13px;
 }
@@ -12,8 +8,4 @@
 input[type=text] {
   @include peertube-input-text(100%);
   display: block;
-}
-
-.form-group {
-  margin: 20px 0;
 }

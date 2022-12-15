@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
   cleanupTests,
   createSingleServer,
   makeDeleteRequest,
@@ -13,8 +9,9 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode } from '@shared/models'
+import { checkBadStartPagination, checkBadCountPagination, checkBadSortPagination } from '@server/tests/shared'
 
 describe('Test user subscriptions API validators', function () {
   const path = '/api/v1/users/me/subscriptions'
@@ -107,7 +104,7 @@ describe('Test user subscriptions API validators', function () {
       await makePostBodyRequest({
         url: server.url,
         path,
-        fields: { uri: 'user1_channel@localhost:' + server.port },
+        fields: { uri: 'user1_channel@' + server.host },
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
@@ -145,7 +142,7 @@ describe('Test user subscriptions API validators', function () {
         url: server.url,
         path,
         token: server.accessToken,
-        fields: { uri: 'user1_channel@localhost:' + server.port },
+        fields: { uri: 'user1_channel@' + server.host },
         expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
 
@@ -157,7 +154,7 @@ describe('Test user subscriptions API validators', function () {
     it('Should fail with a non authenticated user', async function () {
       await makeGetRequest({
         url: server.url,
-        path: path + '/user1_channel@localhost:' + server.port,
+        path: path + '/user1_channel@' + server.host,
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
@@ -188,7 +185,7 @@ describe('Test user subscriptions API validators', function () {
     it('Should fail with an unknown subscription', async function () {
       await makeGetRequest({
         url: server.url,
-        path: path + '/root1@localhost:' + server.port,
+        path: path + '/root1@' + server.host,
         token: server.accessToken,
         expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
@@ -197,7 +194,7 @@ describe('Test user subscriptions API validators', function () {
     it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({
         url: server.url,
-        path: path + '/user1_channel@localhost:' + server.port,
+        path: path + '/user1_channel@' + server.host,
         token: server.accessToken,
         expectedStatus: HttpStatusCode.OK_200
       })
@@ -237,7 +234,7 @@ describe('Test user subscriptions API validators', function () {
       await makeGetRequest({
         url: server.url,
         path: existPath,
-        query: { 'uris[]': 'coucou@localhost:' + server.port },
+        query: { 'uris[]': 'coucou@' + server.host },
         token: server.accessToken,
         expectedStatus: HttpStatusCode.OK_200
       })
@@ -248,7 +245,7 @@ describe('Test user subscriptions API validators', function () {
     it('Should fail with a non authenticated user', async function () {
       await makeDeleteRequest({
         url: server.url,
-        path: path + '/user1_channel@localhost:' + server.port,
+        path: path + '/user1_channel@' + server.host,
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
       })
     })
@@ -279,7 +276,7 @@ describe('Test user subscriptions API validators', function () {
     it('Should fail with an unknown subscription', async function () {
       await makeDeleteRequest({
         url: server.url,
-        path: path + '/root1@localhost:' + server.port,
+        path: path + '/root1@' + server.host,
         token: server.accessToken,
         expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
@@ -288,7 +285,7 @@ describe('Test user subscriptions API validators', function () {
     it('Should succeed with the correct parameters', async function () {
       await makeDeleteRequest({
         url: server.url,
-        path: path + '/user1_channel@localhost:' + server.port,
+        path: path + '/user1_channel@' + server.host,
         token: server.accessToken,
         expectedStatus: HttpStatusCode.NO_CONTENT_204
       })

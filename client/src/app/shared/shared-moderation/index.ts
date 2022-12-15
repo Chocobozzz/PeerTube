@@ -1,6 +1,7 @@
 export * from './report-modals'
 
 export * from './abuse.service'
+export * from './account-block-badges.component'
 export * from './account-block.model'
 export * from './account-blocklist.component'
 export * from './batch-domains-modal.component'

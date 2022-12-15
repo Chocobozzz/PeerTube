@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router'
-import { UsersRoutes } from './users'
-import { VideosRoutes } from './videos'
+import { commentRoutes } from './comments'
+import { usersRoutes } from './users'
+import { videosRoutes } from './videos'
 
 export const OverviewRoutes: Routes = [
-  ...UsersRoutes,
-  ...VideosRoutes
+  ...commentRoutes,
+  ...usersRoutes,
+  ...videosRoutes
 ]

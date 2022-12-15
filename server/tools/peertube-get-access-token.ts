@@ -1,6 +1,3 @@
-import { registerTSPaths } from '../helpers/register-ts-paths'
-registerTSPaths()
-
 import { program } from 'commander'
 import { assignToken, buildServer } from './cli'
 

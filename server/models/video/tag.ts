@@ -1,7 +1,7 @@
 import { col, fn, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsToMany, Column, CreatedAt, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MTag } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoPrivacy, VideoState } from '../../../shared/models/videos'
 import { isVideoTagValid } from '../../helpers/custom-validators/videos'
 import { throwIfNotValid } from '../utils'
@@ -45,8 +45,9 @@ export class TagModel extends Model<Partial<AttributesOnly<TagModel>>> {
   static findOrCreateTags (tags: string[], transaction: Transaction): Promise<MTag[]> {
     if (tags === null) return Promise.resolve([])
 
-    const tasks: Promise<MTag>[] = []
-    tags.forEach(tag => {
+    const uniqueTags = new Set(tags)
+
+    const tasks = Array.from(uniqueTags).map(tag => {
       const query = {
         where: {
           name: tag
@@ -57,9 +58,8 @@ export class TagModel extends Model<Partial<AttributesOnly<TagModel>>> {
         transaction
       }
 
-      const promise = TagModel.findOrCreate<MTag>(query)
+      return TagModel.findOrCreate<MTag>(query)
         .then(([ tagInstance ]) => tagInstance)
-      tasks.push(promise)
     })
 
     return Promise.all(tasks)

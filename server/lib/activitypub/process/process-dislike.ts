@@ -1,12 +1,11 @@
-import { ActivityCreate, ActivityDislike } from '../../../../shared'
-import { DislikeObject } from '../../../../shared/models/activitypub/objects'
+import { VideoModel } from '@server/models/video/video'
+import { ActivityCreate, ActivityDislike, DislikeObject } from '@shared/models'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
-import { forwardVideoRelatedActivity } from '../send/utils'
-import { getOrCreateAPVideo } from '../videos'
+import { federateVideoIfNeeded, getOrCreateAPVideo } from '../videos'
 
 async function processDislikeActivity (options: APProcessorOptions<ActivityCreate | ActivityDislike>) {
   const { activity, byActor } = options
@@ -30,16 +29,23 @@ async function processDislike (activity: ActivityCreate | ActivityDislike, byAct
 
   if (!byAccount) throw new Error('Cannot create dislike with the non account actor ' + byActor.url)
 
-  const { video } = await getOrCreateAPVideo({ videoObject: dislikeObject })
+  const { video: onlyVideo } = await getOrCreateAPVideo({ videoObject: dislikeObject, fetchType: 'only-video' })
+
+  // We don't care about dislikes of remote videos
+  if (!onlyVideo.isOwned()) return
 
   return sequelizeTypescript.transaction(async t => {
+    const video = await VideoModel.loadFull(onlyVideo.id, t)
+
     const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, activity.id, t)
     if (existingRate && existingRate.type === 'dislike') return
 
     await video.increment('dislikes', { transaction: t })
+    video.dislikes++
 
     if (existingRate && existingRate.type === 'like') {
       await video.decrement('likes', { transaction: t })
+      video.likes--
     }
 
     const rate = existingRate || new AccountVideoRateModel()
@@ -50,11 +56,6 @@ async function processDislike (activity: ActivityCreate | ActivityDislike, byAct
 
     await rate.save({ transaction: t })
 
-    if (video.isOwned()) {
-      // Don't resend the activity to the sender
-      const exceptions = [ byActor ]
-
-      await forwardVideoRelatedActivity(activity, t, exceptions, video)
-    }
+    await federateVideoIfNeeded(video, false, t)
   })
 }

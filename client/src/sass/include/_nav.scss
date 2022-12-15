@@ -1,0 +1,43 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+@mixin peertube-nav-tabs (
+  $border-width: 3px,
+  $border-type: solid,
+  $border-color: #EAEAEA,
+  $nav-link-height: 40px
+) {
+  border-bottom: $border-width $border-type $border-color;
+  margin: 20px 0 0 !important;
+
+  &.hide-nav {
+    display: none !important;
+  }
+
+  a.nav-link {
+    @include disable-default-a-behaviour;
+
+    margin-bottom: -$border-width;
+    height: $nav-link-height !important;
+    padding: 0 30px !important;
+
+    border: $border-width $border-type transparent;
+
+    span {
+      border-bottom: 2px solid transparent;
+    }
+
+    &.active {
+      border-color: $border-color;
+      border-bottom-color: transparent;
+
+      span {
+        border-bottom-color: pvar(--mainColor);
+      }
+    }
+
+    &:hover:not(.active) {
+      border-color: transparent;
+    }
+  }
+}

@@ -3,7 +3,6 @@ import express from 'express'
 import { UserNotificationModel } from '@server/models/user/user-notification'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { UserNotificationSetting } from '../../../../shared/models/users'
-import { getFormattedObjects } from '../../../helpers/utils'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -20,6 +19,7 @@ import {
 } from '../../../middlewares/validators/user-notifications'
 import { UserNotificationSettingModel } from '../../../models/user/user-notification-setting'
 import { meRouter } from './me'
+import { getFormattedObjects } from '@server/helpers/utils'
 
 const myNotificationsRouter = express.Router()
 
@@ -82,7 +82,8 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
     abuseNewMessage: body.abuseNewMessage,
     abuseStateChange: body.abuseStateChange,
     newPeerTubeVersion: body.newPeerTubeVersion,
-    newPluginVersion: body.newPluginVersion
+    newPluginVersion: body.newPluginVersion,
+    myVideoStudioEditionFinished: body.myVideoStudioEditionFinished
   }
 
   await UserNotificationSettingModel.update(values, query)

@@ -1,11 +1,13 @@
+import { forkJoin } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
-import { getAbsoluteAPIUrl, scrollToTop } from '@app/helpers'
-import { FormValidatorService } from '@app/shared/shared-forms'
+import { scrollToTop } from '@app/helpers'
+import { FormReactiveService } from '@app/shared/shared-forms'
 import { VideoCaptionService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
+import { logger } from '@root-helpers/logger'
 import { VideoUpdate } from '@shared/models'
 import { hydrateFormFromVideo } from '../shared/video-edit-utils'
 import { VideoSend } from './video-send'
@@ -32,7 +34,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
   error: string
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     protected loadingBar: LoadingBarService,
     protected notifier: Notifier,
     protected authService: AuthService,
@@ -62,14 +64,16 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
     return this.targetUrl?.match(/https?:\/\//)
   }
 
+  isChannelSyncEnabled () {
+    return this.serverConfig.import.videoChannelSynchronization.enabled
+  }
+
   importVideo () {
     this.isImportingVideo = true
 
     const videoUpdate: VideoUpdate = {
       privacy: this.highestPrivacy,
       waitTranscoding: false,
-      commentsEnabled: true,
-      downloadEnabled: true,
       channelId: this.firstStepChannelId
     }
 
@@ -78,12 +82,11 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
     this.videoImportService
         .importVideoUrl(this.targetUrl, videoUpdate)
         .pipe(
-          switchMap(res => {
-            return this.videoCaptionService
-                .listCaptions(res.video.id)
-                .pipe(
-                  map(result => ({ video: res.video, videoCaptions: result.data }))
-                )
+          switchMap(previous => {
+            return forkJoin([
+              this.videoCaptionService.listCaptions(previous.video.uuid),
+              this.videoService.getVideo({ videoId: previous.video.uuid })
+            ]).pipe(map(([ videoCaptionsResult, video ]) => ({ videoCaptions: videoCaptionsResult.data, video })))
           })
         )
         .subscribe({
@@ -93,24 +96,8 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
             this.isImportingVideo = false
             this.hasImportedVideo = true
 
-            const absoluteAPIUrl = getAbsoluteAPIUrl()
-
-            const thumbnailUrl = video.thumbnailPath
-              ? absoluteAPIUrl + video.thumbnailPath
-              : null
-
-            const previewUrl = video.previewPath
-              ? absoluteAPIUrl + video.previewPath
-              : null
-
-            this.video = new VideoEdit(Object.assign(video, {
-              commentsEnabled: videoUpdate.commentsEnabled,
-              downloadEnabled: videoUpdate.downloadEnabled,
-              privacy: { id: this.firstStepPrivacyId },
-              support: null,
-              thumbnailUrl,
-              previewUrl
-            }))
+            this.video = new VideoEdit(video)
+            this.video.patch({ privacy: this.firstStepPrivacyId })
 
             this.videoCaptions = videoCaptions
 
@@ -126,10 +113,8 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
         })
   }
 
-  updateSecondStep () {
-    if (this.checkForm() === false) {
-      return
-    }
+  async updateSecondStep () {
+    if (!await this.isFormValid()) return
 
     this.video.patch(this.form.value)
 
@@ -148,7 +133,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, AfterV
           error: err => {
             this.error = err.message
             scrollToTop()
-            console.error(err)
+            logger.error(err)
           }
         })
   }

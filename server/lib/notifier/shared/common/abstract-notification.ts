@@ -13,7 +13,7 @@ export abstract class AbstractNotification <T, U = MUserWithNotificationSetting>
   abstract getSetting (user: U): UserNotificationSettingValue
   abstract getTargetUsers (): U[]
 
-  abstract createNotification (user: U): Promise<UserNotificationModelForApi>
+  abstract createNotification (user: U): UserNotificationModelForApi
   abstract createEmail (to: string): EmailPayload | Promise<EmailPayload>
 
   isDisabled (): boolean | Promise<boolean> {

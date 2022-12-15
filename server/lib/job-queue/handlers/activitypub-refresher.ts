@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { refreshVideoPlaylistIfNeeded } from '@server/lib/activitypub/playlists'
 import { refreshVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { loadVideoByUrl } from '@server/lib/model-loaders'
@@ -11,7 +11,7 @@ import { refreshActorIfNeeded } from '../../activitypub/actors'
 async function refreshAPObject (job: Job) {
   const payload = job.data as RefreshPayload
 
-  logger.info('Processing AP refresher in job %d for %s.', job.id, payload.url)
+  logger.info('Processing AP refresher in job %s for %s.', job.id, payload.url)
 
   if (payload.type === 'video') return refreshVideo(payload.url)
   if (payload.type === 'video-playlist') return refreshVideoPlaylist(payload.url)
@@ -28,7 +28,7 @@ export {
 
 async function refreshVideo (videoUrl: string) {
   const fetchType = 'all' as 'all'
-  const syncParam = { likes: true, dislikes: true, shares: true, comments: true, thumbnail: true }
+  const syncParam = { rates: true, shares: true, comments: true, thumbnail: true }
 
   const videoFromDatabase = await loadVideoByUrl(videoUrl, fetchType)
   if (videoFromDatabase) {

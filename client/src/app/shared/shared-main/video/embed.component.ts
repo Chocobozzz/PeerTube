@@ -1,7 +1,7 @@
-import { buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
 import { Component, Input, OnInit } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
+import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { buildVideoEmbedLink, decorateVideoLink } from '@shared/core-utils'
 import { Video } from '@shared/models'
 
@@ -20,15 +20,15 @@ export class EmbedComponent implements OnInit {
   }
 
   ngOnInit () {
-    const html = buildVideoOrPlaylistEmbed(
-      decorateVideoLink({
+    const html = buildVideoOrPlaylistEmbed({
+      embedUrl: decorateVideoLink({
         url: buildVideoEmbedLink(this.video, environment.originServerUrl),
 
         title: false,
         warningTitle: false
       }),
-      this.video.name
-    )
+      embedTitle: this.video.name
+    })
 
     this.embedHTML = this.sanitizer.bypassSecurityTrustHtml(html)
   }

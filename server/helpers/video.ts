@@ -2,6 +2,7 @@ import { Response } from 'express'
 import { CONFIG } from '@server/initializers/config'
 import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo } from '@server/types/models'
 import { VideoPrivacy, VideoState } from '@shared/models'
+import { forceNumber } from '@shared/core-utils'
 
 function getVideoWithAttributes (res: Response) {
   return res.locals.videoAPI || res.locals.videoAll || res.locals.onlyVideo
@@ -14,14 +15,14 @@ function extractVideo (videoOrPlaylist: MVideo | MStreamingPlaylistVideo) {
 }
 
 function isPrivacyForFederation (privacy: VideoPrivacy) {
-  const castedPrivacy = parseInt(privacy + '', 10)
+  const castedPrivacy = forceNumber(privacy)
 
   return castedPrivacy === VideoPrivacy.PUBLIC ||
     (CONFIG.FEDERATION.VIDEOS.FEDERATE_UNLISTED === true && castedPrivacy === VideoPrivacy.UNLISTED)
 }
 
 function isStateForFederation (state: VideoState) {
-  const castedState = parseInt(state + '', 10)
+  const castedState = forceNumber(state)
 
   return castedState === VideoState.PUBLISHED || castedState === VideoState.WAITING_FOR_LIVE || castedState === VideoState.LIVE_ENDED
 }

@@ -1,7 +1,16 @@
 <h1>
-  <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon>
-  <ng-container i18n>My channels</ng-container>
-  <span class="badge badge-secondary">{{ totalItems }}</span>
+  <span>
+    <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon>
+    <ng-container i18n>My channels</ng-container>
+    <span *ngIf="totalItems" class="pt-badge badge-secondary">{{ totalItems }}</span>
+  </span>
+
+  <div>
+    <a routerLink="/my-library/video-channel-syncs" class="button-link">
+      <my-global-icon iconName="repeat" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>My synchronizations</ng-container>
+    </a>
+  </div>
 </h1>
 
 <my-channels-setup-message [hideLink]="true"></my-channels-setup-message>
@@ -9,7 +18,7 @@
 <div class="video-channels-header d-flex justify-content-between">
   <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
 
-  <a class="create-button" routerLink="create">
+  <a class="create-button" routerLink="/manage/create">
     <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
     <ng-container i18n>Create video channel</ng-container>
   </a>
@@ -19,7 +28,7 @@
 
 <div class="video-channels">
   <div *ngFor="let videoChannel of videoChannels; let i = index" class="video-channel">
-    <my-actor-avatar [channel]="videoChannel" [internalHref]="[ '/c', videoChannel.nameWithHost ]"></my-actor-avatar>
+    <my-actor-avatar [actor]="videoChannel" actorType="channel" [internalHref]="[ '/c', videoChannel.nameWithHost ]" size="80"></my-actor-avatar>
 
     <div class="video-channel-info">
       <a [routerLink]="[ '/c', videoChannel.nameWithHost ]" class="video-channel-names" i18n-title title="Channel page">
@@ -31,18 +40,30 @@
         i18n class="video-channel-followers"
         [routerLink]="[ '/my-library', 'followers' ]" [queryParams]="{ search: 'channel:' + videoChannel.name }"
       >
-        {videoChannel.followersCount, plural, =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}
+        {videoChannel.followersCount, plural, =0 {No subscribers} =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}
       </a>
 
-      <div i18n class="video-channel-videos">{videoChannel.videosCount, plural, =0 {No videos} =1 {1 video} other {{{ videoChannel.videosCount }} videos}}</div>
+      <div class="d-flex">
+        <span i18n>{videoChannel.videosCount, plural, =0 {No videos} =1 {1 video} other {{{ videoChannel.videosCount }} videos}}</span>
+        <span class="mx-1">·</span>
+        <span i18n>{videoChannel.totalViews, plural, =0 {No views} =1 {1 view} other {{{ videoChannel.totalViews | myNumberFormatter }} views}}</span>
+      </div>
 
       <div class="video-channel-buttons">
-        <my-edit-button label [routerLink]="[ 'update', videoChannel.nameWithHost ]"></my-edit-button>
+        <my-edit-button label [routerLink]="[ '/manage/update', videoChannel.nameWithHost ]"></my-edit-button>
         <my-delete-button label (click)="deleteVideoChannel(videoChannel)"></my-delete-button>
       </div>
 
-      <div *ngIf="!isInSmallView" class="w-100 d-flex justify-content-end">
-        <p-chart *ngIf="chartOptions && videoChannelsChartData && videoChannelsChartData[i]" type="line" [data]="videoChannelsChartData[i]" [options]="chartOptions" width="40vw" height="100px"></p-chart>
+      <div *ngIf="!isInSmallView" class="w-100 d-flex justify-content-end chart-container">
+        <div myDeferLoading>
+          <ng-template>
+            <p-chart
+              *ngIf="chartOptions && videoChannelsChartData && videoChannelsChartData[i]"
+              width="40vw" height="100px"
+              type="line" [data]="videoChannelsChartData[i]" [options]="chartOptions"
+            ></p-chart>
+          </ng-template>
+        </div>
       </div>
     </div>
   </div>

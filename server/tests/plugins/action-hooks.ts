@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
+import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -9,20 +9,19 @@ import {
   PluginsCommand,
   setAccessTokensToServers,
   setDefaultVideoChannel
-} from '@shared/extra-utils'
-import { ServerHookName, VideoPlaylistPrivacy, VideoPrivacy } from '@shared/models'
+} from '@shared/server-commands'
 
 describe('Test plugin action hooks', function () {
   let servers: PeerTubeServer[]
   let videoUUID: string
   let threadId: number
 
-  function checkHook (hook: ServerHookName) {
-    return servers[0].servers.waitUntilLog('Run hook ' + hook)
+  function checkHook (hook: ServerHookName, strictCount = true) {
+    return servers[0].servers.waitUntilLog('Run hook ' + hook, 1, strictCount)
   }
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)
@@ -61,9 +60,42 @@ describe('Test plugin action hooks', function () {
     })
 
     it('Should run action:api.video.viewed', async function () {
-      await servers[0].videos.view({ id: videoUUID })
+      await servers[0].views.simulateView({ id: videoUUID })
 
       await checkHook('action:api.video.viewed')
+    })
+
+    it('Should run action:api.video.deleted', async function () {
+      await servers[0].videos.remove({ id: videoUUID })
+
+      await checkHook('action:api.video.deleted')
+    })
+
+    after(async function () {
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+      videoUUID = uuid
+    })
+  })
+
+  describe('Video channel hooks', function () {
+    const channelName = 'my_super_channel'
+
+    it('Should run action:api.video-channel.created', async function () {
+      await servers[0].channels.create({ attributes: { name: channelName } })
+
+      await checkHook('action:api.video-channel.created')
+    })
+
+    it('Should run action:api.video-channel.updated', async function () {
+      await servers[0].channels.update({ channelName, attributes: { displayName: 'my display name' } })
+
+      await checkHook('action:api.video-channel.updated')
+    })
+
+    it('Should run action:api.video-channel.deleted', async function () {
+      await servers[0].channels.delete({ channelName })
+
+      await checkHook('action:api.video-channel.deleted')
     })
   })
 
@@ -100,6 +132,20 @@ describe('Test plugin action hooks', function () {
       await servers[0].comments.delete({ videoId: videoUUID, commentId: threadId })
 
       await checkHook('action:api.video-comment.deleted')
+    })
+  })
+
+  describe('Captions hooks', function () {
+    it('Should run action:api.video-caption.created', async function () {
+      await servers[0].captions.add({ videoId: videoUUID, language: 'en', fixture: 'subtitle-good.srt' })
+
+      await checkHook('action:api.video-caption.created')
+    })
+
+    it('Should run action:api.video-caption.deleted', async function () {
+      await servers[0].captions.delete({ videoId: videoUUID, language: 'en' })
+
+      await checkHook('action:api.video-caption.deleted')
     })
   })
 
@@ -175,6 +221,13 @@ describe('Test plugin action hooks', function () {
       await servers[0].playlists.addElement({ playlistId, attributes: { videoId } })
 
       await checkHook('action:api.video-playlist-element.created')
+    })
+  })
+
+  describe('Notification hook', function () {
+
+    it('Should run action:notifier.notification.created', async function () {
+      await checkHook('action:notifier.notification.created', false)
     })
   })
 

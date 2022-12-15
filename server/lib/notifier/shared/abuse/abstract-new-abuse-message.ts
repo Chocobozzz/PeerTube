@@ -5,7 +5,7 @@ import { MAbuseFull, MAbuseMessage, MAccountDefault, MUserWithNotificationSettin
 import { UserNotificationType } from '@shared/models'
 import { AbstractNotification } from '../common/abstract-notification'
 
-export type NewAbuseMessagePayload = {
+type NewAbuseMessagePayload = {
   abuse: MAbuseFull
   message: MAbuseMessage
 }
@@ -21,8 +21,8 @@ export abstract class AbstractNewAbuseMessage extends AbstractNotification <NewA
     return user.NotificationSetting.abuseNewMessage
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: UserNotificationType.ABUSE_NEW_MESSAGE,
       userId: user.id,
       abuseId: this.abuse.id
@@ -39,7 +39,7 @@ export abstract class AbstractNewAbuseMessage extends AbstractNotification <NewA
       : WEBSERVER.URL + '/my-account/abuses?search=%23' + this.abuse.id
 
     const action = {
-      text,
+      text: 'View report #' + this.abuse.id,
       url: abuseUrl
     }
 

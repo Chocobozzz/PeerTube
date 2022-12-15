@@ -2,7 +2,6 @@ listen:
   port: 9005
 
 webserver:
-  hostname: 'localhost'
   port: 9005
 
 database:
@@ -23,10 +22,14 @@ storage:
   captions: 'test5/captions/'
   cache: 'test5/cache/'
   plugins: 'test5/plugins/'
+  well_known: 'test5/well-known/'
   client_overrides: 'test5/client-overrides/'
 
 admin:
   email: 'admin5@example.com'
 
 transcoding:
+  enabled: false
+
+video_studio:
   enabled: false

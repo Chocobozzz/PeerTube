@@ -1,6 +1,12 @@
 <div class="video-edit" [formGroup]="form">
   <div ngbNav #nav="ngbNav" class="nav-tabs">
 
+    <ng-template #pluginSettingTemplate let-pluginSetting>
+      <div class="form-group" [hidden]="isPluginFieldHidden(pluginSetting)">
+        <my-dynamic-form-field [form]="pluginDataFormGroup" [formErrors]="formErrors['pluginData']" [setting]="pluginSetting.commonOptions"></my-dynamic-form-field>
+      </div>
+    </ng-template>
+
     <ng-container ngbNavItem>
       <a ngbNavLink i18n>Basic info</a>
 
@@ -45,11 +51,10 @@
                 </ng-template>
               </my-help>
 
-              <my-markdown-textarea [truncate]="250" formControlName="description" [markdownVideo]="videoToUpdate"></my-markdown-textarea>
-
-              <div *ngIf="formErrors.description" class="form-error">
-                {{ formErrors.description }}
-              </div>
+              <my-markdown-textarea
+                formControlName="description" [markdownVideo]="videoToUpdate"
+                [formError]="formErrors.description" [truncate]="250"
+              ></my-markdown-textarea>
             </div>
           </div>
 
@@ -136,16 +141,21 @@
               </ng-template>
             </my-peertube-checkbox>
 
-            <my-peertube-checkbox *ngIf="waitTranscodingEnabled" inputName="waitTranscoding" formControlName="waitTranscoding" helpPlacement="bottom-right">
+            <my-peertube-checkbox *ngIf="!hideWaitTranscoding" inputName="waitTranscoding" formControlName="waitTranscoding" helpPlacement="bottom-right">
               <ng-template ptTemplate="label">
                 <ng-container i18n>Publish after transcoding</ng-container>
               </ng-template>
 
               <ng-template ptTemplate="help">
-                <ng-container i18n>If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends.</ng-container>
+                <ng-container i18n>The video may be unplayable during the transcoding process. It's the reason why we prefer to publish publicly the video after transcoding.</ng-container>
               </ng-template>
             </my-peertube-checkbox>
 
+            <ng-container
+              *ngFor="let pluginSetting of getPluginsFields('main')"
+              [ngTemplateOutlet]="pluginSettingTemplate" [ngTemplateOutletContext]="{ $implicit: pluginSetting }"
+            >
+            </ng-container>
           </div>
         </div>
       </ng-template>
@@ -173,8 +183,9 @@
                   [href]="videoCaption.captionPath"
                 >{{ videoCaption.language.label }}</a>
 
-                <div i18n class="caption-entry-state">Already uploaded	&#10004;</div>
+                <div i18n class="caption-entry-state">Already uploaded on {{ videoCaption.updatedAt | date }}	&#10004;</div>
 
+                <span i18n class="caption-entry-edit" (click)="openEditCaptionModal(videoCaption)">Edit</span>
                 <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Delete</span>
               </ng-container>
 
@@ -184,6 +195,14 @@
                 <div i18n class="caption-entry-state caption-entry-state-create">Will be created on update</div>
 
                 <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel create</span>
+              </ng-container>
+
+              <ng-container *ngIf="videoCaption.action === 'UPDATE'">
+                <span class="caption-entry-label">{{ videoCaption.language.label }}</span>
+
+                <div i18n class="caption-entry-state caption-entry-state-create">Will be edited on update</div>
+
+                <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel edition</span>
               </ng-container>
 
               <ng-container *ngIf="videoCaption.action === 'REMOVE'">
@@ -210,23 +229,23 @@
       <ng-template ngbNavContent>
         <div class="row live-settings">
           <div class="col-md-12">
-            <div class="alert alert-info">
+            <div class="alert pt-alert-primary">
               <my-live-documentation-link></my-live-documentation-link>
             </div>
 
             <div *ngIf="liveVideo.rtmpUrl" class="form-group">
               <label for="liveVideoRTMPUrl" i18n>Live RTMP Url</label>
-              <my-input-toggle-hidden inputId="liveVideoRTMPUrl" [value]="liveVideo.rtmpUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+              <my-input-text inputId="liveVideoRTMPUrl" [value]="liveVideo.rtmpUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
             </div>
 
             <div *ngIf="liveVideo.rtmpsUrl" class="form-group">
               <label for="liveVideoRTMPSUrl" i18n>Live RTMPS Url</label>
-              <my-input-toggle-hidden inputId="liveVideoRTMPSUrl" [value]="liveVideo.rtmpsUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-toggle-hidden>
+              <my-input-text inputId="liveVideoRTMPSUrl" [value]="liveVideo.rtmpsUrl" [withToggle]="false" [withCopy]="true" [show]="true" [readonly]="true"></my-input-text>
             </div>
 
             <div class="form-group">
               <label for="liveVideoStreamKey" i18n>Live stream key</label>
-              <my-input-toggle-hidden inputId="liveVideoStreamKey" [value]="liveVideo.streamKey" [withCopy]="true" [readonly]="true"></my-input-toggle-hidden>
+              <my-input-text inputId="liveVideoStreamKey" [value]="liveVideo.streamKey" [withCopy]="true" [readonly]="true"></my-input-text>
 
               <div class="form-group-description" i18n>⚠️ Never share your stream key with anyone.</div>
             </div>
@@ -237,7 +256,7 @@
                 <label i18n for="permanentLiveFalse" class="radio">This is a normal live</label>
 
                 <span class="form-group-description" i18n>
-                  You can't stream multiple times in a normal live, but you can save a replay of it that will use the same URL
+                  You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live
                 </span>
               </div>
 
@@ -246,7 +265,7 @@
                 <label i18n for="permanentLiveTrue" class="radio">This is a permanent/recurring live</label>
 
                 <span class="form-group-description" i18n>
-                  You can stream multiple times in a permanent/recurring live. The URL for your viewers won't change but you cannot save replays of your lives
+                  You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos
                 </span>
               </div>
             </div>
@@ -261,6 +280,17 @@
                   <span i18n>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</span>
                 </ng-container>
               </my-peertube-checkbox>
+            </div>
+
+            <div class="form-group" *ngIf="isLatencyModeEnabled()">
+              <label i18n for="latencyMode">Latency mode</label>
+              <my-select-options
+                labelForId="latencyMode" [items]="latencyModes" formControlName="latencyMode" [clearable]="true"
+              ></my-select-options>
+
+              <div *ngIf="formErrors.latencyMode" class="form-error">
+                {{ formErrors.latencyMode }}
+              </div>
             </div>
           </div>
         </div>
@@ -277,7 +307,7 @@
           <div class="col-md-12 col-xl-8">
 
             <div class="form-group">
-              <label i18n for="previewfile">Video preview</label>
+              <label i18n for="previewfile">Video thumbnail</label>
 
               <my-preview-upload
                 i18n-inputLabel inputLabel="Edit" inputName="previewfile" formControlName="previewfile"
@@ -294,17 +324,30 @@
                   </ng-container>
                 </ng-template>
               </my-help>
+
               <my-markdown-textarea
                 id="support" formControlName="support" markdownType="enhanced"
-                [classes]="{ 'input-error': formErrors['support'] }"
+                [formError]="formErrors['support']"
               ></my-markdown-textarea>
-              <div *ngIf="formErrors.support" class="form-error">
-                {{ formErrors.support }}
-              </div>
             </div>
           </div>
 
           <div class="col-md-12 col-xl-4">
+
+            <div *ngIf="videoSource" class="form-group">
+              <label i18n for="filename">Filename</label>
+
+              <my-help>
+                <ng-template ptTemplate="preHtml">
+                  <ng-container i18n>
+                    Name of the uploaded file
+                  </ng-container>
+                </ng-template>
+              </my-help>
+
+              <input type="text" [disabled]="true" id="filename" class="form-control" [value]="videoSource.filename" />
+            </div>
+
             <div class="form-group originally-published-at">
               <label i18n for="originallyPublishedAt">Original publication date</label>
               <my-help>
@@ -339,16 +382,18 @@
       </ng-template>
     </ng-container>
 
-    <ng-container ngbNavItem *ngIf="pluginFields.length !== 0">
+    <ng-container ngbNavItem *ngIf="getPluginsFields('plugin-settings').length !== 0">
       <a ngbNavLink i18n>Plugin settings</a>
 
       <ng-template ngbNavContent>
         <div class="row plugin-settings">
 
           <div class="col-md-12 col-xl-8">
-            <div *ngFor="let pluginSetting of pluginFields" class="form-group" [hidden]="isPluginFieldHidden(pluginSetting)">
-              <my-dynamic-form-field [form]="pluginDataFormGroup" [formErrors]="formErrors" [setting]="pluginSetting.commonOptions"></my-dynamic-form-field>
-            </div>
+            <ng-container
+              *ngFor="let pluginSetting of getPluginsFields('plugin-settings')"
+              [ngTemplateOutlet]="pluginSettingTemplate" [ngTemplateOutletContext]="{ $implicit: pluginSetting }"
+            >
+            </ng-container>
           </div>
 
         </div>
@@ -360,5 +405,5 @@
 </div>
 
 <my-video-caption-add-modal
-  #videoCaptionAddModal [existingCaptions]="getExistingCaptions()" [serverConfig]="serverConfig" (captionAdded)="onCaptionAdded($event)"
+  #videoCaptionAddModal [existingCaptions]="getExistingCaptions()" [serverConfig]="serverConfig" (captionAdded)="onCaptionEdited($event)"
 ></my-video-caption-add-modal>

@@ -1,4 +1,4 @@
-import { intoArray } from '@app/helpers'
+import { splitIntoArray } from '@app/helpers'
 import {
   BooleanBothQuery,
   BooleanQuery,
@@ -7,6 +7,8 @@ import {
   VideoPlaylistsSearchQuery,
   VideosSearchQuery
 } from '@shared/models'
+
+export type AdvancedSearchResultType = 'videos' | 'playlists' | 'channels'
 
 export class AdvancedSearch {
   startDate: string // ISO 8601
@@ -36,9 +38,7 @@ export class AdvancedSearch {
   sort: string
 
   searchTarget: SearchTargetType
-
-  // Filters we don't want to count, because they are mandatory
-  private silentFilters = new Set([ 'sort', 'searchTarget' ])
+  resultType: AdvancedSearchResultType
 
   constructor (options?: {
     startDate?: string
@@ -61,6 +61,7 @@ export class AdvancedSearch {
     durationMax?: string
     sort?: string
     searchTarget?: SearchTargetType
+    resultType?: AdvancedSearchResultType
   }) {
     if (!options) return
 
@@ -75,14 +76,20 @@ export class AdvancedSearch {
     this.categoryOneOf = options.categoryOneOf || undefined
     this.licenceOneOf = options.licenceOneOf || undefined
     this.languageOneOf = options.languageOneOf || undefined
-    this.tagsOneOf = intoArray(options.tagsOneOf)
-    this.tagsAllOf = intoArray(options.tagsAllOf)
-    this.durationMin = parseInt(options.durationMin, 10)
-    this.durationMax = parseInt(options.durationMax, 10)
+    this.tagsOneOf = splitIntoArray(options.tagsOneOf)
+    this.tagsAllOf = splitIntoArray(options.tagsAllOf)
+    this.durationMin = options.durationMin ? parseInt(options.durationMin, 10) : undefined
+    this.durationMax = options.durationMax ? parseInt(options.durationMax, 10) : undefined
 
     this.host = options.host || undefined
 
     this.searchTarget = options.searchTarget || undefined
+
+    this.resultType = options.resultType || undefined
+
+    if (!this.resultType && this.hasVideoFilter()) {
+      this.resultType = 'videos'
+    }
 
     if (isNaN(this.durationMin)) this.durationMin = undefined
     if (isNaN(this.durationMax)) this.durationMax = undefined
@@ -91,14 +98,7 @@ export class AdvancedSearch {
   }
 
   containsValues () {
-    const obj = this.toUrlObject()
-    for (const k of Object.keys(obj)) {
-      if (this.silentFilters.has(k)) continue
-
-      if (this.isValidValue(obj[k])) return true
-    }
-
-    return false
+    return this.size() !== 0
   }
 
   reset () {
@@ -137,7 +137,8 @@ export class AdvancedSearch {
       isLive: this.isLive,
       host: this.host,
       sort: this.sort,
-      searchTarget: this.searchTarget
+      searchTarget: this.searchTarget,
+      resultType: this.resultType
     }
   }
 
@@ -151,9 +152,9 @@ export class AdvancedSearch {
       originallyPublishedStartDate: this.originallyPublishedStartDate,
       originallyPublishedEndDate: this.originallyPublishedEndDate,
       nsfw: this.nsfw,
-      categoryOneOf: intoArray(this.categoryOneOf),
-      licenceOneOf: intoArray(this.licenceOneOf),
-      languageOneOf: intoArray(this.languageOneOf),
+      categoryOneOf: splitIntoArray(this.categoryOneOf),
+      licenceOneOf: splitIntoArray(this.licenceOneOf),
+      languageOneOf: splitIntoArray(this.languageOneOf),
       tagsOneOf: this.tagsOneOf,
       tagsAllOf: this.tagsAllOf,
       durationMin: this.durationMin,
@@ -182,12 +183,19 @@ export class AdvancedSearch {
   size () {
     let acc = 0
 
-    const obj = this.toUrlObject()
-    for (const k of Object.keys(obj)) {
-      if (this.silentFilters.has(k)) continue
+    if (this.isValidValue(this.startDate) || this.isValidValue(this.endDate)) acc++
+    if (this.isValidValue(this.originallyPublishedStartDate) || this.isValidValue(this.originallyPublishedEndDate)) acc++
 
-      if (this.isValidValue(obj[k])) acc++
-    }
+    if (this.isValidValue(this.nsfw)) acc++
+    if (this.isValidValue(this.categoryOneOf)) acc++
+    if (this.isValidValue(this.licenceOneOf)) acc++
+    if (this.isValidValue(this.languageOneOf)) acc++
+    if (this.isValidValue(this.tagsOneOf)) acc++
+    if (this.isValidValue(this.tagsAllOf)) acc++
+    if (this.isValidValue(this.durationMin) || this.isValidValue(this.durationMax)) acc++
+    if (this.isValidValue(this.isLive)) acc++
+    if (this.isValidValue(this.host)) acc++
+    if (this.isValidValue(this.resultType)) acc++
 
     return acc
   }
@@ -198,5 +206,21 @@ export class AdvancedSearch {
     if (Array.isArray(val) && val.length === 0) return false
 
     return true
+  }
+
+  private hasVideoFilter () {
+    return this.startDate !== undefined ||
+      this.endDate !== undefined ||
+      this.originallyPublishedStartDate !== undefined ||
+      this.originallyPublishedEndDate !== undefined ||
+      this.nsfw !== undefined ||
+      this.categoryOneOf !== undefined ||
+      this.licenceOneOf !== undefined ||
+      this.languageOneOf !== undefined ||
+      this.tagsOneOf !== undefined ||
+      this.tagsAllOf !== undefined ||
+      this.durationMin !== undefined ||
+      this.durationMax !== undefined ||
+      this.isLive !== undefined
   }
 }

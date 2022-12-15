@@ -1,5 +1,4 @@
 import { ChartModule } from 'primeng/chart'
-import { SelectButtonModule } from 'primeng/selectbutton'
 import { TableModule } from 'primeng/table'
 import { NgModule } from '@angular/core'
 import { SharedAbuseListModule } from '@app/shared/shared-abuse-list'
@@ -11,6 +10,7 @@ import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
 import { SharedTablesModule } from '@app/shared/shared-tables'
+import { SharedUsersModule } from '@app/shared/shared-users'
 import { SharedVideoCommentModule } from '@app/shared/shared-video-comment'
 import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
 import { AdminRoutingModule } from './admin-routing.module'
@@ -32,20 +32,24 @@ import { RedundancyCheckboxComponent } from './follows/shared/redundancy-checkbo
 import { VideoRedundancyInformationComponent } from './follows/video-redundancies-list/video-redundancy-information.component'
 import { AbuseListComponent, VideoBlockListComponent } from './moderation'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from './moderation/instance-blocklist'
-import { VideoCommentListComponent } from './moderation/video-comment-list'
 import {
   UserCreateComponent,
   UserListComponent,
   UserPasswordComponent,
   UserUpdateComponent,
   VideoAdminService,
+  VideoCommentListComponent,
   VideoListComponent
 } from './overview'
-import { PluginListInstalledComponent } from './plugins/plugin-list-installed/plugin-list-installed.component'
-import { PluginSearchComponent } from './plugins/plugin-search/plugin-search.component'
-import { PluginShowInstalledComponent } from './plugins/plugin-show-installed/plugin-show-installed.component'
-import { PluginsComponent } from './plugins/plugins.component'
-import { PluginApiService } from './plugins/shared/plugin-api.service'
+import {
+  PluginApiService,
+  PluginCardComponent,
+  PluginListInstalledComponent,
+  PluginNavigationComponent,
+  PluginSearchComponent,
+  PluginShowInstalledComponent
+} from './plugins'
+import { SharedAdminModule } from './shared'
 import { JobService, LogsComponent, LogsService } from './system'
 import { DebugComponent, DebugService } from './system/debug'
 import { JobsComponent } from './system/jobs/jobs.component'
@@ -65,9 +69,10 @@ import { JobsComponent } from './system/jobs/jobs.component'
     SharedCustomMarkupModule,
     SharedVideoMiniatureModule,
     SharedTablesModule,
+    SharedUsersModule,
+    SharedAdminModule,
 
     TableModule,
-    SelectButtonModule,
     ChartModule
   ],
 
@@ -95,10 +100,11 @@ import { JobsComponent } from './system/jobs/jobs.component'
     InstanceServerBlocklistComponent,
     InstanceAccountBlocklistComponent,
 
-    PluginsComponent,
     PluginListInstalledComponent,
     PluginSearchComponent,
     PluginShowInstalledComponent,
+    PluginCardComponent,
+    PluginNavigationComponent,
 
     JobsComponent,
     LogsComponent,

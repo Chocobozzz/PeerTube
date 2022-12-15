@@ -1,18 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { dateIsValid, testImage } from '@server/tests/shared'
 import {
   cleanupTests,
   CommentsCommand,
   createSingleServer,
-  dateIsValid,
   PeerTubeServer,
   setAccessTokensToServers,
-  testImage
-} from '@shared/extra-utils'
-
-const expect = chai.expect
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar
+} from '@shared/server-commands'
 
 describe('Test video comments', function () {
   let server: PeerTubeServer
@@ -36,7 +34,8 @@ describe('Test video comments', function () {
     videoUUID = uuid
     videoId = id
 
-    await server.users.updateMyAvatar({ fixture: 'avatar.png' })
+    await setDefaultChannelAvatar(server)
+    await setDefaultAccountAvatar(server)
 
     userAccessTokenServer1 = await server.users.generateUserAndToken('user1')
 
@@ -64,8 +63,8 @@ describe('Test video comments', function () {
       expect(comment.videoId).to.equal(videoId)
       expect(comment.id).to.equal(comment.threadId)
       expect(comment.account.name).to.equal('root')
-      expect(comment.account.host).to.equal('localhost:' + server.port)
-      expect(comment.account.url).to.equal('http://localhost:' + server.port + '/accounts/root')
+      expect(comment.account.host).to.equal(server.host)
+      expect(comment.account.url).to.equal(server.url + '/accounts/root')
       expect(comment.totalReplies).to.equal(0)
       expect(comment.totalRepliesFromVideoAuthor).to.equal(0)
       expect(dateIsValid(comment.createdAt as string)).to.be.true
@@ -86,9 +85,11 @@ describe('Test video comments', function () {
       expect(comment.videoId).to.equal(videoId)
       expect(comment.id).to.equal(comment.threadId)
       expect(comment.account.name).to.equal('root')
-      expect(comment.account.host).to.equal('localhost:' + server.port)
+      expect(comment.account.host).to.equal(server.host)
 
-      await testImage(server.url, 'avatar-resized', comment.account.avatar.path, '.png')
+      for (const avatar of comment.account.avatars) {
+        await testImage(server.url, `avatar-resized-${avatar.width}x${avatar.width}`, avatar.path, '.png')
+      }
 
       expect(comment.totalReplies).to.equal(0)
       expect(comment.totalRepliesFromVideoAuthor).to.equal(0)
@@ -248,6 +249,22 @@ describe('Test video comments', function () {
 
       expect(data).to.have.lengthOf(0)
       expect(total).to.equal(0)
+    })
+
+    it('Should filter instance comments by onLocalVideo', async function () {
+      {
+        const { total, data } = await command.listForAdmin({ onLocalVideo: false })
+
+        expect(data).to.have.lengthOf(0)
+        expect(total).to.equal(0)
+      }
+
+      {
+        const { total, data } = await command.listForAdmin({ onLocalVideo: true })
+
+        expect(data).to.not.have.lengthOf(0)
+        expect(total).to.not.equal(0)
+      }
     })
 
     it('Should search instance comments by account', async function () {

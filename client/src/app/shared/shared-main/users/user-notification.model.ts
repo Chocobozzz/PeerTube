@@ -2,6 +2,7 @@ import { AuthUser } from '@app/core'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import { VideoChannel } from '@app/shared/shared-main/video-channel/video-channel.model'
+import { logger } from '@root-helpers/logger'
 import {
   AbuseState,
   ActorInfo,
@@ -227,10 +228,14 @@ export class UserNotification implements UserNotificationServer {
           this.pluginUrl = `/admin/plugins/list-installed`
           this.pluginQueryParams.pluginType = this.plugin.type + ''
           break
+
+        case UserNotificationType.MY_VIDEO_STUDIO_EDITION_FINISHED:
+          this.videoUrl = this.buildVideoUrl(this.video)
+          break
       }
     } catch (err) {
       this.type = null
-      console.error(err)
+      logger.error(err)
     }
   }
 
@@ -254,11 +259,11 @@ export class UserNotification implements UserNotificationServer {
     return [ this.buildVideoUrl(comment.video), { threadId: comment.threadId } ]
   }
 
-  private setAccountAvatarUrl (actor: { avatarUrl?: string, avatar?: { url?: string, path: string } }) {
-    actor.avatarUrl = Account.GET_ACTOR_AVATAR_URL(actor) || Account.GET_DEFAULT_AVATAR_URL()
+  private setAccountAvatarUrl (actor: { avatarUrl?: string, avatars: { width: number, url?: string, path: string }[] }) {
+    actor.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(actor, 48) || Account.GET_DEFAULT_AVATAR_URL(48)
   }
 
-  private setVideoChannelAvatarUrl (actor: { avatarUrl?: string, avatar?: { url?: string, path: string } }) {
-    actor.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(actor) || VideoChannel.GET_DEFAULT_AVATAR_URL()
+  private setVideoChannelAvatarUrl (actor: { avatarUrl?: string, avatars: { width: number, url?: string, path: string }[] }) {
+    actor.avatarUrl = VideoChannel.GET_ACTOR_AVATAR_URL(actor, 48) || VideoChannel.GET_DEFAULT_AVATAR_URL(48)
   }
 }

@@ -1,8 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import { cleanupTests, createMultipleServers, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
 import { HttpStatusCode, UserRole } from '@shared/models'
+import {
+  cleanupTests,
+  createMultipleServers,
+  doubleFollow,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  waitJobs
+} from '@shared/server-commands'
 
 describe('Test transcoding API validators', function () {
   let servers: PeerTubeServer[]
@@ -16,7 +22,7 @@ describe('Test transcoding API validators', function () {
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(2)
     await setAccessTokensToServers(servers)

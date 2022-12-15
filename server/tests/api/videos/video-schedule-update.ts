@@ -1,19 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { wait } from '@shared/core-utils'
+import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
-  wait,
   waitJobs
-} from '@shared/extra-utils'
-import { VideoPrivacy } from '@shared/models'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 function in10Seconds () {
   const now = new Date()

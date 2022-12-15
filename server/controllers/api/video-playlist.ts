@@ -1,10 +1,11 @@
 import express from 'express'
 import { join } from 'path'
-import { uuidToShort } from '@server/helpers/uuid'
 import { scheduleRefreshIfNeeded } from '@server/lib/activitypub/playlists'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { getServerActor } from '@server/models/application/application'
 import { MVideoPlaylistFull, MVideoPlaylistThumbnail, MVideoThumbnail } from '@server/types/models'
+import { forceNumber } from '@shared/core-utils'
+import { uuidToShort } from '@shared/extra-utils'
 import { VideoPlaylistCreateResult, VideoPlaylistElementCreateResult } from '@shared/models'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import { VideoPlaylistCreate } from '../../../shared/models/videos/playlist/video-playlist-create.model'
@@ -47,7 +48,7 @@ import { AccountModel } from '../../models/account/account'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
 
-const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
+const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
 const videoPlaylistRouter = express.Router()
 
@@ -245,7 +246,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
       if (videoPlaylistInfoToUpdate.description !== undefined) videoPlaylistInstance.description = videoPlaylistInfoToUpdate.description
 
       if (videoPlaylistInfoToUpdate.privacy !== undefined) {
-        videoPlaylistInstance.privacy = parseInt(videoPlaylistInfoToUpdate.privacy.toString(), 10)
+        videoPlaylistInstance.privacy = forceNumber(videoPlaylistInfoToUpdate.privacy)
 
         if (wasNotPrivatePlaylist === true && videoPlaylistInstance.privacy === VideoPlaylistPrivacy.PRIVATE) {
           await sendDeleteVideoPlaylist(videoPlaylistInstance, t)
@@ -424,7 +425,13 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
 
     const endOldPosition = oldPosition + reorderLength - 1
     // Insert our reordered elements in their place (update)
-    await VideoPlaylistElementModel.reassignPositionOf(videoPlaylist.id, oldPosition, endOldPosition, newPosition, t)
+    await VideoPlaylistElementModel.reassignPositionOf({
+      videoPlaylistId: videoPlaylist.id,
+      firstPosition: oldPosition,
+      endPosition: endOldPosition,
+      newPosition,
+      transaction: t
+    })
 
     // Decrease positions of elements after the old position of our ordered elements (decrease)
     await VideoPlaylistElementModel.increasePositionOf(videoPlaylist.id, oldPosition, -reorderLength, t)
@@ -453,13 +460,19 @@ async function getVideoPlaylistVideos (req: express.Request, res: express.Respon
   const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
   const server = await getServerActor()
 
-  const resultList = await VideoPlaylistElementModel.listForApi({
+  const apiOptions = await Hooks.wrapObject({
     start: req.query.start,
     count: req.query.count,
     videoPlaylistId: videoPlaylistInstance.id,
     serverAccount: server.Account,
     user
-  })
+  }, 'filter:api.video-playlist.videos.list.params')
+
+  const resultList = await Hooks.wrapPromiseFun(
+    VideoPlaylistElementModel.listForApi,
+    apiOptions,
+    'filter:api.video-playlist.videos.list.result'
+  )
 
   const options = {
     displayNSFW: buildNSFWFilter(res, req.query.nsfw),

@@ -35,12 +35,14 @@ export class ActionButtonsComponent implements OnInit, OnChanges {
     playlist: false,
     download: true,
     update: true,
+    studio: true,
     blacklist: true,
     delete: true,
     report: true,
     duplicate: true,
     mute: true,
-    liveInfo: true
+    liveInfo: true,
+    stats: true
   }
 
   userRating: UserVideoRateType

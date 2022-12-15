@@ -43,7 +43,7 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
         next: data => {
           this.notifier.success($localize`Avatar changed.`)
 
-          this.user.updateAccountAvatar(data.avatar)
+          this.user.updateAccountAvatar(data.avatars)
         },
 
         error: (err: HttpErrorResponse) => genericUploadErrorHandler({

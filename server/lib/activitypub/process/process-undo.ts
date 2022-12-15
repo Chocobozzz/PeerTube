@@ -1,3 +1,4 @@
+import { VideoModel } from '@server/models/video/video'
 import { ActivityAnnounce, ActivityFollow, ActivityLike, ActivityUndo, CacheFileObject } from '../../../../shared/models/activitypub'
 import { DislikeObject } from '../../../../shared/models/activitypub/objects'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
@@ -10,8 +11,8 @@ import { VideoRedundancyModel } from '../../../models/redundancy/video-redundanc
 import { VideoShareModel } from '../../../models/video/video-share'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MActorSignature } from '../../../types/models'
-import { forwardVideoRelatedActivity } from '../send/utils'
-import { getOrCreateAPVideo } from '../videos'
+import { forwardVideoRelatedActivity } from '../send/shared/send-utils'
+import { federateVideoIfNeeded, getOrCreateAPVideo } from '../videos'
 
 async function processUndoActivity (options: APProcessorOptions<ActivityUndo>) {
   const { activity, byActor } = options
@@ -55,23 +56,25 @@ export {
 async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo) {
   const likeActivity = activity.object as ActivityLike
 
-  const { video } = await getOrCreateAPVideo({ videoObject: likeActivity.object })
+  const { video: onlyVideo } = await getOrCreateAPVideo({ videoObject: likeActivity.object })
+  // We don't care about likes of remote videos
+  if (!onlyVideo.isOwned()) return
 
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
+    const video = await VideoModel.loadFull(onlyVideo.id, t)
     const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, likeActivity.id, t)
-    if (!rate || rate.type !== 'like') throw new Error(`Unknown like by account ${byActor.Account.id} for video ${video.id}.`)
+    if (!rate || rate.type !== 'like') {
+      logger.warn('Unknown like by account %d for video %d.', byActor.Account.id, video.id)
+      return
+    }
 
     await rate.destroy({ transaction: t })
     await video.decrement('likes', { transaction: t })
 
-    if (video.isOwned()) {
-      // Don't resend the activity to the sender
-      const exceptions = [ byActor ]
-
-      await forwardVideoRelatedActivity(activity, t, exceptions, video)
-    }
+    video.likes--
+    await federateVideoIfNeeded(video, false, t)
   })
 }
 
@@ -80,25 +83,29 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
     ? activity.object
     : activity.object.object as DislikeObject
 
-  const { video } = await getOrCreateAPVideo({ videoObject: dislike.object })
+  const { video: onlyVideo } = await getOrCreateAPVideo({ videoObject: dislike.object })
+  // We don't care about likes of remote videos
+  if (!onlyVideo.isOwned()) return
 
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
+    const video = await VideoModel.loadFull(onlyVideo.id, t)
     const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, dislike.id, t)
-    if (!rate || rate.type !== 'dislike') throw new Error(`Unknown dislike by account ${byActor.Account.id} for video ${video.id}.`)
+    if (!rate || rate.type !== 'dislike') {
+      logger.warn(`Unknown dislike by account %d for video %d.`, byActor.Account.id, video.id)
+      return
+    }
 
     await rate.destroy({ transaction: t })
     await video.decrement('dislikes', { transaction: t })
+    video.dislikes--
 
-    if (video.isOwned()) {
-      // Don't resend the activity to the sender
-      const exceptions = [ byActor ]
-
-      await forwardVideoRelatedActivity(activity, t, exceptions, video)
-    }
+    await federateVideoIfNeeded(video, false, t)
   })
 }
+
+// ---------------------------------------------------------------------------
 
 async function processUndoCacheFile (byActor: MActorSignature, activity: ActivityUndo) {
   const cacheFileObject = activity.object.object as CacheFileObject
@@ -125,23 +132,13 @@ async function processUndoCacheFile (byActor: MActorSignature, activity: Activit
   })
 }
 
-function processUndoFollow (follower: MActorSignature, followActivity: ActivityFollow) {
-  return sequelizeTypescript.transaction(async t => {
-    const following = await ActorModel.loadByUrlAndPopulateAccountAndChannel(followActivity.object, t)
-    const actorFollow = await ActorFollowModel.loadByActorAndTarget(follower.id, following.id, t)
-
-    if (!actorFollow) throw new Error(`'Unknown actor follow ${follower.id} -> ${following.id}.`)
-
-    await actorFollow.destroy({ transaction: t })
-
-    return undefined
-  })
-}
-
 function processUndoAnnounce (byActor: MActorSignature, announceActivity: ActivityAnnounce) {
   return sequelizeTypescript.transaction(async t => {
     const share = await VideoShareModel.loadByUrl(announceActivity.id, t)
-    if (!share) throw new Error(`Unknown video share ${announceActivity.id}.`)
+    if (!share) {
+      logger.warn('Unknown video share %d', announceActivity.id)
+      return
+    }
 
     if (share.actorId !== byActor.id) throw new Error(`${share.url} is not shared by ${byActor.url}.`)
 
@@ -153,5 +150,23 @@ function processUndoAnnounce (byActor: MActorSignature, announceActivity: Activi
 
       await forwardVideoRelatedActivity(announceActivity, t, exceptions, share.Video)
     }
+  })
+}
+
+// ---------------------------------------------------------------------------
+
+function processUndoFollow (follower: MActorSignature, followActivity: ActivityFollow) {
+  return sequelizeTypescript.transaction(async t => {
+    const following = await ActorModel.loadByUrlAndPopulateAccountAndChannel(followActivity.object, t)
+    const actorFollow = await ActorFollowModel.loadByActorAndTarget(follower.id, following.id, t)
+
+    if (!actorFollow) {
+      logger.warn('Unknown actor follow %d -> %d.', follower.id, following.id)
+      return
+    }
+
+    await actorFollow.destroy({ transaction: t })
+
+    return undefined
   })
 }

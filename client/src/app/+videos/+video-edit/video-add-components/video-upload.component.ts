@@ -1,17 +1,19 @@
 import { truncate } from 'lodash-es'
 import { UploadState, UploadxOptions, UploadxService } from 'ngx-uploadx'
-import { isIOS } from 'src/assets/player/utils'
 import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
-import { Router } from '@angular/router'
-import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService, UserService } from '@app/core'
+import { ActivatedRoute, Router } from '@angular/router'
+import { AuthService, CanComponentDeactivate, HooksService, MetaService, Notifier, ServerService, UserService } from '@app/core'
 import { genericUploadErrorHandler, scrollToTop } from '@app/helpers'
-import { FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactiveService } from '@app/shared/shared-forms'
 import { BytesPipe, Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
+import { logger } from '@root-helpers/logger'
+import { isIOS } from '@root-helpers/web-browser'
+import { HttpStatusCode, VideoCreateResult } from '@shared/models'
 import { UploaderXFormData } from './uploaderx-form-data'
 import { VideoSend } from './video-send'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'my-video-upload',
@@ -47,17 +49,18 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   error: string
   enableRetryAfterError: boolean
 
-  schedulePublicationPossible = false
-
   // So that it can be accessed in the template
   protected readonly BASE_VIDEO_UPLOAD_URL = VideoService.BASE_VIDEO_URL + '/upload-resumable'
 
-  private uploadxOptions: UploadxOptions
   private isUpdatingVideo = false
   private fileToUpload: File
 
+  private alreadyRefreshedToken = false
+
+  private uploadServiceSubscription: Subscription
+
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     protected loadingBar: LoadingBarService,
     protected notifier: Notifier,
     protected authService: AuthService,
@@ -67,29 +70,11 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     private userService: UserService,
     private router: Router,
     private hooks: HooksService,
-    private resumableUploadService: UploadxService
+    private resumableUploadService: UploadxService,
+    private metaService: MetaService,
+    private route: ActivatedRoute
   ) {
     super()
-
-    // FIXME: https://github.com/Chocobozzz/PeerTube/issues/4382#issuecomment-915854167
-    const chunkSize = isIOS()
-      ? 0
-      : undefined // Auto chunk size
-
-    this.uploadxOptions = {
-      endpoint: this.BASE_VIDEO_UPLOAD_URL,
-      multiple: false,
-      token: this.authService.getAccessToken(),
-      uploaderClass: UploaderXFormData,
-      chunkSize,
-      retryConfig: {
-        maxAttempts: 30, // maximum attempts for 503 codes, otherwise set to 6, see below
-        maxDelay: 120_000, // 2 min
-        shouldRetry: (code: number, attempts: number) => {
-          return code === HttpStatusCode.SERVICE_UNAVAILABLE_503 || ((code < 400 || code > 500) && attempts < 6)
-        }
-      }
-    }
   }
 
   get videoExtensions () {
@@ -105,10 +90,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily
         })
 
-    this.resumableUploadService.events
+    this.uploadServiceSubscription = this.resumableUploadService.events
       .subscribe(state => this.onUploadVideoOngoing(state))
-
-    this.schedulePublicationPossible = this.videoPrivacies.some(p => p.id === VideoPrivacy.PRIVATE)
   }
 
   ngAfterViewInit () {
@@ -116,7 +99,9 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   ngOnDestroy () {
-    this.cancelUpload()
+    this.resumableUploadService.disconnect()
+
+    if (this.uploadServiceSubscription) this.uploadServiceSubscription.unsubscribe()
   }
 
   canDeactivate () {
@@ -136,10 +121,28 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     }
   }
 
+  updateTitle () {
+    const videoName = this.form.get('name').value
+
+    if (this.videoUploaded) {
+      this.metaService.setTitle($localize`Publish ${videoName}`)
+    } else if (this.isUploadingAudioFile || this.isUploadingVideo) {
+      this.metaService.setTitle(`${this.videoUploadPercents}% - ${videoName}`)
+    } else {
+      this.metaService.update(this.route.snapshot.data['meta'])
+    }
+  }
+
   onUploadVideoOngoing (state: UploadState) {
     switch (state.status) {
       case 'error': {
-        const error = state.response?.error || 'Unknow error'
+        if (!this.alreadyRefreshedToken && state.responseStatus === HttpStatusCode.UNAUTHORIZED_401) {
+          this.alreadyRefreshedToken = true
+
+          return this.refereshTokenAndRetryUpload()
+        }
+
+        const error = state.response?.error?.message || state.response?.error || 'Unknown error'
 
         this.handleUploadError({
           error: new Error(error),
@@ -170,7 +173,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         break
 
       case 'uploading':
-        this.videoUploadPercents = state.progress
+        // TODO: remove || 0 when // https://github.com/kukhariev/ngx-uploadx/pull/368 is released
+        this.videoUploadPercents = state.progress || 0
         break
 
       case 'paused':
@@ -184,6 +188,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         this.videoUploadedIds = state?.response.video
         break
     }
+
+    this.updateTitle()
   }
 
   onFileDropped (files: FileList) {
@@ -239,10 +245,9 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     return $localize`Upload ${videofile.name}`
   }
 
-  updateSecondStep () {
-    if (this.isPublishingButtonDisabled() || !this.checkForm()) {
-      return
-    }
+  async updateSecondStep () {
+    if (!await this.isFormValid()) return
+    if (this.isPublishingButtonDisabled()) return
 
     const video = new VideoEdit()
     video.patch(this.form.value)
@@ -265,7 +270,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           error: err => {
             this.error = err.message
             scrollToTop()
-            console.error(err)
+            logger.error(err)
           }
         })
   }
@@ -277,8 +282,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   private uploadFile (file: File, previewfile?: File) {
     const metadata = {
       waitTranscoding: true,
-      commentsEnabled: true,
-      downloadEnabled: true,
       channelId: this.firstStepChannelId,
       nsfw: this.serverConfig.instance.isNSFW,
       privacy: this.highestPrivacy.toString(),
@@ -288,7 +291,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     }
 
     this.resumableUploadService.handleFiles(file, {
-      ...this.uploadxOptions,
+      ...this.getUploadxOptions(),
+
       metadata
     })
 
@@ -324,6 +328,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     })
 
     this.firstStepDone.emit(name)
+    this.updateTitle()
   }
 
   private checkGlobalUserQuota (videofile: File) {
@@ -383,5 +388,37 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     }
 
     return name
+  }
+
+  private refereshTokenAndRetryUpload () {
+    this.authService.refreshAccessToken()
+      .subscribe(() => this.retryUpload())
+  }
+
+  private getUploadxOptions (): UploadxOptions {
+    // FIXME: https://github.com/Chocobozzz/PeerTube/issues/4382#issuecomment-915854167
+    const chunkSize = isIOS()
+      ? 0
+      : undefined // Auto chunk size
+
+    return {
+      endpoint: this.BASE_VIDEO_UPLOAD_URL,
+      multiple: false,
+
+      maxChunkSize: this.serverConfig.client.videos.resumableUpload.maxChunkSize,
+      chunkSize,
+
+      token: this.authService.getAccessToken(),
+
+      uploaderClass: UploaderXFormData,
+
+      retryConfig: {
+        maxAttempts: 30, // maximum attempts for 503 codes, otherwise set to 6, see below
+        maxDelay: 120_000, // 2 min
+        shouldRetry: (code: number, attempts: number) => {
+          return code === HttpStatusCode.SERVICE_UNAVAILABLE_503 || ((code < 400 || code > 500) && attempts < 6)
+        }
+      }
+    }
   }
 }

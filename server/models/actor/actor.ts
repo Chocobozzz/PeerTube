@@ -1,5 +1,4 @@
-import { values } from 'lodash'
-import { literal, Op, Transaction } from 'sequelize'
+import { literal, Op, QueryTypes, Transaction } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -16,12 +15,12 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { getLowercaseExtension } from '@server/helpers/core-utils'
+import { activityPubContextify } from '@server/lib/activitypub/context'
+import { getBiggestActorImage } from '@server/lib/actor-image'
 import { ModelCache } from '@server/models/model-cache'
-import { AttributesOnly } from '@shared/core-utils'
-import { ActivityIconObject, ActivityPubActorType } from '../../../shared/models/activitypub'
-import { ActorImage } from '../../../shared/models/actors/actor-image.model'
-import { activityPubContextify } from '../../helpers/activitypub'
+import { forceNumber, getLowercaseExtension } from '@shared/core-utils'
+import { ActivityIconObject, ActivityPubActorType, ActorImageType } from '@shared/models'
+import { AttributesOnly } from '@shared/typescript-utils'
 import {
   isActorFollowersCountValid,
   isActorFollowingCountValid,
@@ -43,15 +42,18 @@ import {
   MActorAccountChannelId,
   MActorAPAccount,
   MActorAPChannel,
+  MActorFollowersUrl,
   MActorFormattable,
   MActorFull,
   MActorHost,
+  MActorId,
   MActorServer,
   MActorSummaryFormattable,
   MActorUrl,
   MActorWithInboxes
 } from '../../types/models'
 import { AccountModel } from '../account/account'
+import { getServerActor } from '../application/application'
 import { ServerModel } from '../server/server'
 import { isOutdated, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
@@ -81,7 +83,7 @@ export const unusedActorAttributesForAPI = [
     },
     {
       model: ActorImageModel,
-      as: 'Avatar',
+      as: 'Avatars',
       required: false
     }
   ]
@@ -109,12 +111,12 @@ export const unusedActorAttributesForAPI = [
       },
       {
         model: ActorImageModel,
-        as: 'Avatar',
+        as: 'Avatars',
         required: false
       },
       {
         model: ActorImageModel,
-        as: 'Banner',
+        as: 'Banners',
         required: false
       }
     ]
@@ -153,9 +155,6 @@ export const unusedActorAttributesForAPI = [
       fields: [ 'serverId' ]
     },
     {
-      fields: [ 'avatarId' ]
-    },
-    {
       fields: [ 'followersUrl' ]
     }
   ]
@@ -163,7 +162,7 @@ export const unusedActorAttributesForAPI = [
 export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
 
   @AllowNull(false)
-  @Column(DataType.ENUM(...values(ACTIVITY_PUB_ACTOR_TYPES)))
+  @Column(DataType.ENUM(...Object.values(ACTIVITY_PUB_ACTOR_TYPES)))
   type: ActivityPubActorType
 
   @AllowNull(false)
@@ -231,35 +230,31 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
   @UpdatedAt
   updatedAt: Date
 
-  @ForeignKey(() => ActorImageModel)
-  @Column
-  avatarId: number
-
-  @ForeignKey(() => ActorImageModel)
-  @Column
-  bannerId: number
-
-  @BelongsTo(() => ActorImageModel, {
+  @HasMany(() => ActorImageModel, {
+    as: 'Avatars',
+    onDelete: 'cascade',
+    hooks: true,
     foreignKey: {
-      name: 'avatarId',
-      allowNull: true
+      allowNull: false
     },
-    as: 'Avatar',
-    onDelete: 'set null',
-    hooks: true
+    scope: {
+      type: ActorImageType.AVATAR
+    }
   })
-  Avatar: ActorImageModel
+  Avatars: ActorImageModel[]
 
-  @BelongsTo(() => ActorImageModel, {
+  @HasMany(() => ActorImageModel, {
+    as: 'Banners',
+    onDelete: 'cascade',
+    hooks: true,
     foreignKey: {
-      name: 'bannerId',
-      allowNull: true
+      allowNull: false
     },
-    as: 'Banner',
-    onDelete: 'set null',
-    hooks: true
+    scope: {
+      type: ActorImageType.BANNER
+    }
   })
-  Banner: ActorImageModel
+  Banners: ActorImageModel[]
 
   @HasMany(() => ActorFollowModel, {
     foreignKey: {
@@ -311,7 +306,10 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
   })
   VideoChannel: VideoChannelModel
 
-  static load (id: number): Promise<MActor> {
+  static async load (id: number): Promise<MActor> {
+    const actorServer = await getServerActor()
+    if (id === actorServer.id) return actorServer
+
     return ActorModel.unscoped().findByPk(id)
   }
 
@@ -319,48 +317,21 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     return ActorModel.scope(ScopeNames.FULL).findByPk(id)
   }
 
-  static loadFromAccountByVideoId (videoId: number, transaction: Transaction): Promise<MActor> {
-    const query = {
-      include: [
-        {
-          attributes: [ 'id' ],
-          model: AccountModel.unscoped(),
-          required: true,
-          include: [
-            {
-              attributes: [ 'id' ],
-              model: VideoChannelModel.unscoped(),
-              required: true,
-              include: [
-                {
-                  attributes: [ 'id' ],
-                  model: VideoModel.unscoped(),
-                  required: true,
-                  where: {
-                    id: videoId
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
+  static loadAccountActorFollowerUrlByVideoId (videoId: number, transaction: Transaction) {
+    const query = `SELECT "actor"."id" AS "id", "actor"."followersUrl" AS "followersUrl" ` +
+                  `FROM "actor" ` +
+                  `INNER JOIN "account" ON "actor"."id" = "account"."actorId" ` +
+                  `INNER JOIN "videoChannel" ON "videoChannel"."accountId" = "account"."id" ` +
+                  `INNER JOIN "video" ON "video"."channelId" = "videoChannel"."id" AND "video"."id" = :videoId`
+
+    const options = {
+      type: QueryTypes.SELECT as QueryTypes.SELECT,
+      replacements: { videoId },
+      plain: true as true,
       transaction
     }
 
-    return ActorModel.unscoped().findOne(query)
-  }
-
-  static isActorUrlExist (url: string) {
-    const query = {
-      raw: true,
-      where: {
-        url
-      }
-    }
-
-    return ActorModel.unscoped().findOne(query)
-      .then(a => !!a)
+    return ActorModel.sequelize.query<MActorId & MActorFollowersUrl>(query, options)
   }
 
   static listByFollowersUrls (followersUrls: string[], transaction?: Transaction): Promise<MActorFull[]> {
@@ -386,8 +357,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
         transaction
       }
 
-      return ActorModel.scope(ScopeNames.FULL)
-                       .findOne(query)
+      return ActorModel.scope(ScopeNames.FULL).findOne(query)
     }
 
     return ModelCache.Instance.doCache({
@@ -410,8 +380,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
         transaction
       }
 
-      return ActorModel.unscoped()
-                       .findOne(query)
+      return ActorModel.unscoped().findOne(query)
     }
 
     return ModelCache.Instance.doCache({
@@ -477,7 +446,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
   }
 
   static rebuildFollowsCount (ofId: number, type: 'followers' | 'following', transaction?: Transaction) {
-    const sanitizedOfId = parseInt(ofId + '', 10)
+    const sanitizedOfId = forceNumber(ofId)
     const where = { id: sanitizedOfId }
 
     let columnToUpdate: string
@@ -492,7 +461,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     }
 
     return ActorModel.update({
-      [columnToUpdate]: literal(`(SELECT COUNT(*) FROM "actorFollow" WHERE "${columnOfCount}" = ${sanitizedOfId})`)
+      [columnToUpdate]: literal(`(SELECT COUNT(*) FROM "actorFollow" WHERE "${columnOfCount}" = ${sanitizedOfId} AND "state" = 'accepted')`)
     }, { where, transaction })
   }
 
@@ -532,55 +501,50 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
   }
 
   toFormattedSummaryJSON (this: MActorSummaryFormattable) {
-    let avatar: ActorImage = null
-    if (this.Avatar) {
-      avatar = this.Avatar.toFormattedJSON()
-    }
-
     return {
       url: this.url,
       name: this.preferredUsername,
       host: this.getHost(),
-      avatar
+      avatars: (this.Avatars || []).map(a => a.toFormattedJSON()),
+
+      // TODO: remove, deprecated in 4.2
+      avatar: this.hasImage(ActorImageType.AVATAR)
+        ? this.Avatars[0].toFormattedJSON()
+        : undefined
     }
   }
 
   toFormattedJSON (this: MActorFormattable) {
-    const base = this.toFormattedSummaryJSON()
+    return {
+      ...this.toFormattedSummaryJSON(),
 
-    let banner: ActorImage = null
-    if (this.Banner) {
-      banner = this.Banner.toFormattedJSON()
-    }
-
-    return Object.assign(base, {
       id: this.id,
       hostRedundancyAllowed: this.getRedundancyAllowed(),
       followingCount: this.followingCount,
       followersCount: this.followersCount,
-      banner,
-      createdAt: this.getCreatedAt()
-    })
+      createdAt: this.getCreatedAt(),
+
+      banners: (this.Banners || []).map(b => b.toFormattedJSON()),
+
+      // TODO: remove, deprecated in 4.2
+      banner: this.hasImage(ActorImageType.BANNER)
+        ? this.Banners[0].toFormattedJSON()
+        : undefined
+    }
   }
 
   toActivityPubObject (this: MActorAPChannel | MActorAPAccount, name: string) {
     let icon: ActivityIconObject
+    let icons: ActivityIconObject[]
     let image: ActivityIconObject
 
-    if (this.avatarId) {
-      const extension = getLowercaseExtension(this.Avatar.filename)
-
-      icon = {
-        type: 'Image',
-        mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extension],
-        height: this.Avatar.height,
-        width: this.Avatar.width,
-        url: this.getAvatarUrl()
-      }
+    if (this.hasImage(ActorImageType.AVATAR)) {
+      icon = getBiggestActorImage(this.Avatars).toActivityPubObject()
+      icons = this.Avatars.map(a => a.toActivityPubObject())
     }
 
-    if (this.bannerId) {
-      const banner = (this as MActorAPChannel).Banner
+    if (this.hasImage(ActorImageType.BANNER)) {
+      const banner = getBiggestActorImage((this as MActorAPChannel).Banners)
       const extension = getLowercaseExtension(banner.filename)
 
       image = {
@@ -588,7 +552,7 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
         mediaType: MIMETYPES.IMAGE.EXT_MIMETYPE[extension],
         height: banner.height,
         width: banner.width,
-        url: this.getBannerUrl()
+        url: ActorImageModel.getImageUrl(banner)
       }
     }
 
@@ -612,11 +576,14 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
         publicKeyPem: this.publicKey
       },
       published: this.getCreatedAt().toISOString(),
+
       icon,
+      icons,
+
       image
     }
 
-    return activityPubContextify(json)
+    return activityPubContextify(json, 'Actor')
   }
 
   getFollowerSharedInboxUrls (t: Transaction) {
@@ -677,16 +644,12 @@ export class ActorModel extends Model<Partial<AttributesOnly<ActorModel>>> {
     return this.Server ? this.Server.redundancyAllowed : false
   }
 
-  getAvatarUrl () {
-    if (!this.avatarId) return undefined
+  hasImage (type: ActorImageType) {
+    const images = type === ActorImageType.AVATAR
+      ? this.Avatars
+      : this.Banners
 
-    return WEBSERVER.URL + this.Avatar.getStaticPath()
-  }
-
-  getBannerUrl () {
-    if (!this.bannerId) return undefined
-
-    return WEBSERVER.URL + this.Banner.getStaticPath()
+    return Array.isArray(images) && images.length !== 0
   }
 
   isOutdated () {

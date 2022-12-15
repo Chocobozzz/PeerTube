@@ -1,10 +1,11 @@
 import { compare, genSalt, hash } from 'bcrypt'
-import { createSign, createVerify } from 'crypto'
+import { createCipheriv, createDecipheriv, createSign, createVerify } from 'crypto'
 import { Request } from 'express'
 import { cloneDeep } from 'lodash'
-import { BCRYPT_SALT_SIZE, HTTP_SIGNATURE, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants'
+import { sha256 } from '@shared/extra-utils'
+import { BCRYPT_SALT_SIZE, ENCRYPTION, HTTP_SIGNATURE, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants'
 import { MActor } from '../types/models'
-import { createPrivateKey, getPublicKey, promisify1, promisify2, sha256 } from './core-utils'
+import { generateRSAKeyPairPromise, promisify1, promisify2, randomBytesPromise, scryptPromise } from './core-utils'
 import { jsonld } from './custom-jsonld-signature'
 import { logger } from './logger'
 
@@ -14,18 +15,19 @@ const bcryptHashPromise = promisify2<any, string | number, string>(hash)
 
 const httpSignature = require('@peertube/http-signature')
 
-async function createPrivateAndPublicKeys () {
+function createPrivateAndPublicKeys () {
   logger.info('Generating a RSA key...')
 
-  const { key } = await createPrivateKey(PRIVATE_RSA_KEY_SIZE)
-  const { publicKey } = await getPublicKey(key)
-
-  return { privateKey: key, publicKey }
+  return generateRSAKeyPairPromise(PRIVATE_RSA_KEY_SIZE)
 }
 
+// ---------------------------------------------------------------------------
 // User password checks
+// ---------------------------------------------------------------------------
 
 function comparePassword (plainPassword: string, hashPassword: string) {
+  if (!plainPassword) return Promise.resolve(false)
+
   return bcryptComparePromise(plainPassword, hashPassword)
 }
 
@@ -35,7 +37,9 @@ async function cryptPassword (password: string) {
   return bcryptHashPromise(password, salt)
 }
 
+// ---------------------------------------------------------------------------
 // HTTP Signature
+// ---------------------------------------------------------------------------
 
 function isHTTPSignatureDigestValid (rawBody: Buffer, req: Request): boolean {
   if (req.headers[HTTP_SIGNATURE.HEADER_NAME] && req.headers['digest']) {
@@ -50,14 +54,23 @@ function isHTTPSignatureVerified (httpSignatureParsed: any, actor: MActor): bool
 }
 
 function parseHTTPSignature (req: Request, clockSkew?: number) {
-  const headers = req.method === 'POST'
-    ? HTTP_SIGNATURE.REQUIRED_HEADERS.POST
-    : HTTP_SIGNATURE.REQUIRED_HEADERS.ALL
+  const requiredHeaders = req.method === 'POST'
+    ? [ '(request-target)', 'host', 'digest' ]
+    : [ '(request-target)', 'host' ]
 
-  return httpSignature.parse(req, { clockSkew, headers })
+  const parsed = httpSignature.parse(req, { clockSkew, headers: requiredHeaders })
+
+  const parsedHeaders = parsed.params.headers
+  if (!parsedHeaders.includes('date') && !parsedHeaders.includes('(created)')) {
+    throw new Error(`date or (created) must be included in signature`)
+  }
+
+  return parsed
 }
 
+// ---------------------------------------------------------------------------
 // JSONLD
+// ---------------------------------------------------------------------------
 
 function isJsonLDSignatureVerified (fromActor: MActor, signedDocument: any): Promise<boolean> {
   if (signedDocument.signature.type === 'RsaSignature2017') {
@@ -107,10 +120,40 @@ async function signJsonLDObject <T> (byActor: MActor, data: T) {
   return Object.assign(data, { signature })
 }
 
+// ---------------------------------------------------------------------------
+
 function buildDigest (body: any) {
   const rawBody = typeof body === 'string' ? body : JSON.stringify(body)
 
   return 'SHA-256=' + sha256(rawBody, 'base64')
+}
+
+// ---------------------------------------------------------------------------
+// Encryption
+// ---------------------------------------------------------------------------
+
+async function encrypt (str: string, secret: string) {
+  const iv = await randomBytesPromise(ENCRYPTION.IV)
+
+  const key = await scryptPromise(secret, ENCRYPTION.SALT, 32)
+  const cipher = createCipheriv(ENCRYPTION.ALGORITHM, key, iv)
+
+  let encrypted = iv.toString(ENCRYPTION.ENCODING) + ':'
+  encrypted += cipher.update(str, 'utf8', ENCRYPTION.ENCODING)
+  encrypted += cipher.final(ENCRYPTION.ENCODING)
+
+  return encrypted
+}
+
+async function decrypt (encryptedArg: string, secret: string) {
+  const [ ivStr, encryptedStr ] = encryptedArg.split(':')
+
+  const iv = Buffer.from(ivStr, 'hex')
+  const key = await scryptPromise(secret, ENCRYPTION.SALT, 32)
+
+  const decipher = createDecipheriv(ENCRYPTION.ALGORITHM, key, iv)
+
+  return decipher.update(encryptedStr, ENCRYPTION.ENCODING, 'utf8') + decipher.final('utf8')
 }
 
 // ---------------------------------------------------------------------------
@@ -124,18 +167,20 @@ export {
   comparePassword,
   createPrivateAndPublicKeys,
   cryptPassword,
-  signJsonLDObject
+  signJsonLDObject,
+
+  encrypt,
+  decrypt
 }
 
 // ---------------------------------------------------------------------------
 
 function hashObject (obj: any): Promise<any> {
-  return jsonld.promises
-               .normalize(obj, {
-                 algorithm: 'URDNA2015',
-                 format: 'application/n-quads'
-               })
-               .then(res => sha256(res))
+  return jsonld.promises.normalize(obj, {
+    safe: false,
+    algorithm: 'URDNA2015',
+    format: 'application/n-quads'
+  }).then(res => sha256(res))
 }
 
 function createSignatureHash (signature: any) {

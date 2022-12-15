@@ -52,14 +52,14 @@
   {{ error }}
 </div>
 
-<div *ngIf="hasImportedVideo && !error" class="alert alert-info" i18n>
+<div *ngIf="hasImportedVideo && !error" class="alert pt-alert-primary" i18n>
   Congratulations, the video will be imported with BitTorrent! You can already add information about this video.
 </div>
 
 <!-- Hidden because we want to load the component -->
 <form [hidden]="!hasImportedVideo" novalidate [formGroup]="form">
   <my-video-edit
-    [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions" [schedulePublicationPossible]="false"
+    [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions" [forbidScheduledPublication]="true"
     [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels"
     type="import-torrent"
   ></my-video-edit>

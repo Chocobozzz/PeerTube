@@ -1,11 +1,22 @@
+@use 'bootstrap/scss/functions' as *;
+
 $primary-foreground-color: #fff;
 $primary-foreground-opacity: 0.9;
 $primary-foreground-opacity-hover: 1;
 $primary-background-color: rgba(0, 0, 0, 0.8);
 
-$play-control-font-size: 16px;
 $font-size: 13px;
-$control-bar-height: 34px;
+
+$control-bar-height: 38px;
+$control-bar-icon-size: 26px;
+$control-bar-volume-slider-height: 14px;
+$control-bar-slider-top: -15px;
+$control-bar-font-size: 14px;
+$control-bar-play-font-size: 34px;
+$control-bar-next-previous-play-font-size: 14px;
+$control-bar-button-width: 38px;
+
+$control-bar-total-height: $control-bar-height - $control-bar-slider-top;
 
 $slider-bg-color: lighten($primary-background-color, 33%);
 
@@ -15,5 +26,9 @@ $dock-padding: 20px;
 
 $first-control-bar-element-margin-left: 10px;
 $first-control-bar-element-margin-left-small-width: 5px;
+
+$screen-width-750: 750px;
+$screen-width-570: 570px;
+$screen-width-350: 350px;
 
 $assets-path: '../../assets/' !default;

@@ -5,7 +5,7 @@ import { optionalAuthenticate } from '@server/middlewares/auth'
 import { getCompleteLocale, is18nLocale } from '../../shared/core-utils/i18n'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { PluginType } from '../../shared/models/plugins/plugin.type'
-import { isTestInstance } from '../helpers/core-utils'
+import { isProdInstance } from '../helpers/core-utils'
 import { PLUGIN_GLOBAL_CSS_PATH } from '../initializers/constants'
 import { PluginManager, RegisteredPlugin } from '../lib/plugins/plugin-manager'
 import { getExternalAuthValidator, getPluginValidator, pluginStaticDirectoryValidator } from '../middlewares/validators/plugins'
@@ -13,7 +13,7 @@ import { serveThemeCSSValidator } from '../middlewares/validators/themes'
 
 const sendFileOptions = {
   maxAge: '30 days',
-  immutable: !isTestInstance()
+  immutable: isProdInstance()
 }
 
 const pluginsRouter = express.Router()

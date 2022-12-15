@@ -56,6 +56,16 @@ const routes: Routes = [
     loadChildren: () => import('./+video-channels/video-channels.module').then(m => m.VideoChannelsModule),
     canActivateChild: [ MetaGuard ]
   },
+  {
+    path: 'manage',
+    loadChildren: () => import('./+manage/manage.module').then(m => m.ManageModule),
+    canActivateChild: [ MetaGuard ]
+  },
+  {
+    path: 'p',
+    loadChildren: () => import('./+plugin-pages/plugin-pages.module').then(m => m.PluginPagesModule),
+    canActivateChild: [ MetaGuard ]
+  },
 
   {
     path: 'about',
@@ -86,6 +96,7 @@ const routes: Routes = [
   {
     path: 'videos/upload',
     loadChildren: () => import('@app/+videos/+video-edit/video-add.module').then(m => m.VideoAddModule),
+    canActivateChild: [ MetaGuard ],
     data: {
       meta: {
         title: $localize`Upload a video`
@@ -95,6 +106,7 @@ const routes: Routes = [
   {
     path: 'videos/update/:uuid',
     loadChildren: () => import('@app/+videos/+video-edit/video-update.module').then(m => m.VideoUpdateModule),
+    canActivateChild: [ MetaGuard ],
     data: {
       meta: {
         title: $localize`Edit a video`
@@ -130,6 +142,18 @@ const routes: Routes = [
   {
     path: 'remote-interaction',
     loadChildren: () => import('./+remote-interaction/remote-interaction.module').then(m => m.RemoteInteractionModule),
+    canActivateChild: [ MetaGuard ]
+  },
+
+  {
+    path: 'studio',
+    loadChildren: () => import('./+video-studio/video-studio.module').then(m => m.VideoStudioModule),
+    canActivateChild: [ MetaGuard ]
+  },
+
+  {
+    path: 'stats',
+    loadChildren: () => import('./+stats/stats.module').then(m => m.StatsModule),
     canActivateChild: [ MetaGuard ]
   },
 
@@ -170,7 +194,7 @@ for (const locale of POSSIBLE_LOCALES) {
 
 routes.push({
   path: '**',
-  loadChildren: () => import('./+page-not-found/page-not-found.module').then(m => m.PageNotFoundModule)
+  loadChildren: () => import('./+error-page/error-page.module').then(m => m.ErrorPageModule)
 })
 
 @NgModule({

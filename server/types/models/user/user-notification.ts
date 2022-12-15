@@ -3,7 +3,7 @@ import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse
 import { ApplicationModel } from '@server/models/application/application'
 import { PluginModel } from '@server/models/server/plugin'
 import { UserNotificationModel } from '@server/models/user/user-notification'
-import { PickWith, PickWithOpt } from '@shared/core-utils'
+import { PickWith, PickWithOpt } from '@shared/typescript-utils'
 import { AbuseModel } from '../../../models/abuse/abuse'
 import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/actor/actor'
@@ -21,6 +21,7 @@ type Use<K extends keyof UserNotificationModel, M> = PickWith<UserNotificationMo
 // ############################################################################
 
 export module UserNotificationIncludes {
+  export type ActorImageInclude = Pick<ActorImageModel, 'createdAt' | 'filename' | 'getStaticPath' | 'width' | 'updatedAt'>
 
   export type VideoInclude = Pick<VideoModel, 'id' | 'uuid' | 'name'>
   export type VideoIncludeChannel =
@@ -29,7 +30,7 @@ export module UserNotificationIncludes {
 
   export type ActorInclude =
     Pick<ActorModel, 'preferredUsername' | 'getHost'> &
-    PickWith<ActorModel, 'Avatar', Pick<ActorImageModel, 'filename' | 'getStaticPath'>> &
+    PickWith<ActorModel, 'Avatars', ActorImageInclude[]> &
     PickWith<ActorModel, 'Server', Pick<ServerModel, 'host'>>
 
   export type VideoChannelInclude = Pick<VideoChannelModel, 'id' | 'name' | 'getDisplayName'>
@@ -75,7 +76,7 @@ export module UserNotificationIncludes {
     Pick<ActorModel, 'preferredUsername' | 'getHost'> &
     PickWith<ActorModel, 'Account', AccountInclude> &
     PickWith<ActorModel, 'Server', Pick<ServerModel, 'host'>> &
-    PickWithOpt<ActorModel, 'Avatar', Pick<ActorImageModel, 'filename' | 'getStaticPath'>>
+    PickWithOpt<ActorModel, 'Avatars', ActorImageInclude[]>
 
   export type ActorFollowing =
     Pick<ActorModel, 'preferredUsername' | 'type' | 'getHost'> &
@@ -98,7 +99,7 @@ export module UserNotificationIncludes {
 // ############################################################################
 
 export type MUserNotification =
-  Omit<UserNotificationModel, 'User' | 'Video' | 'Comment' | 'Abuse' | 'VideoBlacklist' |
+  Omit<UserNotificationModel, 'User' | 'Video' | 'VideoComment' | 'Abuse' | 'VideoBlacklist' |
   'VideoImport' | 'Account' | 'ActorFollow' | 'Plugin' | 'Application'>
 
 // ############################################################################
@@ -106,7 +107,7 @@ export type MUserNotification =
 export type UserNotificationModelForApi =
   MUserNotification &
   Use<'Video', UserNotificationIncludes.VideoIncludeChannel> &
-  Use<'Comment', UserNotificationIncludes.VideoCommentInclude> &
+  Use<'VideoComment', UserNotificationIncludes.VideoCommentInclude> &
   Use<'Abuse', UserNotificationIncludes.AbuseInclude> &
   Use<'VideoBlacklist', UserNotificationIncludes.VideoBlacklistInclude> &
   Use<'VideoImport', UserNotificationIncludes.VideoImportInclude> &

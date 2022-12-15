@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { AuthService, HtmlRendererService, Notifier } from '@app/core'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { logger } from '@root-helpers/logger'
 import { AbuseMessage, UserAbuse } from '@shared/models'
 import { ABUSE_MESSAGE_VALIDATOR } from '../form-validators/abuse-validators'
 import { AbuseService } from '../shared-moderation'
@@ -28,7 +29,7 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
   private abuse: UserAbuse
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private modalService: NgbModal,
     private htmlRenderer: HtmlRendererService,
     private auth: AuthService,
@@ -72,7 +73,7 @@ export class AbuseMessageModalComponent extends FormReactive implements OnInit {
 
         error: err => {
           this.sendingMessage = false
-          console.error(err)
+          logger.error(err)
           this.notifier.error('Sorry but you cannot send this message. Please retry later')
         }
       })

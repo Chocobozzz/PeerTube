@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { pathExists, remove } from 'fs-extra'
+import { join } from 'path'
+import { testHelloWorldRegisteredSettings } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
+import { HttpStatusCode, PluginType } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
   killallServers,
+  makeGetRequest,
   PeerTubeServer,
   PluginsCommand,
-  setAccessTokensToServers,
-  testHelloWorldRegisteredSettings,
-  wait
-} from '@shared/extra-utils'
-import { HttpStatusCode, PluginType } from '@shared/models'
-
-const expect = chai.expect
+  setAccessTokensToServers
+} from '@shared/server-commands'
 
 describe('Test plugins', function () {
   let server: PeerTubeServer = null
@@ -95,13 +95,15 @@ describe('Test plugins', function () {
   })
 
   it('Should have the plugin loaded in the configuration', async function () {
-    const config = await server.config.getConfig()
+    for (const config of [ await server.config.getConfig(), await server.config.getIndexHTMLConfig() ]) {
+      const theme = config.theme.registered.find(r => r.name === 'background-red')
+      expect(theme).to.not.be.undefined
+      expect(theme.npmName).to.equal('peertube-theme-background-red')
 
-    const theme = config.theme.registered.find(r => r.name === 'background-red')
-    expect(theme).to.not.be.undefined
-
-    const plugin = config.plugin.registered.find(r => r.name === 'hello-world')
-    expect(plugin).to.not.be.undefined
+      const plugin = config.plugin.registered.find(r => r.name === 'hello-world')
+      expect(plugin).to.not.be.undefined
+      expect(plugin.npmName).to.equal('peertube-plugin-hello-world')
+    }
   })
 
   it('Should update the default theme in the configuration', async function () {
@@ -111,8 +113,9 @@ describe('Test plugins', function () {
       }
     })
 
-    const config = await server.config.getConfig()
-    expect(config.theme.default).to.equal('background-red')
+    for (const config of [ await server.config.getConfig(), await server.config.getIndexHTMLConfig() ]) {
+      expect(config.theme.default).to.equal('background-red')
+    }
   })
 
   it('Should update my default theme', async function () {
@@ -226,45 +229,62 @@ describe('Test plugins', function () {
   })
 
   it('Should update the plugin and the theme', async function () {
-    this.timeout(90000)
+    this.timeout(180000)
 
     // Wait the scheduler that get the latest plugins versions
     await wait(6000)
 
-    // Fake update our plugin version
-    await server.sql.setPluginVersion('hello-world', '0.0.1')
+    async function testUpdate (type: 'plugin' | 'theme', name: string) {
+      // Fake update our plugin version
+      await server.sql.setPluginVersion(name, '0.0.1')
 
-    // Fake update package.json
-    const packageJSON = await command.getPackageJSON('peertube-plugin-hello-world')
-    const oldVersion = packageJSON.version
+      // Fake update package.json
+      const packageJSON = await command.getPackageJSON(`peertube-${type}-${name}`)
+      const oldVersion = packageJSON.version
 
-    packageJSON.version = '0.0.1'
-    await command.updatePackageJSON('peertube-plugin-hello-world', packageJSON)
+      packageJSON.version = '0.0.1'
+      await command.updatePackageJSON(`peertube-${type}-${name}`, packageJSON)
 
-    // Restart the server to take into account this change
-    await killallServers([ server ])
-    await server.run()
+      // Restart the server to take into account this change
+      await killallServers([ server ])
+      await server.run()
 
-    {
-      const body = await command.list({ pluginType: PluginType.PLUGIN })
+      const checkConfig = async (version: string) => {
+        for (const config of [ await server.config.getConfig(), await server.config.getIndexHTMLConfig() ]) {
+          expect(config[type].registered.find(r => r.name === name).version).to.equal(version)
+        }
+      }
 
-      const plugin = body.data[0]
-      expect(plugin.version).to.equal('0.0.1')
-      expect(plugin.latestVersion).to.exist
-      expect(plugin.latestVersion).to.not.equal('0.0.1')
+      const getPluginFromAPI = async () => {
+        const body = await command.list({ pluginType: type === 'plugin' ? PluginType.PLUGIN : PluginType.THEME })
+
+        return body.data.find(p => p.name === name)
+      }
+
+      {
+        const plugin = await getPluginFromAPI()
+        expect(plugin.version).to.equal('0.0.1')
+        expect(plugin.latestVersion).to.exist
+        expect(plugin.latestVersion).to.not.equal('0.0.1')
+
+        await checkConfig('0.0.1')
+      }
+
+      {
+        await command.update({ npmName: `peertube-${type}-${name}` })
+
+        const plugin = await getPluginFromAPI()
+        expect(plugin.version).to.equal(oldVersion)
+
+        const updatedPackageJSON = await command.getPackageJSON(`peertube-${type}-${name}`)
+        expect(updatedPackageJSON.version).to.equal(oldVersion)
+
+        await checkConfig(oldVersion)
+      }
     }
 
-    {
-      await command.update({ npmName: 'peertube-plugin-hello-world' })
-
-      const body = await command.list({ pluginType: PluginType.PLUGIN })
-
-      const plugin = body.data[0]
-      expect(plugin.version).to.equal(oldVersion)
-
-      const updatedPackageJSON = await command.getPackageJSON('peertube-plugin-hello-world')
-      expect(updatedPackageJSON.version).to.equal(oldVersion)
-    }
+    await testUpdate('theme', 'background-red')
+    await testUpdate('plugin', 'hello-world')
   })
 
   it('Should uninstall the plugin', async function () {
@@ -291,15 +311,15 @@ describe('Test plugins', function () {
   })
 
   it('Should have updated the configuration', async function () {
-    const config = await server.config.getConfig()
+    for (const config of [ await server.config.getConfig(), await server.config.getIndexHTMLConfig() ]) {
+      expect(config.theme.default).to.equal('default')
 
-    expect(config.theme.default).to.equal('default')
+      const theme = config.theme.registered.find(r => r.name === 'background-red')
+      expect(theme).to.be.undefined
 
-    const theme = config.theme.registered.find(r => r.name === 'background-red')
-    expect(theme).to.be.undefined
-
-    const plugin = config.plugin.registered.find(r => r.name === 'hello-world')
-    expect(plugin).to.be.undefined
+      const plugin = config.plugin.registered.find(r => r.name === 'hello-world')
+      expect(plugin).to.be.undefined
+    }
   })
 
   it('Should have updated the user theme', async function () {
@@ -327,6 +347,57 @@ describe('Test plugins', function () {
     await server.run()
 
     await check()
+  })
+
+  it('Should rebuild native modules on Node ABI change', async function () {
+    this.timeout(60000)
+
+    const removeNativeModule = async () => {
+      await remove(join(baseNativeModule, 'build'))
+      await remove(join(baseNativeModule, 'prebuilds'))
+    }
+
+    await command.install({ path: PluginsCommand.getPluginTestPath('-native') })
+
+    await makeGetRequest({
+      url: server.url,
+      path: '/plugins/test-native/router',
+      expectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+
+    const query = `UPDATE "application" SET "nodeABIVersion" = 1`
+    await server.sql.updateQuery(query)
+
+    const baseNativeModule = server.servers.buildDirectory(join('plugins', 'node_modules', 'a-native-example'))
+
+    await removeNativeModule()
+    await server.kill()
+    await server.run()
+
+    await wait(3000)
+
+    expect(await pathExists(join(baseNativeModule, 'build'))).to.be.true
+    expect(await pathExists(join(baseNativeModule, 'prebuilds'))).to.be.true
+
+    await makeGetRequest({
+      url: server.url,
+      path: '/plugins/test-native/router',
+      expectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+
+    await removeNativeModule()
+
+    await server.kill()
+    await server.run()
+
+    expect(await pathExists(join(baseNativeModule, 'build'))).to.be.false
+    expect(await pathExists(join(baseNativeModule, 'prebuilds'))).to.be.false
+
+    await makeGetRequest({
+      url: server.url,
+      path: '/plugins/test-native/router',
+      expectedStatus: HttpStatusCode.NOT_FOUND_404
+    })
   })
 
   after(async function () {

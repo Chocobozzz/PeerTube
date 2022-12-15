@@ -1,18 +1,6 @@
 import { tap } from 'rxjs/operators'
-import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
-import {
-  AuthService,
-  ComponentPagination,
-  ConfirmService,
-  DisableForReuseHook,
-  LocalStorageService,
-  Notifier,
-  ScreenService,
-  ServerService,
-  User,
-  UserService
-} from '@app/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
+import { AuthService, ComponentPagination, ConfirmService, DisableForReuseHook, Notifier, User, UserService } from '@app/core'
 import { immutableAssign } from '@app/helpers'
 import { UserHistoryService, Video } from '@app/shared/shared-main'
 import { MiniatureDisplayOptions, VideosSelectionComponent } from '@app/shared/shared-video-miniature'
@@ -53,17 +41,11 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
   disabled = false
 
   constructor (
-    protected router: Router,
-    protected serverService: ServerService,
-    protected route: ActivatedRoute,
-    protected authService: AuthService,
-    protected userService: UserService,
-    protected notifier: Notifier,
-    protected screenService: ScreenService,
-    protected storageService: LocalStorageService,
+    private authService: AuthService,
+    private userService: UserService,
+    private notifier: Notifier,
     private confirmService: ConfirmService,
-    private userHistoryService: UserHistoryService,
-    protected cfr: ComponentFactoryResolver
+    private userHistoryService: UserHistoryService
   ) {
     this.titlePage = $localize`My watch history`
   }
@@ -95,7 +77,7 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.userHistoryService.getUserVideosHistory(newPagination, this.search)
+    return this.userHistoryService.list(newPagination, this.search)
       .pipe(
         tap(res => this.pagination.totalItems = res.total)
       )
@@ -111,8 +93,8 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
       .subscribe({
         next: () => {
           const message = this.videosHistoryEnabled === true
-            ? $localize`Videos history is enabled`
-            : $localize`Videos history is disabled`
+            ? $localize`Video history is enabled`
+            : $localize`Video history is disabled`
 
           this.notifier.success(message)
 
@@ -123,22 +105,41 @@ export class MyHistoryComponent implements OnInit, DisableForReuseHook {
       })
   }
 
-  async deleteHistory () {
-    const title = $localize`Delete videos history`
-    const message = $localize`Are you sure you want to delete all your videos history?`
+  deleteHistoryElement (video: Video) {
+    this.userHistoryService.deleteElement(video)
+      .subscribe({
+        next: () => {
+          this.videos = this.videos.filter(v => v.id !== video.id)
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  async clearAllHistory () {
+    const title = $localize`Delete video history`
+    const message = $localize`Are you sure you want to delete all your video history?`
 
     const res = await this.confirmService.confirm(message, title)
     if (res !== true) return
 
-    this.userHistoryService.deleteUserVideosHistory()
+    this.userHistoryService.clearAll()
         .subscribe({
           next: () => {
-            this.notifier.success($localize`Videos history deleted`)
+            this.notifier.success($localize`Video history deleted`)
 
             this.reloadData()
           },
 
           error: err => this.notifier.error(err.message)
         })
+  }
+
+  getNoResultMessage () {
+    if (this.search) {
+      return $localize`No videos found for "${this.search}".`
+    }
+
+    return $localize`You don't have any video in your watch history yet.`
   }
 }

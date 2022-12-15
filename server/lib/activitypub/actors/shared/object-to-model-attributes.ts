@@ -1,10 +1,10 @@
-import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc'
-import { buildUUID } from '@server/helpers/uuid'
 import { MIMETYPES } from '@server/initializers/constants'
 import { ActorModel } from '@server/models/actor/actor'
 import { FilteredModelAttributes } from '@server/types'
-import { ActivityPubActor, ActorImageType } from '@shared/models'
+import { getLowercaseExtension } from '@shared/core-utils'
+import { buildUUID } from '@shared/extra-utils'
+import { ActivityIconObject, ActivityPubActor, ActorImageType } from '@shared/models'
 
 function getActorAttributesFromObject (
   actorObject: ActivityPubActor,
@@ -30,33 +30,38 @@ function getActorAttributesFromObject (
   }
 }
 
-function getImageInfoFromObject (actorObject: ActivityPubActor, type: ActorImageType) {
-  const mimetypes = MIMETYPES.IMAGE
-  const icon = type === ActorImageType.AVATAR
-    ? actorObject.icon
+function getImagesInfoFromObject (actorObject: ActivityPubActor, type: ActorImageType) {
+  const iconsOrImages = type === ActorImageType.AVATAR
+    ? actorObject.icons || actorObject.icon
     : actorObject.image
 
-  if (!icon || icon.type !== 'Image' || !isActivityPubUrlValid(icon.url)) return undefined
+  return normalizeIconOrImage(iconsOrImages)
+    .map(iconOrImage => {
+      const mimetypes = MIMETYPES.IMAGE
 
-  let extension: string
+      if (iconOrImage.type !== 'Image' || !isActivityPubUrlValid(iconOrImage.url)) return undefined
 
-  if (icon.mediaType) {
-    extension = mimetypes.MIMETYPE_EXT[icon.mediaType]
-  } else {
-    const tmp = getLowercaseExtension(icon.url)
+      let extension: string
 
-    if (mimetypes.EXT_MIMETYPE[tmp] !== undefined) extension = tmp
-  }
+      if (iconOrImage.mediaType) {
+        extension = mimetypes.MIMETYPE_EXT[iconOrImage.mediaType]
+      } else {
+        const tmp = getLowercaseExtension(iconOrImage.url)
 
-  if (!extension) return undefined
+        if (mimetypes.EXT_MIMETYPE[tmp] !== undefined) extension = tmp
+      }
 
-  return {
-    name: buildUUID() + extension,
-    fileUrl: icon.url,
-    height: icon.height,
-    width: icon.width,
-    type
-  }
+      if (!extension) return undefined
+
+      return {
+        name: buildUUID() + extension,
+        fileUrl: iconOrImage.url,
+        height: iconOrImage.height,
+        width: iconOrImage.width,
+        type
+      }
+    })
+    .filter(i => !!i)
 }
 
 function getActorDisplayNameFromObject (actorObject: ActivityPubActor) {
@@ -65,6 +70,15 @@ function getActorDisplayNameFromObject (actorObject: ActivityPubActor) {
 
 export {
   getActorAttributesFromObject,
-  getImageInfoFromObject,
+  getImagesInfoFromObject,
   getActorDisplayNameFromObject
+}
+
+// ---------------------------------------------------------------------------
+
+function normalizeIconOrImage (icon: ActivityIconObject | ActivityIconObject[]): ActivityIconObject[] {
+  if (Array.isArray(icon)) return icon
+  if (icon) return [ icon ]
+
+  return []
 }

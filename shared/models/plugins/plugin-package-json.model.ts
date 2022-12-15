@@ -1,15 +1,15 @@
 import { PluginClientScope } from './client/plugin-client-scope.type'
 
-export type PluginTranslationPaths = {
+export type PluginTranslationPathsJSON = {
   [ locale: string ]: string
 }
 
-export type ClientScript = {
+export type ClientScriptJSON = {
   script: string
   scopes: PluginClientScope[]
 }
 
-export type PluginPackageJson = {
+export type PluginPackageJSON = {
   name: string
   version: string
   description: string
@@ -23,7 +23,7 @@ export type PluginPackageJson = {
   staticDirs: { [ name: string ]: string }
   css: string[]
 
-  clientScripts: ClientScript[]
+  clientScripts: ClientScriptJSON[]
 
-  translations: PluginTranslationPaths
+  translations: PluginTranslationPathsJSON
 }

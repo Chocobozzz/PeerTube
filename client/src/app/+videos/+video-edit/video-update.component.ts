@@ -4,11 +4,13 @@ import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { Component, HostListener, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Notifier } from '@app/core'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { Video, VideoCaptionEdit, VideoCaptionService, VideoDetails, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
+import { logger } from '@root-helpers/logger'
 import { LiveVideo, LiveVideoUpdate, VideoPrivacy } from '@shared/models'
+import { VideoSource } from '@shared/models/videos/video-source'
 import { hydrateFormFromVideo } from './shared/video-edit-utils'
 
 @Component({
@@ -17,20 +19,20 @@ import { hydrateFormFromVideo } from './shared/video-edit-utils'
   templateUrl: './video-update.component.html'
 })
 export class VideoUpdateComponent extends FormReactive implements OnInit {
-  video: VideoEdit
+  videoEdit: VideoEdit
   videoDetails: VideoDetails
+  videoSource: VideoSource
   userVideoChannels: SelectChannelItem[] = []
   videoCaptions: VideoCaptionEdit[] = []
   liveVideo: LiveVideo
 
   isUpdatingVideo = false
-  schedulePublicationPossible = false
-  waitTranscodingEnabled = true
+  forbidScheduledPublication = false
 
   private updateDone = false
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private route: ActivatedRoute,
     private router: Router,
     private notifier: Notifier,
@@ -46,24 +48,26 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.buildForm({})
 
     const { videoData } = this.route.snapshot.data
-    const { video, videoChannels, videoCaptions, liveVideo } = videoData
+    const { video, videoChannels, videoCaptions, videoSource, liveVideo } = videoData
 
-    this.video = new VideoEdit(video)
     this.videoDetails = video
+    this.videoEdit = new VideoEdit(this.videoDetails)
 
     this.userVideoChannels = videoChannels
     this.videoCaptions = videoCaptions
+    this.videoSource = videoSource
     this.liveVideo = liveVideo
 
-    this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
+    this.forbidScheduledPublication = this.videoEdit.privacy !== VideoPrivacy.PRIVATE
   }
 
   onFormBuilt () {
-    hydrateFormFromVideo(this.form, this.video, true)
+    hydrateFormFromVideo(this.form, this.videoEdit, true)
 
     if (this.liveVideo) {
       this.form.patchValue({
         saveReplay: this.liveVideo.saveReplay,
+        latencyMode: this.liveVideo.latencyMode,
         permanentLive: this.liveVideo.permanentLive
       })
     }
@@ -91,46 +95,40 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     return { canDeactivate: this.formChanged === false, text }
   }
 
-  checkForm () {
+  isWaitTranscodingHidden () {
+    if (this.videoDetails.getFiles().length > 1) { // Already transcoded
+      return true
+    }
+
+    return false
+  }
+
+  async update () {
+    await this.waitPendingCheck()
     this.forceCheck()
 
-    return this.form.valid
-  }
-
-  isWaitTranscodingEnabled () {
-    if (this.videoDetails.getFiles().length > 1) { // Already transcoded
-      return false
-    }
-
-    if (this.liveVideo && this.form.value['saveReplay'] !== true) {
-      return false
-    }
-
-    return true
-  }
-
-  update () {
-    if (this.checkForm() === false || this.isUpdatingVideo === true) {
+    if (!this.form.valid || this.isUpdatingVideo === true) {
       return
     }
 
-    this.video.patch(this.form.value)
+    this.videoEdit.patch(this.form.value)
 
     this.loadingBar.useRef().start()
     this.isUpdatingVideo = true
 
     // Update the video
-    this.videoService.updateVideo(this.video)
+    this.videoService.updateVideo(this.videoEdit)
         .pipe(
           // Then update captions
-          switchMap(() => this.videoCaptionService.updateCaptions(this.video.id, this.videoCaptions)),
+          switchMap(() => this.videoCaptionService.updateCaptions(this.videoEdit.id, this.videoCaptions)),
 
           switchMap(() => {
             if (!this.liveVideo) return of(undefined)
 
             const liveVideoUpdate: LiveVideoUpdate = {
               saveReplay: !!this.form.value.saveReplay,
-              permanentLive: !!this.form.value.permanentLive
+              permanentLive: !!this.form.value.permanentLive,
+              latencyMode: this.form.value.latencyMode
             }
 
             // Don't update live attributes if they did not change
@@ -138,7 +136,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
               .some(key => this.liveVideo[key] !== liveVideoUpdate[key])
             if (!liveChanged) return of(undefined)
 
-            return this.liveVideoService.updateLive(this.video.id, liveVideoUpdate)
+            return this.liveVideoService.updateLive(this.videoEdit.id, liveVideoUpdate)
           })
         )
         .subscribe({
@@ -147,23 +145,23 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
             this.isUpdatingVideo = false
             this.loadingBar.useRef().complete()
             this.notifier.success($localize`Video updated.`)
-            this.router.navigateByUrl(Video.buildWatchUrl(this.video))
+            this.router.navigateByUrl(Video.buildWatchUrl(this.videoEdit))
           },
 
           error: err => {
             this.loadingBar.useRef().complete()
             this.isUpdatingVideo = false
             this.notifier.error(err.message)
-            console.error(err)
+            logger.error(err)
           }
         })
   }
 
   hydratePluginFieldsFromVideo () {
-    if (!this.video.pluginData) return
+    if (!this.videoEdit.pluginData) return
 
     this.form.patchValue({
-      pluginData: this.video.pluginData
+      pluginData: this.videoEdit.pluginData
     })
   }
 

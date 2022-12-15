@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
-import { FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms'
+import { AsyncValidatorFn, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms'
 import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
-import { FormReactiveErrors, FormReactiveValidationMessages } from './form-reactive'
+import { FormReactiveErrors, FormReactiveValidationMessages } from './form-reactive.service'
 
 @Injectable()
 export class FormValidatorService {
@@ -30,7 +30,7 @@ export class FormValidatorService {
 
       if (field?.MESSAGES) validationMessages[name] = field.MESSAGES as { [ name: string ]: string }
 
-      const defaultValue = defaultValues[name] || ''
+      const defaultValue = defaultValues[name] ?? ''
 
       if (field?.VALIDATORS) group[name] = [ defaultValue, field.VALIDATORS ]
       else group[name] = [ defaultValue ]
@@ -40,7 +40,7 @@ export class FormValidatorService {
     return { form, formErrors, validationMessages }
   }
 
-  updateForm (
+  updateFormGroup (
     form: FormGroup,
     formErrors: FormReactiveErrors,
     validationMessages: FormReactiveValidationMessages,
@@ -52,7 +52,7 @@ export class FormValidatorService {
 
       const field = obj[name]
       if (this.isRecursiveField(field)) {
-        this.updateForm(
+        this.updateFormGroup(
           form[name],
           formErrors[name] as FormReactiveErrors,
           validationMessages[name] as FormReactiveValidationMessages,
@@ -66,8 +66,22 @@ export class FormValidatorService {
 
       const defaultValue = defaultValues[name] || ''
 
-      if (field?.VALIDATORS) form.addControl(name, new FormControl(defaultValue, field.VALIDATORS as ValidatorFn[]))
-      else form.addControl(name, new FormControl(defaultValue))
+      form.addControl(
+        name,
+        new FormControl(defaultValue, field?.VALIDATORS as ValidatorFn[], field?.ASYNC_VALIDATORS as AsyncValidatorFn[])
+      )
+    }
+  }
+
+  updateTreeValidity (group: FormGroup | FormArray): void {
+    for (const key of Object.keys(group.controls)) {
+      const abstractControl = group.controls[key] as FormControl
+
+      if (abstractControl instanceof FormGroup || abstractControl instanceof FormArray) {
+        this.updateTreeValidity(abstractControl)
+      } else {
+        abstractControl.updateValueAndValidity({ emitEvent: false })
+      }
     }
   }
 

@@ -22,7 +22,6 @@ export class SearchFiltersComponent implements OnInit {
   publishedDateRanges: FormOption[] = []
   sorts: FormOption[] = []
   durationRanges: FormOption[] = []
-  videoType: FormOption[] = []
 
   publishedDateRange: string
   durationRange: string
@@ -51,17 +50,6 @@ export class SearchFiltersComponent implements OnInit {
       {
         id: 'last_365days',
         label: $localize`Last 365 days`
-      }
-    ]
-
-    this.videoType = [
-      {
-        id: 'vod',
-        label: $localize`VOD videos`
-      },
-      {
-        id: 'live',
-        label: $localize`Live videos`
       }
     ]
 
@@ -150,11 +138,11 @@ export class SearchFiltersComponent implements OnInit {
   private loadOriginallyPublishedAtYears () {
     this.originallyPublishedStartYear = this.advancedSearch.originallyPublishedStartDate
       ? new Date(this.advancedSearch.originallyPublishedStartDate).getFullYear().toString()
-      : null
+      : undefined
 
     this.originallyPublishedEndYear = this.advancedSearch.originallyPublishedEndDate
       ? new Date(this.advancedSearch.originallyPublishedEndDate).getFullYear().toString()
-      : null
+      : undefined
   }
 
   private loadFromDurationRange () {
@@ -201,7 +189,7 @@ export class SearchFiltersComponent implements OnInit {
 
       this.advancedSearch.originallyPublishedStartDate = start.toISOString()
     } else {
-      this.advancedSearch.originallyPublishedStartDate = null
+      this.advancedSearch.originallyPublishedStartDate = undefined
     }
 
     if (this.originallyPublishedEndYear) {
@@ -211,7 +199,7 @@ export class SearchFiltersComponent implements OnInit {
 
       this.advancedSearch.originallyPublishedEndDate = end.toISOString()
     } else {
-      this.advancedSearch.originallyPublishedEndDate = null
+      this.advancedSearch.originallyPublishedEndDate = undefined
     }
   }
 

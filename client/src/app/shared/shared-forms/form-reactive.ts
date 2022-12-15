@@ -1,14 +1,9 @@
 import { FormGroup } from '@angular/forms'
 import { BuildFormArgument, BuildFormDefaultValues } from '../form-validators/form-validator.model'
-import { FormValidatorService } from './form-validator.service'
-
-export type FormReactiveErrors = { [ id: string ]: string | FormReactiveErrors }
-export type FormReactiveValidationMessages = {
-  [ id: string ]: { [ name: string ]: string } | FormReactiveValidationMessages
-}
+import { FormReactiveService, FormReactiveValidationMessages } from './form-reactive.service'
 
 export abstract class FormReactive {
-  protected abstract formValidatorService: FormValidatorService
+  protected abstract formReactiveService: FormReactiveService
   protected formChanged = false
 
   form: FormGroup
@@ -16,55 +11,22 @@ export abstract class FormReactive {
   validationMessages: FormReactiveValidationMessages
 
   buildForm (obj: BuildFormArgument, defaultValues: BuildFormDefaultValues = {}) {
-    const { formErrors, validationMessages, form } = this.formValidatorService.buildForm(obj, defaultValues)
+    const { formErrors, validationMessages, form } = this.formReactiveService.buildForm(obj, defaultValues)
 
     this.form = form
     this.formErrors = formErrors
     this.validationMessages = validationMessages
+  }
 
-    this.form.valueChanges.subscribe(() => this.onValueChanged(this.form, this.formErrors, this.validationMessages, false))
+  protected async waitPendingCheck () {
+    return this.formReactiveService.waitPendingCheck(this.form)
+  }
+
+  protected markAllAsDirty () {
+    return this.formReactiveService.markAllAsDirty(this.form.controls)
   }
 
   protected forceCheck () {
-    return this.onValueChanged(this.form, this.formErrors, this.validationMessages, true)
+    return this.formReactiveService.forceCheck(this.form, this.formErrors, this.validationMessages)
   }
-
-  protected check () {
-    return this.onValueChanged(this.form, this.formErrors, this.validationMessages, false)
-  }
-
-  private onValueChanged (
-    form: FormGroup,
-    formErrors: FormReactiveErrors,
-    validationMessages: FormReactiveValidationMessages,
-    forceCheck = false
-  ) {
-    for (const field of Object.keys(formErrors)) {
-      if (formErrors[field] && typeof formErrors[field] === 'object') {
-        this.onValueChanged(
-          form.controls[field] as FormGroup,
-          formErrors[field] as FormReactiveErrors,
-          validationMessages[field] as FormReactiveValidationMessages,
-          forceCheck
-        )
-        continue
-      }
-
-      // clear previous error message (if any)
-      formErrors[field] = ''
-      const control = form.get(field)
-
-      if (control.dirty) this.formChanged = true
-
-      // Don't care if dirty on force check
-      const isDirty = control.dirty || forceCheck === true
-      if (control && isDirty && control.enabled && !control.valid) {
-        const messages = validationMessages[field]
-        for (const key of Object.keys(control.errors)) {
-          formErrors[field] += messages[key] + ' '
-        }
-      }
-    }
-  }
-
 }

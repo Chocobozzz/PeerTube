@@ -1,7 +1,7 @@
 import { remove } from 'fs-extra'
 import memoizee from 'memoizee'
 import { join } from 'path'
-import { FindOptions, Op, Transaction } from 'sequelize'
+import { FindOptions, Op, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -18,16 +18,21 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { Where } from 'sequelize/types/lib/utils'
 import validator from 'validator'
-import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 import { logger } from '@server/helpers/logger'
 import { extractVideo } from '@server/helpers/video'
-import { getHLSPublicFileUrl, getWebTorrentPublicFileUrl } from '@server/lib/object-storage'
+import { buildRemoteVideoBaseUrl } from '@server/lib/activitypub/url'
+import {
+  getHLSPrivateFileUrl,
+  getHLSPublicFileUrl,
+  getWebTorrentPrivateFileUrl,
+  getWebTorrentPublicFileUrl
+} from '@server/lib/object-storage'
 import { getFSTorrentFilePath } from '@server/lib/paths'
+import { isVideoInPrivateDirectory } from '@server/lib/video-privacy'
 import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoWithHost } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
-import { VideoStorage } from '@shared/models'
+import { VideoResolution, VideoStorage } from '@shared/models'
+import { AttributesOnly } from '@shared/typescript-utils'
 import {
   isVideoFileExtnameValid,
   isVideoFileInfoHashValid,
@@ -39,7 +44,6 @@ import {
   LAZY_STATIC_PATHS,
   MEMOIZE_LENGTH,
   MEMOIZE_TTL,
-  MIMETYPES,
   STATIC_DOWNLOAD_PATHS,
   STATIC_PATHS,
   WEBSERVER
@@ -50,6 +54,7 @@ import { doesExist } from '../shared'
 import { parseAggregateResult, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
+import { CONFIG } from '@server/initializers/config'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO',
@@ -71,7 +76,7 @@ export enum ScopeNames {
       }
     ]
   },
-  [ScopeNames.WITH_VIDEO_OR_PLAYLIST]: (options: { whereVideo?: Where } = {}) => {
+  [ScopeNames.WITH_VIDEO_OR_PLAYLIST]: (options: { whereVideo?: WhereOptions } = {}) => {
     return {
       include: [
         {
@@ -297,6 +302,16 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     return VideoFileModel.findOne(query)
   }
 
+  static loadWithVideoByFilename (filename: string): Promise<MVideoFileVideo | MVideoFileStreamingPlaylistVideo> {
+    const query = {
+      where: {
+        filename
+      }
+    }
+
+    return VideoFileModel.scope(ScopeNames.WITH_VIDEO_OR_PLAYLIST).findOne(query)
+  }
+
   static loadWithVideoOrPlaylistByTorrentFilename (filename: string) {
     const query = {
       where: {
@@ -305,6 +320,10 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     }
 
     return VideoFileModel.scope(ScopeNames.WITH_VIDEO_OR_PLAYLIST).findOne(query)
+  }
+
+  static load (id: number): Promise<MVideoFile> {
+    return VideoFileModel.findByPk(id)
   }
 
   static loadWithMetadata (id: number) {
@@ -407,15 +426,16 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     mode: 'streaming-playlist' | 'video',
     transaction: Transaction
   ) {
-    const baseWhere = {
+    const baseFind = {
       fps: videoFile.fps,
-      resolution: videoFile.resolution
+      resolution: videoFile.resolution,
+      transaction
     }
 
-    if (mode === 'streaming-playlist') Object.assign(baseWhere, { videoStreamingPlaylistId: videoFile.videoStreamingPlaylistId })
-    else Object.assign(baseWhere, { videoId: videoFile.videoId })
+    const element = mode === 'streaming-playlist'
+      ? await VideoFileModel.loadHLSFile({ ...baseFind, playlistId: videoFile.videoStreamingPlaylistId })
+      : await VideoFileModel.loadWebTorrentFile({ ...baseFind, videoId: videoFile.videoId })
 
-    const element = await VideoFileModel.findOne({ where: baseWhere, transaction })
     if (!element) return videoFile.save({ transaction })
 
     for (const k of Object.keys(videoFile.toJSON())) {
@@ -423,6 +443,36 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     }
 
     return element.save({ transaction })
+  }
+
+  static async loadWebTorrentFile (options: {
+    videoId: number
+    fps: number
+    resolution: number
+    transaction?: Transaction
+  }) {
+    const where = {
+      fps: options.fps,
+      resolution: options.resolution,
+      videoId: options.videoId
+    }
+
+    return VideoFileModel.findOne({ where, transaction: options.transaction })
+  }
+
+  static async loadHLSFile (options: {
+    playlistId: number
+    fps: number
+    resolution: number
+    transaction?: Transaction
+  }) {
+    const where = {
+      fps: options.fps,
+      resolution: options.resolution,
+      videoStreamingPlaylistId: options.playlistId
+    }
+
+    return VideoFileModel.findOne({ where, transaction: options.transaction })
   }
 
   static removeHLSFilesOfVideoId (videoStreamingPlaylistId: number) {
@@ -438,7 +488,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   }
 
   getVideoOrStreamingPlaylist (this: MVideoFileVideo | MVideoFileStreamingPlaylistVideo): MVideo | MStreamingPlaylistVideo {
-    if (this.videoId) return (this as MVideoFileVideo).Video
+    if (this.videoId || (this as MVideoFileVideo).Video) return (this as MVideoFileVideo).Video
 
     return (this as MVideoFileStreamingPlaylistVideo).VideoStreamingPlaylist
   }
@@ -448,7 +498,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   }
 
   isAudio () {
-    return !!MIMETYPES.AUDIO.EXT_MIMETYPE[this.extname]
+    return this.resolution === VideoResolution.H_NOVIDEO
   }
 
   isLive () {
@@ -459,7 +509,25 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     return !!this.videoStreamingPlaylistId
   }
 
-  getObjectStorageUrl () {
+  // ---------------------------------------------------------------------------
+
+  getObjectStorageUrl (video: MVideo) {
+    if (video.hasPrivateStaticPath() && CONFIG.OBJECT_STORAGE.PROXY.PROXIFY_PRIVATE_FILES === true) {
+      return this.getPrivateObjectStorageUrl(video)
+    }
+
+    return this.getPublicObjectStorageUrl()
+  }
+
+  private getPrivateObjectStorageUrl (video: MVideo) {
+    if (this.isHLS()) {
+      return getHLSPrivateFileUrl(video, this.filename)
+    }
+
+    return getWebTorrentPrivateFileUrl(this.filename)
+  }
+
+  private getPublicObjectStorageUrl () {
     if (this.isHLS()) {
       return getHLSPublicFileUrl(this.fileUrl)
     }
@@ -467,22 +535,45 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     return getWebTorrentPublicFileUrl(this.fileUrl)
   }
 
-  getFileUrl (video: MVideo) {
-    if (this.storage === VideoStorage.OBJECT_STORAGE) {
-      return this.getObjectStorageUrl()
-    }
+  // ---------------------------------------------------------------------------
 
-    if (!this.Video) this.Video = video as VideoModel
-    if (video.isOwned()) return WEBSERVER.URL + this.getFileStaticPath(video)
+  getFileUrl (video: MVideo) {
+    if (video.isOwned()) {
+      if (this.storage === VideoStorage.OBJECT_STORAGE) {
+        return this.getObjectStorageUrl(video)
+      }
+
+      return WEBSERVER.URL + this.getFileStaticPath(video)
+    }
 
     return this.fileUrl
   }
 
+  // ---------------------------------------------------------------------------
+
   getFileStaticPath (video: MVideo) {
-    if (this.isHLS()) return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, video.uuid, this.filename)
+    if (this.isHLS()) return this.getHLSFileStaticPath(video)
+
+    return this.getWebTorrentFileStaticPath(video)
+  }
+
+  private getWebTorrentFileStaticPath (video: MVideo) {
+    if (isVideoInPrivateDirectory(video.privacy)) {
+      return join(STATIC_PATHS.PRIVATE_WEBSEED, this.filename)
+    }
 
     return join(STATIC_PATHS.WEBSEED, this.filename)
   }
+
+  private getHLSFileStaticPath (video: MVideo) {
+    if (isVideoInPrivateDirectory(video.privacy)) {
+      return join(STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS, video.uuid, this.filename)
+    }
+
+    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, video.uuid, this.filename)
+  }
+
+  // ---------------------------------------------------------------------------
 
   getFileDownloadUrl (video: MVideoWithHost) {
     const path = this.isHLS()

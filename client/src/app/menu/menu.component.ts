@@ -21,9 +21,10 @@ import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
+import { PluginsManager } from '@root-helpers/plugins-manager'
 import { HTMLServerConfig, ServerConfig, UserRight, VideoConstant } from '@shared/models'
 
-const logger = debug('peertube:menu:MenuComponent')
+const debugLogger = debug('peertube:menu:MenuComponent')
 
 @Component({
   selector: 'my-menu',
@@ -129,6 +130,15 @@ export class MenuComponent implements OnInit {
       .subscribe(() => this.openQuickSettings())
   }
 
+  getExternalLoginHref () {
+    if (!this.serverConfig || this.serverConfig.client.menu.login.redirectOnSingleExternalAuth !== true) return undefined
+
+    const externalAuths = this.serverConfig.plugin.registeredExternalAuths
+    if (externalAuths.length !== 1) return undefined
+
+    return PluginsManager.getExternalAuthHref(externalAuths[0])
+  }
+
   isRegistrationAllowed () {
     if (!this.serverConfig) return false
 
@@ -186,9 +196,9 @@ export class MenuComponent implements OnInit {
 
   toggleUseP2P () {
     if (!this.user) return
-    this.user.webTorrentEnabled = !this.user.webTorrentEnabled
+    this.user.p2pEnabled = !this.user.p2pEnabled
 
-    this.userService.updateMyProfile({ webTorrentEnabled: this.user.webTorrentEnabled })
+    this.userService.updateMyProfile({ p2pEnabled: this.user.p2pEnabled })
       .subscribe(() => this.authService.refreshUserInformation())
   }
 
@@ -285,8 +295,8 @@ export class MenuComponent implements OnInit {
       .pipe(
         switchMap(() => this.user.computeCanSeeVideosLink(this.userService.getMyVideoQuotaUsed()))
       ).subscribe(res => {
-        if (res === true) logger('User can see videos link.')
-        else logger('User cannot see videos link.')
+        if (res === true) debugLogger('User can see videos link.')
+        else debugLogger('User cannot see videos link.')
       })
   }
 

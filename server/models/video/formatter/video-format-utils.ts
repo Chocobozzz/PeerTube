@@ -1,11 +1,20 @@
-import { uuidToShort } from '@server/helpers/uuid'
 import { generateMagnetUri } from '@server/helpers/webtorrent'
+import { getActivityStreamDuration } from '@server/lib/activitypub/activity'
+import { tracer } from '@server/lib/opentelemetry/tracing'
 import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls'
-import { VideoViews } from '@server/lib/video-views'
-import { VideoFile, VideosCommonQueryAfterSanitize } from '@shared/models'
-import { ActivityTagObject, ActivityUrlObject, VideoObject } from '../../../../shared/models/activitypub/objects'
-import { Video, VideoDetails, VideoInclude } from '../../../../shared/models/videos'
-import { VideoStreamingPlaylist } from '../../../../shared/models/videos/video-streaming-playlist.model'
+import { VideoViewsManager } from '@server/lib/views/video-views-manager'
+import { uuidToShort } from '@shared/extra-utils'
+import {
+  ActivityTagObject,
+  ActivityUrlObject,
+  Video,
+  VideoDetails,
+  VideoFile,
+  VideoInclude,
+  VideoObject,
+  VideosCommonQueryAfterSanitize,
+  VideoStreamingPlaylist
+} from '@shared/models'
 import { isArray } from '../../../helpers/custom-validators/misc'
 import {
   MIMETYPES,
@@ -25,6 +34,7 @@ import {
 import {
   MServer,
   MStreamingPlaylistRedundanciesOpt,
+  MUserId,
   MVideo,
   MVideoAP,
   MVideoFile,
@@ -48,7 +58,7 @@ export type VideoFormattingJSONOptions = {
 }
 
 function guessAdditionalAttributesFromQuery (query: VideosCommonQueryAfterSanitize): VideoFormattingJSONOptions {
-  if (!query || !query.include) return {}
+  if (!query?.include) return {}
 
   return {
     additionalAttributes: {
@@ -63,6 +73,8 @@ function guessAdditionalAttributesFromQuery (query: VideosCommonQueryAfterSaniti
 }
 
 function videoModelToFormattedJSON (video: MVideoFormattable, options: VideoFormattingJSONOptions = {}): Video {
+  const span = tracer.startSpan('peertube.VideoModel.toFormattedJSON')
+
   const userHistory = isArray(video.UserVideoHistories) ? video.UserVideoHistories[0] : undefined
 
   const videoObject: Video = {
@@ -91,13 +103,17 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options: VideoForm
     },
     nsfw: video.nsfw,
 
+    truncatedDescription: video.getTruncatedDescription(),
     description: options && options.completeDescription === true
       ? video.description
       : video.getTruncatedDescription(),
 
     isLocal: video.isOwned(),
     duration: video.duration,
+
     views: video.views,
+    viewers: VideoViewsManager.Instance.getViewers(video),
+
     likes: video.likes,
     dislikes: video.dislikes,
     thumbnailPath: video.getMiniatureStaticPath(),
@@ -119,10 +135,6 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options: VideoForm
 
     // Can be added by external plugins
     pluginData: (video as any).pluginData
-  }
-
-  if (video.isLive) {
-    videoObject.viewers = VideoViews.Instance.getViewers(video)
   }
 
   const add = options.additionalAttributes
@@ -161,11 +173,16 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options: VideoForm
     videoObject.files = videoFilesModelToFormattedJSON(video, video.VideoFiles)
   }
 
+  span.end()
+
   return videoObject
 }
 
 function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): VideoDetails {
+  const span = tracer.startSpan('peertube.VideoModel.toFormattedDetailsJSON')
+
   const videoJSON = video.toFormattedJSON({
+    completeDescription: true,
     additionalAttributes: {
       scheduledUpdate: true,
       blacklistInfo: true,
@@ -191,6 +208,8 @@ function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): Vid
 
     trackerUrls: video.getTrackerUrls()
   }
+
+  span.end()
 
   return Object.assign(videoJSON, detailsJSON)
 }
@@ -229,8 +248,12 @@ function sortByResolutionDesc (fileA: MVideoFile, fileB: MVideoFile) {
 function videoFilesModelToFormattedJSON (
   video: MVideoFormattable,
   videoFiles: MVideoFileRedundanciesOpt[],
-  includeMagnet = true
+  options: {
+    includeMagnet?: boolean // default true
+  } = {}
 ): VideoFile[] {
+  const { includeMagnet = true } = options
+
   const trackerUrls = includeMagnet
     ? video.getTrackerUrls()
     : []
@@ -240,6 +263,8 @@ function videoFilesModelToFormattedJSON (
     .sort(sortByResolutionDesc)
     .map(videoFile => {
       return {
+        id: videoFile.id,
+
         resolution: {
           id: videoFile.resolution,
           label: videoFile.resolution === 0 ? 'Audio' : `${videoFile.resolution}p`
@@ -263,11 +288,14 @@ function videoFilesModelToFormattedJSON (
     })
 }
 
-function addVideoFilesInAPAcc (
-  acc: ActivityUrlObject[] | ActivityTagObject[],
-  video: MVideo,
+function addVideoFilesInAPAcc (options: {
+  acc: ActivityUrlObject[] | ActivityTagObject[]
+  video: MVideo
   files: MVideoFile[]
-) {
+  user?: MUserId
+}) {
+  const { acc, video, files } = options
+
   const trackerUrls = video.getTrackerUrls()
 
   const sortedFiles = (files || [])
@@ -352,7 +380,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     }
   ]
 
-  addVideoFilesInAPAcc(url, video, video.VideoFiles || [])
+  addVideoFilesInAPAcc({ acc: url, video, files: video.VideoFiles || [] })
 
   for (const playlist of (video.VideoStreamingPlaylists || [])) {
     const tag = playlist.p2pMediaLoaderInfohashes
@@ -364,7 +392,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
       href: playlist.getSha256SegmentsUrl(video)
     })
 
-    addVideoFilesInAPAcc(tag, video, playlist.VideoFiles || [])
+    addVideoFilesInAPAcc({ acc: tag, video, files: playlist.VideoFiles || [] })
 
     url.push({
       type: 'Link',
@@ -411,15 +439,6 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     views: video.views,
     sensitive: video.nsfw,
     waitTranscoding: video.waitTranscoding,
-    isLiveBroadcast: video.isLive,
-
-    liveSaveReplay: video.isLive
-      ? video.VideoLive.saveReplay
-      : null,
-
-    permanentLive: video.isLive
-      ? video.VideoLive.permanentLive
-      : null,
 
     state: video.state,
     commentsEnabled: video.commentsEnabled,
@@ -431,10 +450,13 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
       : null,
 
     updated: video.updatedAt.toISOString(),
+
     mediaType: 'text/markdown',
     content: video.description,
     support: video.support,
+
     subtitleLanguage,
+
     icon: icons.map(i => ({
       type: 'Image',
       url: i.getFileUrl(video),
@@ -442,11 +464,14 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
       width: i.width,
       height: i.height
     })),
+
     url,
+
     likes: getLocalVideoLikesActivityPubUrl(video),
     dislikes: getLocalVideoDislikesActivityPubUrl(video),
     shares: getLocalVideoSharesActivityPubUrl(video),
     comments: getLocalVideoCommentsActivityPubUrl(video),
+
     attributedTo: [
       {
         type: 'Person',
@@ -456,13 +481,10 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
         type: 'Group',
         id: video.VideoChannel.Actor.url
       }
-    ]
-  }
-}
+    ],
 
-function getActivityStreamDuration (duration: number) {
-  // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
-  return 'PT' + duration + 'S'
+    ...buildLiveAPAttributes(video)
+  }
 }
 
 function getCategoryLabel (id: number) {
@@ -490,7 +512,6 @@ export {
   videoModelToFormattedDetailsJSON,
   videoFilesModelToFormattedJSON,
   videoModelToActivityPubObject,
-  getActivityStreamDuration,
 
   guessAdditionalAttributesFromQuery,
 
@@ -499,4 +520,24 @@ export {
   getLanguageLabel,
   getPrivacyLabel,
   getStateLabel
+}
+
+// ---------------------------------------------------------------------------
+
+function buildLiveAPAttributes (video: MVideoAP) {
+  if (!video.isLive) {
+    return {
+      isLiveBroadcast: false,
+      liveSaveReplay: null,
+      permanentLive: null,
+      latencyMode: null
+    }
+  }
+
+  return {
+    isLiveBroadcast: true,
+    liveSaveReplay: video.VideoLive.saveReplay,
+    permanentLive: video.VideoLive.permanentLive,
+    latencyMode: video.VideoLive.latencyMode
+  }
 }

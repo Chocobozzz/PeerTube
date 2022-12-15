@@ -3,7 +3,7 @@ import { UserRightGuard } from '@app/core'
 import { UserRight } from '@shared/models'
 import { VideoListComponent } from './video-list.component'
 
-export const VideosRoutes: Routes = [
+export const videosRoutes: Routes = [
   {
     path: 'videos',
     canActivate: [ UserRightGuard ],

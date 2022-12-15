@@ -1,13 +1,12 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-.custom-row {
+.notification-row {
   display: flex;
   align-items: center;
   border-bottom: 1px solid $separator-border-color;
 
   &.header {
-    font-size: 16px;
     font-weight: $font-semibold;
     margin-top: 10px;
   }

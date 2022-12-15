@@ -36,7 +36,7 @@ async function federateAllVideosOfChannel (videoChannel: MChannelId) {
   const videoIds = await VideoModel.getAllIdsFromChannel(videoChannel)
 
   for (const videoId of videoIds) {
-    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
+    const video = await VideoModel.loadFull(videoId)
 
     await federateVideoIfNeeded(video, false)
   }

@@ -1,0 +1,18 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+input {
+  @include peertube-input-text(auto);
+  @include padding-left(15px !important);
+  @include padding-right(15px !important);
+}
+
+.btn {
+  @include button-with-icon(18px);
+}
+
+.copy-text {
+  font-size: 14px;
+  margin-left: 5px;
+  vertical-align: top;
+}

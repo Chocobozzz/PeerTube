@@ -1,6 +1,3 @@
-import { registerTSPaths } from '../helpers/register-ts-paths'
-registerTSPaths()
-
 import { program } from 'commander'
 import { access, constants } from 'fs-extra'
 import { isAbsolute } from 'path'
@@ -66,7 +63,13 @@ async function run (url: string, username: string, password: string) {
     console.log(`Video ${options.videoName} uploaded.`)
     process.exit(0)
   } catch (err) {
-    console.error(require('util').inspect(err))
+    const message = err.message || ''
+    if (message.includes('413')) {
+      console.error('Aborted: user quota is exceeded or video file is too big for this PeerTube instance.')
+    } else {
+      console.error(require('util').inspect(err))
+    }
+
     process.exit(-1)
   }
 }

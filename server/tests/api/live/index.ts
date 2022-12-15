@@ -1,7 +1,7 @@
 import './live-constraints'
+import './live-fast-restream'
 import './live-socket-messages'
 import './live-permanent'
 import './live-rtmps'
 import './live-save-replay'
-import './live-views'
 import './live'

@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import { buildUUID } from '@server/helpers/uuid'
 import {
   checkAbuseStateChange,
   checkAutoInstanceFollowing,
@@ -16,19 +14,20 @@ import {
   checkUserRegistered,
   checkVideoAutoBlacklistForModerators,
   checkVideoIsPublished,
-  cleanupTests,
   MockInstancesIndex,
   MockSmtpServer,
-  PeerTubeServer,
-  prepareNotificationsTest,
-  wait,
-  waitJobs
-} from '@shared/extra-utils'
-import { AbuseState, CustomConfig, UserNotification, VideoPrivacy } from '@shared/models'
+  prepareNotificationsTest
+} from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
+import { buildUUID } from '@shared/extra-utils'
+import { AbuseState, CustomConfig, UserNotification, UserRole, VideoPrivacy } from '@shared/models'
+import { cleanupTests, PeerTubeServer, waitJobs } from '@shared/server-commands'
 
 describe('Test moderation notifications', function () {
   let servers: PeerTubeServer[] = []
-  let userAccessToken: string
+  let userToken1: string
+  let userToken2: string
+
   let userNotifications: UserNotification[] = []
   let adminNotifications: UserNotification[] = []
   let adminNotificationsServer2: UserNotification[] = []
@@ -39,11 +38,13 @@ describe('Test moderation notifications', function () {
 
     const res = await prepareNotificationsTest(3)
     emails = res.emails
-    userAccessToken = res.userAccessToken
+    userToken1 = res.userAccessToken
     servers = res.servers
     userNotifications = res.userNotifications
     adminNotifications = res.adminNotifications
     adminNotificationsServer2 = res.adminNotificationsServer2
+
+    userToken2 = await servers[1].users.generateUserAndToken('user2', UserRole.USER)
   })
 
   describe('Abuse for moderators notification', function () {
@@ -58,13 +59,25 @@ describe('Test moderation notifications', function () {
       }
     })
 
+    it('Should not send a notification to moderators on local abuse reported by an admin', async function () {
+      this.timeout(20000)
+
+      const name = 'video for abuse ' + buildUUID()
+      const video = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
+
+      await servers[0].abuses.report({ videoId: video.id, reason: 'super reason' })
+
+      await waitJobs(servers)
+      await checkNewVideoAbuseForModerators({ ...baseParams, shortUUID: video.shortUUID, videoName: name, checkType: 'absence' })
+    })
+
     it('Should send a notification to moderators on local video abuse', async function () {
       this.timeout(20000)
 
       const name = 'video for abuse ' + buildUUID()
-      const video = await servers[0].videos.upload({ token: userAccessToken, attributes: { name } })
+      const video = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
 
-      await servers[0].abuses.report({ videoId: video.id, reason: 'super reason' })
+      await servers[0].abuses.report({ token: userToken1, videoId: video.id, reason: 'super reason' })
 
       await waitJobs(servers)
       await checkNewVideoAbuseForModerators({ ...baseParams, shortUUID: video.shortUUID, videoName: name, checkType: 'presence' })
@@ -74,12 +87,12 @@ describe('Test moderation notifications', function () {
       this.timeout(20000)
 
       const name = 'video for abuse ' + buildUUID()
-      const video = await servers[0].videos.upload({ token: userAccessToken, attributes: { name } })
+      const video = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
 
       await waitJobs(servers)
 
       const videoId = await servers[1].videos.getId({ uuid: video.uuid })
-      await servers[1].abuses.report({ videoId, reason: 'super reason' })
+      await servers[1].abuses.report({ token: userToken2, videoId, reason: 'super reason' })
 
       await waitJobs(servers)
       await checkNewVideoAbuseForModerators({ ...baseParams, shortUUID: video.shortUUID, videoName: name, checkType: 'presence' })
@@ -89,16 +102,16 @@ describe('Test moderation notifications', function () {
       this.timeout(20000)
 
       const name = 'video for abuse ' + buildUUID()
-      const video = await servers[0].videos.upload({ token: userAccessToken, attributes: { name } })
+      const video = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
       const comment = await servers[0].comments.createThread({
-        token: userAccessToken,
+        token: userToken1,
         videoId: video.id,
         text: 'comment abuse ' + buildUUID()
       })
 
       await waitJobs(servers)
 
-      await servers[0].abuses.report({ commentId: comment.id, reason: 'super reason' })
+      await servers[0].abuses.report({ token: userToken1, commentId: comment.id, reason: 'super reason' })
 
       await waitJobs(servers)
       await checkNewCommentAbuseForModerators({ ...baseParams, shortUUID: video.shortUUID, videoName: name, checkType: 'presence' })
@@ -108,10 +121,10 @@ describe('Test moderation notifications', function () {
       this.timeout(20000)
 
       const name = 'video for abuse ' + buildUUID()
-      const video = await servers[0].videos.upload({ token: userAccessToken, attributes: { name } })
+      const video = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
 
       await servers[0].comments.createThread({
-        token: userAccessToken,
+        token: userToken1,
         videoId: video.id,
         text: 'comment abuse ' + buildUUID()
       })
@@ -120,7 +133,7 @@ describe('Test moderation notifications', function () {
 
       const { data } = await servers[1].comments.listThreads({ videoId: video.uuid })
       const commentId = data[0].id
-      await servers[1].abuses.report({ commentId, reason: 'super reason' })
+      await servers[1].abuses.report({ token: userToken2, commentId, reason: 'super reason' })
 
       await waitJobs(servers)
       await checkNewCommentAbuseForModerators({ ...baseParams, shortUUID: video.shortUUID, videoName: name, checkType: 'presence' })
@@ -133,7 +146,7 @@ describe('Test moderation notifications', function () {
       const { account } = await servers[0].users.create({ username, password: 'donald' })
       const accountId = account.id
 
-      await servers[0].abuses.report({ accountId, reason: 'super reason' })
+      await servers[0].abuses.report({ token: userToken1, accountId, reason: 'super reason' })
 
       await waitJobs(servers)
       await checkNewAccountAbuseForModerators({ ...baseParams, displayName: username, checkType: 'presence' })
@@ -149,7 +162,7 @@ describe('Test moderation notifications', function () {
       await waitJobs(servers)
 
       const account = await servers[1].accounts.get({ accountName: username + '@' + servers[0].host })
-      await servers[1].abuses.report({ accountId: account.id, reason: 'super reason' })
+      await servers[1].abuses.report({ token: userToken2, accountId: account.id, reason: 'super reason' })
 
       await waitJobs(servers)
       await checkNewAccountAbuseForModerators({ ...baseParams, displayName: username, checkType: 'presence' })
@@ -165,13 +178,13 @@ describe('Test moderation notifications', function () {
         server: servers[0],
         emails,
         socketNotifications: userNotifications,
-        token: userAccessToken
+        token: userToken1
       }
 
       const name = 'abuse ' + buildUUID()
-      const video = await servers[0].videos.upload({ token: userAccessToken, attributes: { name } })
+      const video = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
 
-      const body = await servers[0].abuses.report({ token: userAccessToken, videoId: video.id, reason: 'super reason' })
+      const body = await servers[0].abuses.report({ token: userToken1, videoId: video.id, reason: 'super reason' })
       abuseId = body.abuse.id
     })
 
@@ -205,7 +218,7 @@ describe('Test moderation notifications', function () {
         server: servers[0],
         emails,
         socketNotifications: userNotifications,
-        token: userAccessToken
+        token: userToken1
       }
 
       baseParamsAdmin = {
@@ -216,15 +229,15 @@ describe('Test moderation notifications', function () {
       }
 
       const name = 'abuse ' + buildUUID()
-      const video = await servers[0].videos.upload({ token: userAccessToken, attributes: { name } })
+      const video = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
 
       {
-        const body = await servers[0].abuses.report({ token: userAccessToken, videoId: video.id, reason: 'super reason' })
+        const body = await servers[0].abuses.report({ token: userToken1, videoId: video.id, reason: 'super reason' })
         abuseId = body.abuse.id
       }
 
       {
-        const body = await servers[0].abuses.report({ token: userAccessToken, videoId: video.id, reason: 'super reason 2' })
+        const body = await servers[0].abuses.report({ token: userToken1, videoId: video.id, reason: 'super reason 2' })
         abuseId2 = body.abuse.id
       }
     })
@@ -254,7 +267,7 @@ describe('Test moderation notifications', function () {
       this.timeout(10000)
 
       const message = 'my super message to moderators'
-      await servers[0].abuses.addMessage({ token: userAccessToken, abuseId: abuseId2, message })
+      await servers[0].abuses.addMessage({ token: userToken1, abuseId: abuseId2, message })
       await waitJobs(servers)
 
       const toEmail = 'admin' + servers[0].internalServerNumber + '@example.com'
@@ -265,7 +278,7 @@ describe('Test moderation notifications', function () {
       this.timeout(10000)
 
       const message = 'my super message that should not be sent to reporter'
-      await servers[0].abuses.addMessage({ token: userAccessToken, abuseId: abuseId2, message })
+      await servers[0].abuses.addMessage({ token: userToken1, abuseId: abuseId2, message })
       await waitJobs(servers)
 
       const toEmail = 'user_1@example.com'
@@ -281,7 +294,7 @@ describe('Test moderation notifications', function () {
         server: servers[0],
         emails,
         socketNotifications: userNotifications,
-        token: userAccessToken
+        token: userToken1
       }
     })
 
@@ -289,7 +302,7 @@ describe('Test moderation notifications', function () {
       this.timeout(10000)
 
       const name = 'video for abuse ' + buildUUID()
-      const { uuid, shortUUID } = await servers[0].videos.upload({ token: userAccessToken, attributes: { name } })
+      const { uuid, shortUUID } = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
 
       await servers[0].blacklist.add({ videoId: uuid })
 
@@ -301,7 +314,7 @@ describe('Test moderation notifications', function () {
       this.timeout(10000)
 
       const name = 'video for abuse ' + buildUUID()
-      const { uuid, shortUUID } = await servers[0].videos.upload({ token: userAccessToken, attributes: { name } })
+      const { uuid, shortUUID } = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
 
       await servers[0].blacklist.add({ videoId: uuid })
 
@@ -335,7 +348,7 @@ describe('Test moderation notifications', function () {
 
       await checkUserRegistered({ ...baseParams, username: 'user_45', checkType: 'presence' })
 
-      const userOverride = { socketNotifications: userNotifications, token: userAccessToken, check: { web: true, mail: false } }
+      const userOverride = { socketNotifications: userNotifications, token: userToken1, check: { web: true, mail: false } }
       await checkUserRegistered({ ...baseParams, ...userOverride, username: 'user_45', checkType: 'absence' })
     })
   })
@@ -360,7 +373,7 @@ describe('Test moderation notifications', function () {
         followings: {
           instance: {
             autoFollowIndex: {
-              indexUrl: `http://localhost:${port}/api/v1/instances/hosts`,
+              indexUrl: `http://127.0.0.1:${port}/api/v1/instances/hosts`,
               enabled: true
             }
           }
@@ -369,16 +382,16 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification only to admin when there is a new instance follower', async function () {
-      this.timeout(20000)
+      this.timeout(60000)
 
       await servers[2].follows.follow({ hosts: [ servers[0].url ] })
 
       await waitJobs(servers)
 
-      await checkNewInstanceFollower({ ...baseParams, followerHost: 'localhost:' + servers[2].port, checkType: 'presence' })
+      await checkNewInstanceFollower({ ...baseParams, followerHost: servers[2].host, checkType: 'presence' })
 
-      const userOverride = { socketNotifications: userNotifications, token: userAccessToken, check: { web: true, mail: false } }
-      await checkNewInstanceFollower({ ...baseParams, ...userOverride, followerHost: 'localhost:' + servers[2].port, checkType: 'absence' })
+      const userOverride = { socketNotifications: userNotifications, token: userToken1, check: { web: true, mail: false } }
+      await checkNewInstanceFollower({ ...baseParams, ...userOverride, followerHost: servers[2].host, checkType: 'absence' })
     })
 
     it('Should send a notification on auto follow back', async function () {
@@ -404,7 +417,7 @@ describe('Test moderation notifications', function () {
       const followingHost = servers[2].host
       await checkAutoInstanceFollowing({ ...baseParams, followerHost, followingHost, checkType: 'presence' })
 
-      const userOverride = { socketNotifications: userNotifications, token: userAccessToken, check: { web: true, mail: false } }
+      const userOverride = { socketNotifications: userNotifications, token: userToken1, check: { web: true, mail: false } }
       await checkAutoInstanceFollowing({ ...baseParams, ...userOverride, followerHost, followingHost, checkType: 'absence' })
 
       config.followings.instance.autoFollowBack.enabled = false
@@ -461,7 +474,7 @@ describe('Test moderation notifications', function () {
         server: servers[0],
         emails,
         socketNotifications: userNotifications,
-        token: userAccessToken
+        token: userToken1
       }
 
       currentCustomConfig = await servers[0].config.getCustomConfig()
@@ -482,15 +495,15 @@ describe('Test moderation notifications', function () {
       autoBlacklistTestsCustomConfig.transcoding.enabled = true
       await servers[0].config.updateCustomConfig({ newCustomConfig: autoBlacklistTestsCustomConfig })
 
-      await servers[0].subscriptions.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
-      await servers[1].subscriptions.add({ targetUri: 'user_1_channel@localhost:' + servers[0].port })
+      await servers[0].subscriptions.add({ targetUri: 'user_1_channel@' + servers[0].host })
+      await servers[1].subscriptions.add({ targetUri: 'user_1_channel@' + servers[0].host })
     })
 
     it('Should send notification to moderators on new video with auto-blacklist', async function () {
       this.timeout(120000)
 
       videoName = 'video with auto-blacklist ' + buildUUID()
-      const video = await servers[0].videos.upload({ token: userAccessToken, attributes: { name: videoName } })
+      const video = await servers[0].videos.upload({ token: userToken1, attributes: { name: videoName } })
       shortUUID = video.shortUUID
       uuid = video.uuid
 
@@ -532,7 +545,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send unblacklist but not published/subscription notes after unblacklisted if scheduled update pending', async function () {
-      this.timeout(40000)
+      this.timeout(120000)
 
       const updateAt = new Date(new Date().getTime() + 1000000)
 
@@ -547,7 +560,7 @@ describe('Test moderation notifications', function () {
         }
       }
 
-      const { shortUUID, uuid } = await servers[0].videos.upload({ token: userAccessToken, attributes })
+      const { shortUUID, uuid } = await servers[0].videos.upload({ token: userToken1, attributes })
 
       await servers[0].blacklist.remove({ videoId: uuid })
 
@@ -579,7 +592,7 @@ describe('Test moderation notifications', function () {
         }
       }
 
-      const { shortUUID } = await servers[0].videos.upload({ token: userAccessToken, attributes })
+      const { shortUUID } = await servers[0].videos.upload({ token: userToken1, attributes })
 
       await wait(6000)
       await checkVideoIsPublished({ ...userBaseParams, videoName: name, shortUUID, checkType: 'absence' })
@@ -588,7 +601,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should not send a notification to moderators on new video without auto-blacklist', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       const name = 'video without auto-blacklist ' + buildUUID()
 
@@ -602,8 +615,8 @@ describe('Test moderation notifications', function () {
     after(async () => {
       await servers[0].config.updateCustomConfig({ newCustomConfig: currentCustomConfig })
 
-      await servers[0].subscriptions.remove({ uri: 'user_1_channel@localhost:' + servers[0].port })
-      await servers[1].subscriptions.remove({ uri: 'user_1_channel@localhost:' + servers[0].port })
+      await servers[0].subscriptions.remove({ uri: 'user_1_channel@' + servers[0].host })
+      await servers[1].subscriptions.remove({ uri: 'user_1_channel@' + servers[0].host })
     })
   })
 

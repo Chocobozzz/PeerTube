@@ -1,12 +1,13 @@
 import bytes from 'bytes'
 import { IConfig } from 'config'
-import decache from 'decache'
 import { dirname, join } from 'path'
+import { decacheModule } from '@server/helpers/decache'
 import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
 import { BroadcastMessageLevel } from '@shared/models/server'
-import { VideosRedundancyStrategy } from '../../shared/models'
+import { buildPath, root } from '../../shared/core-utils'
+import { VideoPrivacy, VideosRedundancyStrategy } from '../../shared/models'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
-import { buildPath, parseBytes, parseDurationToMs, root } from '../helpers/core-utils'
+import { parseBytes, parseDurationToMs } from '../helpers/core-utils'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
@@ -18,6 +19,9 @@ const CONFIG = {
   LISTEN: {
     PORT: config.get<number>('listen.port'),
     HOSTNAME: config.get<string>('listen.hostname')
+  },
+  SECRETS: {
+    PEERTUBE: config.get<string>('secrets.peertube')
   },
   DATABASE: {
     DBNAME: config.has('database.name') ? config.get<string>('database.name') : 'peertube' + config.get<string>('database.suffix'),
@@ -61,7 +65,33 @@ const CONFIG = {
   CLIENT: {
     VIDEOS: {
       MINIATURE: {
-        get PREFER_AUTHOR_DISPLAY_NAME () { return config.get<boolean>('client.videos.miniature.prefer_author_display_name') }
+        get PREFER_AUTHOR_DISPLAY_NAME () { return config.get<boolean>('client.videos.miniature.prefer_author_display_name') },
+        get DISPLAY_AUTHOR_AVATAR () { return config.get<boolean>('client.videos.miniature.display_author_avatar') }
+      },
+      RESUMABLE_UPLOAD: {
+        get MAX_CHUNK_SIZE () { return parseBytes(config.get<number>('client.videos.resumable_upload.max_chunk_size') || 0) }
+      }
+    },
+    MENU: {
+      LOGIN: {
+        get REDIRECT_ON_SINGLE_EXTERNAL_AUTH () { return config.get<boolean>('client.menu.login.redirect_on_single_external_auth') }
+      }
+    }
+  },
+
+  DEFAULTS: {
+    PUBLISH: {
+      DOWNLOAD_ENABLED: config.get<boolean>('defaults.publish.download_enabled'),
+      COMMENTS_ENABLED: config.get<boolean>('defaults.publish.comments_enabled'),
+      PRIVACY: config.get<VideoPrivacy>('defaults.publish.privacy'),
+      LICENCE: config.get<number>('defaults.publish.licence')
+    },
+    P2P: {
+      WEBAPP: {
+        ENABLED: config.get<boolean>('defaults.p2p.webapp.enabled')
+      },
+      EMBED: {
+        ENABLED: config.get<boolean>('defaults.p2p.embed.enabled')
       }
     }
   },
@@ -80,16 +110,27 @@ const CONFIG = {
     TORRENTS_DIR: buildPath(config.get<string>('storage.torrents')),
     CACHE_DIR: buildPath(config.get<string>('storage.cache')),
     PLUGINS_DIR: buildPath(config.get<string>('storage.plugins')),
-    CLIENT_OVERRIDES_DIR: buildPath(config.get<string>('storage.client_overrides'))
+    CLIENT_OVERRIDES_DIR: buildPath(config.get<string>('storage.client_overrides')),
+    WELL_KNOWN_DIR: buildPath(config.get<string>('storage.well_known'))
+  },
+  STATIC_FILES: {
+    PRIVATE_FILES_REQUIRE_AUTH: config.get<boolean>('static_files.private_files_require_auth')
   },
   OBJECT_STORAGE: {
     ENABLED: config.get<boolean>('object_storage.enabled'),
     MAX_UPLOAD_PART: bytes.parse(config.get<string>('object_storage.max_upload_part')),
     ENDPOINT: config.get<string>('object_storage.endpoint'),
     REGION: config.get<string>('object_storage.region'),
+    UPLOAD_ACL: {
+      PUBLIC: config.get<string>('object_storage.upload_acl.public'),
+      PRIVATE: config.get<string>('object_storage.upload_acl.private')
+    },
     CREDENTIALS: {
       ACCESS_KEY_ID: config.get<string>('object_storage.credentials.access_key_id'),
       SECRET_ACCESS_KEY: config.get<string>('object_storage.credentials.secret_access_key')
+    },
+    PROXY: {
+      PROXIFY_PRIVATE_FILES: config.get<boolean>('object_storage.proxy.proxify_private_files')
     },
     VIDEOS: {
       BUCKET_NAME: config.get<string>('object_storage.videos.bucket_name'),
@@ -121,6 +162,10 @@ const CONFIG = {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.login.window')),
       MAX: config.get<number>('rates_limit.login.max')
     },
+    RECEIVE_CLIENT_LOG: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.receive_client_log.window')),
+      MAX: config.get<number>('rates_limit.receive_client_log.max')
+    },
     ASK_SEND_EMAIL: {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.ask_send_email.window')),
       MAX: config.get<number>('rates_limit.ask_send_email.max')
@@ -136,7 +181,26 @@ const CONFIG = {
     },
     ANONYMIZE_IP: config.get<boolean>('log.anonymize_ip'),
     LOG_PING_REQUESTS: config.get<boolean>('log.log_ping_requests'),
-    PRETTIFY_SQL: config.get<boolean>('log.prettify_sql')
+    LOG_TRACKER_UNKNOWN_INFOHASH: config.get<boolean>('log.log_tracker_unknown_infohash'),
+    PRETTIFY_SQL: config.get<boolean>('log.prettify_sql'),
+    ACCEPT_CLIENT_LOG: config.get<boolean>('log.accept_client_log')
+  },
+  OPEN_TELEMETRY: {
+    METRICS: {
+      ENABLED: config.get<boolean>('open_telemetry.metrics.enabled'),
+
+      PROMETHEUS_EXPORTER: {
+        HOSTNAME: config.get<string>('open_telemetry.metrics.prometheus_exporter.hostname'),
+        PORT: config.get<number>('open_telemetry.metrics.prometheus_exporter.port')
+      }
+    },
+    TRACING: {
+      ENABLED: config.get<boolean>('open_telemetry.tracing.enabled'),
+
+      JAEGER_EXPORTER: {
+        ENDPOINT: config.get<string>('open_telemetry.tracing.jaeger_exporter.endpoint')
+      }
+    }
   },
   TRENDING: {
     VIDEOS: {
@@ -187,6 +251,12 @@ const CONFIG = {
       IP_VIEW_EXPIRATION: parseDurationToMs(config.get('views.videos.ip_view_expiration'))
     }
   },
+  GEO_IP: {
+    ENABLED: config.get<boolean>('geo_ip.enabled'),
+    COUNTRY: {
+      DATABASE_URL: config.get<string>('geo_ip.country.database_url')
+    }
+  },
   PLUGINS: {
     INDEX: {
       ENABLED: config.get<boolean>('plugins.index.enabled'),
@@ -211,6 +281,14 @@ const CONFIG = {
       EDITION: {
         ALLOWED: config.get<boolean>('webadmin.configuration.edition.allowed')
       }
+    }
+  },
+  FEEDS: {
+    VIDEOS: {
+      COUNT: config.get<number>('feeds.videos.count')
+    },
+    COMMENTS: {
+      COUNT: config.get<number>('feeds.comments.count')
     }
   },
   ADMIN: {
@@ -245,6 +323,7 @@ const CONFIG = {
     get THREADS () { return config.get<number>('transcoding.threads') },
     get CONCURRENCY () { return config.get<number>('transcoding.concurrency') },
     get PROFILE () { return config.get<string>('transcoding.profile') },
+    get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () { return config.get<boolean>('transcoding.always_transcode_original_resolution') },
     RESOLUTIONS: {
       get '0p' () { return config.get<boolean>('transcoding.resolutions.0p') },
       get '144p' () { return config.get<boolean>('transcoding.resolutions.144p') },
@@ -272,14 +351,22 @@ const CONFIG = {
 
     get ALLOW_REPLAY () { return config.get<boolean>('live.allow_replay') },
 
+    LATENCY_SETTING: {
+      get ENABLED () { return config.get<boolean>('live.latency_setting.enabled') }
+    },
+
     RTMP: {
       get ENABLED () { return config.get<boolean>('live.rtmp.enabled') },
-      get PORT () { return config.get<number>('live.rtmp.port') }
+      get PORT () { return config.get<number>('live.rtmp.port') },
+      get HOSTNAME () { return config.get<number>('live.rtmp.hostname') },
+      get PUBLIC_HOSTNAME () { return config.get<number>('live.rtmp.public_hostname') }
     },
 
     RTMPS: {
       get ENABLED () { return config.get<boolean>('live.rtmps.enabled') },
       get PORT () { return config.get<number>('live.rtmps.port') },
+      get HOSTNAME () { return config.get<number>('live.rtmps.hostname') },
+      get PUBLIC_HOSTNAME () { return config.get<number>('live.rtmps.public_hostname') },
       get KEY_FILE () { return config.get<string>('live.rtmps.key_file') },
       get CERT_FILE () { return config.get<string>('live.rtmps.cert_file') }
     },
@@ -288,6 +375,8 @@ const CONFIG = {
       get ENABLED () { return config.get<boolean>('live.transcoding.enabled') },
       get THREADS () { return config.get<number>('live.transcoding.threads') },
       get PROFILE () { return config.get<string>('live.transcoding.profile') },
+
+      get ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION () { return config.get<boolean>('live.transcoding.always_transcode_original_resolution') },
 
       RESOLUTIONS: {
         get '144p' () { return config.get<boolean>('live.transcoding.resolutions.144p') },
@@ -301,22 +390,38 @@ const CONFIG = {
       }
     }
   },
+  VIDEO_STUDIO: {
+    get ENABLED () { return config.get<boolean>('video_studio.enabled') }
+  },
   IMPORT: {
     VIDEOS: {
       get CONCURRENCY () { return config.get<number>('import.videos.concurrency') },
+      get TIMEOUT () { return parseDurationToMs(config.get<string>('import.videos.timeout')) },
 
       HTTP: {
         get ENABLED () { return config.get<boolean>('import.videos.http.enabled') },
 
         YOUTUBE_DL_RELEASE: {
           get URL () { return config.get<string>('import.videos.http.youtube_dl_release.url') },
-          get NAME () { return config.get<string>('import.videos.http.youtube_dl_release.name') }
+          get NAME () { return config.get<string>('import.videos.http.youtube_dl_release.name') },
+          get PYTHON_PATH () { return config.get<string>('import.videos.http.youtube_dl_release.python_path') }
         },
 
         get FORCE_IPV4 () { return config.get<boolean>('import.videos.http.force_ipv4') }
       },
       TORRENT: {
         get ENABLED () { return config.get<boolean>('import.videos.torrent.enabled') }
+      }
+    },
+    VIDEO_CHANNEL_SYNCHRONIZATION: {
+      get ENABLED () { return config.get<boolean>('import.video_channel_synchronization.enabled') },
+      get MAX_PER_USER () { return config.get<number>('import.video_channel_synchronization.max_per_user') },
+      get CHECK_INTERVAL () { return parseDurationToMs(config.get<string>('import.video_channel_synchronization.check_interval')) },
+      get VIDEOS_LIMIT_PER_SYNCHRONIZATION () {
+        return config.get<number>('import.video_channel_synchronization.videos_limit_per_synchronization')
+      },
+      get FULL_SYNC_VIDEOS_LIMIT () {
+        return config.get<number>('import.video_channel_synchronization.full_sync_videos_limit')
       }
     }
   },
@@ -427,6 +532,7 @@ const CONFIG = {
       get CUSTOM_VALUE () { return config.get<string>('podcast.lightning.custom_value') }
     }
   }
+
 }
 
 function registerConfigChangedHandler (fun: Function) {
@@ -505,7 +611,7 @@ export function reloadConfig () {
       delete require.cache[fileName]
     }
 
-    decache('config')
+    decacheModule('config')
   }
 
   purge()

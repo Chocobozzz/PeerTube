@@ -1,18 +1,18 @@
 import express from 'express'
-import RateLimit from 'express-rate-limit'
 import { logger } from '@server/helpers/logger'
-import { buildUUID } from '@server/helpers/uuid'
 import { CONFIG } from '@server/initializers/config'
+import { OTP } from '@server/initializers/constants'
 import { getAuthNameFromRefreshGrant, getBypassFromExternalAuth, getBypassFromPasswordGrant } from '@server/lib/auth/external-auth'
-import { handleOAuthToken } from '@server/lib/auth/oauth'
+import { handleOAuthToken, MissingTwoFactorError } from '@server/lib/auth/oauth'
 import { BypassLogin, revokeToken } from '@server/lib/auth/oauth-model'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { asyncMiddleware, authenticate, openapiOperationDoc } from '@server/middlewares'
+import { asyncMiddleware, authenticate, buildRateLimiter, openapiOperationDoc } from '@server/middlewares'
+import { buildUUID } from '@shared/extra-utils'
 import { ScopedToken } from '@shared/models/users/user-scoped-token'
 
 const tokensRouter = express.Router()
 
-const loginRateLimiter = RateLimit({
+const loginRateLimiter = buildRateLimiter({
   windowMs: CONFIG.RATES_LIMIT.LOGIN.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.LOGIN.MAX
 })
@@ -79,6 +79,10 @@ async function handleToken (req: express.Request, res: express.Response, next: e
     })
   } catch (err) {
     logger.warn('Login error', { err })
+
+    if (err instanceof MissingTwoFactorError) {
+      res.set(OTP.HEADER_NAME, OTP.HEADER_REQUIRED_VALUE)
+    }
 
     return res.fail({
       status: err.code,

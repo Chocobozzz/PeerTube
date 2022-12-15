@@ -1,18 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { wait } from '@shared/core-utils'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
-  wait,
   waitJobs
-} from '@shared/extra-utils'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 describe('Test AP cleaner', function () {
   let servers: PeerTubeServer[] = []
@@ -268,6 +265,66 @@ describe('Test AP cleaner', function () {
 
     await checkLocal()
     await checkRemote('kyle')
+  })
+
+  it('Should remove unavailable remote resources', async function () {
+    this.timeout(240000)
+
+    async function expectNotDeleted () {
+      {
+        const video = await servers[0].videos.get({ id: uuid })
+
+        expect(video.likes).to.equal(3)
+        expect(video.dislikes).to.equal(0)
+      }
+
+      {
+        const { total } = await servers[0].comments.listThreads({ videoId: uuid })
+        expect(total).to.equal(3)
+      }
+    }
+
+    async function expectDeleted () {
+      {
+        const video = await servers[0].videos.get({ id: uuid })
+
+        expect(video.likes).to.equal(2)
+        expect(video.dislikes).to.equal(0)
+      }
+
+      {
+        const { total } = await servers[0].comments.listThreads({ videoId: uuid })
+        expect(total).to.equal(2)
+      }
+    }
+
+    const uuid = (await servers[0].videos.quickUpload({ name: 'server 1 video 2' })).uuid
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      await server.videos.rate({ id: uuid, rating: 'like' })
+      await server.comments.createThread({ videoId: uuid, text: 'comment' })
+    }
+
+    await waitJobs(servers)
+
+    await expectNotDeleted()
+
+    await servers[1].kill()
+
+    await wait(5000)
+    await expectNotDeleted()
+
+    let continueWhile = true
+
+    do {
+      try {
+        await expectDeleted()
+        continueWhile = false
+      } catch {
+      }
+    } while (continueWhile)
   })
 
   after(async function () {

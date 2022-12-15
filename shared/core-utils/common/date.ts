@@ -43,6 +43,8 @@ function isLastWeek (d: Date) {
   return getDaysDifferences(now, d) <= 7
 }
 
+// ---------------------------------------------------------------------------
+
 function timeToInt (time: number | string) {
   if (!time) return 0
   if (typeof time === 'number') return time

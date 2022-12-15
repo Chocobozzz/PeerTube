@@ -1,22 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import { omit } from 'lodash'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination, FIXTURE_URLS } from '@server/tests/shared'
+import { buildAbsoluteFixturePath, omit } from '@shared/core-utils'
+import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import {
-  buildAbsoluteFixturePath,
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
   cleanupTests,
   createSingleServer,
-  FIXTURE_URLS,
   makeGetRequest,
   makePostBodyRequest,
   makeUploadRequest,
   PeerTubeServer,
-  setAccessTokensToServers
-} from '@shared/extra-utils'
-import { HttpStatusCode, VideoPrivacy } from '@shared/models'
+  setAccessTokensToServers,
+  setDefaultVideoChannel,
+  waitJobs
+} from '@shared/server-commands'
 
 describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'
@@ -32,10 +29,11 @@ describe('Test video imports API validator', function () {
     server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
+    await setDefaultVideoChannel([ server ])
 
     const username = 'user1'
     const password = 'my super password'
-    await server.users.create({ username: username, password: password })
+    await server.users.create({ username, password })
     userAccessToken = await server.login.getAccessToken({ username, password })
 
     {
@@ -57,6 +55,15 @@ describe('Test video imports API validator', function () {
 
     it('Should fail with an incorrect sort', async function () {
       await checkBadSortPagination(server.url, myPath, server.accessToken)
+    })
+
+    it('Should fail with a bad videoChannelSyncId param', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: myPath,
+        query: { videoChannelSyncId: 'toto' },
+        token: server.accessToken
+      })
     })
 
     it('Should success with the correct parameters', async function () {
@@ -88,11 +95,17 @@ describe('Test video imports API validator', function () {
 
     it('Should fail with nothing', async function () {
       const fields = {}
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        fields,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
     })
 
     it('Should fail without a target url', async function () {
-      const fields = omit(baseCorrectParams, 'targetUrl')
+      const fields = omit(baseCorrectParams, [ 'targetUrl' ])
       await makePostBodyRequest({
         url: server.url,
         path,
@@ -106,6 +119,35 @@ describe('Test video imports API validator', function () {
       const fields = { ...baseCorrectParams, targetUrl: 'htt://hello' }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with localhost', async function () {
+      const fields = { ...baseCorrectParams, targetUrl: 'http://localhost:8000' }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a private IP target urls', async function () {
+      const targetUrls = [
+        'http://127.0.0.1:8000',
+        'http://127.0.0.1',
+        'http://127.0.0.1/hello',
+        'https://192.168.1.42',
+        'http://192.168.1.42',
+        'http://127.0.0.1.cpy.re'
+      ]
+
+      for (const targetUrl of targetUrls) {
+        const fields = { ...baseCorrectParams, targetUrl }
+
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          token: server.accessToken,
+          fields,
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+      }
     })
 
     it('Should fail with a long name', async function () {
@@ -145,7 +187,7 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should fail without a channel', async function () {
-      const fields = omit(baseCorrectParams, 'channelId')
+      const fields = omit(baseCorrectParams, [ 'channelId' ])
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -227,7 +269,7 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should fail with an invalid torrent file', async function () {
-      const fields = omit(baseCorrectParams, 'targetUrl')
+      const fields = omit(baseCorrectParams, [ 'targetUrl' ])
       const attaches = {
         torrentfile: buildAbsoluteFixturePath('avatar-big.png')
       }
@@ -236,14 +278,14 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should fail with an invalid magnet URI', async function () {
-      let fields = omit(baseCorrectParams, 'targetUrl')
+      let fields = omit(baseCorrectParams, [ 'targetUrl' ])
       fields = { ...fields, magnetUri: 'blabla' }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should succeed with the correct parameters', async function () {
-      this.timeout(30000)
+      this.timeout(120000)
 
       await makePostBodyRequest({
         url: server.url,
@@ -295,7 +337,7 @@ describe('Test video imports API validator', function () {
         }
       })
 
-      let fields = omit(baseCorrectParams, 'targetUrl')
+      let fields = omit(baseCorrectParams, [ 'targetUrl' ])
       fields = { ...fields, magnetUri: FIXTURE_URLS.magnet }
 
       await makePostBodyRequest({
@@ -306,7 +348,7 @@ describe('Test video imports API validator', function () {
         expectedStatus: HttpStatusCode.CONFLICT_409
       })
 
-      fields = omit(fields, 'magnetUri')
+      fields = omit(fields, [ 'magnetUri' ])
       const attaches = {
         torrentfile: buildAbsoluteFixturePath('video-720p.torrent')
       }
@@ -319,6 +361,67 @@ describe('Test video imports API validator', function () {
         attaches,
         expectedStatus: HttpStatusCode.CONFLICT_409
       })
+    })
+  })
+
+  describe('Deleting/cancelling a video import', function () {
+    let importId: number
+
+    async function importVideo () {
+      const attributes = { channelId: server.store.channel.id, targetUrl: FIXTURE_URLS.goodVideo }
+      const res = await server.imports.importVideo({ attributes })
+
+      return res.id
+    }
+
+    before(async function () {
+      importId = await importVideo()
+    })
+
+    it('Should fail with an invalid import id', async function () {
+      await server.imports.cancel({ importId: 'artyom' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await server.imports.delete({ importId: 'artyom' as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with an unknown import id', async function () {
+      await server.imports.cancel({ importId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await server.imports.delete({ importId: 42, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should fail without token', async function () {
+      await server.imports.cancel({ importId, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await server.imports.delete({ importId, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should fail with another user token', async function () {
+      await server.imports.cancel({ importId, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await server.imports.delete({ importId, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail to cancel non pending import', async function () {
+      this.timeout(60000)
+
+      await waitJobs([ server ])
+
+      await server.imports.cancel({ importId, expectedStatus: HttpStatusCode.CONFLICT_409 })
+    })
+
+    it('Should succeed to delete an import', async function () {
+      await server.imports.delete({ importId })
+    })
+
+    it('Should fail to delete a pending import', async function () {
+      await server.jobs.pauseJobQueue()
+
+      importId = await importVideo()
+
+      await server.imports.delete({ importId, expectedStatus: HttpStatusCode.CONFLICT_409 })
+    })
+
+    it('Should succeed to cancel an import', async function () {
+      importId = await importVideo()
+
+      await server.imports.cancel({ importId })
     })
   })
 

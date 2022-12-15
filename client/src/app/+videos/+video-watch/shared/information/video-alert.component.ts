@@ -9,13 +9,22 @@ import { VideoState } from '@shared/models'
 })
 export class VideoAlertComponent {
   @Input() video: VideoDetails
+  @Input() noPlaylistVideoFound: boolean
 
   isVideoToTranscode () {
     return this.video && this.video.state.id === VideoState.TO_TRANSCODE
   }
 
+  isVideoToEdit () {
+    return this.video && this.video.state.id === VideoState.TO_EDIT
+  }
+
   isVideoTranscodingFailed () {
     return this.video && this.video.state.id === VideoState.TRANSCODING_FAILED
+  }
+
+  isVideoMoveToObjectStorageFailed () {
+    return this.video && this.video.state.id === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED
   }
 
   isVideoToImport () {

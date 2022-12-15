@@ -65,6 +65,22 @@ async function register ({
       }
     })
   }
+
+  {
+    const result = registerExternalAuth({
+      authName: 'external-auth-7',
+      authDisplayName: () => 'External Auth 7',
+      onAuthRequest: (req, res) => {
+        result.userAuthenticated({
+          req,
+          res,
+          username: 'existing_user2',
+          email: 'custom_email_existing_user2@example.com',
+          displayName: 'Existing user 2'
+        })
+      }
+    })
+  }
 }
 
 async function unregister () {

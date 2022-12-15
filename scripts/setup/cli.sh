@@ -9,8 +9,9 @@ rm -rf ./dist/server/tools/
 (
     cd ./server/tools
     yarn install --pure-lockfile
+    ../../node_modules/.bin/tsc --build --verbose
 )
 
-npm run tsc -- --build ./server/tools/tsconfig.json
 cp -r "./server/tools/node_modules" "./dist/server/tools"
-cp "./tsconfig.json" "./dist"
+
+npm run resolve-tspaths:server

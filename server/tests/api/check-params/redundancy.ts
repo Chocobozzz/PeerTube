@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
+import { HttpStatusCode, VideoCreateResult } from '@shared/models'
 import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
@@ -15,8 +13,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
-import { HttpStatusCode, VideoCreateResult } from '@shared/models'
+} from '@shared/server-commands'
 
 describe('Test server redundancy API validators', function () {
   let servers: PeerTubeServer[]
@@ -189,7 +186,7 @@ describe('Test server redundancy API validators', function () {
     it('Should fail with an invalid token', async function () {
       await makePutBodyRequest({
         url: servers[0].url,
-        path: path + '/localhost:' + servers[1].port,
+        path: path + '/' + servers[1].host,
         fields: { redundancyAllowed: true },
         token: 'fake_token',
         expectedStatus: HttpStatusCode.UNAUTHORIZED_401
@@ -199,7 +196,7 @@ describe('Test server redundancy API validators', function () {
     it('Should fail if the user is not an administrator', async function () {
       await makePutBodyRequest({
         url: servers[0].url,
-        path: path + '/localhost:' + servers[1].port,
+        path: path + '/' + servers[1].host,
         fields: { redundancyAllowed: true },
         token: userAccessToken,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
@@ -219,7 +216,7 @@ describe('Test server redundancy API validators', function () {
     it('Should fail without de redundancyAllowed param', async function () {
       await makePutBodyRequest({
         url: servers[0].url,
-        path: path + '/localhost:' + servers[1].port,
+        path: path + '/' + servers[1].host,
         fields: { blabla: true },
         token: servers[0].accessToken,
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
@@ -229,7 +226,7 @@ describe('Test server redundancy API validators', function () {
     it('Should succeed with the correct parameters', async function () {
       await makePutBodyRequest({
         url: servers[0].url,
-        path: path + '/localhost:' + servers[1].port,
+        path: path + '/' + servers[1].host,
         fields: { redundancyAllowed: true },
         token: servers[0].accessToken,
         expectedStatus: HttpStatusCode.NO_CONTENT_204

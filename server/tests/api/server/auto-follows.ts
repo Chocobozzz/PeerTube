@@ -1,18 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import {
-  cleanupTests,
-  createMultipleServers,
-  MockInstancesIndex,
-  PeerTubeServer,
-  setAccessTokensToServers,
-  wait,
-  waitJobs
-} from '@shared/extra-utils'
-
-const expect = chai.expect
+import { expect } from 'chai'
+import { MockInstancesIndex } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
+import { cleanupTests, createMultipleServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/server-commands'
 
 async function checkFollow (follower: PeerTubeServer, following: PeerTubeServer, exists: boolean) {
   {
@@ -55,7 +46,7 @@ describe('Test auto follows', function () {
   let servers: PeerTubeServer[] = []
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(3)
 
@@ -159,7 +150,7 @@ describe('Test auto follows', function () {
         followings: {
           instance: {
             autoFollowIndex: {
-              indexUrl: `http://localhost:${port}/api/v1/instances/hosts`,
+              indexUrl: `http://127.0.0.1:${port}/api/v1/instances/hosts`,
               enabled: true
             }
           }

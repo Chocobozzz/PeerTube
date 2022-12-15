@@ -1,13 +1,8 @@
-// eslint-disable @typescript-eslint/no-unnecessary-type-assertion
-
-import { registerTSPaths } from '../helpers/register-ts-paths'
-registerTSPaths()
-
-import { program, Command, OptionValues } from 'commander'
-import { assignToken, buildServer, getServerCredentials } from './cli'
-import { PluginType } from '../../shared/models'
-import { isAbsolute } from 'path'
 import CliTable3 from 'cli-table3'
+import { Command, OptionValues, program } from 'commander'
+import { isAbsolute } from 'path'
+import { PluginType } from '../../shared/models'
+import { assignToken, buildServer, getServerCredentials } from './cli'
 
 program
   .name('plugins')
@@ -31,6 +26,7 @@ program
   .option('-p, --password <token>', 'Password')
   .option('-P --path <path>', 'Install from a path')
   .option('-n, --npm-name <npmName>', 'Install from npm')
+  .option('--plugin-version <pluginVersion>', 'Specify the plugin version to install (only available when installing from npm)')
   .action((options, command) => installPluginCLI(command, options))
 
 program
@@ -73,7 +69,7 @@ async function pluginsListCLI (command: Command, options: OptionValues) {
 
   const table = new CliTable3({
     head: [ 'name', 'version', 'homepage' ],
-    colWidths: [ 50, 10, 50 ]
+    colWidths: [ 50, 20, 50 ]
   }) as any
 
   for (const plugin of data) {
@@ -109,7 +105,7 @@ async function installPluginCLI (command: Command, options: OptionValues) {
   await assignToken(server, username, password)
 
   try {
-    await server.plugins.install({ npmName: options.npmName, path: options.path })
+    await server.plugins.install({ npmName: options.npmName, path: options.path, pluginVersion: options.pluginVersion })
   } catch (err) {
     console.error('Cannot install plugin.', err)
     process.exit(-1)

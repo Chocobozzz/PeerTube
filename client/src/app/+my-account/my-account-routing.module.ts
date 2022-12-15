@@ -7,6 +7,7 @@ import { MyAccountBlocklistComponent } from './my-account-blocklist/my-account-b
 import { MyAccountServerBlocklistComponent } from './my-account-blocklist/my-account-server-blocklist.component'
 import { MyAccountNotificationsComponent } from './my-account-notifications/my-account-notifications.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
+import { MyAccountTwoFactorComponent } from './my-account-settings/my-account-two-factor'
 import { MyAccountComponent } from './my-account.component'
 
 const myAccountRoutes: Routes = [
@@ -26,6 +27,16 @@ const myAccountRoutes: Routes = [
         data: {
           meta: {
             title: $localize`Account settings`
+          }
+        }
+      },
+
+      {
+        path: 'two-factor-auth',
+        component: MyAccountTwoFactorComponent,
+        data: {
+          meta: {
+            title: $localize`Two factor authentication`
           }
         }
       },

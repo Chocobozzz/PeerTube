@@ -16,7 +16,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { isAbuseModerationCommentValid, isAbuseReasonValid, isAbuseStateValid } from '@server/helpers/custom-validators/abuses'
-import { abusePredefinedReasonsMap, AttributesOnly } from '@shared/core-utils'
+import { abusePredefinedReasonsMap } from '@shared/core-utils'
 import {
   AbuseFilter,
   AbuseObject,
@@ -30,6 +30,7 @@ import {
   UserAbuse,
   UserVideoAbuse
 } from '@shared/models'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { ABUSE_STATES, CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { MAbuseAdminFormattable, MAbuseAP, MAbuseFull, MAbuseReporter, MAbuseUserFormattable, MUserAccountId } from '../../types/models'
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
@@ -435,7 +436,7 @@ export class AbuseModel extends Model<Partial<AttributesOnly<AbuseModel>>> {
 
   buildBaseVideoCommentAbuse (this: MAbuseUserFormattable) {
     // Associated video comment could have been destroyed if the video has been deleted
-    if (!this.VideoCommentAbuse || !this.VideoCommentAbuse.VideoComment) return null
+    if (!this.VideoCommentAbuse?.VideoComment) return null
 
     const entity = this.VideoCommentAbuse.VideoComment
 
@@ -562,6 +563,7 @@ export class AbuseModel extends Model<Partial<AttributesOnly<AbuseModel>>> {
     return {
       type: 'Flag' as 'Flag',
       content: this.reason,
+      mediaType: 'text/markdown',
       object,
       tag: predefinedReasons.map(r => ({
         type: 'Hashtag' as 'Hashtag',

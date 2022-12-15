@@ -28,8 +28,8 @@ export class NewAbuseForModerators extends AbstractNotification <NewAbusePayload
     return this.moderators
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: UserNotificationType.NEW_ABUSE_FOR_MODERATORS,
       userId: user.id,
       abuseId: this.payload.abuseInstance.id

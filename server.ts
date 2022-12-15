@@ -1,12 +1,7 @@
-import { registerTSPaths } from './server/helpers/register-ts-paths'
-registerTSPaths()
-
-import { isTestInstance } from './server/helpers/core-utils'
-if (isTestInstance()) {
-  require('source-map-support').install()
-}
-
 // ----------- Node modules -----------
+import { registerOpentelemetryTracing } from './server/lib/opentelemetry/tracing'
+registerOpentelemetryTracing()
+
 import express from 'express'
 import morgan, { token } from 'morgan'
 import cors from 'cors'
@@ -19,7 +14,7 @@ import { program as cli } from 'commander'
 process.title = 'peertube'
 
 // Create our main app
-const app = express().disable("x-powered-by")
+const app = express().disable('x-powered-by')
 
 // ----------- Core checker -----------
 import { checkMissedConfig, checkFFmpeg, checkNodeVersion } from './server/initializers/checker-before-init'
@@ -41,17 +36,30 @@ checkFFmpeg(CONFIG)
     process.exit(-1)
   })
 
-checkNodeVersion()
+try {
+  checkNodeVersion()
+} catch (err) {
+  logger.error('Error in NodeJS check.', { err })
+  process.exit(-1)
+}
 
 import { checkConfig, checkActivityPubUrls, checkFFmpegVersion } from './server/initializers/checker-after-init'
 
-const errorMessage = checkConfig()
-if (errorMessage !== null) {
-  throw new Error(errorMessage)
+try {
+  checkConfig()
+} catch (err) {
+  logger.error('Config error.', { err })
+  process.exit(-1)
 }
 
 // Trust our proxy (IP forwarding...)
 app.set('trust proxy', CONFIG.TRUST_PROXY)
+
+app.use((_req, res, next) => {
+  res.locals.requestStart = Date.now()
+
+  return next()
+})
 
 // Security middleware
 import { baseCSP } from './server/middlewares/csp'
@@ -92,12 +100,14 @@ import { VideosPreviewCache, VideosCaptionCache } from './server/lib/files-cache
 import {
   activityPubRouter,
   apiRouter,
+  miscRouter,
   clientsRouter,
   feedsRouter,
   staticRouter,
+  wellKnownRouter,
   lazyStaticRouter,
   servicesRouter,
-  liveRouter,
+  objectStorageProxyRouter,
   pluginsRouter,
   webfingerRouter,
   trackerRouter,
@@ -118,6 +128,7 @@ import { RemoveOldHistoryScheduler } from './server/lib/schedulers/remove-old-hi
 import { AutoFollowIndexInstances } from './server/lib/schedulers/auto-follow-index-instances'
 import { RemoveDanglingResumableUploadsScheduler } from './server/lib/schedulers/remove-dangling-resumable-uploads-scheduler'
 import { VideoViewsBufferScheduler } from './server/lib/schedulers/video-views-buffer-scheduler'
+import { GeoIPUpdateScheduler } from './server/lib/schedulers/geo-ip-update-scheduler'
 import { isHTTPSignatureDigestValid } from './server/helpers/peertube-crypto'
 import { PeerTubeSocket } from './server/lib/peertube-socket'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './server/lib/hls'
@@ -129,7 +140,11 @@ import { LiveManager } from './server/lib/live'
 import { HttpStatusCode } from './shared/models/http/http-error-codes'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
-import { VideoViews } from '@server/lib/video-views'
+import { VideoViewsManager } from '@server/lib/views/video-views-manager'
+import { isTestOrDevInstance } from './server/helpers/core-utils'
+import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics'
+import { ApplicationModel } from '@server/models/application/application'
+import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler'
 
 // ----------- Command line -----------
 
@@ -142,7 +157,7 @@ cli
 // ----------- App -----------
 
 // Enable CORS for develop
-if (isTestInstance()) {
+if (isTestOrDevInstance()) {
   app.use(cors({
     origin: '*',
     exposedHeaders: 'Retry-After',
@@ -198,6 +213,10 @@ app.use(cookieParser())
 // W3C DNT Tracking Status
 app.use(advertiseDoNotTrack)
 
+// ----------- Open Telemetry -----------
+
+OpenTelemetryMetrics.Instance.init(app)
+
 // ----------- Views, routes and static files -----------
 
 // API
@@ -206,9 +225,6 @@ app.use(apiRoute, apiRouter)
 
 // Services (oembed...)
 app.use('/services', servicesRouter)
-
-// Live streaming
-app.use('/live', liveRouter)
 
 // Plugins & themes
 app.use('/', pluginsRouter)
@@ -221,30 +237,40 @@ app.use('/', botsRouter)
 
 // Static files
 app.use('/', staticRouter)
+app.use('/', wellKnownRouter)
+app.use('/', miscRouter)
 app.use('/', downloadRouter)
 app.use('/', lazyStaticRouter)
+app.use('/', objectStorageProxyRouter)
 
 // Client files, last valid routes!
-const cliOptions = cli.opts()
+const cliOptions = cli.opts<{ client: boolean, plugins: boolean }>()
 if (cliOptions.client) app.use('/', clientsRouter)
 
 // ----------- Errors -----------
 
 // Catch unmatched routes
-app.use((req, res: express.Response) => {
+app.use((_req, res: express.Response) => {
   res.status(HttpStatusCode.NOT_FOUND_404).end()
 })
 
 // Catch thrown errors
-app.use((err, req, res: express.Response, next) => {
+app.use((err, _req, res: express.Response, _next) => {
   // Format error to be logged
   let error = 'Unknown error.'
   if (err) {
     error = err.stack || err.message || err
   }
+
   // Handling Sequelize error traces
-  const sql = err.parent ? err.parent.sql : undefined
-  logger.error('Error in controller.', { err: error, sql })
+  const sql = err?.parent ? err.parent.sql : undefined
+
+  // Help us to debug SequelizeConnectionAcquireTimeoutError errors
+  const activeRequests = err?.name === 'SequelizeConnectionAcquireTimeoutError' && typeof (process as any)._getActiveRequests !== 'function'
+    ? (process as any)._getActiveRequests()
+    : undefined
+
+  logger.error('Error in controller.', { err: error, sql, activeRequests })
 
   return res.fail({
     status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,
@@ -273,7 +299,7 @@ async function startApplication () {
   checkFFmpegVersion()
     .catch(err => logger.error('Cannot check ffmpeg version', { err }))
 
-  // Email initialization
+  Redis.Instance.init()
   Emailer.Instance.init()
 
   await Promise.all([
@@ -299,11 +325,17 @@ async function startApplication () {
   PeerTubeVersionCheckScheduler.Instance.enable()
   AutoFollowIndexInstances.Instance.enable()
   RemoveDanglingResumableUploadsScheduler.Instance.enable()
+  VideoChannelSyncLatestScheduler.Instance.enable()
   VideoViewsBufferScheduler.Instance.enable()
+  GeoIPUpdateScheduler.Instance.enable()
+  OpenTelemetryMetrics.Instance.registerMetrics()
 
-  Redis.Instance.init()
+  PluginManager.Instance.init(server)
+  // Before PeerTubeSocket init
+  PluginManager.Instance.registerWebSocketRouter()
+
   PeerTubeSocket.Instance.init(server)
-  VideoViews.Instance.init()
+  VideoViewsManager.Instance.init()
 
   updateStreamingPlaylistsInfohashesIfNeeded()
     .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
@@ -315,11 +347,22 @@ async function startApplication () {
   server.listen(port, hostname, async () => {
     if (cliOptions.plugins) {
       try {
+        await PluginManager.Instance.rebuildNativePluginsIfNeeded()
+
         await PluginManager.Instance.registerPluginsAndThemes()
       } catch (err) {
         logger.error('Cannot register plugins and themes.', { err })
       }
     }
+
+    ApplicationModel.updateNodeVersions()
+      .catch(err => logger.error('Cannot update node versions.', { err }))
+
+    JobQueue.Instance.start()
+      .catch(err => {
+        logger.error('Cannot start job queue.', { err })
+        process.exit(-1)
+      })
 
     logger.info('HTTP server listening on %s:%d', hostname, port)
     logger.info('Web server: %s', WEBSERVER.URL)
@@ -331,6 +374,7 @@ async function startApplication () {
 
   process.on('exit', () => {
     JobQueue.Instance.terminate()
+      .catch(err => logger.error('Cannot terminate job queue.', { err }))
   })
 
   process.on('SIGINT', () => process.exit(0))

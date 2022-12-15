@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_icons' as *;
 
 /* stylelint-disable */
 @import '~primeng/resources/primeng.css';
@@ -444,65 +445,9 @@ body p-autocomplete.ng-dirty.ng-invalid > .p-autocomplete > .p-inputtext {
   border: 1px solid #a80000;
 }
 
-// select button
-body .p-selectbutton .p-button {
-  background-color: #dadada;
-  border: 1px solid #dadada;
-  color: #333333;
-  overflow: hidden;
-  transition: background-color 0.2s, box-shadow 0.2s;
-}
-body .p-selectbutton .p-button .p-button-icon-left {
-  color: #666666;
-}
-body .p-selectbutton .p-button:not(.p-disabled):not(.p-highlight):hover {
-  background-color: #c8c8c8;
-  border-color: #c8c8c8;
-  color: #333333;
-}
-body .p-selectbutton .p-button:not(.p-disabled):not(.p-highlight):hover .p-button-icon-left {
-  color: #212121;
-}
-body .p-selectbutton .p-button:not(.p-disabled):not(.p-highlight).ui-state-focus {
-  box-shadow: 0 0 0 0.2em #8dcdff;
-  z-index: 1;
-}
-body .p-selectbutton .p-button.p-highlight {
-  background-color: pvar(--mainColor);
-  border-color: pvar(--mainColor);
-  color: #ffffff;
-}
-body .p-selectbutton .p-button.p-highlight .p-button-icon-left {
-  color: #ffffff;
-}
-body .p-selectbutton .p-button.p-highlight:not(.p-disabled):hover {
-  background-color: pvar(--mainColorLighter);
-  border-color: pvar(--mainColorLighter);
-  color: #ffffff;
-}
-body .p-selectbutton .p-button.p-highlight:not(.p-disabled):hover .p-button-icon-left {
-  color: #ffffff;
-}
-body .p-selectbutton .p-button:first-child {
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-}
-body .p-selectbutton .p-button:last-child {
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-}
-body p-selectbutton.ng-dirty.ng-invalid .p-button {
-  border: 1px solid #a80000;
-}
-
-// data table customizations
-
-@mixin glyphicon-light {
-  font-family: 'Glyphicons Halflings';
-  text-decoration: none !important;
-  color: pvar(--mainForegroundColor) !important;
-  font-display: swap;
-}
+// ---------------------------------------------------------------------------
+// PeerTube customizations
+// ---------------------------------------------------------------------------
 
 p-table {
   .p-datatable-header {
@@ -531,7 +476,7 @@ p-table {
 
   td, th {
     font-family: $main-fonts;
-    font-size: 15px !important;
+    font-size: 15px;
     color: pvar(--mainForegroundColor) !important;
   }
 
@@ -618,24 +563,20 @@ p-table {
     &.p-highlight {
       background-color: pvar(--submenuBackgroundColor) !important;
 
-      .pi {
-        @extend .glyphicon !optional;
+      .pi-sort-amount-up-alt,
+      .pi-sort-amount-down {
+        display: inline-block;
+        position: relative;
+        top: -1px;
+        color: pvar(--mainForegroundColor) !important;
+      }
 
-        color: #000 !important;
-        font-size: 11px !important;
-        top: 0 !important;
+      .pi-sort-amount-up-alt {
+        @include arrow-up(5px);
+      }
 
-        &.pi-sort-amount-up-alt {
-          @extend .glyphicon-triangle-top !optional;
-
-          color: pvar(--mainForegroundColor) !important;
-        }
-
-        &.pi-sort-amount-down {
-          @extend .glyphicon-triangle-bottom !optional;
-
-          color: pvar(--mainForegroundColor) !important;
-        }
+      .pi-sort-amount-down {
+        @include arrow-down(5px);
       }
     }
   }
@@ -682,6 +623,12 @@ p-table {
         }
       }
 
+      .p-dropdown,
+      .p-dropdown-trigger {
+        color: pvar(--mainForegroundColor);
+        background-color: pvar(--mainBackgroundColor);
+      }
+
       .p-paginator-current {
         position: absolute;
         right: 0;
@@ -693,12 +640,10 @@ p-table {
       .p-paginator-prev,
       .p-paginator-next,
       .p-paginator-last {
-        @include glyphicon-light;
         padding: 5px 2px;
-        height: auto;
+        height: 100%;
         outline: none;
-        font-size: 13px;
-        top: -1px;
+        color: pvar(--mainForegroundColor);
 
         &.focus-within,
         &:focus {
@@ -710,23 +655,37 @@ p-table {
         }
 
         &.p-paginator-first {
-          @extend .glyphicon-step-backward !optional;
+          .p-paginator-icon {
+            width: 18px;
+            height: 18px;
+            background: url('../assets/images/feather/skip-back.svg') no-repeat;
+            background-size: contain;
+          }
         }
 
         &.p-paginator-prev {
-          @extend .glyphicon-chevron-left !optional;
-
           @include margin-right(10px);
+
+          .p-paginator-icon {
+            @include chevron-left-default;
+          }
         }
 
         &.p-paginator-next {
-          @extend .glyphicon-chevron-right !optional;
-
           @include margin-left(10px);
+
+          .p-paginator-icon {
+            @include chevron-right-default;
+          }
         }
 
         &.p-paginator-last {
-          @extend .glyphicon-step-forward !optional;
+          .p-paginator-icon {
+            width: 18px;
+            height: 18px;
+            background: url('../assets/images/feather/skip-forward.svg') no-repeat;
+            background-size: contain;
+          }
         }
       }
 
@@ -759,8 +718,9 @@ p-table {
     }
   }
 
-  .badge {
-    @include peertube-badge;
+  .pt-badge {
+    font-size: 12px;
+    text-transform: uppercase;
   }
 }
 
@@ -809,8 +769,7 @@ p-calendar .p-datepicker {
     }
 
     .p-datepicker-next {
-      @extend .glyphicon-chevron-right !optional;
-      @include glyphicon-light;
+      @include chevron-right-default;
 
       color: #000 !important;
       text-align: end;
@@ -821,8 +780,7 @@ p-calendar .p-datepicker {
     }
 
     .p-datepicker-prev {
-      @extend .glyphicon-chevron-left !optional;
-      @include glyphicon-light;
+      @include chevron-left-default;
 
       color: #000 !important;
       text-align: start;
@@ -836,15 +794,13 @@ p-calendar .p-datepicker {
   .p-timepicker {
 
     .pi.pi-chevron-up {
-      @extend .glyphicon-chevron-up !optional;
-      @include glyphicon-light;
+      @include chevron-up-default;
 
       color: #000 !important;
     }
 
     .pi.pi-chevron-down {
-      @extend .glyphicon-chevron-down !optional;
-      @include glyphicon-light;
+      @include chevron-down-default;
 
       color: #000 !important;
     }
@@ -898,18 +854,16 @@ p-toast {
     width: auto;
     max-width: 300px;
     min-width: 200px;
-    z-index: z(notification) !important;
 
     .p-toast-icon-close {
-      font-family: "Glyphicons Halflings";
       opacity: 0;
       position: absolute;
       right: 5px;
       top: 5px;
-
-      &:after {
-        content: "\e014";
-      }
+      width: 18px;
+      height: 18px;
+      background: url('../assets/images/feather/x.svg') no-repeat;
+      background-size: contain;
     }
 
     &:hover .p-toast-icon-close {
@@ -927,22 +881,6 @@ p-toast {
     box-shadow: 0 2px 12px 0 rgba(0, 0 , 0, .1);
     overflow: hidden;
 
-    &.p-toast-message-success .glyphicon {
-      color: #8BC34A !important;
-    }
-
-    &.p-toast-message-error .glyphicon {
-      color: #F44336 !important;
-    }
-
-    &.p-toast-message-warn .glyphicon {
-      color: #F1680D !important;
-    }
-
-    &.p-toast-message-info .glyphicon {
-      color: #03A9F4 !important;
-    }
-
     .notification-block {
       display: flex;
       align-items: center;
@@ -950,36 +888,37 @@ p-toast {
       padding: 10px 20px;
 
       .message {
-        flex-grow: 1;
         @include margin-right(20px);
+
+        flex-grow: 1;
 
         h3 {
           font-size: 21px;
         }
 
         p {
-          font-size: 15px;
+          @include peertube-word-wrap;
+
           margin-bottom: 0;
         }
       }
-
-      .glyphicon {
-        font-size: 32px;
-        @include margin-right(5px);
-      }
     }
   }
-}
 
-.p-selectbutton {
-  .p-button:focus {
-    outline: none;
+  .p-toast-message-success my-global-icon {
+    color: #8BC34A !important;
   }
 
-  .p-button-label {
-    padding: 5px 15px;
-    font-size: 15px;
-    font-weight: 600;
+  .p-toast-message-error my-global-icon {
+    color: #F44336 !important;
+  }
+
+  .p-toast-message-warn my-global-icon {
+    color: #F1680D !important;
+  }
+
+  .p-toast-message-info my-global-icon {
+    color: #03A9F4 !important;
   }
 }
 

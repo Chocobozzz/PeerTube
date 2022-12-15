@@ -18,15 +18,15 @@
           <ng-template #templateActionLabel let-action>
             <my-global-icon *ngIf="action.iconName" [iconName]="action.iconName" [ngClass]="'icon-' + action.iconName" aria-hidden="true"></my-global-icon>
 
-            <div class="d-flex flex-column">
+            <div class="item-label">
               <span i18n>{{ action.label }}</span>
-              <small class="text-muted" *ngIf="action.description">{{ action.description }}</small>
+              <small class="muted" *ngIf="action.description">{{ action.description }}</small>
             </div>
           </ng-template>
 
           <a
             *ngIf="action.linkBuilder && !action.isHeader" [ngClass]="{ 'with-icon': !!action.iconName }"
-            class="dropdown-item"  [routerLink]="action.linkBuilder(entry)" [title]="action.title || ''"
+            class="dropdown-item"  [routerLink]="action.linkBuilder(entry)" [queryParams]="getQueryParams(action, entry)" [title]="action.title || ''"
           >
             <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
           </a>
@@ -39,7 +39,7 @@
           </span>
 
           <h6
-            *ngIf="!action.linkBuilder && action.isHeader" [ngClass]="{ 'with-icon': !!action.iconName }"
+            *ngIf="!action.linkBuilder && action.isHeader && areActionsDisplayed(actions, entry)" [ngClass]="{ 'with-icon': !!action.iconName }"
             class="dropdown-header" tabindex="0" role="button" [title]="action.title || ''" (click)="action.handler(entry)" (keyup.enter)="action.handler(entry)"
           >
             <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>

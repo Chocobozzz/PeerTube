@@ -4,6 +4,7 @@ import { Actor } from './actor.model'
 export interface Account extends Actor {
   displayName: string
   description: string
+  avatars: ActorImage[]
 
   updatedAt: Date | string
 
@@ -16,5 +17,9 @@ export interface AccountSummary {
   displayName: string
   url: string
   host: string
-  avatar?: ActorImage
+
+  avatars: ActorImage[]
+
+  // TODO: remove, deprecated in 4.2
+  avatar: ActorImage
 }

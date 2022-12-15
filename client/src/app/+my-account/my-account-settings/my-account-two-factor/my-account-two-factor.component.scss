@@ -1,0 +1,16 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.root {
+  max-width: 600px;
+}
+
+.secret-plain-text {
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+qrcode {
+  display: inline-block;
+  margin: auto;
+}

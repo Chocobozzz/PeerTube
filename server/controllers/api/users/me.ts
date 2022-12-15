@@ -1,18 +1,18 @@
 import 'multer'
 import express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '@server/helpers/audit-logger'
+import { getBiggestActorImage } from '@server/lib/actor-image'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { AttributesOnly } from '@shared/core-utils'
-import { ActorImageType, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
-import { UserVideoQuota } from '../../../../shared/models/users/user-video-quota.model'
+import { pick } from '@shared/core-utils'
+import { ActorImageType, HttpStatusCode, UserUpdateMe, UserVideoQuota, UserVideoRate as FormattedUserVideoRate } from '@shared/models'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { sendUpdateActor } from '../../../lib/activitypub/send'
-import { deleteLocalActorImageFile, updateLocalActorImageFile } from '../../../lib/local-actor'
+import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '../../../lib/local-actor'
 import { getOriginalVideoFileTotalDailyFromUser, getOriginalVideoFileTotalFromUser, sendVerifyUserEmail } from '../../../lib/user'
 import {
   asyncMiddleware,
@@ -25,7 +25,13 @@ import {
   usersUpdateMeValidator,
   usersVideoRatingValidator
 } from '../../../middlewares'
-import { deleteMeValidator, usersVideosValidator, videoImportsSortValidator, videosSortValidator } from '../../../middlewares/validators'
+import {
+  deleteMeValidator,
+  getMyVideoImportsValidator,
+  usersVideosValidator,
+  videoImportsSortValidator,
+  videosSortValidator
+} from '../../../middlewares/validators'
 import { updateAvatarValidator } from '../../../middlewares/validators/actor-image'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
@@ -35,7 +41,7 @@ import { VideoImportModel } from '../../../models/video/video-import'
 
 const auditLogger = auditLoggerFactory('users')
 
-const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
+const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
 const meRouter = express.Router()
 
@@ -60,6 +66,7 @@ meRouter.get('/me/videos/imports',
   videoImportsSortValidator,
   setDefaultSort,
   setDefaultPagination,
+  getMyVideoImportsValidator,
   asyncMiddleware(getUserVideoImports)
 )
 
@@ -135,12 +142,11 @@ async function getUserVideos (req: express.Request, res: express.Response) {
 
 async function getUserVideoImports (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
-  const resultList = await VideoImportModel.listUserVideoImportsForApi(
-    user.id,
-    req.query.start as number,
-    req.query.count as number,
-    req.query.sort
-  )
+  const resultList = await VideoImportModel.listUserVideoImportsForApi({
+    userId: user.id,
+
+    ...pick(req.query, [ 'targetUrl', 'start', 'count', 'sort', 'search', 'videoChannelSyncId' ])
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -197,7 +203,7 @@ async function updateMe (req: express.Request, res: express.Response) {
   const keysToUpdate: (keyof UserUpdateMe & keyof AttributesOnly<UserModel>)[] = [
     'password',
     'nsfwPolicy',
-    'webTorrentEnabled',
+    'p2pEnabled',
     'autoPlayVideo',
     'autoPlayNextVideo',
     'autoPlayNextVideoPlaylist',
@@ -212,6 +218,12 @@ async function updateMe (req: express.Request, res: express.Response) {
 
   for (const key of keysToUpdate) {
     if (body[key] !== undefined) user.set(key, body[key])
+  }
+
+  if (body.p2pEnabled !== undefined) {
+    user.set('p2pEnabled', body.p2pEnabled)
+  } else if (body.webTorrentEnabled !== undefined) { // FIXME: deprecated in 4.1
+    user.set('p2pEnabled', body.webTorrentEnabled)
   }
 
   if (body.email !== undefined) {
@@ -250,9 +262,17 @@ async function updateMyAvatar (req: express.Request, res: express.Response) {
 
   const userAccount = await AccountModel.load(user.Account.id)
 
-  const avatar = await updateLocalActorImageFile(userAccount, avatarPhysicalFile, ActorImageType.AVATAR)
+  const avatars = await updateLocalActorImageFiles(
+    userAccount,
+    avatarPhysicalFile,
+    ActorImageType.AVATAR
+  )
 
-  return res.json({ avatar: avatar.toFormattedJSON() })
+  return res.json({
+    // TODO: remove, deprecated in 4.2
+    avatar: getBiggestActorImage(avatars).toFormattedJSON(),
+    avatars: avatars.map(avatar => avatar.toFormattedJSON())
+  })
 }
 
 async function deleteMyAvatar (req: express.Request, res: express.Response) {
@@ -261,5 +281,5 @@ async function deleteMyAvatar (req: express.Request, res: express.Response) {
   const userAccount = await AccountModel.load(user.Account.id)
   await deleteLocalActorImageFile(userAccount, ActorImageType.AVATAR)
 
-  return res.status(HttpStatusCode.NO_CONTENT_204).end()
+  return res.json({ avatars: [] })
 }

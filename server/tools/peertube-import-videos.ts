@@ -1,11 +1,10 @@
-import { registerTSPaths } from '../helpers/register-ts-paths'
-registerTSPaths()
-
 import { program } from 'commander'
 import { accessSync, constants } from 'fs'
 import { remove } from 'fs-extra'
 import { join } from 'path'
-import { sha256 } from '../helpers/core-utils'
+import { YoutubeDLCLI, YoutubeDLInfo, YoutubeDLInfoBuilder } from '@server/helpers/youtube-dl'
+import { wait } from '@shared/core-utils'
+import { sha256 } from '@shared/extra-utils'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import {
   assignToken,
@@ -15,8 +14,7 @@ import {
   getLogger,
   getServerCredentials
 } from './cli'
-import { wait } from '@shared/extra-utils'
-import { YoutubeDLCLI, YoutubeDLInfo, YoutubeDLInfoBuilder } from '@server/helpers/youtube-dl'
+
 import prompt = require('prompt')
 
 const processOptions = {
@@ -39,7 +37,7 @@ command
   .option('--last <last>', 'Process last n elements of returned playlist')
   .option('--wait-interval <waitInterval>', 'Duration between two video imports (in seconds)', convertIntoMs)
   .option('-T, --tmpdir <tmpdir>', 'Working directory', __dirname)
-  .usage("[global options] [ -- youtube-dl options]")
+  .usage('[global options] [ -- youtube-dl options]')
   .parse(process.argv)
 
 const options = command.opts()
@@ -99,7 +97,7 @@ async function run (url: string, username: string, password: string) {
   for (const [ index, info ] of infoArray.entries()) {
     try {
       if (index > 0 && options.waitInterval && !skipInterval) {
-        log.info("Wait for %d seconds before continuing.", options.waitInterval / 1000)
+        log.info('Wait for %d seconds before continuing.', options.waitInterval / 1000)
         await wait(options.waitInterval)
       }
 
@@ -133,12 +131,20 @@ async function processVideo (parameters: {
   const videoInfo = await fetchObject(youtubeInfo)
   log.debug('Fetched object.', videoInfo)
 
-  if (options.since && videoInfo.originallyPublishedAt && videoInfo.originallyPublishedAt.getTime() < options.since.getTime()) {
+  if (
+    options.since &&
+    videoInfo.originallyPublishedAtWithoutTime &&
+    videoInfo.originallyPublishedAtWithoutTime.getTime() < options.since.getTime()
+  ) {
     log.info('Video "%s" has been published before "%s", don\'t upload it.\n', videoInfo.name, formatDate(options.since))
     return true
   }
 
-  if (options.until && videoInfo.originallyPublishedAt && videoInfo.originallyPublishedAt.getTime() > options.until.getTime()) {
+  if (
+    options.until &&
+    videoInfo.originallyPublishedAtWithoutTime &&
+    videoInfo.originallyPublishedAtWithoutTime.getTime() > options.until.getTime()
+  ) {
     log.info('Video "%s" has been published after "%s", don\'t upload it.\n', videoInfo.name, formatDate(options.until))
     return true
   }
@@ -167,7 +173,7 @@ async function processVideo (parameters: {
     const youtubeDLBinary = await YoutubeDLCLI.safeGet()
     const output = await youtubeDLBinary.download({
       url: videoInfo.url,
-      format: YoutubeDLCLI.getYoutubeDLVideoFormat([]),
+      format: YoutubeDLCLI.getYoutubeDLVideoFormat([], false),
       output: path,
       additionalYoutubeDLArgs: command.args,
       processOptions
@@ -214,8 +220,8 @@ async function uploadVideoOnPeerTube (parameters: {
   const attributes = {
     ...baseAttributes,
 
-    originallyPublishedAt: videoInfo.originallyPublishedAt
-      ? videoInfo.originallyPublishedAt.toISOString()
+    originallyPublishedAtWithoutTime: videoInfo.originallyPublishedAtWithoutTime
+      ? videoInfo.originallyPublishedAtWithoutTime.toISOString()
       : null,
 
     thumbnailfile,
@@ -253,7 +259,7 @@ async function fetchObject (info: any) {
   const youtubeDLCLI = await YoutubeDLCLI.safeGet()
   const result = await youtubeDLCLI.getInfo({
     url,
-    format: YoutubeDLCLI.getYoutubeDLVideoFormat([]),
+    format: YoutubeDLCLI.getYoutubeDLVideoFormat([], false),
     processOptions
   })
 
@@ -338,7 +344,7 @@ function exitError (message: string, ...meta: any[]) {
 function getYoutubeDLInfo (youtubeDLCLI: YoutubeDLCLI, url: string, args: string[]) {
   return youtubeDLCLI.getInfo({
     url,
-    format: YoutubeDLCLI.getYoutubeDLVideoFormat([]),
+    format: YoutubeDLCLI.getYoutubeDLVideoFormat([], false),
     additionalYoutubeDLArgs: [ '-j', '--flat-playlist', '--playlist-reverse', ...args ],
     processOptions
   })

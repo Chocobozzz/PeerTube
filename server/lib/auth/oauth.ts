@@ -1,5 +1,5 @@
 import express from 'express'
-import {
+import OAuth2Server, {
   InvalidClientError,
   InvalidGrantError,
   InvalidRequestError,
@@ -7,19 +7,31 @@ import {
   Response,
   UnauthorizedClientError,
   UnsupportedGrantTypeError
-} from 'oauth2-server'
-import { randomBytesPromise, sha1 } from '@server/helpers/core-utils'
+} from '@node-oauth/oauth2-server'
+import { randomBytesPromise } from '@server/helpers/core-utils'
+import { isOTPValid } from '@server/helpers/otp'
 import { MOAuthClient } from '@server/types/models'
-import { OAUTH_LIFETIME } from '../../initializers/constants'
+import { sha1 } from '@shared/extra-utils'
+import { HttpStatusCode } from '@shared/models'
+import { OAUTH_LIFETIME, OTP } from '../../initializers/constants'
 import { BypassLogin, getClient, getRefreshToken, getUser, revokeToken, saveToken } from './oauth-model'
+
+class MissingTwoFactorError extends Error {
+  code = HttpStatusCode.UNAUTHORIZED_401
+  name = 'missing_two_factor'
+}
+
+class InvalidTwoFactorError extends Error {
+  code = HttpStatusCode.BAD_REQUEST_400
+  name = 'invalid_two_factor'
+}
 
 /**
  *
  * Reimplement some functions of OAuth2Server to inject external auth methods
  *
  */
-
-const oAuthServer = new (require('oauth2-server'))({
+const oAuthServer = new OAuth2Server({
   accessTokenLifetime: OAUTH_LIFETIME.ACCESS_TOKEN,
   refreshTokenLifetime: OAUTH_LIFETIME.REFRESH_TOKEN,
 
@@ -83,17 +95,15 @@ async function handleOAuthToken (req: express.Request, options: { refreshTokenAu
 
 function handleOAuthAuthenticate (
   req: express.Request,
-  res: express.Response,
-  authenticateInQuery = false
+  res: express.Response
 ) {
-  const options = authenticateInQuery
-    ? { allowBearerTokensInQueryString: true }
-    : {}
-
-  return oAuthServer.authenticate(new Request(req), new Response(res), options)
+  return oAuthServer.authenticate(new Request(req), new Response(res))
 }
 
 export {
+  MissingTwoFactorError,
+  InvalidTwoFactorError,
+
   handleOAuthToken,
   handleOAuthAuthenticate
 }
@@ -117,6 +127,16 @@ async function handlePasswordGrant (options: {
 
   const user = await getUser(request.body.username, request.body.password, bypassLogin)
   if (!user) throw new InvalidGrantError('Invalid grant: user credentials are invalid')
+
+  if (user.otpSecret) {
+    if (!request.headers[OTP.HEADER_NAME]) {
+      throw new MissingTwoFactorError('Missing two factor header')
+    }
+
+    if (await isOTPValid({ encryptedSecret: user.otpSecret, token: request.headers[OTP.HEADER_NAME] }) !== true) {
+      throw new InvalidTwoFactorError('Invalid two factor header')
+    }
+  }
 
   const token = await buildToken()
 

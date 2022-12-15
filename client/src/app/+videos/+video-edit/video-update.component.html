@@ -1,17 +1,18 @@
 <div class="margin-content">
-  <div class="title-page title-page-single">
-    <span class="mr-1" i18n>Update</span>
-    <a [routerLink]="getVideoUrl()">{{ video?.name }}</a>
+  <div class="title-page">
+    <span class="me-1" i18n>Update</span>
+    <a [routerLink]="getVideoUrl()">{{ videoDetails?.name }}</a>
   </div>
 
   <form novalidate [formGroup]="form">
 
     <my-video-edit
-      [form]="form" [formErrors]="formErrors" [schedulePublicationPossible]="schedulePublicationPossible"
+      [form]="form" [formErrors]="formErrors" [forbidScheduledPublication]="forbidScheduledPublication"
       [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels"
-      [videoCaptions]="videoCaptions" [waitTranscodingEnabled]="isWaitTranscodingEnabled()"
+      [videoCaptions]="videoCaptions" [hideWaitTranscoding]="isWaitTranscodingHidden()"
       type="update" (pluginFieldsAdded)="hydratePluginFieldsFromVideo()"
       [liveVideo]="liveVideo" [videoToUpdate]="videoDetails"
+      [videoSource]="videoSource"
 
       (formBuilt)="onFormBuilt()"
     ></my-video-edit>

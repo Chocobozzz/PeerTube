@@ -1,8 +1,12 @@
-export interface LiveVideo {
-  rtmpUrl: string
-  rtmpsUrl: string
+import { LiveVideoLatencyMode } from './live-video-latency-mode.enum'
 
-  streamKey: string
+export interface LiveVideo {
+  // If owner
+  rtmpUrl?: string
+  rtmpsUrl?: string
+  streamKey?: string
+
   saveReplay: boolean
   permanentLive: boolean
+  latencyMode: LiveVideoLatencyMode
 }

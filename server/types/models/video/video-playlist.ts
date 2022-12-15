@@ -1,9 +1,9 @@
+import { MVideoPlaylistElementLight } from '@server/types/models/video/video-playlist-element'
+import { PickWith } from '@shared/typescript-utils'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
-import { PickWith } from '@shared/core-utils'
 import { MAccount, MAccountDefault, MAccountSummary, MAccountSummaryFormattable } from '../account'
 import { MThumbnail } from './thumbnail'
 import { MChannelDefault, MChannelSummary, MChannelSummaryFormattable, MChannelUrl } from './video-channels'
-import { MVideoPlaylistElementLight } from '@server/types/models/video/video-playlist-element'
 
 type Use<K extends keyof VideoPlaylistModel, M> = PickWith<VideoPlaylistModel, K, M>
 
@@ -14,6 +14,10 @@ export type MVideoPlaylist = Omit<VideoPlaylistModel, 'OwnerAccount' | 'VideoCha
 // ############################################################################
 
 export type MVideoPlaylistId = Pick<MVideoPlaylist, 'id'>
+export type MVideoPlaylistSummary =
+  Pick<MVideoPlaylist, 'id'> &
+  Pick<MVideoPlaylist, 'name'> &
+  Pick<MVideoPlaylist, 'uuid'>
 export type MVideoPlaylistPrivacy = Pick<MVideoPlaylist, 'privacy'>
 export type MVideoPlaylistUUID = Pick<MVideoPlaylist, 'uuid'>
 export type MVideoPlaylistVideosLength = MVideoPlaylist & { videosLength?: number }
@@ -22,12 +26,8 @@ export type MVideoPlaylistVideosLength = MVideoPlaylist & { videosLength?: numbe
 
 // With elements
 
-export type MVideoPlaylistWithElements =
-  MVideoPlaylist &
-  Use<'VideoPlaylistElements', MVideoPlaylistElementLight[]>
-
-export type MVideoPlaylistIdWithElements =
-  MVideoPlaylistId &
+export type MVideoPlaylistSummaryWithElements =
+  MVideoPlaylistSummary &
   Use<'VideoPlaylistElements', MVideoPlaylistElementLight[]>
 
 // ############################################################################

@@ -1,4 +1,4 @@
-import { FunctionProperties, PickWith, PickWithOpt } from '@shared/core-utils'
+import { FunctionProperties, PickWith, PickWithOpt } from '@shared/typescript-utils'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import {
   MAccountActor,

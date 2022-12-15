@@ -1,5 +1,5 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
-import { forkJoin, delay } from 'rxjs'
+import { delay, forkJoin } from 'rxjs'
 import { filter, first, map } from 'rxjs/operators'
 import { DOCUMENT, getLocaleDirection, PlatformLocation } from '@angular/common'
 import { AfterViewInit, Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
@@ -14,21 +14,24 @@ import {
   ScrollService,
   ServerService,
   ThemeService,
-  User
+  User,
+  UserLocalStorageService
 } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { AccountSetupWarningModalComponent } from '@app/modal/account-setup-warning-modal.component'
+import { AdminWelcomeModalComponent } from '@app/modal/admin-welcome-modal.component'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
-import { AdminWelcomeModalComponent } from '@app/modal/admin-welcome-modal.component'
 import { NgbConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { LoadingBarService } from '@ngx-loading-bar/core'
+import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { getShortLocale } from '@shared/core-utils/i18n'
 import { BroadcastMessageLevel, HTMLServerConfig, UserRole } from '@shared/models'
 import { MenuService } from './core/menu/menu.service'
 import { POP_STATE_MODAL_DISMISS } from './helpers'
+import { GlobalIconName } from './shared/shared-icons'
 import { InstanceService } from './shared/shared-instance'
 
 @Component({
@@ -70,6 +73,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     private ngbConfig: NgbConfig,
     private loadingBar: LoadingBarService,
     private scrollService: ScrollService,
+    private userLocalStorage: UserLocalStorageService,
     public menu: MenuService
   ) {
     this.ngbConfig.animation = false
@@ -85,6 +89,8 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngOnInit () {
     document.getElementById('incompatible-browser').className += ' browser-ok'
+
+    this.loadUser()
 
     this.serverConfig = this.serverService.getHTMLConfig()
 
@@ -146,6 +152,17 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.screenService.isBroadcastMessageDisplayed = false
   }
 
+  getNotificationIcon (message: { severity: 'success' | 'error' | 'info' }): GlobalIconName {
+    switch (message.severity) {
+      case 'error':
+        return 'cross'
+      case 'success':
+        return 'tick'
+      case 'info':
+        return 'help'
+    }
+  }
+
   private initRouteEvents () {
     const eventsObs = this.router.events
 
@@ -189,7 +206,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
 
       this.broadcastMessage = {
-        message: await this.markdownService.unsafeMarkdownToHTML(messageConfig.message, true),
+        message: await this.markdownService.markdownToUnsafeHTML({ markdown: messageConfig.message }),
         dismissable: messageConfig.dismissable,
         class: classes[messageConfig.level]
       }
@@ -205,7 +222,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         /* eslint-disable no-eval */
         eval(this.serverConfig.instance.customizations.javascript)
       } catch (err) {
-        console.error('Cannot eval custom JavaScript.', err)
+        logger.error('Cannot eval custom JavaScript.', err)
       }
     }
   }
@@ -230,12 +247,12 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     // Admin modal
     userSub.pipe(
-      filter(user => user.role === UserRole.ADMINISTRATOR)
+      filter(user => user.role.id === UserRole.ADMINISTRATOR)
     ).subscribe(user => this.openAdminModalsIfNeeded(user))
 
     // Account modal
     userSub.pipe(
-      filter(user => user.role !== UserRole.ADMINISTRATOR)
+      filter(user => user.role.id !== UserRole.ADMINISTRATOR)
     ).subscribe(user => this.openAccountModalsIfNeeded(user))
   }
 
@@ -299,5 +316,16 @@ export class AppComponent implements OnInit, AfterViewInit {
         return false
       }, undefined, $localize`Go to the videos upload page`)
     ])
+  }
+
+  private loadUser () {
+    const tokens = this.userLocalStorage.getTokens()
+    if (!tokens) return
+
+    const user = this.userLocalStorage.getLoggedInUser()
+    if (!user) return
+
+    // Initialize user
+    this.authService.buildAuthUser(user, tokens)
   }
 }

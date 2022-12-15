@@ -17,7 +17,7 @@ import {
 } from 'sequelize-typescript'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 import { MThumbnail, MThumbnailVideo, MVideo } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
@@ -127,7 +127,7 @@ export class ThumbnailModel extends Model<Partial<AttributesOnly<ThumbnailModel>
 
     // Don't block the transaction
     instance.removeThumbnail()
-            .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, err))
+            .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, { err }))
   }
 
   static loadByFilename (filename: string, thumbnailType: ThumbnailType): Promise<MThumbnail> {

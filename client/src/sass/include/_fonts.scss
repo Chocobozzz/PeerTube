@@ -15,3 +15,7 @@
   font-display: swap;
   src: url('../fonts/source-sans/WOFF2/VAR/SourceSans3VF-Italic.ttf.woff2') format('woff2');
 }
+
+@mixin muted {
+  color: pvar(--greyForegroundColor) !important;
+}

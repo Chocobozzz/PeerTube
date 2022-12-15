@@ -1,21 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { io } from 'socket.io-client'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
+import { HttpStatusCode, UserNotificationSetting, UserNotificationSettingValue } from '@shared/models'
 import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
   cleanupTests,
   createSingleServer,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
   PeerTubeServer,
-  setAccessTokensToServers,
-  wait
-} from '@shared/extra-utils'
-import { HttpStatusCode, UserNotificationSetting, UserNotificationSettingValue } from '@shared/models'
+  setAccessTokensToServers
+} from '@shared/server-commands'
 
 describe('Test user notifications API validators', function () {
   let server: PeerTubeServer
@@ -173,6 +170,7 @@ describe('Test user notifications API validators', function () {
       abuseNewMessage: UserNotificationSettingValue.WEB,
       abuseStateChange: UserNotificationSettingValue.WEB,
       newPeerTubeVersion: UserNotificationSettingValue.WEB,
+      myVideoStudioEditionFinished: UserNotificationSettingValue.WEB,
       newPluginVersion: UserNotificationSettingValue.WEB
     }
 
@@ -235,7 +233,7 @@ describe('Test user notifications API validators', function () {
   describe('When connecting to my notification socket', function () {
 
     it('Should fail with no token', function (next) {
-      const socket = io(`http://localhost:${server.port}/user-notifications`, { reconnection: false })
+      const socket = io(`${server.url}/user-notifications`, { reconnection: false })
 
       socket.once('connect_error', function () {
         socket.disconnect()
@@ -249,7 +247,7 @@ describe('Test user notifications API validators', function () {
     })
 
     it('Should fail with an invalid token', function (next) {
-      const socket = io(`http://localhost:${server.port}/user-notifications`, {
+      const socket = io(`${server.url}/user-notifications`, {
         query: { accessToken: 'bad_access_token' },
         reconnection: false
       })
@@ -266,7 +264,7 @@ describe('Test user notifications API validators', function () {
     })
 
     it('Should success with the correct token', function (next) {
-      const socket = io(`http://localhost:${server.port}/user-notifications`, {
+      const socket = io(`${server.url}/user-notifications`, {
         query: { accessToken: server.accessToken },
         reconnection: false
       })

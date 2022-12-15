@@ -44,18 +44,10 @@
   }
 }
 
-td .glyphicon {
-  @include margin-right(10px);
-}
-
 pre {
   font-size: 11px;
 }
 
 .job-error {
   color: #ff0000;
-}
-
-.select-filter-block .badge {
-  @include peertube-badge;
 }

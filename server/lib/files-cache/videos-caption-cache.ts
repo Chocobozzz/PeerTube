@@ -1,4 +1,5 @@
 import { join } from 'path'
+import { logger } from '@server/helpers/logger'
 import { doRequestAndSaveToFile } from '@server/helpers/requests'
 import { CONFIG } from '../../initializers/config'
 import { FILES_CACHE } from '../../initializers/constants'
@@ -35,15 +36,21 @@ class VideosCaptionCache extends AbstractVideoStaticFileCache <string> {
     if (videoCaption.isOwned()) throw new Error('Cannot load remote caption of owned video.')
 
     // Used to fetch the path
-    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoCaption.videoId)
+    const video = await VideoModel.loadFull(videoCaption.videoId)
     if (!video) return undefined
 
     const remoteUrl = videoCaption.getFileUrl(video)
     const destPath = join(FILES_CACHE.VIDEO_CAPTIONS.DIRECTORY, videoCaption.filename)
 
-    await doRequestAndSaveToFile(remoteUrl, destPath)
+    try {
+      await doRequestAndSaveToFile(remoteUrl, destPath)
 
-    return { isOwned: false, path: destPath }
+      return { isOwned: false, path: destPath }
+    } catch (err) {
+      logger.info('Cannot fetch remote caption file %s.', remoteUrl, { err })
+
+      return undefined
+    }
   }
 }
 

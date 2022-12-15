@@ -1,14 +1,15 @@
 import { FindAndCountOptions, json, QueryTypes } from 'sequelize'
 import { AllowNull, Column, CreatedAt, DataType, DefaultScope, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MPlugin, MPluginFormattable } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
-import { PeerTubePlugin, PluginType, RegisterServerSettingOptions } from '../../../shared/models'
+import { AttributesOnly } from '@shared/typescript-utils'
+import { PeerTubePlugin, PluginType, RegisterServerSettingOptions, SettingEntries, SettingValue } from '../../../shared/models'
 import {
   isPluginDescriptionValid,
   isPluginHomepage,
   isPluginNameValid,
-  isPluginTypeValid,
-  isPluginVersionValid
+  isPluginStableOrUnstableVersionValid,
+  isPluginStableVersionValid,
+  isPluginTypeValid
 } from '../../helpers/custom-validators/plugins'
 import { getSort, throwIfNotValid } from '../utils'
 
@@ -40,12 +41,12 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
   type: number
 
   @AllowNull(false)
-  @Is('PluginVersion', value => throwIfNotValid(value, isPluginVersionValid, 'version'))
+  @Is('PluginVersion', value => throwIfNotValid(value, isPluginStableOrUnstableVersionValid, 'version'))
   @Column
   version: string
 
   @AllowNull(true)
-  @Is('PluginLatestVersion', value => throwIfNotValid(value, isPluginVersionValid, 'version'))
+  @Is('PluginLatestVersion', value => throwIfNotValid(value, isPluginStableVersionValid, 'version'))
   @Column
   latestVersion: string
 
@@ -121,7 +122,7 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
 
     return PluginModel.findOne(query)
       .then(p => {
-        if (!p || !p.settings || p.settings === undefined) {
+        if (!p?.settings || p.settings === undefined) {
           const registered = registeredSettings.find(s => s.name === settingName)
           if (!registered || registered.default === undefined) return undefined
 
@@ -148,10 +149,10 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
 
     return PluginModel.findOne(query)
       .then(p => {
-        const result: { [settingName: string ]: string | boolean } = {}
+        const result: SettingEntries = {}
 
         for (const name of settingNames) {
-          if (!p || !p.settings || p.settings[name] === undefined) {
+          if (!p?.settings || p.settings[name] === undefined) {
             const registered = registeredSettings.find(s => s.name === name)
 
             if (registered?.default !== undefined) {
@@ -166,7 +167,7 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
       })
   }
 
-  static setSetting (pluginName: string, pluginType: PluginType, settingName: string, settingValue: string) {
+  static setSetting (pluginName: string, pluginType: PluginType, settingName: string, settingValue: SettingValue) {
     const query = {
       where: {
         name: pluginName,
@@ -197,15 +198,11 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
         if (!c) return undefined
         const value = c.value
 
-        if (typeof value === 'string' && value.startsWith('{')) {
-          try {
-            return JSON.parse(value)
-          } catch {
-            return value
-          }
+        try {
+          return JSON.parse(value)
+        } catch {
+          return value
         }
-
-        return c.value
       })
   }
 
@@ -243,11 +240,10 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
 
     if (options.pluginType) query.where['type'] = options.pluginType
 
-    return PluginModel
-      .findAndCountAll<MPlugin>(query)
-      .then(({ rows, count }) => {
-        return { total: count, data: rows }
-      })
+    return Promise.all([
+      PluginModel.count(query),
+      PluginModel.findAll<MPlugin>(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static listInstalled (): Promise<MPlugin[]> {
@@ -277,7 +273,7 @@ export class PluginModel extends Model<Partial<AttributesOnly<PluginModel>>> {
   }
 
   getPublicSettings (registeredSettings: RegisterServerSettingOptions[]) {
-    const result: { [ name: string ]: string } = {}
+    const result: SettingEntries = {}
     const settings = this.settings || {}
 
     for (const r of registeredSettings) {

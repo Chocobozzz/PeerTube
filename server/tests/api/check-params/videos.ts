@@ -1,15 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { omit } from 'lodash'
+import { expect } from 'chai'
 import { join } from 'path'
-import { randomInt } from '@shared/core-utils'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination, checkUploadVideoParam } from '@server/tests/shared'
+import { omit, randomInt, root } from '@shared/core-utils'
+import { HttpStatusCode, PeerTubeProblemDocument, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
-  checkUploadVideoParam,
   cleanupTests,
   createSingleServer,
   makeDeleteRequest,
@@ -17,12 +13,8 @@ import {
   makePutBodyRequest,
   makeUploadRequest,
   PeerTubeServer,
-  root,
   setAccessTokensToServers
-} from '@shared/extra-utils'
-import { HttpStatusCode, PeerTubeProblemDocument, VideoCreateResult, VideoPrivacy } from '@shared/models'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 describe('Test videos API validator', function () {
   const path = '/api/v1/videos/'
@@ -32,6 +24,7 @@ describe('Test videos API validator', function () {
   let channelId: number
   let channelName: string
   let video: VideoCreateResult
+  let privateVideo: VideoCreateResult
 
   // ---------------------------------------------------------------
 
@@ -42,16 +35,17 @@ describe('Test videos API validator', function () {
 
     await setAccessTokensToServers([ server ])
 
-    const username = 'user1'
-    const password = 'my super password'
-    await server.users.create({ username: username, password: password })
-    userAccessToken = await server.login.getAccessToken({ username, password })
+    userAccessToken = await server.users.generateUserAndToken('user1')
 
     {
       const body = await server.users.getMyInfo()
       channelId = body.videoChannels[0].id
       channelName = body.videoChannels[0].name
       accountName = body.account.name + '@' + body.account.host
+    }
+
+    {
+      privateVideo = await server.videos.quickUpload({ name: 'private video', privacy: VideoPrivacy.PRIVATE })
     }
   })
 
@@ -207,7 +201,7 @@ describe('Test videos API validator', function () {
         support: 'my super support text',
         tags: [ 'tag1', 'tag2' ],
         privacy: VideoPrivacy.PUBLIC,
-        channelId: channelId,
+        channelId,
         originallyPublishedAt: new Date().toISOString()
       }
     })
@@ -221,7 +215,7 @@ describe('Test videos API validator', function () {
       })
 
       it('Should fail without name', async function () {
-        const fields = omit(baseCorrectParams, 'name')
+        const fields = omit(baseCorrectParams, [ 'name' ])
         const attaches = baseCorrectAttaches
 
         await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
@@ -270,7 +264,7 @@ describe('Test videos API validator', function () {
       })
 
       it('Should fail without a channel', async function () {
-        const fields = omit(baseCorrectParams, 'channelId')
+        const fields = omit(baseCorrectParams, [ 'channelId' ])
         const attaches = baseCorrectAttaches
 
         await checkUploadVideoParam(server, server.accessToken, { ...fields, ...attaches }, HttpStatusCode.BAD_REQUEST_400, mode)
@@ -785,6 +779,19 @@ describe('Test videos API validator', function () {
         rating: 'likes'
       }
       await makePutBodyRequest({ url: server.url, path: path + videoId + '/rate', token: server.accessToken, fields })
+    })
+
+    it('Should fail with a private video of another user', async function () {
+      const fields = {
+        rating: 'like'
+      }
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + privateVideo.uuid + '/rate',
+        token: userAccessToken,
+        fields,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
 
     it('Should succeed with the correct parameters', async function () {

@@ -1,0 +1,14 @@
+@use '_mixins' as *;
+@use '_variables' as *;
+@use '_actor' as *;
+
+.add-sync {
+  @include create-button;
+}
+
+.actor {
+  @include actor-row($min-height: auto, $separator: true);
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border: 0;
+}

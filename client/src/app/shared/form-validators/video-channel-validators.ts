@@ -45,6 +45,19 @@ export const VIDEO_CHANNEL_SUPPORT_VALIDATOR: BuildFormValidator = {
   ],
   MESSAGES: {
     minlength: $localize`Support text must be at least 3 characters long.`,
-    maxlength: $localize`Support text cannot be more than 1000 characters long`
+    maxlength: $localize`Support text cannot be more than 1000 characters long.`
+  }
+}
+
+export const VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [
+    Validators.required,
+    Validators.pattern(/^https?:\/\//),
+    Validators.maxLength(1000)
+  ],
+  MESSAGES: {
+    required: $localize`Remote channel url is required.`,
+    pattern: $localize`External channel URL must begin with "https://" or "http://"`,
+    maxlength: $localize`External channel URL cannot be more than 1000 characters long`
   }
 }

@@ -1,5 +1,5 @@
 import validator from 'validator'
-import { UserNotificationSettingValue } from '../../../shared/models/users/user-notification-setting.model'
+import { UserNotificationSettingValue } from '@shared/models'
 import { exists } from './misc'
 
 function isUserNotificationTypeValid (value: any) {

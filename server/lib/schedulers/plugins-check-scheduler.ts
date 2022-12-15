@@ -33,7 +33,7 @@ export class PluginsCheckScheduler extends AbstractScheduler {
     const chunks = chunk(plugins, 10)
     for (const chunk of chunks) {
       // Find plugins according to their npm name
-      const pluginIndex: { [npmName: string]: PluginModel} = {}
+      const pluginIndex: { [npmName: string]: PluginModel } = {}
       for (const plugin of chunk) {
         pluginIndex[PluginModel.buildNpmName(plugin.name, plugin.type)] = plugin
       }

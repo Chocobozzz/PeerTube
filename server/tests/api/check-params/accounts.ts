@@ -1,15 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
-  cleanupTests,
-  createSingleServer,
-  PeerTubeServer
-} from '@shared/extra-utils'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
 import { HttpStatusCode } from '@shared/models'
+import { cleanupTests, createSingleServer, PeerTubeServer } from '@shared/server-commands'
 
 describe('Test accounts API validators', function () {
   const path = '/api/v1/accounts/'

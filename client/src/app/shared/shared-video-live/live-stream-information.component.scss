@@ -9,10 +9,21 @@ p-autocomplete {
   margin: 20px 0;
 }
 
-.alert-info {
+.pt-alert-primary {
   margin: 1rem 0;
 }
 
-.badge {
+.pt-badge {
+  @include margin-right(5px);
+
   font-size: 13px;
+}
+
+.journal-session {
+  margin-bottom: 5px;
+
+  span:not(.pt-badge, :last-child)::after {
+    margin: 3px;
+    content: '•';
+  }
 }

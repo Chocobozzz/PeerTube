@@ -1,25 +1,25 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input, OnChanges } from '@angular/core'
 import { VideoChannel } from '../shared-main'
 import { Account } from '../shared-main/account/account.model'
 
 type ActorInput = {
   name: string
-  avatar?: { url?: string, path: string }
+  avatars: { width: number, url?: string, path: string }[]
   url: string
 }
 
-export type ActorAvatarSize = '18' | '25' | '32' | '34' | '36' | '40' | '100' | '120'
+export type ActorAvatarSize = '18' | '25' | '28' | '32' | '34' | '35' | '36' | '40' | '48' | '75' | '80' | '100' | '120'
 
 @Component({
   selector: 'my-actor-avatar',
   styleUrls: [ './actor-avatar.component.scss' ],
   templateUrl: './actor-avatar.component.html'
 })
-export class ActorAvatarComponent {
+export class ActorAvatarComponent implements OnChanges {
   private _title: string
 
-  @Input() account: ActorInput
-  @Input() channel: ActorInput
+  @Input() actor: ActorInput
+  @Input() actorType: 'channel' | 'account' | 'unlogged'
 
   @Input() previewImage: string
 
@@ -36,63 +36,98 @@ export class ActorAvatarComponent {
 
   get title () {
     if (this._title) return this._title
-    if (this.account) return $localize`${this.account.name} (account page)`
-    if (this.channel) return $localize`${this.channel.name} (channel page)`
+    if (this.isAccount()) return $localize`${this.actor.name} (account page)`
+    if (this.isChannel()) return $localize`${this.actor.name} (channel page)`
 
     return ''
   }
 
+  classes: string[] = []
+
   get alt () {
-    if (this.account) return $localize`Account avatar`
-    if (this.channel) return $localize`Channel avatar`
+    if (this.isAccount()) return $localize`Account avatar`
+    if (this.isChannel()) return $localize`Channel avatar`
 
     return ''
   }
 
   get defaultAvatarUrl () {
-    if (this.channel) return VideoChannel.GET_DEFAULT_AVATAR_URL()
+    if (this.isChannel()) return VideoChannel.GET_DEFAULT_AVATAR_URL(this.getSizeNumber())
 
-    return Account.GET_DEFAULT_AVATAR_URL()
+    // account or unlogged
+    return Account.GET_DEFAULT_AVATAR_URL(this.getSizeNumber())
   }
 
   get avatarUrl () {
-    if (this.account) return Account.GET_ACTOR_AVATAR_URL(this.account)
-    if (this.channel) return VideoChannel.GET_ACTOR_AVATAR_URL(this.channel)
+    if (!this.actor) return ''
+
+    if (this.isAccount()) return Account.GET_ACTOR_AVATAR_URL(this.actor, this.getSizeNumber())
+    if (this.isChannel()) return VideoChannel.GET_ACTOR_AVATAR_URL(this.actor, this.getSizeNumber())
 
     return ''
   }
 
-  get initial () {
-    const name = this.account?.name
+  ngOnChanges () {
+    this.classes = [ 'avatar' ]
+
+    if (this.size) {
+      this.classes.push(`avatar-${this.size}`)
+    }
+
+    if (this.isChannel()) {
+      this.classes.push('channel')
+    } else {
+      this.classes.push('account')
+    }
+
+    // No avatar, use actor name initial
+    if (this.displayActorInitial()) {
+      this.classes.push('initial')
+      this.classes.push(this.getColorTheme())
+    }
+  }
+
+  displayImage () {
+    if (this.actorType === 'unlogged') return true
+
+    return !!(this.actor && this.avatarUrl)
+  }
+
+  displayActorInitial () {
+    return this.actor && !this.avatarUrl
+  }
+
+  displayPlaceholder () {
+    return this.actorType !== 'unlogged' && !this.actor
+  }
+
+  getActorInitial () {
+    const name = this.actor?.name
     if (!name) return ''
 
     return name.slice(0, 1)
   }
 
-  getClass (type: 'avatar' | 'initial') {
-    const base = [ 'avatar' ]
-
-    if (this.size) base.push(`avatar-${this.size}`)
-
-    if (this.channel) base.push('channel')
-    else base.push('account')
-
-    if (type === 'initial' && this.initial) {
-      base.push('initial')
-      base.push(this.getColorTheme())
-    }
-
-    return base
+  private isAccount () {
+    return this.actorType === 'account'
   }
 
-  hasActor () {
-    return !!this.account || !!this.channel
+  private isChannel () {
+    return this.actorType === 'channel'
+  }
+
+  private getSizeNumber () {
+    if (this.size) return +this.size
+
+    return undefined
   }
 
   private getColorTheme () {
+    const initialLowercase = this.getActorInitial().toLowerCase()
+
     // Keep consistency with CSS
     const themes = {
-      abc: 'blue',
+      '0123456789abc': 'blue',
       def: 'green',
       ghi: 'purple',
       jkl: 'gray',
@@ -103,8 +138,8 @@ export class ActorAvatarComponent {
     }
 
     const theme = Object.keys(themes)
-                        .find(chars => chars.includes(this.initial))
+                        .find(chars => chars.includes(initialLowercase))
 
-    return themes[theme]
+    return themes[theme] || 'blue'
   }
 }

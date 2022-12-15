@@ -1,4 +1,4 @@
-import { browserSleep, go } from '../utils'
+import { getCheckbox, go } from '../utils'
 
 export class AdminConfigPage {
 
@@ -14,16 +14,31 @@ export class AdminConfigPage {
     await $('.inner-form-title=' + waitTitles[tab]).waitForDisplayed()
   }
 
-  updateNSFWSetting (newValue: 'do_not_list' | 'blur' | 'display') {
-    return $('#instanceDefaultNSFWPolicy').selectByAttribute('value', newValue)
+  async updateNSFWSetting (newValue: 'do_not_list' | 'blur' | 'display') {
+    const elem = $('#instanceDefaultNSFWPolicy')
+
+    await elem.waitForDisplayed()
+    await elem.scrollIntoView(false) // Avoid issues with fixed header on firefox
+    await elem.waitForClickable()
+
+    return elem.selectByAttribute('value', newValue)
   }
 
   updateHomepage (newValue: string) {
     return $('#instanceCustomHomepageContent').setValue(newValue)
   }
 
+  async toggleSignup () {
+    const checkbox = await getCheckbox('signupEnabled')
+
+    await checkbox.waitForClickable()
+    await checkbox.click()
+  }
+
   async save () {
-    await $('input[type=submit]').click()
-    await browserSleep(200)
+    const button = $('input[type=submit]')
+
+    await button.waitForClickable()
+    await button.click()
   }
 }

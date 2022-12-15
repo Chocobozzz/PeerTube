@@ -3,21 +3,25 @@
 
 $form-base-input-width: 340px;
 
-label {
-  font-weight: $font-regular;
-  font-size: 100%;
-}
-
 form {
   padding-bottom: 1.5rem;
 }
 
-input[type=text] {
-  @include peertube-input-text($form-base-input-width);
-
+my-markdown-textarea {
   display: block;
+  max-width: 500px;
 }
 
+.homepage my-markdown-textarea {
+  display: block;
+  max-width: 90%;
+
+  ::ng-deep textarea {
+    height: 300px !important;
+  }
+}
+
+input[type=text],
 input[type=number] {
   @include peertube-input-text($form-base-input-width);
 
@@ -26,12 +30,16 @@ input[type=number] {
 
 .number-with-unit {
   position: relative;
-  width: min-content;
+  width: fit-content;
 
   input[type=number] + span {
     position: absolute;
-    top: 5px;
+    top: 0.2em;
     right: 2.5rem;
+
+    @media screen and (max-width: $mobile-view) {
+      display: none;
+    }
   }
 
   input[disabled] {
@@ -74,6 +82,11 @@ input[type=submit] {
   @include settings-big-title;
 }
 
+.inner-form-description {
+  font-size: 15px;
+  margin-bottom: 15px;
+}
+
 textarea {
   @include peertube-textarea(500px, 150px);
 
@@ -88,6 +101,7 @@ textarea {
 .label-small-info {
   font-style: italic;
   margin-bottom: 10px;
+  font-size: 14px;
 }
 
 .disabled-checkbox-extra {
@@ -100,11 +114,6 @@ textarea {
 
 input[disabled] {
   opacity: 0.5;
-}
-
-
-.form-group-right {
-  padding-top: 2px;
 }
 
 ngb-tabset:not(.previews) ::ng-deep {
@@ -140,4 +149,10 @@ ngb-tabset:not(.previews) ::ng-deep {
     background-color: pvar(--mainBackgroundColor);
     padding: 0 .3em;
   }
+}
+
+my-user-real-quota-info {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
 }

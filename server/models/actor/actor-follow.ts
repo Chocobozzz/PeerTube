@@ -1,5 +1,5 @@
-import { difference, values } from 'lodash'
-import { IncludeOptions, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
+import { difference } from 'lodash'
+import { Attributes, FindOptions, Includeable, IncludeOptions, Op, QueryTypes, Transaction, WhereAttributeHash } from 'sequelize'
 import {
   AfterCreate,
   AfterDestroy,
@@ -30,18 +30,19 @@ import {
   MActorFollowFormattable,
   MActorFollowSubscriptions
 } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
-import { ActivityPubActorType } from '@shared/models'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { FollowState } from '../../../shared/models/actors'
 import { ActorFollow } from '../../../shared/models/actors/follow.model'
 import { logger } from '../../helpers/logger'
-import { ACTOR_FOLLOW_SCORE, CONSTRAINTS_FIELDS, FOLLOW_STATES, SERVER_ACTOR_NAME } from '../../initializers/constants'
+import { ACTOR_FOLLOW_SCORE, CONSTRAINTS_FIELDS, FOLLOW_STATES, SERVER_ACTOR_NAME, SORTABLE_COLUMNS } from '../../initializers/constants'
 import { AccountModel } from '../account/account'
 import { ServerModel } from '../server/server'
 import { doesExist } from '../shared/query'
-import { createSafeIn, getFollowsSort, getSort, searchAttribute, throwIfNotValid } from '../utils'
+import { createSafeIn, getSort, searchAttribute, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'
+import { InstanceListFollowersQueryBuilder, ListFollowersOptions } from './sql/instance-list-followers-query-builder'
+import { InstanceListFollowingQueryBuilder, ListFollowingOptions } from './sql/instance-list-following-query-builder'
 
 @Table({
   tableName: 'actorFollow',
@@ -68,7 +69,7 @@ import { ActorModel, unusedActorAttributesForAPI } from './actor'
 export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowModel>>> {
 
   @AllowNull(false)
-  @Column(DataType.ENUM(...values(FOLLOW_STATES)))
+  @Column(DataType.ENUM(...Object.values(FOLLOW_STATES)))
   state: FollowState
 
   @AllowNull(false)
@@ -208,7 +209,9 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
   }
 
   static isFollowedBy (actorId: number, followerActorId: number) {
-    const query = 'SELECT 1 FROM "actorFollow" WHERE "actorId" = $followerActorId AND "targetActorId" = $actorId LIMIT 1'
+    const query = `SELECT 1 FROM "actorFollow" ` +
+      `WHERE "actorId" = $followerActorId AND "targetActorId" = $actorId AND "state" = 'accepted' ` +
+      `LIMIT 1`
 
     return doesExist(query, { actorId, followerActorId })
   }
@@ -217,7 +220,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
     const query = {
       where: {
         actorId,
-        targetActorId: targetActorId
+        targetActorId
       },
       include: [
         {
@@ -237,12 +240,15 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
     return ActorFollowModel.findOne(query)
   }
 
-  static loadByActorAndTargetNameAndHostForAPI (
-    actorId: number,
-    targetName: string,
-    targetHost: string,
-    t?: Transaction
-  ): Promise<MActorFollowActorsDefaultSubscription> {
+  static loadByActorAndTargetNameAndHostForAPI (options: {
+    actorId: number
+    targetName: string
+    targetHost: string
+    state?: FollowState
+    transaction?: Transaction
+  }): Promise<MActorFollowActorsDefaultSubscription> {
+    const { actorId, targetHost, targetName, state, transaction } = options
+
     const actorFollowingPartInclude: IncludeOptions = {
       model: ActorModel,
       required: true,
@@ -270,10 +276,11 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
       })
     }
 
-    const query = {
-      where: {
-        actorId
-      },
+    const where: WhereAttributeHash<Attributes<ActorFollowModel>> = { actorId }
+    if (state) where.state = state
+
+    const query: FindOptions<Attributes<ActorFollowModel>> = {
+      where,
       include: [
         actorFollowingPartInclude,
         {
@@ -282,7 +289,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
           as: 'ActorFollower'
         }
       ],
-      transaction: t
+      transaction
     }
 
     return ActorFollowModel.findOne(query)
@@ -324,6 +331,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
             [Op.or]: whereTab
           },
           {
+            state: 'accepted',
             actorId
           }
         ]
@@ -348,132 +356,18 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
     return ActorFollowModel.findAll(query)
   }
 
-  static listInstanceFollowingForApi (options: {
-    id: number
-    start: number
-    count: number
-    sort: string
-    state?: FollowState
-    actorType?: ActivityPubActorType
-    search?: string
-  }) {
-    const { id, start, count, sort, search, state, actorType } = options
-
-    const followWhere = state ? { state } : {}
-    const followingWhere: WhereOptions = {}
-
-    if (search) {
-      Object.assign(followWhere, {
-        [Op.or]: [
-          searchAttribute(options.search, '$ActorFollowing.preferredUsername$'),
-          searchAttribute(options.search, '$ActorFollowing.Server.host$')
-        ]
-      })
-    }
-
-    if (actorType) {
-      Object.assign(followingWhere, { type: actorType })
-    }
-
-    const query = {
-      distinct: true,
-      offset: start,
-      limit: count,
-      order: getFollowsSort(sort),
-      where: followWhere,
-      include: [
-        {
-          model: ActorModel,
-          required: true,
-          as: 'ActorFollower',
-          where: {
-            id
-          }
-        },
-        {
-          model: ActorModel,
-          as: 'ActorFollowing',
-          required: true,
-          where: followingWhere,
-          include: [
-            {
-              model: ServerModel,
-              required: true
-            }
-          ]
-        }
-      ]
-    }
-
-    return ActorFollowModel.findAndCountAll<MActorFollowActorsDefault>(query)
-      .then(({ rows, count }) => {
-        return {
-          data: rows,
-          total: count
-        }
-      })
+  static listInstanceFollowingForApi (options: ListFollowingOptions) {
+    return Promise.all([
+      new InstanceListFollowingQueryBuilder(this.sequelize, options).countFollowing(),
+      new InstanceListFollowingQueryBuilder(this.sequelize, options).listFollowing()
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
-  static listFollowersForApi (options: {
-    actorIds: number[]
-    start: number
-    count: number
-    sort: string
-    state?: FollowState
-    actorType?: ActivityPubActorType
-    search?: string
-  }) {
-    const { actorIds, start, count, sort, search, state, actorType } = options
-
-    const followWhere = state ? { state } : {}
-    const followerWhere: WhereOptions = {}
-
-    if (search) {
-      Object.assign(followWhere, {
-        [Op.or]: [
-          searchAttribute(search, '$ActorFollower.preferredUsername$'),
-          searchAttribute(search, '$ActorFollower.Server.host$')
-        ]
-      })
-    }
-
-    if (actorType) {
-      Object.assign(followerWhere, { type: actorType })
-    }
-
-    const query = {
-      distinct: true,
-      offset: start,
-      limit: count,
-      order: getFollowsSort(sort),
-      where: followWhere,
-      include: [
-        {
-          model: ActorModel,
-          required: true,
-          as: 'ActorFollower',
-          where: followerWhere
-        },
-        {
-          model: ActorModel,
-          as: 'ActorFollowing',
-          required: true,
-          where: {
-            id: {
-              [Op.in]: actorIds
-            }
-          }
-        }
-      ]
-    }
-
-    return ActorFollowModel.findAndCountAll<MActorFollowActorsDefault>(query)
-                           .then(({ rows, count }) => {
-                             return {
-                               data: rows,
-                               total: count
-                             }
-                           })
+  static listFollowersForApi (options: ListFollowersOptions) {
+    return Promise.all([
+      new InstanceListFollowersQueryBuilder(this.sequelize, options).countFollowers(),
+      new InstanceListFollowersQueryBuilder(this.sequelize, options).listFollowers()
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static listSubscriptionsForApi (options: {
@@ -485,7 +379,8 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
   }) {
     const { actorId, start, count, sort } = options
     const where = {
-      actorId: actorId
+      state: 'accepted',
+      actorId
     }
 
     if (options.search) {
@@ -497,58 +392,68 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
       })
     }
 
-    const query = {
-      attributes: [],
-      distinct: true,
-      offset: start,
-      limit: count,
-      order: getSort(sort),
-      where,
-      include: [
-        {
-          attributes: [ 'id' ],
-          model: ActorModel.unscoped(),
-          as: 'ActorFollowing',
-          required: true,
-          include: [
-            {
-              model: VideoChannelModel.unscoped(),
-              required: true,
-              include: [
-                {
-                  attributes: {
-                    exclude: unusedActorAttributesForAPI
-                  },
-                  model: ActorModel,
-                  required: true
+    const getQuery = (forCount: boolean) => {
+      let channelInclude: Includeable[] = []
+
+      if (forCount !== true) {
+        channelInclude = [
+          {
+            attributes: {
+              exclude: unusedActorAttributesForAPI
+            },
+            model: ActorModel,
+            required: true
+          },
+          {
+            model: AccountModel.unscoped(),
+            required: true,
+            include: [
+              {
+                attributes: {
+                  exclude: unusedActorAttributesForAPI
                 },
-                {
-                  model: AccountModel.unscoped(),
-                  required: true,
-                  include: [
-                    {
-                      attributes: {
-                        exclude: unusedActorAttributesForAPI
-                      },
-                      model: ActorModel,
-                      required: true
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
+                model: ActorModel,
+                required: true
+              }
+            ]
+          }
+        ]
+      }
+
+      return {
+        attributes: forCount === true
+          ? []
+          : SORTABLE_COLUMNS.USER_SUBSCRIPTIONS,
+        distinct: true,
+        offset: start,
+        limit: count,
+        order: getSort(sort),
+        where,
+        include: [
+          {
+            attributes: [ 'id' ],
+            model: ActorModel.unscoped(),
+            as: 'ActorFollowing',
+            required: true,
+            include: [
+              {
+                model: VideoChannelModel.unscoped(),
+                required: true,
+                include: channelInclude
+              }
+            ]
+          }
+        ]
+      }
     }
 
-    return ActorFollowModel.findAndCountAll<MActorFollowSubscriptions>(query)
-                           .then(({ rows, count }) => {
-                             return {
-                               data: rows.map(r => r.ActorFollowing.VideoChannel),
-                               total: count
-                             }
-                           })
+    return Promise.all([
+      ActorFollowModel.count(getQuery(true)),
+      ActorFollowModel.findAll<MActorFollowSubscriptions>(getQuery(false))
+    ]).then(([ total, rows ]) => ({
+      total,
+      data: rows.map(r => r.ActorFollowing.VideoChannel)
+    }))
   }
 
   static async keepUnfollowedInstance (hosts: string[]) {
@@ -615,13 +520,15 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
 
     const totalInstanceFollowing = await ActorFollowModel.count({
       where: {
-        actorId: serverActor.id
+        actorId: serverActor.id,
+        state: 'accepted'
       }
     })
 
     const totalInstanceFollowers = await ActorFollowModel.count({
       where: {
-        targetActorId: serverActor.id
+        targetActorId: serverActor.id,
+        state: 'accepted'
       }
     })
 

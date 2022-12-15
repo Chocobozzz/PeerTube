@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
 import { cloneDeep } from 'lodash'
-import { buildAbsoluteFixturePath, buildRequestStub } from '@shared/extra-utils'
-import { buildSignedActivity } from '../../../helpers/activitypub'
+import { signAndContextify } from '@server/lib/activitypub/send'
+import { buildRequestStub } from '@server/tests/shared'
+import { buildAbsoluteFixturePath } from '@shared/core-utils'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../../../helpers/peertube-crypto'
 
 describe('Test activity pub helpers', function () {
+
   describe('When checking the Linked Signature', function () {
 
     it('Should fail with an invalid Mastodon signature', async function () {
@@ -45,7 +46,7 @@ describe('Test activity pub helpers', function () {
       const body = require(buildAbsoluteFixturePath('./ap-json/peertube/announce-without-context.json'))
 
       const actorSignature = { url: 'http://localhost:9002/accounts/peertube', privateKey: keys.privateKey }
-      const signedBody = await buildSignedActivity(actorSignature as any, body)
+      const signedBody = await signAndContextify(actorSignature as any, body, 'Announce')
 
       const fromActor = { publicKey: keys.publicKey, url: 'http://localhost:9002/accounts/peertube' }
       const result = await isJsonLDSignatureVerified(fromActor as any, signedBody)
@@ -58,7 +59,7 @@ describe('Test activity pub helpers', function () {
       const body = require(buildAbsoluteFixturePath('./ap-json/peertube/announce-without-context.json'))
 
       const actorSignature = { url: 'http://localhost:9002/accounts/peertube', privateKey: keys.privateKey }
-      const signedBody = await buildSignedActivity(actorSignature as any, body)
+      const signedBody = await signAndContextify(actorSignature as any, body, 'Announce')
 
       const fromActor = { publicKey: keys.publicKey, url: 'http://localhost:9002/accounts/peertube' }
       const result = await isJsonLDSignatureVerified(fromActor as any, signedBody)

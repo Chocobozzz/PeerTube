@@ -2,10 +2,11 @@ import { Response } from 'express'
 import { AccountModel } from '@server/models/account/account'
 import { UserModel } from '@server/models/user/user'
 import { MAccountDefault } from '@server/types/models'
+import { forceNumber } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
 
 function doesAccountIdExist (id: number | string, res: Response, sendNotFound = true) {
-  const promise = AccountModel.load(parseInt(id + '', 10))
+  const promise = AccountModel.load(forceNumber(id))
 
   return doesAccountExist(promise, res, sendNotFound)
 }
@@ -40,7 +41,7 @@ async function doesAccountExist (p: Promise<MAccountDefault>, res: Response, sen
 }
 
 async function doesUserFeedTokenCorrespond (id: number, token: string, res: Response) {
-  const user = await UserModel.loadByIdWithChannels(parseInt(id + '', 10))
+  const user = await UserModel.loadByIdWithChannels(forceNumber(id))
 
   if (token !== user.feedToken) {
     res.fail({

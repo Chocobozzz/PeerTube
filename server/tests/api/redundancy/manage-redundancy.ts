@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import {
   cleanupTests,
   createMultipleServers,
@@ -10,10 +9,8 @@ import {
   RedundancyCommand,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { VideoPrivacy, VideoRedundanciesTarget } from '@shared/models'
-
-const expect = chai.expect
 
 describe('Test manage videos redundancy', function () {
   const targets: VideoRedundanciesTarget[] = [ 'my-videos', 'remote-videos' ]
@@ -69,6 +66,7 @@ describe('Test manage videos redundancy', function () {
 
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])
+    await doubleFollow(servers[0], servers[2])
     await commands[0].updateRedundancy({ host: servers[1].host, redundancyAllowed: true })
 
     await waitJobs(servers)
@@ -81,6 +79,16 @@ describe('Test manage videos redundancy', function () {
       expect(body.total).to.equal(0)
       expect(body.data).to.have.lengthOf(0)
     }
+  })
+
+  it('Should correctly list followings by redundancy', async function () {
+    const body = await servers[0].follows.getFollowings({ sort: '-redundancyAllowed' })
+
+    expect(body.total).to.equal(2)
+    expect(body.data).to.have.lengthOf(2)
+
+    expect(body.data[0].following.host).to.equal(servers[1].host)
+    expect(body.data[1].following.host).to.equal(servers[2].host)
   })
 
   it('Should not have "remote-videos" redundancies on server 2', async function () {

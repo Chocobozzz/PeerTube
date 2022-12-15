@@ -2,7 +2,7 @@ import { mapValues, pickBy } from 'lodash-es'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { ABUSE_REASON_VALIDATOR } from '@app/shared/form-validators/abuse-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { Account } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
@@ -26,7 +26,7 @@ export class AccountReportComponent extends FormReactive implements OnInit {
   private openedModal: NgbModalRef
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private modalService: NgbModal,
     private abuseService: AbuseService,
     private notifier: Notifier

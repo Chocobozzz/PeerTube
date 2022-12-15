@@ -2,7 +2,7 @@ import { catchError, switchMap, tap } from 'rxjs/operators'
 import { SelectChannelItem } from 'src/types/select-options-item.model'
 import { Directive, EventEmitter, OnInit } from '@angular/core'
 import { AuthService, CanComponentDeactivateResult, Notifier, ServerService } from '@app/core'
-import { listUserChannels } from '@app/helpers'
+import { listUserChannelsForSelect } from '@app/helpers'
 import { FormReactive } from '@app/shared/shared-forms'
 import { VideoCaptionEdit, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
@@ -38,7 +38,7 @@ export abstract class VideoSend extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm({})
 
-    listUserChannels(this.authService)
+    listUserChannelsForSelect(this.authService)
       .subscribe(channels => {
         this.userVideoChannels = channels
         this.firstStepChannelId = this.userVideoChannels[0].id
@@ -49,19 +49,15 @@ export abstract class VideoSend extends FormReactive implements OnInit {
     this.serverService.getVideoPrivacies()
         .subscribe(
           privacies => {
-            const { videoPrivacies, defaultPrivacyId } = this.videoService.explainedPrivacyLabels(privacies)
+            const defaultPrivacy = this.serverConfig.defaults.publish.privacy
+
+            const { videoPrivacies, defaultPrivacyId } = this.videoService.explainedPrivacyLabels(privacies, defaultPrivacy)
 
             this.videoPrivacies = videoPrivacies
             this.firstStepPrivacyId = defaultPrivacyId
 
             this.highestPrivacy = this.videoService.getHighestAvailablePrivacy(privacies)
           })
-  }
-
-  checkForm () {
-    this.forceCheck()
-
-    return this.form.valid
   }
 
   protected updateVideoAndCaptions (video: VideoEdit) {
@@ -77,5 +73,12 @@ export abstract class VideoSend extends FormReactive implements OnInit {
             throw err
           })
         )
+  }
+
+  protected async isFormValid () {
+    await this.waitPendingCheck()
+    this.forceCheck()
+
+    return this.form.valid
   }
 }

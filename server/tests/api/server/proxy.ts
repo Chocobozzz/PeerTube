@@ -1,28 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { expectNotStartWith, expectStartWith, FIXTURE_URLS, MockProxy } from '@server/tests/shared'
+import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
+import { HttpStatusCode, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  FIXTURE_URLS,
+  ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
-} from '@shared/extra-utils'
-import { MockProxy } from '@shared/extra-utils/mock-servers/mock-proxy'
-import { HttpStatusCode, VideoPrivacy } from '@shared/models'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 describe('Test proxy', function () {
   let servers: PeerTubeServer[] = []
   let proxy: MockProxy
 
   const goodEnv = { HTTP_PROXY: '' }
-  const badEnv = { HTTP_PROXY: 'http://localhost:9000' }
+  const badEnv = { HTTP_PROXY: 'http://127.0.0.1:9000' }
 
   before(async function () {
     this.timeout(120000)
@@ -32,7 +30,7 @@ describe('Test proxy', function () {
     const proxyPort = await proxy.initialize()
     servers = await createMultipleServers(2)
 
-    goodEnv.HTTP_PROXY = 'http://localhost:' + proxyPort
+    goodEnv.HTTP_PROXY = 'http://127.0.0.1:' + proxyPort
 
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
@@ -97,7 +95,7 @@ describe('Test proxy', function () {
     }
 
     it('Should succeed import with the appropriate proxy config', async function () {
-      this.timeout(40000)
+      this.timeout(120000)
 
       await servers[0].kill()
       await servers[0].run({}, { env: goodEnv })
@@ -112,12 +110,50 @@ describe('Test proxy', function () {
     })
 
     it('Should fail import with a wrong proxy config', async function () {
-      this.timeout(40000)
+      this.timeout(120000)
 
       await servers[0].kill()
       await servers[0].run({}, { env: badEnv })
 
       await quickImport(HttpStatusCode.BAD_REQUEST_400)
+    })
+  })
+
+  describe('Object storage', function () {
+    if (areMockObjectStorageTestsDisabled()) return
+
+    before(async function () {
+      this.timeout(30000)
+
+      await ObjectStorageCommand.prepareDefaultMockBuckets()
+    })
+
+    it('Should succeed to upload to object storage with the appropriate proxy config', async function () {
+      this.timeout(120000)
+
+      await servers[0].kill()
+      await servers[0].run(ObjectStorageCommand.getDefaultMockConfig(), { env: goodEnv })
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+      await waitJobs(servers)
+
+      const video = await servers[0].videos.get({ id: uuid })
+
+      expectStartWith(video.files[0].fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
+    })
+
+    it('Should fail to upload to object storage with a wrong proxy config', async function () {
+      this.timeout(120000)
+
+      await servers[0].kill()
+      await servers[0].run(ObjectStorageCommand.getDefaultMockConfig(), { env: badEnv })
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+      await waitJobs(servers, { skipDelayed: true })
+
+      const video = await servers[0].videos.get({ id: uuid })
+
+      expectNotStartWith(video.files[0].fileUrl, ObjectStorageCommand.getMockWebTorrentBaseUrl())
     })
   })
 

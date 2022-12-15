@@ -1,4 +1,5 @@
 import 'multer'
+import { UploadFilesForCheck } from 'express'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_IMPORT_STATES } from '../../initializers/constants'
 import { exists, isFileValid } from './misc'
@@ -25,8 +26,14 @@ const videoTorrentImportRegex = Object.keys(MIMETYPES.TORRENT.MIMETYPE_EXT)
                                       .concat([ 'application/octet-stream' ]) // MacOS sends application/octet-stream
                                       .map(m => `(${m})`)
                                       .join('|')
-function isVideoImportTorrentFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
-  return isFileValid(files, videoTorrentImportRegex, 'torrentfile', CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_FILE.FILE_SIZE.max, true)
+function isVideoImportTorrentFile (files: UploadFilesForCheck) {
+  return isFileValid({
+    files,
+    mimeTypeRegex: videoTorrentImportRegex,
+    field: 'torrentfile',
+    maxSize: CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_FILE.FILE_SIZE.max,
+    optional: true
+  })
 }
 
 // ---------------------------------------------------------------------------

@@ -21,6 +21,7 @@ const icons = {
   local: require('!!raw-loader?!../../../assets/images/misc/local.svg').default,
 
   // feather icons
+  copy: require('!!raw-loader?!../../../assets/images/feather/copy.svg').default,
   flag: require('!!raw-loader?!../../../assets/images/feather/flag.svg').default,
   playlists: require('!!raw-loader?!../../../assets/images/feather/list.svg').default,
   syndication: require('!!raw-loader?!../../../assets/images/feather/syndication.svg').default,
@@ -28,7 +29,6 @@ const icons = {
   alert: require('!!raw-loader?!../../../assets/images/feather/alert.svg').default,
   globe: require('!!raw-loader?!../../../assets/images/feather/globe.svg').default,
   home: require('!!raw-loader?!../../../assets/images/feather/home.svg').default,
-  'recently-added': require('!!raw-loader?!../../../assets/images/feather/recently-added.svg').default,
   trending: require('!!raw-loader?!../../../assets/images/feather/trending.svg').default,
   search: require('!!raw-loader?!../../../assets/images/feather/search.svg').default,
   upload: require('!!raw-loader?!../../../assets/images/feather/upload.svg').default,
@@ -62,8 +62,9 @@ const icons = {
   'exit-fullscreen': require('!!raw-loader?!../../../assets/images/feather/minimize.svg').default,
   film: require('!!raw-loader?!../../../assets/images/feather/film.svg').default,
   edit: require('!!raw-loader?!../../../assets/images/feather/edit-2.svg').default,
-  sensitive: require('!!raw-loader?!../../../assets/images/feather/eye.svg').default,
-  unsensitive: require('!!raw-loader?!../../../assets/images/feather/eye-off.svg').default,
+  'external-link': require('!!raw-loader?!../../../assets/images/feather/external-link.svg').default,
+  'eye-open': require('!!raw-loader?!../../../assets/images/feather/eye.svg').default,
+  'eye-close': require('!!raw-loader?!../../../assets/images/feather/eye-off.svg').default,
   refresh: require('!!raw-loader?!../../../assets/images/feather/refresh-cw.svg').default,
   command: require('!!raw-loader?!../../../assets/images/feather/command.svg').default,
   go: require('!!raw-loader?!../../../assets/images/feather/arrow-up-right.svg').default,
@@ -75,7 +76,8 @@ const icons = {
   'chevrons-up': require('!!raw-loader?!../../../assets/images/feather/chevrons-up.svg').default,
   'message-circle': require('!!raw-loader?!../../../assets/images/feather/message-circle.svg').default,
   codesandbox: require('!!raw-loader?!../../../assets/images/feather/codesandbox.svg').default,
-  award: require('!!raw-loader?!../../../assets/images/feather/award.svg').default
+  award: require('!!raw-loader?!../../../assets/images/feather/award.svg').default,
+  stats: require('!!raw-loader?!../../../assets/images/feather/stats.svg').default
 }
 
 export type GlobalIconName = keyof typeof icons
@@ -88,6 +90,7 @@ export type GlobalIconName = keyof typeof icons
 })
 export class GlobalIconComponent implements OnInit {
   @Input() iconName: GlobalIconName
+  @Input() width: string
 
   constructor (
     private el: ElementRef,
@@ -103,6 +106,10 @@ export class GlobalIconComponent implements OnInit {
       'filter:internal.common.svg-icons.get-content.params',
       'filter:internal.common.svg-icons.get-content.result'
     )
+
+    if (this.width) {
+      nativeElement.style.width = this.width
+    }
   }
 
   private getSVGContent (options: { name: string }) {

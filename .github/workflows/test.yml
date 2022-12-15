@@ -1,4 +1,4 @@
-name: Test Suite
+name: Test
 
 on:
   push:
@@ -39,43 +39,27 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        test_suite: [ client, api-1, api-2, api-3, api-4, cli-plugin, lint, external-plugins ]
+        test_suite: [ types-package, client, api-1, api-2, api-3, api-4, api-5, cli-plugin, lint, external-plugins ]
 
     env:
       PGUSER: peertube
       PGHOST: localhost
       NODE_PENDING_JOB_WAIT: 250
       ENABLE_OBJECT_STORAGE_TESTS: true
+      OBJECT_STORAGE_SCALEWAY_KEY_ID: ${{ secrets.OBJECT_STORAGE_SCALEWAY_KEY_ID }}
+      OBJECT_STORAGE_SCALEWAY_ACCESS_KEY: ${{ secrets.OBJECT_STORAGE_SCALEWAY_ACCESS_KEY }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - name: Use Node.js
-        uses: actions/setup-node@v1
+      - uses: './.github/actions/reusable-prepare-peertube-build'
         with:
-          node-version: '12.x'
+          node-version: '14.x'
 
-      - name: Setup system dependencies
-        run: |
-          sudo apt-get install postgresql-client-common redis-tools parallel
-          wget --quiet --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-4.3.1-64bit-static.tar.xz"
-          tar xf ffmpeg-release-4.3.1-64bit-static.tar.xz
-          mkdir -p $HOME/bin
-          cp ffmpeg-*/{ffmpeg,ffprobe} $HOME/bin
-          echo "$HOME/bin" >> $GITHUB_PATH
-
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            **/node_modules
-          key: ${{ runner.OS }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.OS }}-node-
-            ${{ runner.OS }}-
+      - uses: './.github/actions/reusable-prepare-peertube-run'
 
       - name: Cache fixtures
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             fixtures
@@ -85,9 +69,6 @@ jobs:
             ${{ runner.OS }}-fixtures-
             ${{ runner.OS }}-
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
       - name: Set env test variable (schedule)
         if: github.event_name != 'schedule'
         run: |
@@ -96,6 +77,8 @@ jobs:
       - name: Run Test
         # external-plugins tests only run on schedule
         if: github.event_name == 'schedule' || matrix.test_suite != 'external-plugins'
+        env:
+          AKISMET_KEY: ${{ secrets.AKISMET_KEY }}
         run: npm run ci -- ${{ matrix.test_suite }}
 
       - name: Display errors
@@ -103,13 +86,12 @@ jobs:
         run: |
           ( \
             test -f dist/scripts/parse-log.js && \
-            cat *-ci.log | uniq -c && \
             NODE_ENV=test node dist/scripts/parse-log.js -l error -f artifacts/*.log \
           ) || \
           echo "parse-log.js script does not exist, skipping."
 
       - name: Upload logs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: test-storages-${{ matrix.test_suite }}

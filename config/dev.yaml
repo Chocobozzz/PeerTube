@@ -1,0 +1,113 @@
+listen:
+  hostname: '::'
+  port: 9000
+
+webserver:
+  https: false
+
+secrets:
+  peertube: 'my super dev secret'
+
+database:
+  hostname: 'localhost'
+  port: 5432
+
+redis:
+  hostname: 'localhost'
+
+smtp:
+  hostname: null
+  port: 1025
+  tls: false
+  disable_starttls: true
+  from_address: 'test-admin@localhost'
+  username: null
+  password: null
+
+log:
+  level: 'debug'
+
+contact_form:
+  enabled: true
+
+peertube:
+  check_latest_version:
+    enabled: false
+
+redundancy:
+  videos:
+    check_interval: '5 minutes'
+    strategies:
+      -
+        size: '1000MB'
+        min_lifetime: '10 minutes'
+        strategy: 'most-views'
+      -
+        size: '1000MB'
+        min_lifetime: '10 minutes'
+        strategy: 'trending'
+      -
+        size: '1000MB'
+        min_lifetime: '10 minutes'
+        strategy: 'recently-added'
+        min_views: 1
+
+cache:
+  previews:
+    size: 10
+  captions:
+    size: 10
+  torrents:
+    size: 10
+
+signup:
+  enabled: true
+  requires_email_verification: false
+
+live:
+  enabled: true
+
+  allow_replay: true
+
+  transcoding:
+    enabled: true
+    threads: 2
+
+    resolutions:
+      360p: true
+      720p: true
+
+import:
+  videos:
+    concurrency: 2
+    http:
+      enabled: true
+    torrent:
+      enabled: true
+  video_channel_synchronization:
+    enabled: true
+    max_per_user: 10
+    check_interval: 5 minutes
+    videos_limit_per_synchronization: 3
+
+instance:
+  default_nsfw_policy: 'display'
+
+plugins:
+  index:
+    check_latest_versions_interval: '10 minutes'
+
+federation:
+  videos:
+    cleanup_remote_interactions: false
+
+views:
+  videos:
+    remote:
+      max_age: -1
+
+geo_ip:
+  enabled: true
+
+video_studio:
+  enabled: true

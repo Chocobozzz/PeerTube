@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
+import { wait } from '@shared/core-utils'
+import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -9,10 +10,8 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  wait,
   waitJobs
-} from '@shared/extra-utils'
-import { HttpStatusCode, VideoPlaylistPrivacy } from '@shared/models'
+} from '@shared/server-commands'
 
 describe('Test AP refresher', function () {
   let servers: PeerTubeServer[] = []
@@ -25,11 +24,15 @@ describe('Test AP refresher', function () {
   before(async function () {
     this.timeout(60000)
 
-    servers = await createMultipleServers(2, { transcoding: { enabled: false } })
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
+
+    for (const server of servers) {
+      await server.config.disableTranscoding()
+    }
 
     {
       videoUUID1 = (await servers[1].videos.quickUpload({ name: 'video1' })).uuid
@@ -109,16 +112,16 @@ describe('Test AP refresher', function () {
       await wait(10000)
 
       // Change actor name so the remote server returns a 404
-      const to = 'http://localhost:' + servers[1].port + '/accounts/user2'
+      const to = servers[1].url + '/accounts/user2'
       await servers[1].sql.setActorField(to, 'preferredUsername', 'toto')
 
-      await command.get({ accountName: 'user1@localhost:' + servers[1].port })
-      await command.get({ accountName: 'user2@localhost:' + servers[1].port })
+      await command.get({ accountName: 'user1@' + servers[1].host })
+      await command.get({ accountName: 'user2@' + servers[1].host })
 
       await waitJobs(servers)
 
-      await command.get({ accountName: 'user1@localhost:' + servers[1].port, expectedStatus: HttpStatusCode.OK_200 })
-      await command.get({ accountName: 'user2@localhost:' + servers[1].port, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await command.get({ accountName: 'user1@' + servers[1].host, expectedStatus: HttpStatusCode.OK_200 })
+      await command.get({ accountName: 'user2@' + servers[1].host, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
   })
 

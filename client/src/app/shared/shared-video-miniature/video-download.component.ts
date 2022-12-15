@@ -2,13 +2,15 @@ import { mapValues, pick } from 'lodash-es'
 import { firstValueFrom } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { Component, ElementRef, Inject, LOCALE_ID, ViewChild } from '@angular/core'
-import { AuthService, HooksService, Notifier } from '@app/core'
+import { HooksService } from '@app/core'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { logger } from '@root-helpers/logger'
+import { videoRequiresAuth } from '@root-helpers/video'
 import { VideoCaption, VideoFile, VideoPrivacy } from '@shared/models'
-import { BytesPipe, NumberFormatterPipe, VideoDetails, VideoService } from '../shared-main'
+import { BytesPipe, NumberFormatterPipe, VideoDetails, VideoFileTokenService, VideoService } from '../shared-main'
 
 type DownloadType = 'video' | 'subtitles'
-type FileMetadata = { [key: string]: { label: string, value: string }}
+type FileMetadata = { [key: string]: { label: string, value: string } }
 
 @Component({
   selector: 'my-video-download',
@@ -31,6 +33,8 @@ export class VideoDownloadComponent {
 
   type: DownloadType = 'video'
 
+  videoFileToken: string
+
   private activeModal: NgbModalRef
 
   private bytesPipe: BytesPipe
@@ -41,10 +45,9 @@ export class VideoDownloadComponent {
 
   constructor (
     @Inject(LOCALE_ID) private localeId: string,
-    private notifier: Notifier,
     private modalService: NgbModal,
     private videoService: VideoService,
-    private auth: AuthService,
+    private videoFileTokenService: VideoFileTokenService,
     private hooks: HooksService
   ) {
     this.bytesPipe = new BytesPipe()
@@ -70,6 +73,8 @@ export class VideoDownloadComponent {
   }
 
   show (video: VideoDetails, videoCaptions?: VideoCaption[]) {
+    this.videoFileToken = undefined
+
     this.video = video
     this.videoCaptions = videoCaptions
 
@@ -81,6 +86,11 @@ export class VideoDownloadComponent {
 
     if (this.hasCaptions()) {
       this.subtitleLanguageId = this.videoCaptions[0].language.id
+    }
+
+    if (videoRequiresAuth(this.video)) {
+      this.videoFileTokenService.getVideoFileToken(this.video.uuid)
+        .subscribe(({ token }) => this.videoFileToken = token)
     }
 
     this.activeModal.shown.subscribe(() => {
@@ -142,7 +152,7 @@ export class VideoDownloadComponent {
                      .find(f => f.resolution.id === this.resolutionId)
 
     if (!file) {
-      console.error('Could not find file with resolution %d.', this.resolutionId)
+      logger.error(`Could not find file with resolution ${this.resolutionId}`)
       return undefined
     }
 
@@ -154,7 +164,7 @@ export class VideoDownloadComponent {
     if (!file) return ''
 
     const suffix = this.isConfidentialVideo()
-      ? '?access_token=' + this.auth.getAccessToken()
+      ? '?videoFileToken=' + this.videoFileToken
       : ''
 
     switch (this.downloadType) {
@@ -175,7 +185,7 @@ export class VideoDownloadComponent {
                         .find(c => c.language.id === this.subtitleLanguageId)
 
     if (!caption) {
-      console.error('Cannot find caption %s.', this.subtitleLanguageId)
+      logger.error(`Cannot find caption ${this.subtitleLanguageId}`)
       return undefined
     }
 
@@ -191,10 +201,6 @@ export class VideoDownloadComponent {
 
   isConfidentialVideo () {
     return this.video.privacy.id === VideoPrivacy.PRIVATE || this.video.privacy.id === VideoPrivacy.INTERNAL
-  }
-
-  activateCopiedMessage () {
-    this.notifier.success($localize`Copied`)
   }
 
   switchToType (type: DownloadType) {

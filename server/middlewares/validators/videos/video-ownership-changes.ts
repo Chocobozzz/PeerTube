@@ -2,21 +2,13 @@ import express from 'express'
 import { param } from 'express-validator'
 import { isIdValid } from '@server/helpers/custom-validators/misc'
 import { checkUserCanTerminateOwnershipChange } from '@server/helpers/custom-validators/video-ownership'
-import { logger } from '@server/helpers/logger'
-import { isAbleToUploadVideo } from '@server/lib/user'
 import { AccountModel } from '@server/models/account/account'
 import { MVideoWithAllFiles } from '@server/types/models'
-import {
-  HttpStatusCode,
-  ServerErrorCode,
-  UserRight,
-  VideoChangeOwnershipAccept,
-  VideoChangeOwnershipStatus,
-  VideoState
-} from '@shared/models'
+import { HttpStatusCode, UserRight, VideoChangeOwnershipAccept, VideoChangeOwnershipStatus, VideoState } from '@shared/models'
 import {
   areValidationErrors,
   checkUserCanManageVideo,
+  checkUserQuota,
   doesChangeVideoOwnershipExist,
   doesVideoChannelOfAccountExist,
   doesVideoExist,
@@ -27,8 +19,6 @@ const videosChangeOwnershipValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking changeOwnership parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
@@ -48,11 +38,9 @@ const videosChangeOwnershipValidator = [
 
 const videosTerminateChangeOwnershipValidator = [
   param('id')
-    .custom(isIdValid).withMessage('Should have a valid id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking changeOwnership parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesChangeVideoOwnershipExist(req.params.id, res)) return
 
@@ -113,15 +101,7 @@ async function checkCanAccept (video: MVideoWithAllFiles, res: express.Response)
 
   const user = res.locals.oauth.token.User
 
-  if (!await isAbleToUploadVideo(user.id, video.getMaxQualityFile().size)) {
-    res.fail({
-      status: HttpStatusCode.PAYLOAD_TOO_LARGE_413,
-      message: 'The user video quota is exceeded with this video.',
-      type: ServerErrorCode.QUOTA_REACHED
-    })
-
-    return false
-  }
+  if (!await checkUserQuota(user, video.getMaxQualityFile().size, res)) return false
 
   return true
 }

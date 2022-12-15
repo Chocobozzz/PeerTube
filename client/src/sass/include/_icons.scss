@@ -1,0 +1,82 @@
+@use '_variables' as *;
+
+@mixin chevron ($size, $border-width) {
+  border-style: solid;
+  border-width: $border-width $border-width 0 0;
+  content: '';
+  display: inline-block;
+  transform: rotate(-45deg);
+  height: $size;
+  width: $size;
+  position: relative;
+}
+
+@mixin chevron-right ($size, $border-width) {
+  @include chevron($size, $border-width);
+
+  left: 0;
+  transform: rotate(45deg);
+}
+
+@mixin chevron-right-default {
+  @include chevron-right(0.55rem, 0.15rem);
+
+  margin: 0 8px;
+}
+
+@mixin chevron-down ($size, $border-width) {
+  @include chevron($size, $border-width);
+
+  bottom: 0.15em;
+  transform: rotate(135deg);
+}
+
+@mixin chevron-down-default {
+  @include chevron-down(0.55rem, 0.15rem);
+
+  margin: 0 8px;
+}
+
+@mixin chevron-up ($size, $border-width) {
+  @include chevron($size, $border-width);
+
+  top: 0.15em;
+  transform: rotate(-45deg);
+}
+
+@mixin chevron-up-default {
+  @include chevron-up(0.55rem, 0.15rem);
+
+  margin: 0 8px;
+}
+
+@mixin chevron-left ($size, $border-width) {
+  @include chevron($size, $border-width);
+
+  left: 0.25em;
+  transform: rotate(-135deg);
+}
+
+@mixin chevron-left-default {
+  @include chevron-left(0.55rem, 0.15rem);
+
+  margin: 0 8px;
+}
+
+// ---------------------------------------------------------------------------
+
+@mixin arrow-up ($size) {
+  width: 0;
+  height: 0;
+  border-left: $size solid transparent;
+  border-right: $size solid transparent;
+  border-bottom: $size solid pvar(--mainForegroundColor);
+}
+
+@mixin arrow-down ($size) {
+  width: 0;
+  height: 0;
+  border-left: $size solid transparent;
+  border-right: $size solid transparent;
+  border-top: $size solid pvar(--mainForegroundColor);
+}

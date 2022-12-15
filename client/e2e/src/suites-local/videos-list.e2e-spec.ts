@@ -1,9 +1,10 @@
 import { AdminConfigPage } from '../po/admin-config.po'
 import { LoginPage } from '../po/login.po'
-import { MyAccountPage } from '../po/my-account'
+import { MyAccountPage } from '../po/my-account.po'
 import { VideoListPage } from '../po/video-list.po'
 import { VideoSearchPage } from '../po/video-search.po'
 import { VideoUploadPage } from '../po/video-upload.po'
+import { VideoWatchPage } from '../po/video-watch.po'
 import { NSFWPolicy } from '../types/common'
 import { isMobileDevice, isSafari, waitServerUp } from '../utils'
 
@@ -14,6 +15,7 @@ describe('Videos list', () => {
   let loginPage: LoginPage
   let myAccountPage: MyAccountPage
   let videoSearchPage: VideoSearchPage
+  let videoWatchPage: VideoWatchPage
 
   const seed = Math.random()
   const nsfwVideo = seed + ' - nsfw'
@@ -104,10 +106,11 @@ describe('Videos list', () => {
   beforeEach(async () => {
     videoListPage = new VideoListPage(isMobileDevice(), isSafari())
     adminConfigPage = new AdminConfigPage()
-    loginPage = new LoginPage()
+    loginPage = new LoginPage(isMobileDevice())
     videoUploadPage = new VideoUploadPage()
     myAccountPage = new MyAccountPage()
     videoSearchPage = new VideoSearchPage()
+    videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
 
     await browser.maximizeWindow()
   })
@@ -125,12 +128,12 @@ describe('Videos list', () => {
 
   it('Should upload 2 videos (NSFW and classic videos)', async () => {
     await videoUploadPage.navigateTo()
-    await videoUploadPage.uploadVideo()
+    await videoUploadPage.uploadVideo('video.mp4')
     await videoUploadPage.setAsNSFW()
     await videoUploadPage.validSecondUploadStep(nsfwVideo)
 
     await videoUploadPage.navigateTo()
-    await videoUploadPage.uploadVideo()
+    await videoUploadPage.uploadVideo('video2.mp4')
     await videoUploadPage.validSecondUploadStep(normalVideo)
   })
 
@@ -190,6 +193,27 @@ describe('Videos list', () => {
       await updateUserNSFW('display')
       await checkCommonVideoListPages('display')
       await checkSearchPage('display')
+    })
+
+    after(async () => {
+      await loginPage.logout()
+    })
+  })
+
+  describe('Default upload values', function () {
+
+    it('Should have default video values', async function () {
+      await loginPage.loginAsRootUser()
+      await videoUploadPage.navigateTo()
+      await videoUploadPage.uploadVideo('video3.mp4')
+      await videoUploadPage.validSecondUploadStep('video')
+
+      await videoWatchPage.waitWatchVideoName('video')
+
+      expect(await videoWatchPage.getPrivacy()).toBe('Public')
+      expect(await videoWatchPage.getLicence()).toBe('Unknown')
+      expect(await videoWatchPage.isDownloadEnabled()).toBeTruthy()
+      expect(await videoWatchPage.areCommentsEnabled()).toBeTruthy()
     })
   })
 })

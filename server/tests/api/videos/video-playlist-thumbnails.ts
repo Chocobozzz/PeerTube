@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { testImage } from '@server/tests/shared'
+import { VideoPlaylistPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -9,12 +10,8 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  testImage,
   waitJobs
-} from '../../../../shared/extra-utils'
-import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 describe('Playlist thumbnail', function () {
   let servers: PeerTubeServer[] = []
@@ -45,11 +42,15 @@ describe('Playlist thumbnail', function () {
   before(async function () {
     this.timeout(120000)
 
-    servers = await createMultipleServers(2, { transcoding: { enabled: false } })
+    servers = await createMultipleServers(2)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
+
+    for (const server of servers) {
+      await server.config.disableTranscoding()
+    }
 
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])

@@ -1,5 +1,6 @@
 import { move, pathExists, readdir, remove } from 'fs-extra'
 import { dirname, join } from 'path'
+import { inspect } from 'util'
 import { CONFIG } from '@server/initializers/config'
 import { isVideoFileExtnameValid } from '../custom-validators/videos'
 import { logger, loggerTagsFactory } from '../logger'
@@ -16,12 +17,16 @@ export type YoutubeDLSubs = {
 }[]
 
 const processOptions = {
-  maxBuffer: 1024 * 1024 * 10 // 10MB
+  maxBuffer: 1024 * 1024 * 30 // 30MB
 }
 
 class YoutubeDLWrapper {
 
-  constructor (private readonly url: string = '', private readonly enabledResolutions: number[] = []) {
+  constructor (
+    private readonly url: string,
+    private readonly enabledResolutions: number[],
+    private readonly useBestFormat: boolean
+  ) {
 
   }
 
@@ -30,16 +35,34 @@ class YoutubeDLWrapper {
 
     const info = await youtubeDL.getInfo({
       url: this.url,
-      format: YoutubeDLCLI.getYoutubeDLVideoFormat(this.enabledResolutions),
+      format: YoutubeDLCLI.getYoutubeDLVideoFormat(this.enabledResolutions, this.useBestFormat),
       additionalYoutubeDLArgs: youtubeDLArgs,
       processOptions
     })
+
+    if (!info) throw new Error(`YoutubeDL could not get info from ${this.url}`)
 
     if (info.is_live === true) throw new Error('Cannot download a live streaming.')
 
     const infoBuilder = new YoutubeDLInfoBuilder(info)
 
     return infoBuilder.getInfo()
+  }
+
+  async getInfoForListImport (options: {
+    latestVideosCount?: number
+  }) {
+    const youtubeDL = await YoutubeDLCLI.safeGet()
+
+    const list = await youtubeDL.getListInfo({
+      url: this.url,
+      latestVideosCount: options.latestVideosCount,
+      processOptions
+    })
+
+    if (!Array.isArray(list)) throw new Error(`YoutubeDL could not get list info from ${this.url}: ${inspect(list)}`)
+
+    return list.map(info => info.webpage_url)
   }
 
   async getSubtitles (): Promise<YoutubeDLSubs> {
@@ -54,7 +77,7 @@ class YoutubeDLWrapper {
 
     const subtitles = files.reduce((acc, filename) => {
       const matched = filename.match(/\.([a-z]{2})(-[a-z]+)?\.(vtt|ttml)/i)
-      if (!matched || !matched[1]) return acc
+      if (!matched?.[1]) return acc
 
       return [
         ...acc,
@@ -77,38 +100,32 @@ class YoutubeDLWrapper {
 
     const youtubeDL = await YoutubeDLCLI.safeGet()
 
-    let timer: NodeJS.Timeout
-    const timeoutPromise = new Promise<string>((_, rej) => {
-      timer = setTimeout(() => rej(new Error('YoutubeDL download timeout.')), timeout)
-    })
-
-    const downloadPromise = youtubeDL.download({
-      url: this.url,
-      format: YoutubeDLCLI.getYoutubeDLVideoFormat(this.enabledResolutions),
-      output: pathWithoutExtension,
-      processOptions
-    }).then(() => clearTimeout(timer))
-      .then(async () => {
-        // If youtube-dl did not guess an extension for our file, just use .mp4 as default
-        if (await pathExists(pathWithoutExtension)) {
-          await move(pathWithoutExtension, pathWithoutExtension + '.mp4')
-        }
-
-        return this.guessVideoPathWithExtension(pathWithoutExtension, fileExt)
+    try {
+      await youtubeDL.download({
+        url: this.url,
+        format: YoutubeDLCLI.getYoutubeDLVideoFormat(this.enabledResolutions, this.useBestFormat),
+        output: pathWithoutExtension,
+        timeout,
+        processOptions
       })
 
-    return Promise.race([ downloadPromise, timeoutPromise ])
-      .catch(err => {
-        this.guessVideoPathWithExtension(pathWithoutExtension, fileExt)
-          .then(path => {
-            logger.debug('Error in youtube-dl import, deleting file %s.', path, { err, ...lTags() })
+      // If youtube-dl did not guess an extension for our file, just use .mp4 as default
+      if (await pathExists(pathWithoutExtension)) {
+        await move(pathWithoutExtension, pathWithoutExtension + '.mp4')
+      }
 
-            return remove(path)
-          })
-          .catch(innerErr => logger.error('Cannot remove file in youtubeDL timeout.', { innerErr, ...lTags() }))
+      return this.guessVideoPathWithExtension(pathWithoutExtension, fileExt)
+    } catch (err) {
+      this.guessVideoPathWithExtension(pathWithoutExtension, fileExt)
+        .then(path => {
+          logger.debug('Error in youtube-dl import, deleting file %s.', path, { err, ...lTags() })
 
-        throw err
-      })
+          return remove(path)
+        })
+        .catch(innerErr => logger.error('Cannot remove file in youtubeDL error.', { innerErr, ...lTags() }))
+
+      throw err
+    }
   }
 
   private async guessVideoPathWithExtension (tmpPath: string, sourceExt: string) {

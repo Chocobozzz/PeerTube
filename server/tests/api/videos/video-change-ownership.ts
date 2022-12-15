@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import {
   ChangeOwnershipCommand,
   cleanupTests,
@@ -12,10 +11,8 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode, VideoPrivacy } from '@shared/models'
-
-const expect = chai.expect
 
 describe('Test video change ownership - nominal', function () {
   let servers: PeerTubeServer[] = []

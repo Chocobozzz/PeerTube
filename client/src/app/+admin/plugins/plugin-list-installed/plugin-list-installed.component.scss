@@ -4,3 +4,8 @@
 .update-button[disabled=true] ::ng-deep .action-button {
   cursor: default !important;
 }
+
+my-edit-button,
+my-button {
+  @include margin-right(10px);
+}

@@ -1,9 +1,10 @@
 import { SortMeta } from 'primeng/api'
 import { from as observableFrom, Observable } from 'rxjs'
-import { catchError, concatMap, map, toArray } from 'rxjs/operators'
+import { catchError, concatMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
+import { arrayify } from '@shared/core-utils'
 import { ResultList, VideoBlacklist, VideoBlacklistType } from '@shared/models'
 import { environment } from '../../../environments/environment'
 
@@ -46,14 +47,11 @@ export class VideoBlockService {
     if (type) params = params.append('type', type.toString())
 
     return this.authHttp.get<ResultList<VideoBlacklist>>(VideoBlockService.BASE_VIDEOS_URL + 'blacklist', { params })
-               .pipe(
-                 map(res => this.restExtractor.convertResultListDateToHuman(res)),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   unblockVideo (videoIdArgs: number | number[]) {
-    const videoIds = Array.isArray(videoIdArgs) ? videoIdArgs : [ videoIdArgs ]
+    const videoIds = arrayify(videoIdArgs)
 
     return observableFrom(videoIds)
       .pipe(

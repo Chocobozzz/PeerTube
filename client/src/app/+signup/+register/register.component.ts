@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core'
+import { CdkStep } from '@angular/cdk/stepper'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService, UserService } from '@app/core'
+import { AuthService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
+import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
+import { UserSignupService } from '@app/shared/shared-users'
 import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
 import { UserRegister } from '@shared/models'
 import { ServerConfig } from '@shared/models/server'
-import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
 
 @Component({
   selector: 'my-register',
@@ -14,13 +16,15 @@ import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
   styleUrls: [ './register.component.scss' ]
 })
 export class RegisterComponent implements OnInit {
+  @ViewChild('lastStep') lastStep: CdkStep
+
   accordion: NgbAccordion
-  info: string = null
-  error: string = null
-  success: string = null
-  signupDone = false
+
+  signupError: string
+  signupSuccess = false
 
   videoUploadDisabled: boolean
+  videoQuota: number
 
   formStepTerms: FormGroup
   formStepUser: FormGroup
@@ -38,8 +42,8 @@ export class RegisterComponent implements OnInit {
     moderation: false
   }
 
-  defaultPreviousStepButtonLabel = $localize`:Button on the registration form to go to the previous step:Back`
-  defaultNextStepButtonLabel = $localize`:Button on the registration form to go to the previous step:Next`
+  defaultPreviousStepButtonLabel = $localize`Go to the previous step`
+  defaultNextStepButtonLabel = $localize`Go to the next step`
   stepUserButtonLabel = this.defaultNextStepButtonLabel
 
   signupDisabled = false
@@ -49,7 +53,7 @@ export class RegisterComponent implements OnInit {
   constructor (
     private route: ActivatedRoute,
     private authService: AuthService,
-    private userService: UserService,
+    private userSignupService: UserSignupService,
     private hooks: HooksService
   ) { }
 
@@ -61,7 +65,11 @@ export class RegisterComponent implements OnInit {
     return this.serverConfig.signup.minimumAge
   }
 
-  ngOnInit (): void {
+  get instanceName () {
+    return this.serverConfig.instance.name
+  }
+
+  ngOnInit () {
     this.serverConfig = this.route.snapshot.data.serverConfig
 
     if (this.serverConfig.signup.allowed === false || this.serverConfig.signup.allowedForCurrentIP === false) {
@@ -69,7 +77,9 @@ export class RegisterComponent implements OnInit {
       return
     }
 
-    this.videoUploadDisabled = this.serverConfig.user.videoQuota === 0
+    this.videoQuota = this.serverConfig.user.videoQuota
+    this.videoUploadDisabled = this.videoQuota === 0
+
     this.stepUserButtonLabel = this.videoUploadDisabled
       ? $localize`:Button on the registration form to finalize the account and channel creation:Signup`
       : this.defaultNextStepButtonLabel
@@ -119,39 +129,49 @@ export class RegisterComponent implements OnInit {
     this.aboutHtml = instanceAboutAccordion.aboutHtml
   }
 
+  skipChannelCreation () {
+    this.formStepChannel.reset()
+    this.lastStep.select()
+    this.signup()
+  }
+
   async signup () {
-    this.error = null
+    this.signupError = undefined
 
     const body: UserRegister = await this.hooks.wrapObject(
-      Object.assign(this.formStepUser.value, { channel: this.videoUploadDisabled ? undefined : this.formStepChannel.value }),
+      {
+        ...this.formStepUser.value,
+
+        channel: this.formStepChannel?.value?.name
+          ? this.formStepChannel.value
+          : undefined
+      },
       'signup',
       'filter:api.signup.registration.create.params'
     )
 
-    this.userService.signup(body).subscribe({
+    this.userSignupService.signup(body).subscribe({
       next: () => {
-        this.signupDone = true
-
         if (this.requiresEmailVerification) {
-          this.info = $localize`Now please check your emails to verify your account and complete signup.`
+          this.signupSuccess = true
           return
         }
 
         // Auto login
-        this.authService.login(body.username, body.password)
+        this.authService.login({ username: body.username, password: body.password })
           .subscribe({
             next: () => {
-              this.success = $localize`You are now logged in as ${body.username}!`
+              this.signupSuccess = true
             },
 
             error: err => {
-              this.error = err.message
+              this.signupError = err.message
             }
           })
       },
 
       error: err => {
-        this.error = err.message
+        this.signupError = err.message
       }
     })
   }

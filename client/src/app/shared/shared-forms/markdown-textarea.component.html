@@ -1,9 +1,9 @@
-<div class="root" [ngClass]="{ 'maximized': isMaximized }" [ngStyle]="{ 'max-width': textareaMaxWidth }">
+<div class="root" [ngClass]="{ 'maximized': isMaximized }">
+
   <textarea #textarea
     [(ngModel)]="content" (ngModelChange)="onModelChange()"
-    class="form-control" [ngClass]="classes"
+    class="form-control" [ngClass]="{ 'input-error': formError }"
     [attr.disabled]="disabled || null"
-    [ngStyle]="{ height: textareaHeight }"
     [id]="name" [name]="name">
   </textarea>
 
@@ -25,14 +25,18 @@
       </ng-template>
     </ng-container>
 
-    <my-button
-      *ngIf="!isMaximized" [title]="maximizeInText" className="maximize-button" icon="fullscreen" (click)="onMaximizeClick()" [disabled]="disabled"
-    ></my-button>
+    <my-global-icon
+      *ngIf="!isMaximized" role="button" [ngbTooltip]="maximizeInText"
+      class="maximize-button" iconName="fullscreen" (click)="onMaximizeClick()" [ngClass]="{ disabled: disabled }"
+    ></my-global-icon>
 
-    <my-button
-      *ngIf="isMaximized" [title]="maximizeOutText" className="maximize-button" icon="exit-fullscreen" (click)="onMaximizeClick()" [disabled]="disabled"
-    ></my-button>
+    <my-global-icon
+      *ngIf="isMaximized" role="button" [ngbTooltip]="maximizeOutText"
+      class="maximize-button" iconName="exit-fullscreen" (click)="onMaximizeClick()" [ngClass]="{ disabled: disabled }"
+    ></my-global-icon>
   </div>
 
   <div [ngbNavOutlet]="nav"></div>
+
+  <div *ngIf="!isMaximized && formError" class="form-error">{{ formError }}</div>
 </div>

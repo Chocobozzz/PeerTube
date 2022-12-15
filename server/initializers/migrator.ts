@@ -65,7 +65,7 @@ async function getMigrationScripts () {
   }[] = []
 
   files
-    .filter(file => file.endsWith('.js.map') === false)
+    .filter(file => file.endsWith('.js'))
     .forEach(file => {
       // Filename is something like 'version-blabla.js'
       const version = file.split('-')[0]

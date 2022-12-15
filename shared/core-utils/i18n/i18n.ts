@@ -16,7 +16,9 @@ export const I18N_LOCALES = {
   'fr-FR': 'Français',
   'gd': 'Gàidhlig',
   'gl-ES': 'galego',
+  'hr': 'hrvatski',
   'hu-HU': 'magyar',
+  'fa-IR': 'فارسی',
   'it-IT': 'Italiano',
   'ja-JP': '日本語',
   'kab': 'Taqbaylit',
@@ -28,8 +30,11 @@ export const I18N_LOCALES = {
   'ru-RU': 'русский',
   'sq': 'Shqip',
   'sv-SE': 'Svenska',
+  'nn': 'norsk nynorsk',
+  'nb-NO': 'norsk bokmål',
   'th-TH': 'ไทย',
   'vi-VN': 'Tiếng Việt',
+  'tok': 'Toki Pona',
   'zh-Hans-CN': '简体中文（中国）',
   'zh-Hant-TW': '繁體中文（台灣）'
 }
@@ -45,6 +50,7 @@ const I18N_LOCALE_ALIAS = {
   'eu': 'eu-ES',
   'fi': 'fi-FI',
   'gl': 'gl-ES',
+  'fa': 'fa-IR',
   'fr': 'fr-FR',
   'hu': 'hu-HU',
   'it': 'it-IT',
@@ -52,6 +58,7 @@ const I18N_LOCALE_ALIAS = {
   'nl': 'nl-NL',
   'pl': 'pl-PL',
   'pt': 'pt-BR',
+  'nb': 'nb-NO',
   'ru': 'ru-RU',
   'sv': 'sv-SE',
   'th': 'th-TH',
@@ -75,7 +82,7 @@ export function isDefaultLocale (locale: string) {
 }
 
 export function peertubeTranslate (str: string, translations?: { [ id: string ]: string }) {
-  if (!translations || !translations[str]) return str
+  if (!translations?.[str]) return str
 
   return translations[str]
 }

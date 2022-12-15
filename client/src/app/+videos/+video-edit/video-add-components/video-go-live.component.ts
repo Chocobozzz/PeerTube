@@ -3,11 +3,12 @@ import { AfterViewInit, Component, EventEmitter, OnInit, Output } from '@angular
 import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier, ServerService } from '@app/core'
 import { scrollToTop } from '@app/helpers'
-import { FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactiveService } from '@app/shared/shared-forms'
 import { Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { LiveVideo, LiveVideoCreate, LiveVideoUpdate, PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
+import { logger } from '@root-helpers/logger'
+import { LiveVideo, LiveVideoCreate, LiveVideoLatencyMode, LiveVideoUpdate, PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
 import { VideoSend } from './video-send'
 
 @Component({
@@ -26,6 +27,8 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
   firstStepPermanentLive: boolean
 
   isInUpdateForm = false
+  isUpdatingVideo = false
+  isOrHasGoingLive = false
 
   liveVideo: LiveVideo
 
@@ -36,7 +39,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
   error: string
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     protected loadingBar: LoadingBarService,
     protected notifier: Notifier,
     protected authService: AuthService,
@@ -63,6 +66,9 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
   }
 
   goLive () {
+    if (this.isOrHasGoingLive) return
+    this.isOrHasGoingLive = true
+
     const name = 'Live'
 
     const video: LiveVideoCreate = {
@@ -70,15 +76,14 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
       privacy: this.highestPrivacy,
       nsfw: this.serverConfig.instance.isNSFW,
       waitTranscoding: true,
-      commentsEnabled: true,
-      downloadEnabled: true,
       permanentLive: this.firstStepPermanentLive,
-      saveReplay: this.firstStepPermanentLive === false && this.isReplayAllowed(),
+      latencyMode: LiveVideoLatencyMode.DEFAULT,
+      saveReplay: this.isReplayAllowed(),
       channelId: this.firstStepChannelId
     }
 
     // Go live in private mode, but correctly fill the update form with the first user choice
-    const toPatch = Object.assign({}, video, { privacy: this.firstStepPrivacyId })
+    const toPatch = { ...video, privacy: this.firstStepPrivacyId }
     this.form.patchValue(toPatch)
 
     this.liveVideoService.goLive(video)
@@ -112,10 +117,10 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
       })
   }
 
-  updateSecondStep () {
-    if (this.checkForm() === false) {
-      return
-    }
+  async updateSecondStep () {
+    if (!await this.isFormValid()) return
+
+    this.isUpdatingVideo = true
 
     const video = new VideoEdit()
     video.patch(this.form.value)
@@ -125,6 +130,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
 
     const liveVideoUpdate: LiveVideoUpdate = {
       saveReplay: this.form.value.saveReplay,
+      latencyMode: this.form.value.latencyMode,
       permanentLive: this.form.value.permanentLive
     }
 
@@ -135,6 +141,8 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
       this.liveVideoService.updateLive(this.videoId, liveVideoUpdate)
     ]).subscribe({
       next: () => {
+        this.isUpdatingVideo = false
+
         this.notifier.success($localize`Live published.`)
 
         this.router.navigateByUrl(Video.buildWatchUrl(video))
@@ -143,7 +151,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
       error: err => {
         this.error = err.message
         scrollToTop()
-        console.error(err)
+        logger.error(err)
       }
     })
   }
@@ -152,13 +160,9 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
     return this.serverConfig.live.maxDuration / 1000
   }
 
-  isWaitTranscodingEnabled () {
-    return this.form.value['saveReplay'] === true
-  }
-
   getNormalLiveDescription () {
     if (this.isReplayAllowed()) {
-      return $localize`Stream only once and save a replay of your live`
+      return $localize`Stream only once, replay will replace your live`
     }
 
     return $localize`Stream only once`
@@ -166,7 +170,7 @@ export class VideoGoLiveComponent extends VideoSend implements OnInit, AfterView
 
   getPermanentLiveDescription () {
     if (this.isReplayAllowed()) {
-      return $localize`Stream multiple times, replays can't be saved`
+      return $localize`Stream multiple times, replays will be separate videos`
     }
 
     return $localize`Stream multiple times using the same URL`

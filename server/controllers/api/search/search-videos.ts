@@ -134,8 +134,7 @@ async function searchVideoURI (url: string, res: express.Response) {
   if (isUserAbleToSearchRemoteURI(res)) {
     try {
       const syncParam = {
-        likes: false,
-        dislikes: false,
+        rates: false,
         shares: false,
         comments: false,
         thumbnail: true,

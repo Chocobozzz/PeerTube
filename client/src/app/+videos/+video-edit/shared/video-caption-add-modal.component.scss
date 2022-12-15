@@ -1,11 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
-label {
-  font-weight: $font-regular;
-  font-size: 100%;
-}
-
 .caption-file {
   margin-top: 20px;
   width: max-content;

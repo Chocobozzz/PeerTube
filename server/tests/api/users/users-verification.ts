@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { cleanupTests, createSingleServer, MockSmtpServer, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { expect } from 'chai'
+import { MockSmtpServer } from '@server/tests/shared'
 import { HttpStatusCode } from '@shared/models'
-
-const expect = chai.expect
+import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/server-commands'
 
 describe('Test users account verification', function () {
   let server: PeerTubeServer
@@ -30,7 +28,7 @@ describe('Test users account verification', function () {
 
     const overrideConfig = {
       smtp: {
-        hostname: 'localhost',
+        hostname: '127.0.0.1',
         port
       }
     }

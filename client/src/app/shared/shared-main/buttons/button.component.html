@@ -1,8 +1,16 @@
-<span class="action-button" [ngClass]="getClasses()" [ngbTooltip]="getTitle()" tabindex="0">
-  <my-global-icon *ngIf="!loading" [iconName]="icon"></my-global-icon>
-  <my-small-loader [loading]="loading"></my-small-loader>
+<div *ngIf="!routerLink" class="action-button" [ngClass]="classes" [ngbTooltip]="title" tabindex="0">
+  <ng-container *ngTemplateOutlet="content"></ng-container>
+</div>
+
+<a *ngIf="routerLink" class="action-button" [ngClass]="classes" [ngbTooltip]="title" [routerLink]="routerLink">
+  <ng-container *ngTemplateOutlet="content"></ng-container>
+</a>
+
+<ng-template #content>
+  <my-loader size="sm" [ngClass]="{ displayed: loading }" [loading]="loading"></my-loader>
+  <my-global-icon *ngIf="icon && !loading" [iconName]="icon"></my-global-icon>
 
   <span *ngIf="label" class="button-label">{{ label }}</span>
 
   <ng-content></ng-content>
-</span>
+</ng-template>

@@ -1,5 +1,5 @@
 <ng-template #updateSettings let-fragment>
-  <div class="label-description text-muted" i18n>
+  <div class="label-description muted" i18n>
     Update
     <a routerLink="/my-account/settings" [fragment]="fragment">
       <span (click)="onAccountSettingsClick($event)">your settings</span>
@@ -42,13 +42,16 @@
       formControlName="sort"
       [clearable]="false"
       [searchable]="false"
+      [bindValue]="null"
     >
       <ng-option i18n value="-publishedAt">Sort by <strong>"Recently Added"</strong></ng-option>
+      <ng-option i18n value="-originallyPublishedAt">Sort by <strong>"Original Publication Date"</strong></ng-option>
 
+      <ng-option i18n value="name">Sort by <strong>"Name"</strong></ng-option>
       <ng-option i18n *ngIf="isTrendingSortEnabled('most-viewed')" value="-trending">Sort by <strong>"Recent Views"</strong></ng-option>
       <ng-option i18n *ngIf="isTrendingSortEnabled('hot')" value="-hot">Sort by <strong>"Hot"</strong></ng-option>
-      <ng-option i18n *ngIf="isTrendingSortEnabled('best')" value="-best">Sort by <strong>"Best"</strong></ng-option>
       <ng-option i18n *ngIf="isTrendingSortEnabled('most-liked')" value="-likes">Sort by <strong>"Likes"</strong></ng-option>
+      <ng-option i18n value="-views">Sort by <strong>"Global Views"</strong></ng-option>
     </ng-select>
 
   </div>

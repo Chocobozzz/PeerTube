@@ -1,7 +1,7 @@
-import { getAPId } from '@server/helpers/activitypub'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist'
 import { MVideoPlaylistFullSummary } from '@server/types/models'
 import { APObject } from '@shared/models'
+import { getAPId } from '../activity'
 import { createOrUpdateVideoPlaylist } from './create-update'
 import { scheduleRefreshIfNeeded } from './refresh'
 import { fetchRemoteVideoPlaylist } from './shared'

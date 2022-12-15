@@ -1,6 +1,6 @@
 import { Subject, Subscription } from 'rxjs'
-import { Component, OnDestroy, OnInit } from '@angular/core'
-import { ComponentPagination, hasMoreItems, ScreenService } from '@app/core'
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
+import { ComponentPagination, hasMoreItems, HooksService, ScreenService } from '@app/core'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 
@@ -9,7 +9,7 @@ import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-pl
   templateUrl: './video-channel-playlists.component.html',
   styleUrls: [ './video-channel-playlists.component.scss' ]
 })
-export class VideoChannelPlaylistsComponent implements OnInit, OnDestroy {
+export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, OnDestroy {
   videoPlaylists: VideoPlaylist[] = []
 
   pagination: ComponentPagination = {
@@ -26,16 +26,24 @@ export class VideoChannelPlaylistsComponent implements OnInit, OnDestroy {
   constructor (
     private videoPlaylistService: VideoPlaylistService,
     private videoChannelService: VideoChannelService,
-    private screenService: ScreenService
+    private screenService: ScreenService,
+    private hooks: HooksService
   ) {}
 
   ngOnInit () {
     // Parent get the video channel for us
     this.videoChannelSub = this.videoChannelService.videoChannelLoaded
-                               .subscribe(videoChannel => {
-                                 this.videoChannel = videoChannel
-                                 this.loadVideoPlaylists()
-                               })
+      .subscribe(videoChannel => {
+        this.videoChannel = videoChannel
+
+        this.hooks.runAction('action:video-channel-playlists.video-channel.loaded', 'video-channel', { videoChannel })
+
+        this.loadVideoPlaylists()
+      })
+  }
+
+  ngAfterViewInit () {
+    this.hooks.runAction('action:video-channel-playlists.init', 'video-channel')
   }
 
   ngOnDestroy () {
@@ -55,11 +63,13 @@ export class VideoChannelPlaylistsComponent implements OnInit, OnDestroy {
 
   private loadVideoPlaylists () {
     this.videoPlaylistService.listChannelPlaylists(this.videoChannel, this.pagination)
-        .subscribe(res => {
-          this.videoPlaylists = this.videoPlaylists.concat(res.data)
-          this.pagination.totalItems = res.total
+      .subscribe(res => {
+        this.videoPlaylists = this.videoPlaylists.concat(res.data)
+        this.pagination.totalItems = res.total
 
-          this.onDataSubject.next(res.data)
-        })
+        this.hooks.runAction('action:video-channel-playlists.playlists.loaded', 'video-channel', { playlists: this.videoPlaylists })
+
+        this.onDataSubject.next(res.data)
+      })
   }
 }

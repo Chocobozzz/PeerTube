@@ -1,4 +1,4 @@
-import { catchError, map, switchMap } from 'rxjs/operators'
+import { catchError, switchMap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
@@ -18,7 +18,7 @@ export class UserHistoryService {
     private videoService: VideoService
   ) {}
 
-  getUserVideosHistory (historyPagination: ComponentPaginationLight, search?: string) {
+  list (historyPagination: ComponentPaginationLight, search?: string) {
     const pagination = this.restService.componentToRestPagination(historyPagination)
 
     let params = new HttpParams()
@@ -34,12 +34,15 @@ export class UserHistoryService {
                )
   }
 
-  deleteUserVideosHistory () {
+  deleteElement (video: Video) {
+    return this.authHttp
+               .delete(UserHistoryService.BASE_USER_VIDEOS_HISTORY_URL + '/' + video.id)
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  clearAll () {
     return this.authHttp
                .post(UserHistoryService.BASE_USER_VIDEOS_HISTORY_URL + '/remove', {})
-               .pipe(
-                 map(() => this.restExtractor.extractDataBool()),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }

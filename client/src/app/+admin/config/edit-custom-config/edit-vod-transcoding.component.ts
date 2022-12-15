@@ -71,6 +71,8 @@ export class EditVODTranscodingComponent implements OnInit, OnChanges {
   }
 
   private checkTranscodingFields () {
+    const transcodingControl = this.form.get('transcoding.enabled')
+    const videoStudioControl = this.form.get('videoStudio.enabled')
     const hlsControl = this.form.get('transcoding.hls.enabled')
     const webtorrentControl = this.form.get('transcoding.webtorrent.enabled')
 
@@ -95,5 +97,17 @@ export class EditVODTranscodingComponent implements OnInit, OnChanges {
                   webtorrentControl.enable()
                 }
               })
+
+    transcodingControl.valueChanges
+              .subscribe(newValue => {
+                if (newValue === false) {
+                  videoStudioControl.setValue(false)
+                }
+              })
+
+    transcodingControl.updateValueAndValidity()
+    webtorrentControl.updateValueAndValidity()
+    videoStudioControl.updateValueAndValidity()
+    hlsControl.updateValueAndValidity()
   }
 }

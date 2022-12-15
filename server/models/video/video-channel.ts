@@ -17,8 +17,10 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { CONFIG } from '@server/initializers/config'
 import { MAccountActor } from '@server/types/models'
-import { AttributesOnly, pick } from '@shared/core-utils'
+import { forceNumber, pick } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
 import {
@@ -29,6 +31,7 @@ import {
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import {
+  MChannel,
   MChannelActor,
   MChannelAP,
   MChannelBannerAccountDefault,
@@ -44,7 +47,6 @@ import { setAsUpdated } from '../shared'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
-import { CONFIG } from '@server/initializers/config'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
@@ -61,6 +63,7 @@ type AvailableForListOptions = {
   search?: string
   host?: string
   handles?: string[]
+  forCount?: boolean
 }
 
 type AvailableWithStatsOptions = {
@@ -115,70 +118,91 @@ export type SummaryOptions = {
       })
     }
 
-    let rootWhere: WhereOptions
-    if (options.handles) {
-      const or: WhereOptions[] = []
+    if (Array.isArray(options.handles) && options.handles.length !== 0) {
+      const or: string[] = []
 
       for (const handle of options.handles || []) {
         const [ preferredUsername, host ] = handle.split('@')
 
         if (!host || host === WEBSERVER.HOST) {
-          or.push({
-            '$Actor.preferredUsername$': preferredUsername,
-            '$Actor.serverId$': null
-          })
+          or.push(`("preferredUsername" = ${VideoChannelModel.sequelize.escape(preferredUsername)} AND "serverId" IS NULL)`)
         } else {
-          or.push({
-            '$Actor.preferredUsername$': preferredUsername,
-            '$Actor.Server.host$': host
-          })
+          or.push(
+            `(` +
+              `"preferredUsername" = ${VideoChannelModel.sequelize.escape(preferredUsername)} ` +
+              `AND "host" = ${VideoChannelModel.sequelize.escape(host)}` +
+            `)`
+          )
         }
       }
 
-      rootWhere = {
-        [Op.or]: or
-      }
+      whereActorAnd.push({
+        id: {
+          [Op.in]: literal(`(SELECT "actor".id FROM actor LEFT JOIN server on server.id = actor."serverId" WHERE ${or.join(' OR ')})`)
+        }
+      })
+    }
+
+    const channelActorInclude: Includeable[] = []
+    const accountActorInclude: Includeable[] = []
+
+    if (options.forCount !== true) {
+      accountActorInclude.push({
+        model: ServerModel,
+        required: false
+      })
+
+      accountActorInclude.push({
+        model: ActorImageModel,
+        as: 'Avatars',
+        required: false
+      })
+
+      channelActorInclude.push({
+        model: ActorImageModel,
+        as: 'Avatars',
+        required: false
+      })
+
+      channelActorInclude.push({
+        model: ActorImageModel,
+        as: 'Banners',
+        required: false
+      })
+    }
+
+    if (options.forCount !== true || serverRequired) {
+      channelActorInclude.push({
+        model: ServerModel,
+        duplicating: false,
+        required: serverRequired,
+        where: whereServer
+      })
     }
 
     return {
-      where: rootWhere,
       include: [
         {
           attributes: {
             exclude: unusedActorAttributesForAPI
           },
-          model: ActorModel,
+          model: ActorModel.unscoped(),
           where: {
             [Op.and]: whereActorAnd
           },
-          include: [
-            {
-              model: ServerModel,
-              required: serverRequired,
-              where: whereServer
-            },
-            {
-              model: ActorImageModel,
-              as: 'Avatar',
-              required: false
-            },
-            {
-              model: ActorImageModel,
-              as: 'Banner',
-              required: false
-            }
-          ]
+          include: channelActorInclude
         },
         {
-          model: AccountModel,
+          model: AccountModel.unscoped(),
           required: true,
           include: [
             {
               attributes: {
                 exclude: unusedActorAttributesForAPI
               },
-              model: ActorModel, // Default scope includes avatar and server
-              required: true
+              model: ActorModel.unscoped(),
+              required: true,
+              include: accountActorInclude
             }
           ]
         }
@@ -188,7 +212,7 @@ export type SummaryOptions = {
   [ScopeNames.SUMMARY]: (options: SummaryOptions = {}) => {
     const include: Includeable[] = [
       {
-        attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+        attributes: [ 'id', 'preferredUsername', 'url', 'serverId' ],
         model: ActorModel.unscoped(),
         required: options.actorRequired ?? true,
         include: [
@@ -198,8 +222,8 @@ export type SummaryOptions = {
             required: false
           },
           {
-            model: ActorImageModel.unscoped(),
-            as: 'Avatar',
+            model: ActorImageModel,
+            as: 'Avatars',
             required: false
           }
         ]
@@ -244,7 +268,7 @@ export type SummaryOptions = {
           {
             model: ActorImageModel,
             required: false,
-            as: 'Banner'
+            as: 'Banners'
           }
         ]
       }
@@ -256,7 +280,7 @@ export type SummaryOptions = {
     ]
   },
   [ScopeNames.WITH_STATS]: (options: AvailableWithStatsOptions = { daysPrior: 30 }) => {
-    const daysPrior = parseInt(options.daysPrior + '', 10)
+    const daysPrior = forceNumber(options.daysPrior)
 
     return {
       attributes: {
@@ -287,6 +311,16 @@ export type SummaryOptions = {
               ')'
             ),
             'viewsPerDay'
+          ],
+          [
+            literal(
+              '(' +
+              'SELECT COALESCE(SUM("video".views), 0) AS totalViews ' +
+              'FROM "video" ' +
+              'WHERE "video"."channelId" = "VideoChannelModel"."id"' +
+              ')'
+            ),
+            'totalViews'
           ]
         ]
       }
@@ -395,7 +429,7 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
       }
     }
 
-    return VideoChannelModel.count(query)
+    return VideoChannelModel.unscoped().count(query)
   }
 
   static async getStats () {
@@ -473,14 +507,14 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       order: getSort(parameters.sort)
     }
 
-    return VideoChannelModel
-      .scope({
-        method: [ ScopeNames.FOR_API, { actorId } as AvailableForListOptions ]
-      })
-      .findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return { total: count, data: rows }
-      })
+    const getScope = (forCount: boolean) => {
+      return { method: [ ScopeNames.FOR_API, { actorId, forCount } as AvailableForListOptions ] }
+    }
+
+    return Promise.all([
+      VideoChannelModel.scope(getScope(true)).count(),
+      VideoChannelModel.scope(getScope(false)).findAll(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static searchForApi (options: Pick<AvailableForListOptions, 'actorId' | 'search' | 'host' | 'handles'> & {
@@ -518,14 +552,22 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       where
     }
 
-    return VideoChannelModel
-      .scope({
-        method: [ ScopeNames.FOR_API, pick(options, [ 'actorId', 'host', 'handles' ]) as AvailableForListOptions ]
-      })
-      .findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return { total: count, data: rows }
-      })
+    const getScope = (forCount: boolean) => {
+      return {
+        method: [
+          ScopeNames.FOR_API, {
+            ...pick(options, [ 'actorId', 'host', 'handles' ]),
+
+            forCount
+          } as AvailableForListOptions
+        ]
+      }
+    }
+
+    return Promise.all([
+      VideoChannelModel.scope(getScope(true)).count(query),
+      VideoChannelModel.scope(getScope(false)).findAll(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static listByAccountForAPI (options: {
@@ -551,45 +593,49 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       }
       : null
 
-    const query = {
-      offset: options.start,
-      limit: options.count,
-      order: getSort(options.sort),
-      include: [
-        {
-          model: AccountModel,
-          where: {
-            id: options.accountId
-          },
-          required: true
-        }
-      ],
-      where
+    const getQuery = (forCount: boolean) => {
+      const accountModel = forCount
+        ? AccountModel.unscoped()
+        : AccountModel
+
+      return {
+        offset: options.start,
+        limit: options.count,
+        order: getSort(options.sort),
+        include: [
+          {
+            model: accountModel,
+            where: {
+              id: options.accountId
+            },
+            required: true
+          }
+        ],
+        where
+      }
     }
 
-    const scopes: string | ScopeOptions | (string | ScopeOptions)[] = [ ScopeNames.WITH_ACTOR_BANNER ]
+    const findScopes: string | ScopeOptions | (string | ScopeOptions)[] = [ ScopeNames.WITH_ACTOR_BANNER ]
 
     if (options.withStats === true) {
-      scopes.push({
+      findScopes.push({
         method: [ ScopeNames.WITH_STATS, { daysPrior: 30 } as AvailableWithStatsOptions ]
       })
     }
 
-    return VideoChannelModel
-      .scope(scopes)
-      .findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return { total: count, data: rows }
-      })
+    return Promise.all([
+      VideoChannelModel.unscoped().count(getQuery(true)),
+      VideoChannelModel.scope(findScopes).findAll(getQuery(false))
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
-  static listAllByAccount (accountId: number) {
+  static listAllByAccount (accountId: number): Promise<MChannel[]> {
     const query = {
       limit: CONFIG.VIDEO_CHANNELS.MAX_PER_USER,
       include: [
         {
           attributes: [],
-          model: AccountModel,
+          model: AccountModel.unscoped(),
           where: {
             id: accountId
           },
@@ -620,7 +666,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
             {
               model: ActorImageModel,
               required: false,
-              as: 'Banner'
+              as: 'Banners'
             }
           ]
         }
@@ -654,7 +700,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
             {
               model: ActorImageModel,
               required: false,
-              as: 'Banner'
+              as: 'Banners'
             }
           ]
         }
@@ -684,7 +730,7 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
             {
               model: ActorImageModel,
               required: false,
-              as: 'Banner'
+              as: 'Banners'
             }
           ]
         }
@@ -705,6 +751,9 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       displayName: this.getDisplayName(),
       url: actor.url,
       host: actor.host,
+      avatars: actor.avatars,
+
+      // TODO: remove, deprecated in 4.2
       avatar: actor.avatar
     }
   }
@@ -727,6 +776,8 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
         })
     }
 
+    const totalViews = this.get('totalViews') as number
+
     const actor = this.Actor.toFormattedJSON()
     const videoChannel = {
       id: this.id,
@@ -735,9 +786,17 @@ ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
       support: this.support,
       isLocal: this.Actor.isOwned(),
       updatedAt: this.updatedAt,
+
       ownerAccount: undefined,
+
       videosCount,
-      viewsPerDay
+      viewsPerDay,
+      totalViews,
+
+      avatars: actor.avatars,
+
+      // TODO: remove, deprecated in 4.2
+      avatar: actor.avatar
     }
 
     if (this.Account) videoChannel.ownerAccount = this.Account.toFormattedJSON()

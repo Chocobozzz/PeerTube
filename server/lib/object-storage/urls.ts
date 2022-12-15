@@ -1,9 +1,13 @@
 import { CONFIG } from '@server/initializers/config'
+import { OBJECT_STORAGE_PROXY_PATHS, WEBSERVER } from '@server/initializers/constants'
+import { MVideoUUID } from '@server/types/models'
 import { BucketInfo, buildKey, getEndpointParsed } from './shared'
 
-function getPrivateUrl (config: BucketInfo, keyWithoutPrefix: string) {
+function getInternalUrl (config: BucketInfo, keyWithoutPrefix: string) {
   return getBaseUrl(config) + buildKey(keyWithoutPrefix, config)
 }
+
+// ---------------------------------------------------------------------------
 
 function getWebTorrentPublicFileUrl (fileUrl: string) {
   const baseUrl = CONFIG.OBJECT_STORAGE.VIDEOS.BASE_URL
@@ -19,11 +23,28 @@ function getHLSPublicFileUrl (fileUrl: string) {
   return replaceByBaseUrl(fileUrl, baseUrl)
 }
 
+// ---------------------------------------------------------------------------
+
+function getHLSPrivateFileUrl (video: MVideoUUID, filename: string) {
+  return WEBSERVER.URL + OBJECT_STORAGE_PROXY_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + video.uuid + `/${filename}`
+}
+
+function getWebTorrentPrivateFileUrl (filename: string) {
+  return WEBSERVER.URL + OBJECT_STORAGE_PROXY_PATHS.PRIVATE_WEBSEED + filename
+}
+
+// ---------------------------------------------------------------------------
+
 export {
-  getPrivateUrl,
+  getInternalUrl,
+
   getWebTorrentPublicFileUrl,
-  replaceByBaseUrl,
-  getHLSPublicFileUrl
+  getHLSPublicFileUrl,
+
+  getHLSPrivateFileUrl,
+  getWebTorrentPrivateFileUrl,
+
+  replaceByBaseUrl
 }
 
 // ---------------------------------------------------------------------------

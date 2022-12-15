@@ -1,7 +1,8 @@
 import { Observable, Subject } from 'rxjs'
 import { AfterContentInit, Component, ContentChildren, EventEmitter, Input, Output, QueryList, TemplateRef } from '@angular/core'
 import { ComponentPagination, Notifier, User } from '@app/core'
-import { ResultList, VideoSortField } from '@shared/models'
+import { logger } from '@root-helpers/logger'
+import { ResultList, VideosExistInPlaylists, VideoSortField } from '@shared/models'
 import { PeerTubeTemplateDirective, Video } from '../shared-main'
 import { MiniatureDisplayOptions } from './video-miniature.component'
 
@@ -13,6 +14,7 @@ export type SelectionType = { [ id: number ]: boolean }
   styleUrls: [ './videos-selection.component.scss' ]
 })
 export class VideosSelectionComponent implements AfterContentInit {
+  @Input() videosContainedInPlaylists: VideosExistInPlaylists
   @Input() user: User
   @Input() pagination: ComponentPagination
 
@@ -110,6 +112,8 @@ export class VideosSelectionComponent implements AfterContentInit {
   }
 
   loadMoreVideos (reset = false) {
+    if (reset) this.hasDoneFirstQuery = false
+
     this.getVideosObservable(this.pagination.currentPage)
       .subscribe({
         next: ({ data }) => {
@@ -126,7 +130,7 @@ export class VideosSelectionComponent implements AfterContentInit {
         error: err => {
           const message = $localize`Cannot load more videos. Try again later.`
 
-          console.error(message, { err })
+          logger.error(message, err)
           this.notifier.error(message)
         }
       })

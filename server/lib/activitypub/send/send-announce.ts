@@ -1,10 +1,11 @@
 import { Transaction } from 'sequelize'
-import { ActivityAnnounce, ActivityAudience } from '../../../../shared/models/activitypub'
-import { broadcastToFollowers } from './utils'
-import { audiencify, getActorsInvolvedInVideo, getAudience, getAudienceFromFollowersOf } from '../audience'
+import { ActivityAnnounce, ActivityAudience } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { MActorLight, MVideo } from '../../../types/models'
 import { MVideoShare } from '../../../types/models/video'
+import { audiencify, getAudience } from '../audience'
+import { getActorsInvolvedInVideo, getAudienceFromFollowersOf } from './shared'
+import { broadcastToFollowers } from './shared/send-utils'
 
 async function buildAnnounceWithVideoAudience (
   byActor: MActorLight,
@@ -22,13 +23,19 @@ async function buildAnnounceWithVideoAudience (
   return { activity, actorsInvolvedInVideo }
 }
 
-async function sendVideoAnnounce (byActor: MActorLight, videoShare: MVideoShare, video: MVideo, t: Transaction) {
-  const { activity, actorsInvolvedInVideo } = await buildAnnounceWithVideoAudience(byActor, videoShare, video, t)
+async function sendVideoAnnounce (byActor: MActorLight, videoShare: MVideoShare, video: MVideo, transaction: Transaction) {
+  const { activity, actorsInvolvedInVideo } = await buildAnnounceWithVideoAudience(byActor, videoShare, video, transaction)
 
   logger.info('Creating job to send announce %s.', videoShare.url)
 
-  const followersException = [ byActor ]
-  return broadcastToFollowers(activity, byActor, actorsInvolvedInVideo, t, followersException, 'Announce')
+  return broadcastToFollowers({
+    data: activity,
+    byActor,
+    toFollowersOf: actorsInvolvedInVideo,
+    transaction,
+    actorsException: [ byActor ],
+    contextType: 'Announce'
+  })
 }
 
 function buildAnnounceActivity (url: string, byActor: MActorLight, object: string, audience?: ActivityAudience): ActivityAnnounce {

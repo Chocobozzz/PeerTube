@@ -1,15 +1,15 @@
 import { join } from 'path'
-import { ThumbnailType } from '../../shared/models/videos/thumbnail.type'
-import { generateImageFromVideoFile } from '../helpers/ffmpeg-utils'
-import { generateImageFilename, processImage } from '../helpers/image-utils'
-import { downloadImage } from '../helpers/requests'
+import { ThumbnailType } from '@shared/models'
+import { generateImageFilename, generateImageFromVideoFile } from '../helpers/image-utils'
 import { CONFIG } from '../initializers/config'
 import { ASSETS_PATH, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '../initializers/constants'
 import { ThumbnailModel } from '../models/video/thumbnail'
 import { MVideoFile, MVideoThumbnail, MVideoUUID } from '../types/models'
 import { MThumbnail } from '../types/models/video/thumbnail'
 import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist'
+import { downloadImageFromWorker } from './local-actor'
 import { VideoPathManager } from './video-path-manager'
+import { processImageFromWorker } from './worker/parent-process'
 
 type ImageSize = { height?: number, width?: number }
 
@@ -24,7 +24,10 @@ function updatePlaylistMiniatureFromExisting (options: {
   const { filename, outputPath, height, width, existingThumbnail } = buildMetadataFromPlaylist(playlist, size)
   const type = ThumbnailType.MINIATURE
 
-  const thumbnailCreator = () => processImage(inputPath, outputPath, { width, height }, keepOriginal)
+  const thumbnailCreator = () => {
+    return processImageFromWorker({ path: inputPath, destination: outputPath, newSize: { width, height }, keepOriginal })
+  }
+
   return updateThumbnailFromFunction({
     thumbnailCreator,
     filename,
@@ -50,7 +53,10 @@ function updatePlaylistMiniatureFromUrl (options: {
     ? null
     : downloadUrl
 
-  const thumbnailCreator = () => downloadImage(downloadUrl, basePath, filename, { width, height })
+  const thumbnailCreator = () => {
+    return downloadImageFromWorker({ url: downloadUrl, destDir: basePath, destName: filename, size: { width, height } })
+  }
+
   return updateThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
 }
 
@@ -76,7 +82,9 @@ function updateVideoMiniatureFromUrl (options: {
     : existingThumbnail.filename
 
   const thumbnailCreator = () => {
-    if (thumbnailUrlChanged) return downloadImage(downloadUrl, basePath, filename, { width, height })
+    if (thumbnailUrlChanged) {
+      return downloadImageFromWorker({ url: downloadUrl, destDir: basePath, destName: filename, size: { width, height } })
+    }
 
     return Promise.resolve()
   }
@@ -95,7 +103,10 @@ function updateVideoMiniatureFromExisting (options: {
   const { inputPath, video, type, automaticallyGenerated, size, keepOriginal = false } = options
 
   const { filename, outputPath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
-  const thumbnailCreator = () => processImage(inputPath, outputPath, { width, height }, keepOriginal)
+
+  const thumbnailCreator = () => {
+    return processImageFromWorker({ path: inputPath, destination: outputPath, newSize: { width, height }, keepOriginal })
+  }
 
   return updateThumbnailFromFunction({
     thumbnailCreator,
@@ -119,8 +130,18 @@ function generateVideoMiniature (options: {
     const { filename, basePath, height, width, existingThumbnail, outputPath } = buildMetadataFromVideo(video, type)
 
     const thumbnailCreator = videoFile.isAudio()
-      ? () => processImage(ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND, outputPath, { width, height }, true)
-      : () => generateImageFromVideoFile(input, basePath, filename, { height, width })
+      ? () => processImageFromWorker({
+        path: ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND,
+        destination: outputPath,
+        newSize: { width, height },
+        keepOriginal: true
+      })
+      : () => generateImageFromVideoFile({
+        fromPath: input,
+        folder: basePath,
+        imageName: filename,
+        size: { height, width }
+      })
 
     return updateThumbnailFromFunction({
       thumbnailCreator,

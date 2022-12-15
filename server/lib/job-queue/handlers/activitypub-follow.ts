@@ -1,4 +1,4 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { getLocalActorFollowActivityPubUrl } from '@server/lib/activitypub/url'
 import { ActivitypubFollowPayload } from '@shared/models'
 import { sanitizeHost } from '../../../helpers/core-utils'
@@ -17,7 +17,7 @@ async function processActivityPubFollow (job: Job) {
   const payload = job.data as ActivitypubFollowPayload
   const host = payload.host
 
-  logger.info('Processing ActivityPub follow in job %d.', job.id)
+  logger.info('Processing ActivityPub follow in job %s.', job.id)
 
   let targetActor: MActorFull
   if (!host || host === WEBSERVER.HOST) {

@@ -16,7 +16,7 @@ async function addFetchOutboxJob (actor: Pick<ActorModel, 'id' | 'outboxUrl'>) {
     type: 'activity' as 'activity'
   }
 
-  return JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
+  return JobQueue.Instance.createJobAsync({ type: 'activitypub-http-fetcher', payload })
 }
 
 export {

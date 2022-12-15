@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
+import { getAllFiles } from '@shared/core-utils'
 import {
   cleanupTests,
   createSingleServer,
@@ -11,7 +11,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 
 describe('Test update host scripts', function () {
   let server: PeerTubeServer
@@ -67,7 +67,7 @@ describe('Test update host scripts', function () {
     for (const video of data) {
       const { body } = await makeActivityPubGetRequest(server.url, '/videos/watch/' + video.uuid)
 
-      expect(body.id).to.equal('http://localhost:9002/videos/watch/' + video.uuid)
+      expect(body.id).to.equal('http://127.0.0.1:9002/videos/watch/' + video.uuid)
 
       const videoDetails = await server.videos.get({ id: video.uuid })
 
@@ -84,7 +84,7 @@ describe('Test update host scripts', function () {
     for (const channel of data) {
       const { body } = await makeActivityPubGetRequest(server.url, '/video-channels/' + channel.name)
 
-      expect(body.id).to.equal('http://localhost:9002/video-channels/' + channel.name)
+      expect(body.id).to.equal('http://127.0.0.1:9002/video-channels/' + channel.name)
     }
   })
 
@@ -96,7 +96,7 @@ describe('Test update host scripts', function () {
       const usernameWithDomain = account.name
       const { body } = await makeActivityPubGetRequest(server.url, '/accounts/' + usernameWithDomain)
 
-      expect(body.id).to.equal('http://localhost:9002/accounts/' + usernameWithDomain)
+      expect(body.id).to.equal('http://127.0.0.1:9002/accounts/' + usernameWithDomain)
     }
   })
 
@@ -108,22 +108,22 @@ describe('Test update host scripts', function () {
 
     for (const video of data) {
       const videoDetails = await server.videos.get({ id: video.id })
-      const files = videoDetails.files.concat(videoDetails.streamingPlaylists[0].files)
+      const files = getAllFiles(videoDetails)
 
       expect(files).to.have.lengthOf(8)
 
       for (const file of files) {
-        expect(file.magnetUri).to.contain('localhost%3A9002%2Ftracker%2Fsocket')
-        expect(file.magnetUri).to.contain('localhost%3A9002%2Fstatic%2F')
+        expect(file.magnetUri).to.contain('127.0.0.1%3A9002%2Ftracker%2Fsocket')
+        expect(file.magnetUri).to.contain('127.0.0.1%3A9002%2Fstatic%2F')
 
         const torrent = await parseTorrentVideo(server, file)
-        const announceWS = torrent.announce.find(a => a === 'ws://localhost:9002/tracker/socket')
+        const announceWS = torrent.announce.find(a => a === 'ws://127.0.0.1:9002/tracker/socket')
         expect(announceWS).to.not.be.undefined
 
-        const announceHttp = torrent.announce.find(a => a === 'http://localhost:9002/tracker/announce')
+        const announceHttp = torrent.announce.find(a => a === 'http://127.0.0.1:9002/tracker/announce')
         expect(announceHttp).to.not.be.undefined
 
-        expect(torrent.urlList[0]).to.contain('http://localhost:9002/static/')
+        expect(torrent.urlList[0]).to.contain('http://127.0.0.1:9002/static/')
       }
     }
   })

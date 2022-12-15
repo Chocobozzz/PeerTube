@@ -1,9 +1,5 @@
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
-import { Redis } from '../../lib/redis'
 import { ApiCache, APICacheOptions } from './shared'
-
-// Ensure Redis is initialized
-Redis.Instance.init()
 
 const defaultOptions: APICacheOptions = {
   excludeStatus: [

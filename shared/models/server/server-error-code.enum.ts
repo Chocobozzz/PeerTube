@@ -37,7 +37,9 @@ export const enum ServerErrorCode {
    * A torrent should have at most one correct video file. Any more and we will
    * not be able to choose automatically.
    */
-  INCORRECT_FILES_IN_TORRENT = 'incorrect_files_in_torrent'
+  INCORRECT_FILES_IN_TORRENT = 'incorrect_files_in_torrent',
+
+  COMMENT_NOT_ASSOCIATED_TO_VIDEO = 'comment_not_associated_to_video'
 }
 
 /**

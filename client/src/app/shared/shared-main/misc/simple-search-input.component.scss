@@ -5,7 +5,7 @@
   display: flex;
 }
 
-my-global-icon {
+.root > my-global-icon {
   @include margin-left(10px);
 
   height: 28px;
@@ -24,4 +24,8 @@ input {
   &:focus {
     box-shadow: 0 0 5px 0 #a5a5a5;
   }
+}
+
+.input-group > my-global-icon {
+  width: 20px;
 }

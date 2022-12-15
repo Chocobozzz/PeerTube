@@ -20,8 +20,12 @@ export class ReactiveFileComponent implements OnInit, ControlValueAccessor {
   @Input() inputName: string
   @Input() extensions: string[] = []
   @Input() maxFileSize: number
+
   @Input() displayFilename = false
+  @Input() displayReset = false
+
   @Input() icon: GlobalIconName
+  @Input() buttonTooltip: string
 
   @Output() fileChanged = new EventEmitter<Blob>()
 
@@ -53,7 +57,7 @@ export class ReactiveFileComponent implements OnInit, ControlValueAccessor {
 
       const extension = '.' + file.name.split('.').pop()
       if (this.extensions.includes(extension.toLowerCase()) === false) {
-        const message = $localize`PeerTube cannot handle this kind of file. Accepted extensions are ${this.allowedExtensionsMessage}}.`
+        const message = $localize`PeerTube cannot handle this kind of file. Accepted extensions are ${this.allowedExtensionsMessage}.`
         this.notifier.error(message)
 
         return
@@ -62,8 +66,14 @@ export class ReactiveFileComponent implements OnInit, ControlValueAccessor {
       this.file = file
 
       this.propagateChange(this.file)
-      this.fileChanged.emit(this.file)
     }
+    this.fileChanged.emit(this.file)
+  }
+
+  reset () {
+    this.writeValue(undefined)
+    this.propagateChange(undefined)
+    this.fileChanged.emit(undefined)
   }
 
   propagateChange = (_: any) => { /* empty */ }

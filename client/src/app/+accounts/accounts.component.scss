@@ -30,20 +30,20 @@
   }
 }
 
-my-user-moderation-dropdown,
-.badge {
-  @include margin-left(10px);
+my-user-moderation-dropdown {
+  margin: 0 10px;
 
-  position: relative;
-  top: 3px;
-}
-
-.badge {
-  font-size: 13px;
+  height: fit-content;
 }
 
 .copy-button {
+  @include margin-left(3px);
+
   border: 0;
+
+  my-global-icon {
+    width: 15px;
+  }
 }
 
 .account-info {
@@ -62,6 +62,10 @@ my-user-moderation-dropdown,
 
 .account-avatar-row {
   @include avatar-row-responsive(var(--myImgMargin), var(--myGreyFontSize));
+}
+
+.actor-display-name {
+  align-items: center;
 }
 
 .description {
@@ -93,6 +97,10 @@ my-user-moderation-dropdown,
   > a {
     white-space: nowrap;
   }
+}
+
+.pt-badge {
+  @include margin-right(5px);
 }
 
 @media screen and (max-width: $small-view) {

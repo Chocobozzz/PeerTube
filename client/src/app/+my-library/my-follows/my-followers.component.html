@@ -2,7 +2,7 @@
   <span>
     <my-global-icon iconName="follower" aria-hidden="true"></my-global-icon>
     <ng-container i18n>My followers</ng-container>
-    <span class="badge badge-secondary"> {{ pagination.totalItems }}</span>
+    <span *ngIf="pagination.totalItems" class="pt-badge badge-secondary"> {{ pagination.totalItems }}</span>
   </span>
 </h1>
 
@@ -14,15 +14,15 @@
 
 <div class="actors" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
   <div *ngFor="let follow of follows" class="actor">
-    <my-actor-avatar [account]="follow.follower" [href]="follow.follower.url"></my-actor-avatar>
+    <my-actor-avatar [actor]="follow.follower" actorType="account" [href]="follow.follower.url" size="40"></my-actor-avatar>
 
     <div class="actor-info">
       <a [href]="follow.follower.url" class="actor-names" rel="noopener noreferrer" target="_blank" i18n-title title="Follower page">
         <div class="actor-display-name">{{ follow.follower.name + '@' + follow.follower.host }}</div>
-        <span class="glyphicon glyphicon-new-window"></span>
+        <my-global-icon iconName="external-link"></my-global-icon>
       </a>
 
-      <div class="text-muted">
+      <div class="small muted">
         <ng-container *ngIf="isFollowingAccount(follow)" i18n>Is following all your channels</ng-container>
         <ng-container *ngIf="!isFollowingAccount(follow)" i18n>Is following your channel {{ follow.following.name }}</ng-container>
       </div>

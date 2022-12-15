@@ -1,25 +1,19 @@
-$icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
-
 @use 'sass:math';
 
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_icons' as *;
 
 @use '_fonts';
 
-@use './classes';
-
+@use './class-helpers';
 @use './custom-markup';
-
 @use './ng-select';
 
-// Needs an import because we extends glyphicon icons in primeng
-@import './bootstrap';
-@import './primeng-custom';
+@use './bootstrap';
+@use './primeng-custom';
 
-[hidden] {
-  display: none !important;
-}
+@use './z-index';
 
 body {
   /*** theme ***/
@@ -28,13 +22,17 @@ body {
   --mainColor: #{$main-color};
   --mainColorLighter: #{$main-color-lighter};
   --mainColorLightest: #{$main-color-lightest};
+  --mainColorVeryLight: #{$main-color-very-light};
+
   --mainHoverColor: #{$main-hover-color};
+  --mainBackgroundHoverColor: #{$main-background-hover-color};
+
   --mainBackgroundColor: #{$bg-color};
   --mainForegroundColor: #{$fg-color};
-  --secondaryColor: #{$secondary-color};
 
   --greyForegroundColor: #{$grey-foreground-color};
   --greyBackgroundColor: #{$grey-background-color};
+  --greySecondaryBackgroundColor: #{$grey-background-hover-color};
 
   --menuBackgroundColor: #{$menu-background};
   --menuForegroundColor: #{$menu-color};
@@ -45,12 +43,14 @@ body {
   --inputForegroundColor: #{$input-foreground-color};
   --inputBackgroundColor: #{$input-background-color};
   --inputPlaceholderColor: #{$input-placeholder-color};
+  --inputBorderColor: #{$input-border-color};
 
   --textareaForegroundColor: #{$textarea-foreground-color};
   --textareaBackgroundColor: #{$textarea-background-color};
   --markdownTextareaBackgroundColor: #{$markdown-textarea-background-color};
 
   --actionButtonColor: #{$grey-foreground-color};
+
   --supportButtonBackgroundColor: #{transparent};
   --supportButtonColor: #{pvar(--actionButtonColor)};
   --supportButtonHeartColor: #{$support-button-heart};
@@ -65,7 +65,7 @@ body {
   font-weight: $font-regular;
   color: pvar(--mainForegroundColor);
   background-color: pvar(--mainBackgroundColor);
-  font-size: 14px;
+  font-size: 1rem;
   // On desktop browsers, make sure vertical scroll bar is always visible
   // Allow to disable the scrollbar instead of hide it when the content fit the body
   // And not move the content and header horizontally sticked to right when the content is updating
@@ -86,6 +86,10 @@ noscript,
   font-size: 1.2rem;
   max-width: 600px;
   margin: 1rem auto;
+}
+
+a {
+  text-decoration: none;
 }
 
 strong {
@@ -111,7 +115,7 @@ button {
 
 label {
   font-weight: $font-bold;
-  font-size: 15px;
+  margin-bottom: 0.5rem;
 }
 
 code {
@@ -123,35 +127,6 @@ code {
   font-size: 75%;
   display: inline-block;
   vertical-align: middle;
-}
-
-.form-error,
-.form-warning {
-  display: block;
-  margin-top: 5px;
-}
-
-.form-error {
-  color: $red;
-}
-
-.input-error,
-my-input-toggle-hidden ::ng-deep input {
-  border-color: $red !important;
-}
-
-.full-width {
-  width: 100%;
-  margin: 0 auto;
-  max-width: initial;
-}
-
-.glyphicon-black {
-  color: #000;
-}
-
-.row {
-  margin: 0 !important;
 }
 
 .main-col {
@@ -207,141 +182,31 @@ my-input-toggle-hidden ::ng-deep input {
   }
 }
 
-.title-page {
-  @include disable-default-a-behaviour;
-  @include margin-right(55px);
-
-  opacity: 0.6;
-  color: pvar(--mainForegroundColor);
-  font-size: 16px;
-  display: inline-block;
-  font-weight: $font-semibold;
-  border-bottom: 2px solid transparent;
-
-  &.title-page-single {
-    margin-top: 30px;
-    margin-bottom: 25px;
-  }
-
-  &.active {
-    border-bottom-color: pvar(--mainColor);
-  }
-
-  &.title-page-single {
-    font-size: 125%;
-  }
-
-  &:hover,
-  &:active,
-  &:focus {
-    color: pvar(--mainForegroundColor);
-  }
-
-  &.active,
-  &:hover,
-  &:active,
-  &:focus,
-  &.title-page-single {
-    opacity: 1;
-    outline: 0 hidden !important;
-  }
-
-  @media screen and (max-width: $mobile-view) {
-    @include margin-left(15px);
-  }
-}
-
-.title-page-about,
-.title-page-settings {
-  white-space: nowrap;
-  font-size: 115%;
-}
-
-.admin-sub-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 30px;
-
-  .admin-sub-nav a {
-    @include disable-default-a-behaviour;
-
-    font-size: 16px;
-    color: pvar(--mainForegroundColor);
-    padding: 5px 15px;
-    border-radius: 0.25rem;
-    font-weight: $font-semibold;
-    opacity: 0.6;
-
-    &.active {
-      background-color: pvar(--submenuBackgroundColor);
-    }
-
-    &.active,
-    &:hover,
-    &:active,
-    &:focus {
-      opacity: 1;
-    }
-  }
-}
-
 // In tables, don't have a hover different background
 table {
-  .action-button-edit,
-  .action-button-delete {
-    &:hover,
-    &:active,
-    &:focus,
-    &[disabled],
-    &.disabled {
-      background-color: $grey-background-color !important;
+  my-edit-button,
+  my-delete-button {
+    .action-button {
+      &:hover,
+      &:active,
+      &:focus,
+      &[disabled],
+      &.disabled {
+        background-color: pvar(--greyBackgroundColor) !important;
+        opacity: 0.8;
+      }
     }
   }
 }
 
-.no-results {
-  height: 40vh;
-  max-height: 500px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: $font-semibold;
-}
-
-.dropdown-item {
-  @include dropdown-with-icon-item;
-
-  my-global-icon {
-    width: 22px;
-    height: 22px;
-  }
-}
-
-/* offsetTop for scrollToAnchor */
-
-.anchor {
+my-global-icon[iconName=external-link] {
+  margin: 0 0.3em;
+  width: 0.9em;
+  height: 0.9em;
+  display: inline-block;
+  color: pvar(--inputPlaceholderColor);
   position: relative;
-  top: #{-($header-height + 20px)};
-}
-
-.offset-content { // if sub-menu fixed
-  .anchor {
-    top: #{-($header-height + $sub-menu-height + 20px)};
-  }
-}
-
-.form-group-description {
-  @extend .text-muted;
-
-  font-size: 90%;
-  margin-top: 10px;
-}
-
-ngx-loading-bar {
-  z-index: z(header) + 1 !important;
+  top: -0.1em;
 }
 
 @media screen and (max-width: #{breakpoint(xxl)}) {
@@ -360,7 +225,7 @@ ngx-loading-bar {
     --videosHorizontalMarginContent: #{pvar(--horizontalMarginContent)};
   }
 
-  /* the following applies from 500px to 900px and is partially overriden from 500px to 800px by changes below to $small-view */
+  /* the following applies from 500px to 900px and is partially overridden from 500px to 800px by changes below to $small-view */
   .main-col,
   .main-col.expanded {
     --horizontalMarginContent: #{math.div($expanded-horizontal-margins, 3)};
@@ -398,23 +263,6 @@ ngx-loading-bar {
     // Use an appropriate offset top when sub-menu fixed
     .margin-content.offset-content {
       padding-top: $sub-menu-height + $sub-menu-margin-bottom-small-view;
-    }
-
-    .admin-sub-header {
-      flex-direction: column;
-
-      .admin-sub-nav {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-        height: 50px;
-        padding: 10px 0;
-        width: 100%;
-
-        a {
-          @include margin-left(5px);
-        }
-      }
     }
 
     my-markdown-textarea {

@@ -1,3 +1,2 @@
-<span *ngIf="value === true" class="glyphicon glyphicon-ok" i18n-aria-label aria-label="yes"></span>
-<span *ngIf="value === false" class="glyphicon glyphicon-remove" i18n-aria-label aria-label="no"></span>
-
+<my-global-icon *ngIf="value === true" iconName="tick" i18n-aria-label aria-label="yes"></my-global-icon>
+<my-global-icon *ngIf="value === false" iconName="cross" i18n-aria-label aria-label="no"></my-global-icon>

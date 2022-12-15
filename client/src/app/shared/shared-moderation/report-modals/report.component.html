@@ -8,11 +8,11 @@
     <form novalidate [formGroup]="form" (ngSubmit)="report()">
 
     <div class="row">
-      <div class="col-5 form-group">
+      <div class="col-5">
 
           <label i18n for="reportPredefinedReasons">What is the issue?</label>
 
-          <div class="ml-2 mt-2 d-flex flex-column">
+          <div class="ms-2 mt-2 d-flex flex-column">
             <ng-container formGroupName="predefinedReasons">
 
               <div class="form-group" *ngFor="let reason of predefinedReasons">
@@ -29,7 +29,6 @@
 
             </ng-container>
           </div>
-
       </div>
 
       <div class="col-7">

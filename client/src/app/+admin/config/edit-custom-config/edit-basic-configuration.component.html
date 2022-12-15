@@ -1,13 +1,13 @@
 <ng-container [formGroup]="form">
-  <div class="form-row mt-5"> <!-- appearance grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-5"> <!-- appearance grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">APPEARANCE</div>
       <div i18n class="inner-form-description">
-        Use <a routerLink="/admin/plugins">plugins & themes</a> for more involved changes, or <a routerLink="/admin/config/edit-custom" fragment="advanced-configuration">add slight customizations</a>.
+        Use <a class="link-orange" routerLink="/admin/plugins">plugins & themes</a> for more involved changes, or add slight <a class="link-orange" routerLink="/admin/config/edit-custom" fragment="advanced-configuration">customizations</a>.
       </div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="theme">
         <div class="form-group">
@@ -15,9 +15,9 @@
 
           <div class="peertube-select-container">
             <select formControlName="default" id="themeDefault" class="form-control">
-              <option i18n value="default">default</option>
+              <option i18n value="default">{{ getDefaultThemeLabel() }}</option>
 
-              <option *ngFor="let theme of getAvailableThemes()" [value]="theme">{{ theme }}</option>
+              <option *ngFor="let theme of availableThemes" [value]="theme.id">{{ theme.label }}</option>
             </select>
           </div>
         </div>
@@ -44,7 +44,6 @@
 
             <div class="peertube-select-container">
               <select id="trendingVideosAlgorithmsDefault" formControlName="default" class="form-control">
-                <option i18n value="best">Best videos</option>
                 <option i18n value="hot">Hot videos</option>
                 <option i18n value="most-viewed">Most viewed videos</option>
                 <option i18n value="most-liked">Most liked videos</option>
@@ -56,18 +55,48 @@
         </ng-container>
       </div>
 
+      <ng-container formGroupName="client">
+
+        <ng-container formGroupName="videos">
+          <ng-container formGroupName="miniature">
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="clientVideosMiniaturePreferAuthorDisplayName" formControlName="preferAuthorDisplayName"
+                i18n-labelText labelText="Prefer author display name in video miniature"
+              ></my-peertube-checkbox>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <ng-container formGroupName="menu">
+          <ng-container formGroupName="login">
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="clientMenuLoginRedirectOnSingleExternalAuth" formControlName="redirectOnSingleExternalAuth"
+                i18n-labelText labelText="Redirect users on single external auth when users click on the login button in menu"
+              >
+                <ng-container ngProjectAs="description">
+                  <span *ngIf="countExternalAuth() === 0" i18n>⚠️ You don't have any external auth plugin enabled.</span>
+                  <span *ngIf="countExternalAuth() > 1" i18n>⚠️ You have multiple external auth plugins enabled.</span>
+                </ng-container>
+             </my-peertube-checkbox>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- broadcast grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- broadcast grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">BROADCAST MESSAGE</div>
-      <div i18n class="inner-for-description">
+      <div i18n class="inner-form-description">
         Display a message on your instance
       </div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="broadcastMessage">
 
@@ -103,8 +132,8 @@
           <label i18n for="broadcastMessageMessage">Message</label><my-help helpType="markdownText"></my-help>
 
           <my-markdown-textarea
-            name="broadcastMessageMessage" formControlName="message" textareaMaxWidth="500px"
-            [classes]="{ 'input-error': formErrors['broadcastMessage.message'] }"
+            name="broadcastMessageMessage" formControlName="message"
+            [formError]="formErrors['broadcastMessage.message']"
           ></my-markdown-textarea>
 
           <div *ngIf="formErrors.broadcastMessage.message" class="form-error">{{ formErrors.broadcastMessage.message }}</div>
@@ -115,15 +144,15 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- new users grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- new users grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">NEW USERS</div>
-      <div i18n class="inner-for-description">
-        Manage <a routerLink="/admin/users">users</a> to set their quota individually.
+      <div i18n class="inner-form-description">
+        Manage <a class="link-orange" routerLink="/admin/users">users</a> to set their quota individually.
       </div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="signup">
         <div class="form-group">
@@ -134,7 +163,7 @@
             <ng-container ngProjectAs="description">
               <span i18n>⚠️ This functionality requires a lot of attention and extra moderation.</span>
 
-              <div class="alert alert-info alert-signup" *ngIf="signupAlertMessage">{{ signupAlertMessage }}</div>
+              <div class="alert pt-alert-primary alert-signup" *ngIf="signupAlertMessage">{{ signupAlertMessage }}</div>
             </ng-container>
 
             <ng-container ngProjectAs="extra">
@@ -156,7 +185,7 @@
 
                 <div *ngIf="formErrors.signup.limit" class="form-error">{{ formErrors.signup.limit }}</div>
 
-                <small i18n *ngIf="hasUnlimitedSignup()" class="text-muted">Signup won't be limited to a fixed number of users.</small>
+                <small i18n *ngIf="hasUnlimitedSignup()" class="muted small">Signup won't be limited to a fixed number of users.</small>
               </div>
 
               <div [ngClass]="getDisabledSignupClass()" class="mt-3">
@@ -189,6 +218,8 @@
             [clearable]="false"
           ></my-select-custom-value>
 
+          <my-user-real-quota-info [videoQuota]="getUserVideoQuota()"></my-user-real-quota-info>
+
           <div *ngIf="formErrors.user.videoQuota" class="form-error">{{ formErrors.user.videoQuota }}</div>
         </div>
 
@@ -210,20 +241,20 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- videos grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- videos grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">VIDEOS</div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="import">
 
         <ng-container formGroupName="videos">
 
-          <div class="form-group mt-4">
+          <div class="form-group">
             <label i18n for="importConcurrency">Import jobs concurrency</label>
-            <span i18n class="text-muted ml-1">allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</span>
+            <span i18n class="small muted ms-1">allows to import multiple videos in parallel. ⚠️ Requires a PeerTube restart.</span>
 
             <div class="number-with-unit">
               <input type="number" name="importConcurrency" formControlName="concurrency" />
@@ -237,17 +268,41 @@
             <my-peertube-checkbox
               inputName="importVideosHttpEnabled" formControlName="enabled"
               i18n-labelText labelText="Allow import with HTTP URL (e.g. YouTube)"
-            ></my-peertube-checkbox>
+            >
+              <ng-container ngProjectAs="description">
+                <span i18n>⚠️ If enabled, we recommend to use <a class="link-orange" href="https://docs.joinpeertube.org/maintain-configuration?id=security">a HTTP proxy</a> to prevent private URL access from your PeerTube server</span>
+              </ng-container>
+            </my-peertube-checkbox>
           </div>
 
           <div class="form-group" formGroupName="torrent">
             <my-peertube-checkbox
               inputName="importVideosTorrentEnabled" formControlName="enabled"
               i18n-labelText labelText="Allow import with a torrent file or a magnet URI"
-            ></my-peertube-checkbox>
+            >
+            <ng-container ngProjectAs="description">
+              <span i18n>⚠️ We don't recommend to enable this feature if you don't trust your users</span>
+            </ng-container>
+          </my-peertube-checkbox>
           </div>
 
         </ng-container>
+
+        <ng-container formGroupName="videoChannelSynchronization">
+          <div class="form-group">
+            <my-peertube-checkbox
+              inputName="importSynchronizationEnabled" formControlName="enabled"
+              i18n-labelText labelText="Allow channel synchronization with channel of other platforms like YouTube (requires allowing import with HTTP URL)"
+            >
+            <ng-container ngProjectAs="description">
+              <span i18n [hidden]="isImportVideosHttpEnabled()">
+                  ⛔ You need to allow  import with HTTP URL to be able to activate this feature.
+              </span>
+            </ng-container>
+            </my-peertube-checkbox>
+          </div>
+        </ng-container>
+
       </ng-container>
 
       <ng-container formGroupName="autoBlacklist">
@@ -272,12 +327,12 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- video channels grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- video channels grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">VIDEO CHANNELS</div>
     </div>
-    
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+    <div class="col-12 col-lg-8 col-xl-9">
       <div class="form-group" formGroupName="videoChannels">
         <label i18n for="videoChannelsMaxPerUser">Max video channels per user</label>
 
@@ -294,12 +349,12 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- search grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- search grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">SEARCH</div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="search">
         <ng-container formGroupName="remoteUri">
@@ -335,11 +390,11 @@
               i18n-labelText labelText="Enable global search"
             >
               <ng-container ngProjectAs="description">
-                <p i18n>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</p>
+                <div i18n>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</div>
 
-                <span i18n>
-                  You should only use moderated search indexes in production, or <a href="https://framagit.org/framasoft/peertube/search-index">host your own</a>.
-                </span>
+                <div i18n>
+                  You should only use moderated search indexes in production, or <a class="link-orange" href="https://framagit.org/framasoft/peertube/search-index">host your own</a>.
+                </div>
               </ng-container>
 
               <ng-container ngProjectAs="extra">
@@ -383,15 +438,15 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- federation grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- federation grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">FEDERATION</div>
       <div i18n class="inner-form-description">
-        Manage <a routerLink="/admin/follows">relations</a> with other instances.
+        Manage <a class="link-orange" routerLink="/admin/follows">relations</a> with other instances.
       </div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="followers">
         <ng-container formGroupName="instance">
@@ -435,10 +490,10 @@
                 i18n-labelText labelText="Automatically follow instances of a public index"
               >
                 <ng-container ngProjectAs="description">
-                  <p i18n>⚠️ This functionality requires a lot of attention and extra moderation.</p>
+                  <div i18n>⚠️ This functionality requires a lot of attention and extra moderation.</div>
 
                   <span i18n>
-                    See <a href="https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances" rel="noopener noreferrer" target="_blank">the documentation</a> for more information about the expected URL
+                    See <a class="link-orange" href="https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances" rel="noopener noreferrer" target="_blank">the documentation</a> for more information about the expected URL
                   </span>
                 </ng-container>
 
@@ -462,12 +517,12 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- administrators grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- administrators grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">ADMINISTRATORS</div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <div class="form-group" formGroupName="admin">
         <label i18n for="adminEmail">Admin email</label>
@@ -490,8 +545,8 @@
     </div>
   </div>
 
-  <div class="form-row mt-4"> <!-- Twitter grid -->
-    <div class="form-group col-12 col-lg-4 col-xl-3">
+  <div class="row mt-4"> <!-- Twitter grid -->
+    <div class="col-12 col-lg-4 col-xl-3">
       <div i18n class="inner-form-title">TWITTER</div>
       <div i18n class="inner-form-description">
         Provide the Twitter account representing your instance to improve link previews.
@@ -499,7 +554,7 @@
       </div>
     </div>
 
-    <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <div class="col-12 col-lg-8 col-xl-9">
 
       <ng-container formGroupName="services">
         <ng-container formGroupName="twitter">
@@ -526,7 +581,7 @@
                   If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<br />
                   If the instance is not, we use an image link card that will redirect to your PeerTube instance.<br /><br />
                   Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/w/blabla) on
-                  <a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>https://cards-dev.twitter.com/validator</a>
+                  <a class="link-orange" target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>https://cards-dev.twitter.com/validator</a>
                   to see if you instance is allowed.
                 </ng-container>
               </ng-template>

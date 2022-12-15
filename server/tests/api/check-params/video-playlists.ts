@@ -1,18 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
-  cleanupTests,
-  createSingleServer,
-  makeGetRequest,
-  PeerTubeServer,
-  PlaylistsCommand,
-  setAccessTokensToServers,
-  setDefaultVideoChannel
-} from '@shared/extra-utils'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
 import {
   HttpStatusCode,
   VideoPlaylistCreate,
@@ -23,6 +11,15 @@ import {
   VideoPlaylistReorder,
   VideoPlaylistType
 } from '@shared/models'
+import {
+  cleanupTests,
+  createSingleServer,
+  makeGetRequest,
+  PeerTubeServer,
+  PlaylistsCommand,
+  setAccessTokensToServers,
+  setDefaultVideoChannel
+} from '@shared/server-commands'
 
 describe('Test video playlists API validator', function () {
   let server: PeerTubeServer
@@ -211,7 +208,7 @@ describe('Test video playlists API validator', function () {
       }
     }
     const getUpdate = (params: any, playlistId: number | string) => {
-      return { ...params, playlistId: playlistId }
+      return { ...params, playlistId }
     }
 
     it('Should fail with an unauthenticated user', async function () {

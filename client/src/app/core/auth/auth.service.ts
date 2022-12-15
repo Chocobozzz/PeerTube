@@ -1,11 +1,11 @@
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { Observable, ReplaySubject, Subject, throwError as observableThrowError } from 'rxjs'
 import { catchError, map, mergeMap, share, tap } from 'rxjs/operators'
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { Notifier } from '@app/core/notification/notifier.service'
-import { objectToUrlEncoded, peertubeLocalStorage } from '@root-helpers/index'
+import { logger, OAuthUserTokens, objectToUrlEncoded, peertubeLocalStorage } from '@root-helpers/index'
 import { HttpStatusCode, MyUser as UserServerModel, OAuthClientLocal, User, UserLogin, UserRefreshToken } from '@shared/models'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest/rest-extractor.service'
@@ -34,6 +34,7 @@ export class AuthService {
 
   loginChangedSource: Observable<AuthStatus>
   userInformationLoaded = new ReplaySubject<boolean>(1)
+  tokensRefreshed = new ReplaySubject<void>(1)
   hotkeys: Hotkey[]
 
   private clientId: string = peertubeLocalStorage.getItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID)
@@ -51,9 +52,6 @@ export class AuthService {
   ) {
     this.loginChanged = new Subject<AuthStatus>()
     this.loginChangedSource = this.loginChanged.asObservable()
-
-    // Return null if there is nothing to load
-    this.user = AuthUser.load()
 
     // Set HotKeys
     this.hotkeys = [
@@ -76,6 +74,10 @@ export class AuthService {
     ]
   }
 
+  buildAuthUser (userInfo: Partial<User>, tokens: OAuthUserTokens) {
+    this.user = new AuthUser(userInfo, tokens)
+  }
+
   loadClientCredentials () {
     // Fetch the client_id/client_secret
     this.http.get<OAuthClientLocal>(AuthService.BASE_CLIENT_URL)
@@ -88,14 +90,14 @@ export class AuthService {
             peertubeLocalStorage.setItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID, this.clientId)
             peertubeLocalStorage.setItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET, this.clientSecret)
 
-            console.log('Client credentials loaded.')
+            logger.info('Client credentials loaded.')
           },
 
           error: err => {
             let errorMessage = err.message
 
             if (err.status === HttpStatusCode.FORBIDDEN_403) {
-              errorMessage = $localize`Cannot retrieve OAuth Client credentials: ${err.text}.
+              errorMessage = $localize`Cannot retrieve OAuth Client credentials: ${err.message}.
 Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.`
             }
 
@@ -139,7 +141,14 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
     return !!this.getAccessToken()
   }
 
-  login (username: string, password: string, token?: string) {
+  login (options: {
+    username: string
+    password: string
+    otpToken?: string
+    token?: string
+  }) {
+    const { username, password, token, otpToken } = options
+
     // Form url encoded
     const body = {
       client_id: this.clientId,
@@ -153,7 +162,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
 
     if (token) Object.assign(body, { externalAuthToken: token })
 
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    if (otpToken) headers = headers.set('x-peertube-otp', otpToken)
+
     return this.http.post<UserLogin>(AuthService.BASE_TOKEN_URL, objectToUrlEncoded(body), { headers })
                .pipe(
                  map(res => Object.assign(res, { username })),
@@ -175,12 +186,10 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           }
         },
 
-        error: err => console.error(err)
+        error: err => logger.error(err)
       })
 
     this.user = null
-
-    AuthUser.flush()
 
     this.setStatus(AuthStatus.LoggedOut)
 
@@ -190,7 +199,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
   refreshAccessToken () {
     if (this.refreshingTokenObservable) return this.refreshingTokenObservable
 
-    console.log('Refreshing token...')
+    logger.info('Refreshing token...')
 
     const refreshToken = this.getRefreshToken()
 
@@ -212,8 +221,8 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
                                            catchError(err => {
                                              this.refreshingTokenObservable = null
 
-                                             console.error(err)
-                                             console.log('Cannot refresh token -> logout...')
+                                             logger.error(err)
+                                             logger.info('Cannot refresh token -> logout...')
                                              this.logout()
                                              this.router.navigate([ '/login' ])
 
@@ -239,11 +248,18 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         .subscribe({
           next: res => {
             this.user.patch(res)
-            this.user.save()
 
             this.userInformationLoaded.next(true)
           }
         })
+  }
+
+  isOTPMissingError (err: HttpErrorResponse) {
+    if (err.status !== HttpStatusCode.UNAUTHORIZED_401) return false
+
+    if (err.headers.get('x-peertube-otp') !== 'required; app') return false
+
+    return true
   }
 
   private mergeUserInformation (obj: UserLoginWithUsername): Observable<UserLoginWithUserInformation> {
@@ -262,7 +278,6 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
     }
 
     this.user = new AuthUser(obj, hashTokens)
-    this.user.save()
 
     this.setStatus(AuthStatus.LoggedIn)
     this.userInformationLoaded.next(true)
@@ -272,7 +287,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
 
   private handleRefreshToken (obj: UserRefreshToken) {
     this.user.refreshTokens(obj.access_token, obj.refresh_token)
-    this.user.save()
+    this.tokensRefreshed.next()
   }
 
   private setStatus (status: AuthStatus) {

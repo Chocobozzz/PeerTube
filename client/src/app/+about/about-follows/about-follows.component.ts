@@ -1,7 +1,8 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit } from '@angular/core'
-import { ComponentPagination, hasMoreItems, Notifier, RestService } from '@app/core'
+import { ComponentPagination, hasMoreItems, Notifier, RestService, ServerService } from '@app/core'
 import { InstanceFollowService } from '@app/shared/shared-instance'
+import { Actor } from '@shared/models/actors'
 
 @Component({
   selector: 'my-about-follows',
@@ -10,6 +11,8 @@ import { InstanceFollowService } from '@app/shared/shared-instance'
 })
 
 export class AboutFollowsComponent implements OnInit {
+  instanceName: string
+
   followers: string[] = []
   followings: string[] = []
 
@@ -34,6 +37,7 @@ export class AboutFollowsComponent implements OnInit {
   }
 
   constructor (
+    private server: ServerService,
     private restService: RestService,
     private notifier: Notifier,
     private followService: InstanceFollowService
@@ -43,6 +47,8 @@ export class AboutFollowsComponent implements OnInit {
     this.loadMoreFollowers()
 
     this.loadMoreFollowings()
+
+    this.instanceName = this.server.getHTMLConfig().instance.name
   }
 
   loadAllFollowings () {
@@ -95,7 +101,7 @@ export class AboutFollowsComponent implements OnInit {
           next: resultList => {
             if (reset) this.followers = []
 
-            const newFollowers = resultList.data.map(r => r.follower.host)
+            const newFollowers = resultList.data.map(r => this.formatFollow(r.follower))
             this.followers = this.followers.concat(newFollowers)
 
             this.followersPagination.totalItems = resultList.total
@@ -113,7 +119,7 @@ export class AboutFollowsComponent implements OnInit {
           next: resultList => {
             if (reset) this.followings = []
 
-            const newFollowings = resultList.data.map(r => r.following.host)
+            const newFollowings = resultList.data.map(r => this.formatFollow(r.following))
             this.followings = this.followings.concat(newFollowings)
 
             this.followingsPagination.totalItems = resultList.total
@@ -121,6 +127,13 @@ export class AboutFollowsComponent implements OnInit {
 
           error: err => this.notifier.error(err.message)
         })
+  }
+
+  private formatFollow (actor: Actor) {
+    // Instance follow, only display host
+    if (actor.name === 'peertube') return actor.host
+
+    return actor.name + '@' + actor.host
   }
 
 }

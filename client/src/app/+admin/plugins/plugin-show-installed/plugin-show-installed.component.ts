@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { HooksService, Notifier, PluginService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { PeerTubePlugin, RegisterServerSettingOptions } from '@shared/models'
 import { PluginApiService } from '../shared/plugin-api.service'
 
@@ -22,7 +22,7 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
   private npmName: string
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private pluginService: PluginService,
     private pluginAPIService: PluginApiService,
     private notifier: Notifier,
@@ -111,7 +111,7 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
 
     this.form.patchValue(settingsValues)
 
-    setTimeout(() => this.hooks.runAction('action:admin-plugin-settings.init', 'admin-plugin', { npmName: this.npmName }))
+    this.hooks.runAction('action:admin-plugin-settings.init', 'admin-plugin', { npmName: this.npmName })
   }
 
   private getSetting (name: string) {
@@ -126,25 +126,9 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
 
   private async translateSettings (settings: RegisterServerSettingOptions[]) {
     for (const setting of settings) {
-      for (const key of [ 'label', 'html', 'descriptionHTML' ]) {
-        if (setting[key]) setting[key] = await this.pluginService.translateBy(this.npmName, setting[key])
-      }
-
-      if (Array.isArray(setting.options)) {
-        const newOptions = []
-
-        for (const o of setting.options) {
-          newOptions.push({
-            value: o.value,
-            label: await this.pluginService.translateBy(this.npmName, o.label)
-          })
-        }
-
-        setting.options = newOptions
-      }
+      await this.pluginService.translateSetting(this.npmName, setting)
     }
 
     return settings
   }
-
 }

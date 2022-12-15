@@ -32,7 +32,7 @@ async function register ({
     login (body) {
       if (body.id === 'ward') {
         return Promise.resolve({
-          username: 'ward-42',
+          username: '-ward-42',
           email: 'ward@example.com'
         })
       }

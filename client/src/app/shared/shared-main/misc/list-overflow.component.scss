@@ -7,6 +7,9 @@
 
 .list-overflow-parent {
   overflow: hidden;
+  display: flex;
+  // For the menu icon
+  max-width: calc(100vw - 30px);
 }
 
 .list-overflow-menu {

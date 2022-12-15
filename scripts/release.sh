@@ -26,6 +26,8 @@ fi
 
 maintainer_public_key=${MAINTAINER_GPG:-"583A612D890159BE"}
 
+peertube_directory=$(basename $(pwd))
+
 branch=$(git symbolic-ref --short -q HEAD)
 if [ "$branch" != "develop" ] && [[ "$branch" != release/* ]]; then
   echo "Need to be on develop or release branch."
@@ -76,17 +78,17 @@ rm -f "./client/dist/embed-stats.json"
                           "$directory_name/client/package.json" "$directory_name/config" \
                           "$directory_name/dist" "$directory_name/package.json" \
                           "$directory_name/scripts" "$directory_name/support" \
-                          "$directory_name/tsconfig.json" "$directory_name/yarn.lock")
+                          "$directory_name/yarn.lock")
 
   # temporary setup
   cd ..
-  ln -s "PeerTube" "$directory_name"
+  ln -s "$peertube_directory" "$directory_name"
 
   # archive creation + signing
-  zip -9 -r "PeerTube/$zip_name" "${directories_to_archive[@]}"
-  gpg --armor --detach-sign -u "$maintainer_public_key" "PeerTube/$zip_name"
-  XZ_OPT="-e9 -T0" tar cfJ "PeerTube/$tar_name" "${directories_to_archive[@]}"
-  gpg --armor --detach-sign -u "$maintainer_public_key" "PeerTube/$tar_name"
+  zip -9 -r "$peertube_directory/$zip_name" "${directories_to_archive[@]}"
+  gpg --armor --detach-sign -u "$maintainer_public_key" "$peertube_directory/$zip_name"
+  XZ_OPT="-e9 -T0" tar cfJ "$peertube_directory/$tar_name" "${directories_to_archive[@]}"
+  gpg --armor --detach-sign -u "$maintainer_public_key" "$peertube_directory/$tar_name"
 
   # temporary setup destruction
   rm "$directory_name"
@@ -102,6 +104,9 @@ rm -f "./client/dist/embed-stats.json"
     github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version" --description "$changelog" "$github_prerelease_option"
   fi
 
+  # Wait for the release to be published, we had some issues when the files were not uploaded because of "unknown release" error
+  sleep 2
+
   github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name" --file "$zip_name"
   github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name.asc" --file "$zip_name.asc"
   github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$tar_name" --file "$tar_name"
@@ -116,5 +121,10 @@ rm -f "./client/dist/embed-stats.json"
       git merge "$branch"
       git push origin master
       git checkout "$branch"
+
+      # Release types package
+      npm run generate-types-package "$version"
+      cd packages/types/dist
+      npm publish --access public
   fi
 )

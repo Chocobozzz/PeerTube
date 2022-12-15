@@ -1,10 +1,10 @@
 import express from 'express'
-import { OAuthClientLocal } from '../../../shared'
-import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
+import { isTestOrDevInstance } from '@server/helpers/core-utils'
+import { OAuthClientModel } from '@server/models/oauth/oauth-client'
+import { HttpStatusCode, OAuthClientLocal } from '@shared/models'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { asyncMiddleware, openapiOperationDoc } from '../../middlewares'
-import { OAuthClientModel } from '../../models/oauth/oauth-client'
 
 const oauthClientsRouter = express.Router()
 
@@ -23,7 +23,7 @@ async function getLocalClient (req: express.Request, res: express.Response, next
   }
 
   // Don't make this check if this is a test instance
-  if (process.env.NODE_ENV !== 'test' && req.get('host') !== headerHostShouldBe) {
+  if (!isTestOrDevInstance() && req.get('host') !== headerHostShouldBe) {
     logger.info('Getting client tokens for host %s is forbidden (expected %s).', req.get('host'), headerHostShouldBe)
     return res.fail({
       status: HttpStatusCode.FORBIDDEN_403,

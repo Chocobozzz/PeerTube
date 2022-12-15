@@ -1,59 +1,46 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import {
-  cleanupTests,
-  createSingleServer,
-  HistoryCommand,
-  killallServers,
-  PeerTubeServer,
-  setAccessTokensToServers,
-  wait
-} from '@shared/extra-utils'
-import { HttpStatusCode, Video } from '@shared/models'
-
-const expect = chai.expect
+import { expect } from 'chai'
+import { wait } from '@shared/core-utils'
+import { Video } from '@shared/models'
+import { cleanupTests, createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
 describe('Test videos history', function () {
   let server: PeerTubeServer = null
+  let video1Id: number
   let video1UUID: string
   let video2UUID: string
   let video3UUID: string
   let video3WatchedDate: Date
   let userAccessToken: string
-  let command: HistoryCommand
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
 
-    command = server.history
+    // 10 seconds long
+    const fixture = 'video_short1.webm'
 
     {
-      const { uuid } = await server.videos.upload({ attributes: { name: 'video 1' } })
+      const { id, uuid } = await server.videos.upload({ attributes: { name: 'video 1', fixture } })
       video1UUID = uuid
+      video1Id = id
     }
 
     {
-      const { uuid } = await server.videos.upload({ attributes: { name: 'video 2' } })
+      const { uuid } = await server.videos.upload({ attributes: { name: 'video 2', fixture } })
       video2UUID = uuid
     }
 
     {
-      const { uuid } = await server.videos.upload({ attributes: { name: 'video 3' } })
+      const { uuid } = await server.videos.upload({ attributes: { name: 'video 3', fixture } })
       video3UUID = uuid
     }
 
-    const user = {
-      username: 'user_1',
-      password: 'super password'
-    }
-    await server.users.create({ username: user.username, password: user.password })
-    userAccessToken = await server.login.getAccessToken(user)
+    userAccessToken = await server.users.generateUserAndToken('user_1')
   })
 
   it('Should get videos, without watching history', async function () {
@@ -68,8 +55,8 @@ describe('Test videos history', function () {
   })
 
   it('Should watch the first and second video', async function () {
-    await command.wathVideo({ videoId: video2UUID, currentTime: 8 })
-    await command.wathVideo({ videoId: video1UUID, currentTime: 3 })
+    await server.views.view({ id: video2UUID, token: server.accessToken, currentTime: 8 })
+    await server.views.view({ id: video1UUID, token: server.accessToken, currentTime: 3 })
   })
 
   it('Should return the correct history when listing, searching and getting videos', async function () {
@@ -122,9 +109,9 @@ describe('Test videos history', function () {
 
   it('Should have these videos when listing my history', async function () {
     video3WatchedDate = new Date()
-    await command.wathVideo({ videoId: video3UUID, currentTime: 2 })
+    await server.views.view({ id: video3UUID, token: server.accessToken, currentTime: 2 })
 
-    const body = await command.list()
+    const body = await server.history.list()
 
     expect(body.total).to.equal(3)
 
@@ -135,14 +122,14 @@ describe('Test videos history', function () {
   })
 
   it('Should not have videos history on another user', async function () {
-    const body = await command.list({ token: userAccessToken })
+    const body = await server.history.list({ token: userAccessToken })
 
     expect(body.total).to.equal(0)
     expect(body.data).to.have.lengthOf(0)
   })
 
   it('Should be able to search through videos in my history', async function () {
-    const body = await command.list({ search: '2' })
+    const body = await server.history.list({ search: '2' })
     expect(body.total).to.equal(1)
 
     const videos = body.data
@@ -150,11 +137,11 @@ describe('Test videos history', function () {
   })
 
   it('Should clear my history', async function () {
-    await command.remove({ beforeDate: video3WatchedDate.toISOString() })
+    await server.history.removeAll({ beforeDate: video3WatchedDate.toISOString() })
   })
 
   it('Should have my history cleared', async function () {
-    const body = await command.list()
+    const body = await server.history.list()
     expect(body.total).to.equal(1)
 
     const videos = body.data
@@ -166,7 +153,10 @@ describe('Test videos history', function () {
       videosHistoryEnabled: false
     })
 
-    await command.wathVideo({ videoId: video2UUID, currentTime: 8, expectedStatus: HttpStatusCode.CONFLICT_409 })
+    await server.views.view({ id: video2UUID, token: server.accessToken, currentTime: 8 })
+
+    const { data } = await server.history.list()
+    expect(data[0].name).to.not.equal('video 2')
   })
 
   it('Should re-enable videos history', async function () {
@@ -174,14 +164,10 @@ describe('Test videos history', function () {
       videosHistoryEnabled: true
     })
 
-    await command.wathVideo({ videoId: video1UUID, currentTime: 8 })
+    await server.views.view({ id: video2UUID, token: server.accessToken, currentTime: 8 })
 
-    const body = await command.list()
-    expect(body.total).to.equal(2)
-
-    const videos = body.data
-    expect(videos[0].name).to.equal('video 1')
-    expect(videos[1].name).to.equal('video 3')
+    const { data } = await server.history.list()
+    expect(data[0].name).to.equal('video 2')
   })
 
   it('Should not clean old history', async function () {
@@ -195,7 +181,7 @@ describe('Test videos history', function () {
 
     // Should still have history
 
-    const body = await command.list()
+    const body = await server.history.list()
     expect(body.total).to.equal(2)
   })
 
@@ -208,8 +194,28 @@ describe('Test videos history', function () {
 
     await wait(6000)
 
-    const body = await command.list()
+    const body = await server.history.list()
     expect(body.total).to.equal(0)
+  })
+
+  it('Should delete a specific history element', async function () {
+    {
+      await server.views.view({ id: video1UUID, token: server.accessToken, currentTime: 4 })
+      await server.views.view({ id: video2UUID, token: server.accessToken, currentTime: 8 })
+    }
+
+    {
+      const body = await server.history.list()
+      expect(body.total).to.equal(2)
+    }
+
+    {
+      await server.history.removeElement({ videoId: video1Id })
+
+      const body = await server.history.list()
+      expect(body.total).to.equal(1)
+      expect(body.data[0].uuid).to.equal(video2UUID)
+    }
   })
 
   after(async function () {

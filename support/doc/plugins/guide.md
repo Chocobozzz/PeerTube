@@ -12,15 +12,15 @@
     - [Storage](#storage)
     - [Update video constants](#update-video-constants)
     - [Add custom routes](#add-custom-routes)
+    - [Add custom WebSocket handlers](#add-custom-websocket-handlers)
     - [Add external auth methods](#add-external-auth-methods)
     - [Add new transcoding profiles](#add-new-transcoding-profiles)
     - [Server helpers](#server-helpers)
   - [Client API (themes & plugins)](#client-api-themes--plugins)
-    - [Plugin static route](#plugin-static-route)
+    - [Get plugin static and router routes](#get-plugin-static-and-router-routes)
     - [Notifier](#notifier)
     - [Markdown Renderer](#markdown-renderer)
     - [Auth header](#auth-header)
-    - [Plugin router route](#plugin-router-route)
     - [Custom Modal](#custom-modal)
     - [Translate](#translate)
     - [Get public settings](#get-public-settings)
@@ -30,6 +30,7 @@
     - [Plugin selector on HTML elements](#plugin-selector-on-html-elements)
     - [HTML placeholder elements](#html-placeholder-elements)
     - [Add/remove left menu links](#addremove-left-menu-links)
+    - [Create client page](#create-client-page)
   - [Publishing](#publishing)
 - [Write a plugin/theme](#write-a-plugintheme)
   - [Clone the quickstart repository](#clone-the-quickstart-repository)
@@ -317,6 +318,43 @@ The `ping` route can be accessed using:
  * Or `/plugins/:pluginName/router/ping`
 
 
+#### Add custom WebSocket handlers
+
+**PeerTube >= 5.0**
+
+You can create custom WebSocket servers (like [ws](https://github.com/websockets/ws) for example) using `registerWebSocketRoute`:
+
+```js
+function register ({
+  registerWebSocketRoute,
+  peertubeHelpers
+}) {
+  const wss = new WebSocketServer({ noServer: true })
+
+  wss.on('connection', function connection(ws) {
+    peertubeHelpers.logger.info('WebSocket connected!')
+
+    setInterval(() => {
+      ws.send('WebSocket message sent by server');
+    }, 1000)
+  })
+
+  registerWebSocketRoute({
+    route: '/my-websocket-route',
+
+    handler: (request, socket, head) => {
+      wss.handleUpgrade(request, socket, head, ws => {
+        wss.emit('connection', ws, request)
+      })
+    }
+  })
+}
+```
+
+The `my-websocket-route` route can be accessed using:
+ * `/plugins/:pluginName/:pluginVersion/ws/my-websocket-route`
+ * Or `/plugins/:pluginName/ws/my-websocket-route`
+
 #### Add external auth methods
 
 If you want to add a classic username/email and password auth method (like [LDAP](https://framagit.org/framasoft/peertube/official-plugins/-/tree/master/peertube-plugin-auth-ldap) for example):
@@ -531,7 +569,7 @@ See the [plugin API reference](https://docs.joinpeertube.org/api-plugins) to see
 
 ### Client API (themes & plugins)
 
-#### Plugin static route
+#### Get plugin static and router routes
 
 To get your plugin static route:
 
@@ -541,6 +579,24 @@ function register (...) {
   const imageUrl = baseStaticUrl + '/images/chocobo.png'
 }
 ```
+
+And to get your plugin router route, use `peertubeHelpers.getBaseRouterRoute()`:
+
+```js
+function register (...) {
+  registerHook({
+    target: 'action:video-watch.video.loaded',
+    handler: ({ video }) => {
+      fetch(peertubeHelpers.getBaseRouterRoute() + '/my/plugin/api', {
+        method: 'GET',
+        headers: peertubeHelpers.getAuthHeader()
+      }).then(res => res.json())
+        .then(data => console.log('Hi %s.', data))
+    }
+  })
+}
+```
+
 
 #### Notifier
 
@@ -589,27 +645,6 @@ function register (...) {
         headers: peertubeHelpers.getAuthHeader()
       }).then(res => res.json())
         .then(data => console.log('Hi %s.', data.username))
-    }
-  })
-}
-```
-
-#### Plugin router route
-
-**PeerTube >= 3.3**
-
-To get your plugin router route, you can use `peertubeHelpers.getBaseRouterRoute()`:
-
-```js
-function register (...) {
-  registerHook({
-    target: 'action:video-watch.video.loaded',
-    handler: ({ video }) => {
-      fetch(peertubeHelpers.getBaseRouterRoute() + '/my/plugin/api', {
-        method: 'GET',
-        headers: peertubeHelpers.getAuthHeader()
-      }).then(res => res.json())
-        .then(data => console.log('Hi %s.', data))
     }
   })
 }
@@ -686,18 +721,37 @@ async function register ({ registerVideoField, peertubeHelpers }) {
     name: 'my-field-name,
     label: 'My added field',
     descriptionHTML: 'Optional description',
+
+    // type: 'input' | 'input-checkbox' | 'input-password' | 'input-textarea' | 'markdown-text' | 'markdown-enhanced' | 'select' | 'html'
+    // /!\ 'input-checkbox' could send "false" and "true" strings instead of boolean
     type: 'input-textarea',
+
     default: '',
+
     // Optional, to hide a field depending on the current form state
     // liveVideo is in the options object when the user is creating/updating a live
     // videoToUpdate is in the options object when the user is updating a video
     hidden: ({ formValues, videoToUpdate, liveVideo }) => {
       return formValues.pluginData['other-field'] === 'toto'
+    },
+
+    // Optional, to display an error depending on the form state
+    error: ({ formValues, value }) => {
+      if (formValues['privacy'] !== 1 && formValues['privacy'] !== 2) return { error: false }
+      if (value === true) return { error: false }
+
+      return { error: true, text: 'Should be enabled' }
     }
   }
 
+  const videoFormOptions = {
+    // Optional, to choose to put your setting in a specific tab in video form
+    // type: 'main' | 'plugin-settings'
+    tab: 'main'
+  }
+
   for (const type of [ 'upload', 'import-url', 'import-torrent', 'update', 'go-live' ]) {
-    registerVideoField(commonOptions, { type })
+    registerVideoField(commonOptions, { type, ...videoFormOptions  })
   }
 }
 ```
@@ -787,6 +841,21 @@ See the complete list on https://docs.joinpeertube.org/api-plugins
 
 Left menu links can be filtered (add/remove a section or add/remove links) using the `filter:left-menu.links.create.result` client hook.
 
+#### Create client page
+
+To create a client page, register a new client route:
+
+```js
+function register ({ registerClientRoute }) {
+  registerClientRoute({
+    route: 'my-super/route',
+    onMount: ({ rootEl }) => {
+      rootEl.innerHTML = 'hello'
+    }
+  })
+}
+```
+
 
 ### Publishing
 
@@ -875,10 +944,64 @@ And if you don't need CSS or client script files, use an empty `array`:
 ### Write code
 
 Now you can register hooks or settings, write CSS and add static directories to your plugin or your theme :)
+It's up to you to check the code you write will be compatible with the PeerTube NodeJS version, and will be supported by web browsers.
 
-**Caution:** It's up to you to check the code you write will be compatible with the PeerTube NodeJS version,
-and will be supported by web browsers.
+**JavaScript**
+
 If you want to write modern JavaScript, please use a transpiler like [Babel](https://babeljs.io/).
+
+**Typescript**
+
+The easiest way to use __Typescript__ for both front-end and backend code is to clone [peertube-plugin-quickstart-typescript](https://github.com/JohnXLivingston/peertube-plugin-quickstart-typescript/) (also available on [framagit](https://framagit.org/Livingston/peertube-plugin-quickstart-typescript/)) instead of `peertube-plugin-quickstart`.
+Please read carefully the [README file](https://github.com/JohnXLivingston/peertube-plugin-quickstart-typescript/blob/main/README.md), as there are some other differences with `peertube-plugin-quickstart` (using SCSS instead of CSS, linting rules, ...).
+
+If you don't want to use `peertube-plugin-quickstart-typescript`, you can also manually add a dev dependency to __Peertube__ types:
+
+```
+npm install --save-dev @peertube/peertube-types
+```
+
+This package exposes *server* definition files by default:
+```ts
+import { RegisterServerOptions } from '@peertube/peertube-types'
+
+export async function register ({ registerHook }: RegisterServerOptions) {
+  registerHook({
+    target: 'action:application.listening',
+    handler: () => displayHelloWorld()
+  })
+}
+```
+
+But it also exposes client types and various models used in __PeerTube__:
+```ts
+import { Video } from '@peertube/peertube-types';
+import { RegisterClientOptions } from '@peertube/peertube-types/client';
+
+function register({ registerHook, peertubeHelpers }: RegisterClientOptions) {
+  registerHook({
+    target: 'action:admin-plugin-settings.init',
+    handler: ({ npmName }: { npmName: string }) => {
+      if ('peertube-plugin-transcription' !== npmName) {
+        return;
+      }
+    },
+  });
+
+  registerHook({
+    target: 'action:video-watch.video.loaded',
+    handler: ({ video }: { video: Video }) => {
+      fetch(`${peertubeHelpers.getBaseRouterRoute()}/videos/${video.uuid}/captions`, {
+        method: 'PUT',
+        headers: peertubeHelpers.getAuthHeader(),
+      }).then((res) => res.json())
+        .then((data) => console.log('Hi %s.', data));
+    },
+  });
+}
+
+export { register };
+```
 
 ### Add translations
 
@@ -933,13 +1056,16 @@ You built files are in the `dist/` directory. Check `package.json` to correctly 
 
 ### Test your plugin/theme
 
+PeerTube dev server (ran with `npm run dev` on `localhost:3000`) can't inject plugin CSS.
+It's the reason why we don't use the dev mode but build PeerTube instead.
+
 You'll need to have a local PeerTube instance:
  * Follow the [dev prerequisites](https://github.com/Chocobozzz/PeerTube/blob/develop/.github/CONTRIBUTING.md#prerequisites)
  (to clone the repository, install dependencies and prepare the database)
- * Build PeerTube (`--light` to only build the english language):
+ * Build PeerTube:
 
 ```
-$ npm run build -- --light
+$ npm run build
 ```
 
  * Build the CLI:
@@ -951,7 +1077,7 @@ $ npm run setup:cli
  * Run PeerTube (you can access to your instance on http://localhost:9000):
 
 ```
-$ NODE_ENV=test npm start
+$ NODE_ENV=dev npm start
 ```
 
  * Register the instance via the CLI:

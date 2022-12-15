@@ -18,9 +18,14 @@ export class MyAccountDangerZoneComponent {
   ) { }
 
   async deleteMe () {
-    const res = await this.confirmService.confirmWithInput(
-      // eslint-disable-next-line max-len
-      $localize`Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.`,
+    const res = await this.confirmService.confirmWithExpectedInput(
+      $localize`Are you sure you want to delete your account?` +
+        '<br /><br />' +
+        // eslint-disable-next-line max-len
+        $localize`This will delete all your data, including channels, videos, comments and you won't be able to create another user on this instance with "${this.user.username}" username.` +
+        '<br /><br />' +
+        $localize`Content cached by other servers and other third-parties might make longer to be deleted.`,
+
       $localize`Type your username to confirm`,
       this.user.username,
       $localize`Delete your account`,

@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { cleanupTests, createSingleServer, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { expect } from 'chai'
+import { wait } from '@shared/core-utils'
 import { HttpStatusCode, VideoCreateResult, VideoPrivacy } from '@shared/models'
-
-const expect = chai.expect
+import { cleanupTests, createSingleServer, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/server-commands'
 
 describe('Test video privacy', function () {
   const servers: PeerTubeServer[] = []
@@ -47,7 +45,7 @@ describe('Test video privacy', function () {
   describe('Private and internal videos', function () {
 
     it('Should upload a private and internal videos on server 1', async function () {
-      this.timeout(10000)
+      this.timeout(50000)
 
       for (const privacy of [ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL ]) {
         const attributes = { privacy }
@@ -130,7 +128,7 @@ describe('Test video privacy', function () {
   describe('Unlisted videos', function () {
 
     it('Should upload an unlisted video on server 2', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       const attributes = {
         name: 'unlisted video',
@@ -161,7 +159,7 @@ describe('Test video privacy', function () {
     })
 
     it('Should not be able to get this unlisted video using its id', async function () {
-      await servers[1].videos.get({ id: unlistedVideo.id, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await servers[1].videos.get({ id: unlistedVideo.id, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should be able to get this unlisted video using its uuid/shortUUID', async function () {
@@ -209,7 +207,7 @@ describe('Test video privacy', function () {
   describe('Privacy update', function () {
 
     it('Should update the private and internal videos to public on server 1', async function () {
-      this.timeout(10000)
+      this.timeout(100000)
 
       now = Date.now()
 
@@ -230,6 +228,7 @@ describe('Test video privacy', function () {
         await servers[0].videos.update({ id: internalVideoId, attributes })
       }
 
+      await wait(10000)
       await waitJobs(servers)
     })
 

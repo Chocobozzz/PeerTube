@@ -1,6 +1,5 @@
 import express from 'express'
-import { UserRight } from '../../shared'
-import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
+import { HttpStatusCode, UserRight } from '@shared/models'
 import { logger } from '../helpers/logger'
 
 function ensureUserHasRight (userRight: UserRight) {

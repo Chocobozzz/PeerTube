@@ -1,11 +1,19 @@
-import decache from 'decache'
 import express from 'express'
 import { createReadStream, createWriteStream } from 'fs'
 import { ensureDir, outputFile, readJSON } from 'fs-extra'
+import { Server } from 'http'
 import { basename, join } from 'path'
+import { decachePlugin } from '@server/helpers/decache'
+import { ApplicationModel } from '@server/models/application/application'
 import { MOAuthTokenUser, MUser } from '@server/types/models'
 import { getCompleteLocale } from '@shared/core-utils'
-import { ClientScript, PluginPackageJson, PluginTranslation, PluginTranslationPaths, RegisterServerHookOptions } from '@shared/models'
+import {
+  ClientScriptJSON,
+  PluginPackageJSON,
+  PluginTranslation,
+  PluginTranslationPathsJSON,
+  RegisterServerHookOptions
+} from '@shared/models'
 import { getHookType, internalRunHook } from '../../../shared/core-utils/plugins/hooks'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { ServerHook, ServerHookName } from '../../../shared/models/plugins/server/server-hook.model'
@@ -17,7 +25,7 @@ import { PluginModel } from '../../models/server/plugin'
 import { PluginLibrary, RegisterServerAuthExternalOptions, RegisterServerAuthPassOptions, RegisterServerOptions } from '../../types/plugins'
 import { ClientHtml } from '../client-html'
 import { RegisterHelpers } from './register-helpers'
-import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
+import { installNpmPlugin, installNpmPluginFromDisk, rebuildNativePlugins, removeNpmPlugin } from './yarn'
 
 export interface RegisteredPlugin {
   npmName: string
@@ -31,7 +39,7 @@ export interface RegisteredPlugin {
   path: string
 
   staticDirs: { [name: string]: string }
-  clientScripts: { [name: string]: ClientScript }
+  clientScripts: { [name: string]: ClientScriptJSON }
 
   css: string[]
 
@@ -60,7 +68,35 @@ export class PluginManager implements ServerHook {
   private hooks: { [name: string]: HookInformationValue[] } = {}
   private translations: PluginLocalesTranslations = {}
 
+  private server: Server
+
   private constructor () {
+  }
+
+  init (server: Server) {
+    this.server = server
+  }
+
+  registerWebSocketRouter () {
+    this.server.on('upgrade', (request, socket, head) => {
+      const url = request.url
+
+      const matched = url.match(`/plugins/([^/]+)/([^/]+/)?ws(/.*)`)
+      if (!matched) return
+
+      const npmName = PluginModel.buildNpmName(matched[1], PluginType.PLUGIN)
+      const subRoute = matched[3]
+
+      const result = this.getRegisteredPluginOrTheme(npmName)
+      if (!result) return
+
+      const routes = result.registerHelpers.getWebSocketRoutes()
+
+      const wss = routes.find(r => r.route.startsWith(subRoute))
+      if (!wss) return
+
+      wss.handler(request, socket, head)
+    })
   }
 
   // ###################### Getters ######################
@@ -209,8 +245,12 @@ export class PluginManager implements ServerHook {
     for (const hook of this.hooks[hookName]) {
       logger.debug('Running hook %s of plugin %s.', hookName, hook.npmName)
 
-      result = await internalRunHook(hook.handler, hookType, result, params, err => {
-        logger.error('Cannot run hook %s of plugin %s.', hookName, hook.pluginName, { err })
+      result = await internalRunHook({
+        handler: hook.handler,
+        hookType,
+        result,
+        params,
+        onError: err => { logger.error('Cannot run hook %s of plugin %s.', hookName, hook.pluginName, { err }) }
       })
     }
 
@@ -271,6 +311,8 @@ export class PluginManager implements ServerHook {
       logger.info('Regenerating registered plugin CSS to global file.')
       await this.regeneratePluginGlobalCSS()
     }
+
+    ClientHtml.invalidCache()
   }
 
   // ###################### Installation ######################
@@ -372,6 +414,12 @@ export class PluginManager implements ServerHook {
     logger.info('Plugin %s uninstalled.', npmName)
   }
 
+  async rebuildNativePluginsIfNeeded () {
+    if (!await ApplicationModel.nodeABIChanged()) return
+
+    return rebuildNativePlugins()
+  }
+
   // ###################### Private register ######################
 
   private async registerPluginOrTheme (plugin: PluginModel) {
@@ -392,7 +440,7 @@ export class PluginManager implements ServerHook {
       registerHelpers = result.registerStore
     }
 
-    const clientScripts: { [id: string]: ClientScript } = {}
+    const clientScripts: { [id: string]: ClientScriptJSON } = {}
     for (const c of packageJSON.clientScripts) {
       clientScripts[c.script] = c
     }
@@ -413,14 +461,16 @@ export class PluginManager implements ServerHook {
     }
 
     await this.addTranslations(plugin, npmName, packageJSON.translations)
+
+    ClientHtml.invalidCache()
   }
 
-  private async registerPlugin (plugin: PluginModel, pluginPath: string, packageJSON: PluginPackageJson) {
+  private async registerPlugin (plugin: PluginModel, pluginPath: string, packageJSON: PluginPackageJSON) {
     const npmName = PluginModel.buildNpmName(plugin.name, plugin.type)
 
     // Delete cache if needed
     const modulePath = join(pluginPath, packageJSON.library)
-    decache(modulePath)
+    decachePlugin(pluginPath, modulePath)
     const library: PluginLibrary = require(modulePath)
 
     if (!isLibraryCodeValid(library)) {
@@ -442,7 +492,7 @@ export class PluginManager implements ServerHook {
 
   // ###################### Translations ######################
 
-  private async addTranslations (plugin: PluginModel, npmName: string, translationPaths: PluginTranslationPaths) {
+  private async addTranslations (plugin: PluginModel, npmName: string, translationPaths: PluginTranslationPathsJSON) {
     for (const locale of Object.keys(translationPaths)) {
       const path = translationPaths[locale]
       const json = await readJSON(join(this.getPluginPath(plugin.name, plugin.type), path))
@@ -467,8 +517,6 @@ export class PluginManager implements ServerHook {
   // ###################### CSS ######################
 
   private resetCSSGlobalFile () {
-    ClientHtml.invalidCache()
-
     return outputFile(PLUGIN_GLOBAL_CSS_PATH, '')
   }
 
@@ -476,8 +524,6 @@ export class PluginManager implements ServerHook {
     for (const cssPath of cssRelativePaths) {
       await this.concatFiles(join(pluginPath, cssPath), PLUGIN_GLOBAL_CSS_PATH)
     }
-
-    ClientHtml.invalidCache()
   }
 
   private concatFiles (input: string, output: string) {
@@ -513,7 +559,7 @@ export class PluginManager implements ServerHook {
   private getPackageJSON (pluginName: string, pluginType: PluginType) {
     const pluginPath = join(this.getPluginPath(pluginName, pluginType), 'package.json')
 
-    return readJSON(pluginPath) as Promise<PluginPackageJson>
+    return readJSON(pluginPath) as Promise<PluginPackageJSON>
   }
 
   private getPluginPath (pluginName: string, pluginType: PluginType) {
@@ -557,14 +603,14 @@ export class PluginManager implements ServerHook {
       if (!this.hooks[options.target]) this.hooks[options.target] = []
 
       this.hooks[options.target].push({
-        npmName: npmName,
+        npmName,
         pluginName: plugin.name,
         handler: options.handler,
         priority: options.priority || 0
       })
     }
 
-    const registerHelpers = new RegisterHelpers(npmName, plugin, onHookAdded.bind(this))
+    const registerHelpers = new RegisterHelpers(npmName, plugin, this.server, onHookAdded.bind(this))
 
     return {
       registerStore: registerHelpers,
@@ -572,7 +618,7 @@ export class PluginManager implements ServerHook {
     }
   }
 
-  private sanitizeAndCheckPackageJSONOrThrow (packageJSON: PluginPackageJson, pluginType: PluginType) {
+  private sanitizeAndCheckPackageJSONOrThrow (packageJSON: PluginPackageJSON, pluginType: PluginType) {
     if (!packageJSON.staticDirs) packageJSON.staticDirs = {}
     if (!packageJSON.css) packageJSON.css = []
     if (!packageJSON.clientScripts) packageJSON.clientScripts = []

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import 'mocha'
 import { expect } from 'chai'
 import { VideoConstantManagerFactory } from '@server/lib/plugins/video-constant-manager-factory'
 import {

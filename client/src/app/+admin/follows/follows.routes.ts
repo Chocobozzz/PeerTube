@@ -42,7 +42,12 @@ export const FollowsRoutes: Routes = [
       },
       {
         path: 'video-redundancies-list',
-        component: VideoRedundanciesListComponent
+        component: VideoRedundanciesListComponent,
+        data: {
+          meta: {
+            title: $localize`Redundancy`
+          }
+        }
       }
     ]
   }

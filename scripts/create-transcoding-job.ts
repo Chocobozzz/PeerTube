@@ -1,15 +1,12 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import { program } from 'commander'
-import { VideoModel } from '../server/models/video/video'
+import { isUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
+import { computeResolutionsToTranscode } from '@server/helpers/ffmpeg'
+import { CONFIG } from '@server/initializers/config'
+import { buildTranscodingJob } from '@server/lib/video'
+import { VideoState, VideoTranscodingPayload } from '@shared/models'
 import { initDatabaseModels } from '../server/initializers/database'
 import { JobQueue } from '../server/lib/job-queue'
-import { computeLowerResolutionsToTranscode } from '@server/helpers/ffprobe-utils'
-import { VideoState, VideoTranscodingPayload } from '@shared/models'
-import { CONFIG } from '@server/initializers/config'
-import { isUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
-import { addTranscodingJob } from '@server/lib/video'
+import { VideoModel } from '../server/models/video/video'
 
 program
   .option('-v, --video [videoUUID]', 'Video UUID')
@@ -46,24 +43,29 @@ async function run () {
     return
   }
 
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(uuid)
+  const video = await VideoModel.loadFull(uuid)
   if (!video) throw new Error('Video not found.')
 
   const dataInput: VideoTranscodingPayload[] = []
   const maxResolution = video.getMaxQualityFile().resolution
 
+  // FIXME: check the file has audio
+  const hasAudio = true
+
   // Generate HLS files
   if (options.generateHls || CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false) {
     const resolutionsEnabled = options.resolution
       ? [ parseInt(options.resolution) ]
-      : computeLowerResolutionsToTranscode(maxResolution, 'vod').concat([ maxResolution ])
+      : computeResolutionsToTranscode({ input: maxResolution, type: 'vod', includeInput: true, strictLower: false, hasAudio })
 
     for (const resolution of resolutionsEnabled) {
       dataInput.push({
-        type: 'new-resolution-to-hls',
+        type: 'new-resolution-to-hls' as 'new-resolution-to-hls',
         videoUUID: video.uuid,
         resolution,
-        isPortraitMode: false,
+
+        hasAudio,
+
         copyCodecs: false,
         isNewVideo: false,
         isMaxQuality: maxResolution === resolution,
@@ -73,8 +75,13 @@ async function run () {
   } else {
     if (options.resolution !== undefined) {
       dataInput.push({
-        type: 'new-resolution-to-webtorrent',
+        type: 'new-resolution-to-webtorrent' as 'new-resolution-to-webtorrent',
         videoUUID: video.uuid,
+
+        createHLSIfNeeded: true,
+
+        hasAudio,
+
         isNewVideo: false,
         resolution: parseInt(options.resolution)
       })
@@ -85,20 +92,21 @@ async function run () {
       }
 
       dataInput.push({
-        type: 'optimize-to-webtorrent',
+        type: 'optimize-to-webtorrent' as 'optimize-to-webtorrent',
         videoUUID: video.uuid,
         isNewVideo: false
       })
     }
   }
 
-  JobQueue.Instance.init(true)
+  JobQueue.Instance.init()
 
   video.state = VideoState.TO_TRANSCODE
   await video.save()
 
   for (const d of dataInput) {
-    await addTranscodingJob(d, {})
+    await JobQueue.Instance.createJob(await buildTranscodingJob(d))
+
     console.log('Transcoding job for video %s created.', video.uuid)
   }
 }

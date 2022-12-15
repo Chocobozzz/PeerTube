@@ -1,8 +1,8 @@
 import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
-import { durationToString, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
+import { durationToString, getAbsoluteAPIUrl, getAbsoluteEmbedUrl, prepareIcu } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
-import { buildVideoWatchPath } from '@shared/core-utils'
+import { buildVideoWatchPath, getAllFiles } from '@shared/core-utils'
 import { peertubeTranslate } from '@shared/core-utils/i18n'
 import {
   ActorImage,
@@ -19,6 +19,9 @@ import {
 } from '@shared/models'
 
 export class Video implements VideoServerModel {
+  private static readonly viewsICU = prepareIcu($localize`{views, plural, =0 {No view} =1 {1 view} other {{views} views}}`)
+  private static readonly viewersICU = prepareIcu($localize`{viewers, plural, =0 {No viewers} =1 {1 viewer} other {{viewers} viewers}}`)
+
   byVideoChannel: string
   byAccount: string
 
@@ -31,6 +34,7 @@ export class Video implements VideoServerModel {
   language: VideoConstant<string>
   privacy: VideoConstant<VideoPrivacy>
 
+  truncatedDescription: string
   description: string
 
   duration: number
@@ -58,8 +62,7 @@ export class Video implements VideoServerModel {
   url: string
 
   views: number
-  // If live
-  viewers?: number
+  viewers: number
 
   likes: number
   dislikes: number
@@ -84,7 +87,11 @@ export class Video implements VideoServerModel {
     displayName: string
     url: string
     host: string
-    avatar?: ActorImage
+
+    // TODO: remove, deprecated in 4.2
+    avatar: ActorImage
+
+    avatars: ActorImage[]
   }
 
   channel: {
@@ -93,7 +100,11 @@ export class Video implements VideoServerModel {
     displayName: string
     url: string
     host: string
-    avatar?: ActorImage
+
+    // TODO: remove, deprecated in 4.2
+    avatar: ActorImage
+
+    avatars: ActorImage[]
   }
 
   userHistory?: {
@@ -124,6 +135,8 @@ export class Video implements VideoServerModel {
     this.privacy = hash.privacy
     this.waitTranscoding = hash.waitTranscoding
     this.state = hash.state
+
+    this.truncatedDescription = hash.truncatedDescription
     this.description = hash.description
 
     this.isLive = hash.isLive
@@ -220,9 +233,26 @@ export class Video implements VideoServerModel {
     return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.UPDATE_ANY_VIDEO))
   }
 
+  isEditableBy (user: AuthUser, videoStudioEnabled: boolean) {
+    return videoStudioEnabled &&
+      this.state?.id === VideoState.PUBLISHED &&
+      this.isUpdatableBy(user)
+  }
+
+  canSeeStats (user: AuthUser) {
+    return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.SEE_ALL_VIDEOS))
+  }
+
+  canRemoveOneFile (user: AuthUser) {
+    return this.isLocal &&
+      user && user.hasRight(UserRight.MANAGE_VIDEO_FILES) &&
+      this.state.id !== VideoState.TO_TRANSCODE &&
+      getAllFiles(this).length > 1
+  }
+
   canRemoveFiles (user: AuthUser) {
     return this.isLocal &&
-      user.hasRight(UserRight.MANAGE_VIDEO_FILES) &&
+      user && user.hasRight(UserRight.MANAGE_VIDEO_FILES) &&
       this.state.id !== VideoState.TO_TRANSCODE &&
       this.hasHLS() &&
       this.hasWebTorrent()
@@ -230,7 +260,7 @@ export class Video implements VideoServerModel {
 
   canRunTranscoding (user: AuthUser) {
     return this.isLocal &&
-      user.hasRight(UserRight.RUN_VIDEO_TRANSCODING) &&
+      user && user.hasRight(UserRight.RUN_VIDEO_TRANSCODING) &&
       this.state.id !== VideoState.TO_TRANSCODE
   }
 
@@ -252,12 +282,10 @@ export class Video implements VideoServerModel {
   }
 
   getExactNumberOfViews () {
-    if (this.views < 1000) return ''
-
     if (this.isLive) {
-      return $localize`${this.views} viewers`
+      return Video.viewersICU({ viewers: this.viewers }, $localize`${this.viewers} viewer(s)`)
     }
 
-    return $localize`${this.views} views`
+    return Video.viewsICU({ views: this.views }, $localize`{${this.views} view(s)}`)
   }
 }

@@ -31,7 +31,7 @@ export class VideoCommentService {
     private restService: RestService
   ) {}
 
-  addCommentThread (videoId: number | string, comment: VideoCommentCreate) {
+  addCommentThread (videoId: string, comment: VideoCommentCreate) {
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comment-threads'
     const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
@@ -42,7 +42,7 @@ export class VideoCommentService {
                )
   }
 
-  addCommentReply (videoId: number | string, inReplyToCommentId: number, comment: VideoCommentCreate) {
+  addCommentReply (videoId: string, inReplyToCommentId: number, comment: VideoCommentCreate) {
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comments/' + inReplyToCommentId
     const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
@@ -75,7 +75,7 @@ export class VideoCommentService {
   }
 
   getVideoCommentThreads (parameters: {
-    videoId: number | string
+    videoId: string
     componentPagination: ComponentPaginationLight
     sort: string
   }): Observable<ThreadsResultList<VideoComment>> {
@@ -95,7 +95,7 @@ export class VideoCommentService {
   }
 
   getVideoThreadComments (parameters: {
-    videoId: number | string
+    videoId: string
     threadId: number
   }): Observable<VideoCommentThreadTree> {
     const { videoId, threadId } = parameters
@@ -114,10 +114,7 @@ export class VideoCommentService {
 
     return this.authHttp
                .delete(url)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   deleteVideoComments (comments: { videoId: number | string, commentId: number }[]) {
@@ -191,6 +188,10 @@ export class VideoCommentService {
     const filters = this.restService.parseQueryStringFilter(search, {
       isLocal: {
         prefix: 'local:',
+        isBoolean: true
+      },
+      onLocalVideo: {
+        prefix: 'localVideo:',
         isBoolean: true
       },
 

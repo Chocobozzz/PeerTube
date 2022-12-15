@@ -1,5 +1,4 @@
-import 'mocha'
-import { cleanupTests, CLICommand, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '../../../shared/extra-utils'
+import { cleanupTests, CLICommand, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
 describe('Test reset password scripts', function () {
   let server: PeerTubeServer

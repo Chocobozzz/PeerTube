@@ -4,13 +4,12 @@
 </h1>
 
 <p-table
-  [value]="videos" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order"  dataKey="id" [resizableColumns]="true" [(selection)]="selectedVideos"
-  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
+  [value]="videos" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
+  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true"
+  [(selection)]="selectedVideos" [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} videos"
-  (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
-  [ngClass]="{ loading: loading }"
+  [expandedRowKeys]="expandedRows" [ngClass]="{ loading: loading }"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
@@ -22,8 +21,10 @@
         </my-action-dropdown>
       </div>
 
-      <div class="ml-auto">
+      <div class="ms-auto right-form">
         <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
+
+        <my-button i18n-label label="Refresh" icon="refresh" (click)="reloadData()"></my-button>
       </div>
 
     </div>
@@ -66,25 +67,26 @@
       </td>
 
       <td>
-        <span class="badge badge-blue" *ngIf="video.isLocal">Local</span>
-        <span class="badge badge-purple" *ngIf="!video.isLocal">Remote</span>
+        <span class="pt-badge badge-blue" *ngIf="video.isLocal">Local</span>
+        <span class="pt-badge badge-purple" *ngIf="!video.isLocal">Remote</span>
 
-        <span [ngClass]="getPrivacyBadgeClass(video)" class="badge">{{ video.privacy.label }}</span>
+        <span [ngClass]="getPrivacyBadgeClass(video)" class="pt-badge">{{ video.privacy.label }}</span>
 
-        <span *ngIf="video.nsfw" class="badge badge-red" i18n>NSFW</span>
+        <span *ngIf="video.nsfw" class="pt-badge badge-red" i18n>NSFW</span>
 
-        <span *ngIf="isUnpublished(video)" class="badge badge-yellow" i18n>{{ video.state.label }}</span>
+        <span *ngIf="isUnpublished(video)" class="pt-badge badge-yellow" i18n>{{ video.state.label }}</span>
 
-        <span *ngIf="isAccountBlocked(video)" class="badge badge-red" i18n>Account muted</span>
-        <span *ngIf="isServerBlocked(video)" class="badge badge-red" i18n>Server muted</span>
+        <span *ngIf="isAccountBlocked(video)" class="pt-badge badge-red" i18n>Account muted</span>
+        <span *ngIf="isServerBlocked(video)" class="pt-badge badge-red" i18n>Server muted</span>
 
-        <span *ngIf="isVideoBlocked(video)" class="badge badge-red" i18n>Blocked</span>
+        <span *ngIf="isVideoBlocked(video)" class="pt-badge badge-red" i18n>Blocked</span>
       </td>
 
       <td>
-        <span *ngIf="isHLS(video)" class="badge badge-blue">HLS</span>
-        <span *ngIf="isWebTorrent(video)" class="badge badge-blue">WebTorrent</span>
-        <span *ngIf="video.isLive" class="badge badge-blue">Live</span>
+        <span *ngIf="isHLS(video)" class="pt-badge badge-blue">HLS</span>
+        <span *ngIf="isWebTorrent(video)" class="pt-badge badge-blue">WebTorrent ({{ video.files.length }})</span>
+        <span i18n *ngIf="video.isLive" class="pt-badge badge-blue">Live</span>
+        <span i18n *ngIf="hasObjectStorage(video)" class="pt-badge badge-purple">Object storage</span>
 
         <span *ngIf="!isImport(video) && !video.isLive && video.isLocal">{{ getFilesSize(video) | bytes: 1 }}</span>
       </td>
@@ -105,7 +107,13 @@
 
             <ul>
               <li *ngFor="let file of video.files">
-                {{ file.resolution.label }}: {{ file.size | bytes: 1 }}
+                <a target="_blank" rel="noopener noreferrer" [href]="file.fileUrl">{{ file.resolution.label }}</a>: {{ file.size | bytes: 1 }}
+
+                <my-global-icon
+                  *ngIf="canRemoveOneFile(video)"
+                  i18n-ngbTooltip ngbTooltip="Delete this file" iconName="delete" role="button"
+                  (click)="removeVideoFile(video, file, 'webtorrent')"
+                ></my-global-icon>
               </li>
             </ul>
           </div>
@@ -115,12 +123,18 @@
 
             <ul>
               <li *ngFor="let file of video.streamingPlaylists[0].files">
-                {{ file.resolution.label }}: {{ file.size | bytes: 1 }}
+                <a target="_blank" rel="noopener noreferrer" [href]="file.fileUrl">{{ file.resolution.label }}</a>: {{ file.size | bytes: 1 }}
+
+                <my-global-icon
+                  *ngIf="canRemoveOneFile(video)"
+                  i18n-ngbTooltip ngbTooltip="Delete this file" iconName="delete" role="button"
+                  (click)="removeVideoFile(video, file, 'hls')"
+                ></my-global-icon>
               </li>
             </ul>
           </div>
 
-          <my-embed class="ml-auto" [video]="video"></my-embed>
+          <my-embed class="ms-auto" [video]="video"></my-embed>
         </div>
       </td>
     </tr>

@@ -23,6 +23,8 @@ import {
   MVideoPlaylistElementVideoUrlPlaylistPrivacy,
   MVideoPlaylistVideoThumbnail
 } from '@server/types/models/video/video-playlist-element'
+import { forceNumber } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { PlaylistElementObject } from '../../../shared/models/activitypub/objects/playlist-element-object'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { VideoPlaylistElement, VideoPlaylistElementType } from '../../../shared/models/videos/playlist/video-playlist-element.model'
@@ -32,7 +34,6 @@ import { AccountModel } from '../account/account'
 import { getSort, throwIfNotValid } from '../utils'
 import { ForAPIOptions, ScopeNames as VideoScopeNames, VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
-import { AttributesOnly } from '@shared/core-utils'
 
 @Table({
   tableName: 'videoPlaylistElement',
@@ -185,7 +186,9 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
     playlistId: number | string,
     playlistElementId: number
   ): Promise<MVideoPlaylistElementVideoUrlPlaylistPrivacy> {
-    const playlistWhere = validator.isUUID('' + playlistId) ? { uuid: playlistId } : { id: playlistId }
+    const playlistWhere = validator.isUUID('' + playlistId)
+      ? { uuid: playlistId }
+      : { id: playlistId }
 
     const query = {
       include: [
@@ -208,22 +211,28 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
   }
 
   static listUrlsOfForAP (videoPlaylistId: number, start: number, count: number, t?: Transaction) {
-    const query = {
-      attributes: [ 'url' ],
-      offset: start,
-      limit: count,
-      order: getSort('position'),
-      where: {
-        videoPlaylistId
-      },
-      transaction: t
+    const getQuery = (forCount: boolean) => {
+      return {
+        attributes: forCount
+          ? []
+          : [ 'url' ],
+        offset: start,
+        limit: count,
+        order: getSort('position'),
+        where: {
+          videoPlaylistId
+        },
+        transaction: t
+      }
     }
 
-    return VideoPlaylistElementModel
-      .findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return { total: count, data: rows.map(e => e.url) }
-      })
+    return Promise.all([
+      VideoPlaylistElementModel.count(getQuery(true)),
+      VideoPlaylistElementModel.findAll(getQuery(false))
+    ]).then(([ total, rows ]) => ({
+      total,
+      data: rows.map(e => e.url)
+    }))
   }
 
   static loadFirstElementWithVideoThumbnail (videoPlaylistId: number): Promise<MVideoPlaylistVideoThumbnail> {
@@ -256,13 +265,15 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
       .then(position => position ? position + 1 : 1)
   }
 
-  static reassignPositionOf (
-    videoPlaylistId: number,
-    firstPosition: number,
-    endPosition: number,
-    newPosition: number,
+  static reassignPositionOf (options: {
+    videoPlaylistId: number
+    firstPosition: number
+    endPosition: number
+    newPosition: number
     transaction?: Transaction
-  ) {
+  }) {
+    const { videoPlaylistId, firstPosition, endPosition, newPosition, transaction } = options
+
     const query = {
       where: {
         videoPlaylistId,
@@ -275,8 +286,8 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
       validate: false // We use a literal to update the position
     }
 
-    const positionQuery = Sequelize.literal(`${newPosition} + "position" - ${firstPosition}`)
-    return VideoPlaylistElementModel.update({ position: positionQuery as any }, query)
+    const positionQuery = Sequelize.literal(`${forceNumber(newPosition)} + "position" - ${forceNumber(firstPosition)}`)
+    return VideoPlaylistElementModel.update({ position: positionQuery }, query)
   }
 
   static increasePositionOf (
@@ -345,7 +356,7 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
       id: this.url,
       type: 'PlaylistElement',
 
-      url: this.Video.url,
+      url: this.Video?.url || null,
       position: this.position
     }
 

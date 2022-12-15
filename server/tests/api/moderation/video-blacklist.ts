@@ -1,22 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { orderBy } from 'lodash'
+import { expect } from 'chai'
+import { FIXTURE_URLS } from '@server/tests/shared'
+import { sortObjectComparator } from '@shared/core-utils'
+import { UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType } from '@shared/models'
 import {
   BlacklistCommand,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  FIXTURE_URLS,
   killallServers,
   PeerTubeServer,
   setAccessTokensToServers,
+  setDefaultChannelAvatar,
   waitJobs
-} from '@shared/extra-utils'
-import { UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType } from '@shared/models'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 describe('Test video blacklist', function () {
   let servers: PeerTubeServer[] = []
@@ -32,7 +30,7 @@ describe('Test video blacklist', function () {
   }
 
   before(async function () {
-    this.timeout(50000)
+    this.timeout(120000)
 
     // Run servers
     servers = await createMultipleServers(2)
@@ -42,6 +40,7 @@ describe('Test video blacklist', function () {
 
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])
+    await setDefaultChannelAvatar(servers[0])
 
     // Upload 2 videos on server 2
     await servers[1].videos.upload({ attributes: { name: 'My 1st video', description: 'A video on server 2' } })
@@ -136,7 +135,7 @@ describe('Test video blacklist', function () {
       expect(blacklistedVideos).to.be.an('array')
       expect(blacklistedVideos.length).to.equal(2)
 
-      const result = orderBy(body.data, [ 'id' ], [ 'desc' ])
+      const result = [ ...body.data ].sort(sortObjectComparator('id', 'desc'))
       expect(blacklistedVideos).to.deep.equal(result)
     })
 
@@ -148,7 +147,7 @@ describe('Test video blacklist', function () {
       expect(blacklistedVideos).to.be.an('array')
       expect(blacklistedVideos.length).to.equal(2)
 
-      const result = orderBy(body.data, [ 'name' ], [ 'desc' ])
+      const result = [ ...body.data ].sort(sortObjectComparator('name', 'desc'))
       expect(blacklistedVideos).to.deep.equal(result)
     })
 
@@ -160,7 +159,7 @@ describe('Test video blacklist', function () {
       expect(blacklistedVideos).to.be.an('array')
       expect(blacklistedVideos.length).to.equal(2)
 
-      const result = orderBy(body.data, [ 'createdAt' ])
+      const result = [ ...body.data ].sort(sortObjectComparator('createdAt', 'asc'))
       expect(blacklistedVideos).to.deep.equal(result)
     })
   })

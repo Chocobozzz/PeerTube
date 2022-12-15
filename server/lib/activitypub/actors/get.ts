@@ -1,11 +1,11 @@
-
-import { checkUrlsSameHost, getAPId } from '@server/helpers/activitypub'
 import { retryTransactionWrapper } from '@server/helpers/database-utils'
 import { logger } from '@server/helpers/logger'
 import { JobQueue } from '@server/lib/job-queue'
 import { ActorLoadByUrlType, loadActorByUrl } from '@server/lib/model-loaders'
 import { MActor, MActorAccountChannelId, MActorAccountChannelIdActor, MActorAccountId, MActorFullActor } from '@server/types/models'
 import { ActivityPubActor } from '@shared/models'
+import { getAPId } from '../activity'
+import { checkUrlsSameHost } from '../url'
 import { refreshActorIfNeeded } from './refresh'
 import { APActorCreator, fetchRemoteActor } from './shared'
 
@@ -68,26 +68,6 @@ async function getOrCreateAPActor (
   return actorRefreshed
 }
 
-// ---------------------------------------------------------------------------
-
-export {
-  getOrCreateAPActor
-}
-
-// ---------------------------------------------------------------------------
-
-async function loadActorFromDB (actorUrl: string, fetchType: ActorLoadByUrlType) {
-  let actor = await loadActorByUrl(actorUrl, fetchType)
-
-  // Orphan actor (not associated to an account of channel) so recreate it
-  if (actor && (!actor.Account && !actor.VideoChannel)) {
-    await actor.destroy()
-    actor = null
-  }
-
-  return actor
-}
-
 function getOrCreateAPOwner (actorObject: ActivityPubActor, actorUrl: string) {
   const accountAttributedTo = actorObject.attributedTo.find(a => a.type === 'Person')
   if (!accountAttributedTo) throw new Error('Cannot find account attributed to video channel ' + actorUrl)
@@ -106,10 +86,31 @@ function getOrCreateAPOwner (actorObject: ActivityPubActor, actorUrl: string) {
   }
 }
 
+// ---------------------------------------------------------------------------
+
+export {
+  getOrCreateAPOwner,
+  getOrCreateAPActor
+}
+
+// ---------------------------------------------------------------------------
+
+async function loadActorFromDB (actorUrl: string, fetchType: ActorLoadByUrlType) {
+  let actor = await loadActorByUrl(actorUrl, fetchType)
+
+  // Orphan actor (not associated to an account of channel) so recreate it
+  if (actor && (!actor.Account && !actor.VideoChannel)) {
+    await actor.destroy()
+    actor = null
+  }
+
+  return actor
+}
+
 async function scheduleOutboxFetchIfNeeded (actor: MActor, created: boolean, refreshed: boolean, updateCollections: boolean) {
   if ((created === true || refreshed === true) && updateCollections === true) {
     const payload = { uri: actor.outboxUrl, type: 'activity' as 'activity' }
-    await JobQueue.Instance.createJobWithPromise({ type: 'activitypub-http-fetcher', payload })
+    await JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
   }
 }
 
@@ -117,6 +118,6 @@ async function schedulePlaylistFetchIfNeeded (actor: MActorAccountId, created: b
   // We created a new account: fetch the playlists
   if (created === true && actor.Account && accountPlaylistsUrl) {
     const payload = { uri: accountPlaylistsUrl, type: 'account-playlists' as 'account-playlists' }
-    await JobQueue.Instance.createJobWithPromise({ type: 'activitypub-http-fetcher', payload })
+    await JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
   }
 }

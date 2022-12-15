@@ -1,6 +1,6 @@
 import validator from 'validator'
+import { CONFIG } from '@server/initializers/config'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
-import { isTestInstance } from '../../core-utils'
 import { exists } from '../misc'
 
 function isUrlValid (url: string) {
@@ -13,7 +13,7 @@ function isUrlValid (url: string) {
   }
 
   // We validate 'localhost', so we don't have the top level domain
-  if (isTestInstance()) {
+  if (CONFIG.WEBSERVER.HOSTNAME === 'localhost') {
     isURLOptions.require_tld = false
   }
 
@@ -57,10 +57,19 @@ function setValidAttributedTo (obj: any) {
   return true
 }
 
+function isActivityPubVideoDurationValid (value: string) {
+  // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
+  return exists(value) &&
+    typeof value === 'string' &&
+    value.startsWith('PT') &&
+    value.endsWith('S')
+}
+
 export {
   isUrlValid,
   isActivityPubUrlValid,
   isBaseActivityValid,
   setValidAttributedTo,
-  isObjectValid
+  isObjectValid,
+  isActivityPubVideoDurationValid
 }

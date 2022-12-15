@@ -2,7 +2,7 @@ import { pairwise } from 'rxjs/operators'
 import { SelectOptionsItem } from 'src/types/select-options-item.model'
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 import { FormGroup } from '@angular/forms'
-import { MenuService } from '@app/core'
+import { MenuService, ThemeService } from '@app/core'
 import { HTMLServerConfig } from '@shared/models'
 import { ConfigService } from '../shared/config.service'
 
@@ -19,21 +19,30 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
 
   signupAlertMessage: string
   defaultLandingPageOptions: SelectOptionsItem[] = []
+  availableThemes: SelectOptionsItem[]
 
   constructor (
     private configService: ConfigService,
-    private menuService: MenuService
-  ) { }
+    private menuService: MenuService,
+    private themeService: ThemeService
+  ) {}
 
   ngOnInit () {
     this.buildLandingPageOptions()
     this.checkSignupField()
+    this.checkImportSyncField()
+
+    this.availableThemes = this.themeService.buildAvailableThemes()
   }
 
   ngOnChanges (changes: SimpleChanges) {
     if (changes['serverConfig']) {
       this.buildLandingPageOptions()
     }
+  }
+
+  countExternalAuth () {
+    return this.serverConfig.plugin.registeredExternalAuths.length
   }
 
   getVideoQuotaOptions () {
@@ -44,16 +53,15 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
     return this.configService.videoQuotaDailyOptions
   }
 
-  getAvailableThemes () {
-    return this.serverConfig.theme.registered
-      .map(t => t.name)
-  }
-
   doesTrendingVideosAlgorithmsEnabledInclude (algorithm: string) {
     const enabled = this.form.value['trending']['videos']['algorithms']['enabled']
     if (!Array.isArray(enabled)) return false
 
     return !!enabled.find((e: string) => e === algorithm)
+  }
+
+  getUserVideoQuota () {
+    return this.form.value['user']['videoQuota']
   }
 
   isSignupEnabled () {
@@ -62,6 +70,14 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
 
   getDisabledSignupClass () {
     return { 'disabled-checkbox-extra': !this.isSignupEnabled() }
+  }
+
+  isImportVideosHttpEnabled (): boolean {
+    return this.form.value['import']['videos']['http']['enabled'] === true
+  }
+
+  importSynchronizationChecked () {
+    return this.isImportVideosHttpEnabled() && this.form.value['import']['videoChannelSynchronization']['enabled']
   }
 
   hasUnlimitedSignup () {
@@ -90,13 +106,32 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
       }))
   }
 
+  getDefaultThemeLabel () {
+    return this.themeService.getDefaultThemeLabel()
+  }
+
+  private checkImportSyncField () {
+    const importSyncControl = this.form.get('import.videoChannelSynchronization.enabled')
+    const importVideosHttpControl = this.form.get('import.videos.http.enabled')
+
+    importVideosHttpControl.valueChanges
+      .subscribe((httpImportEnabled) => {
+        importSyncControl.setValue(httpImportEnabled && importSyncControl.value)
+        if (httpImportEnabled) {
+          importSyncControl.enable()
+        } else {
+          importSyncControl.disable()
+        }
+      })
+  }
+
   private checkSignupField () {
     const signupControl = this.form.get('signup.enabled')
 
     signupControl.valueChanges
       .pipe(pairwise())
       .subscribe(([ oldValue, newValue ]) => {
-        if (oldValue !== true && newValue === true) {
+        if (oldValue === false && newValue === true) {
           /* eslint-disable max-len */
           this.signupAlertMessage = $localize`You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.`
 
@@ -111,5 +146,7 @@ export class EditBasicConfigurationComponent implements OnInit, OnChanges {
           })
         }
       })
+
+    signupControl.updateValueAndValidity()
   }
 }

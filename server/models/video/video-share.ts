@@ -1,9 +1,10 @@
 import { literal, Op, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
-import { AttributesOnly } from '@shared/core-utils'
+import { forceNumber } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
-import { MActorDefault } from '../../types/models'
+import { MActorDefault, MActorFollowersUrl, MActorId } from '../../types/models'
 import { MVideoShareActor, MVideoShareFull } from '../../types/models/video'
 import { ActorModel } from '../actor/actor'
 import { buildLocalActorIdsIn, throwIfNotValid } from '../utils'
@@ -107,26 +108,23 @@ export class VideoShareModel extends Model<Partial<AttributesOnly<VideoShareMode
     })
   }
 
-  static loadActorsByShare (videoId: number, t: Transaction): Promise<MActorDefault[]> {
-    const query = {
-      where: {
-        videoId
-      },
-      include: [
-        {
-          model: ActorModel,
-          required: true
-        }
-      ],
+  static listActorIdsAndFollowerUrlsByShare (videoId: number, t: Transaction) {
+    const query = `SELECT "actor"."id" AS "id", "actor"."followersUrl" AS "followersUrl" ` +
+                  `FROM "videoShare" ` +
+                  `INNER JOIN "actor" ON "actor"."id" = "videoShare"."actorId" ` +
+                  `WHERE "videoShare"."videoId" = :videoId`
+
+    const options = {
+      type: QueryTypes.SELECT as QueryTypes.SELECT,
+      replacements: { videoId },
       transaction: t
     }
 
-    return VideoShareModel.scope(ScopeNames.FULL).findAll(query)
-                          .then((res: MVideoShareFull[]) => res.map(r => r.Actor))
+    return VideoShareModel.sequelize.query<MActorId & MActorFollowersUrl>(query, options)
   }
 
   static loadActorsWhoSharedVideosOf (actorOwnerId: number, t: Transaction): Promise<MActorDefault[]> {
-    const safeOwnerId = parseInt(actorOwnerId + '', 10)
+    const safeOwnerId = forceNumber(actorOwnerId)
 
     // /!\ On actor model
     const query = {
@@ -151,7 +149,7 @@ export class VideoShareModel extends Model<Partial<AttributesOnly<VideoShareMode
   }
 
   static loadActorsByVideoChannel (videoChannelId: number, t: Transaction): Promise<MActorDefault[]> {
-    const safeChannelId = parseInt(videoChannelId + '', 10)
+    const safeChannelId = forceNumber(videoChannelId)
 
     // /!\ On actor model
     const query = {
@@ -183,7 +181,10 @@ export class VideoShareModel extends Model<Partial<AttributesOnly<VideoShareMode
       transaction: t
     }
 
-    return VideoShareModel.findAndCountAll(query)
+    return Promise.all([
+      VideoShareModel.count(query),
+      VideoShareModel.findAll(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static listRemoteShareUrlsOfLocalVideos () {

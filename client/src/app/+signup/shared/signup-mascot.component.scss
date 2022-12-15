@@ -1,0 +1,11 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.root {
+  display: inline-block;
+  width: 230px;
+}
+
+div ::ng-deep svg {
+  color: pvar(--mainColor);
+}

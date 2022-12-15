@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core'
-import { SignupSharedModule } from '../shared/signup-shared.module'
+import { SharedSignupModule } from '../shared/shared-signup.module'
 import { VerifyAccountAskSendEmailComponent } from './verify-account-ask-send-email/verify-account-ask-send-email.component'
 import { VerifyAccountEmailComponent } from './verify-account-email/verify-account-email.component'
 import { VerifyAccountRoutingModule } from './verify-account-routing.module'
@@ -8,7 +8,7 @@ import { VerifyAccountRoutingModule } from './verify-account-routing.module'
   imports: [
     VerifyAccountRoutingModule,
 
-    SignupSharedModule
+    SharedSignupModule
   ],
 
   declarations: [

@@ -1,8 +1,9 @@
 import { Subject, Subscription } from 'rxjs'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
-import { AuthService, Notifier, ServerService, UserService } from '@app/core'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { AuthService, Notifier, ServerService, ThemeService, UserService } from '@app/core'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { HTMLServerConfig, User, UserUpdateMe } from '@shared/models'
+import { SelectOptionsItem } from 'src/types'
 
 @Component({
   selector: 'my-user-interface-settings',
@@ -15,27 +16,30 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
   @Input() notifyOnUpdate = true
   @Input() userInformationLoaded: Subject<any>
 
+  availableThemes: SelectOptionsItem[]
   formValuesWatcher: Subscription
 
   private serverConfig: HTMLServerConfig
 
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private authService: AuthService,
     private notifier: Notifier,
     private userService: UserService,
+    private themeService: ThemeService,
     private serverService: ServerService
   ) {
     super()
   }
 
-  get availableThemes () {
-    return this.serverConfig.theme.registered
-               .map(t => t.name)
+  get instanceName () {
+    return this.serverConfig.instance.name
   }
 
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
+
+    this.availableThemes = this.themeService.buildAvailableThemes()
 
     this.buildForm({
       theme: null
@@ -55,6 +59,20 @@ export class UserInterfaceSettingsComponent extends FormReactive implements OnIn
 
   ngOnDestroy () {
     this.formValuesWatcher?.unsubscribe()
+  }
+
+  getDefaultThemeLabel () {
+    return this.themeService.getDefaultThemeLabel()
+  }
+
+  getDefaultInstanceThemeLabel () {
+    const theme = this.serverConfig.theme.default
+
+    if (theme === 'default') {
+      return this.getDefaultThemeLabel()
+    }
+
+    return theme
   }
 
   updateInterfaceSettings () {

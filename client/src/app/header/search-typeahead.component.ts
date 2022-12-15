@@ -4,6 +4,7 @@ import { ListKeyManager } from '@angular/cdk/a11y'
 import { AfterViewChecked, Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
+import { logger } from '@root-helpers/logger'
 import { HTMLServerConfig, SearchTargetType } from '@shared/models'
 import { SuggestionComponent, SuggestionPayload, SuggestionPayloadType } from './suggestion.component'
 
@@ -91,7 +92,7 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewChecked, OnDes
 
     const activeIndex = this.suggestionItems.toArray().findIndex(i => i.result.default === true)
     if (activeIndex === -1) {
-      console.error('Cannot find active index.', { suggestionItems: this.suggestionItems })
+      logger.error('Cannot find active index.', { suggestionItems: this.suggestionItems })
     }
 
     this.updateItemsState(activeIndex)

@@ -1,21 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { completeVideoCheck } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
+import { HttpStatusCode, JobState, VideoCreateResult, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   CommentsCommand,
-  completeVideoCheck,
   createMultipleServers,
   killallServers,
   PeerTubeServer,
   setAccessTokensToServers,
-  wait,
   waitJobs
-} from '@shared/extra-utils'
-import { HttpStatusCode, JobState, VideoCreateResult, VideoPrivacy } from '@shared/models'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 describe('Test handle downs', function () {
   let servers: PeerTubeServer[] = []
@@ -50,7 +47,7 @@ describe('Test handle downs', function () {
   let commentCommands: CommentsCommand[]
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(3)
     commentCommands = servers.map(s => s.comments)
@@ -65,7 +62,7 @@ describe('Test handle downs', function () {
       support: 'my super support text for server 1',
       account: {
         name: 'root',
-        host: 'localhost:' + servers[0].port
+        host: servers[0].host
       },
       isLocal: false,
       duration: 10,
@@ -154,7 +151,7 @@ describe('Test handle downs', function () {
     const body = await servers[0].follows.getFollowers({ start: 0, count: 2, sort: 'createdAt' })
     expect(body.data).to.be.an('array')
     expect(body.data).to.have.lengthOf(1)
-    expect(body.data[0].follower.host).to.equal('localhost:' + servers[2].port)
+    expect(body.data[0].follower.host).to.equal(servers[2].host)
   })
 
   it('Should not have pending/processing jobs anymore', async function () {
@@ -162,7 +159,7 @@ describe('Test handle downs', function () {
 
     for (const state of states) {
       const body = await servers[0].jobs.list({
-        state: state,
+        state,
         start: 0,
         count: 50,
         sort: '-createdAt'

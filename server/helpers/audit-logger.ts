@@ -5,9 +5,7 @@ import { chain } from 'lodash'
 import { join } from 'path'
 import { addColors, config, createLogger, format, transports } from 'winston'
 import { AUDIT_LOG_FILENAME } from '@server/initializers/constants'
-import { AdminAbuse, User, VideoChannel, VideoDetails, VideoImport } from '../../shared'
-import { CustomConfig } from '../../shared/models/server/custom-config.model'
-import { VideoComment } from '../../shared/models/videos/comment/video-comment.model'
+import { AdminAbuse, CustomConfig, User, VideoChannel, VideoChannelSync, VideoComment, VideoDetails, VideoImport } from '@shared/models'
 import { CONFIG } from '../initializers/config'
 import { jsonLoggerFormat, labelFormatter } from './logger'
 
@@ -122,7 +120,7 @@ const videoKeysToKeep = [
   'downloadEnabled'
 ]
 class VideoAuditView extends EntityAuditView {
-  constructor (private readonly video: VideoDetails) {
+  constructor (video: VideoDetails) {
     super(videoKeysToKeep, 'video', video)
   }
 }
@@ -133,7 +131,7 @@ const videoImportKeysToKeep = [
   'video-name'
 ]
 class VideoImportAuditView extends EntityAuditView {
-  constructor (private readonly videoImport: VideoImport) {
+  constructor (videoImport: VideoImport) {
     super(videoImportKeysToKeep, 'video-import', videoImport)
   }
 }
@@ -152,7 +150,7 @@ const commentKeysToKeep = [
   'account-name'
 ]
 class CommentAuditView extends EntityAuditView {
-  constructor (private readonly comment: VideoComment) {
+  constructor (comment: VideoComment) {
     super(commentKeysToKeep, 'comment', comment)
   }
 }
@@ -181,7 +179,7 @@ const userKeysToKeep = [
   'videoChannels'
 ]
 class UserAuditView extends EntityAuditView {
-  constructor (private readonly user: User) {
+  constructor (user: User) {
     super(userKeysToKeep, 'user', user)
   }
 }
@@ -207,7 +205,7 @@ const channelKeysToKeep = [
   'ownerAccount-displayedName'
 ]
 class VideoChannelAuditView extends EntityAuditView {
-  constructor (private readonly channel: VideoChannel) {
+  constructor (channel: VideoChannel) {
     super(channelKeysToKeep, 'channel', channel)
   }
 }
@@ -219,7 +217,7 @@ const abuseKeysToKeep = [
   'createdAt'
 ]
 class AbuseAuditView extends EntityAuditView {
-  constructor (private readonly abuse: AdminAbuse) {
+  constructor (abuse: AdminAbuse) {
     super(abuseKeysToKeep, 'abuse', abuse)
   }
 }
@@ -262,6 +260,18 @@ class CustomConfigAuditView extends EntityAuditView {
   }
 }
 
+const channelSyncKeysToKeep = [
+  'id',
+  'externalChannelUrl',
+  'channel-id',
+  'channel-name'
+]
+class VideoChannelSyncAuditView extends EntityAuditView {
+  constructor (channelSync: VideoChannelSync) {
+    super(channelSyncKeysToKeep, 'channelSync', channelSync)
+  }
+}
+
 export {
   getAuditIdFromRes,
 
@@ -272,5 +282,6 @@ export {
   UserAuditView,
   VideoAuditView,
   AbuseAuditView,
-  CustomConfigAuditView
+  CustomConfigAuditView,
+  VideoChannelSyncAuditView
 }

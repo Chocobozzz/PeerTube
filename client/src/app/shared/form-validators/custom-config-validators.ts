@@ -9,9 +9,9 @@ export const INSTANCE_NAME_VALIDATOR: BuildFormValidator = {
 }
 
 export const INSTANCE_SHORT_DESCRIPTION_VALIDATOR: BuildFormValidator = {
-  VALIDATORS: [ Validators.max(250) ],
+  VALIDATORS: [ Validators.maxLength(250) ],
   MESSAGES: {
-    max: $localize`Short description should not be longer than 250 characters.`
+    maxlength: $localize`Short description should not be longer than 250 characters.`
   }
 }
 

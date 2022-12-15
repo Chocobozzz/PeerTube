@@ -31,6 +31,18 @@ $ sudo docker run -p 9444:9000 chocobozzz/s3-ninja
 $ sudo docker run -p 10389:10389 chocobozzz/docker-test-openldap
 ```
 
+Ensure you also have these commands:
+
+```bash
+$ exiftool --help
+$ parallel --help
+```
+
+Otherwise, install the packages. On Debian-based systems (like Debian, Ubuntu or Mint):
+```bash
+$ sudo apt-get install parallel libimage-exiftool-perl
+```
+
 ### Test
 
 To run all test suites:
@@ -39,10 +51,10 @@ To run all test suites:
 $ npm run test # See scripts/test.sh to run a particular suite
 ```
 
-Most of tests can be runned using:
+Most of tests can be run using:
 
 ```bash
-TS_NODE_TRANSPILE_ONLY=true mocha -- --timeout 30000 --exit -r ts-node/register -r tsconfig-paths/register --bail server/tests/api/videos/video-transcoder.ts
+TS_NODE_TRANSPILE_ONLY=true npm run mocha -- --timeout 30000 --exit -r ts-node/register -r tsconfig-paths/register --bail server/tests/api/videos/video-transcoder.ts
 ```
 
 `server/tests/api/activitypub` tests will need different options:
@@ -67,6 +79,19 @@ While testing, you might want to display a server's logs to understand why they 
 NODE_APP_INSTANCE=1 NODE_ENV=test npm run parse-log -- --level debug | less +GF
 ```
 
+You can also:
+ - checkout only the latest logs (PeerTube >= 5.0):
+
+```bash
+tail -n 100 test1/logs/peertube.log | npm run parse-log -- --level debug --files -
+```
+
+ - continuously print the latests logs (PeerTube >= 5.0):
+
+```bash
+tail -f test1/logs/peertube.log | npm run parse-log -- --level debug --files -
+```
+
 
 ## Client E2E tests
 
@@ -88,13 +113,7 @@ $ BROWSERSTACK_USER=your_user BROWSERSTACK_KEY=your_key npm run e2e:browserstack
 
 ### Add E2E tests
 
-To add E2E tests and quickly run tests using a local Chrome, first create a test instance:
-
-```bash
-$ npm run clean:server:test && NODE_APP_INSTANCE=1 NODE_ENV=test npm start
-```
-
-Then, just run your suite using:
+To add E2E tests and quickly run tests using a local Chrome:
 
 ```bash
 $ cd client/e2e

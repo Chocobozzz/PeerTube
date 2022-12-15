@@ -1,21 +1,29 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import autocannon, { printResult } from 'autocannon'
+import { program } from 'commander'
 import { writeJson } from 'fs-extra'
-import { createSingleServer, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
 import { Video, VideoPrivacy } from '@shared/models'
+import { createMultipleServers, doubleFollow, killallServers, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
+let servers: PeerTubeServer[]
+// First server
 let server: PeerTubeServer
 let video: Video
 let threadId: number
 
-const outfile = process.argv[2]
+program
+  .option('-o, --outfile [outfile]', 'Outfile')
+  .option('--grep [string]', 'Filter tests you want to execute')
+  .description('Run API REST benchmark')
+  .parse(process.argv)
+
+const options = program.opts()
+
+const outfile = options.outfile
 
 run()
   .catch(err => console.error(err))
   .finally(() => {
-    if (server) return killallServers([ server ])
+    if (servers) return killallServers(servers)
   })
 
 function buildAuthorizationHeader () {
@@ -30,6 +38,12 @@ function buildAPHeader () {
   }
 }
 
+function buildJSONHeader () {
+  return {
+    'Content-Type': 'application/json'
+  }
+}
+
 async function run () {
   console.log('Preparing server...')
 
@@ -41,7 +55,7 @@ async function run () {
       path: '/accounts/peertube',
       headers: buildAPHeader(),
       expecter: (body, status) => {
-        return status === 200 && body.startsWith('{"type":')
+        return status === 200 && body.startsWith('{"@context":')
       }
     },
     {
@@ -49,7 +63,7 @@ async function run () {
       path: '/videos/watch/' + video.uuid,
       headers: buildAPHeader(),
       expecter: (body, status) => {
-        return status === 200 && body.startsWith('{"type":"Video"')
+        return status === 200 && body.startsWith('{"@context":')
       }
     },
     {
@@ -137,8 +151,35 @@ async function run () {
       expecter: (body, status) => {
         return status === 200 && body.startsWith('{"client":')
       }
+    },
+    {
+      title: 'API - views with token',
+      method: 'PUT',
+      headers: {
+        ...buildAuthorizationHeader(),
+        ...buildJSONHeader()
+      },
+      body: JSON.stringify({ currentTime: 2 }),
+      path: '/api/v1/videos/' + video.uuid + '/views',
+      expecter: (body, status) => {
+        return status === 204
+      }
+    },
+    {
+      title: 'API - views without token',
+      method: 'POST',
+      headers: buildJSONHeader(),
+      body: JSON.stringify({ currentTime: 2 }),
+      path: '/api/v1/videos/' + video.uuid + '/views',
+      expecter: (body, status) => {
+        return status === 204
+      }
     }
-  ]
+  ].filter(t => {
+    if (!options.grep) return true
+
+    return t.title.includes(options.grep)
+  })
 
   const finalResult: any[] = []
 
@@ -157,14 +198,18 @@ async function run () {
 
 function runBenchmark (options: {
   path: string
+  method?: string
+  body?: string
   headers?: { [ id: string ]: string }
   expecter: Function
 }) {
-  const { path, expecter, headers } = options
+  const { method = 'GET', path, body, expecter, headers } = options
 
   return new Promise((res, rej) => {
     autocannon({
       url: server.url + path,
+      method,
+      body,
       connections: 20,
       headers,
       pipelining: 1,
@@ -188,14 +233,18 @@ function runBenchmark (options: {
 }
 
 async function prepare () {
-  server = await createSingleServer(1, {
+  servers = await createMultipleServers(3, {
     rates_limit: {
       api: {
         max: 5_000_000
       }
     }
   })
-  await setAccessTokensToServers([ server ])
+  server = servers[0]
+
+  await setAccessTokensToServers(servers)
+  await doubleFollow(servers[0], servers[1])
+  await doubleFollow(servers[0], servers[2])
 
   const attributes = {
     name: 'my super video',
@@ -205,7 +254,7 @@ async function prepare () {
     language: 'fr',
     privacy: VideoPrivacy.PUBLIC,
     support: 'please give me a coffee',
-    description: 'my super description'.repeat(10),
+    description: 'my super description\n'.repeat(10) + ' * list1\n * list 2\n * list 3',
     tags: [ 'tag1', 'tag2', 'tag3' ]
   }
 
@@ -238,6 +287,4 @@ async function prepare () {
       fixture: 'subtitle-good2.vtt'
     })
   }
-
-  return { server, video, threadId }
 }

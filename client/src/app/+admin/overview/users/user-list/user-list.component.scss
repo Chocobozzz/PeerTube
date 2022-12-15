@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use 'bootstrap/scss/functions' as *;
 
 .add-button {
   @include create-button;
@@ -23,11 +24,8 @@ tr.banned > td {
   font-weight: $font-semibold;
 }
 
-.user-table-primary-text .glyphicon {
-  @include margin-left(0.1rem);
-
-  font-size: 80%;
-  color: #808080;
+.cell-username .pt-badge {
+  @include margin-left(15px);
 }
 
 p-tableCheckbox {

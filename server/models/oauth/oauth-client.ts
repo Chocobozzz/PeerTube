@@ -1,5 +1,5 @@
 import { AllowNull, Column, CreatedAt, DataType, HasMany, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { OAuthTokenModel } from './oauth-token'
 
 @Table({
@@ -53,8 +53,8 @@ export class OAuthClientModel extends Model<Partial<AttributesOnly<OAuthClientMo
   static getByIdAndSecret (clientId: string, clientSecret: string) {
     const query = {
       where: {
-        clientId: clientId,
-        clientSecret: clientSecret
+        clientId,
+        clientSecret
       }
     }
 

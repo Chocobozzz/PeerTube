@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { UserNotificationType } from '@shared/models'
 import {
   BlocklistCommand,
   cleanupTests,
@@ -10,11 +10,9 @@ import {
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
   waitJobs
-} from '@shared/extra-utils'
-import { UserNotificationType } from '@shared/models'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 async function checkAllVideos (server: PeerTubeServer, token: string) {
   {
@@ -79,6 +77,7 @@ describe('Test blocklist', function () {
 
     servers = await createMultipleServers(3)
     await setAccessTokensToServers(servers)
+    await setDefaultAccountAvatar(servers)
 
     command = servers[0].blocklist
     commentsCommand = servers.map(s => s.comments)
@@ -155,7 +154,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote account', async function () {
-        await command.addToMyBlocklist({ account: 'user2@localhost:' + servers[1].port })
+        await command.addToMyBlocklist({ account: 'user2@' + servers[1].host })
       })
 
       it('Should hide its videos', async function () {
@@ -218,7 +217,7 @@ describe('Test blocklist', function () {
             server: servers[0],
             token: userToken1,
             videoUUID: videoUUID2,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'absence')
         }
@@ -238,7 +237,7 @@ describe('Test blocklist', function () {
           expect(block.byAccount.name).to.equal('root')
           expect(block.blockedAccount.displayName).to.equal('user2')
           expect(block.blockedAccount.name).to.equal('user2')
-          expect(block.blockedAccount.host).to.equal('localhost:' + servers[1].port)
+          expect(block.blockedAccount.host).to.equal('' + servers[1].host)
         }
 
         {
@@ -250,7 +249,53 @@ describe('Test blocklist', function () {
           expect(block.byAccount.name).to.equal('root')
           expect(block.blockedAccount.displayName).to.equal('user1')
           expect(block.blockedAccount.name).to.equal('user1')
-          expect(block.blockedAccount.host).to.equal('localhost:' + servers[0].port)
+          expect(block.blockedAccount.host).to.equal('' + servers[0].host)
+        }
+      })
+
+      it('Should search blocked accounts', async function () {
+        const body = await command.listMyAccountBlocklist({ start: 0, count: 10, search: 'user2' })
+        expect(body.total).to.equal(1)
+
+        expect(body.data[0].blockedAccount.name).to.equal('user2')
+      })
+
+      it('Should get blocked status', async function () {
+        const remoteHandle = 'user2@' + servers[1].host
+        const localHandle = 'user1@' + servers[0].host
+        const unknownHandle = 'user5@' + servers[0].host
+
+        {
+          const status = await command.getStatus({ accounts: [ remoteHandle ] })
+          expect(Object.keys(status.accounts)).to.have.lengthOf(1)
+          expect(status.accounts[remoteHandle].blockedByUser).to.be.false
+          expect(status.accounts[remoteHandle].blockedByServer).to.be.false
+
+          expect(Object.keys(status.hosts)).to.have.lengthOf(0)
+        }
+
+        {
+          const status = await command.getStatus({ token: servers[0].accessToken, accounts: [ remoteHandle ] })
+          expect(Object.keys(status.accounts)).to.have.lengthOf(1)
+          expect(status.accounts[remoteHandle].blockedByUser).to.be.true
+          expect(status.accounts[remoteHandle].blockedByServer).to.be.false
+
+          expect(Object.keys(status.hosts)).to.have.lengthOf(0)
+        }
+
+        {
+          const status = await command.getStatus({ token: servers[0].accessToken, accounts: [ localHandle, remoteHandle, unknownHandle ] })
+          expect(Object.keys(status.accounts)).to.have.lengthOf(3)
+
+          for (const handle of [ localHandle, remoteHandle ]) {
+            expect(status.accounts[handle].blockedByUser).to.be.true
+            expect(status.accounts[handle].blockedByServer).to.be.false
+          }
+
+          expect(status.accounts[unknownHandle].blockedByUser).to.be.false
+          expect(status.accounts[unknownHandle].blockedByServer).to.be.false
+
+          expect(Object.keys(status.hosts)).to.have.lengthOf(0)
         }
       })
 
@@ -302,7 +347,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should unblock the remote account', async function () {
-        await command.removeFromMyBlocklist({ account: 'user2@localhost:' + servers[1].port })
+        await command.removeFromMyBlocklist({ account: 'user2@' + servers[1].host })
       })
 
       it('Should display its videos', async function () {
@@ -356,7 +401,7 @@ describe('Test blocklist', function () {
             server: servers[0],
             token: userToken1,
             videoUUID: videoUUID2,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'presence')
         }
@@ -374,7 +419,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote server', async function () {
-        await command.addToMyBlocklist({ server: 'localhost:' + servers[1].port })
+        await command.addToMyBlocklist({ server: '' + servers[1].host })
       })
 
       it('Should hide its videos', async function () {
@@ -418,7 +463,7 @@ describe('Test blocklist', function () {
             server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'absence')
         }
@@ -431,11 +476,47 @@ describe('Test blocklist', function () {
         const block = body.data[0]
         expect(block.byAccount.displayName).to.equal('root')
         expect(block.byAccount.name).to.equal('root')
-        expect(block.blockedServer.host).to.equal('localhost:' + servers[1].port)
+        expect(block.blockedServer.host).to.equal('' + servers[1].host)
+      })
+
+      it('Should search blocked servers', async function () {
+        const body = await command.listMyServerBlocklist({ start: 0, count: 10, search: servers[1].host })
+        expect(body.total).to.equal(1)
+
+        expect(body.data[0].blockedServer.host).to.equal(servers[1].host)
+      })
+
+      it('Should get blocklist status', async function () {
+        const blockedServer = servers[1].host
+        const notBlockedServer = 'example.com'
+
+        {
+          const status = await command.getStatus({ hosts: [ blockedServer, notBlockedServer ] })
+          expect(Object.keys(status.accounts)).to.have.lengthOf(0)
+
+          expect(Object.keys(status.hosts)).to.have.lengthOf(2)
+          expect(status.hosts[blockedServer].blockedByUser).to.be.false
+          expect(status.hosts[blockedServer].blockedByServer).to.be.false
+
+          expect(status.hosts[notBlockedServer].blockedByUser).to.be.false
+          expect(status.hosts[notBlockedServer].blockedByServer).to.be.false
+        }
+
+        {
+          const status = await command.getStatus({ token: servers[0].accessToken, hosts: [ blockedServer, notBlockedServer ] })
+          expect(Object.keys(status.accounts)).to.have.lengthOf(0)
+
+          expect(Object.keys(status.hosts)).to.have.lengthOf(2)
+          expect(status.hosts[blockedServer].blockedByUser).to.be.true
+          expect(status.hosts[blockedServer].blockedByServer).to.be.false
+
+          expect(status.hosts[notBlockedServer].blockedByUser).to.be.false
+          expect(status.hosts[notBlockedServer].blockedByServer).to.be.false
+        }
       })
 
       it('Should unblock the remote server', async function () {
-        await command.removeFromMyBlocklist({ server: 'localhost:' + servers[1].port })
+        await command.removeFromMyBlocklist({ server: '' + servers[1].host })
       })
 
       it('Should display its videos', function () {
@@ -459,7 +540,7 @@ describe('Test blocklist', function () {
             server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'presence')
         }
@@ -483,7 +564,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote account', async function () {
-        await command.addToServerBlocklist({ account: 'user2@localhost:' + servers[1].port })
+        await command.addToServerBlocklist({ account: 'user2@' + servers[1].host })
       })
 
       it('Should hide its videos', async function () {
@@ -543,7 +624,7 @@ describe('Test blocklist', function () {
             server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'absence')
         }
@@ -559,7 +640,7 @@ describe('Test blocklist', function () {
           expect(block.byAccount.name).to.equal('peertube')
           expect(block.blockedAccount.displayName).to.equal('user2')
           expect(block.blockedAccount.name).to.equal('user2')
-          expect(block.blockedAccount.host).to.equal('localhost:' + servers[1].port)
+          expect(block.blockedAccount.host).to.equal('' + servers[1].host)
         }
 
         {
@@ -571,12 +652,40 @@ describe('Test blocklist', function () {
           expect(block.byAccount.name).to.equal('peertube')
           expect(block.blockedAccount.displayName).to.equal('user1')
           expect(block.blockedAccount.name).to.equal('user1')
-          expect(block.blockedAccount.host).to.equal('localhost:' + servers[0].port)
+          expect(block.blockedAccount.host).to.equal('' + servers[0].host)
+        }
+      })
+
+      it('Should search blocked accounts', async function () {
+        const body = await command.listServerAccountBlocklist({ start: 0, count: 10, search: 'user2' })
+        expect(body.total).to.equal(1)
+
+        expect(body.data[0].blockedAccount.name).to.equal('user2')
+      })
+
+      it('Should get blocked status', async function () {
+        const remoteHandle = 'user2@' + servers[1].host
+        const localHandle = 'user1@' + servers[0].host
+        const unknownHandle = 'user5@' + servers[0].host
+
+        for (const token of [ undefined, servers[0].accessToken ]) {
+          const status = await command.getStatus({ token, accounts: [ localHandle, remoteHandle, unknownHandle ] })
+          expect(Object.keys(status.accounts)).to.have.lengthOf(3)
+
+          for (const handle of [ localHandle, remoteHandle ]) {
+            expect(status.accounts[handle].blockedByUser).to.be.false
+            expect(status.accounts[handle].blockedByServer).to.be.true
+          }
+
+          expect(status.accounts[unknownHandle].blockedByUser).to.be.false
+          expect(status.accounts[unknownHandle].blockedByServer).to.be.false
+
+          expect(Object.keys(status.hosts)).to.have.lengthOf(0)
         }
       })
 
       it('Should unblock the remote account', async function () {
-        await command.removeFromServerBlocklist({ account: 'user2@localhost:' + servers[1].port })
+        await command.removeFromServerBlocklist({ account: 'user2@' + servers[1].host })
       })
 
       it('Should display its videos', async function () {
@@ -612,7 +721,7 @@ describe('Test blocklist', function () {
             server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'presence')
         }
@@ -620,6 +729,7 @@ describe('Test blocklist', function () {
     })
 
     describe('When managing server blocklist', function () {
+
       it('Should list all videos', async function () {
         for (const token of [ userModeratorToken, servers[0].accessToken ]) {
           await checkAllVideos(servers[0], token)
@@ -633,7 +743,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote server', async function () {
-        await command.addToServerBlocklist({ server: 'localhost:' + servers[1].port })
+        await command.addToServerBlocklist({ server: '' + servers[1].host })
       })
 
       it('Should hide its videos', async function () {
@@ -681,7 +791,7 @@ describe('Test blocklist', function () {
             server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'absence')
         }
@@ -710,11 +820,35 @@ describe('Test blocklist', function () {
         const block = body.data[0]
         expect(block.byAccount.displayName).to.equal('peertube')
         expect(block.byAccount.name).to.equal('peertube')
-        expect(block.blockedServer.host).to.equal('localhost:' + servers[1].port)
+        expect(block.blockedServer.host).to.equal('' + servers[1].host)
+      })
+
+      it('Should search blocked servers', async function () {
+        const body = await command.listServerServerBlocklist({ start: 0, count: 10, search: servers[1].host })
+        expect(body.total).to.equal(1)
+
+        expect(body.data[0].blockedServer.host).to.equal(servers[1].host)
+      })
+
+      it('Should get blocklist status', async function () {
+        const blockedServer = servers[1].host
+        const notBlockedServer = 'example.com'
+
+        for (const token of [ undefined, servers[0].accessToken ]) {
+          const status = await command.getStatus({ token, hosts: [ blockedServer, notBlockedServer ] })
+          expect(Object.keys(status.accounts)).to.have.lengthOf(0)
+
+          expect(Object.keys(status.hosts)).to.have.lengthOf(2)
+          expect(status.hosts[blockedServer].blockedByUser).to.be.false
+          expect(status.hosts[blockedServer].blockedByServer).to.be.true
+
+          expect(status.hosts[notBlockedServer].blockedByUser).to.be.false
+          expect(status.hosts[notBlockedServer].blockedByServer).to.be.false
+        }
       })
 
       it('Should unblock the remote server', async function () {
-        await command.removeFromServerBlocklist({ server: 'localhost:' + servers[1].port })
+        await command.removeFromServerBlocklist({ server: '' + servers[1].host })
       })
 
       it('Should list all videos', async function () {
@@ -742,7 +876,7 @@ describe('Test blocklist', function () {
             server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[0].port
+            text: 'hello @root@' + servers[0].host
           }
           await checkCommentNotification(servers[0], comment, 'presence')
         }

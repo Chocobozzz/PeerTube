@@ -16,7 +16,7 @@ import {
 import { Router } from '@angular/router'
 import { Notifier, User } from '@app/core'
 import { VIDEO_COMMENT_TEXT_VALIDATOR } from '@app/shared/form-validators/video-comment-validators'
-import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
 import { Video } from '@app/shared/shared-main'
 import { VideoComment, VideoCommentService } from '@app/shared/shared-video-comment'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -45,8 +45,10 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
   addingComment = false
   addingCommentButtonValue: string
 
+  private emojiMarkupList: { emoji: string, name: string }[]
+
   constructor (
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     private notifier: Notifier,
     private videoCommentService: VideoCommentService,
     private modalService: NgbModal,
@@ -54,21 +56,6 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     @Inject(LOCALE_ID) private localeId: string
   ) {
     super()
-  }
-
-  get emojiMarkupList () {
-    const emojiMarkupObjectList = require('markdown-it-emoji/lib/data/light.json')
-
-    // Populate emoji-markup-list from object to array to avoid keys alphabetical order
-    const emojiMarkupArrayList = []
-    for (const emojiMarkupName in emojiMarkupObjectList) {
-      if (emojiMarkupName) {
-        const emoji = emojiMarkupObjectList[emojiMarkupName]
-        emojiMarkupArrayList.push([ emoji, emojiMarkupName ])
-      }
-    }
-
-    return emojiMarkupArrayList
   }
 
   ngOnInit () {
@@ -96,8 +83,22 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     }
   }
 
+  getEmojiMarkupList () {
+    if (this.emojiMarkupList) return this.emojiMarkupList
+
+    const emojiMarkupObjectList = require('markdown-it-emoji/lib/data/light.json')
+
+    this.emojiMarkupList = []
+    for (const name of Object.keys(emojiMarkupObjectList)) {
+      const emoji = emojiMarkupObjectList[name]
+      this.emojiMarkupList.push({ emoji, name })
+    }
+
+    return this.emojiMarkupList
+  }
+
   onValidKey () {
-    this.check()
+    this.forceCheck()
     if (!this.form.valid) return
 
     this.formValidated()
@@ -147,7 +148,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
       error: err => {
         this.addingComment = false
 
-        this.notifier.error(err.text)
+        this.notifier.error(err.message)
       }
     })
   }
@@ -174,14 +175,20 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
     return getLocaleDirection(this.localeId) === 'rtl'
   }
 
+  getAvatarActorType () {
+    if (this.user) return 'account'
+
+    return 'unlogged'
+  }
+
   private addCommentReply (commentCreate: VideoCommentCreate) {
     return this.videoCommentService
-      .addCommentReply(this.video.id, this.parentComment.id, commentCreate)
+      .addCommentReply(this.video.uuid, this.parentComment.id, commentCreate)
   }
 
   private addCommentThread (commentCreate: VideoCommentCreate) {
     return this.videoCommentService
-      .addCommentThread(this.video.id, commentCreate)
+      .addCommentThread(this.video.uuid, commentCreate)
   }
 
   private initTextValue () {

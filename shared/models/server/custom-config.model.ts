@@ -52,6 +52,20 @@ export interface CustomConfig {
     }
   }
 
+  client: {
+    videos: {
+      miniature: {
+        preferAuthorDisplayName: boolean
+      }
+    }
+
+    menu: {
+      login: {
+        redirectOnSingleExternalAuth: boolean
+      }
+    }
+  }
+
   cache: {
     previews: {
       size: number
@@ -103,6 +117,8 @@ export interface CustomConfig {
 
     resolutions: ConfigResolutions & { '0p': boolean }
 
+    alwaysTranscodeOriginalResolution: boolean
+
     webtorrent: {
       enabled: boolean
     }
@@ -117,6 +133,10 @@ export interface CustomConfig {
 
     allowReplay: boolean
 
+    latencySetting: {
+      enabled: boolean
+    }
+
     maxDuration: number
     maxInstanceLives: number
     maxUserLives: number
@@ -126,7 +146,12 @@ export interface CustomConfig {
       threads: number
       profile: string
       resolutions: ConfigResolutions
+      alwaysTranscodeOriginalResolution: boolean
     }
+  }
+
+  videoStudio: {
+    enabled: boolean
   }
 
   import: {
@@ -139,6 +164,10 @@ export interface CustomConfig {
       torrent: {
         enabled: boolean
       }
+    }
+    videoChannelSynchronization: {
+      enabled: boolean
+      maxPerUser: number
     }
   }
 

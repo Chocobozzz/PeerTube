@@ -1,16 +1,13 @@
-import { registerTSPaths } from '../../server/helpers/register-ts-paths'
-registerTSPaths()
-
+import Bluebird from 'bluebird'
+import { move, readFile, writeFile } from 'fs-extra'
 import { join } from 'path'
+import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { JobQueue } from '@server/lib/job-queue'
-import { initDatabaseModels } from '../../server/initializers/database'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getHlsResolutionPlaylistFilename } from '@server/lib/paths'
 import { VideoPathManager } from '@server/lib/video-path-manager'
 import { VideoModel } from '@server/models/video/video'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { move, readFile, writeFile } from 'fs-extra'
-import Bluebird from 'bluebird'
-import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
+import { initDatabaseModels } from '../../server/initializers/database'
 
 run()
   .then(() => process.exit(0))
@@ -24,7 +21,7 @@ async function run () {
 
   await initDatabaseModels(true)
 
-  JobQueue.Instance.init(true)
+  JobQueue.Instance.init()
 
   const ids = await VideoModel.listLocalIds()
 
@@ -100,7 +97,7 @@ async function processVideo (videoId: number) {
   // Everything worked, we can save the playlist now
   await playlist.save()
 
-  const allVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.id)
+  const allVideo = await VideoModel.loadFull(video.id)
   await federateVideoIfNeeded(allVideo, false)
 
   console.log(`Successfully moved HLS files of ${video.name}.`)

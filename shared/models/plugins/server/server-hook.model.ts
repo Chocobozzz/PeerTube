@@ -6,6 +6,11 @@ export const serverFilterHookObject = {
   'filter:api.videos.list.params': true,
   'filter:api.videos.list.result': true,
 
+  // Filter params/result used to list a video playlists videos
+  // for the REST API
+  'filter:api.video-playlist.videos.list.params': true,
+  'filter:api.video-playlist.videos.list.result': true,
+
   // Filter params/result used to list account videos for the REST API
   'filter:api.accounts.videos.list.params': true,
   'filter:api.accounts.videos.list.result': true,
@@ -40,6 +45,13 @@ export const serverFilterHookObject = {
   // Used to get detailed video information (video watch page for example)
   'filter:api.video.get.result': true,
 
+  // Filter params/results when listing video channels
+  'filter:api.video-channels.list.params': true,
+  'filter:api.video-channels.list.result': true,
+
+  // Filter the result when getting a video channel
+  'filter:api.video-channel.get.result': true,
+
   // Filter the result of the accept upload/live, import via torrent/url functions
   // If this function returns false then the upload is aborted with an error
   'filter:api.video.upload.accept.result': true,
@@ -53,6 +65,12 @@ export const serverFilterHookObject = {
   'filter:api.video-thread.create.accept.result': true,
   'filter:api.video-comment-reply.create.accept.result': true,
 
+  // Filter attributes when creating video object
+  'filter:api.video.upload.video-attribute.result': true,
+  'filter:api.video.import-url.video-attribute.result': true,
+  'filter:api.video.import-torrent.video-attribute.result': true,
+  'filter:api.video.live.video-attribute.result': true,
+
   // Filter params/result used to list threads of a specific video
   // (used by the video watch page)
   'filter:api.video-threads.list.params': true,
@@ -62,6 +80,9 @@ export const serverFilterHookObject = {
   // (used by the video watch page when we click on the "View replies" button)
   'filter:api.video-thread-comments.list.params': true,
   'filter:api.video-thread-comments.list.result': true,
+
+  // Filter get stats result
+  'filter:api.server.stats.get.result': true,
 
   // Filter result used to check if we need to auto blacklist a video
   // (fired when a local or remote video is created or updated)
@@ -76,7 +97,15 @@ export const serverFilterHookObject = {
 
   // Filter result to check if the embed is allowed for a particular request
   'filter:html.embed.video.allowed.result': true,
-  'filter:html.embed.video-playlist.allowed.result': true
+  'filter:html.embed.video-playlist.allowed.result': true,
+
+  'filter:job-queue.process.params': true,
+  'filter:job-queue.process.result': true,
+
+  'filter:transcoding.manual.resolutions-to-transcode.result': true,
+  'filter:transcoding.auto.resolutions-to-transcode.result': true,
+
+  'filter:activity-pub.remote-video-comment.create.accept.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject
@@ -84,6 +113,9 @@ export type ServerFilterHookName = keyof typeof serverFilterHookObject
 export const serverActionHookObject = {
   // Fired when the application has been loaded and is listening HTTP requests
   'action:application.listening': true,
+
+  // Fired when a new notification is created
+  'action:notifier.notification.created': true,
 
   // API actions hooks give access to the original express `req` and `res` parameters
 
@@ -96,6 +128,13 @@ export const serverActionHookObject = {
   // Fired when a local video is viewed
   'action:api.video.viewed': true,
 
+  // Fired when a video channel is created
+  'action:api.video-channel.created': true,
+  // Fired when a video channel is updated
+  'action:api.video-channel.updated': true,
+  // Fired when a video channel is deleted
+  'action:api.video-channel.deleted': true,
+
   // Fired when a live video is created
   'action:api.live-video.created': true,
 
@@ -105,6 +144,11 @@ export const serverActionHookObject = {
   'action:api.video-comment-reply.created': true,
   // Fired when a comment (thread or reply) is deleted
   'action:api.video-comment.deleted': true,
+
+  // Fired when a caption is created
+  'action:api.video-caption.created': true,
+  // Fired when a caption is deleted
+  'action:api.video-caption.deleted': true,
 
   // Fired when a user is blocked (banned)
   'action:api.user.blocked': true,

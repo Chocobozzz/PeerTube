@@ -3,11 +3,11 @@ import { AccountModel } from '@server/models/account/account'
 import { VideoModel } from '@server/models/video/video'
 import { VideoCommentModel } from '@server/models/video/video-comment'
 import { abusePredefinedReasonsMap } from '@shared/core-utils/abuse'
-import { AbuseObject, AbuseState, ActivityCreate, ActivityFlag } from '../../../../shared'
-import { getAPId } from '../../../helpers/activitypub'
+import { AbuseObject, AbuseState, ActivityCreate, ActivityFlag } from '@shared/models'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
+import { getAPId } from '../../../lib/activitypub/activity'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model'
 import { MAccountDefault, MActorSignature, MCommentOwnerVideo } from '../../../types/models'
 
@@ -75,7 +75,8 @@ async function processCreateAbuse (activity: ActivityCreate | ActivityFlag, byAc
             endAt,
             reporterAccount,
             transaction: t,
-            videoInstance: video
+            videoInstance: video,
+            skipNotification: false
           })
         }
 
@@ -84,7 +85,8 @@ async function processCreateAbuse (activity: ActivityCreate | ActivityFlag, byAc
             baseAbuse,
             reporterAccount,
             transaction: t,
-            commentInstance: videoComment
+            commentInstance: videoComment,
+            skipNotification: false
           })
         }
 
@@ -92,7 +94,8 @@ async function processCreateAbuse (activity: ActivityCreate | ActivityFlag, byAc
           baseAbuse,
           reporterAccount,
           transaction: t,
-          accountInstance: flaggedAccount
+          accountInstance: flaggedAccount,
+          skipNotification: false
         })
       })
     } catch (err) {

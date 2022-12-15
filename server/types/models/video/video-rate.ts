@@ -1,5 +1,5 @@
 import { AccountVideoRateModel } from '@server/models/account/account-video-rate'
-import { PickWith } from '@shared/core-utils'
+import { PickWith } from '@shared/typescript-utils'
 import { MAccountAudience, MAccountUrl } from '../account/account'
 import { MVideo, MVideoFormattable } from './video'
 

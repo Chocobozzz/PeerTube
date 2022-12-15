@@ -1,6 +1,6 @@
 import execa from 'execa'
-import { pathExists, writeFile } from 'fs-extra'
-import { join } from 'path'
+import { ensureDir, pathExists, writeFile } from 'fs-extra'
+import { dirname, join } from 'path'
 import { CONFIG } from '@server/initializers/config'
 import { VideoResolution } from '@shared/models'
 import { logger, loggerTagsFactory } from '../logger'
@@ -15,6 +15,8 @@ export class YoutubeDLCLI {
 
   static async safeGet () {
     if (!await pathExists(youtubeDLBinaryPath)) {
+      await ensureDir(dirname(youtubeDLBinaryPath))
+
       await this.updateYoutubeDLBinary()
     }
 
@@ -55,7 +57,7 @@ export class YoutubeDLCLI {
     }
   }
 
-  static getYoutubeDLVideoFormat (enabledResolutions: VideoResolution[]) {
+  static getYoutubeDLVideoFormat (enabledResolutions: VideoResolution[], useBestFormat: boolean) {
     /**
      * list of format selectors in order or preference
      * see https://github.com/ytdl-org/youtube-dl#format-selection
@@ -67,18 +69,27 @@ export class YoutubeDLCLI {
      *
      * in any case we avoid AV1, see https://github.com/Chocobozzz/PeerTube/issues/3499
      **/
-    const resolution = enabledResolutions.length === 0
-      ? VideoResolution.H_720P
-      : Math.max(...enabledResolutions)
 
-    return [
-      `bestvideo[vcodec^=avc1][height=${resolution}]+bestaudio[ext=m4a]`, // case #1
-      `bestvideo[vcodec!*=av01][vcodec!*=vp9.2][height=${resolution}]+bestaudio`, // case #2
-      `bestvideo[vcodec^=avc1][height<=${resolution}]+bestaudio[ext=m4a]`, // case #3
-      `bestvideo[vcodec!*=av01][vcodec!*=vp9.2]+bestaudio`,
+    let result: string[] = []
+
+    if (!useBestFormat) {
+      const resolution = enabledResolutions.length === 0
+        ? VideoResolution.H_720P
+        : Math.max(...enabledResolutions)
+
+      result = [
+        `bestvideo[vcodec^=avc1][height=${resolution}]+bestaudio[ext=m4a]`, // case #1
+        `bestvideo[vcodec!*=av01][vcodec!*=vp9.2][height=${resolution}]+bestaudio`, // case #2
+        `bestvideo[vcodec^=avc1][height<=${resolution}]+bestaudio[ext=m4a]` // case #
+      ]
+    }
+
+    return result.concat([
+      'bestvideo[vcodec!*=av01][vcodec!*=vp9.2]+bestaudio',
       'best[vcodec!*=av01][vcodec!*=vp9.2]', // case fallback for known formats
+      'bestvideo[ext=mp4]+bestaudio[ext=m4a]',
       'best' // Ultimate fallback
-    ].join('/')
+    ]).join('/')
   }
 
   private constructor () {
@@ -90,12 +101,17 @@ export class YoutubeDLCLI {
     format: string
     output: string
     processOptions: execa.NodeOptions
+    timeout?: number
     additionalYoutubeDLArgs?: string[]
   }) {
+    let args = options.additionalYoutubeDLArgs || []
+    args = args.concat([ '--merge-output-format', 'mp4', '-f', options.format, '-o', options.output ])
+
     return this.run({
       url: options.url,
       processOptions: options.processOptions,
-      args: (options.additionalYoutubeDLArgs || []).concat([ '-f', options.format, '-o', options.output ])
+      timeout: options.timeout,
+      args
     })
   }
 
@@ -110,11 +126,42 @@ export class YoutubeDLCLI {
     const completeArgs = additionalYoutubeDLArgs.concat([ '--dump-json', '-f', format ])
 
     const data = await this.run({ url, args: completeArgs, processOptions })
-    const info = data.map(this.parseInfo)
+    if (!data) return undefined
+
+    const info = data.map(d => JSON.parse(d))
 
     return info.length === 1
       ? info[0]
       : info
+  }
+
+  async getListInfo (options: {
+    url: string
+    latestVideosCount?: number
+    processOptions: execa.NodeOptions
+  }): Promise<{ upload_date: string, webpage_url: string }[]> {
+    const additionalYoutubeDLArgs = [ '--skip-download', '--playlist-reverse' ]
+
+    if (CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.NAME === 'yt-dlp') {
+      // Optimize listing videos only when using yt-dlp because it is bugged with youtube-dl when fetching a channel
+      additionalYoutubeDLArgs.push('--flat-playlist')
+    }
+
+    if (options.latestVideosCount !== undefined) {
+      additionalYoutubeDLArgs.push('--playlist-end', options.latestVideosCount.toString())
+    }
+
+    const result = await this.getInfo({
+      url: options.url,
+      format: YoutubeDLCLI.getYoutubeDLVideoFormat([], false),
+      processOptions: options.processOptions,
+      additionalYoutubeDLArgs
+    })
+
+    if (!result) return result
+    if (!Array.isArray(result)) return [ result ]
+
+    return result
   }
 
   async getSubs (options: {
@@ -145,17 +192,25 @@ export class YoutubeDLCLI {
   private async run (options: {
     url: string
     args: string[]
+    timeout?: number
     processOptions: execa.NodeOptions
   }) {
-    const { url, args, processOptions } = options
+    const { url, args, timeout, processOptions } = options
 
     let completeArgs = this.wrapWithProxyOptions(args)
     completeArgs = this.wrapWithIPOptions(completeArgs)
     completeArgs = this.wrapWithFFmpegOptions(completeArgs)
 
-    const output = await execa('python', [ youtubeDLBinaryPath, ...completeArgs, url ], processOptions)
+    const { PYTHON_PATH } = CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE
+    const subProcess = execa(PYTHON_PATH, [ youtubeDLBinaryPath, ...completeArgs, url ], processOptions)
 
-    logger.debug('Runned youtube-dl command.', { command: output.command, ...lTags() })
+    if (timeout) {
+      setTimeout(() => subProcess.cancel(), timeout)
+    }
+
+    const output = await subProcess
+
+    logger.debug('Run youtube-dl command.', { command: output.command, ...lTags() })
 
     return output.stdout
       ? output.stdout.trim().split(/\r?\n/)
@@ -190,9 +245,5 @@ export class YoutubeDLCLI {
     }
 
     return args
-  }
-
-  private parseInfo (data: string) {
-    return JSON.parse(data)
   }
 }

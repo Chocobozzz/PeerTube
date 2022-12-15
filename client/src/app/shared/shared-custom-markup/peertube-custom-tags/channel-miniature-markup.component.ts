@@ -42,7 +42,11 @@ export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, O
         tap(channel => {
           this.channel = channel
         }),
-        switchMap(() => from(this.markdown.textMarkdownToHTML(this.channel.description))),
+        switchMap(() => from(this.markdown.textMarkdownToHTML({
+          markdown: this.channel.description,
+          withEmoji: true,
+          withHtml: true
+        }))),
         tap(html => {
           this.descriptionHTML = html
         }),

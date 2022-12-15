@@ -2,19 +2,21 @@ import express from 'express'
 import { readFile } from 'fs-extra'
 import { join } from 'path'
 import validator from 'validator'
+import { isTestOrDevInstance } from '@server/helpers/core-utils'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc'
+import { mdToOneLinePlainText } from '@server/helpers/markdown'
+import { ActorImageModel } from '@server/models/actor/actor-image'
+import { root } from '@shared/core-utils'
 import { escapeHTML } from '@shared/core-utils/renderer'
+import { sha256 } from '@shared/extra-utils'
 import { HTMLServerConfig } from '@shared/models'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/core-utils/i18n/i18n'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { VideoPlaylistPrivacy, VideoPrivacy } from '../../shared/models/videos'
-import { isTestInstance, sha256 } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
-import { mdToPlainText } from '../helpers/markdown'
 import { CONFIG } from '../initializers/config'
 import {
   ACCEPT_HEADERS,
-  ACTOR_IMAGES_SIZE,
   CUSTOM_HTML_TAG_COMMENTS,
   EMBED_SIZE,
   FILES_CONTENT_HASH,
@@ -22,11 +24,12 @@ import {
   WEBSERVER
 } from '../initializers/constants'
 import { AccountModel } from '../models/account/account'
-import { getActivityStreamDuration } from '../models/video/formatter/video-format-utils'
 import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { MAccountActor, MChannelActor } from '../types/models'
+import { getActivityStreamDuration } from './activitypub/activity'
+import { getBiggestActorImage } from './actor-image'
 import { ServerConfigManager } from './server-config-manager'
 
 type Tags = {
@@ -101,7 +104,7 @@ class ClientHtml {
       res.status(HttpStatusCode.NOT_FOUND_404)
       return html
     }
-    const description = mdToPlainText(video.description)
+    const description = mdToOneLinePlainText(video.description)
 
     let customHtml = ClientHtml.addTitleTag(html, video.name)
     customHtml = ClientHtml.addDescriptionTag(customHtml, description)
@@ -132,6 +135,7 @@ class ClientHtml {
       escapedSiteName: escapeHTML(siteName),
       escapedTitle: escapeHTML(title),
       escapedDescription: escapeHTML(description),
+      disallowIndexation: video.privacy !== VideoPrivacy.PUBLIC,
       image,
       embed,
       ogType,
@@ -162,7 +166,7 @@ class ClientHtml {
       return html
     }
 
-    const description = mdToPlainText(videoPlaylist.description)
+    const description = mdToOneLinePlainText(videoPlaylist.description)
 
     let customHtml = ClientHtml.addTitleTag(html, videoPlaylist.name)
     customHtml = ClientHtml.addDescriptionTag(customHtml, description)
@@ -195,6 +199,7 @@ class ClientHtml {
       escapedSiteName: escapeHTML(siteName),
       escapedTitle: escapeHTML(title),
       escapedDescription: escapeHTML(description),
+      disallowIndexation: videoPlaylist.privacy !== VideoPlaylistPrivacy.PUBLIC,
       embed,
       image,
       list,
@@ -228,7 +233,10 @@ class ClientHtml {
   static async getEmbedHTML () {
     const path = ClientHtml.getEmbedPath()
 
-    if (!isTestInstance() && ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
+    // Disable HTML cache in dev mode because webpack can regenerate JS files
+    if (!isTestOrDevInstance() && ClientHtml.htmlCache[path]) {
+      return ClientHtml.htmlCache[path]
+    }
 
     const buffer = await readFile(path)
     const serverConfig = await ServerConfigManager.Instance.getHTMLServerConfig()
@@ -261,7 +269,7 @@ class ClientHtml {
       return ClientHtml.getIndexHTML(req, res)
     }
 
-    const description = mdToPlainText(entity.description)
+    const description = mdToOneLinePlainText(entity.description)
 
     let customHtml = ClientHtml.addTitleTag(html, entity.getDisplayName())
     customHtml = ClientHtml.addDescriptionTag(customHtml, description)
@@ -271,10 +279,11 @@ class ClientHtml {
     const siteName = CONFIG.INSTANCE.NAME
     const title = entity.getDisplayName()
 
+    const avatar = getBiggestActorImage(entity.Actor.Avatars)
     const image = {
-      url: entity.Actor.getAvatarUrl(),
-      width: ACTOR_IMAGES_SIZE.AVATARS.width,
-      height: ACTOR_IMAGES_SIZE.AVATARS.height
+      url: ActorImageModel.getImageUrl(avatar),
+      width: avatar?.width,
+      height: avatar?.height
     }
 
     const ogType = 'website'
@@ -299,7 +308,7 @@ class ClientHtml {
 
   private static async getIndexHTML (req: express.Request, res: express.Response, paramLang?: string) {
     const path = ClientHtml.getIndexPath(req, res, paramLang)
-    if (!isTestInstance() && ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
+    if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
 
     const buffer = await readFile(path)
     const serverConfig = await ServerConfigManager.Instance.getHTMLServerConfig()
@@ -343,15 +352,11 @@ class ClientHtml {
       { cookie: req.cookies?.clientLanguage, paramLang, acceptLanguage: req.headers['accept-language'] }
     )
 
-    return join(__dirname, '../../../client/dist/' + buildFileLocale(lang) + '/index.html')
+    return join(root(), 'client', 'dist', buildFileLocale(lang), 'index.html')
   }
 
   private static getEmbedPath () {
-    return join(__dirname, '../../../client/dist/standalone/videos/embed.html')
-  }
-
-  private static addHtmlLang (htmlStringPage: string, paramLang: string) {
-    return htmlStringPage.replace('<html>', `<html lang="${paramLang}">`)
+    return join(root(), 'client', 'dist', 'standalone', 'videos', 'embed.html')
   }
 
   private static addManifestContentHash (htmlStringPage: string) {
@@ -571,7 +576,7 @@ async function serveIndexHTML (req: express.Request, res: express.Response) {
       await generateHTMLPage(req, res, req.params.language)
       return
     } catch (err) {
-      logger.error('Cannot generate HTML page.', err)
+      logger.error('Cannot generate HTML page.', { err })
       return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR_500).end()
     }
   }

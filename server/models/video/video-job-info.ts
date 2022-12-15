@@ -1,6 +1,6 @@
 import { Op, QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, IsInt, Model, Table, Unique, UpdatedAt } from 'sequelize-typescript'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoModel } from './video'
 
 export type VideoJobInfoColumnType = 'pendingMove' | 'pendingTranscode'
@@ -84,7 +84,7 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
   static async decrease (videoUUID: string, column: VideoJobInfoColumnType): Promise<number> {
     const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
 
-    const [ { pendingMove } ] = await VideoJobInfoModel.sequelize.query<{ pendingMove: number }>(`
+    const result = await VideoJobInfoModel.sequelize.query<{ pendingMove: number }>(`
     UPDATE
       "videoJobInfo"
     SET
@@ -97,6 +97,23 @@ export class VideoJobInfoModel extends Model<Partial<AttributesOnly<VideoJobInfo
       "${column}";
     `, options)
 
-    return pendingMove
+    if (result.length === 0) return undefined
+
+    return result[0].pendingMove
+  }
+
+  static async abortAllTasks (videoUUID: string, column: VideoJobInfoColumnType): Promise<void> {
+    const options = { type: QueryTypes.UPDATE as QueryTypes.UPDATE, bind: { videoUUID } }
+
+    await VideoJobInfoModel.sequelize.query(`
+    UPDATE
+      "videoJobInfo"
+    SET
+      "${column}" = 0,
+      "updatedAt" = NOW()
+    FROM "video"
+    WHERE
+      "video"."id" = "videoJobInfo"."videoId" AND "video"."uuid" = $videoUUID
+    `, options)
   }
 }

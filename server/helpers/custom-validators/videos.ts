@@ -1,9 +1,7 @@
 import { UploadFilesForCheck } from 'express'
-import { values } from 'lodash'
 import magnetUtil from 'magnet-uri'
 import validator from 'validator'
-import { VideoInclude } from '@shared/models'
-import { VideoFilter, VideoPrivacy, VideoRateType } from '../../../shared'
+import { VideoFilter, VideoInclude, VideoPrivacy, VideoRateType } from '@shared/models'
 import {
   CONSTRAINTS_FIELDS,
   MIMETYPES,
@@ -14,7 +12,7 @@ import {
   VIDEO_RATE_TYPES,
   VIDEO_STATES
 } from '../../initializers/constants'
-import { exists, isArray, isDateValid, isFileMimeTypeValid, isFileValid } from './misc'
+import { exists, isArray, isDateValid, isFileValid } from './misc'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 
@@ -47,10 +45,6 @@ function isVideoDurationValid (value: string) {
   return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DURATION)
 }
 
-function isVideoTruncatedDescriptionValid (value: string) {
-  return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.TRUNCATED_DESCRIPTION)
-}
-
 function isVideoDescriptionValid (value: string) {
   return value === null || (exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION))
 }
@@ -67,7 +61,7 @@ function isVideoTagValid (tag: string) {
   return exists(tag) && validator.isLength(tag, VIDEOS_CONSTRAINTS_FIELDS.TAG)
 }
 
-function isVideoTagsValid (tags: string[]) {
+function areVideoTagsValid (tags: string[]) {
   return tags === null || (
     isArray(tags) &&
     validator.isInt(tags.length.toString(), VIDEOS_CONSTRAINTS_FIELDS.TAGS) &&
@@ -79,16 +73,22 @@ function isVideoViewsValid (value: string) {
   return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.VIEWS)
 }
 
+const ratingTypes = new Set(Object.values(VIDEO_RATE_TYPES))
 function isVideoRatingTypeValid (value: string) {
-  return value === 'none' || values(VIDEO_RATE_TYPES).includes(value as VideoRateType)
+  return value === 'none' || ratingTypes.has(value as VideoRateType)
 }
 
 function isVideoFileExtnameValid (value: string) {
   return exists(value) && (value === VIDEO_LIVE.EXTENSION || MIMETYPES.VIDEO.EXT_MIMETYPE[value] !== undefined)
 }
 
-function isVideoFileMimeTypeValid (files: UploadFilesForCheck) {
-  return isFileMimeTypeValid(files, MIMETYPES.VIDEO.MIMETYPES_REGEX, 'videofile')
+function isVideoFileMimeTypeValid (files: UploadFilesForCheck, field = 'videofile') {
+  return isFileValid({
+    files,
+    mimeTypeRegex: MIMETYPES.VIDEO.MIMETYPES_REGEX,
+    field,
+    maxSize: null
+  })
 }
 
 const videoImageTypes = CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME
@@ -96,8 +96,14 @@ const videoImageTypes = CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME
                                           .join('|')
 const videoImageTypesRegex = `image/(${videoImageTypes})`
 
-function isVideoImage (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[], field: string) {
-  return isFileValid(files, videoImageTypesRegex, field, CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max, true)
+function isVideoImageValid (files: UploadFilesForCheck, field: string, optional = true) {
+  return isFileValid({
+    files,
+    mimeTypeRegex: videoImageTypesRegex,
+    field,
+    maxSize: CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max,
+    optional
+  })
 }
 
 function isVideoPrivacyValid (value: number) {
@@ -141,11 +147,10 @@ export {
   isVideoCategoryValid,
   isVideoLicenceValid,
   isVideoLanguageValid,
-  isVideoTruncatedDescriptionValid,
   isVideoDescriptionValid,
   isVideoFileInfoHashValid,
   isVideoNameValid,
-  isVideoTagsValid,
+  areVideoTagsValid,
   isVideoFPSResolutionValid,
   isScheduleVideoUpdatePrivacyValid,
   isVideoOriginallyPublishedAtValid,
@@ -161,7 +166,7 @@ export {
   isVideoPrivacyValid,
   isVideoFileResolutionValid,
   isVideoFileSizeValid,
-  isVideoImage,
+  isVideoImageValid,
   isVideoSupportValid,
   isVideoFilterValid
 }

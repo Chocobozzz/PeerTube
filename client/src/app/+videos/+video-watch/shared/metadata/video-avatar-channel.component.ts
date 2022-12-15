@@ -20,8 +20,4 @@ export class VideoAvatarChannelComponent implements OnInit {
     this.channelLinkTitle = $localize`${this.video.account.name} (channel page)`
     this.accountLinkTitle = $localize`${this.video.byAccount} (account page)`
   }
-
-  isChannelAvatarNull () {
-    return this.video.channel.avatar === null
-  }
 }

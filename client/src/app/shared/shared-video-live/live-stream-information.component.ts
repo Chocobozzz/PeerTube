@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { Video } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { LiveVideo } from '@shared/models'
+import { LiveVideo, LiveVideoError, LiveVideoSession } from '@shared/models'
 import { LiveVideoService } from './live-video.service'
 
 @Component({
@@ -14,6 +14,7 @@ export class LiveStreamInformationComponent {
 
   video: Video
   live: LiveVideo
+  latestLiveSessions: LiveVideoSession[] = []
 
   constructor (
     private modalService: NgbModal,
@@ -30,8 +31,36 @@ export class LiveStreamInformationComponent {
       .open(this.modal, { centered: true })
   }
 
+  getVideoUrl (video: { shortUUID: string }) {
+    return Video.buildWatchUrl(video)
+  }
+
+  getErrorLabel (session: LiveVideoSession) {
+    if (!session.error) return undefined
+
+    const errors: { [ id in LiveVideoError ]: string } = {
+      [LiveVideoError.BAD_SOCKET_HEALTH]: $localize`Server too slow`,
+      [LiveVideoError.BLACKLISTED]: $localize`Live blacklisted`,
+      [LiveVideoError.DURATION_EXCEEDED]: $localize`Max duration exceeded`,
+      [LiveVideoError.FFMPEG_ERROR]: $localize`Server error`,
+      [LiveVideoError.QUOTA_EXCEEDED]: $localize`Quota exceeded`
+    }
+
+    return errors[session.error]
+  }
+
+  isReplayBeingProcessed (session: LiveVideoSession) {
+    // Running live
+    if (!session.endDate) return false
+
+    return session.saveReplay && !session.endingProcessed
+  }
+
   private loadLiveInfo (video: Video) {
     this.liveVideoService.getVideoLive(video.id)
       .subscribe(live => this.live = live)
+
+    this.liveVideoService.listSessions(video.id)
+      .subscribe(({ data }) => this.latestLiveSessions = data.reverse().slice(0, 5))
   }
 }

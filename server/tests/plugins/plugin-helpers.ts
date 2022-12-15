@@ -1,20 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
+import { pathExists } from 'fs-extra'
+import { HttpStatusCode, ThumbnailType } from '@shared/models'
 import {
-  checkVideoFilesWereRemoved,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
   makeGetRequest,
   makePostBodyRequest,
+  makeRawRequest,
   PeerTubeServer,
   PluginsCommand,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
-import { HttpStatusCode } from '@shared/models'
+} from '@shared/server-commands'
+import { checkVideoFilesWereRemoved } from '../shared'
 
 function postCommand (server: PeerTubeServer, command: string, bodyArg?: object) {
   const body = { command }
@@ -45,7 +46,7 @@ describe('Test plugin helpers', function () {
   describe('Logger', function () {
 
     it('Should have logged things', async function () {
-      await servers[0].servers.waitUntilLog('localhost:' + servers[0].port + ' peertube-plugin-test-four', 1, false)
+      await servers[0].servers.waitUntilLog(servers[0].host + ' peertube-plugin-test-four', 1, false)
       await servers[0].servers.waitUntilLog('Hello world from plugin four', 1)
     })
   })
@@ -60,7 +61,7 @@ describe('Test plugin helpers', function () {
   describe('Config', function () {
 
     it('Should have the correct webserver url', async function () {
-      await servers[0].servers.waitUntilLog(`server url is http://localhost:${servers[0].port}`)
+      await servers[0].servers.waitUntilLog(`server url is ${servers[0].url}`)
     })
 
     it('Should have the correct config', async function () {
@@ -79,6 +80,33 @@ describe('Test plugin helpers', function () {
 
     it('Should get the server actor', async function () {
       await servers[0].servers.waitUntilLog('server actor name is peertube')
+    })
+  })
+
+  describe('Socket', function () {
+
+    it('Should sendNotification without any exceptions', async () => {
+      const user = await servers[0].users.create({ username: 'notis_redding', password: 'secret1234?' })
+      await makePostBodyRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/send-notification',
+        fields: {
+          userId: user.id
+        },
+        expectedStatus: HttpStatusCode.CREATED_201
+      })
+    })
+
+    it('Should sendVideoLiveNewState without any exceptions', async () => {
+      const res = await servers[0].videos.quickUpload({ name: 'video server 1' })
+
+      await makePostBodyRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/send-video-live-new-state/' + res.uuid,
+        expectedStatus: HttpStatusCode.CREATED_201
+      })
+
+      await servers[0].videos.remove({ id: res.uuid })
     })
   })
 
@@ -108,6 +136,7 @@ describe('Test plugin helpers', function () {
   })
 
   describe('User', function () {
+    let rootId: number
 
     it('Should not get a user if not authenticated', async function () {
       await makeGetRequest({
@@ -130,6 +159,28 @@ describe('Test plugin helpers', function () {
       expect(res.body.isAdmin).to.be.true
       expect(res.body.isModerator).to.be.false
       expect(res.body.isUser).to.be.false
+
+      rootId = res.body.id
+    })
+
+    it('Should load a user by id', async function () {
+      {
+        const res = await makeGetRequest({
+          url: servers[0].url,
+          path: '/plugins/test-four/router/user/' + rootId,
+          expectedStatus: HttpStatusCode.OK_200
+        })
+
+        expect(res.body.username).to.equal('root')
+      }
+
+      {
+        await makeGetRequest({
+          url: servers[0].url,
+          path: '/plugins/test-four/router/user/42',
+          expectedStatus: HttpStatusCode.NOT_FOUND_404
+        })
+      }
     })
   })
 
@@ -157,7 +208,7 @@ describe('Test plugin helpers', function () {
 
     it('Should mute server 2', async function () {
       this.timeout(10000)
-      await postCommand(servers[0], 'blockServer', { hostToBlock: `localhost:${servers[1].port}` })
+      await postCommand(servers[0], 'blockServer', { hostToBlock: servers[1].host })
 
       const { data } = await servers[0].videos.list()
 
@@ -166,7 +217,7 @@ describe('Test plugin helpers', function () {
     })
 
     it('Should unmute server 2', async function () {
-      await postCommand(servers[0], 'unblockServer', { hostToUnblock: `localhost:${servers[1].port}` })
+      await postCommand(servers[0], 'unblockServer', { hostToUnblock: servers[1].host })
 
       const { data } = await servers[0].videos.list()
 
@@ -174,7 +225,7 @@ describe('Test plugin helpers', function () {
     })
 
     it('Should mute account of server 2', async function () {
-      await postCommand(servers[0], 'blockAccount', { handleToBlock: `root@localhost:${servers[1].port}` })
+      await postCommand(servers[0], 'blockAccount', { handleToBlock: `root@${servers[1].host}` })
 
       const { data } = await servers[0].videos.list()
 
@@ -183,7 +234,7 @@ describe('Test plugin helpers', function () {
     })
 
     it('Should unmute account of server 2', async function () {
-      await postCommand(servers[0], 'unblockAccount', { handleToUnblock: `root@localhost:${servers[1].port}` })
+      await postCommand(servers[0], 'unblockAccount', { handleToUnblock: `root@${servers[1].host}` })
 
       const { data } = await servers[0].videos.list()
 
@@ -222,10 +273,75 @@ describe('Test plugin helpers', function () {
 
   describe('Videos', function () {
     let videoUUID: string
+    let videoPath: string
 
     before(async () => {
+      this.timeout(240000)
+
+      await servers[0].config.enableTranscoding()
+
       const res = await servers[0].videos.quickUpload({ name: 'video1' })
       videoUUID = res.uuid
+
+      await waitJobs(servers)
+    })
+
+    it('Should get video files', async function () {
+      const { body } = await makeGetRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/video-files/' + videoUUID,
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      // Video files check
+      {
+        expect(body.webtorrent.videoFiles).to.be.an('array')
+        expect(body.hls.videoFiles).to.be.an('array')
+
+        for (const resolution of [ 144, 240, 360, 480, 720 ]) {
+          for (const files of [ body.webtorrent.videoFiles, body.hls.videoFiles ]) {
+            const file = files.find(f => f.resolution === resolution)
+            expect(file).to.exist
+
+            expect(file.size).to.be.a('number')
+            expect(file.fps).to.equal(25)
+
+            expect(await pathExists(file.path)).to.be.true
+            await makeRawRequest({ url: file.url, expectedStatus: HttpStatusCode.OK_200 })
+          }
+        }
+
+        videoPath = body.webtorrent.videoFiles[0].path
+      }
+
+      // Thumbnails check
+      {
+        expect(body.thumbnails).to.be.an('array')
+
+        const miniature = body.thumbnails.find(t => t.type === ThumbnailType.MINIATURE)
+        expect(miniature).to.exist
+        expect(await pathExists(miniature.path)).to.be.true
+        await makeRawRequest({ url: miniature.url, expectedStatus: HttpStatusCode.OK_200 })
+
+        const preview = body.thumbnails.find(t => t.type === ThumbnailType.PREVIEW)
+        expect(preview).to.exist
+        expect(await pathExists(preview.path)).to.be.true
+        await makeRawRequest({ url: preview.url, expectedStatus: HttpStatusCode.OK_200 })
+      }
+    })
+
+    it('Should probe a file', async function () {
+      const { body } = await makeGetRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/ffprobe',
+        query: {
+          path: videoPath
+        },
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      expect(body.streams).to.be.an('array')
+      expect(body.streams).to.have.lengthOf(2)
     })
 
     it('Should remove a video after a view', async function () {
@@ -234,7 +350,7 @@ describe('Test plugin helpers', function () {
       // Should not throw -> video exists
       const video = await servers[0].videos.get({ id: videoUUID })
       // Should delete the video
-      await servers[0].videos.view({ id: videoUUID })
+      await servers[0].views.simulateView({ id: videoUUID })
 
       await servers[0].servers.waitUntilLog('Video deleted by plugin four.')
 

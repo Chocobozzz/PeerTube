@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
 import {
   cleanupTests,
@@ -10,7 +9,7 @@ import {
   PeerTubeServer,
   PluginsCommand,
   setAccessTokensToServers
-} from '@shared/extra-utils'
+} from '@shared/server-commands'
 import { HttpStatusCode } from '@shared/models'
 
 describe('Test plugin helpers', function () {

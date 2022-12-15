@@ -4,20 +4,16 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService } from '@app/core'
+import { logger } from '@root-helpers/logger'
 import { PeerTubePluginIndex, PluginType } from '@shared/models'
 
 @Component({
   selector: 'my-plugin-search',
   templateUrl: './plugin-search.component.html',
-  styleUrls: [
-    '../shared/toggle-plugin-type.scss',
-    '../shared/plugin-list.component.scss',
-    './plugin-search.component.scss'
-  ]
+  styleUrls: [ './plugin-search.component.scss' ]
 })
 export class PluginSearchComponent implements OnInit {
-  pluginTypeOptions: { label: string, value: PluginType }[] = []
-  pluginType: PluginType = PluginType.PLUGIN
+  pluginType: PluginType
 
   pagination: ComponentPagination = {
     currentPage: 1,
@@ -45,24 +41,30 @@ export class PluginSearchComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.pluginTypeOptions = this.pluginApiService.getPluginTypeOptions()
   }
 
   ngOnInit () {
-    const query = this.route.snapshot.queryParams
-    if (query['pluginType']) this.pluginType = parseInt(query['pluginType'], 10)
+    if (!this.route.snapshot.queryParams['pluginType']) {
+      const queryParams = { pluginType: PluginType.PLUGIN }
+
+      this.router.navigate([], { queryParams })
+    }
+
+    this.route.queryParams.subscribe(query => {
+      if (!query['pluginType']) return
+
+      this.pluginType = parseInt(query['pluginType'], 10)
+      this.search = query['search'] || ''
+
+      this.reloadPlugins()
+    })
 
     this.searchSubject.asObservable()
         .pipe(
           debounceTime(400),
           distinctUntilChanged()
         )
-        .subscribe(search => {
-          this.search = search
-          this.reloadPlugins()
-        })
-
-    this.reloadPlugins()
+        .subscribe(search => this.router.navigate([], { queryParams: { search }, queryParamsHandling: 'merge' }))
   }
 
   onSearchChange (event: Event) {
@@ -74,8 +76,6 @@ export class PluginSearchComponent implements OnInit {
   reloadPlugins () {
     this.pagination.currentPage = 1
     this.plugins = []
-
-    this.router.navigate([], { queryParams: { pluginType: this.pluginType } })
 
     this.loadMorePlugins()
   }
@@ -95,7 +95,7 @@ export class PluginSearchComponent implements OnInit {
           },
 
           error: err => {
-            console.error(err)
+            logger.error(err)
 
             const message = $localize`The plugin index is not available. Please retry later.`
             this.notifier.error(message)
@@ -113,10 +113,6 @@ export class PluginSearchComponent implements OnInit {
 
   isInstalling (plugin: PeerTubePluginIndex) {
     return !!this.installing[plugin.npmName]
-  }
-
-  getPluginOrThemeHref (name: string) {
-    return this.pluginApiService.getPluginOrThemeHref(this.pluginType, name)
   }
 
   getShowRouterLink (plugin: PeerTubePluginIndex) {
@@ -149,7 +145,11 @@ export class PluginSearchComponent implements OnInit {
             plugin.installed = true
           },
 
-          error: err => this.notifier.error(err.message)
+          error: err => {
+            this.installing[plugin.npmName] = false
+
+            this.notifier.error(err.message)
+          }
         })
   }
 }

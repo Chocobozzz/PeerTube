@@ -1,5 +1,10 @@
+import { ActivityType } from '../activitypub'
 import { VideoRedundancyStrategyWithManual } from '../redundancy'
-export interface ServerStats {
+
+type ActivityPubMessagesSuccess = Record<`totalActivityPub${ActivityType}MessagesSuccesses`, number>
+type ActivityPubMessagesErrors = Record<`totalActivityPub${ActivityType}MessagesErrors`, number>
+
+export interface ServerStats extends ActivityPubMessagesSuccess, ActivityPubMessagesErrors {
   totalUsers: number
   totalDailyActiveUsers: number
   totalWeeklyActiveUsers: number
@@ -28,32 +33,6 @@ export interface ServerStats {
   totalActivityPubMessagesProcessed: number
   totalActivityPubMessagesSuccesses: number
   totalActivityPubMessagesErrors: number
-
-  totalActivityPubCreateMessagesSuccesses: number
-  totalActivityPubUpdateMessagesSuccesses: number
-  totalActivityPubDeleteMessagesSuccesses: number
-  totalActivityPubFollowMessagesSuccesses: number
-  totalActivityPubAcceptMessagesSuccesses: number
-  totalActivityPubRejectMessagesSuccesses: number
-  totalActivityPubAnnounceMessagesSuccesses: number
-  totalActivityPubUndoMessagesSuccesses: number
-  totalActivityPubLikeMessagesSuccesses: number
-  totalActivityPubDislikeMessagesSuccesses: number
-  totalActivityPubFlagMessagesSuccesses: number
-  totalActivityPubViewMessagesSuccesses: number
-
-  totalActivityPubCreateMessagesErrors: number
-  totalActivityPubUpdateMessagesErrors: number
-  totalActivityPubDeleteMessagesErrors: number
-  totalActivityPubFollowMessagesErrors: number
-  totalActivityPubAcceptMessagesErrors: number
-  totalActivityPubRejectMessagesErrors: number
-  totalActivityPubAnnounceMessagesErrors: number
-  totalActivityPubUndoMessagesErrors: number
-  totalActivityPubLikeMessagesErrors: number
-  totalActivityPubDislikeMessagesErrors: number
-  totalActivityPubFlagMessagesErrors: number
-  totalActivityPubViewMessagesErrors: number
 
   activityPubMessagesProcessedPerSecond: number
   totalActivityPubMessagesWaiting: number

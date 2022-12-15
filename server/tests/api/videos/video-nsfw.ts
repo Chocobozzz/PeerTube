@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
+import { expect } from 'chai'
+import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 import { BooleanBothQuery, CustomConfig, ResultList, Video, VideosOverview } from '@shared/models'
-
-const expect = chai.expect
 
 function createOverviewRes (overview: VideosOverview) {
   const videos = overview.categories[0].videos
@@ -136,7 +133,7 @@ describe('Test video NSFW policy', function () {
     it('Should create a user having the default nsfw policy', async function () {
       const username = 'user1'
       const password = 'my super password'
-      await server.users.create({ username: username, password: password })
+      await server.users.create({ username, password })
 
       userAccessToken = await server.login.getAccessToken({ username, password })
 

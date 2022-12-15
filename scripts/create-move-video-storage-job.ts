@@ -1,13 +1,10 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import { program } from 'commander'
-import { VideoModel } from '@server/models/video/video'
-import { initDatabaseModels } from '@server/initializers/database'
-import { VideoStorage } from '@shared/models'
-import { moveToExternalStorageState } from '@server/lib/video-state'
-import { JobQueue } from '@server/lib/job-queue'
 import { CONFIG } from '@server/initializers/config'
+import { initDatabaseModels } from '@server/initializers/database'
+import { JobQueue } from '@server/lib/job-queue'
+import { moveToExternalStorageState } from '@server/lib/video-state'
+import { VideoModel } from '@server/models/video/video'
+import { VideoState, VideoStorage } from '@shared/models'
 
 program
   .description('Move videos to another storage.')
@@ -40,7 +37,7 @@ run()
 async function run () {
   await initDatabaseModels(true)
 
-  JobQueue.Instance.init(true)
+  JobQueue.Instance.init()
 
   let ids: number[] = []
 
@@ -57,13 +54,23 @@ async function run () {
       process.exit(-1)
     }
 
+    if (video.isLive) {
+      console.error('Cannot process live video')
+      process.exit(-1)
+    }
+
+    if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
+      console.error('This video is already being moved to external storage')
+      process.exit(-1)
+    }
+
     ids.push(video.id)
   } else {
     ids = await VideoModel.listLocalIds()
   }
 
   for (const id of ids) {
-    const videoFull = await VideoModel.loadAndPopulateAccountAndServerAndTags(id)
+    const videoFull = await VideoModel.loadFull(id)
 
     const files = videoFull.VideoFiles || []
     const hls = videoFull.getHLSPlaylist()
@@ -71,7 +78,7 @@ async function run () {
     if (files.some(f => f.storage === VideoStorage.FILE_SYSTEM) || hls?.storage === VideoStorage.FILE_SYSTEM) {
       console.log('Processing video %s.', videoFull.name)
 
-      const success = await moveToExternalStorageState(videoFull, false, undefined)
+      const success = await moveToExternalStorageState({ video: videoFull, isNewVideo: false, transaction: undefined })
 
       if (!success) {
         console.error(

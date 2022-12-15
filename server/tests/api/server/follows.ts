@@ -1,28 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import {
-  cleanupTests,
-  completeVideoCheck,
-  createMultipleServers,
-  dateIsValid,
-  expectAccountFollows,
-  expectChannelsFollows,
-  PeerTubeServer,
-  setAccessTokensToServers,
-  testCaptionFile,
-  waitJobs
-} from '@shared/extra-utils'
+import { expect } from 'chai'
+import { completeVideoCheck, dateIsValid, expectAccountFollows, expectChannelsFollows, testCaptionFile } from '@server/tests/shared'
 import { VideoCreateResult, VideoPrivacy } from '@shared/models'
-
-const expect = chai.expect
+import { cleanupTests, createMultipleServers, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/server-commands'
 
 describe('Test follows', function () {
   let servers: PeerTubeServer[] = []
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(3)
 
@@ -101,7 +88,7 @@ describe('Test follows', function () {
       const follows = body.data
       expect(follows).to.be.an('array')
       expect(follows).to.have.lengthOf(1)
-      expect(follows[0].follower.host).to.equal('localhost:' + servers[0].port)
+      expect(follows[0].follower.host).to.equal(servers[0].host)
     })
 
     it('Should have 0 followers on server 1 and 2', async function () {
@@ -292,7 +279,7 @@ describe('Test follows', function () {
     })
 
     it('Should upload a video on server 2 and 3 and propagate only the video of server 2', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       await servers[1].videos.upload({ attributes: { name: 'server2' } })
       await servers[2].videos.upload({ attributes: { name: 'server3' } })

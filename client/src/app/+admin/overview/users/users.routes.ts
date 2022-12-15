@@ -4,7 +4,7 @@ import { UserRight } from '@shared/models'
 import { UserCreateComponent, UserUpdateComponent } from './user-edit'
 import { UserListComponent } from './user-list'
 
-export const UsersRoutes: Routes = [
+export const usersRoutes: Routes = [
   {
     path: 'users',
     canActivate: [ UserRightGuard ],

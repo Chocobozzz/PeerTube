@@ -6,6 +6,7 @@ import { OutgoingHttpHeaders } from 'http'
 import { isTestInstance, parseDurationToMs } from '@server/helpers/core-utils'
 import { logger } from '@server/helpers/logger'
 import { Redis } from '@server/lib/redis'
+import { asyncMiddleware } from '@server/middlewares'
 import { HttpStatusCode } from '@shared/models'
 
 export interface APICacheOptions {
@@ -40,24 +41,25 @@ export class ApiCache {
   buildMiddleware (strDuration: string) {
     const duration = parseDurationToMs(strDuration)
 
-    return (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const key = this.getCacheKey(req.originalUrl)
-      const redis = Redis.Instance.getClient()
+    return asyncMiddleware(
+      async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        const key = Redis.Instance.getPrefix() + 'api-cache-' + req.originalUrl
+        const redis = Redis.Instance.getClient()
 
-      if (!redis.connected) return this.makeResponseCacheable(res, next, key, duration)
+        if (!Redis.Instance.isConnected()) return this.makeResponseCacheable(res, next, key, duration)
 
-      try {
-        redis.hgetall(key, (err, obj) => {
-          if (!err && obj && obj.response) {
+        try {
+          const obj = await redis.hgetall(key)
+          if (obj?.response) {
             return this.sendCachedResponse(req, res, JSON.parse(obj.response), duration)
           }
 
           return this.makeResponseCacheable(res, next, key, duration)
-        })
-      } catch (err) {
-        return this.makeResponseCacheable(res, next, key, duration)
+        } catch (err) {
+          return this.makeResponseCacheable(res, next, key, duration)
+        }
       }
-    }
+    )
   }
 
   clearRoute (route: string) {
@@ -102,21 +104,22 @@ export class ApiCache {
     } as CacheObject
   }
 
-  private cacheResponse (key: string, value: object, duration: number) {
+  private async cacheResponse (key: string, value: object, duration: number) {
     const redis = Redis.Instance.getClient()
 
-    if (redis.connected) {
-      try {
-        redis.hset(key, 'response', JSON.stringify(value))
-        redis.hset(key, 'duration', duration + '')
+    if (Redis.Instance.isConnected()) {
+      await Promise.all([
+        redis.hset(key, 'response', JSON.stringify(value)),
+        redis.hset(key, 'duration', duration + ''),
         redis.expire(key, duration / 1000)
-      } catch (err) {
-        logger.error('Cannot set cache in redis.', { err })
-      }
+      ])
     }
 
     // add automatic cache clearing from duration, includes max limit on setTimeout
-    this.timers[key] = setTimeout(() => this.clear(key), Math.min(duration, 2147483647))
+    this.timers[key] = setTimeout(() => {
+      this.clear(key)
+        .catch(err => logger.error('Cannot clear Redis key %s.', key, { err }))
+    }, Math.min(duration, 2147483647))
   }
 
   private accumulateContent (res: express.Response, content: any) {
@@ -158,7 +161,7 @@ export class ApiCache {
       end: res.end,
       cacheable: true,
       content: undefined,
-      headers: {}
+      headers: undefined
     }
 
     // Patch express
@@ -193,6 +196,7 @@ export class ApiCache {
             encoding
           )
           self.cacheResponse(key, cacheObject, duration)
+            .catch(err => logger.error('Cannot cache response', { err }))
         }
       }
 
@@ -244,7 +248,7 @@ export class ApiCache {
     return response.end(data, cacheObject.encoding)
   }
 
-  private clear (target: string) {
+  private async clear (target: string) {
     const redis = Redis.Instance.getClient()
 
     if (target) {
@@ -252,7 +256,7 @@ export class ApiCache {
       delete this.timers[target]
 
       try {
-        redis.del(target)
+        await redis.del(target)
       } catch (err) {
         logger.error('Cannot delete %s in redis cache.', target, { err })
       }
@@ -264,7 +268,7 @@ export class ApiCache {
         delete this.timers[key]
 
         try {
-          redis.del(key)
+          await redis.del(key)
         } catch (err) {
           logger.error('Cannot delete %s in redis cache.', key, { err })
         }

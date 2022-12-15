@@ -3,6 +3,7 @@ import { first, map, share, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID } from '@angular/core'
 import { getDevLocale, isOnDevLocale, sortBy } from '@app/helpers'
+import { logger } from '@root-helpers/logger'
 import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@shared/core-utils/i18n'
 import { HTMLServerConfig, ServerConfig, ServerStats, VideoConstant } from '@shared/models'
 import { environment } from '../../../environments/environment'
@@ -43,7 +44,7 @@ export class ServerService {
     } catch (err) {
       // Expected in dev mode since we can't inject the config in the HTML
       if (environment.production !== false) {
-        console.error('Cannot load config locally. Fallback to API.')
+        logger.error('Cannot load config locally. Fallback to API.')
       }
 
       return this.getConfig()

@@ -3,6 +3,7 @@ import { pickCommonVideoQuery } from '@server/helpers/query'
 import { ActorFollowModel } from '@server/models/actor/actor-follow'
 import { getServerActor } from '@server/models/application/application'
 import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
+import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { getFormattedObjects } from '../../helpers/utils'
 import { JobQueue } from '../../lib/job-queue'
@@ -25,8 +26,10 @@ import {
   accountsFollowersSortValidator,
   accountsSortValidator,
   ensureAuthUserOwnsAccountValidator,
+  ensureCanManageChannelOrAccount,
   videoChannelsSortValidator,
   videoChannelStatsValidator,
+  videoChannelSyncsSortValidator,
   videosSortValidator
 } from '../../middlewares/validators'
 import { commonVideoPlaylistFiltersValidator, videoPlaylistsSearchValidator } from '../../middlewares/validators/videos/video-playlists'
@@ -70,6 +73,17 @@ accountsRouter.get('/:accountName/video-channels',
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listAccountChannels)
+)
+
+accountsRouter.get('/:accountName/video-channel-syncs',
+  authenticate,
+  asyncMiddleware(accountNameWithHostGetValidator),
+  ensureCanManageChannelOrAccount,
+  paginationValidator,
+  videoChannelSyncsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(listAccountChannelsSync)
 )
 
 accountsRouter.get('/:accountName/video-playlists',
@@ -119,7 +133,7 @@ function getAccount (req: express.Request, res: express.Response) {
   const account = res.locals.account
 
   if (account.isOutdated()) {
-    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'actor', url: account.Actor.url } })
+    JobQueue.Instance.createJobAsync({ type: 'activitypub-refresher', payload: { type: 'actor', url: account.Actor.url } })
   }
 
   return res.json(account.toFormattedJSON())
@@ -142,6 +156,20 @@ async function listAccountChannels (req: express.Request, res: express.Response)
   }
 
   const resultList = await VideoChannelModel.listByAccountForAPI(options)
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
+}
+
+async function listAccountChannelsSync (req: express.Request, res: express.Response) {
+  const options = {
+    accountId: res.locals.account.id,
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    search: req.query.search
+  }
+
+  const resultList = await VideoChannelSyncModel.listByAccountForAPI(options)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -213,7 +241,7 @@ async function listAccountRatings (req: express.Request, res: express.Response) 
     sort: req.query.sort,
     type: req.query.rating
   })
-  return res.json(getFormattedObjects(resultList.rows, resultList.count))
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function listAccountFollowers (req: express.Request, res: express.Response) {

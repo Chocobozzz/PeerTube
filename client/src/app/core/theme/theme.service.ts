@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core'
+import { logger } from '@root-helpers/logger'
+import { capitalizeFirstLetter } from '@root-helpers/string'
 import { UserLocalStorageKeys } from '@root-helpers/users'
 import { HTMLServerConfig, ServerConfigTheme } from '@shared/models'
 import { environment } from '../../../environments/environment'
@@ -40,10 +42,23 @@ export class ThemeService {
     this.listenUserTheme()
   }
 
+  getDefaultThemeLabel () {
+    if (this.hasDarkTheme()) {
+      return $localize`Light/Orange or Dark`
+    }
+
+    return $localize`Light/Orange`
+  }
+
+  buildAvailableThemes () {
+    return this.serverConfig.theme.registered
+               .map(t => ({ id: t.name, label: capitalizeFirstLetter(t.name) }))
+  }
+
   private injectThemes (themes: ServerConfigTheme[], fromLocalStorage = false) {
     this.themes = themes
 
-    console.log('Injecting %d themes.', this.themes.length)
+    logger.info(`Injecting ${this.themes.length} themes.`)
 
     const head = this.getHeadElement()
 
@@ -81,10 +96,7 @@ export class ThemeService {
     if (instanceTheme !== 'default') return instanceTheme
 
     // Default to dark theme if available and wanted by the user
-    if (
-      this.themes.find(t => t.name === 'dark') &&
-      window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-    ) {
+    if (this.hasDarkTheme() && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       return 'dark'
     }
 
@@ -106,13 +118,13 @@ export class ThemeService {
 
     const currentTheme = this.getCurrentTheme()
 
-    console.log('Enabling %s theme.', currentTheme)
+    logger.info(`Enabling ${currentTheme} theme.`)
 
     this.loadTheme(currentTheme)
 
     const theme = this.getTheme(currentTheme)
     if (theme) {
-      console.log('Adding scripts of theme %s.', currentTheme)
+      logger.info(`Adding scripts of theme ${currentTheme}`)
 
       this.pluginService.addPlugin(theme, true)
 
@@ -154,7 +166,7 @@ export class ThemeService {
       this.injectThemes([ lastActiveTheme ], true)
       this.updateCurrentTheme()
     } catch (err) {
-      console.error('Cannot parse last active theme.', err)
+      logger.error('Cannot parse last active theme.', err)
       return
     }
   }
@@ -162,7 +174,7 @@ export class ThemeService {
   private removeThemePlugins (themeName: string) {
     const oldTheme = this.getTheme(themeName)
     if (oldTheme) {
-      console.log('Removing scripts of old theme %s.', themeName)
+      logger.info(`Removing scripts of old theme ${themeName}.`)
       this.pluginService.removePlugin(oldTheme)
     }
   }
@@ -192,5 +204,9 @@ export class ThemeService {
 
   private getTheme (name: string) {
     return this.themes.find(t => t.name === name)
+  }
+
+  private hasDarkTheme () {
+    return this.serverConfig.theme.registered.some(t => t.name === 'dark')
   }
 }

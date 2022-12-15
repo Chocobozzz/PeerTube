@@ -1,19 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { wait } from '@shared/core-utils'
+import { ActivityType, VideoPlaylistPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
-  wait,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar,
   waitJobs
-} from '@shared/extra-utils'
-import { ActivityType, VideoPlaylistPrivacy } from '@shared/models'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 describe('Test stats (excluding redundancy)', function () {
   let servers: PeerTubeServer[] = []
@@ -24,11 +23,13 @@ describe('Test stats (excluding redundancy)', function () {
   }
 
   before(async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(3)
 
     await setAccessTokensToServers(servers)
+    await setDefaultChannelAvatar(servers)
+    await setDefaultAccountAvatar(servers)
 
     await doubleFollow(servers[0], servers[1])
 
@@ -38,7 +39,7 @@ describe('Test stats (excluding redundancy)', function () {
 
     await servers[0].comments.createThread({ videoId: uuid, text: 'comment' })
 
-    await servers[0].videos.view({ id: uuid })
+    await servers[0].views.simulateView({ id: uuid })
 
     // Wait the video views repeatable job
     await wait(8000)
@@ -184,7 +185,7 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   it('Should correctly count video file sizes if transcoding is enabled', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     await servers[0].config.updateCustomSubConfig({
       newConfig: {
@@ -230,13 +231,7 @@ describe('Test stats (excluding redundancy)', function () {
   it('Should have the correct AP stats', async function () {
     this.timeout(60000)
 
-    await servers[0].config.updateCustomSubConfig({
-      newConfig: {
-        transcoding: {
-          enabled: false
-        }
-      }
-    })
+    await servers[0].config.disableTranscoding()
 
     const first = await servers[1].stats.get()
 

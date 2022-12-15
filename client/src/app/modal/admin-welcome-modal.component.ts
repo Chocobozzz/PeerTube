@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { Notifier, User, UserService } from '@app/core'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 
 @Component({
@@ -42,7 +43,7 @@ export class AdminWelcomeModalComponent {
 
     this.userService.updateMyProfile({ noWelcomeModal: true })
       .subscribe({
-        next: () => console.log('We will not open the welcome modal again.'),
+        next: () => logger.info('We will not open the welcome modal again.'),
 
         error: err => this.notifier.error(err.message)
       })

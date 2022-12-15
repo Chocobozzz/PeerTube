@@ -1,19 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
 import {
   CheckerBaseParams,
   checkNewPeerTubeVersion,
   checkNewPluginVersion,
-  cleanupTests,
   MockJoinPeerTubeVersions,
   MockSmtpServer,
-  PeerTubeServer,
-  prepareNotificationsTest,
-  wait
-} from '@shared/extra-utils'
+  prepareNotificationsTest
+} from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
 import { PluginType, UserNotification, UserNotificationType } from '@shared/models'
+import { cleanupTests, PeerTubeServer } from '@shared/server-commands'
 
 describe('Test admin notifications', function () {
   let server: PeerTubeServer
@@ -33,13 +31,13 @@ describe('Test admin notifications', function () {
       peertube: {
         check_latest_version: {
           enabled: true,
-          url: `http://localhost:${port}/versions.json`
+          url: `http://127.0.0.1:${port}/versions.json`
         }
       },
       plugins: {
         index: {
           enabled: true,
-          check_latest_versions_interval: '5 seconds'
+          check_latest_versions_interval: '3 seconds'
         }
       }
     }
@@ -52,7 +50,7 @@ describe('Test admin notifications', function () {
     adminNotifications = res.adminNotifications
 
     baseParams = {
-      server: server,
+      server,
       emails,
       socketNotifications: adminNotifications,
       token: server.accessToken
@@ -64,7 +62,7 @@ describe('Test admin notifications', function () {
 
   describe('Latest PeerTube version notification', function () {
 
-    it('Should not send a notification to admins if there is not a new version', async function () {
+    it('Should not send a notification to admins if there is no new version', async function () {
       this.timeout(30000)
 
       joinPeerTubeServer.setLatestVersion('1.4.2')
@@ -73,7 +71,7 @@ describe('Test admin notifications', function () {
       await checkNewPeerTubeVersion({ ...baseParams, latestVersion: '1.4.2', checkType: 'absence' })
     })
 
-    it('Should send a notification to admins on new plugin version', async function () {
+    it('Should send a notification to admins on new version', async function () {
       this.timeout(30000)
 
       joinPeerTubeServer.setLatestVersion('15.4.2')

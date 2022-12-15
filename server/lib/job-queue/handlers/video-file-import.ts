@@ -1,24 +1,25 @@
-import { Job } from 'bull'
+import { Job } from 'bullmq'
 import { copy, stat } from 'fs-extra'
-import { getLowercaseExtension } from '@server/helpers/core-utils'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { CONFIG } from '@server/initializers/config'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { generateWebTorrentVideoFilename } from '@server/lib/paths'
-import { addMoveToObjectStorageJob } from '@server/lib/video'
+import { buildMoveToObjectStorageJob } from '@server/lib/video'
 import { VideoPathManager } from '@server/lib/video-path-manager'
+import { VideoModel } from '@server/models/video/video'
+import { VideoFileModel } from '@server/models/video/video-file'
 import { MVideoFullLight } from '@server/types/models'
+import { getLowercaseExtension } from '@shared/core-utils'
 import { VideoFileImportPayload, VideoStorage } from '@shared/models'
-import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffprobe-utils'
+import { getVideoStreamFPS, getVideoStreamDimensionsInfo } from '../../../helpers/ffmpeg'
 import { logger } from '../../../helpers/logger'
-import { VideoModel } from '../../../models/video/video'
-import { VideoFileModel } from '../../../models/video/video-file'
+import { JobQueue } from '../job-queue'
 
 async function processVideoFileImport (job: Job) {
   const payload = job.data as VideoFileImportPayload
-  logger.info('Processing video file import in job %d.', job.id)
+  logger.info('Processing video file import in job %s.', job.id)
 
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(payload.videoUUID)
+  const video = await VideoModel.loadFull(payload.videoUUID)
   // No video, maybe deleted?
   if (!video) {
     logger.info('Do not process job %d, video does not exist.', job.id)
@@ -28,7 +29,7 @@ async function processVideoFileImport (job: Job) {
   await updateVideoFile(video, payload.filePath)
 
   if (CONFIG.OBJECT_STORAGE.ENABLED) {
-    await addMoveToObjectStorageJob(video)
+    await JobQueue.Instance.createJob(await buildMoveToObjectStorageJob({ video, previousVideoState: video.state }))
   } else {
     await federateVideoIfNeeded(video, false)
   }
@@ -45,9 +46,9 @@ export {
 // ---------------------------------------------------------------------------
 
 async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
-  const { resolution } = await getVideoFileResolution(inputFilePath)
+  const { resolution } = await getVideoStreamDimensionsInfo(inputFilePath)
   const { size } = await stat(inputFilePath)
-  const fps = await getVideoFileFPS(inputFilePath)
+  const fps = await getVideoStreamFPS(inputFilePath)
 
   const fileExt = getLowercaseExtension(inputFilePath)
 
@@ -55,7 +56,7 @@ async function updateVideoFile (video: MVideoFullLight, inputFilePath: string) {
 
   if (currentVideoFile) {
     // Remove old file and old torrent
-    await video.removeWebTorrentFileAndTorrent(currentVideoFile)
+    await video.removeWebTorrentFile(currentVideoFile)
     // Remove the old video file from the array
     video.VideoFiles = video.VideoFiles.filter(f => f !== currentVideoFile)
 

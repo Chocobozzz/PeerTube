@@ -44,7 +44,7 @@
   {{ error }}
 </div>
 
-<div class="alert alert-info" i18n *ngIf="isInUpdateForm && getMaxLiveDuration() >= 0">
+<div class="alert pt-alert-primary" i18n *ngIf="isInUpdateForm && getMaxLiveDuration() >= 0">
   Max live duration is {{ getMaxLiveDuration() | myDurationFormatter }}.
   If your live reaches this limit, it will be automatically terminated.
 </div>
@@ -53,7 +53,7 @@
 <form [hidden]="!isInUpdateForm" novalidate [formGroup]="form">
   <my-video-edit
     [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions"
-    [schedulePublicationPossible]="false" [waitTranscodingEnabled]="isWaitTranscodingEnabled()"
+    [forbidScheduledPublication]="true" [hideWaitTranscoding]="true"
     [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels" [liveVideo]="liveVideo"
     type="go-live"
   ></my-video-edit>
@@ -61,7 +61,7 @@
   <div class="submit-container">
     <my-button className="orange-button" i18n-label label="Update" icon="circle-tick"
       (click)="updateSecondStep()"
-      [disabled]="!form.valid"
+      [disabled]="!form.valid || isUpdatingVideo === true"
     ></my-button>
   </div>
 </form>

@@ -7,6 +7,8 @@ export class AutofocusDirective implements AfterViewInit {
   constructor (private host: ElementRef) { }
 
   ngAfterViewInit () {
-    this.host.nativeElement.focus()
+    const el = this.host.nativeElement as HTMLElement
+
+    el.focus({ preventScroll: true })
   }
 }

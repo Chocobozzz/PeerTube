@@ -1,5 +1,5 @@
 <div class="video-actions-rates">
-  <div class="video-actions full-width justify-content-end">
+  <div class="video-actions justify-content-end">
     <my-video-rate
       [video]="video" [isUserLoggedIn]="isUserLoggedIn"
       (rateUpdated)="onRateUpdated($event)" (userRatingLoaded)="onRateUpdated($event)"
@@ -36,7 +36,7 @@
 
     <ng-container *ngIf="!isUserLoggedIn && !video.isLive">
       <button
-        *ngIf="isVideoDownloadable()" class="action-button action-button-save"
+        *ngIf="isVideoDownloadable()" class="action-button action-button-download"
         (click)="showDownloadModal()" (keydown.enter)="showDownloadModal()"
       >
         <my-global-icon iconName="download" aria-hidden="true"></my-global-icon>

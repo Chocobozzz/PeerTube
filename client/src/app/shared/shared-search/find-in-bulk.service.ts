@@ -7,8 +7,9 @@ import { ResultList } from '@shared/models/common'
 import { Video, VideoChannel } from '../shared-main'
 import { VideoPlaylist } from '../shared-video-playlist'
 import { SearchService } from './search.service'
+import { AdvancedSearch } from './advanced-search.model'
 
-const logger = debug('peertube:search:FindInBulkService')
+const debugLogger = debug('peertube:search:FindInBulkService')
 
 type BulkObservables <P extends number | string, R> = {
   notifier: Subject<P>
@@ -17,6 +18,8 @@ type BulkObservables <P extends number | string, R> = {
 
 @Injectable()
 export class FindInBulkService {
+
+  private advancedSearchForBulk: AdvancedSearch
 
   private getVideoInBulk: BulkObservables<string, ResultList<Video>>
   private getChannelInBulk: BulkObservables<string, ResultList<VideoChannel>>
@@ -28,10 +31,12 @@ export class FindInBulkService {
     this.getVideoInBulk = this.buildBulkObservableObject(this.getVideosInBulk.bind(this))
     this.getChannelInBulk = this.buildBulkObservableObject(this.getChannelsInBulk.bind(this))
     this.getPlaylistInBulk = this.buildBulkObservableObject(this.getPlaylistsInBulk.bind(this))
+
+    this.advancedSearchForBulk = new AdvancedSearch({ searchTarget: 'local' })
   }
 
   getVideo (uuid: string): Observable<Video> {
-    logger('Schedule video fetch for uuid %s.', uuid)
+    debugLogger('Schedule video fetch for uuid %s.', uuid)
 
     return this.getData({
       observableObject: this.getVideoInBulk,
@@ -41,7 +46,7 @@ export class FindInBulkService {
   }
 
   getChannel (handle: string): Observable<VideoChannel> {
-    logger('Schedule channel fetch for handle %s.', handle)
+    debugLogger('Schedule channel fetch for handle %s.', handle)
 
     return this.getData({
       observableObject: this.getChannelInBulk,
@@ -51,7 +56,7 @@ export class FindInBulkService {
   }
 
   getPlaylist (uuid: string): Observable<VideoPlaylist> {
-    logger('Schedule playlist fetch for uuid %s.', uuid)
+    debugLogger('Schedule playlist fetch for uuid %s.', uuid)
 
     return this.getData({
       observableObject: this.getPlaylistInBulk,
@@ -75,13 +80,18 @@ export class FindInBulkService {
           map(result => result.response.data),
           map(data => data.find(finder))
         )
-        .subscribe(result => {
-          if (!result) {
-            obs.error(new Error($localize`Element ${param} not found`))
-          } else {
+        .subscribe({
+          next: result => {
+            if (!result) {
+              obs.error(new Error($localize`Element ${param} not found`))
+              return
+            }
+
             obs.next(result)
             obs.complete()
-          }
+          },
+
+          error: err => obs.error(err)
         })
 
       observableObject.notifier.next(param)
@@ -89,21 +99,33 @@ export class FindInBulkService {
   }
 
   private getVideosInBulk (uuids: string[]) {
-    logger('Fetching videos %s.', uuids.join(', '))
+    debugLogger('Fetching videos %s.', uuids.join(', '))
 
-    return this.searchService.searchVideos({ uuids, componentPagination: { itemsPerPage: uuids.length, currentPage: 1 } })
+    return this.searchService.searchVideos({
+      uuids,
+      componentPagination: { itemsPerPage: uuids.length, currentPage: 1 },
+      advancedSearch: this.advancedSearchForBulk
+    })
   }
 
   private getChannelsInBulk (handles: string[]) {
-    logger('Fetching channels %s.', handles.join(', '))
+    debugLogger('Fetching channels %s.', handles.join(', '))
 
-    return this.searchService.searchVideoChannels({ handles, componentPagination: { itemsPerPage: handles.length, currentPage: 1 } })
+    return this.searchService.searchVideoChannels({
+      handles,
+      componentPagination: { itemsPerPage: handles.length, currentPage: 1 },
+      advancedSearch: this.advancedSearchForBulk
+    })
   }
 
   private getPlaylistsInBulk (uuids: string[]) {
-    logger('Fetching playlists %s.', uuids.join(', '))
+    debugLogger('Fetching playlists %s.', uuids.join(', '))
 
-    return this.searchService.searchVideoPlaylists({ uuids, componentPagination: { itemsPerPage: uuids.length, currentPage: 1 } })
+    return this.searchService.searchVideoPlaylists({
+      uuids,
+      componentPagination: { itemsPerPage: uuids.length, currentPage: 1 },
+      advancedSearch: this.advancedSearchForBulk
+    })
   }
 
   private buildBulkObservableObject <P extends number | string, R> (bulkGet: (params: P[]) => Observable<R>) {

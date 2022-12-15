@@ -1,10 +1,14 @@
 import express from 'express'
 import { InboxManager } from '@server/lib/activitypub/inbox-manager'
 import { RemoveDanglingResumableUploadsScheduler } from '@server/lib/schedulers/remove-dangling-resumable-uploads-scheduler'
+import { VideoViewsBufferScheduler } from '@server/lib/schedulers/video-views-buffer-scheduler'
+import { VideoViewsManager } from '@server/lib/views/video-views-manager'
 import { Debug, SendDebugCommand } from '@shared/models'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { UserRight } from '../../../../shared/models/users'
 import { authenticate, ensureUserHasRight } from '../../../middlewares'
+import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler'
+import { UpdateVideosScheduler } from '@server/lib/schedulers/update-videos-scheduler'
 
 const debugRouter = express.Router()
 
@@ -38,9 +42,15 @@ function getDebug (req: express.Request, res: express.Response) {
 async function runCommand (req: express.Request, res: express.Response) {
   const body: SendDebugCommand = req.body
 
-  if (body.command === 'remove-dandling-resumable-uploads') {
-    await RemoveDanglingResumableUploadsScheduler.Instance.execute()
+  const processors: { [id in SendDebugCommand['command']]: () => Promise<any> } = {
+    'remove-dandling-resumable-uploads': () => RemoveDanglingResumableUploadsScheduler.Instance.execute(),
+    'process-video-views-buffer': () => VideoViewsBufferScheduler.Instance.execute(),
+    'process-video-viewers': () => VideoViewsManager.Instance.processViewerStats(),
+    'process-update-videos-scheduler': () => UpdateVideosScheduler.Instance.execute(),
+    'process-video-channel-sync-latest': () => VideoChannelSyncLatestScheduler.Instance.execute()
   }
+
+  await processors[body.command]()
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

@@ -1,10 +1,9 @@
 import { DestroyOptions, Op, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, IsInt, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MUserAccountId, MUserId } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoModel } from '../video/video'
 import { UserModel } from './user'
-import { getServerActor } from '../application/application'
 
 @Table({
   tableName: 'userVideoHistory',
@@ -57,22 +56,28 @@ export class UserVideoHistoryModel extends Model<Partial<AttributesOnly<UserVide
   })
   User: UserModel
 
-  static async listForApi (user: MUserAccountId, start: number, count: number, search?: string) {
-    const serverActor = await getServerActor()
-
+  static listForApi (user: MUserAccountId, start: number, count: number, search?: string) {
     return VideoModel.listForApi({
       start,
       count,
       search,
       sort: '-"userVideoHistory"."updatedAt"',
       nsfw: null, // All
-      displayOnlyForFollower: {
-        actorId: serverActor.id,
-        orLocalVideos: true
-      },
+      displayOnlyForFollower: null,
       user,
       historyOfUser: user
     })
+  }
+
+  static removeUserHistoryElement (user: MUserId, videoId: number) {
+    const query: DestroyOptions = {
+      where: {
+        userId: user.id,
+        videoId
+      }
+    }
+
+    return UserVideoHistoryModel.destroy(query)
   }
 
   static removeUserHistoryBefore (user: MUserId, beforeDate: string, t: Transaction) {

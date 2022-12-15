@@ -4,12 +4,12 @@
 </h1>
 
 <p-table
-  [value]="users" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order"  dataKey="id" [resizableColumns]="true" [(selection)]="selectedUsers"
-  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
+  [value]="users" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
+  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true"
+  [(selection)]="selectedUsers" [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} users"
-  (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
+  [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
@@ -26,7 +26,7 @@
         </a>
       </div>
 
-      <div class="ml-auto">
+      <div class="ms-auto">
         <my-advanced-input-filter [filters]="inputFilters" (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
 
@@ -62,10 +62,10 @@
         </div>
       </th>
       <th *ngIf="isSelected('username')" pResizableColumn  pSortableColumn="username">{{ getColumn('username').label }} <p-sortIcon field="username"></p-sortIcon></th>
+      <th *ngIf="isSelected('role')" style="width: 120px;"  pSortableColumn="role">{{ getColumn('role').label }} <p-sortIcon field="role"></p-sortIcon></th>
       <th *ngIf="isSelected('email')">{{ getColumn('email').label }}</th>
       <th *ngIf="isSelected('quota')" style="width: 160px;"  pSortableColumn="videoQuotaUsed">{{ getColumn('quota').label }} <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
       <th *ngIf="isSelected('quotaDaily')" style="width: 160px;">{{ getColumn('quotaDaily').label }}</th>
-      <th *ngIf="isSelected('role')" style="width: 120px;"  pSortableColumn="role">{{ getColumn('role').label }} <p-sortIcon field="role"></p-sortIcon></th>
       <th *ngIf="isSelected('pluginAuth')" style="width: 140px;" pResizableColumn >{{ getColumn('pluginAuth').label }}</th>
       <th *ngIf="isSelected('createdAt')" style="width: 150px;"  pSortableColumn="createdAt">{{ getColumn('createdAt').label }} <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th *ngIf="isSelected('lastLoginDate')" style="width: 150px;"  pSortableColumn="lastLoginDate">{{ getColumn('lastLoginDate').label }} <p-sortIcon field="lastLoginDate"></p-sortIcon></th>
@@ -84,21 +84,30 @@
       </td>
 
       <td class="action-cell">
-        <my-user-moderation-dropdown *ngIf="!isInSelectionMode()" [user]="user" container="body"
-          (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()">
+        <my-user-moderation-dropdown
+          *ngIf="!isInSelectionMode()" [user]="user" [account]="user.accountMutedStatus" [displayOptions]="userModerationDisplayOptions"
+          container="body" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()">
         </my-user-moderation-dropdown>
       </td>
 
-      <td *ngIf="isSelected('username')">
+      <td *ngIf="isSelected('username')" class="cell-username">
         <a i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/a/' + user.username ]">
           <div class="chip two-lines">
-            <my-actor-avatar [account]="user?.account" size="32"></my-actor-avatar>
-           <div>
+            <my-actor-avatar [actor]="user?.account" actorType="account" size="32"></my-actor-avatar>
+            <div>
               <span class="user-table-primary-text">{{ user.account.displayName }}</span>
-              <span class="text-muted">{{ user.username }}</span>
+              <span class="muted">{{ user.username }}</span>
             </div>
           </div>
         </a>
+
+        <div *ngIf="user.accountMutedStatus.mutedByInstance" class="pt-badge badge-red" i18n>Muted</div>
+        <div *ngIf="user.blocked" class="pt-badge badge-red" i18n>Banned</div>
+      </td>
+
+      <td *ngIf="isSelected('role')">
+        <span *ngIf="user.blocked" class="pt-badge badge-banned" i18n-title title="The user was banned">{{ user.role.label }}</span>
+        <span *ngIf="!user.blocked" class="pt-badge" [ngClass]="getRoleClass(user.role.id)">{{ user.role.label }}</span>
       </td>
 
       <td *ngIf="isSelected('email')" [title]="user.email">
@@ -130,17 +139,12 @@
 
       <td *ngIf="isSelected('quotaDaily')">
         <div class="progress" i18n-title title="Total daily video quota">
-          <div class="progress-bar secondary" role="progressbar" [style]="{ width: getUserVideoQuotaDailyPercentage(user) + '%' }"
+          <div class="progress-bar" role="progressbar" [style]="{ width: getUserVideoQuotaDailyPercentage(user) + '%' }"
                [attr.aria-valuenow]="user.rawVideoQuotaUsedDaily" aria-valuemin="0" [attr.aria-valuemax]="user.rawVideoQuotaDaily">
           </div>
           <span>{{ user.videoQuotaUsedDaily }}</span>
           <span>{{ user.videoQuotaDaily }}</span>
         </div>
-      </td>
-
-      <td *ngIf="isSelected('role')">
-        <span *ngIf="user.blocked" class="badge badge-banned" i18n-title title="The user was banned">{{ user.roleLabel }}</span>
-        <span *ngIf="!user.blocked" class="badge" [ngClass]="getRoleClass(user.role)">{{ user.roleLabel }}</span>
       </td>
 
       <td *ngIf="isSelected('pluginAuth')">

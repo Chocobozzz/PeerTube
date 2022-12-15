@@ -1,10 +1,7 @@
-import { registerTSPaths } from '../../server/helpers/register-ts-paths'
-registerTSPaths()
-
-import { initDatabaseModels } from '../../server/initializers/database'
 import { program } from 'commander'
-import { PluginManager } from '../../server/lib/plugins/plugin-manager'
 import { isAbsolute } from 'path'
+import { initDatabaseModels } from '../../server/initializers/database'
+import { PluginManager } from '../../server/lib/plugins/plugin-manager'
 
 program
   .option('-n, --npm-name [npmName]', 'Plugin to install')

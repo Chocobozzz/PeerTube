@@ -1,7 +1,6 @@
+import { Job as BullJob } from 'bullmq'
 import express from 'express'
-import { ResultList } from '../../../shared'
-import { Job, JobState, JobType } from '../../../shared/models'
-import { UserRight } from '../../../shared/models/users'
+import { HttpStatusCode, Job, JobState, JobType, ResultList, UserRight } from '@shared/models'
 import { isArray } from '../../helpers/custom-validators/misc'
 import { JobQueue } from '../../lib/job-queue'
 import {
@@ -17,6 +16,18 @@ import {
 import { listJobsValidator } from '../../middlewares/validators/jobs'
 
 const jobsRouter = express.Router()
+
+jobsRouter.post('/pause',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_JOBS),
+  asyncMiddleware(pauseJobQueue)
+)
+
+jobsRouter.post('/resume',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_JOBS),
+  asyncMiddleware(resumeJobQueue)
+)
 
 jobsRouter.get('/:state?',
   openapiOperationDoc({ operationId: 'getJobs' }),
@@ -37,6 +48,18 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+async function pauseJobQueue (req: express.Request, res: express.Response) {
+  await JobQueue.Instance.pause()
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+async function resumeJobQueue (req: express.Request, res: express.Response) {
+  await JobQueue.Instance.resume()
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
 
 async function listJobs (req: express.Request, res: express.Response) {
   const state = req.params.state as JobState
@@ -60,7 +83,7 @@ async function listJobs (req: express.Request, res: express.Response) {
   return res.json(result)
 }
 
-async function formatJob (job: any, state?: JobState): Promise<Job> {
+async function formatJob (job: BullJob, state?: JobState): Promise<Job> {
   const error = isArray(job.stacktrace) && job.stacktrace.length !== 0
     ? job.stacktrace[0]
     : null
@@ -68,9 +91,9 @@ async function formatJob (job: any, state?: JobState): Promise<Job> {
   return {
     id: job.id,
     state: state || await job.getState(),
-    type: job.queue.name as JobType,
+    type: job.queueName as JobType,
     data: job.data,
-    progress: await job.progress(),
+    progress: job.progress as number,
     priority: job.opts.priority,
     error,
     createdAt: new Date(job.timestamp),

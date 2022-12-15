@@ -12,12 +12,14 @@
       <div class="d-flex video-miniature-meta">
         <my-actor-avatar
           *ngIf="displayOptions.avatar && displayOwnerVideoChannel() && !displayAsRow" [title]="channelLinkTitle"
-          [channel]="video.channel" [size]="actorImageSize" [internalHref]="[ '/c', video.byVideoChannel ]"
+          [actor]="video.channel" actorType="channel" [size]="actorImageSize" [internalHref]="[ '/c', video.byVideoChannel ]"
+          size="32"
         ></my-actor-avatar>
 
         <my-actor-avatar
           *ngIf="displayOptions.avatar && displayOwnerAccount() && !displayAsRow" [title]="channelLinkTitle"
-          [account]="video.account" [size]="actorImageSize" [internalHref]="[ '/c', video.byVideoChannel ]"
+          [actor]="video.account" actorType="channel" [size]="actorImageSize" [internalHref]="[ '/c', video.byVideoChannel ]"
+          size="32"
         ></my-actor-avatar>
 
         <div class="w-100 d-flex flex-column">
@@ -49,6 +51,12 @@
             <ng-container *ngIf="displayOptions.privacyText">{{ video.privacy.label }}</ng-container>
             <ng-container *ngIf="displayOptions.privacyText && displayOptions.state && getStateLabel(video)"> - </ng-container>
             <ng-container *ngIf="displayOptions.state">{{ getStateLabel(video) }}</ng-container>
+          </div>
+
+          <div *ngIf="containedInPlaylists" class="video-contained-in-playlists">
+            <a *ngFor="let playlist of containedInPlaylists" class="chip rectangular bg-secondary text-light" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
+              {{ playlist.playlistDisplayName }}
+            </a>
           </div>
         </div>
       </div>

@@ -5,7 +5,10 @@ export interface PlaylistObject {
   type: 'Playlist'
 
   name: string
+
   content: string
+  mediaType: 'text/markdown'
+
   uuid: string
 
   totalItems: number

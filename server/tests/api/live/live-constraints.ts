@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { VideoPrivacy } from '@shared/models'
+import { expect } from 'chai'
+import { wait } from '@shared/core-utils'
+import { LiveVideoError, VideoPrivacy } from '@shared/models'
 import {
-  checkLiveCleanupAfterSave,
   cleanupTests,
   ConfigCommand,
   createMultipleServers,
@@ -12,11 +11,12 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
-  wait,
-  waitJobs
-} from '../../../../shared/extra-utils'
-
-const expect = chai.expect
+  stopFfmpeg,
+  waitJobs,
+  waitUntilLiveReplacedByReplayOnAllServers,
+  waitUntilLiveWaitingOnAllServers
+} from '@shared/server-commands'
+import { checkLiveCleanup } from '../../shared'
 
 describe('Test live constraints', function () {
   let servers: PeerTubeServer[] = []
@@ -24,12 +24,18 @@ describe('Test live constraints', function () {
   let userAccessToken: string
   let userChannelId: number
 
-  async function createLiveWrapper (saveReplay: boolean) {
+  async function createLiveWrapper (options: {
+    replay: boolean
+    permanent: boolean
+  }) {
+    const { replay, permanent } = options
+
     const liveAttributes = {
       name: 'user live',
       channelId: userChannelId,
       privacy: VideoPrivacy.PUBLIC,
-      saveReplay
+      saveReplay: replay,
+      permanentLive: permanent
     }
 
     const { uuid } = await servers[0].live.create({ token: userAccessToken, fields: liveAttributes })
@@ -43,13 +49,7 @@ describe('Test live constraints', function () {
       expect(video.duration).to.be.greaterThan(0)
     }
 
-    await checkLiveCleanupAfterSave(servers[0], videoId, resolutions)
-  }
-
-  async function waitUntilLivePublishedOnAllServers (videoId: string) {
-    for (const server of servers) {
-      await server.live.waitUntilPublished({ videoId })
-    }
+    await checkLiveCleanup({ server: servers[0], permanent: false, videoUUID: videoId, savedResolutions: resolutions })
   }
 
   function updateQuota (options: { total: number, daily: number }) {
@@ -97,23 +97,42 @@ describe('Test live constraints', function () {
   it('Should not have size limit if save replay is disabled', async function () {
     this.timeout(60000)
 
-    const userVideoLiveoId = await createLiveWrapper(false)
+    const userVideoLiveoId = await createLiveWrapper({ replay: false, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: false })
   })
 
-  it('Should have size limit depending on user global quota if save replay is enabled', async function () {
+  it('Should have size limit depending on user global quota if save replay is enabled on non permanent live', async function () {
     this.timeout(60000)
 
     // Wait for user quota memoize cache invalidation
     await wait(5000)
 
-    const userVideoLiveoId = await createLiveWrapper(true)
+    const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
-    await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
+    await waitUntilLiveReplacedByReplayOnAllServers(servers, userVideoLiveoId)
     await waitJobs(servers)
 
     await checkSaveReplay(userVideoLiveoId)
+
+    const session = await servers[0].live.getReplaySession({ videoId: userVideoLiveoId })
+    expect(session.error).to.equal(LiveVideoError.QUOTA_EXCEEDED)
+  })
+
+  it('Should have size limit depending on user global quota if save replay is enabled on a permanent live', async function () {
+    this.timeout(60000)
+
+    // Wait for user quota memoize cache invalidation
+    await wait(5000)
+
+    const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: true })
+    await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
+
+    await waitJobs(servers)
+    await waitUntilLiveWaitingOnAllServers(servers, userVideoLiveoId)
+
+    const session = await servers[0].live.findLatestSession({ videoId: userVideoLiveoId })
+    expect(session.error).to.equal(LiveVideoError.QUOTA_EXCEEDED)
   })
 
   it('Should have size limit depending on user daily quota if save replay is enabled', async function () {
@@ -124,13 +143,16 @@ describe('Test live constraints', function () {
 
     await updateQuota({ total: -1, daily: 1 })
 
-    const userVideoLiveoId = await createLiveWrapper(true)
+    const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
-    await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
+    await waitUntilLiveReplacedByReplayOnAllServers(servers, userVideoLiveoId)
     await waitJobs(servers)
 
     await checkSaveReplay(userVideoLiveoId)
+
+    const session = await servers[0].live.getReplaySession({ videoId: userVideoLiveoId })
+    expect(session.error).to.equal(LiveVideoError.QUOTA_EXCEEDED)
   })
 
   it('Should succeed without quota limit', async function () {
@@ -141,8 +163,32 @@ describe('Test live constraints', function () {
 
     await updateQuota({ total: 10 * 1000 * 1000, daily: -1 })
 
-    const userVideoLiveoId = await createLiveWrapper(true)
+    const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: false })
+  })
+
+  it('Should have the same quota in admin and as a user', async function () {
+    this.timeout(120000)
+
+    const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: false })
+    const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ token: userAccessToken, videoId: userVideoLiveoId })
+
+    await servers[0].live.waitUntilPublished({ videoId: userVideoLiveoId })
+
+    await wait(3000)
+
+    const quotaUser = await servers[0].users.getMyQuotaUsed({ token: userAccessToken })
+
+    const { data } = await servers[0].users.list()
+    const quotaAdmin = data.find(u => u.username === 'user1')
+
+    expect(quotaUser.videoQuotaUsed).to.equal(quotaAdmin.videoQuotaUsed)
+    expect(quotaUser.videoQuotaUsedDaily).to.equal(quotaAdmin.videoQuotaUsedDaily)
+
+    expect(quotaUser.videoQuotaUsed).to.be.above(10)
+    expect(quotaUser.videoQuotaUsedDaily).to.be.above(10)
+
+    await stopFfmpeg(ffmpegCommand)
   })
 
   it('Should have max duration limit', async function () {
@@ -162,13 +208,16 @@ describe('Test live constraints', function () {
       }
     })
 
-    const userVideoLiveoId = await createLiveWrapper(true)
+    const userVideoLiveoId = await createLiveWrapper({ replay: true, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveoId, shouldHaveError: true })
 
-    await waitUntilLivePublishedOnAllServers(userVideoLiveoId)
+    await waitUntilLiveReplacedByReplayOnAllServers(servers, userVideoLiveoId)
     await waitJobs(servers)
 
     await checkSaveReplay(userVideoLiveoId, [ 720, 480, 360, 240, 144 ])
+
+    const session = await servers[0].live.getReplaySession({ videoId: userVideoLiveoId })
+    expect(session.error).to.equal(LiveVideoError.DURATION_EXCEEDED)
   })
 
   after(async function () {

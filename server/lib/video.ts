@@ -1,30 +1,33 @@
 import { UploadFiles } from 'express'
+import memoizee from 'memoizee'
 import { Transaction } from 'sequelize/types'
-import { DEFAULT_AUDIO_RESOLUTION, JOB_PRIORITY } from '@server/initializers/constants'
+import { CONFIG } from '@server/initializers/config'
+import { DEFAULT_AUDIO_RESOLUTION, JOB_PRIORITY, MEMOIZE_LENGTH, MEMOIZE_TTL } from '@server/initializers/constants'
 import { TagModel } from '@server/models/video/tag'
 import { VideoModel } from '@server/models/video/video'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info'
 import { FilteredModelAttributes } from '@server/types'
-import { MThumbnail, MUserId, MVideoFile, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
-import { ThumbnailType, VideoCreate, VideoPrivacy, VideoTranscodingPayload } from '@shared/models'
-import { CreateJobOptions, JobQueue } from './job-queue/job-queue'
+import { MThumbnail, MUserId, MVideoFile, MVideoFullLight, MVideoTag, MVideoThumbnail, MVideoUUID } from '@server/types/models'
+import { ManageVideoTorrentPayload, ThumbnailType, VideoCreate, VideoPrivacy, VideoState, VideoTranscodingPayload } from '@shared/models'
+import { CreateJobArgument, CreateJobOptions, JobQueue } from './job-queue/job-queue'
 import { updateVideoMiniatureFromExisting } from './thumbnail'
+import { moveFilesIfPrivacyChanged } from './video-privacy'
 
 function buildLocalVideoFromReq (videoInfo: VideoCreate, channelId: number): FilteredModelAttributes<VideoModel> {
   return {
     name: videoInfo.name,
     remote: false,
     category: videoInfo.category,
-    licence: videoInfo.licence,
+    licence: videoInfo.licence ?? CONFIG.DEFAULTS.PUBLISH.LICENCE,
     language: videoInfo.language,
-    commentsEnabled: videoInfo.commentsEnabled !== false, // If the value is not "false", the default is "true"
-    downloadEnabled: videoInfo.downloadEnabled !== false,
+    commentsEnabled: videoInfo.commentsEnabled ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_ENABLED,
+    downloadEnabled: videoInfo.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
     waitTranscoding: videoInfo.waitTranscoding || false,
     nsfw: videoInfo.nsfw || false,
     description: videoInfo.description,
     support: videoInfo.support,
     privacy: videoInfo.privacy || VideoPrivacy.PRIVATE,
-    channelId: channelId,
+    channelId,
     originallyPublishedAt: videoInfo.originallyPublishedAt
       ? new Date(videoInfo.originallyPublishedAt)
       : null
@@ -66,6 +69,8 @@ async function buildVideoThumbnailsFromReq (options: {
   return Promise.all(promises)
 }
 
+// ---------------------------------------------------------------------------
+
 async function setVideoTags (options: {
   video: MVideoTag
   tags: string[]
@@ -80,42 +85,47 @@ async function setVideoTags (options: {
   video.Tags = tagInstances
 }
 
-async function addOptimizeOrMergeAudioJob (video: MVideoUUID, videoFile: MVideoFile, user: MUserId) {
-  let dataInput: VideoTranscodingPayload
+// ---------------------------------------------------------------------------
+
+async function buildOptimizeOrMergeAudioJob (options: {
+  video: MVideoUUID
+  videoFile: MVideoFile
+  user: MUserId
+  isNewVideo?: boolean // Default true
+}) {
+  const { video, videoFile, user, isNewVideo } = options
+
+  let payload: VideoTranscodingPayload
 
   if (videoFile.isAudio()) {
-    dataInput = {
+    payload = {
       type: 'merge-audio-to-webtorrent',
       resolution: DEFAULT_AUDIO_RESOLUTION,
       videoUUID: video.uuid,
-      isNewVideo: true
+      createHLSIfNeeded: true,
+      isNewVideo
     }
   } else {
-    dataInput = {
+    payload = {
       type: 'optimize-to-webtorrent',
       videoUUID: video.uuid,
-      isNewVideo: true
+      isNewVideo
     }
   }
 
-  const jobOptions = {
-    priority: await getTranscodingJobPriority(user)
-  }
-
-  return addTranscodingJob(dataInput, jobOptions)
-}
-
-async function addTranscodingJob (payload: VideoTranscodingPayload, options: CreateJobOptions = {}) {
   await VideoJobInfoModel.increaseOrCreate(payload.videoUUID, 'pendingTranscode')
 
-  return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: payload }, options)
+  return {
+    type: 'video-transcoding' as 'video-transcoding',
+    priority: await getTranscodingJobPriority(user),
+    payload
+  }
 }
 
-async function addMoveToObjectStorageJob (video: MVideoUUID, isNewVideo = true) {
-  await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingMove')
+async function buildTranscodingJob (payload: VideoTranscodingPayload, options: CreateJobOptions = {}) {
+  await VideoJobInfoModel.increaseOrCreate(payload.videoUUID, 'pendingTranscode')
 
-  const dataInput = { videoUUID: video.uuid, isNewVideo }
-  return JobQueue.Instance.createJobWithPromise({ type: 'move-to-object-storage', payload: dataInput })
+  return { type: 'video-transcoding' as 'video-transcoding', payload, ...options }
 }
 
 async function getTranscodingJobPriority (user: MUserId) {
@@ -129,12 +139,106 @@ async function getTranscodingJobPriority (user: MUserId) {
 
 // ---------------------------------------------------------------------------
 
+async function buildMoveToObjectStorageJob (options: {
+  video: MVideoUUID
+  previousVideoState: VideoState
+  isNewVideo?: boolean // Default true
+}) {
+  const { video, previousVideoState, isNewVideo = true } = options
+
+  await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingMove')
+
+  return {
+    type: 'move-to-object-storage' as 'move-to-object-storage',
+    payload: {
+      videoUUID: video.uuid,
+      isNewVideo,
+      previousVideoState
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+
+async function getVideoDuration (videoId: number | string) {
+  const video = await VideoModel.load(videoId)
+
+  const duration = video.isLive
+    ? undefined
+    : video.duration
+
+  return { duration, isLive: video.isLive }
+}
+
+const getCachedVideoDuration = memoizee(getVideoDuration, {
+  promise: true,
+  max: MEMOIZE_LENGTH.VIDEO_DURATION,
+  maxAge: MEMOIZE_TTL.VIDEO_DURATION
+})
+
+// ---------------------------------------------------------------------------
+
+async function addVideoJobsAfterUpdate (options: {
+  video: MVideoFullLight
+  isNewVideo: boolean
+
+  nameChanged: boolean
+  oldPrivacy: VideoPrivacy
+}) {
+  const { video, nameChanged, oldPrivacy, isNewVideo } = options
+  const jobs: CreateJobArgument[] = []
+
+  const filePathChanged = await moveFilesIfPrivacyChanged(video, oldPrivacy)
+
+  if (!video.isLive && (nameChanged || filePathChanged)) {
+    for (const file of (video.VideoFiles || [])) {
+      const payload: ManageVideoTorrentPayload = { action: 'update-metadata', videoId: video.id, videoFileId: file.id }
+
+      jobs.push({ type: 'manage-video-torrent', payload })
+    }
+
+    const hls = video.getHLSPlaylist()
+
+    for (const file of (hls?.VideoFiles || [])) {
+      const payload: ManageVideoTorrentPayload = { action: 'update-metadata', streamingPlaylistId: hls.id, videoFileId: file.id }
+
+      jobs.push({ type: 'manage-video-torrent', payload })
+    }
+  }
+
+  jobs.push({
+    type: 'federate-video',
+    payload: {
+      videoUUID: video.uuid,
+      isNewVideo
+    }
+  })
+
+  const wasConfidentialVideo = new Set([ VideoPrivacy.PRIVATE, VideoPrivacy.UNLISTED, VideoPrivacy.INTERNAL ]).has(oldPrivacy)
+
+  if (wasConfidentialVideo) {
+    jobs.push({
+      type: 'notify',
+      payload: {
+        action: 'new-video',
+        videoUUID: video.uuid
+      }
+    })
+  }
+
+  return JobQueue.Instance.createSequentialJobFlow(...jobs)
+}
+
+// ---------------------------------------------------------------------------
+
 export {
   buildLocalVideoFromReq,
   buildVideoThumbnailsFromReq,
   setVideoTags,
-  addOptimizeOrMergeAudioJob,
-  addTranscodingJob,
-  addMoveToObjectStorageJob,
-  getTranscodingJobPriority
+  buildOptimizeOrMergeAudioJob,
+  buildTranscodingJob,
+  buildMoveToObjectStorageJob,
+  getTranscodingJobPriority,
+  addVideoJobsAfterUpdate,
+  getCachedVideoDuration
 }

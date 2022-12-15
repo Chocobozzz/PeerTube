@@ -1,24 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { dateIsValid } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
 import {
   cleanupTests,
   createMultipleServers,
-  dateIsValid,
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 describe('Test jobs', function () {
   let servers: PeerTubeServer[]
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(240000)
 
     servers = await createMultipleServers(2)
 
@@ -29,7 +27,7 @@ describe('Test jobs', function () {
   })
 
   it('Should create some jobs', async function () {
-    this.timeout(120000)
+    this.timeout(240000)
 
     await servers[1].videos.upload({ attributes: { name: 'video1' } })
     await servers[1].videos.upload({ attributes: { name: 'video2' } })
@@ -59,7 +57,6 @@ describe('Test jobs', function () {
       if (job.type === 'videos-views-stats') job = body.data[1]
 
       expect(job.state).to.equal('completed')
-      expect(job.type.startsWith('activitypub-')).to.be.true
       expect(dateIsValid(job.createdAt as string)).to.be.true
       expect(dateIsValid(job.processedOn as string)).to.be.true
       expect(dateIsValid(job.finishedOn as string)).to.be.true
@@ -89,6 +86,40 @@ describe('Test jobs', function () {
     expect(jobs).to.have.length.above(2)
 
     expect(jobs.find(j => j.state === 'completed')).to.not.be.undefined
+  })
+
+  it('Should pause the job queue', async function () {
+    this.timeout(120000)
+
+    const { uuid } = await servers[1].videos.upload({ attributes: { name: 'video2' } })
+    await waitJobs(servers)
+
+    await servers[1].jobs.pauseJobQueue()
+    await servers[1].videos.runTranscoding({ videoId: uuid, transcodingType: 'hls' })
+
+    await wait(5000)
+
+    {
+      const body = await servers[1].jobs.list({ state: 'waiting', jobType: 'video-transcoding' })
+      // waiting includes waiting-children
+      expect(body.data).to.have.lengthOf(4)
+    }
+
+    {
+      const body = await servers[1].jobs.list({ state: 'waiting-children', jobType: 'video-transcoding' })
+      expect(body.data).to.have.lengthOf(1)
+    }
+  })
+
+  it('Should resume the job queue', async function () {
+    this.timeout(120000)
+
+    await servers[1].jobs.resumeJobQueue()
+
+    await waitJobs(servers)
+
+    const body = await servers[1].jobs.list({ state: 'waiting', jobType: 'video-transcoding' })
+    expect(body.data).to.have.lengthOf(0)
   })
 
   after(async function () {

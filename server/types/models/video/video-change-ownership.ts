@@ -1,7 +1,7 @@
 import { VideoChangeOwnershipModel } from '@server/models/video/video-change-ownership'
-import { PickWith } from '@shared/core-utils'
+import { PickWith } from '@shared/typescript-utils'
 import { MAccountDefault, MAccountFormattable } from '../account/account'
-import { MVideoWithAllFiles, MVideoFormattable } from './video'
+import { MVideoFormattable, MVideoWithAllFiles } from './video'
 
 type Use<K extends keyof VideoChangeOwnershipModel, M> = PickWith<VideoChangeOwnershipModel, K, M>
 

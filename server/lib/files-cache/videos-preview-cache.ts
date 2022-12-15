@@ -30,20 +30,26 @@ class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
 
   // Key is the video UUID
   protected async loadRemoteFile (key: string) {
-    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(key)
+    const video = await VideoModel.loadFull(key)
     if (!video) return undefined
 
     if (video.isOwned()) throw new Error('Cannot load remote preview of owned video.')
 
     const preview = video.getPreview()
     const destPath = join(FILES_CACHE.PREVIEWS.DIRECTORY, preview.filename)
-
     const remoteUrl = preview.getFileUrl(video)
-    await doRequestAndSaveToFile(remoteUrl, destPath)
 
-    logger.debug('Fetched remote preview %s to %s.', remoteUrl, destPath)
+    try {
+      await doRequestAndSaveToFile(remoteUrl, destPath)
 
-    return { isOwned: false, path: destPath }
+      logger.debug('Fetched remote preview %s to %s.', remoteUrl, destPath)
+
+      return { isOwned: false, path: destPath }
+    } catch (err) {
+      logger.info('Cannot fetch remote preview file %s.', remoteUrl, { err })
+
+      return undefined
+    }
   }
 }
 

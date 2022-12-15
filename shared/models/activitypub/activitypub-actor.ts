@@ -27,8 +27,11 @@ export interface ActivityPubActor {
     publicKeyPem: string
   }
 
-  icon?: ActivityIconObject
-  image?: ActivityIconObject
+  image?: ActivityIconObject | ActivityIconObject[]
+
+  icon?: ActivityIconObject | ActivityIconObject[]
+  // TODO: migrate to `icon`, introduced in 4.2
+  icons?: ActivityIconObject[]
 
   published?: string
 }

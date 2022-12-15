@@ -6,7 +6,6 @@ import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import {
-  NgbButtonsModule,
   NgbCollapseModule,
   NgbDropdownModule,
   NgbModalModule,
@@ -21,6 +20,7 @@ import { AccountService } from './account'
 import {
   AutofocusDirective,
   BytesPipe,
+  DeferLoadingDirective,
   DurationFormatterPipe,
   FromNowPipe,
   InfiniteScrollerDirective,
@@ -33,7 +33,7 @@ import { ActionDropdownComponent, ButtonComponent, DeleteButtonComponent, EditBu
 import { CustomPageService } from './custom-page'
 import { DateToggleComponent } from './date'
 import { FeedComponent } from './feeds'
-import { LoaderComponent, SmallLoaderComponent } from './loaders'
+import { LoaderComponent } from './loaders'
 import {
   ChannelsSetupMessageComponent,
   HelpComponent,
@@ -44,7 +44,15 @@ import {
 import { PluginPlaceholderComponent, PluginSelectorDirective } from './plugins'
 import { ActorRedirectGuard } from './router'
 import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
-import { EmbedComponent, RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
+import {
+  EmbedComponent,
+  RedundancyService,
+  VideoFileTokenService,
+  VideoImportService,
+  VideoOwnershipService,
+  VideoResolver,
+  VideoService
+} from './video'
 import { VideoCaptionService } from './video-caption'
 import { VideoChannelService } from './video-channel'
 
@@ -65,7 +73,6 @@ import { VideoChannelService } from './video-channel'
     NgbNavModule,
     NgbTooltipModule,
     NgbCollapseModule,
-    NgbButtonsModule,
 
     ClipboardModule,
 
@@ -80,6 +87,7 @@ import { VideoChannelService } from './video-channel'
     BytesPipe,
     DurationFormatterPipe,
     AutofocusDirective,
+    DeferLoadingDirective,
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
@@ -95,7 +103,6 @@ import { VideoChannelService } from './video-channel'
     FeedComponent,
 
     LoaderComponent,
-    SmallLoaderComponent,
 
     ChannelsSetupMessageComponent,
     HelpComponent,
@@ -128,7 +135,6 @@ import { VideoChannelService } from './video-channel'
     NgbNavModule,
     NgbTooltipModule,
     NgbCollapseModule,
-    NgbButtonsModule,
 
     ClipboardModule,
 
@@ -139,6 +145,7 @@ import { VideoChannelService } from './video-channel'
     NumberFormatterPipe,
     DurationFormatterPipe,
     AutofocusDirective,
+    DeferLoadingDirective,
 
     InfiniteScrollerDirective,
     PeerTubeTemplateDirective,
@@ -154,7 +161,6 @@ import { VideoChannelService } from './video-channel'
     FeedComponent,
 
     LoaderComponent,
-    SmallLoaderComponent,
 
     ChannelsSetupMessageComponent,
     HelpComponent,
@@ -187,6 +193,8 @@ import { VideoChannelService } from './video-channel'
     VideoImportService,
     VideoOwnershipService,
     VideoService,
+    VideoFileTokenService,
+    VideoResolver,
 
     VideoCaptionService,
 

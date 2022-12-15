@@ -1,18 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { VideoChannel } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
   doubleFollow,
   PeerTubeServer,
   SearchCommand,
-  setAccessTokensToServers
-} from '@shared/extra-utils'
-import { VideoChannel } from '@shared/models'
-
-const expect = chai.expect
+  setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar
+} from '@shared/server-commands'
 
 describe('Test channels search', function () {
   let server: PeerTubeServer
@@ -24,12 +23,16 @@ describe('Test channels search', function () {
 
     const servers = await Promise.all([
       createSingleServer(1),
-      createSingleServer(2, { transcoding: { enabled: false } })
+      createSingleServer(2)
     ])
     server = servers[0]
     remoteServer = servers[1]
 
     await setAccessTokensToServers([ server, remoteServer ])
+    await setDefaultChannelAvatar(server)
+    await setDefaultAccountAvatar(server)
+
+    await servers[1].config.disableTranscoding()
 
     {
       await server.users.create({ username: 'user1' })

@@ -1,0 +1,68 @@
+@use '_variables' as *;
+@use '_mixins' as *;
+
+.plugin {
+  margin: 15px 0;
+  background-color: pvar(--submenuBackgroundColor);
+}
+
+.first-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  .plugin-name {
+    @include margin-right(10px);
+
+    font-weight: $font-semibold;
+  }
+
+  .plugin-version {
+    opacity: 0.7;
+  }
+
+  .plugin-icon {
+    @include margin-left(10px);
+
+    my-global-icon {
+      @include apply-svg-color(pvar(--greyForegroundColor));
+
+      &[iconName=npm] {
+        @include fill-svg-color(pvar(--greyForegroundColor));
+      }
+    }
+  }
+
+  .buttons {
+    @include margin-left(auto);
+
+    width: max-content;
+  }
+}
+
+.second-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  justify-content: space-between;
+
+  .description {
+    opacity: 0.8;
+  }
+}
+
+.action-button {
+  @include peertube-button-link;
+  @include button-with-icon(21px, 0, -2px);
+}
+
+@media screen and (max-width: $small-view) {
+  .first-row {
+    flex-wrap: wrap;
+
+    .buttons {
+      flex-basis: 100%;
+      margin-top: 10px;
+    }
+  }
+}

@@ -4,6 +4,7 @@ export const TEXT_RULES = [
   'emphasis',
   'link',
   'newline',
+  'entity',
   'list'
 ]
 

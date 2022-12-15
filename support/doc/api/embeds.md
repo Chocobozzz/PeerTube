@@ -49,6 +49,108 @@ player.seek(32)
 player.pause()
 ```
 
+# URL parameters
+
+You can customize PeerTube player by specifying URL query parameters.
+For example `https://my-instance.example.com/videos/embed/52a10666-3a18-4e73-93da-e8d3c12c305a??start=1s&stop=18s&loop=1&autoplay=1&muted=1&warningTitle=0&controlBar=0&peertubeLink=0&p2p=0`
+
+## start
+
+Start the video at a specific time.
+Value must be raw seconds or a duration (`3m4s`)
+
+## stop
+
+Stop the video at a specific time.
+Value must be raw seconds or a duration (`54s`)
+
+## controls
+
+Mimics video HTML element `controls` attribute, meaning that all controls (including big play button, control bar, etc.) will be removed.
+It can be useful if you want to have a full control of the PeerTube player.
+
+Value must be `0` or `1`.
+
+## controlBar
+
+Hide control bar when the video is played.
+
+Value must be `0` or `1`.
+
+## peertubeLink
+
+Hide PeerTube instance link in control bar.
+
+Value must be `0` or `1`.
+
+## muted
+
+Mute the video by default.
+
+Value must be `0` or `1`.
+
+## loop
+
+Automatically start again the video when it ends.
+
+Value must be `0` or `1`.
+
+## subtitle
+
+Auto select a subtitle by default.
+
+Value must be a valid subtitle ISO code (`fr`, `en`, etc.).
+
+## autoplay
+
+Try to automatically play the video.
+Most web browsers disable video autoplay if the user did not interact with the video. You can try to bypass this limitation by muting the video
+
+Value must be `0` or `1`.
+
+## title
+
+Hide embed title.
+
+Value must be `0` or `1`.
+
+## warningTitle
+
+Hide P2P warning title.
+
+Value must be `0` or `1`.
+
+## p2p
+
+Disable P2P.
+
+Value must be `0` or `1`.
+
+## bigPlayBackgroundColor
+
+Customize big play button background color.
+
+Value must be a valid color (`red` or `rgba(100, 100, 100, 0.5)`).
+
+## foregroundColor
+
+Customize embed font color.
+
+Value must be a valid color (`red` or `rgba(100, 100, 100, 0.5)`).
+
+## mode
+
+Force a specific player engine.
+
+Value must be a valid mode (`webtorrent` or `p2p-media-loader`).
+
+## api
+
+Enable embed JavaScript API (see methods below).
+
+Value must be `0` or `1`.
+
+
 # Methods
 
 ## `play() : Promise<void>`
@@ -66,6 +168,10 @@ Seek to the given position, as specified in seconds into the video.
 ## `addEventListener(eventName : string, handler : Function)`
 
 Add a listener for a specific event. See below for the available events.
+
+## `removeEventListener(eventName : string, handler : Function)`
+
+Remove a listener.
 
 ## `getResolutions() : Promise<PeerTubeResolution[]>`
 

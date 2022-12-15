@@ -1,13 +1,7 @@
 import { Observable, of } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { User } from '@app/core/users/user.model'
-import {
-  flushUserInfoFromLocalStorage,
-  getUserInfoFromLocalStorage,
-  saveUserInfoIntoLocalStorage,
-  TokenOptions,
-  Tokens
-} from '@root-helpers/users'
+import { OAuthUserTokens } from '@root-helpers/users'
 import { hasUserRight } from '@shared/core-utils/users'
 import {
   MyUser as ServerMyUserModel,
@@ -19,76 +13,46 @@ import {
 } from '@shared/models'
 
 export class AuthUser extends User implements ServerMyUserModel {
-  tokens: Tokens
+  oauthTokens: OAuthUserTokens
   specialPlaylists: MyUserSpecialPlaylist[]
 
   canSeeVideosLink = true
 
-  static load () {
-    const tokens = Tokens.load()
-    if (!tokens) return null
-
-    const userInfo = getUserInfoFromLocalStorage()
-    if (!userInfo) return null
-
-    return new AuthUser(userInfo, tokens)
-  }
-
-  static flush () {
-    flushUserInfoFromLocalStorage()
-
-    Tokens.flush()
-  }
-
-  constructor (userHash: Partial<ServerMyUserModel>, hashTokens: TokenOptions) {
+  constructor (userHash: Partial<ServerMyUserModel>, hashTokens: Partial<OAuthUserTokens>) {
     super(userHash)
 
-    this.tokens = new Tokens(hashTokens)
+    this.oauthTokens = new OAuthUserTokens(hashTokens)
     this.specialPlaylists = userHash.specialPlaylists
   }
 
   getAccessToken () {
-    return this.tokens.accessToken
+    return this.oauthTokens.accessToken
   }
 
   getRefreshToken () {
-    return this.tokens.refreshToken
+    return this.oauthTokens.refreshToken
   }
 
   getTokenType () {
-    return this.tokens.tokenType
+    return this.oauthTokens.tokenType
   }
 
   refreshTokens (accessToken: string, refreshToken: string) {
-    this.tokens.accessToken = accessToken
-    this.tokens.refreshToken = refreshToken
+    this.oauthTokens.accessToken = accessToken
+    this.oauthTokens.refreshToken = refreshToken
   }
 
   hasRight (right: UserRight) {
-    return hasUserRight(this.role, right)
+    return hasUserRight(this.role.id, right)
   }
 
   canManage (user: ServerUserModel) {
-    const myRole = this.role
+    const myRole = this.role.id
 
     if (myRole === UserRole.ADMINISTRATOR) return true
 
     // I'm a moderator: I can only manage users
-    return user.role === UserRole.USER
-  }
-
-  save () {
-    saveUserInfoIntoLocalStorage({
-      id: this.id,
-      username: this.username,
-      email: this.email,
-      role: this.role,
-      nsfwPolicy: this.nsfwPolicy,
-      webTorrentEnabled: this.webTorrentEnabled,
-      autoPlayVideo: this.autoPlayVideo
-    })
-
-    this.tokens.save()
+    return user.role.id === UserRole.USER
   }
 
   computeCanSeeVideosLink (quotaObservable: Observable<UserVideoQuota>): Observable<boolean> {

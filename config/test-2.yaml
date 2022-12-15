@@ -2,7 +2,6 @@ listen:
   port: 9002
 
 webserver:
-  hostname: 'localhost'
   port: 9002
 
 database:
@@ -23,6 +22,7 @@ storage:
   captions: 'test2/captions/'
   cache: 'test2/cache/'
   plugins: 'test2/plugins/'
+  well_known: 'test2/well-known/'
   client_overrides: 'test2/client-overrides/'
 
 admin:
@@ -35,3 +35,7 @@ transcoding:
   enabled: true
   allow_additional_extensions: true
   allow_audio_files: true
+
+live:
+  rtmp:
+    port: 1937

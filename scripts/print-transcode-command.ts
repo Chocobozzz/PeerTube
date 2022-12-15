@@ -1,11 +1,8 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import { program } from 'commander'
 import ffmpeg from 'fluent-ffmpeg'
-import { buildx264VODCommand, runCommand, TranscodeOptions } from '@server/helpers/ffmpeg-utils'
 import { exit } from 'process'
-import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/video-transcoding-profiles'
+import { buildVODCommand, runCommand, TranscodeVODOptions } from '@server/helpers/ffmpeg'
+import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles'
 
 program
   .arguments('<path>')
@@ -34,14 +31,13 @@ async function run (path: string, cmd: any) {
     availableEncoders: VideoTranscodingProfilesManager.Instance.getAvailableEncoders(),
     profile: 'default',
 
-    resolution: +cmd.resolution,
-    isPortraitMode: false
-  } as TranscodeOptions
+    resolution: +cmd.resolution
+  } as TranscodeVODOptions
 
   let command = ffmpeg(options.inputPath)
                .output(options.outputPath)
 
-  command = await buildx264VODCommand(command, options)
+  command = await buildVODCommand(command, options)
 
   command.on('start', (cmdline) => {
     console.log(cmdline)

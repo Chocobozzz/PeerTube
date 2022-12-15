@@ -1,12 +1,7 @@
-// eslint-disable @typescript-eslint/no-unnecessary-type-assertion
-
-import { registerTSPaths } from '../helpers/register-ts-paths'
-registerTSPaths()
-
-import { OptionValues, program } from 'commander'
-import { assignToken, buildServer, getNetrc, getSettings, writeSettings } from './cli'
-import { isUserUsernameValid } from '../helpers/custom-validators/users'
 import CliTable3 from 'cli-table3'
+import { OptionValues, program } from 'commander'
+import { isUserUsernameValid } from '../helpers/custom-validators/users'
+import { assignToken, buildServer, getNetrc, getSettings, writeSettings } from './cli'
 
 import prompt = require('prompt')
 
@@ -52,7 +47,7 @@ function stripExtraneousFromPeerTubeUrl (url: string) {
     ? url.indexOf('/', 8)
     : url.length
 
-  return url.substr(0, urlLength)
+  return url.substring(0, urlLength)
 }
 
 program
@@ -94,7 +89,7 @@ program
       // Check credentials
       try {
         // Strip out everything after the domain:port.
-        // @see https://github.com/Chocobozzz/PeerTube/issues/3520
+        // See https://github.com/Chocobozzz/PeerTube/issues/3520
         result.url = stripExtraneousFromPeerTubeUrl(result.url)
 
         const server = buildServer(result.url)

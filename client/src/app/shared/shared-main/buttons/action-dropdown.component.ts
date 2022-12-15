@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { Params } from '@angular/router'
 import { GlobalIconName } from '@app/shared/shared-icons'
 
 export type DropdownAction<T> = {
@@ -7,7 +8,10 @@ export type DropdownAction<T> = {
   description?: string
   title?: string
   handler?: (a: T) => any
+
   linkBuilder?: (a: T) => (string | number)[]
+  queryParamsBuilder?: (a: T) => Params
+
   isDisplayed?: (a: T) => boolean
 
   class?: string[]
@@ -21,7 +25,8 @@ export type DropdownDirection = 'horizontal' | 'vertical'
 @Component({
   selector: 'my-action-dropdown',
   styleUrls: [ './action-dropdown.component.scss' ],
-  templateUrl: './action-dropdown.component.html'
+  templateUrl: './action-dropdown.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ActionDropdownComponent<T> {
@@ -44,11 +49,17 @@ export class ActionDropdownComponent<T> {
     return [ this.actions as DropdownAction<T>[] ]
   }
 
+  getQueryParams (action: DropdownAction<T>, entry: T) {
+    if (action.queryParamsBuilder) return action.queryParamsBuilder(entry)
+
+    return {}
+  }
+
   areActionsDisplayed (actions: Array<DropdownAction<T> | DropdownAction<T>[]>, entry: T): boolean {
     return actions.some(a => {
       if (Array.isArray(a)) return this.areActionsDisplayed(a, entry)
 
-      return a.isDisplayed === undefined || a.isDisplayed(entry)
+      return a.isHeader !== true && (a.isDisplayed === undefined || a.isDisplayed(entry))
     })
   }
 }

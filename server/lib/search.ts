@@ -12,7 +12,6 @@ function isSearchIndexSearch (query: SearchTargetQuery) {
 
   if (searchIndexConfig.ENABLED !== true) return false
 
-  if (searchIndexConfig.DISABLE_LOCAL_SEARCH) return true
   if (searchIndexConfig.IS_DEFAULT_SEARCH && !query.searchTarget) return true
 
   return false

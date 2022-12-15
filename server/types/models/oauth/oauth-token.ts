@@ -1,5 +1,5 @@
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token'
-import { PickWith } from '@shared/core-utils'
+import { PickWith } from '@shared/typescript-utils'
 import { MUserAccountUrl } from '../user/user'
 
 type Use<K extends keyof OAuthTokenModel, M> = PickWith<OAuthTokenModel, K, M>

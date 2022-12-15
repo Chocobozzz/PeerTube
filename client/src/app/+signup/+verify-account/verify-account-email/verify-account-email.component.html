@@ -1,18 +1,14 @@
 <div class="margin-content">
-  <div i18n class="title-page title-page-single">
-    Verify account email confirmation
-  </div>
+  <h1 i18n class="title-page">Verify account email confirmation</h1>
 
-  <my-signup-success i18n *ngIf="!isPendingEmail && success" message="Your email has been verified and you may now login.">
+  <my-signup-success i18n *ngIf="!isPendingEmail && success" [requiresEmailVerification]="false">
   </my-signup-success>
 
-  <div i18n class="alert alert-success" *ngIf="isPendingEmail && success">
-    Email updated.
-  </div>
+  <div i18n class="alert alert-success" *ngIf="isPendingEmail && success">Email updated.</div>
 
-  <div *ngIf="failed">
+  <div class="alert alert-danger" *ngIf="failed">
     <span i18n>An error occurred.</span>
 
-    <a i18n routerLink="/verify-account/ask-send-email" [queryParams]="{ isPendingEmail: isPendingEmail }">Request new verification email.</a>
+    <a i18n class="ms-1 link-orange" routerLink="/verify-account/ask-send-email" [queryParams]="{ isPendingEmail: isPendingEmail }">Request new verification email</a>
   </div>
 </div>

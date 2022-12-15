@@ -8,38 +8,32 @@
     <form novalidate [formGroup]="form" (ngSubmit)="report()">
 
     <div class="row">
-      <div class="col-5 form-group">
+      <div class="col-12 col-md-5">
+        <label i18n for="reportPredefinedReasons">What is the issue?</label>
 
-          <label i18n for="reportPredefinedReasons">What is the issue?</label>
+        <div class="ms-2 mt-2 d-flex flex-column">
+          <ng-container formGroupName="predefinedReasons">
 
-          <div class="ml-2 mt-2 d-flex flex-column">
-            <ng-container formGroupName="predefinedReasons">
+            <div class="form-group" *ngFor="let reason of predefinedReasons">
+              <my-peertube-checkbox [inputName]="reason.id" [formControlName]="reason.id" [labelText]="reason.label">
+                <ng-template *ngIf="reason.help" ptTemplate="help">
+                  <div [innerHTML]="reason.help"></div>
+                </ng-template>
 
-              <div class="form-group" *ngFor="let reason of predefinedReasons">
-                <my-peertube-checkbox [inputName]="reason.id" [formControlName]="reason.id" [labelText]="reason.label">
-                  <ng-template *ngIf="reason.help" ptTemplate="help">
-                    <div [innerHTML]="reason.help"></div>
-                  </ng-template>
+                <ng-container *ngIf="reason.description" ngProjectAs="description">
+                  <div [innerHTML]="reason.description"></div>
+                </ng-container>
+              </my-peertube-checkbox>
+            </div>
 
-                  <ng-container *ngIf="reason.description" ngProjectAs="description">
-                    <div [innerHTML]="reason.description"></div>
-                  </ng-container>
-                </my-peertube-checkbox>
-              </div>
-
-            </ng-container>
-          </div>
-
+          </ng-container>
+        </div>
       </div>
 
-      <div class="col-7">
-        <div class="row justify-content-center">
-          <div class="col-12 col-lg-9 mb-2">
-            <my-embed [video]="video"></my-embed>
-          </div>
-        </div>
+      <div class="col-12 col-md-7">
+        <my-embed [video]="video"></my-embed>
 
-        <div class="mb-1 start-at" formGroupName="timestamp">
+        <div class="mb-1 mt-3 start-at" formGroupName="timestamp">
           <my-peertube-checkbox
             formControlName="hasStart"
             i18n-labelText labelText="Start at"

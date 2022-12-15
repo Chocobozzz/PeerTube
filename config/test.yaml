@@ -1,9 +1,13 @@
 listen:
-  hostname: '0.0.0.0'
+  hostname: '::'
   port: 9000
 
 webserver:
+  hostname: '127.0.0.1'
   https: false
+
+secrets:
+  peertube: 'my super secret'
 
 rates_limit:
   signup:
@@ -17,18 +21,18 @@ rates_limit:
     max: 500
 
 database:
-  hostname: 'localhost'
+  hostname: '127.0.0.1'
   port: 5432
 
 redis:
-  hostname: 'localhost'
+  hostname: '127.0.0.1'
 
 smtp:
   hostname: null
   port: 1025
   tls: false
   disable_starttls: true
-  from_address: 'test-admin@localhost'
+  from_address: 'test-admin@127.0.0.1'
   username: null
   password: null
 
@@ -130,45 +134,10 @@ plugins:
   index:
     check_latest_versions_interval: '10 minutes'
 
-search:
-  # Add ability to fetch remote videos/actors by their URI, that may not be federated with your instance
-  # If enabled, the associated group will be able to "escape" from the instance follows
-  # That means they will be able to follow channels, watch videos, list videos of non followed instances
-  remote_uri:
-    users: true
-    anonymous: false
-
-  # Use a third party index instead of your local index, only for search results
-  # Useful to discover content outside of your instance
-  search_index:
-    enabled: false
-    # URL of the search index, that should use the same search API and routes
-    # than PeerTube: https://docs.joinpeertube.org/api-rest-reference.html
-    # You should deploy your own with https://framagit.org/framasoft/peertube/search-index,
-    # and can use https://search.joinpeertube.org/ for tests, but keep in mind the latter is an unmoderated search index
-    url: 'http://localhost:3234'
-    # You can disable local search, so users only use the search index
-    disable_local_search: false
-    # If you did not disable local search, you can decide to use the search index by default
-    is_default_search: true
-
-podcast:
-  # Optional instance-level values for Podcast RSS for settings not configured at a user/channel level
-  # https://github.com/Podcastindex-org/podcast-namespace/
-  
-  # Fee percentage the instance will use in Podcast RSS feeds as a host
-  instance_fee: 1
-  lightning:
-    # Lightning node address to receive streaming satoshis (bitcoin)
-    node_address: 'fake address'
-    # A custom key for a client to send along with keysend payments, for lnpay etc
-    custom_key: 'custom key'
-    # Custom value to go with the custom_key
-    custom_value: 'custom value'
-
 federation:
   videos:
     federate_unlisted: true
+    cleanup_remote_interactions: false
 
 views:
   videos:
@@ -177,3 +146,14 @@ views:
 
     local_buffer_update_interval: '5 seconds'
     ip_view_expiration: '1 second'
+
+geo_ip:
+  enabled: false
+
+video_studio:
+  enabled: true
+
+open_telemetry:
+  metrics:
+    prometheus_exporter:
+      port: 9092

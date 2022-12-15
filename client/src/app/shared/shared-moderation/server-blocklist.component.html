@@ -4,8 +4,9 @@
 </h1>
 
 <p-table
-  [value]="blockedServers" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onPage)="onPage($event)"
+  [value]="blockedServers" [paginator]="totalRecords > 0" [totalRecords]="totalRecords"
+  [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions" [first]="pagination.start"
+  [sortField]="sort.field" [sortOrder]="sort.order"
   [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} muted instances"
@@ -19,7 +20,7 @@
         </a>
       </div>
 
-      <div class="ml-auto">
+      <div class="ms-auto">
         <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
     </div>
@@ -28,7 +29,7 @@
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 150px;" i18n>Action</th> <!-- column for action buttons -->
-      <th style="width: calc(100% - 300px);" i18n>Instance</th>
+      <th i18n>Instance</th>
       <th style="width: 150px;" i18n pSortableColumn="createdAt">Muted at <p-sortIcon field="createdAt"></p-sortIcon></th>
     </tr>
   </ng-template>
@@ -41,7 +42,7 @@
       <td>
         <a [href]="'https://' + serverBlock.blockedServer.host" i18n-title title="Open instance in a new tab" target="_blank" rel="noopener noreferrer">
           {{ serverBlock.blockedServer.host }}
-          <span class="glyphicon glyphicon-new-window"></span>
+          <my-global-icon iconName="external-link"></my-global-icon>
         </a>
       </td>
       <td>{{ serverBlock.createdAt | date: 'short' }}</td>
@@ -50,7 +51,7 @@
 
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="6">
+      <td colspan="3">
         <div class="no-results">
           <ng-container *ngIf="search" i18n>No server found matching current filters.</ng-container>
           <ng-container *ngIf="!search" i18n>No server found.</ng-container>

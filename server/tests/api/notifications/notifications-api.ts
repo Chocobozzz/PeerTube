@@ -1,20 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import {
   CheckerBaseParams,
   checkNewVideoFromSubscription,
-  cleanupTests,
   getAllNotificationsSettings,
   MockSmtpServer,
-  PeerTubeServer,
-  prepareNotificationsTest,
-  waitJobs
-} from '@shared/extra-utils'
+  prepareNotificationsTest
+} from '@server/tests/shared'
 import { UserNotification, UserNotificationSettingValue } from '@shared/models'
-
-const expect = chai.expect
+import { cleanupTests, PeerTubeServer, waitJobs } from '@shared/server-commands'
 
 describe('Test notifications API', function () {
   let server: PeerTubeServer
@@ -31,13 +26,23 @@ describe('Test notifications API', function () {
     userNotifications = res.userNotifications
     server = res.servers[0]
 
-    await server.subscriptions.add({ token: userToken, targetUri: 'root_channel@localhost:' + server.port })
+    await server.subscriptions.add({ token: userToken, targetUri: 'root_channel@' + server.host })
 
     for (let i = 0; i < 10; i++) {
       await server.videos.randomUpload({ wait: false })
     }
 
     await waitJobs([ server ])
+  })
+
+  describe('Notification list & count', function () {
+
+    it('Should correctly list notifications', async function () {
+      const { data, total } = await server.notifications.list({ token: userToken, start: 0, count: 2 })
+
+      expect(data).to.have.lengthOf(2)
+      expect(total).to.equal(10)
+    })
   })
 
   describe('Mark as read', function () {
@@ -91,7 +96,7 @@ describe('Test notifications API', function () {
 
     before(() => {
       baseParams = {
-        server: server,
+        server,
         emails,
         socketNotifications: userNotifications,
         token: userToken

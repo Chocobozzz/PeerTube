@@ -3,7 +3,7 @@ import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms'
 import { USER_ROLE_LABELS } from '@shared/core-utils/users'
-import { HTMLServerConfig, UserAdminFlag, UserRole, VideoResolution } from '@shared/models'
+import { HTMLServerConfig, UserAdminFlag, UserRole } from '@shared/models'
 import { SelectOptionsItem } from '../../../../../types/select-options-item.model'
 
 @Directive()
@@ -46,14 +46,10 @@ export abstract class UserEdit extends FormReactive implements OnInit {
       .concat(this.serverConfig.plugin.registeredExternalAuths.map(p => p.npmName))
   }
 
-  isInBigView () {
-    return this.screenService.getWindowInnerWidth() > 1600
-  }
-
   buildRoles () {
     const authUser = this.auth.getUser()
 
-    if (authUser.role === UserRole.ADMINISTRATOR) {
+    if (authUser.role.id === UserRole.ADMINISTRATOR) {
       this.roles = Object.keys(USER_ROLE_LABELS)
             .map(key => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
       return
@@ -64,31 +60,25 @@ export abstract class UserEdit extends FormReactive implements OnInit {
     ]
   }
 
-  isTranscodingInformationDisplayed () {
-    const formVideoQuota = parseInt(this.form.value['videoQuota'], 10)
+  displayDangerZone () {
+    if (this.isCreation()) return false
+    if (!this.user) return false
+    if (this.user.pluginAuth) return false
+    if (this.auth.getUser().id === this.user.id) return false
 
-    return this.serverConfig.transcoding.enabledResolutions.length !== 0 &&
-           formVideoQuota > 0
-  }
-
-  computeQuotaWithTranscoding () {
-    const transcodingConfig = this.serverConfig.transcoding
-
-    const resolutions = transcodingConfig.enabledResolutions
-    const higherResolution = VideoResolution.H_4K
-    let multiplier = 0
-
-    for (const resolution of resolutions) {
-      multiplier += resolution / higherResolution
-    }
-
-    if (transcodingConfig.hls.enabled) multiplier *= 2
-
-    return multiplier * parseInt(this.form.value['videoQuota'], 10)
+    return true
   }
 
   resetPassword () {
     return
+  }
+
+  disableTwoFactorAuth () {
+    return
+  }
+
+  getUserVideoQuota () {
+    return this.form.value['videoQuota']
   }
 
   protected buildAdminFlags (formValue: any) {

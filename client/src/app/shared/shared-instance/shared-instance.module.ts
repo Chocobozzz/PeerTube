@@ -1,6 +1,7 @@
 
 import { NgModule } from '@angular/core'
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap'
+import { SharedGlobalIconModule } from '../shared-icons'
 import { SharedMainModule } from '../shared-main/shared-main.module'
 import { FeatureBooleanComponent } from './feature-boolean.component'
 import { InstanceAboutAccordionComponent } from './instance-about-accordion.component'
@@ -12,6 +13,7 @@ import { InstanceService } from './instance.service'
 @NgModule({
   imports: [
     SharedMainModule,
+    SharedGlobalIconModule,
     NgbAccordionModule
   ],
 

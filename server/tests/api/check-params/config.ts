@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
-
-import 'mocha'
-import { omit } from 'lodash'
+import { merge } from 'lodash'
+import { omit } from '@shared/core-utils'
+import { CustomConfig, HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -10,8 +10,7 @@ import {
   makePutBodyRequest,
   PeerTubeServer,
   setAccessTokensToServers
-} from '@shared/extra-utils'
-import { CustomConfig, HttpStatusCode } from '@shared/models'
+} from '@shared/server-commands'
 
 describe('Test config API validators', function () {
   const path = '/api/v1/config/custom'
@@ -52,6 +51,18 @@ describe('Test config API validators', function () {
       twitter: {
         username: '@MySuperUsername',
         whitelisted: true
+      }
+    },
+    client: {
+      videos: {
+        miniature: {
+          preferAuthorDisplayName: false
+        }
+      },
+      menu: {
+        login: {
+          redirectOnSingleExternalAuth: false
+        }
       }
     },
     cache: {
@@ -102,6 +113,7 @@ describe('Test config API validators', function () {
         '1440p': false,
         '2160p': false
       },
+      alwaysTranscodeOriginalResolution: false,
       webtorrent: {
         enabled: true
       },
@@ -113,6 +125,9 @@ describe('Test config API validators', function () {
       enabled: true,
 
       allowReplay: false,
+      latencySetting: {
+        enabled: false
+      },
       maxDuration: 30,
       maxInstanceLives: -1,
       maxUserLives: 50,
@@ -130,8 +145,12 @@ describe('Test config API validators', function () {
           '1080p': true,
           '1440p': true,
           '2160p': true
-        }
+        },
+        alwaysTranscodeOriginalResolution: false
       }
+    },
+    videoStudio: {
+      enabled: true
     },
     import: {
       videos: {
@@ -142,12 +161,16 @@ describe('Test config API validators', function () {
         torrent: {
           enabled: false
         }
+      },
+      videoChannelSynchronization: {
+        enabled: false,
+        maxPerUser: 10
       }
     },
     trending: {
       videos: {
         algorithms: {
-          enabled: [ 'best', 'hot', 'most-viewed', 'most-liked' ],
+          enabled: [ 'hot', 'most-viewed', 'most-liked' ],
           default: 'most-viewed'
         }
       }
@@ -253,7 +276,7 @@ describe('Test config API validators', function () {
     })
 
     it('Should fail if it misses a key', async function () {
-      const newUpdateParams = omit(updateParams, 'admin.email')
+      const newUpdateParams = { ...updateParams, admin: omit(updateParams.admin, [ 'email' ]) }
 
       await makePutBodyRequest({
         url: server.url,
@@ -326,7 +349,26 @@ describe('Test config API validators', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should fail with a disabled http upload & enabled sync', async function () {
+      const newUpdateParams: CustomConfig = merge({}, updateParams, {
+        import: {
+          videos: {
+            http: { enabled: false }
+          },
+          videoChannelSynchronization: { enabled: true }
+        }
+      })
+
+      await makePutBodyRequest({
+        url: server.url,
+        path,
+        fields: newUpdateParams,
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should succeed with the correct parameters', async function () {
       await makePutBodyRequest({
         url: server.url,
         path,

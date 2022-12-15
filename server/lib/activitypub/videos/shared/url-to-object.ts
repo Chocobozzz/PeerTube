@@ -1,8 +1,8 @@
-import { checkUrlsSameHost } from '@server/helpers/activitypub'
 import { sanitizeAndCheckVideoTorrentObject } from '@server/helpers/custom-validators/activitypub/videos'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
 import { doJSONRequest } from '@server/helpers/requests'
 import { VideoObject } from '@shared/models'
+import { checkUrlsSameHost } from '../../url'
 
 const lTags = loggerTagsFactory('ap', 'video')
 

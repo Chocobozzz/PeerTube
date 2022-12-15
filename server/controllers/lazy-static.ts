@@ -1,12 +1,13 @@
 import cors from 'cors'
 import express from 'express'
 import { VideosTorrentCache } from '@server/lib/files-cache/videos-torrent-cache'
+import { MActorImage } from '@server/types/models'
 import { HttpStatusCode } from '../../shared/models/http/http-error-codes'
 import { logger } from '../helpers/logger'
-import { LAZY_STATIC_PATHS, STATIC_MAX_AGE } from '../initializers/constants'
+import { ACTOR_IMAGES_SIZE, LAZY_STATIC_PATHS, STATIC_MAX_AGE } from '../initializers/constants'
 import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
-import { actorImagePathUnsafeCache, pushActorImageProcessInQueue } from '../lib/local-actor'
-import { asyncMiddleware } from '../middlewares'
+import { actorImagePathUnsafeCache, downloadActorImageFromWorker } from '../lib/local-actor'
+import { asyncMiddleware, handleStaticError } from '../middlewares'
 import { ActorImageModel } from '../models/actor/actor-image'
 
 const lazyStaticRouter = express.Router()
@@ -15,27 +16,32 @@ lazyStaticRouter.use(cors())
 
 lazyStaticRouter.use(
   LAZY_STATIC_PATHS.AVATARS + ':filename',
-  asyncMiddleware(getActorImage)
+  asyncMiddleware(getActorImage),
+  handleStaticError
 )
 
 lazyStaticRouter.use(
   LAZY_STATIC_PATHS.BANNERS + ':filename',
-  asyncMiddleware(getActorImage)
+  asyncMiddleware(getActorImage),
+  handleStaticError
 )
 
 lazyStaticRouter.use(
   LAZY_STATIC_PATHS.PREVIEWS + ':filename',
-  asyncMiddleware(getPreview)
+  asyncMiddleware(getPreview),
+  handleStaticError
 )
 
 lazyStaticRouter.use(
   LAZY_STATIC_PATHS.VIDEO_CAPTIONS + ':filename',
-  asyncMiddleware(getVideoCaption)
+  asyncMiddleware(getVideoCaption),
+  handleStaticError
 )
 
 lazyStaticRouter.use(
   LAZY_STATIC_PATHS.TORRENTS + ':filename',
-  asyncMiddleware(getTorrent)
+  asyncMiddleware(getTorrent),
+  handleStaticError
 )
 
 // ---------------------------------------------------------------------------
@@ -64,7 +70,12 @@ async function getActorImage (req: express.Request, res: express.Response, next:
     logger.info('Lazy serve remote actor image %s.', image.fileUrl)
 
     try {
-      await pushActorImageProcessInQueue({ filename: image.filename, fileUrl: image.fileUrl, type: image.type })
+      await downloadActorImageFromWorker({
+        filename: image.filename,
+        fileUrl: image.fileUrl,
+        size: getActorImageSize(image),
+        type: image.type
+      })
     } catch (err) {
       logger.warn('Cannot process remote actor image %s.', image.fileUrl, { err })
       return res.status(HttpStatusCode.NOT_FOUND_404).end()
@@ -86,7 +97,7 @@ async function getActorImage (req: express.Request, res: express.Response, next:
     if (err.status === HttpStatusCode.NOT_FOUND_404 && !image.isOwned()) {
       logger.error('Cannot lazy serve actor image %s.', filename, { err })
 
-      actorImagePathUnsafeCache.del(filename)
+      actorImagePathUnsafeCache.delete(filename)
 
       image.onDisk = false
       image.save()
@@ -95,6 +106,17 @@ async function getActorImage (req: express.Request, res: express.Response, next:
 
     return next(err)
   })
+}
+
+function getActorImageSize (image: MActorImage): { width: number, height: number } {
+  if (image.width && image.height) {
+    return {
+      height: image.height,
+      width: image.width
+    }
+  }
+
+  return ACTOR_IMAGES_SIZE[image.type][0]
 }
 
 async function getPreview (req: express.Request, res: express.Response) {

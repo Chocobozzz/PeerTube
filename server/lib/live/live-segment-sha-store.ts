@@ -1,61 +1,79 @@
+import { writeJson } from 'fs-extra'
 import { basename } from 'path'
+import { mapToJSON } from '@server/helpers/core-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger'
+import { MStreamingPlaylistVideo } from '@server/types/models'
 import { buildSha256Segment } from '../hls'
+import { storeHLSFileFromPath } from '../object-storage'
+import PQueue from 'p-queue'
 
 const lTags = loggerTagsFactory('live')
 
 class LiveSegmentShaStore {
 
-  private static instance: LiveSegmentShaStore
+  private readonly segmentsSha256 = new Map<string, string>()
 
-  private readonly segmentsSha256 = new Map<string, Map<string, string>>()
+  private readonly videoUUID: string
+  private readonly sha256Path: string
+  private readonly streamingPlaylist: MStreamingPlaylistVideo
+  private readonly sendToObjectStorage: boolean
+  private readonly writeQueue = new PQueue({ concurrency: 1 })
 
-  private constructor () {
+  constructor (options: {
+    videoUUID: string
+    sha256Path: string
+    streamingPlaylist: MStreamingPlaylistVideo
+    sendToObjectStorage: boolean
+  }) {
+    this.videoUUID = options.videoUUID
+    this.sha256Path = options.sha256Path
+    this.streamingPlaylist = options.streamingPlaylist
+    this.sendToObjectStorage = options.sendToObjectStorage
   }
 
-  getSegmentsSha256 (videoUUID: string) {
-    return this.segmentsSha256.get(videoUUID)
-  }
-
-  async addSegmentSha (videoUUID: string, segmentPath: string) {
-    const segmentName = basename(segmentPath)
-    logger.debug('Adding live sha segment %s.', segmentPath, lTags(videoUUID))
+  async addSegmentSha (segmentPath: string) {
+    logger.debug('Adding live sha segment %s.', segmentPath, lTags(this.videoUUID))
 
     const shaResult = await buildSha256Segment(segmentPath)
 
-    if (!this.segmentsSha256.has(videoUUID)) {
-      this.segmentsSha256.set(videoUUID, new Map())
-    }
+    const segmentName = basename(segmentPath)
+    this.segmentsSha256.set(segmentName, shaResult)
 
-    const filesMap = this.segmentsSha256.get(videoUUID)
-    filesMap.set(segmentName, shaResult)
+    try {
+      await this.writeToDisk()
+    } catch (err) {
+      logger.error('Cannot write sha segments to disk.', { err })
+    }
   }
 
-  removeSegmentSha (videoUUID: string, segmentPath: string) {
+  async removeSegmentSha (segmentPath: string) {
     const segmentName = basename(segmentPath)
 
-    logger.debug('Removing live sha segment %s.', segmentPath, lTags(videoUUID))
+    logger.debug('Removing live sha segment %s.', segmentPath, lTags(this.videoUUID))
 
-    const filesMap = this.segmentsSha256.get(videoUUID)
-    if (!filesMap) {
-      logger.warn('Unknown files map to remove sha for %s.', videoUUID, lTags(videoUUID))
+    if (!this.segmentsSha256.has(segmentName)) {
+      logger.warn('Unknown segment in files map for video %s and segment %s.', this.videoUUID, segmentPath, lTags(this.videoUUID))
       return
     }
 
-    if (!filesMap.has(segmentName)) {
-      logger.warn('Unknown segment in files map for video %s and segment %s.', videoUUID, segmentPath, lTags(videoUUID))
-      return
-    }
+    this.segmentsSha256.delete(segmentName)
 
-    filesMap.delete(segmentName)
+    await this.writeToDisk()
   }
 
-  cleanupShaSegments (videoUUID: string) {
-    this.segmentsSha256.delete(videoUUID)
-  }
+  private writeToDisk () {
+    return this.writeQueue.add(async () => {
+      await writeJson(this.sha256Path, mapToJSON(this.segmentsSha256))
 
-  static get Instance () {
-    return this.instance || (this.instance = new this())
+      if (this.sendToObjectStorage) {
+        const url = await storeHLSFileFromPath(this.streamingPlaylist, this.sha256Path)
+
+        if (this.streamingPlaylist.segmentsSha256Url !== url) {
+          this.streamingPlaylist.segmentsSha256Url = url
+          await this.streamingPlaylist.save()
+        }
+      }
+    })
   }
 }
 

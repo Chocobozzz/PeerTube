@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import {
   BulkCommand,
   cleanupTests,
@@ -10,9 +9,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 describe('Test bulk actions', function () {
   const commentsUser3: { videoId: number, commentId: number }[] = []
@@ -25,7 +22,7 @@ describe('Test bulk actions', function () {
   let bulkCommand: BulkCommand
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(2)
 
@@ -80,7 +77,7 @@ describe('Test bulk actions', function () {
           const { data } = await servers[1].comments.listThreads({ videoId: video.id })
           const comment = data.find(c => c.text === 'comment by user 3')
 
-          if (video.account.host === 'localhost:' + servers[0].port) {
+          if (video.account.host === servers[0].host) {
             expect(comment).to.not.exist
           } else {
             expect(comment).to.exist
@@ -154,7 +151,7 @@ describe('Test bulk actions', function () {
 
       await bulkCommand.removeCommentsOf({
         attributes: {
-          accountName: 'user3@localhost:' + servers[1].port,
+          accountName: 'user3@' + servers[1].host,
           scope: 'instance'
         }
       })

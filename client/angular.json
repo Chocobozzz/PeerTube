@@ -17,6 +17,10 @@
             "translation": "src/locale/angular.ar.xlf",
             "baseHref": "/client/ar/"
           },
+          "fa": {
+            "translation": "src/locale/angular.fa-IR.xlf",
+            "baseHref": "/client/fa-IR/"
+          },
           "hu": {
             "translation": "src/locale/angular.hu-HU.xlf",
             "baseHref": "/client/hu-HU/"
@@ -73,6 +77,10 @@
             "translation": "src/locale/angular.sq.xlf",
             "baseHref": "/client/sq/"
           },
+          "hr": {
+            "translation": "src/locale/angular.hr.xlf",
+            "baseHref": "/client/hr/"
+          },
           "zh-Hans": {
             "translation": "src/locale/angular.zh-Hans-CN.xlf",
             "baseHref": "/client/zh-Hans-CN/"
@@ -124,6 +132,18 @@
           "kab": {
             "translation": "src/locale/angular.kab.xlf",
             "baseHref": "/client/kab/"
+          },
+          "nb": {
+            "translation": "src/locale/angular.nb-NO.xlf",
+            "baseHref": "/client/nb-NO/"
+          },
+          "tok": {
+            "translation": "src/locale/angular.tok.xlf",
+            "baseHref": "/client/tok/"
+          },
+          "nn": {
+            "translation": "src/locale/angular.nn.xlf",
+            "baseHref": "/client/nn/"
           }
         }
       },
@@ -151,7 +171,7 @@
               "src/sass/application.scss"
             ],
             "allowedCommonJsDependencies": [
-              "qrcode",
+              "@cordobo/qrcode",
               "chart.js",
               "htmlparser2",
               "markdown-it-emoji/light",
@@ -161,8 +181,16 @@
               "debug",
               "@peertube/p2p-media-loader-hlsjs",
               "video.js",
-              "sha.js/sha1",
+              "sha.js",
               "postcss",
+              "focus-visible",
+              "path-browserify",
+              "deep-merge",
+              "escape-string-regexp",
+              "mousetrap",
+              "is-plain-object",
+              "parse-srcset",
+              "deepmerge",
               "core-js/features/reflect"
             ],
             "scripts": [],
@@ -294,11 +322,16 @@
   "defaultProject": "PeerTube",
   "schematics": {
     "@schematics/angular:component": {
-      "prefix": "app",
-      "style": "scss"
+      "prefix": "my",
+      "style": "scss",
+      "skipTests": true,
+      "flat": true
     },
     "@schematics/angular:directive": {
-      "prefix": "app"
+      "prefix": "my"
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

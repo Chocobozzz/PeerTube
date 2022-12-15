@@ -21,7 +21,7 @@
         <span i18n="Selector for the list displaying jobs, filtering by their state">any</span>
       </ng-option>
       <ng-option *ngFor="let state of jobStates" [value]="state">
-        <span class="badge" [ngClass]="getJobStateClass(state)">{{ state }}</span>
+        <span class="pt-badge" [ngClass]="getJobStateClass(state)">{{ state }}</span>
       </ng-option>
     </ng-select>
   </div>
@@ -32,17 +32,17 @@
 </div>
 
 <p-table
-  [value]="jobs" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage"  [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="uniqId" [first]="pagination.start"
-  [tableStyle]="{'table-layout':'auto'}" (onPage)="onPage($event)"
+  [value]="jobs" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
+  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order"
+  (onLazyLoad)="loadLazy($event)" dataKey="uniqId" [first]="pagination.start" [tableStyle]="{'table-layout':'auto'}"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} jobs"
-  (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
+  [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 40px"></th>
-      <th style="width: calc(100% - 390px)" class="job-id" i18n>ID</th>
+      <th class="job-id" i18n>ID</th>
       <th style="width: 200px" class="job-type" i18n>Type</th>
       <th style="width: 200px" class="job-priority" i18n>Priority <small>(1 = highest priority)</small></th>
       <th style="width: 200px" class="job-state" i18n *ngIf="jobState === 'all'">State</th>
@@ -62,14 +62,14 @@
       <td class="job-priority c-hand" [pRowToggler]="job">{{ job.priority }}</td>
 
       <td class="job-state c-hand" [pRowToggler]="job" *ngIf="jobState === 'all'">
-        <span class="badge" [ngClass]="getJobStateClass(job.state)">{{ job.state }}</span>
+        <span class="pt-badge" [ngClass]="getJobStateClass(job.state)">{{ job.state }}</span>
       </td>
 
-      <td class="job-progress c-hand" [pRowToggler]="job">
+      <td *ngIf="hasGlobalProgress()" class="job-progress c-hand" [pRowToggler]="job">
         <ng-container *ngIf="hasProgress(job)">{{ getProgress(job) }}</ng-container>
       </td>
 
-      <td class="job-date c-hand" [pRowToggler]="job">{{ job.createdAt | date: 'short' }}</td>
+      <td class="job-date c-hand" [pRowToggler]="job">{{ job.createdAt }}</td>
     </tr>
   </ng-template>
 
@@ -107,8 +107,8 @@
             </ng-container>
 
             <ng-container *ngIf="jobState !== 'all'">
-              <ng-container *ngIf="jobType === 'all'" i18n>No <span class="badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span> jobs found.</ng-container>
-              <ng-container *ngIf="jobType !== 'all'" i18n>No <code>{{ jobType }}</code> jobs found that are <span class="badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span>.</ng-container>
+              <ng-container *ngIf="jobType === 'all'" i18n>No <span class="pt-badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span> jobs found.</ng-container>
+              <ng-container *ngIf="jobType !== 'all'" i18n>No <code>{{ jobType }}</code> jobs found that are <span class="pt-badge" [ngClass]="getJobStateClass(jobState)">{{ jobState }}</span>.</ng-container>
             </ng-container>
           </div>
         </div>

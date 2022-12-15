@@ -1,12 +1,3 @@
-function objectToUrlEncoded (obj: any) {
-  const str: string[] = []
-  for (const key of Object.keys(obj)) {
-    str.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]))
-  }
-
-  return str.join('&')
-}
-
 function copyToClipboard (text: string) {
   const el = document.createElement('textarea')
   el.value = text
@@ -27,6 +18,5 @@ function wait (ms: number) {
 
 export {
   copyToClipboard,
-  objectToUrlEncoded,
   wait
 }

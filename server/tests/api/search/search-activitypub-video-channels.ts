@@ -1,19 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { wait } from '@shared/core-utils'
+import { VideoChannel } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
   PeerTubeServer,
   SearchCommand,
   setAccessTokensToServers,
-  wait,
+  setDefaultAccountAvatar,
+  setDefaultVideoChannel,
   waitJobs
-} from '@shared/extra-utils'
-import { VideoChannel } from '@shared/models'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 describe('Test ActivityPub video channels search', function () {
   let servers: PeerTubeServer[]
@@ -28,6 +27,8 @@ describe('Test ActivityPub video channels search', function () {
     servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
+    await setDefaultVideoChannel(servers)
+    await setDefaultAccountAvatar(servers)
 
     {
       await servers[0].users.create({ username: 'user1_server1', password: 'password' })
@@ -86,7 +87,7 @@ describe('Test ActivityPub video channels search', function () {
   it('Should search a local video channel', async function () {
     const searches = [
       servers[0].url + '/video-channels/channel1_server1',
-      'channel1_server1@localhost:' + servers[0].port
+      'channel1_server1@' + servers[0].host
     ]
 
     for (const search of searches) {
@@ -138,7 +139,7 @@ describe('Test ActivityPub video channels search', function () {
       servers[1].url + '/video-channels/channel1_server2',
       servers[1].url + '/c/channel1_server2',
       servers[1].url + '/c/channel1_server2/videos',
-      'channel1_server2@localhost:' + servers[1].port
+      'channel1_server2@' + servers[1].host
     ]
 
     for (const search of searches) {
@@ -168,7 +169,7 @@ describe('Test ActivityPub video channels search', function () {
 
     const { total, data } = await servers[0].videos.listByChannel({
       token: null,
-      handle: 'channel1_server2@localhost:' + servers[1].port
+      handle: 'channel1_server2@' + servers[1].host
     })
     expect(total).to.equal(0)
     expect(data).to.have.lengthOf(0)
@@ -176,7 +177,7 @@ describe('Test ActivityPub video channels search', function () {
 
   it('Should list video channel videos of server 2 with token', async function () {
     const { total, data } = await servers[0].videos.listByChannel({
-      handle: 'channel1_server2@localhost:' + servers[1].port
+      handle: 'channel1_server2@' + servers[1].host
     })
 
     expect(total).to.equal(1)
@@ -184,7 +185,7 @@ describe('Test ActivityPub video channels search', function () {
   })
 
   it('Should update video channel of server 2, and refresh it on server 1', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     await servers[1].channels.update({
       token: userServer2Token,
@@ -210,7 +211,7 @@ describe('Test ActivityPub video channels search', function () {
   })
 
   it('Should update and add a video on server 2, and update it on server 1 after a search', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     await servers[1].videos.update({ token: userServer2Token, id: videoServer2UUID, attributes: { name: 'video 1 updated' } })
     await servers[1].videos.upload({ token: userServer2Token, attributes: { name: 'video 2 server 2', channelId: channelIdServer2 } })
@@ -225,7 +226,7 @@ describe('Test ActivityPub video channels search', function () {
 
     await waitJobs(servers)
 
-    const handle = 'channel1_server2@localhost:' + servers[1].port
+    const handle = 'channel1_server2@' + servers[1].host
     const { total, data } = await servers[0].videos.listByChannel({ handle, sort: '-createdAt' })
 
     expect(total).to.equal(2)
@@ -234,7 +235,7 @@ describe('Test ActivityPub video channels search', function () {
   })
 
   it('Should delete video channel of server 2, and delete it on server 1', async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     await servers[1].channels.delete({ token: userServer2Token, channelName: 'channel1_server2' })
 

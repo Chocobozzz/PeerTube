@@ -7,7 +7,7 @@ import { CONFIG } from '@server/initializers/config'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '@shared/core-utils/i18n'
 import { HttpStatusCode } from '@shared/models'
-import { root } from '../helpers/core-utils'
+import { root } from '@shared/core-utils'
 import { STATIC_MAX_AGE } from '../initializers/constants'
 import { ClientHtml, sendHTML, serveIndexHTML } from '../lib/client-html'
 import { asyncMiddleware, embedCSP } from '../middlewares'
@@ -68,7 +68,9 @@ const staticClientOverrides = [
   'assets/images/icons/icon-512x512.png',
   'assets/images/default-playlist.jpg',
   'assets/images/default-avatar-account.png',
-  'assets/images/default-avatar-video-channel.png'
+  'assets/images/default-avatar-account-48x48.png',
+  'assets/images/default-avatar-video-channel.png',
+  'assets/images/default-avatar-video-channel-48x48.png'
 ]
 
 for (const staticClientOverride of staticClientOverrides) {

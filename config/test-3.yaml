@@ -2,7 +2,6 @@ listen:
   port: 9003
 
 webserver:
-  hostname: 'localhost'
   port: 9003
 
 database:
@@ -23,10 +22,14 @@ storage:
   captions: 'test3/captions/'
   cache: 'test3/cache/'
   plugins: 'test3/plugins/'
+  well_known: 'test3/well-known/'
   client_overrides: 'test3/client-overrides/'
 
 admin:
   email: 'admin3@example.com'
 
 transcoding:
+  enabled: false
+
+video_studio:
   enabled: false

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
+import { HttpStatusCode, UserRole, VideoInclude, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -8,8 +8,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel
-} from '@shared/extra-utils'
-import { HttpStatusCode, UserRole, VideoInclude, VideoPrivacy } from '@shared/models'
+} from '@shared/server-commands'
 
 describe('Test video filters validators', function () {
   let server: PeerTubeServer

@@ -1,16 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
-
-import 'mocha'
-import { omit } from 'lodash'
-import {
-  cleanupTests,
-  createSingleServer,
-  makePostBodyRequest,
-  MockSmtpServer,
-  PeerTubeServer,
-  setAccessTokensToServers
-} from '@shared/extra-utils'
+import { MockSmtpServer } from '@server/tests/shared'
+import { omit } from '@shared/core-utils'
 import { HttpStatusCode, UserRole } from '@shared/models'
+import { cleanupTests, createSingleServer, makePostBodyRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
 
 describe('Test users API validators', function () {
   const path = '/api/v1/users/'
@@ -63,7 +55,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with a missing email', async function () {
-      const fields = omit(baseCorrectParams, 'email')
+      const fields = omit(baseCorrectParams, [ 'email' ])
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
@@ -169,7 +161,7 @@ describe('Test users API validators', function () {
         url: server.url,
         path: registrationPath,
         token: server.accessToken,
-        fields: fields,
+        fields,
         expectedStatus: HttpStatusCode.NO_CONTENT_204
       })
     })

@@ -1,3 +1,4 @@
+import { logger } from '@root-helpers/logger'
 import { getCompleteLocale, getShortLocale, is18nLocale, isDefaultLocale } from '@shared/core-utils/i18n'
 
 export class TranslationsManager {
@@ -11,7 +12,7 @@ export class TranslationsManager {
     return fetch(path + '/server.json')
       .then(res => res.json())
       .catch(err => {
-        console.error('Cannot get server translations', err)
+        logger.error('Cannot get server translations', err)
         return undefined
       })
   }
@@ -33,7 +34,7 @@ export class TranslationsManager {
           return json
         })
         .catch(err => {
-          console.error('Cannot get player translations', err)
+          logger.error('Cannot get player translations', err)
           return undefined
         })
     }

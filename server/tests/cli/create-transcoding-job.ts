@@ -1,32 +1,29 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoFile } from '@shared/models'
 import {
-  areObjectStorageTestsDisabled,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
-  expectStartWith,
   makeRawRequest,
   ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '../../../shared/extra-utils'
-
-const expect = chai.expect
+} from '@shared/server-commands'
+import { checkResolutionsInMasterPlaylist, expectStartWith } from '../shared'
 
 async function checkFilesInObjectStorage (files: VideoFile[], type: 'webtorrent' | 'playlist') {
   for (const file of files) {
     const shouldStartWith = type === 'webtorrent'
-      ? ObjectStorageCommand.getWebTorrentBaseUrl()
-      : ObjectStorageCommand.getPlaylistBaseUrl()
+      ? ObjectStorageCommand.getMockWebTorrentBaseUrl()
+      : ObjectStorageCommand.getMockPlaylistBaseUrl()
 
     expectStartWith(file.fileUrl, shouldStartWith)
 
-    await makeRawRequest(file.fileUrl, HttpStatusCode.OK_200)
+    await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
   }
 }
 
@@ -39,7 +36,7 @@ function runTests (objectStorage: boolean) {
     this.timeout(120000)
 
     const config = objectStorage
-      ? ObjectStorageCommand.getDefaultConfig()
+      ? ObjectStorageCommand.getDefaultMockConfig()
       : {}
 
     // Run server 2 to have transcoding enabled
@@ -50,7 +47,7 @@ function runTests (objectStorage: boolean) {
 
     await doubleFollow(servers[0], servers[1])
 
-    if (objectStorage) await ObjectStorageCommand.prepareDefaultBuckets()
+    if (objectStorage) await ObjectStorageCommand.prepareDefaultMockBuckets()
 
     for (let i = 1; i <= 5; i++) {
       const { uuid, shortUUID } = await servers[0].videos.upload({ attributes: { name: 'video' + i } })
@@ -163,11 +160,18 @@ function runTests (objectStorage: boolean) {
 
       expect(videoDetails.streamingPlaylists).to.have.lengthOf(1)
 
-      const files = videoDetails.streamingPlaylists[0].files
+      const hlsPlaylist = videoDetails.streamingPlaylists[0]
+
+      const files = hlsPlaylist.files
       expect(files).to.have.lengthOf(1)
       expect(files[0].resolution.id).to.equal(480)
 
-      if (objectStorage) await checkFilesInObjectStorage(files, 'playlist')
+      if (objectStorage) {
+        await checkFilesInObjectStorage(files, 'playlist')
+
+        const resolutions = files.map(f => f.resolution.id)
+        await checkResolutionsInMasterPlaylist({ server, playlistUrl: hlsPlaylist.playlistUrl, resolutions })
+      }
     }
   })
 
@@ -251,7 +255,7 @@ describe('Test create transcoding jobs', function () {
   })
 
   describe('On object storage', function () {
-    if (areObjectStorageTestsDisabled()) return
+    if (areMockObjectStorageTestsDisabled()) return
 
     runTests(true)
   })

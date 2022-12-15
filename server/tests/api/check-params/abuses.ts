@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
+import { AbuseCreate, AbuseState, HttpStatusCode } from '@shared/models'
 import {
   AbusesCommand,
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
   cleanupTests,
   createSingleServer,
   doubleFollow,
@@ -14,8 +12,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
-import { AbuseCreate, AbuseState, HttpStatusCode } from '@shared/models'
+} from '@shared/server-commands'
 
 describe('Test abuses API validators', function () {
   const basePath = '/api/v1/abuses/'
@@ -165,7 +162,7 @@ describe('Test abuses API validators', function () {
 
     it('Should fail with a wrong video', async function () {
       const fields = { video: { id: 'blabla' }, reason: 'my super reason' }
-      await makePostBodyRequest({ url: server.url, path: path, token: userToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
     })
 
     it('Should fail with an unknown video', async function () {
@@ -181,7 +178,7 @@ describe('Test abuses API validators', function () {
 
     it('Should fail with a wrong comment', async function () {
       const fields = { comment: { id: 'blabla' }, reason: 'my super reason' }
-      await makePostBodyRequest({ url: server.url, path: path, token: userToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
     })
 
     it('Should fail with an unknown comment', async function () {
@@ -197,7 +194,7 @@ describe('Test abuses API validators', function () {
 
     it('Should fail with a wrong account', async function () {
       const fields = { account: { id: 'blabla' }, reason: 'my super reason' }
-      await makePostBodyRequest({ url: server.url, path: path, token: userToken, fields })
+      await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
     })
 
     it('Should fail with an unknown account', async function () {
@@ -271,7 +268,7 @@ describe('Test abuses API validators', function () {
       await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
     })
 
-    it('Should succeed with the corret parameters (advanced)', async function () {
+    it('Should succeed with the correct parameters (advanced)', async function () {
       const fields: AbuseCreate = {
         video: {
           id: server.store.videoCreated.id,
@@ -335,7 +332,7 @@ describe('Test abuses API validators', function () {
       await command.addMessage({ token: userToken, abuseId, message: 'a'.repeat(5000), expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
-    it('Should suceed with the correct params', async function () {
+    it('Should succeed with the correct params', async function () {
       const res = await command.addMessage({ token: userToken, abuseId, message })
       messageId = res.body.abuseMessage.id
     })

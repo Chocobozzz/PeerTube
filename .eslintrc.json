@@ -38,12 +38,15 @@
         }
       }
     ],
+    "quotes": "off",
     "@typescript-eslint/indent": [
       "error",
       2,
       {
         "SwitchCase": 1,
-        "MemberExpression": "off"
+        "MemberExpression": "off",
+        // https://github.com/eslint/eslint/issues/15299
+        "ignoredNodes": ["PropertyDefinition"]
       }
     ],
     "@typescript-eslint/consistent-type-assertions": [
@@ -76,7 +79,14 @@
     "@typescript-eslint/dot-notation": "off",
     "@typescript-eslint/method-signature-style": "off",
     "@typescript-eslint/no-base-to-string": "off",
-    "@typescript-eslint/quotes": "off",
+    "@typescript-eslint/quotes": [
+        "error",
+        "single",
+        {
+            "avoidEscape": true,
+            "allowTemplateLiterals": true
+        }
+    ],
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/promise-function-async": "off",
@@ -100,8 +110,12 @@
     "node_modules/"
   ],
   "parserOptions": {
+    "EXPERIMENTAL_useSourceOfProjectReferenceRedirect": true,
     "project": [
       "./tsconfig.json",
+      "./shared/tsconfig.json",
+      "./scripts/tsconfig.json",
+      "./server/tsconfig.json",
       "./server/tools/tsconfig.json"
     ]
   }

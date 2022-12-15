@@ -1,4 +1,4 @@
-import { VideoUploadFile } from 'express'
+import express, { VideoUploadFile } from 'express'
 import { PathLike } from 'fs-extra'
 import { Transaction } from 'sequelize/types'
 import { AbuseAuditView, auditLoggerFactory } from '@server/helpers/audit-logger'
@@ -13,18 +13,15 @@ import {
   MAbuseFull,
   MAccountDefault,
   MAccountLight,
+  MComment,
   MCommentAbuseAccountVideo,
   MCommentOwnerVideo,
   MUser,
   MVideoAbuseVideoFull,
   MVideoAccountLightBlacklistAllFiles
 } from '@server/types/models'
-import { ActivityCreate } from '../../shared/models/activitypub'
-import { VideoObject } from '../../shared/models/activitypub/objects'
-import { VideoCommentObject } from '../../shared/models/activitypub/objects/video-comment-object'
 import { LiveVideoCreate, VideoCreate, VideoImportCreate } from '../../shared/models/videos'
 import { VideoCommentCreate } from '../../shared/models/videos/comment'
-import { ActorModel } from '../models/actor/actor'
 import { UserModel } from '../models/user/user'
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
@@ -36,7 +33,9 @@ export type AcceptResult = {
   errorMessage?: string
 }
 
-// Can be filtered by plugins
+// ---------------------------------------------------------------------------
+
+// Stub function that can be filtered by plugins
 function isLocalVideoAccepted (object: {
   videoBody: VideoCreate
   videoFile: VideoUploadFile
@@ -45,6 +44,9 @@ function isLocalVideoAccepted (object: {
   return { accepted: true }
 }
 
+// ---------------------------------------------------------------------------
+
+// Stub function that can be filtered by plugins
 function isLocalLiveVideoAccepted (object: {
   liveVideoBody: LiveVideoCreate
   user: UserModel
@@ -52,7 +54,11 @@ function isLocalLiveVideoAccepted (object: {
   return { accepted: true }
 }
 
+// ---------------------------------------------------------------------------
+
+// Stub function that can be filtered by plugins
 function isLocalVideoThreadAccepted (_object: {
+  req: express.Request
   commentBody: VideoCommentCreate
   video: VideoModel
   user: UserModel
@@ -60,7 +66,9 @@ function isLocalVideoThreadAccepted (_object: {
   return { accepted: true }
 }
 
+// Stub function that can be filtered by plugins
 function isLocalVideoCommentReplyAccepted (_object: {
+  req: express.Request
   commentBody: VideoCommentCreate
   parentComment: VideoCommentModel
   video: VideoModel
@@ -69,22 +77,18 @@ function isLocalVideoCommentReplyAccepted (_object: {
   return { accepted: true }
 }
 
-function isRemoteVideoAccepted (_object: {
-  activity: ActivityCreate
-  videoAP: VideoObject
-  byActor: ActorModel
-}): AcceptResult {
-  return { accepted: true }
-}
+// ---------------------------------------------------------------------------
 
+// Stub function that can be filtered by plugins
 function isRemoteVideoCommentAccepted (_object: {
-  activity: ActivityCreate
-  commentAP: VideoCommentObject
-  byActor: ActorModel
+  comment: MComment
 }): AcceptResult {
   return { accepted: true }
 }
 
+// ---------------------------------------------------------------------------
+
+// Stub function that can be filtered by plugins
 function isPreImportVideoAccepted (object: {
   videoImportBody: VideoImportCreate
   user: MUser
@@ -92,6 +96,7 @@ function isPreImportVideoAccepted (object: {
   return { accepted: true }
 }
 
+// Stub function that can be filtered by plugins
 function isPostImportVideoAccepted (object: {
   videoFilePath: PathLike
   videoFile: VideoFileModel
@@ -100,6 +105,8 @@ function isPostImportVideoAccepted (object: {
   return { accepted: true }
 }
 
+// ---------------------------------------------------------------------------
+
 async function createVideoAbuse (options: {
   baseAbuse: FilteredModelAttributes<AbuseModel>
   videoInstance: MVideoAccountLightBlacklistAllFiles
@@ -107,15 +114,16 @@ async function createVideoAbuse (options: {
   endAt: number
   transaction: Transaction
   reporterAccount: MAccountDefault
+  skipNotification: boolean
 }) {
-  const { baseAbuse, videoInstance, startAt, endAt, transaction, reporterAccount } = options
+  const { baseAbuse, videoInstance, startAt, endAt, transaction, reporterAccount, skipNotification } = options
 
   const associateFun = async (abuseInstance: MAbuseFull) => {
     const videoAbuseInstance: MVideoAbuseVideoFull = await VideoAbuseModel.create({
       abuseId: abuseInstance.id,
       videoId: videoInstance.id,
-      startAt: startAt,
-      endAt: endAt
+      startAt,
+      endAt
     }, { transaction })
 
     videoAbuseInstance.Video = videoInstance
@@ -129,6 +137,7 @@ async function createVideoAbuse (options: {
     reporterAccount,
     flaggedAccount: videoInstance.VideoChannel.Account,
     transaction,
+    skipNotification,
     associateFun
   })
 }
@@ -138,8 +147,9 @@ function createVideoCommentAbuse (options: {
   commentInstance: MCommentOwnerVideo
   transaction: Transaction
   reporterAccount: MAccountDefault
+  skipNotification: boolean
 }) {
-  const { baseAbuse, commentInstance, transaction, reporterAccount } = options
+  const { baseAbuse, commentInstance, transaction, reporterAccount, skipNotification } = options
 
   const associateFun = async (abuseInstance: MAbuseFull) => {
     const commentAbuseInstance: MCommentAbuseAccountVideo = await VideoCommentAbuseModel.create({
@@ -158,6 +168,7 @@ function createVideoCommentAbuse (options: {
     reporterAccount,
     flaggedAccount: commentInstance.Account,
     transaction,
+    skipNotification,
     associateFun
   })
 }
@@ -167,8 +178,9 @@ function createAccountAbuse (options: {
   accountInstance: MAccountDefault
   transaction: Transaction
   reporterAccount: MAccountDefault
+  skipNotification: boolean
 }) {
-  const { baseAbuse, accountInstance, transaction, reporterAccount } = options
+  const { baseAbuse, accountInstance, transaction, reporterAccount, skipNotification } = options
 
   const associateFun = () => {
     return Promise.resolve({ isOwned: accountInstance.isOwned() })
@@ -179,16 +191,18 @@ function createAccountAbuse (options: {
     reporterAccount,
     flaggedAccount: accountInstance,
     transaction,
+    skipNotification,
     associateFun
   })
 }
+
+// ---------------------------------------------------------------------------
 
 export {
   isLocalLiveVideoAccepted,
 
   isLocalVideoAccepted,
   isLocalVideoThreadAccepted,
-  isRemoteVideoAccepted,
   isRemoteVideoCommentAccepted,
   isLocalVideoCommentReplyAccepted,
   isPreImportVideoAccepted,
@@ -206,10 +220,11 @@ async function createAbuse (options: {
   base: FilteredModelAttributes<AbuseModel>
   reporterAccount: MAccountDefault
   flaggedAccount: MAccountLight
-  associateFun: (abuseInstance: MAbuseFull) => Promise<{ isOwned: boolean} >
+  associateFun: (abuseInstance: MAbuseFull) => Promise<{ isOwned: boolean }>
+  skipNotification: boolean
   transaction: Transaction
 }) {
-  const { base, reporterAccount, flaggedAccount, associateFun, transaction } = options
+  const { base, reporterAccount, flaggedAccount, associateFun, transaction, skipNotification } = options
   const auditLogger = auditLoggerFactory('abuse')
 
   const abuseAttributes = Object.assign({}, base, { flaggedAccountId: flaggedAccount.id })
@@ -227,13 +242,15 @@ async function createAbuse (options: {
   const abuseJSON = abuseInstance.toFormattedAdminJSON()
   auditLogger.create(reporterAccount.Actor.getIdentifier(), new AbuseAuditView(abuseJSON))
 
-  afterCommitIfTransaction(transaction, () => {
-    Notifier.Instance.notifyOnNewAbuse({
-      abuse: abuseJSON,
-      abuseInstance,
-      reporter: reporterAccount.Actor.getIdentifier()
+  if (!skipNotification) {
+    afterCommitIfTransaction(transaction, () => {
+      Notifier.Instance.notifyOnNewAbuse({
+        abuse: abuseJSON,
+        abuseInstance,
+        reporter: reporterAccount.Actor.getIdentifier()
+      })
     })
-  })
+  }
 
   logger.info('Abuse report %d created.', abuseInstance.id)
 

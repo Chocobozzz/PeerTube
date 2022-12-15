@@ -1,4 +1,4 @@
-import { PickWith, PickWithOpt } from '@shared/core-utils'
+import { PickWith, PickWithOpt } from '@shared/typescript-utils'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { MAccountDefault, MAccountFormattable, MAccountUrl } from '../account'
 import { MVideo, MVideoAccountLight, MVideoFeed, MVideoIdUrl, MVideoUrl } from './video'

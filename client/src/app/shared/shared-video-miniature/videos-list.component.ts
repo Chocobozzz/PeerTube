@@ -3,15 +3,25 @@ import { fromEvent, Observable, Subject, Subscription } from 'rxjs'
 import { debounceTime, switchMap } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { AuthService, ComponentPaginationLight, Notifier, PeerTubeRouterService, ScreenService, User, UserService } from '@app/core'
+import {
+  AuthService,
+  ComponentPaginationLight,
+  Notifier,
+  PeerTubeRouterService,
+  ScreenService,
+  ServerService,
+  User,
+  UserService
+} from '@app/core'
 import { GlobalIconName } from '@app/shared/shared-icons'
+import { logger } from '@root-helpers/logger'
 import { isLastMonth, isLastWeek, isThisMonth, isToday, isYesterday } from '@shared/core-utils'
 import { ResultList, UserRight, VideoSortField } from '@shared/models'
 import { Syndication, Video } from '../shared-main'
 import { VideoFilters, VideoFilterScope } from './video-filters.model'
 import { MiniatureDisplayOptions } from './video-miniature.component'
 
-const logger = debug('peertube:videos:VideosListComponent')
+const debugLogger = debug('peertube:videos:VideosListComponent')
 
 export type HeaderAction = {
   iconName: GlobalIconName
@@ -61,20 +71,12 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() hideScopeFilter = false
 
-  @Input() displayOptions: MiniatureDisplayOptions = {
-    date: true,
-    views: true,
-    by: true,
-    avatar: false,
-    privacyLabel: true,
-    privacyText: false,
-    state: false,
-    blacklistInfo: false
-  }
+  @Input() displayOptions: MiniatureDisplayOptions
 
   @Input() disabled = false
 
   @Output() filtersChanged = new EventEmitter<VideoFilters>()
+  @Output() videosLoaded = new EventEmitter<Video[]>()
 
   videos: Video[] = []
   filters: VideoFilters
@@ -85,6 +87,16 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
   userMiniature: User
 
+  private defaultDisplayOptions: MiniatureDisplayOptions = {
+    date: true,
+    views: true,
+    by: true,
+    avatar: false,
+    privacyLabel: true,
+    privacyText: false,
+    state: false,
+    blacklistInfo: false
+  }
   private routeSub: Subscription
   private userSub: Subscription
   private resizeSub: Subscription
@@ -105,7 +117,8 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
     private userService: UserService,
     private route: ActivatedRoute,
     private screenService: ScreenService,
-    private peertubeRouter: PeerTubeRouterService
+    private peertubeRouter: PeerTubeRouterService,
+    private serverService: ServerService
   ) {
 
   }
@@ -161,6 +174,14 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges (changes: SimpleChanges) {
+    if (changes['displayOptions'] || !this.displayOptions) {
+      this.displayOptions = {
+        ...this.defaultDisplayOptions,
+        avatar: this.serverService.getHTMLConfig().client.videos.miniature.displayAuthorAvatar,
+        ...changes['displayOptions']
+      }
+    }
+
     if (!this.filters) return
 
     let updated = false
@@ -207,6 +228,8 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   loadMoreVideos (reset = false) {
+    if (reset) this.hasDoneFirstQuery = false
+
     this.getVideosObservableFunction(this.pagination, this.filters)
       .subscribe({
         next: ({ data }) => {
@@ -219,12 +242,13 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
           if (this.groupByDate) this.buildGroupedDateLabels()
 
           this.onDataSubject.next(data)
+          this.videosLoaded.emit(this.videos)
         },
 
         error: err => {
           const message = $localize`Cannot load more videos. Try again later.`
 
-          console.error(message, { err })
+          logger.error(message, err)
           this.notifier.error(message)
         }
       })
@@ -302,7 +326,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onFiltersChanged (customizedByUser: boolean) {
-    logger('Running on filters changed')
+    debugLogger('Running on filters changed')
 
     this.updateUrl(customizedByUser)
 
@@ -343,7 +367,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
         if (!items || items.length === 0) this.syndicationItems = undefined
         else this.syndicationItems = items
       })
-      .catch(err => console.error('Cannot get syndication items.', err))
+      .catch(err => logger.error('Cannot get syndication items.', err))
   }
 
   private updateUrl (customizedByUser: boolean) {
@@ -354,7 +378,7 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
       ? { ...baseQuery, c: customizedByUser }
       : baseQuery
 
-    logger('Will inject %O in URL query', queryParams)
+    debugLogger('Will inject %O in URL query', queryParams)
 
     const baseRoute = this.baseRouteBuilderFunction
       ? this.baseRouteBuilderFunction(this.filters)

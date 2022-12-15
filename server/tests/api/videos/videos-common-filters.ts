@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
 import { pick } from '@shared/core-utils'
+import { HttpStatusCode, UserRole, Video, VideoDetails, VideoInclude, VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -10,10 +10,10 @@ import {
   makeGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
   setDefaultVideoChannel,
   waitJobs
-} from '@shared/extra-utils'
-import { HttpStatusCode, UserRole, Video, VideoDetails, VideoInclude, VideoPrivacy } from '@shared/models'
+} from '@shared/server-commands'
 
 describe('Test videos filter', function () {
   let servers: PeerTubeServer[]
@@ -23,12 +23,13 @@ describe('Test videos filter', function () {
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(160000)
+    this.timeout(240000)
 
     servers = await createMultipleServers(2)
 
     await setAccessTokensToServers(servers)
     await setDefaultVideoChannel(servers)
+    await setDefaultAccountAvatar(servers)
 
     for (const server of servers) {
       const moderator = { username: 'moderator', password: 'my super password' }
@@ -231,7 +232,7 @@ describe('Test videos filter', function () {
     })
 
     it('Should display only remote videos', async function () {
-      this.timeout(40000)
+      this.timeout(120000)
 
       await servers[1].videos.upload({ attributes: { name: 'remote video' } })
 

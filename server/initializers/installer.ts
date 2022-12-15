@@ -1,14 +1,16 @@
-import { ensureDir, remove } from 'fs-extra'
+import { ensureDir, readdir, remove } from 'fs-extra'
 import passwordGenerator from 'password-generator'
-import { UserRole } from '../../shared'
+import { join } from 'path'
+import { isTestOrDevInstance } from '@server/helpers/core-utils'
+import { getNodeABIVersion } from '@server/helpers/version'
+import { UserRole } from '@shared/models'
 import { logger } from '../helpers/logger'
-import { createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user'
+import { buildUser, createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
-import { UserModel } from '../models/user/user'
 import { applicationExist, clientsExist, usersExist } from './checker-after-init'
 import { CONFIG } from './config'
-import { FILES_CACHE, HLS_STREAMING_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION, RESUMABLE_UPLOAD_DIRECTORY } from './constants'
+import { DIRECTORIES, FILES_CACHE, LAST_MIGRATION_VERSION } from './constants'
 import { sequelizeTypescript } from './database'
 
 async function installApplication () {
@@ -51,12 +53,26 @@ function removeCacheAndTmpDirectories () {
   // Cache directories
   for (const key of Object.keys(cacheDirectories)) {
     const dir = cacheDirectories[key]
-    tasks.push(remove(dir))
+    tasks.push(removeDirectoryOrContent(dir))
   }
 
-  tasks.push(remove(CONFIG.STORAGE.TMP_DIR))
+  tasks.push(removeDirectoryOrContent(CONFIG.STORAGE.TMP_DIR))
 
   return Promise.all(tasks)
+}
+
+async function removeDirectoryOrContent (dir: string) {
+  try {
+    await remove(dir)
+  } catch (err) {
+    logger.debug('Cannot remove directory %s. Removing content instead.', dir, { err })
+
+    const files = await readdir(dir)
+
+    for (const file of files) {
+      await remove(join(dir, file))
+    }
+  }
 }
 
 function createDirectoriesIfNotExist () {
@@ -76,11 +92,13 @@ function createDirectoriesIfNotExist () {
     tasks.push(ensureDir(dir))
   }
 
-  // Playlist directories
-  tasks.push(ensureDir(HLS_STREAMING_PLAYLIST_DIRECTORY))
+  tasks.push(ensureDir(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE))
+  tasks.push(ensureDir(DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC))
+  tasks.push(ensureDir(DIRECTORIES.VIDEOS.PUBLIC))
+  tasks.push(ensureDir(DIRECTORIES.VIDEOS.PRIVATE))
 
   // Resumable upload directory
-  tasks.push(ensureDir(RESUMABLE_UPLOAD_DIRECTORY))
+  tasks.push(ensureDir(DIRECTORIES.RESUMABLE_UPLOAD))
 
   return Promise.all(tasks)
 }
@@ -121,8 +139,8 @@ async function createOAuthAdminIfNotExist () {
   let validatePassword = true
   let password = ''
 
-  // Do not generate a random password for tests
-  if (process.env.NODE_ENV === 'test') {
+  // Do not generate a random password for test and dev environments
+  if (isTestOrDevInstance()) {
     password = 'test'
 
     if (process.env.NODE_APP_INSTANCE) {
@@ -137,17 +155,15 @@ async function createOAuthAdminIfNotExist () {
     password = passwordGenerator(16, true)
   }
 
-  const userData = {
+  const user = buildUser({
     username,
     email,
     password,
     role,
-    verified: true,
-    nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
+    emailVerified: true,
     videoQuota: -1,
     videoQuotaDaily: -1
-  }
-  const user = new UserModel(userData)
+  })
 
   await createUserAccountAndChannelAndPlaylist({ userToCreate: user, channelNames: undefined, validateUser: validatePassword })
   logger.info('Username: ' + username)
@@ -162,7 +178,9 @@ async function createApplicationIfNotExist () {
   logger.info('Creating application account.')
 
   const application = await ApplicationModel.create({
-    migrationVersion: LAST_MIGRATION_VERSION
+    migrationVersion: LAST_MIGRATION_VERSION,
+    nodeVersion: process.version,
+    nodeABIVersion: getNodeABIVersion()
   })
 
   return createApplicationActor(application.id)

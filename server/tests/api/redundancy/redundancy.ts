@@ -1,25 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { readdir } from 'fs-extra'
 import magnetUtil from 'magnet-uri'
 import { basename, join } from 'path'
-import {
-  checkSegmentHash,
-  checkVideoFilesWereRemoved,
-  cleanupTests,
-  createMultipleServers,
-  doubleFollow,
-  killallServers,
-  makeRawRequest,
-  PeerTubeServer,
-  root,
-  saveVideoInServers,
-  setAccessTokensToServers,
-  wait,
-  waitJobs
-} from '@shared/extra-utils'
+import { checkSegmentHash, checkVideoFilesWereRemoved, saveVideoInServers } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
 import {
   HttpStatusCode,
   VideoDetails,
@@ -28,8 +14,16 @@ import {
   VideoRedundancyStrategy,
   VideoRedundancyStrategyWithManual
 } from '@shared/models'
-
-const expect = chai.expect
+import {
+  cleanupTests,
+  createMultipleServers,
+  doubleFollow,
+  killallServers,
+  makeRawRequest,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  waitJobs
+} from '@shared/server-commands'
 
 let servers: PeerTubeServer[] = []
 let video1Server2: VideoDetails
@@ -45,7 +39,7 @@ async function checkMagnetWebseeds (file: VideoFile, baseWebseeds: string[], ser
   expect(parsed.urlList).to.have.lengthOf(baseWebseeds.length)
 
   for (const url of parsed.urlList) {
-    await makeRawRequest(url, HttpStatusCode.OK_200)
+    await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
   }
 }
 
@@ -56,7 +50,7 @@ async function createServers (strategy: VideoRedundancyStrategy | null, addition
     strategies.push(
       {
         min_lifetime: '1 hour',
-        strategy: strategy,
+        strategy,
         size: '400KB',
 
         ...additionalParams
@@ -90,7 +84,7 @@ async function createServers (strategy: VideoRedundancyStrategy | null, addition
     const { id } = await servers[1].videos.upload({ attributes: { name: 'video 1 server 2' } })
     video1Server2 = await servers[1].videos.get({ id })
 
-    await servers[1].videos.view({ id })
+    await servers[1].views.simulateView({ id })
   }
 
   await waitJobs(servers)
@@ -131,7 +125,7 @@ async function check1WebSeed (videoUUID?: string) {
   if (!videoUUID) videoUUID = video1Server2.uuid
 
   const webseeds = [
-    `http://localhost:${servers[1].port}/static/webseed/`
+    `${servers[1].url}/static/webseed/`
   ]
 
   for (const server of servers) {
@@ -150,8 +144,8 @@ async function check2Webseeds (videoUUID?: string) {
   if (!videoUUID) videoUUID = video1Server2.uuid
 
   const webseeds = [
-    `http://localhost:${servers[0].port}/static/redundancy/`,
-    `http://localhost:${servers[1].port}/static/webseed/`
+    `${servers[0].url}/static/redundancy/`,
+    `${servers[1].url}/static/webseed/`
   ]
 
   for (const server of servers) {
@@ -165,12 +159,12 @@ async function check2Webseeds (videoUUID?: string) {
   const { webtorrentFilenames } = await ensureSameFilenames(videoUUID)
 
   const directories = [
-    'test' + servers[0].internalServerNumber + '/redundancy',
-    'test' + servers[1].internalServerNumber + '/videos'
+    servers[0].getDirectoryPath('redundancy'),
+    servers[1].getDirectoryPath('videos')
   ]
 
   for (const directory of directories) {
-    const files = await readdir(join(root(), directory))
+    const files = await readdir(directory)
     expect(files).to.have.length.at.least(4)
 
     // Ensure we files exist on disk
@@ -220,12 +214,12 @@ async function check1PlaylistRedundancies (videoUUID?: string) {
   const { hlsFilenames } = await ensureSameFilenames(videoUUID)
 
   const directories = [
-    'test' + servers[0].internalServerNumber + '/redundancy/hls',
-    'test' + servers[1].internalServerNumber + '/streaming-playlists/hls'
+    servers[0].getDirectoryPath('redundancy/hls'),
+    servers[1].getDirectoryPath('streaming-playlists/hls')
   ]
 
   for (const directory of directories) {
-    const files = await readdir(join(root(), directory, videoUUID))
+    const files = await readdir(join(directory, videoUUID))
     expect(files).to.have.length.at.least(4)
 
     // Ensure we files exist on disk
@@ -271,8 +265,8 @@ async function checkStatsWithoutRedundancy (strategy: VideoRedundancyStrategyWit
 async function findServerFollows () {
   const body = await servers[0].follows.getFollowings({ start: 0, count: 5, sort: '-createdAt' })
   const follows = body.data
-  const server2 = follows.find(f => f.following.host === `localhost:${servers[1].port}`)
-  const server3 = follows.find(f => f.following.host === `localhost:${servers[2].port}`)
+  const server2 = follows.find(f => f.following.host === `${servers[1].host}`)
+  const server3 = follows.find(f => f.following.host === `${servers[2].host}`)
 
   return { server2, server3 }
 }
@@ -307,7 +301,7 @@ describe('Test videos redundancy', function () {
     const strategy = 'most-views'
 
     before(function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       return createServers(strategy)
     })
@@ -357,7 +351,7 @@ describe('Test videos redundancy', function () {
     const strategy = 'trending'
 
     before(function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       return createServers(strategy)
     })
@@ -420,7 +414,7 @@ describe('Test videos redundancy', function () {
     const strategy = 'recently-added'
 
     before(function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       return createServers(strategy, { min_views: 3 })
     })
@@ -450,8 +444,8 @@ describe('Test videos redundancy', function () {
     it('Should view 2 times the first video to have > min_views config', async function () {
       this.timeout(80000)
 
-      await servers[0].videos.view({ id: video1Server2.uuid })
-      await servers[2].videos.view({ id: video1Server2.uuid })
+      await servers[0].views.simulateView({ id: video1Server2.uuid })
+      await servers[2].views.simulateView({ id: video1Server2.uuid })
 
       await wait(10000)
       await waitJobs(servers)
@@ -491,7 +485,7 @@ describe('Test videos redundancy', function () {
     const strategy = 'recently-added'
 
     before(async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       await createServers(strategy, { min_views: 3 }, false)
     })
@@ -519,8 +513,8 @@ describe('Test videos redundancy', function () {
     it('Should have 1 redundancy on the first video', async function () {
       this.timeout(160000)
 
-      await servers[0].videos.view({ id: video1Server2.uuid })
-      await servers[2].videos.view({ id: video1Server2.uuid })
+      await servers[0].views.simulateView({ id: video1Server2.uuid })
+      await servers[2].views.simulateView({ id: video1Server2.uuid })
 
       await wait(10000)
       await waitJobs(servers)
@@ -553,7 +547,7 @@ describe('Test videos redundancy', function () {
 
   describe('With manual strategy', function () {
     before(function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       return createServers(null)
     })
@@ -632,7 +626,7 @@ describe('Test videos redundancy', function () {
     }
 
     before(async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       await createServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
 
@@ -645,12 +639,12 @@ describe('Test videos redundancy', function () {
       await wait(10000)
 
       try {
-        await checkContains(servers, 'http%3A%2F%2Flocalhost%3A' + servers[0].port)
+        await checkContains(servers, 'http%3A%2F%2F' + servers[0].hostname + '%3A' + servers[0].port)
       } catch {
         // Maybe a server deleted a redundancy in the scheduler
         await wait(2000)
 
-        await checkContains(servers, 'http%3A%2F%2Flocalhost%3A' + servers[0].port)
+        await checkContains(servers, 'http%3A%2F%2F' + servers[0].hostname + '%3A' + servers[0].port)
       }
     })
 
@@ -661,7 +655,7 @@ describe('Test videos redundancy', function () {
 
       await wait(15000)
 
-      await checkNotContains([ servers[1], servers[2] ], 'http%3A%2F%2Flocalhost%3A' + servers[0].port)
+      await checkNotContains([ servers[1], servers[2] ], 'http%3A%2F%2F' + servers[0].port + '%3A' + servers[0].port)
     })
 
     after(async function () {
@@ -674,7 +668,7 @@ describe('Test videos redundancy', function () {
     const strategy = 'recently-added'
 
     before(async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       await createServers(strategy, { min_lifetime: '7 seconds', min_views: 0 })
 
@@ -698,7 +692,7 @@ describe('Test videos redundancy', function () {
     })
 
     it('Should cache video 2 webseeds on the first video', async function () {
-      this.timeout(120000)
+      this.timeout(240000)
 
       await waitJobs(servers)
 

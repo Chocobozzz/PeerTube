@@ -1,28 +1,29 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import request from 'supertest'
 import {
-  buildAbsoluteFixturePath,
   checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
-  cleanupTests,
   completeVideoCheck,
-  createMultipleServers,
   dateIsValid,
-  doubleFollow,
-  PeerTubeServer,
   saveVideoInServers,
+  testImage
+} from '@server/tests/shared'
+import { buildAbsoluteFixturePath, wait } from '@shared/core-utils'
+import { HttpStatusCode, VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
+import {
+  cleanupTests,
+  createMultipleServers,
+  doubleFollow,
+  makeGetRequest,
+  PeerTubeServer,
   setAccessTokensToServers,
-  testImage,
-  wait,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar,
   waitJobs,
   webtorrentAdd
-} from '@shared/extra-utils'
-import { HttpStatusCode, VideoCommentThreadTree, VideoPrivacy } from '@shared/models'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 describe('Test multiple servers', function () {
   let servers: PeerTubeServer[] = []
@@ -45,6 +46,9 @@ describe('Test multiple servers', function () {
         description: 'super channel'
       }
       await servers[0].channels.create({ attributes: videoChannel })
+      await setDefaultChannelAvatar(servers[0], videoChannel.name)
+      await setDefaultAccountAvatar(servers)
+
       const { data } = await servers[0].channels.list({ start: 0, count: 1 })
       videoChannelId = data[0].id
     }
@@ -101,7 +105,7 @@ describe('Test multiple servers', function () {
           originallyPublishedAt: '2019-02-10T13:38:14.449Z',
           account: {
             name: 'root',
-            host: 'localhost:' + servers[0].port
+            host: servers[0].host
           },
           isLocal,
           publishedAt,
@@ -132,11 +136,27 @@ describe('Test multiple servers', function () {
 
         await completeVideoCheck(server, video, checkAttributes)
         publishedAt = video.publishedAt as string
+
+        expect(video.channel.avatars).to.have.lengthOf(2)
+        expect(video.account.avatars).to.have.lengthOf(2)
+
+        for (const image of [ ...video.channel.avatars, ...video.account.avatars ]) {
+          expect(image.createdAt).to.exist
+          expect(image.updatedAt).to.exist
+          expect(image.width).to.be.above(20).and.below(1000)
+          expect(image.path).to.exist
+
+          await makeGetRequest({
+            url: server.url,
+            path: image.path,
+            expectedStatus: HttpStatusCode.OK_200
+          })
+        }
       }
     })
 
     it('Should upload the video on server 2 and propagate on each server', async function () {
-      this.timeout(100000)
+      this.timeout(240000)
 
       const user = {
         username: 'user1',
@@ -165,7 +185,7 @@ describe('Test multiple servers', function () {
 
       // All servers should have this video
       for (const server of servers) {
-        const isLocal = server.url === 'http://localhost:' + servers[1].port
+        const isLocal = server.url === servers[1].url
         const checkAttributes = {
           name: 'my super name for server 2',
           category: 4,
@@ -176,7 +196,7 @@ describe('Test multiple servers', function () {
           support: 'my super support text for server 2',
           account: {
             name: 'user1',
-            host: 'localhost:' + servers[1].port
+            host: servers[1].host
           },
           isLocal,
           commentsEnabled: true,
@@ -206,7 +226,7 @@ describe('Test multiple servers', function () {
             },
             {
               resolution: 720,
-              size: 788000
+              size: 750000
             }
           ],
           thumbnailfile: 'thumbnail',
@@ -259,7 +279,7 @@ describe('Test multiple servers', function () {
 
       // All servers should have this video
       for (const server of servers) {
-        const isLocal = server.url === 'http://localhost:' + servers[2].port
+        const isLocal = server.url === servers[2].url
         const { data } = await server.videos.list()
 
         expect(data).to.be.an('array')
@@ -286,7 +306,7 @@ describe('Test multiple servers', function () {
           support: 'my super support text for server 3',
           account: {
             name: 'root',
-            host: 'localhost:' + servers[2].port
+            host: servers[2].host
           },
           isLocal,
           duration: 5,
@@ -320,7 +340,7 @@ describe('Test multiple servers', function () {
           support: 'my super support text for server 3-2',
           account: {
             name: 'root',
-            host: 'localhost:' + servers[2].port
+            host: servers[2].host
           },
           commentsEnabled: true,
           downloadEnabled: true,
@@ -379,7 +399,7 @@ describe('Test multiple servers', function () {
 
   describe('Should seed the uploaded video', function () {
     it('Should add the file 1 by asking server 3', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { data } = await servers[2].videos.list()
 
@@ -395,7 +415,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should add the file 2 by asking server 1', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { data } = await servers[0].videos.list()
 
@@ -409,7 +429,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should add the file 3 by asking server 2', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { data } = await servers[1].videos.list()
 
@@ -423,7 +443,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should add the file 3-2 by asking server 1', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { data } = await servers[0].videos.list()
 
@@ -437,7 +457,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should add the file 2 in 360p by asking server 1', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { data } = await servers[0].videos.list()
 
@@ -481,21 +501,22 @@ describe('Test multiple servers', function () {
     it('Should view multiple videos on owned servers', async function () {
       this.timeout(30000)
 
-      await servers[2].videos.view({ id: localVideosServer3[0] })
+      await servers[2].views.simulateView({ id: localVideosServer3[0] })
       await wait(1000)
 
-      await servers[2].videos.view({ id: localVideosServer3[0] })
-      await servers[2].videos.view({ id: localVideosServer3[1] })
+      await servers[2].views.simulateView({ id: localVideosServer3[0] })
+      await servers[2].views.simulateView({ id: localVideosServer3[1] })
 
       await wait(1000)
 
-      await servers[2].videos.view({ id: localVideosServer3[0] })
-      await servers[2].videos.view({ id: localVideosServer3[0] })
+      await servers[2].views.simulateView({ id: localVideosServer3[0] })
+      await servers[2].views.simulateView({ id: localVideosServer3[0] })
 
       await waitJobs(servers)
 
-      // Wait the repeatable job
-      await wait(6000)
+      for (const server of servers) {
+        await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
+      }
 
       await waitJobs(servers)
 
@@ -514,23 +535,24 @@ describe('Test multiple servers', function () {
       this.timeout(45000)
 
       const tasks: Promise<any>[] = []
-      tasks.push(servers[0].videos.view({ id: remoteVideosServer1[0] }))
-      tasks.push(servers[1].videos.view({ id: remoteVideosServer2[0] }))
-      tasks.push(servers[1].videos.view({ id: remoteVideosServer2[0] }))
-      tasks.push(servers[2].videos.view({ id: remoteVideosServer3[0] }))
-      tasks.push(servers[2].videos.view({ id: remoteVideosServer3[1] }))
-      tasks.push(servers[2].videos.view({ id: remoteVideosServer3[1] }))
-      tasks.push(servers[2].videos.view({ id: remoteVideosServer3[1] }))
-      tasks.push(servers[2].videos.view({ id: localVideosServer3[1] }))
-      tasks.push(servers[2].videos.view({ id: localVideosServer3[1] }))
-      tasks.push(servers[2].videos.view({ id: localVideosServer3[1] }))
+      tasks.push(servers[0].views.simulateView({ id: remoteVideosServer1[0] }))
+      tasks.push(servers[1].views.simulateView({ id: remoteVideosServer2[0] }))
+      tasks.push(servers[1].views.simulateView({ id: remoteVideosServer2[0] }))
+      tasks.push(servers[2].views.simulateView({ id: remoteVideosServer3[0] }))
+      tasks.push(servers[2].views.simulateView({ id: remoteVideosServer3[1] }))
+      tasks.push(servers[2].views.simulateView({ id: remoteVideosServer3[1] }))
+      tasks.push(servers[2].views.simulateView({ id: remoteVideosServer3[1] }))
+      tasks.push(servers[2].views.simulateView({ id: localVideosServer3[1] }))
+      tasks.push(servers[2].views.simulateView({ id: localVideosServer3[1] }))
+      tasks.push(servers[2].views.simulateView({ id: localVideosServer3[1] }))
 
       await Promise.all(tasks)
 
       await waitJobs(servers)
 
-      // Wait the repeatable job
-      await wait(16000)
+      for (const server of servers) {
+        await server.debug.sendCommand({ body: { command: 'process-video-views-buffer' } })
+      }
 
       await waitJobs(servers)
 
@@ -583,8 +605,8 @@ describe('Test multiple servers', function () {
 
         for (const baseVideo of baseVideos) {
           const sameVideo = data.find(video => video.name === baseVideo.name)
-          expect(baseVideo.likes).to.equal(sameVideo.likes)
-          expect(baseVideo.dislikes).to.equal(sameVideo.dislikes)
+          expect(baseVideo.likes).to.equal(sameVideo.likes, `Likes of ${sameVideo.uuid} do not correspond`)
+          expect(baseVideo.dislikes).to.equal(sameVideo.dislikes, `Dislikes of ${sameVideo.uuid} do not correspond`)
         }
       }
     })
@@ -594,7 +616,7 @@ describe('Test multiple servers', function () {
     let updatedAtMin: Date
 
     it('Should update video 3', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const attributes = {
         name: 'my super video updated',
@@ -617,7 +639,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should have the video 3 updated on each server', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       for (const server of servers) {
         const { data } = await server.videos.list()
@@ -627,7 +649,7 @@ describe('Test multiple servers', function () {
 
         expect(new Date(videoUpdated.updatedAt)).to.be.greaterThan(updatedAtMin)
 
-        const isLocal = server.url === 'http://localhost:' + servers[2].port
+        const isLocal = server.url === servers[2].url
         const checkAttributes = {
           name: 'my super video updated',
           category: 10,
@@ -639,7 +661,7 @@ describe('Test multiple servers', function () {
           originallyPublishedAt: '2019-02-11T13:38:14.449Z',
           account: {
             name: 'root',
-            host: 'localhost:' + servers[2].port
+            host: servers[2].host
           },
           isLocal,
           duration: 5,
@@ -668,7 +690,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should only update thumbnail and update updatedAt attribute', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const attributes = {
         thumbnailfile: 'thumbnail.jpg'
@@ -808,7 +830,7 @@ describe('Test multiple servers', function () {
           expect(comment).to.not.be.undefined
           expect(comment.inReplyToCommentId).to.be.null
           expect(comment.account.name).to.equal('root')
-          expect(comment.account.host).to.equal('localhost:' + servers[0].port)
+          expect(comment.account.host).to.equal(servers[0].host)
           expect(comment.totalReplies).to.equal(3)
           expect(dateIsValid(comment.createdAt as string)).to.be.true
           expect(dateIsValid(comment.updatedAt as string)).to.be.true
@@ -819,7 +841,7 @@ describe('Test multiple servers', function () {
           expect(comment).to.not.be.undefined
           expect(comment.inReplyToCommentId).to.be.null
           expect(comment.account.name).to.equal('root')
-          expect(comment.account.host).to.equal('localhost:' + servers[2].port)
+          expect(comment.account.host).to.equal(servers[2].host)
           expect(comment.totalReplies).to.equal(0)
           expect(dateIsValid(comment.createdAt as string)).to.be.true
           expect(dateIsValid(comment.updatedAt as string)).to.be.true
@@ -836,31 +858,31 @@ describe('Test multiple servers', function () {
 
         expect(tree.comment.text).equal('my super first comment')
         expect(tree.comment.account.name).equal('root')
-        expect(tree.comment.account.host).equal('localhost:' + servers[0].port)
+        expect(tree.comment.account.host).equal(servers[0].host)
         expect(tree.children).to.have.lengthOf(2)
 
         const firstChild = tree.children[0]
         expect(firstChild.comment.text).to.equal('my super answer to thread 1')
         expect(firstChild.comment.account.name).equal('root')
-        expect(firstChild.comment.account.host).equal('localhost:' + servers[1].port)
+        expect(firstChild.comment.account.host).equal(servers[1].host)
         expect(firstChild.children).to.have.lengthOf(1)
 
         childOfFirstChild = firstChild.children[0]
         expect(childOfFirstChild.comment.text).to.equal('my super answer to answer of thread 1')
         expect(childOfFirstChild.comment.account.name).equal('root')
-        expect(childOfFirstChild.comment.account.host).equal('localhost:' + servers[2].port)
+        expect(childOfFirstChild.comment.account.host).equal(servers[2].host)
         expect(childOfFirstChild.children).to.have.lengthOf(0)
 
         const secondChild = tree.children[1]
         expect(secondChild.comment.text).to.equal('my second answer to thread 1')
         expect(secondChild.comment.account.name).equal('root')
-        expect(secondChild.comment.account.host).equal('localhost:' + servers[2].port)
+        expect(secondChild.comment.account.host).equal(servers[2].host)
         expect(secondChild.children).to.have.lengthOf(0)
       }
     })
 
     it('Should delete a reply', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       await servers[2].comments.delete({ videoId: videoUUID, commentId: childOfFirstChild.comment.id })
 
@@ -891,7 +913,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should delete the thread comments', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       const { data } = await servers[0].comments.listThreads({ videoId: videoUUID })
       const commentId = data.find(c => c.text === 'my super first comment').id
@@ -913,7 +935,7 @@ describe('Test multiple servers', function () {
           expect(comment).to.not.be.undefined
           expect(comment.inReplyToCommentId).to.be.null
           expect(comment.account.name).to.equal('root')
-          expect(comment.account.host).to.equal('localhost:' + servers[2].port)
+          expect(comment.account.host).to.equal(servers[2].host)
           expect(comment.totalReplies).to.equal(0)
           expect(dateIsValid(comment.createdAt as string)).to.be.true
           expect(dateIsValid(comment.updatedAt as string)).to.be.true
@@ -999,7 +1021,7 @@ describe('Test multiple servers', function () {
 
   describe('With minimum parameters', function () {
     it('Should upload and propagate the video', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       const path = '/api/v1/videos/upload'
 
@@ -1020,7 +1042,7 @@ describe('Test multiple servers', function () {
         const { data } = await server.videos.list()
         const video = data.find(v => v.name === 'minimum parameters')
 
-        const isLocal = server.url === 'http://localhost:' + servers[1].port
+        const isLocal = server.url === servers[1].url
         const checkAttributes = {
           name: 'minimum parameters',
           category: null,
@@ -1031,7 +1053,7 @@ describe('Test multiple servers', function () {
           support: null,
           account: {
             name: 'root',
-            host: 'localhost:' + servers[1].port
+            host: servers[1].host
           },
           isLocal,
           duration: 5,

@@ -24,6 +24,7 @@ import {
   VideoPrivacy,
   VideoStreamingPlaylistType
 } from '@shared/models'
+import { getDurationFromActivityStream } from '../../activity'
 
 function getThumbnailFromIcons (videoObject: VideoObject) {
   let validIcons = videoObject.icon.filter(i => i.width > THUMBNAILS_SIZE.minWidth)
@@ -151,6 +152,7 @@ function getLiveAttributesFromObject (video: MVideoId, videoObject: VideoObject)
   return {
     saveReplay: videoObject.liveSaveReplay,
     permanentLive: videoObject.permanentLive,
+    latencyMode: videoObject.latencyMode,
     videoId: video.id
   }
 }
@@ -169,7 +171,6 @@ function getVideoAttributesFromObject (videoChannel: MChannelId, videoObject: Vi
     ? VideoPrivacy.PUBLIC
     : VideoPrivacy.UNLISTED
 
-  const duration = videoObject.duration.replace(/[^\d]+/, '')
   const language = videoObject.language?.identifier
 
   const category = videoObject.category
@@ -199,7 +200,7 @@ function getVideoAttributesFromObject (videoChannel: MChannelId, videoObject: Vi
     isLive: videoObject.isLiveBroadcast,
     state: videoObject.state,
     channelId: videoChannel.id,
-    duration: parseInt(duration, 10),
+    duration: getDurationFromActivityStream(videoObject.duration),
     createdAt: new Date(videoObject.published),
     publishedAt: new Date(videoObject.published),
 
@@ -209,8 +210,6 @@ function getVideoAttributesFromObject (videoChannel: MChannelId, videoObject: Vi
 
     updatedAt: new Date(videoObject.updated),
     views: videoObject.views,
-    likes: 0,
-    dislikes: 0,
     remote: true,
     privacy
   }

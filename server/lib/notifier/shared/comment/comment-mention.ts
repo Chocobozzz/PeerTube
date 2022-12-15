@@ -47,8 +47,8 @@ export class CommentMention extends AbstractNotification <MCommentOwnerVideo, MU
 
     const sourceAccounts = this.users.map(u => u.Account.id).concat([ this.serverAccountId ])
 
-    this.accountMutedHash = await AccountBlocklistModel.isAccountMutedByMulti(sourceAccounts, this.payload.accountId)
-    this.instanceMutedHash = await ServerBlocklistModel.isServerMutedByMulti(sourceAccounts, this.payload.Account.Actor.serverId)
+    this.accountMutedHash = await AccountBlocklistModel.isAccountMutedByAccounts(sourceAccounts, this.payload.accountId)
+    this.instanceMutedHash = await ServerBlocklistModel.isServerMutedByAccounts(sourceAccounts, this.payload.Account.Actor.serverId)
   }
 
   log () {
@@ -71,13 +71,13 @@ export class CommentMention extends AbstractNotification <MCommentOwnerVideo, MU
     return this.users
   }
 
-  async createNotification (user: MUserWithNotificationSetting) {
-    const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+  createNotification (user: MUserWithNotificationSetting) {
+    const notification = UserNotificationModel.build<UserNotificationModelForApi>({
       type: UserNotificationType.COMMENT_MENTION,
       userId: user.id,
       commentId: this.payload.id
     })
-    notification.Comment = this.payload
+    notification.VideoComment = this.payload
 
     return notification
   }

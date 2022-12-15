@@ -2,7 +2,7 @@
   <div class="preview-container">
     <my-reactive-file
       [inputName]="inputName" [inputLabel]="inputLabel" [extensions]="videoImageExtensions" [maxFileSize]="maxVideoImageSize" placement="right"
-      icon="edit" (fileChanged)="onFileChanged($event)" [ngbTooltip]="'(extensions: '+ videoImageExtensions +', '+ maxSizeText +': '+ maxVideoImageSizeInBytes +')'"
+      icon="edit" (fileChanged)="onFileChanged($event)" [buttonTooltip]="getReactiveFileButtonTooltip()"
     ></my-reactive-file>
 
     <img *ngIf="imageSrc" [ngStyle]="{ width: previewWidth, height: previewHeight }" [src]="imageSrc" class="preview" />

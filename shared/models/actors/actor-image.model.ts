@@ -1,4 +1,5 @@
 export interface ActorImage {
+  width: number
   path: string
 
   url?: string

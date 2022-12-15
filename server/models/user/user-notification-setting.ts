@@ -14,7 +14,7 @@ import {
 } from 'sequelize-typescript'
 import { TokensCache } from '@server/lib/auth/tokens-cache'
 import { MNotificationSettingFormattable } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../../shared/models/users/user-notification-setting.model'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
 import { throwIfNotValid } from '../utils'
@@ -175,6 +175,15 @@ export class UserNotificationSettingModel extends Model<Partial<AttributesOnly<U
   @Column
   newPluginVersion: UserNotificationSettingValue
 
+  @AllowNull(false)
+  @Default(null)
+  @Is(
+    'UserNotificationSettingMyVideoStudioEditionFinished',
+    value => throwIfNotValid(value, isUserNotificationSettingValid, 'myVideoStudioEditionFinished')
+  )
+  @Column
+  myVideoStudioEditionFinished: UserNotificationSettingValue
+
   @ForeignKey(() => UserModel)
   @Column
   userId: number
@@ -216,6 +225,7 @@ export class UserNotificationSettingModel extends Model<Partial<AttributesOnly<U
       abuseNewMessage: this.abuseNewMessage,
       abuseStateChange: this.abuseStateChange,
       newPeerTubeVersion: this.newPeerTubeVersion,
+      myVideoStudioEditionFinished: this.myVideoStudioEditionFinished,
       newPluginVersion: this.newPluginVersion
     }
   }

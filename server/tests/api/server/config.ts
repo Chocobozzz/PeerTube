@@ -1,19 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { parallelTests } from '@shared/core-utils'
+import { CustomConfig, HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
   killallServers,
   makeGetRequest,
-  parallelTests,
   PeerTubeServer,
   setAccessTokensToServers
-} from '@shared/extra-utils'
-import { CustomConfig, HttpStatusCode } from '@shared/models'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.instance.name).to.equal('PeerTube')
@@ -42,6 +39,9 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
 
   expect(data.services.twitter.username).to.equal('@Chocobozzz')
   expect(data.services.twitter.whitelisted).to.be.false
+
+  expect(data.client.videos.miniature.preferAuthorDisplayName).to.be.false
+  expect(data.client.menu.login.redirectOnSingleExternalAuth).to.be.false
 
   expect(data.cache.previews.size).to.equal(1)
   expect(data.cache.captions.size).to.equal(1)
@@ -74,11 +74,13 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.transcoding.resolutions['1080p']).to.be.true
   expect(data.transcoding.resolutions['1440p']).to.be.true
   expect(data.transcoding.resolutions['2160p']).to.be.true
+  expect(data.transcoding.alwaysTranscodeOriginalResolution).to.be.true
   expect(data.transcoding.webtorrent.enabled).to.be.true
   expect(data.transcoding.hls.enabled).to.be.true
 
   expect(data.live.enabled).to.be.false
   expect(data.live.allowReplay).to.be.false
+  expect(data.live.latencySetting.enabled).to.be.true
   expect(data.live.maxDuration).to.equal(-1)
   expect(data.live.maxInstanceLives).to.equal(20)
   expect(data.live.maxUserLives).to.equal(3)
@@ -93,6 +95,9 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.live.transcoding.resolutions['1080p']).to.be.false
   expect(data.live.transcoding.resolutions['1440p']).to.be.false
   expect(data.live.transcoding.resolutions['2160p']).to.be.false
+  expect(data.live.transcoding.alwaysTranscodeOriginalResolution).to.be.true
+
+  expect(data.videoStudio.enabled).to.be.false
 
   expect(data.import.videos.concurrency).to.equal(2)
   expect(data.import.videos.http.enabled).to.be.true
@@ -138,6 +143,9 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.services.twitter.username).to.equal('@Kuja')
   expect(data.services.twitter.whitelisted).to.be.true
 
+  expect(data.client.videos.miniature.preferAuthorDisplayName).to.be.true
+  expect(data.client.menu.login.redirectOnSingleExternalAuth).to.be.true
+
   expect(data.cache.previews.size).to.equal(2)
   expect(data.cache.captions.size).to.equal(3)
   expect(data.cache.torrents.size).to.equal(4)
@@ -172,11 +180,13 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.transcoding.resolutions['720p']).to.be.false
   expect(data.transcoding.resolutions['1080p']).to.be.false
   expect(data.transcoding.resolutions['2160p']).to.be.false
+  expect(data.transcoding.alwaysTranscodeOriginalResolution).to.be.false
   expect(data.transcoding.hls.enabled).to.be.false
   expect(data.transcoding.webtorrent.enabled).to.be.true
 
   expect(data.live.enabled).to.be.true
   expect(data.live.allowReplay).to.be.true
+  expect(data.live.latencySetting.enabled).to.be.false
   expect(data.live.maxDuration).to.equal(5000)
   expect(data.live.maxInstanceLives).to.equal(-1)
   expect(data.live.maxUserLives).to.equal(10)
@@ -190,6 +200,9 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.live.transcoding.resolutions['720p']).to.be.true
   expect(data.live.transcoding.resolutions['1080p']).to.be.true
   expect(data.live.transcoding.resolutions['2160p']).to.be.true
+  expect(data.live.transcoding.alwaysTranscodeOriginalResolution).to.be.false
+
+  expect(data.videoStudio.enabled).to.be.true
 
   expect(data.import.videos.concurrency).to.equal(4)
   expect(data.import.videos.http.enabled).to.be.false
@@ -246,6 +259,18 @@ const newCustomConfig: CustomConfig = {
       whitelisted: true
     }
   },
+  client: {
+    videos: {
+      miniature: {
+        preferAuthorDisplayName: true
+      }
+    },
+    menu: {
+      login: {
+        redirectOnSingleExternalAuth: true
+      }
+    }
+  },
   cache: {
     previews: {
       size: 2
@@ -294,6 +319,7 @@ const newCustomConfig: CustomConfig = {
       '1440p': false,
       '2160p': false
     },
+    alwaysTranscodeOriginalResolution: false,
     webtorrent: {
       enabled: true
     },
@@ -304,6 +330,9 @@ const newCustomConfig: CustomConfig = {
   live: {
     enabled: true,
     allowReplay: true,
+    latencySetting: {
+      enabled: false
+    },
     maxDuration: 5000,
     maxInstanceLives: -1,
     maxUserLives: 10,
@@ -320,8 +349,12 @@ const newCustomConfig: CustomConfig = {
         '1080p': true,
         '1440p': true,
         '2160p': true
-      }
+      },
+      alwaysTranscodeOriginalResolution: false
     }
+  },
+  videoStudio: {
+    enabled: true
   },
   import: {
     videos: {
@@ -332,12 +365,16 @@ const newCustomConfig: CustomConfig = {
       torrent: {
         enabled: false
       }
+    },
+    videoChannelSynchronization: {
+      enabled: false,
+      maxPerUser: 10
     }
   },
   trending: {
     videos: {
       algorithms: {
-        enabled: [ 'best', 'hot', 'most-viewed', 'most-liked' ],
+        enabled: [ 'hot', 'most-viewed', 'most-liked' ],
         default: 'hot'
       }
     }
@@ -469,7 +506,7 @@ describe('Test config', function () {
   })
 
   it('Should have the correct updated video allowed extensions', async function () {
-    this.timeout(10000)
+    this.timeout(30000)
 
     const data = await server.config.getConfig()
 

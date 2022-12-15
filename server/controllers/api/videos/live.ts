@@ -1,33 +1,33 @@
 import express from 'express'
+import { exists } from '@server/helpers/custom-validators/misc'
 import { createReqFiles } from '@server/helpers/express-utils'
-import { buildUUID, uuidToShort } from '@server/helpers/uuid'
-import { CONFIG } from '@server/initializers/config'
+import { getFormattedObjects } from '@server/helpers/utils'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { buildLocalVideoFromReq, buildVideoThumbnailsFromReq, setVideoTags } from '@server/lib/video'
-import { videoLiveAddValidator, videoLiveGetValidator, videoLiveUpdateValidator } from '@server/middlewares/validators/videos/video-live'
+import {
+  videoLiveAddValidator,
+  videoLiveFindReplaySessionValidator,
+  videoLiveGetValidator,
+  videoLiveListSessionsValidator,
+  videoLiveUpdateValidator
+} from '@server/middlewares/validators/videos/video-live'
 import { VideoLiveModel } from '@server/models/video/video-live'
+import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
 import { MVideoDetails, MVideoFullLight } from '@server/types/models'
-import { LiveVideoCreate, LiveVideoUpdate, VideoState } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
+import { buildUUID, uuidToShort } from '@shared/extra-utils'
+import { HttpStatusCode, LiveVideoCreate, LiveVideoLatencyMode, LiveVideoUpdate, UserRight, VideoState } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { updateVideoMiniatureFromExisting } from '../../../lib/thumbnail'
-import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate } from '../../../middlewares'
+import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, optionalAuthenticate } from '../../../middlewares'
 import { VideoModel } from '../../../models/video/video'
 
 const liveRouter = express.Router()
 
-const reqVideoFileLive = createReqFiles(
-  [ 'thumbnailfile', 'previewfile' ],
-  MIMETYPES.IMAGE.MIMETYPE_EXT,
-  {
-    thumbnailfile: CONFIG.STORAGE.TMP_DIR,
-    previewfile: CONFIG.STORAGE.TMP_DIR
-  }
-)
+const reqVideoFileLive = createReqFiles([ 'thumbnailfile', 'previewfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
 liveRouter.post('/live',
   authenticate,
@@ -36,8 +36,15 @@ liveRouter.post('/live',
   asyncRetryTransactionMiddleware(addLiveVideo)
 )
 
-liveRouter.get('/live/:videoId',
+liveRouter.get('/live/:videoId/sessions',
   authenticate,
+  asyncMiddleware(videoLiveGetValidator),
+  videoLiveListSessionsValidator,
+  asyncMiddleware(getLiveVideoSessions)
+)
+
+liveRouter.get('/live/:videoId',
+  optionalAuthenticate,
   asyncMiddleware(videoLiveGetValidator),
   getLiveVideo
 )
@@ -47,6 +54,11 @@ liveRouter.put('/live/:videoId',
   asyncMiddleware(videoLiveGetValidator),
   videoLiveUpdateValidator,
   asyncRetryTransactionMiddleware(updateLiveVideo)
+)
+
+liveRouter.get('/:videoId/live-session',
+  asyncMiddleware(videoLiveFindReplaySessionValidator),
+  getLiveReplaySession
 )
 
 // ---------------------------------------------------------------------------
@@ -60,7 +72,31 @@ export {
 function getLiveVideo (req: express.Request, res: express.Response) {
   const videoLive = res.locals.videoLive
 
-  return res.json(videoLive.toFormattedJSON())
+  return res.json(videoLive.toFormattedJSON(canSeePrivateLiveInformation(res)))
+}
+
+function getLiveReplaySession (req: express.Request, res: express.Response) {
+  const session = res.locals.videoLiveSession
+
+  return res.json(session.toFormattedJSON())
+}
+
+async function getLiveVideoSessions (req: express.Request, res: express.Response) {
+  const videoLive = res.locals.videoLive
+
+  const data = await VideoLiveSessionModel.listSessionsOfLiveForAPI({ videoId: videoLive.videoId })
+
+  return res.json(getFormattedObjects(data, data.length))
+}
+
+function canSeePrivateLiveInformation (res: express.Response) {
+  const user = res.locals.oauth?.token.User
+  if (!user) return false
+
+  if (user.hasRight(UserRight.GET_ANY_LIVE)) return true
+
+  const video = res.locals.videoAll
+  return video.VideoChannel.Account.userId === user.id
 }
 
 async function updateLiveVideo (req: express.Request, res: express.Response) {
@@ -69,8 +105,9 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
   const videoLive = res.locals.videoLive
 
-  videoLive.saveReplay = body.saveReplay || false
-  videoLive.permanentLive = body.permanentLive || false
+  if (exists(body.saveReplay)) videoLive.saveReplay = body.saveReplay
+  if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
+  if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode
 
   video.VideoLive = await videoLive.save()
 
@@ -83,7 +120,9 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
   const videoInfo: LiveVideoCreate = req.body
 
   // Prepare data so we don't block the transaction
-  const videoData = buildLocalVideoFromReq(videoInfo, res.locals.videoChannel.id)
+  let videoData = buildLocalVideoFromReq(videoInfo, res.locals.videoChannel.id)
+  videoData = await Hooks.wrapObject(videoData, 'filter:api.video.live.video-attribute.result')
+
   videoData.isLive = true
   videoData.state = VideoState.WAITING_FOR_LIVE
   videoData.duration = 0
@@ -94,6 +133,7 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
   const videoLive = new VideoLiveModel()
   videoLive.saveReplay = videoInfo.saveReplay || false
   videoLive.permanentLive = videoInfo.permanentLive || false
+  videoLive.latencyMode = videoInfo.latencyMode || LiveVideoLatencyMode.DEFAULT
   videoLive.streamKey = buildUUID()
 
   const [ thumbnailModel, previewModel ] = await buildVideoThumbnailsFromReq({

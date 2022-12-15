@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { cleanupTests, createMultipleServers, doubleFollow, PeerTubeServer, setAccessTokensToServers } from '@shared/extra-utils'
+import { expect } from 'chai'
 import { HttpStatusCode, PeerTubeProblemDocument, ServerErrorCode } from '@shared/models'
-
-const expect = chai.expect
+import {
+  cleanupTests,
+  createMultipleServers,
+  doubleFollow,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  waitJobs
+} from '@shared/server-commands'
 
 describe('Test follow constraints', function () {
   let servers: PeerTubeServer[] = []
@@ -14,7 +18,7 @@ describe('Test follow constraints', function () {
   let userToken: string
 
   before(async function () {
-    this.timeout(90000)
+    this.timeout(240000)
 
     servers = await createMultipleServers(2)
 
@@ -53,21 +57,21 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list local account videos', async function () {
-        const { total, data } = await servers[0].videos.listByAccount({ handle: 'root@localhost:' + servers[0].port })
+        const { total, data } = await servers[0].videos.listByAccount({ handle: 'root@' + servers[0].host })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)
       })
 
       it('Should list remote account videos', async function () {
-        const { total, data } = await servers[0].videos.listByAccount({ handle: 'root@localhost:' + servers[1].port })
+        const { total, data } = await servers[0].videos.listByAccount({ handle: 'root@' + servers[1].host })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)
       })
 
       it('Should list local channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[0].port
+        const handle = 'root_channel@' + servers[0].host
         const { total, data } = await servers[0].videos.listByChannel({ handle })
 
         expect(total).to.equal(1)
@@ -75,7 +79,7 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list remote channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[1].port
+        const handle = 'root_channel@' + servers[1].host
         const { total, data } = await servers[0].videos.listByChannel({ handle })
 
         expect(total).to.equal(1)
@@ -93,21 +97,21 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list local account videos', async function () {
-        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@localhost:' + servers[0].port })
+        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@' + servers[0].host })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)
       })
 
       it('Should list remote account videos', async function () {
-        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@localhost:' + servers[1].port })
+        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@' + servers[1].host })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)
       })
 
       it('Should list local channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[0].port
+        const handle = 'root_channel@' + servers[0].host
         const { total, data } = await servers[0].videos.listByChannel({ token: userToken, handle })
 
         expect(total).to.equal(1)
@@ -115,7 +119,7 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list remote channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[1].port
+        const handle = 'root_channel@' + servers[1].host
         const { total, data } = await servers[0].videos.listByChannel({ token: userToken, handle })
 
         expect(total).to.equal(1)
@@ -157,7 +161,7 @@ describe('Test follow constraints', function () {
       it('Should list local account videos', async function () {
         const { total, data } = await servers[0].videos.listByAccount({
           token: null,
-          handle: 'root@localhost:' + servers[0].port
+          handle: 'root@' + servers[0].host
         })
 
         expect(total).to.equal(1)
@@ -167,7 +171,7 @@ describe('Test follow constraints', function () {
       it('Should not list remote account videos', async function () {
         const { total, data } = await servers[0].videos.listByAccount({
           token: null,
-          handle: 'root@localhost:' + servers[1].port
+          handle: 'root@' + servers[1].host
         })
 
         expect(total).to.equal(0)
@@ -175,7 +179,7 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list local channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[0].port
+        const handle = 'root_channel@' + servers[0].host
         const { total, data } = await servers[0].videos.listByChannel({ token: null, handle })
 
         expect(total).to.equal(1)
@@ -183,7 +187,7 @@ describe('Test follow constraints', function () {
       })
 
       it('Should not list remote channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[1].port
+        const handle = 'root_channel@' + servers[1].host
         const { total, data } = await servers[0].videos.listByChannel({ token: null, handle })
 
         expect(total).to.equal(0)
@@ -192,6 +196,7 @@ describe('Test follow constraints', function () {
     })
 
     describe('With a logged user', function () {
+
       it('Should get the local video', async function () {
         await servers[0].videos.getWithToken({ token: userToken, id: video1UUID })
       })
@@ -201,21 +206,21 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list local account videos', async function () {
-        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@localhost:' + servers[0].port })
+        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@' + servers[0].host })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)
       })
 
       it('Should list remote account videos', async function () {
-        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@localhost:' + servers[1].port })
+        const { total, data } = await servers[0].videos.listByAccount({ token: userToken, handle: 'root@' + servers[1].host })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)
       })
 
       it('Should list local channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[0].port
+        const handle = 'root_channel@' + servers[0].host
         const { total, data } = await servers[0].videos.listByChannel({ token: userToken, handle })
 
         expect(total).to.equal(1)
@@ -223,12 +228,90 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list remote channel videos', async function () {
-        const handle = 'root_channel@localhost:' + servers[1].port
+        const handle = 'root_channel@' + servers[1].host
         const { total, data } = await servers[0].videos.listByChannel({ token: userToken, handle })
 
         expect(total).to.equal(1)
         expect(data).to.have.lengthOf(1)
       })
+    })
+  })
+
+  describe('When following a remote account', function () {
+
+    before(async function () {
+      this.timeout(60000)
+
+      await servers[0].follows.follow({ handles: [ 'root@' + servers[1].host ] })
+      await waitJobs(servers)
+    })
+
+    it('Should get the remote video with an unlogged user', async function () {
+      await servers[0].videos.get({ id: video2UUID })
+    })
+
+    it('Should get the remote video with a logged in user', async function () {
+      await servers[0].videos.getWithToken({ token: userToken, id: video2UUID })
+    })
+  })
+
+  describe('When unfollowing a remote account', function () {
+
+    before(async function () {
+      this.timeout(60000)
+
+      await servers[0].follows.unfollow({ target: 'root@' + servers[1].host })
+      await waitJobs(servers)
+    })
+
+    it('Should not get the remote video with an unlogged user', async function () {
+      const body = await servers[0].videos.get({ id: video2UUID, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+
+      const error = body as unknown as PeerTubeProblemDocument
+      expect(error.code).to.equal(ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS)
+    })
+
+    it('Should get the remote video with a logged in user', async function () {
+      await servers[0].videos.getWithToken({ token: userToken, id: video2UUID })
+    })
+  })
+
+  describe('When following a remote channel', function () {
+
+    before(async function () {
+      this.timeout(60000)
+
+      await servers[0].follows.follow({ handles: [ 'root_channel@' + servers[1].host ] })
+      await waitJobs(servers)
+    })
+
+    it('Should get the remote video with an unlogged user', async function () {
+      await servers[0].videos.get({ id: video2UUID })
+    })
+
+    it('Should get the remote video with a logged in user', async function () {
+      await servers[0].videos.getWithToken({ token: userToken, id: video2UUID })
+    })
+  })
+
+  describe('When unfollowing a remote channel', function () {
+
+    before(async function () {
+      this.timeout(60000)
+
+      await servers[0].follows.unfollow({ target: 'root_channel@' + servers[1].host })
+      await waitJobs(servers)
+    })
+
+    it('Should not get the remote video with an unlogged user', async function () {
+      const body = await servers[0].videos.get({ id: video2UUID, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+
+      const error = body as unknown as PeerTubeProblemDocument
+      expect(error.code).to.equal(ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS)
+    })
+
+    it('Should get the remote video with a logged in user', async function () {
+      await servers[0].videos.getWithToken({ token: userToken, id: video2UUID })
     })
   })
 

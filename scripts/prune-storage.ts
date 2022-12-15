@@ -1,21 +1,19 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
-import { start, get } from 'prompt'
-import { join, basename } from 'path'
-import { CONFIG } from '../server/initializers/config'
-import { VideoModel } from '../server/models/video/video'
-import { initDatabaseModels } from '../server/initializers/database'
-import { readdir, remove, stat } from 'fs-extra'
-import { VideoRedundancyModel } from '../server/models/redundancy/video-redundancy'
 import { map } from 'bluebird'
-import { getUUIDFromFilename } from '../server/helpers/utils'
-import { ThumbnailModel } from '../server/models/video/thumbnail'
-import { ActorImageModel } from '../server/models/actor/actor-image'
-import { uniq, values } from 'lodash'
-import { ThumbnailType } from '@shared/models'
+import { readdir, remove, stat } from 'fs-extra'
+import { basename, join } from 'path'
+import { get, start } from 'prompt'
+import { DIRECTORIES } from '@server/initializers/constants'
 import { VideoFileModel } from '@server/models/video/video-file'
-import { HLS_REDUNDANCY_DIRECTORY } from '@server/initializers/constants'
+import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
+import { uniqify } from '@shared/core-utils'
+import { ThumbnailType } from '@shared/models'
+import { getUUIDFromFilename } from '../server/helpers/utils'
+import { CONFIG } from '../server/initializers/config'
+import { initDatabaseModels } from '../server/initializers/database'
+import { ActorImageModel } from '../server/models/actor/actor-image'
+import { VideoRedundancyModel } from '../server/models/redundancy/video-redundancy'
+import { ThumbnailModel } from '../server/models/video/thumbnail'
+import { VideoModel } from '../server/models/video/video'
 
 run()
   .then(() => process.exit(0))
@@ -25,9 +23,9 @@ run()
   })
 
 async function run () {
-  const dirs = values(CONFIG.STORAGE)
+  const dirs = Object.values(CONFIG.STORAGE)
 
-  if (uniq(dirs).length !== dirs.length) {
+  if (uniqify(dirs).length !== dirs.length) {
     console.error('Cannot prune storage because you put multiple storage keys in the same directory.')
     process.exit(0)
   }
@@ -39,7 +37,12 @@ async function run () {
   console.log('Detecting files to remove, it could take a while...')
 
   toDelete = toDelete.concat(
-    await pruneDirectory(CONFIG.STORAGE.VIDEOS_DIR, doesWebTorrentFileExist()),
+    await pruneDirectory(DIRECTORIES.VIDEOS.PUBLIC, doesWebTorrentFileExist()),
+    await pruneDirectory(DIRECTORIES.VIDEOS.PRIVATE, doesWebTorrentFileExist()),
+
+    await pruneDirectory(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, doesHLSPlaylistExist()),
+    await pruneDirectory(DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC, doesHLSPlaylistExist()),
+
     await pruneDirectory(CONFIG.STORAGE.TORRENTS_DIR, doesTorrentFileExist()),
 
     await pruneDirectory(CONFIG.STORAGE.REDUNDANCY_DIR, doesRedundancyExist),
@@ -74,7 +77,7 @@ async function run () {
   }
 }
 
-type ExistFun = (file: string) => Promise<boolean>
+type ExistFun = (file: string) => Promise<boolean> | boolean
 async function pruneDirectory (directory: string, existFun: ExistFun) {
   const files = await readdir(directory)
 
@@ -91,7 +94,21 @@ async function pruneDirectory (directory: string, existFun: ExistFun) {
 }
 
 function doesWebTorrentFileExist () {
-  return (filePath: string) => VideoFileModel.doesOwnedWebTorrentVideoFileExist(basename(filePath))
+  return (filePath: string) => {
+    // Don't delete private directory
+    if (filePath === DIRECTORIES.VIDEOS.PRIVATE) return true
+
+    return VideoFileModel.doesOwnedWebTorrentVideoFileExist(basename(filePath))
+  }
+}
+
+function doesHLSPlaylistExist () {
+  return (hlsPath: string) => {
+    // Don't delete private directory
+    if (hlsPath === DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE) return true
+
+    return VideoStreamingPlaylistModel.doesOwnedHLSPlaylistExist(basename(hlsPath))
+  }
 }
 
 function doesTorrentFileExist () {
@@ -122,8 +139,8 @@ async function doesRedundancyExist (filePath: string) {
   const isPlaylist = (await stat(filePath)).isDirectory()
 
   if (isPlaylist) {
-    // Don't delete HLS directory
-    if (filePath === HLS_REDUNDANCY_DIRECTORY) return true
+    // Don't delete HLS redundancy directory
+    if (filePath === DIRECTORIES.HLS_REDUNDANCY) return true
 
     const uuid = getUUIDFromFilename(filePath)
     const video = await VideoModel.loadWithFiles(uuid)

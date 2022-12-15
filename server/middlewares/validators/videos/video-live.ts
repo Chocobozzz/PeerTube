@@ -1,12 +1,22 @@
 import express from 'express'
 import { body } from 'express-validator'
+import { isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants'
 import { isLocalLiveVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { VideoModel } from '@server/models/video/video'
 import { VideoLiveModel } from '@server/models/video/video-live'
-import { HttpStatusCode, ServerErrorCode, UserRight, VideoState } from '@shared/models'
-import { isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
+import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
+import {
+  HttpStatusCode,
+  LiveVideoCreate,
+  LiveVideoLatencyMode,
+  LiveVideoUpdate,
+  ServerErrorCode,
+  UserRight,
+  VideoState
+} from '@shared/models'
+import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { isVideoNameValid } from '../../../helpers/custom-validators/videos'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
@@ -24,14 +34,8 @@ const videoLiveGetValidator = [
   isValidVideoIdParam('videoId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoLiveGetValidator parameters', { parameters: req.params, user: res.locals.oauth.token.User.username })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'all')) return
-
-    // Check if the user who did the request is able to get the live info
-    const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.GET_ANY_LIVE, res, false)) return
 
     const videoLive = await VideoLiveModel.loadByVideoId(res.locals.videoAll.id)
     if (!videoLive) {
@@ -50,7 +54,7 @@ const videoLiveGetValidator = [
 const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
     .customSanitizer(toIntOrNull)
-    .custom(isIdValid).withMessage('Should have correct video channel id'),
+    .custom(isIdValid),
 
   body('name')
     .custom(isVideoNameValid).withMessage(
@@ -60,16 +64,19 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
   body('saveReplay')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid saveReplay attribute'),
+    .custom(isBooleanValid).withMessage('Should have a valid saveReplay boolean'),
 
   body('permanentLive')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid permanentLive attribute'),
+    .custom(isBooleanValid).withMessage('Should have a valid permanentLive boolean'),
+
+  body('latencyMode')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isLiveLatencyModeValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoLiveAddValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
     if (CONFIG.LIVE.ENABLED !== true) {
@@ -82,7 +89,9 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
       })
     }
 
-    if (CONFIG.LIVE.ALLOW_REPLAY !== true && req.body.saveReplay === true) {
+    const body: LiveVideoCreate = req.body
+
+    if (hasValidSaveReplay(body) !== true) {
       cleanUpReqFiles(req)
 
       return res.fail({
@@ -92,17 +101,20 @@ const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
       })
     }
 
-    if (req.body.permanentLive && req.body.saveReplay) {
+    if (hasValidLatencyMode(body) !== true) {
       cleanUpReqFiles(req)
 
-      return res.fail({ message: 'Cannot set this live as permanent while saving its replay' })
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Custom latency mode is not allowed by this instance'
+      })
     }
 
     const user = res.locals.oauth.token.User
-    if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
+    if (!await doesVideoChannelOfAccountExist(body.channelId, user, res)) return cleanUpReqFiles(req)
 
     if (CONFIG.LIVE.MAX_INSTANCE_LIVES !== -1) {
-      const totalInstanceLives = await VideoModel.countLocalLives()
+      const totalInstanceLives = await VideoModel.countLives({ remote: false, mode: 'not-ended' })
 
       if (totalInstanceLives >= CONFIG.LIVE.MAX_INSTANCE_LIVES) {
         cleanUpReqFiles(req)
@@ -139,21 +151,29 @@ const videoLiveUpdateValidator = [
   body('saveReplay')
     .optional()
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid saveReplay attribute'),
+    .custom(isBooleanValid).withMessage('Should have a valid saveReplay boolean'),
+
+  body('latencyMode')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isLiveLatencyModeValid),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoLiveUpdateValidator parameters', { parameters: req.body })
-
     if (areValidationErrors(req, res)) return
 
-    if (req.body.permanentLive && req.body.saveReplay) {
-      return res.fail({ message: 'Cannot set this live as permanent while saving its replay' })
-    }
+    const body: LiveVideoUpdate = req.body
 
-    if (CONFIG.LIVE.ALLOW_REPLAY !== true && req.body.saveReplay === true) {
+    if (hasValidSaveReplay(body) !== true) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Saving live replay is not allowed instance'
+        message: 'Saving live replay is not allowed by this instance'
+      })
+    }
+
+    if (hasValidLatencyMode(body) !== true) {
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Custom latency mode is not allowed by this instance'
       })
     }
 
@@ -169,11 +189,44 @@ const videoLiveUpdateValidator = [
   }
 ]
 
+const videoLiveListSessionsValidator = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    // Check the user can manage the live
+    const user = res.locals.oauth.token.User
+    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.GET_ANY_LIVE, res)) return
+
+    return next()
+  }
+]
+
+const videoLiveFindReplaySessionValidator = [
+  isValidVideoIdParam('videoId'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'id')) return
+
+    const session = await VideoLiveSessionModel.findSessionOfReplay(res.locals.videoId.id)
+    if (!session) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'No live replay found'
+      })
+    }
+
+    res.locals.videoLiveSession = session
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
   videoLiveAddValidator,
   videoLiveUpdateValidator,
+  videoLiveListSessionsValidator,
+  videoLiveFindReplaySessionValidator,
   videoLiveGetValidator
 }
 
@@ -200,6 +253,22 @@ async function isLiveVideoAccepted (req: express.Request, res: express.Response)
     })
     return false
   }
+
+  return true
+}
+
+function hasValidSaveReplay (body: LiveVideoUpdate | LiveVideoCreate) {
+  if (CONFIG.LIVE.ALLOW_REPLAY !== true && body.saveReplay === true) return false
+
+  return true
+}
+
+function hasValidLatencyMode (body: LiveVideoUpdate | LiveVideoCreate) {
+  if (
+    CONFIG.LIVE.LATENCY_SETTING.ENABLED !== true &&
+    exists(body.latencyMode) &&
+    body.latencyMode !== LiveVideoLatencyMode.DEFAULT
+  ) return false
 
   return true
 }

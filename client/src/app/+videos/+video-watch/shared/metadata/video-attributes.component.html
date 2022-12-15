@@ -1,9 +1,9 @@
-<div class="attribute">
+<div class="attribute attribute-privacy">
   <span i18n class="attribute-label">Privacy</span>
   <span class="attribute-value">{{ video.privacy.label }}</span>
 </div>
 
-<div *ngIf="video.isLocal === false" class="attribute">
+<div *ngIf="video.isLocal === false" class="attribute attribute-origin">
   <span i18n class="attribute-label">Origin</span>
   <a
     class="attribute-value" target="_blank" rel="noopener noreferrer"
@@ -11,17 +11,19 @@
   >{{ video.originInstanceHost }}</a>
 
   <a
-    i18n-title title="Open the video on the origin instance" class="glyphicon glyphicon-new-window"
+    i18n-title title="Open the video on the origin instance"
     target="_blank" rel="noopener noreferrer" [href]="video.url"
-  ></a>
+  >
+    <my-global-icon iconName="external-link"></my-global-icon>
+  </a>
 </div>
 
-<div *ngIf="!!video.originallyPublishedAt" class="attribute">
+<div *ngIf="!!video.originallyPublishedAt" class="attribute attribute-originally-published-at">
   <span i18n class="attribute-label">Originally published</span>
   <span class="attribute-value">{{ video.originallyPublishedAt | date: 'dd MMMM yyyy' }}</span>
 </div>
 
-<div class="attribute">
+<div class="attribute attribute-category">
   <span i18n class="attribute-label">Category</span>
   <span *ngIf="!video.category.id" class="attribute-value">{{ video.category.label }}</span>
   <a
@@ -30,7 +32,7 @@
   >{{ video.category.label }}</a>
 </div>
 
-<div class="attribute">
+<div class="attribute attribute-licence">
   <span i18n class="attribute-label">Licence</span>
   <span *ngIf="!video.licence.id" class="attribute-value">{{ video.licence.label }}</span>
   <a
@@ -39,7 +41,7 @@
   >{{ video.licence.label }}</a>
 </div>
 
-<div class="attribute">
+<div class="attribute attribute-language">
   <span i18n class="attribute-label">Language</span>
   <span *ngIf="!video.language.id" class="attribute-value">{{ video.language.label }}</span>
   <a
@@ -56,7 +58,7 @@
   >{{ tag }}</a>
 </div>
 
-<div class="attribute" *ngIf="!video.isLive">
+<div class="attribute attribute-duration" *ngIf="!video.isLive">
   <span i18n class="attribute-label">Duration</span>
   <span class="attribute-value">{{ video.duration | myDurationFormatter }}</span>
 </div>

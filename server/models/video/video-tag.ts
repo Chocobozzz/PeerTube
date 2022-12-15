@@ -1,5 +1,5 @@
 import { Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { TagModel } from './tag'
 import { VideoModel } from './video'
 

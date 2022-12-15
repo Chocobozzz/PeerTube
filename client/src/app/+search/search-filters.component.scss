@@ -6,7 +6,6 @@ form {
 }
 
 .radio-label {
-  font-size: 15px;
   font-weight: $font-bold;
 }
 
@@ -20,10 +19,6 @@ form {
   @include peertube-select-container(auto);
 
   margin-bottom: 1rem;
-}
-
-.form-group {
-  margin-bottom: 25px;
 }
 
 input[type=text] {

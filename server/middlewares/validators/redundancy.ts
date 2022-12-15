@@ -1,6 +1,7 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
 import { isVideoRedundancyTarget } from '@server/helpers/custom-validators/video-redundancies'
+import { forceNumber } from '@shared/core-utils'
 import { HttpStatusCode } from '../../../shared/models/http/http-error-codes'
 import {
   exists,
@@ -12,7 +13,6 @@ import {
   toIntOrNull
 } from '../../helpers/custom-validators/misc'
 import { isHostValid } from '../../helpers/custom-validators/servers'
-import { logger } from '../../helpers/logger'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { ServerModel } from '../../models/server/server'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from './shared'
@@ -22,15 +22,13 @@ const videoFileRedundancyGetValidator = [
 
   param('resolution')
     .customSanitizer(toIntOrNull)
-    .custom(exists).withMessage('Should have a valid resolution'),
+    .custom(exists),
   param('fps')
     .optional()
     .customSanitizer(toIntOrNull)
-    .custom(exists).withMessage('Should have a valid fps'),
+    .custom(exists),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoFileRedundancyGetValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
@@ -69,11 +67,9 @@ const videoPlaylistRedundancyGetValidator = [
 
   param('streamingPlaylistType')
     .customSanitizer(toIntOrNull)
-    .custom(exists).withMessage('Should have a valid streaming playlist type'),
+    .custom(exists),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoPlaylistRedundancyGetValidator parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
@@ -104,14 +100,14 @@ const videoPlaylistRedundancyGetValidator = [
 ]
 
 const updateServerRedundancyValidator = [
-  param('host').custom(isHostValid).withMessage('Should have a valid host'),
+  param('host')
+    .custom(isHostValid),
+
   body('redundancyAllowed')
     .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid redundancyAllowed attribute'),
+    .custom(isBooleanValid).withMessage('Should have a valid redundancyAllowed boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking updateServerRedundancy parameters', { parameters: req.params })
-
     if (areValidationErrors(req, res)) return
 
     const server = await ServerModel.loadByHost(req.params.host)
@@ -130,11 +126,9 @@ const updateServerRedundancyValidator = [
 
 const listVideoRedundanciesValidator = [
   query('target')
-    .custom(isVideoRedundancyTarget).withMessage('Should have a valid video redundancies target'),
+    .custom(isVideoRedundancyTarget),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking listVideoRedundanciesValidator parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     return next()
@@ -144,12 +138,9 @@ const listVideoRedundanciesValidator = [
 const addVideoRedundancyValidator = [
   body('videoId')
     .customSanitizer(toCompleteUUID)
-    .custom(isIdOrUUIDValid)
-    .withMessage('Should have a valid video id'),
+    .custom(isIdOrUUIDValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking addVideoRedundancyValidator parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoExist(req.body.videoId, res, 'only-video')) return
@@ -176,15 +167,12 @@ const addVideoRedundancyValidator = [
 
 const removeVideoRedundancyValidator = [
   param('redundancyId')
-    .custom(isIdValid)
-    .withMessage('Should have a valid redundancy id'),
+    .custom(isIdValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking removeVideoRedundancyValidator parameters', { parameters: req.query })
-
     if (areValidationErrors(req, res)) return
 
-    const redundancy = await VideoRedundancyModel.loadByIdWithVideo(parseInt(req.params.redundancyId, 10))
+    const redundancy = await VideoRedundancyModel.loadByIdWithVideo(forceNumber(req.params.redundancyId))
     if (!redundancy) {
       return res.fail({
         status: HttpStatusCode.NOT_FOUND_404,

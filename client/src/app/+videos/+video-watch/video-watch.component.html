@@ -12,15 +12,14 @@
     </div>
 
     <my-video-watch-playlist
-      #videoWatchPlaylist
-      [playlist]="playlist" class="playlist"
-      (videoFound)="onPlaylistVideoFound($event)"
+      #videoWatchPlaylist [playlist]="playlist"
+      (noVideoFound)="onPlaylistNoVideoFound()" (videoFound)="onPlaylistVideoFound($event)"
     ></my-video-watch-playlist>
 
     <my-plugin-placeholder pluginId="player-next"></my-plugin-placeholder>
   </div>
 
-  <my-video-alert [video]="video"></my-video-alert>
+  <my-video-alert [video]="video" [noPlaylistVideoFound]="noPlaylistVideoFound"></my-video-alert>
 
   <!-- Video information -->
   <div *ngIf="video" class="margin-content video-bottom">
@@ -62,7 +61,7 @@
             <div class="video-info-channel-left d-flex">
               <my-video-avatar-channel [video]="video" [showChannel]="!isChannelDisplayNameGeneric()"></my-video-avatar-channel>
 
-              <div class="video-info-channel-left-links ml-1">
+              <div class="video-info-channel-left-links ms-1">
                 <ng-container *ngIf="!isChannelDisplayNameGeneric()">
                   <a [routerLink]="[ '/c', video.byVideoChannel ]" i18n-title title="Channel page">
                     {{ video.channel.displayName }}

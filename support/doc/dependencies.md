@@ -2,14 +2,23 @@
 
 :warning: **Warning**: dependencies guide is maintained by the community. Some parts may be outdated! :warning:
 
-Follow the below guides, and check their versions match [required external dependencies versions](https://github.com/Chocobozzz/PeerTube/blob/master/engines.yaml). You can check them automatically via `sudo npx engineslist`.
+Follow the below guides, and check their versions match [required external dependencies versions](https://github.com/Chocobozzz/PeerTube/blob/master/engines.yaml).
+
+Main dependencies version supported by PeerTube:
+
+ * `node` >=14.x
+ * `yarn` >=1.x
+ * `postgres` >=10.x
+ * `redis-server` >=5.x
+ * `ffmpeg` >=4.3
+
 
 _note_: only **LTS** versions of external dependencies are supported. If no LTS version matching the version constraint is available, only **release** versions are supported.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Debian / Ubuntu and derivatives](#debian--ubuntu-and-derivatives)
+- [Debian / Ubuntu and derivatives](#debian-ubuntu-and-derivatives)
 - [Arch Linux](#arch-linux)
 - [CentOS 7](#centos-7)
 - [Centos 8](#centos-8)
@@ -34,7 +43,7 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
 
 2. It would be wise to disable root access and to continue this tutorial with a user with sudoers group access
 
-3. Install NodeJS 14.x:
+3. Install NodeJS 16.x:
 [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
 4. Install yarn, and be sure to have [a recent version](https://github.com/yarnpkg/yarn/releases/latest):
 [https://yarnpkg.com/en/docs/install#linux-tab](https://yarnpkg.com/en/docs/install#linux-tab)
@@ -64,6 +73,7 @@ sudo apt update
 sudo apt install certbot nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git cron wget
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
+redis-server --version # Should be >= 5.x
 ```
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
@@ -77,7 +87,7 @@ sudo systemctl start redis postgresql
 1. Run:
 
 ```
-sudo pacman -S nodejs-lts-fermium  yarn ffmpeg postgresql openssl redis git wget unzip python base-devel npm nginx
+sudo pacman -S nodejs-lts-fermium yarn ffmpeg postgresql openssl redis git wget unzip python base-devel npm nginx
 ```
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
@@ -88,7 +98,7 @@ sudo systemctl start redis postgresql
 
 ## CentOS 7
 
-1. Install NodeJS 12.x:
+1. Install NodeJS 16.x:
 [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
 
 2. Install yarn:
@@ -135,7 +145,7 @@ sudo systemctl enable --now postgresql
 
 ## Centos 8
 
-1. Install NodeJS 12.x:
+1. Install NodeJS 16.x:
 [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
 
 2. Install yarn:
@@ -143,7 +153,12 @@ sudo systemctl enable --now postgresql
 
 3. Install or compile ffmpeg:
 
-* Install - [https://linuxize.com/post/how-to-install-ffmpeg-on-centos-8/](https://linuxize.com/post/how-to-install-ffmpeg-on-centos-8/)
+```
+sudo dnf install epel-release dnf-utils
+sudo yum-config-manager --set-enabled powertools
+sudo yum-config-manager --add-repo=https://negativo17.org/repos/epel-multimedia.repo
+sudo dnf install ffmpeg
+```
 
 4. Install packages:
 
@@ -151,7 +166,7 @@ sudo systemctl enable --now postgresql
 sudo dnf update
 sudo dnf install epel-release
 sudo dnf update
-sudo dnf install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git
+sudo dnf install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git unzip
 ```
 
 5. You'll need a symlink for python3 to python for youtube-dl to work
@@ -180,9 +195,9 @@ sudo systemctl enable --now postgresql
 sudo dnf update -y
 ```
 
-2. Install NodeJS 12.x (or 14):
+2. Install NodeJS 16.x:
 ```
-sudo dnf module install -y nodejs:12
+sudo dnf module install -y nodejs:16
 ```
 
 3. Install yarn:
@@ -239,7 +254,7 @@ su my-peertube-user
 3. (Optional) Install certbot (choose instructions for your distribution):
 [https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
 
-4. Install NodeJS 12.x:
+4. Install NodeJS 16.x:
 [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
 
 5. Install yarn:
@@ -258,6 +273,7 @@ This is necessary because `ffmpeg` is not in the Fedora repos.
 sudo dnf install nginx ffmpeg postgresql-server postgresql-contrib openssl gcc-c++ make redis git vim
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
+redis-server --version # Should be >= 5.x
 ```
 
 8. Configure nginx
@@ -331,7 +347,7 @@ echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo s
 2. Install Node.JS
 
 ```
-sudo dnf module install nodejs:12
+sudo dnf module install nodejs:16
 ```
 
 3. Install Yarn
@@ -513,7 +529,7 @@ If `sudo -u postgres createuser -P peertube` gives you an `unknown user: postgre
 ```
 net-libs/nodejs
 sys-apps/yarn
-media-video/ffmpeg[x264] # Optionnally add vorbis,vpx
+media-video/ffmpeg[x264] # Optionally add vorbis,vpx
 dev-db/postgresql
 dev-db/redis
 dev-vcs/git

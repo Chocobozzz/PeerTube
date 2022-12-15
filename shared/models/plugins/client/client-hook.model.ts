@@ -51,6 +51,10 @@ export const clientFilterHookObject = {
   // Filter form
   'filter:api.signup.registration.create.params': true,
 
+  // Filter params/result of the function that fetch video playlist elements of the my-library page
+  'filter:api.my-library.video-playlist-elements.list.params': true,
+  'filter:api.my-library.video-playlist-elements.list.result': true,
+
   // Filter the options to create our player
   'filter:internal.video-watch.player.build-options.params': true,
   'filter:internal.video-watch.player.build-options.result': true,
@@ -65,8 +69,29 @@ export const clientFilterHookObject = {
   // Filter upload page alert messages
   'filter:upload.messages.create.result': true,
 
+  'filter:login.instance-about-plugin-panels.create.result': true,
+  'filter:signup.instance-about-plugin-panels.create.result': true,
+
+  'filter:share.video-embed-code.build.params': true,
+  'filter:share.video-embed-code.build.result': true,
+  'filter:share.video-playlist-embed-code.build.params': true,
+  'filter:share.video-playlist-embed-code.build.result': true,
+
+  'filter:share.video-embed-url.build.params': true,
+  'filter:share.video-embed-url.build.result': true,
+  'filter:share.video-playlist-embed-url.build.params': true,
+  'filter:share.video-playlist-embed-url.build.result': true,
+
+  'filter:share.video-url.build.params': true,
+  'filter:share.video-url.build.result': true,
+  'filter:share.video-playlist-url.build.params': true,
+  'filter:share.video-playlist-url.build.result': true,
+
   // Filter videojs options built for PeerTube player
-  'filter:internal.player.videojs.options.result': true
+  'filter:internal.player.videojs.options.result': true,
+
+  // Filter p2p media loader options built for PeerTube player
+  'filter:internal.player.p2p-media-loader.options.result': true
 }
 
 export type ClientFilterHookName = keyof typeof clientFilterHookObject
@@ -85,6 +110,23 @@ export const clientActionHookObject = {
   'action:video-watch.video-threads.loaded': true,
   // Fired when a user click on 'View x replies' and they're loaded
   'action:video-watch.video-thread-replies.loaded': true,
+
+  // Fired when the video channel creation page is being initialized
+  'action:video-channel-create.init': true,
+
+  // Fired when the video channel update page is being initialized
+  'action:video-channel-update.init': true,
+  'action:video-channel-update.video-channel.loaded': true,
+
+  // Fired when the page that list video channel videos is being initialized
+  'action:video-channel-videos.init': true,
+  'action:video-channel-videos.video-channel.loaded': true,
+  'action:video-channel-videos.videos.loaded': true,
+
+  // Fired when the page that list video channel playlists is being initialized
+  'action:video-channel-playlists.init': true,
+  'action:video-channel-playlists.video-channel.loaded': true,
+  'action:video-channel-playlists.playlists.loaded': true,
 
   // Fired when the video edit page (upload, URL/torrent import, update) is being initialized
   'action:video-edit.init': true,
@@ -105,16 +147,16 @@ export const clientActionHookObject = {
   // Fired when the admin plugin settings page is being initialized
   'action:admin-plugin-settings.init': true,
 
-  // Fired when the video upload page is being initalized
+  // Fired when the video upload page is being initialized
   'action:video-upload.init': true,
-  // Fired when the video import by URL page is being initalized
+  // Fired when the video import by URL page is being initialized
   'action:video-url-import.init': true,
-  // Fired when the video import by torrent/magnet URI page is being initalized
+  // Fired when the video import by torrent/magnet URI page is being initialized
   'action:video-torrent-import.init': true,
-  // Fired when the "Go Live" page is being initalized
+  // Fired when the "Go Live" page is being initialized
   'action:go-live.init': true,
 
-  // Fired when the user explicitely logged in/logged out
+  // Fired when the user explicitly logged in/logged out
   'action:auth-user.logged-in': true,
   'action:auth-user.logged-out': true,
   // Fired when the application loaded user information (using tokens from the local storage or after a successful login)
@@ -122,6 +164,8 @@ export const clientActionHookObject = {
 
   // Fired when the modal to download a video/caption is shown
   'action:modal.video-download.shown': true,
+  // Fired when the modal to share a video/playlist is shown
+  'action:modal.share.shown': true,
 
   // ####### Embed hooks #######
   // /!\ In embed scope, peertube helpers are not available

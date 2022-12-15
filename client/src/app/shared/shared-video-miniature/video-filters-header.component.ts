@@ -8,7 +8,7 @@ import { UserRight } from '@shared/models'
 import { PeertubeModalService } from '../shared-main'
 import { VideoFilters } from './video-filters.model'
 
-const logger = debug('peertube:videos:VideoFiltersHeaderComponent')
+const debugLogger = debug('peertube:videos:VideoFiltersHeaderComponent')
 
 @Component({
   selector: 'my-video-filters-header',
@@ -54,7 +54,7 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
     })
 
     this.form.valueChanges.subscribe(values => {
-      logger('Loading values from form: %O', values)
+      debugLogger('Loading values from form: %O', values)
 
       this.filters.load(values)
       this.filtersChanged.emit()
@@ -72,15 +72,10 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
     return this.auth.getUser().hasRight(UserRight.SEE_ALL_VIDEOS)
   }
 
-  isTrendingSortEnabled (sort: 'most-viewed' | 'hot' | 'best' | 'most-liked') {
+  isTrendingSortEnabled (sort: 'most-viewed' | 'hot' | 'most-liked') {
     const serverConfig = this.serverService.getHTMLConfig()
 
-    const enabled = serverConfig.trending.videos.algorithms.enabled.includes(sort)
-
-    // Best is adapted from the user
-    if (sort === 'best') return enabled && this.auth.isLoggedIn()
-
-    return enabled
+    return serverConfig.trending.videos.algorithms.enabled.includes(sort)
   }
 
   resetFilter (key: string, canRemove: boolean) {
@@ -110,6 +105,6 @@ export class VideoFiltersHeaderComponent implements OnInit, OnDestroy {
     const defaultValues = this.filters.toFormObject()
     this.form.patchValue(defaultValues, { emitEvent })
 
-    logger('Patched form: %O', defaultValues)
+    debugLogger('Patched form: %O', defaultValues)
   }
 }

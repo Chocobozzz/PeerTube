@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { wait } from '@shared/core-utils'
+import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -9,13 +10,11 @@ import {
   PeerTubeServer,
   SearchCommand,
   setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar,
   setDefaultVideoChannel,
-  stopFfmpeg,
-  wait
-} from '@shared/extra-utils'
-import { VideoPrivacy } from '@shared/models'
-
-const expect = chai.expect
+  stopFfmpeg
+} from '@shared/server-commands'
 
 describe('Test videos search', function () {
   let server: PeerTubeServer
@@ -38,6 +37,8 @@ describe('Test videos search', function () {
 
     await setAccessTokensToServers([ server, remoteServer ])
     await setDefaultVideoChannel([ server, remoteServer ])
+    await setDefaultChannelAvatar(server)
+    await setDefaultAccountAvatar(servers)
 
     {
       const attributes1 = {
@@ -102,7 +103,7 @@ describe('Test videos search', function () {
         licence: 2,
         language: 'en'
       }
-      await server.videos.upload({ attributes: attributes })
+      await server.videos.upload({ attributes })
 
       await server.videos.upload({ attributes: { ...attributes, name: attributes.name + ' duplicate' } })
     }
@@ -115,7 +116,7 @@ describe('Test videos search', function () {
         licence: 3,
         language: 'pl'
       }
-      await server.videos.upload({ attributes: attributes })
+      await server.videos.upload({ attributes })
     }
 
     {
@@ -206,7 +207,7 @@ describe('Test videos search', function () {
     const search = {
       categoryOneOf: [ 3 ]
     }
-    const body = await command.advancedVideoSearch({ search: search })
+    const body = await command.advancedVideoSearch({ search })
 
     expect(body.total).to.equal(1)
 

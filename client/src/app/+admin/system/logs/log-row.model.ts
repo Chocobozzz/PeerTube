@@ -1,10 +1,11 @@
-import { LogLevel } from '@shared/models'
 import omit from 'lodash-es/omit'
+import { logger } from '@root-helpers/logger'
+import { ServerLogLevel } from '@shared/models'
 
 export class LogRow {
   date: Date
   localeDate: string
-  level: LogLevel
+  level: ServerLogLevel
   message: string
   meta: string
 
@@ -33,7 +34,7 @@ export class LogRow {
         this.meta = JSON.stringify(message, null, 2)
         this.message = ''
       } catch (err) {
-        console.error('Cannot parse audit message.', err)
+        logger.error('Cannot parse audit message.', err)
       }
     }
   }

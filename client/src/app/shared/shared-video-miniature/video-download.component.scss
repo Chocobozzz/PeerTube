@@ -10,16 +10,11 @@
   justify-content: center;
   align-items: center;
   margin-top: 20px;
-  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
 
   .nav-tabs {
     margin-top: 10x;
-  }
-
-  .glyphicon {
-    @include margin-right(5px);
   }
 }
 

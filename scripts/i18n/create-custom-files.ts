@@ -1,7 +1,6 @@
 import { writeJSON } from 'fs-extra'
-import { values } from 'lodash'
 import { join } from 'path'
-import { registerTSPaths } from '../../server/helpers/register-ts-paths'
+import { root } from '@shared/core-utils'
 import {
   buildLanguages,
   VIDEO_CATEGORIES,
@@ -14,9 +13,7 @@ import {
 } from '../../server/initializers/constants'
 import { I18N_LOCALES } from '../../shared/core-utils/i18n'
 
-registerTSPaths()
-
-const videojs = require(join(__dirname, '../../../client/src/locale/videojs.en-US.json'))
+const videojs = require(join(root(), 'client', 'src', 'locale', 'videojs.en-US.json'))
 const playerKeys = {
   'Quality': 'Quality',
   'Auto': 'Auto',
@@ -51,20 +48,32 @@ const playerKeys = {
   'Buffer Progress': 'Buffer Progress',
   'Buffer State': 'Buffer State',
   'Live Latency': 'Live Latency',
+  'P2P': 'P2P',
+  '{1} seconds': '{1} seconds',
+  'enabled': 'enabled',
+  'Playlist: {1}': 'Playlist: {1}',
+  'disabled': 'disabled',
   '  off': '  off',
-  'Player mode': 'Player mode'
+  'Player mode': 'Player mode',
+  'Play in loop': 'Play in loop',
+  'This live has not started yet.': 'This live has not started yet.',
+  'This live has ended.': 'This live has ended.',
+  'The video failed to play, will try to fast forward.': 'The video failed to play, will try to fast forward.',
+  '{1} / {2} dropped of {3}': '{1} / {2} dropped of {3}',
+  ' (muted)': ' (muted)',
+  '{1} from servers · {2} from peers': '{1} from servers · {2} from peers'
 }
 Object.assign(playerKeys, videojs)
 
 // Server keys
 const serverKeys: any = {}
-values(VIDEO_CATEGORIES)
-  .concat(values(VIDEO_LICENCES))
-  .concat(values(VIDEO_PRIVACIES))
-  .concat(values(VIDEO_STATES))
-  .concat(values(VIDEO_IMPORT_STATES))
-  .concat(values(VIDEO_PLAYLIST_PRIVACIES))
-  .concat(values(VIDEO_PLAYLIST_TYPES))
+Object.values(VIDEO_CATEGORIES)
+  .concat(Object.values(VIDEO_LICENCES))
+  .concat(Object.values(VIDEO_PRIVACIES))
+  .concat(Object.values(VIDEO_STATES))
+  .concat(Object.values(VIDEO_IMPORT_STATES))
+  .concat(Object.values(VIDEO_PLAYLIST_PRIVACIES))
+  .concat(Object.values(VIDEO_PLAYLIST_TYPES))
   .concat([
     'This video does not exist.',
     'We cannot fetch the video. Please try again later.',
@@ -97,7 +106,7 @@ writeAll().catch(err => {
 })
 
 async function writeAll () {
-  const localePath = join(__dirname, '../../../client/src/locale')
+  const localePath = join(root(), 'client', 'src', 'locale')
 
   await writeJSON(join(localePath, 'player.en-US.json'), playerKeys, { spaces: 4 })
   await writeJSON(join(localePath, 'server.en-US.json'), serverKeys, { spaces: 4 })

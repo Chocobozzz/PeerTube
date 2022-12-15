@@ -89,7 +89,7 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
     // Unlogged users do not have ratings
     if (this.isUserLoggedIn === false) return
 
-    this.videoService.getUserVideoRating(this.video.id)
+    this.videoService.getUserVideoRating(this.video.uuid)
         .subscribe({
           next: ratingObject => {
             if (!ratingObject) return
@@ -103,13 +103,13 @@ export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private setRating (nextRating: UserVideoRateType) {
-    const ratingMethods: { [id in UserVideoRateType]: (id: number) => Observable<any> } = {
+    const ratingMethods: { [id in UserVideoRateType]: (id: string) => Observable<any> } = {
       like: this.videoService.setVideoLike,
       dislike: this.videoService.setVideoDislike,
       none: this.videoService.unsetVideoLike
     }
 
-    ratingMethods[nextRating].call(this.videoService, this.video.id)
+    ratingMethods[nextRating].call(this.videoService, this.video.uuid)
           .subscribe({
             next: () => {
               // Update the video like attribute

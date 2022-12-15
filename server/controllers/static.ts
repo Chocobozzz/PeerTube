@@ -1,144 +1,83 @@
 import cors from 'cors'
 import express from 'express'
+import { readFile } from 'fs-extra'
 import { join } from 'path'
-import { serveIndexHTML } from '@server/lib/client-html'
-import { ServerConfigManager } from '@server/lib/server-config-manager'
-import { HttpStatusCode } from '@shared/models'
-import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo/nodeinfo.model'
-import { root } from '../helpers/core-utils'
-import { CONFIG, isEmailEnabled } from '../initializers/config'
+import { injectQueryToPlaylistUrls } from '@server/lib/hls'
 import {
-  CONSTRAINTS_FIELDS,
-  DEFAULT_THEME_NAME,
-  HLS_STREAMING_PLAYLIST_DIRECTORY,
-  PEERTUBE_VERSION,
-  ROUTE_CACHE_LIFETIME,
-  STATIC_MAX_AGE,
-  STATIC_PATHS,
-  WEBSERVER
-} from '../initializers/constants'
-import { getThemeOrDefault } from '../lib/plugins/theme-utils'
-import { asyncMiddleware } from '../middlewares'
-import { cacheRoute } from '../middlewares/cache/cache'
-import { UserModel } from '../models/user/user'
-import { VideoModel } from '../models/video/video'
-import { VideoCommentModel } from '../models/video/video-comment'
+  asyncMiddleware,
+  ensureCanAccessPrivateVideoHLSFiles,
+  ensureCanAccessVideoPrivateWebTorrentFiles,
+  handleStaticError,
+  optionalAuthenticate
+} from '@server/middlewares'
+import { HttpStatusCode } from '@shared/models'
+import { CONFIG } from '../initializers/config'
+import { DIRECTORIES, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers/constants'
+import { buildReinjectVideoFileTokenQuery, doReinjectVideoFileToken } from './shared/m3u8-playlist'
 
 const staticRouter = express.Router()
 
+// Cors is very important to let other servers access torrent and video files
 staticRouter.use(cors())
 
-/*
-  Cors is very important to let other servers access torrent and video files
-*/
+// ---------------------------------------------------------------------------
+// WebTorrent/Classic videos
+// ---------------------------------------------------------------------------
 
-// Videos path for webseed
+const privateWebTorrentStaticMiddlewares = CONFIG.STATIC_FILES.PRIVATE_FILES_REQUIRE_AUTH === true
+  ? [ optionalAuthenticate, asyncMiddleware(ensureCanAccessVideoPrivateWebTorrentFiles) ]
+  : []
+
+staticRouter.use(
+  STATIC_PATHS.PRIVATE_WEBSEED,
+  ...privateWebTorrentStaticMiddlewares,
+  express.static(DIRECTORIES.VIDEOS.PRIVATE, { fallthrough: false }),
+  handleStaticError
+)
 staticRouter.use(
   STATIC_PATHS.WEBSEED,
-  express.static(CONFIG.STORAGE.VIDEOS_DIR, { fallthrough: false }) // 404 because we don't have this video
-)
-staticRouter.use(
-  STATIC_PATHS.REDUNDANCY,
-  express.static(CONFIG.STORAGE.REDUNDANCY_DIR, { fallthrough: false }) // 404 because we don't have this video
+  express.static(DIRECTORIES.VIDEOS.PUBLIC, { fallthrough: false }),
+  handleStaticError
 )
 
+staticRouter.use(
+  STATIC_PATHS.REDUNDANCY,
+  express.static(CONFIG.STORAGE.REDUNDANCY_DIR, { fallthrough: false }),
+  handleStaticError
+)
+
+// ---------------------------------------------------------------------------
 // HLS
+// ---------------------------------------------------------------------------
+
+const privateHLSStaticMiddlewares = CONFIG.STATIC_FILES.PRIVATE_FILES_REQUIRE_AUTH === true
+  ? [ optionalAuthenticate, asyncMiddleware(ensureCanAccessPrivateVideoHLSFiles) ]
+  : []
+
+staticRouter.use(
+  STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:playlistName.m3u8',
+  ...privateHLSStaticMiddlewares,
+  asyncMiddleware(servePrivateM3U8)
+)
+
+staticRouter.use(
+  STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS,
+  ...privateHLSStaticMiddlewares,
+  express.static(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, { fallthrough: false }),
+  handleStaticError
+)
 staticRouter.use(
   STATIC_PATHS.STREAMING_PLAYLISTS.HLS,
-  cors(),
-  express.static(HLS_STREAMING_PLAYLIST_DIRECTORY, { fallthrough: false }) // 404 if the file does not exist
+  express.static(DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC, { fallthrough: false }),
+  handleStaticError
 )
 
 // Thumbnails path for express
 const thumbnailsPhysicalPath = CONFIG.STORAGE.THUMBNAILS_DIR
 staticRouter.use(
   STATIC_PATHS.THUMBNAILS,
-  express.static(thumbnailsPhysicalPath, { maxAge: STATIC_MAX_AGE.SERVER, fallthrough: false }) // 404 if the file does not exist
-)
-
-// robots.txt service
-staticRouter.get('/robots.txt',
-  cacheRoute(ROUTE_CACHE_LIFETIME.ROBOTS),
-  (_, res: express.Response) => {
-    res.type('text/plain')
-
-    return res.send(CONFIG.INSTANCE.ROBOTS)
-  }
-)
-
-staticRouter.all('/teapot',
-  getCup,
-  asyncMiddleware(serveIndexHTML)
-)
-
-// security.txt service
-staticRouter.get('/security.txt',
-  (_, res: express.Response) => {
-    return res.redirect(HttpStatusCode.MOVED_PERMANENTLY_301, '/.well-known/security.txt')
-  }
-)
-
-staticRouter.get('/.well-known/security.txt',
-  cacheRoute(ROUTE_CACHE_LIFETIME.SECURITYTXT),
-  (_, res: express.Response) => {
-    res.type('text/plain')
-    return res.send(CONFIG.INSTANCE.SECURITYTXT + CONFIG.INSTANCE.SECURITYTXT_CONTACT)
-  }
-)
-
-// nodeinfo service
-staticRouter.use('/.well-known/nodeinfo',
-  cacheRoute(ROUTE_CACHE_LIFETIME.NODEINFO),
-  (_, res: express.Response) => {
-    return res.json({
-      links: [
-        {
-          rel: 'http://nodeinfo.diaspora.software/ns/schema/2.0',
-          href: WEBSERVER.URL + '/nodeinfo/2.0.json'
-        }
-      ]
-    })
-  }
-)
-staticRouter.use('/nodeinfo/:version.json',
-  cacheRoute(ROUTE_CACHE_LIFETIME.NODEINFO),
-  asyncMiddleware(generateNodeinfo)
-)
-
-// dnt-policy.txt service (see https://www.eff.org/dnt-policy)
-staticRouter.use('/.well-known/dnt-policy.txt',
-  cacheRoute(ROUTE_CACHE_LIFETIME.DNT_POLICY),
-  (_, res: express.Response) => {
-    res.type('text/plain')
-
-    return res.sendFile(join(root(), 'dist/server/static/dnt-policy/dnt-policy-1.0.txt'))
-  }
-)
-
-// dnt service (see https://www.w3.org/TR/tracking-dnt/#status-resource)
-staticRouter.use('/.well-known/dnt/',
-  (_, res: express.Response) => {
-    res.json({ tracking: 'N' })
-  }
-)
-
-staticRouter.use('/.well-known/change-password',
-  (_, res: express.Response) => {
-    res.redirect('/my-account/settings')
-  }
-)
-
-staticRouter.use('/.well-known/host-meta',
-  (_, res: express.Response) => {
-    res.type('application/xml')
-
-    const xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
-      '<XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">\n' +
-      `  <Link rel="lrdd" type="application/xrd+xml" template="${WEBSERVER.URL}/.well-known/webfinger?resource={uri}"/>\n` +
-      '</XRD>'
-
-    res.send(xml).end()
-  }
+  express.static(thumbnailsPhysicalPath, { maxAge: STATIC_MAX_AGE.SERVER, fallthrough: false }),
+  handleStaticError
 )
 
 // ---------------------------------------------------------------------------
@@ -149,155 +88,28 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function generateNodeinfo (req: express.Request, res: express.Response) {
-  const { totalVideos } = await VideoModel.getStats()
-  const { totalLocalVideoComments } = await VideoCommentModel.getStats()
-  const { totalUsers, totalMonthlyActiveUsers, totalHalfYearActiveUsers } = await UserModel.getStats()
+async function servePrivateM3U8 (req: express.Request, res: express.Response) {
+  const path = join(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, req.params.videoUUID, req.params.playlistName + '.m3u8')
 
-  if (!req.params.version || req.params.version !== '2.0') {
-    return res.fail({
-      status: HttpStatusCode.NOT_FOUND_404,
-      message: 'Nodeinfo schema version not handled'
-    })
+  let playlistContent: string
+
+  try {
+    playlistContent = await readFile(path, 'utf-8')
+  } catch (err) {
+    if (err.message.includes('ENOENT')) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'File not found'
+      })
+    }
+
+    throw err
   }
 
-  const json = {
-    version: '2.0',
-    software: {
-      name: 'peertube',
-      version: PEERTUBE_VERSION
-    },
-    protocols: [
-      'activitypub'
-    ],
-    services: {
-      inbound: [],
-      outbound: [
-        'atom1.0',
-        'rss2.0'
-      ]
-    },
-    openRegistrations: CONFIG.SIGNUP.ENABLED,
-    usage: {
-      users: {
-        total: totalUsers,
-        activeMonth: totalMonthlyActiveUsers,
-        activeHalfyear: totalHalfYearActiveUsers
-      },
-      localPosts: totalVideos,
-      localComments: totalLocalVideoComments
-    },
-    metadata: {
-      taxonomy: {
-        postsName: 'Videos'
-      },
-      nodeName: CONFIG.INSTANCE.NAME,
-      nodeDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
-      nodeConfig: {
-        search: {
-          remoteUri: {
-            users: CONFIG.SEARCH.REMOTE_URI.USERS,
-            anonymous: CONFIG.SEARCH.REMOTE_URI.ANONYMOUS
-          }
-        },
-        plugin: {
-          registered: ServerConfigManager.Instance.getRegisteredPlugins()
-        },
-        theme: {
-          registered: ServerConfigManager.Instance.getRegisteredThemes(),
-          default: getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
-        },
-        email: {
-          enabled: isEmailEnabled()
-        },
-        contactForm: {
-          enabled: CONFIG.CONTACT_FORM.ENABLED
-        },
-        transcoding: {
-          hls: {
-            enabled: CONFIG.TRANSCODING.HLS.ENABLED
-          },
-          webtorrent: {
-            enabled: CONFIG.TRANSCODING.WEBTORRENT.ENABLED
-          },
-          enabledResolutions: ServerConfigManager.Instance.getEnabledResolutions('vod')
-        },
-        live: {
-          enabled: CONFIG.LIVE.ENABLED,
-          transcoding: {
-            enabled: CONFIG.LIVE.TRANSCODING.ENABLED,
-            enabledResolutions: ServerConfigManager.Instance.getEnabledResolutions('live')
-          }
-        },
-        import: {
-          videos: {
-            http: {
-              enabled: CONFIG.IMPORT.VIDEOS.HTTP.ENABLED
-            },
-            torrent: {
-              enabled: CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED
-            }
-          }
-        },
-        autoBlacklist: {
-          videos: {
-            ofUsers: {
-              enabled: CONFIG.AUTO_BLACKLIST.VIDEOS.OF_USERS.ENABLED
-            }
-          }
-        },
-        avatar: {
-          file: {
-            size: {
-              max: CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max
-            },
-            extensions: CONSTRAINTS_FIELDS.ACTORS.IMAGE.EXTNAME
-          }
-        },
-        video: {
-          image: {
-            extensions: CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME,
-            size: {
-              max: CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max
-            }
-          },
-          file: {
-            extensions: CONSTRAINTS_FIELDS.VIDEOS.EXTNAME
-          }
-        },
-        videoCaption: {
-          file: {
-            size: {
-              max: CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max
-            },
-            extensions: CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.EXTNAME
-          }
-        },
-        user: {
-          videoQuota: CONFIG.USER.VIDEO_QUOTA,
-          videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
-        },
-        trending: {
-          videos: {
-            intervalDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
-          }
-        },
-        tracker: {
-          enabled: CONFIG.TRACKER.ENABLED
-        }
-      }
-    }
-  } as HttpNodeinfoDiasporaSoftwareNsSchema20
+  // Inject token in playlist so players that cannot alter the HTTP request can still watch the video
+  const transformedContent = doReinjectVideoFileToken(req)
+    ? injectQueryToPlaylistUrls(playlistContent, buildReinjectVideoFileTokenQuery(req))
+    : playlistContent
 
-  res.contentType('application/json; profile="http://nodeinfo.diaspora.software/ns/schema/2.0#"')
-      .send(json)
-      .end()
-}
-
-function getCup (req: express.Request, res: express.Response, next: express.NextFunction) {
-  res.status(HttpStatusCode.I_AM_A_TEAPOT_418)
-  res.setHeader('Accept-Additions', 'Non-Dairy;1,Sugar;1')
-  res.setHeader('Safe', 'if-sepia-awake')
-
-  return next()
+  return res.set('content-type', 'application/vnd.apple.mpegurl').send(transformedContent).end()
 }

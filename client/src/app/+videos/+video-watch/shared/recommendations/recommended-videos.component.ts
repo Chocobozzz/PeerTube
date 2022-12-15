@@ -1,10 +1,9 @@
 import { Observable } from 'rxjs'
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
-import { AuthService, Notifier, SessionStorageService, User, UserService } from '@app/core'
+import { AuthService, Notifier, User, UserService } from '@app/core'
 import { Video } from '@app/shared/shared-main'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist'
-import { UserLocalStorageKeys } from '@root-helpers/users'
 import { RecommendationInfo } from './recommendation-info.model'
 import { RecommendedVideosStore } from './recommended-videos.store'
 
@@ -39,24 +38,14 @@ export class RecommendedVideosComponent implements OnInit, OnChanges {
     private userService: UserService,
     private authService: AuthService,
     private notifier: Notifier,
-    private store: RecommendedVideosStore,
-    private sessionStorageService: SessionStorageService
+    private store: RecommendedVideosStore
   ) {
     this.videos$ = this.store.recommendations$
     this.hasVideos$ = this.store.hasRecommendations$
     this.videos$.subscribe(videos => this.gotRecommendations.emit(videos))
 
-    if (this.authService.isLoggedIn()) {
-      this.autoPlayNextVideo = this.authService.getUser().autoPlayNextVideo
-    } else {
-      this.autoPlayNextVideo = this.sessionStorageService.getItem(UserLocalStorageKeys.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
-
-      this.sessionStorageService.watch([ UserLocalStorageKeys.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO ]).subscribe(
-        () => {
-          this.autoPlayNextVideo = this.sessionStorageService.getItem(UserLocalStorageKeys.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
-        }
-      )
-    }
+    this.userService.getAnonymousOrLoggedUser()
+      .subscribe(user => this.autoPlayNextVideo = user.autoPlayNextVideo)
 
     this.autoPlayNextVideoTooltip = $localize`When active, the next video is automatically played after the current one.`
   }
@@ -77,13 +66,9 @@ export class RecommendedVideosComponent implements OnInit, OnChanges {
   }
 
   switchAutoPlayNextVideo () {
-    this.sessionStorageService.setItem(UserLocalStorageKeys.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO, this.autoPlayNextVideo.toString())
+    const details = { autoPlayNextVideo: this.autoPlayNextVideo }
 
     if (this.authService.isLoggedIn()) {
-      const details = {
-        autoPlayNextVideo: this.autoPlayNextVideo
-      }
-
       this.userService.updateMyProfile(details)
         .subscribe({
           next: () => {
@@ -92,6 +77,8 @@ export class RecommendedVideosComponent implements OnInit, OnChanges {
 
           error: err => this.notifier.error(err.message)
         })
+    } else {
+      this.userService.updateMyAnonymousProfile(details)
     }
   }
 }

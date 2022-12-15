@@ -2,7 +2,6 @@
 @use '_mixins' as *;
 
 .root-comment {
-  font-size: 15px;
   display: flex;
 
   .left {
@@ -23,10 +22,6 @@
   .right {
     width: 100%;
   }
-}
-
-my-actor-avatar {
-  @include actor-avatar-size(36px);
 }
 
 .comment {
@@ -160,11 +155,6 @@ my-video-comment-add {
 }
 
 .is-child {
-  // Reduce avatars size for replies
-  my-actor-avatar {
-    @include actor-avatar-size(25px);
-  }
-
   .left {
     @include margin-right(6px);
   }

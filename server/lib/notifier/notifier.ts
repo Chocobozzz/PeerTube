@@ -7,6 +7,7 @@ import { MAbuseFull, MAbuseMessage, MActorFollowFull, MApplication, MPlugin } fr
 import { MCommentOwnerVideo, MVideoAccountLight, MVideoFullLight } from '../../types/models/video'
 import { JobQueue } from '../job-queue'
 import { PeerTubeSocket } from '../peertube-socket'
+import { Hooks } from '../plugins/hooks'
 import {
   AbstractNotification,
   AbuseStateChangeForReporter,
@@ -30,6 +31,7 @@ import {
   OwnedPublicationAfterScheduleUpdate,
   OwnedPublicationAfterTranscoding,
   RegistrationForModerators,
+  StudioEditionFinishedForOwner,
   UnblacklistForOwner
 } from './shared'
 
@@ -53,7 +55,8 @@ class Notifier {
     abuseStateChange: [ AbuseStateChangeForReporter ],
     newAbuseMessage: [ NewAbuseMessageForReporter, NewAbuseMessageForModerators ],
     newPeertubeVersion: [ NewPeerTubeVersionForAdmins ],
-    newPluginVersion: [ NewPluginVersionForAdmins ]
+    newPluginVersion: [ NewPluginVersionForAdmins ],
+    videoStudioEditionFinished: [ StudioEditionFinishedForOwner ]
   }
 
   private static instance: Notifier
@@ -198,6 +201,13 @@ class Notifier {
       .catch(err => logger.error('Cannot notify on new plugin version %s.', plugin.name, { err }))
   }
 
+  notifyOfFinishedVideoStudioEdition (video: MVideoFullLight) {
+    const models = this.notificationModels.videoStudioEditionFinished
+
+    this.sendNotifications(models, video)
+      .catch(err => logger.error('Cannot notify on finished studio edition %s.', video.url, { err }))
+  }
+
   private async notify <T> (object: AbstractNotification<T>) {
     await object.prepare()
 
@@ -213,20 +223,26 @@ class Notifier {
     for (const user of users) {
       const setting = object.getSetting(user)
 
-      if (this.isWebNotificationEnabled(setting)) {
-        const notification = await object.createNotification(user)
+      const webNotificationEnabled = this.isWebNotificationEnabled(setting)
+      const emailNotificationEnabled = this.isEmailEnabled(user, setting)
+      const notification = object.createNotification(user)
+
+      if (webNotificationEnabled) {
+        await notification.save()
 
         PeerTubeSocket.Instance.sendNotification(user.id, notification)
       }
 
-      if (this.isEmailEnabled(user, setting)) {
+      if (emailNotificationEnabled) {
         toEmails.push(user.email)
       }
+
+      Hooks.runAction('action:notifier.notification.created', { webNotificationEnabled, emailNotificationEnabled, user, notification })
     }
 
     for (const to of toEmails) {
       const payload = await object.createEmail(to)
-      JobQueue.Instance.createJob({ type: 'email', payload })
+      JobQueue.Instance.createJobAsync({ type: 'email', payload })
     }
   }
 

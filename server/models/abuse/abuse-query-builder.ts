@@ -1,5 +1,6 @@
 
 import { exists } from '@server/helpers/custom-validators/misc'
+import { forceNumber } from '@shared/core-utils'
 import { AbuseFilter, AbuseState, AbuseVideoIs } from '@shared/models'
 import { buildBlockedAccountSQL, buildDirectionAndField } from '../utils'
 
@@ -13,7 +14,7 @@ export type BuildAbusesQueryOptions = {
   searchReporter?: string
   searchReportee?: string
 
-  // video releated
+  // video related
   searchVideo?: string
   searchVideoChannel?: string
   videoIs?: AbuseVideoIs
@@ -48,7 +49,10 @@ function buildAbuseListQuery (options: BuildAbusesQueryOptions, type: 'count' | 
   ]
 
   if (options.serverAccountId || options.userAccountId) {
-    whereAnd.push('"abuse"."reporterAccountId" NOT IN (' + buildBlockedAccountSQL([ options.serverAccountId, options.userAccountId ]) + ')')
+    whereAnd.push(
+      '"abuse"."reporterAccountId" IS NULL OR ' +
+      '"abuse"."reporterAccountId" NOT IN (' + buildBlockedAccountSQL([ options.serverAccountId, options.userAccountId ]) + ')'
+    )
   }
 
   if (options.reporterAccountId) {
@@ -132,12 +136,12 @@ function buildAbuseListQuery (options: BuildAbusesQueryOptions, type: 'count' | 
     }
 
     if (exists(options.count)) {
-      const count = parseInt(options.count + '', 10)
+      const count = forceNumber(options.count)
       suffix += `LIMIT ${count} `
     }
 
     if (exists(options.start)) {
-      const start = parseInt(options.start + '', 10)
+      const start = forceNumber(options.start)
       suffix += `OFFSET ${start} `
     }
   }

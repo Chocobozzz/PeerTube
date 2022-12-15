@@ -1,13 +1,13 @@
 import { Transaction } from 'sequelize/types'
-import { buildUUID } from '@server/helpers/uuid'
+import { logger } from '@server/helpers/logger'
+import { CONFIG } from '@server/initializers/config'
 import { UserModel } from '@server/models/user/user'
 import { MActorDefault } from '@server/types/models/actor'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
-import { UserNotificationSetting, UserNotificationSettingValue } from '../../shared/models/users'
+import { UserAdminFlag, UserNotificationSetting, UserNotificationSettingValue, UserRole } from '../../shared/models/users'
 import { SERVER_ACTOR_NAME, WEBSERVER } from '../initializers/constants'
 import { sequelizeTypescript } from '../initializers/database'
 import { AccountModel } from '../models/account/account'
-import { ActorModel } from '../models/actor/actor'
 import { UserNotificationSettingModel } from '../models/user/user-notification-setting'
 import { MAccountDefault, MChannelActor } from '../types/models'
 import { MUser, MUserDefault, MUserId } from '../types/models/user'
@@ -15,12 +15,61 @@ import { generateAndSaveActorKeys } from './activitypub/actors'
 import { getLocalAccountActivityPubUrl } from './activitypub/url'
 import { Emailer } from './emailer'
 import { LiveQuotaStore } from './live/live-quota-store'
-import { buildActorInstance } from './local-actor'
+import { buildActorInstance, findAvailableLocalActorName } from './local-actor'
 import { Redis } from './redis'
 import { createLocalVideoChannel } from './video-channel'
 import { createWatchLaterPlaylist } from './video-playlist'
 
 type ChannelNames = { name: string, displayName: string }
+
+function buildUser (options: {
+  username: string
+  password: string
+  email: string
+
+  role?: UserRole // Default to UserRole.User
+  adminFlags?: UserAdminFlag // Default to UserAdminFlag.NONE
+
+  emailVerified: boolean | null
+
+  videoQuota?: number // Default to CONFIG.USER.VIDEO_QUOTA
+  videoQuotaDaily?: number // Default to CONFIG.USER.VIDEO_QUOTA_DAILY
+
+  pluginAuth?: string
+}): MUser {
+  const {
+    username,
+    password,
+    email,
+    role = UserRole.USER,
+    emailVerified,
+    videoQuota = CONFIG.USER.VIDEO_QUOTA,
+    videoQuotaDaily = CONFIG.USER.VIDEO_QUOTA_DAILY,
+    adminFlags = UserAdminFlag.NONE,
+    pluginAuth
+  } = options
+
+  return new UserModel({
+    username,
+    password,
+    email,
+
+    nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
+    p2pEnabled: CONFIG.DEFAULTS.P2P.WEBAPP.ENABLED,
+    autoPlayVideo: true,
+
+    role,
+    emailVerified,
+    adminFlags,
+
+    videoQuota,
+    videoQuotaDaily,
+
+    pluginAuth
+  })
+}
+
+// ---------------------------------------------------------------------------
 
 async function createUserAccountAndChannelAndPlaylist (parameters: {
   userToCreate: MUser
@@ -98,7 +147,7 @@ async function createApplicationActor (applicationId: number) {
   const accountCreated = await createLocalAccountWithoutKeys({
     name: SERVER_ACTOR_NAME,
     userId: null,
-    applicationId: applicationId,
+    applicationId,
     t: undefined,
     type: 'Application'
   })
@@ -107,6 +156,8 @@ async function createApplicationActor (applicationId: number) {
 
   return accountCreated
 }
+
+// ---------------------------------------------------------------------------
 
 async function sendVerifyUserEmail (user: MUser, isPendingEmail = false) {
   const verificationString = await Redis.Instance.setVerifyEmailVerificationString(user.id)
@@ -117,14 +168,17 @@ async function sendVerifyUserEmail (user: MUser, isPendingEmail = false) {
   const email = isPendingEmail ? user.pendingEmail : user.email
   const username = user.username
 
-  await Emailer.Instance.addVerifyEmailJob(username, email, url)
+  Emailer.Instance.addVerifyEmailJob(username, email, url)
 }
+
+// ---------------------------------------------------------------------------
 
 async function getOriginalVideoFileTotalFromUser (user: MUserId) {
   // Don't use sequelize because we need to use a sub query
   const query = UserModel.generateUserQuotaBaseSQL({
     withSelect: true,
-    whereUserId: '$userId'
+    whereUserId: '$userId',
+    daily: false
   })
 
   const base = await UserModel.getTotalRawQuery(query, user.id)
@@ -138,7 +192,7 @@ async function getOriginalVideoFileTotalDailyFromUser (user: MUserId) {
   const query = UserModel.generateUserQuotaBaseSQL({
     withSelect: true,
     whereUserId: '$userId',
-    where: '"video"."createdAt" > now() - interval \'24 hours\''
+    daily: true
   })
 
   const base = await UserModel.getTotalRawQuery(query, user.id)
@@ -159,6 +213,11 @@ async function isAbleToUploadVideo (userId: number, newVideoSize: number) {
   const uploadedTotal = newVideoSize + totalBytes
   const uploadedDaily = newVideoSize + totalBytesDaily
 
+  logger.debug(
+    'Check user %d quota to upload another video.', userId,
+    { totalBytes, totalBytesDaily, videoQuota: user.videoQuota, videoQuotaDaily: user.videoQuotaDaily, newVideoSize }
+  )
+
   if (user.videoQuotaDaily === -1) return uploadedTotal < user.videoQuota
   if (user.videoQuota === -1) return uploadedDaily < user.videoQuotaDaily
 
@@ -174,7 +233,8 @@ export {
   createUserAccountAndChannelAndPlaylist,
   createLocalAccountWithoutKeys,
   sendVerifyUserEmail,
-  isAbleToUploadVideo
+  isAbleToUploadVideo,
+  buildUser
 }
 
 // ---------------------------------------------------------------------------
@@ -197,7 +257,8 @@ function createDefaultUserNotificationSettings (user: MUserId, t: Transaction | 
     abuseStateChange: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     autoInstanceFollowing: UserNotificationSettingValue.WEB,
     newPeerTubeVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    newPluginVersion: UserNotificationSettingValue.WEB
+    newPluginVersion: UserNotificationSettingValue.WEB,
+    myVideoStudioEditionFinished: UserNotificationSettingValue.WEB
   }
 
   return UserNotificationSettingModel.create(values, { transaction: t })
@@ -206,12 +267,7 @@ function createDefaultUserNotificationSettings (user: MUserId, t: Transaction | 
 async function buildChannelAttributes (user: MUser, transaction?: Transaction, channelNames?: ChannelNames) {
   if (channelNames) return channelNames
 
-  let channelName = user.username + '_channel'
-
-  // Conflict, generate uuid instead
-  const actor = await ActorModel.loadLocalByName(channelName, transaction)
-  if (actor) channelName = buildUUID()
-
+  const channelName = await findAvailableLocalActorName(user.username + '_channel', transaction)
   const videoChannelDisplayName = `Main ${user.username} channel`
 
   return {

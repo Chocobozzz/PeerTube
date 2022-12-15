@@ -1,0 +1,33 @@
+name: Nightly
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+
+jobs:
+
+  nightly:
+    runs-on: ubuntu-latest
+
+    steps:
+      -
+        name: Checkout develop
+        uses: actions/checkout@v3
+        with:
+          ref: develop
+
+      - uses: './.github/actions/reusable-prepare-peertube-build'
+        with:
+          node-version: '14.x'
+
+      - name: Build
+        run: npm run nightly
+
+      - uses: './.github/actions/reusable-deploy'
+        with:
+          source: ./peertube-nightly-*
+          destination: nightly
+          knownHosts: ${{ secrets.STATS_DEPLOYEMENT_KNOWN_HOSTS }}
+          deployKey: ${{ secrets.STATS_DEPLOYEMENT_KEY }}
+          deployUser: ${{ secrets.STATS_DEPLOYEMENT_USER }}
+          deployHost: ${{ secrets.STATS_DEPLOYEMENT_HOST }}

@@ -1,16 +1,18 @@
-import { WEBSERVER } from '../../initializers/constants'
+import { REMOTE_SCHEME, WEBSERVER } from '../../initializers/constants'
 import {
   MAbuseFull,
   MAbuseId,
   MActor,
-  MActorFollowActors,
+  MActorFollow,
   MActorId,
   MActorUrl,
   MCommentId,
+  MLocalVideoViewer,
   MVideoId,
   MVideoPlaylistElement,
   MVideoUrl,
-  MVideoUUID
+  MVideoUUID,
+  MVideoWithHost
 } from '../../types/models'
 import { MVideoFileVideoUUID } from '../../types/models/video/video-file'
 import { MVideoPlaylist, MVideoPlaylistUUID } from '../../types/models/video/video-playlist'
@@ -54,8 +56,12 @@ function getLocalAbuseActivityPubUrl (abuse: MAbuseId) {
   return WEBSERVER.URL + '/admin/abuses/' + abuse.id
 }
 
-function getLocalVideoViewActivityPubUrl (byActor: MActorUrl, video: MVideoId) {
-  return byActor.url + '/views/videos/' + video.id + '/' + new Date().toISOString()
+function getLocalVideoViewActivityPubUrl (byActor: MActorUrl, video: MVideoId, viewerIdentifier: string) {
+  return byActor.url + '/views/videos/' + video.id + '/' + viewerIdentifier
+}
+
+function getLocalVideoViewerActivityPubUrl (stats: MLocalVideoViewer) {
+  return WEBSERVER.URL + '/videos/local-viewer/' + stats.uuid
 }
 
 function getVideoLikeActivityPubUrlByLocalActor (byActor: MActorUrl, video: MVideoId) {
@@ -86,15 +92,12 @@ function getLocalActorFollowActivityPubUrl (follower: MActor, following: MActorI
   return follower.url + '/follows/' + following.id
 }
 
-function getLocalActorFollowAcceptActivityPubUrl (actorFollow: MActorFollowActors) {
-  const follower = actorFollow.ActorFollower
-  const me = actorFollow.ActorFollowing
-
-  return WEBSERVER.URL + '/accepts/follows/' + follower.id + '/' + me.id
+function getLocalActorFollowAcceptActivityPubUrl (actorFollow: MActorFollow) {
+  return WEBSERVER.URL + '/accepts/follows/' + actorFollow.id
 }
 
-function getLocalActorFollowRejectActivityPubUrl (follower: MActorId, following: MActorId) {
-  return WEBSERVER.URL + '/rejects/follows/' + follower.id + '/' + following.id
+function getLocalActorFollowRejectActivityPubUrl () {
+  return WEBSERVER.URL + '/rejects/follows/' + new Date().toISOString()
 }
 
 function getLocalVideoAnnounceActivityPubUrl (byActor: MActorId, video: MVideoUrl) {
@@ -121,6 +124,27 @@ function getAbuseTargetUrl (abuse: MAbuseFull) {
     abuse.FlaggedAccount.Actor.url
 }
 
+// ---------------------------------------------------------------------------
+
+function buildRemoteVideoBaseUrl (video: MVideoWithHost, path: string, scheme?: string) {
+  if (!scheme) scheme = REMOTE_SCHEME.HTTP
+
+  const host = video.VideoChannel.Actor.Server.host
+
+  return scheme + '://' + host + path
+}
+
+// ---------------------------------------------------------------------------
+
+function checkUrlsSameHost (url1: string, url2: string) {
+  const idHost = new URL(url1).host
+  const actorHost = new URL(url2).host
+
+  return idHost && actorHost && idHost.toLowerCase() === actorHost.toLowerCase()
+}
+
+// ---------------------------------------------------------------------------
+
 export {
   getLocalVideoActivityPubUrl,
   getLocalVideoPlaylistActivityPubUrl,
@@ -145,5 +169,9 @@ export {
   getLocalVideoCommentsActivityPubUrl,
   getLocalVideoLikesActivityPubUrl,
   getLocalVideoDislikesActivityPubUrl,
-  getAbuseTargetUrl
+  getLocalVideoViewerActivityPubUrl,
+
+  getAbuseTargetUrl,
+  checkUrlsSameHost,
+  buildRemoteVideoBaseUrl
 }

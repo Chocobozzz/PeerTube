@@ -1,10 +1,11 @@
 import { forkJoin } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { SelectChannelItem } from 'src/types/select-options-item.model'
-import { Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
+import { SelectChannelItem, SelectOptionsItem } from 'src/types/select-options-item.model'
+import { ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms'
 import { HooksService, PluginService, ServerService } from '@app/core'
 import { removeElementFromArray } from '@app/helpers'
+import { BuildFormValidator } from '@app/shared/form-validators'
 import {
   VIDEO_CATEGORY_VALIDATOR,
   VIDEO_CHANNEL_VALIDATOR,
@@ -20,22 +21,29 @@ import {
 } from '@app/shared/form-validators/video-validators'
 import { FormReactiveValidationMessages, FormValidatorService } from '@app/shared/shared-forms'
 import { InstanceService } from '@app/shared/shared-instance'
-import { VideoCaptionEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { VideoCaptionEdit, VideoCaptionWithPathEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { logger } from '@root-helpers/logger'
+import { PluginInfo } from '@root-helpers/plugins-manager'
 import {
   HTMLServerConfig,
   LiveVideo,
+  LiveVideoLatencyMode,
   RegisterClientFormFieldOptions,
   RegisterClientVideoFieldOptions,
   VideoConstant,
   VideoDetails,
   VideoPrivacy
 } from '@shared/models'
+import { VideoSource } from '@shared/models/videos/video-source'
 import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
+import { VideoCaptionEditModalContentComponent } from './video-caption-edit-modal-content/video-caption-edit-modal-content.component'
 import { VideoEditType } from './video-edit.type'
 
 type VideoLanguages = VideoConstant<string> & { group?: string }
 type PluginField = {
+  pluginInfo: PluginInfo
   commonOptions: RegisterClientFormFieldOptions
   videoFormOptions: RegisterClientVideoFieldOptions
 }
@@ -53,11 +61,13 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() videoToUpdate: VideoDetails
 
   @Input() userVideoChannels: SelectChannelItem[] = []
-  @Input() schedulePublicationPossible = true
+  @Input() forbidScheduledPublication = true
 
-  @Input() videoCaptions: (VideoCaptionEdit & { captionPath?: string })[] = []
+  @Input() videoCaptions: VideoCaptionWithPathEdit[] = []
+  @Input() videoSource: VideoSource
 
-  @Input() waitTranscodingEnabled = true
+  @Input() hideWaitTranscoding = false
+
   @Input() type: VideoEditType
   @Input() liveVideo: LiveVideo
 
@@ -73,6 +83,23 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   videoCategories: VideoConstant<number>[] = []
   videoLicences: VideoConstant<number>[] = []
   videoLanguages: VideoLanguages[] = []
+  latencyModes: SelectOptionsItem[] = [
+    {
+      id: LiveVideoLatencyMode.SMALL_LATENCY,
+      label: $localize`Small latency`,
+      description: $localize`Reduce latency to ~15s disabling P2P`
+    },
+    {
+      id: LiveVideoLatencyMode.DEFAULT,
+      label: $localize`Default`,
+      description: $localize`Average latency of 30s`
+    },
+    {
+      id: LiveVideoLatencyMode.HIGH_LATENCY,
+      label: $localize`High latency`,
+      description: $localize`Average latency of 60s increasing P2P ratio`
+    }
+  ]
 
   pluginDataFormGroup: FormGroup
 
@@ -101,7 +128,9 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     private instanceService: InstanceService,
     private i18nPrimengCalendarService: I18nPrimengCalendarService,
     private ngZone: NgZone,
-    private hooks: HooksService
+    private hooks: HooksService,
+    private cd: ChangeDetectorRef,
+    private modalService: NgbModal
   ) {
     this.calendarTimezone = this.i18nPrimengCalendarService.getTimezone()
     this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
@@ -110,12 +139,13 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   updateForm () {
     const defaultValues: any = {
       nsfw: 'false',
-      commentsEnabled: 'true',
-      downloadEnabled: 'true',
-      waitTranscoding: 'true',
+      commentsEnabled: this.serverConfig.defaults.publish.commentsEnabled,
+      downloadEnabled: this.serverConfig.defaults.publish.downloadEnabled,
+      waitTranscoding: true,
+      licence: this.serverConfig.defaults.publish.licence,
       tags: []
     }
-    const obj: any = {
+    const obj: { [ id: string ]: BuildFormValidator } = {
       name: VIDEO_NAME_VALIDATOR,
       privacy: VIDEO_PRIVACY_VALIDATOR,
       channelId: VIDEO_CHANNEL_VALIDATOR,
@@ -134,10 +164,11 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       originallyPublishedAt: VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR,
       liveStreamKey: null,
       permanentLive: null,
+      latencyMode: null,
       saveReplay: null
     }
 
-    this.formValidatorService.updateForm(
+    this.formValidatorService.updateFormGroup(
       this.form,
       this.formErrors,
       this.validationMessages,
@@ -154,12 +185,13 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
     this.trackChannelChange()
     this.trackPrivacyChange()
-    this.trackLivePermanentFieldChange()
 
     this.formBuilt.emit()
   }
 
   ngOnInit () {
+    this.serverConfig = this.serverService.getHTMLConfig()
+
     this.updateForm()
 
     this.pluginService.ensurePluginsAreLoaded('video-edit')
@@ -178,9 +210,11 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.videoLanguages = res.languages
           .map(l => {
+            if (l.id === 'zxx') return { ...l, group: $localize`Other`, groupOrder: 1 }
+
             return res.about.instance.languages.includes(l.id)
               ? { ...l, group: $localize`Instance languages`, groupOrder: 0 }
-              : { ...l, group: $localize`All languages`, groupOrder: 1 }
+              : { ...l, group: $localize`All languages`, groupOrder: 2 }
           })
           .sort((a, b) => a.groupOrder - b.groupOrder)
       })
@@ -189,16 +223,16 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       .subscribe(privacies => {
         this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies).videoPrivacies
 
-        if (this.schedulePublicationPossible) {
-          this.videoPrivacies.push({
-            id: this.SPECIAL_SCHEDULED_PRIVACY,
-            label: $localize`Scheduled`,
-            description: $localize`Hide the video until a specific date`
-          })
-        }
-      })
+        // Can't schedule publication if private privacy is not available (could be deleted by a plugin)
+        const hasPrivatePrivacy = this.videoPrivacies.some(p => p.id === VideoPrivacy.PRIVATE)
+        if (this.forbidScheduledPublication || !hasPrivatePrivacy) return
 
-    this.serverConfig = this.serverService.getHTMLConfig()
+        this.videoPrivacies.push({
+          id: this.SPECIAL_SCHEDULED_PRIVACY,
+          label: $localize`Scheduled`,
+          description: $localize`Hide the video until a specific date`
+        })
+      })
 
     this.initialVideoCaptions = this.videoCaptions.map(c => c.language.id)
 
@@ -219,12 +253,12 @@ export class VideoEditComponent implements OnInit, OnDestroy {
                .map(c => c.language.id)
   }
 
-  onCaptionAdded (caption: VideoCaptionEdit) {
+  onCaptionEdited (caption: VideoCaptionEdit) {
     const existingCaption = this.videoCaptions.find(c => c.language.id === caption.language.id)
 
     // Replace existing caption?
     if (existingCaption) {
-      Object.assign(existingCaption, caption, { action: 'CREATE' as 'CREATE' })
+      Object.assign(existingCaption, caption)
     } else {
       this.videoCaptions.push(
         Object.assign(caption, { action: 'CREATE' as 'CREATE' })
@@ -242,7 +276,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     }
 
     // This caption is not on the server, just remove it from our array
-    if (caption.action === 'CREATE') {
+    if (caption.action === 'CREATE' || caption.action === 'UPDATE') {
       removeElementFromArray(this.videoCaptions, caption)
       return
     }
@@ -254,12 +288,23 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.videoCaptionAddModal.show()
   }
 
+  openEditCaptionModal (videoCaption: VideoCaptionWithPathEdit) {
+    const modalRef = this.modalService.open(VideoCaptionEditModalContentComponent, { centered: true, keyboard: false })
+    modalRef.componentInstance.videoCaption = videoCaption
+    modalRef.componentInstance.serverConfig = this.serverConfig
+    modalRef.componentInstance.captionEdited.subscribe(this.onCaptionEdited.bind(this))
+  }
+
   isSaveReplayEnabled () {
     return this.serverConfig.live.allowReplay
   }
 
   isPermanentLiveEnabled () {
     return this.form.value['permanentLive'] === true
+  }
+
+  isLatencyModeEnabled () {
+    return this.serverConfig.live.latencySetting.enabled
   }
 
   isPluginFieldHidden (pluginField: PluginField) {
@@ -272,6 +317,14 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     })
   }
 
+  getPluginsFields (tab: 'main' | 'plugin-settings') {
+    return this.pluginFields.filter(p => {
+      const wanted = p.videoFormOptions.tab ?? 'plugin-settings'
+
+      return wanted === tab
+    })
+  }
+
   private sortVideoCaptions () {
     this.videoCaptions.sort((v1, v2) => {
       if (v1.language.label < v2.language.label) return -1
@@ -281,21 +334,56 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     })
   }
 
-  private updatePluginFields () {
+  private async updatePluginFields () {
     this.pluginFields = this.pluginService.getRegisteredVideoFormFields(this.type)
 
     if (this.pluginFields.length === 0) return
 
-    const obj: any = {}
+    const pluginObj: { [ id: string ]: BuildFormValidator } = {}
+    const pluginValidationMessages: FormReactiveValidationMessages = {}
+    const pluginFormErrors: any = {}
+    const pluginDefaults: any = {}
 
     for (const setting of this.pluginFields) {
-      obj[setting.commonOptions.name] = new FormControl(setting.commonOptions.default)
+      await this.pluginService.translateSetting(setting.pluginInfo.plugin.npmName, setting.commonOptions)
+
+      const validator = async (control: AbstractControl) => {
+        if (!setting.commonOptions.error) return null
+
+        const error = await setting.commonOptions.error({ formValues: this.form.value, value: control.value })
+
+        return error?.error ? { [setting.commonOptions.name]: error.text } : null
+      }
+
+      const name = setting.commonOptions.name
+
+      pluginObj[name] = {
+        ASYNC_VALIDATORS: [ validator ],
+        VALIDATORS: [],
+        MESSAGES: {}
+      }
+
+      pluginDefaults[name] = setting.commonOptions.default
     }
 
-    this.pluginDataFormGroup = new FormGroup(obj)
-    this.form.addControl('pluginData', this.pluginDataFormGroup)
+    this.pluginDataFormGroup = new FormGroup({})
+    this.formValidatorService.updateFormGroup(
+      this.pluginDataFormGroup,
+      pluginFormErrors,
+      pluginValidationMessages,
+      pluginObj,
+      pluginDefaults
+    )
 
+    this.form.addControl('pluginData', this.pluginDataFormGroup)
+    this.formErrors['pluginData'] = pluginFormErrors
+    this.validationMessages['pluginData'] = pluginValidationMessages
+
+    this.cd.detectChanges()
     this.pluginFieldsAdded.emit()
+
+    // Plugins may need other control values to calculate potential errors
+    this.form.valueChanges.subscribe(() => this.formValidatorService.updateTreeValidity(this.pluginDataFormGroup))
   }
 
   private trackPrivacyChange () {
@@ -365,7 +453,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
             const oldChannel = this.userVideoChannels.find(c => c.id === oldChannelId)
             if (!newChannel || !oldChannel) {
-              console.error('Cannot find new or old channel.')
+              logger.error('Cannot find new or old channel.')
               return
             }
 
@@ -376,24 +464,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
             // Update the support text with our new channel
             this.updateSupportField(newChannel.support)
           })
-        }
-      )
-  }
-
-  private trackLivePermanentFieldChange () {
-    // We will update the "support" field depending on the channel
-    this.form.controls['permanentLive']
-      .valueChanges
-      .subscribe(
-        permanentLive => {
-          const saveReplayControl = this.form.controls['saveReplay']
-
-          if (permanentLive === true) {
-            saveReplayControl.setValue(false)
-            saveReplayControl.disable()
-          } else {
-            saveReplayControl.enable()
-          }
         }
       )
   }

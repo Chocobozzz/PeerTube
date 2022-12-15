@@ -1,6 +1,5 @@
 import { SortMeta } from 'primeng/api'
 import { switchMap } from 'rxjs/operators'
-import { buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -8,6 +7,7 @@ import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, S
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction, VideoService } from '@app/shared/shared-main'
 import { VideoBlockService } from '@app/shared/shared-moderation'
+import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { buildVideoEmbedLink, decorateVideoLink } from '@shared/core-utils'
 import { VideoBlacklist, VideoBlacklistType } from '@shared/models'
 
@@ -98,7 +98,10 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
 
             this.videoService.removeVideo(videoBlock.video.id)
               .subscribe({
-                next: () => this.notifier.success($localize`Video deleted.`),
+                next: () => {
+                  this.notifier.success($localize`Video deleted.`)
+                  this.reloadData()
+                },
 
                 error: err => this.notifier.error(err.message)
               })
@@ -124,7 +127,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
   }
 
   toHtml (text: string) {
-    return this.markdownRenderer.textMarkdownToHTML(text)
+    return this.markdownRenderer.textMarkdownToHTML({ markdown: text })
   }
 
   async unblockVideo (entry: VideoBlacklist) {
@@ -145,15 +148,15 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
   }
 
   getVideoEmbed (entry: VideoBlacklist) {
-    return buildVideoOrPlaylistEmbed(
-      decorateVideoLink({
+    return buildVideoOrPlaylistEmbed({
+      embedUrl: decorateVideoLink({
         url: buildVideoEmbedLink(entry.video, environment.originServerUrl),
 
         title: false,
         warningTitle: false
       }),
-      entry.video.name
-    )
+      embedTitle: entry.video.name
+    })
   }
 
   protected reloadData () {

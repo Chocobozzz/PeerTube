@@ -2,8 +2,15 @@ import { Observable, ReplaySubject } from 'rxjs'
 import { catchError, map, tap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
-import { ActorImage, ResultList, VideoChannel as VideoChannelServer, VideoChannelCreate, VideoChannelUpdate } from '@shared/models'
+import { ComponentPaginationLight, RestExtractor, RestService, ServerService } from '@app/core'
+import {
+  ActorImage,
+  ResultList,
+  VideoChannel as VideoChannelServer,
+  VideoChannelCreate,
+  VideoChannelUpdate,
+  VideosImportInChannelCreate
+} from '@shared/models'
 import { environment } from '../../../../environments/environment'
 import { Account } from '../account'
 import { AccountService } from '../account/account.service'
@@ -18,7 +25,8 @@ export class VideoChannelService {
   constructor (
     private authHttp: HttpClient,
     private restService: RestService,
-    private restExtractor: RestExtractor
+    private restExtractor: RestExtractor,
+    private serverService: ServerService
   ) { }
 
   static extractVideoChannels (result: ResultList<VideoChannelServer>) {
@@ -49,9 +57,11 @@ export class VideoChannelService {
   }): Observable<ResultList<VideoChannel>> {
     const { account, componentPagination, withStats = false, sort, search } = options
 
+    const defaultCount = this.serverService.getHTMLConfig().videoChannels.maxPerUser
+
     const pagination = componentPagination
       ? this.restService.componentToRestPagination(componentPagination)
-      : { start: 0, count: 20 }
+      : { start: 0, count: defaultCount }
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
@@ -69,24 +79,18 @@ export class VideoChannelService {
 
   createVideoChannel (videoChannel: VideoChannelCreate) {
     return this.authHttp.post(VideoChannelService.BASE_VIDEO_CHANNEL_URL, videoChannel)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   updateVideoChannel (videoChannelName: string, videoChannel: VideoChannelUpdate) {
     return this.authHttp.put(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName, videoChannel)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   changeVideoChannelImage (videoChannelName: string, avatarForm: FormData, type: 'avatar' | 'banner') {
     const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName + '/' + type + '/pick'
 
-    return this.authHttp.post<{ avatar?: ActorImage, banner?: ActorImage }>(url, avatarForm)
+    return this.authHttp.post<{ avatars?: ActorImage[], banners?: ActorImage[] }>(url, avatarForm)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
@@ -94,17 +98,23 @@ export class VideoChannelService {
     const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName + '/' + type
 
     return this.authHttp.delete(url)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   removeVideoChannel (videoChannel: VideoChannel) {
     return this.authHttp.delete(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  importVideos (videoChannelName: string, externalChannelUrl: string, syncId?: number) {
+    const path = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName + '/import-videos'
+
+    const body: VideosImportInChannelCreate = {
+      externalChannelUrl,
+      videoChannelSyncId: syncId
+    }
+
+    return this.authHttp.post(path, body)
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }

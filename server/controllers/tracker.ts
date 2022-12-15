@@ -69,12 +69,17 @@ const trackerServer = new TrackerServer({
 })
 
 if (CONFIG.TRACKER.ENABLED !== false) {
-
   trackerServer.on('error', function (err) {
     logger.error('Error in tracker.', { err })
   })
 
   trackerServer.on('warning', function (err) {
+    const message = err.message || ''
+
+    if (CONFIG.LOG.LOG_TRACKER_UNKNOWN_INFOHASH === false && message.includes('Unknown infoHash')) {
+      return
+    }
+
     logger.warn('Warning in tracker.', { err })
   })
 }

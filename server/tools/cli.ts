@@ -2,23 +2,25 @@ import { Command } from 'commander'
 import { Netrc } from 'netrc-parser'
 import { join } from 'path'
 import { createLogger, format, transports } from 'winston'
-import { PeerTubeServer } from '@shared/extra-utils'
+import { loadLanguages } from '@server/initializers/constants'
+import { root } from '@shared/core-utils'
 import { UserRole } from '@shared/models'
+import { PeerTubeServer } from '@shared/server-commands'
 import { VideoPrivacy } from '../../shared/models/videos'
-import { getAppNumber, isTestInstance, root } from '../helpers/core-utils'
+import { getAppNumber, isTestInstance } from '../helpers/core-utils'
 
 let configName = 'PeerTube/CLI'
 if (isTestInstance()) configName += `-${getAppNumber()}`
 
 const config = require('application-config')(configName)
 
-const version = require('../../../package.json').version
+const version = require(join(root(), 'package.json')).version
 
 async function getAdminTokenOrDie (server: PeerTubeServer, username: string, password: string) {
   const token = await server.login.getAccessToken(username, password)
   const me = await server.users.getMyInfo({ token })
 
-  if (me.role !== UserRole.ADMINISTRATOR) {
+  if (me.role.id !== UserRole.ADMINISTRATOR) {
     console.error('You must be an administrator.')
     process.exit(-1)
   }
@@ -71,35 +73,51 @@ function getRemoteObjectOrDie (
 ): { url: string, username: string, password: string } {
   const options = program.opts()
 
-  if (!options.url || !options.username || !options.password) {
-    // No remote and we don't have program parameters: quit
-    if (settings.remotes.length === 0 || Object.keys(netrc.machines).length === 0) {
-      if (!options.url) console.error('--url field is required.')
-      if (!options.username) console.error('--username field is required.')
-      if (!options.password) console.error('--password field is required.')
+  function exitIfNoOptions (optionNames: string[], errorPrefix: string = '') {
+    let exit = false
 
-      return process.exit(-1)
+    for (const key of optionNames) {
+      if (!options[key]) {
+        if (exit === false && errorPrefix) console.error(errorPrefix)
+
+        console.error(`--${key} field is required`)
+        exit = true
+      }
     }
 
-    let url: string = options.url
-    let username: string = options.username
-    let password: string = options.password
-
-    if (!url && settings.default !== -1) url = settings.remotes[settings.default]
-
-    const machine = netrc.machines[url]
-
-    if (!username && machine) username = machine.login
-    if (!password && machine) password = machine.password
-
-    return { url, username, password }
+    if (exit) process.exit(-1)
   }
 
-  return {
-    url: options.url,
-    username: options.username,
-    password: options.password
+  // If username or password are specified, both are mandatory
+  if (options.username || options.password) {
+    exitIfNoOptions([ 'username', 'password' ])
   }
+
+  // If no available machines, url, username and password args are mandatory
+  if (Object.keys(netrc.machines).length === 0) {
+    exitIfNoOptions([ 'url', 'username', 'password' ], 'No account found in netrc')
+  }
+
+  if (settings.remotes.length === 0 || settings.default === -1) {
+    exitIfNoOptions([ 'url' ], 'No default instance found')
+  }
+
+  let url: string = options.url
+  let username: string = options.username
+  let password: string = options.password
+
+  if (!url && settings.default !== -1) url = settings.remotes[settings.default]
+
+  const machine = netrc.machines[url]
+  if ((!username || !password) && !machine) {
+    console.error('Cannot find existing configuration for %s.', url)
+    process.exit(-1)
+  }
+
+  if (!username && machine) username = machine.login
+  if (!password && machine) password = machine.password
+
+  return { url, username, password }
 }
 
 function buildCommonVideoOptions (command: Command) {
@@ -180,6 +198,7 @@ function getServerCredentials (program: Command) {
 }
 
 function buildServer (url: string) {
+  loadLanguages()
   return new PeerTubeServer({ url })
 }
 

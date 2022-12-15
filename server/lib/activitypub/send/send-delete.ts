@@ -1,15 +1,16 @@
 import { Transaction } from 'sequelize'
 import { getServerActor } from '@server/models/application/application'
-import { ActivityAudience, ActivityDelete } from '../../../../shared/models/activitypub'
+import { ActivityAudience, ActivityDelete } from '@shared/models'
 import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/actor/actor'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { MActorUrl } from '../../../types/models'
 import { MCommentOwnerVideo, MVideoAccountLight, MVideoPlaylistFullSummary } from '../../../types/models/video'
-import { audiencify, getActorsInvolvedInVideo, getVideoCommentAudience } from '../audience'
+import { audiencify } from '../audience'
 import { getDeleteActivityPubUrl } from '../url'
-import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
+import { getActorsInvolvedInVideo, getVideoCommentAudience } from './shared'
+import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './shared/send-utils'
 
 async function sendDeleteVideo (video: MVideoAccountLight, transaction: Transaction) {
   logger.info('Creating job to broadcast delete of video %s.', video.url)
@@ -22,16 +23,16 @@ async function sendDeleteVideo (video: MVideoAccountLight, transaction: Transact
     return buildDeleteActivity(url, video.url, byActor, audience)
   }
 
-  return sendVideoRelatedActivity(activityBuilder, { byActor, video, transaction })
+  return sendVideoRelatedActivity(activityBuilder, { byActor, video, contextType: 'Delete', transaction })
 }
 
-async function sendDeleteActor (byActor: ActorModel, t: Transaction) {
+async function sendDeleteActor (byActor: ActorModel, transaction: Transaction) {
   logger.info('Creating job to broadcast delete of actor %s.', byActor.url)
 
   const url = getDeleteActivityPubUrl(byActor.url)
   const activity = buildDeleteActivity(url, byActor.url, byActor)
 
-  const actorsInvolved = await VideoShareModel.loadActorsWhoSharedVideosOf(byActor.id, t)
+  const actorsInvolved = await VideoShareModel.loadActorsWhoSharedVideosOf(byActor.id, transaction)
 
   // In case the actor did not have any videos
   const serverActor = await getServerActor()
@@ -39,10 +40,16 @@ async function sendDeleteActor (byActor: ActorModel, t: Transaction) {
 
   actorsInvolved.push(byActor)
 
-  return broadcastToFollowers(activity, byActor, actorsInvolved, t)
+  return broadcastToFollowers({
+    data: activity,
+    byActor,
+    toFollowersOf: actorsInvolved,
+    contextType: 'Delete',
+    transaction
+  })
 }
 
-async function sendDeleteVideoComment (videoComment: MCommentOwnerVideo, t: Transaction) {
+async function sendDeleteVideoComment (videoComment: MCommentOwnerVideo, transaction: Transaction) {
   logger.info('Creating job to send delete of comment %s.', videoComment.url)
 
   const isVideoOrigin = videoComment.Video.isOwned()
@@ -52,10 +59,10 @@ async function sendDeleteVideoComment (videoComment: MCommentOwnerVideo, t: Tran
     ? videoComment.Account.Actor
     : videoComment.Video.VideoChannel.Account.Actor
 
-  const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, t)
+  const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, transaction)
   const threadParentCommentsFiltered = threadParentComments.filter(c => !c.isDeleted())
 
-  const actorsInvolvedInComment = await getActorsInvolvedInVideo(videoComment.Video, t)
+  const actorsInvolvedInComment = await getActorsInvolvedInVideo(videoComment.Video, transaction)
   actorsInvolvedInComment.push(byActor) // Add the actor that commented the video
 
   const audience = getVideoCommentAudience(videoComment, threadParentCommentsFiltered, actorsInvolvedInComment, isVideoOrigin)
@@ -63,19 +70,48 @@ async function sendDeleteVideoComment (videoComment: MCommentOwnerVideo, t: Tran
 
   // This was a reply, send it to the parent actors
   const actorsException = [ byActor ]
-  await broadcastToActors(activity, byActor, threadParentCommentsFiltered.map(c => c.Account.Actor), t, actorsException)
+  await broadcastToActors({
+    data: activity,
+    byActor,
+    toActors: threadParentCommentsFiltered.map(c => c.Account.Actor),
+    transaction,
+    contextType: 'Delete',
+    actorsException
+  })
 
   // Broadcast to our followers
-  await broadcastToFollowers(activity, byActor, [ byActor ], t)
+  await broadcastToFollowers({
+    data: activity,
+    byActor,
+    toFollowersOf: [ byActor ],
+    contextType: 'Delete',
+    transaction
+  })
 
   // Send to actors involved in the comment
-  if (isVideoOrigin) return broadcastToFollowers(activity, byActor, actorsInvolvedInComment, t, actorsException)
+  if (isVideoOrigin) {
+    return broadcastToFollowers({
+      data: activity,
+      byActor,
+      toFollowersOf: actorsInvolvedInComment,
+      transaction,
+      contextType: 'Delete',
+      actorsException
+    })
+  }
 
   // Send to origin
-  t.afterCommit(() => unicastTo(activity, byActor, videoComment.Video.VideoChannel.Account.Actor.getSharedInbox()))
+  return transaction.afterCommit(() => {
+    return unicastTo({
+      data: activity,
+      byActor,
+      toActorUrl: videoComment.Video.VideoChannel.Account.Actor.getSharedInbox(),
+      contextType: 'Delete'
+    })
+  })
 }
 
-async function sendDeleteVideoPlaylist (videoPlaylist: MVideoPlaylistFullSummary, t: Transaction) {
+async function sendDeleteVideoPlaylist (videoPlaylist: MVideoPlaylistFullSummary, transaction: Transaction) {
   logger.info('Creating job to send delete of playlist %s.', videoPlaylist.url)
 
   const byActor = videoPlaylist.OwnerAccount.Actor
@@ -88,7 +124,13 @@ async function sendDeleteVideoPlaylist (videoPlaylist: MVideoPlaylistFullSummary
 
   if (videoPlaylist.VideoChannel) toFollowersOf.push(videoPlaylist.VideoChannel.Actor)
 
-  return broadcastToFollowers(activity, byActor, toFollowersOf, t)
+  return broadcastToFollowers({
+    data: activity,
+    byActor,
+    toFollowersOf,
+    contextType: 'Delete',
+    transaction
+  })
 }
 
 // ---------------------------------------------------------------------------

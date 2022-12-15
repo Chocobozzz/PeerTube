@@ -59,13 +59,6 @@
     color: pvar(--mainForegroundColor);
     line-height: 1rem;
 
-    div .glyphicon {
-      @include margin-left(0.1rem);
-
-      font-size: 80%;
-      color: #808080;
-    }
-
     div + div {
       color: var(--greyForegroundColor);
       font-size: 11px;

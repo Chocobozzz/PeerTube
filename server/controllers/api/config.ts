@@ -3,9 +3,7 @@ import { remove, writeJSON } from 'fs-extra'
 import { snakeCase } from 'lodash'
 import validator from 'validator'
 import { ServerConfigManager } from '@server/lib/server-config-manager'
-import { UserRight } from '../../../shared'
-import { About } from '../../../shared/models/server/about.model'
-import { CustomConfig } from '../../../shared/models/server/custom-config.model'
+import { About, CustomConfig, UserRight } from '@shared/models'
 import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '../../helpers/audit-logger'
 import { objectConverter } from '../../helpers/core-utils'
 import { CONFIG, reloadConfig } from '../../initializers/config'
@@ -169,6 +167,18 @@ function customConfig (): CustomConfig {
         whitelisted: CONFIG.SERVICES.TWITTER.WHITELISTED
       }
     },
+    client: {
+      videos: {
+        miniature: {
+          preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME
+        }
+      },
+      menu: {
+        login: {
+          redirectOnSingleExternalAuth: CONFIG.CLIENT.MENU.LOGIN.REDIRECT_ON_SINGLE_EXTERNAL_AUTH
+        }
+      }
+    },
     cache: {
       previews: {
         size: CONFIG.CACHE.PREVIEWS.SIZE
@@ -217,6 +227,7 @@ function customConfig (): CustomConfig {
         '1440p': CONFIG.TRANSCODING.RESOLUTIONS['1440p'],
         '2160p': CONFIG.TRANSCODING.RESOLUTIONS['2160p']
       },
+      alwaysTranscodeOriginalResolution: CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION,
       webtorrent: {
         enabled: CONFIG.TRANSCODING.WEBTORRENT.ENABLED
       },
@@ -227,6 +238,9 @@ function customConfig (): CustomConfig {
     live: {
       enabled: CONFIG.LIVE.ENABLED,
       allowReplay: CONFIG.LIVE.ALLOW_REPLAY,
+      latencySetting: {
+        enabled: CONFIG.LIVE.LATENCY_SETTING.ENABLED
+      },
       maxDuration: CONFIG.LIVE.MAX_DURATION,
       maxInstanceLives: CONFIG.LIVE.MAX_INSTANCE_LIVES,
       maxUserLives: CONFIG.LIVE.MAX_USER_LIVES,
@@ -243,8 +257,12 @@ function customConfig (): CustomConfig {
           '1080p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['1080p'],
           '1440p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['1440p'],
           '2160p': CONFIG.LIVE.TRANSCODING.RESOLUTIONS['2160p']
-        }
+        },
+        alwaysTranscodeOriginalResolution: CONFIG.LIVE.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
       }
+    },
+    videoStudio: {
+      enabled: CONFIG.VIDEO_STUDIO.ENABLED
     },
     import: {
       videos: {
@@ -255,6 +273,10 @@ function customConfig (): CustomConfig {
         torrent: {
           enabled: CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED
         }
+      },
+      videoChannelSynchronization: {
+        enabled: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED,
+        maxPerUser: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.MAX_PER_USER
       }
     },
     trending: {

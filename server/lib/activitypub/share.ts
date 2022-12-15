@@ -1,15 +1,15 @@
 import { map } from 'bluebird'
 import { Transaction } from 'sequelize'
 import { getServerActor } from '@server/models/application/application'
-import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
 import { logger, loggerTagsFactory } from '../../helpers/logger'
 import { doJSONRequest } from '../../helpers/requests'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { VideoShareModel } from '../../models/video/video-share'
 import { MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../types/models/video'
+import { getAPId } from './activity'
 import { getOrCreateAPActor } from './actors'
 import { sendUndoAnnounce, sendVideoAnnounce } from './send'
-import { getLocalVideoAnnounceActivityPubUrl } from './url'
+import { checkUrlsSameHost, getLocalVideoAnnounceActivityPubUrl } from './url'
 
 const lTags = loggerTagsFactory('share')
 
@@ -57,7 +57,7 @@ export {
 
 async function addVideoShare (shareUrl: string, video: MVideoId) {
   const { body } = await doJSONRequest<any>(shareUrl, { activityPub: true })
-  if (!body || !body.actor) throw new Error('Body or body actor is invalid')
+  if (!body?.actor) throw new Error('Body or body actor is invalid')
 
   const actorUrl = getAPId(body.actor)
   if (checkUrlsSameHost(shareUrl, actorUrl) !== true) {

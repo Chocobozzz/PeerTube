@@ -1,7 +1,7 @@
 import { omit } from 'lodash-es'
 import { SortMeta } from 'primeng/api'
 import { Observable } from 'rxjs'
-import { catchError, map } from 'rxjs/operators'
+import { catchError } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
@@ -77,40 +77,28 @@ export class AbuseService {
     const body = omit(parameters, [ 'id' ])
 
     return this.authHttp.post(url, body)
-      .pipe(
-        map(this.restExtractor.extractDataBool),
-        catchError(res => this.restExtractor.handleError(res))
-      )
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   updateAbuse (abuse: AdminAbuse, abuseUpdate: AbuseUpdate) {
     const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id
 
     return this.authHttp.put(url, abuseUpdate)
-      .pipe(
-        map(this.restExtractor.extractDataBool),
-        catchError(res => this.restExtractor.handleError(res))
-      )
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   removeAbuse (abuse: AdminAbuse) {
     const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id
 
     return this.authHttp.delete(url)
-      .pipe(
-        map(this.restExtractor.extractDataBool),
-        catchError(res => this.restExtractor.handleError(res))
-      )
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   addAbuseMessage (abuse: UserAbuse, message: string) {
     const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id + '/messages'
 
     return this.authHttp.post(url, { message })
-    .pipe(
-      map(this.restExtractor.extractDataBool),
-      catchError(res => this.restExtractor.handleError(res))
-    )
+    .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   listAbuseMessages (abuse: UserAbuse) {
@@ -126,10 +114,7 @@ export class AbuseService {
     const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id + '/messages/' + abuseMessage.id
 
     return this.authHttp.delete(url)
-    .pipe(
-      map(this.restExtractor.extractDataBool),
-      catchError(res => this.restExtractor.handleError(res))
-    )
+    .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   getPrefefinedReasons (type: AbuseFilter) {

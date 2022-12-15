@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
+import { HttpStatusCode } from '@shared/models'
 import {
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
@@ -13,8 +11,7 @@ import {
   makePostBodyRequest,
   PeerTubeServer,
   setAccessTokensToServers
-} from '@shared/extra-utils'
-import { HttpStatusCode } from '@shared/models'
+} from '@shared/server-commands'
 
 describe('Test blocklist API validators', function () {
   let servers: PeerTubeServer[]
@@ -166,7 +163,7 @@ describe('Test blocklist API validators', function () {
           await makePostBodyRequest({
             url: server.url,
             path,
-            fields: { host: 'localhost:9002' },
+            fields: { host: '127.0.0.1:9002' },
             expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
@@ -176,7 +173,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             token: server.accessToken,
             path,
-            fields: { host: 'localhost:9003' },
+            fields: { host: '127.0.0.1:9003' },
             expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
         })
@@ -186,7 +183,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             token: server.accessToken,
             path,
-            fields: { host: 'localhost:' + server.port },
+            fields: { host: server.host },
             expectedStatus: HttpStatusCode.CONFLICT_409
           })
         })
@@ -196,7 +193,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             token: server.accessToken,
             path,
-            fields: { host: 'localhost:' + servers[1].port },
+            fields: { host: servers[1].host },
             expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
         })
@@ -206,7 +203,7 @@ describe('Test blocklist API validators', function () {
         it('Should fail with an unauthenticated user', async function () {
           await makeDeleteRequest({
             url: server.url,
-            path: path + '/localhost:' + servers[1].port,
+            path: path + '/' + servers[1].host,
             expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
@@ -214,7 +211,7 @@ describe('Test blocklist API validators', function () {
         it('Should fail with an unknown server block', async function () {
           await makeDeleteRequest({
             url: server.url,
-            path: path + '/localhost:9004',
+            path: path + '/127.0.0.1:9004',
             token: server.accessToken,
             expectedStatus: HttpStatusCode.NOT_FOUND_404
           })
@@ -223,7 +220,7 @@ describe('Test blocklist API validators', function () {
         it('Should succeed with the correct params', async function () {
           await makeDeleteRequest({
             url: server.url,
-            path: path + '/localhost:' + servers[1].port,
+            path: path + '/' + servers[1].host,
             token: server.accessToken,
             expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
@@ -396,7 +393,7 @@ describe('Test blocklist API validators', function () {
           await makePostBodyRequest({
             url: server.url,
             path,
-            fields: { host: 'localhost:' + servers[1].port },
+            fields: { host: servers[1].host },
             expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
@@ -406,7 +403,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             token: userAccessToken,
             path,
-            fields: { host: 'localhost:' + servers[1].port },
+            fields: { host: servers[1].host },
             expectedStatus: HttpStatusCode.FORBIDDEN_403
           })
         })
@@ -416,7 +413,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             token: server.accessToken,
             path,
-            fields: { host: 'localhost:9003' },
+            fields: { host: '127.0.0.1:9003' },
             expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
         })
@@ -426,7 +423,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             token: server.accessToken,
             path,
-            fields: { host: 'localhost:' + server.port },
+            fields: { host: server.host },
             expectedStatus: HttpStatusCode.CONFLICT_409
           })
         })
@@ -436,7 +433,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             token: server.accessToken,
             path,
-            fields: { host: 'localhost:' + servers[1].port },
+            fields: { host: servers[1].host },
             expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
         })
@@ -446,7 +443,7 @@ describe('Test blocklist API validators', function () {
         it('Should fail with an unauthenticated user', async function () {
           await makeDeleteRequest({
             url: server.url,
-            path: path + '/localhost:' + servers[1].port,
+            path: path + '/' + servers[1].host,
             expectedStatus: HttpStatusCode.UNAUTHORIZED_401
           })
         })
@@ -454,7 +451,7 @@ describe('Test blocklist API validators', function () {
         it('Should fail with a user without the appropriate rights', async function () {
           await makeDeleteRequest({
             url: server.url,
-            path: path + '/localhost:' + servers[1].port,
+            path: path + '/' + servers[1].host,
             token: userAccessToken,
             expectedStatus: HttpStatusCode.FORBIDDEN_403
           })
@@ -463,7 +460,7 @@ describe('Test blocklist API validators', function () {
         it('Should fail with an unknown server block', async function () {
           await makeDeleteRequest({
             url: server.url,
-            path: path + '/localhost:9004',
+            path: path + '/127.0.0.1:9004',
             token: server.accessToken,
             expectedStatus: HttpStatusCode.NOT_FOUND_404
           })
@@ -472,11 +469,83 @@ describe('Test blocklist API validators', function () {
         it('Should succeed with the correct params', async function () {
           await makeDeleteRequest({
             url: server.url,
-            path: path + '/localhost:' + servers[1].port,
+            path: path + '/' + servers[1].host,
             token: server.accessToken,
             expectedStatus: HttpStatusCode.NO_CONTENT_204
           })
         })
+      })
+    })
+  })
+
+  describe('When getting blocklist status', function () {
+    const path = '/api/v1/blocklist/status'
+
+    it('Should fail with a bad token', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: 'false',
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail with a bad accounts field', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: {
+          accounts: 1
+        },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: {
+          accounts: [ 1 ]
+        },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with a bad hosts field', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: {
+          hosts: 1
+        },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: {
+          hosts: [ 1 ]
+        },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should succeed with the correct parameters', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: {},
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: {
+          hosts: [ 'example.com' ],
+          accounts: [ 'john@example.com' ]
+        },
+        expectedStatus: HttpStatusCode.OK_200
       })
     })
   })

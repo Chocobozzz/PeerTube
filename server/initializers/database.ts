@@ -1,11 +1,17 @@
 import { QueryTypes, Transaction } from 'sequelize'
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
+import { ActorCustomPageModel } from '@server/models/account/actor-custom-page'
 import { TrackerModel } from '@server/models/server/tracker'
 import { VideoTrackerModel } from '@server/models/server/video-tracker'
 import { UserModel } from '@server/models/user/user'
 import { UserNotificationModel } from '@server/models/user/user-notification'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history'
-import { isTestInstance } from '../helpers/core-utils'
+import { VideoJobInfoModel } from '@server/models/video/video-job-info'
+import { VideoLiveSessionModel } from '@server/models/video/video-live-session'
+import { VideoSourceModel } from '@server/models/video/video-source'
+import { LocalVideoViewerModel } from '@server/models/view/local-video-viewer'
+import { LocalVideoViewerWatchSectionModel } from '@server/models/view/local-video-viewer-watch-section'
+import { isTestOrDevInstance } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
 import { AbuseModel } from '../models/abuse/abuse'
 import { AbuseMessageModel } from '../models/abuse/abuse-message'
@@ -42,10 +48,9 @@ import { VideoPlaylistElementModel } from '../models/video/video-playlist-elemen
 import { VideoShareModel } from '../models/video/video-share'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 import { VideoTagModel } from '../models/video/video-tag'
-import { VideoViewModel } from '../models/video/video-view'
+import { VideoViewModel } from '../models/view/video-view'
 import { CONFIG } from './config'
-import { ActorCustomPageModel } from '@server/models/account/actor-custom-page'
-import { VideoJobInfoModel } from '@server/models/video/video-job-info'
+import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -77,13 +82,13 @@ const sequelizeTypescript = new SequelizeTypescript({
   pool: {
     max: poolMax
   },
-  benchmark: isTestInstance(),
+  benchmark: isTestOrDevInstance(),
   isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
   logging: (message: string, benchmark: number) => {
     if (process.env.NODE_DB_LOG === 'false') return
 
     let newMessage = 'Executed SQL request'
-    if (isTestInstance() === true && benchmark !== undefined) {
+    if (isTestOrDevInstance() === true && benchmark !== undefined) {
       newMessage += ' in ' + benchmark + 'ms'
     }
 
@@ -123,6 +128,7 @@ async function initDatabaseModels (silent: boolean) {
     VideoChannelModel,
     VideoShareModel,
     VideoFileModel,
+    VideoSourceModel,
     VideoCaptionModel,
     VideoBlacklistModel,
     VideoTagModel,
@@ -133,6 +139,7 @@ async function initDatabaseModels (silent: boolean) {
     VideoRedundancyModel,
     UserVideoHistoryModel,
     VideoLiveModel,
+    VideoLiveSessionModel,
     AccountBlocklistModel,
     ServerBlocklistModel,
     UserNotificationModel,
@@ -140,12 +147,15 @@ async function initDatabaseModels (silent: boolean) {
     VideoStreamingPlaylistModel,
     VideoPlaylistModel,
     VideoPlaylistElementModel,
+    LocalVideoViewerModel,
+    LocalVideoViewerWatchSectionModel,
     ThumbnailModel,
     TrackerModel,
     VideoTrackerModel,
     PluginModel,
     ActorCustomPageModel,
-    VideoJobInfoModel
+    VideoJobInfoModel,
+    VideoChannelSyncModel
   ])
 
   // Check extensions exist in the database

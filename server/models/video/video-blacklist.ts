@@ -1,7 +1,7 @@
 import { FindOptions } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MVideoBlacklist, MVideoBlacklistFormattable } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { VideoBlacklist, VideoBlacklistType } from '../../../shared/models/videos'
 import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'

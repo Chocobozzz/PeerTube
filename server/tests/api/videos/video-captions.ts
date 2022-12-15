@@ -1,20 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
+import { checkVideoFilesWereRemoved, testCaptionFile } from '@server/tests/shared'
+import { wait } from '@shared/core-utils'
 import {
-  checkVideoFilesWereRemoved,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
   PeerTubeServer,
   setAccessTokensToServers,
-  testCaptionFile,
-  wait,
   waitJobs
-} from '@shared/extra-utils'
-
-const expect = chai.expect
+} from '@shared/server-commands'
 
 describe('Test video captions', function () {
   const uuidRegex = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'

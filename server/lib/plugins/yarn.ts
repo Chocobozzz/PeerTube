@@ -1,7 +1,7 @@
 import { outputJSON, pathExists } from 'fs-extra'
 import { join } from 'path'
 import { execShell } from '../../helpers/core-utils'
-import { isNpmPluginNameValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
+import { isNpmPluginNameValid, isPluginStableOrUnstableVersionValid } from '../../helpers/custom-validators/plugins'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { getLatestPluginVersion } from './plugin-index'
@@ -31,11 +31,16 @@ async function removeNpmPlugin (name: string) {
   await execYarn('remove ' + name)
 }
 
+async function rebuildNativePlugins () {
+  await execYarn('install --pure-lockfile')
+}
+
 // ############################################################################
 
 export {
   installNpmPlugin,
   installNpmPluginFromDisk,
+  rebuildNativePlugins,
   removeNpmPlugin
 }
 
@@ -64,5 +69,5 @@ function checkNpmPluginNameOrThrow (name: string) {
 }
 
 function checkPluginVersionOrThrow (name: string) {
-  if (!isPluginVersionValid(name)) throw new Error('Invalid NPM plugin version to install')
+  if (!isPluginStableOrUnstableVersionValid(name)) throw new Error('Invalid NPM plugin version to install')
 }

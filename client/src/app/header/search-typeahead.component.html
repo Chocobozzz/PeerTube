@@ -24,36 +24,34 @@
     <div *ngIf="showSearchGlobalHelp()" id="typeahead-help" class="overflow-hidden">
       <div class="d-flex justify-content-between">
         <label class="small-title" i18n>GLOBAL SEARCH</label>
-        <div class="advanced-search-status text-muted">
-          <span *ngIf="serverConfig" class="mr-1" i18n>using {{ serverConfig.search.searchIndex.url }}</span>
-          <i class="glyphicon glyphicon-globe"></i>
+        <div class="advanced-search-status muted">
+          <span *ngIf="serverConfig" class="me-1" i18n>using {{ serverConfig.search.searchIndex.url }}</span>
         </div>
       </div>
-      <div class="text-muted" i18n>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</div>
+      <div class="muted" i18n>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</div>
     </div>
 
     <!-- search instructions, when search input is empty -->
     <div *ngIf="areInstructionsDisplayed()" id="typeahead-instructions" class="overflow-hidden">
-      <span class="text-muted" i18n>Your query will be matched against video names or descriptions, channel names.</span>
+      <span class="muted" i18n>Your query will be matched against video names or descriptions, channel names.</span>
       <div class="d-flex justify-content-between mt-3">
         <label class="small-title" i18n>ADVANCED SEARCH</label>
         <div class="advanced-search-status c-help">
-          <span [ngClass]="canSearchAnyURI ? 'text-success' : 'text-muted'" i18n-title title="Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.">
-            <span *ngIf="canSearchAnyURI()" class="mr-1" i18n>any instance</span>
-            <span *ngIf="!canSearchAnyURI()" class="mr-1" i18n>only followed instances</span>
-            <i [ngClass]="canSearchAnyURI() ? 'glyphicon glyphicon-ok-sign' : 'glyphicon glyphicon-exclamation-sign'"></i>
+          <span [ngClass]="canSearchAnyURI ? 'text-success' : 'muted'" i18n-title title="Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.">
+            <span *ngIf="canSearchAnyURI()" class="me-1" i18n>any instance</span>
+            <span *ngIf="!canSearchAnyURI()" class="me-1" i18n>only followed instances</span>
           </span>
         </div>
       </div>
       <ul>
         <li>
-          <em>@channel_id@domain</em> <span class="flex-auto text-muted" i18n>will list the matching channel</span>
+          <em>@channel_id@domain</em> <span class="flex-auto muted" i18n>will list the matching channel</span>
         </li>
         <li>
-          <em>URL</em> <span class="text-muted" i18n>will list the matching channel</span>
+          <em>URL</em> <span class="muted" i18n>will list the matching channel</span>
         </li>
         <li>
-          <em>UUID</em> <span class="text-muted" i18n>will list the matching video</span>
+          <em>UUID</em> <span class="muted" i18n>will list the matching video</span>
         </li>
       </ul>
     </div>

@@ -1,10 +1,11 @@
 import { readFileSync } from 'fs-extra'
-import { isArray, merge } from 'lodash'
+import { merge } from 'lodash'
 import { createTransport, Transporter } from 'nodemailer'
 import { join } from 'path'
+import { arrayify, root } from '@shared/core-utils'
 import { EmailPayload } from '@shared/models'
 import { SendEmailDefaultOptions } from '../../shared/models/server/emailer.model'
-import { isTestInstance, root } from '../helpers/core-utils'
+import { isTestOrDevInstance } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
 import { CONFIG, isEmailEnabled } from '../initializers/config'
 import { WEBSERVER } from '../initializers/constants'
@@ -28,7 +29,7 @@ class Emailer {
     this.initialized = true
 
     if (!isEmailEnabled()) {
-      if (!isTestInstance()) {
+      if (!isTestOrDevInstance()) {
         logger.error('Cannot use SMTP server because of lack of configuration. PeerTube will not be able to send mails!')
       }
 
@@ -65,7 +66,7 @@ class Emailer {
       }
     }
 
-    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
   addPasswordCreateEmailJob (username: string, to: string, createPasswordUrl: string) {
@@ -79,7 +80,7 @@ class Emailer {
       }
     }
 
-    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
   addVerifyEmailJob (username: string, to: string, verifyEmailUrl: string) {
@@ -93,7 +94,7 @@ class Emailer {
       }
     }
 
-    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
   addUserBlockJob (user: MUser, blocked: boolean, reason?: string) {
@@ -107,7 +108,7 @@ class Emailer {
       text: `Your account ${user.username} on ${CONFIG.INSTANCE.NAME} has been ${blockedWord}${reasonString}.`
     }
 
-    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
   addContactFormJob (fromEmail: string, fromName: string, subject: string, body: string) {
@@ -126,12 +127,13 @@ class Emailer {
       }
     }
 
-    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
   async sendMail (options: EmailPayload) {
     if (!isEmailEnabled()) {
-      throw new Error('Cannot send mail because SMTP is not configured.')
+      logger.info('Cannot send mail because SMTP is not configured.')
+      return
     }
 
     const fromDisplayName = options.from
@@ -140,6 +142,12 @@ class Emailer {
 
     const email = new Email({
       send: true,
+      htmlToText: {
+        selectors: [
+          { selector: 'img', format: 'skip' },
+          { selector: 'a', options: { hideLinkHrefIfSameAsText: true } }
+        ]
+      },
       message: {
         from: `"${fromDisplayName}" <${CONFIG.SMTP.FROM_ADDRESS}>`
       },
@@ -150,9 +158,7 @@ class Emailer {
       subjectPrefix: CONFIG.EMAIL.SUBJECT.PREFIX
     })
 
-    const toEmails = isArray(options.to)
-      ? options.to
-      : [ options.to ]
+    const toEmails = arrayify(options.to)
 
     for (const to of toEmails) {
       const baseOptions: SendEmailDefaultOptions = {
@@ -172,7 +178,7 @@ class Emailer {
         }
       }
 
-      // overriden/new variables given for a specific template in the payload
+      // overridden/new variables given for a specific template in the payload
       const sendOptions = merge(baseOptions, options)
 
       await email.send(sendOptions)

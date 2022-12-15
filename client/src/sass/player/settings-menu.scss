@@ -1,5 +1,6 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_icons' as *;
 @use './_player-variables' as *;
 
 $setting-transition-duration: 0.15s;
@@ -8,26 +9,6 @@ $setting-transition-easing: ease-out;
 /* Sass for videojs-settings-menu */
 
 .video-js {
-
-  .vjs-settings {
-    @include disable-outline;
-
-    cursor: pointer;
-    width: 33px;
-
-    .vjs-icon-placeholder {
-      display: inline-block;
-      width: 17px;
-      height: 17px;
-      vertical-align: middle;
-      background: url('#{$assets-path}/player/images/settings.svg') no-repeat;
-      background-size: contain;
-
-      &::before {
-        content: '';
-      }
-    }
-  }
 
   .vjs-settings-sub-menu-title {
     width: 4em;
@@ -42,6 +23,7 @@ $setting-transition-easing: ease-out;
     opacity: $primary-foreground-opacity;
     margin: 0 auto;
     font-size: $font-size !important;
+    z-index: 100;
 
     width: auto;
     overflow: hidden;

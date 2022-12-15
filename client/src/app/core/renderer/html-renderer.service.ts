@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
+import { getCustomMarkupSanitizeOptions, getDefaultSanitizeOptions } from '@shared/core-utils/renderer/html'
 import { LinkifierService } from './linkifier.service'
-import { getCustomMarkupSanitizeOptions, getSanitizeOptions } from '@shared/core-utils/renderer/html'
 
 @Injectable()
 export class HtmlRendererService {
@@ -30,7 +30,7 @@ export class HtmlRendererService {
 
     const options = additionalAllowedTags.length !== 0
       ? getCustomMarkupSanitizeOptions(additionalAllowedTags)
-      : getSanitizeOptions()
+      : getDefaultSanitizeOptions()
 
     return this.sanitizeHtml(html, options)
   }

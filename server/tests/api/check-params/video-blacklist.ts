@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
+import { HttpStatusCode, VideoBlacklistType } from '@shared/models'
 import {
   BlacklistCommand,
-  checkBadCountPagination,
-  checkBadSortPagination,
-  checkBadStartPagination,
   cleanupTests,
   createMultipleServers,
   doubleFollow,
@@ -15,8 +13,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
-} from '@shared/extra-utils'
-import { HttpStatusCode, VideoBlacklistType } from '@shared/models'
+} from '@shared/server-commands'
 
 describe('Test video blacklist API validators', function () {
   let servers: PeerTubeServer[]
@@ -39,14 +36,14 @@ describe('Test video blacklist API validators', function () {
     {
       const username = 'user1'
       const password = 'my super password'
-      await servers[0].users.create({ username: username, password: password })
+      await servers[0].users.create({ username, password })
       userAccessToken1 = await servers[0].login.getAccessToken({ username, password })
     }
 
     {
       const username = 'user2'
       const password = 'my super password'
-      await servers[0].users.create({ username: username, password: password })
+      await servers[0].users.create({ username, password })
       userAccessToken2 = await servers[0].login.getAccessToken({ username, password })
     }
 

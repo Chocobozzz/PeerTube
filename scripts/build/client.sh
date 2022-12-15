@@ -8,6 +8,7 @@ defaultLanguage="en-US"
 # Supported languages
 languages=(
     ["ar"]="ar"
+    ["fa"]="fa-IR"
     ["en"]="en-US"
     ["vi"]="vi-VN"
     ["hu"]="hu-HU"
@@ -31,10 +32,14 @@ languages=(
     ["ca"]="ca-ES"
     ["gl"]="gl-ES"
     ["cs"]="cs-CZ"
+    ["hr"]="hr"
     ["eo"]="eo"
     ["de"]="de-DE"
     ["it"]="it-IT"
     ["sq"]="sq"
+    ["tok"]="tok"
+    ["nn"]="nn"
+    ["nb"]="nb-NO"
     ["kab"]="kab"
 )
 
@@ -46,7 +51,7 @@ rm -rf ./dist
 if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); then
     additionalParams=""
     if [ ! -z ${1+x} ] && [ "$1" == "--source-map" ]; then
-        additionalParams="--sourceMap=true"
+        additionalParams="--source-map=true"
     fi
 
     node --max_old_space_size=8192 node_modules/.bin/ng build --configuration production --output-path "dist/build" $additionalParams
@@ -68,14 +73,14 @@ if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); t
 else
     additionalParams=""
     if [ ! -z ${1+x} ] && [ "$1" == "--analyze-bundle" ]; then
-        additionalParams="--namedChunks=true --outputHashing=none"
+        additionalParams="--named-chunks=true --output-hashing=none"
 
         # For webpack
         export ANALYZE_BUNDLE=true
     fi
 
     node --max_old_space_size=8192 node_modules/.bin/ng build --localize=false --output-path "dist/$defaultLanguage/" \
-                        --deploy-url "/client/$defaultLanguage/" --configuration production --stats-json $additionalParams
+                                                              --configuration production --stats-json $additionalParams
 fi
 
 cp "./dist/$defaultLanguage/manifest.webmanifest" "./dist/manifest.webmanifest"

@@ -1,11 +1,11 @@
 import express from 'express'
+import { Hooks } from '@server/lib/plugins/hooks'
 import { MVideoCaption } from '@server/types/models'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
-import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { federateVideoIfNeeded } from '../../../lib/activitypub/videos'
@@ -13,13 +13,7 @@ import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate } from '
 import { addVideoCaptionValidator, deleteVideoCaptionValidator, listVideoCaptionsValidator } from '../../../middlewares/validators'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
 
-const reqVideoCaptionAdd = createReqFiles(
-  [ 'captionfile' ],
-  MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT,
-  {
-    captionfile: CONFIG.STORAGE.CAPTIONS_DIR
-  }
-)
+const reqVideoCaptionAdd = createReqFiles([ 'captionfile' ], MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT)
 
 const videoCaptionsRouter = express.Router()
 
@@ -48,7 +42,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listVideoCaptions (req: express.Request, res: express.Response) {
-  const data = await VideoCaptionModel.listVideoCaptions(res.locals.videoId.id)
+  const data = await VideoCaptionModel.listVideoCaptions(res.locals.onlyVideo.id)
 
   return res.json(getFormattedObjects(data, data.length))
 }
@@ -75,6 +69,8 @@ async function addVideoCaption (req: express.Request, res: express.Response) {
     await federateVideoIfNeeded(video, false, t)
   })
 
+  Hooks.runAction('action:api.video-caption.created', { caption: videoCaption, req, res })
+
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
@@ -90,6 +86,8 @@ async function deleteVideoCaption (req: express.Request, res: express.Response) 
   })
 
   logger.info('Video caption %s of video %s deleted.', videoCaption.language, video.uuid)
+
+  Hooks.runAction('action:api.video-caption.deleted', { caption: videoCaption, req, res })
 
   return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }

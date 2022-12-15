@@ -17,9 +17,10 @@
 </div>
 
 <p-table
-  [value]="videoRedundancies" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [value]="videoRedundancies" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords"
+  [rows]="rowsPerPage"  [first]="pagination.start" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
-  (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
+  [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="header">
     <tr>
@@ -46,7 +47,7 @@
       <td>
         <a [href]="redundancy.url" i18n-title title="Open video in a new tab" target="_blank" rel="noopener noreferrer">
           {{ redundancy.name }}
-          <span class="glyphicon glyphicon-new-window"></span>
+          <my-global-icon iconName="external-link"></my-global-icon>
         </a>
       </td>
 

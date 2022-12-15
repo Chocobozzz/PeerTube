@@ -2,19 +2,19 @@ import * as debug from 'debug'
 import truncate from 'lodash-es/truncate'
 import { SortMeta } from 'primeng/api'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
-import { DomSanitizer } from '@angular/platform-browser'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
 import { Account, Actor, DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { AbuseService, BlocklistService, VideoBlockService } from '@app/shared/shared-moderation'
 import { VideoCommentService } from '@app/shared/shared-video-comment'
+import { logger } from '@root-helpers/logger'
 import { AbuseState, AdminAbuse } from '@shared/models'
 import { AdvancedInputFilter } from '../shared-forms'
 import { AbuseMessageModalComponent } from './abuse-message-modal.component'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
 import { ProcessedAbuse } from './processed-abuse.model'
 
-const logger = debug('peertube:moderation:AbuseListTableComponent')
+const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
 
 @Component({
   selector: 'my-abuse-list-table',
@@ -72,8 +72,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
     private videoService: VideoService,
     private videoBlocklistService: VideoBlockService,
     private confirmService: ConfirmService,
-    private markdownRenderer: MarkdownService,
-    private sanitizer: DomSanitizer
+    private markdownRenderer: MarkdownService
   ) {
     super()
   }
@@ -158,7 +157,7 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
     const abuse = this.abuses.find(a => a.id === event.abuseId)
 
     if (!abuse) {
-      console.error('Cannot find abuse %d.', event.abuseId)
+      logger.error(`Cannot find abuse ${event.abuseId}`)
       return
     }
 
@@ -171,12 +170,13 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
 
   isLocalAbuse (abuse: AdminAbuse) {
     if (this.viewType === 'user') return true
+    if (!abuse.reporterAccount) return false
 
     return Actor.IS_LOCAL(abuse.reporterAccount.host)
   }
 
   protected reloadData () {
-    logger('Loading data.')
+    debugLogger('Loading data.')
 
     const options = {
       pagination: this.pagination,
@@ -214,8 +214,8 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
               abuse.truncatedCommentHtml = abuse.commentHtml = $localize`Deleted comment`
             } else {
               const truncated = truncate(abuse.comment.text, { length: 100 })
-              abuse.truncatedCommentHtml = await this.markdownRenderer.textMarkdownToHTML(truncated, true)
-              abuse.commentHtml = await this.markdownRenderer.textMarkdownToHTML(abuse.comment.text, true)
+              abuse.truncatedCommentHtml = await this.markdownRenderer.textMarkdownToHTML({ markdown: truncated, withHtml: true })
+              abuse.commentHtml = await this.markdownRenderer.textMarkdownToHTML({ markdown: abuse.comment.text, withHtml: true })
             }
           }
 
@@ -272,7 +272,8 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
       },
       {
         label: $localize`Delete report`,
-        handler: abuse => this.isAdminView() && this.removeAbuse(abuse)
+        handler: abuse => this.removeAbuse(abuse),
+        isDisplayed: () => this.isAdminView()
       }
     ]
   }
@@ -450,6 +451,6 @@ export class AbuseListTableComponent extends RestTable implements OnInit {
   }
 
   private toHtml (text: string) {
-    return this.markdownRenderer.textMarkdownToHTML(text)
+    return this.markdownRenderer.textMarkdownToHTML({ markdown: text })
   }
 }

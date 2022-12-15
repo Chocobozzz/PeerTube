@@ -2,7 +2,7 @@
   <span>
     <my-global-icon iconName="videos" aria-hidden="true"></my-global-icon>
     <ng-container i18n>My videos</ng-container>
-    <span class="badge badge-secondary"> {{ pagination.totalItems }}</span>
+    <span *ngIf="pagination.totalItems" class="pt-badge badge-secondary"> {{ pagination.totalItems }}</span>
   </span>
 
   <div>
@@ -34,6 +34,7 @@
 </div>
 
 <my-videos-selection
+  [videosContainedInPlaylists]="videosContainedInPlaylists"
   [pagination]="pagination"
   [(selection)]="selection"
   [(videosModel)]="videos"
@@ -55,10 +56,12 @@
     <div class="action-button">
       <my-edit-button label [routerLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
 
-      <my-action-dropdown [actions]="videoActions" [entry]="{ video: video }"></my-action-dropdown>
+      <my-video-actions-dropdown
+        [video]="video" [displayOptions]="videoDropdownDisplayOptions" [moreActions]="moreVideoActions"
+        [buttonStyled]="true" buttonDirection="horizontal" (videoRemoved)="onVideoRemoved(video)"
+      ></my-video-actions-dropdown>
     </div>
   </ng-template>
 </my-videos-selection>
 
 <my-video-change-ownership #videoChangeOwnershipModal></my-video-change-ownership>
-<my-live-stream-information #liveStreamInformationModal></my-live-stream-information>

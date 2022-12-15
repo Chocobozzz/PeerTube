@@ -3,60 +3,52 @@ import { move, readFile } from 'fs-extra'
 import { decode } from 'magnet-uri'
 import parseTorrent, { Instance } from 'parse-torrent'
 import { join } from 'path'
-import { isVideoFileExtnameValid } from '@server/helpers/custom-validators/videos'
-import { ServerConfigManager } from '@server/lib/server-config-manager'
-import { setVideoTags } from '@server/lib/video'
-import { FilteredModelAttributes } from '@server/types'
-import {
-  MChannelAccountDefault,
-  MThumbnail,
-  MUser,
-  MVideoAccountDefault,
-  MVideoCaption,
-  MVideoTag,
-  MVideoThumbnail,
-  MVideoWithBlacklistLight
-} from '@server/types/models'
-import { MVideoImportFormattable } from '@server/types/models/video/video-import'
-import { ServerErrorCode, VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '../../../../shared'
-import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
+import { buildYoutubeDLImport, buildVideoFromImport, insertFromImportIntoDB, YoutubeDlImportError } from '@server/lib/video-pre-import'
+import { MThumbnail, MVideoThumbnail } from '@server/types/models'
+import { HttpStatusCode, ServerErrorCode, ThumbnailType, VideoImportCreate, VideoImportPayload, VideoImportState } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
-import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
 import { isArray } from '../../../helpers/custom-validators/misc'
 import { cleanUpReqFiles, createReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { getSecureTorrentName } from '../../../helpers/utils'
-import { YoutubeDLWrapper, YoutubeDLInfo } from '../../../helpers/youtube-dl'
 import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
-import { sequelizeTypescript } from '../../../initializers/database'
-import { getLocalVideoActivityPubUrl } from '../../../lib/activitypub/url'
 import { JobQueue } from '../../../lib/job-queue/job-queue'
-import { updateVideoMiniatureFromExisting, updateVideoMiniatureFromUrl } from '../../../lib/thumbnail'
-import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
-import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
-import { VideoModel } from '../../../models/video/video'
-import { VideoCaptionModel } from '../../../models/video/video-caption'
-import { VideoImportModel } from '../../../models/video/video-import'
+import { updateVideoMiniatureFromExisting } from '../../../lib/thumbnail'
+import {
+  asyncMiddleware,
+  asyncRetryTransactionMiddleware,
+  authenticate,
+  videoImportAddValidator,
+  videoImportCancelValidator,
+  videoImportDeleteValidator
+} from '../../../middlewares'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
 
 const reqVideoFileImport = createReqFiles(
   [ 'thumbnailfile', 'previewfile', 'torrentfile' ],
-  Object.assign({}, MIMETYPES.TORRENT.MIMETYPE_EXT, MIMETYPES.IMAGE.MIMETYPE_EXT),
-  {
-    thumbnailfile: CONFIG.STORAGE.TMP_DIR,
-    previewfile: CONFIG.STORAGE.TMP_DIR,
-    torrentfile: CONFIG.STORAGE.TMP_DIR
-  }
+  { ...MIMETYPES.TORRENT.MIMETYPE_EXT, ...MIMETYPES.IMAGE.MIMETYPE_EXT }
 )
 
 videoImportsRouter.post('/imports',
   authenticate,
   reqVideoFileImport,
   asyncMiddleware(videoImportAddValidator),
-  asyncRetryTransactionMiddleware(addVideoImport)
+  asyncRetryTransactionMiddleware(handleVideoImport)
+)
+
+videoImportsRouter.post('/imports/:id/cancel',
+  authenticate,
+  asyncMiddleware(videoImportCancelValidator),
+  asyncRetryTransactionMiddleware(cancelVideoImport)
+)
+
+videoImportsRouter.delete('/imports/:id',
+  authenticate,
+  asyncMiddleware(videoImportDeleteValidator),
+  asyncRetryTransactionMiddleware(deleteVideoImport)
 )
 
 // ---------------------------------------------------------------------------
@@ -67,14 +59,31 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function addVideoImport (req: express.Request, res: express.Response) {
-  if (req.body.targetUrl) return addYoutubeDLImport(req, res)
+async function deleteVideoImport (req: express.Request, res: express.Response) {
+  const videoImport = res.locals.videoImport
 
-  const file = req.files?.['torrentfile']?.[0]
-  if (req.body.magnetUri || file) return addTorrentImport(req, res, file)
+  await videoImport.destroy()
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
-async function addTorrentImport (req: express.Request, res: express.Response, torrentfile: Express.Multer.File) {
+async function cancelVideoImport (req: express.Request, res: express.Response) {
+  const videoImport = res.locals.videoImport
+
+  videoImport.state = VideoImportState.CANCELLED
+  await videoImport.save()
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+function handleVideoImport (req: express.Request, res: express.Response) {
+  if (req.body.targetUrl) return handleYoutubeDlImport(req, res)
+
+  const file = req.files?.['torrentfile']?.[0]
+  if (req.body.magnetUri || file) return handleTorrentImport(req, res, file)
+}
+
+async function handleTorrentImport (req: express.Request, res: express.Response, torrentfile: Express.Multer.File) {
   const body: VideoImportCreate = req.body
   const user = res.locals.oauth.token.User
 
@@ -94,12 +103,17 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
     videoName = result.name
   }
 
-  const video = buildVideo(res.locals.videoChannel.id, body, { name: videoName })
+  const video = await buildVideoFromImport({
+    channelId: res.locals.videoChannel.id,
+    importData: { name: videoName },
+    importDataOverride: body,
+    importType: 'torrent'
+  })
 
   const thumbnailModel = await processThumbnail(req, video)
   const previewModel = await processPreview(req, video)
 
-  const videoImport = await insertIntoDB({
+  const videoImport = await insertFromImportIntoDB({
     video,
     thumbnailModel,
     previewModel,
@@ -114,127 +128,63 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
     }
   })
 
-  // Create job to import the video
-  const payload = {
+  const payload: VideoImportPayload = {
     type: torrentfile
-      ? 'torrent-file' as 'torrent-file'
-      : 'magnet-uri' as 'magnet-uri',
+      ? 'torrent-file'
+      : 'magnet-uri',
     videoImportId: videoImport.id,
-    magnetUri
+    preventException: false
   }
-  await JobQueue.Instance.createJobWithPromise({ type: 'video-import', payload })
+  await JobQueue.Instance.createJob({ type: 'video-import', payload })
 
   auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
 
   return res.json(videoImport.toFormattedJSON()).end()
 }
 
-async function addYoutubeDLImport (req: express.Request, res: express.Response) {
+function statusFromYtDlImportError (err: YoutubeDlImportError): number {
+  switch (err.code) {
+    case YoutubeDlImportError.CODE.NOT_ONLY_UNICAST_URL:
+      return HttpStatusCode.FORBIDDEN_403
+
+    case YoutubeDlImportError.CODE.FETCH_ERROR:
+      return HttpStatusCode.BAD_REQUEST_400
+
+    default:
+      return HttpStatusCode.INTERNAL_SERVER_ERROR_500
+  }
+}
+
+async function handleYoutubeDlImport (req: express.Request, res: express.Response) {
   const body: VideoImportCreate = req.body
   const targetUrl = body.targetUrl
   const user = res.locals.oauth.token.User
 
-  const youtubeDL = new YoutubeDLWrapper(targetUrl, ServerConfigManager.Instance.getEnabledResolutions('vod'))
-
-  // Get video infos
-  let youtubeDLInfo: YoutubeDLInfo
   try {
-    youtubeDLInfo = await youtubeDL.getInfoForDownload()
+    const { job, videoImport } = await buildYoutubeDLImport({
+      targetUrl,
+      channel: res.locals.videoChannel,
+      importDataOverride: body,
+      thumbnailFilePath: req.files?.['thumbnailfile']?.[0].path,
+      previewFilePath: req.files?.['previewfile']?.[0].path,
+      user
+    })
+    await JobQueue.Instance.createJob(job)
+
+    auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
+
+    return res.json(videoImport.toFormattedJSON()).end()
   } catch (err) {
-    logger.info('Cannot fetch information from import for URL %s.', targetUrl, { err })
+    logger.error('An error occurred while importing the video %s. ', targetUrl, { err })
 
     return res.fail({
-      message: 'Cannot fetch remote information of this URL.',
+      message: err.message,
+      status: statusFromYtDlImportError(err),
       data: {
         targetUrl
       }
     })
   }
-
-  const video = buildVideo(res.locals.videoChannel.id, body, youtubeDLInfo)
-
-  // Process video thumbnail from request.files
-  let thumbnailModel = await processThumbnail(req, video)
-
-  // Process video thumbnail from url if processing from request.files failed
-  if (!thumbnailModel && youtubeDLInfo.thumbnailUrl) {
-    try {
-      thumbnailModel = await processThumbnailFromUrl(youtubeDLInfo.thumbnailUrl, video)
-    } catch (err) {
-      logger.warn('Cannot process thumbnail %s from youtubedl.', youtubeDLInfo.thumbnailUrl, { err })
-    }
-  }
-
-  // Process video preview from request.files
-  let previewModel = await processPreview(req, video)
-
-  // Process video preview from url if processing from request.files failed
-  if (!previewModel && youtubeDLInfo.thumbnailUrl) {
-    try {
-      previewModel = await processPreviewFromUrl(youtubeDLInfo.thumbnailUrl, video)
-    } catch (err) {
-      logger.warn('Cannot process preview %s from youtubedl.', youtubeDLInfo.thumbnailUrl, { err })
-    }
-  }
-
-  const videoImport = await insertIntoDB({
-    video,
-    thumbnailModel,
-    previewModel,
-    videoChannel: res.locals.videoChannel,
-    tags: body.tags || youtubeDLInfo.tags,
-    user,
-    videoImportAttributes: {
-      targetUrl,
-      state: VideoImportState.PENDING,
-      userId: user.id
-    }
-  })
-
-  // Get video subtitles
-  await processYoutubeSubtitles(youtubeDL, targetUrl, video.id)
-
-  let fileExt = `.${youtubeDLInfo.ext}`
-  if (!isVideoFileExtnameValid(fileExt)) fileExt = '.mp4'
-
-  // Create job to import the video
-  const payload = {
-    type: 'youtube-dl' as 'youtube-dl',
-    videoImportId: videoImport.id,
-    fileExt
-  }
-  await JobQueue.Instance.createJobWithPromise({ type: 'video-import', payload })
-
-  auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
-
-  return res.json(videoImport.toFormattedJSON()).end()
-}
-
-function buildVideo (channelId: number, body: VideoImportCreate, importData: YoutubeDLInfo): MVideoThumbnail {
-  const videoData = {
-    name: body.name || importData.name || 'Unknown name',
-    remote: false,
-    category: body.category || importData.category,
-    licence: body.licence || importData.licence,
-    language: body.language || importData.language,
-    commentsEnabled: body.commentsEnabled !== false, // If the value is not "false", the default is "true"
-    downloadEnabled: body.downloadEnabled !== false,
-    waitTranscoding: body.waitTranscoding || false,
-    state: VideoState.TO_IMPORT,
-    nsfw: body.nsfw || importData.nsfw || false,
-    description: body.description || importData.description,
-    support: body.support || null,
-    privacy: body.privacy || VideoPrivacy.PRIVATE,
-    duration: 0, // duration will be set by the import job
-    channelId: channelId,
-    originallyPublishedAt: body.originallyPublishedAt
-      ? new Date(body.originallyPublishedAt)
-      : importData.originallyPublishedAt
-  }
-  const video = new VideoModel(videoData)
-  video.url = getLocalVideoActivityPubUrl(video)
-
-  return video
 }
 
 async function processThumbnail (req: express.Request, video: MVideoThumbnail) {
@@ -267,69 +217,6 @@ async function processPreview (req: express.Request, video: MVideoThumbnail): Pr
   }
 
   return undefined
-}
-
-async function processThumbnailFromUrl (url: string, video: MVideoThumbnail) {
-  try {
-    return updateVideoMiniatureFromUrl({ downloadUrl: url, video, type: ThumbnailType.MINIATURE })
-  } catch (err) {
-    logger.warn('Cannot generate video thumbnail %s for %s.', url, video.url, { err })
-    return undefined
-  }
-}
-
-async function processPreviewFromUrl (url: string, video: MVideoThumbnail) {
-  try {
-    return updateVideoMiniatureFromUrl({ downloadUrl: url, video, type: ThumbnailType.PREVIEW })
-  } catch (err) {
-    logger.warn('Cannot generate video preview %s for %s.', url, video.url, { err })
-    return undefined
-  }
-}
-
-async function insertIntoDB (parameters: {
-  video: MVideoThumbnail
-  thumbnailModel: MThumbnail
-  previewModel: MThumbnail
-  videoChannel: MChannelAccountDefault
-  tags: string[]
-  videoImportAttributes: FilteredModelAttributes<VideoImportModel>
-  user: MUser
-}): Promise<MVideoImportFormattable> {
-  const { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes, user } = parameters
-
-  const videoImport = await sequelizeTypescript.transaction(async t => {
-    const sequelizeOptions = { transaction: t }
-
-    // Save video object in database
-    const videoCreated = await video.save(sequelizeOptions) as (MVideoAccountDefault & MVideoWithBlacklistLight & MVideoTag)
-    videoCreated.VideoChannel = videoChannel
-
-    if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
-    if (previewModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
-
-    await autoBlacklistVideoIfNeeded({
-      video: videoCreated,
-      user,
-      notify: false,
-      isRemote: false,
-      isNew: true,
-      transaction: t
-    })
-
-    await setVideoTags({ video: videoCreated, tags, transaction: t })
-
-    // Create video import object in database
-    const videoImport = await VideoImportModel.create(
-      Object.assign({ videoId: videoCreated.id }, videoImportAttributes),
-      sequelizeOptions
-    ) as MVideoImportFormattable
-    videoImport.Video = videoCreated
-
-    return videoImport
-  })
-
-  return videoImport
 }
 
 async function processTorrentOrAbortRequest (req: express.Request, res: express.Response, torrentfile: Express.Multer.File) {
@@ -371,29 +258,4 @@ function processMagnetURI (body: VideoImportCreate) {
 
 function extractNameFromArray (name: string | string[]) {
   return isArray(name) ? name[0] : name
-}
-
-async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: string, videoId: number) {
-  try {
-    const subtitles = await youtubeDL.getSubtitles()
-
-    logger.info('Will create %s subtitles from youtube import %s.', subtitles.length, targetUrl)
-
-    for (const subtitle of subtitles) {
-      const videoCaption = new VideoCaptionModel({
-        videoId,
-        language: subtitle.language,
-        filename: VideoCaptionModel.generateCaptionName(subtitle.language)
-      }) as MVideoCaption
-
-      // Move physical file
-      await moveAndProcessCaptionFile(subtitle, videoCaption)
-
-      await sequelizeTypescript.transaction(async t => {
-        await VideoCaptionModel.insertOrReplaceLanguage(videoCaption, t)
-      })
-    }
-  } catch (err) {
-    logger.warn('Cannot get video subtitles.', { err })
-  }
 }

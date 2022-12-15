@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
-import { AuthService, ConfirmService, Notifier, ScreenService } from '@app/core'
+import { AuthService, ConfirmService, Notifier, ScreenService, ServerService } from '@app/core'
 import { BlocklistService, VideoBlockComponent, VideoBlockService, VideoReportComponent } from '@app/shared/shared-moderation'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@shared/models'
@@ -29,6 +29,8 @@ export type VideoActionsDisplayType = {
   liveInfo?: boolean
   removeFiles?: boolean
   transcoding?: boolean
+  studio?: boolean
+  stats?: boolean
 }
 
 @Component({
@@ -59,9 +61,12 @@ export class VideoActionsDropdownComponent implements OnChanges {
     mute: true,
     liveInfo: false,
     removeFiles: false,
-    transcoding: false
+    transcoding: false,
+    studio: true,
+    stats: true
   }
   @Input() placement = 'left'
+  @Input() moreActions: DropdownAction<{ video: Video }>[][] = []
 
   @Input() label: string
 
@@ -89,7 +94,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
     private videoBlocklistService: VideoBlockService,
     private screenService: ScreenService,
     private videoService: VideoService,
-    private redundancyService: RedundancyService
+    private redundancyService: RedundancyService,
+    private serverService: ServerService
   ) { }
 
   get user () {
@@ -147,6 +153,14 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   isVideoUpdatable () {
     return this.video.isUpdatableBy(this.user)
+  }
+
+  isVideoEditable () {
+    return this.video.isEditableBy(this.user, this.serverService.getHTMLConfig().videoStudio.enabled)
+  }
+
+  isVideoStatsAvailable () {
+    return this.video.canSeeStats(this.user)
   }
 
   isVideoRemovable () {
@@ -216,7 +230,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
     let message = $localize`Do you really want to delete ${this.video.name}?`
     if (this.video.isLive) {
-      message += ' ' + $localize`The live stream will be automatically terminated.`
+      message += ' ' + $localize`The live stream will be automatically terminated and replays won't be saved.`
     }
 
     const res = await this.confirmService.confirm(message, $localize`Delete ${this.video.name}`)
@@ -330,6 +344,18 @@ export class VideoActionsDropdownComponent implements OnChanges {
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.update && this.isVideoUpdatable()
         },
         {
+          label: $localize`Studio`,
+          linkBuilder: ({ video }) => [ '/studio/edit', video.uuid ],
+          iconName: 'film',
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.studio && this.isVideoEditable()
+        },
+        {
+          label: $localize`Stats`,
+          linkBuilder: ({ video }) => [ '/stats/videos', video.uuid ],
+          iconName: 'stats',
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.stats && this.isVideoStatsAvailable()
+        },
+        {
           label: $localize`Block`,
           handler: () => this.showBlockModal(),
           iconName: 'no',
@@ -395,5 +421,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
         }
       ]
     ]
+
+    this.videoActions = this.videoActions.concat(this.moreActions)
   }
 }

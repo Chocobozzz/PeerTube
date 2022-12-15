@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
 import { pathExists, remove } from 'fs-extra'
 import { join } from 'path'
-import { Mock429 } from '@shared/extra-utils/mock-servers/mock-429'
-import { FIXTURE_URLS, root, wait } from '../../../shared/extra-utils'
+import { root, wait } from '@shared/core-utils'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
+import { FIXTURE_URLS, Mock429 } from '../shared'
 
 describe('Request helpers', function () {
   const destPath1 = join(root(), 'test-output-1.txt')
@@ -42,7 +41,7 @@ describe('Request helpers', function () {
     const port = await mock.initialize()
 
     const before = new Date().getTime()
-    await doRequest('http://localhost:' + port)
+    await doRequest('http://127.0.0.1:' + port)
 
     expect(new Date().getTime() - before).to.be.greaterThan(2000)
 

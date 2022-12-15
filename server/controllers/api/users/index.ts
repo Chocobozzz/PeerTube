@@ -1,13 +1,10 @@
 import express from 'express'
-import RateLimit from 'express-rate-limit'
 import { tokensRouter } from '@server/controllers/api/users/token'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token'
-import { MUser, MUserAccountDefault } from '@server/types/models'
-import { UserCreate, UserCreateResult, UserRight, UserRole, UserUpdate } from '../../../../shared'
-import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
-import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
-import { UserRegister } from '../../../../shared/models/users/user-register.model'
+import { MUserAccountDefault } from '@server/types/models'
+import { pick } from '@shared/core-utils'
+import { HttpStatusCode, UserCreate, UserCreateResult, UserRegister, UserRight, UserUpdate } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
 import { logger } from '../../../helpers/logger'
 import { generateRandomString, getFormattedObjects } from '../../../helpers/utils'
@@ -17,11 +14,13 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { Emailer } from '../../../lib/emailer'
 import { Notifier } from '../../../lib/notifier'
 import { Redis } from '../../../lib/redis'
-import { createUserAccountAndChannelAndPlaylist, sendVerifyUserEmail } from '../../../lib/user'
+import { buildUser, createUserAccountAndChannelAndPlaylist, sendVerifyUserEmail } from '../../../lib/user'
 import {
+  adminUsersSortValidator,
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
+  buildRateLimiter,
   ensureUserHasRight,
   ensureUserRegistrationAllowed,
   ensureUserRegistrationAllowedForIP,
@@ -34,11 +33,10 @@ import {
   usersListValidator,
   usersRegisterValidator,
   usersRemoveValidator,
-  usersSortValidator,
   usersUpdateValidator
 } from '../../../middlewares'
 import {
-  ensureCanManageUser,
+  ensureCanModerateUser,
   usersAskResetPasswordValidator,
   usersAskSendVerifyEmailValidator,
   usersBlockingValidator,
@@ -53,21 +51,23 @@ import { myVideosHistoryRouter } from './my-history'
 import { myNotificationsRouter } from './my-notifications'
 import { mySubscriptionsRouter } from './my-subscriptions'
 import { myVideoPlaylistsRouter } from './my-video-playlists'
+import { twoFactorRouter } from './two-factor'
 
 const auditLogger = auditLoggerFactory('users')
 
-const signupRateLimiter = RateLimit({
+const signupRateLimiter = buildRateLimiter({
   windowMs: CONFIG.RATES_LIMIT.SIGNUP.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.SIGNUP.MAX,
   skipFailedRequests: true
 })
 
-const askSendEmailLimiter = RateLimit({
+const askSendEmailLimiter = buildRateLimiter({
   windowMs: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX
 })
 
 const usersRouter = express.Router()
+usersRouter.use('/', twoFactorRouter)
 usersRouter.use('/', tokensRouter)
 usersRouter.use('/', myNotificationsRouter)
 usersRouter.use('/', mySubscriptionsRouter)
@@ -86,7 +86,7 @@ usersRouter.get('/',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
   paginationValidator,
-  usersSortValidator,
+  adminUsersSortValidator,
   setDefaultSort,
   setDefaultPagination,
   usersListValidator,
@@ -97,14 +97,14 @@ usersRouter.post('/:id/block',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
   asyncMiddleware(usersBlockingValidator),
-  ensureCanManageUser,
+  ensureCanModerateUser,
   asyncMiddleware(blockUser)
 )
 usersRouter.post('/:id/unblock',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
   asyncMiddleware(usersBlockingValidator),
-  ensureCanManageUser,
+  ensureCanModerateUser,
   asyncMiddleware(unblockUser)
 )
 
@@ -134,7 +134,7 @@ usersRouter.put('/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
   asyncMiddleware(usersUpdateValidator),
-  ensureCanManageUser,
+  ensureCanModerateUser,
   asyncMiddleware(updateUser)
 )
 
@@ -142,7 +142,7 @@ usersRouter.delete('/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
   asyncMiddleware(usersRemoveValidator),
-  ensureCanManageUser,
+  ensureCanModerateUser,
   asyncMiddleware(removeUser)
 )
 
@@ -178,17 +178,11 @@ export {
 async function createUser (req: express.Request, res: express.Response) {
   const body: UserCreate = req.body
 
-  const userToCreate = new UserModel({
-    username: body.username,
-    password: body.password,
-    email: body.email,
-    nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
-    autoPlayVideo: true,
-    role: body.role,
-    videoQuota: body.videoQuota,
-    videoQuotaDaily: body.videoQuotaDaily,
-    adminFlags: body.adminFlags || UserAdminFlag.NONE
-  }) as MUser
+  const userToCreate = buildUser({
+    ...pick(body, [ 'username', 'password', 'email', 'role', 'videoQuota', 'videoQuotaDaily', 'adminFlags' ]),
+
+    emailVerified: null
+  })
 
   // NB: due to the validator usersAddValidator, password==='' can only be true if we can send the mail.
   const createPassword = userToCreate.password === ''
@@ -209,7 +203,7 @@ async function createUser (req: express.Request, res: express.Response) {
     logger.info('Sending to user %s a create password email', body.username)
     const verificationString = await Redis.Instance.setCreatePasswordVerificationString(user.id)
     const url = WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
-    await Emailer.Instance.addPasswordCreateEmailJob(userToCreate.username, user.email, url)
+    Emailer.Instance.addPasswordCreateEmailJob(userToCreate.username, user.email, url)
   }
 
   Hooks.runAction('action:api.user.created', { body, user, account, videoChannel, req, res })
@@ -227,20 +221,14 @@ async function createUser (req: express.Request, res: express.Response) {
 async function registerUser (req: express.Request, res: express.Response) {
   const body: UserRegister = req.body
 
-  const userToCreate = new UserModel({
-    username: body.username,
-    password: body.password,
-    email: body.email,
-    nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
-    autoPlayVideo: true,
-    role: UserRole.USER,
-    videoQuota: CONFIG.USER.VIDEO_QUOTA,
-    videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY,
+  const userToCreate = buildUser({
+    ...pick(body, [ 'username', 'password', 'email' ]),
+
     emailVerified: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION ? false : null
   })
 
   const { user, account, videoChannel } = await createUserAccountAndChannelAndPlaylist({
-    userToCreate: userToCreate,
+    userToCreate,
     userDisplayName: body.displayName || undefined,
     channelNames: body.channel
   })
@@ -291,7 +279,7 @@ async function autocompleteUsers (req: express.Request, res: express.Response) {
 }
 
 async function listUsers (req: express.Request, res: express.Response) {
-  const resultList = await UserModel.listForApi({
+  const resultList = await UserModel.listForAdminApi({
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
@@ -357,7 +345,7 @@ async function askResetUserPassword (req: express.Request, res: express.Response
 
   const verificationString = await Redis.Instance.setResetPasswordVerificationString(user.id)
   const url = WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
-  await Emailer.Instance.addPasswordResetEmailJob(user.username, user.email, url)
+  Emailer.Instance.addPasswordResetEmailJob(user.username, user.email, url)
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

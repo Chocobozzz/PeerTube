@@ -16,7 +16,6 @@ $footer-links-base-opacity: .8;
 
   color: pvar(--menuForegroundColor);
   cursor: pointer;
-  font-size: 16px;
   white-space: normal;
   word-break: break-word;
   transition: background-color .1s ease-in-out;
@@ -106,6 +105,7 @@ my-notification {
 }
 
 .logged-in-more {
+
   @mixin display-hints($is-mobile: false) {
     background-color: rgba(255, 255, 255, 0.15);
 
@@ -114,18 +114,16 @@ my-notification {
         display: inherit !important;
       }
 
-      .dropdown-toggle {
+      > .dropdown-toggle {
         max-width: 88% !important;
       }
     }
   }
 
-  $main-radius: 25px;
-
   @include margin-left(13px);
 
   flex: 1;
-  border-radius: $main-radius;
+  border-radius: 25px;
   transition: all .1s ease-in-out;
   cursor: pointer;
   line-height: 1;
@@ -157,7 +155,6 @@ my-notification {
 
   .dropdown-toggle-indicator {
     position: relative;
-    width: 0;
     display: none;
 
     span {
@@ -165,21 +162,17 @@ my-notification {
       right: -35px;
       top: -8px;
       color: #808080;
-      width: $main-radius;
     }
   }
 
-  .dropdown-toggle {
-    &::after {
-      border: 0;
-    }
+  .dropdown-toggle::after {
+    border: 0;
   }
 
-  .dropdown-toggle:first-child {
+  > .dropdown-toggle:first-child {
     display: flex;
     align-items: center;
     padding: 5px 7px;
-    border-radius: $main-radius;
   }
 }
 
@@ -201,7 +194,6 @@ my-actor-avatar {
 .logged-in-display-name {
   @include disable-default-a-behaviour;
 
-  font-size: 16px;
   font-weight: $font-semibold;
   color: pvar(--menuForegroundColor);
 }
@@ -299,18 +291,14 @@ my-actor-avatar {
 }
 
 .footer {
-  width: $menu-width;
   padding-bottom: 15px;
 }
 
 .footer-bottom {
-  display: flex;
-  flex-direction: column;
   padding: 0 $menu-lateral-padding;
 }
 
 .footer-links {
-  &,
   > div {
     display: flex;
     flex-wrap: wrap;
@@ -319,23 +307,31 @@ my-actor-avatar {
   a,
   span[role=button] {
     @include margin-right(8px);
+    @include disable-default-a-behaviour;
 
-    display: inline-block;
-    text-decoration: none;
     color: pvar(--menuForegroundColor);
     opacity: $footer-links-base-opacity;
     white-space: nowrap;
-    font-size: 90%;
-    font-weight: 500;
+    font-size: 0.75rem;
     line-height: 1.4rem;
+    font-weight: $font-semibold;
+
+    &:hover {
+      opacity: $footer-links-base-opacity + .2;
+    }
   }
 }
 
-.footer-copyleft small a {
+.footer-copyleft a {
   @include disable-default-a-behaviour;
 
   color: pvar(--menuForegroundColor);
   opacity: $footer-links-base-opacity - .2;
+  font-size: 0.85rem;
+
+  &:hover {
+    opacity: $footer-links-base-opacity;
+  }
 }
 
 .dropdown {
@@ -344,6 +340,11 @@ my-actor-avatar {
 
 .dropdown-menu {
   width: calc(100% + 40px);
+
+  // Prevent weird display issue on firefox when global style is not loaded yet
+  &:not(.show) {
+    display: none;
+  }
 }
 
 .dropdown-item {
@@ -352,10 +353,6 @@ my-actor-avatar {
   cursor: pointer;
   display: flex;
   align-items: center;
-
-  i.glyphicon-menu-right {
-    opacity: .4;
-  }
 
   &:hover {
     .hover-display-toggle {
@@ -391,36 +388,20 @@ my-actor-avatar {
   .dropdown-menu {
     width: calc(100vw - 30px);
   }
-
-  .dropdown-item:hover,
-  .dropdown-item:active {
-    &.settings-sensitive my-global-icon ::ng-deep svg {
-      margin-top: 0 !important;
-    }
-  }
 }
 
 my-global-icon {
-  &[iconName=playlists] {
+  position: relative;
+  top: -1px;
+
+  .playlist-icon {
     @include margin-right(16px);
 
     height: 24px;
     width: 24px;
   }
 
-  &[iconName=videos] {
-    position: relative;
-    right: -1px;
-  }
-
-  &[iconName=channel] {
-    margin-top: -2px;
-  }
-
-  &[iconName='sign-out'] {
-    position: relative;
-    right: -2px;
-    height: 20px;
-    width: 20px;
+  &.channel-icon {
+    top: -2px;
   }
 }

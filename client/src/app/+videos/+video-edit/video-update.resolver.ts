@@ -3,7 +3,7 @@ import { map, switchMap } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router'
 import { AuthService } from '@app/core'
-import { listUserChannels } from '@app/helpers'
+import { listUserChannelsForSelect } from '@app/helpers'
 import { VideoCaptionService, VideoDetails, VideoService } from '@app/shared/shared-main'
 import { LiveVideoService } from '@app/shared/shared-video-live'
 
@@ -23,7 +23,8 @@ export class VideoUpdateResolver implements Resolve<any> {
     return this.videoService.getVideo({ videoId: uuid })
                .pipe(
                  switchMap(video => forkJoin(this.buildVideoObservables(video))),
-                 map(([ video, videoChannels, videoCaptions, liveVideo ]) => ({ video, videoChannels, videoCaptions, liveVideo }))
+                 map(([ video, videoSource, videoChannels, videoCaptions, liveVideo ]) =>
+                   ({ video, videoChannels, videoCaptions, videoSource, liveVideo }))
                )
   }
 
@@ -33,10 +34,12 @@ export class VideoUpdateResolver implements Resolve<any> {
         .loadCompleteDescription(video.descriptionPath)
         .pipe(map(description => Object.assign(video, { description }))),
 
-      listUserChannels(this.authService),
+      this.videoService.getSource(video.id),
+
+      listUserChannelsForSelect(this.authService),
 
       this.videoCaptionService
-        .listCaptions(video.id)
+        .listCaptions(video.uuid)
         .pipe(
           map(result => result.data)
         ),

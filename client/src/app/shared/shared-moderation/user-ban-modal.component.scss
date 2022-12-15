@@ -1,6 +1,10 @@
 @use '_variables' as *;
 @use '_mixins' as *;
 
+.description {
+  margin-bottom: 15px;
+}
+
 textarea {
   @include peertube-textarea(100%, 60px);
 }

@@ -1,6 +1,24 @@
 import { Video, VideoPlaylist } from '../../models'
 import { secondsToTime } from './date'
 
+function addQueryParams (url: string, params: { [ id: string ]: string }) {
+  const objUrl = new URL(url)
+
+  for (const key of Object.keys(params)) {
+    objUrl.searchParams.append(key, params[key])
+  }
+
+  return objUrl.toString()
+}
+
+function removeQueryParams (url: string) {
+  const objUrl = new URL(url)
+
+  objUrl.searchParams.forEach((_v, k) => objUrl.searchParams.delete(k))
+
+  return objUrl.toString()
+}
+
 function buildPlaylistLink (playlist: Pick<VideoPlaylist, 'shortUUID'>, base?: string) {
   return (base ?? window.location.origin) + buildPlaylistWatchPath(playlist)
 }
@@ -48,8 +66,12 @@ function decorateVideoLink (options: {
   // Embed options
   title?: boolean
   warningTitle?: boolean
+
   controls?: boolean
+  controlBar?: boolean
+
   peertubeLink?: boolean
+  p2p?: boolean
 }) {
   const { url } = options
 
@@ -72,8 +94,12 @@ function decorateVideoLink (options: {
   if (options.muted === true) params.set('muted', '1')
   if (options.title === false) params.set('title', '0')
   if (options.warningTitle === false) params.set('warningTitle', '0')
+
   if (options.controls === false) params.set('controls', '0')
+  if (options.controlBar === false) params.set('controlBar', '0')
+
   if (options.peertubeLink === false) params.set('peertubeLink', '0')
+  if (options.p2p !== undefined) params.set('p2p', options.p2p ? '1' : '0')
 
   return buildUrl(url, params)
 }
@@ -95,6 +121,9 @@ function decoratePlaylistLink (options: {
 // ---------------------------------------------------------------------------
 
 export {
+  addQueryParams,
+  removeQueryParams,
+
   buildPlaylistLink,
   buildVideoLink,
 

@@ -1,9 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { omit } from 'lodash'
-import { Account, HTMLServerConfig, HttpStatusCode, ServerConfig, VideoPlaylistCreateResult, VideoPlaylistPrivacy } from '@shared/models'
+import { expect } from 'chai'
+import { omit } from '@shared/core-utils'
+import {
+  Account,
+  HTMLServerConfig,
+  HttpStatusCode,
+  ServerConfig,
+  VideoPlaylistCreateResult,
+  VideoPlaylistPrivacy,
+  VideoPrivacy
+} from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -14,16 +21,14 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
-} from '../../shared/extra-utils'
-
-const expect = chai.expect
+} from '../../shared/server-commands'
 
 function checkIndexTags (html: string, title: string, description: string, css: string, config: ServerConfig) {
   expect(html).to.contain('<title>' + title + '</title>')
   expect(html).to.contain('<meta name="description" content="' + description + '" />')
   expect(html).to.contain('<style class="custom-css-style">' + css + '</style>')
 
-  const htmlConfig: HTMLServerConfig = omit(config, 'signup')
+  const htmlConfig: HTMLServerConfig = omit(config, [ 'signup' ])
   const configObjectString = JSON.stringify(htmlConfig)
   const configEscapedString = JSON.stringify(configObjectString)
 
@@ -48,6 +53,10 @@ describe('Test a client controllers', function () {
   const watchPlaylistBasePaths = [ '/videos/watch/playlist/', '/w/p/' ]
 
   let videoIds: (string | number)[] = []
+  let privateVideoId: string
+  let internalVideoId: string
+  let unlistedVideoId: string
+
   let playlistIds: (string | number)[] = []
 
   before(async function () {
@@ -66,7 +75,7 @@ describe('Test a client controllers', function () {
       attributes: { description: channelDescription }
     })
 
-    // Video
+    // Public video
 
     {
       const attributes = { name: videoName, description: videoDescription }
@@ -78,6 +87,12 @@ describe('Test a client controllers', function () {
       const video = data[0]
       servers[0].store.video = video
       videoIds = [ video.id, video.uuid, video.shortUUID ]
+    }
+
+    {
+      ({ uuid: privateVideoId } = await servers[0].videos.quickUpload({ name: 'private', privacy: VideoPrivacy.PRIVATE }));
+      ({ uuid: unlistedVideoId } = await servers[0].videos.quickUpload({ name: 'unlisted', privacy: VideoPrivacy.UNLISTED }));
+      ({ uuid: internalVideoId } = await servers[0].videos.quickUpload({ name: 'internal', privacy: VideoPrivacy.INTERNAL }))
     }
 
     // Playlist
@@ -119,11 +134,9 @@ describe('Test a client controllers', function () {
             expectedStatus: HttpStatusCode.OK_200
           })
 
-          const port = servers[0].port
-
-          const expectedLink = '<link rel="alternate" type="application/json+oembed" href="http://localhost:' + port + '/services/oembed?' +
-            `url=http%3A%2F%2Flocalhost%3A${port}%2Fw%2F${servers[0].store.video.shortUUID}" ` +
-            `title="${servers[0].store.video.name}" />`
+          const expectedLink = `<link rel="alternate" type="application/json+oembed" href="${servers[0].url}/services/oembed?` +
+          `url=http%3A%2F%2F${servers[0].hostname}%3A${servers[0].port}%2Fw%2F${servers[0].store.video.shortUUID}" ` +
+          `title="${servers[0].store.video.name}" />`
 
           expect(res.text).to.contain(expectedLink)
         }
@@ -140,10 +153,8 @@ describe('Test a client controllers', function () {
             expectedStatus: HttpStatusCode.OK_200
           })
 
-          const port = servers[0].port
-
-          const expectedLink = '<link rel="alternate" type="application/json+oembed" href="http://localhost:' + port + '/services/oembed?' +
-            `url=http%3A%2F%2Flocalhost%3A${port}%2Fw%2Fp%2F${playlist.shortUUID}" ` +
+          const expectedLink = `<link rel="alternate" type="application/json+oembed" href="${servers[0].url}/services/oembed?` +
+            `url=http%3A%2F%2F${servers[0].hostname}%3A${servers[0].port}%2Fw%2Fp%2F${playlist.shortUUID}" ` +
             `title="${playlistName}" />`
 
           expect(res.text).to.contain(expectedLink)
@@ -466,7 +477,7 @@ describe('Test a client controllers', function () {
       }
     })
 
-    it('Should add noindex meta tag for remote accounts', async function () {
+    it('Should add noindex meta tag for remote channels', async function () {
       const handle = 'root_channel@' + servers[0].host
       const paths = [ '/video-channels/', '/c/', '/@' ]
 
@@ -480,6 +491,36 @@ describe('Test a client controllers', function () {
           const { text } = await makeHTMLRequest(servers[0].url, path + handle)
           expect(text).to.not.contain('<meta name="robots" content="noindex" />')
         }
+      }
+    })
+
+    it('Should not display internal/private video', async function () {
+      for (const basePath of watchVideoBasePaths) {
+        for (const id of [ privateVideoId, internalVideoId ]) {
+          const res = await makeGetRequest({
+            url: servers[0].url,
+            path: basePath + id,
+            accept: 'text/html',
+            expectedStatus: HttpStatusCode.NOT_FOUND_404
+          })
+
+          expect(res.text).to.not.contain('internal')
+          expect(res.text).to.not.contain('private')
+        }
+      }
+    })
+
+    it('Should add noindex meta tag for unlisted video', async function () {
+      for (const basePath of watchVideoBasePaths) {
+        const res = await makeGetRequest({
+          url: servers[0].url,
+          path: basePath + unlistedVideoId,
+          accept: 'text/html',
+          expectedStatus: HttpStatusCode.OK_200
+        })
+
+        expect(res.text).to.contain('unlisted')
+        expect(res.text).to.contain('<meta name="robots" content="noindex" />')
       }
     })
   })

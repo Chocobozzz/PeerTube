@@ -15,3 +15,7 @@
 .abuse-details-links {
   @include disable-default-a-behaviour;
 }
+
+my-global-icon[iconName=flag] {
+  width: 15px;
+}

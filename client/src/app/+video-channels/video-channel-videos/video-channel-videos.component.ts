@@ -1,16 +1,16 @@
 import { Subscription } from 'rxjs'
 import { first } from 'rxjs/operators'
-import { Component, OnDestroy, OnInit } from '@angular/core'
-import { ComponentPaginationLight, DisableForReuseHook, ScreenService } from '@app/core'
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
+import { ComponentPaginationLight, DisableForReuseHook, HooksService, ScreenService } from '@app/core'
 import { VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
 import { MiniatureDisplayOptions, VideoFilters } from '@app/shared/shared-video-miniature'
-import { VideoSortField } from '@shared/models/videos'
+import { Video, VideoSortField } from '@shared/models'
 
 @Component({
   selector: 'my-video-channel-videos',
   templateUrl: './video-channel-videos.component.html'
 })
-export class VideoChannelVideosComponent implements OnInit, OnDestroy, DisableForReuseHook {
+export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDestroy, DisableForReuseHook {
   getVideosObservableFunction = this.getVideosObservable.bind(this)
   getSyndicationItemsFunction = this.getSyndicationItems.bind(this)
 
@@ -36,7 +36,8 @@ export class VideoChannelVideosComponent implements OnInit, OnDestroy, DisableFo
   constructor (
     private screenService: ScreenService,
     private videoChannelService: VideoChannelService,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private hooks: HooksService
   ) {
   }
 
@@ -45,7 +46,13 @@ export class VideoChannelVideosComponent implements OnInit, OnDestroy, DisableFo
     this.videoChannelService.videoChannelLoaded.pipe(first())
       .subscribe(videoChannel => {
         this.videoChannel = videoChannel
+
+        this.hooks.runAction('action:video-channel-videos.video-channel.loaded', 'video-channel', { videoChannel })
       })
+  }
+
+  ngAfterViewInit () {
+    this.hooks.runAction('action:video-channel-videos.init', 'video-channel')
   }
 
   ngOnDestroy () {
@@ -78,5 +85,9 @@ export class VideoChannelVideosComponent implements OnInit, OnDestroy, DisableFo
 
   enabledForReuse () {
     this.disabled = false
+  }
+
+  onVideosLoaded (videos: Video[]) {
+    this.hooks.runAction('action:video-channel-videos.videos.loaded', 'video-channel', { videos })
   }
 }

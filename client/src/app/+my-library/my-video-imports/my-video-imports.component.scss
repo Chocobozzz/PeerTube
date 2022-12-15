@@ -8,3 +8,9 @@ pre {
 .video-import-error {
   color: #ff0000;
 }
+
+.button-link {
+  @include peertube-button-link;
+  @include grey-button;
+  @include button-with-icon(18px, 3px, -1px);
+}

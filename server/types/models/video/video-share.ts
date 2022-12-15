@@ -1,4 +1,4 @@
-import { PickWith } from '@shared/core-utils'
+import { PickWith } from '@shared/typescript-utils'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { MActorDefault } from '../actor'
 import { MVideo } from './video'

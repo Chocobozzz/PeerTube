@@ -1,19 +1,30 @@
-<h1>
-  <my-global-icon iconName="cloud-download" aria-hidden="true"></my-global-icon>
-  <ng-container i18n>My imports</ng-container>
+<h1 class="d-flex justify-content-between">
+  <span>
+    <my-global-icon iconName="cloud-download" aria-hidden="true"></my-global-icon>
+    <ng-container i18n>My imports</ng-container>
+  </span>
+
+  <a routerLink="/my-library/video-channel-syncs" class="button-link">
+    <my-global-icon iconName="repeat" aria-hidden="true"></my-global-icon>
+    <ng-container i18n>My synchronizations</ng-container>
+  </a>
 </h1>
 
+<div class="mb-4 d-flex justify-content-between">
+  <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+</div>
+
 <p-table
-  [value]="videoImports" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
+  [value]="videoImports" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
+  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" dataKey="id"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} imports"
-  (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
+  [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 40px;"></th>
-      <th style="width: 70px">Action</th>
+      <th style="width: 200px">Action</th>
       <th style="width: 45%" i18n>Target</th>
       <th style="width: 55%" i18n>Video</th>
       <th style="width: 150px" i18n>State</th>
@@ -24,12 +35,13 @@
   <ng-template pTemplate="body" let-expanded="expanded" let-videoImport>
     <tr>
       <td class="expand-cell" [pRowToggler]="videoImport">
-        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
+        <my-table-expander-icon *ngIf="videoImport.error" [expanded]="expanded"></my-table-expander-icon>
       </td>
 
       <td class="action-cell">
-        <my-edit-button *ngIf="isVideoImportSuccess(videoImport) && videoImport.video"
-          [routerLink]="getEditVideoUrl(videoImport.video)"></my-edit-button>
+        <my-button *ngIf="isVideoImportPending(videoImport)" i18n-label label="Cancel" icon="no" (click)="cancelImport(videoImport)"></my-button>
+        <my-delete-button *ngIf="isVideoImportFailed(videoImport) || isVideoImportCancelled(videoImport) || !videoImport.video" (click)="deleteImport(videoImport)"></my-delete-button>
+        <my-edit-button *ngIf="isVideoImportSuccess(videoImport) && videoImport.video" [routerLink]="getEditVideoUrl(videoImport.video)"></my-edit-button>
       </td>
 
       <td>
@@ -49,7 +61,7 @@
       </td>
 
       <td>
-        <span class="badge" [ngClass]="getVideoImportStateClass(videoImport.state.id)">
+        <span class="pt-badge" [ngClass]="getVideoImportStateClass(videoImport.state.id)">
           {{ videoImport.state.label }}
         </span>
       </td>

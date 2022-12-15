@@ -1,4 +1,3 @@
-import { values } from 'lodash'
 import { col, FindOptions, fn, literal, Op, QueryTypes, where, WhereOptions } from 'sequelize'
 import {
   AfterDestroy,
@@ -22,18 +21,18 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { TokensCache } from '@server/lib/auth/tokens-cache'
+import { LiveQuotaStore } from '@server/lib/live'
 import {
   MMyUserFormattable,
   MUser,
   MUserDefault,
   MUserFormattable,
   MUserNotifSettingChannelDefault,
-  MUserWithNotificationSetting,
-  MVideoWithRights
+  MUserWithNotificationSetting
 } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { hasUserRight, USER_ROLE_LABELS } from '../../../shared/core-utils/users'
-import { AbuseState, MyUser, UserRight, VideoPlaylistType, VideoPrivacy } from '../../../shared/models'
+import { AbuseState, MyUser, UserRight, VideoPlaylistType } from '../../../shared/models'
 import { User, UserRole } from '../../../shared/models/users'
 import { UserAdminFlag } from '../../../shared/models/users/user-flag.model'
 import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
@@ -48,14 +47,13 @@ import {
   isUserEmailVerifiedValid,
   isUserNoModal,
   isUserNSFWPolicyValid,
+  isUserP2PEnabledValid,
   isUserPasswordValid,
   isUserRoleValid,
-  isUserUsernameValid,
   isUserVideoLanguages,
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
-  isUserVideosHistoryEnabledValid,
-  isUserWebTorrentEnabledValid
+  isUserVideosHistoryEnabledValid
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { DEFAULT_USER_THEME_NAME, NSFW_POLICY_TYPES } from '../../initializers/constants'
@@ -65,17 +63,19 @@ import { ActorModel } from '../actor/actor'
 import { ActorFollowModel } from '../actor/actor-follow'
 import { ActorImageModel } from '../actor/actor-image'
 import { OAuthTokenModel } from '../oauth/oauth-token'
-import { getSort, throwIfNotValid } from '../utils'
+import { getAdminUsersSort, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoImportModel } from '../video/video-import'
 import { VideoLiveModel } from '../video/video-live'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { UserNotificationSettingModel } from './user-notification-setting'
+import { forceNumber } from '@shared/core-utils'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',
   WITH_VIDEOCHANNELS = 'WITH_VIDEOCHANNELS',
+  WITH_QUOTA = 'WITH_QUOTA',
   WITH_STATS = 'WITH_STATS'
 }
 
@@ -106,7 +106,7 @@ enum ScopeNames {
                 include: [
                   {
                     model: ActorImageModel,
-                    as: 'Banner',
+                    as: 'Banners',
                     required: false
                   }
                 ]
@@ -153,7 +153,7 @@ enum ScopeNames {
       }
     ]
   },
-  [ScopeNames.WITH_STATS]: {
+  [ScopeNames.WITH_QUOTA]: {
     attributes: {
       include: [
         [
@@ -161,12 +161,31 @@ enum ScopeNames {
             '(' +
               UserModel.generateUserQuotaBaseSQL({
                 withSelect: false,
-                whereUserId: '"UserModel"."id"'
+                whereUserId: '"UserModel"."id"',
+                daily: false
               }) +
             ')'
           ),
           'videoQuotaUsed'
         ],
+        [
+          literal(
+            '(' +
+              UserModel.generateUserQuotaBaseSQL({
+                withSelect: false,
+                whereUserId: '"UserModel"."id"',
+                daily: true
+              }) +
+            ')'
+          ),
+          'videoQuotaUsedDaily'
+        ]
+      ]
+    }
+  },
+  [ScopeNames.WITH_STATS]: {
+    attributes: {
+      include: [
         [
           literal(
             '(' +
@@ -241,7 +260,6 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   password: string
 
   @AllowNull(false)
-  @Is('UserUsername', value => throwIfNotValid(value, isUserUsernameValid, 'user name'))
   @Column
   username: string
 
@@ -263,14 +281,13 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
   @AllowNull(false)
   @Is('UserNSFWPolicy', value => throwIfNotValid(value, isUserNSFWPolicyValid, 'NSFW policy'))
-  @Column(DataType.ENUM(...values(NSFW_POLICY_TYPES)))
+  @Column(DataType.ENUM(...Object.values(NSFW_POLICY_TYPES)))
   nsfwPolicy: NSFWPolicyType
 
   @AllowNull(false)
-  @Default(true)
-  @Is('UserWebTorrentEnabled', value => throwIfNotValid(value, isUserWebTorrentEnabledValid, 'WebTorrent enabled'))
+  @Is('p2pEnabled', value => throwIfNotValid(value, isUserP2PEnabledValid, 'P2P enabled'))
   @Column
-  webTorrentEnabled: boolean
+  p2pEnabled: boolean
 
   @AllowNull(false)
   @Default(true)
@@ -392,6 +409,11 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   @Column
   isEmailPublic: boolean
 
+  @AllowNull(true)
+  @Default(null)
+  @Column
+  otpSecret: string
+
   @CreatedAt
   createdAt: Date
 
@@ -446,7 +468,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
     return this.count()
   }
 
-  static listForApi (parameters: {
+  static listForAdminApi (parameters: {
     start: number
     count: number
     sort: string
@@ -474,40 +496,20 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
     }
 
     if (blocked !== undefined) {
-      Object.assign(where, {
-        blocked: blocked
-      })
+      Object.assign(where, { blocked })
     }
 
     const query: FindOptions = {
-      attributes: {
-        include: [
-          [
-            literal(
-              '(' +
-                UserModel.generateUserQuotaBaseSQL({
-                  withSelect: false,
-                  whereUserId: '"UserModel"."id"'
-                }) +
-              ')'
-            ),
-            'videoQuotaUsed'
-          ]
-        ]
-      },
       offset: start,
       limit: count,
-      order: getSort(sort),
+      order: getAdminUsersSort(sort),
       where
     }
 
-    return UserModel.findAndCountAll(query)
-                    .then(({ rows, count }) => {
-                      return {
-                        data: rows,
-                        total: count
-                      }
-                    })
+    return Promise.all([
+      UserModel.unscoped().count(query),
+      UserModel.scope([ 'defaultScope', ScopeNames.WITH_QUOTA ]).findAll(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static listWithRight (right: UserRight): Promise<MUserDefault[]> {
@@ -588,7 +590,10 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
       ScopeNames.WITH_VIDEOCHANNELS
     ]
 
-    if (withStats) scopes.push(ScopeNames.WITH_STATS)
+    if (withStats) {
+      scopes.push(ScopeNames.WITH_QUOTA)
+      scopes.push(ScopeNames.WITH_STATS)
+    }
 
     return UserModel.scope(scopes).findByPk(id)
   }
@@ -629,7 +634,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
     const query = {
       where: {
         [Op.or]: [
-          where(fn('lower', col('username')), fn('lower', username)),
+          where(fn('lower', col('username')), fn('lower', username) as any),
 
           { email }
         ]
@@ -769,10 +774,10 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   static generateUserQuotaBaseSQL (options: {
     whereUserId: '$userId' | '"UserModel"."id"'
     withSelect: boolean
-    where?: string
+    daily: boolean
   }) {
-    const andWhere = options.where
-      ? 'AND ' + options.where
+    const andWhere = options.daily === true
+      ? 'AND "video"."createdAt" > now() - interval \'24 hours\''
       : ''
 
     const videoChannelJoin = 'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
@@ -819,10 +824,10 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
         }
       }
 
-      return UserModel.count(query)
+      return UserModel.unscoped().count(query)
     }
 
-    const totalUsers = await UserModel.count()
+    const totalUsers = await UserModel.unscoped().count()
     const totalDailyActiveUsers = await getActiveUsers(1)
     const totalWeeklyActiveUsers = await getActiveUsers(7)
     const totalMonthlyActiveUsers = await getActiveUsers(30)
@@ -849,22 +854,6 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
     return UserModel.findAll(query)
                     .then(u => u.map(u => u.username))
-  }
-
-  canGetVideo (video: MVideoWithRights) {
-    const videoUserId = video.VideoChannel.Account.userId
-
-    if (video.isBlacklisted()) {
-      return videoUserId === this.id || this.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
-    }
-
-    if (video.privacy === VideoPrivacy.PRIVATE) {
-      return video.VideoChannel && videoUserId === this.id || this.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
-    }
-
-    if (video.privacy === VideoPrivacy.INTERNAL) return true
-
-    return false
   }
 
   hasRight (right: UserRight) {
@@ -898,38 +887,47 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
       emailVerified: this.emailVerified,
 
       nsfwPolicy: this.nsfwPolicy,
-      webTorrentEnabled: this.webTorrentEnabled,
+
+      // FIXME: deprecated in 4.1
+      webTorrentEnabled: this.p2pEnabled,
+      p2pEnabled: this.p2pEnabled,
+
       videosHistoryEnabled: this.videosHistoryEnabled,
       autoPlayVideo: this.autoPlayVideo,
       autoPlayNextVideo: this.autoPlayNextVideo,
       autoPlayNextVideoPlaylist: this.autoPlayNextVideoPlaylist,
       videoLanguages: this.videoLanguages,
 
-      role: this.role,
-      roleLabel: USER_ROLE_LABELS[this.role],
+      role: {
+        id: this.role,
+        label: USER_ROLE_LABELS[this.role]
+      },
 
       videoQuota: this.videoQuota,
       videoQuotaDaily: this.videoQuotaDaily,
+
       videoQuotaUsed: videoQuotaUsed !== undefined
-        ? parseInt(videoQuotaUsed + '', 10)
+        ? forceNumber(videoQuotaUsed) + LiveQuotaStore.Instance.getLiveQuotaOf(this.id)
         : undefined,
+
       videoQuotaUsedDaily: videoQuotaUsedDaily !== undefined
-        ? parseInt(videoQuotaUsedDaily + '', 10)
+        ? forceNumber(videoQuotaUsedDaily) + LiveQuotaStore.Instance.getLiveQuotaOf(this.id)
         : undefined,
+
       videosCount: videosCount !== undefined
-        ? parseInt(videosCount + '', 10)
+        ? forceNumber(videosCount)
         : undefined,
       abusesCount: abusesCount
-        ? parseInt(abusesCount, 10)
+        ? forceNumber(abusesCount)
         : undefined,
       abusesAcceptedCount: abusesAcceptedCount
-        ? parseInt(abusesAcceptedCount, 10)
+        ? forceNumber(abusesAcceptedCount)
         : undefined,
       abusesCreatedCount: abusesCreatedCount !== undefined
-        ? parseInt(abusesCreatedCount + '', 10)
+        ? forceNumber(abusesCreatedCount)
         : undefined,
       videoCommentsCount: videoCommentsCount !== undefined
-        ? parseInt(videoCommentsCount + '', 10)
+        ? forceNumber(videoCommentsCount)
         : undefined,
 
       noInstanceConfigWarningModal: this.noInstanceConfigWarningModal,
@@ -951,7 +949,9 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
 
       pluginAuth: this.pluginAuth,
 
-      lastLoginDate: this.lastLoginDate
+      lastLoginDate: this.lastLoginDate,
+
+      twoFactorEnabled: !!this.otpSecret
     }
 
     if (parameters.withAdminFlags) {

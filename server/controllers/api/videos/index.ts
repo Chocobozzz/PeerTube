@@ -1,7 +1,6 @@
 import express from 'express'
 import { pickCommonVideoQuery } from '@server/helpers/query'
 import { doJSONRequest } from '@server/helpers/requests'
-import { VideoViews } from '@server/lib/video-views'
 import { openapiOperationDoc } from '@server/middlewares/doc'
 import { getServerActor } from '@server/models/application/application'
 import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-format-utils'
@@ -13,7 +12,6 @@ import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { REMOTE_SCHEME, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { sendView } from '../../../lib/activitypub/send/send-view'
 import { JobQueue } from '../../../lib/job-queue'
 import { Hooks } from '../../../lib/plugins/hooks'
 import {
@@ -28,6 +26,7 @@ import {
   setDefaultVideosSort,
   videosCustomGetValidator,
   videosGetValidator,
+  videoSourceGetValidator,
   videosRemoveValidator,
   videosSortValidator
 } from '../../../middlewares'
@@ -40,26 +39,32 @@ import { videoImportsRouter } from './import'
 import { liveRouter } from './live'
 import { ownershipVideoRouter } from './ownership'
 import { rateVideoRouter } from './rate'
+import { statsRouter } from './stats'
+import { studioRouter } from './studio'
+import { tokenRouter } from './token'
 import { transcodingRouter } from './transcoding'
 import { updateRouter } from './update'
 import { uploadRouter } from './upload'
-import { watchingRouter } from './watching'
+import { viewRouter } from './view'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
 
 videosRouter.use('/', blacklistRouter)
+videosRouter.use('/', statsRouter)
 videosRouter.use('/', rateVideoRouter)
 videosRouter.use('/', videoCommentRouter)
+videosRouter.use('/', studioRouter)
 videosRouter.use('/', videoCaptionsRouter)
 videosRouter.use('/', videoImportsRouter)
 videosRouter.use('/', ownershipVideoRouter)
-videosRouter.use('/', watchingRouter)
+videosRouter.use('/', viewRouter)
 videosRouter.use('/', liveRouter)
 videosRouter.use('/', uploadRouter)
 videosRouter.use('/', updateRouter)
 videosRouter.use('/', filesRouter)
 videosRouter.use('/', transcodingRouter)
+videosRouter.use('/', tokenRouter)
 
 videosRouter.get('/categories',
   openapiOperationDoc({ operationId: 'getCategories' }),
@@ -89,22 +94,26 @@ videosRouter.get('/',
   asyncMiddleware(listVideos)
 )
 
+// TODO: remove, deprecated in 5.0 now we send the complete description in VideoDetails
 videosRouter.get('/:id/description',
   openapiOperationDoc({ operationId: 'getVideoDesc' }),
   asyncMiddleware(videosGetValidator),
   asyncMiddleware(getVideoDescription)
 )
+
+videosRouter.get('/:id/source',
+  openapiOperationDoc({ operationId: 'getVideoSource' }),
+  authenticate,
+  asyncMiddleware(videoSourceGetValidator),
+  getVideoSource
+)
+
 videosRouter.get('/:id',
   openapiOperationDoc({ operationId: 'getVideo' }),
   optionalAuthenticate,
   asyncMiddleware(videosCustomGetValidator('for-api')),
   asyncMiddleware(checkVideoFollowConstraints),
-  getVideo
-)
-videosRouter.post('/:id/views',
-  openapiOperationDoc({ operationId: 'addView' }),
-  asyncMiddleware(videosCustomGetValidator('only-video')),
-  asyncMiddleware(viewVideo)
+  asyncMiddleware(getVideo)
 )
 
 videosRouter.delete('/:id',
@@ -138,30 +147,17 @@ function listVideoPrivacies (_req: express.Request, res: express.Response) {
   res.json(VIDEO_PRIVACIES)
 }
 
-function getVideo (_req: express.Request, res: express.Response) {
-  const video = res.locals.videoAPI
+async function getVideo (_req: express.Request, res: express.Response) {
+  const videoId = res.locals.videoAPI.id
+  const userId = res.locals.oauth?.token.User.id
+
+  const video = await Hooks.wrapObject(res.locals.videoAPI, 'filter:api.video.get.result', { id: videoId, userId })
 
   if (video.isOutdated()) {
-    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: video.url } })
+    JobQueue.Instance.createJobAsync({ type: 'activitypub-refresher', payload: { type: 'video', url: video.url } })
   }
 
   return res.json(video.toFormattedDetailsJSON())
-}
-
-async function viewVideo (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
-
-  const ip = req.ip
-  const success = await VideoViews.Instance.processView({ video, ip })
-
-  if (success) {
-    const serverActor = await getServerActor()
-    await sendView(serverActor, video, undefined)
-
-    Hooks.runAction('action:api.video.viewed', { video: video, ip, req, res })
-  }
-
-  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function getVideoDescription (req: express.Request, res: express.Response) {
@@ -172,6 +168,10 @@ async function getVideoDescription (req: express.Request, res: express.Response)
     : await fetchRemoteVideoDescription(videoInstance)
 
   return res.json({ description })
+}
+
+function getVideoSource (req: express.Request, res: express.Response) {
+  return res.json(res.locals.videoSource.toFormattedJSON())
 }
 
 async function listVideos (req: express.Request, res: express.Response) {

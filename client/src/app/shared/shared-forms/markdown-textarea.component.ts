@@ -24,10 +24,7 @@ import { Video } from '@shared/models'
 export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   @Input() content = ''
 
-  @Input() classes: string[] | { [klass: string]: any[] | any } = []
-
-  @Input() textareaMaxWidth = '100%'
-  @Input() textareaHeight = '150px'
+  @Input() formError: string
 
   @Input() truncate: number
 
@@ -93,6 +90,8 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   }
 
   onMaximizeClick () {
+    if (this.disabled) return
+
     this.isMaximized = !this.isMaximized
 
     // Make sure textarea have the focus
@@ -145,9 +144,9 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
 
       html = result
     } else if (this.markdownType === 'text') {
-      html = await this.markdownService.textMarkdownToHTML(text)
+      html = await this.markdownService.textMarkdownToHTML({ markdown: text })
     } else {
-      html = await this.markdownService.enhancedMarkdownToHTML(text)
+      html = await this.markdownService.enhancedMarkdownToHTML({ markdown: text })
     }
 
     if (this.markdownVideo) {

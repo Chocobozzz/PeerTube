@@ -1,18 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
 import { expect } from 'chai'
+import { wait } from '@shared/core-utils'
+import { Video } from '@shared/models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
   killallServers,
-  MockBlocklist,
   PeerTubeServer,
-  setAccessTokensToServers,
-  wait
-} from '@shared/extra-utils'
-import { Video } from '@shared/models'
+  setAccessTokensToServers
+} from '@shared/server-commands'
+import { MockBlocklist } from '../shared'
 
 async function check (server: PeerTubeServer, videoUUID: string, exists = true) {
   const { data } = await server.videos.list()
@@ -65,7 +64,7 @@ describe('Official plugin auto-block videos', function () {
     await servers[0].plugins.updateSettings({
       npmName: 'peertube-plugin-auto-block-videos',
       settings: {
-        'blocklist-urls': `http://localhost:${port}/blocklist`,
+        'blocklist-urls': `http://127.0.0.1:${port}/blocklist`,
         'check-seconds-interval': 1
       }
     })

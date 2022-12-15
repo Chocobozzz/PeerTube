@@ -1,3 +1,4 @@
+import { afterLocalSuite, beforeLocalSuite, beforeLocalSession } from './src/utils'
 import { config as mainConfig } from './wdio.main.conf'
 
 const prefs = {
@@ -21,12 +22,25 @@ module.exports = {
         browserName: 'chrome',
         acceptInsecureCerts: true,
         'goog:chromeOptions': {
-          args: [ '--headless', '--disable-gpu', '--window-size=1280,1024' ],
+          args: [ '--disable-gpu', '--window-size=1280,1024' ],
           prefs
         }
       }
+      // {
+      //   browserName: 'firefox',
+      //   'moz:firefoxOptions': {
+      //     binary: '/usr/bin/firefox-developer-edition',
+      //     args: [ '--headless', '--window-size=1280,1024' ],
+
+      //     prefs
+      //   }
+      // }
     ],
 
-    services: [ 'chromedriver' ]
+    services: [ 'chromedriver', 'geckodriver' ],
+
+    beforeSession: beforeLocalSession,
+    beforeSuite: beforeLocalSuite,
+    afterSuite: afterLocalSuite
   } as WebdriverIO.Config
 }

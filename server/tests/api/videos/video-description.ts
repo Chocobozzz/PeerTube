@@ -1,16 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { cleanupTests, createMultipleServers, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
-
-const expect = chai.expect
+import { expect } from 'chai'
+import {
+  cleanupTests,
+  createMultipleServers,
+  doubleFollow,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  waitJobs
+} from '@shared/server-commands'
 
 describe('Test video description', function () {
   let servers: PeerTubeServer[] = []
   let videoUUID = ''
   let videoId: number
+
   const longDescription = 'my super description for server 1'.repeat(50)
+
+  // 30 characters * 6 -> 240 characters
+  const truncatedDescription = 'my super description for server 1'.repeat(7) + 'my super descrip...'
 
   before(async function () {
     this.timeout(40000)
@@ -26,7 +34,7 @@ describe('Test video description', function () {
   })
 
   it('Should upload video with long description', async function () {
-    this.timeout(10000)
+    this.timeout(30000)
 
     const attributes = {
       description: longDescription
@@ -41,15 +49,22 @@ describe('Test video description', function () {
     videoUUID = data[0].uuid
   })
 
-  it('Should have a truncated description on each server', async function () {
+  it('Should have a truncated description on each server when listing videos', async function () {
+    for (const server of servers) {
+      const { data } = await server.videos.list()
+      const video = data.find(v => v.uuid === videoUUID)
+
+      expect(video.description).to.equal(truncatedDescription)
+      expect(video.truncatedDescription).to.equal(truncatedDescription)
+    }
+  })
+
+  it('Should not have a truncated description on each server when getting videos', async function () {
     for (const server of servers) {
       const video = await server.videos.get({ id: videoUUID })
 
-      // 30 characters * 6 -> 240 characters
-      const truncatedDescription = 'my super description for server 1'.repeat(7) +
-        'my super descrip...'
-
-      expect(video.description).to.equal(truncatedDescription)
+      expect(video.description).to.equal(longDescription)
+      expect(video.truncatedDescription).to.equal(truncatedDescription)
     }
   })
 

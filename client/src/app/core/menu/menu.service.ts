@@ -7,6 +7,7 @@ import { ScreenService } from '../wrappers'
 
 export type MenuLink = {
   icon: GlobalIconName
+  iconClass?: string
 
   label: string
   // Used by the left menu for example
@@ -71,6 +72,14 @@ export class MenuService {
 
     if (userCanSeeVideosLink) {
       links.push({
+        path: '/my-library/video-channels',
+        icon: 'channel' as GlobalIconName,
+        iconClass: 'channel-icon',
+        shortLabel: $localize`Channels`,
+        label: $localize`My channels`
+      })
+
+      links.push({
         path: '/my-library/videos',
         icon: 'videos' as GlobalIconName,
         shortLabel: $localize`Videos`,
@@ -132,7 +141,7 @@ export class MenuService {
         path: '/videos/trending'
       },
       {
-        icon: 'recently-added' as 'recently-added',
+        icon: 'add' as 'add',
         label: $localize`Recently added videos`,
         shortLabel: $localize`Recently added`,
         path: '/videos/recently-added'

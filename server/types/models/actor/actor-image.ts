@@ -1,4 +1,4 @@
-import { FunctionProperties } from '@shared/core-utils'
+import { FunctionProperties } from '@shared/typescript-utils'
 import { ActorImageModel } from '../../../models/actor/actor-image'
 
 export type MActorImage = ActorImageModel
@@ -9,4 +9,4 @@ export type MActorImage = ActorImageModel
 
 export type MActorImageFormattable =
   FunctionProperties<MActorImage> &
-  Pick<MActorImage, 'filename' | 'createdAt' | 'updatedAt'>
+  Pick<MActorImage, 'width' | 'filename' | 'createdAt' | 'updatedAt'>

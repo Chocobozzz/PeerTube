@@ -1,0 +1,18 @@
+name: 📝 Documentation Issue
+description: Use this template for documentation-related issues
+labels: [ 'Component: Documentation :books:' ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please search among past open/closed issues for a similar one beforehand:
+          - https://github.com/Chocobozzz/PeerTube/issues?q=
+          - https://framacolibri.org/c/peertube
+
+  - type: textarea
+    attributes:
+      label: Describe the desired information/correction
+      description: |
+        Are you up to submit a pull request? Chances are, only a small edit is required, so give it a try:
+          * Click "Edit this page" if on https://docs.joinpeertube.org
+          * Edit https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/openapi.yaml if on https://docs.joinpeertube.org/api-rest-reference.html

@@ -1,12 +1,9 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import { program } from 'commander'
 import { resolve } from 'path'
-import { VideoModel } from '../server/models/video/video'
+import { isUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
 import { initDatabaseModels } from '../server/initializers/database'
 import { JobQueue } from '../server/lib/job-queue'
-import { isUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc'
+import { VideoModel } from '../server/models/video/video'
 
 program
   .option('-v, --video [videoUUID]', 'Video UUID')
@@ -47,7 +44,7 @@ async function run () {
     filePath: resolve(options.import)
   }
 
-  JobQueue.Instance.init(true)
-  await JobQueue.Instance.createJobWithPromise({ type: 'video-file-import', payload: dataInput })
+  JobQueue.Instance.init()
+  await JobQueue.Instance.createJob({ type: 'video-file-import', payload: dataInput })
   console.log('Import job for video %s created.', video.uuid)
 }

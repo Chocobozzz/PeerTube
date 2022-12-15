@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
+import { expect } from 'chai'
 import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
@@ -9,10 +8,10 @@ import {
   CustomPagesCommand,
   killallServers,
   PeerTubeServer,
-  setAccessTokensToServers
-} from '../../../../shared/extra-utils/index'
-
-const expect = chai.expect
+  setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar
+} from '../../../../shared/server-commands/index'
 
 async function getHomepageState (server: PeerTubeServer) {
   const config = await server.config.getConfig()
@@ -29,6 +28,8 @@ describe('Test instance homepage actions', function () {
 
     server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
+    await setDefaultChannelAvatar(server)
+    await setDefaultAccountAvatar(server)
 
     command = server.customPage
   })

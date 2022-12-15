@@ -13,7 +13,7 @@ import { MActorFull, MActorSignature } from '../../../types/models'
 import { APActorUpdater } from '../actors/updater'
 import { createOrUpdateCacheFile } from '../cache-file'
 import { createOrUpdateVideoPlaylist } from '../playlists'
-import { forwardVideoRelatedActivity } from '../send/utils'
+import { forwardVideoRelatedActivity } from '../send/shared/send-utils'
 import { APVideoUpdater, getOrCreateAPVideo } from '../videos'
 
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate>) {

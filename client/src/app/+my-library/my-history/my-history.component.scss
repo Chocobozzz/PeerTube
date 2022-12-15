@@ -6,7 +6,6 @@
   justify-content: center;
   margin-top: 50px;
   font-weight: $font-semibold;
-  font-size: 16px;
 }
 
 .top-buttons {
@@ -29,11 +28,11 @@
 
     grid-column: 3;
     display: flex;
+    align-items: center;
 
     label {
       margin: 0 0 0 5px;
       color: var(--greyForegroundColor);
-      font-size: 15px;
       font-weight: $font-semibold;
     }
   }
@@ -44,13 +43,16 @@
     @include button-with-icon;
 
     grid-column: 4;
-
-    font-size: 15px;
   }
 }
 
 .video {
   @include row-blocks($column-responsive: false);
+}
+
+.action-button {
+  display: flex;
+  align-self: flex-end;
 }
 
 @media screen and (max-width: $small-view) {

@@ -13,6 +13,10 @@ function getAbsoluteAPIUrl () {
   return absoluteAPIUrl
 }
 
+function getAPIHost () {
+  return new URL(getAbsoluteAPIUrl()).host
+}
+
 function getAbsoluteEmbedUrl () {
   let absoluteEmbedUrl = environment.originServerUrl
   if (!absoluteEmbedUrl) {
@@ -50,7 +54,9 @@ function objectToFormData (obj: any, form?: FormData, namespace?: string) {
 }
 
 export {
-  objectToFormData,
   getAbsoluteAPIUrl,
-  getAbsoluteEmbedUrl
+  getAPIHost,
+  getAbsoluteEmbedUrl,
+
+  objectToFormData
 }

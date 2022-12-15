@@ -1,5 +1,4 @@
-import { uniq } from 'lodash'
-import { FindAndCountOptions, FindOptions, Op, Order, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
+import { FindOptions, Op, Order, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -14,10 +13,12 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { exists } from '@server/helpers/custom-validators/misc'
 import { getServerActor } from '@server/models/application/application'
 import { MAccount, MAccountId, MUserAccountId } from '@server/types/models'
-import { AttributesOnly } from '@shared/core-utils'
+import { uniqify } from '@shared/core-utils'
 import { VideoPrivacy } from '@shared/models'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { ActivityTagObject, ActivityTombstoneObject } from '../../../shared/models/activitypub/objects/common-objects'
 import { VideoCommentObject } from '../../../shared/models/activitypub/objects/video-comment-object'
 import { VideoComment, VideoCommentAdmin } from '../../../shared/models/videos/comment/video-comment.model'
@@ -312,12 +313,13 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
     count: number
     sort: string
 
+    onLocalVideo?: boolean
     isLocal?: boolean
     search?: string
     searchAccount?: string
     searchVideo?: string
   }) {
-    const { start, count, sort, isLocal, search, searchAccount, searchVideo } = parameters
+    const { start, count, sort, isLocal, search, searchAccount, searchVideo, onLocalVideo } = parameters
 
     const where: WhereOptions = {
       deletedAt: null
@@ -363,40 +365,47 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
       Object.assign(whereVideo, searchAttribute(searchVideo, 'name'))
     }
 
-    const query: FindAndCountOptions = {
-      offset: start,
-      limit: count,
-      order: getCommentSort(sort),
-      where,
-      include: [
-        {
-          model: AccountModel.unscoped(),
-          required: true,
-          where: whereAccount,
-          include: [
-            {
-              attributes: {
-                exclude: unusedActorAttributesForAPI
-              },
-              model: ActorModel, // Default scope includes avatar and server
-              required: true,
-              where: whereActor
-            }
-          ]
-        },
-        {
-          model: VideoModel.unscoped(),
-          required: true,
-          where: whereVideo
-        }
-      ]
+    if (exists(onLocalVideo)) {
+      Object.assign(whereVideo, { remote: !onLocalVideo })
     }
 
-    return VideoCommentModel
-      .findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return { total: count, data: rows }
-      })
+    const getQuery = (forCount: boolean) => {
+      return {
+        offset: start,
+        limit: count,
+        order: getCommentSort(sort),
+        where,
+        include: [
+          {
+            model: AccountModel.unscoped(),
+            required: true,
+            where: whereAccount,
+            include: [
+              {
+                attributes: {
+                  exclude: unusedActorAttributesForAPI
+                },
+                model: forCount === true
+                  ? ActorModel.unscoped() // Default scope includes avatar and server
+                  : ActorModel,
+                required: true,
+                where: whereActor
+              }
+            ]
+          },
+          {
+            model: VideoModel.unscoped(),
+            required: true,
+            where: whereVideo
+          }
+        ]
+      }
+    }
+
+    return Promise.all([
+      VideoCommentModel.count(getQuery(true)),
+      VideoCommentModel.findAll(getQuery(false))
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static async listThreadsForApi (parameters: {
@@ -443,14 +452,20 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
       }
     }
 
-    const scopesList: (string | ScopeOptions)[] = [
+    const findScopesList: (string | ScopeOptions)[] = [
       ScopeNames.WITH_ACCOUNT_FOR_API,
       {
         method: [ ScopeNames.ATTRIBUTES_FOR_API, blockerAccountIds ]
       }
     ]
 
-    const queryCount = {
+    const countScopesList: ScopeOptions[] = [
+      {
+        method: [ ScopeNames.ATTRIBUTES_FOR_API, blockerAccountIds ]
+      }
+    ]
+
+    const notDeletedQueryCount = {
       where: {
         videoId,
         deletedAt: null,
@@ -459,9 +474,10 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
     }
 
     return Promise.all([
-      VideoCommentModel.scope(scopesList).findAndCountAll(queryList),
-      VideoCommentModel.count(queryCount)
-    ]).then(([ { rows, count }, totalNotDeletedComments ]) => {
+      VideoCommentModel.scope(findScopesList).findAll(queryList),
+      VideoCommentModel.scope(countScopesList).count(queryList),
+      VideoCommentModel.count(notDeletedQueryCount)
+    ]).then(([ rows, count, totalNotDeletedComments ]) => {
       return { total: count, data: rows, totalNotDeletedComments }
     })
   }
@@ -512,11 +528,10 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
       }
     ]
 
-    return VideoCommentModel.scope(scopes)
-      .findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return { total: count, data: rows }
-      })
+    return Promise.all([
+      VideoCommentModel.count(query),
+      VideoCommentModel.scope(scopes).findAll(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static listThreadParentComments (comment: MCommentId, t: Transaction, order: 'ASC' | 'DESC' = 'ASC'): Promise<MCommentOwner[]> {
@@ -565,7 +580,10 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
       transaction: t
     }
 
-    return VideoCommentModel.findAndCountAll<MComment>(query)
+    return Promise.all([
+      VideoCommentModel.count(query),
+      VideoCommentModel.findAll<MComment>(query)
+    ]).then(([ total, data ]) => ({ total, data }))
   }
 
   static async listForFeed (parameters: {
@@ -671,11 +689,11 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
     const totalLocalVideoComments = await VideoCommentModel.count({
       include: [
         {
-          model: AccountModel,
+          model: AccountModel.unscoped(),
           required: true,
           include: [
             {
-              model: ActorModel,
+              model: ActorModel.unscoped(),
               required: true,
               where: {
                 serverId: null
@@ -784,7 +802,7 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
       )
     }
 
-    return uniq(result)
+    return uniqify(result)
   }
 
   toFormattedJSON (this: MCommentFormattable) {
@@ -874,7 +892,10 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
     return {
       type: 'Note' as 'Note',
       id: this.url,
+
       content: this.text,
+      mediaType: 'text/markdown',
+
       inReplyTo,
       updated: this.updatedAt.toISOString(),
       published: this.createdAt.toISOString(),
@@ -898,7 +919,7 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
 
     if (isVideoOwned) {
       const videoOwnerAccount = await AccountModel.loadAccountIdFromVideo(videoId)
-      blockerAccountIds.push(videoOwnerAccount.id)
+      if (videoOwnerAccount) blockerAccountIds.push(videoOwnerAccount.id)
     }
 
     return blockerAccountIds

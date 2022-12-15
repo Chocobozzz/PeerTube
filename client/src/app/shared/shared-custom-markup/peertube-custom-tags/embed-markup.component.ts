@@ -1,6 +1,6 @@
-import { buildVideoOrPlaylistEmbed } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
 import { Component, ElementRef, Input, OnInit } from '@angular/core'
+import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
 import { buildPlaylistEmbedLink, buildVideoEmbedLink } from '@shared/core-utils'
 import { CustomMarkupComponent } from './shared'
 
@@ -21,6 +21,6 @@ export class EmbedMarkupComponent implements CustomMarkupComponent, OnInit {
       ? buildVideoEmbedLink({ uuid: this.uuid }, environment.originServerUrl)
       : buildPlaylistEmbedLink({ uuid: this.uuid }, environment.originServerUrl)
 
-    this.el.nativeElement.innerHTML = buildVideoOrPlaylistEmbed(link, this.uuid)
+    this.el.nativeElement.innerHTML = buildVideoOrPlaylistEmbed({ embedUrl: link, embedTitle: this.uuid })
   }
 }

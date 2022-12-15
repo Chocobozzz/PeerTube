@@ -1,6 +1,6 @@
 <div *ngIf="serverConfig" class="feature-table">
 
-  <table class="table" *ngIf="serverConfig">
+  <table *ngIf="serverConfig">
     <caption i18n>Features found on this instance</caption>
     <tr>
       <th i18n class="label" scope="row">PeerTube version</th>
@@ -106,15 +106,10 @@
       </td>
     </tr>
 
-
     <tr>
-      <th i18n class="label" colspan="2">Player</th>
-    </tr>
-
-    <tr>
-      <th i18n class="sub-label" scope="row">P2P enabled</th>
+      <th i18n class="sub-label" scope="row">Channel synchronization with other platforms (YouTube, Vimeo, ...)</th>
       <td>
-        <my-feature-boolean [value]="serverConfig.tracker.enabled"></my-feature-boolean>
+        <my-feature-boolean [value]="serverConfig.import.videoChannelSynchronization.enabled"></my-feature-boolean>
       </td>
     </tr>
 

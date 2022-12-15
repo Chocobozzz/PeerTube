@@ -7,8 +7,11 @@ export type EncoderOptionsBuilderParams = {
 
   resolution: VideoResolution
 
-  // Could be null for "merge audio" transcoding
-  fps?: number
+  // If PeerTube applies a filter, transcoding profile must not copy input stream
+  canCopyAudio: boolean
+  canCopyVideo: boolean
+
+  fps: number
 
   // Could be undefined if we could not get input bitrate (some RTMP streams for example)
   inputBitrate: number

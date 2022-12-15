@@ -1,9 +1,6 @@
-import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import { readdir, stat } from 'fs-extra'
 import { join } from 'path'
-import { root } from '@server/helpers/core-utils'
+import { root } from '@shared/core-utils'
 
 async function run () {
   const result = {

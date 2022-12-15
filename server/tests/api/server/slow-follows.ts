@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import 'mocha'
-import * as chai from 'chai'
-import { cleanupTests, createMultipleServers, doubleFollow, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/extra-utils'
+import { expect } from 'chai'
 import { Job } from '@shared/models'
-
-const expect = chai.expect
+import {
+  cleanupTests,
+  createMultipleServers,
+  doubleFollow,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  waitJobs
+} from '@shared/server-commands'
 
 describe('Test slow follows', function () {
   let servers: PeerTubeServer[] = []
@@ -13,7 +17,7 @@ describe('Test slow follows', function () {
   let afterFollows: Date
 
   before(async function () {
-    this.timeout(60000)
+    this.timeout(120000)
 
     servers = await createMultipleServers(3)
 

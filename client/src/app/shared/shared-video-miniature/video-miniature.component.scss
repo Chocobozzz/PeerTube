@@ -4,6 +4,14 @@
 
 $more-button-width: 40px;
 
+.chip {
+  @include chip;
+}
+
+.video-miniature {
+  font-size: 14px;
+}
+
 .video-miniature-name {
   @include miniature-name;
 }

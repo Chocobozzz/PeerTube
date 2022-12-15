@@ -20,7 +20,7 @@ function isSearchTargetValid (value: SearchTargetType) {
 
   const searchIndexConfig = CONFIG.SEARCH.SEARCH_INDEX
 
-  if (value === 'local' && (!searchIndexConfig.ENABLED || !searchIndexConfig.DISABLE_LOCAL_SEARCH)) return true
+  if (value === 'local') return true
 
   if (value === 'search-index' && searchIndexConfig.ENABLED) return true
 

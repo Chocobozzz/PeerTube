@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
-import { AuthService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
+import { AuthService, Notifier, ScreenService, ServerService } from '@app/core'
 import {
   USER_CHANNEL_NAME_VALIDATOR,
   USER_EMAIL_VALIDATOR,
@@ -12,7 +12,8 @@ import {
   USER_VIDEO_QUOTA_DAILY_VALIDATOR,
   USER_VIDEO_QUOTA_VALIDATOR
 } from '@app/shared/form-validators/user-validators'
-import { FormValidatorService } from '@app/shared/shared-forms'
+import { FormReactiveService } from '@app/shared/shared-forms'
+import { UserAdminService } from '@app/shared/shared-users'
 import { UserCreate, UserRole } from '@shared/models'
 import { UserEdit } from './user-edit'
 
@@ -26,13 +27,13 @@ export class UserCreateComponent extends UserEdit implements OnInit {
 
   constructor (
     protected serverService: ServerService,
-    protected formValidatorService: FormValidatorService,
+    protected formReactiveService: FormReactiveService,
     protected configService: ConfigService,
     protected screenService: ScreenService,
     protected auth: AuthService,
     private router: Router,
     private notifier: Notifier,
-    private userService: UserService
+    private userAdminService: UserAdminService
   ) {
     super()
 
@@ -71,7 +72,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     userCreate.videoQuota = parseInt(this.form.value['videoQuota'], 10)
     userCreate.videoQuotaDaily = parseInt(this.form.value['videoQuotaDaily'], 10)
 
-    this.userService.addUser(userCreate)
+    this.userAdminService.addUser(userCreate)
       .subscribe({
         next: () => {
           this.notifier.success($localize`User ${userCreate.username} created.`)
