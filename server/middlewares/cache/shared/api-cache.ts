@@ -43,7 +43,7 @@ export class ApiCache {
 
     return asyncMiddleware(
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        const key = Redis.Instance.getPrefix() + 'api-cache-' + req.originalUrl
+        const key = this.getCacheKey(req.originalUrl)
         const redis = Redis.Instance.getClient()
 
         if (!Redis.Instance.isConnected()) return this.makeResponseCacheable(res, next, key, duration)
@@ -62,9 +62,9 @@ export class ApiCache {
     )
   }
 
-  clearRoute (route: string) {
+  async clearRoute (route: string) {
     const key = this.getCacheKey(route)
-    this.clear(key)
+    return this.clear(key)
   }
 
   getCacheKey (route: string) {

@@ -302,8 +302,6 @@ class LiveManager {
       ...pick(options, [ 'streamingPlaylist', 'inputUrl', 'bitrate', 'ratio', 'fps', 'allResolutions', 'hasAudio' ])
     })
 
-    muxingSession.on('master-playlist-created', () => this.publishAndFederateLive(videoLive, localLTags))
-    
     muxingSession.on('live-ready', () => this.publishAndFederateLive(videoLive, localLTags))
 
     muxingSession.on('bad-socket-health', ({ videoId }) => {
@@ -373,7 +371,7 @@ class LiveManager {
       await wait(getLiveSegmentTime(live.latencyMode) * 1000 * VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION)
 
       // Clear cache for Podcast RSS feed when live stream starts
-      clearCacheRoute(`/feeds/videos.xml?videoChannelId=${video.channelId}&format=podcast`)
+      await clearCacheRoute(`/feeds/videos.xml?videoChannelId=${video.channelId}&format=podcast`)
 
       try {
         await federateVideoIfNeeded(video, false)
@@ -442,7 +440,7 @@ class LiveManager {
       await fullVideo.save()
 
       // Clear cache for Podcast RSS feed when live stream ends
-      clearCacheRoute(`/feeds/videos.xml?videoChannelId=${fullVideo.channelId}&format=podcast`)
+      await clearCacheRoute(`/feeds/videos.xml?videoChannelId=${fullVideo.channelId}&format=podcast`)
 
       PeerTubeSocket.Instance.sendVideoLiveNewState(fullVideo)
 

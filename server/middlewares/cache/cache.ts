@@ -20,10 +20,10 @@ function cacheRouteFactory (options: APICacheOptions) {
   return instance.buildMiddleware.bind(instance)
 }
 
-const clearCacheRoute = (target: string) => {
+async function clearCacheRoute (target: string) {
   const instance = new ApiCache(defaultOptions)
 
-  instance.clearRoute(target)
+  return instance.clearRoute(target)
 }
 
 // ---------------------------------------------------------------------------
