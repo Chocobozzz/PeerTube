@@ -177,6 +177,9 @@ export class VideosListCommonPageComponent implements OnInit, OnDestroy, Disable
       case 'best':
         return '-hot'
 
+      case 'name':
+        return 'name'
+
       default:
         return '-' + algorithm as VideoSortField
     }
