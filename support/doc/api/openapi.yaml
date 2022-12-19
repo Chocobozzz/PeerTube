@@ -8128,17 +8128,13 @@ components:
     NotificationSettingValue:
       type: integer
       description: >
-        Notification type
+        Notification type. One of the following values, or a sum of multiple values:
 
         - `0` NONE
 
         - `1` WEB
 
         - `2` EMAIL
-      enum:
-        - 0
-        - 1
-        - 2
     Notification:
       properties:
         id:

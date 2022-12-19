@@ -187,7 +187,10 @@ async function createObjectReadStream (options: {
 
   const response = await getClient().send(command)
 
-  return response.Body as Readable
+  return {
+    response,
+    stream: response.Body as Readable
+  }
 }
 
 // ---------------------------------------------------------------------------
