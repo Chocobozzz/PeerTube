@@ -153,8 +153,25 @@
   }
 
   .vjs-live-control {
-    line-height: $control-bar-height;
-    min-width: 4em;
+    padding: 5px 7px;
+    border-radius: 3px;
+    height: fit-content;
+    margin: auto 10px;
+    font-weight: bold;
+    max-width: fit-content;
+    opacity: 1 !important;
+    line-height: normal;
+    position: relative;
+    top: -1px;
+
+    &.synced-with-live-edge {
+      background: #d7281c;
+    }
+
+    &:not(.synced-with-live-edge) {
+      cursor: pointer;
+      background: #80807f;
+    }
   }
 
   .vjs-peertube {
