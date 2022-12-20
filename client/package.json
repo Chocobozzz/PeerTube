@@ -96,7 +96,7 @@
     "expect-webdriverio": "^3.4.0",
     "focus-visible": "^5.0.2",
     "geckodriver": "^3.2.0",
-    "hls.js": "1.2.7",
+    "hls.js": "1.2.9",
     "html-loader": "^4.1.0",
     "html-webpack-plugin": "^5.3.1",
     "https-browserify": "^1.0.0",
