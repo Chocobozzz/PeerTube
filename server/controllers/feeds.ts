@@ -285,8 +285,8 @@ function addVideosToFeed (feed: Feed, videos: VideoModel[]) {
       content: toSafeHtml(video.description),
       author: [
         {
-          name: video.VideoChannel.Account.getDisplayName(),
-          link: video.VideoChannel.Account.Actor.url
+          name: video.VideoChannel.getDisplayName(),
+          link: video.VideoChannel.Actor.url
         }
       ],
       date: video.publishedAt,

@@ -189,7 +189,7 @@ describe('Test syndication feeds', () => {
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(1)
         expect(jsonObj.items[0].title).to.equal('my super name for server 1')
-        expect(jsonObj.items[0].author.name).to.equal('root')
+        expect(jsonObj.items[0].author.name).to.equal('Main root channel')
       }
 
       {
@@ -197,7 +197,7 @@ describe('Test syndication feeds', () => {
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(1)
         expect(jsonObj.items[0].title).to.equal('user video')
-        expect(jsonObj.items[0].author.name).to.equal('john')
+        expect(jsonObj.items[0].author.name).to.equal('Main john channel')
       }
 
       for (const server of servers) {
@@ -223,7 +223,7 @@ describe('Test syndication feeds', () => {
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(1)
         expect(jsonObj.items[0].title).to.equal('my super name for server 1')
-        expect(jsonObj.items[0].author.name).to.equal('root')
+        expect(jsonObj.items[0].author.name).to.equal('Main root channel')
       }
 
       {
@@ -231,7 +231,7 @@ describe('Test syndication feeds', () => {
         const jsonObj = JSON.parse(json)
         expect(jsonObj.items.length).to.be.equal(1)
         expect(jsonObj.items[0].title).to.equal('user video')
-        expect(jsonObj.items[0].author.name).to.equal('john')
+        expect(jsonObj.items[0].author.name).to.equal('Main john channel')
       }
 
       for (const server of servers) {
