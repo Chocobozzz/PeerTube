@@ -250,7 +250,10 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
 
   registerHook({
     target: 'filter:api.download.video.allowed.result',
-    handler: (result, params) => {
+    handler: async (result, params) => {
+      const loggedInUser = await peertubeHelpers.user.getAuthUser(params.res)
+      if (loggedInUser) return { allowed: true }
+
       if (params && !params.streamingPlaylist && params.video.name.includes('bad file')) {
         return { allowed: false, errorMessage: 'Cao Cao' }
       }

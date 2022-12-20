@@ -245,7 +245,7 @@ function buildUserHelpers () {
     },
 
     getAuthUser: (res: express.Response) => {
-      const user = res.locals.oauth?.token?.User
+      const user = res.locals.oauth?.token?.User || res.locals.videoFileToken?.user
       if (!user) return undefined
 
       return UserModel.loadByIdFull(user.id)
