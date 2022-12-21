@@ -62,6 +62,9 @@ class PeerTubeLiveDisplay extends ClickableComponent {
     const hlsjs = this.getHLSJS()
     if (!hlsjs) return
 
+    // Not loaded yet
+    if (this.player().currentTime() === 0) return
+
     const isSync = Math.abs(this.player().currentTime() - hlsjs.liveSyncPosition) < 10
     this.updateSync(isSync)
   }
