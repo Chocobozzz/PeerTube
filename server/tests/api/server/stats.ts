@@ -131,6 +131,7 @@ describe('Test stats (excluding redundancy)', function () {
     {
       const data = await server.stats.get()
 
+      expect(data.totalLocalVideoChannels).to.equal(2)
       expect(data.totalLocalDailyActiveVideoChannels).to.equal(1)
       expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(1)
       expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(1)
@@ -146,6 +147,7 @@ describe('Test stats (excluding redundancy)', function () {
 
       const data = await server.stats.get()
 
+      expect(data.totalLocalVideoChannels).to.equal(3)
       expect(data.totalLocalDailyActiveVideoChannels).to.equal(1)
       expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(1)
       expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(1)
@@ -156,6 +158,7 @@ describe('Test stats (excluding redundancy)', function () {
 
       const data = await server.stats.get()
 
+      expect(data.totalLocalVideoChannels).to.equal(3)
       expect(data.totalLocalDailyActiveVideoChannels).to.equal(2)
       expect(data.totalLocalWeeklyActiveVideoChannels).to.equal(2)
       expect(data.totalLocalMonthlyActiveVideoChannels).to.equal(2)
