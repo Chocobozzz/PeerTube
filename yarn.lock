@@ -6210,7 +6210,7 @@ lodash.merge@4.6.2, lodash.merge@^4.6.2:
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
-lodash@>=4.17.13, lodash@^4.17.10, lodash@^4.17.20, lodash@^4.17.21:
+lodash@>=4.17.13, lodash@^4.17.20, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -7319,6 +7319,13 @@ peek-stream@^1.1.1:
     buffer-from "^1.0.0"
     duplexify "^3.5.0"
     through2 "^2.0.3"
+
+pfeed-podcast@^6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/pfeed-podcast/-/pfeed-podcast-6.1.1.tgz#32cca6e6a0c95fbdd52b7d075f59cd6eb7a1b8bb"
+  integrity sha512-kDzPZiS0CQeAMfII4dAQJJYFsqHAL+faDPH4YQ5wYt4AMvaBl7zI9dsajnEDE37IjmxOb1Rzg0d0w5+Mm1kgiQ==
+  dependencies:
+    xml-js "^1.6.11"
 
 pg-connection-string@^2.5.0:
   version "2.5.0"

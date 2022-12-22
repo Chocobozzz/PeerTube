@@ -1,7 +1,8 @@
 import express from 'express'
-import { groupBy, isNull, last, map, orderBy } from 'lodash'
+import { groupBy, isNull, map, orderBy } from 'lodash'
 import { extname } from 'path'
-import { Feed } from '@peertube/feed'
+import { Feed } from 'pfeed-podcast'
+import { CustomTag, LiveItemStatus } from 'pfeed-podcast/lib/typings'
 import { mdToOneLinePlainText, toSafeHtml } from '@server/helpers/markdown'
 import { getServerActor } from '@server/models/application/application'
 import { getCategoryLabel } from '@server/models/video/formatter/video-format-utils'
@@ -86,14 +87,15 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
     videoChannelId: videoChannel ? videoChannel.id : undefined
   })
 
-  const { name, description, imageUrl } = buildFeedMetadata({ video, account, videoChannel })
+  const { name, description, imageUrl, link } = await buildFeedMetadata({ video, account, videoChannel })
 
   const feed = initFeed({
     name,
     description,
     imageUrl,
+    link,
     resourceType: 'video-comments',
-    queryString: new URL(WEBSERVER.URL + req.originalUrl).search
+    queryString: new URL(WEBSERVER.URL + req.originalUrl).search,
   })
 
   // Adding video items to the feed, one at a time
@@ -132,74 +134,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   const nsfw = buildNSFWFilter(res, req.query.nsfw)
   const format = req.query.format || req.params.format || 'rss'
 
-  const { name, description, imageUrl } = buildFeedMetadata({ videoChannel, account })
-  let name: string
-  let description: string
-  let link: string
-  let image: string
-  const author: {name: string, email: string, link: string, img?: string} = {
-    name: 'Instance admin of ' + CONFIG.INSTANCE.NAME,
-    email: CONFIG.ADMIN.EMAIL,
-    link: `${WEBSERVER.URL}/about`
-  }
-
-  const feed = initFeed({
-    name,
-    description,
-    imageUrl,
-    resourceType: 'videos',
-    queryString: new URL(WEBSERVER.URL + req.url).search
-  })
-
-  if (videoChannel) {
-    name = videoChannel.getDisplayName()
-    description = videoChannel.description
-    link = videoChannel.getLocalUrl()
-
-    author.name = videoChannel.Account.getDisplayName()
-
-    const user = await UserModel.loadById(videoChannel.Account.userId)
-
-    // TODO: Add column to SQL table/user model to indicate the user
-    // is willing to have their email address publicly displayed
-
-    // Only allow local users for now
-    if (isNull(user.pluginAuth) && user.emailVerified && user.isEmailPublic) {
-      author.email = user.email
-    }
-
-    if (!isNull(videoChannel.Actor.Avatar)) {
-      image = WEBSERVER.URL + videoChannel.Actor.Avatar.getStaticPath()
-    }
-    if (!isNull(videoChannel.Account.Actor.Avatar)) {
-      author.img = WEBSERVER.URL + videoChannel.Account.Actor.Avatar.getStaticPath()
-    }
-  } else if (account) {
-    name = account.getDisplayName()
-    description = account.description
-    link = account.getLocalUrl()
-
-    author.name = name
-
-    const user = await UserModel.loadById(videoChannel.Account.userId)
-
-    // TODO: Add column to SQL table/user model to indicate the user
-    // is willing to have their email address publicly displayed
-
-    // Only allow local users for now
-    if (isNull(user.pluginAuth) && user.emailVerified && user.isEmailPublic) {
-      author.email = user.email
-    }
-
-    if (!isNull(account.Actor.Avatar)) {
-      image = WEBSERVER.URL + account.Actor.Avatar.getStaticPath()
-      author.img = image
-    }
-  } else {
-    name = CONFIG.INSTANCE.NAME
-    description = CONFIG.INSTANCE.DESCRIPTION
-    link = WEBSERVER.URL
-  }
+  const { name, description, imageUrl, accountImageUrl, email, link, accountLink } = await buildFeedMetadata({ videoChannel, account })
 
   const options = {
     accountId: account ? account.id : null,
@@ -211,15 +146,15 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     start,
     count: CONFIG.FEEDS.VIDEOS.COUNT,
     sort: req.query.sort,
-    count: FEEDS.COUNT,
-    sort: '-publishedAt',
     displayOnlyForFollower: {
       actorId: server.id,
       orLocalVideos: true
     },
     nsfw,
     isLocal: true,
-    include: req.query.include | VideoInclude.FILES | VideoInclude.TAGS,
+    include: req.query.include | VideoInclude.FILES,
+    // TODO: include tags for future inclusion into the RSS feed
+    //include: req.query.include | VideoInclude.FILES | VideoInclude.TAGS,
     hasFiles: true,
     countVideos: false,
     ...options
@@ -230,21 +165,26 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   const isFilm: boolean = data.length > 0 && data[data.length - 1].category === 2
   const videos = isFilm ? [ data[data.length - 1] ] : data
 
-  // TODO: Find a way to allow plugins to add their own fields to a channel
+  // TODO: Add customTags hook for the channel level here
+  /*const customTags: CustomTag[] = await Hooks.wrapObject(
+    [],
+    'filter:feed.podcast.channel.custom-tags.result',
+    { account, videoChannel }
+  )*/
+
   const feed = initFeed({
     name: isFilm ? videos[0].name : name,
     description: isFilm ? videos[0].description : description,
     link: isFilm ? videos[0].url : link,
-    image: isFilm ? WEBSERVER.URL + videos[0].getPreviewStaticPath() : image,
-    locked: 'yes', // Default to yes because we have no way of offering a redirect etc
-    author,
+    imageUrl: isFilm ? WEBSERVER.URL + videos[0].getPreviewStaticPath() : imageUrl,
+    locked: { isLocked: true, email }, // Default to true because we have no way of offering a redirect etc
+    author: { name, link: accountLink, imageUrl: accountImageUrl },
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search,
     medium: isFilm ? 'film' : 'video',
-    tagDelimiter: ','
+    format,
   })
 
-  // TODO: Find a way to allow plugins to add their own fields to an item
   await addVideosToFeed(feed, videos, format)
 
   // Now the feed generation is done, let's send it!
@@ -255,18 +195,17 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
   const start = 0
   const account = res.locals.account
   const nsfw = buildNSFWFilter(res, req.query.nsfw)
-  const name = account.getDisplayName()
-  const description = account.description
   const format = req.query.format || req.params.format || 'rss'
 
-  const { name, description, imageUrl } = buildFeedMetadata({ account })
+  const { name, description, imageUrl, link } = await buildFeedMetadata({ account })
 
   const feed = initFeed({
     name,
     description,
+    link,
     imageUrl,
     resourceType: 'videos',
-    queryString: new URL(WEBSERVER.URL + req.url).search
+    queryString: new URL(WEBSERVER.URL + req.url).search,
   })
 
   const { data } = await VideoModel.listForApi({
@@ -300,56 +239,46 @@ function initFeed (parameters: {
   description: string
   imageUrl: string
   link?: string
-  image?: string
-  locked?: string
+  locked?: { isLocked: boolean, email: string }
   author?: {
     name: string
-    email: string
     link: string
+    imageUrl: string
   }
   resourceType?: 'videos' | 'video-comments'
   queryString?: string
   medium?: string
-  tagDelimiter?: string
+  format?: string
+  customTags?: CustomTag[]
 }) {
   const webserverUrl = WEBSERVER.URL
-  const { name, description, resourceType, queryString, imageUrl } = parameters
-  const { name, description, link, image, locked, author, resourceType, queryString, medium, tagDelimiter } = parameters
+  const { name, description, link, imageUrl, locked, author, resourceType, queryString, medium, format, customTags } = parameters
 
   return new Feed({
     title: name,
     description: mdToOneLinePlainText(description),
     // updated: TODO: somehowGetLatestUpdate, // optional, default = today
-    id: webserverUrl,
-    link: webserverUrl,
-    image: imageUrl,
+    id: link || webserverUrl,
     link: link || webserverUrl,
-    image: image || webserverUrl + '/client/assets/images/icons/icon-96x96.png',
+    image: imageUrl,
     favicon: webserverUrl + '/client/assets/images/favicon.png',
     copyright: `All rights reserved, unless otherwise specified in the terms specified at ${webserverUrl}/about` +
     ` and potential licenses granted by each content's rightholder.`,
     generator: `Toraifōsu`, // ^.~
     medium: medium || 'video',
-    tagDelimiter: tagDelimiter || ',',
     locked,
     feedLinks: {
       json: `${webserverUrl}/feeds/${resourceType}.json${queryString}`,
       atom: `${webserverUrl}/feeds/${resourceType}.atom${queryString}`,
       rss: `${webserverUrl}/feeds/${resourceType}.xml${queryString}`
     },
-    author: author || {
-      name: 'Instance admin of ' + CONFIG.INSTANCE.NAME,
-      email: CONFIG.ADMIN.EMAIL,
-      link: `${webserverUrl}/about`
-    },
-    owner: author ? { name: author.name, email: author.email } : null
+    customTags,
+    ...(format && format !== "podcast" && author),
+    ...(format === "podcast" && author && { name: author.name, href: author.link, img: author.imageUrl }),
   })
 }
 
-function addVideosToFeed (feed: Feed, videos: VideoModel[]) {
-  for (const video of videos) {
-    const formattedVideoFiles = video.getFormattedVideoFilesJSON(false)
-async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
+async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string) {
   /**
    * Adding video items to the feed object, one at a time
    */
@@ -366,7 +295,7 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
       }[] = video.getFormattedVideoFilesJSON(false).map(videoFile => {
         const isAudio = videoFile.resolution.id === VideoResolution.H_NOVIDEO
         const result = {
-          type: isAudio ? 'audio/mp4' : 'video/mp4',
+          type: MIMETYPES.AUDIO.MIMETYPE_EXT[extname(videoFile.fileUrl)],
           title: isAudio ? "Audio" : videoFile.resolution.label,
           length: videoFile.size,
           bitrate: videoFile.size / video.duration * 8,
@@ -378,15 +307,6 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
 
         if (video.language) Object.assign(result, { language: video.language })
 
-    const videoFiles = formattedVideoFiles.map(videoFile => {
-      const result = {
-        type: MIMETYPES.VIDEO.EXT_MIMETYPE[extname(videoFile.fileUrl)],
-        medium: 'video',
-        height: videoFile.resolution.id,
-        fileSize: videoFile.size,
-        url: videoFile.fileUrl,
-        framerate: videoFile.fps,
-        duration: video.duration
         return result
       })
 
@@ -407,7 +327,7 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
           if (streamingPlaylist.type === VideoStreamingPlaylistType.HLS) {
             type = 'application/x-mpegURL'
           } else {
-            return {}
+            return
           }
           const result = {
             type,
@@ -424,87 +344,71 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
 
       const media = [ ...sortedVideos, ...streamingPlaylists ].filter(m => m)
 
-      const categories: string[] = []
+      let category: string
       if (video.category) {
-        categories.push(getCategoryLabel(video.category))
-      }
-
-      if (video.Tags) {
-        video.Tags.forEach(tag => {
-          categories.push(tag.name)
-        })
+        category = getCategoryLabel(video.category)
       }
 
       const videoCaptions = await VideoCaptionModel.listVideoCaptions(video.id)
 
       const captions = videoCaptions?.map(caption => {
-        const fileExtension = last(caption.filename.split("."))
-        let type: string
-        if (fileExtension === "srt") {
-          type = "application/srt"
-        } else if (fileExtension === "vtt") {
-          type = "text/vtt"
-        }
-        if (!type) return {}
+        const type = MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT[extname(caption.filename)]
+        if (!type) return
         return {
           url: caption.getFileUrl(video),
           language: caption.language,
           type,
           rel: "captions"
         }
-      })
+      }).filter(c => c)
 
-      const markdownConverter = new showdown.Converter()
+      // TODO: Add customTags hook for the channel level here
+      /*const customTags: CustomTag[] = await Hooks.wrapObject(
+        [],
+        'filter:feed.podcast.item.custom-tags.result',
+        { account, videoChannel }
+      )*/
 
+      const author = {
+        name: video.VideoChannel.Account.getDisplayName(),
+        href: video.VideoChannel.Account.Actor.url
+      }
       const item = {
         trackers: video.getTrackerUrls(),
         title: video.name,
-        // Live videos need unique GUIDs
-        id: video.url,
         link: WEBSERVER.URL + video.getWatchStaticPath(),
-        description: markdownConverter.makeHtml(video.description),
+        description: mdToOneLinePlainText(video.getTruncatedDescription()),
+        content: toSafeHtml(video.description),
         author: [
+          author
+        ],
+        person: [
           {
-            name: video.VideoChannel.Account.getDisplayName(),
-            href: video.VideoChannel.Account.Actor.url
+            ...author,
+            ...(video.VideoChannel.Account.Actor.hasImage(ActorImageType.AVATAR) && {
+              img: WEBSERVER.URL + video.VideoChannel.Account.Actor.Avatars[0].getStaticPath()
+            })
           }
         ],
         date: video.publishedAt,
-        explicit: video.nsfw,
+        nsfw: video.nsfw,
         media,
-        categories,
+        category: [{ name: category }],
         socialInteract: [
-          { uri: video.url, protocol: "activitypub" }
+          { uri: video.url, protocol: "activitypub", accountUrl: video.VideoChannel.Account.getLocalUrl() }
         ],
         subTitle: captions,
         thumbnail: [
           {
             url: WEBSERVER.URL + video.getPreviewStaticPath()
           }
-        ]
+        ],
+        //customTags,
       }
 
-      if (!isNull(video.VideoChannel.Account.Actor.Avatar)) {
-        Object.assign(item.author[0], {
-          img: WEBSERVER.URL + video.VideoChannel.Account.Actor.Avatar.getStaticPath()
-        })
-      }
-
-      feed.addItem(item)
+      feed.addPodcastItem(item)
     }
 
-    const localLink = WEBSERVER.URL + video.getWatchStaticPath()
-
-    feed.addItem({
-      title: video.name,
-      id: localLink,
-      link: localLink,
-      description: mdToOneLinePlainText(video.getTruncatedDescription()),
-      content: toSafeHtml(video.description),
-      author: [
-        {
-          name: video.VideoChannel.Account.getDisplayName(),
-          link: video.VideoChannel.Account.Actor.url
     // Filter live videos that are pending or in progress
     for (const video of videos.filter(v => v.isLive && v.state !== VideoState.LIVE_ENDED)) {
       const streamingPlaylists = video.VideoStreamingPlaylists
@@ -513,7 +417,7 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
           if (streamingPlaylist.type === VideoStreamingPlaylistType.HLS) {
             type = 'application/x-mpegURL'
           } else {
-            return {}
+            return
           }
           const result = {
             type,
@@ -526,35 +430,38 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
           if (video.language) Object.assign(result, { language: video.language })
 
           return result
-        })
+        }).filter(s => s)
 
-      const categories: string[] = []
+      let category: string
       if (video.category) {
-        categories.push(getCategoryLabel(video.category))
+        category = getCategoryLabel(video.category)
       }
 
-      if (video.Tags) {
-        video.Tags.forEach(tag => {
-          categories.push(tag.name)
-        })
-      }
-
-      const markdownConverter = new showdown.Converter()
-
-      let status = ""
+      let status: LiveItemStatus
 
       switch (video.state) {
         case VideoState.WAITING_FOR_LIVE:
-          status = "pending"
+          status = LiveItemStatus.pending
           break
         case VideoState.LIVE_ENDED:
-          status = "ended"
+          status = LiveItemStatus.ended
           break
         case VideoState.PUBLISHED:
-          status = "live"
+          status = LiveItemStatus.live
           break
       }
 
+      // TODO: Add customTags hook for the channel level here
+      /*const customTags: CustomTag[] = await Hooks.wrapObject(
+        [],
+        'filter:feed.podcast.live-item.custom-tags.result',
+        { account, videoChannel }
+      )*/
+
+      const author = {
+        name: video.VideoChannel.Account.getDisplayName(),
+        href: video.VideoChannel.Account.Actor.url
+      }
       const item = {
         isLive: true,
         status,
@@ -564,33 +471,35 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         // Live videos need unique GUIDs
         id: video.url,
         link: WEBSERVER.URL + video.getWatchStaticPath(),
-        description: markdownConverter.makeHtml(video.description),
+        description: mdToOneLinePlainText(video.getTruncatedDescription()),
+        content: toSafeHtml(video.description),
         author: [
+          author
+        ],
+        person: [
           {
-            name: video.VideoChannel.Account.getDisplayName(),
-            href: video.VideoChannel.Account.Actor.url
+            ...author,
+            ...(video.VideoChannel.Account.Actor.hasImage(ActorImageType.AVATAR) && {
+              img: WEBSERVER.URL + video.VideoChannel.Account.Actor.Avatars[0].getStaticPath()
+            })
           }
         ],
-        explicit: video.nsfw,
+        date: video.publishedAt,
+        nsfw: video.nsfw,
         media: streamingPlaylists,
-        categories,
+        category: [{ name: category }],
         socialInteract: [
-          { uri: video.url, protocol: "activitypub" }
+          { uri: video.url, protocol: "activitypub", accountUrl: video.VideoChannel.Account.getLocalUrl() }
         ],
         thumbnail: [
           {
             url: WEBSERVER.URL + video.getPreviewStaticPath()
           }
-        ]
+        ],
+        //customTags,
       }
 
-      if (!isNull(video.VideoChannel.Account.Actor.Avatar)) {
-        Object.assign(item.author[0], {
-          img: WEBSERVER.URL + video.VideoChannel.Account.Actor.Avatar.getStaticPath()
-        })
-      }
-
-      feed.addLiveItem(item)
+      feed.addPodcastLiveItem(item)
     }
   } else {
     for (const video of videos) {
@@ -602,54 +511,16 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         size_in_bytes: videoFile.size
       }))
 
-      const videos = formattedVideoFiles.map(videoFile => {
+      const videoFiles = formattedVideoFiles.map(videoFile => {
         const result = {
-          type: 'video/mp4',
+          type: MIMETYPES.VIDEO.EXT_MIMETYPE[extname(videoFile.fileUrl)],
           medium: 'video',
-          height: videoFile.resolution.label.replace('p', ''),
+          height: videoFile.resolution.id,
           fileSize: videoFile.size,
           url: videoFile.fileUrl,
           framerate: videoFile.fps,
           duration: video.duration
         }
-      ],
-      date: video.publishedAt,
-      nsfw: video.nsfw,
-      torrents,
-
-      // Enclosure
-      video: videoFiles.length !== 0
-        ? {
-          url: videoFiles[0].url,
-          length: videoFiles[0].fileSize,
-          type: videoFiles[0].type
-        }
-        : undefined,
-
-      // Media RSS
-      videos: videoFiles,
-
-      embed: {
-        url: WEBSERVER.URL + video.getEmbedStaticPath(),
-        allowFullscreen: true
-      },
-      player: {
-        url: WEBSERVER.URL + video.getWatchStaticPath()
-      },
-      categories,
-      community: {
-        statistics: {
-          views: video.views
-        }
-      },
-      thumbnails: [
-        {
-          url: WEBSERVER.URL + video.getPreviewStaticPath(),
-          height: PREVIEWS_SIZE.height,
-          width: PREVIEWS_SIZE.width
-        }
-      ]
-    })
 
         if (video.language) Object.assign(result, { lang: video.language })
 
@@ -664,12 +535,14 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         })
       }
 
+      const localLink = WEBSERVER.URL + video.getWatchStaticPath()
+
       feed.addItem({
         title: video.name,
-        id: video.url,
-        link: WEBSERVER.URL + '/w/' + video.uuid,
-        description: video.getTruncatedDescription(),
-        content: video.description,
+        id: localLink,
+        link: localLink,
+        description: mdToOneLinePlainText(video.getTruncatedDescription()),
+        content: toSafeHtml(video.description),
         author: [
           {
             name: video.VideoChannel.Account.getDisplayName(),
@@ -678,14 +551,26 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
         ],
         date: video.publishedAt,
         nsfw: video.nsfw,
-        torrent: torrents,
-        videos,
+        torrents,
+  
+        // Enclosure
+        video: videoFiles.length !== 0
+          ? {
+            url: videoFiles[0].url,
+            length: videoFiles[0].fileSize,
+            type: videoFiles[0].type
+          }
+          : undefined,
+  
+        // Media RSS
+        videos: videoFiles,
+  
         embed: {
-          url: video.getEmbedStaticPath(),
+          url: WEBSERVER.URL + video.getEmbedStaticPath(),
           allowFullscreen: true
         },
         player: {
-          url: video.getWatchStaticPath()
+          url: WEBSERVER.URL + video.getWatchStaticPath()
         },
         categories,
         community: {
@@ -693,7 +578,7 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
             views: video.views
           }
         },
-        thumbnail: [
+        thumbnails: [
           {
             url: WEBSERVER.URL + video.getPreviewStaticPath(),
             height: PREVIEWS_SIZE.height,
@@ -706,8 +591,6 @@ async function addVideosToFeed (feed, videos: VideoModel[], format: string) {
 }
 
 function sendFeed (feed: Feed, req: express.Request, res: express.Response) {
-  const format = req.params.format
-function sendFeed (feed, req: express.Request, res: express.Response) {
   const format = req.query.format || req.params.format
 
   if (format === 'atom' || format === 'atom1') {
@@ -734,7 +617,7 @@ function sendFeed (feed, req: express.Request, res: express.Response) {
   return res.send(feed.rss2()).end()
 }
 
-function buildFeedMetadata (options: {
+async function buildFeedMetadata (options: {
   videoChannel?: MChannelBannerAccountDefault
   account?: MAccountDefault
   video?: MVideoFullLight
@@ -742,30 +625,62 @@ function buildFeedMetadata (options: {
   const { video, videoChannel, account } = options
 
   let imageUrl = WEBSERVER.URL + '/client/assets/images/icons/icon-96x96.png'
+  let accountImageUrl: string
   let name: string
   let description: string
+  // TODO: See if we need to allow admin-optin to show the email address in feeds
+  let email = CONFIG.ADMIN.EMAIL
+  let link: string
+  let accountLink: string
 
   if (videoChannel) {
     name = videoChannel.getDisplayName()
     description = videoChannel.description
+    link = videoChannel.getLocalUrl()
+    accountLink = videoChannel.Account.getLocalUrl()
 
     if (videoChannel.Actor.hasImage(ActorImageType.AVATAR)) {
       imageUrl = WEBSERVER.URL + videoChannel.Actor.Avatars[0].getStaticPath()
     }
+
+    if (videoChannel.Account.Actor.hasImage(ActorImageType.AVATAR)) {
+      accountImageUrl = WEBSERVER.URL + videoChannel.Account.Actor.Avatars[0].getStaticPath()
+    }
+
+    const user = await UserModel.loadById(videoChannel.Account.userId)
+
+    // Only allow local users for now
+    if (isNull(user.pluginAuth) && user.emailVerified && user.isEmailPublic) {
+      email = user.email
+    }
+
   } else if (account) {
     name = account.getDisplayName()
     description = account.description
+    link = account.getLocalUrl()
+    accountLink = link
 
     if (account.Actor.hasImage(ActorImageType.AVATAR)) {
       imageUrl = WEBSERVER.URL + account.Actor.Avatars[0].getStaticPath()
+      accountImageUrl = imageUrl
     }
+
+    const user = await UserModel.loadById(account.userId)
+
+    // Only allow local users for now
+    if (isNull(user.pluginAuth) && user.emailVerified && user.isEmailPublic) {
+      email = user.email
+    }
+
   } else if (video) {
     name = video.name
     description = video.description
+    link = video.url
   } else {
     name = CONFIG.INSTANCE.NAME
     description = CONFIG.INSTANCE.DESCRIPTION
+    link = WEBSERVER.URL
   }
 
-  return { name, description, imageUrl }
+  return { name, description, imageUrl, accountImageUrl, email, link, accountLink }
 }
