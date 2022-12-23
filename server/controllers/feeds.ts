@@ -95,7 +95,7 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
     imageUrl,
     link,
     resourceType: 'video-comments',
-    queryString: new URL(WEBSERVER.URL + req.originalUrl).search,
+    queryString: new URL(WEBSERVER.URL + req.originalUrl).search
   })
 
   // Adding video items to the feed, one at a time
@@ -154,7 +154,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     isLocal: true,
     include: req.query.include | VideoInclude.FILES,
     // TODO: include tags for future inclusion into the RSS feed
-    //include: req.query.include | VideoInclude.FILES | VideoInclude.TAGS,
+    // include: req.query.include | VideoInclude.FILES | VideoInclude.TAGS,
     hasFiles: true,
     countVideos: false,
     ...options
@@ -166,11 +166,11 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   const videos = isFilm ? [ data[data.length - 1] ] : data
 
   // TODO: Add customTags hook for the channel level here
-  /*const customTags: CustomTag[] = await Hooks.wrapObject(
-    [],
-    'filter:feed.podcast.channel.custom-tags.result',
-    { account, videoChannel }
-  )*/
+  /* const customTags: CustomTag[] = await Hooks.wrapObject(
+     [],
+     'filter:feed.podcast.channel.custom-tags.result',
+     { account, videoChannel }
+  ) */
 
   const feed = initFeed({
     name: isFilm ? videos[0].name : name,
@@ -182,7 +182,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search,
     medium: isFilm ? 'film' : 'video',
-    format,
+    format
   })
 
   await addVideosToFeed(feed, videos, format)
@@ -205,7 +205,7 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
     link,
     imageUrl,
     resourceType: 'videos',
-    queryString: new URL(WEBSERVER.URL + req.url).search,
+    queryString: new URL(WEBSERVER.URL + req.url).search
   })
 
   const { data } = await VideoModel.listForApi({
@@ -273,8 +273,8 @@ function initFeed (parameters: {
       rss: `${webserverUrl}/feeds/${resourceType}.xml${queryString}`
     },
     customTags,
-    ...(format && format !== "podcast" && author),
-    ...(format === "podcast" && author && { name: author.name, href: author.link, img: author.imageUrl }),
+    ...(format && format !== 'podcast' && author),
+    ...(format === 'podcast' && author && { name: author.name, href: author.link, img: author.imageUrl })
   })
 }
 
@@ -296,7 +296,7 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
         const isAudio = videoFile.resolution.id === VideoResolution.H_NOVIDEO
         const result = {
           type: MIMETYPES.AUDIO.MIMETYPE_EXT[extname(videoFile.fileUrl)],
-          title: isAudio ? "Audio" : videoFile.resolution.label,
+          title: isAudio ? 'Audio' : videoFile.resolution.label,
           length: videoFile.size,
           bitrate: videoFile.size / video.duration * 8,
           sources: [
@@ -315,7 +315,7 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
       const groupedVideos = groupBy(videos, video => video.title)
       const preferredVideos = map(groupedVideos, videoGroup => {
         return videoGroup.find(v => {
-          return v.sources.some(s => s.uri.includes("/webseed/") || (!s.uri.includes("-fragmented") && !s.uri.includes("-hls")))
+          return v.sources.some(s => s.uri.includes('/webseed/') || (!s.uri.includes('-fragmented') && !s.uri.includes('-hls')))
         })
       })
 
@@ -327,11 +327,11 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
           if (streamingPlaylist.type === VideoStreamingPlaylistType.HLS) {
             type = 'application/x-mpegURL'
           } else {
-            return
+            return null
           }
           const result = {
             type,
-            title: "HLS",
+            title: 'HLS',
             sources: [
               { uri: streamingPlaylist.getMasterPlaylistUrl(video) }
             ]
@@ -353,21 +353,21 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
 
       const captions = videoCaptions?.map(caption => {
         const type = MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT[extname(caption.filename)]
-        if (!type) return
+        if (!type) return null
         return {
           url: caption.getFileUrl(video),
           language: caption.language,
           type,
-          rel: "captions"
+          rel: 'captions'
         }
       }).filter(c => c)
 
       // TODO: Add customTags hook for the channel level here
-      /*const customTags: CustomTag[] = await Hooks.wrapObject(
-        [],
-        'filter:feed.podcast.item.custom-tags.result',
-        { account, videoChannel }
-      )*/
+      /* const customTags: CustomTag[] = await Hooks.wrapObject(
+         [],
+         'filter:feed.podcast.item.custom-tags.result',
+         { account, videoChannel }
+      ) */
 
       const author = {
         name: video.VideoChannel.Account.getDisplayName(),
@@ -393,17 +393,17 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
         date: video.publishedAt,
         nsfw: video.nsfw,
         media,
-        category: [{ name: category }],
+        category: [ { name: category } ],
         socialInteract: [
-          { uri: video.url, protocol: "activitypub", accountUrl: video.VideoChannel.Account.getLocalUrl() }
+          { uri: video.url, protocol: 'activitypub', accountUrl: video.VideoChannel.Account.getLocalUrl() }
         ],
         subTitle: captions,
         thumbnail: [
           {
             url: WEBSERVER.URL + video.getPreviewStaticPath()
           }
-        ],
-        //customTags,
+        ]
+        // customTags,
       }
 
       feed.addPodcastItem(item)
@@ -417,7 +417,7 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
           if (streamingPlaylist.type === VideoStreamingPlaylistType.HLS) {
             type = 'application/x-mpegURL'
           } else {
-            return
+            return null
           }
           const result = {
             type,
@@ -452,11 +452,11 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
       }
 
       // TODO: Add customTags hook for the channel level here
-      /*const customTags: CustomTag[] = await Hooks.wrapObject(
-        [],
-        'filter:feed.podcast.live-item.custom-tags.result',
-        { account, videoChannel }
-      )*/
+      /* const customTags: CustomTag[] = await Hooks.wrapObject(
+         [],
+         'filter:feed.podcast.live-item.custom-tags.result',
+         { account, videoChannel }
+      ) */
 
       const author = {
         name: video.VideoChannel.Account.getDisplayName(),
@@ -487,16 +487,16 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
         date: video.publishedAt,
         nsfw: video.nsfw,
         media: streamingPlaylists,
-        category: [{ name: category }],
+        category: [ { name: category } ],
         socialInteract: [
-          { uri: video.url, protocol: "activitypub", accountUrl: video.VideoChannel.Account.getLocalUrl() }
+          { uri: video.url, protocol: 'activitypub', accountUrl: video.VideoChannel.Account.getLocalUrl() }
         ],
         thumbnail: [
           {
             url: WEBSERVER.URL + video.getPreviewStaticPath()
           }
-        ],
-        //customTags,
+        ]
+        // customTags,
       }
 
       feed.addPodcastLiveItem(item)
@@ -552,7 +552,7 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
         date: video.publishedAt,
         nsfw: video.nsfw,
         torrents,
-  
+
         // Enclosure
         video: videoFiles.length !== 0
           ? {
@@ -561,10 +561,10 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
             type: videoFiles[0].type
           }
           : undefined,
-  
+
         // Media RSS
         videos: videoFiles,
-  
+
         embed: {
           url: WEBSERVER.URL + video.getEmbedStaticPath(),
           allowFullscreen: true
