@@ -162,7 +162,7 @@ export class PlayerManagerOptions {
 
     serverConfig: HTMLServerConfig
 
-    alreadyHadPlayer: boolean
+    autoplayFromPreviousVideo: boolean
 
     translations: Translations
 
@@ -174,7 +174,7 @@ export class PlayerManagerOptions {
     const {
       video,
       captionsResponse,
-      alreadyHadPlayer,
+      autoplayFromPreviousVideo,
       videoFileToken,
       translations,
       forceAutoplay,
@@ -189,7 +189,7 @@ export class PlayerManagerOptions {
     const playerOptions: PeertubePlayerManagerOptions = {
       common: {
         // Autoplay in playlist mode
-        autoplay: alreadyHadPlayer ? true : this.autoplay,
+        autoplay: autoplayFromPreviousVideo ? true : this.autoplay,
         forceAutoplay,
 
         controls: this.controls,

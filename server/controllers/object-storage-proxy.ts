@@ -15,6 +15,7 @@ import {
 } from '@server/middlewares'
 import { HttpStatusCode } from '@shared/models'
 import { buildReinjectVideoFileTokenQuery, doReinjectVideoFileToken } from './shared/m3u8-playlist'
+import { GetObjectCommandOutput } from '@aws-sdk/client-s3'
 
 const objectStorageProxyRouter = express.Router()
 
@@ -46,10 +47,12 @@ async function proxifyWebTorrent (req: express.Request, res: express.Response) {
   logger.debug('Proxifying WebTorrent file %s from object storage.', filename)
 
   try {
-    const stream = await getWebTorrentFileReadStream({
+    const { response: s3Response, stream } = await getWebTorrentFileReadStream({
       filename,
       rangeHeader: req.header('range')
     })
+
+    setS3Headers(res, s3Response)
 
     return stream.pipe(res)
   } catch (err) {
@@ -65,11 +68,13 @@ async function proxifyHLS (req: express.Request, res: express.Response) {
   logger.debug('Proxifying HLS file %s from object storage.', filename)
 
   try {
-    const stream = await getHLSFileReadStream({
+    const { response: s3Response, stream } = await getHLSFileReadStream({
       playlist: playlist.withVideo(video),
       filename,
       rangeHeader: req.header('range')
     })
+
+    setS3Headers(res, s3Response)
 
     const streamReplacer = filename.endsWith('.m3u8') && doReinjectVideoFileToken(req)
       ? new StreamReplacer(line => injectQueryToPlaylistUrls(line, buildReinjectVideoFileTokenQuery(req)))
@@ -101,4 +106,10 @@ function handleObjectStorageFailure (res: express.Response, err: Error) {
     message: err.message,
     type: err.name
   })
+}
+
+function setS3Headers (res: express.Response, s3Response: GetObjectCommandOutput) {
+  if (s3Response.$metadata.httpStatusCode === HttpStatusCode.PARTIAL_CONTENT_206) {
+    res.status(HttpStatusCode.PARTIAL_CONTENT_206)
+  }
 }

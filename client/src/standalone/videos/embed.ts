@@ -90,7 +90,7 @@ export class PeerTubeEmbed {
 
     if (!videoId) return
 
-    return this.loadVideoAndBuildPlayer({ uuid: videoId, forceAutoplay: false })
+    return this.loadVideoAndBuildPlayer({ uuid: videoId, autoplayFromPreviousVideo: false, forceAutoplay: false })
   }
 
   private async initPlaylist () {
@@ -147,7 +147,7 @@ export class PeerTubeEmbed {
 
     this.playlistTracker.setCurrentElement(next)
 
-    return this.loadVideoAndBuildPlayer({ uuid: next.video.uuid, forceAutoplay: false })
+    return this.loadVideoAndBuildPlayer({ uuid: next.video.uuid, autoplayFromPreviousVideo: true, forceAutoplay: false })
   }
 
   async playPreviousPlaylistVideo () {
@@ -159,7 +159,7 @@ export class PeerTubeEmbed {
 
     this.playlistTracker.setCurrentElement(previous)
 
-    await this.loadVideoAndBuildPlayer({ uuid: previous.video.uuid, forceAutoplay: false })
+    await this.loadVideoAndBuildPlayer({ uuid: previous.video.uuid, autoplayFromPreviousVideo: true, forceAutoplay: false })
   }
 
   getCurrentPlaylistPosition () {
@@ -170,14 +170,15 @@ export class PeerTubeEmbed {
 
   private async loadVideoAndBuildPlayer (options: {
     uuid: string
+    autoplayFromPreviousVideo: boolean
     forceAutoplay: boolean
   }) {
-    const { uuid, forceAutoplay } = options
+    const { uuid, autoplayFromPreviousVideo, forceAutoplay } = options
 
     try {
       const { videoResponse, captionsPromise } = await this.videoFetcher.loadVideo(uuid)
 
-      return this.buildVideoPlayer({ videoResponse, captionsPromise, forceAutoplay })
+      return this.buildVideoPlayer({ videoResponse, captionsPromise, autoplayFromPreviousVideo, forceAutoplay })
     } catch (err) {
       this.playerHTML.displayError(err.message, await this.translationsPromise)
     }
@@ -186,17 +187,18 @@ export class PeerTubeEmbed {
   private async buildVideoPlayer (options: {
     videoResponse: Response
     captionsPromise: Promise<Response>
+    autoplayFromPreviousVideo: boolean
     forceAutoplay: boolean
   }) {
-    const { videoResponse, captionsPromise, forceAutoplay } = options
+    const { videoResponse, captionsPromise, autoplayFromPreviousVideo, forceAutoplay } = options
 
-    const alreadyHadPlayer = this.resetPlayerElement()
+    this.resetPlayerElement()
 
     const videoInfoPromise = videoResponse.json()
       .then(async (videoInfo: VideoDetails) => {
         this.playerManagerOptions.loadParams(this.config, videoInfo)
 
-        if (!alreadyHadPlayer && !this.playerManagerOptions.hasAutoplay()) {
+        if (!autoplayFromPreviousVideo && !this.playerManagerOptions.hasAutoplay()) {
           this.playerHTML.buildPlaceholder(videoInfo)
         }
         const live = videoInfo.isLive
@@ -224,14 +226,14 @@ export class PeerTubeEmbed {
     const playerOptions = await this.playerManagerOptions.getPlayerOptions({
       video,
       captionsResponse,
-      alreadyHadPlayer,
+      autoplayFromPreviousVideo,
       translations,
       serverConfig: this.config,
 
       authorizationHeader: () => this.http.getHeaderTokenValue(),
       videoFileToken: () => videoFileToken,
 
-      onVideoUpdate: (uuid: string) => this.loadVideoAndBuildPlayer({ uuid, forceAutoplay: false }),
+      onVideoUpdate: (uuid: string) => this.loadVideoAndBuildPlayer({ uuid, autoplayFromPreviousVideo: true, forceAutoplay: false }),
 
       playlistTracker: this.playlistTracker,
       playNextPlaylistVideo: () => this.playNextPlaylistVideo(),
@@ -277,7 +279,7 @@ export class PeerTubeEmbed {
         video,
         onPublishedVideo: () => {
           this.liveManager.stopListeningForChanges(video)
-          this.loadVideoAndBuildPlayer({ uuid: video.uuid, forceAutoplay: true })
+          this.loadVideoAndBuildPlayer({ uuid: video.uuid, autoplayFromPreviousVideo: false, forceAutoplay: true })
         }
       })
 
@@ -294,12 +296,9 @@ export class PeerTubeEmbed {
   }
 
   private resetPlayerElement () {
-    let alreadyHadPlayer = false
-
     if (this.player) {
       this.player.dispose()
       this.player = undefined
-      alreadyHadPlayer = true
     }
 
     const playerElement = document.createElement('video')
@@ -308,8 +307,6 @@ export class PeerTubeEmbed {
 
     this.playerHTML.setPlayerElement(playerElement)
     this.playerHTML.addPlayerElementToDOM()
-
-    return alreadyHadPlayer
   }
 
   private async buildPlayerPlaylistUpnext () {

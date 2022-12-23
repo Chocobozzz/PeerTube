@@ -434,42 +434,41 @@ export class VideoChannelModel extends Model<Partial<AttributesOnly<VideoChannel
 
   static async getStats () {
 
-    function getActiveVideoChannels (days: number) {
+    function getLocalVideoChannelStats (days?: number) {
       const options = {
         type: QueryTypes.SELECT as QueryTypes.SELECT,
         raw: true
       }
 
+      const videoJoin = days
+        ? `INNER JOIN "video" AS "Videos" ON "VideoChannelModel"."id" = "Videos"."channelId" ` +
+             `AND ("Videos"."publishedAt" > Now() - interval '${days}d')`
+        : ''
+
       const query = `
-SELECT          COUNT(DISTINCT("VideoChannelModel"."id")) AS "count"
-FROM            "videoChannel"                            AS "VideoChannelModel"
-INNER JOIN      "video"                                   AS "Videos"
-ON              "VideoChannelModel"."id" = "Videos"."channelId"
-AND             ("Videos"."publishedAt" > Now() - interval '${days}d')
-INNER JOIN      "account" AS "Account"
-ON              "VideoChannelModel"."accountId" = "Account"."id"
-INNER JOIN      "actor" AS "Account->Actor"
-ON              "Account"."actorId" = "Account->Actor"."id"
-AND             "Account->Actor"."serverId" IS NULL
-LEFT OUTER JOIN "server" AS "Account->Actor->Server"
-ON              "Account->Actor"."serverId" = "Account->Actor->Server"."id"`
+      SELECT COUNT(DISTINCT("VideoChannelModel"."id")) AS "count"
+      FROM "videoChannel" AS "VideoChannelModel"
+      ${videoJoin}
+      INNER JOIN "account" AS "Account" ON "VideoChannelModel"."accountId" = "Account"."id"
+      INNER JOIN "actor" AS "Account->Actor" ON "Account"."actorId" = "Account->Actor"."id"
+        AND "Account->Actor"."serverId" IS NULL`
 
       return VideoChannelModel.sequelize.query<{ count: string }>(query, options)
                               .then(r => parseInt(r[0].count, 10))
     }
 
-    const totalLocalVideoChannels = await VideoChannelModel.count()
-    const totalLocalDailyActiveVideoChannels = await getActiveVideoChannels(1)
-    const totalLocalWeeklyActiveVideoChannels = await getActiveVideoChannels(7)
-    const totalLocalMonthlyActiveVideoChannels = await getActiveVideoChannels(30)
-    const totalHalfYearActiveVideoChannels = await getActiveVideoChannels(180)
+    const totalLocalVideoChannels = await getLocalVideoChannelStats()
+    const totalLocalDailyActiveVideoChannels = await getLocalVideoChannelStats(1)
+    const totalLocalWeeklyActiveVideoChannels = await getLocalVideoChannelStats(7)
+    const totalLocalMonthlyActiveVideoChannels = await getLocalVideoChannelStats(30)
+    const totalLocalHalfYearActiveVideoChannels = await getLocalVideoChannelStats(180)
 
     return {
       totalLocalVideoChannels,
       totalLocalDailyActiveVideoChannels,
       totalLocalWeeklyActiveVideoChannels,
       totalLocalMonthlyActiveVideoChannels,
-      totalHalfYearActiveVideoChannels
+      totalLocalHalfYearActiveVideoChannels
     }
   }
 
