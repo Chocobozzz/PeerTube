@@ -781,6 +781,9 @@ const LRU_CACHE = {
   VIDEO_TOKENS: {
     MAX_SIZE: 100_000,
     TTL: parseDurationToMs('8 hours')
+  },
+  TRACKER_IPS: {
+    MAX_SIZE: 100_000
   }
 }
 
@@ -884,7 +887,7 @@ const TRACKER_RATE_LIMITS = {
   INTERVAL: 60000 * 5, // 5 minutes
   ANNOUNCES_PER_IP_PER_INFOHASH: 15, // maximum announces per torrent in the interval
   ANNOUNCES_PER_IP: 30, // maximum announces for all our torrents in the interval
-  BLOCK_IP_LIFETIME: 60000 * 3 // 3 minutes
+  BLOCK_IP_LIFETIME: parseDurationToMs('3 minutes')
 }
 
 const P2P_MEDIA_LOADER_PEER_VERSION = 2

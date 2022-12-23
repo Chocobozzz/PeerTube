@@ -1,16 +1,21 @@
 import { Server as TrackerServer } from 'bittorrent-tracker'
 import express from 'express'
 import { createServer } from 'http'
+import LRUCache from 'lru-cache'
 import proxyAddr from 'proxy-addr'
 import { WebSocketServer } from 'ws'
-import { Redis } from '@server/lib/redis'
 import { logger } from '../helpers/logger'
 import { CONFIG } from '../initializers/config'
-import { TRACKER_RATE_LIMITS } from '../initializers/constants'
+import { LRU_CACHE, TRACKER_RATE_LIMITS } from '../initializers/constants'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 
 const trackerRouter = express.Router()
+
+const blockedIPs = new LRUCache<string, boolean>({
+  max: LRU_CACHE.TRACKER_IPS.MAX_SIZE,
+  ttl: TRACKER_RATE_LIMITS.BLOCK_IP_LIFETIME
+})
 
 let peersIps = {}
 let peersIpInfoHash = {}
@@ -55,8 +60,7 @@ const trackerServer = new TrackerServer({
 
       // Close socket connection and block IP for a few time
       if (params.type === 'ws') {
-        Redis.Instance.setTrackerBlockIP(ip)
-          .catch(err => logger.error('Cannot set tracker block ip.', { err }))
+        blockedIPs.set(ip, true)
 
         // setTimeout to wait filter response
         setTimeout(() => params.socket.close(), 0)
@@ -102,20 +106,16 @@ function createWebsocketTrackerServer (app: express.Application) {
     if (request.url === '/tracker/socket') {
       const ip = proxyAddr(request, CONFIG.TRUST_PROXY)
 
-      Redis.Instance.doesTrackerBlockIPExist(ip)
-        .then(result => {
-          if (result === true) {
-            logger.debug('Blocking IP %s from tracker.', ip)
+      if (blockedIPs.has(ip)) {
+        logger.debug('Blocking IP %s from tracker.', ip)
 
-            socket.write('HTTP/1.1 403 Forbidden\r\n\r\n')
-            socket.destroy()
-            return
-          }
+        socket.write('HTTP/1.1 403 Forbidden\r\n\r\n')
+        socket.destroy()
+        return
+      }
 
-          // FIXME: typings
-          return wss.handleUpgrade(request, socket as any, head, ws => wss.emit('connection', ws, request))
-        })
-        .catch(err => logger.error('Cannot check if tracker block ip exists.', { err }))
+      // FIXME: typings
+      return wss.handleUpgrade(request, socket as any, head, ws => wss.emit('connection', ws, request))
     }
 
     // Don't destroy socket, we have Socket.IO too
