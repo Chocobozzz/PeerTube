@@ -66,7 +66,7 @@
     "expect-webdriverio": "^3.4.0",
     "focus-visible": "^5.0.2",
     "geckodriver": "^3.0.1",
-    "hls.js": "1.2.0",
+    "hls.js": "1.2.9",
     "html-loader": "^4.1.0",
     "html-webpack-plugin": "^5.3.1",
     "https-browserify": "^1.0.0",
@@ -105,11 +105,12 @@
     "webpack": "^5.73.0",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.10.0",
-    "webtorrent": "^1.8.22",
+    "webtorrent": "^1.9.6",
     "whatwg-fetch": "^3.0.0",
     "zone.js": "~0.11.4"
   },
   "dependencies": {
+    "@babel/plugin-proposal-async-generator-functions": "^7.20.7",
     "abortcontroller-polyfill": "^1.7.3",
     "babel-plugin-transform-es2015-constants": "^6.1.4",
     "videojs-overlay": "^2.1.4"

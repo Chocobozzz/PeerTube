@@ -85,7 +85,7 @@ module.exports = function () {
                 "presets": [
                   "@babel/preset-env"
                 ],
-                "plugins": ["@babel/plugin-transform-spread", "@babel/plugin-transform-classes", "@babel/plugin-proposal-object-rest-spread", "@babel/plugin-transform-async-to-generator", "transform-es2015-constants"]
+                "plugins": ["@babel/plugin-proposal-async-generator-functions", "@babel/plugin-transform-spread", "@babel/plugin-transform-classes", "@babel/plugin-proposal-object-rest-spread", "@babel/plugin-transform-async-to-generator", "transform-es2015-constants"]
               }
             },
             {
@@ -108,7 +108,7 @@ module.exports = function () {
                   ]
                 ],
 
-                plugins : ["@babel/plugin-transform-spread", "@babel/plugin-transform-classes", "@babel/plugin-proposal-object-rest-spread", "@babel/plugin-transform-async-to-generator", "transform-es2015-constants"]
+                plugins : ["@babel/plugin-transform-spread", "@babel/plugin-proposal-async-generator-functions", "@babel/plugin-transform-classes", "@babel/plugin-proposal-object-rest-spread", "@babel/plugin-transform-async-to-generator", "transform-es2015-constants"]
               }
             }
           ]

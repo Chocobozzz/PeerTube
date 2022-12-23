@@ -28,7 +28,7 @@ class PeerTubePlugin extends Plugin {
   private readonly startTime: number
 
   private readonly CONSTANTS = {
-    USER_VIEW_VIDEO_INTERVAL: 5000 // Every 5 seconds, notify the user is watching the video
+    USER_VIEW_VIDEO_INTERVAL: 240000 // Every 60 seconds, notify the user is watching the video
   }
 
   //private videoCaptions: VideoJSCaption[]
@@ -151,7 +151,7 @@ class PeerTubePlugin extends Plugin {
     let lastViewEvent: VideoViewEvent
 
     this.player.one('play', () => {
-      this.notifyUserIsWatching(this.startTime, lastViewEvent)
+      this.notifyUserIsWatching(Math.round(this.startTime), lastViewEvent)
     })
 
     this.player.on('seeked', () => {

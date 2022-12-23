@@ -62,7 +62,7 @@ export class HLSOptionsBuilder {
 
   private getP2PMediaLoaderOptions (redundancyUrlManager: RedundancyUrlManager): HlsJsEngineSettings {
     let consumeOnly = false
-    if ((navigator as any)?.connection?.type === 'cellular') {
+    if ((navigator as any)?.connection?.type === 'cellular' /*|| (window as any).cordova*/) {
       logger.info('We are on a cellular connection: disabling seeding.')
       consumeOnly = true
     }
