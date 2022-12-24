@@ -105,7 +105,12 @@ export const serverFilterHookObject = {
   'filter:transcoding.manual.resolutions-to-transcode.result': true,
   'filter:transcoding.auto.resolutions-to-transcode.result': true,
 
-  'filter:activity-pub.remote-video-comment.create.accept.result': true
+  'filter:activity-pub.remote-video-comment.create.accept.result': true,
+
+  // Filter result to allow custom tags in podcast RSS feeds
+  'filter:api.feed.podcast.channel.custom-tags.result': true,
+  'filter:api.feed.podcast.item.custom-tags.result': true,
+  'filter:api.feed.podcast.live-item.custom-tags.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject

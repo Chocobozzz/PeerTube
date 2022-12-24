@@ -11,6 +11,7 @@ import {
   makeGetRequest,
   makeRawRequest,
   PeerTubeServer,
+  PluginsCommand,
   setAccessTokensToServers,
   setDefaultChannelAvatar,
   stopFfmpeg,
@@ -26,6 +27,7 @@ const expect = chai.expect
 describe('Test syndication feeds', () => {
   let servers: PeerTubeServer[] = []
   let serverHLSOnly: PeerTubeServer
+  let command: PluginsCommand
   let userAccessToken: string
   let rootAccountId: number
   let rootChannelId: number
@@ -97,6 +99,11 @@ describe('Test syndication feeds', () => {
 
     await waitJobs(servers)
     await waitJobs([ serverHLSOnly ])
+
+    command = servers[0].plugins
+
+    await command.install({ path: PluginsCommand.getPluginTestPath() })
+    await command.install({ path: PluginsCommand.getPluginTestPath('-podcast-custom-tags') })
   })
 
   describe('All feed', function () {
@@ -233,11 +240,45 @@ describe('Test syndication feeds', () => {
 
       for (const item of xmlDoc.rss.channel.item) {
         const socialInteract = item['podcast:socialInteract']
-        console.log(socialInteract)
         expect(socialInteract).to.exist
         expect(socialInteract['@_protocol']).to.equal('activitypub')
         expect(socialInteract['@_uri']).to.exist
         expect(socialInteract['@_accountUrl']).to.exist
+      }
+    })
+
+    it('Should contain a valid support custom tags for plugins (covers Podcast endpoint)', async function () {
+      const server = servers[0]
+      const rss = await server.feed.getXML({ feed: 'videos', ignoreCache: true, format: 'podcast' })
+      expect(XMLValidator.validate(rss)).to.be.true
+
+      const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+      const xmlDoc = parser.parse(rss)
+
+      const fooTag = xmlDoc.rss.channel.fooTag
+      expect(fooTag).to.exist
+      expect(fooTag['@_bar']).to.equal('baz')
+      expect(fooTag['#text']).to.equal(42)
+
+      const bizzBuzzItem = xmlDoc.rss.channel['biz:buzzItem']
+      expect(bizzBuzzItem).to.exist
+
+      const nestedTag = bizzBuzzItem.nestedTag
+      expect(nestedTag).to.exist
+      expect(nestedTag).to.equal('example nested tag')
+
+      for (const item of xmlDoc.rss.channel.item) {
+        const fizzTag = item.fizzTag
+        expect(fizzTag).to.exist
+        expect(fizzTag['@_bar']).to.equal('baz')
+        expect(fizzTag['#text']).to.equal(21)
+
+        const bizzBuzz = item['biz:buzz']
+        expect(bizzBuzz).to.exist
+
+        const nestedTag = bizzBuzz.nestedTag
+        expect(nestedTag).to.exist
+        expect(nestedTag).to.equal('example nested tag')
       }
     })
 
@@ -576,6 +617,8 @@ describe('Test syndication feeds', () => {
   })
 
   after(async function () {
+    await command.uninstall({ npmName: 'peertube-plugin-test-podcast-custom-tags' })
+
     await cleanupTests([ ...servers, serverHLSOnly ])
   })
 })

@@ -27,6 +27,7 @@ import { VideoModel } from '../models/video/video'
 import { VideoCaptionModel } from '../models/video/video-caption'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { UserModel } from '@server/models/user/user'
+import { Hooks } from '@server/lib/plugins/hooks'
 
 const feedsRouter = express.Router()
 
@@ -172,24 +173,24 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     const isFilm: boolean = data.length > 0 && data[data.length - 1].category === 2
     const videos = isFilm ? [ data[data.length - 1] ] : data
 
-    // TODO: Add customTags hook for the channel level here
-    /* const customTags: CustomTag[] = await Hooks.wrapObject(
+    const customTags: CustomTag[] = await Hooks.wrapObject(
       [],
-      'filter:feed.podcast.channel.custom-tags.result',
+      'filter:api.feed.podcast.channel.custom-tags.result',
       { account, videoChannel }
-    ) */
+    )
 
     feed = initFeed({
       name: isFilm ? videos[0].name : name,
       description: isFilm ? videos[0].description : description,
       link: isFilm ? videos[0].url : link,
       imageUrl: isFilm ? WEBSERVER.URL + videos[0].getPreviewStaticPath() : imageUrl,
-      ...(email && { locked: { isLocked: true, email } }), // Default to true because we have no way of offering a redirect etc
+      ...(email && { locked: { isLocked: true, email } }), // Default to true because we have no way of offering a redirect yet
       author: { name, link: accountLink, imageUrl: accountImageUrl },
       resourceType: 'videos',
       queryString: new URL(WEBSERVER.URL + req.url).search,
       medium: isFilm ? 'film' : 'video',
-      format
+      format,
+      customTags
     })
 
     await addVideosToFeed(feed, videos, format)
@@ -381,12 +382,11 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
         }
       }).filter(c => c)
 
-      // TODO: Add customTags hook for the channel level here
-      /* const customTags: CustomTag[] = await Hooks.wrapObject(
-         [],
-         'filter:feed.podcast.item.custom-tags.result',
-         { account, videoChannel }
-      ) */
+      const customTags: CustomTag[] = await Hooks.wrapObject(
+        [],
+        'filter:api.feed.podcast.item.custom-tags.result',
+        { video }
+      )
 
       const author = {
         name: video.VideoChannel.Account.getDisplayName(),
@@ -421,8 +421,8 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
           {
             url: WEBSERVER.URL + video.getPreviewStaticPath()
           }
-        ]
-        // customTags,
+        ],
+        customTags
       }
 
       feed.addPodcastItem(item)
@@ -465,12 +465,11 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
           break
       }
 
-      // TODO: Add customTags hook for the channel level here
-      /* const customTags: CustomTag[] = await Hooks.wrapObject(
-         [],
-         'filter:feed.podcast.live-item.custom-tags.result',
-         { account, videoChannel }
-      ) */
+      const customTags: CustomTag[] = await Hooks.wrapObject(
+        [],
+        'filter:api.feed.podcast.live-item.custom-tags.result',
+        { video }
+      )
 
       const author = {
         name: video.VideoChannel.Account.getDisplayName(),
@@ -509,8 +508,8 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
           {
             url: WEBSERVER.URL + video.getPreviewStaticPath()
           }
-        ]
-        // customTags,
+        ],
+        customTags
       }
 
       feed.addPodcastLiveItem(item)
