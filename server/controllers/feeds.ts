@@ -6,7 +6,7 @@ import { CustomTag, LiveItemStatus } from 'pfeed-podcast/lib/typings'
 import { mdToOneLinePlainText, toSafeHtml } from '@server/helpers/markdown'
 import { getServerActor } from '@server/models/application/application'
 import { getCategoryLabel } from '@server/models/video/formatter/video-format-utils'
-import { MAccountDefault, MChannelBannerAccountDefault, MVideoFullLight } from '@server/types/models'
+import { MAccountDefault, MChannelBannerAccountDefault, MUser, MVideoFullLight } from '@server/types/models'
 import { ActorImageType, VideoInclude, VideoResolution, VideoState, VideoStreamingPlaylistType } from '@shared/models'
 import { buildNSFWFilter } from '../helpers/express-utils'
 import { CONFIG } from '../initializers/config'
@@ -141,17 +141,21 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     videoChannelId: videoChannel ? videoChannel.id : null
   }
 
+  console.log(`isLocal: ${req.query.isLocal}$`)
+
   const server = await getServerActor()
   const { data } = await VideoModel.listForApi({
     start,
     count: CONFIG.FEEDS.VIDEOS.COUNT,
-    sort: req.query.sort,
+    sort: format === 'podcast' ? '-publishedAt' : req.query.sort,
     displayOnlyForFollower: {
       actorId: server.id,
       orLocalVideos: true
     },
     nsfw,
-    isLocal: true,
+    // Prevent podcast feeds from listing videos in other instances
+    // helps prevent duplicates when they are indexed -- only the author should control them
+    isLocal: format === 'podcast' ? true : req.query.isLocal,
     include: req.query.include | VideoInclude.FILES,
     // TODO: include tags for future inclusion into the RSS feed
     // include: req.query.include | VideoInclude.FILES | VideoInclude.TAGS,
@@ -160,32 +164,49 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     ...options
   })
 
-  // If the first video in the channel is a film, that will be the only video in the feed
-  // Yes, this is a hack :)
-  const isFilm: boolean = data.length > 0 && data[data.length - 1].category === 2
-  const videos = isFilm ? [ data[data.length - 1] ] : data
+  let feed: Feed
 
-  // TODO: Add customTags hook for the channel level here
-  /* const customTags: CustomTag[] = await Hooks.wrapObject(
-     [],
-     'filter:feed.podcast.channel.custom-tags.result',
-     { account, videoChannel }
-  ) */
+  if (format === 'podcast') {
+    // If the first video in the channel is a film, that will be the only video in the feed
+    // Yes, this is a hack :)
+    const isFilm: boolean = data.length > 0 && data[data.length - 1].category === 2
+    const videos = isFilm ? [ data[data.length - 1] ] : data
 
-  const feed = initFeed({
-    name: isFilm ? videos[0].name : name,
-    description: isFilm ? videos[0].description : description,
-    link: isFilm ? videos[0].url : link,
-    imageUrl: isFilm ? WEBSERVER.URL + videos[0].getPreviewStaticPath() : imageUrl,
-    locked: { isLocked: true, email }, // Default to true because we have no way of offering a redirect etc
-    author: { name, link: accountLink, imageUrl: accountImageUrl },
-    resourceType: 'videos',
-    queryString: new URL(WEBSERVER.URL + req.url).search,
-    medium: isFilm ? 'film' : 'video',
-    format
-  })
+    // TODO: Add customTags hook for the channel level here
+    /* const customTags: CustomTag[] = await Hooks.wrapObject(
+      [],
+      'filter:feed.podcast.channel.custom-tags.result',
+      { account, videoChannel }
+    ) */
 
-  await addVideosToFeed(feed, videos, format)
+    feed = initFeed({
+      name: isFilm ? videos[0].name : name,
+      description: isFilm ? videos[0].description : description,
+      link: isFilm ? videos[0].url : link,
+      imageUrl: isFilm ? WEBSERVER.URL + videos[0].getPreviewStaticPath() : imageUrl,
+      ...(email && { locked: { isLocked: true, email } }), // Default to true because we have no way of offering a redirect etc
+      author: { name, link: accountLink, imageUrl: accountImageUrl },
+      resourceType: 'videos',
+      queryString: new URL(WEBSERVER.URL + req.url).search,
+      medium: isFilm ? 'film' : 'video',
+      format
+    })
+
+    await addVideosToFeed(feed, videos, format)
+  } else {
+    feed = initFeed({
+      name,
+      description,
+      link,
+      imageUrl,
+      author: { name, link: accountLink, imageUrl: accountImageUrl },
+      resourceType: 'videos',
+      queryString: new URL(WEBSERVER.URL + req.url).search,
+      format
+    })
+
+    await addVideosToFeed(feed, data, format)
+  }
 
   // Now the feed generation is done, let's send it!
   return sendFeed(feed, req, res)
@@ -294,8 +315,11 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
         language?: string
       }[] = video.getFormattedVideoFilesJSON(false).map(videoFile => {
         const isAudio = videoFile.resolution.id === VideoResolution.H_NOVIDEO
+        const type = isAudio
+          ? MIMETYPES.AUDIO.EXT_MIMETYPE[extname(videoFile.fileUrl)]
+          : MIMETYPES.VIDEO.EXT_MIMETYPE[extname(videoFile.fileUrl)]
         const result = {
-          type: MIMETYPES.AUDIO.MIMETYPE_EXT[extname(videoFile.fileUrl)],
+          type,
           title: isAudio ? 'Audio' : videoFile.resolution.label,
           length: videoFile.size,
           bitrate: videoFile.size / video.duration * 8,
@@ -311,7 +335,7 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
       })
 
       // If both webtorrent and HLS are enabled, prefer webtorrent files
-      // standard files for webtorrent are regular MP4s
+      // standard files for webtorrent are regular videos
       const groupedVideos = groupBy(videos, video => video.title)
       const preferredVideos = map(groupedVideos, videoGroup => {
         return videoGroup.find(v => {
@@ -322,15 +346,10 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
       const sortedVideos = orderBy(preferredVideos, [ 'bitrate' ], [ 'desc' ])
 
       const streamingPlaylists = video.VideoStreamingPlaylists
+        .filter((streamingPlaylist) => streamingPlaylist.type === VideoStreamingPlaylistType.HLS)
         .map(streamingPlaylist => {
-          let type = ''
-          if (streamingPlaylist.type === VideoStreamingPlaylistType.HLS) {
-            type = 'application/x-mpegURL'
-          } else {
-            return null
-          }
           const result = {
-            type,
+            type: 'application/x-mpegURL',
             title: 'HLS',
             sources: [
               { uri: streamingPlaylist.getMasterPlaylistUrl(video) }
@@ -352,7 +371,7 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
       const videoCaptions = await VideoCaptionModel.listVideoCaptions(video.id)
 
       const captions = videoCaptions?.map(caption => {
-        const type = MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT[extname(caption.filename)]
+        const type = MIMETYPES.VIDEO_CAPTIONS.EXT_MIMETYPE[extname(caption.filename)]
         if (!type) return null
         return {
           url: caption.getFileUrl(video),
@@ -412,15 +431,10 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
     // Filter live videos that are pending or in progress
     for (const video of videos.filter(v => v.isLive && v.state !== VideoState.LIVE_ENDED)) {
       const streamingPlaylists = video.VideoStreamingPlaylists
+        .filter((streamingPlaylist) => streamingPlaylist.type === VideoStreamingPlaylistType.HLS)
         .map((streamingPlaylist, index) => {
-          let type = ''
-          if (streamingPlaylist.type === VideoStreamingPlaylistType.HLS) {
-            type = 'application/x-mpegURL'
-          } else {
-            return null
-          }
           const result = {
-            type,
+            type: 'application/x-mpegURL',
             title: `Live Stream ${index + 1}`,
             sources: [
               { uri: streamingPlaylist.getMasterPlaylistUrl(video) }
@@ -430,7 +444,7 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
           if (video.language) Object.assign(result, { language: video.language })
 
           return result
-        }).filter(s => s)
+        })
 
       let category: string
       if (video.category) {
@@ -628,10 +642,10 @@ async function buildFeedMetadata (options: {
   let accountImageUrl: string
   let name: string
   let description: string
-  // TODO: See if we need to allow admin-optin to show the email address in feeds
-  let email = CONFIG.ADMIN.EMAIL
+  let email: string
   let link: string
   let accountLink: string
+  let user: MUser
 
   if (videoChannel) {
     name = videoChannel.getDisplayName()
@@ -647,13 +661,7 @@ async function buildFeedMetadata (options: {
       accountImageUrl = WEBSERVER.URL + videoChannel.Account.Actor.Avatars[0].getStaticPath()
     }
 
-    const user = await UserModel.loadById(videoChannel.Account.userId)
-
-    // Only allow local users for now
-    if (isNull(user.pluginAuth) && user.emailVerified && user.isEmailPublic) {
-      email = user.email
-    }
-
+    user = await UserModel.loadById(videoChannel.Account.userId)
   } else if (account) {
     name = account.getDisplayName()
     description = account.description
@@ -665,13 +673,7 @@ async function buildFeedMetadata (options: {
       accountImageUrl = imageUrl
     }
 
-    const user = await UserModel.loadById(account.userId)
-
-    // Only allow local users for now
-    if (isNull(user.pluginAuth) && user.emailVerified && user.isEmailPublic) {
-      email = user.email
-    }
-
+    user = await UserModel.loadById(account.userId)
   } else if (video) {
     name = video.name
     description = video.description
@@ -680,6 +682,12 @@ async function buildFeedMetadata (options: {
     name = CONFIG.INSTANCE.NAME
     description = CONFIG.INSTANCE.DESCRIPTION
     link = WEBSERVER.URL
+  }
+
+  // If the user is local, has a verified email address, and allows it to be publicly displayed
+  // Return it so the owner can prove ownership of their feed
+  if (user && isNull(user.pluginAuth) && user.emailVerified && user.isEmailPublic) {
+    email = user.email
   }
 
   return { name, description, imageUrl, accountImageUrl, email, link, accountLink }
