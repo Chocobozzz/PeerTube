@@ -223,6 +223,24 @@ describe('Test syndication feeds', () => {
       expect(alternateEnclosure['podcast:source']['@_uri']).to.equal(enclosure['@_url'])
     })
 
+    it('Should contain a valid podacst:socialInteract (covers Podcast endpoint)', async function () {
+      const server = servers[0]
+      const rss = await server.feed.getXML({ feed: 'videos', ignoreCache: true, format: 'podcast' })
+      expect(XMLValidator.validate(rss)).to.be.true
+
+      const parser = new XMLParser({ parseAttributeValue: true, ignoreAttributes: false })
+      const xmlDoc = parser.parse(rss)
+
+      for (const item of xmlDoc.rss.channel.item) {
+        const socialInteract = item['podcast:socialInteract']
+        console.log(socialInteract)
+        expect(socialInteract).to.exist
+        expect(socialInteract['@_protocol']).to.equal('activitypub')
+        expect(socialInteract['@_uri']).to.exist
+        expect(socialInteract['@_accountUrl']).to.exist
+      }
+    })
+
     it('Should contain a valid \'attachments\' object (covers JSON feed 1.0 endpoint)', async function () {
       for (const server of servers) {
         const json = await server.feed.getJSON({ feed: 'videos', ignoreCache: true })
