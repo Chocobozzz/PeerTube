@@ -406,12 +406,12 @@
       </trans-unit>
       <trans-unit id="5201790281220738609" datatype="html">
         <source>Search playlists</source>
-        <target state="translated">Искать плейлисты</target>
+        <target state="translated">Искать подборки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="6056859576122955708" datatype="html">
         <source>Create a private playlist</source>
-        <target state="translated">Создать приватный плейлист</target>
+        <target state="translated">Создать приватную подборку</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="2409672154570643758">
@@ -632,12 +632,12 @@
       </trans-unit>
       <trans-unit id="6228449077605046873" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</source>
-        <target state="translated">Вы уверены, что хотите удалить {count, plural, =1 {1 HLS плейлист} other {<x id="count"/> HLS плейлистов}}?</target>
+        <target state="translated">Вы уверены, что хотите удалить {count, plural, =1 {1 HLS подборку} other {<x id="count"/> HLS подборок}}?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">277</context></context-group>
       </trans-unit>
       <trans-unit id="9088099192924395359" datatype="html">
         <source>Are you sure you want to delete <x id="PH" equiv-text="videos.length"/> HLS streaming playlists?</source>
-        <target state="translated">Вы действительно хотите удалить <x id="PH" equiv-text="videos.length"/> плейлисты потоковой передачи HLS?</target>
+        <target state="translated">Вы действительно хотите удалить <x id="PH" equiv-text="videos.length"/> подборки потоковой передачи HLS?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">279</context></context-group>
       </trans-unit>
       <trans-unit id="653148876380254581" datatype="html">
@@ -1451,7 +1451,7 @@
       </trans-unit>
       <trans-unit id="3848077896245199337" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="translated">Настройте свой аккаунт, управляйте плейлистами видео, открывайте сторонние приложения...</target>
+        <target state="translated">Настройте свою учётную запись, управляйте подборками видео, открывайте сторонние приложения...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="6284442506490785579" datatype="html">
@@ -1735,7 +1735,7 @@
       </trans-unit>
       <trans-unit id="949618577357088829" datatype="html">
         <source>Create a new playlist</source>
-        <target state="translated">Создать плейлист</target>
+        <target state="translated">Создать подборку</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="2689878465089314112" datatype="html">
@@ -2368,7 +2368,7 @@
       </trans-unit>
       <trans-unit id="3059355667050002541" datatype="html">
         <source>Error in playlist miniature component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="translated">Ошибка компонента миниатюры плейлиста: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Ошибка в заставочном компоненте подборки: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/playlist-miniature-markup.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -2687,7 +2687,7 @@
       </trans-unit>
       <trans-unit id="5407145687662795944" datatype="html">
         <source>Video thumbnail</source>
-        <target state="translated">Миниатюра видео</target>
+        <target state="translated">Заставка видео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">310</context></context-group>
       </trans-unit>
       <trans-unit id="2375260419993138758">
@@ -2975,12 +2975,12 @@
       </trans-unit>
       <trans-unit id="6599497107591892109" datatype="html">
         <source>Share the playlist</source>
-        <target state="translated">Поделитесь плейлистом</target>
+        <target state="translated">Поделитесь подборкой</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="937533808893845780" datatype="html">
         <source>This playlist is private so you won't be able to share it with external users</source>
-        <target state="translated">Этот плейлист является частным, поэтому вы не сможете поделиться им с другими пользователями</target>
+        <target state="translated">Эта подборка является частной, поэтому вы не сможете поделиться её с другими пользователями</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context>
           <context context-type="linenumber">14</context>
@@ -2988,12 +2988,12 @@
       </trans-unit>
       <trans-unit id="5806907163449517166" datatype="html">
         <source>Update playlist privacy</source>
-        <target state="translated">Обновить конфиденциальность плейлиста</target>
+        <target state="translated">Обновить конфиденциальность подборки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6460270615876918310" datatype="html">
         <source>Share the playlist at this video position</source>
-        <target state="translated">Поделитесь плейлистом с текущей позиции видео</target>
+        <target state="translated">Поделитесь подборкой с текущей позиции видео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">71</context></context-group>
       </trans-unit>
       <trans-unit id="8920371331444717794" datatype="html">
@@ -3316,7 +3316,7 @@
       </trans-unit>
       <trans-unit id="7365478703093390233" datatype="html">
         <source>There are no videos available in this playlist.</source>
-        <target state="translated">В этом плейлисте нет доступных видео.</target>
+        <target state="translated">В этой подборке нет доступных видео.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">37,39</context>
@@ -6199,7 +6199,7 @@
       </trans-unit>
       <trans-unit id="2864486939135008600" datatype="html">
         <source>Playlist elements</source>
-        <target state="translated">Элементы плейлиста</target>
+        <target state="translated">Элементы подборки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="7801453816697513153" datatype="html">
@@ -6419,25 +6419,25 @@
       </trans-unit>
       <trans-unit id="1967081128372276674" datatype="html">
         <source>My Playlists</source>
-        <target state="translated">Мои плейлисты</target>
+        <target state="translated">Мои подборки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="2317130384024575795" datatype="html">
         <source>NEW PLAYLIST</source>
-        <target state="translated">НОВЫЙ ПЛЕЙЛИСТ</target>
+        <target state="translated">НОВАЯ ПОДБОРКА</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">25</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="2871943975385662656" datatype="html">
         <source>PLAYLIST</source>
-        <target state="translated">ПЛЕЙЛИСТ</target>
+        <target state="translated">ПОДБОРКА</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">26</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="3438686710205841496" datatype="html">
         <source>Create playlist</source>
-        <target state="translated">Создать плейлист</target>
+        <target state="translated">Создать подборку</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="7040375308762081154" datatype="html">
@@ -6452,18 +6452,18 @@
       </trans-unit>
       <trans-unit id="3943893855105372623" datatype="html">
         <source>Playlist thumbnail</source>
-        <target state="translated">Миниатюра плейлиста</target>
+        <target state="translated">Заставка подборки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">76</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="7743343997362363486">
         <source>No videos in this playlist.</source>
-        <target>Нет видео в этом плейлисте.</target>
+        <target state="translated">Нет видео в этой подборке.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="2427149618141327033" datatype="html">
         <source>Browse videos on PeerTube to add them in your playlist.</source>
-        <target state="translated">Просматривайте видео, чтобы добавить их в плейлист.</target>
+        <target state="translated">Просматривайте видео, чтобы добавить их в подборку.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="8901774330683812267" datatype="html">
@@ -6589,12 +6589,12 @@
       </trans-unit>
       <trans-unit id="3030338154442300172" datatype="html">
         <source>Created <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {1 playlist} other {{{ pagination.totalItems }} playlists}}" xid="498463490165953744"/> </source>
-        <target state="translated">Создан <x id="ICU" equiv-text="{pagination.totalItems, plural, one {{{ pagination.totalItems }} плейлист} few {{{ pagination.totalItems }} плейлиста} other {{{ pagination.totalItems }} плейлистов}}"/> </target>
+        <target state="translated">Создана(о) <x id="ICU" equiv-text="{pagination.totalItems, plural, one {{{ pagination.totalItems }} подборка} few {{{ pagination.totalItems }} подборки} other {{{ pagination.totalItems }} подборок}}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="3505845886770923767" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</source>
-        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> плейлист} few {<x id="INTERPOLATION"/> плейлиста} other {<x id="INTERPOLATION"/> плейлистов}}</target>
+        <target state="translated">{VAR_PLURAL, plural, one {<x id="INTERPOLATION"/> подборка} few {<x id="INTERPOLATION"/> подборки} other {<x id="INTERPOLATION"/> подборок}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6620,7 +6620,7 @@
       </trans-unit>
       <trans-unit id="3193822049276963401" datatype="html">
         <source>Video channel playlists</source>
-        <target state="translated">Плейлисты видеоканалов</target>
+        <target state="translated">Подборки видеоканалов</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels-routing.module.ts</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="1949999959792821767" datatype="html">
@@ -6821,7 +6821,7 @@
       </trans-unit>
       <trans-unit id="4068658588793749132">
         <source>This channel does not have playlists.</source>
-        <target>Этот канал не имеет плейлистов.</target>
+        <target state="translated">Этот канал не имеет подборок.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="5066829276646988805">
@@ -6984,7 +6984,7 @@
       </trans-unit>
       <trans-unit id="8674693181203168033" datatype="html">
         <source>Discover how to setup your account, what is a channel, how to create a playlist and more!</source>
-        <target state="translated">Узнайте, как настроить свой аккаунт, что такое канал, как создать плейлист и многое другое!</target>
+        <target state="translated">Узнайте, как настроить свою учётную запись, что такое канал, как создать подборку и многое другое!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="5336387229608682776" datatype="html">
@@ -9158,7 +9158,7 @@
       </trans-unit>
       <trans-unit id="5032453707232754344">
         <source>Playlist <x id="PH"/> created.</source>
-        <target>Плейлист <x id="PH"/> был создан.</target>
+        <target state="translated">Подборка <x id="PH"/> была создана.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-create.component.ts</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="5674286808255988565" datatype="html">
@@ -9175,7 +9175,7 @@
       </trans-unit>
       <trans-unit id="8869957234869568361" datatype="html">
         <source>Update playlist</source>
-        <target state="translated">Изменить плейлист</target>
+        <target state="translated">Изменить подборку</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">69</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
@@ -9196,12 +9196,12 @@
       </trans-unit>
       <trans-unit id="104404386496394770" datatype="html">
         <source>Delete playlist</source>
-        <target state="translated">Удалить плейлист</target>
+        <target state="translated">Удалить подборку</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="1431617394009162547">
         <source>Playlist <x id="PH"/> updated.</source>
-        <target>Плейлист <x id="PH"/> был обновлён.</target>
+        <target state="translated">Подборка <x id="PH"/> была обновлена.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context><context context-type="linenumber">100</context></context-group>
       </trans-unit>
       <trans-unit id="4844578664427956129" datatype="html">
@@ -9212,7 +9212,7 @@
       </trans-unit>
       <trans-unit id="3380608219513805292">
         <source>Playlist <x id="PH"/> deleted.</source>
-        <target>Плейлист <x id="PH"/> был удалён.</target>
+        <target state="translated">Подборка <x id="PH"/> была удалена.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">136</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
@@ -9308,7 +9308,7 @@
       </trans-unit>
       <trans-unit id="7545420287297803988">
         <source>My playlists</source>
-        <target>Мои плейлисты</target>
+        <target state="translated">Мои подборки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">95</context></context-group>
@@ -9394,7 +9394,7 @@
       </trans-unit>
       <trans-unit id="1823843876735462104" datatype="html">
         <source>Playlists</source>
-        <target state="translated">Плейлисты</target>
+        <target state="translated">Подборки</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library.component.ts</context><context context-type="linenumber">59</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">205</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">94</context></context-group>
@@ -9442,7 +9442,7 @@
       </trans-unit>
       <trans-unit id="3131904093925601441" datatype="html">
         <source>PLAYLISTS</source>
-        <target state="translated">ПЛЕЙЛИСТЫ</target>
+        <target state="translated">ПОДБОРКИ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="1593265243494758679" datatype="html">
@@ -10612,7 +10612,7 @@
       </trans-unit>
       <trans-unit id="1276238402004616037" datatype="html">
         <source>The channel is required when the playlist is public.</source>
-        <target state="translated">Канал необходим, если плейлист является общедоступным.</target>
+        <target state="translated">Канал необходим, если подборка является общедоступной.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="5226261760726752768" datatype="html">
@@ -11748,7 +11748,7 @@
       </trans-unit>
       <trans-unit id="2279527393438260622" datatype="html">
         <source>Search videos, playlists, channels…</source>
-        <target state="translated">Искать видео, плейлисты, каналы…</target>
+        <target state="translated">Искать видео, подборки, каналы…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">3</context>
@@ -11964,7 +11964,7 @@
       </trans-unit>
       <trans-unit id="1950057220179636309">
         <source>Save to playlist</source>
-        <target>Добавить в плейлист</target>
+        <target state="translated">Добавить в подборку</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/action-buttons.component.ts</context><context context-type="linenumber">59</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">321</context></context-group>
       </trans-unit>
@@ -12320,12 +12320,12 @@
       </trans-unit>
       <trans-unit id="5870421136141540382" datatype="html">
         <source>Stop looping playlist videos</source>
-        <target state="translated">Остановить зацикливание воспроизведения видео</target>
+        <target state="translated">Остановить повторение видео из подборок</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/playlist/video-watch-playlist.component.ts</context><context context-type="linenumber">243</context></context-group>
       </trans-unit>
       <trans-unit id="1599585307037758139" datatype="html">
         <source>Loop playlist videos</source>
-        <target state="translated">Цикличное воспроизведение видео</target>
+        <target state="translated">Повторять видео из подборок</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/playlist/video-watch-playlist.component.ts</context><context context-type="linenumber">244</context></context-group>
       </trans-unit>
       <trans-unit id="1254111869788332501" datatype="html">
