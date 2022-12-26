@@ -6984,7 +6984,7 @@
       </trans-unit>
       <trans-unit id="8674693181203168033" datatype="html">
         <source>Discover how to setup your account, what is a channel, how to create a playlist and more!</source>
-        <target state="translated">Узнайте, как настроить свой аккаунт, что такое канал, как создать плейлист и многое другое!</target>
+        <target state="translated">Узнайте, как настроить свою учётную запись, что такое канал, как создать подборку и многое другое!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="5336387229608682776" datatype="html">
