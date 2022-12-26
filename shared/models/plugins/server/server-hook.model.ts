@@ -142,6 +142,8 @@ export const serverActionHookObject = {
 
   // Fired when a live video is created
   'action:api.live-video.created': true,
+  // Fired when a live video starts or ends
+  'action:api.live-video.state.updated': true,
 
   // Fired when a thread is created
   'action:api.video-thread.created': true,

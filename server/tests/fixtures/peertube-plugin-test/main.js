@@ -13,6 +13,7 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     'action:api.video-channel.deleted',
 
     'action:api.live-video.created',
+    'action:api.live-video.state.updated',
 
     'action:api.video-thread.created',
     'action:api.video-comment-reply.created',
