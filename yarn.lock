@@ -7320,10 +7320,10 @@ peek-stream@^1.1.1:
     duplexify "^3.5.0"
     through2 "^2.0.3"
 
-pfeed-podcast@^6.1.1:
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/pfeed-podcast/-/pfeed-podcast-6.1.1.tgz#32cca6e6a0c95fbdd52b7d075f59cd6eb7a1b8bb"
-  integrity sha512-kDzPZiS0CQeAMfII4dAQJJYFsqHAL+faDPH4YQ5wYt4AMvaBl7zI9dsajnEDE37IjmxOb1Rzg0d0w5+Mm1kgiQ==
+pfeed-podcast@^6.1.2:
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/pfeed-podcast/-/pfeed-podcast-6.1.2.tgz#96206bb179871156a1b0a57d0d6bf7e806f00be0"
+  integrity sha512-2nwHHFUOlIQ8j9G//r9amWK0TmS8AUcODHtavb1GNcBlHM6B5mEPGldyrOtUsOn3Ly71HFqXGS+RApYkqYXfKA==
   dependencies:
     xml-js "^1.6.11"
 
@@ -8293,13 +8293,6 @@ short-uuid@^4.2.0:
   dependencies:
     any-base "^1.1.0"
     uuid "^8.3.2"
-
-showdown@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/showdown/-/showdown-2.1.0.tgz#1251f5ed8f773f0c0c7bfc8e6fd23581f9e545c5"
-  integrity sha512-/6NVYu4U819R2pUIk79n67SYgJHWCce0a5xTP979WbNp0FL9MN1I1QK662IDU1b6JzKTvmhgI7T7JYIxBi3kMQ==
-  dependencies:
-    commander "^9.0.0"
 
 side-channel@^1.0.4:
   version "1.0.4"
