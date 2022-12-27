@@ -412,7 +412,6 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
         date: video.publishedAt,
         nsfw: video.nsfw,
         media,
-        category: [ { name: category } ],
         socialInteract: [
           { uri: video.url, protocol: 'activitypub', accountUrl: video.VideoChannel.Account.getLocalUrl() }
         ],
@@ -423,6 +422,10 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
           }
         ],
         customTags
+      }
+
+      if (category) {
+        Object.assign(item, { name: category })
       }
 
       feed.addPodcastItem(item)
@@ -500,7 +503,6 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
         date: video.publishedAt,
         nsfw: video.nsfw,
         media: streamingPlaylists,
-        category: [ { name: category } ],
         socialInteract: [
           { uri: video.url, protocol: 'activitypub', accountUrl: video.VideoChannel.Account.getLocalUrl() }
         ],
@@ -510,6 +512,10 @@ async function addVideosToFeed (feed: Feed, videos: VideoModel[], format: string
           }
         ],
         customTags
+      }
+
+      if (category) {
+        Object.assign(item, { name: category })
       }
 
       feed.addPodcastLiveItem(item)
