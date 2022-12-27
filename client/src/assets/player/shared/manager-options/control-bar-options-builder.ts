@@ -30,10 +30,7 @@ export class ControlBarOptionsBuilder {
     }
 
     Object.assign(children, {
-      currentTimeDisplay: {},
-      timeDivider: {},
-      durationDisplay: {},
-      liveDisplay: {},
+      ...this.getTimeControls(),
 
       flexibleWidthSpacer: {},
 
@@ -90,7 +87,23 @@ export class ControlBarOptionsBuilder {
     }
   }
 
+  private getTimeControls () {
+    if (this.options.isLive) {
+      return {
+        peerTubeLiveDisplay: {}
+      }
+    }
+
+    return {
+      currentTimeDisplay: {},
+      timeDivider: {},
+      durationDisplay: {}
+    }
+  }
+
   private getProgressControl () {
+    if (this.options.isLive) return {}
+
     const loadProgressBar = this.mode === 'webtorrent'
       ? 'peerTubeLoadProgressBar'
       : 'loadProgressBar'

@@ -41,6 +41,7 @@ const playerKeys = {
   'Volume': 'Volume',
   'Codecs': 'Codecs',
   'Color': 'Color',
+  'Go back to the live': 'Go back to the live',
   'Connection Speed': 'Connection Speed',
   'Network Activity': 'Network Activity',
   'Total Transfered': 'Total Transfered',

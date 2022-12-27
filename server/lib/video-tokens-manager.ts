@@ -1,5 +1,7 @@
 import LRUCache from 'lru-cache'
 import { LRU_CACHE } from '@server/initializers/constants'
+import { MUserAccountUrl } from '@server/types/models'
+import { pick } from '@shared/core-utils'
 import { buildUUID } from '@shared/extra-utils'
 
 // ---------------------------------------------------------------------------
@@ -10,19 +12,22 @@ class VideoTokensManager {
 
   private static instance: VideoTokensManager
 
-  private readonly lruCache = new LRUCache<string, string>({
+  private readonly lruCache = new LRUCache<string, { videoUUID: string, user: MUserAccountUrl }>({
     max: LRU_CACHE.VIDEO_TOKENS.MAX_SIZE,
     ttl: LRU_CACHE.VIDEO_TOKENS.TTL
   })
 
   private constructor () {}
 
-  create (videoUUID: string) {
+  create (options: {
+    user: MUserAccountUrl
+    videoUUID: string
+  }) {
     const token = buildUUID()
 
     const expires = new Date(new Date().getTime() + LRU_CACHE.VIDEO_TOKENS.TTL)
 
-    this.lruCache.set(token, videoUUID)
+    this.lruCache.set(token, pick(options, [ 'user', 'videoUUID' ]))
 
     return { token, expires }
   }
@@ -34,7 +39,16 @@ class VideoTokensManager {
     const value = this.lruCache.get(options.token)
     if (!value) return false
 
-    return value === options.videoUUID
+    return value.videoUUID === options.videoUUID
+  }
+
+  getUserFromToken (options: {
+    token: string
+  }) {
+    const value = this.lruCache.get(options.token)
+    if (!value) return undefined
+
+    return value.user
   }
 
   static get Instance () {

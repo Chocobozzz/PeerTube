@@ -180,17 +180,15 @@ async function checkCanAccessVideoStaticFiles (options: {
     return checkCanSeeVideo(options)
   }
 
-  if (!video.hasPrivateStaticPath()) return true
-
   const videoFileToken = req.query.videoFileToken
-  if (!videoFileToken) {
-    res.sendStatus(HttpStatusCode.FORBIDDEN_403)
-    return false
-  }
+  if (videoFileToken && VideoTokensManager.Instance.hasToken({ token: videoFileToken, videoUUID: video.uuid })) {
+    const user = VideoTokensManager.Instance.getUserFromToken({ token: videoFileToken })
 
-  if (VideoTokensManager.Instance.hasToken({ token: videoFileToken, videoUUID: video.uuid })) {
+    res.locals.videoFileToken = { user }
     return true
   }
+
+  if (!video.hasPrivateStaticPath()) return true
 
   res.sendStatus(HttpStatusCode.FORBIDDEN_403)
   return false

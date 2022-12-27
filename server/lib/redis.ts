@@ -8,7 +8,6 @@ import {
   AP_CLEANER,
   CONTACT_FORM_LIFETIME,
   RESUMABLE_UPLOAD_SESSION_LIFETIME,
-  TRACKER_RATE_LIMITS,
   TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME,
   USER_EMAIL_VERIFY_LIFETIME,
   USER_PASSWORD_CREATE_LIFETIME,
@@ -155,16 +154,6 @@ class Redis {
 
   async doesVideoIPViewExist (ip: string, videoUUID: string) {
     return this.exists(this.generateIPViewKey(ip, videoUUID))
-  }
-
-  /* ************ Tracker IP block ************ */
-
-  setTrackerBlockIP (ip: string) {
-    return this.setValue(this.generateTrackerBlockIPKey(ip), '1', TRACKER_RATE_LIMITS.BLOCK_IP_LIFETIME)
-  }
-
-  async doesTrackerBlockIPExist (ip: string) {
-    return this.exists(this.generateTrackerBlockIPKey(ip))
   }
 
   /* ************ Video views stats ************ */
@@ -363,10 +352,6 @@ class Redis {
 
   private generateIPViewKey (ip: string, videoUUID: string) {
     return `views-${videoUUID}-${ip}`
-  }
-
-  private generateTrackerBlockIPKey (ip: string) {
-    return `tracker-block-ip-${ip}`
   }
 
   private generateContactFormKey (ip: string) {

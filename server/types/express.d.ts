@@ -10,6 +10,7 @@ import {
   MChannelBannerAccountDefault,
   MChannelSyncChannel,
   MStreamingPlaylist,
+  MUserAccountUrl,
   MVideoChangeOwnershipFull,
   MVideoFile,
   MVideoFormattableDetails,
@@ -185,6 +186,10 @@ declare module 'express' {
 
       signature?: {
         actor: MActorAccountChannelId
+      }
+
+      videoFileToken?: {
+        user: MUserAccountUrl
       }
 
       authenticated?: boolean

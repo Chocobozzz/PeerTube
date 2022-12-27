@@ -22,7 +22,7 @@ export {
 function generateToken (req: express.Request, res: express.Response) {
   const video = res.locals.onlyVideo
 
-  const { token, expires } = VideoTokensManager.Instance.create(video.uuid)
+  const { token, expires } = VideoTokensManager.Instance.create({ videoUUID: video.uuid, user: res.locals.oauth.token.User })
 
   return res.json({
     files: {

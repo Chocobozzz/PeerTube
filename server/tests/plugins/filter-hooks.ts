@@ -430,6 +430,7 @@ describe('Test plugin filter hooks', function () {
 
   describe('Download hooks', function () {
     const downloadVideos: VideoDetails[] = []
+    let downloadVideo2Token: string
 
     before(async function () {
       this.timeout(120000)
@@ -459,6 +460,8 @@ describe('Test plugin filter hooks', function () {
       for (const uuid of uuids) {
         downloadVideos.push(await servers[0].videos.get({ id: uuid }))
       }
+
+      downloadVideo2Token = await servers[0].videoToken.getVideoFileToken({ videoId: downloadVideos[2].uuid })
     })
 
     it('Should run filter:api.download.torrent.allowed.result', async function () {
@@ -471,32 +474,42 @@ describe('Test plugin filter hooks', function () {
 
     it('Should run filter:api.download.video.allowed.result', async function () {
       {
-        const res = await makeRawRequest({ url: downloadVideos[1].files[0].fileDownloadUrl, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        const refused = downloadVideos[1].files[0].fileDownloadUrl
+        const allowed = [
+          downloadVideos[0].files[0].fileDownloadUrl,
+          downloadVideos[2].files[0].fileDownloadUrl
+        ]
+
+        const res = await makeRawRequest({ url: refused, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         expect(res.body.error).to.equal('Cao Cao')
 
-        await makeRawRequest({ url: downloadVideos[0].files[0].fileDownloadUrl, expectedStatus: HttpStatusCode.OK_200 })
-        await makeRawRequest({ url: downloadVideos[2].files[0].fileDownloadUrl, expectedStatus: HttpStatusCode.OK_200 })
+        for (const url of allowed) {
+          await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
+          await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
+        }
       }
 
       {
-        const res = await makeRawRequest({
-          url: downloadVideos[2].streamingPlaylists[0].files[0].fileDownloadUrl,
-          expectedStatus: HttpStatusCode.FORBIDDEN_403
-        })
+        const refused = downloadVideos[2].streamingPlaylists[0].files[0].fileDownloadUrl
 
+        const allowed = [
+          downloadVideos[2].files[0].fileDownloadUrl,
+          downloadVideos[0].streamingPlaylists[0].files[0].fileDownloadUrl,
+          downloadVideos[1].streamingPlaylists[0].files[0].fileDownloadUrl
+        ]
+
+        // Only streaming playlist is refuse
+        const res = await makeRawRequest({ url: refused, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         expect(res.body.error).to.equal('Sun Jian')
 
-        await makeRawRequest({ url: downloadVideos[2].files[0].fileDownloadUrl, expectedStatus: HttpStatusCode.OK_200 })
+        // But not we there is a user in res
+        await makeRawRequest({ url: refused, token: servers[0].accessToken, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url: refused, query: { videoFileToken: downloadVideo2Token }, expectedStatus: HttpStatusCode.OK_200 })
 
-        await makeRawRequest({
-          url: downloadVideos[0].streamingPlaylists[0].files[0].fileDownloadUrl,
-          expectedStatus: HttpStatusCode.OK_200
-        })
-
-        await makeRawRequest({
-          url: downloadVideos[1].streamingPlaylists[0].files[0].fileDownloadUrl,
-          expectedStatus: HttpStatusCode.OK_200
-        })
+        // Other files work
+        for (const url of allowed) {
+          await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
+        }
       }
     })
   })
