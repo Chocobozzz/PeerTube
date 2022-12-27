@@ -2598,7 +2598,7 @@
       </trans-unit>
       <trans-unit id="5121874940679887597" datatype="html">
         <source>Copy channel handle</source>
-        <target state="translated">複製頻道帳號</target>
+        <target state="translated">複製頻道代號</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="2486917589932345430" datatype="html">
@@ -5109,7 +5109,7 @@
       </trans-unit>
       <trans-unit id="3442084803796199253" datatype="html">
         <source>Allow users to do remote URI/handle search</source>
-        <target state="translated">允許使用者遠端搜尋 URI</target>
+        <target state="translated">允許使用者遠端搜尋 URI／代號</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">365</context></context-group>
       </trans-unit>
       <trans-unit id="2258148539285928012" datatype="html">
@@ -5119,7 +5119,7 @@
       </trans-unit>
       <trans-unit id="7295422540935146771" datatype="html">
         <source>Allow anonymous to do remote URI/handle search</source>
-        <target state="translated">允許匿名使用者遠端搜尋 URI</target>
+        <target state="translated">允許匿名使用者遠端搜尋 URI／代號</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">376</context></context-group>
       </trans-unit>
       <trans-unit id="7305237807882754643" datatype="html">
@@ -6698,7 +6698,7 @@
       </trans-unit>
       <trans-unit id="8661266239199665830" datatype="html">
         <source>Copy account handle</source>
-        <target state="translated">複製帳號名稱</target>
+        <target state="translated">複製帳號代號</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="3061133792040537550" datatype="html">
@@ -7735,7 +7735,7 @@
       </trans-unit>
       <trans-unit id="5991533283446904296" datatype="html">
         <source>Hosts or handles are invalid.</source>
-        <target state="translated">主機或帳號無效。</target>
+        <target state="translated">主機或代號無效。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">102</context>
@@ -7743,7 +7743,7 @@
       </trans-unit>
       <trans-unit id="6759198394434886237" datatype="html">
         <source>Hosts or handles contain duplicates.</source>
-        <target state="translated">主機或帳號包含了重複的項目。</target>
+        <target state="translated">主機或代號包含了重複的項目。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">103</context>
@@ -10234,12 +10234,12 @@
       </trans-unit>
       <trans-unit id="544279804045883862" datatype="html">
         <source>Handle is required.</source>
-        <target state="translated">帳號必填。</target>
+        <target state="translated">代號必填。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="2805037637775107078" datatype="html">
         <source>Handle must be valid (eg. chocobozzz@example.com).</source>
-        <target state="translated">帳號必須有效（例如 chocobozzz@example.com）。</target>
+        <target state="translated">代號必須有效（例如 chocobozzz@example.com）。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="3159508433607320799" datatype="html">
