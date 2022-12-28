@@ -177,16 +177,17 @@ $ sudo vim /etc/letsencrypt/renewal/your-domain.com.conf
 
 If you plan to have many concurrent viewers on your PeerTube instance, consider increasing `worker_connections` value: https://nginx.org/en/docs/ngx_core_module.html#worker_connections.
 
-**FreeBSD**
+<details>
+<summary><strong>If using FreeBSD</strong></summary>
+
 On FreeBSD you can use [Dehydrated](https://dehydrated.io/) `security/dehydrated` for [Let's Encrypt](https://letsencrypt.org/)
 
 ```bash
 $ sudo pkg install dehydrated
 ```
+</details>
 
-### :alembic: TCP/IP Tuning
-
-**On Linux**
+### :alembic: Linux TCP/IP Tuning
 
 ```bash
 $ sudo cp /var/www/peertube/peertube-latest/support/sysctl.d/30-peertube-tcp.conf /etc/sysctl.d/
@@ -231,7 +232,9 @@ $ sudo systemctl start peertube
 $ sudo journalctl -feu peertube
 ```
 
-**FreeBSD**
+<details>
+<summary><strong>If using FreeBSD</strong></summary>
+
 On FreeBSD, copy the startup script and update rc.conf:
 
 ```bash
@@ -244,8 +247,10 @@ Run:
 ```bash
 $ sudo service peertube start
 ```
+</details>
 
-### :bricks: OpenRC
+<details>
+<summary><strong>If using OpenRC</strong></summary>
 
 If your OS uses OpenRC, copy the service script:
 
@@ -265,6 +270,7 @@ Run and print last logs:
 $ sudo /etc/init.d/peertube start
 $ tail -f /var/log/peertube/peertube.log
 ```
+</details>
 
 ### :technologist: Administrator
 
@@ -291,16 +297,15 @@ Now your instance is up you can:
 
 **Check the changelog (in particular the *IMPORTANT NOTES* section):** https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md
 
-#### Auto
-
-The password it asks is PeerTube's database user password.
+Run the upgrade script (the password it asks is PeerTube's database user password):
 
 ```bash
 $ cd /var/www/peertube/peertube-latest/scripts && sudo -H -u peertube ./upgrade.sh
 $ sudo systemctl restart peertube # Or use your OS command to restart PeerTube if you don't use systemd
 ```
 
-#### Manually
+<details>
+<summary><strong>Prefer manual upgrade?</strong></summary>
 
 Make a SQL backup
 
@@ -346,17 +351,18 @@ $ cd /var/www/peertube && \
     sudo unlink ./peertube-latest && \
     sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest
 ```
+</details>
 
-### Configuration
+### Update PeerTube configuration
 
-You can check for configuration changes, and report them in your `config/production.yaml` file:
+Check for configuration changes, and report them in your `config/production.yaml` file:
 
 ```bash
 $ cd /var/www/peertube/versions
 $ diff -u "$(ls --sort=t | head -2 | tail -1)/config/production.yaml.example" "$(ls --sort=t | head -1)/config/production.yaml.example"
 ```
 
-### nginx
+### Update nginx configuration
 
 Check changes in nginx configuration:
 
@@ -365,7 +371,7 @@ $ cd /var/www/peertube/versions
 $ diff -u "$(ls --sort=t | head -2 | tail -1)/support/nginx/peertube" "$(ls --sort=t | head -1)/support/nginx/peertube"
 ```
 
-### systemd
+### Update systemd service
 
 Check changes in systemd configuration:
 
