@@ -47,8 +47,6 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
       .subscribe({
         next: () => {
           this.authService.refreshUserInformation()
-
-          //if (this.notifyOnUpdate) this.notifier.success($localize`Interface settings updated.`)
         },
 
         error: err => console.log(err.message)
