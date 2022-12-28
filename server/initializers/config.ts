@@ -523,14 +523,6 @@ const CONFIG = {
       get DISABLE_LOCAL_SEARCH () { return config.get<boolean>('search.search_index.disable_local_search') },
       get IS_DEFAULT_SEARCH () { return config.get<boolean>('search.search_index.is_default_search') }
     }
-  },
-  PODCAST: {
-    get INSTANCE_FEE () { return config.get<number>('podcast.instance_fee') },
-    LIGHTNING: {
-      get NODE_ADDRESS () { return config.get<string>('podcast.lightning.node_address') },
-      get CUSTOM_KEY () { return config.get<string>('podcast.lightning.custom_key') },
-      get CUSTOM_VALUE () { return config.get<string>('podcast.lightning.custom_value') }
-    }
   }
 
 }
