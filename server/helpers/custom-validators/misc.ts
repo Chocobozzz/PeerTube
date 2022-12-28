@@ -103,7 +103,13 @@ function checkMimetypeRegex (fileMimeType: string, mimeTypeRegex: string) {
 // ---------------------------------------------------------------------------
 
 function toCompleteUUID (value: string) {
-  if (isShortUUID(value)) return shortToUUID(value)
+  if (isShortUUID(value)) {
+    try {
+      return shortToUUID(value)
+    } catch {
+      return null
+    }
+  }
 
   return value
 }
