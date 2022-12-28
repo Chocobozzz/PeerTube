@@ -228,5 +228,4 @@ export interface CustomConfig {
       isDefaultSearch: boolean
     }
   }
-
 }
