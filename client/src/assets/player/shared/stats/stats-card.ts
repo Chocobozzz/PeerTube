@@ -182,7 +182,7 @@ class StatsCard extends Component {
     let colorSpace = 'unknown'
     let codecs = 'unknown'
 
-    if (metadata?.streams[0]) {
+    if (metadata?.streams?.[0]) {
       const stream = metadata.streams[0]
 
       colorSpace = stream['color_space'] !== 'unknown'
@@ -193,7 +193,7 @@ class StatsCard extends Component {
     }
 
     const resolution = videoFile?.resolution.label + videoFile?.fps
-    const buffer = this.timeRangesToString(this.player().buffered())
+    const buffer = this.timeRangesToString(this.player_.buffered())
     const progress = this.player_.webtorrent().getTorrent()?.progress
 
     return {
