@@ -76,7 +76,7 @@ export async function synchronizeChannel (options: {
 
     await JobQueue.Instance.createJobWithChildren(parent, children)
   } catch (err) {
-    logger.error(`Failed to import channel ${channel.name}`, { err })
+    logger.error(`Failed to import ${externalChannelUrl} in channel ${channel.name}`, { err })
     channelSync.state = VideoChannelSyncState.FAILED
     await channelSync.save()
   }

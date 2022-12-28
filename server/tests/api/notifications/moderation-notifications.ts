@@ -34,7 +34,7 @@ describe('Test moderation notifications', function () {
   let emails: object[] = []
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(50000)
 
     const res = await prepareNotificationsTest(3)
     emails = res.emails
@@ -60,7 +60,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should not send a notification to moderators on local abuse reported by an admin', async function () {
-      this.timeout(20000)
+      this.timeout(50000)
 
       const name = 'video for abuse ' + buildUUID()
       const video = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
@@ -72,7 +72,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to moderators on local video abuse', async function () {
-      this.timeout(20000)
+      this.timeout(50000)
 
       const name = 'video for abuse ' + buildUUID()
       const video = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
@@ -84,7 +84,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to moderators on remote video abuse', async function () {
-      this.timeout(20000)
+      this.timeout(50000)
 
       const name = 'video for abuse ' + buildUUID()
       const video = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
@@ -99,7 +99,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to moderators on local comment abuse', async function () {
-      this.timeout(20000)
+      this.timeout(50000)
 
       const name = 'video for abuse ' + buildUUID()
       const video = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
@@ -118,7 +118,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to moderators on remote comment abuse', async function () {
-      this.timeout(20000)
+      this.timeout(50000)
 
       const name = 'video for abuse ' + buildUUID()
       const video = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
@@ -140,7 +140,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to moderators on local account abuse', async function () {
-      this.timeout(20000)
+      this.timeout(50000)
 
       const username = 'user' + new Date().getTime()
       const { account } = await servers[0].users.create({ username, password: 'donald' })
@@ -153,7 +153,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a notification to moderators on remote account abuse', async function () {
-      this.timeout(20000)
+      this.timeout(50000)
 
       const username = 'user' + new Date().getTime()
       const tmpToken = await servers[0].users.generateUserAndToken(username)
@@ -500,7 +500,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send notification to moderators on new video with auto-blacklist', async function () {
-      this.timeout(120000)
+      this.timeout(50000)
 
       videoName = 'video with auto-blacklist ' + buildUUID()
       const video = await servers[0].videos.upload({ token: userToken1, attributes: { name: videoName } })
@@ -545,7 +545,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send unblacklist but not published/subscription notes after unblacklisted if scheduled update pending', async function () {
-      this.timeout(120000)
+      this.timeout(50000)
 
       const updateAt = new Date(new Date().getTime() + 1000000)
 
@@ -601,7 +601,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should not send a notification to moderators on new video without auto-blacklist', async function () {
-      this.timeout(120000)
+      this.timeout(50000)
 
       const name = 'video without auto-blacklist ' + buildUUID()
 

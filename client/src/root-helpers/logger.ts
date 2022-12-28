@@ -27,6 +27,10 @@ class Logger {
   warn (message: LoggerMessage, meta?: LoggerMeta) {
     this.runHooks('warn', message, meta)
 
+    this.clientWarn(message, meta)
+  }
+
+  clientWarn (message: LoggerMessage, meta?: LoggerMeta) {
     if (meta) console.warn(message, meta)
     else console.warn(message)
   }
@@ -34,6 +38,10 @@ class Logger {
   error (message: LoggerMessage, meta?: LoggerMeta) {
     this.runHooks('error', message, meta)
 
+    this.clientError(message, meta)
+  }
+
+  clientError (message: LoggerMessage, meta?: LoggerMeta) {
     if (meta) console.error(message, meta)
     else console.error(message)
   }
