@@ -87,7 +87,11 @@ export class RestExtractor {
 
     if (err.status !== undefined) {
       const errorMessage = this.buildServerErrorMessage(err)
-      logger.error(`Backend returned code ${err.status}, errorMessage is: ${errorMessage}`)
+
+      const message = `Backend returned code ${err.status}, errorMessage is: ${errorMessage}`
+
+      if (err.status === HttpStatusCode.NOT_FOUND_404) logger.clientError(message)
+      else logger.error(message)
 
       return errorMessage
     }
