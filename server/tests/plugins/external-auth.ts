@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { wait } from '@shared/core-utils'
-import { HttpStatusCode, UserRole } from '@shared/models'
+import { HttpStatusCode, UserAdminFlag, UserRole } from '@shared/models'
 import {
   cleanupTests,
   createSingleServer,
@@ -156,6 +156,9 @@ describe('Test external auth plugins', function () {
       expect(body.account.displayName).to.equal('cyan')
       expect(body.email).to.equal('cyan@example.com')
       expect(body.role.id).to.equal(UserRole.USER)
+      expect(body.adminFlags).to.equal(UserAdminFlag.NONE)
+      expect(body.videoQuota).to.equal(5242880)
+      expect(body.videoQuotaDaily).to.equal(-1)
     }
   })
 
@@ -178,6 +181,9 @@ describe('Test external auth plugins', function () {
       expect(body.account.displayName).to.equal('Kefka Palazzo')
       expect(body.email).to.equal('kefka@example.com')
       expect(body.role.id).to.equal(UserRole.ADMINISTRATOR)
+      expect(body.adminFlags).to.equal(UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST)
+      expect(body.videoQuota).to.equal(42000)
+      expect(body.videoQuotaDaily).to.equal(42100)
     }
   })
 

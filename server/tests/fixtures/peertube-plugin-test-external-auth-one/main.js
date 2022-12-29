@@ -33,7 +33,10 @@ async function register ({
           username: 'kefka',
           email: 'kefka@example.com',
           role: 0,
-          displayName: 'Kefka Palazzo'
+          displayName: 'Kefka Palazzo',
+          adminFlags: 1,
+          videoQuota: 42000,
+          videoQuotaDaily: 42100
         })
       },
       hookTokenValidity: (options) => {

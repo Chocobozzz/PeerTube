@@ -1,5 +1,5 @@
 import express from 'express'
-import { UserRole } from '@shared/models'
+import { UserAdminFlag, UserRole } from '@shared/models'
 import { MOAuthToken, MUser } from '../models'
 
 export type RegisterServerAuthOptions = RegisterServerAuthPassOptions | RegisterServerAuthExternalOptions
@@ -9,6 +9,11 @@ export interface RegisterServerAuthenticatedResult {
   email: string
   role?: UserRole
   displayName?: string
+
+  adminFlags?: UserAdminFlag
+
+  videoQuota?: number
+  videoQuotaDaily?: number
 }
 
 export interface RegisterServerExternalAuthenticatedResult extends RegisterServerAuthenticatedResult {

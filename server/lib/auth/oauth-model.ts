@@ -5,7 +5,6 @@ import { MOAuthClient } from '@server/types/models'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token'
 import { MUser } from '@server/types/models/user/user'
 import { pick } from '@shared/core-utils'
-import { UserRole } from '@shared/models/users/user-role'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { OAuthClientModel } from '../../models/oauth/oauth-client'
@@ -13,6 +12,7 @@ import { OAuthTokenModel } from '../../models/oauth/oauth-token'
 import { UserModel } from '../../models/user/user'
 import { findAvailableLocalActorName } from '../local-actor'
 import { buildUser, createUserAccountAndChannelAndPlaylist } from '../user'
+import { ExternalUser } from './external-auth'
 import { TokensCache } from './tokens-cache'
 
 type TokenInfo = {
@@ -26,12 +26,7 @@ export type BypassLogin = {
   bypass: boolean
   pluginName: string
   authName?: string
-  user: {
-    username: string
-    email: string
-    displayName: string
-    role: UserRole
-  }
+  user: ExternalUser
 }
 
 async function getAccessToken (bearerToken: string) {
@@ -219,16 +214,11 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function createUserFromExternal (pluginAuth: string, options: {
-  username: string
-  email: string
-  role: UserRole
-  displayName: string
-}) {
-  const username = await findAvailableLocalActorName(options.username)
+async function createUserFromExternal (pluginAuth: string, userOptions: ExternalUser) {
+  const username = await findAvailableLocalActorName(userOptions.username)
 
   const userToCreate = buildUser({
-    ...pick(options, [ 'email', 'role' ]),
+    ...pick(userOptions, [ 'email', 'role', 'adminFlags', 'videoQuota', 'videoQuotaDaily' ]),
 
     username,
     emailVerified: null,
@@ -238,7 +228,7 @@ async function createUserFromExternal (pluginAuth: string, options: {
 
   const { user } = await createUserAccountAndChannelAndPlaylist({
     userToCreate,
-    userDisplayName: options.displayName
+    userDisplayName: userOptions.displayName
   })
 
   return user

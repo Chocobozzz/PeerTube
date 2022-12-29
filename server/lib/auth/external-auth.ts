@@ -1,26 +1,33 @@
 
-import { isUserDisplayNameValid, isUserRoleValid, isUserUsernameValid } from '@server/helpers/custom-validators/users'
+import {
+  isUserAdminFlagsValid,
+  isUserDisplayNameValid,
+  isUserRoleValid,
+  isUserUsernameValid,
+  isUserVideoQuotaDailyValid,
+  isUserVideoQuotaValid
+} from '@server/helpers/custom-validators/users'
 import { logger } from '@server/helpers/logger'
 import { generateRandomString } from '@server/helpers/utils'
 import { PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME } from '@server/initializers/constants'
 import { PluginManager } from '@server/lib/plugins/plugin-manager'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token'
+import { MUser } from '@server/types/models'
 import {
   RegisterServerAuthenticatedResult,
   RegisterServerAuthPassOptions,
   RegisterServerExternalAuthenticatedResult
 } from '@server/types/plugins/register-server-auth.model'
-import { UserRole } from '@shared/models'
+import { UserAdminFlag, UserRole } from '@shared/models'
+
+export type ExternalUser =
+  Pick<MUser, 'username' | 'email' | 'role' | 'adminFlags' | 'videoQuotaDaily' | 'videoQuota'> &
+  { displayName: string }
 
 // Token is the key, expiration date is the value
 const authBypassTokens = new Map<string, {
   expires: Date
-  user: {
-    username: string
-    email: string
-    displayName: string
-    role: UserRole
-  }
+  user: ExternalUser
   authName: string
   npmName: string
 }>()
@@ -172,30 +179,20 @@ function getBypassFromExternalAuth (username: string, externalAuthToken: string)
 }
 
 function isAuthResultValid (npmName: string, authName: string, result: RegisterServerAuthenticatedResult) {
-  if (!isUserUsernameValid(result.username)) {
-    logger.error('Auth method %s of plugin %s did not provide a valid username.', authName, npmName, { username: result.username })
+  const returnError = (field: string) => {
+    logger.error('Auth method %s of plugin %s did not provide a valid %s.', authName, npmName, field, { [field]: result[field] })
     return false
   }
 
-  if (!result.email) {
-    logger.error('Auth method %s of plugin %s did not provide a valid email.', authName, npmName, { email: result.email })
-    return false
-  }
+  if (!isUserUsernameValid(result.username)) return returnError('username')
+  if (!result.email) return returnError('email')
 
-  // role is optional
-  if (result.role && !isUserRoleValid(result.role)) {
-    logger.error('Auth method %s of plugin %s did not provide a valid role.', authName, npmName, { role: result.role })
-    return false
-  }
-
-  // display name is optional
-  if (result.displayName && !isUserDisplayNameValid(result.displayName)) {
-    logger.error(
-      'Auth method %s of plugin %s did not provide a valid display name.',
-      authName, npmName, { displayName: result.displayName }
-    )
-    return false
-  }
+  // Following fields are optional
+  if (result.role && !isUserRoleValid(result.role)) return returnError('role')
+  if (result.displayName && !isUserDisplayNameValid(result.displayName)) return returnError('displayName')
+  if (result.adminFlags && !isUserAdminFlagsValid(result.adminFlags)) return returnError('adminFlags')
+  if (result.videoQuota && !isUserVideoQuotaValid(result.videoQuota + '')) return returnError('videoQuota')
+  if (result.videoQuotaDaily && !isUserVideoQuotaDailyValid(result.videoQuotaDaily + '')) return returnError('videoQuotaDaily')
 
   return true
 }
@@ -205,7 +202,12 @@ function buildUserResult (pluginResult: RegisterServerAuthenticatedResult) {
     username: pluginResult.username,
     email: pluginResult.email,
     role: pluginResult.role ?? UserRole.USER,
-    displayName: pluginResult.displayName || pluginResult.username
+    displayName: pluginResult.displayName || pluginResult.username,
+
+    adminFlags: pluginResult.adminFlags ?? UserAdminFlag.NONE,
+
+    videoQuota: pluginResult.videoQuota,
+    videoQuotaDaily: pluginResult.videoQuotaDaily
   }
 }
 
