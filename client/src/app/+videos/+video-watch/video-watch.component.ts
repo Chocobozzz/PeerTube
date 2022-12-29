@@ -295,6 +295,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           subtitle: queryParams.subtitle,
 
           playerMode: queryParams.mode,
+          playbackRate: queryParams.playbackRate,
           peertubeLink: false
         }
 
@@ -657,6 +658,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         muted: urlOptions.muted,
         loop: urlOptions.loop,
         subtitle: urlOptions.subtitle,
+        playbackRate: urlOptions.playbackRate,
 
         peertubeLink: urlOptions.peertubeLink,
 

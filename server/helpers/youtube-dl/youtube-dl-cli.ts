@@ -6,6 +6,7 @@ import { VideoResolution } from '@shared/models'
 import { logger, loggerTagsFactory } from '../logger'
 import { getProxy, isProxyEnabled } from '../proxy'
 import { isBinaryResponse, peertubeGot } from '../requests'
+import { OptionsOfBufferResponseBody } from 'got/dist/source'
 
 const lTags = loggerTagsFactory('youtube-dl')
 
@@ -28,7 +29,16 @@ export class YoutubeDLCLI {
 
     logger.info('Updating youtubeDL binary from %s.', url, lTags())
 
-    const gotOptions = { context: { bodyKBLimit: 20_000 }, responseType: 'buffer' as 'buffer' }
+    const gotOptions: OptionsOfBufferResponseBody = {
+      context: { bodyKBLimit: 20_000 },
+      responseType: 'buffer' as 'buffer'
+    }
+
+    if (process.env.YOUTUBE_DL_DOWNLOAD_BEARER_TOKEN) {
+      gotOptions.headers = {
+        authorization: 'Bearer ' + process.env.YOUTUBE_DL_DOWNLOAD_BEARER_TOKEN
+      }
+    }
 
     try {
       let gotResult = await peertubeGot(url, gotOptions)

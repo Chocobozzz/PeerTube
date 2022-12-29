@@ -97,6 +97,10 @@ export class PeertubePlayerManager {
       videojs(options.common.playerElement, videojsOptions, function (this: videojs.Player) {
         const player = this
 
+        if (!isNaN(+options.common.playbackRate)) {
+          player.playbackRate(+options.common.playbackRate)
+        }
+
         let alreadyFallback = false
 
         const handleError = () => {

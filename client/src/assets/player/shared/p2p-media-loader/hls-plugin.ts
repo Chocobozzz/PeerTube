@@ -281,8 +281,8 @@ class Html5Hlsjs {
     if (this.errorCounts[data.type]) this.errorCounts[data.type] += 1
     else this.errorCounts[data.type] = 1
 
-    if (data.fatal) logger.warn(error.message)
-    else logger.error(error.message, { data })
+    if (data.fatal) logger.error(error.message, { currentTime: this.player.currentTime(), data })
+    else logger.warn(error.message)
 
     if (data.type === Hlsjs.ErrorTypes.NETWORK_ERROR) {
       error.code = 2

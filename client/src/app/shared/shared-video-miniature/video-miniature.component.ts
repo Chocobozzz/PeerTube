@@ -314,6 +314,6 @@ export class VideoMiniatureComponent implements OnInit {
           this.cd.markForCheck()
         })
 
-    this.videoPlaylistService.runPlaylistCheck(this.video.id)
+    this.videoPlaylistService.runVideoExistsInPlaylistCheck(this.video.id)
   }
 }

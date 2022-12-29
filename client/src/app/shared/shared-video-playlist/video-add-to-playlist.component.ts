@@ -81,7 +81,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
         .subscribe(result => {
           this.playlistsData = result.data
 
-          this.videoPlaylistService.runPlaylistCheck(this.video.id)
+          this.videoPlaylistService.runVideoExistsInPlaylistCheck(this.video.id)
         })
 
     this.videoPlaylistSearchChanged
@@ -129,7 +129,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
         .subscribe(playlistsResult => {
           this.playlistsData = playlistsResult.data
 
-          this.videoPlaylistService.runPlaylistCheck(this.video.id)
+          this.videoPlaylistService.runVideoExistsInPlaylistCheck(this.video.id)
         })
   }
 

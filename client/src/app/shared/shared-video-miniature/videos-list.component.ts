@@ -1,6 +1,6 @@
 import * as debug from 'debug'
 import { fromEvent, Observable, Subject, Subscription } from 'rxjs'
-import { debounceTime, switchMap } from 'rxjs/operators'
+import { concatMap, debounceTime, map, switchMap } from 'rxjs/operators'
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import {
@@ -111,6 +111,8 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
 
   private lastQueryLength: number
 
+  private videoRequests = new Subject<{ reset: boolean, obs: Observable<ResultList<Video>> }>()
+
   constructor (
     private notifier: Notifier,
     private authService: AuthService,
@@ -124,6 +126,8 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit () {
+    this.subscribeToVideoRequests()
+
     const hiddenFilters = this.hideScopeFilter
       ? [ 'scope' ]
       : []
@@ -228,30 +232,12 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   loadMoreVideos (reset = false) {
-    if (reset) this.hasDoneFirstQuery = false
+    if (reset) {
+      this.hasDoneFirstQuery = false
+      this.videos = []
+    }
 
-    this.getVideosObservableFunction(this.pagination, this.filters)
-      .subscribe({
-        next: ({ data }) => {
-          this.hasDoneFirstQuery = true
-          this.lastQueryLength = data.length
-
-          if (reset) this.videos = []
-          this.videos = this.videos.concat(data)
-
-          if (this.groupByDate) this.buildGroupedDateLabels()
-
-          this.onDataSubject.next(data)
-          this.videosLoaded.emit(this.videos)
-        },
-
-        error: err => {
-          const message = $localize`Cannot load more videos. Try again later.`
-
-          logger.error(message, err)
-          this.notifier.error(message)
-        }
-      })
+    this.videoRequests.next({ reset, obs: this.getVideosObservableFunction(this.pagination, this.filters) })
   }
 
   reloadVideos () {
@@ -422,5 +408,33 @@ export class VideosListComponent implements OnInit, OnChanges, OnDestroy {
       this.filters.load({ search: param['search'] })
       this.onFiltersChanged(true)
     })
+  }
+
+  private subscribeToVideoRequests () {
+    this.videoRequests
+      .pipe(concatMap(({ reset, obs }) => obs.pipe(map(({ data }) => ({ data, reset })))))
+      .subscribe({
+        next: ({ data, reset }) => {
+          console.log(data[0].name)
+
+          this.hasDoneFirstQuery = true
+          this.lastQueryLength = data.length
+
+          if (reset) this.videos = []
+          this.videos = this.videos.concat(data)
+
+          if (this.groupByDate) this.buildGroupedDateLabels()
+
+          this.onDataSubject.next(data)
+          this.videosLoaded.emit(this.videos)
+        },
+
+        error: err => {
+          const message = $localize`Cannot load more videos. Try again later.`
+
+          logger.error(message, err)
+          this.notifier.error(message)
+        }
+      })
   }
 }

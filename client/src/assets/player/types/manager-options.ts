@@ -29,6 +29,8 @@ export interface CustomizationOptions {
   resume?: string
 
   peertubeLink: boolean
+
+  playbackRate?: number | string
 }
 
 export interface CommonOptions extends CustomizationOptions {
