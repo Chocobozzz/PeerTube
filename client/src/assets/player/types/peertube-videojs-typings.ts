@@ -12,7 +12,7 @@ import { PeerTubeResolutionsPlugin } from '../shared/resolutions/peertube-resolu
 import { StatsCardOptions } from '../shared/stats/stats-card'
 import { StatsForNerdsPlugin } from '../shared/stats/stats-plugin'
 import { EndCardOptions } from '../shared/upnext/end-card'
-import { WebTorrentPlugin } from '../shared/webtorrent/webtorrent-plugin'
+//import { WebTorrentPlugin } from '../shared/webtorrent/webtorrent-plugin'
 import { PlayerMode } from './manager-options'
 
 declare module 'video.js' {
@@ -34,7 +34,7 @@ declare module 'video.js' {
 
     peertube (): PeerTubePlugin
 
-    webtorrent (): WebTorrentPlugin
+    //webtorrent (): WebTorrentPlugin
 
     p2pMediaLoader (): P2pMediaLoaderPlugin
 

@@ -95,9 +95,7 @@ export class ControlBarOptionsBuilder {
   }
 
   private getProgressControl () {
-    const loadProgressBar = this.mode === 'webtorrent'
-      ? 'peerTubeLoadProgressBar'
-      : 'loadProgressBar'
+    const loadProgressBar = 'loadProgressBar'
 
     return {
       progressControl: {

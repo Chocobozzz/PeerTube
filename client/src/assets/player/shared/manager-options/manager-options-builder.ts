@@ -156,14 +156,14 @@ export class ManagerOptionsBuilder {
         }*/
       ]
 
-      if (this.mode === 'webtorrent') {
+      /*if (this.mode === 'webtorrent') {
         items.push({
           label: player.localize('Copy magnet URI'),
           listener: function (this: videojs.Player) {
             copyToClipboard(this.webtorrent().getCurrentVideoFile().magnetUri)
           }
         })
-      }
+      }*/
 
       items.push({
         icon: 'info',

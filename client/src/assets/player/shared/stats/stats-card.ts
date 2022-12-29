@@ -120,9 +120,12 @@ class StatsCard extends Component {
 
     this.updateInterval = setInterval(async () => {
       try {
-        const options = this.mode === 'p2p-media-loader'
+        const options = this.buildHLSOptions()
+        
+        
+        /*this.mode === 'p2p-media-loader'
           ? this.buildHLSOptions()
-          : await this.buildWebTorrentOptions();
+          : await this.buildWebTorrentOptions();*/
 
           this.populateInfoValues(options)
           
@@ -168,7 +171,7 @@ class StatsCard extends Component {
     }
   }
 
-  private async buildWebTorrentOptions () {
+  /*private async buildWebTorrentOptions () {
     const videoFile = this.player_.webtorrent().getCurrentVideoFile()
 
     if (!this.metadataStore[videoFile.fileUrl]) {
@@ -202,7 +205,7 @@ class StatsCard extends Component {
       resolution,
       buffer
     }
-  }
+  }*/
 
   private populateInfoBlocks () {
     this.playerMode = this.buildInfoRow(this.player().localize('Player mode'))

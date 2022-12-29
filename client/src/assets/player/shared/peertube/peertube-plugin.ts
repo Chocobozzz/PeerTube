@@ -103,8 +103,6 @@ class PeerTubePlugin extends Plugin {
 
       //this.player.on('sourcechange', () => this.initCaptions())
 
-      console.log("SETDURATION", options.videoDuration)
-
       this.player.duration(options.videoDuration)
 
       this.initializePlayer()
@@ -137,7 +135,7 @@ class PeerTubePlugin extends Plugin {
   private initializePlayer () {
     if (isMobile()) this.player.addClass('vjs-is-mobile')
 
-    this.initSmoothProgressBar()
+    //this.initSmoothProgressBar()
 
     //this.initCaptions()
 
@@ -274,7 +272,7 @@ class PeerTubePlugin extends Plugin {
 
   // Thanks: https://github.com/videojs/video.js/issues/4460#issuecomment-312861657
   private initSmoothProgressBar () {
-    const SeekBar = videojs.getComponent('SeekBar') as any
+    /*const SeekBar = videojs.getComponent('SeekBar') as any
     SeekBar.prototype.getPercent = function getPercent () {
       // Allows for smooth scrubbing, when player can't keep up.
       // const time = (this.player_.scrubbing()) ?
@@ -289,9 +287,33 @@ class PeerTubePlugin extends Plugin {
       if (newTime === this.player_.duration()) {
         newTime = newTime - 0.1
       }
+
       this.player_.currentTime(newTime)
       this.update()
     }
+
+    SeekBar.prototype.handleMouseUp = function handleMouseUp (event: any) {
+      console.log("???????????????????????????")
+      //this.super.handleMouseUp.apply(event, this.super);
+  
+      // Stop event propagation to prevent double fire in progress-control.js
+      if (event) {
+        event.stopPropagation();
+      }
+      this.player_.scrubbing(false);
+
+      console.log('this.videoWasPlaying', this.videoWasPlaying)
+  
+
+      this.player_.trigger({ type: 'timeupdate', target: this, manuallyTriggered: true });
+      if (this.videoWasPlaying) {
+        this.player_.play().catch(e => {
+          console.error('e', e)
+        })
+      } else {
+        this.update_();
+      }
+    }*/
   }
 }
 

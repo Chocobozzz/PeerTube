@@ -241,6 +241,14 @@ export class PeerTubeEmbedApi {
 
 		if(!this.embed.player) return
 
+		var slf = this
+
+		var player : any = this.embed.player
+
+		var hls : any = null;
+
+		if(typeof player.p2pMediaLoader == 'function') hls = player.p2pMediaLoader().getHLSJS()
+
 		this.updateinterval = setInterval(() => {
 			if (!this.element) return
 
@@ -249,25 +257,20 @@ export class PeerTubeEmbedApi {
 
 			this.state = currentState
 
-
 			this.answer({
 				method: 'playbackStatusUpdate',
 				params: {
 					position,
 					volume,
 					duration: this.embed.player.duration(),
-					playbackState: currentState
+					playbackState: currentState,
+
+					bandwidthEstimate : hls.bandwidthEstimate
 				}
 			})
 		}, 500)
 
-		var slf = this
-
-		var player : any = this.embed.player
-
-		var hls : any = null;
-
-		if(typeof player.p2pMediaLoader == 'function') hls = player.p2pMediaLoader().getHLSJS()
+		
 
 		if (hls){
 
@@ -380,6 +383,6 @@ export class PeerTubeEmbedApi {
 	}
 
 	public isWebtorrent() {
-		return this.embed.player.webtorrent
+		return false
 	}
 }

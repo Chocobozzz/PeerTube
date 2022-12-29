@@ -130,8 +130,8 @@ export class HLSOptionsBuilder {
       requiredSegmentsPriority: 3,
       skipSegmentBuilderPriority: 1,
 
-      cachedSegmentExpiration: 86400000,
-      cachedSegmentsCount: 100,
+      cachedSegmentExpiration: 10 * 60 * 1000,
+      cachedSegmentsCount: 30,
 
       httpDownloadMaxPriority: 9,
       httpDownloadProbability: 0.06,
@@ -148,6 +148,10 @@ export class HLSOptionsBuilder {
       ? this.getHLSLiveOptions()
       : this.getHLSVODOptions()
 
+    console.log('this.options.common', )
+
+    //autoLevelEnabled
+
     const base = {
       capLevelToPlayerSize: true,
       autoStartLoad: false,
@@ -156,6 +160,7 @@ export class HLSOptionsBuilder {
 
       ...specificLiveOrVODOptions
     }
+
 
     const averageBandwidth = getAverageBandwidthInStore()
     if (!averageBandwidth) return base
@@ -168,6 +173,8 @@ export class HLSOptionsBuilder {
       startLevel: -1,
       testBandwidth: false,
       debug: false,
+
+      //autoLevelEnabled : !(this.options.common.videoDuration > 0 && this.options.common.videoDuration < 60000)
 
      // capLevelController : CapLevelController
     }

@@ -32,6 +32,11 @@ import { saveAverageBandwidth } from './peertube-player-local-storage'
 import { ManagerOptionsBuilder } from './shared/manager-options'
 import { TranslationsManager } from './translations-manager'
 import { CommonOptions, PeertubePlayerManagerOptions, PlayerMode, PlayerNetworkInfo } from './types'
+import './shared/p2p-media-loader/p2p-media-loader-plugin'
+import * as p2pMediaLoaderModule from 'p2p-media-loader-hlsjs-basyton'
+
+
+console.log('p2pMediaLoaderModule', p2pMediaLoaderModule)
 
 
 const Fn: any = require('./shared/videojs-helpers/fn.js');
@@ -132,7 +137,7 @@ SeekBar.prototype.update = function (event : any) {
   return percent;
   
 }
-
+/*
 SeekBar.prototype.handleMouseMove = function handleMouseMove (event: any) {
 
   let newTime = this.calculateDistance(event) * this.player_.duration()
@@ -143,6 +148,33 @@ SeekBar.prototype.handleMouseMove = function handleMouseMove (event: any) {
   this.player_.currentTime(newTime)
   this.update()
 }
+
+SeekBar.prototype.handleMouseUp = function handleMouseUp (event: any) {
+
+  console.log('this.super', this, SeekBar, SeekBar.prototype)
+
+
+  console.log('this.super', this.super)
+  console.log('this.super', SeekBar.prototype.super)
+
+  this.super.handleMouseUp.call(this.super, event);
+
+  // Stop event propagation to prevent double fire in progress-control.js
+  if (event) {
+    event.stopPropagation();
+  }
+  this.player_.scrubbing(false);
+
+
+  this.player_.trigger({ type: 'timeupdate', target: this, manuallyTriggered: true });
+  if (this.videoWasPlaying) {
+    this.player_.play().catch(e => {
+      console.error('e', e)
+    })
+  } else {
+    this.update_();
+  }
+}*/
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 //(videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
@@ -174,13 +206,10 @@ export class PeertubePlayerManager {
     this.onPlayerChange = onPlayerChange
     this.playerElementClassName = options.common.playerElement.className
 
-    if (mode === 'webtorrent') await import('./shared/webtorrent/webtorrent-plugin')
-    if (mode === 'p2p-media-loader') {
-      const [ p2pMediaLoaderModule ] = await Promise.all([
-        import('p2p-media-loader-hlsjs-basyton'),
-        import('./shared/p2p-media-loader/p2p-media-loader-plugin')
-      ])
+    //if (mode === 'webtorrent') await import('./shared/webtorrent/webtorrent-plugin')
 
+
+    if (mode === 'p2p-media-loader') {
       this.p2pMediaLoaderModule = p2pMediaLoaderModule
     }
 
@@ -305,7 +334,7 @@ export class PeertubePlayerManager {
 
     this.rebuildAndUpdateVideoElement(currentPlayer, options.common)
 
-    await import('./shared/webtorrent/webtorrent-plugin')
+    //await import('./shared/webtorrent/webtorrent-plugin')
 
     const newPlayer = await this.buildPlayer('webtorrent', options)
     this.onPlayerChange(newPlayer)

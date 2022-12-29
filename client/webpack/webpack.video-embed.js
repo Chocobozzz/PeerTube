@@ -7,7 +7,7 @@ const ProvidePlugin = require('webpack/lib/ProvidePlugin')
 const DefinePlugin = require('webpack/lib/DefinePlugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const version = (Math.random() * 10000).toFixed(0)
-
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const AddCharsetWebpackPlugin = require("./addcharset");
 
 module.exports = function () {
@@ -165,6 +165,7 @@ module.exports = function () {
     },
 
     plugins: [
+      //new BundleAnalyzerPlugin(),
       new ProvidePlugin({
         process: 'process/browser',
         Buffer: [ 'buffer', 'Buffer' ]

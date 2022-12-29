@@ -22,12 +22,13 @@ class PeerTubeLoadProgressBar extends Component {
   }
 
   update () {
-    const torrent = this.player().webtorrent().getTorrent()
+    return
+    /*const torrent = this.player().webtorrent().getTorrent()
     if (!torrent) return
 
     // @ts-ignore
     (this.el() as HTMLElement).style['transform-origin'] = 'left'
-    (this.el() as HTMLElement).style['transform'] = 'scaleX('+(torrent.progress).toFixed(2)+')'
+    (this.el() as HTMLElement).style['transform'] = 'scaleX('+(torrent.progress).toFixed(2)+')'*/
 
     //(this.el() as HTMLElement).style.width = (torrent.progress * 100) + '%'
   }

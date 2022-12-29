@@ -1496,10 +1496,10 @@
     "@typescript-eslint/types" "5.31.0"
     "eslint-visitor-keys" "^3.3.0"
 
-"@videojs/http-streaming@2.14.2":
-  "integrity" "sha512-K1raSfO/pq5r8iUas3OSYni0kXOj91n8ealIpV02khghzGv9LQ6O3YUqYd/eAhJ1HIrmZWOnrYpK/P+mhUExXQ=="
-  "resolved" "https://registry.npmjs.org/@videojs/http-streaming/-/http-streaming-2.14.2.tgz"
-  "version" "2.14.2"
+"@videojs/http-streaming@2.14.3":
+  "integrity" "sha512-2tFwxCaNbcEZzQugWf8EERwNMyNtspfHnvxRGRABQs09W/5SqmkWFuGWfUAm4wQKlXGfdPyAJ1338ASl459xAA=="
+  "resolved" "https://registry.npmjs.org/@videojs/http-streaming/-/http-streaming-2.14.3.tgz"
+  "version" "2.14.3"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@videojs/vhs-utils" "3.0.5"
@@ -1675,9 +1675,9 @@
     "http-parser-js" "^0.4.3"
 
 "@xmldom/xmldom@^0.7.2":
-  "integrity" "sha512-V3BIhmY36fXZ1OtVcI9W+FxQqxVLsPKcNjWigIaa81dLC9IolJl5Mt4Cvhmr0flUnjSpTdrbMTSbXqYqV5dT6A=="
-  "resolved" "https://registry.npmjs.org/@xmldom/xmldom/-/xmldom-0.7.5.tgz"
-  "version" "0.7.5"
+  "integrity" "sha512-yceMpm/xd4W2a85iqZyO09gTnHvXF6pyiWjD2jcOJs7hRoZtNNOO1eJlhHj1ixA+xip2hOyGn+LgcvLCMo5zXA=="
+  "resolved" "https://registry.npmjs.org/@xmldom/xmldom/-/xmldom-0.7.9.tgz"
+  "version" "0.7.9"
 
 "@xtuc/ieee754@^1.2.0":
   "integrity" "sha512-DX8nKgqcGwsc0eJSqYt5lwP4DH5FlHnmuWWBRy7X0NcaGR0ZtuyeESgMwTYVEtxmsNGY+qit4QYT/MIYTOTPeA=="
@@ -4982,10 +4982,10 @@
   "resolved" "https://registry.npmjs.org/p-try/-/p-try-2.2.0.tgz"
   "version" "2.2.0"
 
-"p2p-media-loader-core-basyton@^1.0.18":
-  "integrity" "sha512-EpvCVMbAc0sj7PbI0wzCr7MzeqlJEqB0BNSuL/vazcHNkwflyLQC2+s5dJ3Sv6+aGVPghau305QBX5gV3do7wA=="
-  "resolved" "https://registry.npmjs.org/p2p-media-loader-core-basyton/-/p2p-media-loader-core-basyton-1.0.18.tgz"
-  "version" "1.0.18"
+"p2p-media-loader-core-basyton@^1.0.21":
+  "integrity" "sha512-CzxJfR6sZH4L0bZOE8LUMYI/Y5TAdl0T0zbJ0xNFEfEtL6MNXCkJBOZrEW+f0Q4WgiSz+xgw0tqrM0C0x5j9yQ=="
+  "resolved" "https://registry.npmjs.org/p2p-media-loader-core-basyton/-/p2p-media-loader-core-basyton-1.0.21.tgz"
+  "version" "1.0.21"
   dependencies:
     "bittorrent-tracker" "^9.19.0"
     "debug" "^4.3.4"
@@ -4993,15 +4993,15 @@
     "sha.js" "^2.4.11"
     "simple-peer" "^9.11.1"
 
-"p2p-media-loader-hlsjs-basyton@^1.0.18":
-  "integrity" "sha512-J2YkvxJH5w+bo5QXIS5G8h7LqAeW01e1knhi1ir3RDfXxZBiliqpFRHhIZvBSDzjx35APdpJJxMxHCb5mROF5A=="
-  "resolved" "https://registry.npmjs.org/p2p-media-loader-hlsjs-basyton/-/p2p-media-loader-hlsjs-basyton-1.0.18.tgz"
-  "version" "1.0.18"
+"p2p-media-loader-hlsjs-basyton@^1.0.21":
+  "integrity" "sha512-kjn9KZkDKTBtnT1AQHDChiKS7BaYs6fQZGc8twt5yshwTAOmczN0ds5ukLAyLgOWVjKJyeRVrmrYJ3JGCVA5WQ=="
+  "resolved" "https://registry.npmjs.org/p2p-media-loader-hlsjs-basyton/-/p2p-media-loader-hlsjs-basyton-1.0.21.tgz"
+  "version" "1.0.21"
   dependencies:
     "debug" "^4.3.4"
     "events" "^3.3.0"
     "m3u8-parser" "^4.7.1"
-    "p2p-media-loader-core-basyton" "^1.0.18"
+    "p2p-media-loader-core-basyton" "^1.0.21"
 
 "package-json-versionify@^1.0.4":
   "integrity" "sha512-mtKKtCeSZMtWcc5hHJS6OlEGP7J9g7WN6vWCCZi2hCXFag/Zmjokh6WFFTQb9TuMnBcZpRjhhMQyOyglPCAahw=="
@@ -6757,13 +6757,13 @@
     "core-util-is" "1.0.2"
     "extsprintf" "^1.2.0"
 
-"video.js@^6 || ^7", "video.js@^7.19.2", "video.js@^7.6.0":
-  "integrity" "sha512-QMuj+bjwvLId9SY8uBAjO9sw7pCDhdVzJtwsAwg1MdVLXgVuxhhSYswdsdsRk+YMssHtReopINclvDlTGTxMLA=="
-  "resolved" "https://registry.npmjs.org/video.js/-/video.js-7.20.1.tgz"
-  "version" "7.20.1"
+"video.js@^6 || ^7", "video.js@^7.20.3", "video.js@^7.6.0":
+  "integrity" "sha512-JMspxaK74LdfWcv69XWhX4rILywz/eInOVPdKefpQiZJSMD5O8xXYueqACP2Q5yqKstycgmmEKlJzZ+kVmDciw=="
+  "resolved" "https://registry.npmjs.org/video.js/-/video.js-7.20.3.tgz"
+  "version" "7.20.3"
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@videojs/http-streaming" "2.14.2"
+    "@videojs/http-streaming" "2.14.3"
     "@videojs/vhs-utils" "^3.0.4"
     "@videojs/xhr" "2.6.0"
     "aes-decrypter" "3.1.3"
@@ -6774,7 +6774,7 @@
     "mux.js" "6.0.1"
     "safe-json-parse" "4.0.0"
     "videojs-font" "3.2.0"
-    "videojs-vtt.js" "^0.15.3"
+    "videojs-vtt.js" "^0.15.4"
 
 "videojs-font@3.2.0":
   "integrity" "sha512-g8vHMKK2/JGorSfqAZQUmYYNnXmfec4MLhwtEFS+mMs2IDY398GLysy6BH6K+aS1KMNu/xWZ8Sue/X/mdQPliA=="
@@ -6789,10 +6789,10 @@
     "global" "^4.3.2"
     "video.js" "^6 || ^7"
 
-"videojs-vtt.js@^0.15.3":
-  "integrity" "sha512-5FvVsICuMRx6Hd7H/Y9s9GDeEtYcXQWzGMS+sl4UX3t/zoHp3y+isSfIPRochnTH7h+Bh1ILyC639xy9Z6kPag=="
-  "resolved" "https://registry.npmjs.org/videojs-vtt.js/-/videojs-vtt.js-0.15.3.tgz"
-  "version" "0.15.3"
+"videojs-vtt.js@^0.15.4":
+  "integrity" "sha512-r6IhM325fcLb1D6pgsMkTQT1PpFdUdYZa1iqk7wJEu+QlibBwATPfPc9Bg8Jiym0GE5yP1AG2rMLu+QMVWkYtA=="
+  "resolved" "https://registry.npmjs.org/videojs-vtt.js/-/videojs-vtt.js-0.15.4.tgz"
+  "version" "0.15.4"
   dependencies:
     "global" "^4.3.1"
 
@@ -6816,10 +6816,10 @@
     "glob-to-regexp" "^0.4.1"
     "graceful-fs" "^4.1.2"
 
-"webpack-bundle-analyzer@^4.4.2":
-  "integrity" "sha512-GUMZlM3SKwS8Z+CKeIFx7CVoHn3dXFcUAjT/dcZQQmfSZGvitPfMob2ipjai7ovFFqPvTqkEZ/leL4O0YOdAYQ=="
-  "resolved" "https://registry.npmjs.org/webpack-bundle-analyzer/-/webpack-bundle-analyzer-4.5.0.tgz"
-  "version" "4.5.0"
+"webpack-bundle-analyzer@^4.7.0":
+  "integrity" "sha512-j9b8ynpJS4K+zfO5GGwsAcQX4ZHpWV+yRiHDiL+bE0XHJ8NiPYLTNVQdlFYWxtpg9lfAQNlwJg16J9AJtFSXRg=="
+  "resolved" "https://registry.npmjs.org/webpack-bundle-analyzer/-/webpack-bundle-analyzer-4.7.0.tgz"
+  "version" "4.7.0"
   dependencies:
     "acorn" "^8.0.4"
     "acorn-walk" "^8.0.0"

@@ -6,6 +6,7 @@ import videojs from 'video.js'
 import { logger } from '@root-helpers/logger'
 import { HlsjsConfigHandlerOptions, PeerTubeResolution, VideoJSTechHLS } from '../../types'
 import CapLevelController from './cap-level-controller'
+import AbrController from './abr-controler'
 
 type ErrorCounts = {
   [ type: string ]: number
@@ -44,11 +45,8 @@ const registerSourceHandler = function (vjs: typeof videojs) {
 
     handleSource: function (source: videojs.Tech.SourceObject, tech: VideoJSTechHLS) {
       if (tech.hlsProvider) {
-        console.log("HERE")
         tech.hlsProvider.dispose()
       }
-
-      console.log("???ASD222")
 
       tech.hlsProvider = new Html5Hlsjs(vjs, source, tech)
 
@@ -96,7 +94,7 @@ class Html5Hlsjs {
   private readonly source: videojs.Tech.SourceObject
   private readonly vjs: typeof videojs
 
-  private maxNetworkErrorRecovery = 5
+  private maxNetworkErrorRecovery = 10
 
   private hls: Hlsjs
   private hlsjsConfig: Partial<HlsConfig & { cueHandler: any }> = null
@@ -391,14 +389,20 @@ class Html5Hlsjs {
       this.videoElement.addEventListener('play', this.handlers.play)
     }
 
-    console.log("HERE")
+    console.log("HERE" ,techOptions , srOptions_)
 
     //@ts-ignore
     this.hlsjsConfig.capLevelController = CapLevelController
+    this.hlsjsConfig.abrController = AbrController as any
+    this.hlsjsConfig.abrBandWidthUpFactor = 0.3
+
+    //if(!data.details.live && data.details.totalduration      )
 
     //this.hlsjsConfig.debug = true
 
     this.hls = new Hlsjs(this.hlsjsConfig)
+
+    
 
     //@ts-ignore
     this.player.hls = this.hls;
@@ -421,6 +425,10 @@ class Html5Hlsjs {
 
       this._duration = this.isLive ? Infinity : data.details.totalduration
 
+      //if(this._duration < 60){
+        //this.player.peertubeResolutions().disableAutoResolution()
+      //}
+
       // Increase network error recovery for lives since they can be broken (server restart, stream interruption etc)
       if (this.isLive) this.maxNetworkErrorRecovery = 300
     })
@@ -432,6 +440,7 @@ class Html5Hlsjs {
     })
 
     this.hls.on(Hlsjs.Events.LEVEL_SWITCHING, (_e, data: LevelSwitchingData) => {
+
       const resolutionId = this.hls.autoLevelEnabled
         ? -1
         : data.level
