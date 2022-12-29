@@ -38,6 +38,7 @@ export class PlayerManagerOptions {
   private enableApi = false
   private startTime: number | string = 0
   private stopTime: number | string
+  private playbackRate: number | string
 
   private title: boolean
   private warningTitle: boolean
@@ -130,6 +131,7 @@ export class PlayerManagerOptions {
       this.subtitle = getParamString(params, 'subtitle')
       this.startTime = getParamString(params, 'start')
       this.stopTime = getParamString(params, 'stop')
+      this.playbackRate = getParamString(params, 'playbackRate')
 
       this.bigPlayBackgroundColor = getParamString(params, 'bigPlayBackgroundColor')
       this.foregroundColor = getParamString(params, 'foregroundColor')
@@ -209,6 +211,8 @@ export class PlayerManagerOptions {
         stopTime: playlistTracker
           ? playlistTracker.getCurrentElement().stopTimestamp
           : this.stopTime,
+
+        playbackRate: this.playbackRate,
 
         videoCaptions,
         inactivityTimeout: 2500,

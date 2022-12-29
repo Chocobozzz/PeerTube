@@ -30,7 +30,7 @@ export interface CustomizationOptions {
 
   peertubeLink: boolean
 
-  playbackRate: number | string
+  playbackRate?: number | string
 }
 
 export interface CommonOptions extends CustomizationOptions {

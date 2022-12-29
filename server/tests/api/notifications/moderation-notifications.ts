@@ -500,7 +500,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send notification to moderators on new video with auto-blacklist', async function () {
-      this.timeout(50000)
+      this.timeout(120000)
 
       videoName = 'video with auto-blacklist ' + buildUUID()
       const video = await servers[0].videos.upload({ token: userToken1, attributes: { name: videoName } })
@@ -512,10 +512,14 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should not send video publish notification if auto-blacklisted', async function () {
+      this.timeout(120000)
+
       await checkVideoIsPublished({ ...userBaseParams, videoName, shortUUID, checkType: 'absence' })
     })
 
     it('Should not send a local user subscription notification if auto-blacklisted', async function () {
+      this.timeout(120000)
+
       await checkNewVideoFromSubscription({ ...adminBaseParamsServer1, videoName, shortUUID, checkType: 'absence' })
     })
 
@@ -524,7 +528,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send video published and unblacklist after video unblacklisted', async function () {
-      this.timeout(40000)
+      this.timeout(120000)
 
       await servers[0].blacklist.remove({ videoId: uuid })
 
@@ -537,15 +541,19 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should send a local user subscription notification after removed from blacklist', async function () {
+      this.timeout(120000)
+
       await checkNewVideoFromSubscription({ ...adminBaseParamsServer1, videoName, shortUUID, checkType: 'presence' })
     })
 
     it('Should send a remote user subscription notification after removed from blacklist', async function () {
+      this.timeout(120000)
+
       await checkNewVideoFromSubscription({ ...adminBaseParamsServer2, videoName, shortUUID, checkType: 'presence' })
     })
 
     it('Should send unblacklist but not published/subscription notes after unblacklisted if scheduled update pending', async function () {
-      this.timeout(50000)
+      this.timeout(120000)
 
       const updateAt = new Date(new Date().getTime() + 1000000)
 
@@ -576,7 +584,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should not send publish/subscription notifications after scheduled update if video still auto-blacklisted', async function () {
-      this.timeout(40000)
+      this.timeout(120000)
 
       // In 2 seconds
       const updateAt = new Date(new Date().getTime() + 2000)
@@ -601,7 +609,7 @@ describe('Test moderation notifications', function () {
     })
 
     it('Should not send a notification to moderators on new video without auto-blacklist', async function () {
-      this.timeout(50000)
+      this.timeout(120000)
 
       const name = 'video without auto-blacklist ' + buildUUID()
 

@@ -120,7 +120,7 @@ describe('Object storage for video static file privacy', function () {
     // ---------------------------------------------------------------------------
 
     it('Should upload a private video and have appropriate object storage ACL', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       {
         const { uuid } = await server.videos.quickUpload({ name: 'video', privacy: VideoPrivacy.PRIVATE })
@@ -138,7 +138,7 @@ describe('Object storage for video static file privacy', function () {
     })
 
     it('Should upload a public video and have appropriate object storage ACL', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       const { uuid } = await server.videos.quickUpload({ name: 'video', privacy: VideoPrivacy.UNLISTED })
       await waitJobs([ server ])
