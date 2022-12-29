@@ -10,10 +10,11 @@ import OAuth2Server, {
 } from '@node-oauth/oauth2-server'
 import { randomBytesPromise } from '@server/helpers/core-utils'
 import { isOTPValid } from '@server/helpers/otp'
+import { CONFIG } from '@server/initializers/config'
 import { MOAuthClient } from '@server/types/models'
 import { sha1 } from '@shared/extra-utils'
 import { HttpStatusCode } from '@shared/models'
-import { OAUTH_LIFETIME, OTP } from '../../initializers/constants'
+import { OTP } from '../../initializers/constants'
 import { BypassLogin, getClient, getRefreshToken, getUser, revokeToken, saveToken } from './oauth-model'
 
 class MissingTwoFactorError extends Error {
@@ -32,8 +33,9 @@ class InvalidTwoFactorError extends Error {
  *
  */
 const oAuthServer = new OAuth2Server({
-  accessTokenLifetime: OAUTH_LIFETIME.ACCESS_TOKEN,
-  refreshTokenLifetime: OAUTH_LIFETIME.REFRESH_TOKEN,
+  // Wants seconds
+  accessTokenLifetime: CONFIG.OAUTH2.TOKEN_LIFETIME.ACCESS_TOKEN / 1000,
+  refreshTokenLifetime: CONFIG.OAUTH2.TOKEN_LIFETIME.REFRESH_TOKEN / 1000,
 
   // See https://github.com/oauthjs/node-oauth2-server/wiki/Model-specification for the model specifications
   model: require('./oauth-model')
@@ -182,10 +184,10 @@ function generateRandomToken () {
 
 function getTokenExpiresAt (type: 'access' | 'refresh') {
   const lifetime = type === 'access'
-    ? OAUTH_LIFETIME.ACCESS_TOKEN
-    : OAUTH_LIFETIME.REFRESH_TOKEN
+    ? CONFIG.OAUTH2.TOKEN_LIFETIME.ACCESS_TOKEN
+    : CONFIG.OAUTH2.TOKEN_LIFETIME.REFRESH_TOKEN
 
-  return new Date(Date.now() + lifetime * 1000)
+  return new Date(Date.now() + lifetime)
 }
 
 async function buildToken () {

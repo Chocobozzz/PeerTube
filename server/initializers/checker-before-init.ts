@@ -13,6 +13,7 @@ function checkMissedConfig () {
     'webserver.https', 'webserver.hostname', 'webserver.port',
     'secrets.peertube',
     'trust_proxy',
+    'oauth2.token_lifetime.access_token', 'oauth2.token_lifetime.refresh_token',
     'database.hostname', 'database.port', 'database.username', 'database.password', 'database.pool.max',
     'smtp.hostname', 'smtp.port', 'smtp.username', 'smtp.password', 'smtp.tls', 'smtp.from_address',
     'email.body.signature', 'email.subject.prefix',

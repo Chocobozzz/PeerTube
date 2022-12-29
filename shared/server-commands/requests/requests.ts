@@ -199,7 +199,7 @@ function buildRequest (req: request.Test, options: CommonRequestParams) {
   return req.expect((res) => {
     if (options.expectedStatus && res.status !== options.expectedStatus) {
       throw new Error(`Expected status ${options.expectedStatus}, got ${res.status}. ` +
-        `\nThe server responded this error: "${res.body?.error ?? res.text}".\n` +
+        `\nThe server responded: "${res.body?.error ?? res.text}".\n` +
         'You may take a closer look at the logs. To see how to do so, check out this page: ' +
         'https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/development/tests.md#debug-server-logs')
     }
