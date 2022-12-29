@@ -16,7 +16,7 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
   success: string = null
   user: User = null
 
-  emailPreferences = { 'isEmailPublic': false }
+  emailPreferences = { isEmailPublic: false }
 
   constructor (
     protected formReactiveService: FormReactiveService,
@@ -34,13 +34,13 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
     })
 
     this.user = this.authService.getUser()
-    this.emailPreferences['isEmailPublic'] = this.user.isEmailPublic
+    this.emailPreferences.isEmailPublic = this.user.isEmailPublic
   }
 
   updateIsEmailPublic () {
-    console.log("model changed")
+    console.log('model changed')
     const details: UserUpdateMe = {
-      isEmailPublic: this.emailPreferences['isEmailPublic']
+      isEmailPublic: this.emailPreferences.isEmailPublic
     }
 
     this.userService.updateMyProfile(details)
