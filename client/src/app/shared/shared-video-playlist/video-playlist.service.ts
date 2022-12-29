@@ -206,7 +206,15 @@ export class VideoPlaylistService {
                      stopTimestamp: body.stopTimestamp
                    })
 
-                   this.runPlaylistCheck(body.videoId)
+                   this.runVideoExistsInPlaylistCheck(body.videoId)
+
+                   if (this.myAccountPlaylistCache) {
+                     const playlist = this.myAccountPlaylistCache.data.find(p => p.id === playlistId)
+                     if (!playlist) return
+
+                     const otherPlaylists = this.myAccountPlaylistCache.data.filter(p => p !== playlist)
+                     this.myAccountPlaylistCache.data = [ playlist, ...otherPlaylists ]
+                   }
                  }),
                  catchError(err => this.restExtractor.handleError(err))
                )
@@ -225,7 +233,7 @@ export class VideoPlaylistService {
                      elem.stopTimestamp = body.stopTimestamp
                    }
 
-                   this.runPlaylistCheck(videoId)
+                   this.runVideoExistsInPlaylistCheck(videoId)
                  }),
                  catchError(err => this.restExtractor.handleError(err))
                )
@@ -242,7 +250,7 @@ export class VideoPlaylistService {
                        .filter(e => e.playlistElementId !== playlistElementId)
                    }
 
-                   this.runPlaylistCheck(videoId)
+                   this.runVideoExistsInPlaylistCheck(videoId)
                  }),
                  catchError(err => this.restExtractor.handleError(err))
                )
@@ -296,7 +304,7 @@ export class VideoPlaylistService {
     return obs
   }
 
-  runPlaylistCheck (videoId: number) {
+  runVideoExistsInPlaylistCheck (videoId: number) {
     debugLogger('Running playlist check.')
 
     if (this.videoExistsCache[videoId]) {
