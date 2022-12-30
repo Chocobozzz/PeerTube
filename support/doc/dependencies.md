@@ -2,8 +2,6 @@
 
 :warning: **Warning**: dependencies guide is maintained by the community. Some parts may be outdated! :warning:
 
-Follow the below guides, and check their versions match [required external dependencies versions](https://github.com/Chocobozzz/PeerTube/blob/master/engines.yaml).
-
 Main dependencies version supported by PeerTube:
 
  * `node` >=14.x
