@@ -844,7 +844,7 @@
       </trans-unit>
       <trans-unit id="5975923297757530070" datatype="html">
         <source><x id="START_TAG_DIV"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>can be redefined by the users<x id="CLOSE_TAG_DIV"/></source>
-        <target state="translated"><x id="START_TAG_DIV"/>Политика NSFW/чувствительных видео по-умолчанию<x id="CLOSE_TAG_DIV"/> <x id="START_TAG_DIV_1"/>может быть переопределена пользователями<x id="CLOSE_TAG_DIV"/></target>
+        <target state="translated"><x id="START_TAG_DIV"/>Политика NSFW/чувствительных видео по умолчанию<x id="CLOSE_TAG_DIV"/> <x id="START_TAG_DIV_1"/>может быть переопределена пользователями<x id="CLOSE_TAG_DIV"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="3386631781603205915">
@@ -875,7 +875,7 @@
       </trans-unit>
       <trans-unit id="4990508956923223990" datatype="html">
         <source>Max parallel lives</source>
-        <target state="translated">Макс. параллельных прямых эфиров</target>
+        <target state="translated">Предел параллельных прямых эфиров</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="7864066132065250510" datatype="html">
@@ -987,7 +987,7 @@
       </trans-unit>
       <trans-unit id="6090561122481711127" datatype="html">
         <source>hosted video</source>
-        <target state="translated">размещенное видео</target>
+        <target state="translated">размещённых видео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">51</context>
@@ -1045,7 +1045,7 @@
       </trans-unit>
       <trans-unit id="8530934870279569179" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file was too large (max. size: <x id="PH_1" equiv-text="maxFileSize"/>)</source>
-        <target state="translated">Ваш <x id="PH" equiv-text="name"/> файл был слишком большим (Макс. размер:<x id="PH_1" equiv-text="maxFileSize"/>)</target>
+        <target state="translated">Ваш <x id="PH" equiv-text="name"/> файл был слишком большим (Наиб. размер:<x id="PH_1" equiv-text="maxFileSize"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="7908493851025027368">
@@ -1712,7 +1712,7 @@
       </trans-unit>
       <trans-unit id="8893390761160292681" datatype="html">
         <source>My account</source>
-        <target state="translated">Мой аккаунт</target>
+        <target state="translated">Моя учётка</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">58</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">87</context></context-group>
       </trans-unit>
@@ -2332,7 +2332,7 @@
       </trans-unit>
       <trans-unit id="7306351600905511107" datatype="html">
         <source>ratio 6/1, recommended size: 1920x317, max size: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, extensions: <x id="PH_1" equiv-text="this.bannerExtensions"/></source>
-        <target state="translated">соотношение 6/1, рекомендуемый размер 1920x317, макс. размер: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, расширения: <x id="PH_1" equiv-text="this.bannerExtensions"/></target>
+        <target state="translated">соотношение 6/1, желательный размер 1920x317, наиб. размер: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, расширения: <x id="PH_1" equiv-text="this.bannerExtensions"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="3220184757632006830" datatype="html">
@@ -2919,7 +2919,7 @@
       </trans-unit>
       <trans-unit id="2993949426196989262" datatype="html">
         <source>We recommend you to not use the <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> user to publish your videos, since it's the super-admin account of your instance. <x id="LINE_BREAK"/> Instead, <x id="START_LINK"/>create a dedicated account<x id="CLOSE_LINK"/> to upload your videos. </source>
-        <target state="translated">Мы не рекомендуем вам использовать это <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> пользователь должен публиковать свои видео, так как это учетная запись супер-администратора вашего экземпляра. <x id="LINE_BREAK"/> вместо этого, <x id="START_LINK"/>создайте специальную учетную запись <x id="CLOSE_LINK"/> чтобы загрузить свои видео. </target>
+        <target state="translated">Лучше не использовать <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> пользователь должен размещать свои видео, так как это учётная запись супер-администратора вашего экземпляра. <x id="LINE_BREAK"/> вместо этого, <x id="START_LINK"/>создайте отдельную учётную запись <x id="CLOSE_LINK"/> чтобы загрузить свои видео. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="293476877021544115">
@@ -3503,7 +3503,7 @@
       </trans-unit>
       <trans-unit id="658727060940996385" datatype="html">
         <source>Renewing the token will disallow previously configured clients from retrieving the feed until they use the new token. Proceed?</source>
-        <target state="translated">Обновление токена не позволит ранее настроенным клиентам получать фид до тех пор, пока они не используют новый токен. Продолжить?</target>
+        <target state="translated">Обновление токена не позволит ранее настроенным клиентам получать ленту новостей до тех пор, пока они не используют новый токен. Продолжить?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.ts</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="3029923402309610616" datatype="html">
@@ -3521,22 +3521,22 @@
       </trans-unit>
       <trans-unit id="2645809032917283525" datatype="html">
         <source>Use third-party feed aggregators to retrieve the list of videos from channels you subscribed to.</source>
-        <target state="translated">Используйте сторонние агрегаторы каналов, чтобы получить список видео с каналов, на которые вы подписаны.</target>
+        <target state="translated">Используйте сторонние сборщики каналов, чтобы получить список видео с каналов, на которые вы подписаны.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="7944777648309302794" datatype="html">
         <source>Feed URL</source>
-        <target state="translated">Адрес фида</target>
+        <target state="translated">Адрес ленты новостей</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="6086365181226161548" datatype="html">
         <source>Feed Token</source>
-        <target state="translated">Токен фида</target>
+        <target state="translated">Токен ленты новостей</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="6492684506192237359" datatype="html">
         <source>⚠️ Never share your feed token with anyone.</source>
-        <target state="translated">⚠️ Никогда и никому не сообщайте свой токен фида.</target>
+        <target state="translated">⚠️ Никогда и никому не сообщайте свой токен ленты новостей.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="270726559962362501" datatype="html">
@@ -4451,7 +4451,7 @@
       </trans-unit>
       <trans-unit id="1671858302647356245" datatype="html">
         <source>Videos that have the most likes</source>
-        <target state="translated">Видео, получившие наибольшее количество лайков</target>
+        <target state="translated">Видео, получившие наибольшее количество нравликов</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">213</context></context-group>
       </trans-unit>
       <trans-unit id="2006841089844688970" datatype="html">
@@ -4747,12 +4747,12 @@
       </trans-unit>
       <trans-unit id="4620493570088713907" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="translated">Включение этого параметра позволит другим администраторам узнать, что вы в основном добавляете конфиденциальный контент.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Более того, флажок NSFW при загрузке видео будет автоматически установлен по умолчанию. </target>
+        <target state="translated">Включение этой настройки позволит другим администраторам узнать, что вы в основном добавляете конфиденциальное содержимое.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Более того, флажок NSFW при загрузке видео будет автоматически установлен по умолчанию. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="7497677457560701935">
         <source>Policy on videos containing sensitive content</source>
-        <target>Политика касательно видео, содержащих конфиденциальный контент</target>
+        <target state="translated">Политика касательно видео, содержащих конфиденциальное содержимое</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="8930852890861583005">
@@ -5859,7 +5859,7 @@
       </trans-unit>
       <trans-unit id="5063779773341398537" datatype="html">
         <source>Sensitive content:</source>
-        <target state="translated">Конфиденциальный контент:</target>
+        <target state="translated">Конфиденциальное содержимое:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="5723033003381016192" datatype="html">
@@ -5922,7 +5922,7 @@
       </trans-unit>
       <trans-unit id="7377817702119089263">
         <source>Default policy on videos containing sensitive content</source>
-        <target>Политика касательно видео, содержащих конфиденциальный контент</target>
+        <target state="translated">Политика касательно видео, содержащих конфиденциальное содержимое</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="7350483582490037954" datatype="html">
@@ -6895,7 +6895,7 @@
       </trans-unit>
       <trans-unit id="19872047295276660" datatype="html">
         <source>This instance is dedicated to sensitive/NSFW content.</source>
-        <target state="translated">Этот экземпляр предназначен для конфиденциального/NSFW контента.</target>
+        <target state="translated">Этот экземпляр предназначен для конфиденциального/NSFW содержимого.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="1970848297295860531" datatype="html">
@@ -7442,7 +7442,7 @@
       </trans-unit>
       <trans-unit id="5254305728396198887" datatype="html">
         <source>Sensitive content</source>
-        <target state="translated">Конфиденциальный контент</target>
+        <target state="translated">Чувствительное содержимое</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="5590086849807274701" datatype="html">
@@ -11639,7 +11639,7 @@
       </trans-unit>
       <trans-unit id="7401289443263903223" datatype="html">
         <source>Privacy breach or doxxing</source>
-        <target state="translated">Нарушение конфиденциальности или доксинг</target>
+        <target state="translated">Нарушение конфиденциальности или «доксинг»</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="8363008638081993167" datatype="html">
