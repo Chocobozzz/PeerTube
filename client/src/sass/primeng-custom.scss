@@ -455,7 +455,7 @@ p-table {
     background-color: pvar(--mainBackgroundColor) !important;
 
     .caption {
-      height: 40px;
+      min-height: 40px;
       width: 100%;
       display: inline-flex;
       align-items: center;
@@ -634,6 +634,11 @@ p-table {
         right: 0;
         color: pvar(--inputPlaceholderColor);
         overflow: visible;
+
+        @media screen and (max-width: $small-view) {
+          left: 0;
+          top: 40px;
+        }
       }
 
       .p-paginator-first,

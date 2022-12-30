@@ -6,6 +6,7 @@ import { join } from 'path'
 import { LiveVideo, VideoStreamingPlaylistType } from '@shared/models'
 import { ObjectStorageCommand, PeerTubeServer } from '@shared/server-commands'
 import { checkLiveSegmentHash, checkResolutionsInMasterPlaylist } from './streaming-playlists'
+import { sha1 } from '@shared/extra-utils'
 
 async function checkLiveCleanup (options: {
   server: PeerTubeServer
@@ -101,6 +102,13 @@ async function testVideoResolutions (options: {
         segmentName,
         hlsPlaylist
       })
+
+      if (originServer.internalServerNumber === server.internalServerNumber) {
+        const infohash = sha1(`${2 + hlsPlaylist.playlistUrl}+V${i}`)
+        const dbInfohashes = await originServer.sql.getPlaylistInfohash(hlsPlaylist.id)
+
+        expect(dbInfohashes).to.include(infohash)
+      }
     }
   }
 }

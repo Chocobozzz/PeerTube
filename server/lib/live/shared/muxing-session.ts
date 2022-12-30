@@ -262,6 +262,8 @@ class MuxingSession extends EventEmitter {
           const url = await storeHLSFileFromFilename(this.streamingPlaylist, this.streamingPlaylist.playlistFilename)
 
           this.streamingPlaylist.playlistUrl = url
+          this.streamingPlaylist.assignP2PMediaLoaderInfoHashes(this.videoLive.Video, this.allResolutions)
+
           await this.streamingPlaylist.save()
         } catch (err) {
           logger.error('Cannot upload live master file to object storage.', { err, ...this.lTags() })

@@ -86,6 +86,8 @@ export class SQLCommand extends AbstractCommand {
     return seq.query(query, options)
   }
 
+  // ---------------------------------------------------------------------------
+
   setPluginField (pluginName: string, field: string, value: string) {
     const seq = this.getSequelize()
 
@@ -101,6 +103,17 @@ export class SQLCommand extends AbstractCommand {
   setPluginLatestVersion (pluginName: string, newVersion: string) {
     return this.setPluginField(pluginName, 'latestVersion', newVersion)
   }
+
+  // ---------------------------------------------------------------------------
+
+  async getPlaylistInfohash (playlistId: number) {
+    const result = await this.selectQuery('SELECT "p2pMediaLoaderInfohashes" FROM "videoStreamingPlaylist" WHERE id = ' + playlistId)
+    if (!result || result.length === 0) return []
+
+    return result[0].p2pMediaLoaderInfohashes
+  }
+
+  // ---------------------------------------------------------------------------
 
   setActorFollowScores (newScore: number) {
     const seq = this.getSequelize()
