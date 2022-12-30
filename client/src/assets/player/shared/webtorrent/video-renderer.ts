@@ -89,6 +89,7 @@ function renderMedia (file: any, elem: HTMLVideoElement, opts: RenderMediaOption
       preparedElem = elem
 
       preparedElem.addEventListener('progress', function () {
+        
         currentTime = elem.currentTime
       })
     }

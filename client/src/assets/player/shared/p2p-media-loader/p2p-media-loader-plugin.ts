@@ -57,13 +57,7 @@ class P2pMediaLoaderPlugin extends Plugin {
         return
       }
     } else {
-      // FIXME: typings https://github.com/Microsoft/TypeScript/issues/14080
-      /*(videojs as any).Html5Hlsjs.addHook('beforeinitialize', (videojsPlayer: any, hlsjs: any) => {
-
-        console.log('beforeinitialize')
-
-        this.hlsjs = hlsjs
-      })*/
+     
 
       initVideoJsContribHlsJsPlayer(player)
     }
@@ -121,8 +115,6 @@ class P2pMediaLoaderPlugin extends Plugin {
 
   private initializePlugin () {
     initHlsJsPlayer(this.hlsjs)
-
-    console.log('initializePlugin')
 
     this.p2pEngine = this.options.loader.getEngine()
 

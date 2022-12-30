@@ -159,7 +159,10 @@ class PeerTubePlugin extends Plugin {
       lastViewEvent = 'seek'
     })
 
+   
+
     this.player.one('ended', () => {
+
       const currentTime = Math.round(this.player.duration())
       lastCurrentTime = currentTime
 
@@ -255,66 +258,6 @@ class PeerTubePlugin extends Plugin {
     debugLogger('Set player inactivity to ' + timeout)
   }
 
-  /*private initCaptions () {
-    for (const caption of this.videoCaptions) {
-      this.player.addRemoteTextTrack({
-        kind: 'captions',
-        label: caption.label,
-        language: caption.language,
-        id: caption.language,
-        src: caption.src,
-        default: this.defaultSubtitle === caption.language
-      }, false)
-    }
-
-    this.player.trigger('captionsChanged')
-  }*/
-
-  // Thanks: https://github.com/videojs/video.js/issues/4460#issuecomment-312861657
-  private initSmoothProgressBar () {
-    /*const SeekBar = videojs.getComponent('SeekBar') as any
-    SeekBar.prototype.getPercent = function getPercent () {
-      // Allows for smooth scrubbing, when player can't keep up.
-      // const time = (this.player_.scrubbing()) ?
-      //   this.player_.getCache().currentTime :
-      //   this.player_.currentTime()
-      const time = this.player_.currentTime()
-      const percent = time / this.player_.duration()
-      return percent >= 1 ? 1 : percent
-    }
-    SeekBar.prototype.handleMouseMove = function handleMouseMove (event: any) {
-      let newTime = this.calculateDistance(event) * this.player_.duration()
-      if (newTime === this.player_.duration()) {
-        newTime = newTime - 0.1
-      }
-
-      this.player_.currentTime(newTime)
-      this.update()
-    }
-
-    SeekBar.prototype.handleMouseUp = function handleMouseUp (event: any) {
-      console.log("???????????????????????????")
-      //this.super.handleMouseUp.apply(event, this.super);
-  
-      // Stop event propagation to prevent double fire in progress-control.js
-      if (event) {
-        event.stopPropagation();
-      }
-      this.player_.scrubbing(false);
-
-      console.log('this.videoWasPlaying', this.videoWasPlaying)
-  
-
-      this.player_.trigger({ type: 'timeupdate', target: this, manuallyTriggered: true });
-      if (this.videoWasPlaying) {
-        this.player_.play().catch(e => {
-          console.error('e', e)
-        })
-      } else {
-        this.update_();
-      }
-    }*/
-  }
 }
 
 videojs.registerPlugin('peertube', PeerTubePlugin)

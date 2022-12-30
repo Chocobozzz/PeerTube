@@ -36,8 +36,6 @@ import './shared/p2p-media-loader/p2p-media-loader-plugin'
 import * as p2pMediaLoaderModule from 'p2p-media-loader-hlsjs-basyton'
 
 
-console.log('p2pMediaLoaderModule', p2pMediaLoaderModule)
-
 
 const Fn: any = require('./shared/videojs-helpers/fn.js');
 
@@ -137,47 +135,6 @@ SeekBar.prototype.update = function (event : any) {
   return percent;
   
 }
-/*
-SeekBar.prototype.handleMouseMove = function handleMouseMove (event: any) {
-
-  let newTime = this.calculateDistance(event) * this.player_.duration()
-  if (newTime === this.player_.duration()) {
-    newTime = newTime - 0.1
-  }
-
-  this.player_.currentTime(newTime)
-  this.update()
-}
-
-SeekBar.prototype.handleMouseUp = function handleMouseUp (event: any) {
-
-  console.log('this.super', this, SeekBar, SeekBar.prototype)
-
-
-  console.log('this.super', this.super)
-  console.log('this.super', SeekBar.prototype.super)
-
-  this.super.handleMouseUp.call(this.super, event);
-
-  // Stop event propagation to prevent double fire in progress-control.js
-  if (event) {
-    event.stopPropagation();
-  }
-  this.player_.scrubbing(false);
-
-
-  this.player_.trigger({ type: 'timeupdate', target: this, manuallyTriggered: true });
-  if (this.videoWasPlaying) {
-    this.player_.play().catch(e => {
-      console.error('e', e)
-    })
-  } else {
-    this.update_();
-  }
-}*/
-
-// Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
-//(videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
 
 const CaptionsButton = videojs.getComponent('CaptionsButton') as any
 // Change Captions to Subtitles/CC
@@ -225,8 +182,6 @@ export class PeertubePlayerManager {
       'filter:internal.player.videojs.options.result',
       videojsOptionsBuilder.getVideojsOptions(this.alreadyPlayed)
     )*/
-
-    console.log('videojsOptions', videojsOptions, options)
 
     const self = this
     return new Promise(res => {
@@ -278,6 +233,7 @@ export class PeertubePlayerManager {
         }
         else{
           player.on('durationchange', () => {
+            console.log("?????????????")
             if(player.duration() != options.common.videoDuration)
               player.duration(options.common.videoDuration)
           })
@@ -322,8 +278,6 @@ export class PeertubePlayerManager {
     currentPlayer: videojs.Player,
     options: PeertubePlayerManagerOptions
   ) {
-
-    console.log('maybeFallbackToWebTorrent')
 
     if (options.webtorrent.videoFiles.length === 0 || currentMode === 'webtorrent') {
       currentPlayer.peertube().displayFatalError()

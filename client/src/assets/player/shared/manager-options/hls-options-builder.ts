@@ -148,8 +148,6 @@ export class HLSOptionsBuilder {
       ? this.getHLSLiveOptions()
       : this.getHLSVODOptions()
 
-    console.log('this.options.common', )
-
     //autoLevelEnabled
 
     const base = {

@@ -4982,10 +4982,10 @@
   "resolved" "https://registry.npmjs.org/p-try/-/p-try-2.2.0.tgz"
   "version" "2.2.0"
 
-"p2p-media-loader-core-basyton@^1.0.21":
-  "integrity" "sha512-CzxJfR6sZH4L0bZOE8LUMYI/Y5TAdl0T0zbJ0xNFEfEtL6MNXCkJBOZrEW+f0Q4WgiSz+xgw0tqrM0C0x5j9yQ=="
-  "resolved" "https://registry.npmjs.org/p2p-media-loader-core-basyton/-/p2p-media-loader-core-basyton-1.0.21.tgz"
-  "version" "1.0.21"
+"p2p-media-loader-core-basyton@^1.0.22":
+  "integrity" "sha512-rUvuEA3KSp9FKHd3qFE56pql8NflEltPwHwN9ROPKADsZ2VGGwkUjy9+eY8qOyitjyHCd6PHUKyhqh+7y/m+jw=="
+  "resolved" "https://registry.npmjs.org/p2p-media-loader-core-basyton/-/p2p-media-loader-core-basyton-1.0.22.tgz"
+  "version" "1.0.22"
   dependencies:
     "bittorrent-tracker" "^9.19.0"
     "debug" "^4.3.4"
@@ -4993,15 +4993,15 @@
     "sha.js" "^2.4.11"
     "simple-peer" "^9.11.1"
 
-"p2p-media-loader-hlsjs-basyton@^1.0.21":
-  "integrity" "sha512-kjn9KZkDKTBtnT1AQHDChiKS7BaYs6fQZGc8twt5yshwTAOmczN0ds5ukLAyLgOWVjKJyeRVrmrYJ3JGCVA5WQ=="
-  "resolved" "https://registry.npmjs.org/p2p-media-loader-hlsjs-basyton/-/p2p-media-loader-hlsjs-basyton-1.0.21.tgz"
-  "version" "1.0.21"
+"p2p-media-loader-hlsjs-basyton@^1.0.22":
+  "integrity" "sha512-Lb2LDHFtitlz4IAAGIH/AbgRK2jKDXJ8Z3BHZEYvO9szzJ6JLPHbLZUAob9k0mPK1b4GHuN0rs0ynvgBD3WroQ=="
+  "resolved" "https://registry.npmjs.org/p2p-media-loader-hlsjs-basyton/-/p2p-media-loader-hlsjs-basyton-1.0.22.tgz"
+  "version" "1.0.22"
   dependencies:
     "debug" "^4.3.4"
     "events" "^3.3.0"
     "m3u8-parser" "^4.7.1"
-    "p2p-media-loader-core-basyton" "^1.0.21"
+    "p2p-media-loader-core-basyton" "^1.0.22"
 
 "package-json-versionify@^1.0.4":
   "integrity" "sha512-mtKKtCeSZMtWcc5hHJS6OlEGP7J9g7WN6vWCCZi2hCXFag/Zmjokh6WFFTQb9TuMnBcZpRjhhMQyOyglPCAahw=="

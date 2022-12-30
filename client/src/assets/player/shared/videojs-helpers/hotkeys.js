@@ -419,7 +419,7 @@
   
       function silencePromise(value) {
         if (value != null && typeof value.then === 'function') {
-          value.then(null, function(e) {console.log("E", e)});
+          value.then(null, function(e) {});
         }
       }
 

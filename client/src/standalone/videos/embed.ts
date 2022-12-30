@@ -319,7 +319,6 @@ export class PeerTubeEmbed {
 			}
 		}
 
-		console.log('parameters.localVideo', parameters.localVideo)
 
 		const PlayerManager: typeof PeertubePlayerManager = PeertubePlayerManagerModule.PeertubePlayerManager
 		const options = await this.playerManagerOptions.getPlayerOptions({

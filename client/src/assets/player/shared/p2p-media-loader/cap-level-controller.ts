@@ -144,8 +144,6 @@ class CapLevelController implements ComponentAPI {
           this.streamController
         ) {
 
-          console.log("GO TO NEXT LEVEL")
-
           // if auto level capping has a higher value for the previous one, flush the buffer using nextLevelSwitch
           // usually happen when the user go to the fullscreen mode.
           this.streamController.nextLevelSwitch();

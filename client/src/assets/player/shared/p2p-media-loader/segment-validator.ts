@@ -7,6 +7,22 @@ type SegmentsJSON = { [filename: string]: string | { [byterange: string]: string
 
 const maxRetries = 3
 
+function findbyqualityname(segments : any, name : string){
+
+  var result = undefined
+
+  name = name.substring(36)
+
+
+  for (var key in segments) {
+    if (segments.hasOwnProperty(key) && key.indexOf(name) > -1) {
+      result = segments[key]
+    }
+  }
+
+  return result
+}
+
 function segmentValidatorFactory (segmentsSha256Url: string, isLive: boolean) {
   let segmentsJSON = fetchSha256Segments(segmentsSha256Url)
   const regex = /bytes=(\d+)-(\d+)/
@@ -17,7 +33,9 @@ function segmentValidatorFactory (segmentsSha256Url: string, isLive: boolean) {
 
     const filename = basename(segment.url)
 
-    const segmentValue = (await segmentsJSON)[filename]
+    const segments = (await segmentsJSON)
+
+    const segmentValue = segments[filename] || findbyqualityname(segments, filename)
 
     if (!segmentValue && retry > maxRetries) {
       throw new Error(`Unknown segment name ${filename} in segment validator`)

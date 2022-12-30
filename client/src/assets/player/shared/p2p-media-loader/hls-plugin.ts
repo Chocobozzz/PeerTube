@@ -119,6 +119,10 @@ class Html5Hlsjs {
     this.videoElement = tech.el() as HTMLVideoElement
     this.player = vjs((tech.options_ as any).playerId)
 
+    /*this.player.on('seeking', (e : any) => {
+      console.log("E", e)
+    })*/
+
     this.videoElement.addEventListener('error', event => {
       let errorTxt: string
       const mediaError = ((event.currentTarget || event.target) as HTMLVideoElement).error
@@ -185,7 +189,6 @@ class Html5Hlsjs {
       // empty
     }
 
-    console.log("DESTROY", this.hls)
 
     this.hls.destroy()
   }
@@ -389,7 +392,6 @@ class Html5Hlsjs {
       this.videoElement.addEventListener('play', this.handlers.play)
     }
 
-    console.log("HERE" ,techOptions , srOptions_)
 
     //@ts-ignore
     this.hlsjsConfig.capLevelController = CapLevelController
@@ -398,7 +400,7 @@ class Html5Hlsjs {
 
     //if(!data.details.live && data.details.totalduration      )
 
-    //this.hlsjsConfig.debug = true
+    this.hlsjsConfig.debug = true
 
     this.hls = new Hlsjs(this.hlsjsConfig)
 
@@ -424,6 +426,8 @@ class Html5Hlsjs {
       this.dvrDuration = data.details.totalduration
 
       this._duration = this.isLive ? Infinity : data.details.totalduration
+
+      this.player.duration(Math.round(this._duration))
 
       //if(this._duration < 60){
         //this.player.peertubeResolutions().disableAutoResolution()
