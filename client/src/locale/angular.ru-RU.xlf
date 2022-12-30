@@ -1245,7 +1245,7 @@
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
-        <target state="translated">Письмо с инструкцией по сбросу пароля будет отправлено на <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Ссылка будет рабочей в течении 1 часа.</target>
+        <target state="translated">Письмо с руководством по сбросу пароля будет отправлено на <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Ссылка будет рабочей в течении 1 часа.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">149</context></context-group>
       </trans-unit>
       <trans-unit id="4768749765465246664">
@@ -5080,7 +5080,7 @@
       </trans-unit>
       <trans-unit id="6801844913630625451" datatype="html">
         <source>⚠️ We don't recommend to enable this feature if you don't trust your users</source>
-        <target state="translated">⚠️ Мы не рекомендуем включать эту функцию, если вы не доверяете своим пользователям</target>
+        <target state="translated">⚠️ Нежелательно включать эту функцию, если вы не доверяете своим пользователям</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">284</context></context-group>
       </trans-unit>
       <trans-unit id="2634326893148077182" datatype="html">
@@ -5849,7 +5849,7 @@
       </trans-unit>
       <trans-unit id="322705536187172989" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Global Views"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">Сортировать по <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Общие представления"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Упорядочивать по <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>«Общие просмотры»<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="2343321245279384373" datatype="html">
@@ -9274,7 +9274,7 @@
       </trans-unit>
       <trans-unit id="7699622144571229146" datatype="html">
         <source>Sort by</source>
-        <target state="translated">Сортировать по</target>
+        <target state="translated">Упорядочивать по</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">26</context>
