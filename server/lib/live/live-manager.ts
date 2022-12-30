@@ -483,11 +483,11 @@ class LiveManager {
     playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
     playlist.type = VideoStreamingPlaylistType.HLS
 
-    playlist.assignP2PMediaLoaderInfoHashes(video, allResolutions)
-
     playlist.storage = CONFIG.OBJECT_STORAGE.ENABLED
       ? VideoStorage.OBJECT_STORAGE
       : VideoStorage.FILE_SYSTEM
+
+    playlist.assignP2PMediaLoaderInfoHashes(video, allResolutions)
 
     return playlist.save()
   }

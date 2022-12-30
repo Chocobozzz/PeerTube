@@ -40,6 +40,8 @@ async function checkSegmentHash (options: {
   expect(sha256(segmentBody)).to.equal(shaBody[videoName][range])
 }
 
+// ---------------------------------------------------------------------------
+
 async function checkLiveSegmentHash (options: {
   server: PeerTubeServer
   baseUrlSegment: string
@@ -55,6 +57,8 @@ async function checkLiveSegmentHash (options: {
 
   expect(sha256(segmentBody)).to.equal(shaBody[segmentName])
 }
+
+// ---------------------------------------------------------------------------
 
 async function checkResolutionsInMasterPlaylist (options: {
   server: PeerTubeServer
