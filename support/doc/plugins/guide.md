@@ -433,7 +433,27 @@ function register (...) {
       username: 'user'
       email: 'user@example.com'
       role: 2
-      displayName: 'User display name'
+      displayName: 'User display name',
+
+      // Custom admin flags (bypass video auto moderation etc.)
+      // https://github.com/Chocobozzz/PeerTube/blob/develop/shared/models/users/user-flag.model.ts
+      // PeerTube >= 5.1
+      adminFlags: 0,
+      // Quota in bytes
+      // PeerTube >= 5.1
+      videoQuota: 1024 * 1024 * 1024, // 1GB
+      // PeerTube >= 5.1
+      videoQuotaDaily: -1, // Unlimited
+
+      // Update the user profile if it already exists
+      // Default behaviour is no update
+      // Introduced in PeerTube >= 5.1
+      userUpdater: ({ fieldName, currentValue, newValue }) => {
+        // Always use new value except for videoQuotaDaily field
+        if (fieldName === 'videoQuotaDaily') return currentValue
+
+        return newValue
+      }
     })
   })
 

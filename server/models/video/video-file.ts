@@ -439,7 +439,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
     if (!element) return videoFile.save({ transaction })
 
     for (const k of Object.keys(videoFile.toJSON())) {
-      element[k] = videoFile[k]
+      element.set(k, videoFile[k])
     }
 
     return element.save({ transaction })

@@ -174,7 +174,8 @@ function checkRemoteRedundancyConfig () {
 function checkStorageConfig () {
   // Check storage directory locations
   if (isProdInstance()) {
-    const configStorage = config.get('storage')
+    const configStorage = config.get<{ [ name: string ]: string }>('storage')
+
     for (const key of Object.keys(configStorage)) {
       if (configStorage[key].startsWith('storage/')) {
         logger.warn(

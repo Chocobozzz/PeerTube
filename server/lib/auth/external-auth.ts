@@ -19,6 +19,7 @@ import {
   RegisterServerExternalAuthenticatedResult
 } from '@server/types/plugins/register-server-auth.model'
 import { UserAdminFlag, UserRole } from '@shared/models'
+import { BypassLogin } from './oauth-model'
 
 export type ExternalUser =
   Pick<MUser, 'username' | 'email' | 'role' | 'adminFlags' | 'videoQuotaDaily' | 'videoQuota'> &
@@ -28,6 +29,7 @@ export type ExternalUser =
 const authBypassTokens = new Map<string, {
   expires: Date
   user: ExternalUser
+  userUpdater: RegisterServerAuthenticatedResult['userUpdater']
   authName: string
   npmName: string
 }>()
@@ -63,7 +65,8 @@ async function onExternalUserAuthenticated (options: {
     expires,
     user,
     npmName,
-    authName
+    authName,
+    userUpdater: authResult.userUpdater
   })
 
   // Cleanup expired tokens
@@ -85,7 +88,7 @@ async function getAuthNameFromRefreshGrant (refreshToken?: string) {
   return tokenModel?.authName
 }
 
-async function getBypassFromPasswordGrant (username: string, password: string) {
+async function getBypassFromPasswordGrant (username: string, password: string): Promise<BypassLogin> {
   const plugins = PluginManager.Instance.getIdAndPassAuths()
   const pluginAuths: { npmName?: string, registerAuthOptions: RegisterServerAuthPassOptions }[] = []
 
@@ -140,7 +143,8 @@ async function getBypassFromPasswordGrant (username: string, password: string) {
         bypass: true,
         pluginName: pluginAuth.npmName,
         authName: authOptions.authName,
-        user: buildUserResult(loginResult)
+        user: buildUserResult(loginResult),
+        userUpdater: loginResult.userUpdater
       }
     } catch (err) {
       logger.error('Error in auth method %s of plugin %s', authOptions.authName, pluginAuth.npmName, { err })
@@ -150,7 +154,7 @@ async function getBypassFromPasswordGrant (username: string, password: string) {
   return undefined
 }
 
-function getBypassFromExternalAuth (username: string, externalAuthToken: string) {
+function getBypassFromExternalAuth (username: string, externalAuthToken: string): BypassLogin {
   const obj = authBypassTokens.get(externalAuthToken)
   if (!obj) throw new Error('Cannot authenticate user with unknown bypass token')
 
@@ -174,6 +178,7 @@ function getBypassFromExternalAuth (username: string, externalAuthToken: string)
     bypass: true,
     pluginName: npmName,
     authName,
+    userUpdater: obj.userUpdater,
     user
   }
 }
@@ -193,6 +198,11 @@ function isAuthResultValid (npmName: string, authName: string, result: RegisterS
   if (result.adminFlags && !isUserAdminFlagsValid(result.adminFlags)) return returnError('adminFlags')
   if (result.videoQuota && !isUserVideoQuotaValid(result.videoQuota + '')) return returnError('videoQuota')
   if (result.videoQuotaDaily && !isUserVideoQuotaDailyValid(result.videoQuotaDaily + '')) return returnError('videoQuotaDaily')
+
+  if (result.userUpdater && typeof result.userUpdater !== 'function') {
+    logger.error('Auth method %s of plugin %s did not provide a valid user updater function.', authName, npmName)
+    return false
+  }
 
   return true
 }

@@ -8,10 +8,11 @@ function isVideoCaptionLanguageValid (value: any) {
   return exists(value) && VIDEO_LANGUAGES[value] !== undefined
 }
 
-const videoCaptionTypesRegex = Object.keys(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT)
-                                .concat([ 'application/octet-stream' ]) // MacOS sends application/octet-stream
-                                .map(m => `(${m})`)
-                                .join('|')
+// MacOS sends application/octet-stream
+const videoCaptionTypesRegex = [ ...Object.keys(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT), 'application/octet-stream' ]
+  .map(m => `(${m})`)
+  .join('|')
+
 function isVideoCaptionFile (files: UploadFilesForCheck, field: string) {
   return isFileValid({
     files,

@@ -33,7 +33,18 @@ async function register ({
       if (body.id === 'laguna' && body.password === 'laguna password') {
         return Promise.resolve({
           username: 'laguna',
-          email: 'laguna@example.com'
+          email: 'laguna@example.com',
+          displayName: 'Laguna Loire',
+          adminFlags: 1,
+          videoQuota: 42000,
+          videoQuotaDaily: 42100,
+
+          // Always use new value except for videoQuotaDaily field
+          userUpdater: ({ fieldName, currentValue, newValue }) => {
+            if (fieldName === 'videoQuotaDaily') return currentValue
+
+            return newValue
+          }
         })
       }
 

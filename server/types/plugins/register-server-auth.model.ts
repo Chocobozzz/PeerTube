@@ -4,15 +4,29 @@ import { MOAuthToken, MUser } from '../models'
 
 export type RegisterServerAuthOptions = RegisterServerAuthPassOptions | RegisterServerAuthExternalOptions
 
+export type AuthenticatedResultUpdaterFieldName = 'displayName' | 'role' | 'adminFlags' | 'videoQuota' | 'videoQuotaDaily'
+
 export interface RegisterServerAuthenticatedResult {
+  // Update the user profile if it already exists
+  // Default behaviour is no update
+  // Introduced in PeerTube >= 5.1
+  userUpdater?: <T> (options: {
+    fieldName: AuthenticatedResultUpdaterFieldName
+    currentValue: T
+    newValue: T
+  }) => T
+
   username: string
   email: string
   role?: UserRole
   displayName?: string
 
+  // PeerTube >= 5.1
   adminFlags?: UserAdminFlag
 
+  // PeerTube >= 5.1
   videoQuota?: number
+  // PeerTube >= 5.1
   videoQuotaDaily?: number
 }
 
