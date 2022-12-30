@@ -3,6 +3,7 @@ import videojs from 'video.js'
 import { Engine } from '@peertube/p2p-media-loader-hlsjs'
 import { VideoFile, VideoPlaylist, VideoPlaylistElement } from '@shared/models'
 import { PeerTubeDockPluginOptions } from '../shared/dock/peertube-dock-plugin'
+import { HotkeysOptions } from '../shared/hotkeys/peertube-hotkeys-plugin'
 import { Html5Hlsjs } from '../shared/p2p-media-loader/hls-plugin'
 import { P2pMediaLoaderPlugin } from '../shared/p2p-media-loader/p2p-media-loader-plugin'
 import { RedundancyUrlManager } from '../shared/p2p-media-loader/redundancy-url-manager'
@@ -44,7 +45,7 @@ declare module 'video.js' {
 
     bezels (): void
     peertubeMobile (): void
-    peerTubeHotkeysPlugin (): void
+    peerTubeHotkeysPlugin (options?: HotkeysOptions): void
 
     stats (options?: StatsCardOptions): StatsForNerdsPlugin
 

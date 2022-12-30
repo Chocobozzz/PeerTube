@@ -133,8 +133,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.loadRouteParams()
     this.loadRouteQuery()
 
-    this.initHotkeys()
-
     this.theaterEnabled = getStoredTheater()
 
     this.hooks.runAction('action:video-watch.init', 'video-watch')
@@ -406,6 +404,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       )
       if (res === false) return this.location.back()
     }
+
+    this.buildHotkeysHelp(video)
 
     this.buildPlayer({ urlOptions, loggedInOrAnonymousUser, forceAutoplay })
       .catch(err => logger.error('Cannot build the player', err))
@@ -787,32 +787,42 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.video.viewers = newViewers
   }
 
-  private initHotkeys () {
+  private buildHotkeysHelp (video: Video) {
+    if (this.hotkeys.length !== 0) {
+      this.hotkeysService.remove(this.hotkeys)
+    }
+
     this.hotkeys = [
       // These hotkeys are managed by the player
       new Hotkey('f', e => e, undefined, $localize`Enter/exit fullscreen`),
       new Hotkey('space', e => e, undefined, $localize`Play/Pause the video`),
       new Hotkey('m', e => e, undefined, $localize`Mute/unmute the video`),
 
-      new Hotkey('0-9', e => e, undefined, $localize`Skip to a percentage of the video: 0 is 0% and 9 is 90%`),
-
       new Hotkey('up', e => e, undefined, $localize`Increase the volume`),
       new Hotkey('down', e => e, undefined, $localize`Decrease the volume`),
-
-      new Hotkey('right', e => e, undefined, $localize`Seek the video forward`),
-      new Hotkey('left', e => e, undefined, $localize`Seek the video backward`),
-
-      new Hotkey('>', e => e, undefined, $localize`Increase playback rate`),
-      new Hotkey('<', e => e, undefined, $localize`Decrease playback rate`),
-
-      new Hotkey(',', e => e, undefined, $localize`Navigate in the video to the previous frame`),
-      new Hotkey('.', e => e, undefined, $localize`Navigate in the video to the next frame`),
 
       new Hotkey('t', e => {
         this.theaterEnabled = !this.theaterEnabled
         return false
       }, undefined, $localize`Toggle theater mode`)
     ]
+
+    if (!video.isLive) {
+      this.hotkeys = this.hotkeys.concat([
+        // These hotkeys are also managed by the player but only for VOD
+
+        new Hotkey('0-9', e => e, undefined, $localize`Skip to a percentage of the video: 0 is 0% and 9 is 90%`),
+
+        new Hotkey('right', e => e, undefined, $localize`Seek the video forward`),
+        new Hotkey('left', e => e, undefined, $localize`Seek the video backward`),
+
+        new Hotkey('>', e => e, undefined, $localize`Increase playback rate`),
+        new Hotkey('<', e => e, undefined, $localize`Decrease playback rate`),
+
+        new Hotkey(',', e => e, undefined, $localize`Navigate in the video to the previous frame`),
+        new Hotkey('.', e => e, undefined, $localize`Navigate in the video to the next frame`)
+      ])
+    }
 
     if (this.isUserLoggedIn()) {
       this.hotkeys = this.hotkeys.concat([

@@ -4,6 +4,10 @@ type KeyHandler = { accept: (event: KeyboardEvent) => boolean, cb: (e: KeyboardE
 
 const Plugin = videojs.getPlugin('plugin')
 
+export type HotkeysOptions = {
+  isLive: boolean
+}
+
 class PeerTubeHotkeysPlugin extends Plugin {
   private static readonly VOLUME_STEP = 0.1
   private static readonly SEEK_STEP = 5
@@ -12,8 +16,12 @@ class PeerTubeHotkeysPlugin extends Plugin {
 
   private readonly handlers: KeyHandler[]
 
-  constructor (player: videojs.Player, options: videojs.PlayerOptions) {
+  private readonly isLive: boolean
+
+  constructor (player: videojs.Player, options: videojs.PlayerOptions & HotkeysOptions) {
     super(player, options)
+
+    this.isLive = options.isLive
 
     this.handlers = this.buildHandlers()
 
@@ -68,28 +76,6 @@ class PeerTubeHotkeysPlugin extends Plugin {
         }
       },
 
-      // Rewind
-      {
-        accept: e => this.isNaked(e, 'ArrowLeft') || this.isNaked(e, 'MediaRewind'),
-        cb: e => {
-          e.preventDefault()
-
-          const target = Math.max(0, this.player.currentTime() - PeerTubeHotkeysPlugin.SEEK_STEP)
-          this.player.currentTime(target)
-        }
-      },
-
-      // Forward
-      {
-        accept: e => this.isNaked(e, 'ArrowRight') || this.isNaked(e, 'MediaForward'),
-        cb: e => {
-          e.preventDefault()
-
-          const target = Math.min(this.player.duration(), this.player.currentTime() + PeerTubeHotkeysPlugin.SEEK_STEP)
-          this.player.currentTime(target)
-        }
-      },
-
       // Fullscreen
       {
         // f key or Ctrl + Enter
@@ -116,6 +102,8 @@ class PeerTubeHotkeysPlugin extends Plugin {
       {
         accept: e => e.key === '>',
         cb: () => {
+          if (this.isLive) return
+
           const target = Math.min(this.player.playbackRate() + 0.1, 5)
 
           this.player.playbackRate(parseFloat(target.toFixed(2)))
@@ -126,6 +114,8 @@ class PeerTubeHotkeysPlugin extends Plugin {
       {
         accept: e => e.key === '<',
         cb: () => {
+          if (this.isLive) return
+
           const target = Math.max(this.player.playbackRate() - 0.1, 0.10)
 
           this.player.playbackRate(parseFloat(target.toFixed(2)))
@@ -136,6 +126,8 @@ class PeerTubeHotkeysPlugin extends Plugin {
       {
         accept: e => e.key === ',',
         cb: () => {
+          if (this.isLive) return
+
           this.player.pause()
 
           // Calculate movement distance (assuming 30 fps)
@@ -148,6 +140,8 @@ class PeerTubeHotkeysPlugin extends Plugin {
       {
         accept: e => e.key === '.',
         cb: () => {
+          if (this.isLive) return
+
           this.player.pause()
 
           // Calculate movement distance (assuming 30 fps)
@@ -157,11 +151,47 @@ class PeerTubeHotkeysPlugin extends Plugin {
       }
     ]
 
+    if (this.isLive) return handlers
+
+    return handlers.concat(this.buildVODHandlers())
+  }
+
+  private buildVODHandlers () {
+    const handlers: KeyHandler[] = [
+      // Rewind
+      {
+        accept: e => this.isNaked(e, 'ArrowLeft') || this.isNaked(e, 'MediaRewind'),
+        cb: e => {
+          if (this.isLive) return
+
+          e.preventDefault()
+
+          const target = Math.max(0, this.player.currentTime() - PeerTubeHotkeysPlugin.SEEK_STEP)
+          this.player.currentTime(target)
+        }
+      },
+
+      // Forward
+      {
+        accept: e => this.isNaked(e, 'ArrowRight') || this.isNaked(e, 'MediaForward'),
+        cb: e => {
+          if (this.isLive) return
+
+          e.preventDefault()
+
+          const target = Math.min(this.player.duration(), this.player.currentTime() + PeerTubeHotkeysPlugin.SEEK_STEP)
+          this.player.currentTime(target)
+        }
+      }
+    ]
+
     // 0-9 key handlers
     for (let i = 0; i < 10; i++) {
       handlers.push({
         accept: e => this.isNakedOrShift(e, i + ''),
         cb: e => {
+          if (this.isLive) return
+
           e.preventDefault()
 
           this.player.currentTime(this.player.duration() * i * 0.1)
