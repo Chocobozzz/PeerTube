@@ -200,7 +200,7 @@ async function updateObjectBucketPolicy (options: {
 
   logger.debug('Updating Bucket Policy for file %s in bucket %s', key, bucketInfo.BUCKET_NAME, lTags())
 
-  var bucketPolicyResponse = await getbucketPolicy({bucketInfo: bucketInfo})
+  var bucketPolicyResponse = JSON.parse((await getbucketPolicy({bucketInfo: bucketInfo})).Policy)
   
   if (!bucketPolicyResponse.Policy){
     await createPolicy({bucketInfo: bucketInfo})
@@ -230,7 +230,7 @@ async function updateObjectBucketPolicyPrefix (options: {
 }) {
   const { prefix, bucketInfo, isPrivate } = options
   const s3policyPrefix = "arn:aws:s3:::"
-  var bucketPolicyResponse = await getbucketPolicy({bucketInfo: bucketInfo})
+  var bucketPolicyResponse = JSON.parse((await getbucketPolicy({bucketInfo: bucketInfo})).Policy)
   
   if (!bucketPolicyResponse.Policy){
     await createPolicy({bucketInfo: bucketInfo})
