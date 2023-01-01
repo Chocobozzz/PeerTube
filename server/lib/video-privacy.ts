@@ -5,6 +5,7 @@ import { DIRECTORIES } from '@server/initializers/constants'
 import { MVideo, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { VideoPrivacy, VideoStorage } from '@shared/models'
 import { updateHLSFilesACL, updateWebTorrentFileACL } from './object-storage'
+import { ACLEnabled, PolicyEnabled } from './object-storage/shared'
 
 function setVideoPrivacy (video: MVideo, newPrivacy: VideoPrivacy) {
   if (video.privacy === VideoPrivacy.PRIVATE && newPrivacy !== VideoPrivacy.PRIVATE) {
@@ -58,12 +59,18 @@ async function moveFiles (options: {
   video: MVideoFullLight
 }) {
   const { type, video } = options
+  const isACLon = ACLEnabled()
+
 
   for (const file of video.VideoFiles) {
     if (file.storage === VideoStorage.FILE_SYSTEM) {
       await moveWebTorrentFileOnFS(type, video, file)
     } else {
-      await updateWebTorrentFileACL(video, file)
+      if (isACLon){
+        await updateWebTorrentFileACL(video, file)
+      } else if (PolicyEnabled()) {
+        
+      }
     }
   }
 
@@ -73,7 +80,11 @@ async function moveFiles (options: {
     if (hls.storage === VideoStorage.FILE_SYSTEM) {
       await moveHLSFilesOnFS(type, video)
     } else {
-      await updateHLSFilesACL(hls)
+      if (isACLon){
+        await updateHLSFilesACL(hls)
+      } else if (PolicyEnabled()){
+        
+      }
     }
   }
 }

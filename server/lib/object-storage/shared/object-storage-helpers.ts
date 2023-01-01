@@ -9,6 +9,8 @@ import {
   GetObjectCommand,
   ListObjectsV2Command,
   PutObjectAclCommand,
+  GetBucketPolicyCommand,
+  PutBucketPolicyCommand,
   PutObjectCommandInput,
   S3Client
 } from '@aws-sdk/client-s3'
@@ -102,6 +104,160 @@ function updatePrefixACL (options: {
         ACL: getACL(isPrivate)
       })
     }
+  })
+}
+// ---------------------------------------------------------------------------
+
+function PolicyTemplate() {
+  return {
+      "Version": "2012-10-17",
+      "Statement": [
+          {
+              "Effect": "Allow",
+              "Principal": {
+                  "AWS": [
+                      "*"
+                  ]
+              },
+              "Action": [
+                  "s3:GetObject"
+              ],
+              "Resource": [
+                  "arn:aws:s3:::test/*"
+              ]
+          },
+          {
+              "Effect": "Deny",
+              "Principal": {
+                  "AWS": [
+                      "*"
+                  ]
+              },
+              "Action": [
+                  "s3:GetObject"
+              ],
+              "Resource": [
+                  ""
+              ]
+          }
+      ]
+  }
+}
+
+function createPolicy(options: {bucketInfo: BucketInfo}) {
+  const { bucketInfo } = options
+  const Policy = PolicyTemplate()
+  const command = BucketpolicyUpdate({
+    bucketInfo: bucketInfo,
+    bucketPolicy: Policy
+  })
+  logger.debug('Policy is empty, attempting to create policy')
+  return getClient().send(command)
+}
+
+function getbucketPolicy (options: {
+  bucketInfo: BucketInfo
+}) {
+  const { bucketInfo } = options
+  logger.debug('Fetching bucket policy of bucket %s', bucketInfo.BUCKET_NAME)
+  const command = new GetBucketPolicyCommand({
+      Bucket: bucketInfo.BUCKET_NAME
+  })
+  return getClient().send(command)
+}
+// -Lower level policy invocation
+function BucketpolicyUpdate (options: {
+  bucketInfo: BucketInfo
+  bucketPolicy
+}) {
+  const { bucketInfo, bucketPolicy } = options
+  const command = new PutBucketPolicyCommand({
+    Bucket: bucketInfo.BUCKET_NAME,
+    Policy: bucketPolicy
+  })
+  return command
+}
+// ----------------------------------------------------------
+function addResource(options: {
+  whichStatement: string,
+  Key,
+  bucketPolicy
+}) {
+  const { whichStatement, bucketPolicy } = options
+  var statement = bucketPolicy.Statement
+  if (whichStatement === "Deny") {
+    statement[1].Resource.push()
+  }
+}
+
+async function updateObjectBucketPolicy (options: {
+  objectStorageKey: string
+  bucketInfo: BucketInfo
+  isPrivate: boolean
+}) {
+  
+  const s3policyPrefix = "arn:aws:s3:::"
+  const { objectStorageKey, bucketInfo, isPrivate } = options
+  const key = buildKey(objectStorageKey, bucketInfo)
+
+  logger.debug('Updating Bucket Policy for file %s in bucket %s', key, bucketInfo.BUCKET_NAME, lTags())
+
+  var bucketPolicyResponse = await getbucketPolicy({bucketInfo: bucketInfo})
+  
+  if (!bucketPolicyResponse.Policy){
+    await createPolicy({bucketInfo: bucketInfo})
+    logger.debug('Reattempting to fetch bucket policy')
+    bucketPolicyResponse = await getbucketPolicy({bucketInfo: bucketInfo}).Policy
+    if (!bucketPolicyResponse.Policy) {
+      throw new Error('Cannot fetch bucket policy')
+    }
+  }
+  var bucketcollected = bucketPolicyResponse.Policy
+  const command = new PutBucketPolicyCommand({
+    Bucket: bucketInfo.BUCKET_NAME,
+    Policy: addResource({
+      whichStatement: getPolicy(isPrivate),
+      Key: `${s3policyPrefix}${key}`,
+      bucketPolicy: bucketcollected
+    })
+  })
+
+  return getClient().send(command)
+  }
+
+async function updateObjectBucketPolicyPrefix (options: {
+  prefix: string
+  bucketInfo: BucketInfo
+  isPrivate: boolean
+}) {
+  const { prefix, bucketInfo, isPrivate } = options
+  const s3policyPrefix = "arn:aws:s3:::"
+  var bucketPolicyResponse = await getbucketPolicy({bucketInfo: bucketInfo})
+  
+  if (!bucketPolicyResponse.Policy){
+    await createPolicy({bucketInfo: bucketInfo})
+    logger.debug('Reattempting to fetch bucket policy')
+    bucketPolicyResponse = await getbucketPolicy({bucketInfo: bucketInfo}).Policy
+    if (!bucketPolicyResponse.Policy) {
+      throw new Error('Cannot fetch bucket policy')
+    }
+  }
+  var bucketcollected = bucketPolicyResponse.Policy
+  return applyOnPrefix({
+    prefix,
+    bucketInfo,
+    commandBuilder: obj => {
+      logger.debug('Updating Bucket policy of %s inside prefix %s in bucket %s', obj.Key, prefix, bucketInfo.BUCKET_NAME, lTags())
+      return new PutBucketPolicyCommand({
+        Bucket: bucketInfo.BUCKET_NAME,
+        Policy: addResource({
+          whichStatement: getPolicy(isPrivate),
+          Key: `${s3policyPrefix}${obj.key}`,
+          bucketPolicy: bucketcollected
+        })
+      })
+    },
+    isPolicymode: true
   })
 }
 
@@ -211,7 +367,10 @@ export {
   updatePrefixACL,
 
   listKeysOfPrefix,
-  createObjectReadStream
+  createObjectReadStream,
+
+  ACLEnabled,
+  PolicyEnabled
 }
 
 // ---------------------------------------------------------------------------
@@ -223,12 +382,27 @@ async function uploadToStorage (options: {
   isPrivate: boolean
 }) {
   const { content, objectStorageKey, bucketInfo, isPrivate } = options
-
-  const input: PutObjectCommandInput = {
-    Body: content,
-    Bucket: bucketInfo.BUCKET_NAME,
-    Key: buildKey(objectStorageKey, bucketInfo),
-    ACL: getACL(isPrivate)
+  
+  if (ACLEnabled()){
+    var input: PutObjectCommandInput = {
+      Body: content,
+      Bucket: bucketInfo.BUCKET_NAME,
+      Key: buildKey(objectStorageKey, bucketInfo),
+      ACL: getACL(isPrivate)
+    }
+  } else {
+    var input: PutObjectCommandInput = {
+      Body: content,
+      Bucket: bucketInfo.BUCKET_NAME,
+      Key: buildKey(objectStorageKey, bucketInfo)
+    }
+  }
+  if(PolicyEnabled()) {
+    updateObjectBucketPolicy({
+      objectStorageKey: buildKey(objectStorageKey, bucketInfo),
+      bucketInfo: bucketInfo,
+      isPrivate: isPrivate
+    })
   }
 
   const parallelUploads3 = new Upload({
@@ -257,18 +431,20 @@ async function uploadToStorage (options: {
     'Completed %s%s in bucket %s',
     bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags()
   )
-
+  
   return getInternalUrl(bucketInfo, objectStorageKey)
 }
 
 async function applyOnPrefix (options: {
   prefix: string
   bucketInfo: BucketInfo
-  commandBuilder: (obj: _Object) => Parameters<S3Client['send']>[0]
+  commandBuilder?: (obj: _Object) => Parameters<S3Client['send']>[0]
+  
 
   continuationToken?: string
+  isPolicymode?: boolean
 }) {
-  const { prefix, bucketInfo, commandBuilder, continuationToken } = options
+  const { prefix, bucketInfo, commandBuilder, continuationToken, isPolicymode } = options
 
   const s3Client = getClient()
 
@@ -287,21 +463,40 @@ async function applyOnPrefix (options: {
     logger.error(message, { response: listedObjects, ...lTags() })
     throw new Error(message)
   }
-
-  await map(listedObjects.Contents, object => {
-    const command = commandBuilder(object)
-
-    return s3Client.send(command)
-  }, { concurrency: 10 })
-
+  if (isPolicymode) {
+    await map(listedObjects.Contents, object => {
+      return commandBuilder()
+    }, { concurrency: 10 })
+  } else {
+    await map(listedObjects.Contents, object => {
+      const command = commandBuilder(object)
+      
+      return s3Client.send(command)
+    }, { concurrency: 10 })
+  }
+    
   // Repeat if not all objects could be listed at once (limit of 1000?)
   if (listedObjects.IsTruncated) {
     await applyOnPrefix({ ...options, continuationToken: listedObjects.ContinuationToken })
   }
 }
 
+function ACLEnabled () {
+  return CONFIG.OBJECT_STORAGE.UPLOAD_ACL.ENABLED === true
+}
+
+function PolicyEnabled() {
+  return CONFIG.OBJECT_STORAGE.BUCKET_POLICY.ENABLED === true
+}
+
 function getACL (isPrivate: boolean) {
   return isPrivate
     ? CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PRIVATE
     : CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PUBLIC
+}
+
+function getPolicy (isPrivate: boolean) {
+  return isPrivate
+    ? CONFIG.OBJECT_STORAGE.BUCKET_POLICY.PRIVATE
+    : CONFIG.OBJECT_STORAGE.BUCKET_POLICY.PUBLIC
 }

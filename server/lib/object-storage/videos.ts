@@ -6,6 +6,7 @@ import { getHLSDirectory } from '../paths'
 import { VideoPathManager } from '../video-path-manager'
 import { generateHLSObjectBaseStorageKey, generateHLSObjectStorageKey, generateWebTorrentObjectStorageKey } from './keys'
 import {
+  fetchBucketPolicies,
   createObjectReadStream,
   listKeysOfPrefix,
   lTags,
@@ -70,6 +71,25 @@ function updateHLSFilesACL (playlist: MStreamingPlaylistVideo) {
     isPrivate: playlist.Video.hasPrivateStaticPath()
   })
 }
+// ---------------------------------------------------------------------------
+
+function updateWebTorrentFilePolicy (video: MVideo, file: MVideoFile) {
+  return updateObjectACL({
+    objectStorageKey: generateWebTorrentObjectStorageKey(file.filename),
+    bucketInfo: CONFIG.OBJECT_STORAGE.VIDEOS,
+    isPrivate: video.hasPrivateStaticPath()
+  })
+}
+
+function updateHLSFilesPolicy (playlist: MStreamingPlaylistVideo) {
+  return updatePrefixACL({
+    prefix: generateHLSObjectBaseStorageKey(playlist),
+    bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
+    isPrivate: playlist.Video.hasPrivateStaticPath()
+  })
+}
+
+
 
 // ---------------------------------------------------------------------------
 
@@ -169,6 +189,9 @@ export {
 
   updateWebTorrentFileACL,
   updateHLSFilesACL,
+  
+  updateWebTorrentFilePolicy,
+  updateHLSFilesPolicy,
 
   removeHLSObjectStorage,
   removeHLSFileObjectStorageByFilename,

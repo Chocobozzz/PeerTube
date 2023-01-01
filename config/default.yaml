@@ -152,12 +152,22 @@ object_storage:
 
   region: 'us-east-1'
 
+  #ACLs are legacy options for setting the privacy of your objects
+  #Use bucket_policy instead for flexible solution.
   upload_acl:
+    enabled: false
     # Set this ACL on each uploaded object of public/unlisted videos
     public: 'public-read'
     # Set this ACL on each uploaded object of private/internal videos
     # PeerTube can proxify requests to private objects so your users can access them
     private: 'private'
+  
+  bucket_policy:
+    enabled: true
+    #Permissions for public objects
+    public: 'Allow'
+    #Permissions for private objects
+    private: 'Deny'
 
   proxy:
     # If private files (private/internal video files) have a private ACL, users can't access directly the ressource

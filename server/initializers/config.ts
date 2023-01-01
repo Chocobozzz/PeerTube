@@ -122,8 +122,14 @@ const CONFIG = {
     ENDPOINT: config.get<string>('object_storage.endpoint'),
     REGION: config.get<string>('object_storage.region'),
     UPLOAD_ACL: {
+      ENABLED: config.get<boolean>('object_storage.upload_acl.enabled'),
       PUBLIC: config.get<string>('object_storage.upload_acl.public'),
       PRIVATE: config.get<string>('object_storage.upload_acl.private')
+    },
+    BUCKET_POLICY: {
+      ENABLED: config.get<boolean>('object_storage.bucket_policy.enabled'),
+      PUBLIC: config.get<string>('object_storage.bucket_policy.public'),
+      PRIVATE: config.get<string>('object_storage.bucket_policy.private')
     },
     CREDENTIALS: {
       ACCESS_KEY_ID: config.get<string>('object_storage.credentials.access_key_id'),
