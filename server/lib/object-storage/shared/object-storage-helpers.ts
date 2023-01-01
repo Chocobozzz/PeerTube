@@ -205,7 +205,7 @@ async function updateObjectBucketPolicy (options: {
   if (!bucketPolicyResponse.Policy){
     await createPolicy({bucketInfo: bucketInfo})
     logger.debug('Reattempting to fetch bucket policy')
-    bucketPolicyResponse = (await getbucketPolicy({bucketInfo: bucketInfo})).Policy
+    var bucketPolicyResponse = JSON.parse((await getbucketPolicy({bucketInfo: bucketInfo})).Policy)
     if (!bucketPolicyResponse.Policy) {
       throw new Error('Cannot fetch bucket policy')
     }
@@ -235,7 +235,7 @@ async function updateObjectBucketPolicyPrefix (options: {
   if (!bucketPolicyResponse.Policy){
     await createPolicy({bucketInfo: bucketInfo})
     logger.debug('Reattempting to fetch bucket policy')
-    bucketPolicyResponse = (await getbucketPolicy({bucketInfo: bucketInfo})).Policy
+    var bucketPolicyResponse = JSON.parse((await getbucketPolicy({bucketInfo: bucketInfo})).Policy)
     if (!bucketPolicyResponse.Policy) {
       throw new Error('Cannot fetch bucket policy')
     }
