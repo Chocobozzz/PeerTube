@@ -365,7 +365,7 @@ export {
   updatePrefixACL,
 
   updateObjectBucketPolicy,
-  updateObjectBucketPolicyPrefix
+  updateObjectBucketPolicyPrefix,
 
   listKeysOfPrefix,
   createObjectReadStream,
