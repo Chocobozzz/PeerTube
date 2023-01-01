@@ -6,7 +6,6 @@ import { getHLSDirectory } from '../paths'
 import { VideoPathManager } from '../video-path-manager'
 import { generateHLSObjectBaseStorageKey, generateHLSObjectStorageKey, generateWebTorrentObjectStorageKey } from './keys'
 import {
-  fetchBucketPolicies,
   createObjectReadStream,
   listKeysOfPrefix,
   lTags,
