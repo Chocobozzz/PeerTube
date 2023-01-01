@@ -466,7 +466,7 @@ async function applyOnPrefix (options: {
   }
   if (isPolicymode) {
     await map(listedObjects.Contents, object => {
-      return commandBuilder()
+      return commandBuilder(object)
     }, { concurrency: 10 })
   } else {
     await map(listedObjects.Contents, object => {
