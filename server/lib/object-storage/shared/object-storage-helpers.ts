@@ -108,7 +108,7 @@ function updatePrefixACL (options: {
 }
 // ---------------------------------------------------------------------------
 
-function PolicyTemplate() {
+function PolicyTemplate(bucketInfo) {
   return {
       "Version": "2012-10-17",
       "Statement": [
@@ -123,7 +123,7 @@ function PolicyTemplate() {
                   "s3:GetObject"
               ],
               "Resource": [
-                  "arn:aws:s3:::test/*"
+                  `arn:aws:s3:::${bucketInfo.BUCKET_NAME}/*`
               ]
           },
           {
@@ -136,9 +136,7 @@ function PolicyTemplate() {
               "Action": [
                   "s3:GetObject"
               ],
-              "Resource": [
-                  ""
-              ]
+              "Resource": []
           }
       ]
   }
@@ -146,7 +144,7 @@ function PolicyTemplate() {
 
 function createPolicy(options: {bucketInfo: BucketInfo}) {
   const { bucketInfo } = options
-  const Policy = PolicyTemplate()
+  const Policy = PolicyTemplate(bucketInfo)
   const command = BucketpolicyUpdate({
     bucketInfo: bucketInfo,
     bucketPolicy: Policy
@@ -183,10 +181,10 @@ function addResource(options: {
   Key,
   bucketPolicy
 }) {
-  const { whichStatement, bucketPolicy } = options
-  var statement = bucketPolicy.Statement
+  const { whichStatement, bucketPolicy, Key } = options
   if (whichStatement === "Deny") {
-    statement[1].Resource.push()
+    bucketPolicy.Statement[1].Resource.push(Key)
+    return bucketPolicy
   }
 }
 
@@ -365,6 +363,9 @@ export {
 
   updateObjectACL,
   updatePrefixACL,
+
+  updateObjectBucketPolicy,
+  updateObjectBucketPolicyPrefix
 
   listKeysOfPrefix,
   createObjectReadStream,

@@ -16,7 +16,9 @@ import {
   removePrefix,
   storeObject,
   updateObjectACL,
-  updatePrefixACL
+  updatePrefixACL,
+  updateObjectBucketPolicyPrefix,
+  updateObjectBucketPolicy
 } from './shared'
 
 function listHLSFileKeysOf (playlist: MStreamingPlaylistVideo) {
@@ -74,7 +76,7 @@ function updateHLSFilesACL (playlist: MStreamingPlaylistVideo) {
 // ---------------------------------------------------------------------------
 
 function updateWebTorrentFilePolicy (video: MVideo, file: MVideoFile) {
-  return updateObjectACL({
+  return updateObjectBucketPolicy({
     objectStorageKey: generateWebTorrentObjectStorageKey(file.filename),
     bucketInfo: CONFIG.OBJECT_STORAGE.VIDEOS,
     isPrivate: video.hasPrivateStaticPath()
@@ -82,7 +84,7 @@ function updateWebTorrentFilePolicy (video: MVideo, file: MVideoFile) {
 }
 
 function updateHLSFilesPolicy (playlist: MStreamingPlaylistVideo) {
-  return updatePrefixACL({
+  return updateObjectBucketPolicyPrefix({
     prefix: generateHLSObjectBaseStorageKey(playlist),
     bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
     isPrivate: playlist.Video.hasPrivateStaticPath()
