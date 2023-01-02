@@ -220,7 +220,7 @@ async function updateObjectBucketPolicy (options: {
     Bucket: bucketInfo.BUCKET_NAME,
     Policy: addResource({
       whichStatement: getPolicy(isPrivate),
-      Key: `${s3policyPrefix}${key}`,
+      Key: `${s3policyPrefix}${bucketInfo.BUCKET_NAME}/${key}`,
       bucketPolicy: bucketcollected
     })
   })
@@ -255,7 +255,7 @@ async function updateObjectBucketPolicyPrefix (options: {
         Bucket: bucketInfo.BUCKET_NAME,
         Policy: addResource({
           whichStatement: getPolicy(isPrivate),
-          Key: `${s3policyPrefix}${obj.Key}`,
+          Key: `${s3policyPrefix}${bucketInfo.BUCKET_NAME}/${obj.Key}`,
           bucketPolicy: bucketcollected
         })
       })
