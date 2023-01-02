@@ -279,19 +279,17 @@ function checkObjectStorageConfig () {
       )
     }
 
-    if (CONFIG.OBJECT_STORAGE.UPLOAD_ACL.ENABLED === true){
+    if (CONFIG.OBJECT_STORAGE.UPLOAD_ACL.ENABLED === true) {
       if (!CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PUBLIC) {
         throw new Error('object_storage.upload_acl.public must be set')
-      }
-      else if (!CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PRIVATE) {
+      } else if (!CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PRIVATE) {
         throw new Error('object_storage.upload_acl.private must be set')
-      }  
+      }
     }
-    if (CONFIG.OBJECT_STORAGE.BUCKET_POLICY.ENABLED === true){
+    if (CONFIG.OBJECT_STORAGE.BUCKET_POLICY.ENABLED === true) {
       if (!CONFIG.OBJECT_STORAGE.BUCKET_POLICY.PUBLIC) {
         throw new Error('object_storage.bucket_policy.public must be set')
-      }
-      else if (!CONFIG.OBJECT_STORAGE.BUCKET_POLICY.PRIVATE) {
+      } else if (!CONFIG.OBJECT_STORAGE.BUCKET_POLICY.PRIVATE) {
         throw new Error('object_storage.bucket_policy.private must be set')
       }  
     }
