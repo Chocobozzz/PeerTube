@@ -17,7 +17,7 @@ import {
 import { Upload } from '@aws-sdk/lib-storage'
 import { pipelinePromise } from '@server/helpers/core-utils'
 import { isArray } from '@server/helpers/custom-validators/misc'
-import { jsonLoggerFormat, logger } from '@server/helpers/logger'
+import { logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { getInternalUrl } from '../urls'
 import { getClient } from './client'
