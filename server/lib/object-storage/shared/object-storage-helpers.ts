@@ -17,7 +17,7 @@ import {
 import { Upload } from '@aws-sdk/lib-storage'
 import { pipelinePromise } from '@server/helpers/core-utils'
 import { isArray } from '@server/helpers/custom-validators/misc'
-import { logger } from '@server/helpers/logger'
+import { jsonLoggerFormat, logger } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
 import { getInternalUrl } from '../urls'
 import { getClient } from './client'
@@ -109,7 +109,7 @@ function updatePrefixACL (options: {
 // ---------------------------------------------------------------------------
 
 function PolicyTemplate(bucketInfo) {
-  return {
+  return JSON.stringify({
       "Version": "2012-10-17",
       "Statement": [
           {
@@ -136,10 +136,12 @@ function PolicyTemplate(bucketInfo) {
               "Action": [
                   "s3:GetObject"
               ],
-              "Resource": []
+              "Resource": [
+                `arn:aws:s3:::${bucketInfo.BUCKET_NAME}/favicon.ico`
+              ]
           }
       ]
-  }
+  })
 }
 
 function createPolicy(options: {bucketInfo: BucketInfo}) {
