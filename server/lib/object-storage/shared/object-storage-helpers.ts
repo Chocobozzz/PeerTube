@@ -184,13 +184,11 @@ function addResource(options: {
   const { whichStatement, Key, bucketPolicy } = options
   if (whichStatement === "Deny") {
     bucketPolicy.Statement[1].Resource.push(Key)
-    return bucketPolicy
-  }
-  if (whichStatement === "Allow") {
+  } else if (whichStatement === "Allow") {
     var removedArray = bucketPolicy.Statement[1].Resource.filter(function(e) { return e !== Key })
     bucketPolicy.Statement[1].Resource = removedArray
-    return bucketPolicy
   }
+  return JSON.stringify(bucketPolicy)
 }
 
 async function updateObjectBucketPolicy (options: {
