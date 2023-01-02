@@ -181,9 +181,14 @@ function addResource(options: {
   Key,
   bucketPolicy
 }) {
-  const { whichStatement, bucketPolicy, Key } = options
+  const { whichStatement, Key, bucketPolicy } = options
   if (whichStatement === "Deny") {
     bucketPolicy.Statement[1].Resource.push(Key)
+    return bucketPolicy
+  }
+  if (whichStatement === "Allow") {
+    var removedArray = bucketPolicy.Statement[1].Resource.filter(function(e) { return e !== Key })
+    bucketPolicy.Statement[1].Resource = removedArray
     return bucketPolicy
   }
 }
@@ -202,15 +207,15 @@ async function updateObjectBucketPolicy (options: {
 
   var bucketPolicyResponse = JSON.parse((await getbucketPolicy({bucketInfo: bucketInfo})).Policy)
   
-  if (!bucketPolicyResponse.Policy){
+  if (!bucketPolicyResponse){
     await createPolicy({bucketInfo: bucketInfo})
     logger.debug('Reattempting to fetch bucket policy')
     var bucketPolicyResponse = JSON.parse((await getbucketPolicy({bucketInfo: bucketInfo})).Policy)
-    if (!bucketPolicyResponse.Policy) {
+    if (!bucketPolicyResponse) {
       throw new Error('Cannot fetch bucket policy')
     }
   }
-  var bucketcollected = bucketPolicyResponse.Policy
+  var bucketcollected = bucketPolicyResponse
   const command = new PutBucketPolicyCommand({
     Bucket: bucketInfo.BUCKET_NAME,
     Policy: addResource({
@@ -232,15 +237,15 @@ async function updateObjectBucketPolicyPrefix (options: {
   const s3policyPrefix = "arn:aws:s3:::"
   var bucketPolicyResponse = JSON.parse((await getbucketPolicy({bucketInfo: bucketInfo})).Policy)
   
-  if (!bucketPolicyResponse.Policy){
+  if (!bucketPolicyResponse){
     await createPolicy({bucketInfo: bucketInfo})
     logger.debug('Reattempting to fetch bucket policy')
     var bucketPolicyResponse = JSON.parse((await getbucketPolicy({bucketInfo: bucketInfo})).Policy)
-    if (!bucketPolicyResponse.Policy) {
+    if (!bucketPolicyResponse) {
       throw new Error('Cannot fetch bucket policy')
     }
   }
-  var bucketcollected = bucketPolicyResponse.Policy
+  var bucketcollected = bucketPolicyResponse
   return applyOnPrefix({
     prefix,
     bucketInfo,
@@ -466,7 +471,9 @@ async function applyOnPrefix (options: {
   }
   if (isPolicymode) {
     await map(listedObjects.Contents, object => {
-      return commandBuilder(object)
+      const command = commandBuilder(object)
+
+      return s3Client.send(command)
     }, { concurrency: 10 })
   } else {
     await map(listedObjects.Contents, object => {
