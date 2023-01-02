@@ -185,8 +185,10 @@ function addResource(options: {
   if (whichStatement === "Deny") {
     bucketPolicy.Statement[1].Resource.push(Key)
   } else if (whichStatement === "Allow") {
-    var removedArray = bucketPolicy.Statement[1].Resource.filter(function(e) { return e !== Key })
-    bucketPolicy.Statement[1].Resource = removedArray
+    var index = bucketPolicy.Statement[1].Resource.indexOf(Key);
+    if (index >= 0) { // remove matching Keynames from array
+      bucketPolicy.Statement[1].Resource.splice( index, 1 );
+    }
   }
   return JSON.stringify(bucketPolicy)
 }
