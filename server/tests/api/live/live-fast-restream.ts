@@ -78,9 +78,15 @@ describe('Fast restream in live', function () {
       const video = await server.videos.get({ id: liveId })
       expect(video.streamingPlaylists).to.have.lengthOf(1)
 
-      await server.live.getSegmentFile({ videoUUID: liveId, segment: 0, playlistNumber: 0 })
-      await makeRawRequest({ url: video.streamingPlaylists[0].playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
-      await makeRawRequest({ url: video.streamingPlaylists[0].segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
+      try {
+        await server.live.getSegmentFile({ videoUUID: liveId, segment: 0, playlistNumber: 0 })
+        await makeRawRequest({ url: video.streamingPlaylists[0].playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
+        await makeRawRequest({ url: video.streamingPlaylists[0].segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
+      } catch (err) {
+        // FIXME: try to debug error in CI "Unexpected end of JSON input"
+        console.error(err)
+        throw err
+      }
 
       await wait(100)
     }
