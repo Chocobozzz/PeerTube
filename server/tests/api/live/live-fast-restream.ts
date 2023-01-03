@@ -129,7 +129,7 @@ describe('Fast restream in live', function () {
     await server.config.enableLive({ allowReplay: true, transcoding: true, resolutions: 'min' })
   })
 
-  it('Should correctly fast reastream in a permanent live with and without save replay', async function () {
+  it('Should correctly fast restream in a permanent live with and without save replay', async function () {
     this.timeout(480000)
 
     // A test can take a long time, so prefer to run them in parallel

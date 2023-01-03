@@ -148,7 +148,7 @@ describe('Test AP cleaner', function () {
   it('Should destroy server 3 internal shares and correctly clean them', async function () {
     this.timeout(20000)
 
-    const preCount = await servers[0].sql.getCount('videoShare')
+    const preCount = await servers[0].sql.getVideoShareCount()
     expect(preCount).to.equal(6)
 
     await servers[2].sql.deleteAll('videoShare')
@@ -156,7 +156,7 @@ describe('Test AP cleaner', function () {
     await waitJobs(servers)
 
     // Still 6 because we don't have remote shares on local videos
-    const postCount = await servers[0].sql.getCount('videoShare')
+    const postCount = await servers[0].sql.getVideoShareCount()
     expect(postCount).to.equal(6)
   })
 
@@ -185,7 +185,7 @@ describe('Test AP cleaner', function () {
     async function check (like: string, ofServerUrl: string, urlSuffix: string, remote: 'true' | 'false') {
       const query = `SELECT "videoId", "accountVideoRate".url FROM "accountVideoRate" ` +
         `INNER JOIN video ON "accountVideoRate"."videoId" = video.id AND remote IS ${remote} WHERE "accountVideoRate"."url" LIKE '${like}'`
-      const res = await servers[0].sql.selectQuery(query)
+      const res = await servers[0].sql.selectQuery<{ url: string }>(query)
 
       for (const rate of res) {
         const matcher = new RegExp(`^${ofServerUrl}/accounts/root/dislikes/\\d+${urlSuffix}$`)
@@ -231,7 +231,7 @@ describe('Test AP cleaner', function () {
       const query = `SELECT "videoId", "videoComment".url, uuid as "videoUUID" FROM "videoComment" ` +
         `INNER JOIN video ON "videoComment"."videoId" = video.id AND remote IS ${remote} WHERE "videoComment"."url" LIKE '${like}'`
 
-      const res = await servers[0].sql.selectQuery(query)
+      const res = await servers[0].sql.selectQuery<{ url: string, videoUUID: string }>(query)
 
       for (const comment of res) {
         const matcher = new RegExp(`${ofServerUrl}/videos/watch/${comment.videoUUID}/comments/\\d+${urlSuffix}`)

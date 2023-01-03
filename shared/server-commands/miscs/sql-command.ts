@@ -13,88 +13,46 @@ export class SQLCommand extends AbstractCommand {
     return seq.query(`DELETE FROM "${table}"`, options)
   }
 
-  async getCount (table: string) {
-    const seq = this.getSequelize()
-
-    const options = { type: QueryTypes.SELECT as QueryTypes.SELECT }
-
-    const [ { total } ] = await seq.query<{ total: string }>(`SELECT COUNT(*) as total FROM "${table}"`, options)
+  async getVideoShareCount () {
+    const [ { total } ] = await this.selectQuery<{ total: string }>(`SELECT COUNT(*) as total FROM "videoShare"`)
     if (total === null) return 0
 
     return parseInt(total, 10)
   }
 
   async getInternalFileUrl (fileId: number) {
-    return this.selectQuery(`SELECT "fileUrl" FROM "videoFile" WHERE id = ${fileId}`)
-      .then(rows => rows[0].fileUrl as string)
+    return this.selectQuery<{ fileUrl: string }>(`SELECT "fileUrl" FROM "videoFile" WHERE id = :fileId`, { fileId })
+      .then(rows => rows[0].fileUrl)
   }
 
   setActorField (to: string, field: string, value: string) {
-    const seq = this.getSequelize()
-
-    const options = { type: QueryTypes.UPDATE }
-
-    return seq.query(`UPDATE actor SET "${field}" = '${value}' WHERE url = '${to}'`, options)
+    return this.updateQuery(`UPDATE actor SET ${this.escapeColumnName(field)} = :value WHERE url = :to`, { value, to })
   }
 
   setVideoField (uuid: string, field: string, value: string) {
-    const seq = this.getSequelize()
-
-    const options = { type: QueryTypes.UPDATE }
-
-    return seq.query(`UPDATE video SET "${field}" = '${value}' WHERE uuid = '${uuid}'`, options)
+    return this.updateQuery(`UPDATE video SET ${this.escapeColumnName(field)} = :value WHERE uuid = :uuid`, { value, uuid })
   }
 
   setPlaylistField (uuid: string, field: string, value: string) {
-    const seq = this.getSequelize()
-
-    const options = { type: QueryTypes.UPDATE }
-
-    return seq.query(`UPDATE "videoPlaylist" SET "${field}" = '${value}' WHERE uuid = '${uuid}'`, options)
+    return this.updateQuery(`UPDATE "videoPlaylist" SET ${this.escapeColumnName(field)} = :value WHERE uuid = :uuid`, { value, uuid })
   }
 
   async countVideoViewsOf (uuid: string) {
-    const seq = this.getSequelize()
-
     const query = 'SELECT SUM("videoView"."views") AS "total" FROM "videoView" ' +
-      `INNER JOIN "video" ON "video"."id" = "videoView"."videoId" WHERE "video"."uuid" = '${uuid}'`
+      `INNER JOIN "video" ON "video"."id" = "videoView"."videoId" WHERE "video"."uuid" = :uuid`
 
-    const options = { type: QueryTypes.SELECT as QueryTypes.SELECT }
-    const [ { total } ] = await seq.query<{ total: number }>(query, options)
-
+    const [ { total } ] = await this.selectQuery<{ total: number }>(query, { uuid })
     if (!total) return 0
 
     return forceNumber(total)
   }
 
   getActorImage (filename: string) {
-    return this.selectQuery(`SELECT * FROM "actorImage" WHERE filename = '${filename}'`)
+    return this.selectQuery<{ width: number, height: number }>(`SELECT * FROM "actorImage" WHERE filename = :filename`, { filename })
       .then(rows => rows[0])
   }
 
-  selectQuery (query: string) {
-    const seq = this.getSequelize()
-    const options = { type: QueryTypes.SELECT as QueryTypes.SELECT }
-
-    return seq.query<any>(query, options)
-  }
-
-  updateQuery (query: string) {
-    const seq = this.getSequelize()
-    const options = { type: QueryTypes.UPDATE as QueryTypes.UPDATE }
-
-    return seq.query(query, options)
-  }
-
   // ---------------------------------------------------------------------------
-
-  setPluginField (pluginName: string, field: string, value: string) {
-    const seq = this.getSequelize()
-
-    const options = { type: QueryTypes.UPDATE }
-
-    return seq.query(`UPDATE "plugin" SET "${field}" = '${value}' WHERE "name" = '${pluginName}'`, options)
-  }
 
   setPluginVersion (pluginName: string, newVersion: string) {
     return this.setPluginField(pluginName, 'version', newVersion)
@@ -104,10 +62,38 @@ export class SQLCommand extends AbstractCommand {
     return this.setPluginField(pluginName, 'latestVersion', newVersion)
   }
 
+  setPluginField (pluginName: string, field: string, value: string) {
+    return this.updateQuery(
+      `UPDATE "plugin" SET ${this.escapeColumnName(field)} = :value WHERE "name" = :pluginName`,
+      { pluginName, value }
+    )
+  }
+
+  // ---------------------------------------------------------------------------
+
+  selectQuery <T extends object> (query: string, replacements: { [id: string]: string | number } = {}) {
+    const seq = this.getSequelize()
+    const options = {
+      type: QueryTypes.SELECT as QueryTypes.SELECT,
+      replacements
+    }
+
+    return seq.query<T>(query, options)
+  }
+
+  updateQuery (query: string, replacements: { [id: string]: string | number } = {}) {
+    const seq = this.getSequelize()
+    const options = { type: QueryTypes.UPDATE as QueryTypes.UPDATE, replacements }
+
+    return seq.query(query, options)
+  }
+
   // ---------------------------------------------------------------------------
 
   async getPlaylistInfohash (playlistId: number) {
-    const result = await this.selectQuery('SELECT "p2pMediaLoaderInfohashes" FROM "videoStreamingPlaylist" WHERE id = ' + playlistId)
+    const query = 'SELECT "p2pMediaLoaderInfohashes" FROM "videoStreamingPlaylist" WHERE id = :playlistId'
+
+    const result = await this.selectQuery<{ p2pMediaLoaderInfohashes: string }>(query, { playlistId })
     if (!result || result.length === 0) return []
 
     return result[0].p2pMediaLoaderInfohashes
@@ -116,19 +102,14 @@ export class SQLCommand extends AbstractCommand {
   // ---------------------------------------------------------------------------
 
   setActorFollowScores (newScore: number) {
-    const seq = this.getSequelize()
-
-    const options = { type: QueryTypes.UPDATE }
-
-    return seq.query(`UPDATE "actorFollow" SET "score" = ${newScore}`, options)
+    return this.updateQuery(`UPDATE "actorFollow" SET "score" = :newScore`, { newScore })
   }
 
   setTokenField (accessToken: string, field: string, value: string) {
-    const seq = this.getSequelize()
-
-    const options = { type: QueryTypes.UPDATE }
-
-    return seq.query(`UPDATE "oAuthToken" SET "${field}" = '${value}' WHERE "accessToken" = '${accessToken}'`, options)
+    return this.updateQuery(
+      `UPDATE "oAuthToken" SET ${this.escapeColumnName(field)} = :value WHERE "accessToken" = :accessToken`,
+      { value, accessToken }
+    )
   }
 
   async cleanup () {
@@ -157,4 +138,9 @@ export class SQLCommand extends AbstractCommand {
     return this.sequelize
   }
 
+  private escapeColumnName (columnName: string) {
+    return this.getSequelize().escape(columnName)
+      .replace(/^'/, '"')
+      .replace(/'$/, '"')
+  }
 }
