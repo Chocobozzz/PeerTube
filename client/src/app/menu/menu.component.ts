@@ -1,6 +1,7 @@
 import { HotkeysService } from 'angular2-hotkeys'
 import * as debug from 'debug'
 import { switchMap } from 'rxjs/operators'
+import { environment } from 'src/environments/environment'
 import { ViewportScroller } from '@angular/common'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
@@ -131,12 +132,7 @@ export class MenuComponent implements OnInit {
   }
 
   getExternalLoginHref () {
-    if (!this.serverConfig || this.serverConfig.client.menu.login.redirectOnSingleExternalAuth !== true) return undefined
-
-    const externalAuths = this.serverConfig.plugin.registeredExternalAuths
-    if (externalAuths.length !== 1) return undefined
-
-    return PluginsManager.getExternalAuthHref(externalAuths[0])
+    return PluginsManager.getDefaultLoginHref(environment.apiUrl, this.serverConfig)
   }
 
   isRegistrationAllowed () {
