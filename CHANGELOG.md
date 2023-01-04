@@ -1,5 +1,22 @@
 # Changelog
 
+## v5.0.1
+
+### IMPORTANT NOTES
+
+ * If you upgrade from PeerTube **< 5.0.0**, please follow 5.0.0 IMPORTANT NOTES
+
+### Bug fixes
+
+ * Fix HLS player infinite loading when the live stream/video ends
+ * Do not autoplay live without autoplay setting
+ * Fix private/internal video playback from Cloudflare object storage
+ * Fix local channel stats/OpenTelemetry metric
+ * Also display dropdown for videos from the homepage
+ * Fix broken P2P with live stream coming from object storage
+ * Fix responsive of table pagination
+
+
 ## v5.0.0
 
 ### IMPORTANT NOTES
