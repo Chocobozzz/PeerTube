@@ -209,6 +209,10 @@ function buildConfigHelpers () {
       return WEBSERVER.URL
     },
 
+    getServerListeningConfig () {
+      return { hostname: CONFIG.LISTEN.HOSTNAME, port: CONFIG.LISTEN.PORT }
+    },
+
     getServerConfig () {
       return ServerConfigManager.Instance.getServerConfig()
     }

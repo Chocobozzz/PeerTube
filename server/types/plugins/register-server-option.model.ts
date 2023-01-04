@@ -71,6 +71,9 @@ export type PeerTubeHelpers = {
   config: {
     getWebserverUrl: () => string
 
+    // PeerTube >= 5.1
+    getServerListeningConfig: () => { hostname: string, port: number }
+
     getServerConfig: () => Promise<ServerConfig>
   }
 
