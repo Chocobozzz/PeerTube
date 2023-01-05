@@ -232,7 +232,8 @@ describe('Test video comments', function () {
       await command.addReply({ videoId, toCommentId: threadId2, text: text3 })
 
       const tree = await command.getThread({ videoId: videoUUID, threadId: threadId2 })
-      expect(tree.comment.totalReplies).to.equal(tree.comment.totalRepliesFromVideoAuthor + 1)
+      expect(tree.comment.totalRepliesFromVideoAuthor).to.equal(1)
+      expect(tree.comment.totalReplies).to.equal(2)
     })
   })
 

@@ -231,12 +231,12 @@ function parseRowCountResult (result: any) {
   return 0
 }
 
-function createSafeIn (sequelize: Sequelize, stringArr: (string | number)[]) {
-  return stringArr.map(t => {
+function createSafeIn (sequelize: Sequelize, toEscape: (string | number)[], additionalUnescaped: string[] = []) {
+  return toEscape.map(t => {
     return t === null
       ? null
       : sequelize.escape('' + t)
-  }).join(', ')
+  }).concat(additionalUnescaped).join(', ')
 }
 
 function buildLocalAccountIdsIn () {

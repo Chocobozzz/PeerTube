@@ -1,4 +1,4 @@
-import { FindOptions, Op, Order, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
+import { FindOptions, Op, Order, QueryTypes, Sequelize, Transaction } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -13,11 +13,9 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { exists } from '@server/helpers/custom-validators/misc'
 import { getServerActor } from '@server/models/application/application'
 import { MAccount, MAccountId, MUserAccountId } from '@server/types/models'
-import { uniqify } from '@shared/core-utils'
-import { VideoPrivacy } from '@shared/models'
+import { pick, uniqify } from '@shared/core-utils'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { ActivityTagObject, ActivityTombstoneObject } from '../../../shared/models/activitypub/objects/common-objects'
 import { VideoCommentObject } from '../../../shared/models/activitypub/objects/video-comment-object'
@@ -41,81 +39,23 @@ import {
 } from '../../types/models/video'
 import { VideoCommentAbuseModel } from '../abuse/video-comment-abuse'
 import { AccountModel } from '../account/account'
-import { ActorModel, unusedActorAttributesForAPI } from '../actor/actor'
-import {
-  buildBlockedAccountSQL,
-  buildBlockedAccountSQLOptimized,
-  buildLocalAccountIdsIn,
-  getCommentSort,
-  searchAttribute,
-  throwIfNotValid
-} from '../utils'
+import { ActorModel } from '../actor/actor'
+import { buildLocalAccountIdsIn, throwIfNotValid } from '../utils'
+import { ListVideoCommentsOptions, VideoCommentListQueryBuilder } from './sql/comment/video-comment-list-query-builder'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
 
 export enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
-  WITH_ACCOUNT_FOR_API = 'WITH_ACCOUNT_FOR_API',
   WITH_IN_REPLY_TO = 'WITH_IN_REPLY_TO',
-  WITH_VIDEO = 'WITH_VIDEO',
-  ATTRIBUTES_FOR_API = 'ATTRIBUTES_FOR_API'
+  WITH_VIDEO = 'WITH_VIDEO'
 }
 
 @Scopes(() => ({
-  [ScopeNames.ATTRIBUTES_FOR_API]: (blockerAccountIds: number[]) => {
-    return {
-      attributes: {
-        include: [
-          [
-            Sequelize.literal(
-              '(' +
-                'WITH "blocklist" AS (' + buildBlockedAccountSQL(blockerAccountIds) + ')' +
-                'SELECT COUNT("replies"."id") ' +
-                'FROM "videoComment" AS "replies" ' +
-                'WHERE "replies"."originCommentId" = "VideoCommentModel"."id" ' +
-                'AND "deletedAt" IS NULL ' +
-                'AND "accountId" NOT IN (SELECT "id" FROM "blocklist")' +
-              ')'
-            ),
-            'totalReplies'
-          ],
-          [
-            Sequelize.literal(
-              '(' +
-                'SELECT COUNT("replies"."id") ' +
-                'FROM "videoComment" AS "replies" ' +
-                'INNER JOIN "video" ON "video"."id" = "replies"."videoId" ' +
-                'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-                'WHERE "replies"."originCommentId" = "VideoCommentModel"."id" ' +
-                'AND "replies"."accountId" = "videoChannel"."accountId"' +
-              ')'
-            ),
-            'totalRepliesFromVideoAuthor'
-          ]
-        ]
-      }
-    } as FindOptions
-  },
   [ScopeNames.WITH_ACCOUNT]: {
     include: [
       {
         model: AccountModel
-      }
-    ]
-  },
-  [ScopeNames.WITH_ACCOUNT_FOR_API]: {
-    include: [
-      {
-        model: AccountModel.unscoped(),
-        include: [
-          {
-            attributes: {
-              exclude: unusedActorAttributesForAPI
-            },
-            model: ActorModel, // Default scope includes avatar and server
-            required: true
-          }
-        ]
       }
     ]
   },
@@ -319,93 +259,19 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
     searchAccount?: string
     searchVideo?: string
   }) {
-    const { start, count, sort, isLocal, search, searchAccount, searchVideo, onLocalVideo } = parameters
+    const queryOptions: ListVideoCommentsOptions = {
+      ...pick(parameters, [ 'start', 'count', 'sort', 'isLocal', 'search', 'searchVideo', 'searchAccount', 'onLocalVideo' ]),
 
-    const where: WhereOptions = {
-      deletedAt: null
-    }
-
-    const whereAccount: WhereOptions = {}
-    const whereActor: WhereOptions = {}
-    const whereVideo: WhereOptions = {}
-
-    if (isLocal === true) {
-      Object.assign(whereActor, {
-        serverId: null
-      })
-    } else if (isLocal === false) {
-      Object.assign(whereActor, {
-        serverId: {
-          [Op.ne]: null
-        }
-      })
-    }
-
-    if (search) {
-      Object.assign(where, {
-        [Op.or]: [
-          searchAttribute(search, 'text'),
-          searchAttribute(search, '$Account.Actor.preferredUsername$'),
-          searchAttribute(search, '$Account.name$'),
-          searchAttribute(search, '$Video.name$')
-        ]
-      })
-    }
-
-    if (searchAccount) {
-      Object.assign(whereActor, {
-        [Op.or]: [
-          searchAttribute(searchAccount, '$Account.Actor.preferredUsername$'),
-          searchAttribute(searchAccount, '$Account.name$')
-        ]
-      })
-    }
-
-    if (searchVideo) {
-      Object.assign(whereVideo, searchAttribute(searchVideo, 'name'))
-    }
-
-    if (exists(onLocalVideo)) {
-      Object.assign(whereVideo, { remote: !onLocalVideo })
-    }
-
-    const getQuery = (forCount: boolean) => {
-      return {
-        offset: start,
-        limit: count,
-        order: getCommentSort(sort),
-        where,
-        include: [
-          {
-            model: AccountModel.unscoped(),
-            required: true,
-            where: whereAccount,
-            include: [
-              {
-                attributes: {
-                  exclude: unusedActorAttributesForAPI
-                },
-                model: forCount === true
-                  ? ActorModel.unscoped() // Default scope includes avatar and server
-                  : ActorModel,
-                required: true,
-                where: whereActor
-              }
-            ]
-          },
-          {
-            model: VideoModel.unscoped(),
-            required: true,
-            where: whereVideo
-          }
-        ]
-      }
+      selectType: 'api',
+      notDeleted: true
     }
 
     return Promise.all([
-      VideoCommentModel.count(getQuery(true)),
-      VideoCommentModel.findAll(getQuery(false))
-    ]).then(([ total, data ]) => ({ total, data }))
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).listComments<MCommentAdminFormattable>(),
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).countComments()
+    ]).then(([ rows, count ]) => {
+      return { total: count, data: rows }
+    })
   }
 
   static async listThreadsForApi (parameters: {
@@ -416,67 +282,40 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
     sort: string
     user?: MUserAccountId
   }) {
-    const { videoId, isVideoOwned, start, count, sort, user } = parameters
+    const { videoId, user } = parameters
 
-    const blockerAccountIds = await VideoCommentModel.buildBlockerAccountIds({ videoId, user, isVideoOwned })
+    const blockerAccountIds = await VideoCommentModel.buildBlockerAccountIds({ user })
 
-    const accountBlockedWhere = {
-      accountId: {
-        [Op.notIn]: Sequelize.literal(
-          '(' + buildBlockedAccountSQL(blockerAccountIds) + ')'
-        )
-      }
+    const commonOptions: ListVideoCommentsOptions = {
+      selectType: 'api',
+      videoId,
+      blockerAccountIds
     }
 
-    const queryList = {
-      offset: start,
-      limit: count,
-      order: getCommentSort(sort),
-      where: {
-        [Op.and]: [
-          {
-            videoId
-          },
-          {
-            inReplyToCommentId: null
-          },
-          {
-            [Op.or]: [
-              accountBlockedWhere,
-              {
-                accountId: null
-              }
-            ]
-          }
-        ]
-      }
+    const listOptions: ListVideoCommentsOptions = {
+      ...commonOptions,
+      ...pick(parameters, [ 'sort', 'start', 'count' ]),
+
+      isThread: true,
+      includeReplyCounters: true
     }
 
-    const findScopesList: (string | ScopeOptions)[] = [
-      ScopeNames.WITH_ACCOUNT_FOR_API,
-      {
-        method: [ ScopeNames.ATTRIBUTES_FOR_API, blockerAccountIds ]
-      }
-    ]
+    const countOptions: ListVideoCommentsOptions = {
+      ...commonOptions,
 
-    const countScopesList: ScopeOptions[] = [
-      {
-        method: [ ScopeNames.ATTRIBUTES_FOR_API, blockerAccountIds ]
-      }
-    ]
+      isThread: true
+    }
 
-    const notDeletedQueryCount = {
-      where: {
-        videoId,
-        deletedAt: null,
-        ...accountBlockedWhere
-      }
+    const notDeletedCountOptions: ListVideoCommentsOptions = {
+      ...commonOptions,
+
+      notDeleted: true
     }
 
     return Promise.all([
-      VideoCommentModel.scope(findScopesList).findAll(queryList),
-      VideoCommentModel.scope(countScopesList).count(queryList),
-      VideoCommentModel.count(notDeletedQueryCount)
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, listOptions).listComments<MCommentAdminFormattable>(),
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, countOptions).countComments(),
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, notDeletedCountOptions).countComments()
     ]).then(([ rows, count, totalNotDeletedComments ]) => {
       return { total: count, data: rows, totalNotDeletedComments }
     })
@@ -484,54 +323,29 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
 
   static async listThreadCommentsForApi (parameters: {
     videoId: number
-    isVideoOwned: boolean
     threadId: number
     user?: MUserAccountId
   }) {
-    const { videoId, threadId, user, isVideoOwned } = parameters
+    const { user } = parameters
 
-    const blockerAccountIds = await VideoCommentModel.buildBlockerAccountIds({ videoId, user, isVideoOwned })
+    const blockerAccountIds = await VideoCommentModel.buildBlockerAccountIds({ user })
 
-    const query = {
-      order: [ [ 'createdAt', 'ASC' ], [ 'updatedAt', 'ASC' ] ] as Order,
-      where: {
-        videoId,
-        [Op.and]: [
-          {
-            [Op.or]: [
-              { id: threadId },
-              { originCommentId: threadId }
-            ]
-          },
-          {
-            [Op.or]: [
-              {
-                accountId: {
-                  [Op.notIn]: Sequelize.literal(
-                    '(' + buildBlockedAccountSQL(blockerAccountIds) + ')'
-                  )
-                }
-              },
-              {
-                accountId: null
-              }
-            ]
-          }
-        ]
-      }
+    const queryOptions: ListVideoCommentsOptions = {
+      ...pick(parameters, [ 'videoId', 'threadId' ]),
+
+      selectType: 'api',
+      sort: 'createdAt',
+
+      blockerAccountIds,
+      includeReplyCounters: true
     }
 
-    const scopes: any[] = [
-      ScopeNames.WITH_ACCOUNT_FOR_API,
-      {
-        method: [ ScopeNames.ATTRIBUTES_FOR_API, blockerAccountIds ]
-      }
-    ]
-
     return Promise.all([
-      VideoCommentModel.count(query),
-      VideoCommentModel.scope(scopes).findAll(query)
-    ]).then(([ total, data ]) => ({ total, data }))
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).listComments<MCommentAdminFormattable>(),
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).countComments()
+    ]).then(([ rows, count ]) => {
+      return { total: count, data: rows }
+    })
   }
 
   static listThreadParentComments (comment: MCommentId, t: Transaction, order: 'ASC' | 'DESC' = 'ASC'): Promise<MCommentOwner[]> {
@@ -559,31 +373,31 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
       .findAll(query)
   }
 
-  static async listAndCountByVideoForAP (video: MVideoImmutable, start: number, count: number, t?: Transaction) {
-    const blockerAccountIds = await VideoCommentModel.buildBlockerAccountIds({
-      videoId: video.id,
-      isVideoOwned: video.isOwned()
-    })
+  static async listAndCountByVideoForAP (parameters: {
+    video: MVideoImmutable
+    start: number
+    count: number
+  }) {
+    const { video } = parameters
 
-    const query = {
-      order: [ [ 'createdAt', 'ASC' ] ] as Order,
-      offset: start,
-      limit: count,
-      where: {
-        videoId: video.id,
-        accountId: {
-          [Op.notIn]: Sequelize.literal(
-            '(' + buildBlockedAccountSQL(blockerAccountIds) + ')'
-          )
-        }
-      },
-      transaction: t
+    const blockerAccountIds = await VideoCommentModel.buildBlockerAccountIds({ user: null })
+
+    const queryOptions: ListVideoCommentsOptions = {
+      ...pick(parameters, [ 'start', 'count' ]),
+
+      selectType: 'comment-only',
+      videoId: video.id,
+      sort: 'createdAt',
+
+      blockerAccountIds
     }
 
     return Promise.all([
-      VideoCommentModel.count(query),
-      VideoCommentModel.findAll<MComment>(query)
-    ]).then(([ total, data ]) => ({ total, data }))
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).listComments<MComment>(),
+      new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).countComments()
+    ]).then(([ rows, count ]) => {
+      return { total: count, data: rows }
+    })
   }
 
   static async listForFeed (parameters: {
@@ -592,97 +406,36 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
     videoId?: number
     accountId?: number
     videoChannelId?: number
-  }): Promise<MCommentOwnerVideoFeed[]> {
-    const serverActor = await getServerActor()
-    const { start, count, videoId, accountId, videoChannelId } = parameters
+  }) {
+    const blockerAccountIds = await VideoCommentModel.buildBlockerAccountIds({ user: null })
 
-    const whereAnd: WhereOptions[] = buildBlockedAccountSQLOptimized(
-      '"VideoCommentModel"."accountId"',
-      [ serverActor.Account.id, '"Video->VideoChannel"."accountId"' ]
-    )
+    const queryOptions: ListVideoCommentsOptions = {
+      ...pick(parameters, [ 'start', 'count', 'accountId', 'videoId', 'videoChannelId' ]),
 
-    if (accountId) {
-      whereAnd.push({
-        accountId
-      })
+      selectType: 'feed',
+
+      sort: '-createdAt',
+      onPublicVideo: true,
+      notDeleted: true,
+
+      blockerAccountIds
     }
 
-    const accountWhere = {
-      [Op.and]: whereAnd
-    }
-
-    const videoChannelWhere = videoChannelId ? { id: videoChannelId } : undefined
-
-    const query = {
-      order: [ [ 'createdAt', 'DESC' ] ] as Order,
-      offset: start,
-      limit: count,
-      where: {
-        deletedAt: null,
-        accountId: accountWhere
-      },
-      include: [
-        {
-          attributes: [ 'name', 'uuid' ],
-          model: VideoModel.unscoped(),
-          required: true,
-          where: {
-            privacy: VideoPrivacy.PUBLIC
-          },
-          include: [
-            {
-              attributes: [ 'accountId' ],
-              model: VideoChannelModel.unscoped(),
-              required: true,
-              where: videoChannelWhere
-            }
-          ]
-        }
-      ]
-    }
-
-    if (videoId) query.where['videoId'] = videoId
-
-    return VideoCommentModel
-      .scope([ ScopeNames.WITH_ACCOUNT ])
-      .findAll(query)
+    return new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).listComments<MCommentOwnerVideoFeed>()
   }
 
   static listForBulkDelete (ofAccount: MAccount, filter: { onVideosOfAccount?: MAccountId } = {}) {
-    const accountWhere = filter.onVideosOfAccount
-      ? { id: filter.onVideosOfAccount.id }
-      : {}
+    const queryOptions: ListVideoCommentsOptions = {
+      selectType: 'comment-only',
 
-    const query = {
-      limit: 1000,
-      where: {
-        deletedAt: null,
-        accountId: ofAccount.id
-      },
-      include: [
-        {
-          model: VideoModel,
-          required: true,
-          include: [
-            {
-              model: VideoChannelModel,
-              required: true,
-              include: [
-                {
-                  model: AccountModel,
-                  required: true,
-                  where: accountWhere
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      accountId: ofAccount.id,
+      videoAccountOwnerId: filter.onVideosOfAccount?.id,
+
+      notDeleted: true,
+      count: 5000
     }
 
-    return VideoCommentModel
-      .scope([ ScopeNames.WITH_ACCOUNT ])
-      .findAll(query)
+    return new VideoCommentListQueryBuilder(VideoCommentModel.sequelize, queryOptions).listComments<MComment>()
   }
 
   static async getStats () {
@@ -750,9 +503,7 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
   }
 
   isOwned () {
-    if (!this.Account) {
-      return false
-    }
+    if (!this.Account) return false
 
     return this.Account.isOwned()
   }
@@ -906,21 +657,14 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
   }
 
   private static async buildBlockerAccountIds (options: {
-    videoId: number
-    isVideoOwned: boolean
-    user?: MUserAccountId
-  }) {
-    const { videoId, user, isVideoOwned } = options
+    user: MUserAccountId
+  }): Promise<number[]> {
+    const { user } = options
 
     const serverActor = await getServerActor()
     const blockerAccountIds = [ serverActor.Account.id ]
 
     if (user) blockerAccountIds.push(user.Account.id)
-
-    if (isVideoOwned) {
-      const videoOwnerAccount = await AccountModel.loadAccountIdFromVideo(videoId)
-      if (videoOwnerAccount) blockerAccountIds.push(videoOwnerAccount.id)
-    }
 
     return blockerAccountIds
   }

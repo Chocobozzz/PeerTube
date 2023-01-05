@@ -1,4 +1,6 @@
+import { MCommentFormattable } from '@server/types/models'
 import express from 'express'
+
 import { ResultList, ThreadsResultList, UserRight, VideoCommentCreate } from '../../../../shared/models'
 import { HttpStatusCode } from '../../../../shared/models/http/http-error-codes'
 import { VideoCommentThreads } from '../../../../shared/models/videos/comment/video-comment.model'
@@ -109,7 +111,7 @@ async function listVideoThreads (req: express.Request, res: express.Response) {
   const video = res.locals.onlyVideo
   const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
 
-  let resultList: ThreadsResultList<VideoCommentModel>
+  let resultList: ThreadsResultList<MCommentFormattable>
 
   if (video.commentsEnabled === true) {
     const apiOptions = await Hooks.wrapObject({
@@ -144,12 +146,11 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
   const video = res.locals.onlyVideo
   const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
 
-  let resultList: ResultList<VideoCommentModel>
+  let resultList: ResultList<MCommentFormattable>
 
   if (video.commentsEnabled === true) {
     const apiOptions = await Hooks.wrapObject({
       videoId: video.id,
-      isVideoOwned: video.isOwned(),
       threadId: res.locals.videoCommentThread.id,
       user
     }, 'filter:api.video-thread-comments.list.params')

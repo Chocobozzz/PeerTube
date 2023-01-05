@@ -1,30 +1,41 @@
+import express from 'express'
 import { cloneDeep } from 'lodash'
 import * as Sequelize from 'sequelize'
-import express from 'express'
 import { logger } from '@server/helpers/logger'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { ResultList } from '../../shared/models'
 import { VideoCommentThreadTree } from '../../shared/models/videos/comment/video-comment.model'
 import { VideoCommentModel } from '../models/video/video-comment'
-import { MAccountDefault, MComment, MCommentOwnerVideo, MCommentOwnerVideoReply, MVideoFullLight } from '../types/models'
+import {
+  MAccountDefault,
+  MComment,
+  MCommentFormattable,
+  MCommentOwnerVideo,
+  MCommentOwnerVideoReply,
+  MVideoFullLight
+} from '../types/models'
 import { sendCreateVideoComment, sendDeleteVideoComment } from './activitypub/send'
 import { getLocalVideoCommentActivityPubUrl } from './activitypub/url'
 import { Hooks } from './plugins/hooks'
 
-async function removeComment (videoCommentInstance: MCommentOwnerVideo, req: express.Request, res: express.Response) {
-  const videoCommentInstanceBefore = cloneDeep(videoCommentInstance)
+async function removeComment (commentArg: MComment, req: express.Request, res: express.Response) {
+  let videoCommentInstanceBefore: MCommentOwnerVideo
 
   await sequelizeTypescript.transaction(async t => {
-    if (videoCommentInstance.isOwned() || videoCommentInstance.Video.isOwned()) {
-      await sendDeleteVideoComment(videoCommentInstance, t)
+    const comment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideo(commentArg.url, t)
+
+    videoCommentInstanceBefore = cloneDeep(comment)
+
+    if (comment.isOwned() || comment.Video.isOwned()) {
+      await sendDeleteVideoComment(comment, t)
     }
 
-    videoCommentInstance.markAsDeleted()
+    comment.markAsDeleted()
 
-    await videoCommentInstance.save({ transaction: t })
+    await comment.save({ transaction: t })
+
+    logger.info('Video comment %d deleted.', comment.id)
   })
-
-  logger.info('Video comment %d deleted.', videoCommentInstance.id)
 
   Hooks.runAction('action:api.video-comment.deleted', { comment: videoCommentInstanceBefore, req, res })
 }
@@ -64,7 +75,7 @@ async function createVideoComment (obj: {
   return savedComment
 }
 
-function buildFormattedCommentTree (resultList: ResultList<VideoCommentModel>): VideoCommentThreadTree {
+function buildFormattedCommentTree (resultList: ResultList<MCommentFormattable>): VideoCommentThreadTree {
   // Comments are sorted by id ASC
   const comments = resultList.data
 

@@ -1,6 +1,23 @@
 import { isPlainObject } from 'lodash'
-import { Model as SequelizeModel, Sequelize } from 'sequelize'
+import { Model as SequelizeModel, ModelStatic, Sequelize } from 'sequelize'
 import { logger } from '@server/helpers/logger'
+
+/**
+ *
+ * Build Sequelize models from sequelize raw query (that must use { nest: true } options)
+ *
+ * In order to sequelize to correctly build the JSON this class will ingest,
+ * the columns selected in the raw query should be in the following form:
+ *   * All tables must be Pascal Cased (for example "VideoChannel")
+ *   * Root table must end with `Model` (for example "VideoCommentModel")
+ *   * Joined tables must contain the origin table name + '->JoinedTable'. For example:
+ *     * "Actor" is joined to "Account": "Actor" table must be renamed "Account->Actor"
+ *     * "Account->Actor" is joined to "Server": "Server" table must be renamed to "Account->Actor->Server"
+ *   * Selected columns must be renamed to contain the JSON path:
+ *     * "videoComment"."id": "VideoCommentModel"."id"
+ *     * "Account"."Actor"."Server"."id": "Account.Actor.Server.id"
+ *   * All tables must contain the row id
+ */
 
 export class ModelBuilder <T extends SequelizeModel> {
   private readonly modelRegistry = new Map<string, T>()
@@ -72,18 +89,18 @@ export class ModelBuilder <T extends SequelizeModel> {
         'Cannot build model %s that does not exist', this.buildSequelizeModelName(modelName),
         { existing: this.sequelize.modelManager.all.map(m => m.name) }
       )
-      return undefined
+      return { created: false, model: null }
     }
 
-    // FIXME: typings
-    const model = new (Model as any)(json)
+    const model = Model.build(json, { raw: true, isNewRecord: false })
+
     this.modelRegistry.set(registryKey, model)
 
     return { created: true, model }
   }
 
   private findModelBuilder (modelName: string) {
-    return this.sequelize.modelManager.getModel(this.buildSequelizeModelName(modelName))
+    return this.sequelize.modelManager.getModel(this.buildSequelizeModelName(modelName)) as ModelStatic<T>
   }
 
   private buildSequelizeModelName (modelName: string) {

@@ -309,7 +309,7 @@ async function videoCommentsController (req: express.Request, res: express.Respo
   if (redirectIfNotOwned(video.url, res)) return
 
   const handler = async (start: number, count: number) => {
-    const result = await VideoCommentModel.listAndCountByVideoForAP(video, start, count)
+    const result = await VideoCommentModel.listAndCountByVideoForAP({ video, start, count })
 
     return {
       total: result.total,
