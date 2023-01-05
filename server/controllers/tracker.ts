@@ -121,7 +121,7 @@ function createWebsocketTrackerServer (app: express.Application) {
     // Don't destroy socket, we have Socket.IO too
   })
 
-  return server
+  return { server, trackerServer }
 }
 
 // ---------------------------------------------------------------------------

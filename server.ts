@@ -279,7 +279,7 @@ app.use((err, _req, res: express.Response, _next) => {
   })
 })
 
-const server = createWebsocketTrackerServer(app)
+const { server, trackerServer } = createWebsocketTrackerServer(app)
 
 // ----------- Run -----------
 
@@ -328,7 +328,8 @@ async function startApplication () {
   VideoChannelSyncLatestScheduler.Instance.enable()
   VideoViewsBufferScheduler.Instance.enable()
   GeoIPUpdateScheduler.Instance.enable()
-  OpenTelemetryMetrics.Instance.registerMetrics()
+
+  OpenTelemetryMetrics.Instance.registerMetrics({ trackerServer })
 
   PluginManager.Instance.init(server)
   // Before PeerTubeSocket init
