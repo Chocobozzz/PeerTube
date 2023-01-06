@@ -751,7 +751,7 @@
       </trans-unit>
       <trans-unit id="146235964740293376" datatype="html">
         <source>Recommended</source>
-        <target state="translated">Рекомендуется</target>
+        <target state="translated">Желательно</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/peertube-checkbox.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="80975420989930934" datatype="html">
@@ -1204,7 +1204,7 @@
       </trans-unit>
       <trans-unit id="2101170466365500913" datatype="html">
         <source>Logging into an account lets you publish content</source>
-        <target state="translated">Авторизация учетной записи позволяет публиковать контент</target>
+        <target state="translated">Вход в учётную запись позволяет размещать содержимое</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="6584143415159913044" datatype="html">
@@ -3060,7 +3060,7 @@
       </trans-unit>
       <trans-unit id="2454050363478003966" datatype="html">
         <source>Login</source>
-        <target state="translated">Авторизация</target>
+        <target state="translated">Войти</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login-routing.module.ts</context><context context-type="linenumber">12</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">81</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">103</context></context-group>
@@ -9340,7 +9340,7 @@
       </trans-unit>
       <trans-unit id="4250548381153518208" datatype="html">
         <source>Change your email</source>
-        <target state="translated">Изменить свой адрес электронной почты</target>
+        <target state="translated">Изменить свой адрес эл. почты</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">11</context>
@@ -9636,7 +9636,7 @@
       </trans-unit>
       <trans-unit id="2206638022166154361">
         <source>Keyboard Shortcuts:</source>
-        <target>Комбинации клавиш:</target>
+        <target state="translated">Горячие клавиши:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/hotkeys/hotkeys.component.ts</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="3608407683173066091" datatype="html">
