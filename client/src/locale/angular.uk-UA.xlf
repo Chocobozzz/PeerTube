@@ -10122,22 +10122,22 @@
       </trans-unit>
       <trans-unit id="913683464711184925" datatype="html">
         <source>Max instance lives should be greater or equal to -1.</source>
-        <target state="new">Max instance lives should be greater or equal to -1.</target>
+        <target state="translated">Максимальна кількість трансляцій сервера повинна бути більшою або дорівнювати -1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="5614457087254770778" datatype="html">
         <source>Max user lives is required.</source>
-        <target state="new">Max user lives is required.</target>
+        <target state="translated">Максимальна кількість трансляцій користувача обов'язкова.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">96</context></context-group>
       </trans-unit>
       <trans-unit id="2779726697233311712" datatype="html">
         <source>Max user lives should be greater or equal to -1.</source>
-        <target state="new">Max user lives should be greater or equal to -1.</target>
+        <target state="translated">Максимальна кількість трансляцій користувача повинна бути більшою або дорівнювати -1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">97</context></context-group>
       </trans-unit>
       <trans-unit id="351272950792130803" datatype="html">
         <source>Max video channels per user is required.</source>
-        <target state="new">Max video channels per user is required.</target>
+        <target state="translated">Максимальна кількість каналів на користувача обов'язкова.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">104</context>
@@ -10145,7 +10145,7 @@
       </trans-unit>
       <trans-unit id="5253683089104713724" datatype="html">
         <source>Max video channels per user must be greater or equal to 1.</source>
-        <target state="new">Max video channels per user must be greater or equal to 1.</target>
+        <target state="translated">Максимальна кількість відеоканалів на одного користувача повинна бути більшою або дорівнювати 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">105</context>
@@ -10153,7 +10153,7 @@
       </trans-unit>
       <trans-unit id="8354695459880751923" datatype="html">
         <source>Max video channels per user must be a number.</source>
-        <target state="new">Max video channels per user must be a number.</target>
+        <target state="translated">Максимальна кількість відеоканалів на одного користувача повинна бути числом.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">106</context>
@@ -10161,22 +10161,22 @@
       </trans-unit>
       <trans-unit id="5832601947705094130" datatype="html">
         <source>Concurrency is required.</source>
-        <target state="new">Concurrency is required.</target>
+        <target state="translated">Одночасність обробки обов'язкова.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="4751566092251132371" datatype="html">
         <source>Concurrency should be greater or equal to 1.</source>
-        <target state="new">Concurrency should be greater or equal to 1.</target>
+        <target state="translated">Одночасність повинна бути більшою або дорівнювати 1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
       <trans-unit id="75589896034107743" datatype="html">
         <source>Index URL should be a URL</source>
-        <target state="new">Index URL should be a URL</target>
+        <target state="translated">URL-адреса індексу повинна бути URL-адресою</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="3964961007325702684" datatype="html">
         <source>Search index URL should be a URL</source>
-        <target state="new">Search index URL should be a URL</target>
+        <target state="translated">URL-адреса пошукового індексу повинна бути URL-адресою</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
       <trans-unit id="8602814243662345124" datatype="html">
@@ -10284,7 +10284,7 @@
       </trans-unit>
       <trans-unit id="5621067256208426608" datatype="html">
         <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Username should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">Ім'я користувача повинно бути буквено-цифровим у нижньому регістрі; допускаються крапки та підкреслення.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6288154707582132676" datatype="html">
@@ -10304,7 +10304,7 @@
       </trans-unit>
       <trans-unit id="3419415520566928243" datatype="html">
         <source>Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</source>
-        <target state="new">Channel name should be lowercase, and can contain only alphanumeric characters, dots and underscores.</target>
+        <target state="translated">Назва каналу повинна бути написана малими буквами й може містити лише буквенно-цифрові символи, крапки та знаки підкреслення.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="525871656034789056" datatype="html">
@@ -10326,75 +10326,75 @@
       </trans-unit>
       <trans-unit id="2027337371129904473" datatype="html">
         <source>Video quota is required.</source>
-        <target state="new">Video quota is required.</target>
+        <target state="translated">Квота відео обов'язкова.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">107</context></context-group>
       </trans-unit>
       <trans-unit id="267386529333143660" datatype="html">
         <source>Quota must be greater than -1.</source>
-        <target state="new">Quota must be greater than -1.</target>
+        <target state="translated">Квота повинна бути більшою за -1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="1220179061234048936" datatype="html">
         <source>Daily upload limit is required.</source>
-        <target state="new">Daily upload limit is required.</target>
+        <target state="translated">Добовий ліміт вивантаження обов'язковий.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">114</context></context-group>
       </trans-unit>
       <trans-unit id="8959404382357999234" datatype="html">
         <source>Daily upload limit must be greater than -1.</source>
-        <target state="new">Daily upload limit must be greater than -1.</target>
+        <target state="translated">Добовий ліміт вивантаження повинен бути більшим ніж -1.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="4796798537475457493" datatype="html">
         <source>User role is required.</source>
-        <target state="new">User role is required.</target>
+        <target state="translated">Роль користувача обов'язкова.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="2761226139624435788" datatype="html">
         <source>Description must be at least 3 characters long.</source>
-        <target state="new">Description must be at least 3 characters long.</target>
+        <target state="translated">Опис повинен містити принаймні 3 символи.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">134</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">36</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="4717982586356605243" datatype="html">
         <source>Description cannot be more than 1000 characters long.</source>
-        <target state="new">Description cannot be more than 1000 characters long.</target>
+        <target state="translated">Опис не може бути довшим за 1000 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">135</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">37</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="1814372869868173571" datatype="html">
         <source>You must agree with the instance terms in order to register on it.</source>
-        <target state="new">You must agree with the instance terms in order to register on it.</target>
+        <target state="translated">Щоб зареєструватися на сервері, необхідно погодитися з його умовами.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">142</context></context-group>
       </trans-unit>
       <trans-unit id="7803960725351649605" datatype="html">
         <source>Ban reason must be at least 3 characters long.</source>
-        <target state="new">Ban reason must be at least 3 characters long.</target>
+        <target state="translated">Причина блокування повинна містити принаймні 3 символи.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">152</context></context-group>
       </trans-unit>
       <trans-unit id="3851609012243698179" datatype="html">
         <source>Ban reason cannot be more than 250 characters long.</source>
-        <target state="new">Ban reason cannot be more than 250 characters long.</target>
+        <target state="translated">Причина блокування не може бути довшою за 250 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">153</context></context-group>
       </trans-unit>
       <trans-unit id="6632896893630378443" datatype="html">
         <source>Display name is required.</source>
-        <target state="new">Display name is required.</target>
+        <target state="translated">Показуване ім'я обов'язкове.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">164</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="1303578752658966736" datatype="html">
         <source>Display name must be at least 1 character long.</source>
-        <target state="new">Display name must be at least 1 character long.</target>
+        <target state="translated">Показуване ім'я повинне містити щонайменше 1 символ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">165</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">25</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="4613240543124934954" datatype="html">
         <source>Display name cannot be more than 50 characters long.</source>
-        <target state="new">Display name cannot be more than 50 characters long.</target>
+        <target state="translated">Довжина показуваного імені не може бути довшою за 50 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">166</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
@@ -10405,42 +10405,42 @@
       </trans-unit>
       <trans-unit id="1109780973109145433" datatype="html">
         <source>Report reason must be at least 2 characters long.</source>
-        <target state="new">Report reason must be at least 2 characters long.</target>
+        <target state="translated">Причина скарги повинна містити принаймні 2 символи.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="5414573937278525654" datatype="html">
         <source>Report reason cannot be more than 3000 characters long.</source>
-        <target state="new">Report reason cannot be more than 3000 characters long.</target>
+        <target state="translated">Причина скарги не може бути довшою за 3000 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="8779567454442277762" datatype="html">
         <source>Moderation comment is required.</source>
-        <target state="new">Moderation comment is required.</target>
+        <target state="translated">Коментар модерації обов'язковий.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="8954765410376245909" datatype="html">
         <source>Moderation comment must be at least 2 characters long.</source>
-        <target state="new">Moderation comment must be at least 2 characters long.</target>
+        <target state="translated">Коментар модерації повинен містити принаймні 2 символи.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6316804467108244906" datatype="html">
         <source>Moderation comment cannot be more than 3000 characters long.</source>
-        <target state="new">Moderation comment cannot be more than 3000 characters long.</target>
+        <target state="translated">Довжина коментаря для модерації не може бути довшою за 3000 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8835075531528610034" datatype="html">
         <source>Abuse message is required.</source>
-        <target state="new">Abuse message is required.</target>
+        <target state="translated">Повідомлення про порушення обов'язкове.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="9034042966936514516" datatype="html">
         <source>Abuse message must be at least 2 characters long.</source>
-        <target state="new">Abuse message must be at least 2 characters long.</target>
+        <target state="translated">Повідомлення про порушення має містити принаймні 2 символи.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="7989186574443390119" datatype="html">
         <source>Abuse message cannot be more than 3000 characters long.</source>
-        <target state="new">Abuse message cannot be more than 3000 characters long.</target>
+        <target state="translated">Повідомлення про порушення не може бути довшим за 3000 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="6700357678556223012" datatype="html">
@@ -10450,27 +10450,27 @@
       </trans-unit>
       <trans-unit id="9191505323045740697" datatype="html">
         <source>Block reason must be at least 2 characters long.</source>
-        <target state="new">Block reason must be at least 2 characters long.</target>
+        <target state="translated">Причина блокування повинна містити принаймні 2 символи.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="8581623418602419755" datatype="html">
         <source>Block reason cannot be more than 300 characters long.</source>
-        <target state="new">Block reason cannot be more than 300 characters long.</target>
+        <target state="translated">Причина блокування не може бути довшою за 300 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="1099619384694370156" datatype="html">
         <source>Video caption language is required.</source>
-        <target state="new">Video caption language is required.</target>
+        <target state="translated">Мова підписів до відео обов'язкова.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="3438639650276868976" datatype="html">
         <source>Video caption file is required.</source>
-        <target state="new">Video caption file is required.</target>
+        <target state="translated">Файл підписів до відео обов'язковий.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="9145435275110757909" datatype="html">
         <source>Caption content is required.</source>
-        <target state="new">Caption content is required.</target>
+        <target state="translated">Вміст підписів обов'язковий.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-captions-validators.ts</context>
           <context context-type="linenumber">21</context>
@@ -10483,7 +10483,7 @@
       </trans-unit>
       <trans-unit id="3954099618513992825" datatype="html">
         <source>You can only transfer ownership to a local account</source>
-        <target state="new">You can only transfer ownership to a local account</target>
+        <target state="translated">Передати право власності можна лише локальному обліковому запису</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="4444753420973870540" datatype="html">
@@ -10493,17 +10493,17 @@
       </trans-unit>
       <trans-unit id="4006797705713167676" datatype="html">
         <source>Name must be at least 1 character long.</source>
-        <target state="new">Name must be at least 1 character long.</target>
+        <target state="translated">Ім'я повинно містити щонайменше 1 символ.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="2233809696503670883" datatype="html">
         <source>Name cannot be more than 50 characters long.</source>
-        <target state="new">Name cannot be more than 50 characters long.</target>
+        <target state="translated">Довжина імені не може перевищувати 50 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="7915656854942800659" datatype="html">
         <source>Name should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Name should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">Ім'я повинно бути буквенно-цифровим у нижньому регістрі; допускаються крапки й символи підкреслення.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="6880459830525364741" datatype="html">
@@ -10537,7 +10537,7 @@
       </trans-unit>
       <trans-unit id="5090406837784732474" datatype="html">
         <source>External channel URL cannot be more than 1000 characters long</source>
-        <target state="new">External channel URL cannot be more than 1000 characters long</target>
+        <target state="translated">URL-адреса зовнішнього каналу не може бути довшою за 1000 символів</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">61</context>
@@ -10560,12 +10560,12 @@
       </trans-unit>
       <trans-unit id="4148250392704331190" datatype="html">
         <source>Comment cannot be more than 3000 characters long.</source>
-        <target state="new">Comment cannot be more than 3000 characters long.</target>
+        <target state="translated">Коментар не може бути довшим за 3000 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="6854100952145697527" datatype="html">
         <source>Display name cannot be more than 120 characters long.</source>
-        <target state="new">Display name cannot be more than 120 characters long.</target>
+        <target state="translated">Показуване ім'я не може бути довшим за 120 символів.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="6198895122092095739" datatype="html">
@@ -10622,7 +10622,7 @@
       </trans-unit>
       <trans-unit id="4022826795131920912" datatype="html">
         <source>You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live</source>
-        <target state="new"> You can stream only once in a normal live. If you enable replay, it will be saved under the same URL as your live </target>
+        <target state="translated">Ви можете транслювати лише один раз під час звичайного прямого ефіру. Якщо ви увімкнете повтор, він буде збережений за тією ж URL-адресою, що і ваш прямий ефір</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">259</context></context-group>
       </trans-unit>
       <trans-unit id="2261925229535541622" datatype="html">
@@ -10632,7 +10632,7 @@
       </trans-unit>
       <trans-unit id="8986073791327847979" datatype="html">
         <source>You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos</source>
-        <target state="new"> You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos </target>
+        <target state="translated">Ви можете здійснювати трансляцію наживо кілька разів у постійному/повторюваному. Якщо ви ввімкнете повтори, вони будуть збережені окремими відео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">268</context></context-group>
       </trans-unit>
       <trans-unit id="3112273530390098557" datatype="html">
@@ -10669,7 +10669,7 @@
       </trans-unit>
       <trans-unit id="3424935624805832445" datatype="html">
         <source>Go to replay</source>
-        <target state="new">Go to replay</target>
+        <target state="translated">Перейти до повтору</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">44</context>
@@ -10677,7 +10677,7 @@
       </trans-unit>
       <trans-unit id="6989092358991683843" datatype="html">
         <source>Replay is being processed...</source>
-        <target state="new">Replay is being processed...</target>
+        <target state="translated">Повтор обробляється...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">45</context>
@@ -10768,7 +10768,7 @@
       </trans-unit>
       <trans-unit id="5604677701754367707" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</source>
-        <target state="new">PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
+        <target state="translated">PeerTube не може обробити цей тип файлу. Прийнятне розширення — <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -10784,7 +10784,7 @@
       </trans-unit>
       <trans-unit id="8280589137189201687" datatype="html">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
-        <target state="new">You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</target>
+        <target state="translated">Ви не можете вибрати більше ніж {maxItems, plural, =1 {1 елемент} few {<x id="maxItems"/> елемента} many {<x id="maxItems"/> елементів} other {<x id="maxItems"/> елементів}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -11205,7 +11205,7 @@
       </trans-unit>
       <trans-unit id="3911025298999036211" datatype="html">
         <source>~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</source>
-        <target state="new">~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</target>
+        <target state="translated">~ {hours, plural, =1 {1 година} few {<x id="hours"/> години} many {<x id="hours"/> годин} other {<x id="hours"/> година}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">71</context>
@@ -11221,7 +11221,7 @@
       </trans-unit>
       <trans-unit id="2819927377059070056" datatype="html">
         <source>~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</source>
-        <target state="new">~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</target>
+        <target state="translated">~ {minutes, plural, =1 {1 хвилина} few {<x id="minutes"/> хвилини} many {<x id="minutes"/> хвилин} other {<x id="minutes"/> хвилина}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -11449,7 +11449,7 @@
       </trans-unit>
       <trans-unit id="4728427543536046034" datatype="html">
         <source>Change quota, role, and more.</source>
-        <target state="new">Change quota, role, and more.</target>
+        <target state="translated">Змінити квоту, роль або щось інше.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">341</context></context-group>
       </trans-unit>
       <trans-unit id="7913022656086109932" datatype="html">
@@ -11595,22 +11595,22 @@
       </trans-unit>
       <trans-unit id="6374940465448453212" datatype="html">
         <source>Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</source>
-        <target state="new">Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</target>
+        <target state="translated">Містить рекламу, спам, умисно неправдиві новини або іншим чином оманливі мініатюри/текст/мітки. Будь ласка, повідомляйте з перевірених джерел про оманливі матеріали.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="7401289443263903223" datatype="html">
         <source>Privacy breach or doxxing</source>
-        <target state="new">Privacy breach or doxxing</target>
+        <target state="translated">Порушення приватності або доксинг</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="8363008638081993167" datatype="html">
         <source>Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</source>
-        <target state="new">Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</target>
+        <target state="translated">Містить особисті дані, які можуть бути використані для стеження, ідентифікації, зв'язку або видачі себе за іншу особу (наприклад, ім'я, адреса, номер телефону, електронна пошта або дані кредитної картки).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">142</context></context-group>
       </trans-unit>
       <trans-unit id="380450014369168564" datatype="html">
         <source>Infringes your copyright wrt. the regional laws with which the server must comply.</source>
-        <target state="new">Infringes your copyright wrt. the regional laws with which the server must comply.</target>
+        <target state="translated">Порушує ваші авторські права відповідно до регіональних законів, яким повинен відповідати сервер.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">147</context></context-group>
       </trans-unit>
       <trans-unit id="1378933246324202613" datatype="html">
@@ -11620,7 +11620,7 @@
       </trans-unit>
       <trans-unit id="7930601470861156366" datatype="html">
         <source>Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.</source>
-        <target state="new">Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.</target>
+        <target state="translated">Усе, що не включено до перерахованого вище, що порушує умови надання послуг, правила поведінки або загальні правила, що діють на сервері.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">153</context></context-group>
       </trans-unit>
       <trans-unit id="8700771664729810984" datatype="html">
@@ -11696,7 +11696,7 @@
       </trans-unit>
       <trans-unit id="1000724328916033777" datatype="html">
         <source>Multiple ways to subscribe to the current channel</source>
-        <target state="new">Multiple ways to subscribe to the current channel</target>
+        <target state="translated">Кілька способів підписатися на поточний канал</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="363499678348067004" datatype="html">
