@@ -8673,6 +8673,7 @@
       </trans-unit>
       <trans-unit id="6924803931258995553" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> imports</source>
+        <target state="translated">Birti <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> til <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> af <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> innflutningum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
           <context context-type="linenumber">21</context>
@@ -8995,6 +8996,7 @@
       </trans-unit>
       <trans-unit id="9157178301885999151" datatype="html">
         <source>Do you really want to delete {length, plural, =1 {this video} other {<x id="length"/> videos}}?</source>
+        <target state="translated">Viltu í alvörunni eyða {length, plural, =1 {þessu myndskeiði} other {<x id="length"/> myndskeiðum}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">185</context>
@@ -9002,6 +9004,7 @@
       </trans-unit>
       <trans-unit id="8197117721861453263" datatype="html">
         <source>Do you really want to delete <x id="PH" equiv-text="toDeleteVideosIds.length"/> videos?</source>
+        <target state="translated">Viltu örugglega eyða <x id="PH" equiv-text="toDeleteVideosIds.length"/> myndskeiðum?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">187</context>
@@ -9016,6 +9019,7 @@
       </trans-unit>
       <trans-unit id="3255171236149541417" datatype="html">
         <source><x id="PH" equiv-text="toDeleteVideosIds.length"/> have been deleted.</source>
+        <target state="translated"><x id="PH" equiv-text="toDeleteVideosIds.length"/> hefur verið eytt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">208</context>
