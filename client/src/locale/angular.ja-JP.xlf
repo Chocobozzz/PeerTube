@@ -394,7 +394,7 @@
       </trans-unit>
       <trans-unit id="2816407313459209541" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="translated">あなたの通報は<x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/>のモデレーターに送信され、動画の発信元 (<x id="INTERPOLATION_1"/>)にも<x id="CLOSE_TAG_NG_CONTAINER"/>送信されます。 </target>
+        <target state="translated">あなたの通報は<x id="INTERPOLATION"/>のモデレーターに対して送信され、<x id="START_TAG_NG_CONTAINER"/>動画のオリジン(<x id="INTERPOLATION_1"/>)にも併せて転送されます<x id="CLOSE_TAG_NG_CONTAINER"/>。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="6990204431018013063" datatype="html">
@@ -2978,7 +2978,7 @@
       </trans-unit>
       <trans-unit id="5806907163449517166" datatype="html">
         <source>Update playlist privacy</source>
-        <target state="translated">投稿範囲を変更</target>
+        <target state="translated">プレイリストの公開範囲を更新</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="6460270615876918310" datatype="html">
@@ -3004,7 +3004,7 @@
       </trans-unit>
       <trans-unit id="3201319007886576629" datatype="html">
         <source>Update video privacy</source>
-        <target state="translated">投稿範囲を変更</target>
+        <target state="translated">動画の公開範囲を更新</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">95</context></context-group>
       </trans-unit>
       <trans-unit id="1845599966367432388">
@@ -12040,7 +12040,7 @@
       </trans-unit>
       <trans-unit id="7657908235362559477" datatype="html">
         <source>Publication scheduled on <x id="PH" equiv-text="updateAt"/></source>
-        <target state="translated"><x id="PH" equiv-text="updateAt"/>に投稿される予定です</target>
+        <target state="translated"><x id="PH" equiv-text="updateAt"/>に公開されます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">182</context></context-group>
       </trans-unit>
       <trans-unit id="5093002376262354382" datatype="html">
