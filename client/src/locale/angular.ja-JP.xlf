@@ -9068,7 +9068,7 @@
       </trans-unit>
       <trans-unit id="1009095940160473792" datatype="html">
         <source>URL parameter is missing in URL parameters</source>
-        <target state="translated">URLパラメーター内にURLパラメーターが見つかりません</target>
+        <target state="translated">URLパラメーター内に、有効なURLパラメーターが見つかりません</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+remote-interaction/remote-interaction.component.ts</context>
           <context context-type="linenumber">25</context>
