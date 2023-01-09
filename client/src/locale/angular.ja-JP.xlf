@@ -3421,7 +3421,7 @@
       </trans-unit>
       <trans-unit id="2958389355547305739" datatype="html">
         <source>Login to comment</source>
-        <target state="translated">PeerTubeアカウントでコメントする</target>
+        <target state="translated">コメントするためにログイン</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="4817080330698362530" datatype="html">
