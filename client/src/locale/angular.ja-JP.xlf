@@ -2107,7 +2107,7 @@
       </trans-unit>
       <trans-unit id="5038188980760269298">
         <source>Original publication year</source>
-        <target state="translated">オリジナルの投稿年</target>
+        <target state="translated">オリジナルの公開年</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="2316758236788716819">
@@ -2456,7 +2456,7 @@
       </trans-unit>
       <trans-unit id="9012879216268259096">
         <source>Schedule publication (<x id="INTERPOLATION"/>)</source>
-        <target>スケジュール投稿 (<x id="INTERPOLATION"/>)</target>
+        <target state="translated">予約公開 (<x id="INTERPOLATION"/>)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">122</context></context-group>
       </trans-unit>
       <trans-unit id="9155449485123349070" datatype="html">
@@ -2471,7 +2471,7 @@
       </trans-unit>
       <trans-unit id="4895908242997839943" datatype="html">
         <source>Publish after transcoding</source>
-        <target state="translated">トランスコード完了後に投稿する</target>
+        <target state="translated">トランスコード完了後に公開</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
       <trans-unit id="1124038634267013139" datatype="html">
@@ -2725,7 +2725,7 @@
       </trans-unit>
       <trans-unit id="9172233176401579786">
         <source>Scheduled</source>
-        <target state="translated">スケジュール済み</target>
+        <target state="translated">予約済み</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">232</context></context-group>
       </trans-unit>
       <trans-unit id="1435317307066082710" datatype="html">
