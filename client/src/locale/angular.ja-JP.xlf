@@ -2107,7 +2107,7 @@
       </trans-unit>
       <trans-unit id="5038188980760269298">
         <source>Original publication year</source>
-        <target state="translated">動画が投稿された年</target>
+        <target state="translated">オリジナルの投稿年</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="2316758236788716819">
