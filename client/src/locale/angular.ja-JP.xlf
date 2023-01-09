@@ -184,7 +184,7 @@
       </trans-unit>
       <trans-unit id="3780281836273462589" datatype="html">
         <source><x id="INTERPOLATION"/> published a new video: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="INTERPOLATION"/>さんが新しい動画を投稿しました: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="INTERPOLATION"/>さんが新しい動画を公開しました: <x id="START_LINK"/><x id="INTERPOLATION_1"/><x id="CLOSE_LINK"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="3861380964267994829" datatype="html">
@@ -1353,7 +1353,7 @@
       </trans-unit>
       <trans-unit id="7760677303939127268" datatype="html">
         <source>Create your channel to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">チャンネルを作成して<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>動画を投稿する<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">チャンネルを作成して<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>動画を公開する<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">14</context>
@@ -2102,7 +2102,7 @@
       </trans-unit>
       <trans-unit id="7970752988844762769">
         <source>Published date</source>
-        <target>投稿日</target>
+        <target state="translated">公開日</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="5038188980760269298">
@@ -2349,7 +2349,7 @@
       </trans-unit>
       <trans-unit id="7976591803735140601" datatype="html">
         <source>Latest published video</source>
-        <target state="translated">最新の投稿動画</target>
+        <target state="translated">公開された最新の動画</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context>
           <context context-type="linenumber">24</context>
@@ -2788,7 +2788,7 @@
       </trans-unit>
       <trans-unit id="3768339632235914548">
         <source>Publish will be available when upload is finished</source>
-        <target state="translated">アップロードが完了した段階で投稿されます</target>
+        <target state="translated">アップロードが完了した段階で公開されます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">105</context></context-group>
       </trans-unit>
       <trans-unit id="7430416142942514215">
@@ -2909,7 +2909,7 @@
       </trans-unit>
       <trans-unit id="2993949426196989262" datatype="html">
         <source>We recommend you to not use the <x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/> user to publish your videos, since it's the super-admin account of your instance. <x id="LINE_BREAK"/> Instead, <x id="START_LINK"/>create a dedicated account<x id="CLOSE_LINK"/> to upload your videos. </source>
-        <target state="translated">PeerTubeは<x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/>ユーザーで動画を投稿することを推奨していません。rootユーザーはあなたのインスタンスにおける、システム管理権限を有した最上位のアカウントの為です。<x id="LINE_BREAK"/>代わりに、<x id="START_LINK"/>専用アカウントを作成<x id="CLOSE_LINK"/>して動画を投稿する事をオススメします。 </target>
+        <target state="translated">PeerTubeは<x id="START_TAG_STRONG"/>root<x id="CLOSE_TAG_STRONG"/>ユーザーで動画を公開することを推奨していません。rootユーザーはあなたのインスタンスにおける、システム管理権限を有した最上位のアカウントのためです。<x id="LINE_BREAK"/>代わりに、<x id="START_LINK"/>専用アカウントを作成<x id="CLOSE_LINK"/>して動画を公開する事をオススメします。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="293476877021544115">
@@ -3128,7 +3128,7 @@
       </trans-unit>
       <trans-unit id="2482137713226830428" datatype="html">
         <source>Published <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/></source>
-        <target state="translated"><x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/>に投稿</target>
+        <target state="translated"><x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/>に公開</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="1813238393038053050" datatype="html">
@@ -5261,7 +5261,7 @@
       </trans-unit>
       <trans-unit id="6421580347313273983" datatype="html">
         <source>Allow your users to automatically publish a replay of their live</source>
-        <target state="translated">ユーザーがライブ配信終了時に、自動的にライブ配信のリプレイ動画を投稿することを許可する</target>
+        <target state="translated">ユーザーがライブ配信終了時に、自動的にライブ配信のリプレイ動画を公開することを許可する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="8583623894789865917" datatype="html">
@@ -5936,7 +5936,7 @@
       </trans-unit>
       <trans-unit id="1788875035518441092" datatype="html">
         <source>Last published first</source>
-        <target state="translated">最近投稿した順</target>
+        <target state="translated">最近公開した順</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="4541072509002204177" datatype="html">
@@ -7390,7 +7390,7 @@
       </trans-unit>
       <trans-unit id="807777065817324789" datatype="html">
         <source>Display all videos (private, unlisted or not yet published)</source>
-        <target state="translated">全ての動画を表示（非公開、未収載、またはまだ投稿されていない動画）</target>
+        <target state="translated">全ての動画を表示（非公開、未収載、またはまだ公開されていない動画）</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
       <trans-unit id="784681343382270982" datatype="html">
@@ -12035,7 +12035,7 @@
       </trans-unit>
       <trans-unit id="4058575476871566236">
         <source>Published</source>
-        <target state="translated">投稿済み</target>
+        <target state="translated">公開済み</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
       <trans-unit id="7657908235362559477" datatype="html">
