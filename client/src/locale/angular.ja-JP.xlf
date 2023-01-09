@@ -1393,7 +1393,7 @@
       </trans-unit>
       <trans-unit id="1335686739562009265" datatype="html">
         <source>You might want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>create a channel by theme:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> for example, you can create a channel named "SweetMelodies" to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology. </source>
-        <target state="translated">チャンネルを作成する際に<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>何らかのテーマに基づきたい場合:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 例として、ピアノコンサートの動画を投稿するのであれば「SweetMelodies」というチャンネル名をつけたり、エコについて話す動画を投稿するのであれば「Ecology」というチャンネル名にしてみると良いかも知れません。 </target>
+        <target state="translated">チャンネルを作成する際に<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>何らかのテーマに基づきたい場合:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 例として、ピアノコンサートの動画を投稿するのであれば「SweetMelodies」というチャンネル名をつけたり、エコについて話す動画を投稿するのであれば「Ecology」というチャンネル名にしてみると良いかもしれません。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">6,9</context>
