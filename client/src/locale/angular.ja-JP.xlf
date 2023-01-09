@@ -892,7 +892,7 @@
       </trans-unit>
       <trans-unit id="3584756669036615394" datatype="html">
         <source>Automatically published</source>
-        <target state="translated">事前にモデレーターによってチェックされず、自動的に投稿されます</target>
+        <target state="translated">自動公開</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="2602586221576511475">
@@ -1385,7 +1385,7 @@
       </trans-unit>
       <trans-unit id="2528596078796844503" datatype="html">
         <source>You want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Then you need to create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>で<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>動画を投稿したいですか？<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> それでは、あなたの<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>チャンネルを<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>作る必要があります。 </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>で<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>動画を公開<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>したいですか？それには、あなたの<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>チャンネル<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>を作る必要があります。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -1393,7 +1393,7 @@
       </trans-unit>
       <trans-unit id="1335686739562009265" datatype="html">
         <source>You might want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>create a channel by theme:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> for example, you can create a channel named "SweetMelodies" to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology. </source>
-        <target state="translated">チャンネルを作成する際に<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>何らかのテーマに基づきたい場合:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 例えば、ピアノコンサートの動画を投稿するのであれば「SweetMelodies」というチャンネル名。または、エコロジーについて話す動画を投稿するのであれば「Ecology」というチャンネル名にしてみてはどうでしょうか。 </target>
+        <target state="translated">チャンネルを作成する際に<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>何らかのテーマに基づきたい場合:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 例として、ピアノコンサートの動画を投稿するのであれば「SweetMelodies」というチャンネル名をつけたり、エコについて話す動画を投稿するのであれば「Ecology」というチャンネル名にしてみると良いかも知れません。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">6,9</context>
