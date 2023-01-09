@@ -184,7 +184,7 @@ class JobQueue {
 
     this.jobRedisPrefix = 'bull-' + WEBSERVER.HOST
 
-    for (const handlerName of (Object.keys(handlers) as JobType[])) {
+    for (const handlerName of Object.keys(handlers)) {
       this.buildWorker(handlerName)
       this.buildQueue(handlerName)
       this.buildQueueScheduler(handlerName)
