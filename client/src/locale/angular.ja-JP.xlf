@@ -399,7 +399,7 @@
       </trans-unit>
       <trans-unit id="6990204431018013063" datatype="html">
         <source>Please describe the issue...</source>
-        <target state="translated">問題を詳細に明記してください...</target>
+        <target state="translated">問題を詳細に記入してください...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">72</context></context-group>
@@ -426,7 +426,7 @@
       </trans-unit>
       <trans-unit id="2193037168694505715" datatype="html">
         <source>Short text to tell people how they can support the channel (membership platform...).&lt;br /&gt;&lt;br /&gt; When a video is uploaded in this channel, the video support field will be automatically filled by this text.</source>
-        <target state="translated">どうすれば視聴者がチャンネルを応援できるか(メンバーシップ制のサービスなど...)を完結に記入してください。&lt;br /&gt;&lt;br /&gt; このチャンネルに動画がアップロードされると、この文章が自動的に動画支援欄に入力されます。</target>
+        <target state="translated">どうすれば視聴者がチャンネルを応援できるか(メンバーシップ制のサービスなど...)を簡潔に記入してください。&lt;br /&gt;&lt;br /&gt; このチャンネルに動画がアップロードされると、この文章が自動的に動画応援欄に入力されます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">66</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
@@ -831,12 +831,12 @@
       </trans-unit>
       <trans-unit id="6462281745850371027" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="translated">ActivityPubに対応しているfediverseのインスタンス（例えば、PeerTubeやMastodonまたはPleromaなど）を経由して、チャンネルを登録できます。</target>
+        <target state="translated">ActivityPubに対応しているfediverseのインスタンス(例えば、PeerTubeやMastodonまたはPleromaなど)を経由して、チャンネル登録できます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">17</context></context-group>
       </trans-unit>
       <trans-unit id="20374890400263257" datatype="html">
         <source>You can interact with this via any ActivityPub-capable fediverse instance (PeerTube, Mastodon or Pleroma for example).</source>
-        <target state="translated">ActivityPubに対応しているfediverseのインスタンス（例えば、PeerTubeやMastodonまたはPleromaなど）のユーザーと交流することができます。</target>
+        <target state="translated">ActivityPubに対応しているfediverseのインスタンス(例えば、PeerTubeやMastodonまたはPleromaなど)のユーザーと交流することができます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="6751395526297887552" datatype="html">
