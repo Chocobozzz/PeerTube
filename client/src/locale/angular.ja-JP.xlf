@@ -887,7 +887,7 @@
       </trans-unit>
       <trans-unit id="486979448055158839" datatype="html">
         <source>Requires manual validation by moderators</source>
-        <target state="translated">投稿される前にモデレーターによってチェックされます</target>
+        <target state="translated">公開される前にモデレーターによってチェックされます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="3584756669036615394" datatype="html">
@@ -1393,7 +1393,7 @@
       </trans-unit>
       <trans-unit id="1335686739562009265" datatype="html">
         <source>You might want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>create a channel by theme:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> for example, you can create a channel named "SweetMelodies" to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology. </source>
-        <target state="translated">チャンネルを作成する際に<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>何らかのテーマに基づきたい場合:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 例として、ピアノコンサートの動画を投稿するのであれば「SweetMelodies」というチャンネル名をつけたり、エコについて話す動画を投稿するのであれば「Ecology」というチャンネル名にしてみると良いかもしれません。 </target>
+        <target state="translated">チャンネルを作成する際に<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>何らかのテーマに基づきたい場合:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 例として、ピアノコンサートの動画を公開するのであれば「SweetMelodies」というチャンネル名をつけたり、エコについて話す動画を公開するのであれば「Ecology」というチャンネル名にしてみると良いかもしれません。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">6,9</context>
@@ -5779,12 +5779,12 @@
       </trans-unit>
       <trans-unit id="7028708681117573961" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Recently Added"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"最近投稿された動画順"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>で並び替え</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"最近公開された動画順"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>で並び替え</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="762510264401369759" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Original Publication Date"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"動画が投稿された順"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>で並び替え</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"オリジナルの公開日順"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>で並び替え</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="4860917424154224190" datatype="html">
@@ -5904,7 +5904,7 @@
       </trans-unit>
       <trans-unit id="1534085756270333258" datatype="html">
         <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target state="translated">最近投稿された動画、トレンド、ローカル動画、高評価が多かった動画、そして検索結果のページなど</target>
+        <target state="translated">最近公開された動画、トレンド、ローカル動画、高評価が多かった動画、そして検索結果のページなど</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="2658703380934466003" datatype="html">
@@ -6456,7 +6456,7 @@
       </trans-unit>
       <trans-unit id="7849797693092882170" datatype="html">
         <source>Since the video publication</source>
-        <target state="translated">この動画を投稿してから</target>
+        <target state="translated">この動画を公開してから</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+stats/video/video-stats.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -8058,7 +8058,7 @@
       </trans-unit>
       <trans-unit id="8440128775129354214" datatype="html">
         <source>Privacy</source>
-        <target state="translated">投稿範囲</target>
+        <target state="translated">公開範囲</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">51</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context><context context-type="linenumber">51</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">111</context></context-group>
@@ -8579,7 +8579,7 @@
       </trans-unit>
       <trans-unit id="7091163288887549392" datatype="html">
         <source>Videos scope</source>
-        <target state="translated">動画の範囲</target>
+        <target state="translated">動画の公開範囲</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="1144415254281227966" datatype="html">
@@ -9515,7 +9515,7 @@
       </trans-unit>
       <trans-unit id="3242234958443825475">
         <source>Go to the recently added videos page</source>
-        <target state="translated">「最近投稿された動画」のページに移動</target>
+        <target state="translated">「最近公開された動画」のページに移動</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">307</context></context-group>
       </trans-unit>
       <trans-unit id="2887122197778293919">
@@ -11643,12 +11643,12 @@
       </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="translated"><x id="PH"/>の全てのチャンネルを登録しました。それぞれのチャンネルで新しく動画が投稿されると、あなた宛に通知が送信されます。</target>
+        <target state="translated"><x id="PH"/>の全てのチャンネルを登録しました。それぞれのチャンネルで新しく動画が公開されると、あなた宛に通知が送信されます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">109</context></context-group>
       </trans-unit>
       <trans-unit id="2780460651686172544" datatype="html">
         <source>Subscribed to <x id="PH"/>. You will be notified of all their new videos.</source>
-        <target state="translated"><x id="PH"/>のチャンネルを登録しました。チャンネルで新しく動画が投稿されると、あなた宛に通知が送信されます。</target>
+        <target state="translated"><x id="PH"/>のチャンネルを登録しました。チャンネルで新しく動画が公開されると、あなた宛に通知が送信されます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="7019115336138470191">
@@ -12445,7 +12445,7 @@
       </trans-unit>
       <trans-unit id="2431286785954354122" datatype="html">
         <source>Recently added</source>
-        <target state="translated">最近投稿された動画</target>
+        <target state="translated">最近公開された動画</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">199</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">146</context></context-group>
       </trans-unit>
@@ -12512,7 +12512,7 @@
       </trans-unit>
       <trans-unit id="3037358578603095196" datatype="html">
         <source>Only videos uploaded on this instance are displayed</source>
-        <target state="translated">このインスタンスに投稿された動画のみ、表示されます</target>
+        <target state="translated">このインスタンスで公開された動画のみ、表示されます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="4668975178372693951" datatype="html">
