@@ -399,7 +399,7 @@
       </trans-unit>
       <trans-unit id="6990204431018013063" datatype="html">
         <source>Please describe the issue...</source>
-        <target state="translated">通報理由を具体的に書いて下さい...</target>
+        <target state="translated">問題を詳細に明記してください...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">72</context></context-group>
@@ -426,7 +426,7 @@
       </trans-unit>
       <trans-unit id="2193037168694505715" datatype="html">
         <source>Short text to tell people how they can support the channel (membership platform...).&lt;br /&gt;&lt;br /&gt; When a video is uploaded in this channel, the video support field will be automatically filled by this text.</source>
-        <target state="translated">どうすれば動画の視聴者があなたのチャンネルを応援できるか(メンバーシップ制のサービス...など)を説明するための簡潔な文章を書きましょう。&lt;br /&gt;&lt;br /&gt;動画がチャンネルに投稿された時に、自動的に動画への応援欄に文章は埋め込まれます。</target>
+        <target state="translated">どうすれば視聴者がチャンネルを応援できるか(メンバーシップ制のサービスなど...)を完結に記入してください。&lt;br /&gt;&lt;br /&gt; このチャンネルに動画がアップロードされると、この文章が自動的に動画支援欄に入力されます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">66</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
@@ -9597,7 +9597,7 @@
       </trans-unit>
       <trans-unit id="6470888608149621404" datatype="html">
         <source>ON <x id="PH" equiv-text="config.instance.name"/></source>
-        <target state="translated"><x id="PH" equiv-text="config.instance.name"/>インスタンス</target>
+        <target state="translated"><x id="PH" equiv-text="config.instance.name"/>上</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">159</context></context-group>
       </trans-unit>
       <trans-unit id="2821179408673282599" datatype="html">
@@ -9762,7 +9762,7 @@
       </trans-unit>
       <trans-unit id="6183000905044663854" datatype="html">
         <source>Search <x id="PH" equiv-text="this.currentSearch"/></source>
-        <target state="translated"><x id="PH" equiv-text="this.currentSearch"/>を検索する</target>
+        <target state="translated"><x id="PH" equiv-text="this.currentSearch"/>を検索</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">252</context>
@@ -9770,7 +9770,7 @@
       </trans-unit>
       <trans-unit id="8491751845906232809" datatype="html">
         <source>PeerTube instance host filter is invalid</source>
-        <target state="translated">フィルター「PeerTubeインスタンスのドメイン名」が間違っています</target>
+        <target state="translated">フィルター「PeerTubeインスタンスのホスト」が間違っています</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.ts</context><context context-type="linenumber">327</context></context-group>
       </trans-unit>
       <trans-unit id="4580988005648117665" datatype="html">
@@ -12116,7 +12116,7 @@
       </trans-unit>
       <trans-unit id="435589893738610428" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> default theme (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>デフォルトのテーマ(<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> デフォルトテーマ (<x id="INTERPOLATION_1" equiv-text="{{ getDefaultInstanceThemeLabel() }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">8</context>
