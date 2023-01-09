@@ -2988,7 +2988,7 @@
       </trans-unit>
       <trans-unit id="8920371331444717794" datatype="html">
         <source>Only display embed URL</source>
-        <target state="translated">埋め込み動画のURLのみ表示する</target>
+        <target state="translated">埋め込み動画のURLのみ表示</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">79</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">177</context></context-group>
       </trans-unit>
@@ -3088,7 +3088,7 @@
       </trans-unit>
       <trans-unit id="5908032061347078472" datatype="html">
         <source>Use origin instance URL</source>
-        <target state="translated">オリジナルが配信されているインスタンスのURLを使用する</target>
+        <target state="translated">オリジナルの動画が配信されているインスタンスのURLを使用する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">225</context></context-group>
       </trans-unit>
       <trans-unit id="6212841954039032241" datatype="html">
@@ -3108,7 +3108,7 @@
       </trans-unit>
       <trans-unit id="4583515246777381165" datatype="html">
         <source>Display player control bar</source>
-        <target state="translated">再生プレイヤーのコントロールバーを表示する</target>
+        <target state="translated">再生プレイヤーのコントロールバーを表示</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">255</context></context-group>
       </trans-unit>
       <trans-unit id="805456636864344681" datatype="html">
@@ -3168,7 +3168,7 @@
       </trans-unit>
       <trans-unit id="687548610091961489">
         <source>By <x id="INTERPOLATION"/></source>
-        <target state="translated"><x id="INTERPOLATION"/> 制作</target>
+        <target state="translated"><x id="INTERPOLATION"/> 公開</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="1144407473317535723" datatype="html">
