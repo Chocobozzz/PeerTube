@@ -394,7 +394,7 @@
       </trans-unit>
       <trans-unit id="2816407313459209541" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION"/><x id="START_TAG_NG_CONTAINER"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1"/>) too<x id="CLOSE_TAG_NG_CONTAINER"/>. </source>
-        <target state="translated">あなたの通報は<x id="INTERPOLATION"/>のモデレーターに対して送信され、<x id="START_TAG_NG_CONTAINER"/>動画のオリジン(<x id="INTERPOLATION_1"/>)にも併せて転送されます<x id="CLOSE_TAG_NG_CONTAINER"/>。 </target>
+        <target state="translated">あなたの通報は<x id="INTERPOLATION"/>のモデレーターに対して送信され、<x id="START_TAG_NG_CONTAINER"/>動画の発信元 (<x id="INTERPOLATION_1"/>)にも転送されます<x id="CLOSE_TAG_NG_CONTAINER"/>。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="6990204431018013063" datatype="html">
