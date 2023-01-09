@@ -120,7 +120,7 @@ See the production guide ["What now" section](https://docs.joinpeertube.org/inst
 
 ## Upgrade
 
-**Important:** Before upgrading, check you have all the `storage` fields in your [production.yaml file](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/config/production.yaml).
+**Check the changelog (in particular the *IMPORTANT NOTES* section):** https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md
 
 Pull the latest images:
 
