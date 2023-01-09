@@ -108,45 +108,9 @@ function updatePrefixACL (options: {
 }
 // ---------------------------------------------------------------------------
 
-function PolicyTemplate(bucketInfo) {
-  return JSON.stringify({
-      "Version": "2012-10-17",
-      "Statement": [
-          {
-              "Effect": "Allow",
-              "Principal": {
-                  "AWS": [
-                      "*"
-                  ]
-              },
-              "Action": [
-                  "s3:GetObject"
-              ],
-              "Resource": [
-                  `arn:aws:s3:::${bucketInfo.BUCKET_NAME}/*`
-              ]
-          },
-          {
-              "Effect": "Deny",
-              "Principal": {
-                  "AWS": [
-                      "*"
-                  ]
-              },
-              "Action": [
-                  "s3:GetObject"
-              ],
-              "Resource": [
-                `arn:aws:s3:::${bucketInfo.BUCKET_NAME}/favicon.ico`
-              ]
-          }
-      ]
-  })
-}
-
 function createPolicy(options: {bucketInfo: BucketInfo}) {
   const { bucketInfo } = options
-  const Policy = PolicyTemplate(bucketInfo)
+  const Policy = PolicyTemplate(bucketinfo)
   const command = BucketpolicyUpdate({
     bucketInfo: bucketInfo,
     bucketPolicy: Policy
@@ -257,7 +221,7 @@ async function updateObjectBucketPolicyPrefix (options: {
         Bucket: bucketInfo.BUCKET_NAME,
         Policy: addResource({
           whichStatement: getPolicy(isPrivate),
-          Key: `${s3policyPrefix}${bucketInfo.BUCKET_NAME}/${obj.Key}`,
+          Key: `${s3policyPrefix}${bucketInfo.BUCKET_NAME}/${obj.Key}/*`,
           bucketPolicy: bucketcollected
         })
       })
@@ -447,9 +411,7 @@ async function applyOnPrefix (options: {
   prefix: string
   bucketInfo: BucketInfo
   commandBuilder?: (obj: _Object) => Parameters<S3Client['send']>[0]
-  
-
-  continuationToken?: string
+  continuationToken: string
   isPolicymode?: boolean
 }) {
   const { prefix, bucketInfo, commandBuilder, continuationToken, isPolicymode } = options
@@ -457,6 +419,11 @@ async function applyOnPrefix (options: {
   const s3Client = getClient()
 
   const commandPrefix = buildKey(prefix, bucketInfo)
+  if (isPolicymode){
+    const command = commandBuilder({Key: commandPrefix})
+    return s3Client.send(command)
+  }
+  //----------Non prefix policy--------------------- 
   const listCommand = new ListObjectsV2Command({
     Bucket: bucketInfo.BUCKET_NAME,
     Prefix: commandPrefix,
@@ -471,19 +438,11 @@ async function applyOnPrefix (options: {
     logger.error(message, { response: listedObjects, ...lTags() })
     throw new Error(message)
   }
-  if (isPolicymode) {
-    await map(listedObjects.Contents, object => {
-      const command = commandBuilder(object)
-
-      return s3Client.send(command)
-    }, { concurrency: 10 })
-  } else {
-    await map(listedObjects.Contents, object => {
-      const command = commandBuilder(object)
+  await map(listedObjects.Contents, object => {
+    const command = commandBuilder(object)
       
-      return s3Client.send(command)
+    return s3Client.send(command)
     }, { concurrency: 10 })
-  }
     
   // Repeat if not all objects could be listed at once (limit of 1000?)
   if (listedObjects.IsTruncated) {
