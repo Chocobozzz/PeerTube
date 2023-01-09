@@ -2476,7 +2476,7 @@
       </trans-unit>
       <trans-unit id="1124038634267013139" datatype="html">
         <source>The video may be unplayable during the transcoding process. It's the reason why we prefer to publish publicly the video after transcoding.</source>
-        <target state="translated">変換処理中は動画が再生できない場合がある為、処理完了後に動画を公開するようにします。</target>
+        <target state="translated">トランスコード処理中は動画が再生できない場合があるため、処理完了後に動画を公開するようにしています。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">150</context>
@@ -12528,7 +12528,7 @@
       </trans-unit>
       <trans-unit id="664221386829541948" datatype="html">
         <source>Recently added videos</source>
-        <target state="translated">最近投稿された動画</target>
+        <target state="translated">最近公開された動画</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">145</context></context-group>
       </trans-unit>
       <trans-unit id="8212906256415538361" datatype="html">
