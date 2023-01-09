@@ -258,12 +258,12 @@ function buildSQLAttributes <M extends Model> (options: {
   model: ModelStatic<M>
   tableName: string
 
-  excludeAttributes?: (keyof AttributesOnly<M>)[]
+  excludeAttributes?: Exclude<keyof AttributesOnly<M>, symbol>[]
   aliasPrefix?: string
 }) {
   const { model, tableName, aliasPrefix, excludeAttributes } = options
 
-  const attributes = Object.keys(model.getAttributes())
+  const attributes = Object.keys(model.getAttributes()) as Exclude<keyof AttributesOnly<M>, symbol>[]
 
   return attributes
     .filter(a => {
