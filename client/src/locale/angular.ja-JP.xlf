@@ -2557,7 +2557,7 @@
       </trans-unit>
       <trans-unit id="8891497955962997247" datatype="html">
         <source>Automatically publish a replay when your live ends</source>
-        <target state="translated">ライブ配信を終了した時に、自動的にライブ配信の内容をリプレイ動画として投稿します</target>
+        <target state="translated">ライブ配信終了後に自動的にリプレイを投稿する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">276</context></context-group>
       </trans-unit>
       <trans-unit id="2288513108450439427">
@@ -2793,7 +2793,7 @@
       </trans-unit>
       <trans-unit id="7430416142942514215">
         <source>Publish</source>
-        <target state="translated">動画を投稿</target>
+        <target state="translated">公開</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">107</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/header.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
@@ -2809,7 +2809,7 @@
       </trans-unit>
       <trans-unit id="1138810463037464722" datatype="html">
         <source>Uploaded videos are reviewed before publishing for your account. If you want to add videos without moderation review, an admin must turn off your videos auto-block.</source>
-        <target state="translated">アップロードした動画は、あなたのアカウントに加えられる前に審査されます。モデレーターによる審査無しで動画をアカウントに加えたい場合、運営者は動画の自動ブロック機能を無効にしなければなりません。</target>
+        <target state="translated">アップロードした動画は、あなたのアカウントで公開される前に審査されます。モデレーターによる審査無しで動画をアップロードしたい場合、運営者は動画の自動ブロック機能を無効にする必要があります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -3291,7 +3291,7 @@
       </trans-unit>
       <trans-unit id="8619499607322327082" datatype="html">
         <source>This video will be published on <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>. </source>
-        <target state="translated">この動画は<x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>に投稿されます。 </target>
+        <target state="translated">この動画は<x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>に公開されます。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="4262297989675590582" datatype="html">
@@ -8438,7 +8438,7 @@
       </trans-unit>
       <trans-unit id="4767765747214995164" datatype="html">
         <source>Published <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="translated">投稿 <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">公開 <x id="START_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;p-sortIcon field=&quot;publishedAt&quot;&gt;"/><x id="CLOSE_TAG_P_SORTICON" ctype="x-p_sorticon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="6759205696902713848">
@@ -9741,7 +9741,7 @@
       </trans-unit>
       <trans-unit id="7944277186358179990">
         <source>Publish date</source>
-        <target state="translated">投稿日</target>
+        <target state="translated">公開日</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="2123659921722214537">
@@ -12175,7 +12175,7 @@
       </trans-unit>
       <trans-unit id="1830802698757049943" datatype="html">
         <source>Publish <x id="PH" equiv-text="videoName"/></source>
-        <target state="translated"><x id="PH" equiv-text="videoName"/>を投稿する</target>
+        <target state="translated"><x id="PH" equiv-text="videoName"/>を公開</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
       <trans-unit id="6932865105766151309" datatype="html">
@@ -12190,7 +12190,7 @@
       </trans-unit>
       <trans-unit id="5981816353437801748">
         <source>Video published.</source>
-        <target state="translated">動画が投稿されました。</target>
+        <target state="translated">動画が公開されました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">266</context></context-group>
       </trans-unit>
       <trans-unit id="764164089183618119">
