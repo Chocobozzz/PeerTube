@@ -22,6 +22,7 @@ import { CONFIG } from '@server/initializers/config'
 import { getInternalUrl } from '../urls'
 import { getClient } from './client'
 import { lTags } from './logger'
+import { PolicyTemplate } from '../templates'
 
 type BucketInfo = {
   BUCKET_NAME: string
@@ -110,7 +111,7 @@ function updatePrefixACL (options: {
 
 function createPolicy(options: {bucketInfo: BucketInfo}) {
   const { bucketInfo } = options
-  const Policy = PolicyTemplate(bucketinfo)
+  const Policy = PolicyTemplate(bucketInfo)
   const command = BucketpolicyUpdate({
     bucketInfo: bucketInfo,
     bucketPolicy: Policy
@@ -119,15 +120,19 @@ function createPolicy(options: {bucketInfo: BucketInfo}) {
   return getClient().send(command)
 }
 
-function getbucketPolicy (options: {
+async function getbucketPolicy (options: {
   bucketInfo: BucketInfo
 }) {
   const { bucketInfo } = options
   logger.debug('Fetching bucket policy of bucket %s', bucketInfo.BUCKET_NAME)
-  const command = new GetBucketPolicyCommand({
+  try {
+    const command = new GetBucketPolicyCommand({
       Bucket: bucketInfo.BUCKET_NAME
-  })
-  return getClient().send(command)
+    })
+    return (await getClient().send(command))
+  } catch (error) {
+    return false //bucket might not have policy
+  } 
 }
 // -Lower level policy invocation
 function BucketpolicyUpdate (options: {
@@ -171,17 +176,16 @@ async function updateObjectBucketPolicy (options: {
 
   logger.debug('Updating Bucket Policy for file %s in bucket %s', key, bucketInfo.BUCKET_NAME, lTags())
 
-  var bucketPolicyResponse = JSON.parse((await getbucketPolicy({bucketInfo: bucketInfo})).Policy)
-  
+  var bucketPolicyResponse = (await getbucketPolicy({bucketInfo: bucketInfo}))
   if (!bucketPolicyResponse){
     await createPolicy({bucketInfo: bucketInfo})
     logger.debug('Reattempting to fetch bucket policy')
-    var bucketPolicyResponse = JSON.parse((await getbucketPolicy({bucketInfo: bucketInfo})).Policy)
+    bucketPolicyResponse = (await getbucketPolicy({bucketInfo: bucketInfo}))
     if (!bucketPolicyResponse) {
       throw new Error('Cannot fetch bucket policy')
     }
   }
-  var bucketcollected = bucketPolicyResponse
+  var bucketcollected = JSON.parse(bucketPolicyResponse.Policy)
   const command = new PutBucketPolicyCommand({
     Bucket: bucketInfo.BUCKET_NAME,
     Policy: addResource({
@@ -411,7 +415,9 @@ async function applyOnPrefix (options: {
   prefix: string
   bucketInfo: BucketInfo
   commandBuilder?: (obj: _Object) => Parameters<S3Client['send']>[0]
-  continuationToken: string
+  
+
+  continuationToken?: string
   isPolicymode?: boolean
 }) {
   const { prefix, bucketInfo, commandBuilder, continuationToken, isPolicymode } = options
