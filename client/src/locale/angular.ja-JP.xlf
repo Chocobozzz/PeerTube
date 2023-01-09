@@ -539,7 +539,7 @@
       </trans-unit>
       <trans-unit id="5108124319304980502" datatype="html">
         <source>Report video "<x id="INTERPOLATION"/>"</source>
-        <target state="translated">"<x id="INTERPOLATION"/>"の動画を通報</target>
+        <target state="translated">"<x id="INTERPOLATION"/>"を通報</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="5471125870639393916" datatype="html">
@@ -587,7 +587,7 @@
       </trans-unit>
       <trans-unit id="9081463435738465430" datatype="html">
         <source>Blocked</source>
-        <target state="translated">ブロックした動画</target>
+        <target state="translated">ブロック済み</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">82</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.html</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
@@ -766,7 +766,7 @@
       </trans-unit>
       <trans-unit id="1779391511451594552">
         <source>Using an ActivityPub account</source>
-        <target state="translated">ActivityPubアプリケーションのアカウントを使用</target>
+        <target state="translated">ActivityPubアカウントを使用</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="3372646000533908418" datatype="html">
