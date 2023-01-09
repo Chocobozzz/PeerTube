@@ -17,5 +17,5 @@
     { "path": "./server" },
     { "path": "./scripts" }
   ],
-  "files": [ "server.ts", "server/types/express.d.ts" ]
+  "files": [ "server.ts", "server/types/express.d.ts", "server/types/lib.d.ts" ]
 }
