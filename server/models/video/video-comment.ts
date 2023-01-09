@@ -40,7 +40,7 @@ import {
 import { VideoCommentAbuseModel } from '../abuse/video-comment-abuse'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../actor/actor'
-import { buildLocalAccountIdsIn, throwIfNotValid } from '../utils'
+import { buildLocalAccountIdsIn, buildSQLAttributes, throwIfNotValid } from '../utils'
 import { ListVideoCommentsOptions, VideoCommentListQueryBuilder } from './sql/comment/video-comment-list-query-builder'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
@@ -191,6 +191,18 @@ export class VideoCommentModel extends Model<Partial<AttributesOnly<VideoComment
     onDelete: 'set null'
   })
   CommentAbuses: VideoCommentAbuseModel[]
+
+  // ---------------------------------------------------------------------------
+
+  static getSQLAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix
+    })
+  }
+
+  // ---------------------------------------------------------------------------
 
   static loadById (id: number, t?: Transaction): Promise<MComment> {
     const query: FindOptions = {

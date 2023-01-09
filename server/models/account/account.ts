@@ -38,7 +38,7 @@ import { ApplicationModel } from '../application/application'
 import { ServerModel } from '../server/server'
 import { ServerBlocklistModel } from '../server/server-blocklist'
 import { UserModel } from '../user/user'
-import { getSort, throwIfNotValid } from '../utils'
+import { buildSQLAttributes, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
@@ -250,6 +250,18 @@ export class AccountModel extends Model<Partial<AttributesOnly<AccountModel>>> {
 
     return undefined
   }
+
+  // ---------------------------------------------------------------------------
+
+  static getSQLAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix
+    })
+  }
+
+  // ---------------------------------------------------------------------------
 
   static load (id: number, transaction?: Transaction): Promise<MAccountDefault> {
     return AccountModel.findByPk(id, { transaction })

@@ -68,7 +68,7 @@ function searchCache (moduleName: string, callback: (current: NodeModule) => voi
 };
 
 function removeCachedPath (pluginPath: string) {
-  const pathCache = (module.constructor as any)._pathCache
+  const pathCache = (module.constructor as any)._pathCache as { [ id: string ]: string[] }
 
   Object.keys(pathCache).forEach(function (cacheKey) {
     if (cacheKey.includes(pluginPath)) {

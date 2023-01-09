@@ -1,33 +1,23 @@
+import { Memoize } from '@server/helpers/memoize'
+import { AccountModel } from '@server/models/account/account'
+import { ActorModel } from '@server/models/actor/actor'
+import { ActorImageModel } from '@server/models/actor/actor-image'
+import { ServerModel } from '@server/models/server/server'
+import { VideoCommentModel } from '../../video-comment'
+
 export class VideoCommentTableAttributes {
 
+  @Memoize()
   getVideoCommentAttributes () {
-    return [
-      '"VideoCommentModel"."id"',
-      '"VideoCommentModel"."url"',
-      '"VideoCommentModel"."deletedAt"',
-      '"VideoCommentModel"."updatedAt"',
-      '"VideoCommentModel"."createdAt"',
-      '"VideoCommentModel"."text"',
-      '"VideoCommentModel"."originCommentId"',
-      '"VideoCommentModel"."inReplyToCommentId"',
-      '"VideoCommentModel"."videoId"',
-      '"VideoCommentModel"."accountId"'
-    ].join(', ')
+    return VideoCommentModel.getSQLAttributes('VideoCommentModel').join(', ')
   }
 
+  @Memoize()
   getAccountAttributes () {
-    return [
-      `"Account"."id" AS "Account.id"`,
-      `"Account"."name" AS "Account.name"`,
-      `"Account"."description" AS "Account.description"`,
-      `"Account"."createdAt" AS "Account.createdAt"`,
-      `"Account"."updatedAt" AS "Account.updatedAt"`,
-      `"Account"."actorId" AS "Account.actorId"`,
-      `"Account"."userId" AS "Account.userId"`,
-      `"Account"."applicationId" AS "Account.applicationId"`
-    ].join(', ')
+    return AccountModel.getSQLAttributes('Account', 'Account.').join(', ')
   }
 
+  @Memoize()
   getVideoAttributes () {
     return [
       `"Video"."id" AS "Video.id"`,
@@ -36,43 +26,18 @@ export class VideoCommentTableAttributes {
     ].join(', ')
   }
 
+  @Memoize()
   getActorAttributes () {
-    return [
-      `"Account->Actor"."id" AS "Account.Actor.id"`,
-      `"Account->Actor"."type" AS "Account.Actor.type"`,
-      `"Account->Actor"."preferredUsername" AS "Account.Actor.preferredUsername"`,
-      `"Account->Actor"."url" AS "Account.Actor.url"`,
-      `"Account->Actor"."followersCount" AS "Account.Actor.followersCount"`,
-      `"Account->Actor"."followingCount" AS "Account.Actor.followingCount"`,
-      `"Account->Actor"."remoteCreatedAt" AS "Account.Actor.remoteCreatedAt"`,
-      `"Account->Actor"."serverId" AS "Account.Actor.serverId"`,
-      `"Account->Actor"."createdAt" AS "Account.Actor.createdAt"`,
-      `"Account->Actor"."updatedAt" AS "Account.Actor.updatedAt"`
-    ].join(', ')
+    return ActorModel.getSQLAPIAttributes('Account->Actor', `Account.Actor.`).join(', ')
   }
 
+  @Memoize()
   getServerAttributes () {
-    return [
-      `"Account->Actor->Server"."id" AS "Account.Actor.Server.id"`,
-      `"Account->Actor->Server"."host" AS "Account.Actor.Server.host"`,
-      `"Account->Actor->Server"."redundancyAllowed" AS "Account.Actor.Server.redundancyAllowed"`,
-      `"Account->Actor->Server"."createdAt" AS "Account.Actor.Server.createdAt"`,
-      `"Account->Actor->Server"."updatedAt" AS "Account.Actor.Server.updatedAt"`
-    ].join(', ')
+    return ServerModel.getSQLAttributes('Account->Actor->Server', `Account.Actor.Server.`).join(', ')
   }
 
+  @Memoize()
   getAvatarAttributes () {
-    return [
-      `"Account->Actor->Avatars"."id" AS "Account.Actor.Avatars.id"`,
-      `"Account->Actor->Avatars"."filename" AS "Account.Actor.Avatars.filename"`,
-      `"Account->Actor->Avatars"."height" AS "Account.Actor.Avatars.height"`,
-      `"Account->Actor->Avatars"."width" AS "Account.Actor.Avatars.width"`,
-      `"Account->Actor->Avatars"."fileUrl" AS "Account.Actor.Avatars.fileUrl"`,
-      `"Account->Actor->Avatars"."onDisk" AS "Account.Actor.Avatars.onDisk"`,
-      `"Account->Actor->Avatars"."type" AS "Account.Actor.Avatars.type"`,
-      `"Account->Actor->Avatars"."actorId" AS "Account.Actor.Avatars.actorId"`,
-      `"Account->Actor->Avatars"."createdAt" AS "Account.Actor.Avatars.createdAt"`,
-      `"Account->Actor->Avatars"."updatedAt" AS "Account.Actor.Avatars.updatedAt"`
-    ].join(', ')
+    return ActorImageModel.getSQLAttributes('Account->Actor->Avatars', 'Account.Actor.Avatars.id').join(', ')
   }
 }

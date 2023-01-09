@@ -40,7 +40,7 @@ import { ScopeNames as VideoScopeNames, VideoModel } from '../video/video'
 import { VideoBlacklistModel } from '../video/video-blacklist'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions as ChannelSummaryOptions, VideoChannelModel } from '../video/video-channel'
 import { ScopeNames as CommentScopeNames, VideoCommentModel } from '../video/video-comment'
-import { buildAbuseListQuery, BuildAbusesQueryOptions } from './abuse-query-builder'
+import { buildAbuseListQuery, BuildAbusesQueryOptions } from './sql/abuse-query-builder'
 import { VideoAbuseModel } from './video-abuse'
 import { VideoCommentAbuseModel } from './video-comment-abuse'
 

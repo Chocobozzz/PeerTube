@@ -1,6 +1,7 @@
-import { literal, Op, OrderItem, Sequelize } from 'sequelize'
+import { literal, Model, ModelStatic, Op, OrderItem, Sequelize } from 'sequelize'
 import validator from 'validator'
 import { forceNumber } from '@shared/core-utils'
+import { AttributesOnly } from '@shared/typescript-utils'
 
 type SortType = { sortModel: string, sortValue: string }
 
@@ -178,30 +179,6 @@ function buildBlockedAccountSQL (blockerIds: number[]) {
     'WHERE "serverBlocklist"."accountId" IN (' + blockerIdsString + ')'
 }
 
-function buildBlockedAccountSQLOptimized (columnNameJoin: string, blockerIds: number[]) {
-  const blockerIdsString = blockerIds.join(', ')
-
-  return [
-    literal(
-      `NOT EXISTS (` +
-      `  SELECT 1 FROM "accountBlocklist" ` +
-      `  WHERE "targetAccountId" = ${columnNameJoin} ` +
-      `  AND "accountId" IN (${blockerIdsString})` +
-      `)`
-    ),
-
-    literal(
-      `NOT EXISTS (` +
-      `  SELECT 1 FROM "account" ` +
-      `  INNER JOIN "actor" ON account."actorId" = actor.id ` +
-      `  INNER JOIN "serverBlocklist" ON "actor"."serverId" = "serverBlocklist"."targetServerId" ` +
-      `  WHERE "account"."id" = ${columnNameJoin} ` +
-      `  AND "serverBlocklist"."accountId" IN (${blockerIdsString})` +
-      `)`
-    )
-  ]
-}
-
 function buildServerIdsFollowedBy (actorId: any) {
   const actorIdNumber = forceNumber(actorId)
 
@@ -277,11 +254,34 @@ function searchAttribute (sourceField?: string, targetField?: string) {
   }
 }
 
+function buildSQLAttributes <M extends Model> (options: {
+  model: ModelStatic<M>
+  tableName: string
+
+  excludeAttributes?: (keyof AttributesOnly<M>)[]
+  aliasPrefix?: string
+}) {
+  const { model, tableName, aliasPrefix, excludeAttributes } = options
+
+  const attributes = Object.keys(model.getAttributes())
+
+  return attributes
+    .filter(a => {
+      if (!excludeAttributes) return true
+      if (excludeAttributes.includes(a)) return false
+
+      return true
+    })
+    .map(a => {
+      return `"${tableName}"."${a}" AS "${aliasPrefix || ''}${a}"`
+    })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
+  buildSQLAttributes,
   buildBlockedAccountSQL,
-  buildBlockedAccountSQLOptimized,
   buildLocalActorIdsIn,
   getPlaylistSort,
   SortType,

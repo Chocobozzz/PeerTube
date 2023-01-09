@@ -4,7 +4,7 @@ import { MServer, MServerFormattable } from '@server/types/models/server'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { isHostValid } from '../../helpers/custom-validators/servers'
 import { ActorModel } from '../actor/actor'
-import { throwIfNotValid } from '../utils'
+import { buildSQLAttributes, throwIfNotValid } from '../utils'
 import { ServerBlocklistModel } from './server-blocklist'
 
 @Table({
@@ -51,6 +51,18 @@ export class ServerModel extends Model<Partial<AttributesOnly<ServerModel>>> {
     onDelete: 'CASCADE'
   })
   BlockedBy: ServerBlocklistModel[]
+
+  // ---------------------------------------------------------------------------
+
+  static getSQLAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix
+    })
+  }
+
+  // ---------------------------------------------------------------------------
 
   static load (id: number, transaction?: Transaction): Promise<MServer> {
     const query = {

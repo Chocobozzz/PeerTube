@@ -22,7 +22,7 @@ import { isActivityPubUrlValid } from '../../helpers/custom-validators/activityp
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { LAZY_STATIC_PATHS, MIMETYPES, WEBSERVER } from '../../initializers/constants'
-import { throwIfNotValid } from '../utils'
+import { buildSQLAttributes, throwIfNotValid } from '../utils'
 import { ActorModel } from './actor'
 
 @Table({
@@ -93,6 +93,18 @@ export class ActorImageModel extends Model<Partial<AttributesOnly<ActorImageMode
     instance.removeImage()
       .catch(err => logger.error('Cannot remove actor image file %s.', instance.filename, { err }))
   }
+
+  // ---------------------------------------------------------------------------
+
+  static getSQLAttributes (tableName: string, aliasPrefix = '') {
+    return buildSQLAttributes({
+      model: this,
+      tableName,
+      aliasPrefix
+    })
+  }
+
+  // ---------------------------------------------------------------------------
 
   static loadByName (filename: string) {
     const query = {

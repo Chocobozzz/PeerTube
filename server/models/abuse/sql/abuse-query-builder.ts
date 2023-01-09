@@ -2,7 +2,7 @@
 import { exists } from '@server/helpers/custom-validators/misc'
 import { forceNumber } from '@shared/core-utils'
 import { AbuseFilter, AbuseState, AbuseVideoIs } from '@shared/models'
-import { buildBlockedAccountSQL, buildDirectionAndField } from '../utils'
+import { buildBlockedAccountSQL, buildDirectionAndField } from '../../utils'
 
 export type BuildAbusesQueryOptions = {
   start: number
