@@ -8836,7 +8836,7 @@
       </trans-unit>
       <trans-unit id="1158912204255103651">
         <source>Video published (after transcoding/scheduled update)</source>
-        <target state="translated">あなたの動画が (変換/設定された予約投稿後に)投稿された</target>
+        <target state="translated">あなたの動画が (トランスコード/設定された予約公開後に)公開された</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3809414664640924954">
@@ -10733,7 +10733,7 @@
       </trans-unit>
       <trans-unit id="4246579596585402255">
         <source>A date is required to schedule video update.</source>
-        <target state="translated">予約投稿の動画の更新には日付が必須です。</target>
+        <target state="translated">予約公開の動画の更新には日付が必須です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="8728283516316752593">
