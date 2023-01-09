@@ -1,11 +1,13 @@
 import express from 'express'
 import { AccessDeniedError } from '@node-oauth/oauth2-server'
 import { PluginManager } from '@server/lib/plugins/plugin-manager'
+import { AccountModel } from '@server/models/account/account'
+import { AuthenticatedResultUpdaterFieldName, RegisterServerAuthenticatedResult } from '@server/types'
 import { MOAuthClient } from '@server/types/models'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token'
-import { MUser } from '@server/types/models/user/user'
+import { MUser, MUserDefault } from '@server/types/models/user/user'
 import { pick } from '@shared/core-utils'
-import { UserRole } from '@shared/models/users/user-role'
+import { AttributesOnly } from '@shared/typescript-utils'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { OAuthClientModel } from '../../models/oauth/oauth-client'
@@ -13,6 +15,7 @@ import { OAuthTokenModel } from '../../models/oauth/oauth-token'
 import { UserModel } from '../../models/user/user'
 import { findAvailableLocalActorName } from '../local-actor'
 import { buildUser, createUserAccountAndChannelAndPlaylist } from '../user'
+import { ExternalUser } from './external-auth'
 import { TokensCache } from './tokens-cache'
 
 type TokenInfo = {
@@ -26,12 +29,8 @@ export type BypassLogin = {
   bypass: boolean
   pluginName: string
   authName?: string
-  user: {
-    username: string
-    email: string
-    displayName: string
-    role: UserRole
-  }
+  user: ExternalUser
+  userUpdater: RegisterServerAuthenticatedResult['userUpdater']
 }
 
 async function getAccessToken (bearerToken: string) {
@@ -89,7 +88,9 @@ async function getUser (usernameOrEmail?: string, password?: string, bypassLogin
     logger.info('Bypassing oauth login by plugin %s.', bypassLogin.pluginName)
 
     let user = await UserModel.loadByEmail(bypassLogin.user.email)
+
     if (!user) user = await createUserFromExternal(bypassLogin.pluginName, bypassLogin.user)
+    else user = await updateUserFromExternal(user, bypassLogin.user, bypassLogin.userUpdater)
 
     // Cannot create a user
     if (!user) throw new AccessDeniedError('Cannot create such user: an actor with that name already exists.')
@@ -219,16 +220,11 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function createUserFromExternal (pluginAuth: string, options: {
-  username: string
-  email: string
-  role: UserRole
-  displayName: string
-}) {
-  const username = await findAvailableLocalActorName(options.username)
+async function createUserFromExternal (pluginAuth: string, userOptions: ExternalUser) {
+  const username = await findAvailableLocalActorName(userOptions.username)
 
   const userToCreate = buildUser({
-    ...pick(options, [ 'email', 'role' ]),
+    ...pick(userOptions, [ 'email', 'role', 'adminFlags', 'videoQuota', 'videoQuotaDaily' ]),
 
     username,
     emailVerified: null,
@@ -238,10 +234,55 @@ async function createUserFromExternal (pluginAuth: string, options: {
 
   const { user } = await createUserAccountAndChannelAndPlaylist({
     userToCreate,
-    userDisplayName: options.displayName
+    userDisplayName: userOptions.displayName
   })
 
   return user
+}
+
+async function updateUserFromExternal (
+  user: MUserDefault,
+  userOptions: ExternalUser,
+  userUpdater: RegisterServerAuthenticatedResult['userUpdater']
+) {
+  if (!userUpdater) return user
+
+  {
+    type UserAttributeKeys = keyof AttributesOnly<UserModel>
+    const mappingKeys: { [ id in UserAttributeKeys ]?: AuthenticatedResultUpdaterFieldName } = {
+      role: 'role',
+      adminFlags: 'adminFlags',
+      videoQuota: 'videoQuota',
+      videoQuotaDaily: 'videoQuotaDaily'
+    }
+
+    for (const modelKey of Object.keys(mappingKeys)) {
+      const pluginOptionKey = mappingKeys[modelKey]
+
+      const newValue = userUpdater({ fieldName: pluginOptionKey, currentValue: user[modelKey], newValue: userOptions[pluginOptionKey] })
+      user.set(modelKey, newValue)
+    }
+  }
+
+  {
+    type AccountAttributeKeys = keyof Partial<AttributesOnly<AccountModel>>
+    const mappingKeys: { [ id in AccountAttributeKeys ]?: AuthenticatedResultUpdaterFieldName } = {
+      name: 'displayName'
+    }
+
+    for (const modelKey of Object.keys(mappingKeys)) {
+      const optionKey = mappingKeys[modelKey]
+
+      const newValue = userUpdater({ fieldName: optionKey, currentValue: user.Account[modelKey], newValue: userOptions[optionKey] })
+      user.Account.set(modelKey, newValue)
+    }
+  }
+
+  logger.debug('Updated user %s with plugin userUpdated function.', user.email, { user, userOptions })
+
+  user.Account = await user.Account.save()
+
+  return user.save()
 }
 
 function checkUserValidityOrThrow (user: MUser) {

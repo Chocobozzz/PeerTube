@@ -33,7 +33,17 @@ async function register ({
           username: 'kefka',
           email: 'kefka@example.com',
           role: 0,
-          displayName: 'Kefka Palazzo'
+          displayName: 'Kefka Palazzo',
+          adminFlags: 1,
+          videoQuota: 42000,
+          videoQuotaDaily: 42100,
+
+          // Always use new value except for videoQuotaDaily field
+          userUpdater: ({ fieldName, currentValue, newValue }) => {
+            if (fieldName === 'videoQuotaDaily') return currentValue
+
+            return newValue
+          }
         })
       },
       hookTokenValidity: (options) => {

@@ -51,8 +51,7 @@ function removeCacheAndTmpDirectories () {
   const tasks: Promise<any>[] = []
 
   // Cache directories
-  for (const key of Object.keys(cacheDirectories)) {
-    const dir = cacheDirectories[key]
+  for (const dir of cacheDirectories) {
     tasks.push(removeDirectoryOrContent(dir))
   }
 
@@ -87,8 +86,7 @@ function createDirectoriesIfNotExist () {
   }
 
   // Cache directories
-  for (const key of Object.keys(cacheDirectories)) {
-    const dir = cacheDirectories[key]
+  for (const dir of cacheDirectories) {
     tasks.push(ensureDir(dir))
   }
 

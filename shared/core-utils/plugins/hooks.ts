@@ -1,3 +1,4 @@
+import { RegisteredExternalAuthConfig } from '@shared/models'
 import { HookType } from '../../models/plugins/hook-type.enum'
 import { isCatchable, isPromise } from '../common/promises'
 
@@ -49,7 +50,12 @@ async function internalRunHook <T> (options: {
   return result
 }
 
+function getExternalAuthHref (apiUrl: string, auth: RegisteredExternalAuthConfig) {
+  return apiUrl + `/plugins/${auth.name}/${auth.version}/auth/${auth.authName}`
+}
+
 export {
   getHookType,
-  internalRunHook
+  internalRunHook,
+  getExternalAuthHref
 }

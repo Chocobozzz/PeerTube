@@ -149,6 +149,12 @@ const CONFIG = {
     HOSTNAME: config.get<string>('webserver.hostname'),
     PORT: config.get<number>('webserver.port')
   },
+  OAUTH2: {
+    TOKEN_LIFETIME: {
+      ACCESS_TOKEN: parseDurationToMs(config.get<string>('oauth2.token_lifetime.access_token')),
+      REFRESH_TOKEN: parseDurationToMs(config.get<string>('oauth2.token_lifetime.refresh_token'))
+    }
+  },
   RATES_LIMIT: {
     API: {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.api.window')),
