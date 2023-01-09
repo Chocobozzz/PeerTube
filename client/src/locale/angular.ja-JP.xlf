@@ -9160,7 +9160,7 @@
       </trans-unit>
       <trans-unit id="3058024914967508975">
         <source>My videos</source>
-        <target state="translated">動画</target>
+        <target state="translated">あなたの動画</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">79</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">92</context></context-group>
@@ -9485,7 +9485,7 @@
       </trans-unit>
       <trans-unit id="4876327655498234453" datatype="html">
         <source>As a reminder, the following tasks will be executed: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</source>
-        <target state="translated">これはリマインダーですが、次のタスクは実行される予定です &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
+        <target state="translated">なお、次のタスクが実行されます: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="7934869554046374009" datatype="html">
