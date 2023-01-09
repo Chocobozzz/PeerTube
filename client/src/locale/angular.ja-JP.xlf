@@ -846,7 +846,7 @@
       </trans-unit>
       <trans-unit id="5975923297757530070" datatype="html">
         <source><x id="START_TAG_DIV"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>can be redefined by the users<x id="CLOSE_TAG_DIV"/></source>
-        <target state="translated"><x id="START_TAG_DIV"/>NSFW/センシティブな動画へのデフォルト・ポリシー<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>ユーザーは「設定」で変更することができます<x id="CLOSE_TAG_DIV"/></target>
+        <target state="translated"><x id="START_TAG_DIV"/>デフォルトのNSFW/センシティブ動画ポリシー<x id="CLOSE_TAG_DIV"/><x id="START_TAG_DIV_1"/>は、ユーザーによって再定義できます<x id="CLOSE_TAG_DIV"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="3386631781603205915">
