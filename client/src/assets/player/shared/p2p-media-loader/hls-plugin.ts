@@ -400,7 +400,7 @@ class Html5Hlsjs {
 
     //if(!data.details.live && data.details.totalduration      )
 
-    this.hlsjsConfig.debug = true
+    //this.hlsjsConfig.debug = true
 
     this.hls = new Hlsjs(this.hlsjsConfig)
 

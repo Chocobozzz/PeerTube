@@ -28,7 +28,7 @@ class PeerTubePlugin extends Plugin {
   private readonly startTime: number
 
   private readonly CONSTANTS = {
-    USER_VIEW_VIDEO_INTERVAL: 240000 // Every 60 seconds, notify the user is watching the video
+    USER_VIEW_VIDEO_INTERVAL: 30000 // Every 60 seconds, notify the user is watching the video
   }
 
   //private videoCaptions: VideoJSCaption[]
