@@ -38,6 +38,8 @@ describe('Test video comments', function () {
     await setDefaultAccountAvatar(server)
 
     userAccessTokenServer1 = await server.users.generateUserAndToken('user1')
+    await setDefaultChannelAvatar(server, 'user1_channel')
+    await setDefaultAccountAvatar(server, userAccessTokenServer1)
 
     command = server.comments
   })
@@ -240,9 +242,26 @@ describe('Test video comments', function () {
   describe('All instance comments', function () {
 
     it('Should list instance comments as admin', async function () {
-      const { data } = await command.listForAdmin({ start: 0, count: 1 })
+      {
+        const { data, total } = await command.listForAdmin({ start: 0, count: 1 })
 
-      expect(data[0].text).to.equal('my second answer to thread 4')
+        expect(total).to.equal(7)
+        expect(data).to.have.lengthOf(1)
+        expect(data[0].text).to.equal('my second answer to thread 4')
+        expect(data[0].account.name).to.equal('root')
+        expect(data[0].account.displayName).to.equal('root')
+        expect(data[0].account.avatars).to.have.lengthOf(2)
+      }
+
+      {
+        const { data, total } = await command.listForAdmin({ start: 1, count: 2 })
+
+        expect(total).to.equal(7)
+        expect(data).to.have.lengthOf(2)
+
+        expect(data[0].account.avatars).to.have.lengthOf(2)
+        expect(data[1].account.avatars).to.have.lengthOf(2)
+      }
     })
 
     it('Should filter instance comments by isLocal', async function () {

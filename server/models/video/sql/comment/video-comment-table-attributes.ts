@@ -38,6 +38,6 @@ export class VideoCommentTableAttributes {
 
   @Memoize()
   getAvatarAttributes () {
-    return ActorImageModel.getSQLAttributes('Account->Actor->Avatars', 'Account.Actor.Avatars.id').join(', ')
+    return ActorImageModel.getSQLAttributes('Account->Actor->Avatars', 'Account.Actor.Avatars.').join(', ')
   }
 }

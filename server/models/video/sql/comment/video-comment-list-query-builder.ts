@@ -87,8 +87,7 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
     this.query = `${this.select} ` +
       `FROM (${this.innerQuery}) AS "VideoCommentModel" ` +
       `${this.joins} ` +
-      `${this.getOrder()} ` +
-      `${this.getLimit()}`
+      `${this.getOrder()}`
   }
 
   private buildInnerListQuery () {
@@ -373,14 +372,6 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
     const orders = getCommentSort(this.options.sort)
 
     return 'ORDER BY ' + orders.map(o => `"${o[0]}" ${o[1]}`).join(', ')
-  }
-
-  private getLimit () {
-    if (!this.options.count) return ''
-
-    this.replacements.limit = this.options.count
-
-    return `LIMIT :limit `
   }
 
   private getInnerLimit () {
