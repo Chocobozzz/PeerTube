@@ -3830,6 +3830,7 @@
       </trans-unit>
       <trans-unit id="4955506044513787741" datatype="html">
         <source>Do you really want to reject these follow requests?</source>
+        <target state="translated">Viltu í alvörunni hafna þessum fylgjendabeiðnum?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">84</context>
@@ -3866,6 +3867,7 @@
       </trans-unit>
       <trans-unit id="320661315515678647" datatype="html">
         <source>Do you really want to delete these follow requests?</source>
+        <target state="translated">Viltu í alvörunni eyða þessum fylgjendabeiðnum?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -4024,6 +4026,7 @@
       </trans-unit>
       <trans-unit id="8061023631336698211" datatype="html">
         <source>Do you really want to unfollow these entries?</source>
+        <target state="translated">Viltu í alvörunni hætta að fylgjast með þessum færslum?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">72</context>
@@ -5877,6 +5880,7 @@
       </trans-unit>
       <trans-unit id="1314383205093440631" datatype="html">
         <source>Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</source>
+        <target state="translated">Ertu viss um að þú viljir eyða {count, plural, =1 {þessu myndskeiði} other {þessum <x id="count"/> myndskeiðum}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">229</context>
@@ -5884,6 +5888,7 @@
       </trans-unit>
       <trans-unit id="870586304593427318" datatype="html">
         <source>Are you sure you want to delete these <x id="PH" equiv-text="videos.length"/> videos?</source>
+        <target state="translated">Ertu viss um að þú viljir eyða þessum <x id="PH" equiv-text="videos.length"/> myndskeiðum?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">231</context>
@@ -13013,6 +13018,7 @@
       </trans-unit>
       <trans-unit id="3779524668013120370" datatype="html">
         <source>Go to my subscriptions</source>
+        <target state="translated">Fara í áskriftirnar mínar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">61</context>
@@ -13067,6 +13073,7 @@
       </trans-unit>
       <trans-unit id="8093156107152165809" datatype="html">
         <source>Show/hide this help menu</source>
+        <target state="translated">Birta/Fela þessa hjálparvalmynd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/core.module.ts</context>
           <context context-type="linenumber">45</context>
@@ -13074,6 +13081,7 @@
       </trans-unit>
       <trans-unit id="3314265031897048047" datatype="html">
         <source>Hide this help menu</source>
+        <target state="translated">Fela þessa hjálparvalmynd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/core.module.ts</context>
           <context context-type="linenumber">46</context>
@@ -13430,7 +13438,7 @@
       </trans-unit>
       <trans-unit id="4116024528500133384" datatype="html">
         <source>My settings</source>
-        <target state="translated">Mínar stillingar</target>
+        <target state="translated">Stillingarnar mínar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">125</context>
@@ -13853,6 +13861,7 @@
       </trans-unit>
       <trans-unit id="1420294365005204590" datatype="html">
         <source>These settings apply only to your session on this instance.</source>
+        <target state="translated">Þessar stillingar eiga aðeins við setu þína á þessu tilviki.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">8</context>
@@ -16581,6 +16590,7 @@
       </trans-unit>
       <trans-unit id="8700771664729810984" datatype="html">
         <source>The above can only be seen in thumbnails.</source>
+        <target state="translated">Ofangreint sést aðeins í smámyndum.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">162</context>
@@ -16588,6 +16598,7 @@
       </trans-unit>
       <trans-unit id="5779804235244672536" datatype="html">
         <source>The above can only be seen in captions (please describe which).</source>
+        <target state="translated">Ofangreint sést aðeins í skýringatextum (veldu hvaða).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">167</context>
@@ -17572,7 +17583,7 @@
       </trans-unit>
       <trans-unit id="1290987288288099212" datatype="html">
         <source>Support <x id="INTERPOLATION" equiv-text="{{ displayName }}"/></source>
-        <target state="translated">Aðstoð <x id="INTERPOLATION" equiv-text="{{ displayName }}"/></target>
+        <target state="translated">Styðja <x id="INTERPOLATION" equiv-text="{{ displayName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-support-modal/support-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -17632,6 +17643,7 @@
       </trans-unit>
       <trans-unit id="7377817702119089263" datatype="html">
         <source>Default policy on videos containing sensitive content</source>
+        <target state="translated">Sjálfgefin stefna varðandi myndskeið sem innihalda viðkvæmt efni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">4</context>
@@ -17639,6 +17651,7 @@
       </trans-unit>
       <trans-unit id="2864176699435587977" datatype="html">
         <source>Only display videos in the following languages/subtitles</source>
+        <target state="translated">Aðeins birta myndskeið á eftirfarandi tungumáli/skjátexta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">25</context>
@@ -17654,6 +17667,7 @@
       </trans-unit>
       <trans-unit id="34094919610906740" datatype="html">
         <source>Help share videos being played</source>
+        <target state="translated">Hjálpa til við að deila myndskeiðum í spilun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
           <context context-type="linenumber">42</context>
@@ -17705,6 +17719,7 @@
       </trans-unit>
       <trans-unit id="3960396487495291449" datatype="html">
         <source>Video settings updated.</source>
+        <target state="translated">Myndstillingar uppfærðar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
           <context context-type="linenumber">121</context>
@@ -17712,6 +17727,7 @@
       </trans-unit>
       <trans-unit id="3326446048041727269" datatype="html">
         <source>Display/Video settings updated.</source>
+        <target state="translated">Skjá-/Myndstillingar uppfærðar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
           <context context-type="linenumber">130</context>
