@@ -22,7 +22,7 @@ import { isActivityPubUrlValid } from '../../helpers/custom-validators/activityp
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { LAZY_STATIC_PATHS, MIMETYPES, WEBSERVER } from '../../initializers/constants'
-import { buildSQLAttributes, throwIfNotValid } from '../utils'
+import { buildSQLAttributes, throwIfNotValid } from '../shared'
 import { ActorModel } from './actor'
 
 @Table({

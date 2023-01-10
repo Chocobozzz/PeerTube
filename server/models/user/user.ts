@@ -30,6 +30,7 @@ import {
   MUserNotifSettingChannelDefault,
   MUserWithNotificationSetting
 } from '@server/types/models'
+import { forceNumber } from '@shared/core-utils'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { hasUserRight, USER_ROLE_LABELS } from '../../../shared/core-utils/users'
 import { AbuseState, MyUser, UserRight, VideoPlaylistType } from '../../../shared/models'
@@ -63,14 +64,13 @@ import { ActorModel } from '../actor/actor'
 import { ActorFollowModel } from '../actor/actor-follow'
 import { ActorImageModel } from '../actor/actor-image'
 import { OAuthTokenModel } from '../oauth/oauth-token'
-import { getAdminUsersSort, throwIfNotValid } from '../utils'
+import { getAdminUsersSort, throwIfNotValid } from '../shared'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoImportModel } from '../video/video-import'
 import { VideoLiveModel } from '../video/video-live'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { UserNotificationSettingModel } from './user-notification-setting'
-import { forceNumber } from '@shared/core-utils'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',

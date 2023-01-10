@@ -6,7 +6,7 @@ import { AttributesOnly } from '@shared/typescript-utils'
 import { AccountBlock } from '../../../shared/models'
 import { ActorModel } from '../actor/actor'
 import { ServerModel } from '../server/server'
-import { createSafeIn, getSort, searchAttribute } from '../utils'
+import { createSafeIn, getSort, searchAttribute } from '../shared'
 import { AccountModel } from './account'
 
 @Table({

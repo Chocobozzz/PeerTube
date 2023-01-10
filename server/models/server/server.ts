@@ -4,7 +4,7 @@ import { MServer, MServerFormattable } from '@server/types/models/server'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { isHostValid } from '../../helpers/custom-validators/servers'
 import { ActorModel } from '../actor/actor'
-import { buildSQLAttributes, throwIfNotValid } from '../utils'
+import { buildSQLAttributes, throwIfNotValid } from '../shared'
 import { ServerBlocklistModel } from './server-blocklist'
 
 @Table({

@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize'
 import { AbstractRunQuery } from '@server/models/shared'
-import { getInstanceFollowsSort } from '@server/models/utils'
 import { ActorImageType } from '@shared/models'
+import { getInstanceFollowsSort } from '../../../shared'
 import { ActorFollowTableAttributes } from './actor-follow-table-attributes'
 
 type BaseOptions = {

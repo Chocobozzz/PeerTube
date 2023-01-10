@@ -4,7 +4,7 @@ import { MServerBlocklist, MServerBlocklistAccountServer, MServerBlocklistFormat
 import { ServerBlock } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { AccountModel } from '../account/account'
-import { createSafeIn, getSort, searchAttribute } from '../utils'
+import { createSafeIn, getSort, searchAttribute } from '../shared'
 import { ServerModel } from './server'
 
 enum ScopeNames {

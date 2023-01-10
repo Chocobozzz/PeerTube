@@ -21,7 +21,7 @@ import { VideoChannelSync, VideoChannelSyncState } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { AccountModel } from '../account/account'
 import { UserModel } from '../user/user'
-import { getChannelSyncSort, throwIfNotValid } from '../utils'
+import { getChannelSyncSort, throwIfNotValid } from '../shared'
 import { VideoChannelModel } from './video-channel'
 
 @DefaultScope(() => ({

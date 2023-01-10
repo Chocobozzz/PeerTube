@@ -21,12 +21,8 @@ import { activityPubCollectionPagination } from '@server/lib/activitypub/collect
 import { MAccountId, MChannelId } from '@server/types/models'
 import { buildPlaylistEmbedPath, buildPlaylistWatchPath, pick } from '@shared/core-utils'
 import { buildUUID, uuidToShort } from '@shared/extra-utils'
+import { ActivityIconObject, PlaylistObject, VideoPlaylist, VideoPlaylistPrivacy, VideoPlaylistType } from '@shared/models'
 import { AttributesOnly } from '@shared/typescript-utils'
-import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
-import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
-import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { VideoPlaylistType } from '../../../shared/models/videos/playlist/video-playlist-type.model'
-import { VideoPlaylist } from '../../../shared/models/videos/playlist/video-playlist.model'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import {
   isVideoPlaylistDescriptionValid,
@@ -53,7 +49,6 @@ import {
 } from '../../types/models/video/video-playlist'
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions } from '../account/account'
 import { ActorModel } from '../actor/actor'
-import { setAsUpdated } from '../shared'
 import {
   buildServerIdsFollowedBy,
   buildTrigramSearchIndex,
@@ -61,8 +56,9 @@ import {
   createSimilarityAttribute,
   getPlaylistSort,
   isOutdated,
+  setAsUpdated,
   throwIfNotValid
-} from '../utils'
+} from '../shared'
 import { ThumbnailModel } from './thumbnail'
 import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
 import { VideoPlaylistElementModel } from './video-playlist-element'
@@ -641,7 +637,7 @@ export class VideoPlaylistModel extends Model<Partial<AttributesOnly<VideoPlayli
   }
 
   setAsRefreshed () {
-    return setAsUpdated('videoPlaylist', this.id)
+    return setAsUpdated({ sequelize: this.sequelize, table: 'videoPlaylist', id: this.id })
   }
 
   setVideosLength (videosLength: number) {

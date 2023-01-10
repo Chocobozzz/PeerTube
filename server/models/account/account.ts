@@ -16,7 +16,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { ModelCache } from '@server/models/model-cache'
+import { ModelCache } from '@server/models/shared/model-cache'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { Account, AccountSummary } from '../../../shared/models/actors'
 import { isAccountDescriptionValid } from '../../helpers/custom-validators/accounts'
@@ -38,7 +38,7 @@ import { ApplicationModel } from '../application/application'
 import { ServerModel } from '../server/server'
 import { ServerBlocklistModel } from '../server/server-blocklist'
 import { UserModel } from '../user/user'
-import { buildSQLAttributes, getSort, throwIfNotValid } from '../utils'
+import { buildSQLAttributes, getSort, throwIfNotValid } from '../shared'
 import { VideoModel } from '../video/video'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'

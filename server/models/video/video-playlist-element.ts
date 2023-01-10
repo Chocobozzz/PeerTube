@@ -31,7 +31,7 @@ import { VideoPlaylistElement, VideoPlaylistElementType } from '../../../shared/
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { AccountModel } from '../account/account'
-import { getSort, throwIfNotValid } from '../utils'
+import { getSort, throwIfNotValid } from '../shared'
 import { ForAPIOptions, ScopeNames as VideoScopeNames, VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
 

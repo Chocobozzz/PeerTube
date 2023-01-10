@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize'
 import { ModelBuilder } from '@server/models/shared'
-import { parseRowCountResult } from '@server/models/utils'
 import { MActorFollowActorsDefault } from '@server/types/models'
 import { ActivityPubActorType, FollowState } from '@shared/models'
+import { parseRowCountResult } from '../../shared'
 import { InstanceListFollowsQueryBuilder } from './shared/instance-list-follows-query-builder'
 
 export interface ListFollowersOptions {

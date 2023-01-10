@@ -22,7 +22,7 @@ import { isVideoImportStateValid, isVideoImportTargetUrlValid } from '../../help
 import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
 import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers/constants'
 import { UserModel } from '../user/user'
-import { getSort, searchAttribute, throwIfNotValid } from '../utils'
+import { getSort, searchAttribute, throwIfNotValid } from '../shared'
 import { ScopeNames as VideoModelScopeNames, VideoModel } from './video'
 import { VideoChannelSyncModel } from './video-channel-sync'
 

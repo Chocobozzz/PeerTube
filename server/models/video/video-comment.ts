@@ -40,7 +40,7 @@ import {
 import { VideoCommentAbuseModel } from '../abuse/video-comment-abuse'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../actor/actor'
-import { buildLocalAccountIdsIn, buildSQLAttributes, throwIfNotValid } from '../utils'
+import { buildLocalAccountIdsIn, buildSQLAttributes, throwIfNotValid } from '../shared'
 import { ListVideoCommentsOptions, VideoCommentListQueryBuilder } from './sql/comment/video-comment-list-query-builder'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'

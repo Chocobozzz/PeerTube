@@ -17,7 +17,7 @@ import { MNotificationSettingFormattable } from '@server/types/models'
 import { AttributesOnly } from '@shared/typescript-utils'
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../../shared/models/users/user-notification-setting.model'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
-import { throwIfNotValid } from '../utils'
+import { throwIfNotValid } from '../shared'
 import { UserModel } from './user'
 
 @Table({

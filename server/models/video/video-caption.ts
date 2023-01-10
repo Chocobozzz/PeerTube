@@ -23,7 +23,7 @@ import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/vid
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers/config'
 import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, VIDEO_LANGUAGES, WEBSERVER } from '../../initializers/constants'
-import { buildWhereIdOrUUID, throwIfNotValid } from '../utils'
+import { buildWhereIdOrUUID, throwIfNotValid } from '../shared'
 import { VideoModel } from './video'
 
 export enum ScopeNames {

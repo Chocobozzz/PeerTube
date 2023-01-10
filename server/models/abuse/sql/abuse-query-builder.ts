@@ -2,7 +2,7 @@
 import { exists } from '@server/helpers/custom-validators/misc'
 import { forceNumber } from '@shared/core-utils'
 import { AbuseFilter, AbuseState, AbuseVideoIs } from '@shared/models'
-import { buildBlockedAccountSQL, buildDirectionAndField } from '../../utils'
+import { buildBlockedAccountSQL, buildSortDirectionAndField } from '../../shared'
 
 export type BuildAbusesQueryOptions = {
   start: number
@@ -157,7 +157,7 @@ function buildAbuseListQuery (options: BuildAbusesQueryOptions, type: 'count' | 
 }
 
 function buildAbuseOrder (value: string) {
-  const { direction, field } = buildDirectionAndField(value)
+  const { direction, field } = buildSortDirectionAndField(value)
 
   return `ORDER BY "abuse"."${field}" ${direction}`
 }

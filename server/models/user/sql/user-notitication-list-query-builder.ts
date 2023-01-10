@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize'
 import { AbstractRunQuery, ModelBuilder } from '@server/models/shared'
-import { getSort } from '@server/models/utils'
 import { UserNotificationModelForApi } from '@server/types/models'
 import { ActorImageType } from '@shared/models'
+import { getSort } from '../../shared'
 
 export interface ListNotificationsOptions {
   userId: number

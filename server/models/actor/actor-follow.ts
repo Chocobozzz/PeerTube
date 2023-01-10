@@ -38,7 +38,7 @@ import { ACTOR_FOLLOW_SCORE, CONSTRAINTS_FIELDS, FOLLOW_STATES, SERVER_ACTOR_NAM
 import { AccountModel } from '../account/account'
 import { ServerModel } from '../server/server'
 import { doesExist } from '../shared/query'
-import { buildSQLAttributes, createSafeIn, getSort, searchAttribute, throwIfNotValid } from '../utils'
+import { buildSQLAttributes, createSafeIn, getSort, searchAttribute, throwIfNotValid } from '../shared'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'
 import { InstanceListFollowersQueryBuilder, ListFollowersOptions } from './sql/instance-list-followers-query-builder'
@@ -225,7 +225,7 @@ export class ActorFollowModel extends Model<Partial<AttributesOnly<ActorFollowMo
       `WHERE "actorId" = $followerActorId AND "targetActorId" = $actorId AND "state" = 'accepted' ` +
       `LIMIT 1`
 
-    return doesExist(query, { actorId, followerActorId })
+    return doesExist(this.sequelize, query, { actorId, followerActorId })
   }
 
   static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Transaction): Promise<MActorFollowActorsDefault> {

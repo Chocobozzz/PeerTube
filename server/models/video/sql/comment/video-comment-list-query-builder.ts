@@ -1,7 +1,7 @@
 import { Model, Sequelize, Transaction } from 'sequelize'
 import { AbstractRunQuery, ModelBuilder } from '@server/models/shared'
-import { createSafeIn, getCommentSort, parseRowCountResult } from '@server/models/utils'
 import { ActorImageType, VideoPrivacy } from '@shared/models'
+import { createSafeIn, getCommentSort, parseRowCountResult } from '../../../shared'
 import { VideoCommentTableAttributes } from './video-comment-table-attributes'
 
 export interface ListVideoCommentsOptions {

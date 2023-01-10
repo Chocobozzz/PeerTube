@@ -21,6 +21,7 @@ import {
 import validator from 'validator'
 import { logger } from '@server/helpers/logger'
 import { extractVideo } from '@server/helpers/video'
+import { CONFIG } from '@server/initializers/config'
 import { buildRemoteVideoBaseUrl } from '@server/lib/activitypub/url'
 import {
   getHLSPrivateFileUrl,
@@ -50,11 +51,9 @@ import {
 } from '../../initializers/constants'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../types/models/video/video-file'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
-import { doesExist } from '../shared'
-import { parseAggregateResult, throwIfNotValid } from '../utils'
+import { doesExist, parseAggregateResult, throwIfNotValid } from '../shared'
 import { VideoModel } from './video'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
-import { CONFIG } from '@server/initializers/config'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO',
@@ -266,7 +265,7 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
   static doesInfohashExist (infoHash: string) {
     const query = 'SELECT 1 FROM "videoFile" WHERE "infoHash" = $infoHash LIMIT 1'
 
-    return doesExist(query, { infoHash })
+    return doesExist(this.sequelize, query, { infoHash })
   }
 
   static async doesVideoExistForVideoFile (id: number, videoIdOrUUID: number | string) {
@@ -282,14 +281,14 @@ export class VideoFileModel extends Model<Partial<AttributesOnly<VideoFileModel>
                   'LEFT JOIN "video" "hlsVideo" ON "hlsVideo"."id" = "videoStreamingPlaylist"."videoId" AND "hlsVideo"."remote" IS FALSE ' +
                   'WHERE "torrentFilename" = $filename AND ("hlsVideo"."id" IS NOT NULL OR "webtorrent"."id" IS NOT NULL) LIMIT 1'
 
-    return doesExist(query, { filename })
+    return doesExist(this.sequelize, query, { filename })
   }
 
   static async doesOwnedWebTorrentVideoFileExist (filename: string) {
     const query = 'SELECT 1 FROM "videoFile" INNER JOIN "video" ON "video"."id" = "videoFile"."videoId" AND "video"."remote" IS FALSE ' +
                   `WHERE "filename" = $filename AND "storage" = ${VideoStorage.FILE_SYSTEM} LIMIT 1`
 
-    return doesExist(query, { filename })
+    return doesExist(this.sequelize, query, { filename })
   }
 
   static loadByFilename (filename: string) {
