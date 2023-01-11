@@ -5425,7 +5425,7 @@
       </trans-unit>
       <trans-unit id="3839590624406770455" datatype="html">
         <source>HLS with P2P support enabled</source>
-        <target state="translated">P2Pを用いたHLSを有効にする</target>
+        <target state="translated">P2P機能を用いたHLSを有効にする</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="7334484418359079994" datatype="html">
