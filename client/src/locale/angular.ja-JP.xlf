@@ -5471,7 +5471,7 @@
       </trans-unit>
       <trans-unit id="7185278676178506632" datatype="html">
         <source>Transcoding jobs concurrency</source>
-        <target state="translated">同時並行変換処理のジョブ数</target>
+        <target state="translated">同時並行トランスコード処理のジョブ数</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">168</context></context-group>
       </trans-unit>
       <trans-unit id="1969393594784140832" datatype="html">
