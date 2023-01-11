@@ -5302,7 +5302,7 @@
       </trans-unit>
       <trans-unit id="4240037618955024499" datatype="html">
         <source>will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with VOD transcoding </source>
-        <target state="translated">は、VOD動画の変換で、<x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/>要求します </target>
+        <target state="translated">は、ビデオ・オン・デマンド動画のトランスコードで、<x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/>要求します </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">148</context></context-group>
       </trans-unit>
       <trans-unit id="8489317904250057957" datatype="html">
