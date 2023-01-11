@@ -6728,7 +6728,7 @@
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
         <source>Do you really want to delete <x id="PH" equiv-text="videoChannel.displayName"/>? It will delete <x id="PH_1" equiv-text="videoChannel.videosCount"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</source>
-        <target state="translated">本当に<x id="PH" equiv-text="videoChannel.displayName"/>のチャンネルを削除しますか？ このチャンネルにアップロードされている<x id="PH_1" equiv-text="videoChannel.videosCount"/>動画が削除され、(<x id="PH_2" equiv-text="videoChannel.name"/>)と同じ名前のチャンネルを作成できなくなります！</target>
+        <target state="translated">本当に<x id="PH" equiv-text="videoChannel.displayName"/>のチャンネルを削除してもよろしいですか？ これにより、このチャンネルにアップロードされている<x id="PH_1" equiv-text="videoChannel.videosCount"/>件の動画が削除され、(<x id="PH_2" equiv-text="videoChannel.name"/>)と同じ名前で 別のチャンネルが作成できなくなります！</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="4433306639366959484" datatype="html">
@@ -7199,7 +7199,7 @@
       </trans-unit>
       <trans-unit id="8583412279916132438" datatype="html">
         <source>Channel display name</source>
-        <target state="translated">チャンネルの名前</target>
+        <target state="translated">チャンネルの表示名</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="4376397515999418662" datatype="html">
@@ -7228,7 +7228,7 @@
       </trans-unit>
       <trans-unit id="1421502666684458815" datatype="html">
         <source>This is the name that will be displayed in your profile URL.</source>
-        <target state="translated">チャンネルIDはあなたのプロフィールで表示されます。</target>
+        <target state="translated">チャンネルIDはあなたのプロフィールURLで表示されます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">38</context>
@@ -10355,21 +10355,21 @@
       </trans-unit>
       <trans-unit id="6632896893630378443">
         <source>Display name is required.</source>
-        <target state="translated">ハンドルネームまたはチャンネル名は必須です。</target>
+        <target state="translated">表示名は必須です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">164</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="1303578752658966736">
         <source>Display name must be at least 1 character long.</source>
-        <target state="translated">ハンドルネームまたはチャンネル名は 1 文字以上にする必要があります。</target>
+        <target state="translated">表示名は必ず1文字以上にしてください。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">165</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">25</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="4613240543124934954">
         <source>Display name cannot be more than 50 characters long.</source>
-        <target state="translated">ハンドルネームまたはチャンネル名は50文字以内でなければなりません。</target>
+        <target state="translated">表示名は50文字以内でなければなりません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">166</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
@@ -10540,7 +10540,7 @@
       </trans-unit>
       <trans-unit id="6854100952145697527">
         <source>Display name cannot be more than 120 characters long.</source>
-        <target state="translated">ハンドルネームまたはチャンネル名は、120 文字以内でなければなりません。</target>
+        <target state="translated">表示名は、120文字以内でなければなりません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/video-playlist-validators.ts</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="6198895122092095739">
