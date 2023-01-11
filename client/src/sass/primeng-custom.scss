@@ -294,6 +294,7 @@ body .p-datepicker .p-datepicker-header .p-datepicker-title select:focus {
 body .p-datepicker table {
   font-size: 14px;
   margin: 0.857em 0 0 0;
+  table-layout: fixed;
 }
 body .p-datepicker table th {
   padding: 0.5em;
