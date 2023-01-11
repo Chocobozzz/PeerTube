@@ -5486,7 +5486,7 @@
       </trans-unit>
       <trans-unit id="6289966287765074028" datatype="html">
         <source>new transcoding profiles can be added by PeerTube plugins</source>
-        <target state="translated">新しいトランスコードのプロファイルは、PeerTubeのプラグインによって追加が可能です</target>
+        <target state="translated">新しい変換プロファイルは、PeerTubeのプラグインによって追加できます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">181</context></context-group>
       </trans-unit>
       <trans-unit id="5843661880070076970" datatype="html">
