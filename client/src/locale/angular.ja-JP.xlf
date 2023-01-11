@@ -7072,7 +7072,7 @@
       </trans-unit>
       <trans-unit id="5991790391344625653" datatype="html">
         <source>Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling WebRTC in your browser.</source>
-        <target state="translated">結局のところ、再生プレイヤー上で設定することでP2P機能をいつでも無効にでき、またブラウザーの設定でWebRTCを無効にするだけでP2P機能を無効にできることを記憶にとどめておいて下さい。</target>
+        <target state="translated">最終的には、動画プレーヤーで切り替えるか、ブラウザーでWebRTCを無効にするだけでいつでもP2P機能を無効にできることを覚えておいてください。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">155</context></context-group>
       </trans-unit>
       <trans-unit id="8438752523256358076" datatype="html">
