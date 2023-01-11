@@ -5476,7 +5476,7 @@
       </trans-unit>
       <trans-unit id="1969393594784140832" datatype="html">
         <source>allows to transcode multiple files in parallel. ⚠️ Requires a PeerTube restart</source>
-        <target state="translated">複数のファイルの同時トランスコードを許可する ⚠️ PeerTubeの再起動が必要です</target>
+        <target state="translated">複数ファイルの同時変換を許可します。 ⚠️ PeerTubeの再起動が必要です</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">169</context></context-group>
       </trans-unit>
       <trans-unit id="2184317712452071847" datatype="html">
