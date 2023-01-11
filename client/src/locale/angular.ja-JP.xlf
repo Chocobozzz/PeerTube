@@ -8879,7 +8879,7 @@
       </trans-unit>
       <trans-unit id="2326816287669585542" datatype="html">
         <source>One of your abuse reports has been accepted or rejected by moderators</source>
-        <target state="translated">不正行為に関する通報の一つが、モデレーターによって受理または却下されました</target>
+        <target state="translated">不正行為に関する通報の一つが、モデレーターによって受理または却下された</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="2764971902180889905" datatype="html">
@@ -8908,7 +8908,7 @@
       </trans-unit>
       <trans-unit id="4579496777570550463" datatype="html">
         <source>Social</source>
-        <target state="translated">ActivityPubプロトコル経由</target>
+        <target state="translated">ソーシャル</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="1852164487280647902" datatype="html">
@@ -8928,7 +8928,7 @@
       </trans-unit>
       <trans-unit id="6721822899525405039" datatype="html">
         <source>People can find you using @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> </source>
-        <target state="translated">ActivityPubアプリケーションのユーザーは、Fediverse上であなたのアカウント名 @<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> を検索することであなたのアカウントを見つけることができます </target>
+        <target state="translated">ユーザーは、@<x id="INTERPOLATION" equiv-text="sing @{{ user.usern"/>@<x id="INTERPOLATION_1" equiv-text="me }}@{{ instanceH"/> を検索することであなたのアカウントを見つけることができます </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -9347,12 +9347,12 @@
       </trans-unit>
       <trans-unit id="6489275254908395777" datatype="html">
         <source>Maximize editor</source>
-        <target state="translated">編集画面を最大表示</target>
+        <target state="translated">エディターを最大化</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="4243591013849340688" datatype="html">
         <source>Exit maximized editor</source>
-        <target state="translated">最大表示の編集画面から出る</target>
+        <target state="translated">最大化したエディターを終了</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="2687679787442328897">
@@ -9586,7 +9586,7 @@
       </trans-unit>
       <trans-unit id="4024404994702813072" datatype="html">
         <source>In my library</source>
-        <target state="translated">ライブラリ</target>
+        <target state="translated">ライブラリー内</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">113</context></context-group>
       </trans-unit>
       <trans-unit id="232050922346936574" datatype="html">
@@ -9639,7 +9639,7 @@
       </trans-unit>
       <trans-unit id="4534458451100881847" datatype="html">
         <source>display</source>
-        <target state="translated">表示する</target>
+        <target state="translated">表示</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">319</context></context-group>
       </trans-unit>
       <trans-unit id="4467323362722952678" datatype="html">
@@ -9736,7 +9736,7 @@
       </trans-unit>
       <trans-unit id="1787083504545967">
         <source>Relevance</source>
-        <target state="translated">関連性の高さ</target>
+        <target state="translated">関連性</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="7944277186358179990">
@@ -11856,13 +11856,13 @@
       </trans-unit>
       <trans-unit id="6521421218398377925" datatype="html">
         <source>Run HLS transcoding</source>
-        <target state="translated">HLSファイルのトランスコードを開始</target>
+        <target state="translated">HLSファイルを生成</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">98</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">391</context></context-group>
       </trans-unit>
       <trans-unit id="4956271014213477815" datatype="html">
         <source>Run WebTorrent transcoding</source>
-        <target state="translated">WebTorrentのトランスコードを開始</target>
+        <target state="translated">WebTorrentファイルを生成</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">104</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">397</context></context-group>
       </trans-unit>
@@ -12139,7 +12139,7 @@
       </trans-unit>
       <trans-unit id="6767380569816110388" datatype="html">
         <source>Only shareable via a private link</source>
-        <target state="translated">ライブ配信のURLを他人と共有する以外の方法では、視聴することはできません</target>
+        <target state="translated">限定公開リンクからのみこの動画を視聴できます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">386</context></context-group>
       </trans-unit>
       <trans-unit id="6828965264297239528">
