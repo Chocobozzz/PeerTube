@@ -3512,7 +3512,7 @@
       </trans-unit>
       <trans-unit id="4965562695253171955" datatype="html">
         <source>Clear filter</source>
-        <target state="translated">フィルターを消去する</target>
+        <target state="translated">フィルターをリセット</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">28</context>
@@ -3756,7 +3756,7 @@
       </trans-unit>
       <trans-unit id="1412406834353485520">
         <source>Ask for new password</source>
-        <target state="translated">新しいパスワードを求める</target>
+        <target state="translated">新しいパスワードを要求する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">218</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">218</context></context-group>
       </trans-unit>
@@ -4667,7 +4667,7 @@
       </trans-unit>
       <trans-unit id="34094919610906740" datatype="html">
         <source>Help share videos being played</source>
-        <target state="translated">サーバー負荷軽減のために、再生される動画のピアを担う</target>
+        <target state="translated">再生中の動画を共有し、サーバーの負荷軽減に協力</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="6236140336967052987" datatype="html">
