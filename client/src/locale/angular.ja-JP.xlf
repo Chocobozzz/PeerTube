@@ -5370,7 +5370,7 @@
       </trans-unit>
       <trans-unit id="8212237880239644112" datatype="html">
         <source>Same as VOD transcoding, transcoding live streams so that they are in a streamable form that any device can play. Requires a beefy CPU, and then some.</source>
-        <target state="translated">VOD動画の変換と同様に、ライブ配信をどのような端末でも再生できるようなストリーミング形式に変換します。高性能のCPUが必要で、場合によってはさらに強力なCPUが必要となる場合があります。</target>
+        <target state="translated">ビデオ・オン・デマンド動画のトランスコードと同様に、ライブ配信をどのような端末でも再生できるようなストリーミング形式にトランスコードします。高性能のCPUが必要で、場合によってはさらに強力なCPUが必要となる場合があります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="3444148141968928069" datatype="html">
