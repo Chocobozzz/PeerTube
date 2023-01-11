@@ -6204,7 +6204,7 @@
       </trans-unit>
       <trans-unit id="5278589041647101772" datatype="html">
         <source>Overwrite support field of all videos of this channel</source>
-        <target state="translated">このチャンネルにある全ての動画の応援メッセージを上書きする</target>
+        <target state="translated">このチャンネルにある全ての動画の応援メッセージ欄を上書きする</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">79</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">79</context></context-group>
       </trans-unit>
@@ -6344,7 +6344,7 @@
       </trans-unit>
       <trans-unit id="5339945526545410198" datatype="html">
         <source>Set up my channels</source>
-        <target state="translated">あなたのチャンネルを設定する</target>
+        <target state="translated">チャンネルを設定する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/channels-setup-message.component.html</context>
           <context context-type="linenumber">6</context>
@@ -6372,7 +6372,7 @@
       </trans-unit>
       <trans-unit id="9167786874272926575">
         <source>Web</source>
-        <target state="translated">PeerTubeアカウント</target>
+        <target state="translated">Web</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="1967081128372276674" datatype="html">
