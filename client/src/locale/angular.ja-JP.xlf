@@ -378,7 +378,7 @@
       </trans-unit>
       <trans-unit id="1394835141143590910">
         <source>Start at</source>
-        <target state="translated">開始位置</target>
+        <target state="translated">再生開始位置</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">39</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">149</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">33</context></context-group>
@@ -386,7 +386,7 @@
       </trans-unit>
       <trans-unit id="5964984095397511808">
         <source>Stop at</source>
-        <target state="translated">停止位置</target>
+        <target state="translated">再生停止位置</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">54</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">190</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">34</context></context-group>
@@ -657,7 +657,7 @@
       </trans-unit>
       <trans-unit id="7054344823477412274" datatype="html">
         <source>Transcoding jobs created.</source>
-        <target state="translated">トランスコードのジョブを作成しました。</target>
+        <target state="translated">トランスコードのジョブが作成されました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">307</context></context-group>
       </trans-unit>
       <trans-unit id="3514509630940272440" datatype="html">
@@ -690,7 +690,7 @@
       </trans-unit>
       <trans-unit id="5263519165976128456">
         <source>Edit starts/stops at</source>
-        <target state="translated">動画の再生開始位置と再生停止位置を編集する</target>
+        <target state="translated">再生開始位置と再生停止位置を編集</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="3768927257183755959">
@@ -6728,7 +6728,7 @@
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
         <source>Do you really want to delete <x id="PH" equiv-text="videoChannel.displayName"/>? It will delete <x id="PH_1" equiv-text="videoChannel.videosCount"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</source>
-        <target state="translated">本当に<x id="PH" equiv-text="videoChannel.displayName"/>のチャンネルを削除してもよろしいですか？ これにより、このチャンネルにアップロードされている<x id="PH_1" equiv-text="videoChannel.videosCount"/>件の動画が削除され、(<x id="PH_2" equiv-text="videoChannel.name"/>)と同じ名前で 別のチャンネルが作成できなくなります！</target>
+        <target state="translated">本当に<x id="PH" equiv-text="videoChannel.displayName"/>のチャンネルを削除してもよろしいですか？ これにより、このチャンネルにアップロードされている<x id="PH_1" equiv-text="videoChannel.videosCount"/>件の動画が削除され、(<x id="PH_2" equiv-text="videoChannel.name"/>)と同じ名前で別のチャンネルが作成できなくなります！</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="4433306639366959484" datatype="html">
