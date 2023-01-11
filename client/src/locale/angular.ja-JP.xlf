@@ -8869,7 +8869,7 @@
       </trans-unit>
       <trans-unit id="773085434165307906" datatype="html">
         <source>Your instance automatically followed another instance</source>
-        <target state="translated">あなたのインスタンスが自動的にふぉかのインスタンスからフォローされた</target>
+        <target state="translated">あなたのインスタンスが自動的に他のインスタンスからフォローされた</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="900099988467638766" datatype="html">
@@ -12045,7 +12045,7 @@
       </trans-unit>
       <trans-unit id="5093002376262354382" datatype="html">
         <source>Transcoding failed</source>
-        <target state="translated">トランスコードは失敗しました</target>
+        <target state="translated">トランスコードに失敗しました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">186</context></context-group>
       </trans-unit>
       <trans-unit id="118687079501751948" datatype="html">
@@ -12055,7 +12055,7 @@
       </trans-unit>
       <trans-unit id="4887724548587271148">
         <source>Waiting transcoding</source>
-        <target state="translated">トランスコードの待機中</target>
+        <target state="translated">トランスコードを待っています</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="4517785179607945981">
