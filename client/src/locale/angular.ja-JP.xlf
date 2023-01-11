@@ -5085,7 +5085,7 @@
       </trans-unit>
       <trans-unit id="3442084803796199253" datatype="html">
         <source>Allow users to do remote URI/handle search</source>
-        <target state="translated">ユーザーに外部インスタンスのURLまたはアカウントIDの検索を許可する</target>
+        <target state="translated">ユーザーに外部インスタンスのURLまたはアカウントハンドルの検索を許可する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">365</context></context-group>
       </trans-unit>
       <trans-unit id="2258148539285928012" datatype="html">
@@ -5095,7 +5095,7 @@
       </trans-unit>
       <trans-unit id="7295422540935146771" datatype="html">
         <source>Allow anonymous to do remote URI/handle search</source>
-        <target state="translated">匿名ユーザーへの外部インスタンスのURLとアカウントIDの検索を許可する</target>
+        <target state="translated">匿名ユーザーへの外部インスタンスのURLとアカウントハンドルの検索を許可する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">376</context></context-group>
       </trans-unit>
       <trans-unit id="7305237807882754643" datatype="html">
@@ -7578,7 +7578,7 @@
       </trans-unit>
       <trans-unit id="1473738049081128420" datatype="html">
         <source>Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically.</source>
-        <target state="translated">ビデオを変換してストリーミングするためのサーバーの容量を見積もるのは簡単ではなく、PeerTubeを自動的に調整することもできません。</target>
+        <target state="translated">動画をトランスコードしてストリーミングするためのサーバーの容量を見積もるのは簡単ではなく、PeerTubeを自動的に調整することもできません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="8538708819525283296" datatype="html">
@@ -7937,7 +7937,7 @@
       </trans-unit>
       <trans-unit id="3596798855644241001" datatype="html">
         <source>1 host (without "http://"), account handle or channel handle per line</source>
-        <target state="translated">1ホスト("http://"は不要)、アカウントIDまたはチャンネルIDを一行ずつ</target>
+        <target state="translated">1ホスト("http://"は不要)、アカウントハンドルまたはチャンネルハンドルを一行ずつ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">11</context>
