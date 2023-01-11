@@ -1726,7 +1726,7 @@
       </trans-unit>
       <trans-unit id="3108704604266608109" datatype="html">
         <source>My video imports</source>
-        <target state="translated">自分がインポートした動画</target>
+        <target state="translated">インポートした動画</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-library-routing.module.ts</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="949618577357088829" datatype="html">
@@ -1809,7 +1809,7 @@
       </trans-unit>
       <trans-unit id="5788965650054506209" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>Setup<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>your account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>アカウント設定<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>アカウント<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>を<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="Setu"/>設定<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">60,62</context>
@@ -1825,7 +1825,7 @@
       </trans-unit>
       <trans-unit id="3071761663064320665" datatype="html">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>Create<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your first channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>あなたの<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>チャンネルを作成<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>初めてのあなたのチャンネル<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>を<x id="START_TAG_DIV" ctype="x-div" equiv-text="Create&lt;"/>作成<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">77,79</context>
