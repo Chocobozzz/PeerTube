@@ -811,7 +811,7 @@
       </trans-unit>
       <trans-unit id="2949829240129672512">
         <source>Using a syndication feed</source>
-        <target state="translated">シンジケートフィードを使用する</target>
+        <target state="translated">シンジケートフィードを使用</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="7695158742270602420">
@@ -1067,7 +1067,7 @@
       </trans-unit>
       <trans-unit id="7256462927215762997" datatype="html">
         <source>Please describe the reason...</source>
-        <target state="translated">理由をここに書いて下さい...</target>
+        <target state="translated">理由をここに記入して下さい...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="9133713232258232158" datatype="html">
@@ -11618,7 +11618,7 @@
       </trans-unit>
       <trans-unit id="5779804235244672536" datatype="html">
         <source>The above can only be seen in captions (please describe which).</source>
-        <target state="translated">上記のいずれかの通報理由がキャプションに含まれる場合のみ（どのキャプションが通報対象かを書いてください）。</target>
+        <target state="translated">上記のいずれかの通報理由がキャプションに含まれる場合のみ（どのキャプションが通報対象かを記入してください）。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">167</context></context-group>
       </trans-unit>
       <trans-unit id="968295009933361070">
