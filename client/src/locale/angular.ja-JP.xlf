@@ -204,22 +204,22 @@
       </trans-unit>
       <trans-unit id="506794214492992969" datatype="html">
         <source><x id="START_LINK"/>A new video abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>動画への不正行為に関する通報<x id="CLOSE_LINK"/>が、新たにこの動画に対して作成されました。<x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>動画への不正行為に関する通報<x id="CLOSE_LINK"/>が、動画「<x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/>」に対して作成されました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="3487882822536102372" datatype="html">
         <source><x id="START_LINK"/>A new comment abuse<x id="CLOSE_LINK"/> has been created on video <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>コメントへの不正行為に関する通報<x id="CLOSE_LINK"/>が、新たにこの動画に対して作成されました。<x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>コメントへの不正行為に関する通報<x id="CLOSE_LINK"/>が、動画「<x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/>」に対して作成されました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="7885094785640544496" datatype="html">
         <source><x id="START_LINK"/>A new account abuse<x id="CLOSE_LINK"/> has been created on account <x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></source>
-        <target state="translated"><x id="START_LINK"/>アカウントへの不正行為に関する通報<x id="CLOSE_LINK"/>が、新たにこのアカウントに対して作成されました。<x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/></target>
+        <target state="translated"><x id="START_LINK"/>アカウントへの不正行為に関する通報<x id="CLOSE_LINK"/>が、アカウント「<x id="START_LINK_1"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/>」に対して作成されました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="2008776855594205860" datatype="html">
         <source><x id="START_LINK"/>A new abuse<x id="CLOSE_LINK"/> has been created </source>
-        <target state="translated"><x id="START_LINK"/>不正行為に関する通報<x id="CLOSE_LINK"/>が新たに作成されました。 </target>
+        <target state="translated"><x id="START_LINK"/>不正行為に関する通報<x id="CLOSE_LINK"/>が新たに作成されました </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="8816959058080937679" datatype="html">
@@ -378,7 +378,7 @@
       </trans-unit>
       <trans-unit id="1394835141143590910">
         <source>Start at</source>
-        <target state="translated">動画の再生開始位置</target>
+        <target state="translated">開始位置</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">39</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">149</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">33</context></context-group>
@@ -386,7 +386,7 @@
       </trans-unit>
       <trans-unit id="5964984095397511808">
         <source>Stop at</source>
-        <target state="translated">再生の停止位置</target>
+        <target state="translated">停止位置</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">54</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">190</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">34</context></context-group>
