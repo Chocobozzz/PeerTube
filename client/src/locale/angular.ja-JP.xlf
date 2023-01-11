@@ -4707,7 +4707,7 @@
       </trans-unit>
       <trans-unit id="4620493570088713907" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="translated">有効にすることで、このインスタンスはセンシティブなコンテンツを主に取り扱っている事を、他のインスタンスの管理者が知ることができます。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/>さらに、動画アップロード時のNSFWチェックボックスがデフォルトで有効になります。 </target>
+        <target state="translated">有効にすることで、このインスタンスはセンシティブなコンテンツを主に連合させている事を、他のインスタンスの管理者が知ることができます。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/>さらに、動画アップロード時のNSFWチェックボックスがデフォルトで有効になります。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="7497677457560701935">
