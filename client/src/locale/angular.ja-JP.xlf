@@ -4682,7 +4682,7 @@
       </trans-unit>
       <trans-unit id="575474399125992547" datatype="html">
         <source>When a video ends, follow up with the next suggested video.</source>
-        <target state="translated">動画の再生が終了すると、あなたへのオススメ動画が続いて再生されます。</target>
+        <target state="translated">動画の再生が終了すると、次の動画が再生されます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="2701970773087072815" datatype="html">
@@ -4707,7 +4707,7 @@
       </trans-unit>
       <trans-unit id="4620493570088713907" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="translated">有効にすることで、このインスタンスが主にセンシティブなコンテンツをActivityPubを通して配送していることを他のインスタンスの運営者に知らせます。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/>さらに、動画アップロードの際のNSFWのチェックボックスは、デフォルト設定で自動的にチェックが入るようになります。 </target>
+        <target state="translated">有効にすることで、このインスタンスはセンシティブなコンテンツを主に取り扱っている事を、他のインスタンスの管理者が知ることができます。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;                 "/>さらに、動画アップロード時のNSFWチェックボックスがデフォルトで有効になります。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-instance-information.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="7497677457560701935">
