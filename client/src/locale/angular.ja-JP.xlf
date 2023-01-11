@@ -416,7 +416,7 @@
       </trans-unit>
       <trans-unit id="2409672154570643758">
         <source>Display name</source>
-        <target state="translated">ハンドルネーム</target>
+        <target state="translated">表示名</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+manage/video-channel-edit/video-channel-edit.component.html</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.html</context><context context-type="linenumber">17</context></context-group>
@@ -498,7 +498,7 @@
       </trans-unit>
       <trans-unit id="1781854282711822539" datatype="html">
         <source>Mute to also hide videos/comments</source>
-        <target state="translated">動画とコメントをミュートにした上で隠す</target>
+        <target state="translated">動画/コメントを非表示にした上でミュート</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.html</context>
           <context context-type="linenumber">27</context>
@@ -708,7 +708,7 @@
       </trans-unit>
       <trans-unit id="834805431202576194">
         <source>No results.</source>
-        <target state="translated">動画は見つかりませんでした。</target>
+        <target state="translated">結果が見つかりませんでした。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/overview/video-overview.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.ts</context><context context-type="linenumber">25</context></context-group>
@@ -738,12 +738,12 @@
       </trans-unit>
       <trans-unit id="5293515551330482519">
         <source>Truncated preview</source>
-        <target state="translated">プレビューを一部表示</target>
+        <target state="translated">一部プレビュー</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="80730865601179554">
         <source>Complete preview</source>
-        <target state="translated">プレビュー</target>
+        <target state="translated">完全なプレビュー</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="8644431249513874405" datatype="html">
@@ -811,7 +811,7 @@
       </trans-unit>
       <trans-unit id="2949829240129672512">
         <source>Using a syndication feed</source>
-        <target state="translated">RSSフィードを使用</target>
+        <target state="translated">シンジケートフィードを使用する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="7695158742270602420">
@@ -4859,7 +4859,7 @@
       </trans-unit>
       <trans-unit id="5862227717871131052" datatype="html">
         <source>Prefer author display name in video miniature</source>
-        <target state="translated">Prefer author display name in video miniature</target>
+        <target state="translated">動画リストで投稿者の表示名を優先する</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">65</context></context-group>
       </trans-unit>
       <trans-unit id="5444889468197427724" datatype="html">
