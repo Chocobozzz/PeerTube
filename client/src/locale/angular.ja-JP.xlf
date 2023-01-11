@@ -2410,7 +2410,7 @@
       </trans-unit>
       <trans-unit id="8740951153302736329" datatype="html">
         <source>Video descriptions are truncated by default and require manual action to expand them.</source>
-        <target state="translated">デフォルトでは動画の説明文が長い場合はその一部が省かれるため、「もっと見る」を手動でクリックする必要があります。</target>
+        <target state="translated">デフォルトでは動画の説明文が長い場合はその一部が省略されるため、手動で広げる必要があります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="2090254132451149776" datatype="html">
@@ -2547,7 +2547,7 @@
       </trans-unit>
       <trans-unit id="1212376766715456139" datatype="html">
         <source>⚠️ If you enable this option, your live will be terminated if you exceed your video quota</source>
-        <target state="translated">⚠️ このオプションを有効にすると、あなたのリプレイ動画の投稿処理中に動画容量の制限を越えた場合、投稿処理は強制的に終了されます</target>
+        <target state="translated">⚠️ このオプションを有効にすると、アップロード容量制限を超えた場合、自動的にライブ配信が終了します</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">280</context></context-group>
       </trans-unit>
       <trans-unit id="1966495339378120213" datatype="html">
@@ -2635,7 +2635,7 @@
       </trans-unit>
       <trans-unit id="668281328725856861" datatype="html">
         <source>Reduce latency to ~15s disabling P2P</source>
-        <target state="translated">P2P機能を無効にし、遅延時間を15秒以下に減らします</target>
+        <target state="translated">P2Pを無効にし、遅延を15秒以内まで減らします</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="5607669932062416162" datatype="html">
