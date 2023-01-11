@@ -2590,7 +2590,7 @@
       </trans-unit>
       <trans-unit id="5121874940679887597" datatype="html">
         <source>Copy channel handle</source>
-        <target state="translated">チャンネルIDをコピー</target>
+        <target state="translated">チャンネルハンドルをコピー</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
       <trans-unit id="2486917589932345430" datatype="html">
@@ -6656,7 +6656,7 @@
       </trans-unit>
       <trans-unit id="8661266239199665830" datatype="html">
         <source>Copy account handle</source>
-        <target state="translated">アカウントIDをコピーする</target>
+        <target state="translated">アカウントハンドルをコピー</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="3061133792040537550" datatype="html">
@@ -7639,7 +7639,7 @@
       </trans-unit>
       <trans-unit id="3203902538239082422" datatype="html">
         <source>You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</source>
-        <target state="translated">アカウント作成を有効にしました。PeerTubeは以下の「動画」の欄にある「自動的に新しい動画をブロック」のチェックボックスに自動的にチェックマークを入れて、「自動的に新しい動画をブロック」の機能を有効にします。</target>
+        <target state="translated">アカウント作成を有効にしました: PeerTubeは以下の「動画」の欄にある「自動的に新しい動画をブロック」機能を自動的に有効にしました。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="6284468333579755406" datatype="html">
@@ -7691,7 +7691,7 @@
       </trans-unit>
       <trans-unit id="5991533283446904296" datatype="html">
         <source>Hosts or handles are invalid.</source>
-        <target state="translated">無効なホストまたはアカウントIDです。</target>
+        <target state="translated">無効なホストまたはハンドルです。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">102</context>
@@ -8589,7 +8589,7 @@
       </trans-unit>
       <trans-unit id="8564701209009684429" datatype="html">
         <source>Federation</source>
-        <target state="translated">他インスタンスとの連合</target>
+        <target state="translated">連合</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="3767259920053407667" datatype="html">
@@ -8813,7 +8813,7 @@
       </trans-unit>
       <trans-unit id="4343589211916204486">
         <source>New comment on your video</source>
-        <target state="translated">動画への新しいコメント</target>
+        <target state="translated">あなたの動画に新しいコメントが投稿された</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="7130088765428829942" datatype="html">
@@ -8859,7 +8859,7 @@
       </trans-unit>
       <trans-unit id="5315689532659759332">
         <source>Someone mentioned you in video comments</source>
-        <target state="translated">動画のコメント欄内で、あなたのアカウントが言及された</target>
+        <target state="translated">動画のコメント欄で、あなたのアカウントが言及された</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="2018794201569157817" datatype="html">
@@ -8869,7 +8869,7 @@
       </trans-unit>
       <trans-unit id="773085434165307906" datatype="html">
         <source>Your instance automatically followed another instance</source>
-        <target state="translated">あなたのインスタンスは自動的に他のインスタンスからフォローされます</target>
+        <target state="translated">あなたのインスタンスが自動的にふぉかのインスタンスからフォローされた</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="900099988467638766" datatype="html">
@@ -10168,12 +10168,12 @@
       </trans-unit>
       <trans-unit id="544279804045883862" datatype="html">
         <source>Handle is required.</source>
-        <target state="translated">アカウントIDは必須です。</target>
+        <target state="translated">ハンドルは必須です。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="2805037637775107078" datatype="html">
         <source>Handle must be valid (eg. chocobozzz@example.com).</source>
-        <target state="translated">アカウントIDは有効なものでなくてはいけません(例えば chocobozzz@example.com)。</target>
+        <target state="translated">ハンドルは有効なものでなくてはいけません(例えば chocobozzz@example.com)。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="3159508433607320799" datatype="html">
