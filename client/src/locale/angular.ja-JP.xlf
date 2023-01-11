@@ -3426,7 +3426,7 @@
       </trans-unit>
       <trans-unit id="4817080330698362530" datatype="html">
         <source>Markdown Emoji List</source>
-        <target state="translated">マークダウンでの絵文字リスト</target>
+        <target state="translated">マークダウン記法での絵文字リスト</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="3572897237443938692">
