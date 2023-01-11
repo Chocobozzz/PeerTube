@@ -4667,7 +4667,7 @@
       </trans-unit>
       <trans-unit id="34094919610906740" datatype="html">
         <source>Help share videos being played</source>
-        <target state="translated">再生中の動画を共有し、サーバーの負荷軽減に協力</target>
+        <target state="translated">再生される動画を共有し、サーバーの負荷軽減に協力</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="6236140336967052987" datatype="html">
