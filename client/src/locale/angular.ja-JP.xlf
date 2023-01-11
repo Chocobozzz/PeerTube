@@ -2743,7 +2743,7 @@
       </trans-unit>
       <trans-unit id="3517255641769192386" datatype="html">
         <source>Permanent/recurring live</source>
-        <target state="translated">永続/繰り返しタイプのライブ配信</target>
+        <target state="translated">永続/繰り返しのライブ配信</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
           <context context-type="linenumber">29</context>
@@ -3221,7 +3221,7 @@
       </trans-unit>
       <trans-unit id="2935783216050341269" datatype="html">
         <source>the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.</source>
-        <target state="translated">動画再生の際に使用されるP2P機能は、あなたのシステムの技術的情報（例えば、公開IPアドレスなど）が他のピアに送信されることを暗に意味しています。</target>
+        <target state="translated">この動画に使用される共有システムは、あなたのシステムの技術的情報（例えば、公開IPアドレスなど）を他のピアに送信する場合があります。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="4619188387782427495">
@@ -4662,7 +4662,7 @@
       </trans-unit>
       <trans-unit id="8953934448427251062" datatype="html">
         <source>The <x id="START_LINK"/>sharing system<x id="CLOSE_LINK"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</source>
-        <target state="translated"><x id="START_LINK"/>P2P機能<x id="CLOSE_LINK"/>は、あなたのシステムの技術的情報（例えば、公開IPアドレスなど）が他のピアに送信されることを暗に意味していますが、PeerTubeサーバーの負荷を軽減することへの大きな助けとなります。</target>
+        <target state="translated"><x id="START_LINK"/>共有システム<x id="CLOSE_LINK"/>はあなたのシステムの技術的情報（例えば、公開IPアドレスなど）を他のピアに送信する場合がありますが、これによりサーバーへの負荷を減らす大きな手助けをすることができます。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="34094919610906740" datatype="html">
@@ -6982,7 +6982,7 @@
       </trans-unit>
       <trans-unit id="6868048887248005916">
         <source>What are the consequences?</source>
-        <target state="translated">この脅威に関する結論</target>
+        <target state="translated">結論としてはどうでしょうか？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="1411398404280870617" datatype="html">
@@ -10560,7 +10560,7 @@
       </trans-unit>
       <trans-unit id="5078078160576986217" datatype="html">
         <source>Permanent/Recurring live</source>
-        <target state="translated">永続/繰り返しタイプのライブ配信</target>
+        <target state="translated">永続/繰り返しのライブ配信</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">10</context>
@@ -10602,12 +10602,12 @@
       </trans-unit>
       <trans-unit id="2261925229535541622" datatype="html">
         <source>This is a permanent/recurring live</source>
-        <target state="translated">永続/繰り返しタイプのライブ配信</target>
+        <target state="translated">永続/繰り返しのライブ配信</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">265</context></context-group>
       </trans-unit>
       <trans-unit id="8986073791327847979" datatype="html">
         <source>You can stream multiple times in a permanent/recurring live. If you enable replays, they will be saved as separate videos</source>
-        <target state="translated">永続/繰り返しタイプのライブ配信では複数回配信することができます。リプレイ動画の設定を有効にした場合、別々に分けられた複数のリプレイ動画が保存されます</target>
+        <target state="translated">永続/繰り返しのライブ配信では複数回配信することができます。リプレイ動画の設定を有効にした場合、別々に分けられた複数のリプレイ動画が保存されます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">268</context></context-group>
       </trans-unit>
       <trans-unit id="3112273530390098557" datatype="html">
@@ -12139,7 +12139,7 @@
       </trans-unit>
       <trans-unit id="6767380569816110388" datatype="html">
         <source>Only shareable via a private link</source>
-        <target state="translated">限定公開リンクからのみこの動画を視聴できます</target>
+        <target state="translated">未収載リンクを経由してのみ、この動画を視聴できます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">386</context></context-group>
       </trans-unit>
       <trans-unit id="6828965264297239528">
