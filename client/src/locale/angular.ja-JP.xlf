@@ -7204,7 +7204,7 @@
       </trans-unit>
       <trans-unit id="4376397515999418662" datatype="html">
         <source>This is the name that will be publicly visible by other users.</source>
-        <target state="translated">チャンネル名は公開され、他のユーザーは見ることができます。</target>
+        <target state="translated">この表示名は一般公開され、他のユーザーが見ることができます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">23</context>
@@ -7285,7 +7285,7 @@
       </trans-unit>
       <trans-unit id="7536432216862568979" datatype="html">
         <source>This is the name that will be publicly visible by other users.</source>
-        <target state="translated">ハンドルネームは公開され、他のユーザーは見ることができます。</target>
+        <target state="translated">ハンドルネームは一般公開され、他のユーザーが見ることができます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -7372,7 +7372,7 @@
       </trans-unit>
       <trans-unit id="819067926858619041" datatype="html">
         <source>Account videos</source>
-        <target state="translated">このアカウントの動画</target>
+        <target state="translated">アカウントの動画</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="4605517634011438234" datatype="html">
@@ -7385,7 +7385,7 @@
       </trans-unit>
       <trans-unit id="6823616469362610020" datatype="html">
         <source>Account video channels</source>
-        <target state="translated">このアカウントのチャンネルリスト</target>
+        <target state="translated">アカウントの動画チャンネル</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts-routing.module.ts</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="807777065817324789" datatype="html">
@@ -7405,7 +7405,7 @@
       </trans-unit>
       <trans-unit id="5590086849807274701" datatype="html">
         <source>Scope</source>
-        <target state="translated">対象の動画</target>
+        <target state="translated">対象</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="5019568087038659501" datatype="html">
@@ -7430,7 +7430,7 @@
       </trans-unit>
       <trans-unit id="8466337030143068285" datatype="html">
         <source>Blurred</source>
-        <target state="translated">ぼかされます</target>
+        <target state="translated">ぼかす</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">241</context></context-group>
       </trans-unit>
       <trans-unit id="7054829409324166420" datatype="html">
@@ -7445,7 +7445,7 @@
       </trans-unit>
       <trans-unit id="1833483831276078393" datatype="html">
         <source>displayed</source>
-        <target state="translated">表示する</target>
+        <target state="translated">表示</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">250</context></context-group>
       </trans-unit>
       <trans-unit id="6250999352462648289" datatype="html">
@@ -7578,7 +7578,7 @@
       </trans-unit>
       <trans-unit id="1473738049081128420" datatype="html">
         <source>Estimating a server's capacity to transcode and stream videos isn't easy and we can't tune PeerTube automatically.</source>
-        <target state="translated">動画をトランスコードしてストリーミングするためのサーバーの容量を見積もることは簡単ではありません。よって、PeerTubeを適宜自動的に調整させることはできません。</target>
+        <target state="translated">ビデオを変換してストリーミングするためのサーバーの容量を見積もるのは簡単ではなく、PeerTubeを自動的に調整することもできません。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="8538708819525283296" datatype="html">
