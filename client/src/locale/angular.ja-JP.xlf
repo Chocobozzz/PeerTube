@@ -2635,7 +2635,7 @@
       </trans-unit>
       <trans-unit id="668281328725856861" datatype="html">
         <source>Reduce latency to ~15s disabling P2P</source>
-        <target state="translated">P2Pを無効にし、遅延を15秒以内まで減らします</target>
+        <target state="translated">P2P機能を無効にし、遅延を15秒以内まで減らします</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="5607669932062416162" datatype="html">
