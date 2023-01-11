@@ -3252,7 +3252,7 @@
       </trans-unit>
       <trans-unit id="6216656500190325717" datatype="html">
         <source>Transcoding failed, this video may not work properly.</source>
-        <target state="translated">トランスコードが失敗しました。この動画は再生できないかもしれません。</target>
+        <target state="translated">変換に失敗したため、この動画は再生できない可能性があります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">1,3</context>
