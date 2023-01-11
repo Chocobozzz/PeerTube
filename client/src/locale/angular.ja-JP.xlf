@@ -1672,12 +1672,12 @@
       </trans-unit>
       <trans-unit id="9156407045661257130" datatype="html">
         <source>Sensitive:</source>
-        <target state="translated">センシティブなコンテンツ:</target>
+        <target state="translated">センシティブコンテンツ:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="3430483831942247060" datatype="html">
         <source>Help share videos</source>
-        <target state="translated">サーバー負荷軽減のために、再生される動画のピアになりましょう</target>
+        <target state="translated">再生するピアとして貢献</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">62</context></context-group>
       </trans-unit>
       <trans-unit id="7005745151564974365" datatype="html">
