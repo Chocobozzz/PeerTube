@@ -5486,7 +5486,7 @@
       </trans-unit>
       <trans-unit id="6289966287765074028" datatype="html">
         <source>new transcoding profiles can be added by PeerTube plugins</source>
-        <target state="translated">新しい変換プロファイルは、PeerTubeのプラグインによって追加できます</target>
+        <target state="translated">新しいトランスコードプロファイルは、PeerTubeのプラグインによって追加できます</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context><context context-type="linenumber">181</context></context-group>
       </trans-unit>
       <trans-unit id="5843661880070076970" datatype="html">
@@ -6170,7 +6170,7 @@
       </trans-unit>
       <trans-unit id="7000850040589508423" datatype="html">
         <source>Create video channel</source>
-        <target state="translated">チャンネルの作成</target>
+        <target state="translated">チャンネルを作成</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="5700655611297335752" datatype="html">
@@ -6256,7 +6256,7 @@
       </trans-unit>
       <trans-unit id="9131836378905533756">
         <source>Created by <x id="INTERPOLATION"/></source>
-        <target state="translated"><x id="INTERPOLATION"/> 制作</target>
+        <target state="translated"><x id="INTERPOLATION"/> 公開</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="228548407872312756" datatype="html">
