@@ -2558,7 +2558,7 @@
       </trans-unit>
       <trans-unit id="1966495339378120213" datatype="html">
         <source>Latency mode</source>
-        <target state="translated">Kiểu độ trễ</target>
+        <target state="translated">Chế độ trễ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">286</context></context-group>
       </trans-unit>
       <trans-unit id="8891497955962997247" datatype="html">
@@ -5274,7 +5274,7 @@
       </trans-unit>
       <trans-unit id="8583623894789865917" datatype="html">
         <source>Allow your users to change live latency</source>
-        <target state="translated">Cho phép người dùng tăng độ trễ trực tiếp</target>
+        <target state="translated">Cho phép người dùng tăng độ trễ livestream</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
       <trans-unit id="6422195560028891534" datatype="html">
