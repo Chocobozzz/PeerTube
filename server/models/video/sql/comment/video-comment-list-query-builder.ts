@@ -44,6 +44,7 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
 
   private innerSelect = ''
   private innerJoins = ''
+  private innerLateralJoins = ''
   private innerWhere = ''
 
   private readonly built = {
@@ -59,6 +60,10 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
     private readonly options: ListVideoCommentsOptions
   ) {
     super(sequelize)
+
+    if (this.options.includeReplyCounters && !this.options.videoId) {
+      throw new Error('Cannot include reply counters without videoId')
+    }
   }
 
   async listComments <T extends Model> () {
@@ -97,6 +102,7 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
     this.innerQuery = `${this.innerSelect} ` +
       `FROM "videoComment" AS "VideoCommentModel" ` +
       `${this.innerJoins} ` +
+      `${this.innerLateralJoins} ` +
       `${this.innerWhere} ` +
       `${this.getOrder()} ` +
       `${this.getInnerLimit()}`
@@ -284,11 +290,6 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
       toSelect.push(this.tableAttributes.getAvatarAttributes())
     }
 
-    if (this.options.includeReplyCounters === true) {
-      toSelect.push(this.getTotalRepliesSelect())
-      toSelect.push(this.getAuthorTotalRepliesSelect())
-    }
-
     this.select = this.buildSelect(toSelect)
   }
 
@@ -305,6 +306,14 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
         this.tableAttributes.getActorAttributes(),
         this.tableAttributes.getServerAttributes()
       ])
+    }
+
+    if (this.options.includeReplyCounters === true) {
+      this.buildTotalRepliesSelect()
+      this.buildAuthorTotalRepliesSelect()
+
+      toSelect.push('"totalRepliesFromVideoAuthor"."count" AS "totalRepliesFromVideoAuthor"')
+      toSelect.push('"totalReplies"."count" AS "totalReplies"')
     }
 
     this.innerSelect = this.buildSelect(toSelect)
@@ -344,26 +353,32 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
 
   // ---------------------------------------------------------------------------
 
-  private getTotalRepliesSelect () {
+  private buildTotalRepliesSelect () {
     const blockWhereString = this.getBlockWhere('replies', 'videoChannel').join(' AND ')
 
-    return `(` +
-      `SELECT COUNT("replies"."id") FROM "videoComment" AS "replies" ` +
-      `LEFT JOIN "video" ON "video"."id" = "replies"."videoId" ` +
+    // Help the planner by providing videoId that should filter out many comments
+    this.replacements.videoId = this.options.videoId
+
+    this.innerLateralJoins += `LEFT JOIN LATERAL (` +
+      `SELECT COUNT("replies"."id") AS "count" FROM "videoComment" AS "replies" ` +
+      `INNER JOIN "video" ON "video"."id" = "replies"."videoId" AND "replies"."videoId" = :videoId ` +
       `LEFT JOIN "videoChannel" ON "video"."channelId" = "videoChannel"."id" ` +
       `WHERE "replies"."originCommentId" = "VideoCommentModel"."id" ` +
         `AND "deletedAt" IS NULL ` +
         `AND ${blockWhereString} ` +
-    `) AS "totalReplies"`
+    `) "totalReplies" ON TRUE `
   }
 
-  private getAuthorTotalRepliesSelect () {
-    return `(` +
-      `SELECT COUNT("replies"."id") FROM "videoComment" AS "replies" ` +
-      `INNER JOIN "video" ON "video"."id" = "replies"."videoId" ` +
+  private buildAuthorTotalRepliesSelect () {
+    // Help the planner by providing videoId that should filter out many comments
+    this.replacements.videoId = this.options.videoId
+
+    this.innerLateralJoins += `LEFT JOIN LATERAL (` +
+      `SELECT COUNT("replies"."id") AS "count" FROM "videoComment" AS "replies" ` +
+      `INNER JOIN "video" ON "video"."id" = "replies"."videoId" AND "replies"."videoId" = :videoId ` +
       `INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ` +
       `WHERE "replies"."originCommentId" = "VideoCommentModel"."id" AND "replies"."accountId" = "videoChannel"."accountId"` +
-    `) AS "totalRepliesFromVideoAuthor"`
+    `) "totalRepliesFromVideoAuthor" ON TRUE `
   }
 
   private getOrder () {

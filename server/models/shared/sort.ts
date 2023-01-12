@@ -49,7 +49,7 @@ function getCommentSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): 
 
   if (field === 'totalReplies') {
     return [
-      [ Sequelize.literal('"totalReplies"'), direction ],
+      [ 'totalReplies', direction ],
       lastSort
     ]
   }

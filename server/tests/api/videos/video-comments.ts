@@ -169,6 +169,13 @@ describe('Test video comments', function () {
       expect(body.data[2].totalReplies).to.equal(0)
     })
 
+    it('Should list the and sort them by total replies', async function () {
+      const body = await command.listThreads({ videoId: videoUUID, sort: 'totalReplies' })
+
+      expect(body.data[2].text).to.equal('my super first comment')
+      expect(body.data[2].totalReplies).to.equal(3)
+    })
+
     it('Should delete a reply', async function () {
       await command.delete({ videoId, commentId: replyToDeleteId })
 
