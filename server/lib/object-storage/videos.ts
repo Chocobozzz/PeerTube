@@ -55,16 +55,16 @@ function storeWebTorrentFile (video: MVideo, file: MVideoFile) {
 
 // ---------------------------------------------------------------------------
 
-function updateWebTorrentFileACL (video: MVideo, file: MVideoFile) {
-  return updateObjectACL({
+async function updateWebTorrentFileACL (video: MVideo, file: MVideoFile) {
+  await updateObjectACL({
     objectStorageKey: generateWebTorrentObjectStorageKey(file.filename),
     bucketInfo: CONFIG.OBJECT_STORAGE.VIDEOS,
     isPrivate: video.hasPrivateStaticPath()
   })
 }
 
-function updateHLSFilesACL (playlist: MStreamingPlaylistVideo) {
-  return updatePrefixACL({
+async function updateHLSFilesACL (playlist: MStreamingPlaylistVideo) {
+  await updatePrefixACL({
     prefix: generateHLSObjectBaseStorageKey(playlist),
     bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
     isPrivate: playlist.Video.hasPrivateStaticPath()

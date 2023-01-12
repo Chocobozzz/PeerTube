@@ -61,12 +61,15 @@ async function storeObject (options: {
 
 // ---------------------------------------------------------------------------
 
-function updateObjectACL (options: {
+async function updateObjectACL (options: {
   objectStorageKey: string
   bucketInfo: BucketInfo
   isPrivate: boolean
 }) {
   const { objectStorageKey, bucketInfo, isPrivate } = options
+
+  const acl = getACL(isPrivate)
+  if (!acl) return
 
   const key = buildKey(objectStorageKey, bucketInfo)
 
@@ -75,10 +78,10 @@ function updateObjectACL (options: {
   const command = new PutObjectAclCommand({
     Bucket: bucketInfo.BUCKET_NAME,
     Key: key,
-    ACL: getACL(isPrivate)
+    ACL: acl
   })
 
-  return getClient().send(command)
+  await getClient().send(command)
 }
 
 function updatePrefixACL (options: {
@@ -87,6 +90,9 @@ function updatePrefixACL (options: {
   isPrivate: boolean
 }) {
   const { prefix, bucketInfo, isPrivate } = options
+
+  const acl = getACL(isPrivate)
+  if (!acl) return
 
   logger.debug('Updating ACL of files in prefix %s in bucket %s', prefix, bucketInfo.BUCKET_NAME, lTags())
 
@@ -99,7 +105,7 @@ function updatePrefixACL (options: {
       return new PutObjectAclCommand({
         Bucket: bucketInfo.BUCKET_NAME,
         Key: obj.Key,
-        ACL: getACL(isPrivate)
+        ACL: acl
       })
     }
   })
@@ -227,9 +233,11 @@ async function uploadToStorage (options: {
   const input: PutObjectCommandInput = {
     Body: content,
     Bucket: bucketInfo.BUCKET_NAME,
-    Key: buildKey(objectStorageKey, bucketInfo),
-    ACL: getACL(isPrivate)
+    Key: buildKey(objectStorageKey, bucketInfo)
   }
+
+  const acl = getACL(isPrivate)
+  if (acl) input.ACL = acl
 
   const parallelUploads3 = new Upload({
     client: getClient(),
