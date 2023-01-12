@@ -279,14 +279,6 @@ function checkObjectStorageConfig () {
         'Object storage bucket prefixes should be set to different values when the same bucket is used for both types of video.'
       )
     }
-
-    if (!CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PUBLIC) {
-      throw new Error('object_storage.upload_acl.public must be set')
-    }
-
-    if (!CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PRIVATE) {
-      throw new Error('object_storage.upload_acl.private must be set')
-    }
   }
 }
 

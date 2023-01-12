@@ -157,9 +157,11 @@ object_storage:
 
   upload_acl:
     # Set this ACL on each uploaded object of public/unlisted videos
+    # Use null if your S3 provider does not support object ACL
     public: 'public-read'
     # Set this ACL on each uploaded object of private/internal videos
     # PeerTube can proxify requests to private objects so your users can access them
+    # Use null if your S3 provider does not support object ACL
     private: 'private'
 
   proxy:
