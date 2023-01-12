@@ -44,19 +44,6 @@ function getPlaylistSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]):
   return getSort(value, lastSort)
 }
 
-function getCommentSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
-  const { direction, field } = buildSortDirectionAndField(value)
-
-  if (field === 'totalReplies') {
-    return [
-      [ 'totalReplies', direction ],
-      lastSort
-    ]
-  }
-
-  return getSort(value, lastSort)
-}
-
 function getVideoSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
   const { direction, field } = buildSortDirectionAndField(value)
 
@@ -151,7 +138,6 @@ export {
   buildSortDirectionAndField,
   getPlaylistSort,
   getSort,
-  getCommentSort,
   getAdminUsersSort,
   getVideoSort,
   getBlacklistSort,

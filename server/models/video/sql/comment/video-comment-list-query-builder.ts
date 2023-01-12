@@ -1,7 +1,7 @@
 import { Model, Sequelize, Transaction } from 'sequelize'
 import { AbstractRunQuery, ModelBuilder } from '@server/models/shared'
 import { ActorImageType, VideoPrivacy } from '@shared/models'
-import { createSafeIn, getCommentSort, parseRowCountResult } from '../../../shared'
+import { createSafeIn, getSort, parseRowCountResult } from '../../../shared'
 import { VideoCommentTableAttributes } from './video-comment-table-attributes'
 
 export interface ListVideoCommentsOptions {
@@ -384,7 +384,7 @@ export class VideoCommentListQueryBuilder extends AbstractRunQuery {
   private getOrder () {
     if (!this.options.sort) return ''
 
-    const orders = getCommentSort(this.options.sort)
+    const orders = getSort(this.options.sort)
 
     return 'ORDER BY ' + orders.map(o => `"${o[0]}" ${o[1]}`).join(', ')
   }
