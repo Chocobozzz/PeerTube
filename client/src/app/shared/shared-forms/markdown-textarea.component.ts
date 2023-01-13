@@ -31,6 +31,8 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   @Input() markdownType: 'text' | 'enhanced' = 'text'
   @Input() customMarkdownRenderer?: (text: string) => Promise<string | HTMLElement>
 
+  @Input() debounceTime = 150
+
   @Input() markdownVideo: Video
 
   @Input() name = 'description'
@@ -59,7 +61,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   ngOnInit () {
     this.contentChanged
         .pipe(
-          debounceTime(150),
+          debounceTime(this.debounceTime),
           distinctUntilChanged()
         )
         .subscribe(() => this.updatePreviews())

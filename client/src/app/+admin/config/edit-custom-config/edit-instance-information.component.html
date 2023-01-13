@@ -38,7 +38,7 @@
 
           <my-markdown-textarea
             name="instanceDescription" formControlName="description"
-            [customMarkdownRenderer]="getCustomMarkdownRenderer()"
+            [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
             [formError]="formErrors['instance.description']"
           ></my-markdown-textarea>
         </div>
