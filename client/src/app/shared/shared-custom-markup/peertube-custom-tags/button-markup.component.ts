@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { VideoChannel } from '../../shared-main'
 import { CustomMarkupComponent } from './shared'
 
@@ -9,7 +9,8 @@ import { CustomMarkupComponent } from './shared'
 @Component({
   selector: 'my-button-markup',
   templateUrl: 'button-markup.component.html',
-  styleUrls: [ 'button-markup.component.scss' ]
+  styleUrls: [ 'button-markup.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ButtonMarkupComponent implements CustomMarkupComponent {
   @Input() theme: 'primary' | 'secondary'

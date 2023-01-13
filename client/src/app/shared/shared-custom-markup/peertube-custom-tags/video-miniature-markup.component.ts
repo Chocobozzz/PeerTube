@@ -1,5 +1,5 @@
 import { finalize } from 'rxjs/operators'
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
 import { FindInBulkService } from '@app/shared/shared-search'
 import { Video } from '../../shared-main'
@@ -13,7 +13,8 @@ import { CustomMarkupComponent } from './shared'
 @Component({
   selector: 'my-video-miniature-markup',
   templateUrl: 'video-miniature-markup.component.html',
-  styleUrls: [ 'video-miniature-markup.component.scss' ]
+  styleUrls: [ 'video-miniature-markup.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() uuid: string

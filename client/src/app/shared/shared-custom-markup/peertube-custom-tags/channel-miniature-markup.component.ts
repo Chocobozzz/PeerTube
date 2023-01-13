@@ -1,6 +1,6 @@
 import { from } from 'rxjs'
 import { finalize, map, switchMap, tap } from 'rxjs/operators'
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { MarkdownService, Notifier, UserService } from '@app/core'
 import { FindInBulkService } from '@app/shared/shared-search'
 import { VideoSortField } from '@shared/models'
@@ -14,7 +14,8 @@ import { CustomMarkupComponent } from './shared'
 @Component({
   selector: 'my-channel-miniature-markup',
   templateUrl: 'channel-miniature-markup.component.html',
-  styleUrls: [ 'channel-miniature-markup.component.scss' ]
+  styleUrls: [ 'channel-miniature-markup.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() name: string

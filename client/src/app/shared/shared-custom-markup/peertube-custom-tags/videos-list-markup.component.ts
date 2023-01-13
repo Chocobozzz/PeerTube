@@ -1,5 +1,5 @@
 import { finalize } from 'rxjs/operators'
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
 import { VideoSortField } from '@shared/models'
 import { Video, VideoService } from '../../shared-main'
@@ -13,7 +13,8 @@ import { CustomMarkupComponent } from './shared'
 @Component({
   selector: 'my-videos-list-markup',
   templateUrl: 'videos-list-markup.component.html',
-  styleUrls: [ 'videos-list-markup.component.scss' ]
+  styleUrls: [ 'videos-list-markup.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() sort: string

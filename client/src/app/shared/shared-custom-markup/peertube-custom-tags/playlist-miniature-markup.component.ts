@@ -1,5 +1,5 @@
 import { finalize } from 'rxjs/operators'
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { Notifier } from '@app/core'
 import { FindInBulkService } from '@app/shared/shared-search'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
@@ -13,7 +13,8 @@ import { CustomMarkupComponent } from './shared'
 @Component({
   selector: 'my-playlist-miniature-markup',
   templateUrl: 'playlist-miniature-markup.component.html',
-  styleUrls: [ 'playlist-miniature-markup.component.scss' ]
+  styleUrls: [ 'playlist-miniature-markup.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlaylistMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
   @Input() uuid: string
