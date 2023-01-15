@@ -4160,7 +4160,7 @@
       </trans-unit>
       <trans-unit id="2662644497259948010" datatype="html">
         <source>Comment</source>
-        <target state="new">Comment</target>
+        <target state="translated">Komment</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">45</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.ts</context><context context-type="linenumber">68</context></context-group>
       </trans-unit>
@@ -8766,7 +8766,7 @@
       </trans-unit>
       <trans-unit id="1486537403020619891" datatype="html">
         <source>My watch history</source>
-        <target state="new">My watch history</target>
+        <target state="translated">Videó előzményeim</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
