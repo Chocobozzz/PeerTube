@@ -183,6 +183,17 @@ export class PeertubePlayerManager {
       videojsOptionsBuilder.getVideojsOptions(this.alreadyPlayed)
     )*/
 
+    // If video is audio
+    if (options && options.isAudio && videojsOptions && videojsOptions.controlBar && videojsOptions.controlBar.children) {
+      videojsOptions.controlBar.children['settingsButton'].entries = [];
+      videojsOptions.controlBar.fullscreenToggle = false;
+      videojsOptions.bigPlayButton = false;
+      videojsOptions.inactivityTimeout = 0;
+      // Mouse events
+      videojsOptions.userActions = videojsOptions.userActions || {}
+      videojsOptions.userActions.doubleClick = false;
+    }
+
     const self = this
     return new Promise(res => {
       videojs(options.common.playerElement, videojsOptions, function (this: videojs.Player) {
@@ -200,6 +211,9 @@ export class PeertubePlayerManager {
             /// remove torrent /// self.maybeFallbackToWebTorrent(mode, player, options)
           }
         }
+
+        if (options && options.isAudio)
+          player.addClass('vjs-is-audio')
 
         player.one('error', () => handleError())
 

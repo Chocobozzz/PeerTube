@@ -179,6 +179,8 @@
         width: 100%;
         background : #000;
         background-size: 100% auto;
+        background-repeat: no-repeat;
+        background-position: center;
         opacity: 0;
         -webkit-transition: opacity .3s, outline .3s, opacity .3s;
         -moz-transition: opacity .3s, outline .3s, opacity .3s;
@@ -188,6 +190,11 @@
 
         &.active{
             opacity: 1;
+        }
+
+        &.vjs-is-audio {
+            background-position: center;
+            background-size: cover;
         }
     }
 
@@ -449,7 +456,39 @@
         }
     }
 
+    &.vjs-is-audio {
+        height: 200px;
+        background: transparent;
+        video {
+            display: none;
+        }
+        .vjs-control-bar {
+            border-top-right-radius: 0 !important;
+            border-top-left-radius: 0 !important;
+            box-shadow: none;
+            // mix-blend-mode: difference;
+            background: rgba(rgb(66, 66, 66), 0.5);
+            color: white;
+        }
+        .vjs-overlay{
+            display: none !important;
+        }
+    }
 
+}
+
+.vjs-audio-wallpaper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-position: center;
+    background-size: cover;
+}
+
+.vjs-audio-visualization {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 html.mobileview{
@@ -551,6 +590,16 @@ html.mobileview{
         .vjs-overlay{
             display: none!important;
         }
+
+        .vjs-is-audio {
+            .vjs-control-bar {
+                background: transparent;
+            }
+        }
+    }
+
+    .vjs-audio-visualization {
+        border-radius: 10px;
     }
 }
 
@@ -566,3 +615,14 @@ html.mobileview{
         }
     }
 }
+
+/*
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+*/

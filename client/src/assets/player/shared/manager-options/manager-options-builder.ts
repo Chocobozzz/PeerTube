@@ -99,7 +99,7 @@ export class ManagerOptionsBuilder {
         children: controlBarOptionsBuilder.getChildrenOptions() as any // FIXME: typings
       },
 
-      
+
     }
 
     if (commonOptions.language && !isDefaultLocale(commonOptions.language)) {
@@ -122,6 +122,9 @@ export class ManagerOptionsBuilder {
   }
 
   getContextMenuOptions (player: videojs.Player, commonOptions: CommonOptions) {
+    const videoUUID = commonOptions.videoUUID
+    const serverUrl = commonOptions.serverUrl
+
     const content = () => {
       const isLoopEnabled = player.options_['loop']
 
@@ -134,19 +137,26 @@ export class ManagerOptionsBuilder {
           }
         },
         {
-          label: player.localize('Copy the video URL'),
-          listener: function () {
-            copyToClipboard(buildVideoLink({ shortUUID: commonOptions.videoShortUUID }))
-          }
-        },
-        {
-          label: player.localize('Copy the video URL at the current time'),
+          // icon: 'repeat',
+          label: 'Send video playback information to devs',
           listener: function (this: videojs.Player) {
-            const url = buildVideoLink({ shortUUID: commonOptions.videoShortUUID })
-
-            copyToClipboard(decorateVideoLink({ url, startTime: this.currentTime() }))
+            (this as any).tech_.hlsProvider.sendLogsCache(videoUUID, serverUrl);
           }
         },
+        // {
+        //   label: player.localize('Copy the video URL'),
+        //   listener: function () {
+        //     copyToClipboard(buildVideoLink({ shortUUID: commonOptions.videoShortUUID }))
+        //   }
+        // },
+        // {
+        //   label: player.localize('Copy the video URL at the current time'),
+        //   listener: function (this: videojs.Player) {
+        //     const url = buildVideoLink({ shortUUID: commonOptions.videoShortUUID })
+
+        //     copyToClipboard(decorateVideoLink({ url, startTime: this.currentTime() }))
+        //   }
+        // },
         /*{
           icon: 'code',
           label: player.localize('Copy embed code'),

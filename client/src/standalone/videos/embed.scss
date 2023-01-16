@@ -24,6 +24,16 @@ $assets-path: '../../assets/';
   }
 }
 
+.video-js.vjs-is-audio {
+  height: 200px;
+  // background: transparent;
+  background-size: cover;
+  background-position: center;
+  video {
+    display: none;
+  }
+}
+
 #error-block {
   display: none;
 

@@ -14,6 +14,10 @@ export class PlayerHTML {
     this.wrapperElement = wrapperElement //document.getElementById(this.videoWrapperId)
   }
 
+  getWrapperElement () {
+	return this.wrapperElement;
+  }
+
   getPlayerElement () {
     return this.playerElement
   }
@@ -34,6 +38,14 @@ export class PlayerHTML {
 
   addPlayerElementToDOM () {
     this.wrapperElement.appendChild(this.playerElement)
+  }
+  addElementToDOM(element) {
+	this.wrapperElement.appendChild(element)
+  }
+  getWrapperSize() {
+	if (this.wrapperElement)
+		return { width: this.wrapperElement.clientWidth, height: this.wrapperElement.clientHeight }
+	return
   }
 
   displayError (text: string, style : string = "noncritical" /* translations: Translations*/) {

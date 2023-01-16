@@ -81,6 +81,7 @@ export interface VideoDetails extends Video {
   host : string
   from ? : string
   aspectRatio : number
+  isAudio?: boolean
 
   // Not optional in details (unlike in parent Video)
   waitTranscoding: boolean

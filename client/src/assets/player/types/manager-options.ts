@@ -89,6 +89,7 @@ export type PeertubePlayerManagerOptions = {
   mobile ?: Boolean,
   segmentsStorage? : any,
   assetsStorage? : any
+  isAudio?: boolean
   
   //pluginsManager: PluginsManager
 }
