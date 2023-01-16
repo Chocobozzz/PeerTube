@@ -10442,6 +10442,7 @@
       </trans-unit>
       <trans-unit id="5030063045826839645" datatype="html">
         <source>Concatenate a file at the beginning of the video.</source>
+        <target state="translated">Bættu skrá framan við upphaf myndskeiðsins.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">26</context>
@@ -10465,6 +10466,7 @@
       </trans-unit>
       <trans-unit id="2832051749922509643" datatype="html">
         <source>Concatenate a file at the end of the video.</source>
+        <target state="translated">Bættu skrá aftan við endi myndskeiðsins.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">40</context>
@@ -10488,6 +10490,7 @@
       </trans-unit>
       <trans-unit id="4472450670859114703" datatype="html">
         <source>Add a watermark image to the video.</source>
+        <target state="translated">Bættu vatnsmerki á myndskeiðið .</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">54</context>
@@ -10495,6 +10498,7 @@
       </trans-unit>
       <trans-unit id="155510305759087510" datatype="html">
         <source>Select watermark image file</source>
+        <target state="translated">Veldu myndskrá fyrir vatnsmerki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">58</context>
@@ -10502,6 +10506,7 @@
       </trans-unit>
       <trans-unit id="3926035808219061063" datatype="html">
         <source>Run video edition</source>
+        <target state="translated">Keyra breytingar á myndskeiði</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">66</context>
@@ -10509,6 +10514,7 @@
       </trans-unit>
       <trans-unit id="1514792472513458403" datatype="html">
         <source>Video before edition</source>
+        <target state="translated">Myndskeið fyrir breytingar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">75</context>
@@ -10516,6 +10522,7 @@
       </trans-unit>
       <trans-unit id="1109043661443571733" datatype="html">
         <source>Edition tasks:</source>
+        <target state="translated">Verk við breytingar:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">80</context>
@@ -10523,6 +10530,7 @@
       </trans-unit>
       <trans-unit id="3541115907775840269" datatype="html">
         <source>Are you sure you want to edit "<x id="PH" equiv-text="this.video.name"/>"?</source>
+        <target state="translated">Ertu viss um að þú viljir breyta "<x id="PH" equiv-text="this.video.name"/>"?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -10530,6 +10538,7 @@
       </trans-unit>
       <trans-unit id="3858880927114551513" datatype="html">
         <source>The current video will be overwritten by this edited video and &lt;strong&gt;you won't be able to recover it&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</source>
+        <target state="translated">Skrifað verður yfir fyrirliggjandi myndskeið með þessu breytta myndskeiði og &lt;strong&gt;þú munt ekki geta endurheimt fyrra myndskeiðið&lt;/strong&gt;.&lt;br /&gt;&lt;br /&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -10537,6 +10546,7 @@
       </trans-unit>
       <trans-unit id="4876327655498234453" datatype="html">
         <source>As a reminder, the following tasks will be executed: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</source>
+        <target state="translated">Til áminningar, þá verða eftirfarandi verk framkvæmd: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">78</context>
@@ -10544,6 +10554,7 @@
       </trans-unit>
       <trans-unit id="7934869554046374009" datatype="html">
         <source>Edition tasks created.</source>
+        <target state="translated">Útbjó verk fyrir breytingar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -10563,6 +10574,7 @@
       </trans-unit>
       <trans-unit id="2763845919408843325" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the beginning of the video</source>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" verður bætt framan við myndskeiðið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">123</context>
@@ -10570,6 +10582,7 @@
       </trans-unit>
       <trans-unit id="4952096817126306891" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" will be added at the end of the video</source>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" verður bætt við enda myndskeiðsins</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">127</context>
@@ -10577,6 +10590,7 @@
       </trans-unit>
       <trans-unit id="665518679871959619" datatype="html">
         <source>"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" image watermark will be added to the video</source>
+        <target state="translated">"<x id="PH" equiv-text="this.getFilename(t.options.file)"/>" vatnsmerki verður bætt á myndskeiðið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">131</context>
@@ -10584,6 +10598,7 @@
       </trans-unit>
       <trans-unit id="2677581013897190613" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></source>
+        <target state="translated">Myndskeið mun hefjast á <x id="PH" equiv-text="secondsToTime(start)"/> og enda á <x id="PH_1" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">138</context>
@@ -10591,6 +10606,7 @@
       </trans-unit>
       <trans-unit id="2299077646120636288" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/></source>
+        <target state="translated">Myndskeið mun hefjast á <x id="PH" equiv-text="secondsToTime(start)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">142</context>
@@ -10598,6 +10614,7 @@
       </trans-unit>
       <trans-unit id="7209039243783736285" datatype="html">
         <source>Video will stop at <x id="PH" equiv-text="secondsToTime(end)"/></source>
+        <target state="translated">Myndskeið mun stöðvast á <x id="PH" equiv-text="secondsToTime(end)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.ts</context>
           <context context-type="linenumber">146</context>
@@ -11037,6 +11054,7 @@
       </trans-unit>
       <trans-unit id="5922757127987546008" datatype="html">
         <source>yy-mm-dd</source>
+        <target state="translated">áá-mm-dd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/i18n-primeng-calendar.service.ts</context>
           <context context-type="linenumber">83</context>
@@ -11053,6 +11071,7 @@
       </trans-unit>
       <trans-unit id="753928283782809091" datatype="html">
         <source>Select the caption file</source>
+        <target state="translated">Veldu skýringatextaskrána</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">24</context>
@@ -11060,6 +11079,7 @@
       </trans-unit>
       <trans-unit id="4616828176080418150" datatype="html">
         <source>This will replace an existing caption!</source>
+        <target state="translated">Þetta mun skipta út fyrirliggjandi skýringatexta!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">30,32</context>
@@ -11067,6 +11087,7 @@
       </trans-unit>
       <trans-unit id="2752121353049766867" datatype="html">
         <source>Add this caption</source>
+        <target state="translated">Bæta við þessum skýringatexta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">42</context>
@@ -11090,6 +11111,7 @@
       </trans-unit>
       <trans-unit id="1989971680596153649" datatype="html">
         <source>Edit this caption</source>
+        <target state="translated">Breyta þessum skýringatexta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-caption-edit-modal-content/video-caption-edit-modal-content.component.html</context>
           <context context-type="linenumber">30</context>
@@ -11097,6 +11119,7 @@
       </trans-unit>
       <trans-unit id="5984574397847510001" datatype="html">
         <source>Basic info</source>
+        <target state="translated">Grunnupplýsingar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">11</context>
@@ -11138,6 +11161,7 @@
       </trans-unit>
       <trans-unit id="2090254132451149776" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="ps://chooser-beta.creativecommons.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>Choose<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> the appropriate licence for your work. </source>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="ps://chooser-beta.creativecommons.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>Veldu<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> viðeigandi notkunarleyfi fyrir verkið þitt. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">84,85</context>
@@ -11145,6 +11169,7 @@
       </trans-unit>
       <trans-unit id="9012879216268259096" datatype="html">
         <source>Schedule publication (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</source>
+        <target state="translated">Áætla útgáfutíma (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">122</context>
@@ -11152,6 +11177,7 @@
       </trans-unit>
       <trans-unit id="9155449485123349070" datatype="html">
         <source>Contains sensitive content</source>
+        <target state="translated">Inniheldur viðkvæmt efni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">136</context>
@@ -11166,6 +11192,7 @@
       </trans-unit>
       <trans-unit id="4895908242997839943" datatype="html">
         <source>Publish after transcoding</source>
+        <target state="translated">Gefa út eftir umkóðun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">146</context>
@@ -11196,6 +11223,7 @@
       </trans-unit>
       <trans-unit id="2142169012597585513" datatype="html">
         <source>Add another caption</source>
+        <target state="translated">Bæta við öðrum skýringatexta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">173</context>
@@ -11203,6 +11231,7 @@
       </trans-unit>
       <trans-unit id="4525569337497033381" datatype="html">
         <source>See the subtitle file</source>
+        <target state="translated">Skoðaðu skjátextaskrána</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">182</context>
@@ -11210,6 +11239,7 @@
       </trans-unit>
       <trans-unit id="4335724652642647824" datatype="html">
         <source>Already uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | date }}"/> ✔</source>
+        <target state="translated">Þegar búið að senda inn þann <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | date }}"/> ✔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">186</context>
@@ -11225,6 +11255,7 @@
       </trans-unit>
       <trans-unit id="7044449271109607418" datatype="html">
         <source>Cancel create</source>
+        <target state="translated">Hætta við að útbúa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">197</context>
@@ -11240,6 +11271,7 @@
       </trans-unit>
       <trans-unit id="4013233634947488312" datatype="html">
         <source>Cancel edition</source>
+        <target state="translated">Hætta við breytingu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">205</context>
@@ -11255,6 +11287,7 @@
       </trans-unit>
       <trans-unit id="305832955565133216" datatype="html">
         <source>Cancel deletion</source>
+        <target state="translated">Hætta við eyðingu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">213</context>
@@ -11262,6 +11295,7 @@
       </trans-unit>
       <trans-unit id="360396717319152766" datatype="html">
         <source>No captions for now.</source>
+        <target state="translated">Engir skýringartextar í augnablikinu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">219,220</context>
@@ -11269,6 +11303,7 @@
       </trans-unit>
       <trans-unit id="8508836953540308271" datatype="html">
         <source>Live settings</source>
+        <target state="translated">Stillingar beins streymis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">227</context>
@@ -11322,6 +11357,7 @@
       </trans-unit>
       <trans-unit id="5941639683192662500" datatype="html">
         <source>This is a normal live</source>
+        <target state="translated">Þetta er venjulegt beint streymi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">256</context>
@@ -11364,6 +11400,7 @@
       </trans-unit>
       <trans-unit id="1966495339378120213" datatype="html">
         <source>Latency mode</source>
+        <target state="translated">Biðtímahamur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">286</context>
@@ -11379,6 +11416,7 @@
       </trans-unit>
       <trans-unit id="5407145687662795944" datatype="html">
         <source>Video thumbnail</source>
+        <target state="translated">Smámynd myndskeiðs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">310</context>
@@ -11402,6 +11440,7 @@
       </trans-unit>
       <trans-unit id="1186960092655764809" datatype="html">
         <source>Name of the uploaded file</source>
+        <target state="translated">Heiti innsendu skrárinnar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">343,344</context>
@@ -11409,6 +11448,7 @@
       </trans-unit>
       <trans-unit id="7958716262877895706" datatype="html">
         <source>Original publication date</source>
+        <target state="translated">Upprunaleg útgáfudagsetning</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">352</context>
@@ -11416,6 +11456,7 @@
       </trans-unit>
       <trans-unit id="50985514722149155" datatype="html">
         <source>This is the date when the content was originally published (e.g. the release date for a film)</source>
+        <target state="translated">Þetta er dagsetningin þegar efnið var fyrst birt opinberlega (t.d. útgáfudagsetning kvikmyndar)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">356,357</context>
@@ -11423,6 +11464,7 @@
       </trans-unit>
       <trans-unit id="2200003513633568069" datatype="html">
         <source>Enable video comments</source>
+        <target state="translated">Virkja athugasemdir við myndskeið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">373</context>
@@ -11430,6 +11472,7 @@
       </trans-unit>
       <trans-unit id="8896564060463626070" datatype="html">
         <source>Enable download</source>
+        <target state="translated">Virkja innsendingar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">378</context>
@@ -11445,6 +11488,7 @@
       </trans-unit>
       <trans-unit id="54931094224146544" datatype="html">
         <source>Small latency</source>
+        <target state="translated">Lítill biðtími</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -11452,6 +11496,7 @@
       </trans-unit>
       <trans-unit id="668281328725856861" datatype="html">
         <source>Reduce latency to ~15s disabling P2P</source>
+        <target state="translated">Minnka biðtíma í ~15s með því að gera P2P óvirkt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">90</context>
@@ -11467,6 +11512,7 @@
       </trans-unit>
       <trans-unit id="4299493457408757206" datatype="html">
         <source>Average latency of 30s</source>
+        <target state="translated">Meðalbiðtími 30s</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">95</context>
@@ -11482,6 +11528,7 @@
       </trans-unit>
       <trans-unit id="369497609327288447" datatype="html">
         <source>Average latency of 60s increasing P2P ratio</source>
+        <target state="translated">Meðalbiðtími 60s með því að auka P2P-hlutfall</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">100</context>
@@ -11501,6 +11548,7 @@
       </trans-unit>
       <trans-unit id="2830831449226931729" datatype="html">
         <source>Instance languages</source>
+        <target state="translated">Tungumál netþjónsins</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">216</context>
@@ -11528,6 +11576,7 @@
       </trans-unit>
       <trans-unit id="1435317307066082710" datatype="html">
         <source>Hide the video until a specific date</source>
+        <target state="translated">Fala myndskeið þar til á tiltekinni dagsetningu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">233</context>
@@ -11535,6 +11584,7 @@
       </trans-unit>
       <trans-unit id="1087181129481039628" datatype="html">
         <source>Normal live</source>
+        <target state="translated">Venjulegt beint streymi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
           <context context-type="linenumber">22</context>
@@ -11542,6 +11592,7 @@
       </trans-unit>
       <trans-unit id="3517255641769192386" datatype="html">
         <source>Permanent/recurring live</source>
+        <target state="translated">Viðvarandi/endurtekið beint streymi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
           <context context-type="linenumber">29</context>
@@ -11549,6 +11600,7 @@
       </trans-unit>
       <trans-unit id="8218579597782287078" datatype="html">
         <source>Go Live</source>
+        <target state="translated">Fara í beina útsendingu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
           <context context-type="linenumber">37</context>
@@ -11556,6 +11608,7 @@
       </trans-unit>
       <trans-unit id="460353452916242022" datatype="html">
         <source>Sorry, but something went wrong</source>
+        <target state="translated">Því miður, en eitthvað fór úrskeiðis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.html</context>
           <context context-type="linenumber">43</context>
@@ -11596,6 +11649,7 @@
       </trans-unit>
       <trans-unit id="2621043320678012413" datatype="html">
         <source>Live published.</source>
+        <target state="translated">Beint streymi birt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">146</context>
@@ -11610,6 +11664,7 @@
       </trans-unit>
       <trans-unit id="2360261543675520397" datatype="html">
         <source>Stream only once</source>
+        <target state="translated">Streyma aðeins einu sinni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-go-live.component.ts</context>
           <context context-type="linenumber">168</context>
@@ -11631,6 +11686,7 @@
       </trans-unit>
       <trans-unit id="3455474330346212563" datatype="html">
         <source>Select the torrent to import</source>
+        <target state="translated">Veldu torrent-skrána til að flytja inn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">6</context>
@@ -11650,6 +11706,7 @@
       </trans-unit>
       <trans-unit id="6173286379208830044" datatype="html">
         <source>Paste magnet URI</source>
+        <target state="translated">Líma slóð segultengils</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">16</context>
@@ -11694,6 +11751,7 @@
       </trans-unit>
       <trans-unit id="5210096066382592800" datatype="html">
         <source>Video to import updated.</source>
+        <target state="translated">Myndskeið til innflutnings uppfært.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-torrent.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -11705,7 +11763,7 @@
       </trans-unit>
       <trans-unit id="2375260419993138758" datatype="html">
         <source>URL</source>
-        <target state="translated">Slóð</target>
+        <target state="translated">Vefslóð</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">6</context>
@@ -11742,6 +11800,7 @@
       </trans-unit>
       <trans-unit id="6722765664648523978" datatype="html">
         <source>Select the file to upload</source>
+        <target state="translated">Veldu skrána til að senda inn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">6</context>
@@ -11753,6 +11812,7 @@
       </trans-unit>
       <trans-unit id="6148369758871787018" datatype="html">
         <source>Video background image</source>
+        <target state="translated">Bakgrunnsmynd myndskeiðs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">34</context>
@@ -11941,6 +12001,7 @@
       </trans-unit>
       <trans-unit id="2061223017941329156" datatype="html">
         <source>Import with URL</source>
+        <target state="translated">Flytja inn með vefslóð</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">63</context>
@@ -11948,6 +12009,7 @@
       </trans-unit>
       <trans-unit id="8740142697043012403" datatype="html">
         <source>Import with torrent</source>
+        <target state="translated">Flytja inn með torrent-skrá</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">73</context>
@@ -11955,6 +12017,7 @@
       </trans-unit>
       <trans-unit id="6066940329544282265" datatype="html">
         <source>Go live</source>
+        <target state="translated">Fara í beina útsendingu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">83</context>
@@ -11997,6 +12060,7 @@
       </trans-unit>
       <trans-unit id="8306050839443016954" datatype="html">
         <source>Video updated.</source>
+        <target state="translated">Myndskeið uppfært.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-update.component.ts</context>
           <context context-type="linenumber">147</context>
@@ -12055,6 +12119,7 @@
       </trans-unit>
       <trans-unit id="677619204556459328" datatype="html">
         <source>Like this video</source>
+        <target state="translated">Líkar við þetta myndskeið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">37</context>
@@ -12062,6 +12127,7 @@
       </trans-unit>
       <trans-unit id="1979134407801821102" datatype="html">
         <source>Dislike this video</source>
+        <target state="translated">Líkar ekki við þetta myndskeið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -12069,6 +12135,7 @@
       </trans-unit>
       <trans-unit id="8025996572234182184" datatype="html">
         <source>Like the video</source>
+        <target state="translated">Líkar við myndskeiðið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -12076,6 +12143,7 @@
       </trans-unit>
       <trans-unit id="7692127636377222448" datatype="html">
         <source>Dislike the video</source>
+        <target state="translated">Líkar ekki við myndskeiðið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -12083,6 +12151,7 @@
       </trans-unit>
       <trans-unit id="8272123190776748811" datatype="html">
         <source>You need to be &lt;a href="/login"&gt;logged in&lt;/a&gt; to rate this video.</source>
+        <target state="translated">Þú þarft að vera &lt;a href="/login"&gt;lskráð/ur inn&lt;/a&gt; til að gefa þessu myndskeiði einkunn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -12098,6 +12167,7 @@
       </trans-unit>
       <trans-unit id="982956590420630883" datatype="html">
         <source>Markdown compatible</source>
+        <target state="translated">Markdown-samhæft</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">15</context>
@@ -12167,6 +12237,7 @@
       </trans-unit>
       <trans-unit id="7227611412155083002" datatype="html">
         <source>Emoji shortcuts</source>
+        <target state="translated">Flýtilyklar tjáningartákna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">29</context>
@@ -12181,6 +12252,7 @@
       </trans-unit>
       <trans-unit id="381522038671562286" datatype="html">
         <source>See complete list</source>
+        <target state="translated">Sjá fullan lista</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">35</context>
@@ -12200,6 +12272,7 @@
       </trans-unit>
       <trans-unit id="2263890353858735493" datatype="html">
         <source>You are one step away from commenting</source>
+        <target state="translated">Þú ert núna einu skrefi frá því að gera athugasemd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">59</context>
@@ -12214,6 +12287,7 @@
       </trans-unit>
       <trans-unit id="2958389355547305739" datatype="html">
         <source>Login to comment</source>
+        <target state="translated">Skráðu inn til að gera athugasemd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">78</context>
@@ -12240,6 +12314,7 @@
       </trans-unit>
       <trans-unit id="3572897237443938692" datatype="html">
         <source>Highlighted comment</source>
+        <target state="translated">Áherslulituð athugasemd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.html</context>
           <context context-type="linenumber">14</context>
@@ -12267,6 +12342,7 @@
       </trans-unit>
       <trans-unit id="2447932355167015019" datatype="html">
         <source>This comment has been deleted</source>
+        <target state="translated">Þessari athugasemd hefur verið eytt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.html</context>
           <context context-type="linenumber">57</context>
@@ -12297,6 +12373,7 @@
       </trans-unit>
       <trans-unit id="60216491008745400" datatype="html">
         <source>Actions on comment</source>
+        <target state="translated">Aðgerðir við athugasemdir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comment.component.ts</context>
           <context context-type="linenumber">202</context>
@@ -12382,6 +12459,7 @@
       </trans-unit>
       <trans-unit id="1055254162789146714" datatype="html">
         <source>Comments are disabled.</source>
+        <target state="translated">Athugasemdir eru óvirkar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">92,93</context>
@@ -12389,6 +12467,7 @@
       </trans-unit>
       <trans-unit id="6747218355168080191" datatype="html">
         <source>Do you really want to delete this comment?</source>
+        <target state="translated">Viltu í alvörunni eyða þessari athugasemd?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">181</context>
@@ -12422,6 +12501,7 @@
       </trans-unit>
       <trans-unit id="7163633882758007711" datatype="html">
         <source>Do you really want to delete and re-draft this comment?</source>
+        <target state="translated">Viltu í alvörunni eyða og endurskrifa þessa athugasemd?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">215</context>
@@ -12429,6 +12509,7 @@
       </trans-unit>
       <trans-unit id="723038562278401061" datatype="html">
         <source>Friendly Reminder:</source>
+        <target state="translated">Vinsamleg áminning:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/privacy-concerns.component.html</context>
           <context context-type="linenumber">4</context>
@@ -12531,6 +12612,7 @@
       </trans-unit>
       <trans-unit id="7365478703093390233" datatype="html">
         <source>There are no videos available in this playlist.</source>
+        <target state="translated">Það eru engin myndskeið tiltæk í þessum spilunarlista.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">37,39</context>
@@ -12538,6 +12620,7 @@
       </trans-unit>
       <trans-unit id="4416005356063364306" datatype="html">
         <source>This video is blocked.</source>
+        <target state="translated">Þetta myndskeið er útilokað.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">42</context>
@@ -12553,6 +12636,7 @@
       </trans-unit>
       <trans-unit id="6981359593518942576" datatype="html">
         <source>Open the video on the origin instance</source>
+        <target state="translated">Opna myndskeiðið á upprunalegum netþjóni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context>
           <context context-type="linenumber">14</context>
@@ -12560,6 +12644,7 @@
       </trans-unit>
       <trans-unit id="5139892963394684487" datatype="html">
         <source>Originally published</source>
+        <target state="translated">Fyrst útgefið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context>
           <context context-type="linenumber">22</context>
@@ -12567,6 +12652,7 @@
       </trans-unit>
       <trans-unit id="6952960992592445535" datatype="html">
         <source><x id="PH" equiv-text="this.video.account.name"/> (channel page)</source>
+        <target state="translated"><x id="PH" equiv-text="this.video.account.name"/> (síða rásar)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context>
           <context context-type="linenumber">20</context>
@@ -12582,6 +12668,7 @@
       </trans-unit>
       <trans-unit id="1209500590333005801" datatype="html">
         <source><x id="PH" equiv-text="this.video.byAccount"/> (account page)</source>
+        <target state="translated"><x id="PH" equiv-text="this.video.byAccount"/> (síða aðgangsins)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-avatar-channel.component.ts</context>
           <context context-type="linenumber">21</context>
@@ -12661,6 +12748,7 @@
       </trans-unit>
       <trans-unit id="5870421136141540382" datatype="html">
         <source>Stop looping playlist videos</source>
+        <target state="translated">Hætta að endurspila myndskeið spilunarlistans</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/playlist/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">243</context>
@@ -12668,6 +12756,7 @@
       </trans-unit>
       <trans-unit id="1599585307037758139" datatype="html">
         <source>Loop playlist videos</source>
+        <target state="translated">Endurtaka myndskeið spilunarlistans</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/playlist/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">244</context>
@@ -12706,6 +12795,7 @@
       </trans-unit>
       <trans-unit id="3704292036525161260" datatype="html">
         <source>Placeholder image</source>
+        <target state="translated">Staðgengimynd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">11</context>
@@ -12755,6 +12845,7 @@
       </trans-unit>
       <trans-unit id="8858527736400081688" datatype="html">
         <source>This video contains mature or explicit content. Are you sure you want to watch it?</source>
+        <target state="translated">Þetta myndskeið inniheldur fullorðinsefni eða viðkvæmt efni. Ertu viss að þú viljir horfa á það?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">403</context>
@@ -12762,6 +12853,7 @@
       </trans-unit>
       <trans-unit id="3937119019020041049" datatype="html">
         <source>Mature or explicit content</source>
+        <target state="translated">Fullorðins eða viðkvæmt efni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">404</context>
@@ -12832,6 +12924,7 @@
       </trans-unit>
       <trans-unit id="2541031516422557760" datatype="html">
         <source>Seek the video forward</source>
+        <target state="translated">Leita áfram í myndskeiðinu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">800</context>
@@ -12839,6 +12932,7 @@
       </trans-unit>
       <trans-unit id="8813023402019364882" datatype="html">
         <source>Seek the video backward</source>
+        <target state="translated">Leita afturábak í myndskeiðinu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">801</context>
@@ -12846,6 +12940,7 @@
       </trans-unit>
       <trans-unit id="581757752202843950" datatype="html">
         <source>Increase playback rate</source>
+        <target state="translated">Auka afspilunarhraða</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">803</context>
@@ -12853,6 +12948,7 @@
       </trans-unit>
       <trans-unit id="5467642834854681120" datatype="html">
         <source>Decrease playback rate</source>
+        <target state="translated">Minnka afspilunarhraða</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">804</context>
@@ -12874,6 +12970,7 @@
       </trans-unit>
       <trans-unit id="8223917068580581095" datatype="html">
         <source>Toggle theater mode</source>
+        <target state="translated">Víxla bíóham af/á</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">812</context>
