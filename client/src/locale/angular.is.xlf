@@ -12956,6 +12956,7 @@
       </trans-unit>
       <trans-unit id="3860402955823859506" datatype="html">
         <source>Navigate in the video to the previous frame</source>
+        <target state="translated">Fara á fyrri ramma í myndskeiðinu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">806</context>
@@ -12963,6 +12964,7 @@
       </trans-unit>
       <trans-unit id="8232494782895420700" datatype="html">
         <source>Navigate in the video to the next frame</source>
+        <target state="translated">Fara á næsta ramma í myndskeiðinu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">807</context>
@@ -13014,6 +13016,7 @@
       </trans-unit>
       <trans-unit id="3037358578603095196" datatype="html">
         <source>Only videos uploaded on this instance are displayed</source>
+        <target state="translated">Aðeins myndskeið send inn á þessum netþjóni eru birt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context>
           <context context-type="linenumber">194</context>
@@ -13169,6 +13172,7 @@
       </trans-unit>
       <trans-unit id="2887122197778293919" datatype="html">
         <source>Go to the local videos page</source>
+        <target state="translated">Fara á síðuna yfir staðvær myndskeið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">312</context>
@@ -13176,6 +13180,7 @@
       </trans-unit>
       <trans-unit id="8009065619559214982" datatype="html">
         <source>Go to the videos upload page</source>
+        <target state="translated">Fara á síðuna til innsendingar myndskeiða</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">317</context>
@@ -13191,6 +13196,7 @@
       </trans-unit>
       <trans-unit id="1136469849928650779" datatype="html">
         <source>Go to my videos</source>
+        <target state="translated">Fara í myndskeiðin mín</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">65</context>
@@ -13198,6 +13204,7 @@
       </trans-unit>
       <trans-unit id="7836683738999600376" datatype="html">
         <source>Go to my imports</source>
+        <target state="translated">Fara í innflutninginn minn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">69</context>
@@ -13205,6 +13212,7 @@
       </trans-unit>
       <trans-unit id="7511292153332773503" datatype="html">
         <source>Go to my channels</source>
+        <target state="translated">Fara í rásirnar mínar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">73</context>
@@ -13231,6 +13239,7 @@
       </trans-unit>
       <trans-unit id="375263728166936544" datatype="html">
         <source>You need to reconnect.</source>
+        <target state="translated">Þú þarft að endurtengjast.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">230</context>
@@ -13262,6 +13271,7 @@
       </trans-unit>
       <trans-unit id="3608407683173066091" datatype="html">
         <source>My history</source>
+        <target state="translated">Ferilskráin mín</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/menu/menu.service.ts</context>
           <context context-type="linenumber">107</context>
@@ -13269,6 +13279,7 @@
       </trans-unit>
       <trans-unit id="4024404994702813072" datatype="html">
         <source>In my library</source>
+        <target state="translated">í safninu mínu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/menu/menu.service.ts</context>
           <context context-type="linenumber">113</context>
@@ -13331,6 +13342,7 @@
       </trans-unit>
       <trans-unit id="968295009933361070" datatype="html">
         <source>Too many attempts, please try again after <x id="PH" equiv-text="minutesLeft"/> minutes.</source>
+        <target state="translated">Of margar tilraunir, reyndu aftur eftir <x id="PH" equiv-text="minutesLeft"/> mínútur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">122</context>
@@ -13338,6 +13350,7 @@
       </trans-unit>
       <trans-unit id="4965472196059235310" datatype="html">
         <source>Too many attempts, please try again later.</source>
+        <target state="translated">Of margar tilraunir, reyndu aftur síðar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">125</context>
@@ -13345,6 +13358,7 @@
       </trans-unit>
       <trans-unit id="1693549688987384699" datatype="html">
         <source>Server error. Please retry later.</source>
+        <target state="translated">Villa á netþjóni. Reyndu aftur síðar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">129</context>
@@ -13360,6 +13374,7 @@
       </trans-unit>
       <trans-unit id="4670312387769733978" datatype="html">
         <source>All unsaved data will be lost, are you sure you want to leave this page?</source>
+        <target state="translated">Öll óvistuð gögn munu tapast, ertu viss um að þú viljir fara af þessari síðu?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/routing/can-deactivate-guard.service.ts</context>
           <context context-type="linenumber">19</context>
@@ -13375,6 +13390,7 @@
       </trans-unit>
       <trans-unit id="6410650387447929805" datatype="html">
         <source>Light/Orange or Dark</source>
+        <target state="translated">Ljóst/appelsínugult eða dökkt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">47</context>
@@ -13382,6 +13398,7 @@
       </trans-unit>
       <trans-unit id="5622582942980351192" datatype="html">
         <source>Light/Orange</source>
+        <target state="translated">Ljóst/appelsínugult</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/theme/theme.service.ts</context>
           <context context-type="linenumber">50</context>
@@ -13389,6 +13406,7 @@
       </trans-unit>
       <trans-unit id="2279527393438260622" datatype="html">
         <source>Search videos, playlists, channels…</source>
+        <target state="translated">Leitaðu að myndskeiðum, rásum og spilunarlistum…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">3</context>
@@ -13404,6 +13422,7 @@
       </trans-unit>
       <trans-unit id="1843010981261389722" datatype="html">
         <source>using <x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/></source>
+        <target state="translated">með því að nota <x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">28</context>
@@ -13495,6 +13514,7 @@
       </trans-unit>
       <trans-unit id="1447760976255144968" datatype="html">
         <source>The connection was interrupted</source>
+        <target state="translated">Tengingin var trufluð</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">27</context>
@@ -13502,6 +13522,7 @@
       </trans-unit>
       <trans-unit id="4499233456830047129" datatype="html">
         <source>The server encountered an error</source>
+        <target state="translated">Netþjónninn rakst á villu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">31</context>
@@ -13531,6 +13552,7 @@
       </trans-unit>
       <trans-unit id="2964653499524716819" datatype="html">
         <source>Help to translate PeerTube!</source>
+        <target state="translated">Hjálpaðu við þýðingar á PeerTube!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/language-chooser.component.html</context>
           <context context-type="linenumber">8,10</context>
@@ -13562,6 +13584,7 @@
       </trans-unit>
       <trans-unit id="9156407045661257130" datatype="html">
         <source>Sensitive:</source>
+        <target state="translated">Viðkvæmt:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">56</context>
@@ -13597,6 +13620,7 @@
       </trans-unit>
       <trans-unit id="6371572688505952303" datatype="html">
         <source>My library</source>
+        <target state="translated">Safnið mitt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">92</context>
@@ -13624,6 +13648,7 @@
       </trans-unit>
       <trans-unit id="8378304669563824772" datatype="html">
         <source>Get help using PeerTube</source>
+        <target state="translated">Fáðu aðstoð við að nota PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">141</context>
@@ -13639,6 +13664,7 @@
       </trans-unit>
       <trans-unit id="3620232640697554352" datatype="html">
         <source>Frequently asked questions about PeerTube</source>
+        <target state="translated">Algengar spurningar varðandi PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">142</context>
@@ -13682,6 +13708,7 @@
       </trans-unit>
       <trans-unit id="7366542359085748162" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2022</source>
+        <target state="translated">keyrt með PeerTube - CopyLeft 2015-2022</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">149</context>
@@ -13689,6 +13716,7 @@
       </trans-unit>
       <trans-unit id="2497681082724639563" datatype="html">
         <source>powered by PeerTube</source>
+        <target state="translated">keyrt með PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">150</context>
@@ -13704,6 +13732,7 @@
       </trans-unit>
       <trans-unit id="7939914198003891823" datatype="html">
         <source>any language</source>
+        <target state="translated">hvaða tungumál sem er</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">276</context>
@@ -13735,6 +13764,7 @@
       </trans-unit>
       <trans-unit id="403762424689874454" datatype="html">
         <source>View your notifications</source>
+        <target state="translated">Skoðaðu tilkynningarnar þínar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/notification.component.html</context>
           <context context-type="linenumber">3</context>
@@ -13746,6 +13776,7 @@
       </trans-unit>
       <trans-unit id="8278995041812548563" datatype="html">
         <source>Update your notification preferences</source>
+        <target state="translated">Stilltu hvernig tilkynningarnar þínar birtast</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/notification.component.html</context>
           <context context-type="linenumber">34</context>
@@ -13753,6 +13784,7 @@
       </trans-unit>
       <trans-unit id="5842982307680337701" datatype="html">
         <source>See all your notifications</source>
+        <target state="translated">Sjáðu allar tilkynningarnar þínar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/notification.component.html</context>
           <context context-type="linenumber">54</context>
@@ -13767,6 +13799,7 @@
       </trans-unit>
       <trans-unit id="8821712929823045567" datatype="html">
         <source>It's time to set up your account profile!</source>
+        <target state="translated">Nú er orðið tímabært að setja upp notandaaðganginn þinn!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">10</context>
@@ -13795,6 +13828,7 @@
       </trans-unit>
       <trans-unit id="2218100934178971211" datatype="html">
         <source>Don't show me this anymore</source>
+        <target state="translated">Ekki sýna mér þetta aftur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">23</context>
@@ -13964,6 +13998,7 @@
       </trans-unit>
       <trans-unit id="966824924873033885" datatype="html">
         <source>Instance short description</source>
+        <target state="translated">Stutt lýsing á tilvikinu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">14</context>
@@ -13971,6 +14006,7 @@
       </trans-unit>
       <trans-unit id="1339481669904426442" datatype="html">
         <source>Who you are</source>
+        <target state="translated">Hver ert þú</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">16</context>
@@ -13999,6 +14035,7 @@
       </trans-unit>
       <trans-unit id="5032335000394561521" datatype="html">
         <source>Instance terms</source>
+        <target state="translated">Skilmálar tilviksins</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">21</context>
@@ -14013,6 +14050,7 @@
       </trans-unit>
       <trans-unit id="2728623642717111613" datatype="html">
         <source>Don't show me this warning anymore</source>
+        <target state="translated">Ekki birta þessa aðvörun aftur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">33</context>
@@ -14218,6 +14256,7 @@
       </trans-unit>
       <trans-unit id="240096858386658337" datatype="html">
         <source>Admin email is required.</source>
+        <target state="translated">Tölvupóstfang stjórnanda er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">64</context>
@@ -14225,6 +14264,7 @@
       </trans-unit>
       <trans-unit id="4392533896009432078" datatype="html">
         <source>Admin email must be valid.</source>
+        <target state="translated">Tölvupóstfang stjórnanda verður að vera gilt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">65</context>
@@ -14349,6 +14389,7 @@
       </trans-unit>
       <trans-unit id="2127446333083057097" datatype="html">
         <source>Domain is required.</source>
+        <target state="translated">Heiti léns er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">92</context>
@@ -14388,6 +14429,7 @@
       </trans-unit>
       <trans-unit id="8602814243662345124" datatype="html">
         <source>Email is required.</source>
+        <target state="translated">Tölvupóstfang er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -14399,6 +14441,7 @@
       </trans-unit>
       <trans-unit id="4591482207344282590" datatype="html">
         <source>Email must be valid.</source>
+        <target state="translated">Tölvupóstfang verður að vera gilt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -14485,7 +14528,7 @@
       </trans-unit>
       <trans-unit id="3577237269587081090" datatype="html">
         <source>Password is required.</source>
-        <target state="translated">Þarfnast lykilorðs.</target>
+        <target state="translated">Lykilorð er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/login-validators.ts</context>
           <context context-type="linenumber">18</context>
@@ -15037,6 +15080,7 @@
       </trans-unit>
       <trans-unit id="3109314382334906782" datatype="html">
         <source>Reportee</source>
+        <target state="translated">Kærandi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">29</context>
@@ -15052,6 +15096,7 @@
       </trans-unit>
       <trans-unit id="829951422090160526" datatype="html">
         <source>Reported part</source>
+        <target state="translated">Kærður hluti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">74</context>
@@ -15067,6 +15112,7 @@
       </trans-unit>
       <trans-unit id="7234922541542636802" datatype="html">
         <source>The video was deleted</source>
+        <target state="translated">Myndskeiðinu var eytt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">90</context>
@@ -15082,6 +15128,7 @@
       </trans-unit>
       <trans-unit id="149121389669248117" datatype="html">
         <source>Violent or Repulsive</source>
+        <target state="translated">Ofsafengið eða ógeðslegt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context>
           <context context-type="linenumber">20</context>
@@ -15089,6 +15136,7 @@
       </trans-unit>
       <trans-unit id="2493388551376623687" datatype="html">
         <source>Hateful or Abusive</source>
+        <target state="translated">Hatursfullt eða meiðandi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context>
           <context context-type="linenumber">21</context>
@@ -15096,6 +15144,7 @@
       </trans-unit>
       <trans-unit id="5124757565683866220" datatype="html">
         <source>Spam or Misleading</source>
+        <target state="translated">Ruslpóstur eða misvísandi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context>
           <context context-type="linenumber">22</context>
@@ -15135,6 +15184,7 @@
       </trans-unit>
       <trans-unit id="9173448803033928792" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> reports</source>
+        <target state="translated">Birti <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> til <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> af <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> kærum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">6</context>
@@ -15142,6 +15192,7 @@
       </trans-unit>
       <trans-unit id="4266779970063047572" datatype="html">
         <source>Video/Comment/Account</source>
+        <target state="translated">Myndskeið/Athugasemd/Aðgangur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">22</context>
@@ -15157,6 +15208,7 @@
       </trans-unit>
       <trans-unit id="1969144763032891922" datatype="html">
         <source>Internal note</source>
+        <target state="translated">Innri minnispunktur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">26</context>
@@ -15172,6 +15224,7 @@
       </trans-unit>
       <trans-unit id="1359961255805685312" datatype="html">
         <source>This video has been reported multiple times.</source>
+        <target state="translated">Þetta myndskeið hefur verið kært mörgum sinnum.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">66</context>
@@ -15179,6 +15232,7 @@
       </trans-unit>
       <trans-unit id="8103613717136753118" datatype="html">
         <source>The video was blocked</source>
+        <target state="translated">Þetta myndskeið var útilokað</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">73</context>
@@ -15186,6 +15240,7 @@
       </trans-unit>
       <trans-unit id="1443698606045744844" datatype="html">
         <source>Video was deleted</source>
+        <target state="translated">Myndskeiði var eytt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.html</context>
           <context context-type="linenumber">79</context>
@@ -15247,6 +15302,7 @@
       </trans-unit>
       <trans-unit id="5604806676748121035" datatype="html">
         <source>Reports with blocked videos</source>
+        <target state="translated">Kærur með útilokuðum myndskeiðum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -15254,6 +15310,7 @@
       </trans-unit>
       <trans-unit id="5105869928182826553" datatype="html">
         <source>Reports with deleted videos</source>
+        <target state="translated">Kærur með eyddum myndskeiðum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">59</context>
@@ -15275,6 +15332,7 @@
       </trans-unit>
       <trans-unit id="6282990098351939529" datatype="html">
         <source>Deleted comment</source>
+        <target state="translated">Eydd athugasemd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">214</context>
@@ -15339,6 +15397,7 @@
       </trans-unit>
       <trans-unit id="4903651219400691248" datatype="html">
         <source>Mute account</source>
+        <target state="translated">Þagga niður í notandaaðgangi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">292</context>
