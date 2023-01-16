@@ -51,11 +51,11 @@ module.exports = function () {
 
     output: {
       // path: helpers.root('dist/standalone/videos'),
-      path: '/Users/aleksandr/dev-server/pocketnet/peertube',
+      //path: '/Users/aleksandr/dev-server/pocketnet/peertube',
 
       clean : {},
 
-      // path: 'C:\\inetpub\\wwwroot\\pocketnet\\peertube',
+       path: 'C:\\inetpub\\wwwroot\\pocketnet\\peertube',
 
       filename: process.env.ANALYZE_BUNDLE === 'true'
         ? '[name].bundle.js'
