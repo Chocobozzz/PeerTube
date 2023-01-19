@@ -21,6 +21,10 @@ import { LocalVideoViewerWatchSectionModel } from './local-video-viewer-watch-se
   indexes: [
     {
       fields: [ 'videoId' ]
+    },
+    {
+      fields: [ 'url' ],
+      unique: true
     }
   ]
 })
