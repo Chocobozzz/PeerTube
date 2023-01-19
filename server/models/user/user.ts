@@ -441,16 +441,17 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   })
   OAuthTokens: OAuthTokenModel[]
 
+  // Used if we already set an encrypted password in user model
+  skipPasswordEncryption = false
+
   @BeforeCreate
   @BeforeUpdate
-  static cryptPasswordIfNeeded (instance: UserModel) {
-    if (instance.changed('password') && instance.password) {
-      return cryptPassword(instance.password)
-        .then(hash => {
-          instance.password = hash
-          return undefined
-        })
-    }
+  static async cryptPasswordIfNeeded (instance: UserModel) {
+    if (instance.skipPasswordEncryption) return
+    if (!instance.changed('password')) return
+    if (!instance.password) return
+
+    instance.password = await cryptPassword(instance.password)
   }
 
   @AfterUpdate

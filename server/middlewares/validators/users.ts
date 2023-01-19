@@ -1,8 +1,7 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { Hooks } from '@server/lib/plugins/hooks'
 import { forceNumber } from '@shared/core-utils'
-import { HttpStatusCode, UserRegister, UserRight, UserRole } from '@shared/models'
+import { HttpStatusCode, UserRight, UserRole } from '@shared/models'
 import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import {
@@ -24,17 +23,16 @@ import {
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid
 } from '../../helpers/custom-validators/users'
-import { isVideoChannelDisplayNameValid, isVideoChannelUsernameValid } from '../../helpers/custom-validators/video-channels'
+import { isVideoChannelUsernameValid } from '../../helpers/custom-validators/video-channels'
 import { logger } from '../../helpers/logger'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { Redis } from '../../lib/redis'
-import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../lib/signup'
 import { ActorModel } from '../../models/actor/actor'
 import {
   areValidationErrors,
   checkUserEmailExist,
   checkUserIdExist,
-  checkUserNameOrEmailDoesNotAlreadyExist,
+  checkUserNameOrEmailDoNotAlreadyExist,
   doesVideoChannelIdExist,
   doesVideoExist,
   isValidVideoIdParam
@@ -81,7 +79,7 @@ const usersAddValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res, { omitBodyLog: true })) return
-    if (!await checkUserNameOrEmailDoesNotAlreadyExist(req.body.username, req.body.email, res)) return
+    if (!await checkUserNameOrEmailDoNotAlreadyExist(req.body.username, req.body.email, res)) return
 
     const authUser = res.locals.oauth.token.User
     if (authUser.role !== UserRole.ADMINISTRATOR && req.body.role !== UserRole.USER) {
@@ -101,51 +99,6 @@ const usersAddValidator = [
         return res.fail({
           status: HttpStatusCode.CONFLICT_409,
           message: `Channel with name ${req.body.channelName} already exists.`
-        })
-      }
-    }
-
-    return next()
-  }
-]
-
-const usersRegisterValidator = [
-  body('username')
-    .custom(isUserUsernameValid),
-  body('password')
-    .custom(isUserPasswordValid),
-  body('email')
-    .isEmail(),
-  body('displayName')
-    .optional()
-    .custom(isUserDisplayNameValid),
-
-  body('channel.name')
-    .optional()
-    .custom(isVideoChannelUsernameValid),
-  body('channel.displayName')
-    .optional()
-    .custom(isVideoChannelDisplayNameValid),
-
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res, { omitBodyLog: true })) return
-    if (!await checkUserNameOrEmailDoesNotAlreadyExist(req.body.username, req.body.email, res)) return
-
-    const body: UserRegister = req.body
-    if (body.channel) {
-      if (!body.channel.name || !body.channel.displayName) {
-        return res.fail({ message: 'Channel is optional but if you specify it, channel.name and channel.displayName are required.' })
-      }
-
-      if (body.channel.name === body.username) {
-        return res.fail({ message: 'Channel name cannot be the same as user username.' })
-      }
-
-      const existing = await ActorModel.loadLocalByName(body.channel.name)
-      if (existing) {
-        return res.fail({
-          status: HttpStatusCode.CONFLICT_409,
-          message: `Channel with name ${body.channel.name} already exists.`
         })
       }
     }
@@ -365,45 +318,6 @@ const usersVideosValidator = [
   }
 ]
 
-const ensureUserRegistrationAllowed = [
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const allowedParams = {
-      body: req.body,
-      ip: req.ip
-    }
-
-    const allowedResult = await Hooks.wrapPromiseFun(
-      isSignupAllowed,
-      allowedParams,
-      'filter:api.user.signup.allowed.result'
-    )
-
-    if (allowedResult.allowed === false) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: allowedResult.errorMessage || 'User registration is not enabled or user limit is reached.'
-      })
-    }
-
-    return next()
-  }
-]
-
-const ensureUserRegistrationAllowedForIP = [
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const allowed = isSignupAllowedForCurrentIP(req.ip)
-
-    if (allowed === false) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'You are not on a network authorized for registration.'
-      })
-    }
-
-    return next()
-  }
-]
-
 const usersAskResetPasswordValidator = [
   body('email')
     .isEmail(),
@@ -443,58 +357,6 @@ const usersResetPasswordValidator = [
 
     const user = res.locals.user
     const redisVerificationString = await Redis.Instance.getResetPasswordVerificationString(user.id)
-
-    if (redisVerificationString !== req.body.verificationString) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Invalid verification string.'
-      })
-    }
-
-    return next()
-  }
-]
-
-const usersAskSendVerifyEmailValidator = [
-  body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),
-
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res)) return
-
-    const exists = await checkUserEmailExist(req.body.email, res, false)
-    if (!exists) {
-      logger.debug('User with email %s does not exist (asking verify email).', req.body.email)
-      // Do not leak our emails
-      return res.status(HttpStatusCode.NO_CONTENT_204).end()
-    }
-
-    if (res.locals.user.pluginAuth) {
-      return res.fail({
-        status: HttpStatusCode.CONFLICT_409,
-        message: 'Cannot ask verification email of a user that uses a plugin authentication.'
-      })
-    }
-
-    return next()
-  }
-]
-
-const usersVerifyEmailValidator = [
-  param('id')
-    .isInt().not().isEmpty().withMessage('Should have a valid id'),
-
-  body('verificationString')
-    .not().isEmpty().withMessage('Should have a valid verification string'),
-  body('isPendingEmail')
-    .optional()
-    .customSanitizer(toBooleanOrNull),
-
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res)) return
-    if (!await checkUserIdExist(req.params.id, res)) return
-
-    const user = res.locals.user
-    const redisVerificationString = await Redis.Instance.getVerifyEmailLink(user.id)
 
     if (redisVerificationString !== req.body.verificationString) {
       return res.fail({
@@ -603,21 +465,16 @@ export {
   usersListValidator,
   usersAddValidator,
   deleteMeValidator,
-  usersRegisterValidator,
   usersBlockingValidator,
   usersRemoveValidator,
   usersUpdateValidator,
   usersUpdateMeValidator,
   usersVideoRatingValidator,
   usersCheckCurrentPasswordFactory,
-  ensureUserRegistrationAllowed,
-  ensureUserRegistrationAllowedForIP,
   usersGetValidator,
   usersVideosValidator,
   usersAskResetPasswordValidator,
   usersResetPasswordValidator,
-  usersAskSendVerifyEmailValidator,
-  usersVerifyEmailValidator,
   userAutocompleteValidator,
   ensureAuthUserOwnsAccountValidator,
   ensureCanModerateUser,

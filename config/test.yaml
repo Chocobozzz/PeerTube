@@ -74,6 +74,7 @@ cache:
 
 signup:
   enabled: true
+  requires_approval: false
   requires_email_verification: false
 
 transcoding:

@@ -261,10 +261,17 @@ class ServerConfigManager {
   async getServerConfig (ip?: string): Promise<ServerConfig> {
     const { allowed } = await Hooks.wrapPromiseFun(
       isSignupAllowed,
+
       {
-        ip
+        ip,
+        signupMode: CONFIG.SIGNUP.REQUIRES_APPROVAL
+          ? 'request-registration'
+          : 'direct-registration'
       },
-      'filter:api.user.signup.allowed.result'
+
+      CONFIG.SIGNUP.REQUIRES_APPROVAL
+        ? 'filter:api.user.request-signup.allowed.result'
+        : 'filter:api.user.signup.allowed.result'
     )
 
     const allowedForCurrentIP = isSignupAllowedForCurrentIP(ip)
@@ -273,6 +280,7 @@ class ServerConfigManager {
       allowed,
       allowedForCurrentIP,
       minimumAge: CONFIG.SIGNUP.MINIMUM_AGE,
+      requiresApproval: CONFIG.SIGNUP.REQUIRES_APPROVAL,
       requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
     }
 

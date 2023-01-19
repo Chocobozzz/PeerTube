@@ -20,6 +20,7 @@ import { VideoCommentModel } from '../video/video-comment'
 import { VideoImportModel } from '../video/video-import'
 import { UserNotificationListQueryBuilder } from './sql/user-notitication-list-query-builder'
 import { UserModel } from './user'
+import { UserRegistrationModel } from './user-registration'
 
 @Table({
   tableName: 'userNotification',
@@ -95,6 +96,14 @@ import { UserModel } from './user'
       fields: [ 'applicationId' ],
       where: {
         applicationId: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'userRegistrationId' ],
+      where: {
+        userRegistrationId: {
           [Op.ne]: null
         }
       }
@@ -240,6 +249,18 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
     onDelete: 'cascade'
   })
   Application: ApplicationModel
+
+  @ForeignKey(() => UserRegistrationModel)
+  @Column
+  userRegistrationId: number
+
+  @BelongsTo(() => UserRegistrationModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
+  UserRegistration: UserRegistrationModel
 
   static listForApi (userId: number, start: number, count: number, sort: string, unread?: boolean) {
     const where = { userId }
@@ -416,6 +437,10 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
       ? { latestVersion: this.Application.latestPeerTubeVersion }
       : undefined
 
+    const registration = this.UserRegistration
+      ? { id: this.UserRegistration.id, username: this.UserRegistration.username }
+      : undefined
+
     return {
       id: this.id,
       type: this.type,
@@ -429,6 +454,7 @@ export class UserNotificationModel extends Model<Partial<AttributesOnly<UserNoti
       actorFollow,
       plugin,
       peertube,
+      registration,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString()
     }

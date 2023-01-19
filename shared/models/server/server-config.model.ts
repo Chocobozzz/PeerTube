@@ -131,6 +131,7 @@ export interface ServerConfig {
     allowed: boolean
     allowedForCurrentIP: boolean
     requiresEmailVerification: boolean
+    requiresApproval: boolean
     minimumAge: number
   }
 

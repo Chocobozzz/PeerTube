@@ -4,26 +4,21 @@ import { Hooks } from '@server/lib/plugins/hooks'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token'
 import { MUserAccountDefault } from '@server/types/models'
 import { pick } from '@shared/core-utils'
-import { HttpStatusCode, UserCreate, UserCreateResult, UserRegister, UserRight, UserUpdate } from '@shared/models'
+import { HttpStatusCode, UserCreate, UserCreateResult, UserRight, UserUpdate } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
 import { logger } from '../../../helpers/logger'
 import { generateRandomString, getFormattedObjects } from '../../../helpers/utils'
-import { CONFIG } from '../../../initializers/config'
 import { WEBSERVER } from '../../../initializers/constants'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { Emailer } from '../../../lib/emailer'
-import { Notifier } from '../../../lib/notifier'
 import { Redis } from '../../../lib/redis'
-import { buildUser, createUserAccountAndChannelAndPlaylist, sendVerifyUserEmail } from '../../../lib/user'
+import { buildUser, createUserAccountAndChannelAndPlaylist } from '../../../lib/user'
 import {
   adminUsersSortValidator,
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  buildRateLimiter,
   ensureUserHasRight,
-  ensureUserRegistrationAllowed,
-  ensureUserRegistrationAllowedForIP,
   paginationValidator,
   setDefaultPagination,
   setDefaultSort,
@@ -31,19 +26,17 @@ import {
   usersAddValidator,
   usersGetValidator,
   usersListValidator,
-  usersRegisterValidator,
   usersRemoveValidator,
   usersUpdateValidator
 } from '../../../middlewares'
 import {
   ensureCanModerateUser,
   usersAskResetPasswordValidator,
-  usersAskSendVerifyEmailValidator,
   usersBlockingValidator,
-  usersResetPasswordValidator,
-  usersVerifyEmailValidator
+  usersResetPasswordValidator
 } from '../../../middlewares/validators'
 import { UserModel } from '../../../models/user/user'
+import { emailVerificationRouter } from './email-verification'
 import { meRouter } from './me'
 import { myAbusesRouter } from './my-abuses'
 import { myBlocklistRouter } from './my-blocklist'
@@ -51,22 +44,14 @@ import { myVideosHistoryRouter } from './my-history'
 import { myNotificationsRouter } from './my-notifications'
 import { mySubscriptionsRouter } from './my-subscriptions'
 import { myVideoPlaylistsRouter } from './my-video-playlists'
+import { registrationsRouter } from './registrations'
 import { twoFactorRouter } from './two-factor'
 
 const auditLogger = auditLoggerFactory('users')
 
-const signupRateLimiter = buildRateLimiter({
-  windowMs: CONFIG.RATES_LIMIT.SIGNUP.WINDOW_MS,
-  max: CONFIG.RATES_LIMIT.SIGNUP.MAX,
-  skipFailedRequests: true
-})
-
-const askSendEmailLimiter = buildRateLimiter({
-  windowMs: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
-  max: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX
-})
-
 const usersRouter = express.Router()
+usersRouter.use('/', emailVerificationRouter)
+usersRouter.use('/', registrationsRouter)
 usersRouter.use('/', twoFactorRouter)
 usersRouter.use('/', tokensRouter)
 usersRouter.use('/', myNotificationsRouter)
@@ -122,14 +107,6 @@ usersRouter.post('/',
   asyncRetryTransactionMiddleware(createUser)
 )
 
-usersRouter.post('/register',
-  signupRateLimiter,
-  asyncMiddleware(ensureUserRegistrationAllowed),
-  ensureUserRegistrationAllowedForIP,
-  asyncMiddleware(usersRegisterValidator),
-  asyncRetryTransactionMiddleware(registerUser)
-)
-
 usersRouter.put('/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
@@ -154,17 +131,6 @@ usersRouter.post('/ask-reset-password',
 usersRouter.post('/:id/reset-password',
   asyncMiddleware(usersResetPasswordValidator),
   asyncMiddleware(resetUserPassword)
-)
-
-usersRouter.post('/ask-send-verify-email',
-  askSendEmailLimiter,
-  asyncMiddleware(usersAskSendVerifyEmailValidator),
-  asyncMiddleware(reSendVerifyUserEmail)
-)
-
-usersRouter.post('/:id/verify-email',
-  asyncMiddleware(usersVerifyEmailValidator),
-  asyncMiddleware(verifyUserEmail)
 )
 
 // ---------------------------------------------------------------------------
@@ -216,35 +182,6 @@ async function createUser (req: express.Request, res: express.Response) {
       }
     } as UserCreateResult
   })
-}
-
-async function registerUser (req: express.Request, res: express.Response) {
-  const body: UserRegister = req.body
-
-  const userToCreate = buildUser({
-    ...pick(body, [ 'username', 'password', 'email' ]),
-
-    emailVerified: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION ? false : null
-  })
-
-  const { user, account, videoChannel } = await createUserAccountAndChannelAndPlaylist({
-    userToCreate,
-    userDisplayName: body.displayName || undefined,
-    channelNames: body.channel
-  })
-
-  auditLogger.create(body.username, new UserAuditView(user.toFormattedJSON()))
-  logger.info('User %s with its channel and account registered.', body.username)
-
-  if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
-    await sendVerifyUserEmail(user)
-  }
-
-  Notifier.Instance.notifyOnNewUserRegistration(user)
-
-  Hooks.runAction('action:api.user.registered', { body, user, account, videoChannel, req, res })
-
-  return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function unblockUser (req: express.Request, res: express.Response) {
@@ -356,28 +293,6 @@ async function resetUserPassword (req: express.Request, res: express.Response) {
 
   await user.save()
   await Redis.Instance.removePasswordVerificationString(user.id)
-
-  return res.status(HttpStatusCode.NO_CONTENT_204).end()
-}
-
-async function reSendVerifyUserEmail (req: express.Request, res: express.Response) {
-  const user = res.locals.user
-
-  await sendVerifyUserEmail(user)
-
-  return res.status(HttpStatusCode.NO_CONTENT_204).end()
-}
-
-async function verifyUserEmail (req: express.Request, res: express.Response) {
-  const user = res.locals.user
-  user.emailVerified = true
-
-  if (req.body.isPendingEmail === true) {
-    user.email = user.pendingEmail
-    user.pendingEmail = null
-  }
-
-  await user.save()
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

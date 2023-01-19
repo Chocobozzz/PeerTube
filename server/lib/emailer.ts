@@ -3,13 +3,13 @@ import { merge } from 'lodash'
 import { createTransport, Transporter } from 'nodemailer'
 import { join } from 'path'
 import { arrayify, root } from '@shared/core-utils'
-import { EmailPayload } from '@shared/models'
+import { EmailPayload, UserRegistrationState } from '@shared/models'
 import { SendEmailDefaultOptions } from '../../shared/models/server/emailer.model'
 import { isTestOrDevInstance } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
 import { CONFIG, isEmailEnabled } from '../initializers/config'
 import { WEBSERVER } from '../initializers/constants'
-import { MUser } from '../types/models'
+import { MRegistration, MUser } from '../types/models'
 import { JobQueue } from './job-queue'
 
 const Email = require('email-templates')
@@ -62,7 +62,9 @@ class Emailer {
       subject: 'Reset your account password',
       locals: {
         username,
-        resetPasswordUrl
+        resetPasswordUrl,
+
+        hideNotificationPreferencesLink: true
       }
     }
 
@@ -76,21 +78,33 @@ class Emailer {
       subject: 'Create your account password',
       locals: {
         username,
-        createPasswordUrl
+        createPasswordUrl,
+
+        hideNotificationPreferencesLink: true
       }
     }
 
     return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
-  addVerifyEmailJob (username: string, to: string, verifyEmailUrl: string) {
+  addVerifyEmailJob (options: {
+    username: string
+    isRegistrationRequest: boolean
+    to: string
+    verifyEmailUrl: string
+  }) {
+    const { username, isRegistrationRequest, to, verifyEmailUrl } = options
+
     const emailPayload: EmailPayload = {
       template: 'verify-email',
       to: [ to ],
       subject: `Verify your email on ${CONFIG.INSTANCE.NAME}`,
       locals: {
         username,
-        verifyEmailUrl
+        verifyEmailUrl,
+        isRegistrationRequest,
+
+        hideNotificationPreferencesLink: true
       }
     }
 
@@ -123,7 +137,33 @@ class Emailer {
         body,
 
         // There are not notification preferences for the contact form
-        hideNotificationPreferences: true
+        hideNotificationPreferencesLink: true
+      }
+    }
+
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
+  }
+
+  addUserRegistrationRequestProcessedJob (registration: MRegistration) {
+    let template: string
+    let subject: string
+    if (registration.state === UserRegistrationState.ACCEPTED) {
+      template = 'user-registration-request-accepted'
+      subject = `Your registration request for ${registration.username} has been accepted`
+    } else {
+      template = 'user-registration-request-rejected'
+      subject = `Your registration request for ${registration.username} has been rejected`
+    }
+
+    const to = registration.email
+    const emailPayload: EmailPayload = {
+      to: [ to ],
+      template,
+      subject,
+      locals: {
+        username: registration.username,
+        moderationResponse: registration.moderationResponse,
+        loginLink: WEBSERVER.URL + '/login'
       }
     }
 

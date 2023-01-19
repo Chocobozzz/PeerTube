@@ -83,6 +83,7 @@ export interface CustomConfig {
   signup: {
     enabled: boolean
     limit: number
+    requiresApproval: boolean
     requiresEmailVerification: boolean
     minimumAge: number
   }

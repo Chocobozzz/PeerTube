@@ -9,7 +9,7 @@ import {
   CONTACT_FORM_LIFETIME,
   RESUMABLE_UPLOAD_SESSION_LIFETIME,
   TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME,
-  USER_EMAIL_VERIFY_LIFETIME,
+  EMAIL_VERIFY_LIFETIME,
   USER_PASSWORD_CREATE_LIFETIME,
   USER_PASSWORD_RESET_LIFETIME,
   VIEW_LIFETIME,
@@ -124,16 +124,28 @@ class Redis {
 
   /* ************ Email verification ************ */
 
-  async setVerifyEmailVerificationString (userId: number) {
+  async setUserVerifyEmailVerificationString (userId: number) {
     const generatedString = await generateRandomString(32)
 
-    await this.setValue(this.generateVerifyEmailKey(userId), generatedString, USER_EMAIL_VERIFY_LIFETIME)
+    await this.setValue(this.generateUserVerifyEmailKey(userId), generatedString, EMAIL_VERIFY_LIFETIME)
 
     return generatedString
   }
 
-  async getVerifyEmailLink (userId: number) {
-    return this.getValue(this.generateVerifyEmailKey(userId))
+  async getUserVerifyEmailLink (userId: number) {
+    return this.getValue(this.generateUserVerifyEmailKey(userId))
+  }
+
+  async setRegistrationVerifyEmailVerificationString (registrationId: number) {
+    const generatedString = await generateRandomString(32)
+
+    await this.setValue(this.generateRegistrationVerifyEmailKey(registrationId), generatedString, EMAIL_VERIFY_LIFETIME)
+
+    return generatedString
+  }
+
+  async getRegistrationVerifyEmailLink (registrationId: number) {
+    return this.getValue(this.generateRegistrationVerifyEmailKey(registrationId))
   }
 
   /* ************ Contact form per IP ************ */
@@ -346,8 +358,12 @@ class Redis {
     return 'two-factor-request-' + userId + '-' + token
   }
 
-  private generateVerifyEmailKey (userId: number) {
-    return 'verify-email-' + userId
+  private generateUserVerifyEmailKey (userId: number) {
+    return 'verify-email-user-' + userId
+  }
+
+  private generateRegistrationVerifyEmailKey (registrationId: number) {
+    return 'verify-email-registration-' + registrationId
   }
 
   private generateIPViewKey (ip: string, videoUUID: string) {

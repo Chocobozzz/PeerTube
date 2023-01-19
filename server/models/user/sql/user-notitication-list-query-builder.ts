@@ -180,7 +180,9 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
       "Account->Actor->Avatars"."type" AS "Account.Actor.Avatars.type",
       "Account->Actor->Avatars"."filename" AS "Account.Actor.Avatars.filename",
       "Account->Actor->Server"."id" AS "Account.Actor.Server.id",
-      "Account->Actor->Server"."host" AS "Account.Actor.Server.host"`
+      "Account->Actor->Server"."host" AS "Account.Actor.Server.host",
+      "UserRegistration"."id" AS "UserRegistration.id",
+      "UserRegistration"."username" AS "UserRegistration.username"`
   }
 
   private getJoins () {
@@ -196,74 +198,76 @@ export class UserNotificationListQueryBuilder extends AbstractRunQuery {
         ON "Video->VideoChannel->Actor"."serverId" = "Video->VideoChannel->Actor->Server"."id"
     ) ON "UserNotificationModel"."videoId" = "Video"."id"
 
-  LEFT JOIN (
-    "videoComment" AS "VideoComment"
-    INNER JOIN "account" AS "VideoComment->Account" ON "VideoComment"."accountId" = "VideoComment->Account"."id"
-    INNER JOIN "actor" AS "VideoComment->Account->Actor" ON "VideoComment->Account"."actorId" = "VideoComment->Account->Actor"."id"
-    LEFT JOIN "actorImage" AS "VideoComment->Account->Actor->Avatars"
-      ON "VideoComment->Account->Actor"."id" = "VideoComment->Account->Actor->Avatars"."actorId"
-      AND "VideoComment->Account->Actor->Avatars"."type" = ${ActorImageType.AVATAR}
-    LEFT JOIN "server" AS "VideoComment->Account->Actor->Server"
-      ON "VideoComment->Account->Actor"."serverId" = "VideoComment->Account->Actor->Server"."id"
-    INNER JOIN "video" AS "VideoComment->Video" ON "VideoComment"."videoId" = "VideoComment->Video"."id"
-  ) ON "UserNotificationModel"."commentId" = "VideoComment"."id"
+    LEFT JOIN (
+      "videoComment" AS "VideoComment"
+      INNER JOIN "account" AS "VideoComment->Account" ON "VideoComment"."accountId" = "VideoComment->Account"."id"
+      INNER JOIN "actor" AS "VideoComment->Account->Actor" ON "VideoComment->Account"."actorId" = "VideoComment->Account->Actor"."id"
+      LEFT JOIN "actorImage" AS "VideoComment->Account->Actor->Avatars"
+        ON "VideoComment->Account->Actor"."id" = "VideoComment->Account->Actor->Avatars"."actorId"
+        AND "VideoComment->Account->Actor->Avatars"."type" = ${ActorImageType.AVATAR}
+      LEFT JOIN "server" AS "VideoComment->Account->Actor->Server"
+        ON "VideoComment->Account->Actor"."serverId" = "VideoComment->Account->Actor->Server"."id"
+      INNER JOIN "video" AS "VideoComment->Video" ON "VideoComment"."videoId" = "VideoComment->Video"."id"
+    ) ON "UserNotificationModel"."commentId" = "VideoComment"."id"
 
-  LEFT JOIN "abuse" AS "Abuse" ON "UserNotificationModel"."abuseId" = "Abuse"."id"
-  LEFT JOIN "videoAbuse" AS "Abuse->VideoAbuse" ON "Abuse"."id" = "Abuse->VideoAbuse"."abuseId"
-  LEFT JOIN "video" AS "Abuse->VideoAbuse->Video" ON "Abuse->VideoAbuse"."videoId" = "Abuse->VideoAbuse->Video"."id"
-  LEFT JOIN "commentAbuse" AS "Abuse->VideoCommentAbuse" ON "Abuse"."id" = "Abuse->VideoCommentAbuse"."abuseId"
-  LEFT JOIN "videoComment" AS "Abuse->VideoCommentAbuse->VideoComment"
-    ON "Abuse->VideoCommentAbuse"."videoCommentId" = "Abuse->VideoCommentAbuse->VideoComment"."id"
-  LEFT JOIN "video" AS "Abuse->VideoCommentAbuse->VideoComment->Video"
-    ON "Abuse->VideoCommentAbuse->VideoComment"."videoId" = "Abuse->VideoCommentAbuse->VideoComment->Video"."id"
-  LEFT JOIN (
-    "account" AS "Abuse->FlaggedAccount"
-    INNER JOIN "actor" AS "Abuse->FlaggedAccount->Actor" ON "Abuse->FlaggedAccount"."actorId" = "Abuse->FlaggedAccount->Actor"."id"
-    LEFT JOIN "actorImage" AS "Abuse->FlaggedAccount->Actor->Avatars"
-      ON "Abuse->FlaggedAccount->Actor"."id" = "Abuse->FlaggedAccount->Actor->Avatars"."actorId"
-      AND "Abuse->FlaggedAccount->Actor->Avatars"."type" = ${ActorImageType.AVATAR}
-    LEFT JOIN "server" AS "Abuse->FlaggedAccount->Actor->Server"
-      ON "Abuse->FlaggedAccount->Actor"."serverId" = "Abuse->FlaggedAccount->Actor->Server"."id"
-  ) ON "Abuse"."flaggedAccountId" = "Abuse->FlaggedAccount"."id"
+    LEFT JOIN "abuse" AS "Abuse" ON "UserNotificationModel"."abuseId" = "Abuse"."id"
+    LEFT JOIN "videoAbuse" AS "Abuse->VideoAbuse" ON "Abuse"."id" = "Abuse->VideoAbuse"."abuseId"
+    LEFT JOIN "video" AS "Abuse->VideoAbuse->Video" ON "Abuse->VideoAbuse"."videoId" = "Abuse->VideoAbuse->Video"."id"
+    LEFT JOIN "commentAbuse" AS "Abuse->VideoCommentAbuse" ON "Abuse"."id" = "Abuse->VideoCommentAbuse"."abuseId"
+    LEFT JOIN "videoComment" AS "Abuse->VideoCommentAbuse->VideoComment"
+      ON "Abuse->VideoCommentAbuse"."videoCommentId" = "Abuse->VideoCommentAbuse->VideoComment"."id"
+    LEFT JOIN "video" AS "Abuse->VideoCommentAbuse->VideoComment->Video"
+      ON "Abuse->VideoCommentAbuse->VideoComment"."videoId" = "Abuse->VideoCommentAbuse->VideoComment->Video"."id"
+    LEFT JOIN (
+      "account" AS "Abuse->FlaggedAccount"
+      INNER JOIN "actor" AS "Abuse->FlaggedAccount->Actor" ON "Abuse->FlaggedAccount"."actorId" = "Abuse->FlaggedAccount->Actor"."id"
+      LEFT JOIN "actorImage" AS "Abuse->FlaggedAccount->Actor->Avatars"
+        ON "Abuse->FlaggedAccount->Actor"."id" = "Abuse->FlaggedAccount->Actor->Avatars"."actorId"
+        AND "Abuse->FlaggedAccount->Actor->Avatars"."type" = ${ActorImageType.AVATAR}
+      LEFT JOIN "server" AS "Abuse->FlaggedAccount->Actor->Server"
+        ON "Abuse->FlaggedAccount->Actor"."serverId" = "Abuse->FlaggedAccount->Actor->Server"."id"
+    ) ON "Abuse"."flaggedAccountId" = "Abuse->FlaggedAccount"."id"
 
-  LEFT JOIN (
-    "videoBlacklist" AS "VideoBlacklist"
-    INNER JOIN "video" AS "VideoBlacklist->Video" ON "VideoBlacklist"."videoId" = "VideoBlacklist->Video"."id"
-  ) ON "UserNotificationModel"."videoBlacklistId" = "VideoBlacklist"."id"
+    LEFT JOIN (
+      "videoBlacklist" AS "VideoBlacklist"
+      INNER JOIN "video" AS "VideoBlacklist->Video" ON "VideoBlacklist"."videoId" = "VideoBlacklist->Video"."id"
+    ) ON "UserNotificationModel"."videoBlacklistId" = "VideoBlacklist"."id"
 
-  LEFT JOIN "videoImport" AS "VideoImport" ON "UserNotificationModel"."videoImportId" = "VideoImport"."id"
-  LEFT JOIN "video" AS "VideoImport->Video" ON "VideoImport"."videoId" = "VideoImport->Video"."id"
+    LEFT JOIN "videoImport" AS "VideoImport" ON "UserNotificationModel"."videoImportId" = "VideoImport"."id"
+    LEFT JOIN "video" AS "VideoImport->Video" ON "VideoImport"."videoId" = "VideoImport->Video"."id"
 
-  LEFT JOIN "plugin" AS "Plugin" ON "UserNotificationModel"."pluginId" = "Plugin"."id"
+    LEFT JOIN "plugin" AS "Plugin" ON "UserNotificationModel"."pluginId" = "Plugin"."id"
 
-  LEFT JOIN "application" AS "Application" ON "UserNotificationModel"."applicationId" = "Application"."id"
+    LEFT JOIN "application" AS "Application" ON "UserNotificationModel"."applicationId" = "Application"."id"
 
-  LEFT JOIN (
-    "actorFollow" AS "ActorFollow"
-    INNER JOIN "actor" AS "ActorFollow->ActorFollower" ON "ActorFollow"."actorId" = "ActorFollow->ActorFollower"."id"
-    INNER JOIN "account" AS "ActorFollow->ActorFollower->Account"
-      ON "ActorFollow->ActorFollower"."id" = "ActorFollow->ActorFollower->Account"."actorId"
-    LEFT JOIN "actorImage" AS "ActorFollow->ActorFollower->Avatars"
-      ON "ActorFollow->ActorFollower"."id" = "ActorFollow->ActorFollower->Avatars"."actorId"
-      AND "ActorFollow->ActorFollower->Avatars"."type" = ${ActorImageType.AVATAR}
-    LEFT JOIN "server" AS "ActorFollow->ActorFollower->Server"
-      ON "ActorFollow->ActorFollower"."serverId" = "ActorFollow->ActorFollower->Server"."id"
-    INNER JOIN "actor" AS "ActorFollow->ActorFollowing" ON "ActorFollow"."targetActorId" = "ActorFollow->ActorFollowing"."id"
-    LEFT JOIN "videoChannel" AS "ActorFollow->ActorFollowing->VideoChannel"
-      ON "ActorFollow->ActorFollowing"."id" = "ActorFollow->ActorFollowing->VideoChannel"."actorId"
-    LEFT JOIN "account" AS "ActorFollow->ActorFollowing->Account"
-      ON "ActorFollow->ActorFollowing"."id" = "ActorFollow->ActorFollowing->Account"."actorId"
-    LEFT JOIN "server" AS "ActorFollow->ActorFollowing->Server"
-      ON "ActorFollow->ActorFollowing"."serverId" = "ActorFollow->ActorFollowing->Server"."id"
-  ) ON "UserNotificationModel"."actorFollowId" = "ActorFollow"."id"
+    LEFT JOIN (
+      "actorFollow" AS "ActorFollow"
+      INNER JOIN "actor" AS "ActorFollow->ActorFollower" ON "ActorFollow"."actorId" = "ActorFollow->ActorFollower"."id"
+      INNER JOIN "account" AS "ActorFollow->ActorFollower->Account"
+        ON "ActorFollow->ActorFollower"."id" = "ActorFollow->ActorFollower->Account"."actorId"
+      LEFT JOIN "actorImage" AS "ActorFollow->ActorFollower->Avatars"
+        ON "ActorFollow->ActorFollower"."id" = "ActorFollow->ActorFollower->Avatars"."actorId"
+        AND "ActorFollow->ActorFollower->Avatars"."type" = ${ActorImageType.AVATAR}
+      LEFT JOIN "server" AS "ActorFollow->ActorFollower->Server"
+        ON "ActorFollow->ActorFollower"."serverId" = "ActorFollow->ActorFollower->Server"."id"
+      INNER JOIN "actor" AS "ActorFollow->ActorFollowing" ON "ActorFollow"."targetActorId" = "ActorFollow->ActorFollowing"."id"
+      LEFT JOIN "videoChannel" AS "ActorFollow->ActorFollowing->VideoChannel"
+        ON "ActorFollow->ActorFollowing"."id" = "ActorFollow->ActorFollowing->VideoChannel"."actorId"
+      LEFT JOIN "account" AS "ActorFollow->ActorFollowing->Account"
+        ON "ActorFollow->ActorFollowing"."id" = "ActorFollow->ActorFollowing->Account"."actorId"
+      LEFT JOIN "server" AS "ActorFollow->ActorFollowing->Server"
+        ON "ActorFollow->ActorFollowing"."serverId" = "ActorFollow->ActorFollowing->Server"."id"
+    ) ON "UserNotificationModel"."actorFollowId" = "ActorFollow"."id"
 
-  LEFT JOIN (
-    "account" AS "Account"
-    INNER JOIN "actor" AS "Account->Actor" ON "Account"."actorId" = "Account->Actor"."id"
-    LEFT JOIN "actorImage" AS "Account->Actor->Avatars"
-      ON "Account->Actor"."id" = "Account->Actor->Avatars"."actorId"
-      AND "Account->Actor->Avatars"."type" = ${ActorImageType.AVATAR}
-    LEFT JOIN "server" AS "Account->Actor->Server" ON "Account->Actor"."serverId" = "Account->Actor->Server"."id"
-  ) ON "UserNotificationModel"."accountId" = "Account"."id"`
+    LEFT JOIN (
+      "account" AS "Account"
+      INNER JOIN "actor" AS "Account->Actor" ON "Account"."actorId" = "Account->Actor"."id"
+      LEFT JOIN "actorImage" AS "Account->Actor->Avatars"
+        ON "Account->Actor"."id" = "Account->Actor->Avatars"."actorId"
+        AND "Account->Actor->Avatars"."type" = ${ActorImageType.AVATAR}
+      LEFT JOIN "server" AS "Account->Actor->Server" ON "Account->Actor"."serverId" = "Account->Actor->Server"."id"
+    ) ON "UserNotificationModel"."accountId" = "Account"."id"
+
+    LEFT JOIN "userRegistration" as "UserRegistration" ON "UserNotificationModel"."userRegistrationId" = "UserRegistration"."id"`
   }
 }

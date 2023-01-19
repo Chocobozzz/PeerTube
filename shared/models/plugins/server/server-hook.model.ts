@@ -91,6 +91,10 @@ export const serverFilterHookObject = {
   // Filter result used to check if a user can register on the instance
   'filter:api.user.signup.allowed.result': true,
 
+  // Filter result used to check if a user can send a registration request on the instance
+  // PeerTube >= 5.1
+  'filter:api.user.request-signup.allowed.result': true,
+
   // Filter result used to check if video/torrent download is allowed
   'filter:api.download.video.allowed.result': true,
   'filter:api.download.torrent.allowed.result': true,
@@ -156,6 +160,9 @@ export const serverActionHookObject = {
   'action:api.user.unblocked': true,
   // Fired when a user registered on the instance
   'action:api.user.registered': true,
+  // Fired when a user requested registration on the instance
+  // PeerTube >= 5.1
+  'action:api.user.requested-registration': true,
   // Fired when an admin/moderator created a user
   'action:api.user.created': true,
   // Fired when a user is removed by an admin/moderator
