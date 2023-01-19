@@ -138,14 +138,14 @@ describe('Official plugin Akismet', function () {
     })
 
     it('Should allow signup', async function () {
-      await servers[0].users.register({
+      await servers[0].registrations.register({
         username: 'user1',
         displayName: 'user 1'
       })
     })
 
     it('Should detect a signup as SPAM', async function () {
-      await servers[0].users.register({
+      await servers[0].registrations.register({
         username: 'user2',
         displayName: 'user 2',
         email: 'akismet-guaranteed-spam@example.com',

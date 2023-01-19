@@ -42,7 +42,7 @@ describe('Test upload quota', function () {
       this.timeout(30000)
 
       const user = { username: 'registered' + randomInt(1, 1500), password: 'password' }
-      await server.users.register(user)
+      await server.registrations.register(user)
       const userToken = await server.login.getAccessToken(user)
 
       const attributes = { fixture: 'video_short2.webm' }
@@ -57,7 +57,7 @@ describe('Test upload quota', function () {
       this.timeout(30000)
 
       const user = { username: 'registered' + randomInt(1, 1500), password: 'password' }
-      await server.users.register(user)
+      await server.registrations.register(user)
       const userToken = await server.login.getAccessToken(user)
 
       const attributes = { fixture: 'video_short2.webm' }

@@ -6,6 +6,7 @@ import { wait } from '@shared/core-utils'
 import { HttpStatusCode } from '@shared/models'
 import {
   cleanupTests,
+  ConfigCommand,
   ContactFormCommand,
   createSingleServer,
   PeerTubeServer,
@@ -23,13 +24,7 @@ describe('Test contact form', function () {
 
     const port = await MockSmtpServer.Instance.collectEmails(emails)
 
-    const overrideConfig = {
-      smtp: {
-        hostname: '127.0.0.1',
-        port
-      }
-    }
-    server = await createSingleServer(1, overrideConfig)
+    server = await createSingleServer(1, ConfigCommand.getEmailOverrideConfig(port))
     await setAccessTokensToServers([ server ])
 
     command = server.contactForm

@@ -79,6 +79,7 @@ describe('Test config API validators', function () {
     signup: {
       enabled: false,
       limit: 5,
+      requiresApproval: false,
       requiresEmailVerification: false,
       minimumAge: 16
     },
@@ -313,6 +314,7 @@ describe('Test config API validators', function () {
         signup: {
           enabled: true,
           limit: 5,
+          requiresApproval: true,
           requiresEmailVerification: true
         }
       }

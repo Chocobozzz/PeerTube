@@ -106,13 +106,13 @@ describe('Test application behind a reverse proxy', function () {
   it('Should rate limit signup', async function () {
     for (let i = 0; i < 10; i++) {
       try {
-        await server.users.register({ username: 'test' + i })
+        await server.registrations.register({ username: 'test' + i })
       } catch {
         // empty
       }
     }
 
-    await server.users.register({ username: 'test42', expectedStatus: HttpStatusCode.TOO_MANY_REQUESTS_429 })
+    await server.registrations.register({ username: 'test42', expectedStatus: HttpStatusCode.TOO_MANY_REQUESTS_429 })
   })
 
   it('Should not rate limit failed signup', async function () {
@@ -121,10 +121,10 @@ describe('Test application behind a reverse proxy', function () {
     await wait(7000)
 
     for (let i = 0; i < 3; i++) {
-      await server.users.register({ username: 'test' + i, expectedStatus: HttpStatusCode.CONFLICT_409 })
+      await server.registrations.register({ username: 'test' + i, expectedStatus: HttpStatusCode.CONFLICT_409 })
     }
 
-    await server.users.register({ username: 'test43', expectedStatus: HttpStatusCode.NO_CONTENT_204 })
+    await server.registrations.register({ username: 'test43', expectedStatus: HttpStatusCode.NO_CONTENT_204 })
 
   })
 

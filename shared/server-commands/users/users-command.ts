@@ -214,35 +214,6 @@ export class UsersCommand extends AbstractCommand {
     return this.server.login.getAccessToken({ username, password })
   }
 
-  register (options: OverrideCommandOptions & {
-    username: string
-    password?: string
-    displayName?: string
-    email?: string
-    channel?: {
-      name: string
-      displayName: string
-    }
-  }) {
-    const { username, password = 'password', displayName, channel, email = username + '@example.com' } = options
-    const path = '/api/v1/users/register'
-
-    return this.postBodyRequest({
-      ...options,
-
-      path,
-      fields: {
-        username,
-        password,
-        email,
-        displayName,
-        channel
-      },
-      implicitToken: false,
-      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
-    })
-  }
-
   // ---------------------------------------------------------------------------
 
   getMyInfo (options: OverrideCommandOptions = {}) {

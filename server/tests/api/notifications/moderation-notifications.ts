@@ -11,7 +11,6 @@ import {
   checkNewInstanceFollower,
   checkNewVideoAbuseForModerators,
   checkNewVideoFromSubscription,
-  checkUserRegistered,
   checkVideoAutoBlacklistForModerators,
   checkVideoIsPublished,
   MockInstancesIndex,
@@ -324,32 +323,6 @@ describe('Test moderation notifications', function () {
 
       await wait(500)
       await checkNewBlacklistOnMyVideo({ ...baseParams, shortUUID, videoName: name, blacklistType: 'unblacklist' })
-    })
-  })
-
-  describe('New registration', function () {
-    let baseParams: CheckerBaseParams
-
-    before(() => {
-      baseParams = {
-        server: servers[0],
-        emails,
-        socketNotifications: adminNotifications,
-        token: servers[0].accessToken
-      }
-    })
-
-    it('Should send a notification only to moderators when a user registers on the instance', async function () {
-      this.timeout(10000)
-
-      await servers[0].users.register({ username: 'user_45' })
-
-      await waitJobs(servers)
-
-      await checkUserRegistered({ ...baseParams, username: 'user_45', checkType: 'presence' })
-
-      const userOverride = { socketNotifications: userNotifications, token: userToken1, check: { web: true, mail: false } }
-      await checkUserRegistered({ ...baseParams, ...userOverride, username: 'user_45', checkType: 'absence' })
     })
   })
 

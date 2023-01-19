@@ -3,7 +3,14 @@
 import { expect } from 'chai'
 import { MockSmtpServer } from '@server/tests/shared'
 import { HttpStatusCode } from '@shared/models'
-import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/server-commands'
+import {
+  cleanupTests,
+  ConfigCommand,
+  createSingleServer,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  waitJobs
+} from '@shared/server-commands'
 
 describe('Test emails', function () {
   let server: PeerTubeServer
@@ -24,21 +31,15 @@ describe('Test emails', function () {
     username: 'user_1',
     password: 'super_password'
   }
-  let emailPort: number
 
   before(async function () {
     this.timeout(50000)
 
-    emailPort = await MockSmtpServer.Instance.collectEmails(emails)
+    const emailPort = await MockSmtpServer.Instance.collectEmails(emails)
+    server = await createSingleServer(1, ConfigCommand.getEmailOverrideConfig(emailPort))
 
-    const overrideConfig = {
-      smtp: {
-        hostname: '127.0.0.1',
-        port: emailPort
-      }
-    }
-    server = await createSingleServer(1, overrideConfig)
     await setAccessTokensToServers([ server ])
+    await server.config.enableSignup(true)
 
     {
       const created = await server.users.create({ username: user.username, password: user.password })
@@ -319,6 +320,62 @@ describe('Test emails', function () {
 
     it('Should verify the email', async function () {
       await server.users.verifyEmail({ userId, verificationString })
+    })
+  })
+
+  describe('When verifying a registration email', function () {
+    let registrationId: number
+    let registrationIdEmail: number
+
+    before(async function () {
+      const { id } = await server.registrations.requestRegistration({
+        username: 'request_1',
+        email: 'request_1@example.com',
+        registrationReason: 'tt'
+      })
+      registrationId = id
+    })
+
+    it('Should ask to send the verification email', async function () {
+      this.timeout(10000)
+
+      await server.registrations.askSendVerifyEmail({ email: 'request_1@example.com' })
+
+      await waitJobs(server)
+      expect(emails).to.have.lengthOf(9)
+
+      const email = emails[8]
+
+      expect(email['from'][0]['name']).equal('PeerTube')
+      expect(email['from'][0]['address']).equal('test-admin@127.0.0.1')
+      expect(email['to'][0]['address']).equal('request_1@example.com')
+      expect(email['subject']).contains('Verify')
+
+      const verificationStringMatches = /verificationString=([a-z0-9]+)/.exec(email['text'])
+      expect(verificationStringMatches).not.to.be.null
+
+      verificationString = verificationStringMatches[1]
+      expect(verificationString).to.not.be.undefined
+      expect(verificationString).to.have.length.above(2)
+
+      const registrationIdMatches = /registrationId=([0-9]+)/.exec(email['text'])
+      expect(registrationIdMatches).not.to.be.null
+
+      registrationIdEmail = parseInt(registrationIdMatches[1], 10)
+
+      expect(registrationId).to.equal(registrationIdEmail)
+    })
+
+    it('Should not verify the email with an invalid verification string', async function () {
+      await server.registrations.verifyEmail({
+        registrationId: registrationIdEmail,
+        verificationString: verificationString + 'b',
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should verify the email', async function () {
+      await server.registrations.verifyEmail({ registrationId: registrationIdEmail, verificationString })
     })
   })
 

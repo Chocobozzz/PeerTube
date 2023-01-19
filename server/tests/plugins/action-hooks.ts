@@ -153,7 +153,7 @@ describe('Test plugin action hooks', function () {
     let userId: number
 
     it('Should run action:api.user.registered', async function () {
-      await servers[0].users.register({ username: 'registered_user' })
+      await servers[0].registrations.register({ username: 'registered_user' })
 
       await checkHook('action:api.user.registered')
     })

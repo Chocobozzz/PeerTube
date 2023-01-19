@@ -226,16 +226,29 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     }
   })
 
-  registerHook({
-    target: 'filter:api.user.signup.allowed.result',
-    handler: (result, params) => {
-      if (params && params.body && params.body.email && params.body.email.includes('jma')) {
-        return { allowed: false, errorMessage: 'No jma' }
-      }
+  {
+    registerHook({
+      target: 'filter:api.user.signup.allowed.result',
+      handler: (result, params) => {
+        if (params && params.body && params.body.email && params.body.email.includes('jma 1')) {
+          return { allowed: false, errorMessage: 'No jma 1' }
+        }
 
-      return result
-    }
-  })
+        return result
+      }
+    })
+
+    registerHook({
+      target: 'filter:api.user.request-signup.allowed.result',
+      handler: (result, params) => {
+        if (params && params.body && params.body.email && params.body.email.includes('jma 2')) {
+          return { allowed: false, errorMessage: 'No jma 2' }
+        }
+
+        return result
+      }
+    })
+  }
 
   registerHook({
     target: 'filter:api.download.torrent.allowed.result',

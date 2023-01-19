@@ -429,56 +429,6 @@ describe('Test users', function () {
     })
   })
 
-  describe('Registering a new user', function () {
-    let user15AccessToken: string
-
-    it('Should register a new user', async function () {
-      const user = { displayName: 'super user 15', username: 'user_15', password: 'my super password' }
-      const channel = { name: 'my_user_15_channel', displayName: 'my channel rocks' }
-
-      await server.users.register({ ...user, channel })
-    })
-
-    it('Should be able to login with this registered user', async function () {
-      const user15 = {
-        username: 'user_15',
-        password: 'my super password'
-      }
-
-      user15AccessToken = await server.login.getAccessToken(user15)
-    })
-
-    it('Should have the correct display name', async function () {
-      const user = await server.users.getMyInfo({ token: user15AccessToken })
-      expect(user.account.displayName).to.equal('super user 15')
-    })
-
-    it('Should have the correct video quota', async function () {
-      const user = await server.users.getMyInfo({ token: user15AccessToken })
-      expect(user.videoQuota).to.equal(5 * 1024 * 1024)
-    })
-
-    it('Should have created the channel', async function () {
-      const { displayName } = await server.channels.get({ channelName: 'my_user_15_channel' })
-
-      expect(displayName).to.equal('my channel rocks')
-    })
-
-    it('Should remove me', async function () {
-      {
-        const { data } = await server.users.list()
-        expect(data.find(u => u.username === 'user_15')).to.not.be.undefined
-      }
-
-      await server.users.deleteMe({ token: user15AccessToken })
-
-      {
-        const { data } = await server.users.list()
-        expect(data.find(u => u.username === 'user_15')).to.be.undefined
-      }
-    })
-  })
-
   describe('User blocking', function () {
     let user16Id: number
     let user16AccessToken: string
