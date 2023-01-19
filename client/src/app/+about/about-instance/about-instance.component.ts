@@ -2,7 +2,7 @@ import { ViewportScroller } from '@angular/common'
 import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { Notifier, ServerService } from '@app/core'
-import { InstanceService } from '@app/shared/shared-instance'
+import { AboutHTML } from '@app/shared/shared-instance'
 import { copyToClipboard } from '@root-helpers/utils'
 import { HTMLServerConfig } from '@shared/models/server'
 import { ResolverData } from './about-instance.resolver'
@@ -17,22 +17,12 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   @ViewChild('descriptionWrapper') descriptionWrapper: ElementRef<HTMLInputElement>
   @ViewChild('contactAdminModal', { static: true }) contactAdminModal: ContactAdminModalComponent
 
-  shortDescription = ''
-  descriptionContent: string
-
-  html = {
-    terms: '',
-    codeOfConduct: '',
-    moderationInformation: '',
-    administrator: '',
-    creationReason: '',
-    maintenanceLifetime: '',
-    businessModel: '',
-    hardwareInformation: ''
-  }
+  aboutHTML: AboutHTML
+  descriptionElement: HTMLDivElement
 
   languages: string[] = []
   categories: string[] = []
+  shortDescription = ''
 
   initialized = false
 
@@ -44,8 +34,7 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
     private viewportScroller: ViewportScroller,
     private route: ActivatedRoute,
     private notifier: Notifier,
-    private serverService: ServerService,
-    private instanceService: InstanceService
+    private serverService: ServerService
   ) {}
 
   get instanceName () {
@@ -60,8 +49,16 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
     return this.serverConfig.instance.isNSFW
   }
 
-  async ngOnInit () {
-    const { about, languages, categories }: ResolverData = this.route.snapshot.data.instanceData
+  ngOnInit () {
+    const { about, languages, categories, aboutHTML, descriptionElement }: ResolverData = this.route.snapshot.data.instanceData
+
+    this.aboutHTML = aboutHTML
+    this.descriptionElement = descriptionElement
+
+    this.languages = languages
+    this.categories = categories
+
+    this.shortDescription = about.instance.shortDescription
 
     this.serverConfig = this.serverService.getHTMLConfig()
 
@@ -72,14 +69,6 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
 
       this.contactAdminModal.show(prefill)
     })
-
-    this.languages = languages
-    this.categories = categories
-
-    this.shortDescription = about.instance.shortDescription
-    this.descriptionContent = about.instance.description
-
-    this.html = await this.instanceService.buildHtml(about)
 
     this.initialized = true
   }

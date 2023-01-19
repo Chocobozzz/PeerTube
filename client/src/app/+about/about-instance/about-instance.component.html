@@ -21,7 +21,7 @@
 
     <div class="anchor" id="administrators-and-sustainability"></div>
     <a
-      *ngIf="html.administrator || html.maintenanceLifetime || html.businessModel"
+      *ngIf="aboutHTML.administrator || aboutHTML.maintenanceLifetime || aboutHTML.businessModel"
       class="anchor-link"
       routerLink="/about/instance"
       fragment="administrators-and-sustainability"
@@ -33,7 +33,7 @@
       </h2>
     </a>
 
-    <div class="block administrator" *ngIf="html.administrator">
+    <div class="block administrator" *ngIf="aboutHTML.administrator">
       <div class="anchor" id="administrators"></div>
       <a
         class="anchor-link"
@@ -44,10 +44,10 @@
         <h3 i18n class="section-title">Who we are</h3>
       </a>
 
-      <div [innerHTML]="html.administrator"></div>
+      <div [innerHTML]="aboutHTML.administrator"></div>
     </div>
 
-    <div class="block creation-reason" *ngIf="html.creationReason">
+    <div class="block creation-reason" *ngIf="aboutHTML.creationReason">
       <div class="anchor" id="creation-reason"></div>
       <a
         class="anchor-link"
@@ -58,10 +58,10 @@
         <h3 i18n class="section-title">Why we created this instance</h3>
       </a>
 
-      <div [innerHTML]="html.creationReason"></div>
+      <div [innerHTML]="aboutHTML.creationReason"></div>
     </div>
 
-    <div class="block maintenance-lifetime" *ngIf="html.maintenanceLifetime">
+    <div class="block maintenance-lifetime" *ngIf="aboutHTML.maintenanceLifetime">
       <div class="anchor" id="maintenance-lifetime"></div>
       <a
         class="anchor-link"
@@ -72,10 +72,10 @@
         <h3 i18n class="section-title">How long we plan to maintain this instance</h3>
       </a>
 
-      <div [innerHTML]="html.maintenanceLifetime"></div>
+      <div [innerHTML]="aboutHTML.maintenanceLifetime"></div>
     </div>
 
-    <div class="block business-model" *ngIf="html.businessModel">
+    <div class="block business-model" *ngIf="aboutHTML.businessModel">
         <div class="anchor" id="business-model"></div>
         <a
           class="anchor-link"
@@ -86,12 +86,12 @@
           <h3 i18n class="section-title">How we will pay for keeping our instance running</h3>
         </a>
 
-      <div [innerHTML]="html.businessModel"></div>
+      <div [innerHTML]="aboutHTML.businessModel"></div>
     </div>
 
     <div class="anchor" id="information"></div>
     <a
-      *ngIf="descriptionContent"
+      *ngIf="descriptionElement"
       class="anchor-link"
       routerLink="/about/instance"
       fragment="information"
@@ -113,13 +113,13 @@
         <h3 i18n class="section-title">Description</h3>
       </a>
 
-      <my-custom-markup-container [content]="descriptionContent"></my-custom-markup-container>
+      <my-custom-markup-container [content]="descriptionElement"></my-custom-markup-container>
     </div>
 
     <div myPluginSelector pluginSelectorId="about-instance-moderation">
       <div class="anchor" id="moderation"></div>
       <a
-        *ngIf="html.moderationInformation || html.codeOfConduct || html.terms"
+        *ngIf="aboutHTML.moderationInformation || aboutHTML.codeOfConduct || aboutHTML.terms"
         class="anchor-link"
         routerLink="/about/instance"
         fragment="moderation"
@@ -130,7 +130,7 @@
         </h2>
       </a>
 
-      <div class="block moderation-information" *ngIf="html.moderationInformation">
+      <div class="block moderation-information" *ngIf="aboutHTML.moderationInformation">
         <div class="anchor" id="moderation-information"></div>
         <a
           class="anchor-link"
@@ -141,10 +141,10 @@
           <h3 i18n class="section-title">Moderation information</h3>
         </a>
 
-        <div [innerHTML]="html.moderationInformation"></div>
+        <div [innerHTML]="aboutHTML.moderationInformation"></div>
       </div>
 
-      <div class="block code-of-conduct" *ngIf="html.codeOfConduct">
+      <div class="block code-of-conduct" *ngIf="aboutHTML.codeOfConduct">
         <div class="anchor" id="code-of-conduct"></div>
         <a
           class="anchor-link"
@@ -155,7 +155,7 @@
           <h3 i18n class="section-title">Code of conduct</h3>
         </a>
 
-        <div [innerHTML]="html.codeOfConduct"></div>
+        <div [innerHTML]="aboutHTML.codeOfConduct"></div>
       </div>
 
       <div class="block terms">
@@ -169,14 +169,14 @@
           <h3 i18n class="section-title">Terms</h3>
         </a>
 
-        <div [innerHTML]="html.terms"></div>
+        <div [innerHTML]="aboutHTML.terms"></div>
       </div>
     </div>
 
     <div myPluginSelector pluginSelectorId="about-instance-other-information">
       <div class="anchor" id="other-information"></div>
       <a
-        *ngIf="html.hardwareInformation"
+        *ngIf="aboutHTML.hardwareInformation"
         class="anchor-link"
         routerLink="/about/instance"
         fragment="other-information"
@@ -187,7 +187,7 @@
         </h2>
       </a>
 
-      <div class="block hardware-information" *ngIf="html.hardwareInformation">
+      <div class="block hardware-information" *ngIf="aboutHTML.hardwareInformation">
         <div class="anchor" id="hardware-information"></div>
         <a
           class="anchor-link"
@@ -198,7 +198,7 @@
           <h3 i18n class="section-title">Hardware information</h3>
         </a>
 
-        <div [innerHTML]="html.hardwareInformation"></div>
+        <div [innerHTML]="aboutHTML.hardwareInformation"></div>
       </div>
     </div>
   </div>
