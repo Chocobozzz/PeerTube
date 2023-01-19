@@ -488,7 +488,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
 }
 
 function getCategoryLabel (id: number) {
-  return VIDEO_CATEGORIES[id] || 'Misc'
+  return VIDEO_CATEGORIES[id] || 'Unknown'
 }
 
 function getLicenceLabel (id: number) {

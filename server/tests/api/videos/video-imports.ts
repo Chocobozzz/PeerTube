@@ -41,7 +41,7 @@ async function checkVideosServer1 (server: PeerTubeServer, idHttp: string, idMag
   const videoTorrent = await server.videos.get({ id: idTorrent })
 
   for (const video of [ videoMagnet, videoTorrent ]) {
-    expect(video.category.label).to.equal('Misc')
+    expect(video.category.label).to.equal('Unknown')
     expect(video.licence.label).to.equal('Unknown')
     expect(video.language.label).to.equal('Unknown')
     expect(video.nsfw).to.be.false

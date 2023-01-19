@@ -90,7 +90,6 @@ Object.values(VIDEO_CATEGORIES)
 
 // More keys
 Object.assign(serverKeys, {
-  Misc: 'Misc',
   Unknown: 'Unknown'
 })
 
