@@ -6,6 +6,7 @@ import { randomInt, root } from '@shared/core-utils'
 import {
   AbuseState,
   JobType,
+  UserRegistrationState,
   VideoChannelSyncState,
   VideoImportState,
   VideoPrivacy,
@@ -77,6 +78,8 @@ const SORTABLE_COLUMNS = {
   INSTANCE_FOLLOWING: [ 'createdAt', 'redundancyAllowed', 'state' ],
   ACCOUNT_FOLLOWERS: [ 'createdAt' ],
   CHANNEL_FOLLOWERS: [ 'createdAt' ],
+
+  USER_REGISTRATIONS: [ 'createdAt', 'state' ],
 
   VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'trending', 'hot', 'best' ],
 
@@ -289,6 +292,10 @@ const CONSTRAINTS_FIELDS = {
   },
   ABUSE_MESSAGES: {
     MESSAGE: { min: 2, max: 3000 } // Length
+  },
+  USER_REGISTRATIONS: {
+    REASON_MESSAGE: { min: 2, max: 3000 }, // Length
+    MODERATOR_MESSAGE: { min: 2, max: 3000 } // Length
   },
   VIDEO_BLACKLIST: {
     REASON: { min: 2, max: 300 } // Length
@@ -516,6 +523,12 @@ const ABUSE_STATES: { [ id in AbuseState ]: string } = {
   [AbuseState.ACCEPTED]: 'Accepted'
 }
 
+const USER_REGISTRATION_STATES: { [ id in UserRegistrationState ]: string } = {
+  [UserRegistrationState.PENDING]: 'Pending',
+  [UserRegistrationState.REJECTED]: 'Rejected',
+  [UserRegistrationState.ACCEPTED]: 'Accepted'
+}
+
 const VIDEO_PLAYLIST_PRIVACIES: { [ id in VideoPlaylistPrivacy ]: string } = {
   [VideoPlaylistPrivacy.PUBLIC]: 'Public',
   [VideoPlaylistPrivacy.UNLISTED]: 'Unlisted',
@@ -660,7 +673,7 @@ const USER_PASSWORD_CREATE_LIFETIME = 60000 * 60 * 24 * 7 // 7 days
 
 const TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME = 60000 * 10 // 10 minutes
 
-const USER_EMAIL_VERIFY_LIFETIME = 60000 * 60 // 60 minutes
+const EMAIL_VERIFY_LIFETIME = 60000 * 60 // 60 minutes
 
 const NSFW_POLICY_TYPES: { [ id: string ]: NSFWPolicyType } = {
   DO_NOT_LIST: 'do_not_list',
@@ -1069,13 +1082,14 @@ export {
   VIDEO_TRANSCODING_FPS,
   FFMPEG_NICE,
   ABUSE_STATES,
+  USER_REGISTRATION_STATES,
   LRU_CACHE,
   REQUEST_TIMEOUTS,
   MAX_LOCAL_VIEWER_WATCH_SECTIONS,
   USER_PASSWORD_RESET_LIFETIME,
   USER_PASSWORD_CREATE_LIFETIME,
   MEMOIZE_TTL,
-  USER_EMAIL_VERIFY_LIFETIME,
+  EMAIL_VERIFY_LIFETIME,
   OVERVIEWS,
   SCHEDULER_INTERVALS_MS,
   REPEAT_JOBS,
