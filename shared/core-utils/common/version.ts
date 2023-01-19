@@ -1,18 +1,9 @@
-// Thanks https://stackoverflow.com/a/16187766
+// Thanks https://gist.github.com/iwill/a83038623ba4fef6abb9efca87ae9ccb
 function compareSemVer (a: string, b: string) {
-  const regExStrip0 = /(\.0+)+$/
-  const segmentsA = a.replace(regExStrip0, '').split('.')
-  const segmentsB = b.replace(regExStrip0, '').split('.')
+  if (a.startsWith(b + '-')) return -1
+  if (b.startsWith(a + '-')) return 1
 
-  const l = Math.min(segmentsA.length, segmentsB.length)
-
-  for (let i = 0; i < l; i++) {
-    const diff = parseInt(segmentsA[i], 10) - parseInt(segmentsB[i], 10)
-
-    if (diff) return diff
-  }
-
-  return segmentsA.length - segmentsB.length
+  return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'case', caseFirst: 'upper' })
 }
 
 export {
