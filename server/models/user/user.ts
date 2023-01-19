@@ -460,7 +460,7 @@ export class UserModel extends Model<Partial<AttributesOnly<UserModel>>> {
   }
 
   static countTotal () {
-    return this.count()
+    return UserModel.unscoped().count()
   }
 
   static listForAdminApi (parameters: {
