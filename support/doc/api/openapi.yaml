@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: PeerTube
-  version: 4.0.0
+  version: 5.1.0
   contact:
     name: PeerTube Community
     url: https://joinpeertube.org
@@ -1401,22 +1401,44 @@ paths:
         '200':
           description: successful operation
 
-  /api/v1/users/register:
+  /api/v1/users/ask-send-verify-email:
     post:
-      summary: Register a user
-      operationId: registerUser
+      summary: Resend user verification link
+      operationId: resendEmailToVerifyUser
       tags:
         - Users
         - Register
-      responses:
-        '204':
-          description: successful operation
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterUser'
-        required: true
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: User email
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/users/registrations/ask-send-verify-email:
+    post:
+      summary: Resend verification link to registration email
+      operationId: resendEmailToVerifyRegistration
+      tags:
+        - Register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: Registration email
+      responses:
+        '204':
+          description: successful operation
 
   /api/v1/users/{id}/verify-email:
     post:
@@ -1425,6 +1447,7 @@ paths:
       description: |
         Following a user registration, the new user will receive an email asking to click a link
         containing a secret.
+        This endpoint can also be used to verify a new email set in the user account.
       tags:
         - Users
         - Register
@@ -1450,6 +1473,36 @@ paths:
           description: invalid verification string
         '404':
           description: user not found
+
+  /api/v1/users/registrations/{registrationId}/verify-email:
+    post:
+      summary: Verify a registration email
+      operationId: verifyRegistrationEmail
+      description: |
+        Following a user registration request, the user will receive an email asking to click a link
+        containing a secret.
+      tags:
+        - Register
+      parameters:
+        - $ref: '#/components/parameters/registrationId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                verificationString:
+                  type: string
+                  format: url
+              required:
+                - verificationString
+      responses:
+        '204':
+          description: successful operation
+        '403':
+          description: invalid verification string
+        '404':
+          description: registration not found
 
   /api/v1/users/{id}/two-factor/request:
     post:
@@ -1540,18 +1593,6 @@ paths:
           description: invalid password
         '404':
           description: user not found
-
-
-  /api/v1/users/ask-send-verify-email:
-    post:
-      summary: Resend user verification link
-      operationId: resendEmailToVerifyUser
-      tags:
-        - Users
-        - Register
-      responses:
-        '204':
-          description: successful operation
 
   /api/v1/users/me:
     get:
@@ -2033,6 +2074,146 @@ paths:
         - OAuth2: []
       tags:
         - My User
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/users/register:
+    post:
+      summary: Register a user
+      operationId: registerUser
+      description: Signup has to be enabled and signup approval is not required
+      tags:
+        - Register
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: request error
+        '403':
+          description: user registration is not enabled, user limit is reached, registration is not allowed for the ip, requires approval or blocked by a plugin
+        '409':
+          description: 'a user with this username, channel name or email already exists'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUser'
+        required: true
+
+  /api/v1/users/registrations/request:
+    post:
+      summary: Request registration
+      description: Signup has to be enabled and require approval on the instance
+      operationId: requestRegistration
+      tags:
+        - Register
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegistration'
+        '400':
+          description: request error or signup approval is not enabled on the instance
+        '403':
+          description: user registration is not enabled, user limit is reached, registration is not allowed for the ip or blocked by a plugin
+        '409':
+          description: 'a user or registration with this username, channel name or email already exists'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+
+  /api/v1/users/registrations/{registrationId}/accept:
+    post:
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      summary: Accept registration
+      operationId: acceptRegistration
+      tags:
+        - Register
+      parameters:
+        - $ref: '#/components/parameters/registrationId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationAcceptOrReject'
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/users/registrations/{registrationId}/reject:
+    post:
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      summary: Reject registration
+      operationId: rejectRegistration
+      tags:
+        - Register
+      parameters:
+        - $ref: '#/components/parameters/registrationId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationAcceptOrReject'
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/users/registrations/{registrationId}:
+    delete:
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      summary: Delete registration
+      description: 'Delete the registration entry. It will not remove the user associated with this registration (if any)'
+      operationId: deleteRegistration
+      tags:
+        - Register
+      parameters:
+        - $ref: '#/components/parameters/registrationId'
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/users/registrations:
+    get:
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      summary: List registrations
+      operationId: listRegistrations
+      tags:
+        - Register
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+            - -createdAt
+            - createdAt
+            - state
+            - -state
       responses:
         '204':
           description: successful operation
@@ -5389,6 +5570,7 @@ components:
         type: string
         enum:
         - createdAt
+
     name:
       name: name
       in: path
@@ -5402,6 +5584,13 @@ components:
       in: path
       required: true
       description: Entity id
+      schema:
+        $ref: '#/components/schemas/id'
+    registrationId:
+      name: registrationId
+      in: path
+      required: true
+      description: Registration ID
       schema:
         $ref: '#/components/schemas/id'
     idOrUUID:
@@ -7724,6 +7913,7 @@ components:
       required:
         - video
         - rating
+
     RegisterUser:
       properties:
         username:
@@ -7753,6 +7943,74 @@ components:
         - username
         - password
         - email
+
+    UserRegistrationRequest:
+      allOf:
+        - $ref: '#/components/schemas/RegisterUser'
+        - type: object
+          properties:
+            registrationReason:
+              type: string
+              description: reason for the user to register on the instance
+          required:
+            - registrationReason
+
+    UserRegistrationAcceptOrReject:
+      type: object
+      properties:
+        moderationResponse:
+          type: string
+          description: Moderation response to send to the user
+      required:
+        - moderationResponse
+
+    UserRegistration:
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        state:
+          type: object
+          properties:
+            id:
+              type: integer
+              enum:
+                - 1
+                - 2
+                - 3
+              description: 'The registration state (Pending = `1`, Rejected = `2`, Accepted = `3`)'
+            label:
+              type: string
+        registrationReason:
+          type: string
+        moderationResponse:
+          type: string
+          nullable: true
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        emailVerified:
+          type: boolean
+        accountDisplayName:
+          type: string
+        channelHandle:
+          type: string
+        channelDisplayName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        user:
+          type: object
+          nullable: true
+          description: If the registration has been accepted, this is a partial user object created by the registration
+          properties:
+            id:
+              $ref: '#/components/schemas/id'
 
     OAuthClient:
       properties:
