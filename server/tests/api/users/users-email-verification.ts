@@ -3,9 +3,16 @@
 import { expect } from 'chai'
 import { MockSmtpServer } from '@server/tests/shared'
 import { HttpStatusCode } from '@shared/models'
-import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers, waitJobs } from '@shared/server-commands'
+import {
+  cleanupTests,
+  ConfigCommand,
+  createSingleServer,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  waitJobs
+} from '@shared/server-commands'
 
-describe('Test users account verification', function () {
+describe('Test users email verification', function () {
   let server: PeerTubeServer
   let userId: number
   let userAccessToken: string
@@ -25,14 +32,7 @@ describe('Test users account verification', function () {
     this.timeout(30000)
 
     const port = await MockSmtpServer.Instance.collectEmails(emails)
-
-    const overrideConfig = {
-      smtp: {
-        hostname: '127.0.0.1',
-        port
-      }
-    }
-    server = await createSingleServer(1, overrideConfig)
+    server = await createSingleServer(1, ConfigCommand.getEmailOverrideConfig(port))
 
     await setAccessTokensToServers([ server ])
   })
@@ -40,17 +40,18 @@ describe('Test users account verification', function () {
   it('Should register user and send verification email if verification required', async function () {
     this.timeout(30000)
 
-    await server.config.updateCustomSubConfig({
+    await server.config.updateExistingSubConfig({
       newConfig: {
         signup: {
           enabled: true,
+          requiresApproval: false,
           requiresEmailVerification: true,
           limit: 10
         }
       }
     })
 
-    await server.users.register(user1)
+    await server.registrations.register(user1)
 
     await waitJobs(server)
     expectedEmailsLength++
@@ -127,17 +128,15 @@ describe('Test users account verification', function () {
 
   it('Should register user not requiring email verification if setting not enabled', async function () {
     this.timeout(5000)
-    await server.config.updateCustomSubConfig({
+    await server.config.updateExistingSubConfig({
       newConfig: {
         signup: {
-          enabled: true,
-          requiresEmailVerification: false,
-          limit: 10
+          requiresEmailVerification: false
         }
       }
     })
 
-    await server.users.register(user2)
+    await server.registrations.register(user2)
 
     await waitJobs(server)
     expect(emails).to.have.lengthOf(expectedEmailsLength)
@@ -152,9 +151,7 @@ describe('Test users account verification', function () {
     await server.config.updateCustomSubConfig({
       newConfig: {
         signup: {
-          enabled: true,
-          requiresEmailVerification: true,
-          limit: 10
+          requiresEmailVerification: true
         }
       }
     })

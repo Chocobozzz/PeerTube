@@ -149,7 +149,7 @@ describe('Test config defaults', function () {
       })
 
       it('Should register a user with this default setting', async function () {
-        await server.users.register({ username: 'user_p2p_2' })
+        await server.registrations.register({ username: 'user_p2p_2' })
 
         const userToken = await server.login.getAccessToken('user_p2p_2')
 
@@ -194,7 +194,7 @@ describe('Test config defaults', function () {
       })
 
       it('Should register a user with this default setting', async function () {
-        await server.users.register({ username: 'user_p2p_4' })
+        await server.registrations.register({ username: 'user_p2p_4' })
 
         const userToken = await server.login.getAccessToken('user_p2p_4')
 

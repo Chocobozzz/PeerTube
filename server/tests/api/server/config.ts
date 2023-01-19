@@ -50,6 +50,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.signup.enabled).to.be.true
   expect(data.signup.limit).to.equal(4)
   expect(data.signup.minimumAge).to.equal(16)
+  expect(data.signup.requiresApproval).to.be.false
   expect(data.signup.requiresEmailVerification).to.be.false
 
   expect(data.admin.email).to.equal('admin' + server.internalServerNumber + '@example.com')
@@ -152,6 +153,7 @@ function checkUpdatedConfig (data: CustomConfig) {
 
   expect(data.signup.enabled).to.be.false
   expect(data.signup.limit).to.equal(5)
+  expect(data.signup.requiresApproval).to.be.false
   expect(data.signup.requiresEmailVerification).to.be.false
   expect(data.signup.minimumAge).to.equal(10)
 
@@ -285,6 +287,7 @@ const newCustomConfig: CustomConfig = {
   signup: {
     enabled: false,
     limit: 5,
+    requiresApproval: false,
     requiresEmailVerification: false,
     minimumAge: 10
   },
@@ -468,9 +471,9 @@ describe('Test config', function () {
     this.timeout(5000)
 
     await Promise.all([
-      server.users.register({ username: 'user1' }),
-      server.users.register({ username: 'user2' }),
-      server.users.register({ username: 'user3' })
+      server.registrations.register({ username: 'user1' }),
+      server.registrations.register({ username: 'user2' }),
+      server.registrations.register({ username: 'user3' })
     ])
 
     const data = await server.config.getConfig()
