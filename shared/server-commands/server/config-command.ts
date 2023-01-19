@@ -31,13 +31,13 @@ export class ConfigCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  enableSignup (requiresApproval: boolean) {
+  enableSignup (requiresApproval: boolean, limit = -1) {
     return this.updateExistingSubConfig({
       newConfig: {
         signup: {
           enabled: true,
           requiresApproval,
-          limit: -1
+          limit
         }
       }
     })

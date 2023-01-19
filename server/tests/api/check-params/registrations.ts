@@ -1,7 +1,15 @@
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '@server/tests/shared'
 import { omit } from '@shared/core-utils'
 import { HttpStatusCode, UserRole } from '@shared/models'
-import { cleanupTests, createSingleServer, makePostBodyRequest, PeerTubeServer, setAccessTokensToServers } from '@shared/server-commands'
+import {
+  cleanupTests,
+  createSingleServer,
+  makePostBodyRequest,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  setDefaultAccountAvatar,
+  setDefaultChannelAvatar
+} from '@shared/server-commands'
 
 describe('Test registrations API validators', function () {
   let server: PeerTubeServer
@@ -16,6 +24,9 @@ describe('Test registrations API validators', function () {
     server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
+    await setDefaultAccountAvatar([ server ])
+    await setDefaultChannelAvatar([ server ])
+
     await server.config.enableSignup(false);
 
     ({ token: moderatorToken } = await server.users.generate('moderator', UserRole.MODERATOR));
@@ -37,7 +48,10 @@ describe('Test registrations API validators', function () {
     describe('When registering a new user or requesting user registration', function () {
 
       async function check (fields: any, expectedStatus = HttpStatusCode.BAD_REQUEST_400) {
+        await server.config.enableSignup(false)
         await makePostBodyRequest({ url: server.url, path: registrationPath, fields, expectedStatus })
+
+        await server.config.enableSignup(true)
         await makePostBodyRequest({ url: server.url, path: registrationRequestPath, fields, expectedStatus })
       }
 
@@ -138,7 +152,7 @@ describe('Test registrations API validators', function () {
       it('Should fail on a server with registration disabled', async function () {
         this.timeout(60000)
 
-        await server.config.updateCustomSubConfig({
+        await server.config.updateExistingSubConfig({
           newConfig: {
             signup: {
               enabled: false
@@ -159,13 +173,30 @@ describe('Test registrations API validators', function () {
 
         const { total } = await server.users.list()
 
-        await server.config.updateCustomSubConfig({ newConfig: { signup: { limit: total } } })
-
+        await server.config.enableSignup(false, total)
         await server.registrations.register({ username: 'user42', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+
+        await server.config.enableSignup(true, total)
         await server.registrations.requestRegistration({
           username: 'user42',
           registrationReason: 'reason',
           expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+      })
+
+      it('Should succeed if the user limit is not reached', async function () {
+        this.timeout(60000)
+
+        const { total } = await server.users.list()
+
+        await server.config.enableSignup(false, total + 1)
+        await server.registrations.register({ username: 'user43', expectedStatus: HttpStatusCode.NO_CONTENT_204 })
+
+        await server.config.enableSignup(true, total + 2)
+        await server.registrations.requestRegistration({
+          username: 'user44',
+          registrationReason: 'reason',
+          expectedStatus: HttpStatusCode.OK_200
         })
       })
     })
