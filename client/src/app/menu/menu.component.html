@@ -103,7 +103,9 @@
         <a i18n *ngIf="!getExternalLoginHref()" routerLink="/login" class="peertube-button-link orange-button">Login</a>
         <a i18n *ngIf="getExternalLoginHref()" [href]="getExternalLoginHref()" class="peertube-button-link orange-button">Login</a>
 
-        <a i18n *ngIf="isRegistrationAllowed()" routerLink="/signup" class="peertube-button-link create-account-button">Create an account</a>
+        <a *ngIf="isRegistrationAllowed()" routerLink="/signup" class="peertube-button-link create-account-button">
+          <my-signup-label [requiresApproval]="requiresApproval"></my-signup-label>
+        </a>
       </div>
 
       <ng-container *ngFor="let menuSection of menuSections" >

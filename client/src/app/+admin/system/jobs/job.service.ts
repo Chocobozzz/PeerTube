@@ -19,7 +19,7 @@ export class JobService {
     private restExtractor: RestExtractor
   ) {}
 
-  getJobs (options: {
+  listJobs (options: {
     jobState?: JobStateClient
     jobType: JobTypeClient
     pagination: RestPagination

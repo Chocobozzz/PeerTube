@@ -96,6 +96,14 @@ export class AdminComponent implements OnInit {
       children: []
     }
 
+    if (this.hasRegistrationsRight()) {
+      moderationItems.children.push({
+        label: $localize`Registrations`,
+        routerLink: '/admin/moderation/registrations/list',
+        iconName: 'user'
+      })
+    }
+
     if (this.hasAbusesRight()) {
       moderationItems.children.push({
         label: $localize`Reports`,
@@ -228,5 +236,9 @@ export class AdminComponent implements OnInit {
 
   private hasVideosRight () {
     return this.auth.getUser().hasRight(UserRight.SEE_ALL_VIDEOS)
+  }
+
+  private hasRegistrationsRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_REGISTRATIONS)
   }
 }

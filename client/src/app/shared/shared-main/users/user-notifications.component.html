@@ -215,6 +215,14 @@
         </div>
       </ng-container>
 
+      <ng-container *ngSwitchCase="20"> <!-- UserNotificationType.NEW_USER_REGISTRATION_REQUEST -->
+        <my-global-icon iconName="user-add" aria-hidden="true"></my-global-icon>
+
+        <div class="message" i18n>
+          User <a (click)="markAsRead(notification)" [routerLink]="notification.registrationsUrl">{{ notification.registration.username }}</a> wants to register on your instance
+        </div>
+      </ng-container>
+
       <ng-container *ngSwitchDefault>
         <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
 

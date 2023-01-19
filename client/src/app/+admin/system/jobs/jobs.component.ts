@@ -125,7 +125,7 @@ export class JobsComponent extends RestTable implements OnInit {
     if (this.jobState === 'all') jobState = null
 
     this.jobsService
-      .getJobs({
+      .listJobs({
         jobState,
         jobType: this.jobType,
         pagination: this.pagination,

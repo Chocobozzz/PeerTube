@@ -40,10 +40,6 @@
   }
 }
 
-.chip {
-  @include chip;
-}
-
 my-action-dropdown.show {
   ::ng-deep .dropdown-root {
     display: block !important;

@@ -171,12 +171,21 @@
             </ng-container>
 
             <ng-container ngProjectAs="extra">
-              <my-peertube-checkbox [ngClass]="getDisabledSignupClass()"
-                inputName="signupRequiresEmailVerification" formControlName="requiresEmailVerification"
-                i18n-labelText labelText="Signup requires email verification"
-              ></my-peertube-checkbox>
+              <div class="form-group">
+                <my-peertube-checkbox [ngClass]="getDisabledSignupClass()"
+                  inputName="signupRequiresApproval" formControlName="requiresApproval"
+                  i18n-labelText labelText="Signup requires approval by moderators"
+                ></my-peertube-checkbox>
+              </div>
 
-              <div [ngClass]="getDisabledSignupClass()" class="mt-3">
+              <div class="form-group">
+                <my-peertube-checkbox [ngClass]="getDisabledSignupClass()"
+                  inputName="signupRequiresEmailVerification" formControlName="requiresEmailVerification"
+                  i18n-labelText labelText="Signup requires email verification"
+                ></my-peertube-checkbox>
+              </div>
+
+              <div [ngClass]="getDisabledSignupClass()">
                 <label i18n for="signupLimit">Signup limit</label>
 
                 <div class="number-with-unit">

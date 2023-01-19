@@ -9,6 +9,10 @@
   font-weight: $font-semibold;
   line-height: 1.1;
 
+  &.badge-fs-normal {
+    font-size: 100%;
+  }
+
   &.badge-primary {
     color: pvar(--mainBackgroundColor);
     background-color: pvar(--mainColor);

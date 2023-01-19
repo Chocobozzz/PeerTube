@@ -10,12 +10,6 @@ tr.banned > td {
   background-color: lighten($color: $red, $amount: 40) !important;
 }
 
-.table-email {
-  @include disable-default-a-behaviour;
-
-  color: pvar(--mainForegroundColor);
-}
-
 .banned-info {
   font-style: italic;
 }
@@ -35,10 +29,6 @@ p-tableCheckbox {
 
 my-global-icon {
   width: 18px;
-}
-
-.chip {
-  @include chip;
 }
 
 .progress {

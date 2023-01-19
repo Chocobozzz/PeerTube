@@ -284,3 +284,9 @@ label + .form-group-description {
     border: 2px solid pvar(--mainColorLightest);
   }
 }
+
+// ---------------------------------------------------------------------------
+
+.chip {
+  @include chip;
+}

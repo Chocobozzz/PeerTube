@@ -8,7 +8,7 @@
 
       <span class="moderation-expanded-text">
         <a [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reporter:&quot;' + abuse.reporterAccount.displayName + '&quot;' }"
-          class="chip"
+          class="chip me-1"
         >
           <my-actor-avatar size="18" [actor]="abuse.reporterAccount" actorType="account"></my-actor-avatar>
           <div>
@@ -29,7 +29,7 @@
       <span class="moderation-expanded-label" i18n>Reportee</span>
       <span class="moderation-expanded-text">
         <a [routerLink]="[ '.' ]" [queryParams]="{ 'search': 'reportee:&quot;' +abuse.flaggedAccount.displayName + '&quot;' }"
-          class="chip"
+          class="chip me-1"
         >
           <my-actor-avatar size="18" [actor]="abuse.flaggedAccount" actorType="account"></my-actor-avatar>
           <div>
@@ -63,7 +63,7 @@
     <div *ngIf="predefinedReasons" class="mt-2 d-flex">
       <span>
         <a *ngFor="let reason of predefinedReasons"  [routerLink]="[ '.' ]"
-          [queryParams]="{ 'search': 'tag:' + reason.id  }" class="chip rectangular bg-secondary text-light"
+          [queryParams]="{ 'search': 'tag:' + reason.id  }" class="pt-badge badge-secondary"
         >
           <div>{{ reason.label }}</div>
         </a>

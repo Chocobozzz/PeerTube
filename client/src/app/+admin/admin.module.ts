@@ -30,7 +30,13 @@ import { FollowersListComponent, FollowModalComponent, VideoRedundanciesListComp
 import { FollowingListComponent } from './follows/following-list/following-list.component'
 import { RedundancyCheckboxComponent } from './follows/shared/redundancy-checkbox.component'
 import { VideoRedundancyInformationComponent } from './follows/video-redundancies-list/video-redundancy-information.component'
-import { AbuseListComponent, VideoBlockListComponent } from './moderation'
+import {
+  AbuseListComponent,
+  AdminRegistrationService,
+  ProcessRegistrationModalComponent,
+  RegistrationListComponent,
+  VideoBlockListComponent
+} from './moderation'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from './moderation/instance-blocklist'
 import {
   UserCreateComponent,
@@ -116,7 +122,10 @@ import { JobsComponent } from './system/jobs/jobs.component'
     EditLiveConfigurationComponent,
     EditAdvancedConfigurationComponent,
     EditInstanceInformationComponent,
-    EditHomepageComponent
+    EditHomepageComponent,
+
+    RegistrationListComponent,
+    ProcessRegistrationModalComponent
   ],
 
   exports: [
@@ -130,7 +139,8 @@ import { JobsComponent } from './system/jobs/jobs.component'
     ConfigService,
     PluginApiService,
     EditConfigurationService,
-    VideoAdminService
+    VideoAdminService,
+    AdminRegistrationService
   ]
 })
 export class AdminModule { }

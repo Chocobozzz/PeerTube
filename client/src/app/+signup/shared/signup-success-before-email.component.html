@@ -1,0 +1,35 @@
+<my-signup-step-title mascotImageName="success">
+  <ng-container *ngIf="requiresApproval">
+    <strong i18n>Account request sent</strong>
+  </ng-container>
+
+  <ng-container *ngIf="!requiresApproval" i18n>
+    <strong>Welcome</strong>
+    <div>on {{ instanceName }}</div>
+  </ng-container>
+</my-signup-step-title>
+
+<div class="alert pt-alert-primary">
+  <p *ngIf="requiresApproval" i18n>Your account request has been sent!</p>
+  <p *ngIf="!requiresApproval" i18n>Your account has been created!</p>
+
+  <ng-container *ngIf="requiresEmailVerification">
+    <p i18n *ngIf="requiresApproval">
+      <strong>Check your emails</strong> to validate your account and complete your registration request.
+    </p>
+
+    <p i18n *ngIf="!requiresApproval">
+      <strong>Check your emails</strong> to validate your account and complete your registration.
+    </p>
+  </ng-container>
+
+  <ng-container *ngIf="!requiresEmailVerification">
+    <p i18n *ngIf="requiresApproval">
+      A moderator will check your registration request soon and you'll receive an email when it will be accepted or rejected.
+    </p>
+
+    <p *ngIf="!requiresApproval" i18n>
+      If you need help to use PeerTube, you can have a look at the <a class="link-orange" href="https://docs.joinpeertube.org/use-setup-account" target="_blank" rel="noopener noreferrer">documentation</a>.
+    </p>
+  </ng-container>
+</div>
