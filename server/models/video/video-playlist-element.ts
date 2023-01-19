@@ -309,7 +309,23 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
     return VideoPlaylistElementModel.increment({ position: by }, query)
   }
 
-  getType (this: MVideoPlaylistElementFormattable, displayNSFW?: boolean, accountId?: number) {
+  toFormattedJSON (
+    this: MVideoPlaylistElementFormattable,
+    options: { accountId?: number } = {}
+  ): VideoPlaylistElement {
+    return {
+      id: this.id,
+      position: this.position,
+      startTimestamp: this.startTimestamp,
+      stopTimestamp: this.stopTimestamp,
+
+      type: this.getType(options.accountId),
+
+      video: this.getVideoElement(options.accountId)
+    }
+  }
+
+  getType (this: MVideoPlaylistElementFormattable, accountId?: number) {
     const video = this.Video
 
     if (!video) return VideoPlaylistElementType.DELETED
@@ -323,32 +339,15 @@ export class VideoPlaylistElementModel extends Model<Partial<AttributesOnly<Vide
     if (video.privacy === VideoPrivacy.PRIVATE || video.privacy === VideoPrivacy.INTERNAL) return VideoPlaylistElementType.PRIVATE
 
     if (video.isBlacklisted() || video.isBlocked()) return VideoPlaylistElementType.UNAVAILABLE
-    if (video.nsfw === true && displayNSFW === false) return VideoPlaylistElementType.UNAVAILABLE
 
     return VideoPlaylistElementType.REGULAR
   }
 
-  getVideoElement (this: MVideoPlaylistElementFormattable, displayNSFW?: boolean, accountId?: number) {
+  getVideoElement (this: MVideoPlaylistElementFormattable, accountId?: number) {
     if (!this.Video) return null
-    if (this.getType(displayNSFW, accountId) !== VideoPlaylistElementType.REGULAR) return null
+    if (this.getType(accountId) !== VideoPlaylistElementType.REGULAR) return null
 
     return this.Video.toFormattedJSON()
-  }
-
-  toFormattedJSON (
-    this: MVideoPlaylistElementFormattable,
-    options: { displayNSFW?: boolean, accountId?: number } = {}
-  ): VideoPlaylistElement {
-    return {
-      id: this.id,
-      position: this.position,
-      startTimestamp: this.startTimestamp,
-      stopTimestamp: this.stopTimestamp,
-
-      type: this.getType(options.displayNSFW, options.accountId),
-
-      video: this.getVideoElement(options.displayNSFW, options.accountId)
-    }
   }
 
   toActivityPubObject (this: MVideoPlaylistElementAP): PlaylistElementObject {

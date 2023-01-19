@@ -3,6 +3,7 @@
 import { expect } from 'chai'
 import { checkPlaylistFilesWereRemoved, testImage } from '@server/tests/shared'
 import { wait } from '@shared/core-utils'
+import { uuidToShort } from '@shared/extra-utils'
 import {
   HttpStatusCode,
   VideoPlaylist,
@@ -23,7 +24,6 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@shared/server-commands'
-import { uuidToShort } from '@shared/extra-utils'
 
 async function checkPlaylistElementType (
   servers: PeerTubeServer[],
@@ -752,19 +752,6 @@ describe('Test video playlists', function () {
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
       }
     })
-
-    it('Should hide the video if it is NSFW', async function () {
-      const body = await commands[0].listVideos({ token: userTokenServer1, playlistId: playlistServer1UUID2, query: { nsfw: 'false' } })
-      expect(body.total).to.equal(3)
-
-      const elements = body.data
-      const element = elements.find(e => e.position === 3)
-
-      expect(element).to.exist
-      expect(element.video).to.be.null
-      expect(element.type).to.equal(VideoPlaylistElementType.UNAVAILABLE)
-    })
-
   })
 
   describe('Managing playlist elements', function () {

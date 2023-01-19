@@ -15,7 +15,7 @@ import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/vid
 import { VideoPlaylistReorder } from '../../../shared/models/videos/playlist/video-playlist-reorder.model'
 import { VideoPlaylistUpdate } from '../../../shared/models/videos/playlist/video-playlist-update.model'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
-import { buildNSFWFilter, createReqFiles } from '../../helpers/express-utils'
+import { createReqFiles } from '../../helpers/express-utils'
 import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
 import { CONFIG } from '../../initializers/config'
@@ -474,10 +474,7 @@ async function getVideoPlaylistVideos (req: express.Request, res: express.Respon
     'filter:api.video-playlist.videos.list.result'
   )
 
-  const options = {
-    displayNSFW: buildNSFWFilter(res, req.query.nsfw),
-    accountId: user ? user.Account.id : undefined
-  }
+  const options = { accountId: user?.Account?.id }
   return res.json(getFormattedObjects(resultList.data, resultList.total, options))
 }
 
