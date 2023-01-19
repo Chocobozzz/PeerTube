@@ -11,20 +11,31 @@ import OAuth2Server, {
 import { randomBytesPromise } from '@server/helpers/core-utils'
 import { isOTPValid } from '@server/helpers/otp'
 import { CONFIG } from '@server/initializers/config'
+import { UserRegistrationModel } from '@server/models/user/user-registration'
 import { MOAuthClient } from '@server/types/models'
 import { sha1 } from '@shared/extra-utils'
-import { HttpStatusCode } from '@shared/models'
+import { HttpStatusCode, ServerErrorCode, UserRegistrationState } from '@shared/models'
 import { OTP } from '../../initializers/constants'
 import { BypassLogin, getClient, getRefreshToken, getUser, revokeToken, saveToken } from './oauth-model'
 
 class MissingTwoFactorError extends Error {
   code = HttpStatusCode.UNAUTHORIZED_401
-  name = 'missing_two_factor'
+  name = ServerErrorCode.MISSING_TWO_FACTOR
 }
 
 class InvalidTwoFactorError extends Error {
   code = HttpStatusCode.BAD_REQUEST_400
-  name = 'invalid_two_factor'
+  name = ServerErrorCode.INVALID_TWO_FACTOR
+}
+
+class RegistrationWaitingForApproval extends Error {
+  code = HttpStatusCode.BAD_REQUEST_400
+  name = ServerErrorCode.ACCOUNT_WAITING_FOR_APPROVAL
+}
+
+class RegistrationApprovalRejected extends Error {
+  code = HttpStatusCode.BAD_REQUEST_400
+  name = ServerErrorCode.ACCOUNT_APPROVAL_REJECTED
 }
 
 /**
@@ -128,7 +139,17 @@ async function handlePasswordGrant (options: {
   }
 
   const user = await getUser(request.body.username, request.body.password, bypassLogin)
-  if (!user) throw new InvalidGrantError('Invalid grant: user credentials are invalid')
+  if (!user) {
+    const registration = await UserRegistrationModel.loadByEmailOrUsername(request.body.username)
+
+    if (registration?.state === UserRegistrationState.REJECTED) {
+      throw new RegistrationApprovalRejected('Registration approval for this account has been rejected')
+    } else if (registration?.state === UserRegistrationState.PENDING) {
+      throw new RegistrationWaitingForApproval('Registration for this account is awaiting approval')
+    }
+
+    throw new InvalidGrantError('Invalid grant: user credentials are invalid')
+  }
 
   if (user.otpSecret) {
     if (!request.headers[OTP.HEADER_NAME]) {

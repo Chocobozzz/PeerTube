@@ -1,4 +1,4 @@
-import { MUser, MUserDefault } from '@server/types/models/user'
+import { MRegistration, MUser, MUserDefault } from '@server/types/models/user'
 import { MVideoBlacklistLightVideo, MVideoBlacklistVideo } from '@server/types/models/video/video-blacklist'
 import { UserNotificationSettingValue } from '../../../shared/models/users'
 import { logger } from '../../helpers/logger'
@@ -13,6 +13,7 @@ import {
   AbuseStateChangeForReporter,
   AutoFollowForInstance,
   CommentMention,
+  DirectRegistrationForModerators,
   FollowForInstance,
   FollowForUser,
   ImportFinishedForOwner,
@@ -30,7 +31,7 @@ import {
   OwnedPublicationAfterAutoUnblacklist,
   OwnedPublicationAfterScheduleUpdate,
   OwnedPublicationAfterTranscoding,
-  RegistrationForModerators,
+  RegistrationRequestForModerators,
   StudioEditionFinishedForOwner,
   UnblacklistForOwner
 } from './shared'
@@ -47,7 +48,8 @@ class Notifier {
     newBlacklist: [ NewBlacklistForOwner ],
     unblacklist: [ UnblacklistForOwner ],
     importFinished: [ ImportFinishedForOwner ],
-    userRegistration: [ RegistrationForModerators ],
+    directRegistration: [ DirectRegistrationForModerators ],
+    registrationRequest: [ RegistrationRequestForModerators ],
     userFollow: [ FollowForUser ],
     instanceFollow: [ FollowForInstance ],
     autoInstanceFollow: [ AutoFollowForInstance ],
@@ -138,11 +140,18 @@ class Notifier {
         })
   }
 
-  notifyOnNewUserRegistration (user: MUserDefault): void {
-    const models = this.notificationModels.userRegistration
+  notifyOnNewDirectRegistration (user: MUserDefault): void {
+    const models = this.notificationModels.directRegistration
 
     this.sendNotifications(models, user)
       .catch(err => logger.error('Cannot notify moderators of new user registration (%s).', user.username, { err }))
+  }
+
+  notifyOnNewRegistrationRequest (registration: MRegistration): void {
+    const models = this.notificationModels.registrationRequest
+
+    this.sendNotifications(models, registration)
+      .catch(err => logger.error('Cannot notify moderators of new registration request (%s).', registration.username, { err }))
   }
 
   notifyOfNewUserFollow (actorFollow: MActorFollowFull): void {

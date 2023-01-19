@@ -14,7 +14,7 @@ function checkUserEmailExist (email: string, res: express.Response, abortRespons
   return checkUserExist(() => UserModel.loadByEmail(email), res, abortResponse)
 }
 
-async function checkUserNameOrEmailDoesNotAlreadyExist (username: string, email: string, res: express.Response) {
+async function checkUserNameOrEmailDoNotAlreadyExist (username: string, email: string, res: express.Response) {
   const user = await UserModel.loadByUsernameOrEmail(username, email)
 
   if (user) {
@@ -58,6 +58,6 @@ async function checkUserExist (finder: () => Promise<MUserDefault>, res: express
 export {
   checkUserIdExist,
   checkUserEmailExist,
-  checkUserNameOrEmailDoesNotAlreadyExist,
+  checkUserNameOrEmailDoNotAlreadyExist,
   checkUserExist
 }

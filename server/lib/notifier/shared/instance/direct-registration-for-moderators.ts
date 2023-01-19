@@ -6,7 +6,7 @@ import { MUserDefault, MUserWithNotificationSetting, UserNotificationModelForApi
 import { UserNotificationType, UserRight } from '@shared/models'
 import { AbstractNotification } from '../common/abstract-notification'
 
-export class RegistrationForModerators extends AbstractNotification <MUserDefault> {
+export class DirectRegistrationForModerators extends AbstractNotification <MUserDefault> {
   private moderators: MUserDefault[]
 
   async prepare () {
@@ -40,7 +40,7 @@ export class RegistrationForModerators extends AbstractNotification <MUserDefaul
     return {
       template: 'user-registered',
       to,
-      subject: `a new user registered on ${CONFIG.INSTANCE.NAME}: ${this.payload.username}`,
+      subject: `A new user registered on ${CONFIG.INSTANCE.NAME}: ${this.payload.username}`,
       locals: {
         user: this.payload
       }

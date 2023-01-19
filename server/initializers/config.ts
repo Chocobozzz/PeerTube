@@ -305,6 +305,7 @@ const CONFIG = {
   },
   SIGNUP: {
     get ENABLED () { return config.get<boolean>('signup.enabled') },
+    get REQUIRES_APPROVAL () { return config.get<boolean>('signup.requires_approval') },
     get LIMIT () { return config.get<number>('signup.limit') },
     get REQUIRES_EMAIL_VERIFICATION () { return config.get<boolean>('signup.requires_email_verification') },
     get MINIMUM_AGE () { return config.get<number>('signup.minimum_age') },

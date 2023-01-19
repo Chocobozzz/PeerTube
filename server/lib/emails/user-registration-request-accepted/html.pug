@@ -1,0 +1,10 @@
+extends ../common/greetings
+
+block title
+  | Congratulation #{username}, your registration request has been accepted!
+
+block content
+  p Your registration request has been accepted.
+  p Moderators sent you the following message:
+  blockquote(style='white-space: pre-wrap') #{moderationResponse}
+  p Your account has been created and you can login on #[a(href=loginLink) #{loginLink}]

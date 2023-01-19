@@ -392,9 +392,15 @@ contact_form:
 
 signup:
   enabled: false
+
   limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
+
   minimum_age: 16 # Used to configure the signup form
+
+  # Users fill a form to register so moderators can accept/reject the registration
+  requires_approval: true
   requires_email_verification: false
+
   filters:
     cidr: # You can specify CIDR ranges to whitelist (empty = no filtering) or blacklist
       whitelist: []

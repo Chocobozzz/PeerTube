@@ -23,7 +23,8 @@ const userRoleRights: { [ id in UserRole ]: UserRight[] } = {
     UserRight.MANAGE_ACCOUNTS_BLOCKLIST,
     UserRight.MANAGE_SERVERS_BLOCKLIST,
     UserRight.MANAGE_USERS,
-    UserRight.SEE_ALL_COMMENTS
+    UserRight.SEE_ALL_COMMENTS,
+    UserRight.MANAGE_REGISTRATIONS
   ],
 
   [UserRole.USER]: []

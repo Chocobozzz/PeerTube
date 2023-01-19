@@ -32,7 +32,9 @@ export const enum UserNotificationType {
   NEW_PLUGIN_VERSION = 17,
   NEW_PEERTUBE_VERSION = 18,
 
-  MY_VIDEO_STUDIO_EDITION_FINISHED = 19
+  MY_VIDEO_STUDIO_EDITION_FINISHED = 19,
+
+  NEW_USER_REGISTRATION_REQUEST = 20
 }
 
 export interface VideoInfo {
@@ -124,6 +126,11 @@ export interface UserNotification {
 
   peertube?: {
     latestVersion: string
+  }
+
+  registration?: {
+    id: number
+    username: string
   }
 
   createdAt: string
