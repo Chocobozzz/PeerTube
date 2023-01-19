@@ -64,8 +64,8 @@ export class MarkdownService {
 
   textMarkdownToHTML (options: {
     markdown: string
-    withHtml?: boolean
-    withEmoji?: boolean
+    withHtml?: boolean // default false
+    withEmoji?: boolean // default false
   }) {
     const { markdown, withHtml = false, withEmoji = false } = options
 
@@ -76,8 +76,8 @@ export class MarkdownService {
 
   enhancedMarkdownToHTML (options: {
     markdown: string
-    withHtml?: boolean
-    withEmoji?: boolean
+    withHtml?: boolean // default false
+    withEmoji?: boolean // default false
   }) {
     const { markdown, withHtml = false, withEmoji = false } = options
 
@@ -98,6 +98,8 @@ export class MarkdownService {
 
     return this.render({ name: 'customPageMarkdownIt', markdown, withEmoji: true, additionalAllowedTags })
   }
+
+  // ---------------------------------------------------------------------------
 
   processVideoTimestamps (videoShortUUID: string, html: string) {
     return html.replace(/((\d{1,2}):)?(\d{1,2}):(\d{1,2})/g, function (str, _, h, m, s) {
