@@ -5,6 +5,10 @@ async function getCheckbox (name: string) {
   return input.parentElement()
 }
 
+function isCheckboxSelected (name: string) {
+  return $(`input[id=${name}]`).isSelected()
+}
+
 async function selectCustomSelect (id: string, valueLabel: string) {
   const wrapper = $(`[formcontrolname=${id}] .ng-arrow-wrapper`)
 
@@ -22,7 +26,18 @@ async function selectCustomSelect (id: string, valueLabel: string) {
   return option.click()
 }
 
+async function findParentElement (
+  el: WebdriverIO.Element,
+  finder: (el: WebdriverIO.Element) => Promise<boolean>
+) {
+  if (await finder(el) === true) return el
+
+  return findParentElement(await el.parentElement(), finder)
+}
+
 export {
   getCheckbox,
-  selectCustomSelect
+  isCheckboxSelected,
+  selectCustomSelect,
+  findParentElement
 }

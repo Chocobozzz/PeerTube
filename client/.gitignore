@@ -11,5 +11,6 @@
 /src/locale/target/server_*.xml
 /e2e/local.log
 /e2e/browserstack.err
+/e2e/screenshots
 /src/standalone/player/build
 /src/standalone/player/dist

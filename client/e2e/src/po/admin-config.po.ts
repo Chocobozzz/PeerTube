@@ -1,4 +1,4 @@
-import { getCheckbox, go } from '../utils'
+import { browserSleep, getCheckbox, go, isCheckboxSelected } from '../utils'
 
 export class AdminConfigPage {
 
@@ -8,7 +8,6 @@ export class AdminConfigPage {
       'basic-configuration': 'APPEARANCE',
       'instance-information': 'INSTANCE'
     }
-
     await go('/admin/config/edit-custom#' + tab)
 
     await $('.inner-form-title=' + waitTitles[tab]).waitForDisplayed()
@@ -28,8 +27,28 @@ export class AdminConfigPage {
     return $('#instanceCustomHomepageContent').setValue(newValue)
   }
 
-  async toggleSignup () {
+  async toggleSignup (enabled: boolean) {
+    if (await isCheckboxSelected('signupEnabled') === enabled) return
+
     const checkbox = await getCheckbox('signupEnabled')
+
+    await checkbox.waitForClickable()
+    await checkbox.click()
+  }
+
+  async toggleSignupApproval (required: boolean) {
+    if (await isCheckboxSelected('signupRequiresApproval') === required) return
+
+    const checkbox = await getCheckbox('signupRequiresApproval')
+
+    await checkbox.waitForClickable()
+    await checkbox.click()
+  }
+
+  async toggleSignupEmailVerification (required: boolean) {
+    if (await isCheckboxSelected('signupRequiresEmailVerification') === required) return
+
+    const checkbox = await getCheckbox('signupRequiresEmailVerification')
 
     await checkbox.waitForClickable()
     await checkbox.click()
@@ -40,5 +59,7 @@ export class AdminConfigPage {
 
     await button.waitForClickable()
     await button.click()
+
+    await browserSleep(1000)
   }
 }

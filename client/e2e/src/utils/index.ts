@@ -1,5 +1,7 @@
 export * from './common'
 export * from './elements'
+export * from './email'
 export * from './hooks'
+export * from './mock-smtp'
 export * from './server'
 export * from './urls'
