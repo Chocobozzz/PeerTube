@@ -1,14 +1,19 @@
-<div class="margin-content">
-  <h1 i18n class="title-page">Verify account email confirmation</h1>
+<div *ngIf="loaded" class="margin-content">
+  <h1 i18n class="title-page">Verify email</h1>
 
-  <my-signup-success i18n *ngIf="!isPendingEmail && success" [requiresEmailVerification]="false">
-  </my-signup-success>
+  <my-signup-success-after-email
+    *ngIf="displaySignupSuccess()"
+    [requiresApproval]="isRegistrationRequest() && requiresApproval"
+  >
+  </my-signup-success-after-email>
 
-  <div i18n class="alert alert-success" *ngIf="isPendingEmail && success">Email updated.</div>
+  <div i18n class="alert alert-success" *ngIf="!isRegistrationRequest() && isPendingEmail && success">Email updated.</div>
 
   <div class="alert alert-danger" *ngIf="failed">
     <span i18n>An error occurred.</span>
 
-    <a i18n class="ms-1 link-orange" routerLink="/verify-account/ask-send-email" [queryParams]="{ isPendingEmail: isPendingEmail }">Request new verification email</a>
+    <a i18n class="ms-1 link-orange" routerLink="/verify-account/ask-send-email">
+      Request a new verification email
+    </a>
   </div>
 </div>

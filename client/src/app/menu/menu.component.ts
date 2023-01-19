@@ -92,6 +92,10 @@ export class MenuComponent implements OnInit {
     return this.languageChooserModal.getCurrentLanguage()
   }
 
+  get requiresApproval () {
+    return this.serverConfig.signup.requiresApproval
+  }
+
   ngOnInit () {
     this.htmlServerConfig = this.serverService.getHTMLConfig()
     this.currentInterfaceLanguage = this.languageChooserModal.getCurrentLanguage()

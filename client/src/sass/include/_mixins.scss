@@ -36,6 +36,10 @@
   max-height: $font-size * $number-of-lines;
 }
 
+@mixin muted {
+  color: pvar(--greyForegroundColor) !important;
+}
+
 @mixin fade-text ($fade-after, $background-color) {
   position: relative;
   overflow: hidden;
@@ -791,51 +795,39 @@
 }
 
 @mixin chip {
-  --chip-radius: 5rem;
-  --chip-padding: .2rem .4rem;
-  $avatar-height: 1.2rem;
+  --avatar-size: 1.2rem;
 
-  align-items: center;
-  border-radius: var(--chip-radius);
   display: inline-flex;
-  font-size: 90%;
   color: pvar(--mainForegroundColor);
-  height: $avatar-height;
-  line-height: 1rem;
-  margin: .1rem;
+  height: var(--avatar-size);
   max-width: 320px;
   overflow: hidden;
-  padding: var(--chip-padding);
   text-decoration: none;
   text-overflow: ellipsis;
   vertical-align: middle;
   white-space: nowrap;
 
-  &.rectangular {
-    --chip-radius: .2rem;
-    --chip-padding: .2rem .3rem;
-  }
-
   my-actor-avatar {
-    @include margin-left(-.4rem);
     @include margin-right(.2rem);
+
+    border-radius: 5rem;
+    width: var(--avatar-size);
+    height: var(--avatar-size);
   }
 
   &.two-lines {
-    $avatar-height: 2rem;
+    --avatar-size: 2rem;
 
-    height: $avatar-height;
+    font-size: 14px;
+    line-height: 1rem;
 
     my-actor-avatar {
       display: inline-block;
     }
 
-    div {
-      margin: 0 .1rem;
-
+    > div {
       display: flex;
       flex-direction: column;
-      height: $avatar-height;
       justify-content: center;
     }
   }

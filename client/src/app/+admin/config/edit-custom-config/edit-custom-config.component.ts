@@ -132,6 +132,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       signup: {
         enabled: null,
         limit: SIGNUP_LIMIT_VALIDATOR,
+        requiresApproval: null,
         requiresEmailVerification: null,
         minimumAge: SIGNUP_MINIMUM_AGE_VALIDATOR
       },

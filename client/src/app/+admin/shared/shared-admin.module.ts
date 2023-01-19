@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core'
 import { SharedMainModule } from '../../shared/shared-main/shared-main.module'
+import { UserEmailInfoComponent } from './user-email-info.component'
 import { UserRealQuotaInfoComponent } from './user-real-quota-info.component'
 
 @NgModule({
@@ -8,11 +9,13 @@ import { UserRealQuotaInfoComponent } from './user-real-quota-info.component'
   ],
 
   declarations: [
-    UserRealQuotaInfoComponent
+    UserRealQuotaInfoComponent,
+    UserEmailInfoComponent
   ],
 
   exports: [
-    UserRealQuotaInfoComponent
+    UserRealQuotaInfoComponent,
+    UserEmailInfoComponent
   ],
 
   providers: []

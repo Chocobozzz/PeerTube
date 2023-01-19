@@ -1,0 +1,120 @@
+<h1>
+  <my-global-icon iconName="user" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>Registration requests</ng-container>
+</h1>
+
+<p-table
+  [value]="registrations" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
+  [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id"
+  [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
+  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
+  currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} registrations"
+  [expandedRowKeys]="expandedRows"
+>
+  <ng-template pTemplate="caption">
+    <div class="caption">
+      <div class="ms-auto">
+        <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr> <!-- header -->
+      <th style="width: 40px;"></th>
+      <th style="width: 150px;"></th>
+      <th i18n>Account</th>
+      <th i18n>Email</th>
+      <th i18n>Channel</th>
+      <th i18n>Registration reason</th>
+      <th i18n pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
+      <th i18n>Moderation response</th>
+      <th style="width: 150px;" i18n pSortableColumn="createdAt">Requested on <p-sortIcon field="createdAt"></p-sortIcon></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-expanded="expanded" let-registration>
+    <tr>
+      <td class="expand-cell" [pRowToggler]="registration">
+        <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
+      </td>
+
+      <td class="action-cell">
+        <my-action-dropdown
+          [ngClass]="{ 'show': expanded }" placement="bottom-right top-right left auto" container="body"
+          i18n-label label="Actions" [actions]="registrationActions" [entry]="registration"
+        ></my-action-dropdown>
+      </td>
+
+      <td>
+        <div class="chip two-lines">
+          <div>
+            <span>{{ registration.username }}</span>
+            <span class="muted">{{ registration.accountDisplayName }}</span>
+          </div>
+        </div>
+      </td>
+
+      <td>
+        <my-user-email-info [entry]="registration" [requiresEmailVerification]="requiresEmailVerification"></my-user-email-info>
+      </td>
+
+      <td>
+        <div class="chip two-lines">
+          <div>
+            <span>{{ registration.channelHandle }}</span>
+            <span class="muted">{{ registration.channelDisplayName }}</span>
+          </div>
+        </div>
+      </td>
+
+      <td container="body" placement="left auto" [ngbTooltip]="registration.registrationReason">
+        {{ registration.registrationReason }}
+      </td>
+
+      <td class="c-hand abuse-states" [pRowToggler]="registration">
+        <my-global-icon *ngIf="isRegistrationAccepted(registration)" [title]="registration.state.label" iconName="tick"></my-global-icon>
+        <my-global-icon *ngIf="isRegistrationRejected(registration)" [title]="registration.state.label" iconName="cross"></my-global-icon>
+      </td>
+
+      <td container="body" placement="left auto" [ngbTooltip]="registration.moderationResponse">
+        {{ registration.moderationResponse }}
+      </td>
+
+      <td class="c-hand" [pRowToggler]="registration">{{ registration.createdAt | date: 'short'  }}</td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="rowexpansion" let-registration>
+    <tr>
+      <td colspan="9">
+        <div class="moderation-expanded">
+          <div class="left">
+            <div class="d-flex">
+              <span class="moderation-expanded-label" i18n>Registration reason:</span>
+              <span class="moderation-expanded-text" [innerHTML]="registration.registrationReasonHTML"></span>
+            </div>
+
+            <div *ngIf="registration.moderationResponse">
+              <span class="moderation-expanded-label" i18n>Moderation response:</span>
+              <span class="moderation-expanded-text" [innerHTML]="registration.moderationResponseHTML"></span>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="9">
+        <div class="no-results">
+          <ng-container *ngIf="search" i18n>No registrations found matching current filters.</ng-container>
+          <ng-container *ngIf="!search" i18n>No registrations found.</ng-container>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<my-process-registration-modal #processRegistrationModal (registrationProcessed)="onRegistrationProcessed()"></my-process-registration-modal>

@@ -1,0 +1,21 @@
+<my-signup-step-title mascotImageName="success">
+  <strong i18n>Email verified!</strong>
+</my-signup-step-title>
+
+<div class="alert pt-alert-primary">
+  <ng-container *ngIf="requiresApproval">
+    <p i18n>Your email has been verified and your account request has been sent!</p>
+
+    <p i18n>
+      A moderator will check your registration request soon and you'll receive an email when it will be accepted or rejected.
+    </p>
+  </ng-container>
+
+  <ng-container *ngIf="!requiresApproval">
+    <p i18n>Your email has been verified and your account has been created!</p>
+
+    <p i18n>
+      If you need help to use PeerTube, you can have a look at the <a class="link-orange" href="https://docs.joinpeertube.org/use-setup-account" target="_blank" rel="noopener noreferrer">documentation</a>.
+    </p>
+  </ng-container>
+</div>

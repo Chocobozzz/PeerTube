@@ -1,4 +1,16 @@
 <form role="form" [formGroup]="form">
+
+  <div *ngIf="requiresApproval" class="form-group">
+    <label i18n for="registrationReason">Why do you want to join {{ instanceName }}?</label>
+
+    <textarea
+      id="registrationReason" formControlName="registrationReason" class="form-control" rows="4"
+      [ngClass]="{ 'input-error': formErrors['registrationReason'] }"
+    ></textarea>
+
+    <div *ngIf="formErrors.registrationReason" class="form-error">{{ formErrors.registrationReason }}</div>
+  </div>
+
   <div class="form-group">
     <my-peertube-checkbox inputName="terms" formControlName="terms">
       <ng-template ptTemplate="label">
@@ -6,7 +18,7 @@
           I am at least {{ minimumAge }} years old and agree
           to the <a class="link-orange" (click)="onTermsClick($event)" href='#'>Terms</a>
           <ng-container *ngIf="hasCodeOfConduct"> and to the <a class="link-orange" (click)="onCodeOfConductClick($event)" href='#'>Code of Conduct</a></ng-container>
-          of this instance
+          of {{ instanceName }}
         </ng-container>
       </ng-template>
     </my-peertube-checkbox>

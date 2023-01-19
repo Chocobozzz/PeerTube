@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
+import { SignupService } from '@app/+signup/shared/signup.service'
 import { Notifier, RedirectService, ServerService } from '@app/core'
 import { USER_EMAIL_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactive, FormReactiveService } from '@app/shared/shared-forms'
-import { UserSignupService } from '@app/shared/shared-users'
 
 @Component({
   selector: 'my-verify-account-ask-send-email',
@@ -15,7 +15,7 @@ export class VerifyAccountAskSendEmailComponent extends FormReactive implements 
 
   constructor (
     protected formReactiveService: FormReactiveService,
-    private userSignupService: UserSignupService,
+    private signupService: SignupService,
     private serverService: ServerService,
     private notifier: Notifier,
     private redirectService: RedirectService
@@ -34,7 +34,7 @@ export class VerifyAccountAskSendEmailComponent extends FormReactive implements 
 
   askSendVerifyEmail () {
     const email = this.form.value['verify-email-email']
-    this.userSignupService.askSendVerifyEmail(email)
+    this.signupService.askSendVerifyEmail(email)
       .subscribe({
         next: () => {
           this.notifier.success($localize`An email with verification link will be sent to ${email}.`)

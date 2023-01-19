@@ -5,10 +5,10 @@ import { ActivatedRoute } from '@angular/router'
 import { AuthService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { InstanceAboutAccordionComponent } from '@app/shared/shared-instance'
-import { UserSignupService } from '@app/shared/shared-users'
 import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
 import { UserRegister } from '@shared/models'
 import { ServerConfig } from '@shared/models/server'
+import { SignupService } from '../shared/signup.service'
 
 @Component({
   selector: 'my-register',
@@ -53,12 +53,16 @@ export class RegisterComponent implements OnInit {
   constructor (
     private route: ActivatedRoute,
     private authService: AuthService,
-    private userSignupService: UserSignupService,
+    private signupService: SignupService,
     private hooks: HooksService
   ) { }
 
   get requiresEmailVerification () {
     return this.serverConfig.signup.requiresEmailVerification
+  }
+
+  get requiresApproval () {
+    return this.serverConfig.signup.requiresApproval
   }
 
   get minimumAge () {
@@ -132,47 +136,67 @@ export class RegisterComponent implements OnInit {
   skipChannelCreation () {
     this.formStepChannel.reset()
     this.lastStep.select()
+
     this.signup()
   }
 
   async signup () {
     this.signupError = undefined
 
-    const body: UserRegister = await this.hooks.wrapObject(
-      {
-        ...this.formStepUser.value,
+    const termsForm = this.formStepTerms.value
+    const userForm = this.formStepUser.value
+    const channelForm = this.formStepChannel?.value
 
-        channel: this.formStepChannel?.value?.name
-          ? this.formStepChannel.value
-          : undefined
+    const channel = this.formStepChannel?.value?.name
+      ? { name: channelForm?.name, displayName: channelForm?.displayName }
+      : undefined
+
+    const body = await this.hooks.wrapObject(
+      {
+        username: userForm.username,
+        password: userForm.password,
+        email: userForm.email,
+        displayName: userForm.displayName,
+
+        registrationReason: termsForm.registrationReason,
+
+        channel
       },
       'signup',
       'filter:api.signup.registration.create.params'
     )
 
-    this.userSignupService.signup(body).subscribe({
+    const obs = this.requiresApproval
+      ? this.signupService.requestSignup(body)
+      : this.signupService.directSignup(body)
+
+    obs.subscribe({
       next: () => {
-        if (this.requiresEmailVerification) {
+        if (this.requiresEmailVerification || this.requiresApproval) {
           this.signupSuccess = true
           return
         }
 
         // Auto login
-        this.authService.login({ username: body.username, password: body.password })
-          .subscribe({
-            next: () => {
-              this.signupSuccess = true
-            },
-
-            error: err => {
-              this.signupError = err.message
-            }
-          })
+        this.autoLogin(body)
       },
 
       error: err => {
         this.signupError = err.message
       }
     })
+  }
+
+  private autoLogin (body: UserRegister) {
+    this.authService.login({ username: body.username, password: body.password })
+      .subscribe({
+        next: () => {
+          this.signupSuccess = true
+        },
+
+        error: err => {
+          this.signupError = err.message
+        }
+      })
   }
 }

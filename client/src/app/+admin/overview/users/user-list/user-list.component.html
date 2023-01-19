@@ -95,7 +95,7 @@
           <div class="chip two-lines">
             <my-actor-avatar [actor]="user?.account" actorType="account" size="32"></my-actor-avatar>
             <div>
-              <span class="user-table-primary-text">{{ user.account.displayName }}</span>
+              <span>{{ user.account.displayName }}</span>
               <span class="muted">{{ user.username }}</span>
             </div>
           </div>
@@ -110,22 +110,9 @@
         <span *ngIf="!user.blocked" class="pt-badge" [ngClass]="getRoleClass(user.role.id)">{{ user.role.label }}</span>
       </td>
 
-      <td *ngIf="isSelected('email')" [title]="user.email">
-        <ng-container *ngIf="!requiresEmailVerification || user.blocked; else emailWithVerificationStatus">
-          <a class="table-email" [href]="'mailto:' + user.email">{{ user.email }}</a>
-        </ng-container>
+      <td *ngIf="isSelected('email')">
+        <my-user-email-info [entry]="user" [requiresEmailVerification]="requiresEmailVerification"></my-user-email-info>
       </td>
-
-      <ng-template #emailWithVerificationStatus>
-        <td *ngIf="user.emailVerified === false; else emailVerifiedNotFalse" i18n-title title="User's email must be verified to login">
-          <em>? {{ user.email }}</em>
-        </td>
-        <ng-template #emailVerifiedNotFalse>
-          <td i18n-title title="User's email is verified / User can login without email verification">
-            &#x2713; {{ user.email }}
-          </td>
-        </ng-template>
-      </ng-template>
 
       <td *ngIf="isSelected('quota')">
         <div class="progress" i18n-title title="Total video quota">

@@ -2,10 +2,6 @@
 @use '_miniature' as *;
 @use '_mixins' as *;
 
-.chip {
-  @include chip;
-}
-
 .video-table-video {
   display: inline-flex;
 
