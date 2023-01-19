@@ -4,7 +4,7 @@ import { getFFmpegVersion } from '@server/helpers/ffmpeg'
 import { uniqify } from '@shared/core-utils'
 import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
 import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
-import { isProdInstance, parseSemVersion } from '../helpers/core-utils'
+import { isProdInstance, parseBytes, parseSemVersion } from '../helpers/core-utils'
 import { isArray } from '../helpers/custom-validators/misc'
 import { logger } from '../helpers/logger'
 import { ApplicationModel, getServerActor } from '../models/application/application'
@@ -283,6 +283,11 @@ function checkObjectStorageConfig () {
       throw new Error(
         'Object storage bucket prefixes should be set to different values when the same bucket is used for both types of video.'
       )
+    }
+
+    if (CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART > parseBytes('250MB')) {
+      // eslint-disable-next-line max-len
+      logger.warn(`Object storage max upload part seems to have a big value (${CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART} bytes). Consider using a lower one (like 100MB).`)
     }
   }
 }
