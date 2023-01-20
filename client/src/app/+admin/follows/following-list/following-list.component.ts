@@ -12,7 +12,7 @@ import { prepareIcu } from '@app/helpers'
   templateUrl: './following-list.component.html',
   styleUrls: [ './following-list.component.scss' ]
 })
-export class FollowingListComponent extends RestTable implements OnInit {
+export class FollowingListComponent extends RestTable <ActorFollow> implements OnInit {
   @ViewChild('followModal') followModal: FollowModalComponent
 
   following: ActorFollow[] = []
@@ -22,8 +22,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
 
   searchFilters: AdvancedInputFilter[] = []
 
-  selectedFollows: ActorFollow[] = []
-  bulkFollowsActions: DropdownAction<ActorFollow[]>[] = []
+  bulkActions: DropdownAction<ActorFollow[]>[] = []
 
   constructor (
     private notifier: Notifier,
@@ -38,7 +37,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
 
     this.searchFilters = this.followService.buildFollowsListFilters()
 
-    this.bulkFollowsActions = [
+    this.bulkActions = [
       {
         label: $localize`Delete`,
         handler: follows => this.removeFollowing(follows)
@@ -56,10 +55,6 @@ export class FollowingListComponent extends RestTable implements OnInit {
 
   isInstanceFollowing (follow: ActorFollow) {
     return follow.following.name === 'peertube'
-  }
-
-  isInSelectionMode () {
-    return this.selectedFollows.length !== 0
   }
 
   buildFollowingName (follow: ActorFollow) {

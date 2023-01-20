@@ -17,7 +17,7 @@ import { VideoAdminService } from './video-admin.service'
   templateUrl: './video-list.component.html',
   styleUrls: [ './video-list.component.scss' ]
 })
-export class VideoListComponent extends RestTable implements OnInit {
+export class VideoListComponent extends RestTable <Video> implements OnInit {
   @ViewChild('videoBlockModal') videoBlockModal: VideoBlockComponent
 
   videos: Video[] = []
@@ -26,9 +26,7 @@ export class VideoListComponent extends RestTable implements OnInit {
   sort: SortMeta = { field: 'publishedAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
-  bulkVideoActions: DropdownAction<Video[]>[][] = []
-
-  selectedVideos: Video[] = []
+  bulkActions: DropdownAction<Video[]>[][] = []
 
   inputFilters: AdvancedInputFilter[]
 
@@ -72,7 +70,7 @@ export class VideoListComponent extends RestTable implements OnInit {
 
     this.inputFilters = this.videoAdminService.buildAdminInputFilter()
 
-    this.bulkVideoActions = [
+    this.bulkActions = [
       [
         {
           label: $localize`Delete`,
@@ -124,10 +122,6 @@ export class VideoListComponent extends RestTable implements OnInit {
 
   getIdentifier () {
     return 'VideoListComponent'
-  }
-
-  isInSelectionMode () {
-    return this.selectedVideos.length !== 0
   }
 
   getPrivacyBadgeClass (video: Video) {
@@ -190,7 +184,7 @@ export class VideoListComponent extends RestTable implements OnInit {
   }
 
   reloadData () {
-    this.selectedVideos = []
+    this.selectedRows = []
 
     this.loading = true
 

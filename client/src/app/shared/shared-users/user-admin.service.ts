@@ -64,7 +64,7 @@ export class UserAdminService {
                )
   }
 
-  removeUser (usersArg: UserServerModel | UserServerModel[]) {
+  removeUsers (usersArg: UserServerModel | UserServerModel[]) {
     const users = arrayify(usersArg)
 
     return from(users)

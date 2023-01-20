@@ -6,7 +6,7 @@
 <p-table
   [value]="users" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
   [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id" [resizableColumns]="true"
-  [(selection)]="selectedUsers" [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
+  [(selection)]="selectedRows" [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false" [selectionPageOnly]="true"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} users"
   [expandedRowKeys]="expandedRows"
@@ -16,7 +16,7 @@
       <div class="left-buttons">
         <my-action-dropdown
           *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="orange"
-          [actions]="bulkUserActions" [entry]="selectedUsers"
+          [actions]="bulkActions" [entry]="selectedRows"
         >
         </my-action-dropdown>
 

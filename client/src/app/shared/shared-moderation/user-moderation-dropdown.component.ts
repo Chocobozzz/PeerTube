@@ -105,7 +105,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     const res = await this.confirmService.confirm(message, $localize`Delete ${user.username}`)
     if (res === false) return
 
-    this.userAdminService.removeUser(user)
+    this.userAdminService.removeUsers(user)
       .subscribe({
         next: () => {
           this.notifier.success($localize`User ${user.username} deleted.`)

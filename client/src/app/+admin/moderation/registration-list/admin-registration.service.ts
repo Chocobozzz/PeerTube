@@ -1,8 +1,10 @@
 import { SortMeta } from 'primeng/api'
-import { catchError } from 'rxjs/operators'
+import { from } from 'rxjs'
+import { catchError, concatMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
+import { arrayify } from '@shared/core-utils'
 import { ResultList, UserRegistration } from '@shared/models'
 import { environment } from '../../../../environments/environment'
 
@@ -54,10 +56,14 @@ export class AdminRegistrationService {
       .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  removeRegistration (registration: UserRegistration) {
-    const url = AdminRegistrationService.BASE_REGISTRATION_URL + '/' + registration.id
+  removeRegistrations (registrationsArg: UserRegistration | UserRegistration[]) {
+    const registrations = arrayify(registrationsArg)
 
-    return this.authHttp.delete(url)
-      .pipe(catchError(res => this.restExtractor.handleError(res)))
+    return from(registrations)
+      .pipe(
+        concatMap(r => this.authHttp.delete(AdminRegistrationService.BASE_REGISTRATION_URL + '/' + r.id)),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 }

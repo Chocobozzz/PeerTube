@@ -1,7 +1,8 @@
 import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { MarkdownService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { prepareIcu } from '@app/helpers'
 import { AdvancedInputFilter } from '@app/shared/shared-forms'
 import { DropdownAction } from '@app/shared/shared-main'
 import { UserRegistration, UserRegistrationState } from '@shared/models'
@@ -13,7 +14,7 @@ import { ProcessRegistrationModalComponent } from './process-registration-modal.
   templateUrl: './registration-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './registration-list.component.scss' ]
 })
-export class RegistrationListComponent extends RestTable implements OnInit {
+export class RegistrationListComponent extends RestTable <UserRegistration> implements OnInit {
   @ViewChild('processRegistrationModal', { static: true }) processRegistrationModal: ProcessRegistrationModalComponent
 
   registrations: (UserRegistration & { registrationReasonHTML?: string, moderationResponseHTML?: string })[] = []
@@ -22,6 +23,7 @@ export class RegistrationListComponent extends RestTable implements OnInit {
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   registrationActions: DropdownAction<UserRegistration>[][] = []
+  bulkActions: DropdownAction<UserRegistration[]>[] = []
 
   inputFilters: AdvancedInputFilter[] = []
 
@@ -33,6 +35,7 @@ export class RegistrationListComponent extends RestTable implements OnInit {
     private server: ServerService,
     private notifier: Notifier,
     private markdownRenderer: MarkdownService,
+    private confirmService: ConfirmService,
     private adminRegistrationService: AdminRegistrationService
   ) {
     super()
@@ -40,21 +43,27 @@ export class RegistrationListComponent extends RestTable implements OnInit {
     this.registrationActions = [
       [
         {
-          label: $localize`Accept this registration`,
+          label: $localize`Accept this request`,
           handler: registration => this.openRegistrationRequestProcessModal(registration, 'accept'),
           isDisplayed: registration => registration.state.id === UserRegistrationState.PENDING
         },
         {
-          label: $localize`Reject this registration`,
+          label: $localize`Reject this request`,
           handler: registration => this.openRegistrationRequestProcessModal(registration, 'reject'),
           isDisplayed: registration => registration.state.id === UserRegistrationState.PENDING
         },
         {
-          label: $localize`Remove this registration request`,
-          handler: registration => this.removeRegistration(registration),
-          isDisplayed: registration => registration.state.id !== UserRegistrationState.PENDING
+          label: $localize`Remove this request`,
+          handler: registration => this.removeRegistrations([ registration ])
         }
       ]
+    ]
+
+    this.bulkActions = [
+      {
+        label: $localize`Delete`,
+        handler: registrations => this.removeRegistrations(registrations)
+      }
     ]
   }
 
@@ -107,11 +116,28 @@ export class RegistrationListComponent extends RestTable implements OnInit {
     this.processRegistrationModal.openModal(registration, mode)
   }
 
-  private removeRegistration (registration: UserRegistration) {
-    this.adminRegistrationService.removeRegistration(registration)
+  private async removeRegistrations (registrations: UserRegistration[]) {
+    const icuParams = { count: registrations.length, username: registrations[0].username }
+
+    // eslint-disable-next-line max-len
+    const message = prepareIcu($localize`Do you really want to delete {count, plural, =1 {{username} registration request?} other {{count} registration requests?}}`)(
+      icuParams,
+      $localize`Do you really want to delete these registration requests?`
+    )
+
+    const res = await this.confirmService.confirm(message, $localize`Delete`)
+    if (res === false) return
+
+    this.adminRegistrationService.removeRegistrations(registrations)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Registration request deleted.`)
+          // eslint-disable-next-line max-len
+          const message = prepareIcu($localize`Removed {count, plural, =1 {{username} registration request} other {{count} registration requests}}`)(
+            icuParams,
+            $localize`Registration requests removed`
+          )
+
+          this.notifier.success(message)
           this.reloadData()
         },
 

@@ -7,12 +7,20 @@
   [value]="registrations" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [first]="pagination.start"
   [rowsPerPageOptions]="rowsPerPageOptions" [sortField]="sort.field" [sortOrder]="sort.order" dataKey="id"
   [lazy]="true" (onLazyLoad)="loadLazy($event)" [lazyLoadOnInit]="false"
-  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
+  [(selection)]="selectedRows" [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} registrations"
   [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
+      <div class="left-buttons">
+        <my-action-dropdown
+          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="orange"
+          [actions]="bulkActions" [entry]="selectedRows"
+        >
+        </my-action-dropdown>
+      </div>
+
       <div class="ms-auto">
         <my-advanced-input-filter (search)="onSearch($event)"></my-advanced-input-filter>
       </div>
@@ -21,6 +29,9 @@
 
   <ng-template pTemplate="header">
     <tr> <!-- header -->
+      <th style="width: 40px">
+        <p-tableHeaderCheckbox ariaLabel="Select all rows" i18n-ariaLabel></p-tableHeaderCheckbox>
+      </th>
       <th style="width: 40px;"></th>
       <th style="width: 150px;"></th>
       <th i18n>Account</th>
@@ -34,7 +45,11 @@
   </ng-template>
 
   <ng-template pTemplate="body" let-expanded="expanded" let-registration>
-    <tr>
+    <tr [pSelectableRow]="registration">
+      <td class="checkbox-cell">
+        <p-tableCheckbox [value]="registration" ariaLabel="Select this row" i18n-ariaLabel></p-tableCheckbox>
+      </td>
+
       <td class="expand-cell" [pRowToggler]="registration">
         <my-table-expander-icon [expanded]="expanded"></my-table-expander-icon>
       </td>

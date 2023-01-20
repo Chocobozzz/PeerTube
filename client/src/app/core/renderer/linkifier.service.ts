@@ -15,7 +15,7 @@ export class LinkifierService {
     },
     formatHref: {
       mention: (href: string) => {
-        return getAbsoluteAPIUrl() + '/services/redirect/accounts/' + href.substr(1)
+        return getAbsoluteAPIUrl() + '/services/redirect/accounts/' + href.substring(1)
       }
     }
   }
