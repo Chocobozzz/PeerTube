@@ -81,7 +81,13 @@ export abstract class RestTable <T = unknown> {
     return this.selectedRows.length !== 0
   }
 
-  protected abstract reloadData (): void
+  protected abstract reloadDataInternal (): void
+
+  protected reloadData () {
+    this.selectedRows = []
+
+    this.reloadDataInternal()
+  }
 
   private getSortLocalStorageKey () {
     return 'rest-table-sort-' + this.getIdentifier()

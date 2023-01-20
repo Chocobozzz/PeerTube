@@ -92,7 +92,7 @@ export class RegistrationListComponent extends RestTable <UserRegistration> impl
     this.reloadData()
   }
 
-  protected reloadData () {
+  protected reloadDataInternal () {
     this.adminRegistrationService.listRegistrations({
       pagination: this.pagination,
       sort: this.sort,

@@ -159,26 +159,25 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
     })
   }
 
-  protected reloadData () {
+  protected reloadDataInternal () {
     this.videoBlocklistService.listBlocks({
       pagination: this.pagination,
       sort: this.sort,
       search: this.search
+    }).subscribe({
+      next: async resultList => {
+        this.totalRecords = resultList.total
+
+        this.blocklist = resultList.data
+
+        for (const element of this.blocklist) {
+          Object.assign(element, {
+            reasonHtml: await this.toHtml(element.reason)
+          })
+        }
+      },
+
+      error: err => this.notifier.error(err.message)
     })
-      .subscribe({
-        next: async resultList => {
-          this.totalRecords = resultList.total
-
-          this.blocklist = resultList.data
-
-          for (const element of this.blocklist) {
-            Object.assign(element, {
-              reasonHtml: await this.toHtml(element.reason)
-            })
-          }
-        },
-
-        error: err => this.notifier.error(err.message)
-      })
   }
 }

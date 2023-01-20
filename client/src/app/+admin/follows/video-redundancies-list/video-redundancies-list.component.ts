@@ -162,7 +162,7 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
 
   }
 
-  protected reloadData () {
+  protected reloadDataInternal () {
     const options = {
       pagination: this.pagination,
       sort: this.sort,

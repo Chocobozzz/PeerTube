@@ -68,7 +68,7 @@ export class MyVideoChannelSyncsComponent extends RestTable implements OnInit {
     ]
   }
 
-  protected reloadData () {
+  protected reloadDataInternal () {
     this.error = undefined
 
     this.authService.userInformationLoaded

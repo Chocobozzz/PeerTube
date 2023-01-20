@@ -62,8 +62,10 @@ export class FollowingListComponent extends RestTable <ActorFollow> implements O
   }
 
   async removeFollowing (follows: ActorFollow[]) {
+    const icuParams = { count: follows.length, entryName: this.buildFollowingName(follows[0]) }
+
     const message = prepareIcu($localize`Do you really want to unfollow {count, plural, =1 {{entryName}?} other {{count} entries?}}`)(
-      { count: follows.length, entryName: this.buildFollowingName(follows[0]) },
+      icuParams,
       $localize`Do you really want to unfollow these entries?`
     )
 
@@ -75,7 +77,7 @@ export class FollowingListComponent extends RestTable <ActorFollow> implements O
         next: () => {
           // eslint-disable-next-line max-len
           const message = prepareIcu($localize`You are not following {count, plural, =1 {{entryName} anymore.} other {these {count} entries anymore.}}`)(
-            { count: follows.length, entryName: this.buildFollowingName(follows[0]) },
+            icuParams,
             $localize`You are not following them anymore.`
           )
 
@@ -87,7 +89,7 @@ export class FollowingListComponent extends RestTable <ActorFollow> implements O
       })
   }
 
-  protected reloadData () {
+  protected reloadDataInternal () {
     this.followService.getFollowing({ pagination: this.pagination, sort: this.sort, search: this.search })
                       .subscribe({
                         next: resultList => {

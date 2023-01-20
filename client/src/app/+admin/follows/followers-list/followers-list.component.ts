@@ -140,7 +140,7 @@ export class FollowersListComponent extends RestTable <ActorFollow> implements O
     return follow.follower.name + '@' + follow.follower.host
   }
 
-  protected reloadData () {
+  protected reloadDataInternal () {
     this.followService.getFollowers({ pagination: this.pagination, sort: this.sort, search: this.search })
                       .subscribe({
                         next: resultList => {

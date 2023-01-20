@@ -117,7 +117,7 @@ export class VideoCommentListComponent extends RestTable <VideoCommentAdmin> imp
     return this.markdownRenderer.textMarkdownToHTML({ markdown: text, withHtml: true, withEmoji: true })
   }
 
-  reloadData () {
+  protected reloadDataInternal () {
     this.videoCommentService.getAdminVideoComments({
       pagination: this.pagination,
       sort: this.sort,

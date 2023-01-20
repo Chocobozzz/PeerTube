@@ -183,9 +183,23 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
     return files.reduce((p, f) => p += f.size, 0)
   }
 
-  reloadData () {
-    this.selectedRows = []
+  async removeVideoFile (video: Video, file: VideoFile, type: 'hls' | 'webtorrent') {
+    const message = $localize`Are you sure you want to delete this ${file.resolution.label} file?`
+    const res = await this.confirmService.confirm(message, $localize`Delete file`)
+    if (res === false) return
 
+    this.videoService.removeFile(video.uuid, file.id, type)
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`File removed.`)
+          this.reloadData()
+        },
+
+        error: err => this.notifier.error(err.message)
+      })
+  }
+
+  protected reloadDataInternal () {
     this.loading = true
 
     this.videoAdminService.getAdminVideos({
@@ -197,22 +211,6 @@ export class VideoListComponent extends RestTable <Video> implements OnInit {
         next: resultList => {
           this.videos = resultList.data
           this.totalRecords = resultList.total
-        },
-
-        error: err => this.notifier.error(err.message)
-      })
-  }
-
-  async removeVideoFile (video: Video, file: VideoFile, type: 'hls' | 'webtorrent') {
-    const message = $localize`Are you sure you want to delete this ${file.resolution.label} file?`
-    const res = await this.confirmService.confirm(message, $localize`Delete file`)
-    if (res === false) return
-
-    this.videoService.removeFile(video.uuid, file.id, type)
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`File removed.`)
-          this.reloadData()
         },
 
         error: err => this.notifier.error(err.message)

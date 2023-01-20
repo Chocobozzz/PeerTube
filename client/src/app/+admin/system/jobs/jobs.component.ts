@@ -120,7 +120,7 @@ export class JobsComponent extends RestTable implements OnInit {
     this.reloadData()
   }
 
-  protected reloadData () {
+  protected reloadDataInternal () {
     let jobState = this.jobState as JobState
     if (this.jobState === 'all') jobState = null
 

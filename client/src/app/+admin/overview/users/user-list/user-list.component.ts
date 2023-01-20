@@ -283,9 +283,7 @@ export class UserListComponent extends RestTable <User> implements OnInit {
       })
   }
 
-  protected reloadData () {
-    this.selectedRows = []
-
+  protected reloadDataInternal () {
     this.userAdminService.getUsers({
       pagination: this.pagination,
       sort: this.sort,
