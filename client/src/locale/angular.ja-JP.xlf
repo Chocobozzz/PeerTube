@@ -5232,7 +5232,7 @@
       </trans-unit>
       <trans-unit id="2076338542820061819" datatype="html">
         <source>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> If the instance is not, we use an image link card that will redirect to your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/w/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to see if you instance is allowed. </source>
-        <target state="translated">インスタンスのドメインがTwitterにより許可されている場合、Twitterフィード上でツイートに対してPeerTubeの動画プレーヤーを埋め込むことができます。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> 許可されていない場合、PeerTubeインスタンスへの画像リンクカードを代わりに使用します。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> このチェックボックスが有効にしてから設定を保存してください。 </target>
+        <target state="translated">インスタンスのドメインがTwitterにより明確に許可された場合、Twitterフィード上でPeerTubeの動画が共有された時にツイートに対してPeerTubeの動画プレーヤーが埋め込まれます。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> 許可されていない場合、PeerTubeインスタンスにリダイレクトされる画像リンクカードを使用します。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> このチェックボックスを有効にしてから設定を保存し、インスタンスが許可されているかどうかを確認するために、インスタンスの動画URL(例えば https://example.com/w/blabla)を<x id="START_LINK" ctype="x-a" equiv-text="&lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>でテストしてください。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">580</context></context-group>
       </trans-unit>
       <trans-unit id="493135676263039396" datatype="html">
@@ -8048,7 +8048,7 @@
       </trans-unit>
       <trans-unit id="2493388551376623687" datatype="html">
         <source>Hateful or Abusive</source>
-        <target state="translated">憎悪または悪意がある</target>
+        <target state="translated">憎悪または暴力性がある</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.ts</context><context context-type="linenumber">21</context></context-group>
       </trans-unit>
       <trans-unit id="5124757565683866220" datatype="html">
