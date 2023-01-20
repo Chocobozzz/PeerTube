@@ -614,7 +614,7 @@
       </trans-unit>
       <trans-unit id="3252544997685163807" datatype="html">
         <source>Object storage</source>
-        <target state="new">Object storage</target>
+        <target state="translated">พื้นที่จัดเก็บวัตถุ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context>
           <context context-type="linenumber">89,91</context>
@@ -663,12 +663,12 @@
       </trans-unit>
       <trans-unit id="653148876380254581" datatype="html">
         <source>Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</source>
-        <target state="new">Are you sure you want to delete WebTorrent files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</target>
+        <target state="translated">คุณแน่ใจหรือไม่ที่จะลบไฟล์ WebTorrent สำหรับวิดีโอ {count, plural, =1 {1 รายการ} other {<x id="count"/> รายการ}}?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">283</context></context-group>
       </trans-unit>
       <trans-unit id="5442133371267277333" datatype="html">
         <source>Are you sure you want to delete WebTorrent files of <x id="PH" equiv-text="videos.length"/> videos?</source>
-        <target state="new">Are you sure you want to delete WebTorrent files of <x id="PH" equiv-text="videos.length"/> videos?</target>
+        <target state="translated">คุณแน่ใจหรือไม่ที่จะลบไฟล์ WebTorrent สำหรับวิดีโอ <x id="PH" equiv-text="videos.length"/> รายการ?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">285</context></context-group>
       </trans-unit>
       <trans-unit id="1571742433738679426" datatype="html">
@@ -1060,7 +1060,7 @@
       </trans-unit>
       <trans-unit id="732935381486595265" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</source>
-        <target state="new">Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</target>
+        <target state="translated">ไม่สามารถโอนย้ายไฟล์ <x id="PH" equiv-text="name"/> ได้ก่อนหมดเวลาพร็อกซีเซิร์ฟเวอร์</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">35</context>
@@ -1499,7 +1499,7 @@
       </trans-unit>
       <trans-unit id="1852111465407058121" datatype="html">
         <source>Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="new"> Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of instance they are. </target>
+        <target state="translated">การเลือก<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ชื่อเซิร์ฟเวอร์<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ตั้งค่าคำอธิบาย<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, ระบุว่า<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>คุณเป็นใคร<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, ทำไม<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>คุณจึงสร้างเซิร์ฟเวอร์นี้<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> และคุณมีแผนที่จะ<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ดูแล<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>เซิร์ฟเวอร์<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>นานเท่าใด<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> เป็นสิ่งสำคัญมากที่จะทำให้ผู้เยี่ยมชมเข้าใจประเภทของเซิร์ฟเวอร์ </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">57,61</context>
