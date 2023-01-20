@@ -7961,6 +7961,9 @@ components:
         moderationResponse:
           type: string
           description: Moderation response to send to the user
+        preventEmailDelivery:
+          type: boolean
+          description: Set it to true if you don't want PeerTube to send an email to the user
       required:
         - moderationResponse
 

@@ -1,5 +1,5 @@
 import { pick } from '@shared/core-utils'
-import { HttpStatusCode, ResultList, UserRegistration, UserRegistrationRequest } from '@shared/models'
+import { HttpStatusCode, ResultList, UserRegistration, UserRegistrationRequest, UserRegistrationUpdateState } from '@shared/models'
 import { unwrapBody } from '../requests'
 import { AbstractCommand, OverrideCommandOptions } from '../shared'
 
@@ -47,35 +47,29 @@ export class RegistrationsCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  accept (options: OverrideCommandOptions & {
-    id: number
-    moderationResponse: string
-  }) {
-    const { id, moderationResponse } = options
+  accept (options: OverrideCommandOptions & { id: number } & UserRegistrationUpdateState) {
+    const { id } = options
     const path = '/api/v1/users/registrations/' + id + '/accept'
 
     return this.postBodyRequest({
       ...options,
 
       path,
-      fields: { moderationResponse },
+      fields: pick(options, [ 'moderationResponse', 'preventEmailDelivery' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
 
-  reject (options: OverrideCommandOptions & {
-    id: number
-    moderationResponse: string
-  }) {
-    const { id, moderationResponse } = options
+  reject (options: OverrideCommandOptions & { id: number } & UserRegistrationUpdateState) {
+    const { id } = options
     const path = '/api/v1/users/registrations/' + id + '/reject'
 
     return this.postBodyRequest({
       ...options,
 
       path,
-      fields: { moderationResponse },
+      fields: pick(options, [ 'moderationResponse', 'preventEmailDelivery' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })

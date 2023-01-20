@@ -12,7 +12,7 @@
     <div class="modal-body mb-3">
 
       <div i18n *ngIf="!registration.emailVerified" class="alert alert-warning">
-        Registration email has not been verified.
+        Registration email has not been verified. Email delivery has been disabled by default.
       </div>
 
       <div class="description">
@@ -21,7 +21,7 @@
             <strong>Accepting</strong>&nbsp;<em>{{ registration.username }}</em> registration will create the account and channel.
           </p>
 
-          <p *ngIf="isEmailEnabled()" i18n>
+          <p *ngIf="isEmailEnabled()" i18n [ngClass]="{ 'text-decoration-line-through': isPreventEmailDeliveryChecked() }">
             An email will be sent to <em>{{ registration.email }}</em> explaining its account has been created with the moderation response you'll write below.
           </p>
 
@@ -31,7 +31,7 @@
         </ng-container>
 
         <ng-container *ngIf="isReject()">
-          <p i18n>
+          <p i18n [ngClass]="{ 'text-decoration-line-through': isPreventEmailDeliveryChecked() }">
             An email will be sent to <em>{{ registration.email }}</em> explaining its registration request has been <strong>rejected</strong> with the moderation response you'll write below.
           </p>
 
@@ -52,6 +52,13 @@
         <div *ngIf="formErrors.moderationResponse" class="form-error">
           {{ formErrors.moderationResponse }}
         </div>
+      </div>
+
+      <div class="form-group">
+        <my-peertube-checkbox
+          inputName="preventEmailDelivery" formControlName="preventEmailDelivery" [disabled]="!isEmailEnabled()"
+          i18n-labelText labelText="Prevent email from being sent to the user"
+        ></my-peertube-checkbox>
       </div>
     </div>
 

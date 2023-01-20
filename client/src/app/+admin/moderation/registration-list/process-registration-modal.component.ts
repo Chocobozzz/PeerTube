@@ -34,7 +34,8 @@ export class ProcessRegistrationModalComponent extends FormReactive implements O
 
   ngOnInit () {
     this.buildForm({
-      moderationResponse: REGISTRATION_MODERATION_RESPONSE_VALIDATOR
+      moderationResponse: REGISTRATION_MODERATION_RESPONSE_VALIDATOR,
+      preventEmailDelivery: null
     })
   }
 
@@ -49,6 +50,10 @@ export class ProcessRegistrationModalComponent extends FormReactive implements O
   openModal (registration: UserRegistration, mode: 'accept' | 'reject') {
     this.processMode = mode
     this.registration = registration
+
+    this.form.patchValue({
+      preventEmailDelivery: !this.isEmailEnabled() || registration.emailVerified !== true
+    })
 
     this.openedModal = this.modalService.open(this.modal, { centered: true })
   }
@@ -77,31 +82,41 @@ export class ProcessRegistrationModalComponent extends FormReactive implements O
     return this.server.getHTMLConfig().email.enabled
   }
 
+  isPreventEmailDeliveryChecked () {
+    return this.form.value.preventEmailDelivery
+  }
+
   private acceptRegistration () {
-    this.registrationService.acceptRegistration(this.registration, this.form.value.moderationResponse)
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`${this.registration.username} account created`)
+    this.registrationService.acceptRegistration({
+      registration: this.registration,
+      moderationResponse: this.form.value.moderationResponse,
+      preventEmailDelivery: this.form.value.preventEmailDelivery
+    }).subscribe({
+      next: () => {
+        this.notifier.success($localize`${this.registration.username} account created`)
 
-          this.registrationProcessed.emit()
-          this.hide()
-        },
+        this.registrationProcessed.emit()
+        this.hide()
+      },
 
-        error: err => this.notifier.error(err.message)
-      })
+      error: err => this.notifier.error(err.message)
+    })
   }
 
   private rejectRegistration () {
-    this.registrationService.rejectRegistration(this.registration, this.form.value.moderationResponse)
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`${this.registration.username} registration rejected`)
+    this.registrationService.rejectRegistration({
+      registration: this.registration,
+      moderationResponse: this.form.value.moderationResponse,
+      preventEmailDelivery: this.form.value.preventEmailDelivery
+    }).subscribe({
+      next: () => {
+        this.notifier.success($localize`${this.registration.username} registration rejected`)
 
-          this.registrationProcessed.emit()
-          this.hide()
-        },
+        this.registrationProcessed.emit()
+        this.hide()
+      },
 
-        error: err => this.notifier.error(err.message)
-      })
+      error: err => this.notifier.error(err.message)
+    })
   }
 }

@@ -3,7 +3,14 @@ import { Emailer } from '@server/lib/emailer'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { UserRegistrationModel } from '@server/models/user/user-registration'
 import { pick } from '@shared/core-utils'
-import { HttpStatusCode, UserRegister, UserRegistrationRequest, UserRegistrationState, UserRight } from '@shared/models'
+import {
+  HttpStatusCode,
+  UserRegister,
+  UserRegistrationRequest,
+  UserRegistrationState,
+  UserRegistrationUpdateState,
+  UserRight
+} from '@shared/models'
 import { auditLoggerFactory, UserAuditView } from '../../../helpers/audit-logger'
 import { logger } from '../../../helpers/logger'
 import { CONFIG } from '../../../initializers/config'
@@ -125,6 +132,7 @@ async function requestRegistration (req: express.Request, res: express.Response)
 
 async function acceptRegistration (req: express.Request, res: express.Response) {
   const registration = res.locals.userRegistration
+  const body: UserRegistrationUpdateState = req.body
 
   const userToCreate = buildUser({
     username: registration.username,
@@ -150,26 +158,31 @@ async function acceptRegistration (req: express.Request, res: express.Response) 
 
   registration.userId = user.id
   registration.state = UserRegistrationState.ACCEPTED
-  registration.moderationResponse = req.body.moderationResponse
+  registration.moderationResponse = body.moderationResponse
 
   await registration.save()
 
   logger.info('Registration of %s accepted', registration.username)
 
-  Emailer.Instance.addUserRegistrationRequestProcessedJob(registration)
+  if (body.preventEmailDelivery !== true) {
+    Emailer.Instance.addUserRegistrationRequestProcessedJob(registration)
+  }
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function rejectRegistration (req: express.Request, res: express.Response) {
   const registration = res.locals.userRegistration
+  const body: UserRegistrationUpdateState = req.body
 
   registration.state = UserRegistrationState.REJECTED
-  registration.moderationResponse = req.body.moderationResponse
+  registration.moderationResponse = body.moderationResponse
 
   await registration.save()
 
-  Emailer.Instance.addUserRegistrationRequestProcessedJob(registration)
+  if (body.preventEmailDelivery !== true) {
+    Emailer.Instance.addUserRegistrationRequestProcessedJob(registration)
+  }
 
   logger.info('Registration of %s rejected', registration.username)
 

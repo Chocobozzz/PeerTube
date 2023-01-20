@@ -1,6 +1,6 @@
 import express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
-import { exists, isIdValid } from '@server/helpers/custom-validators/misc'
+import { exists, isBooleanValid, isIdValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc'
 import { isRegistrationModerationResponseValid, isRegistrationReasonValid } from '@server/helpers/custom-validators/user-registration'
 import { CONFIG } from '@server/initializers/config'
 import { Hooks } from '@server/lib/plugins/hooks'
@@ -90,6 +90,11 @@ const acceptOrRejectRegistrationValidator = [
 
   body('moderationResponse')
     .custom(isRegistrationModerationResponseValid),
+
+  body('preventEmailDelivery')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid).withMessage('Should have preventEmailDelivery boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

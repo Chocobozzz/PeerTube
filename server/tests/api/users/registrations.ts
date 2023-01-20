@@ -329,6 +329,42 @@ describe('Test registrations', function () {
       }
     })
 
+    it('Should be able to prevent email delivery on accept/reject', async function () {
+      this.timeout(50000)
+
+      let id1: number
+      let id2: number
+
+      {
+        const { id } = await server.registrations.requestRegistration({
+          username: 'user7',
+          email: 'user7@example.com',
+          registrationReason: 'tt'
+        })
+        id1 = id
+      }
+      {
+        const { id } = await server.registrations.requestRegistration({
+          username: 'user8',
+          email: 'user8@example.com',
+          registrationReason: 'tt'
+        })
+        id2 = id
+      }
+
+      await server.registrations.accept({ id: id1, moderationResponse: 'tt', preventEmailDelivery: true })
+      await server.registrations.reject({ id: id2, moderationResponse: 'tt', preventEmailDelivery: true })
+
+      await waitJobs([ server ])
+
+      const filtered = emails.filter(e => {
+        const address = e['to'][0]['address']
+        return address === 'user7@example.com' || address === 'user8@example.com'
+      })
+
+      expect(filtered).to.have.lengthOf(0)
+    })
+
     it('Should request a registration without a channel, that will conflict with an already existing channel', async function () {
       let id1: number
       let id2: number
