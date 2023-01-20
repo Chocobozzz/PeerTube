@@ -185,7 +185,7 @@ export class PeertubePlayerManager {
 
     // If video is audio
     if (options && options.isAudio && videojsOptions && videojsOptions.controlBar && videojsOptions.controlBar.children) {
-      videojsOptions.controlBar.children['settingsButton'].entries = [];
+      videojsOptions.controlBar.children['settingsButton'].entries = ['playbackRateMenuButton'];
       videojsOptions.controlBar.fullscreenToggle = false;
       videojsOptions.bigPlayButton = false;
       videojsOptions.inactivityTimeout = 0;

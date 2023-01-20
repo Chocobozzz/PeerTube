@@ -145,9 +145,6 @@ export class PeerTubeEmbed {
 
 			videoDetails.host = host
 
-			if (videoDetails.isAudio)
-				parameters.light = false;
-
 			const pipMiniElem = this.playerHTML.getWrapperElement().closest('.pipmini')
 			const pipModeElem = this.playerHTML.getWrapperElement().closest('.pipmode')
 			parameters.isPip = (pipMiniElem != undefined || pipModeElem != undefined);
@@ -155,6 +152,7 @@ export class PeerTubeEmbed {
 			if (parameters.light){
 
 				return this.buildVideoPlayerLight(videoDetails, async () => {
+					parameters.wasLight = true;
 					await this.buildVideoPlayer(videoDetails, host, parameters, clbk)
 				}, parameters, clbk);
 	
@@ -366,7 +364,7 @@ export class PeerTubeEmbed {
 			this.player = player
 		})
 
-		if (videoDetails && videoDetails.isAudio == true && parameters.isPip != true) {
+		if (videoDetails && videoDetails.isAudio == true && parameters.isPip != true && parameters.wasLight != true) {
 			this.player.play()?.then(() => {
 				this.player.pause();
 				if (this.player.muted())
@@ -389,6 +387,17 @@ export class PeerTubeEmbed {
 				}
 			})
 		})
+
+		// Fix an issue on mobile, where the video pause itself after moving to another time
+		if (videoDetails && videoDetails.isAudio == true) {
+			this.player.on('seeked', () => {
+				setTimeout(() => {
+					if (this.player.paused()) {
+						this.player.play();
+					}
+				}, 100);
+			});
+		}
 
 		//window['videojsPlayer'] = this.player
 
@@ -539,7 +548,12 @@ export class PeerTubeEmbed {
 				if (!canvasAdded)
 					return;
 
-				audioVisu.height = (isPip) ? wrapperSize.height : wrapperSize.height - 63;
+				const isMobileView = (this.playerHTML.getWrapperElement().closest('html.mobileview') != undefined);
+
+				audioVisu.height = (isPip) ? wrapperSize.height : wrapperSize.height;
+				// If not on mobile, move the visualization on top of the control bar
+				if (!isMobileView)
+					audioVisu.height -= 63;
 				audioVisu.width = (isPip) ? wrapperSize.width : wrapperSize.width - audioVisu.height;
 				audioVisu.style.width = audioVisu.width + 'px';
 				audioVisu.style.height = audioVisu.height + 'px';

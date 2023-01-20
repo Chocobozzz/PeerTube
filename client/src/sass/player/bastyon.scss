@@ -467,11 +467,14 @@
             border-top-left-radius: 0 !important;
             box-shadow: none;
             // mix-blend-mode: difference;
-            background: rgba(rgb(66, 66, 66), 0.5);
+            background: rgba(rgb(66, 66, 66), 0.25);
             color: white;
         }
         .vjs-overlay{
             display: none !important;
+        }
+        .vjs-mobile-buttons-overlay {
+            display: none;
         }
     }
 
@@ -551,6 +554,21 @@ html.mobileview{
 
 html.mobileview{
     @include mobileview ();
+
+    .video-js.vjs-is-audio {
+        height: 120px;
+        .vjs-play-control{
+            display: flex;
+        }
+        .vjs-volume-control {
+            display: flex;
+        }
+        .vjs-settings-dialog {
+            position: sticky;
+            z-index: 10;
+            margin-right: 50px;
+        }
+    }
 }
 
 @media only screen and (max-width: 768px){

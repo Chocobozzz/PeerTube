@@ -160,6 +160,8 @@ export class PlayerHTML {
 		poster.className = "vjs-thumb video-js";
 		poster.style.backgroundImage = 'url('+url+')'
 		
+	if (videoInfo.isAudio)
+	 poster.className += " vjs-is-audio";
 
 	var aslayer = this.createARElement(videoInfo)
 		poster.appendChild(aslayer)
