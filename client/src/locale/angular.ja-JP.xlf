@@ -11556,7 +11556,7 @@
       </trans-unit>
       <trans-unit id="5272553814105457319" datatype="html">
         <source>Contains offensive, violent, or coarse language or iconography.</source>
-        <target state="translated">攻撃的、暴力的、または下品な言葉や図像が含まれている。</target>
+        <target state="translated">攻撃的、暴力的または下品な言葉もしくは図像が含まれている。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">125</context></context-group>
       </trans-unit>
       <trans-unit id="6979166468838302269" datatype="html">
@@ -11566,7 +11566,7 @@
       </trans-unit>
       <trans-unit id="8006612645824137458" datatype="html">
         <source>Contains abusive, racist or sexist language or iconography.</source>
-        <target state="translated">人を罵る、人種差別的または性差別的な言葉または図像が含まれている。</target>
+        <target state="translated">人を罵る、人種差別的または性差別的な言葉もしくは図像が含まれている。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
       <trans-unit id="5413552012131573970" datatype="html">
@@ -11576,7 +11576,7 @@
       </trans-unit>
       <trans-unit id="6374940465448453212" datatype="html">
         <source>Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</source>
-        <target state="translated">マーケティング、スパム、意図的に虚偽のニュース、またはその他の誤解を招くサムネイル/テキスト/タグが含まれている。 デマを報告するには、信頼できる情報源を提供してください。</target>
+        <target state="translated">マーケティング、スパム、意図的な虚偽のニュース、またはその他の誤解を招くサムネイル/テキスト/タグが含まれている。 デマを報告するには、信頼できる情報源を提供してください。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context><context context-type="linenumber">136</context></context-group>
       </trans-unit>
       <trans-unit id="7401289443263903223" datatype="html">
