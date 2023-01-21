@@ -104,7 +104,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.MM" datatype="html">
         <source>MM</source>
-        <target state="new">MM</target>
+        <target state="translated">MM</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.minutes" datatype="html">
@@ -134,7 +134,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.SS" datatype="html">
         <source>SS</source>
-        <target state="new">SS</target>
+        <target state="translated">SS</target>
         <context-group purpose="location"><context context-type="sourcefile">node_modules/src/ngb-config.ts</context><context context-type="linenumber">13</context></context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.seconds" datatype="html">
@@ -322,7 +322,7 @@
       </trans-unit>
       <trans-unit id="906167214730624194" datatype="html">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="new">{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</target>
+        <target state="translated">{spettatori, plurale, =0 {Nessuno spettatore} =1 {1 spettatore} altri {<x id="viewers"/> spettatori}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">22</context>
@@ -330,7 +330,7 @@
       </trans-unit>
       <trans-unit id="4873265433447388314" datatype="html">
         <source>{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</source>
-        <target state="new">{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</target>
+        <target state="translated">{spettatori, plurale, =0 {Nessuno spettatore} =1 {1 spettatore} altri {<x id="viewers"/> spettatori}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">23</context>
@@ -343,7 +343,7 @@
       </trans-unit>
       <trans-unit id="8622604868434380566" datatype="html">
         <source>{<x id="PH" equiv-text="this.views"/> view(s)}</source>
-        <target state="new">{<x id="PH" equiv-text="this.views"/> view(s)}</target>
+        <target state="translated"><x id="PH" equiv-text="this.views"/> spettatori</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context><context context-type="linenumber">289</context></context-group>
       </trans-unit>
       <trans-unit id="3321250177023376249" datatype="html">
@@ -1041,7 +1041,7 @@
       </trans-unit>
       <trans-unit id="732935381486595265" datatype="html">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout</source>
-        <target state="translated">Il file <x id="PH" equiv-text="name"/> non è stato trasferito prima del timeout del proxy del server.</target>
+        <target state="translated">Il tuo file <x id="PH" equiv-text="name"/> non è stato trasferito prima del timeout del proxy del server</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
           <context context-type="linenumber">35</context>
@@ -1084,7 +1084,7 @@
       </trans-unit>
       <trans-unit id="7312374115603954471" datatype="html">
         <source>This will ask remote instances to delete local videos</source>
-        <target state="translated">Questo chiederà alle istanze remote di eliminare i video locali.</target>
+        <target state="translated">Questo chiederà alle istanze remote di eliminare i video locali</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">34</context>
@@ -1092,7 +1092,7 @@
       </trans-unit>
       <trans-unit id="2728722206183105047" datatype="html">
         <source>This will ask remote instances to delete this video</source>
-        <target state="translated">In questo modo si chiederà alle istanze remote di eliminare il video.</target>
+        <target state="translated">In questo modo si chiederà alle istanze remote di eliminare il video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">35</context>
@@ -1287,7 +1287,7 @@
       </trans-unit>
       <trans-unit id="8434369348784683733" datatype="html">
         <source>for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="new">for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">per &lt;x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class="search-value"&gt;"/&gt;&lt;x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/&gt;&lt;x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">10</context>
@@ -1381,7 +1381,7 @@
       </trans-unit>
       <trans-unit id="7772973173091400795" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> has been created using <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, a video creation platform developed by Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is a french non-profit organization that offers alternatives to Big Tech's digital tools </source>
-        <target state="new"> <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> has been created using <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, a video creation platform developed by Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is a french non-profit organization that offers alternatives to Big Tech's digital tools </target>
+        <target state="translated">&lt;x id="INTERPOLATION" equiv-text="{{ instanceName }}"/&gt; è stato creato utilizzando &lt;x id="START_LINK" ctype="x-a" equiv-text="&lt;a class="link-orange" target="_blank" rel="noopener noreferrer" href="https://joinpeertube.org"&gt;"/&gt;PeerTube&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/&gt;, una piattaforma di creazione video sviluppata da Framasoft. &lt;x id="START_LINK_1" equiv-text="&lt;a class="link-orange" target="_blank" rel="noopener noreferrer" href="https://framasoft.org"&gt;"/&gt;Framasoft&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/&gt; è un'organizzazione francese senza scopo di lucro che offre alternative agli strumenti digitali di Big Tech. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">34,37</context>
@@ -1389,7 +1389,7 @@
       </trans-unit>
       <trans-unit id="2528596078796844503" datatype="html">
         <source>You want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Then you need to create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="new"> You want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Then you need to create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">Vuoi &lt;x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/&gt;pubblicare video&lt;x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/&gt; su &lt;x id="INTERPOLATION" equiv-text="{{ instanceName }}"/&gt;? Allora devi creare il tuo primo canale &lt;x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/&gt;&lt;x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/&gt; . </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -1770,7 +1770,7 @@
       </trans-unit>
       <trans-unit id="2095604754338363597" datatype="html">
         <source>⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</source>
-        <target state="translated">⚠️ Se abilitato, si consiglia di utilizzare <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>un proxy HTTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per impedire l'accesso a URL privati dal server PeerTube.</target>
+        <target state="translated">⚠️ Se abilitato, si consiglia di utilizzare <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>un proxy HTTP<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> per impedire l'accesso a URL privati dal server PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context><context context-type="linenumber">273</context></context-group>
       </trans-unit>
       <trans-unit id="7627544798203088407" datatype="html">
@@ -3373,12 +3373,12 @@
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target state="new"> View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
+        <target state="needs-translation">Visualizza <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> da <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="5535545444690528619" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/></source>
-        <target state="new">View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/></target>
+        <target state="translated">Vista <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="1055254162789146714">
@@ -5827,7 +5827,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1405600824334286337" datatype="html">
         <source>More filters</source>
-        <target state="new">More filters</target>
+        <target state="translated">Altri filtri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">20</context>
@@ -5843,37 +5843,37 @@ color: red;
       </trans-unit>
       <trans-unit id="7028708681117573961" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Recently Added"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Recently Added"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Ordina per <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Aggiunti di recente".<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="762510264401369759" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Original Publication Date"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Original Publication Date"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Ordina per <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Data di pubblicazione originale<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">48</context></context-group>
       </trans-unit>
       <trans-unit id="4860917424154224190" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Name"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Name"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Ordina per <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Aggiunti di recente".<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="8190023086228606960" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Recent Views"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Recent Views"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Ordina per <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Aggiunti di recente".<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="3224510615614621760" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Hot"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Hot"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Ordina per <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Aggiunti di recente".<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="4322133526902910662" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Likes"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Likes"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Ordina per <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Aggiunti di recente".<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="322705536187172989" datatype="html">
         <source>Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Global Views"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Sort by <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Global Views"<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Ordina per <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>"Aggiunti di recente".<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="2343321245279384373" datatype="html">
@@ -5883,7 +5883,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5063779773341398537" datatype="html">
         <source>Sensitive content:</source>
-        <target state="new">Sensitive content:</target>
+        <target state="translated">Contenuti sensibili:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="5723033003381016192" datatype="html">
@@ -6794,7 +6794,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7152797255397280410" datatype="html">
         <source>Do you really want to delete <x id="PH" equiv-text="videoChannel.displayName"/>? It will delete <x id="PH_1" equiv-text="videoChannel.videosCount"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="PH_2" equiv-text="videoChannel.name"/>)!</source>
-        <target state="translated">Vuoi davvero eliminare <x id="PH" equiv-text="videoChannel.displayName"/>? Verranno eliminati <x id="PH_1" equiv-text="videoChannel.videosCount"/> i video caricati in questo canale e non potrai creare un altro canale con lo stesso nome <x id="PH_2" equiv-text="videoChannel.name"/></target>
+        <target state="translated">Vuoi davvero eliminare <x id="PH" equiv-text="videoChannel.displayName"/>? Verranno eliminati <x id="PH_1" equiv-text="videoChannel.videosCount"/> i video caricati in questo canale e non potrai creare un altro canale con lo stesso nome (<x id="PH_2" equiv-text="videoChannel.name"/>)!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="4433306639366959484" datatype="html">
@@ -7467,7 +7467,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5254305728396198887" datatype="html">
         <source>Sensitive content</source>
-        <target state="new">Sensitive content</target>
+        <target state="translated">Contenuti sensibili</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="5590086849807274701" datatype="html">
@@ -8790,7 +8790,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1486537403020619891" datatype="html">
         <source>My watch history</source>
-        <target state="new">My watch history</target>
+        <target state="translated">Cronologia delle mie visualizzazioni</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.html</context><context context-type="linenumber">3</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-history/my-history.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
@@ -9292,7 +9292,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7699622144571229146" datatype="html">
         <source>Sort by</source>
-        <target state="new">Sort by</target>
+        <target state="translated">Ordina per</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context>
           <context context-type="linenumber">26</context>
