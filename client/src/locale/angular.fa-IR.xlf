@@ -9812,12 +9812,12 @@
       </trans-unit>
       <trans-unit id="8392321423487952834" datatype="html">
         <source>1 year ago</source>
-        <target state="translated">1 سال پیش</target>
+        <target state="translated">یک سال قبل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
       <trans-unit id="1995871740249853660" datatype="html">
         <source><x id="PH" equiv-text="interval"/> month(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> month(s) ago</target>
+        <target state="translated"><x id="PH" equiv-text="interval"/> ماه قبل</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">28</context>
@@ -9825,12 +9825,12 @@
       </trans-unit>
       <trans-unit id="6874778750344205852" datatype="html">
         <source>1 month ago</source>
-        <target state="translated">1 ماه پیش</target>
+        <target state="translated">یک ماه قبل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">34</context></context-group>
       </trans-unit>
       <trans-unit id="3626585509896494177" datatype="html">
         <source><x id="PH" equiv-text="interval"/> week(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> week(s) ago</target>
+        <target state="translated"><x id="PH" equiv-text="interval"/> هفته قبل</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">37</context>
@@ -9838,7 +9838,7 @@
       </trans-unit>
       <trans-unit id="4853543308896023917" datatype="html">
         <source><x id="PH" equiv-text="interval"/> day(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> day(s) ago</target>
+        <target state="translated"><x id="PH" equiv-text="interval"/> روز قبل</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">42</context>
@@ -9846,7 +9846,7 @@
       </trans-unit>
       <trans-unit id="1345947856864087664" datatype="html">
         <source><x id="PH" equiv-text="interval"/> hour(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> hour(s) ago</target>
+        <target state="translated"><x id="PH" equiv-text="interval"/> ساعت قبل</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">47</context>
@@ -9854,7 +9854,7 @@
       </trans-unit>
       <trans-unit id="8256466313580256940" datatype="html">
         <source><x id="PH"/> min ago </source>
-        <target state="translated"><x id="PH"/> دقیقه پیش </target>
+        <target state="translated"><x id="PH"/> دقیقه قبل </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="4733690367258997247" datatype="html">
@@ -9869,7 +9869,7 @@
       </trans-unit>
       <trans-unit id="8489397598480880903" datatype="html">
         <source>{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</source>
-        <target state="new">{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</target>
+        <target state="translated">{interval, plural, =1 {یک سال قبل} other {<x id="interval"/> سال قبل}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">7</context>
@@ -9877,7 +9877,7 @@
       </trans-unit>
       <trans-unit id="599762045687999334" datatype="html">
         <source>{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</source>
-        <target state="new">{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</target>
+        <target state="translated">{interval, plural, =1 {یک ماه قبل} other {<x id="interval"/> ماه قبل}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">8</context>
@@ -9885,7 +9885,7 @@
       </trans-unit>
       <trans-unit id="4951459525104027759" datatype="html">
         <source>{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</source>
-        <target state="new">{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</target>
+        <target state="translated">{interval, plural, =1 {یک هفته قبل} other {<x id="interval"/> هفته قبل}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">9</context>
@@ -9893,7 +9893,7 @@
       </trans-unit>
       <trans-unit id="2471141982657856893" datatype="html">
         <source>{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</source>
-        <target state="new">{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</target>
+        <target state="translated">{interval, plural, =1 {یک روز قبل} other {<x id="interval"/> روز قبل}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">10</context>
@@ -9901,7 +9901,7 @@
       </trans-unit>
       <trans-unit id="8562677309401914974" datatype="html">
         <source>{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</source>
-        <target state="new">{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</target>
+        <target state="translated">{interval, plural, =1 {یک ساعت قبل} other {<x id="interval"/> ساعت قبل}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">11</context>
@@ -9909,7 +9909,7 @@
       </trans-unit>
       <trans-unit id="3613007385964514320" datatype="html">
         <source><x id="PH" equiv-text="interval"/> year(s) ago</source>
-        <target state="new"><x id="PH" equiv-text="interval"/> year(s) ago</target>
+        <target state="translated"><x id="PH" equiv-text="interval"/> سال قبل</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">19</context>
