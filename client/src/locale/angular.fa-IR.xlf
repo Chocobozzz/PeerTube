@@ -322,7 +322,7 @@
       </trans-unit>
       <trans-unit id="906167214730624194" datatype="html">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="translated">{views, plural, =0 { بدون بازدید } =1 { یک بازدید کننده } other { بازدید کننده<x id="views"/>}}</target>
+        <target state="translated">{views, plural, =0 {بدون بازدید} =1 {یک بازدید} other { بازدید<x id="views"/>}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">22</context>
@@ -330,7 +330,7 @@
       </trans-unit>
       <trans-unit id="4873265433447388314" datatype="html">
         <source>{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</source>
-        <target state="translated">{viewers, plural, =0 {بدون بازدید کننده} =1 {یک بازدید کننده} other { بازدید کننده <x id="viewers"/>}}</target>
+        <target state="translated">{viewers, plural, =0 {بدون بازدید کننده} =1 {یک بازدید کننده} other { بازدید کننده<x id="viewers"/>}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">23</context>
@@ -1570,7 +1570,7 @@
       </trans-unit>
       <trans-unit id="7630362802781892981" datatype="html">
         <source>Interface</source>
-        <target state="new">Interface</target>
+        <target state="translated">رابط</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">18</context>
@@ -3329,7 +3329,7 @@
       </trans-unit>
       <trans-unit id="7494537777006082055" datatype="html">
         <source>No comments.</source>
-        <target state="translated">بدون نظر</target>
+        <target state="translated">بدون نظر.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html">
@@ -3356,7 +3356,7 @@
       </trans-unit>
       <trans-unit id="1055254162789146714" datatype="html">
         <source>Comments are disabled.</source>
-        <target state="translated">نظرات غیر فعال شده اند</target>
+        <target state="translated">ثبت نظرات غیر فعال شده اند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">92</context></context-group>
       </trans-unit>
       <trans-unit id="5733075023444401902" datatype="html">
@@ -4000,7 +4000,7 @@
       </trans-unit>
       <trans-unit id="7266085473379376028" datatype="html">
         <source>No comments found matching current filters.</source>
-        <target state="translated">هیچ نظری پیدا نشد مطابق فیلترهای فعلی.</target>
+        <target state="translated">مطابق فیلترهای فعلی هیچ نظری پیدا نشد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">106</context></context-group>
       </trans-unit>
       <trans-unit id="2398388496754671928" datatype="html">
@@ -4020,7 +4020,7 @@
       </trans-unit>
       <trans-unit id="7483158147658382515" datatype="html">
         <source>Comments on local videos</source>
-        <target state="new">Comments on local videos</target>
+        <target state="translated">نظرات برروی ویدئوهای محلی</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -12290,7 +12290,7 @@
       </trans-unit>
       <trans-unit id="1254111869788332501" datatype="html">
         <source>Other videos</source>
-        <target state="new">Other videos</target>
+        <target state="translated">سایر ویدئوها</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">4,6</context>
