@@ -127,6 +127,9 @@ export class UserVideoSettingsComponent extends FormReactive implements OnInit, 
 
   private updateAnonymousProfile (details: UserUpdateMe) {
     this.userService.updateMyAnonymousProfile(details)
-    if (this.notifyOnUpdate) this.notifier.success($localize`Display/Video settings updated.`)
+
+    if (this.notifyOnUpdate) {
+      this.notifier.success($localize`Display/Video settings updated.`)
+    }
   }
 }
