@@ -21,11 +21,16 @@ describe('Version', function () {
     expect(compareSemVer('3.4.0-alpha.1', '3.4.0-beta.1')).to.be.below(0)
     expect(compareSemVer('3.4.0-beta.1', '3.4.0-beta.2')).to.be.below(0)
     expect(compareSemVer('3.4.0-beta.1', '3.5.0-alpha.1')).to.be.below(0)
+
+    expect(compareSemVer('3.4.0-alpha.1', '3.4.0-nightly.4')).to.be.below(0)
+    expect(compareSemVer('3.4.0-nightly.3', '3.4.0-nightly.4')).to.be.below(0)
+    expect(compareSemVer('3.3.0-nightly.5', '3.4.0-nightly.4')).to.be.below(0)
   })
 
   it('Should correctly compare a stable and unstable versions', async function () {
     expect(compareSemVer('3.4.0', '3.4.1-beta.1')).to.be.below(0)
     expect(compareSemVer('3.4.0-beta.1', '3.4.0-beta.2')).to.be.below(0)
     expect(compareSemVer('3.4.0-beta.1', '3.4.0')).to.be.below(0)
+    expect(compareSemVer('3.4.0-nightly.4', '3.4.0')).to.be.below(0)
   })
 })
