@@ -108,10 +108,15 @@ class PluginsManager {
     }
   }
 
-  async runHook<T> (hookName: ClientHookName, result?: T, params?: any) {
-    if (!this.hooks[hookName]) return result
+  async runHook<T> (hookName: ClientHookName, resultArg?: T | Promise<T>, params?: any) {
+    if (!this.hooks[hookName]) {
+      // eslint-disable-next-line no-return-await
+      return await resultArg
+    }
 
     const hookType = getHookType(hookName)
+
+    let result = await resultArg
 
     for (const hook of this.hooks[hookName]) {
       logger.info(`Running hook ${hookName} of plugin ${hook.plugin.name}`)
