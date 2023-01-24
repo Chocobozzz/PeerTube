@@ -1,5 +1,5 @@
-function isPromise (value: any) {
-  return value && typeof value.then === 'function'
+function isPromise <T = unknown> (value: T | Promise<T>): value is Promise<T> {
+  return value && typeof (value as Promise<T>).then === 'function'
 }
 
 function isCatchable (value: any) {
