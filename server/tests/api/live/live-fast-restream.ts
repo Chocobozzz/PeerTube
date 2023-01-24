@@ -95,6 +95,9 @@ describe('Fast restream in live', function () {
   async function runTest (replay: boolean) {
     const { ffmpegCommand, liveVideoUUID } = await fastRestreamWrapper({ replay })
 
+    // TODO: remove, we try to debug a test timeout failure here
+    console.log('Ensuring last live works')
+
     await ensureLastLiveWorks(liveVideoUUID)
 
     await stopFfmpeg(ffmpegCommand)
