@@ -1,5 +1,5 @@
 import { finalize } from 'rxjs/operators'
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
 import { FindInBulkService } from '@app/shared/shared-search'
 import { Video } from '../../shared-main'
@@ -37,7 +37,8 @@ export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnI
   constructor (
     private auth: AuthService,
     private findInBulk: FindInBulkService,
-    private notifier: Notifier
+    private notifier: Notifier,
+    private cd: ChangeDetectorRef
   ) { }
 
   getUser () {
@@ -56,7 +57,10 @@ export class VideoMiniatureMarkupComponent implements CustomMarkupComponent, OnI
     this.findInBulk.getVideo(this.uuid)
       .pipe(finalize(() => this.loaded.emit(true)))
       .subscribe({
-        next: video => this.video = video,
+        next: video => {
+          this.video = video
+          this.cd.markForCheck()
+        },
 
         error: err => this.notifier.error($localize`Error in video miniature component: ${err.message}`)
       })

@@ -1,6 +1,6 @@
 import { from } from 'rxjs'
 import { finalize, map, switchMap, tap } from 'rxjs/operators'
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { MarkdownService, Notifier, UserService } from '@app/core'
 import { FindInBulkService } from '@app/shared/shared-search'
 import { VideoSortField } from '@shared/models'
@@ -34,7 +34,8 @@ export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, O
     private findInBulk: FindInBulkService,
     private videoService: VideoService,
     private userService: UserService,
-    private notifier: Notifier
+    private notifier: Notifier,
+    private cd: ChangeDetectorRef
   ) { }
 
   ngOnInit () {
@@ -57,6 +58,8 @@ export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, O
         next: ({ total, data }) => {
           this.totalVideos = total
           this.video = data[0]
+
+          this.cd.markForCheck()
         },
 
         error: err => this.notifier.error($localize`Error in channel miniature component: ${err.message}`)

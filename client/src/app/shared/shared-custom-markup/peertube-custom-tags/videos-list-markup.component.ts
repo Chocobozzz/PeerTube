@@ -1,5 +1,5 @@
 import { finalize } from 'rxjs/operators'
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
 import { VideoSortField } from '@shared/models'
 import { Video, VideoService } from '../../shared-main'
@@ -46,7 +46,8 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
   constructor (
     private auth: AuthService,
     private videoService: VideoService,
-    private notifier: Notifier
+    private notifier: Notifier,
+    private cd: ChangeDetectorRef
   ) { }
 
   getUser () {
@@ -73,7 +74,10 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
     return this.getVideosObservable()
       .pipe(finalize(() => this.loaded.emit(true)))
       .subscribe({
-        next: ({ data }) => this.videos = data,
+        next: ({ data }) => {
+          this.videos = data
+          this.cd.markForCheck()
+        },
 
         error: err => this.notifier.error($localize`Error in videos list component: ${err.message}`)
       })

@@ -1,5 +1,5 @@
 import { finalize } from 'rxjs/operators'
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { Notifier } from '@app/core'
 import { FindInBulkService } from '@app/shared/shared-search'
 import { MiniatureDisplayOptions } from '../../shared-video-miniature'
@@ -36,14 +36,18 @@ export class PlaylistMiniatureMarkupComponent implements CustomMarkupComponent, 
 
   constructor (
     private findInBulkService: FindInBulkService,
-    private notifier: Notifier
+    private notifier: Notifier,
+    private cd: ChangeDetectorRef
   ) { }
 
   ngOnInit () {
     this.findInBulkService.getPlaylist(this.uuid)
       .pipe(finalize(() => this.loaded.emit(true)))
       .subscribe({
-        next: playlist => this.playlist = playlist,
+        next: playlist => {
+          this.playlist = playlist
+          this.cd.markForCheck()
+        },
 
         error: err => this.notifier.error($localize`Error in playlist miniature component: ${err.message}`)
       })
