@@ -68,7 +68,7 @@ python --version # Should be >= 2.x or >= 3.x
 
 ```
 sudo apt update
-sudo apt install certbot nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git cron wget
+sudo apt install certbot nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git cron wget unzip
 ffmpeg -version # Should be >= 4.1
 g++ -v # Should be >= 5.x
 redis-server --version # Should be >= 5.x
