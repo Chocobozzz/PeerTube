@@ -189,8 +189,12 @@
         <div class="form-group">
           <my-peertube-checkbox
             inputName="byPassAutoBlock" formControlName="byPassAutoBlock"
-            i18n-labelText labelText="Doesn't need review before a video goes public"
-          ></my-peertube-checkbox>
+            i18n-labelText labelText="User bypasses video validation by moderators"
+          >
+            <ng-container ngProjectAs="description" i18n>
+              Enable this checkbox if this user doesn't need to have its videos reviewed by moderators.
+            </ng-container>
+          </my-peertube-checkbox>
         </div>
 
         <input type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
