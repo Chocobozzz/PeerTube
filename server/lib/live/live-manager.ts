@@ -487,7 +487,9 @@ class LiveManager {
       ? VideoStorage.OBJECT_STORAGE
       : VideoStorage.FILE_SYSTEM
 
-    playlist.assignP2PMediaLoaderInfoHashes(video, allResolutions)
+    if (playlist.storage === VideoStorage.FILE_SYSTEM) {
+      playlist.assignP2PMediaLoaderInfoHashes(video, allResolutions)
+    }
 
     return playlist.save()
   }
