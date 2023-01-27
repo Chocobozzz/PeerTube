@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { expectStartWith, testVideoResolutions } from '@server/tests/shared'
+import { expectStartWith, MockObjectStorageProxy, testVideoResolutions } from '@server/tests/shared'
 import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, LiveVideoCreate, VideoPrivacy } from '@shared/models'
 import {
@@ -93,7 +93,7 @@ describe('Object storage for lives', function () {
     await servers[0].config.enableTranscoding()
   })
 
-  describe('Without live transcoding', async function () {
+  describe('Without live transcoding', function () {
     let videoUUID: string
 
     before(async function () {
@@ -134,7 +134,7 @@ describe('Object storage for lives', function () {
     })
   })
 
-  describe('With live transcoding', async function () {
+  describe('With live transcoding', function () {
     const resolutions = [ 720, 480, 360, 240, 144 ]
 
     before(async function () {
@@ -220,6 +220,62 @@ describe('Object storage for lives', function () {
       it('Should have cleaned up live files from object storage', async function () {
         await checkFilesCleanup(servers[0], videoUUIDPermanent, resolutions)
       })
+    })
+  })
+
+  describe('With object storage base url', function () {
+    const mockObjectStorageProxy = new MockObjectStorageProxy()
+    let baseMockUrl: string
+
+    before(async function () {
+      this.timeout(120000)
+
+      const port = await mockObjectStorageProxy.initialize()
+      baseMockUrl = `http://127.0.0.1:${port}/streaming-playlists`
+
+      await ObjectStorageCommand.createMockBucket('streaming-playlists')
+
+      const config = {
+        object_storage: {
+          enabled: true,
+          endpoint: 'http://' + ObjectStorageCommand.getMockEndpointHost(),
+          region: ObjectStorageCommand.getMockRegion(),
+
+          credentials: ObjectStorageCommand.getMockCredentialsConfig(),
+
+          streaming_playlists: {
+            bucket_name: 'streaming-playlists',
+            prefix: '',
+            base_url: baseMockUrl
+          }
+        }
+      }
+
+      await servers[0].kill()
+      await servers[0].run(config)
+
+      await servers[0].config.enableLive({ transcoding: true, resolutions: 'min' })
+    })
+
+    it('Should publish a live and replace the base url', async function () {
+      this.timeout(240000)
+
+      const videoUUIDPermanent = await createLive(servers[0], true)
+
+      const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUIDPermanent })
+      await waitUntilLivePublishedOnAllServers(servers, videoUUIDPermanent)
+
+      await testVideoResolutions({
+        originServer: servers[0],
+        servers,
+        liveVideoId: videoUUIDPermanent,
+        resolutions: [ 720 ],
+        transcoded: true,
+        objectStorage: true,
+        objectStorageBaseUrl: baseMockUrl
+      })
+
+      await stopFfmpeg(ffmpegCommand)
     })
   })
 

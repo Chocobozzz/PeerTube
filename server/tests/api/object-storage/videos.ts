@@ -9,7 +9,7 @@ import {
   expectLogDoesNotContain,
   expectStartWith,
   generateHighBitrateVideo,
-  MockObjectStorage
+  MockObjectStorageProxy
 } from '@server/tests/shared'
 import { areMockObjectStorageTestsDisabled } from '@shared/core-utils'
 import { HttpStatusCode, VideoDetails } from '@shared/models'
@@ -124,7 +124,7 @@ function runTestSuite (options: {
 
   useMockBaseUrl?: boolean
 }) {
-  const mockObjectStorage = new MockObjectStorage()
+  const mockObjectStorageProxy = new MockObjectStorageProxy()
   const { fixture } = options
   let baseMockUrl: string
 
@@ -138,8 +138,10 @@ function runTestSuite (options: {
   before(async function () {
     this.timeout(120000)
 
-    const port = await mockObjectStorage.initialize()
-    baseMockUrl = options.useMockBaseUrl ? `http://127.0.0.1:${port}` : undefined
+    const port = await mockObjectStorageProxy.initialize()
+    baseMockUrl = options.useMockBaseUrl
+      ? `http://127.0.0.1:${port}`
+      : undefined
 
     await ObjectStorageCommand.createMockBucket(options.playlistBucket)
     await ObjectStorageCommand.createMockBucket(options.webtorrentBucket)
@@ -254,7 +256,7 @@ function runTestSuite (options: {
   })
 
   after(async function () {
-    await mockObjectStorage.terminate()
+    await mockObjectStorageProxy.terminate()
 
     await cleanupTests(servers)
   })

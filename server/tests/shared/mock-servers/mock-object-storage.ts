@@ -5,7 +5,7 @@ import { pipeline } from 'stream'
 import { ObjectStorageCommand } from '@shared/server-commands'
 import { getPort, randomListen, terminateServer } from './shared'
 
-export class MockObjectStorage {
+export class MockObjectStorageProxy {
   private server: Server
 
   async initialize () {
