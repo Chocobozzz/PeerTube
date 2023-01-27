@@ -293,6 +293,30 @@ tracker:
   private: true
   # Reject peers that do a lot of announces (could improve privacy of TCP/UDP peers)
   reject_too_many_announces: false
+  
+customize_torrents:
+  # If additional trackers is more than 0, 
+  # then as many as additional trackers entries from the trakcers list will be 
+  # added to the torrent file
+  # entries are randomly chosen if number is less than whole list otherwise all
+  # 0 , empty or absense of this property means disabled   
+  # additional_trackers: 6
+  # trackers_list:
+  #   - 'udp://tracker.leechers-paradise.org:6969'
+  #   - 'udp://www.torrent.eu.org:451/announce'
+  #   - 'udp://tracker.opentrackr.org:1337'
+  #   - 'udp://tracker.moeking.me:6969/announce'
+  #   - 'udp://explodie.org:6969'
+  #   - 'wss://tracker.btorrent.xyz'
+  #   - 'wss://tracker.openwebtorrent.com'
+  #   - 'udp://open.stealth.si:80/announce'
+  #   - 'udp://tracker.coppersurfer.tk:6969'
+  #   - 'udp://exodus.desync.com:6969/announce'
+  #   - 'udp://retracker.lanta-net.ru:2710/announce'
+  #   - 'http://open.acgnxtracker.com:80/announce'
+  #   - 'udp://tracker.torrent.eu.org:451/announce'
+  #   - 'udp://tracker.empire-js.us:1337'
+  #   - 'udp://open.stealth.si:80/announce'
 
 history:
   videos:

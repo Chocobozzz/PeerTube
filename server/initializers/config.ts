@@ -243,6 +243,12 @@ const CONFIG = {
     PRIVATE: config.get<boolean>('tracker.private'),
     REJECT_TOO_MANY_ANNOUNCES: config.get<boolean>('tracker.reject_too_many_announces')
   },
+  CUSTOMIZE_TORRENTS: {
+    ADDITIONAL_TRACKERS: config.has('customize_torrents.additional_trackers')
+      ? config.get<number>('customize_torrents.additional_trackers')
+      : 0,
+    TRACKERS_LIST: config.has('customize_torrents.trackers_list') ? config.get<string[]>('customize_torrents.trackers_list') : []
+  },
   HISTORY: {
     VIDEOS: {
       MAX_AGE: parseDurationToMs(config.get('history.videos.max_age'))

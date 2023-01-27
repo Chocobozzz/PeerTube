@@ -47,8 +47,9 @@ async function downloadWebTorrentVideo (target: { uri: string, torrentName?: str
           deleteDownloadedFile({ directoryPath, filepath: file.path })
         }
 
-        return safeWebtorrentDestroy(webtorrent, torrentId, undefined, target.torrentName)
-          .then(() => rej(new Error('Cannot import torrent ' + torrentId + ': there are multiple files in it')))
+        return safeWebtorrentDestroy(webtorrent, torrentId, undefined, target.torrentName).then(() =>
+          rej(new Error('Cannot import torrent ' + torrentId + ': there are multiple files in it'))
+        )
       }
 
       logger.debug('Got torrent from webtorrent %s.', id, { infoHash: torrent.infoHash })
@@ -65,13 +66,9 @@ async function downloadWebTorrentVideo (target: { uri: string, torrentName?: str
           .catch(err => logger.error('Cannot destroy webtorrent.', { err }))
       })
 
-      pipeline(
-        file.createReadStream(),
-        writeStream,
-        err => {
-          if (err) rej(err)
-        }
-      )
+      pipeline(file.createReadStream(), writeStream, err => {
+        if (err) rej(err)
+      })
     })
 
     torrent.on('error', err => rej(err))
@@ -79,13 +76,17 @@ async function downloadWebTorrentVideo (target: { uri: string, torrentName?: str
     timer = setTimeout(() => {
       const err = new Error('Webtorrent download timeout.')
 
-      safeWebtorrentDestroy(webtorrent, torrentId, file ? { directoryPath, filepath: file.path } : undefined, target.torrentName)
+      safeWebtorrentDestroy(
+        webtorrent,
+        torrentId,
+        file ? { directoryPath, filepath: file.path } : undefined,
+        target.torrentName
+      )
         .then(() => rej(err))
         .catch(destroyErr => {
           logger.error('Cannot destroy webtorrent.', { err: destroyErr })
           rej(err)
         })
-
     }, timeout)
   })
 }
@@ -134,8 +135,12 @@ async function updateTorrentMetadata (videoOrPlaylist: MVideo | MStreamingPlayli
 
   const oldTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename)
 
-  if (!await pathExists(oldTorrentPath)) {
-    logger.info('Do not update torrent metadata %s of video %s because the file does not exist anymore.', video.uuid, oldTorrentPath)
+  if (!(await pathExists(oldTorrentPath))) {
+    logger.info(
+      'Do not update torrent metadata %s of video %s because the file does not exist anymore.',
+      video.uuid,
+      oldTorrentPath
+    )
     return
   }
 
@@ -193,10 +198,8 @@ function generateMagnetUri (
 export {
   createTorrentPromise,
   updateTorrentMetadata,
-
   createTorrentAndSetInfoHash,
   createTorrentAndSetInfoHashFromPath,
-
   generateMagnetUri,
   downloadWebTorrentVideo
 }
@@ -214,8 +217,9 @@ function safeWebtorrentDestroy (
       // Delete torrent file
       if (torrentName) {
         logger.debug('Removing %s torrent after webtorrent download.', torrentId)
-        remove(torrentId)
-          .catch(err => logger.error('Cannot remove torrent %s in webtorrent download.', torrentId, { err }))
+        remove(torrentId).catch(err =>
+          logger.error('Cannot remove torrent %s in webtorrent download.', torrentId, { err })
+        )
       }
 
       // Delete downloaded file
@@ -236,15 +240,55 @@ function deleteDownloadedFile (downloadedFile: { directoryPath: string, filepath
   const toRemovePath = join(downloadedFile.directoryPath, pathToDelete)
 
   logger.debug('Removing %s after webtorrent download.', toRemovePath)
-  remove(toRemovePath)
-    .catch(err => logger.error('Cannot remove torrent file %s in webtorrent download.', toRemovePath, { err }))
+  remove(toRemovePath).catch(err =>
+    logger.error('Cannot remove torrent file %s in webtorrent download.', toRemovePath, { err })
+  )
+}
+
+const getRandomizedArrayIndex = ({ randomSeed }) => ({ arrayLength, indexOffset }) => {
+  // randomizing the selection
+  return (randomSeed + indexOffset) % arrayLength
 }
 
 function buildAnnounceList () {
-  return [
-    [ WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket' ],
-    [ WEBSERVER.URL + '/tracker/announce' ]
-  ]
+  const additionalTrackersCount =
+    !!CONFIG.CUSTOMIZE_TORRENTS?.ADDITIONAL_TRACKERS && CONFIG.CUSTOMIZE_TORRENTS?.ADDITIONAL_TRACKERS
+  const configTrackersList = CONFIG.CUSTOMIZE_TORRENTS?.TRACKERS_LIST?.length
+    ? CONFIG.CUSTOMIZE_TORRENTS?.TRACKERS_LIST
+    : []
+
+  let additionalTrackersList = []
+  if (additionalTrackersCount >= configTrackersList.length) {
+    additionalTrackersList = configTrackersList
+  } else {
+    const randomizeIndex = getRandomizedArrayIndex({ randomSeed: Date.now() })
+    for (let i = 0; i < additionalTrackersCount; ++i) {
+      additionalTrackersList = [
+        ...additionalTrackersList,
+        configTrackersList[randomizeIndex({ arrayLength: configTrackersList.length, indexOffset: i })]
+      ]
+    }
+  }
+
+  logger.debug({
+    additionalTrackersList,
+    additionalTrackersCount,
+    configTrackersList,
+    ctlLength: configTrackersList.length
+  })
+
+  return additionalTrackersList.length
+    ? [
+      ...additionalTrackersList.map(tracker => {
+        return [ tracker ]
+      }),
+      [ WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket' ],
+      [ WEBSERVER.URL + '/tracker/announce' ]
+    ]
+    : [
+      [ WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket' ],
+      [ WEBSERVER.URL + '/tracker/announce' ]
+    ]
 }
 
 function buildUrlList (video: MVideo, videoFile: MVideoFile) {
