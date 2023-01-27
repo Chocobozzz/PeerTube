@@ -1,4 +1,3 @@
-
 import { mapSeries } from 'bluebird'
 import { FSWatcher, watch } from 'chokidar'
 import { FfmpegCommand } from 'fluent-ffmpeg'
@@ -9,12 +8,18 @@ import { EventEmitter } from 'stream'
 import { getLiveMuxingCommand, getLiveTranscodingCommand } from '@server/helpers/ffmpeg'
 import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger'
 import { CONFIG } from '@server/initializers/config'
-import { MEMOIZE_TTL, VIDEO_LIVE } from '@server/initializers/constants'
+import { MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE } from '@server/initializers/constants'
 import { removeHLSFileObjectStorageByPath, storeHLSFileFromFilename, storeHLSFileFromPath } from '@server/lib/object-storage'
 import { VideoFileModel } from '@server/models/video/video-file'
+import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { MStreamingPlaylistVideo, MUserId, MVideoLiveVideo } from '@server/types/models'
-import { VideoStorage } from '@shared/models'
-import { getLiveDirectory, getLiveReplayBaseDirectory } from '../../paths'
+import { VideoStorage, VideoStreamingPlaylistType } from '@shared/models'
+import {
+  generateHLSMasterPlaylistFilename,
+  generateHlsSha256SegmentsFilename,
+  getLiveDirectory,
+  getLiveReplayBaseDirectory
+} from '../../paths'
 import { VideoTranscodingProfilesManager } from '../../transcoding/default-transcoding-profiles'
 import { isAbleToUploadVideo } from '../../user'
 import { LiveQuotaStore } from '../live-quota-store'
@@ -53,7 +58,6 @@ class MuxingSession extends EventEmitter {
   private readonly user: MUserId
   private readonly sessionId: string
   private readonly videoLive: MVideoLiveVideo
-  private readonly streamingPlaylist: MStreamingPlaylistVideo
   private readonly inputUrl: string
   private readonly fps: number
   private readonly allResolutions: number[]
@@ -70,11 +74,12 @@ class MuxingSession extends EventEmitter {
   private readonly outDirectory: string
   private readonly replayDirectory: string
 
-  private readonly liveSegmentShaStore: LiveSegmentShaStore
-
   private readonly lTags: LoggerTagsFn
 
   private segmentsToProcessPerPlaylist: { [playlistId: string]: string[] } = {}
+
+  private streamingPlaylist: MStreamingPlaylistVideo
+  private liveSegmentShaStore: LiveSegmentShaStore
 
   private tsWatcher: FSWatcher
   private masterWatcher: FSWatcher
@@ -98,7 +103,6 @@ class MuxingSession extends EventEmitter {
     user: MUserId
     sessionId: string
     videoLive: MVideoLiveVideo
-    streamingPlaylist: MStreamingPlaylistVideo
     inputUrl: string
     fps: number
     bitrate: number
@@ -112,7 +116,6 @@ class MuxingSession extends EventEmitter {
     this.user = options.user
     this.sessionId = options.sessionId
     this.videoLive = options.videoLive
-    this.streamingPlaylist = options.streamingPlaylist
     this.inputUrl = options.inputUrl
     this.fps = options.fps
 
@@ -131,17 +134,13 @@ class MuxingSession extends EventEmitter {
     this.outDirectory = getLiveDirectory(this.videoLive.Video)
     this.replayDirectory = join(getLiveReplayBaseDirectory(this.videoLive.Video), new Date().toISOString())
 
-    this.liveSegmentShaStore = new LiveSegmentShaStore({
-      videoUUID: this.videoLive.Video.uuid,
-      sha256Path: join(this.outDirectory, this.streamingPlaylist.segmentsSha256Filename),
-      streamingPlaylist: this.streamingPlaylist,
-      sendToObjectStorage: CONFIG.OBJECT_STORAGE.ENABLED
-    })
-
     this.lTags = loggerTagsFactory('live', this.sessionId, this.videoUUID)
   }
 
   async runMuxing () {
+    this.streamingPlaylist = await this.createLivePlaylist()
+
+    this.createLiveShaStore()
     this.createFiles()
 
     await this.prepareDirectories()
@@ -257,17 +256,18 @@ class MuxingSession extends EventEmitter {
     this.masterWatcher = watch(this.outDirectory + '/' + this.streamingPlaylist.playlistFilename)
 
     this.masterWatcher.on('add', async () => {
-      if (this.streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
-        try {
+      try {
+        if (this.streamingPlaylist.storage === VideoStorage.OBJECT_STORAGE) {
           const url = await storeHLSFileFromFilename(this.streamingPlaylist, this.streamingPlaylist.playlistFilename)
 
           this.streamingPlaylist.playlistUrl = url
-          this.streamingPlaylist.assignP2PMediaLoaderInfoHashes(this.videoLive.Video, this.allResolutions)
-
-          await this.streamingPlaylist.save()
-        } catch (err) {
-          logger.error('Cannot upload live master file to object storage.', { err, ...this.lTags() })
         }
+
+        this.streamingPlaylist.assignP2PMediaLoaderInfoHashes(this.videoLive.Video, this.allResolutions)
+
+        await this.streamingPlaylist.save()
+      } catch (err) {
+        logger.error('Cannot update streaming playlist.', { err, ...this.lTags() })
       }
 
       this.masterPlaylistCreated = true
@@ -477,6 +477,31 @@ class MuxingSession extends EventEmitter {
     } catch (err) {
       logger.error('Cannot copy segment %s to replay directory.', segmentPath, { err, ...this.lTags() })
     }
+  }
+
+  private async createLivePlaylist (): Promise<MStreamingPlaylistVideo> {
+    const playlist = await VideoStreamingPlaylistModel.loadOrGenerate(this.videoLive.Video)
+
+    playlist.playlistFilename = generateHLSMasterPlaylistFilename(true)
+    playlist.segmentsSha256Filename = generateHlsSha256SegmentsFilename(true)
+
+    playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
+    playlist.type = VideoStreamingPlaylistType.HLS
+
+    playlist.storage = CONFIG.OBJECT_STORAGE.ENABLED
+      ? VideoStorage.OBJECT_STORAGE
+      : VideoStorage.FILE_SYSTEM
+
+    return playlist.save()
+  }
+
+  private createLiveShaStore () {
+    this.liveSegmentShaStore = new LiveSegmentShaStore({
+      videoUUID: this.videoLive.Video.uuid,
+      sha256Path: join(this.outDirectory, this.streamingPlaylist.segmentsSha256Filename),
+      streamingPlaylist: this.streamingPlaylist,
+      sendToObjectStorage: CONFIG.OBJECT_STORAGE.ENABLED
+    })
   }
 }
 
