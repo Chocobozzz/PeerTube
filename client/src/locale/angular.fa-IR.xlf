@@ -338,17 +338,17 @@
       </trans-unit>
       <trans-unit id="4763067539652050249" datatype="html">
         <source><x id="PH" equiv-text="this.viewers"/> viewer(s)</source>
-        <target state="new"><x id="PH" equiv-text="this.viewers"/> viewer(s)</target>
+        <target state="translated"><x id="PH" equiv-text="this.viewers"/> بازدید‌کننده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context><context context-type="linenumber">286</context></context-group>
       </trans-unit>
       <trans-unit id="8622604868434380566" datatype="html">
         <source>{<x id="PH" equiv-text="this.views"/> view(s)}</source>
-        <target state="new">{<x id="PH" equiv-text="this.views"/> view(s)}</target>
+        <target state="translated">{ بازدید<x id="PH" equiv-text="this.views"/>}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context><context context-type="linenumber">289</context></context-group>
       </trans-unit>
       <trans-unit id="3321250177023376249" datatype="html">
         <source>Change your avatar</source>
-        <target state="translated">نماد (avatar) خود را تغییر دهید</target>
+        <target state="translated">نماد (آواتار) خود را تغییر دهید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-avatar-edit.component.html</context><context context-type="linenumber">18</context></context-group>
       </trans-unit>
       <trans-unit id="8411430224810427392" datatype="html">
@@ -567,12 +567,12 @@
       </trans-unit>
       <trans-unit id="7688104409544625220" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 view} other{<x id="INTERPOLATION"/> نماها}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {یک بازدید} other { بازدید<x id="INTERPOLATION"/> }}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="8562063050145802350" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 viewer} other {<x id="INTERPOLATION"/> viewers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 viewer} other {<x id="INTERPOLATION"/> بینندگان}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {یک بازدید‌کننده} other { بازدید‌کننده<x id="INTERPOLATION"/>}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context>
           <context context-type="linenumber">7</context>
@@ -599,7 +599,7 @@
       </trans-unit>
       <trans-unit id="2956881312790136147" datatype="html">
         <source>Delete this file</source>
-        <target state="new">Delete this file</target>
+        <target state="translated">حذف این فایل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">114</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.html</context><context context-type="linenumber">130</context></context-group>
       </trans-unit>
@@ -610,7 +610,7 @@
       </trans-unit>
       <trans-unit id="5779580280418408097" datatype="html">
         <source>Deleted {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="new">Deleted {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</target>
+        <target state="translated">{count, plural, =1 {یک ویدئو} other { ویدئو<x id="count"/>}}حذف شد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">241</context></context-group>
       </trans-unit>
       <trans-unit id="6630644917521475697" datatype="html">
@@ -858,7 +858,7 @@
       </trans-unit>
       <trans-unit id="457567965747150035" datatype="html">
         <source>Transcoding in multiple resolutions</source>
-        <target state="translated">تبدیل به کیفیت‌های متعدد</target>
+        <target state="translated">تبدیل به رزولوشن‌های متعدد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="330610135077253864" datatype="html">
@@ -1147,7 +1147,7 @@
       </trans-unit>
       <trans-unit id="3997350348765083892">
         <source>Username or email address</source>
-        <target>نام کاربری یا آدرس رایانامه</target>
+        <target state="translated">نام کاربری یا آدرس ایمیل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="175344056589888866" datatype="html">
@@ -1158,7 +1158,7 @@
       </trans-unit>
       <trans-unit id="1758058452376026925" datatype="html">
         <source>⚠️ Most email addresses do not include capital letters.</source>
-        <target state="translated">⚠️ بیشتر نشانی‌های رایانامه فاقد حروف بزرگ هستند.</target>
+        <target state="translated">⚠️ بیشتر ایمیل‌ها فاقد حروف بزرگ هستند.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="6512825581399429064" datatype="html">
@@ -1236,17 +1236,17 @@
       </trans-unit>
       <trans-unit id="3188014010833256853" datatype="html">
         <source>Enter your email address and we will send you a link to reset your password.</source>
-        <target state="translated">نشانی رایانامه‌تان را وارد کنید تا ما پیوندی برای بازنشانی گذرواژه را برای شما بفرستیم.</target>
+        <target state="translated">ایمیل‌تان را وارد کنید تا ما پیوندی برای بازنشانی گذرواژه را برای شما بفرستیم.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">128</context></context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
-        <target state="translated">رایانامه‌ای حاوی دستورالعمل بازنشانی گذرواژه به <x id="PH" equiv-text="this.forgotPasswordEmail"/> فرستاده خواهد شد. این پیوند تا یک ساعت دیگر منقضی می‌شود.</target>
+        <target state="translated">یک ایمیل حاوی دستورالعمل بازنشانی گذرواژه به <x id="PH" equiv-text="this.forgotPasswordEmail"/> فرستاده خواهد شد. این پیوند تا یک ساعت دیگر منقضی می‌شود.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">149</context></context-group>
       </trans-unit>
       <trans-unit id="4768749765465246664">
         <source>Email</source>
-        <target>رایانامه</target>
+        <target state="translated">ایمیل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">105</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">105</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">133</context></context-group>
@@ -1257,7 +1257,7 @@
       </trans-unit>
       <trans-unit id="3967269098753656610">
         <source>Email address</source>
-        <target>آدرس رایانامه</target>
+        <target state="translated">آدرس ایمیل</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">135</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
@@ -2664,7 +2664,7 @@
       </trans-unit>
       <trans-unit id="2200003513633568069" datatype="html">
         <source>Enable video comments</source>
-        <target state="translated">قابلیت های ویدئویی را فعال کنید</target>
+        <target state="translated">قابلیت ثبت نظر برروی ویدئو را فعال کنید</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">373</context></context-group>
       </trans-unit>
       <trans-unit id="8896564060463626070" datatype="html">
@@ -4015,7 +4015,7 @@
       </trans-unit>
       <trans-unit id="2721988499779041837" datatype="html">
         <source>Remote comments</source>
-        <target state="translated">نظرات از راه دور</target>
+        <target state="translated">نظرات کاربران راه دور</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="7483158147658382515" datatype="html">
@@ -4504,7 +4504,7 @@
       </trans-unit>
       <trans-unit id="7427986413651551775" datatype="html">
         <source>Video comments</source>
-        <target state="translated">نظرات ویدئو</target>
+        <target state="translated">نظرات راجع به ویدئو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="289582790179344391" datatype="html">
@@ -4965,7 +4965,7 @@
       </trans-unit>
       <trans-unit id="8147229944654164397" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos} }</source>
-        <target state="translated">{var_plural، plural، = 1 {video} سایر {فیلم}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {فیلم} other {فیلم} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">24</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
@@ -4995,7 +4995,7 @@
       </trans-unit>
       <trans-unit id="3094586852616580737" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</source>
-        <target state="translated">{var_plural، plural، = 1 {نظر} دیگر {نظرات}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {نظر} other {نظر} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">54</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
@@ -8859,7 +8859,7 @@
       </trans-unit>
       <trans-unit id="5315689532659759332" datatype="html">
         <source>Someone mentioned you in video comments</source>
-        <target state="translated">فردی از شما  در نظرات ویدئو نام برد.</target>
+        <target state="translated">فردی از شما در نظرات راجع به ویدئو نام برد.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="2018794201569157817" datatype="html">
@@ -11938,7 +11938,7 @@
       </trans-unit>
       <trans-unit id="992317512448454409" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</source>
-        <target state="needs-translation">{VAR_PLURAL, plural, =0 {Comments} =1 {1 Comment} other {<x id="INTERPOLATION"/> Comments}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {بدون نظر} =1 {یک نظر} other { نظر<x id="INTERPOLATION"/>}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="4903651219400691248" datatype="html">
