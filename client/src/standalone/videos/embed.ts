@@ -496,7 +496,7 @@ export class PeerTubeEmbed {
 			// Create a div to show the audio wallpaper
 			const audioWallpaper = document.createElement('div')
 			audioWallpaper.className = 'vjs-audio-wallpaper';
-			const thumbnailUrl = (videoDetails.from ? 'https://' + videoDetails.from : videoDetails.host) + videoDetails.previewPath;
+			const thumbnailUrl = (videoDetails.from ? 'https://' + videoDetails.from : videoDetails.host) + videoDetails.thumbnailPath;
 			audioWallpaper.style.backgroundImage = 'url(' + thumbnailUrl + ')';
 			const playerWrapperSize = this.playerHTML.getWrapperSize();
 			if (playerWrapperSize && playerWrapperSize.height) {
@@ -565,7 +565,7 @@ export class PeerTubeEmbed {
 				// Show / hide the visualization if needed
 				const noSound = (dataArray.reduce((partialSum, value) => partialSum + value, 0) <= 0)
 				if (noSound) {
-					// const thumbnailUrl = (videoDetails.from ? 'https://' + videoDetails.from : videoDetails.host) + videoDetails.previewPath;
+					// const thumbnailUrl = (videoDetails.from ? 'https://' + videoDetails.from : videoDetails.host) + videoDetails.thumbnailPath;
 					// audioVisu.style.backgroundImage = 'url(' + thumbnailUrl + ')';
 					audioVisu.style.backgroundPosition = 'center';
 					audioVisu.style.backgroundRepeat = 'no-repeat';

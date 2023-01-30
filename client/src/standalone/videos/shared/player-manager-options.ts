@@ -228,7 +228,7 @@ export class PlayerManagerOptions {
         peertubeLink: this.peertubeLink,
         //instanceName: serverConfig.instance.name,
 
-        poster: poster ? poster : (video.from ? 'https://' + video.from : video.host) + video.previewPath,
+        poster: poster ? poster : (video.from ? 'https://' + video.from : video.host) + video.thumbnailPath,
         theaterButton: false,
 
         serverUrl: video.host,

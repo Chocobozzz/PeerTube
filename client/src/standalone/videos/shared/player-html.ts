@@ -98,7 +98,7 @@ export class PlayerHTML {
   /*buildPlaceholder (video: VideoDetails, host : string) {
     const placeholder = this.getPlaceholderElement()
 
-    const url = host + video.previewPath
+    const url = host + video.thumbnailPath
     placeholder.style.backgroundImage = `url("${url}")`
     placeholder.style.display = 'block'
   }
@@ -154,7 +154,7 @@ export class PlayerHTML {
 
   thumbPlayer(videoInfo: VideoDetails, addplaybutton : Boolean){
 	
-	const url = (videoInfo.from ? 'https://' + videoInfo.from : videoInfo.host) + videoInfo.previewPath
+	const url = (videoInfo.from ? 'https://' + videoInfo.from : videoInfo.host) + videoInfo.thumbnailPath
 
 	var poster = document.createElement("div");
 		poster.className = "vjs-thumb video-js";
