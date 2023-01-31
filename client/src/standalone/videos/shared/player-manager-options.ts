@@ -123,7 +123,7 @@ export class PlayerManagerOptions {
       this.loop = getParamToggle(params, 'loop', false)
       this.title = getParamToggle(params, 'title', true)
       this.enableApi = getParamToggle(params, 'api', this.enableApi)
-      this.warningTitle = getParamToggle(params, 'warningTitle', true)
+      this.warningTitle = getParamToggle(params, 'warningTitle', false)
       this.peertubeLink = getParamToggle(params, 'peertubeLink', true)
       this.p2pEnabled = getParamToggle(params, 'p2p', this.isP2PEnabled(config, video))
 
