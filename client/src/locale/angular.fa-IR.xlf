@@ -322,7 +322,7 @@
       </trans-unit>
       <trans-unit id="906167214730624194" datatype="html">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="translated">{views, plural, =0 {بدون بازدید} =1 {یک بازدید} other { بازدید<x id="views"/>}}</target>
+        <target state="translated">{views, plural, =0 {بدون بازدید} =1 {یک بازدید} other {<x id="views"/> بازدید}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.model.ts</context>
           <context context-type="linenumber">22</context>
@@ -567,7 +567,7 @@
       </trans-unit>
       <trans-unit id="7688104409544625220" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {یک بازدید} other { بازدید<x id="INTERPOLATION"/> }}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {یک بازدید} other {<x id="INTERPOLATION"/> بازدید }}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="8562063050145802350" datatype="html">
@@ -6250,7 +6250,7 @@
       </trans-unit>
       <trans-unit id="6500762313951857695" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No views} =1 {1 view} other {<x id="INTERPOLATION"/> views}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {بدون بازدید} =1 {یک بازدید} other {<x id="INTERPOLATION"/> بازدید}}</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="9131836378905533756" datatype="html">
