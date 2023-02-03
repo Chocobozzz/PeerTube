@@ -757,6 +757,7 @@
       </trans-unit>
       <trans-unit id="8674693181203168033" datatype="html">
         <source>Discover how to setup your account, what is a channel, how to create a playlist and more!</source>
+        <target state="translated">Sjáðu hvernig á að setja upp notandaaðganginn þinn, hvað sé rás, hvernig eigi að útbúa spilunarlista og margt fleira!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">31,33</context>
@@ -772,6 +773,7 @@
       </trans-unit>
       <trans-unit id="7916664392219781729" datatype="html">
         <source>Discover unofficial Android applications or browser addons!</source>
+        <target state="translated">Sjáðu upplýsingar um óopinber Android-forrit eða vafraviðbætur!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">43,45</context>
@@ -787,6 +789,7 @@
       </trans-unit>
       <trans-unit id="6886584917624458638" datatype="html">
         <source>Want to help to improve PeerTube? You can translate the web interface, give your feedback or directly contribute to the code!</source>
+        <target state="translated">Viltu hjálpa til við að bæta PeerTube? Þú getur þýtt vefviðmótið, gefið umsagnir eða lagt þitt beint af mörkum í kóðann!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">55,57</context>
@@ -802,6 +805,7 @@
       </trans-unit>
       <trans-unit id="442017645619017020" datatype="html">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server, but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What follows applies only if you want to keep using the P2P mode of PeerTube.</source>
+        <target state="translated">PeerTube notar BitTorrent-samskiptamáta til að sjálfgefið deila bandbreidd á milli notenda og þannig minnka álag á netþjóna, en á endanum gefur þetta þér val um að skipta yfir í venjulegt streymi beint af þjóninum sem geymir myndskeiðið. Það sem á eftir fer á aðeins við ef þú heldur áfram að nota P2P-haminn í PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">69,73</context>
@@ -809,6 +813,7 @@
       </trans-unit>
       <trans-unit id="6314880288843792309" datatype="html">
         <source>The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
+        <target state="translated">Aðal-ógnin við persónuleynd þína sem fylgir BitTorrent, liggur í því að IP-vistfang þitt sé skráð í BitTorrent-rekjara tilviksins á meðan þú ert að sækja eða horfa á myndskeiðið.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">75,78</context>
@@ -824,6 +829,7 @@
       </trans-unit>
       <trans-unit id="1411398404280870617" datatype="html">
         <source>In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video. In practice, this is much more difficult because:</source>
+        <target state="translated">Fræðilega getur einhver nógu tæknilega þenkjandi náð að útbúa skriftu sem rekur hvaða IP-vistfang sé að sækja hvaða myndskeið. Í raun er þetta mjög erfitt vegna þess að:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">82,85</context>
@@ -880,6 +886,7 @@
       </trans-unit>
       <trans-unit id="8484650229450883706" datatype="html">
         <source>How does PeerTube compare with YouTube?</source>
+        <target state="translated">Hvernig er PeerTube í samanburði við YouTube?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">125</context>
@@ -894,6 +901,7 @@
       </trans-unit>
       <trans-unit id="2676074687792256808" datatype="html">
         <source>What can I do to limit the exposure of my IP address?</source>
+        <target state="translated">Hvað get ég gert til að takmarka berskjöldun IP-vistfangsins míns?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">133</context>
@@ -908,6 +916,7 @@
       </trans-unit>
       <trans-unit id="401806741040118292" datatype="html">
         <source>What will be done to mitigate this problem?</source>
+        <target state="translated">Hvað verður gert til að verjast þessu vandamáli?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">142</context>
@@ -1230,7 +1239,7 @@
       </trans-unit>
       <trans-unit id="8661266239199665830" datatype="html">
         <source>Copy account handle</source>
-        <target state="translated">Afrita tengil aðgangs</target>
+        <target state="translated">Afrita auðkenni aðgangs</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">29</context>
@@ -1618,6 +1627,7 @@
       </trans-unit>
       <trans-unit id="3710881484246327863" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached image} other {cached images}}</source>
+        <target state="translated">{VAR_PLURAL, plural, =1 {mynd í skyndiminni} other {myndir í skyndiminni}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">22</context>
@@ -1633,6 +1643,7 @@
       </trans-unit>
       <trans-unit id="6193666854590647323" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached caption} other {cached captions}}</source>
+        <target state="translated">{VAR_PLURAL, plural, =1 {skýringatexti í skyndiminni} other {skýringatextar í skyndiminni}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">36</context>
@@ -1640,6 +1651,7 @@
       </trans-unit>
       <trans-unit id="330647913034301472" datatype="html">
         <source>Number of video torrents to keep in cache</source>
+        <target state="translated">Fjöldi torrent-streyma myndskeiða til að halda í skyndiminni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">43</context>
@@ -1647,6 +1659,7 @@
       </trans-unit>
       <trans-unit id="4613961764793311850" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {cached torrent} other {cached torrents}}</source>
+        <target state="translated">{VAR_PLURAL, plural, =1 {torrent-streymi í skyndiminni} other {torrent-streymi í skyndiminni}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-advanced-configuration.component.html</context>
           <context context-type="linenumber">50</context>
@@ -2155,6 +2168,7 @@
       </trans-unit>
       <trans-unit id="3442084803796199253" datatype="html">
         <source>Allow users to do remote URI/handle search</source>
+        <target state="translated">Leyfa notendum að leita að fjartengdum slóðum/auðkennum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">365</context>
@@ -2170,6 +2184,7 @@
       </trans-unit>
       <trans-unit id="7295422540935146771" datatype="html">
         <source>Allow anonymous to do remote URI/handle search</source>
+        <target state="translated">Leyfa nafnlausum að leita að fjartengdum slóðum/auðkennum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">376</context>
@@ -2526,6 +2541,7 @@
       </trans-unit>
       <trans-unit id="8167543029214637769" datatype="html">
         <source>There are errors in the form: <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let error of grabAllErrors()&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{ error }}"/> <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></source>
+        <target state="translated">Það eru villur í innfyllingarforminu: <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/><x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li *ngFor=&quot;let error of grabAllErrors()&quot;&gt;"/> <x id="INTERPOLATION" equiv-text="{{ error }}"/> <x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/><x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">71,78</context>
@@ -3180,6 +3196,7 @@
       </trans-unit>
       <trans-unit id="3839590624406770455" datatype="html">
         <source>HLS with P2P support enabled</source>
+        <target state="translated">HLS með virkjaðan stuðning við P2P</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">89</context>
@@ -3850,6 +3867,7 @@
       </trans-unit>
       <trans-unit id="3145156821099755377" datatype="html">
         <source>Accepted {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
+        <target state="translated">Samþykkti {count, plural, =1 {beiðni frá <x id="followerName"/> um að fylgjast með} other {<x id="count"/> beiðnir um að fylgjast með}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -3865,6 +3883,7 @@
       </trans-unit>
       <trans-unit id="8823680466537853782" datatype="html">
         <source>Do you really want to reject {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
+        <target state="translated">Viltu í alvörunni hafna {count, plural, =1 {fylgjendabeiðni frá <x id="followerName"/>?} other {<x id="count"/> fylgjendabeiðnum?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -3880,6 +3899,7 @@
       </trans-unit>
       <trans-unit id="7182104881582756649" datatype="html">
         <source>Rejected {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
+        <target state="translated">Hafnaði {count, plural, =1 {beiðni frá <x id="followerName"/> um að fylgjast með} other {<x id="count"/> beiðnir um að fylgjast með}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -3895,6 +3915,7 @@
       </trans-unit>
       <trans-unit id="4309656190692990192" datatype="html">
         <source>Deleted followers will be able to send again a follow request.</source>
+        <target state="translated">Eyddir fylgjendur munu geta sent inn nýjar beiðnir um að fylgjast með.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">108</context>
@@ -3902,6 +3923,7 @@
       </trans-unit>
       <trans-unit id="4187075675930483010" datatype="html">
         <source>Do you really want to delete {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
+        <target state="translated">Viltu í alvörunni eyða {count, plural, =1 {fylgjendabeiðni frá <x id="followerName"/>?} other {<x id="count"/> fylgjendabeiðnum?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">112</context>
@@ -3917,6 +3939,7 @@
       </trans-unit>
       <trans-unit id="805843790553313750" datatype="html">
         <source>Removed {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
+        <target state="translated">Fjarlægði {count, plural, =1 {beiðni frá <x id="followerName"/> um að fylgjast með} other {<x id="count"/> beiðnir um að fylgjast með}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">124</context>
@@ -3948,6 +3971,7 @@
       </trans-unit>
       <trans-unit id="3596798855644241001" datatype="html">
         <source>1 host (without "http://"), account handle or channel handle per line</source>
+        <target state="translated">1 hýsing (án "http://"), auðkenni notandaaðgangs eða rás á hverri línu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">11</context>
@@ -3955,6 +3979,7 @@
       </trans-unit>
       <trans-unit id="4917252294930256268" datatype="html">
         <source>It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.</source>
+        <target state="translated">Það lítur út fyrir að þú sért ekki á HTTPS-vefþjóni. Vefþjónninn þinn þarf að virkja TLS til að geta fylgst með öðrum þjónum.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context>
           <context context-type="linenumber">27,29</context>
@@ -3962,6 +3987,7 @@
       </trans-unit>
       <trans-unit id="2959657578684395250" datatype="html">
         <source>{count, plural, =1 {Follow request sent!} other {Follow requests sent!}}</source>
+        <target state="translated">{count, plural, =1 {Beiðni um að fylgjast með var send!} other {Beiðnir um að fylgjast með voru sendar!}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -5516,6 +5542,7 @@
       </trans-unit>
       <trans-unit id="3403978719736970622" datatype="html">
         <source>You cannot ban root.</source>
+        <target state="translated">Þú getur ekki bannað rótarnotandann.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">200</context>
@@ -5557,6 +5584,7 @@
       </trans-unit>
       <trans-unit id="5325873477837320044" datatype="html">
         <source>You cannot delete root.</source>
+        <target state="translated">Þú getur ekki eytt rótarnotandanum.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">241</context>
@@ -5952,6 +5980,7 @@
       </trans-unit>
       <trans-unit id="5779580280418408097" datatype="html">
         <source>Deleted {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
+        <target state="translated">Eyddi {count, plural, =1 {1 myndskeiði} other {<x id="count"/> myndskeiðum}}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">241</context>
@@ -5959,6 +5988,7 @@
       </trans-unit>
       <trans-unit id="6630644917521475697" datatype="html">
         <source>Deleted <x id="PH" equiv-text="videos.length"/> videos.</source>
+        <target state="translated">Eyddi <x id="PH" equiv-text="videos.length"/> myndskeiðum.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">243</context>
@@ -5966,6 +5996,7 @@
       </trans-unit>
       <trans-unit id="9164541937317586242" datatype="html">
         <source>Unblocked {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
+        <target state="translated">Hætti að loka á {count, plural, =1 {1 myndskeið} other {<x id="count"/> myndskeið}}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">259</context>
@@ -5973,6 +6004,7 @@
       </trans-unit>
       <trans-unit id="2870417795706430145" datatype="html">
         <source>Unblocked <x id="PH" equiv-text="videos.length"/> videos.</source>
+        <target state="translated">Hætti að loka á <x id="PH" equiv-text="videos.length"/> myndskeið.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">261</context>
@@ -6094,6 +6126,7 @@
       </trans-unit>
       <trans-unit id="3773378957693174719" datatype="html">
         <source><x id="PH" equiv-text="plugin.name"/> uninstalled.</source>
+        <target state="translated"><x id="PH" equiv-text="plugin.name"/> tekið út.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">129</context>
@@ -6758,6 +6791,7 @@
       </trans-unit>
       <trans-unit id="6209939621665316894" datatype="html">
         <source>You might need to check your account is allowed by the video or instance owner.</source>
+        <target state="translated">Þú gætir þurft að athuga hvort aðgangurinn þinn sé leyfður af eiganda myndskeiðs eða netþjóns.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">45</context>
@@ -6765,6 +6799,7 @@
       </trans-unit>
       <trans-unit id="3543381263966122204" datatype="html">
         <source>You might need to check your account is allowed by the resource or instance owner.</source>
+        <target state="translated">Þú gætir þurft að athuga hvort aðgangurinn þinn sé leyfður af eiganda tilfangs eða netþjóns.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">46</context>
@@ -6824,6 +6859,7 @@
       </trans-unit>
       <trans-unit id="2101170466365500913" datatype="html">
         <source>Logging into an account lets you publish content</source>
+        <target state="translated">Innskráning á notandaaðgang gerir þér kleift að gefa út efni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -6831,6 +6867,7 @@
       </trans-unit>
       <trans-unit id="6584143415159913044" datatype="html">
         <source>This instance allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another instance to match your exact needs at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+        <target state="translated">Þessi netþjónn leyfir nýskráningar. Hinsvegar þarftu að muna eftir að merkja við <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange terms-anchor&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>skilmálana<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot; fragment=&quot;terms&quot;&gt;"/>skilmálana<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> áður en þú býrð til notandaaðgang. Þú getur líka leitað hér að öðrum netþjóni sem uppfyllir þarfir þínar: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">15,18</context>
@@ -10045,6 +10082,7 @@
       </trans-unit>
       <trans-unit id="8610022770999239699" datatype="html">
         <source>This instance does not require email verification.</source>
+        <target state="translated">Þetta tilvik krefst ekki sannvottunar með tölvupósti.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context>
           <context context-type="linenumber">20</context>
@@ -10052,6 +10090,7 @@
       </trans-unit>
       <trans-unit id="2687679787442328897" datatype="html">
         <source>An email with verification link will be sent to <x id="PH" equiv-text="email"/>.</source>
+        <target state="translated">Tölvupóstur með staðfestingartengli verður sendur til <x id="PH" equiv-text="email"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -10059,6 +10098,7 @@
       </trans-unit>
       <trans-unit id="3856244462638931422" datatype="html">
         <source>Verify account email confirmation</source>
+        <target state="translated">Sannreyna staðfestingu notandaaðgangs með tölvupósti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -10114,6 +10154,7 @@
       </trans-unit>
       <trans-unit id="4656825997819651017" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your emails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your inscription. </source>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Skoðaðu tölvupóstinn þinn<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> til að staðfesta notandaaðganginn þinn og ljúka skráningunni. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -10121,6 +10162,7 @@
       </trans-unit>
       <trans-unit id="3461985498881453026" datatype="html">
         <source>If you need help to use PeerTube, you can have a look at the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/use-setup-account&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+        <target state="translated">Ef þig vantar hjálp við að nota PeerTube, þá geturðu skoðað <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://docs.joinpeertube.org/use-setup-account&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>hjálparskjölin<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -10383,7 +10425,7 @@
       </trans-unit>
       <trans-unit id="5121874940679887597" datatype="html">
         <source>Copy channel handle</source>
-        <target state="translated">Afrita tengil rásar</target>
+        <target state="translated">Afrita auðkenni rásar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context>
           <context context-type="linenumber">68</context>
@@ -10427,7 +10469,7 @@
       </trans-unit>
       <trans-unit id="5639348768609905535" datatype="html">
         <source>Set a new start/end.</source>
-        <target state="translated">Setja nýtt upphaf/endi</target>
+        <target state="translated">Setja nýtt upphaf/endi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-studio/edit/video-studio-edit.component.html</context>
           <context context-type="linenumber">10</context>
@@ -13352,6 +13394,7 @@
       </trans-unit>
       <trans-unit id="2971365540217107489" datatype="html">
         <source>Media is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
+        <target state="translated">Margmiðlunarskráin er of stór fyrir netþjónninn. Hafðu samband við kerfisstjórann þinn ef þú vilt hækka stærðarmörkin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">114</context>
@@ -13476,6 +13519,7 @@
       </trans-unit>
       <trans-unit id="3416071273413341159" datatype="html">
         <source>any instance</source>
+        <target state="translated">hvaða netþjónstilvik sem er</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">41</context>
@@ -13483,6 +13527,7 @@
       </trans-unit>
       <trans-unit id="1764675694412365696" datatype="html">
         <source>only followed instances</source>
+        <target state="translated">aðeins netþjónstilvik sem fylgst er með</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">42</context>
@@ -13508,6 +13553,7 @@
       </trans-unit>
       <trans-unit id="2468689683507870964" datatype="html">
         <source>In this instance's network</source>
+        <target state="translated">Í netkerfi þessa netþjóns</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">14</context>
@@ -13809,6 +13855,7 @@
       </trans-unit>
       <trans-unit id="5108072242786374364" datatype="html">
         <source>Welcome to <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>, dear user!</source>
+        <target state="translated">Velkomin/n á <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>, kæri notandi!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -13816,7 +13863,7 @@
       </trans-unit>
       <trans-unit id="8821712929823045567" datatype="html">
         <source>It's time to set up your account profile!</source>
-        <target state="translated">Nú er orðið tímabært að setja upp notandaaðganginn þinn!</target>
+        <target state="translated">Nú er tímabært að setja upp notandaaðganginn þinn!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">10</context>
@@ -13824,6 +13871,7 @@
       </trans-unit>
       <trans-unit id="7239874680342223476" datatype="html">
         <source>Help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> by:</source>
+        <target state="translated">Hjálpaðu umsjónarfólki og öðrum notendum að vita <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>hver þú sért<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> með því að:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">12</context>
@@ -13831,6 +13879,7 @@
       </trans-unit>
       <trans-unit id="5856432243446401016" datatype="html">
         <source>Uploading an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target state="translated">Senda inn <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>auðkennismynd<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">15</context>
@@ -13838,6 +13887,7 @@
       </trans-unit>
       <trans-unit id="3221645359464920754" datatype="html">
         <source>Writing a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target state="translated">Skrifa <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>lýsingu<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">16</context>
@@ -13877,6 +13927,7 @@
       </trans-unit>
       <trans-unit id="1516969129397662377" datatype="html">
         <source>Welcome to PeerTube, dear administrator!</source>
+        <target state="translated">Velkominn á PeerTube, kæri stjórnandi!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -13927,6 +13978,7 @@
       </trans-unit>
       <trans-unit id="6284442506490785579" datatype="html">
         <source>Useful links</source>
+        <target state="translated">Gagnlegir tenglar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">39</context>
@@ -13934,6 +13986,7 @@
       </trans-unit>
       <trans-unit id="5170617864166788170" datatype="html">
         <source>Official PeerTube website (news, support, contribute...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot;                                                                            rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <target state="translated">Opinbera PeerTube vefsvæðið (fréttir, aðstoð, þátttaka...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://joinpeertube.org&quot; target=&quot;_blank&quot;                                                                            rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">42,43</context>
@@ -13978,6 +14031,7 @@
       </trans-unit>
       <trans-unit id="9202089339019827574" datatype="html">
         <source>Configure my instance</source>
+        <target state="translated">Grunnstilla kerfið mitt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-welcome-modal.component.html</context>
           <context context-type="linenumber">80,82</context>
@@ -13985,7 +14039,7 @@
       </trans-unit>
       <trans-unit id="5850698978356573024" datatype="html">
         <source>Confirm your password</source>
-        <target state="translated">Staðfestu lykilorðið</target>
+        <target state="translated">Staðfestu lykilorð þitt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/confirm.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -13993,6 +14047,7 @@
       </trans-unit>
       <trans-unit id="9005121595859995793" datatype="html">
         <source>Configuration warning!</source>
+        <target state="translated">Aðvörun varðandi uppsetningu!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -14000,6 +14055,7 @@
       </trans-unit>
       <trans-unit id="8901933019590352016" datatype="html">
         <source>You enabled user registration on your instance but did not configure the following fields:</source>
+        <target state="translated">Þú virkjaðir nýskráningu notenda á tilvikinu þínu en skráðir ekki í eftirfarandi reiti:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">10</context>
@@ -14031,6 +14087,7 @@
       </trans-unit>
       <trans-unit id="5026256683194518810" datatype="html">
         <source>How long you plan to maintain your instance</source>
+        <target state="translated">Hve lengi ætlar þú að viðhalda þessu tilviki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">17</context>
@@ -14038,6 +14095,7 @@
       </trans-unit>
       <trans-unit id="1909672990242291785" datatype="html">
         <source>How you plan to pay for keeping your instance running</source>
+        <target state="translated">Hvernig ætlum þú að fjármagna að halda þessu tilviki gangandi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">18</context>
@@ -14045,6 +14103,7 @@
       </trans-unit>
       <trans-unit id="869943508869906576" datatype="html">
         <source>How you will moderate your instance</source>
+        <target state="translated">Hvernig ætlar þú að hafa umsjón með efni á þessu tilviki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">20</context>
@@ -14099,6 +14158,7 @@
       </trans-unit>
       <trans-unit id="1000468652492651683" datatype="html">
         <source>Report reason is required.</source>
+        <target state="translated">Ástæða kæru er nauðsynleg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -14106,6 +14166,7 @@
       </trans-unit>
       <trans-unit id="1109780973109145433" datatype="html">
         <source>Report reason must be at least 2 characters long.</source>
+        <target state="translated">Ástæða kæru verður að vera a.m.k 2 stafa löng.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -14113,6 +14174,7 @@
       </trans-unit>
       <trans-unit id="5414573937278525654" datatype="html">
         <source>Report reason cannot be more than 3000 characters long.</source>
+        <target state="translated">Ástæða kæru má ekki vera lengri en 3000 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -14120,6 +14182,7 @@
       </trans-unit>
       <trans-unit id="8779567454442277762" datatype="html">
         <source>Moderation comment is required.</source>
+        <target state="translated">Athugasemd umsjónarfólks er nauðsynleg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">16</context>
@@ -14127,6 +14190,7 @@
       </trans-unit>
       <trans-unit id="8954765410376245909" datatype="html">
         <source>Moderation comment must be at least 2 characters long.</source>
+        <target state="translated">Athugasemd umsjónarfólks verður að vera a.m.k 2 stafa löng.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">17</context>
@@ -14134,6 +14198,7 @@
       </trans-unit>
       <trans-unit id="6316804467108244906" datatype="html">
         <source>Moderation comment cannot be more than 3000 characters long.</source>
+        <target state="translated">Athugasemd umsjónarfólks má ekki vera lengri en 3000 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">18</context>
@@ -14141,6 +14206,7 @@
       </trans-unit>
       <trans-unit id="8835075531528610034" datatype="html">
         <source>Abuse message is required.</source>
+        <target state="translated">Skilaboð vegna misnotkunar eru nauðsynleg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">25</context>
@@ -14148,6 +14214,7 @@
       </trans-unit>
       <trans-unit id="9034042966936514516" datatype="html">
         <source>Abuse message must be at least 2 characters long.</source>
+        <target state="translated">Skilaboð vegna misnotkunar verða að vera a.m.k 2 stafa löng.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">26</context>
@@ -14155,6 +14222,7 @@
       </trans-unit>
       <trans-unit id="7989186574443390119" datatype="html">
         <source>Abuse message cannot be more than 3000 characters long.</source>
+        <target state="translated">Skilaboð vegna misnotkunar mega ekki vera lengri en 3000 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/abuse-validators.ts</context>
           <context context-type="linenumber">27</context>
@@ -14162,6 +14230,7 @@
       </trans-unit>
       <trans-unit id="7784486624424057376" datatype="html">
         <source>Instance name is required.</source>
+        <target state="translated">Heiti tilviks er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -14169,6 +14238,7 @@
       </trans-unit>
       <trans-unit id="3281212084219111058" datatype="html">
         <source>Short description should not be longer than 250 characters.</source>
+        <target state="translated">Stutt lýsing má ekki vera lengra en 250 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">14</context>
@@ -14176,6 +14246,7 @@
       </trans-unit>
       <trans-unit id="6033463036257195528" datatype="html">
         <source>Twitter username is required.</source>
+        <target state="translated">Twitter-notandanafn er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">21</context>
@@ -14418,6 +14489,7 @@
       </trans-unit>
       <trans-unit id="7951488350851416577" datatype="html">
         <source>Hosts entered are invalid.</source>
+        <target state="translated">Uppgefnar hýsingar eru ógildar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">93</context>
@@ -14425,6 +14497,7 @@
       </trans-unit>
       <trans-unit id="1469559036084108672" datatype="html">
         <source>Hosts entered contain duplicates.</source>
+        <target state="translated">Uppgefnar hýsingar innihalda tvítekningar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">94</context>
@@ -14432,6 +14505,7 @@
       </trans-unit>
       <trans-unit id="5991533283446904296" datatype="html">
         <source>Hosts or handles are invalid.</source>
+        <target state="translated">Hýsingar eða auðkenni eru ógild.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">102</context>
@@ -14439,6 +14513,7 @@
       </trans-unit>
       <trans-unit id="6759198394434886237" datatype="html">
         <source>Hosts or handles contain duplicates.</source>
+        <target state="translated">Hýsingar eða auðkenni innihalda tvítekningar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/host-validators.ts</context>
           <context context-type="linenumber">103</context>
@@ -14470,6 +14545,7 @@
       </trans-unit>
       <trans-unit id="4968369344159400023" datatype="html">
         <source>Your name is required.</source>
+        <target state="translated">Nafnið þitt er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">19</context>
@@ -14477,6 +14553,7 @@
       </trans-unit>
       <trans-unit id="5799695548385507586" datatype="html">
         <source>Your name must be at least 1 character long.</source>
+        <target state="translated">Nafnið þitt verður að vera a.m.k. 1 stafur að lengd.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">20</context>
@@ -14484,6 +14561,7 @@
       </trans-unit>
       <trans-unit id="3600004643604731577" datatype="html">
         <source>Your name cannot be more than 120 characters long.</source>
+        <target state="translated">Nafnið þitt má ekki vera lengra en 120 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">21</context>
@@ -14491,6 +14569,7 @@
       </trans-unit>
       <trans-unit id="3981804692726336204" datatype="html">
         <source>A subject is required.</source>
+        <target state="translated">Viðfangsefni er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">32</context>
@@ -14617,6 +14696,7 @@
       </trans-unit>
       <trans-unit id="544279804045883862" datatype="html">
         <source>Handle is required.</source>
+        <target state="translated">Auðkenni er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">50</context>
@@ -14624,6 +14704,7 @@
       </trans-unit>
       <trans-unit id="2805037637775107078" datatype="html">
         <source>Handle must be valid (eg. chocobozzz@example.com).</source>
+        <target state="translated">Auðkenni verður að vera gilt (t.d. chocobozzz@example.com).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">51</context>
@@ -14927,6 +15008,7 @@
       </trans-unit>
       <trans-unit id="3954099618513992825" datatype="html">
         <source>You can only transfer ownership to a local account</source>
+        <target state="translated">Þú getur aðeins millifært eignarhald yfir á stðbundinn aðgang</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-ownership-change-validators.ts</context>
           <context context-type="linenumber">15</context>
@@ -15357,6 +15439,7 @@
       </trans-unit>
       <trans-unit id="9196775343330824083" datatype="html">
         <source>Messages with reporter</source>
+        <target state="translated">Skilaboð varðandi kæranda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">248</context>
@@ -15364,6 +15447,7 @@
       </trans-unit>
       <trans-unit id="8770468575924421391" datatype="html">
         <source>Messages with moderators</source>
+        <target state="translated">Skilaboð varðandi umsjónarfólk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">249</context>
@@ -15371,6 +15455,7 @@
       </trans-unit>
       <trans-unit id="8528549800795985099" datatype="html">
         <source>Update internal note</source>
+        <target state="translated">Uppfæra innri minnispunkt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">254</context>
@@ -15410,6 +15495,7 @@
       </trans-unit>
       <trans-unit id="5793550984155962433" datatype="html">
         <source>Actions for the flagged account</source>
+        <target state="translated">Aðgerðir vegna flaggaða aðgangsins</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">286</context>
@@ -15437,6 +15523,7 @@
       </trans-unit>
       <trans-unit id="5072091387445907742" datatype="html">
         <source>Actions for the reporter</source>
+        <target state="translated">Aðgerðir fyrir kærandann</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">310</context>
@@ -15832,6 +15919,7 @@
       </trans-unit>
       <trans-unit id="6489275254908395777" datatype="html">
         <source>Maximize editor</source>
+        <target state="translated">Hámarka ritil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -15839,6 +15927,7 @@
       </trans-unit>
       <trans-unit id="4243591013849340688" datatype="html">
         <source>Exit maximized editor</source>
+        <target state="translated">Hætta í hámörkuðum ritli</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -15870,6 +15959,7 @@
       </trans-unit>
       <trans-unit id="5604677701754367707" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</source>
+        <target state="translated">PeerTube getur ekki meðhöndlað þessa tegund skráa. Leyfðar skráarendingar eru <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -15885,6 +15975,7 @@
       </trans-unit>
       <trans-unit id="8280589137189201687" datatype="html">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
+        <target state="translated">Þú getur ekki valið meira en {maxItems, plural, =1 {1 atriði} other {<x id="maxItems"/> atriði}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -15892,6 +15983,7 @@
       </trans-unit>
       <trans-unit id="3999967345340145904" datatype="html">
         <source>You can't select more than <x id="PH" equiv-text="this.maxItems"/> items</source>
+        <target state="translated">Þú getur ekki valið meira en <x id="PH" equiv-text="this.maxItems"/> atriði</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-all.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -16171,6 +16263,7 @@
       </trans-unit>
       <trans-unit id="2173989454916398137" datatype="html">
         <source>Blurred with confirmation request</source>
+        <target state="translated">Móskað með beiðni um staðfestingu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -16222,6 +16315,7 @@
       </trans-unit>
       <trans-unit id="6028521920505655348" datatype="html">
         <source><x id="PH" equiv-text="this.getApproximateTime(fullHdSeconds)"/> of full HD videos</source>
+        <target state="translated"><x id="PH" equiv-text="this.getApproximateTime(fullHdSeconds)"/> af HD-myndskeiðum í fullum gæðum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">98</context>
@@ -16229,6 +16323,7 @@
       </trans-unit>
       <trans-unit id="117588083391484998" datatype="html">
         <source><x id="PH" equiv-text="this.getApproximateTime(hdSeconds)"/> of HD videos</source>
+        <target state="translated"><x id="PH" equiv-text="this.getApproximateTime(hdSeconds)"/> af HD-myndskeiðum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">99</context>
@@ -16236,6 +16331,7 @@
       </trans-unit>
       <trans-unit id="6636555695556123073" datatype="html">
         <source><x id="PH" equiv-text="this.getApproximateTime(normalSeconds)"/> of average quality videos</source>
+        <target state="translated"><x id="PH" equiv-text="this.getApproximateTime(normalSeconds)"/> af myndskeiðum í meðalgæðum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">100</context>
@@ -16243,6 +16339,7 @@
       </trans-unit>
       <trans-unit id="1792453450803202450" datatype="html">
         <source>Accepted follows</source>
+        <target state="translated">Samþykktar fylgjendabeiðnir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">146</context>
@@ -16250,6 +16347,7 @@
       </trans-unit>
       <trans-unit id="1745310805516417209" datatype="html">
         <source>Rejected follows</source>
+        <target state="translated">Hafnaðar fylgjendabeiðnir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">150</context>
@@ -16257,6 +16355,7 @@
       </trans-unit>
       <trans-unit id="1810206793608630396" datatype="html">
         <source>Pending follows</source>
+        <target state="translated">Fylgjendabeiðnir í bið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">154</context>
@@ -16272,7 +16371,7 @@
       </trans-unit>
       <trans-unit id="5851173629316588976" datatype="html">
         <source>By users on this instance</source>
-        <target state="translated">Frá notendum þessu tilviki</target>
+        <target state="translated">Frá notendum á þessu tilviki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context>
           <context context-type="linenumber">4</context>
@@ -16538,6 +16637,7 @@
       </trans-unit>
       <trans-unit id="8644431249513874405" datatype="html">
         <source>&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; compatible that supports:</source>
+        <target state="translated">&lt;a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer"&gt;Markdown&lt;/a&gt; samhæft sem styður:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">75</context>
@@ -16545,7 +16645,7 @@
       </trans-unit>
       <trans-unit id="7565716024468232322" datatype="html">
         <source>Links</source>
-        <target state="translated">Tenglar</target>
+        <target state="translated">Tengla</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/misc/help.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -16593,6 +16693,7 @@
       </trans-unit>
       <trans-unit id="3861380964267994829" datatype="html">
         <source>The notification concerns a video now unavailable</source>
+        <target state="translated">Tilkynningin varðar myndskeið sem núna er ekki tiltækt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">23,25</context>
@@ -16600,6 +16701,7 @@
       </trans-unit>
       <trans-unit id="5067946665521007036" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been unblocked </source>
+        <target state="translated">Opnað hefur verið á <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> myndskeiðið þitt </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">32,34</context>
@@ -16607,6 +16709,7 @@
       </trans-unit>
       <trans-unit id="7127745751169269971" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been blocked </source>
+        <target state="translated">Lokað hefur verið á <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> myndskeiðið þitt </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">40,42</context>
@@ -16663,6 +16766,7 @@
       </trans-unit>
       <trans-unit id="2740435661398285769" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> commented your video <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.accountUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> setti athugasemd við myndskeiðið þitt <x id="START_LINK_1" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.commentUrl&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">99</context>
@@ -16670,6 +16774,7 @@
       </trans-unit>
       <trans-unit id="2020563642195933477" datatype="html">
         <source>The notification concerns a comment now unavailable</source>
+        <target state="translated">Tilkynningin varðar athugasemd sem núna er ekki tiltæk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">106,108</context>
@@ -16681,6 +16786,7 @@
       </trans-unit>
       <trans-unit id="2436106664506839309" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been published </source>
+        <target state="translated">Myndskeiðið þitt <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> hefur verið gefið út </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">115,117</context>
@@ -16688,6 +16794,7 @@
       </trans-unit>
       <trans-unit id="7130219900907848048" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl || notification.videoImportUrl&quot;&gt;"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> succeeded </source>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl || notification.videoImportUrl&quot;&gt;"/>Innflutningur þinn á myndskeiði<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> tókst </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">124,125</context>
@@ -16695,6 +16802,7 @@
       </trans-unit>
       <trans-unit id="2099623308096969132" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoImportUrl&quot;&gt;"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> failed </source>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoImportUrl&quot;&gt;"/>Innflutningur þinn á myndskeiði<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> mistókst </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">132,133</context>
@@ -16742,6 +16850,7 @@
       </trans-unit>
       <trans-unit id="363592786729553688" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.pluginUrl&quot; [queryParams]=&quot;notification.pluginQueryParams&quot;&gt;"/>A new version of the plugin/theme <x id="INTERPOLATION" equiv-text="{{ notification.plugin.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is available: <x id="INTERPOLATION_1" equiv-text="{{ notification.plugin.latestVersion }}"/> </source>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.pluginUrl&quot; [queryParams]=&quot;notification.pluginQueryParams&quot;&gt;"/>Ný útgáfa af viðbótinni/þemanu <x id="INTERPOLATION" equiv-text="{{ notification.plugin.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> er tiltæk: <x id="INTERPOLATION_1" equiv-text="{{ notification.plugin.latestVersion }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">198,199</context>
@@ -16757,6 +16866,7 @@
       </trans-unit>
       <trans-unit id="731573110355765429" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> edition has finished </source>
+        <target state="translated">Breytingum á myndskeiðinu þínu <x id="START_LINK" ctype="x-a" equiv-text="&lt;a (click)=&quot;markAsRead(notification)&quot; [routerLink]=&quot;notification.videoUrl&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> er lokið </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">213,215</context>
@@ -16764,6 +16874,7 @@
       </trans-unit>
       <trans-unit id="5421414445136873229" datatype="html">
         <source>The notification points to content now unavailable</source>
+        <target state="translated">Tilkynningin varðar efni sem núna er ekki tiltækt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context>
           <context context-type="linenumber">221,223</context>
@@ -16843,6 +16954,7 @@
       </trans-unit>
       <trans-unit id="5272553814105457319" datatype="html">
         <source>Contains offensive, violent, or coarse language or iconography.</source>
+        <target state="translated">Inniheldur ofbeldiskennt efni, ögrandi, gróft málfar eða myndefni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">125</context>
@@ -16858,6 +16970,7 @@
       </trans-unit>
       <trans-unit id="8006612645824137458" datatype="html">
         <source>Contains abusive, racist or sexist language or iconography.</source>
+        <target state="translated">Inniheldur meiðandi efni, kynþáttafullt eða kynferðislegt málfar eða myndefni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">130</context>
@@ -16873,6 +16986,7 @@
       </trans-unit>
       <trans-unit id="6374940465448453212" datatype="html">
         <source>Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</source>
+        <target state="translated">Inniheldur markaðssetningu, auglýsingar, ruslpóst, viljandi falsaðar upplýsingar eða falsfréttir eða á annan hátt afvegaleiðandi smámyndir/texta/merkingar. Gefðu upp áreiðanlegar heimildir við að kæra falsanir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">136</context>
@@ -16880,6 +16994,7 @@
       </trans-unit>
       <trans-unit id="7401289443263903223" datatype="html">
         <source>Privacy breach or doxxing</source>
+        <target state="translated">Brot á friðhelgi eða áreitni (doxxing)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">140</context>
@@ -16887,6 +17002,7 @@
       </trans-unit>
       <trans-unit id="8363008638081993167" datatype="html">
         <source>Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</source>
+        <target state="translated">Inniheldur efni með persónulegum upplýsingum sem gætu verið notaðar til að rekja ferðir, auðkenna, hafa samband við eða stela auðkennum einhvers annars (t.d. upplýsingar um nafn, heimilisfang, símanúmer, tölvupóstfang eða greiðslukort).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">142</context>
@@ -16894,6 +17010,7 @@
       </trans-unit>
       <trans-unit id="380450014369168564" datatype="html">
         <source>Infringes your copyright wrt. the regional laws with which the server must comply.</source>
+        <target state="translated">Brýtur á höfundarrétti þínum miðað við staðbundin lagaákvæði sem netþjónninn verður að taka mið af.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">147</context>
@@ -16909,6 +17026,7 @@
       </trans-unit>
       <trans-unit id="7930601470861156366" datatype="html">
         <source>Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.</source>
+        <target state="translated">All sem ekki er talið hér að ofan, en sem brýtur gegn þjónustuskilmálunum, suðsreglum eða almennum reglum sem gilda á netþjóninum.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/abuse.service.ts</context>
           <context context-type="linenumber">153</context>
@@ -17116,6 +17234,7 @@
       </trans-unit>
       <trans-unit id="7651712714082200084" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isRemote()&quot;&gt;"/> and will be forwarded to the comment origin (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/>. </source>
+        <target state="translated">Kæran þín verður send til umsjónarfólks <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isRemote()&quot;&gt;"/> og einnig áframsend til upprunaaðgangs athugasemdarinnar (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>)<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context>
           <context context-type="linenumber">35,37</context>
@@ -17191,6 +17310,7 @@
       </trans-unit>
       <trans-unit id="2816407313459209541" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isRemote()&quot;&gt;"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/>. </source>
+        <target state="translated">Kæran þín verður send til umsjónarfólks <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;ng-container *ngIf=&quot;isRemote()&quot;&gt;"/> og einnig áframsend til upprunaaðgangs myndskeiðsins (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>)<x id="CLOSE_TAG_NG_CONTAINER" ctype="x-ng_container" equiv-text="&lt;/ng-container&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context>
           <context context-type="linenumber">66,68</context>
@@ -17378,6 +17498,7 @@
       </trans-unit>
       <trans-unit id="8269144351796756896" datatype="html">
         <source>Do you really want to unban <x id="PH" equiv-text="user.username"/>?</source>
+        <target state="translated">Viltu í alvörunni taka <x id="PH" equiv-text="user.username"/> úr banni?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -17385,6 +17506,7 @@
       </trans-unit>
       <trans-unit id="1794219875546376069" datatype="html">
         <source>User <x id="PH" equiv-text="user.username"/> unbanned.</source>
+        <target state="translated">Notandinn <x id="PH" equiv-text="user.username"/> tekinn úr banni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -17661,6 +17783,7 @@
       </trans-unit>
       <trans-unit id="6504240011224861621" datatype="html">
         <source>Instance moderation</source>
+        <target state="translated">Umsjón með netþjóni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">419</context>
@@ -17668,6 +17791,7 @@
       </trans-unit>
       <trans-unit id="8546847443058492245" datatype="html">
         <source>Block <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> videos</source>
+        <target state="translated">Loka á <x id="INTERPOLATION" equiv-text="{{ videos.length }}"/> myndskeið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">4</context>
@@ -17675,6 +17799,7 @@
       </trans-unit>
       <trans-unit id="4526499522377118108" datatype="html">
         <source>Block video "<x id="INTERPOLATION" equiv-text="{{ getSingleVideo().name }}"/>"</source>
+        <target state="translated">Loka á myndskeiðið "<x id="INTERPOLATION" equiv-text=" getSingleVideo().name }}"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">8</context>
@@ -17682,6 +17807,7 @@
       </trans-unit>
       <trans-unit id="2992313729068029516" datatype="html">
         <source>Block live "<x id="INTERPOLATION" equiv-text="{{ getSingleVideo().name }}"/>"</source>
+        <target state="translated">Loka á beina streymið "<x id="INTERPOLATION" equiv-text=" getSingleVideo().name }}"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">9</context>
@@ -18214,6 +18340,7 @@
       </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
         <source>Subscribed to all current channels of <x id="PH" equiv-text="this.account.displayName"/>. You will be notified of all their new videos.</source>
+        <target state="translated">Gerðist áskrifandi að öllum fyrirliggjandi rásum hjá <x id="PH" equiv-text="this.account.displayName"/>. Þú verður látin/n vita um öll ný myndskeið.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">109</context>
@@ -18221,6 +18348,7 @@
       </trans-unit>
       <trans-unit id="2780460651686172544" datatype="html">
         <source>Subscribed to <x id="PH" equiv-text="this.videoChannels[0].displayName"/>. You will be notified of all their new videos.</source>
+        <target state="translated">Gerðist áskrifandi að <x id="PH" equiv-text="this.videoChannels[0].displayName"/>. Þú verður látin/n vita um öll ný myndskeið frá viðkomandi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">110</context>
@@ -18236,6 +18364,7 @@
       </trans-unit>
       <trans-unit id="7070823964189404459" datatype="html">
         <source>Unsubscribed from all channels of <x id="PH" equiv-text="this.account.nameWithHost"/></source>
+        <target state="translated">Sagði upp áskrift að öllum rásum hjá <x id="PH" equiv-text="this.account.nameWithHost"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -18243,6 +18372,7 @@
       </trans-unit>
       <trans-unit id="9201562016527884133" datatype="html">
         <source>Unsubscribed from <x id="PH" equiv-text="this.videoChannels[0].nameWithHost"/></source>
+        <target state="translated">Sagði upp áskrift að <x id="PH" equiv-text="this.videoChannels[0].nameWithHost"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">140</context>
@@ -18297,6 +18427,7 @@
       </trans-unit>
       <trans-unit id="5078078160576986217" datatype="html">
         <source>Permanent/Recurring live</source>
+        <target state="translated">Viðvarandi/endurtekið beint streymi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">10</context>
@@ -18304,6 +18435,7 @@
       </trans-unit>
       <trans-unit id="3112273530390098557" datatype="html">
         <source>Replay will be saved</source>
+        <target state="translated">Endursýning verður vistuð</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">11</context>
@@ -18311,6 +18443,7 @@
       </trans-unit>
       <trans-unit id="6445713766140892433" datatype="html">
         <source>Latest live sessions</source>
+        <target state="translated">Síðustu bein streymi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">36</context>
@@ -18326,6 +18459,7 @@
       </trans-unit>
       <trans-unit id="6765028278622459314" datatype="html">
         <source>Ended on <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></source>
+        <target state="translated">Lauk þann <x id="INTERPOLATION" equiv-text="{{ session.endDate | date:'medium' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">43</context>
@@ -18341,6 +18475,7 @@
       </trans-unit>
       <trans-unit id="6989092358991683843" datatype="html">
         <source>Replay is being processed...</source>
+        <target state="translated">Endursýning er í vinnslu...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">45</context>
@@ -18348,6 +18483,7 @@
       </trans-unit>
       <trans-unit id="4853631149357965563" datatype="html">
         <source>Update live settings</source>
+        <target state="translated">Uppfæra stillingar beins streymis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-live/live-stream-information.component.html</context>
           <context context-type="linenumber">55</context>
@@ -18441,6 +18577,7 @@
       </trans-unit>
       <trans-unit id="4140366911638662173" datatype="html">
         <source>Do you really want to remove "<x id="PH" equiv-text="this.video.name"/>" files?</source>
+        <target state="translated">Viltu örugglega fjarlægja skrár sem tilheyra "<x id="PH" equiv-text="this.video.name"/>"?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">277</context>
@@ -18448,6 +18585,7 @@
       </trans-unit>
       <trans-unit id="2955645766721124100" datatype="html">
         <source>Remove "<x id="PH" equiv-text="this.video.name"/>" files</source>
+        <target state="translated">Fjarlægja skrár sem tilheyra "<x id="PH" equiv-text="this.video.name"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">279</context>
@@ -18455,6 +18593,7 @@
       </trans-unit>
       <trans-unit id="7758350391886784213" datatype="html">
         <source>Removed files of <x id="PH" equiv-text="video.name"/>.</source>
+        <target state="translated">Fjarlægði skrár sem tilheyra <x id="PH" equiv-text="video.name"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">285</context>
