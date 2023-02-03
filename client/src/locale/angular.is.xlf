@@ -6875,6 +6875,7 @@
       </trans-unit>
       <trans-unit id="1394326136451741248" datatype="html">
         <source>Currently this instance doesn't allow for user registration, you may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find an instance that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple instances at: <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+        <target state="translated">Þessi netþjónn leyfir ekki nýskráningar í augnablikinu, þú getur merkt við <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href='#'&gt;"/>Skilmálar<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> til að sjá nánari upplýsingar eða fundið netþjón sem gefur þér kost á að nýskrá notandaaðgang þar sem þú getur sent inn myndskeið. Finndu þér einhvern netþjón sem þér hentar: <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-orange&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">20,23</context>
@@ -6996,6 +6997,7 @@
       </trans-unit>
       <trans-unit id="3188014010833256853" datatype="html">
         <source>Enter your email address and we will send you a link to reset your password.</source>
+        <target state="translated">Settu inn netfangið þitt og við munum senda tengil til að breyta lykilorðinu þínu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">128,130</context>
@@ -7807,6 +7809,7 @@
       </trans-unit>
       <trans-unit id="988319118163514570" datatype="html">
         <source>Video studio edition has finished</source>
+        <target state="translated">Breytingum á myndskeiðinu þínu er lokið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -9895,6 +9898,7 @@
       </trans-unit>
       <trans-unit id="269413964682905563" datatype="html">
         <source>Have access to your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>watch history<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target state="translated">Fáðu aðgang að <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>áhorfsferlinum þínum<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">13</context>
@@ -9909,6 +9913,7 @@
       </trans-unit>
       <trans-unit id="5767014923310516" datatype="html">
         <source>Do you use Mastodon, ActivityPub or a RSS feed aggregator?</source>
+        <target state="translated">Notar þú Mastodon, ActivityPub eða RSS-streymasafnara?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">19</context>
@@ -9931,6 +9936,7 @@
       </trans-unit>
       <trans-unit id="2528596078796844503" datatype="html">
         <source>You want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Then you need to create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
+        <target state="translated">Langar þig til að <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>gefa út myndskeið<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> á <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>? Þá þarftu að útbúa fyrstu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rásina þína<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">2,4</context>
@@ -9960,6 +9966,7 @@
       </trans-unit>
       <trans-unit id="4376397515999418662" datatype="html">
         <source>This is the name that will be publicly visible by other users.</source>
+        <target state="translated">Þetta er nafnið sem verður opinberlega sýnilegt öðrum notendum.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">23</context>
@@ -9983,6 +9990,7 @@
       </trans-unit>
       <trans-unit id="1421502666684458815" datatype="html">
         <source>This is the name that will be displayed in your profile URL.</source>
+        <target state="translated">Þetta er nafnið sem verður birt í slóð notandasniðsins þíns.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">38</context>
@@ -10028,6 +10036,7 @@
       </trans-unit>
       <trans-unit id="7536432216862568979" datatype="html">
         <source>This is the name that will be publicly visible by other users.</source>
+        <target state="translated">Þetta er nafnið sem verður opinberlega sýnilegt öðrum notendum.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">11,13</context>
@@ -10043,6 +10052,7 @@
       </trans-unit>
       <trans-unit id="8656171949584591423" datatype="html">
         <source>This is the name that will be displayed in your profile URL.</source>
+        <target state="translated">Þetta er nafnið sem verður birt í slóð notandasniðsins þíns.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">28,30</context>
@@ -10170,6 +10180,7 @@
       </trans-unit>
       <trans-unit id="8844610145426272276" datatype="html">
         <source>To help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, don't forget to <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/my-account/settings&quot;&gt;"/>set up your account profile<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> by adding an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
+        <target state="translated">Til að hjálpa umsjónarfólki og öðrum notendum að vita <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>hver þú sért<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, skaltu ekki gleyma að <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-orange&quot; routerLink=&quot;/my-account/settings&quot;&gt;"/>setja upp notandasniðið þitt<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> með því að bæta við <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>auðkennismynd<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> og <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>lýsingu<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context>
           <context context-type="linenumber">18,20</context>
@@ -11886,6 +11897,7 @@
       </trans-unit>
       <trans-unit id="4626927731329688072" datatype="html">
         <source>Total video uploaded</source>
+        <target state="translated">Alls innsend myndskeið</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">63</context>
@@ -12480,6 +12492,7 @@
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> and others </source>
+        <target state="translated">Skoðaðu <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> frá <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> og fleirum </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">74,75</context>
@@ -12503,6 +12516,7 @@
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
+        <target state="translated">Skoðaðu <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/> frá <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">77,78</context>
@@ -12870,6 +12884,7 @@
       </trans-unit>
       <trans-unit id="5417361655914085905" datatype="html">
         <source>Account page</source>
+        <target state="translated">Síða aðgangsins</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">69</context>
@@ -14591,6 +14606,7 @@
       </trans-unit>
       <trans-unit id="847704400962945123" datatype="html">
         <source>A message is required.</source>
+        <target state="translated">Skilaboð eru nauðsynleg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">45</context>
@@ -14598,6 +14614,7 @@
       </trans-unit>
       <trans-unit id="3871842658394273178" datatype="html">
         <source>The message must be at least 3 characters long.</source>
+        <target state="translated">Skilaboðin verða að vera a.m.k 3 stafa löng.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">46</context>
@@ -14605,6 +14622,7 @@
       </trans-unit>
       <trans-unit id="3731145759205895653" datatype="html">
         <source>The message cannot be more than 5000 characters long.</source>
+        <target state="translated">Skilaboðin mega ekki vera lengri en 5000 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/instance-validators.ts</context>
           <context context-type="linenumber">47</context>
@@ -14640,6 +14658,7 @@
       </trans-unit>
       <trans-unit id="3152303769378345477" datatype="html">
         <source>Confirmation of the password is required.</source>
+        <target state="translated">Staðfestingar á lykilorðinu er krafist.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/reset-password-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -14647,6 +14666,7 @@
       </trans-unit>
       <trans-unit id="4786141633412279939" datatype="html">
         <source>Username must be at least 1 character long.</source>
+        <target state="translated">Notandanafnið verður að vera að minnsta kosti 1 stafur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">15</context>
@@ -14654,6 +14674,7 @@
       </trans-unit>
       <trans-unit id="1019755749203839300" datatype="html">
         <source>Username cannot be more than 50 characters long.</source>
+        <target state="translated">Notandanafn má ekki vera lengra en 50 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">16</context>
@@ -14719,6 +14740,7 @@
       </trans-unit>
       <trans-unit id="525871656034789056" datatype="html">
         <source>Password must be at least 6 characters long.</source>
+        <target state="translated">Lykilorð verður að vera að minnsta kosti 6 stafa langt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">81</context>
@@ -14730,6 +14752,7 @@
       </trans-unit>
       <trans-unit id="1099684476181448167" datatype="html">
         <source>Password cannot be more than 255 characters long.</source>
+        <target state="translated">Lykilorð má ekki vera lengra en 255 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">82</context>
@@ -14741,6 +14764,7 @@
       </trans-unit>
       <trans-unit id="3392630942539073768" datatype="html">
         <source>The new password and the confirmed password do not correspond.</source>
+        <target state="translated">Nýja lykilorðið og staðfesta lykilorðið samsvara ekki.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/user-validators.ts</context>
           <context context-type="linenumber">100</context>
@@ -14910,6 +14934,7 @@
       </trans-unit>
       <trans-unit id="4444753420973870540" datatype="html">
         <source>Name is required.</source>
+        <target state="translated">Nafn er nauðsynlegt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">10</context>
@@ -14917,6 +14942,7 @@
       </trans-unit>
       <trans-unit id="4006797705713167676" datatype="html">
         <source>Name must be at least 1 character long.</source>
+        <target state="translated">Nafn verður að vera að minnsta kosti 1 stafur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">11</context>
@@ -14924,6 +14950,7 @@
       </trans-unit>
       <trans-unit id="2233809696503670883" datatype="html">
         <source>Name cannot be more than 50 characters long.</source>
+        <target state="translated">Nafn má ekki vera lengra en 50 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">12</context>
@@ -14973,6 +15000,7 @@
       </trans-unit>
       <trans-unit id="4267638333776227701" datatype="html">
         <source>Comment is required.</source>
+        <target state="translated">Athugasemd er nauðsynleg.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -14980,6 +15008,7 @@
       </trans-unit>
       <trans-unit id="71132671234491945" datatype="html">
         <source>Comment must be at least 2 characters long.</source>
+        <target state="translated">Athugasemd verður að vera a.m.k 2 stafa löng.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context>
           <context context-type="linenumber">8</context>
@@ -14987,6 +15016,7 @@
       </trans-unit>
       <trans-unit id="4148250392704331190" datatype="html">
         <source>Comment cannot be more than 3000 characters long.</source>
+        <target state="translated">Athugasemd má ekki vera lengri en 3000 stafir.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-comment-validators.ts</context>
           <context context-type="linenumber">9</context>
@@ -15764,6 +15794,7 @@
       </trans-unit>
       <trans-unit id="1117672957968812680" datatype="html">
         <source>Change your banner</source>
+        <target state="translated">Breyttu borðanum þínum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context>
           <context context-type="linenumber">16</context>
@@ -15771,6 +15802,7 @@
       </trans-unit>
       <trans-unit id="3394080812181176794" datatype="html">
         <source>Remove banner</source>
+        <target state="translated">Fjarlægja borða</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context>
           <context context-type="linenumber">28</context>
@@ -15778,6 +15810,7 @@
       </trans-unit>
       <trans-unit id="6259523075362402245" datatype="html">
         <source>Upload a new banner</source>
+        <target state="translated">Senda inn nýjan borða</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context>
           <context context-type="linenumber">34</context>
@@ -15785,6 +15818,7 @@
       </trans-unit>
       <trans-unit id="7306351600905511107" datatype="html">
         <source>ratio 6/1, recommended size: 1920x317, max size: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, extensions: <x id="PH_1" equiv-text="this.bannerExtensions"/></source>
+        <target state="translated">hlutfallið 6/1, ákjósanleg stærð: 1920x317, hámarksstærð: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, skráarendingar: <x id="PH_1" equiv-text="this.bannerExtensions"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.ts</context>
           <context context-type="linenumber">44</context>
