@@ -749,6 +749,7 @@
       </trans-unit>
       <trans-unit id="8205344394429673413" datatype="html">
         <source>Use PeerTube documentation</source>
+        <target state="translated">Nota hjálparskjöl PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">28</context>
@@ -2052,6 +2053,7 @@
       </trans-unit>
       <trans-unit id="780513172839038392" datatype="html">
         <source>jobs in parallel</source>
+        <target state="translated">verk samhliða</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">261</context>
@@ -2183,6 +2185,7 @@
       </trans-unit>
       <trans-unit id="6476750382562952780" datatype="html">
         <source>Enable global search</source>
+        <target state="translated">Virkja víðværa leit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-basic-configuration.component.html</context>
           <context context-type="linenumber">390</context>
@@ -2939,6 +2942,7 @@
       </trans-unit>
       <trans-unit id="1521259619066122077" datatype="html">
         <source>Max live duration</source>
+        <target state="translated">Hámark beins streymis</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">73</context>
@@ -2972,6 +2976,7 @@
       </trans-unit>
       <trans-unit id="6727057461851446921" datatype="html">
         <source>Live resolutions to generate</source>
+        <target state="translated">Upplausnir í beinni sem á að útbúa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-live-configuration.component.html</context>
           <context context-type="linenumber">114</context>
@@ -3130,6 +3135,7 @@
       </trans-unit>
       <trans-unit id="1823941382992046371" datatype="html">
         <source>Allow audio files upload</source>
+        <target state="translated">Leyfa innsendingu á hljóðskrám</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">57</context>
@@ -3188,6 +3194,7 @@
       </trans-unit>
       <trans-unit id="6698240176427495644" datatype="html">
         <source>Resolutions to generate</source>
+        <target state="translated">Upplausnir sem á að útbúa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-vod-transcoding.component.html</context>
           <context context-type="linenumber">111</context>
@@ -5575,6 +5582,7 @@
       </trans-unit>
       <trans-unit id="1301767781765127363" datatype="html">
         <source>{count, plural, =1 {1 user deleted.} other {<x id="count"/> users deleted.}}</source>
+        <target state="translated">{count, plural, =1 {1 notanda eytt.} other {<x id="count"/> notendum eytt.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">256</context>
@@ -5582,6 +5590,7 @@
       </trans-unit>
       <trans-unit id="7166936623843420016" datatype="html">
         <source><x id="PH" equiv-text="users.length"/> users deleted.</source>
+        <target state="translated"><x id="PH" equiv-text="users.length"/> notendum eytt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">258</context>
@@ -9989,6 +9998,7 @@
       </trans-unit>
       <trans-unit id="1926625386720791836" datatype="html">
         <source>Example: John Doe</source>
+        <target state="translated">Dæmi: Jóna Jóns</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">17</context>
@@ -10003,6 +10013,7 @@
       </trans-unit>
       <trans-unit id="9199457913561943854" datatype="html">
         <source>Example: john_doe58</source>
+        <target state="translated">Dæmi: jona_jons63</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">34</context>
@@ -10010,6 +10021,7 @@
       </trans-unit>
       <trans-unit id="5856397248272246243" datatype="html">
         <source>This email address will be used to validate your account.</source>
+        <target state="translated">Þetta tölvupóstfang verður notað til að staðfesta notandaaðganginn þinn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">48,50</context>
@@ -10017,6 +10029,7 @@
       </trans-unit>
       <trans-unit id="1789116494691736014" datatype="html">
         <source>Request email for account verification</source>
+        <target state="translated">Biðja um tölvupóst til að sannreyna notandaaðgang</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context>
           <context context-type="linenumber">2</context>
@@ -10024,6 +10037,7 @@
       </trans-unit>
       <trans-unit id="4027779086550572813" datatype="html">
         <source>Send verification email</source>
+        <target state="translated">Senda sannvottunarpóst</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context>
           <context context-type="linenumber">16</context>
@@ -10060,6 +10074,7 @@
       </trans-unit>
       <trans-unit id="8994506181143828992" datatype="html">
         <source>Request new verification email</source>
+        <target state="translated">Biðja um nýjan staðfestingarpóst</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
           <context context-type="linenumber">12</context>
@@ -10067,6 +10082,7 @@
       </trans-unit>
       <trans-unit id="248731258067914565" datatype="html">
         <source>Verify account via email</source>
+        <target state="translated">Staðfesta notandaaðgang með tölvupósti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">15</context>
@@ -10074,6 +10090,7 @@
       </trans-unit>
       <trans-unit id="6040639330855198542" datatype="html">
         <source>Ask to send an email to verify your account</source>
+        <target state="translated">Biddu um tölvupóst til að sannreyna notandaaðganginn þinn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-routing.module.ts</context>
           <context context-type="linenumber">24</context>
