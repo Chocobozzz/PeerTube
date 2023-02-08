@@ -2942,7 +2942,7 @@
       </trans-unit>
       <trans-unit id="2913936134410914576" datatype="html">
         <source>AUTOPLAY</source>
-        <target state="translated">صورت خودکار</target>
+        <target state="translated">نمایش خودکار</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="2738123251363312498" datatype="html">
@@ -3065,7 +3065,7 @@
       </trans-unit>
       <trans-unit id="1452803153270294110" datatype="html">
         <source>Autoplay</source>
-        <target state="translated">صورت خودکار</target>
+        <target state="translated">نمایش خودکار</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-share-modal/video-share.component.html</context><context context-type="linenumber">204</context></context-group>
       </trans-unit>
       <trans-unit id="5336944753883027145" datatype="html">
@@ -4020,7 +4020,7 @@
       </trans-unit>
       <trans-unit id="7483158147658382515" datatype="html">
         <source>Comments on local videos</source>
-        <target state="translated">نظرات برروی ویدئوهای محلی</target>
+        <target state="translated">نظرات درباره ویدئوهای محلی</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/comments/video-comment-list.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -5828,7 +5828,7 @@
       </trans-unit>
       <trans-unit id="8481241275509347668" datatype="html">
         <source>Local videos (this instance)</source>
-        <target state="translated">فیلم های محلی (این سایت)</target>
+        <target state="translated">ویدئوهای محلی (این سایت)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context><context context-type="linenumber">88</context></context-group>
       </trans-unit>
       <trans-unit id="8383401711408398806" datatype="html">
@@ -9521,7 +9521,7 @@
       </trans-unit>
       <trans-unit id="2887122197778293919" datatype="html">
         <source>Go to the local videos page</source>
-        <target state="translated">برو به صفحه فیلم های محلی</target>
+        <target state="translated">برو به صفحه ویدئوهای محلی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.ts</context><context context-type="linenumber">312</context></context-group>
       </trans-unit>
       <trans-unit id="8009065619559214982" datatype="html">
@@ -12270,12 +12270,12 @@
       </trans-unit>
       <trans-unit id="6775540171466219199" datatype="html">
         <source>Stop autoplaying next video</source>
-        <target state="translated">پخش خودکار ویدیوی بعدی را متوقف کنید</target>
+        <target state="translated">توقف نمایش خودکار ویدیوی بعدی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/playlist/video-watch-playlist.component.ts</context><context context-type="linenumber">237</context></context-group>
       </trans-unit>
       <trans-unit id="5149234672404299151" datatype="html">
         <source>Autoplay next video</source>
-        <target state="translated">پخش خودکار ویدیوی بعدی</target>
+        <target state="translated">نمایش خودکار ویدیوی بعدی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/playlist/video-watch-playlist.component.ts</context><context context-type="linenumber">238</context></context-group>
       </trans-unit>
       <trans-unit id="5870421136141540382" datatype="html">
@@ -12356,7 +12356,7 @@
       </trans-unit>
       <trans-unit id="3354816756665089864" datatype="html">
         <source>Autoplay is suspended</source>
-        <target state="translated">Autoplay به حالت تعلیق درآمده است</target>
+        <target state="translated">نمایش خودکار به حالت تعلیق درآمده است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">487</context></context-group>
       </trans-unit>
       <trans-unit id="5856931617181450881" datatype="html">
@@ -12474,7 +12474,7 @@
       </trans-unit>
       <trans-unit id="8681933925782924101" datatype="html">
         <source>Local videos</source>
-        <target state="translated">فیلم های محلی</target>
+        <target state="translated">ویدئوهای محلی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-admin.service.ts</context><context context-type="linenumber">89</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/video-list/videos-list-common-page.component.ts</context><context context-type="linenumber">193</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/core/menu/menu.service.ts</context><context context-type="linenumber">151</context></context-group>
