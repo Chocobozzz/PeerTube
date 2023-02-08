@@ -130,7 +130,7 @@
         align-items: center;
         justify-content: center;
         font-weight: $font-semibold;
-        color: $fg-color;
+        color: pvar(--mainForegroundColor);
         padding: 7px 0;
         margin-top: auto;
         text-decoration: none;
