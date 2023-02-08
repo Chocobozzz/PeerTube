@@ -537,8 +537,8 @@
       height: 12px;
       opacity: 0;
       transform: rotate(45deg) scale(0);
-      border-right: 2px solid $bg-color;
-      border-bottom: 2px solid $bg-color;
+      border-right: 2px solid pvar(--mainBackgroundColor);
+      border-bottom: 2px solid pvar(--mainBackgroundColor);
     }
   }
 
