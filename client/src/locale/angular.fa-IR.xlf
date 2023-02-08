@@ -250,7 +250,7 @@
       </trans-unit>
       <trans-unit id="2436106664506839309" datatype="html">
         <source>Your video <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> has been published </source>
-        <target state="translated">ویدیو شما <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> منتشر شد </target>
+        <target state="translated">ویدئوی شما <x id="START_LINK"/><x id="INTERPOLATION"/><x id="CLOSE_LINK"/> منتشر شد </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/users/user-notifications.component.html</context><context context-type="linenumber">115</context></context-group>
       </trans-unit>
       <trans-unit id="7130219900907848048" datatype="html">
@@ -2347,7 +2347,7 @@
       </trans-unit>
       <trans-unit id="7976591803735140601" datatype="html">
         <source>Latest published video</source>
-        <target state="translated">آخرین ویدیو منتشر شده</target>
+        <target state="translated">آخرین ویدئوی منتشر شده</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context>
           <context context-type="linenumber">24</context>
@@ -2618,7 +2618,7 @@
       </trans-unit>
       <trans-unit id="50985514722149155" datatype="html">
         <source>This is the date when the content was originally published (e.g. the release date for a film)</source>
-        <target state="translated">این تاریخ زمانی است که محتوا منتشر شد.</target>
+        <target state="translated">این تاریخ انتشار اولیه محتوا می‌باشد</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">356</context></context-group>
       </trans-unit>
       <trans-unit id="1669378369440073270" datatype="html">
@@ -2947,7 +2947,7 @@
       </trans-unit>
       <trans-unit id="2738123251363312498" datatype="html">
         <source>Next video to be played</source>
-        <target state="translated">ویدیوی بعدی بازی می شود</target>
+        <target state="translated">ویدئوی درانتظار نمایش</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="4619111912751495491" datatype="html">
@@ -3127,7 +3127,7 @@
       </trans-unit>
       <trans-unit id="2482137713226830428" datatype="html">
         <source>Published <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/></source>
-        <target state="translated">منتشر شده <x id="START_TAG_MY_DATE_TOGGLE"/> <x id="CLOSE_TAG_MY_DATE_TOGGLE"/></target>
+        <target state="translated"><x id="START_TAG_MY_DATE_TOGGLE"/> <x id="CLOSE_TAG_MY_DATE_TOGGLE"/> منتشر شده است</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="1813238393038053050" datatype="html">
@@ -3152,12 +3152,12 @@
       </trans-unit>
       <trans-unit id="677619204556459328" datatype="html">
         <source>Like this video</source>
-        <target state="translated">این ویدیو را پسند کنید</target>
+        <target state="translated">این ویدئو را پسندیدم</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="1979134407801821102" datatype="html">
         <source>Dislike this video</source>
-        <target state="translated">این ویدیو را نپسندید</target>
+        <target state="translated">این ویدیو را نپسندیدم</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="4001371302469308813" datatype="html">
@@ -3215,7 +3215,7 @@
       </trans-unit>
       <trans-unit id="5139892963394684487" datatype="html">
         <source>Originally published</source>
-        <target state="translated">تاریخ انتشار</target>
+        <target state="translated">انتشار اولیه</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/metadata/video-attributes.component.html</context><context context-type="linenumber">22</context></context-group>
       </trans-unit>
       <trans-unit id="2935783216050341269" datatype="html">
@@ -3319,12 +3319,12 @@
       </trans-unit>
       <trans-unit id="6448160249466325288" datatype="html">
         <source>Most recent first (default)</source>
-        <target state="translated">آخرین اخیرا (به طور پیش فرض)</target>
+        <target state="translated">آخرین نظر (پیش فرض)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="5179007899354903649" datatype="html">
         <source>Most replies first</source>
-        <target state="translated">اکثر پاسخ ها برای اولین بار</target>
+        <target state="translated">بیشترین پاسخ‌ها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="7494537777006082055" datatype="html">
@@ -4675,17 +4675,17 @@
       </trans-unit>
       <trans-unit id="9135112681389493865" datatype="html">
         <source>Automatically play videos</source>
-        <target state="translated">به طور خودکار فیلم ها را پخش کنید</target>
+        <target state="translated">نمایش خودکار ویدئوها</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="575474399125992547" datatype="html">
         <source>When a video ends, follow up with the next suggested video.</source>
-        <target state="translated">هنگامی که یک ویدیو به پایان می رسد، با ویدیو پیشنهادی بعدی پیگیری کنید.</target>
+        <target state="translated">پس از پایان یک ویدئو، ویدئوی پیشنهادی بعدی نمایش داده شود.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="2701970773087072815" datatype="html">
         <source>Automatically start playing the next video</source>
-        <target state="translated">شروع به پخش ویدئو بعدی، به طور خودکار صورت پذیرد .</target>
+        <target state="translated">نمایش خودکار ویدئوی بعدی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="5983800192187691457" datatype="html">
@@ -5950,7 +5950,7 @@
       </trans-unit>
       <trans-unit id="8108088952881606566" datatype="html">
         <source>Most liked first</source>
-        <target state="translated">میزان پسندیده شدن</target>
+        <target state="translated">بیشتر پسندیده شده</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.html</context><context context-type="linenumber">30</context></context-group>
       </trans-unit>
       <trans-unit id="2782422473180760140" datatype="html">
@@ -8836,7 +8836,7 @@
       </trans-unit>
       <trans-unit id="1158912204255103651" datatype="html">
         <source>Video published (after transcoding/scheduled update)</source>
-        <target state="translated">ویدئو منتشر شد (پس از transcoding / به روز رسانی برنامه ریزی شده )</target>
+        <target state="translated">ویدئو منتشر شد (پس از transcoding / به روزرسانی برنامه‌ریزی شده )</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="3809414664640924954" datatype="html">
@@ -12186,7 +12186,7 @@
       </trans-unit>
       <trans-unit id="5981816353437801748">
         <source>Video published.</source>
-        <target>ویدئو انتشار‌یافت</target>
+        <target state="translated">ویدئو انتشار‌یافت.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.ts</context><context context-type="linenumber">266</context></context-group>
       </trans-unit>
       <trans-unit id="764164089183618119" datatype="html">
@@ -12416,17 +12416,17 @@
       </trans-unit>
       <trans-unit id="8232494782895420700" datatype="html">
         <source>Navigate in the video to the next frame</source>
-        <target state="translated">حرکت در ویدیو به فریم بعدی</target>
+        <target state="translated">حرکت در ویدئو به فریم بعدی</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">807</context></context-group>
       </trans-unit>
       <trans-unit id="8223917068580581095" datatype="html">
         <source>Toggle theater mode</source>
-        <target state="translated">حالت پخش را تغییر دهید</target>
+        <target state="translated">تغییر حالت پخش</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">812</context></context-group>
       </trans-unit>
       <trans-unit id="8025996572234182184" datatype="html">
         <source>Like the video</source>
-        <target state="translated">پسندیدن ویدیو</target>
+        <target state="translated">پسندیدن ویدئو</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/action-buttons/video-rate.component.ts</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="7692127636377222448" datatype="html">
@@ -12436,7 +12436,7 @@
       </trans-unit>
       <trans-unit id="1729036051846673606" datatype="html">
         <source>When active, the next video is automatically played after the current one.</source>
-        <target state="translated">هنگام فعال بودن، ویدیوی بعدی به طور خودکار پس از ویدئوی فعلی پخش می شود.</target>
+        <target state="translated">هنگام فعال بودن، ویدئوی بعدی به طور خودکار پس از ویدئوی فعلی پخش می‌شود.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/shared/recommendations/recommended-videos.component.ts</context><context context-type="linenumber">50</context></context-group>
       </trans-unit>
       <trans-unit id="2431286785954354122" datatype="html">
