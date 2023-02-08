@@ -1,44 +1,44 @@
 {
   "/api": {
-    "target": "http://localhost:9000",
+    "target": "http://127.0.0.1:9000",
     "secure": false
   },
   "/plugins": {
-    "target": "http://localhost:9000",
+    "target": "http://127.0.0.1:9000",
     "secure": false
   },
   "/themes": {
-    "target": "http://localhost:9000",
+    "target": "http://127.0.0.1:9000",
     "secure": false
   },
   "/static": {
-    "target": "http://localhost:9000",
+    "target": "http://127.0.0.1:9000",
     "secure": false
   },
   "/lazy-static": {
-    "target": "http://localhost:9000",
+    "target": "http://127.0.0.1:9000",
     "secure": false
   },
   "/socket.io": {
-    "target": "ws://localhost:9000",
+    "target": "ws://127.0.0.1:9000",
     "secure": false,
     "ws": true
   },
   "/client/assets": {
-    "target": "http://localhost:9000",
+    "target": "http://127.0.0.1:9000",
     "secure": false
   },
   "/client/locales": {
-    "target": "http://localhost:9000",
+    "target": "http://127.0.0.1:9000",
     "secure": false
   },
   "/!(client)**": {
-    "target": "http://localhost:3000/client/index.html",
+    "target": "http://127.0.0.1:3000/client/index.html",
     "secure": false,
     "logLevel": "debug"
   },
   "/!(client)**/**": {
-    "target": "http://localhost:3000/client/index.html",
+    "target": "http://127.0.0.1:3000/client/index.html",
     "secure": false,
     "logLevel": "debug"
   }
