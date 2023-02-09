@@ -190,7 +190,7 @@ Create a PostgreSQL user **with the same name as your username** in order to avo
 Then, we can create the databases (if they don't already exist):
 
 ```
-$ sudo -u postgres createuser you_username --createdb
+$ sudo -u postgres createuser you_username --createdb --superuser
 $ createdb -O peertube peertube_test{1,2,3}
 ```
 
