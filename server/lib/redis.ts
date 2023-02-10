@@ -32,7 +32,8 @@ class Redis {
     if (this.initialized === true) return
     this.initialized = true
 
-    logger.info('Connecting to redis...')
+    const redisMode = CONFIG.REDIS.SENTINEL.ENABLED ? 'sentinel' : 'standalone'
+    logger.info('Connecting to redis ' + redisMode + '...')
 
     this.client = new IoRedis(Redis.getRedisClientOptions('', { enableAutoPipelining: true }))
     this.client.on('error', err => logger.error('Redis failed to connect', { err }))
@@ -56,10 +57,25 @@ class Redis {
     this.prefix = 'redis-' + WEBSERVER.HOST + '-'
   }
 
-  static getRedisClientOptions (connectionName?: string, options: RedisOptions = {}): RedisOptions {
+  static getRedisClientOptions (name?: string, options: RedisOptions = {}): RedisOptions {
+    const connectionName = [ 'PeerTube', name ].join('')
+    const connectTimeout = 20000 // Could be slow since node use sync call to compile PeerTube
+
+    if (CONFIG.REDIS.SENTINEL.ENABLED) {
+      return {
+        connectionName,
+        connectTimeout,
+        enableTLSForSentinelMode: CONFIG.REDIS.SENTINEL.ENABLE_TLS,
+        sentinelPassword: CONFIG.REDIS.AUTH,
+        sentinels: CONFIG.REDIS.SENTINEL.SENTINELS,
+        name: CONFIG.REDIS.SENTINEL.MASTER_NAME,
+        ...options
+      }
+    }
+
     return {
-      connectionName: [ 'PeerTube', connectionName ].join(''),
-      connectTimeout: 20000, // Could be slow since node use sync call to compile PeerTube
+      connectionName,
+      connectTimeout,
       password: CONFIG.REDIS.AUTH,
       db: CONFIG.REDIS.DB,
       host: CONFIG.REDIS.HOSTNAME,

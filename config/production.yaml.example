@@ -63,8 +63,15 @@ database:
 redis:
   hostname: 'localhost'
   port: 6379
-  auth: null
+  auth: null # Used by both standalone and sentinel
   db: 0
+  sentinel:
+    enabled: false
+    enable_tls: false
+    master_name: ''
+    sentinels:
+      - hostname: ''
+        port: 26379
 
 # SMTP server to send emails
 smtp:
