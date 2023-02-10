@@ -16,7 +16,7 @@ export class AdminRegistrationPage {
 
     await tr.$('.action-cell .dropdown-root').click()
 
-    const accept = await $('span*=Accept this registration')
+    const accept = await $('span*=Accept this request')
     await accept.waitForClickable()
     await accept.click()
 
