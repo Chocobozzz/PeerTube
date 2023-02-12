@@ -291,11 +291,11 @@ class Redis {
 
   /* ************ Resumable uploads final responses ************ */
 
-  setUploadSession (uploadId: string, response?: { video: { id: number, shortUUID: string, uuid: string } }) {
+  setUploadSession (uploadId: string, isDone: boolean, response?: { video: { id: number, shortUUID: string, uuid: string } }) {
     return this.setValue(
       'resumable-upload-' + uploadId,
       response
-        ? JSON.stringify(response)
+        ? JSON.stringify({ isDone, response })
         : '',
       RESUMABLE_UPLOAD_SESSION_LIFETIME
     )

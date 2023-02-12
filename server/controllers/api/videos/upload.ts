@@ -1,6 +1,6 @@
 import express from 'express'
 import { move } from 'fs-extra'
-import { basename } from 'path'
+import { basename, join } from 'path'
 import { getResumableUploadPath } from '@server/helpers/upload'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url'
 import { JobQueue } from '@server/lib/job-queue'
@@ -20,7 +20,7 @@ import { openapiOperationDoc } from '@server/middlewares/doc'
 import { VideoSourceModel } from '@server/models/video/video-source'
 import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models'
 import { getLowercaseExtension } from '@shared/core-utils'
-import { isAudioFile, uuidToShort } from '@shared/extra-utils'
+import { buildUUID, isAudioFile, uuidToShort } from '@shared/extra-utils'
 import { HttpStatusCode, VideoCreate, VideoResolution, VideoState } from '@shared/models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { createReqFiles } from '../../../helpers/express-utils'
@@ -37,11 +37,14 @@ import {
   authenticate,
   videosAddLegacyValidator,
   videosAddResumableInitValidator,
-  videosAddResumableValidator
+  videosAddResumableValidator,
+  videosUpdateResumableInitValidator,
+  videoUploadResumableValidator
 } from '../../../middlewares'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
+import { CONFIG } from '@server/initializers/config'
 
 const lTags = loggerTagsFactory('api', 'video')
 const auditLogger = auditLoggerFactory('videos')
@@ -66,18 +69,36 @@ uploadRouter.post('/upload',
   asyncRetryTransactionMiddleware(addVideoLegacy)
 )
 
+uploadRouter.post('/upload-resumable/:videoId',
+  openapiOperationDoc({ operationId: 'uploadResumableInit' }),
+  authenticate,
+  reqVideoFileAddResumable,
+  asyncMiddleware(videoUploadResumableValidator),
+  asyncMiddleware(videosUpdateResumableInitValidator),
+  uploadx.upload
+)
+
 uploadRouter.post('/upload-resumable',
   openapiOperationDoc({ operationId: 'uploadResumableInit' }),
   authenticate,
   reqVideoFileAddResumable,
+  asyncMiddleware(videoUploadResumableValidator),
   asyncMiddleware(videosAddResumableInitValidator),
   uploadx.upload
 )
 
-uploadRouter.delete('/upload-resumable',
+uploadRouter.delete('/upload-resumable/:videoId?',
   authenticate,
   asyncMiddleware(deleteUploadResumableCache),
   uploadx.upload
+)
+
+uploadRouter.put('/upload-resumable/:videoId',
+  openapiOperationDoc({ operationId: 'uploadResumable' }),
+  authenticate,
+  uploadx.upload, // uploadx doesn't next() before the file upload completes
+  asyncMiddleware(videosAddResumableValidator),
+  asyncMiddleware(updateVideo)
 )
 
 uploadRouter.put('/upload-resumable',
@@ -116,13 +137,33 @@ async function addVideoLegacy (req: express.Request, res: express.Response) {
   return res.json(response)
 }
 
+async function updateVideo (req: express.Request, res: express.Response) {
+  const videoPhysicalFile = res.locals.videoFileResumable
+  const video = res.locals.videoAll
+
+  const extension = getLowercaseExtension(videoPhysicalFile.filename)
+  const destination = join(CONFIG.STORAGE.TMP_DIR, buildUUID() + extension)
+  await move(videoPhysicalFile.path, destination)
+
+  const dataInput = {
+    videoUUID: video.uuid,
+    filePath: destination
+  }
+
+  await JobQueue.Instance.createJob({ type: 'video-file-import', payload: dataInput })
+
+  await Redis.Instance.setUploadSession(req.query.upload_id, true)
+
+  return res.status(HttpStatusCode.OK_200).send()
+}
+
 async function addVideoResumable (req: express.Request, res: express.Response) {
   const videoPhysicalFile = res.locals.videoFileResumable
   const videoInfo = videoPhysicalFile.metadata
   const files = { previewfile: videoInfo.previewfile }
 
   const response = await addVideo({ req, res, videoPhysicalFile, videoInfo, files })
-  await Redis.Instance.setUploadSession(req.query.upload_id, response)
+  await Redis.Instance.setUploadSession(req.query.upload_id, true, response)
 
   return res.json(response)
 }

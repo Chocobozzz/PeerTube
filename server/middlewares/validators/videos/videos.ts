@@ -14,7 +14,9 @@ import {
   isDateValid,
   isFileValid,
   isIdValid,
+  isUUIDValid,
   toBooleanOrNull,
+  toCompleteUUID,
   toIntOrNull,
   toValueOrNull
 } from '../../../helpers/custom-validators/misc'
@@ -103,6 +105,8 @@ const videosAddLegacyValidator = getCommonVideoEditAttributes().concat([
  * Gets called after the last PUT request
  */
 const videosAddResumableValidator = [
+  param('videoId')
+    .customSanitizer(toCompleteUUID),
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
     const body: express.CustomUploadXFile<express.UploadXFileMetadata> = req.body
@@ -113,9 +117,9 @@ const videosAddResumableValidator = [
     const sessionExists = await Redis.Instance.doesUploadSessionExist(uploadId)
 
     if (sessionExists) {
-      const sessionResponse = await Redis.Instance.getUploadSession(uploadId)
+      const { isDone, response: sessionResponse } = await Redis.Instance.getUploadSession(uploadId)
 
-      if (!sessionResponse) {
+      if (!isDone) {
         res.setHeader('Retry-After', 300) // ask to retry after 5 min, knowing the upload_id is kept for up to 15 min after completion
 
         return res.fail({
@@ -131,9 +135,13 @@ const videosAddResumableValidator = [
       return res.json(sessionResponse)
     }
 
-    await Redis.Instance.setUploadSession(uploadId)
+    await Redis.Instance.setUploadSession(uploadId, false)
 
-    if (!await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)) return cleanup()
+    if (req.params.videoId) {
+      if (!await doesVideoExist(req.params.videoId, res)) return cleanup()
+    } else {
+      if (!await doesVideoChannelOfAccountExist(file.metadata.channelId, user, res)) return cleanup()
+    }
 
     try {
       if (!file.duration) await addDurationToVideo(file)
@@ -163,17 +171,12 @@ const videosAddResumableValidator = [
  * see https://github.com/kukhariev/node-uploadx/blob/dc9fb4a8ac5a6f481902588e93062f591ec6ef03/packages/core/src/handlers/base-handler.ts
  *
  */
-const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
+const videoUploadResumableValidator = [
+  param('videoId')
+    .customSanitizer(toCompleteUUID),
+
   body('filename')
     .exists(),
-  body('name')
-    .trim()
-    .custom(isVideoNameValid).withMessage(
-      `Should have a video name between ${CONSTRAINTS_FIELDS.VIDEOS.NAME.min} and ${CONSTRAINTS_FIELDS.VIDEOS.NAME.max} characters long`
-    ),
-  body('channelId')
-    .customSanitizer(toIntOrNull)
-    .custom(isIdValid),
 
   header('x-upload-content-length')
     .isNumeric()
@@ -194,10 +197,11 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     const user = res.locals.oauth.token.User
     const cleanup = () => cleanUpReqFiles(req)
 
-    logger.debug('Checking videosAddResumableInitValidator parameters and headers', {
-      parameters: req.body,
+    logger.debug('Checking videoUploadResumableValidator parameters and headers', {
+      body: req.body,
       headers: req.headers,
-      files: req.files
+      files: req.files,
+      params: req.params
     })
 
     if (areValidationErrors(req, res, { omitLog: true })) return cleanup()
@@ -209,6 +213,51 @@ const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
     req.headers['content-type'] = 'application/json; charset=utf-8'
     // place previewfile in metadata so that uploadx saves it in .META
     if (req.files?.['previewfile']) req.body.previewfile = req.files['previewfile']
+
+    next()
+  }
+]
+
+const videosAddResumableInitValidator = getCommonVideoEditAttributes().concat([
+  body('name')
+    .trim()
+    .custom(isVideoNameValid).withMessage(
+      `Should have a video name between ${CONSTRAINTS_FIELDS.VIDEOS.NAME.min} and ${CONSTRAINTS_FIELDS.VIDEOS.NAME.max} characters long`
+    ),
+  body('channelId')
+    .customSanitizer(toIntOrNull)
+    .custom(isIdValid),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videosAddResumableInitValidator parameters and headers', {
+      parameters: req.body,
+      headers: req.headers,
+      files: req.files
+    })
+
+    if (areValidationErrors(req, res, { omitLog: true })) return
+
+    return next()
+  }
+])
+
+const videosUpdateResumableInitValidator = getCommonVideoEditAttributes().concat([
+  param('videoId')
+    .customSanitizer(toCompleteUUID)
+    .custom(isUUIDValid),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videosUpdateResumableInitValidator parameters and headers', {
+      body: req.body,
+      headers: req.headers,
+      files: req.files,
+      params: req.params
+    })
+
+    if (areValidationErrors(req, res, { omitLog: true })) return
+    if (!await doesVideoExist(req.params.videoId, res)) return
+
+    if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.videoAll, UserRight.MANAGE_VIDEO_FILES, res)) return
 
     return next()
   }
@@ -429,7 +478,7 @@ function getCommonVideoEditAttributes () {
       .optional()
       .customSanitizer(toIntOrNull)
       .custom(isScheduleVideoUpdatePrivacyValid)
-  ] as (ValidationChain | ExpressPromiseHandler)[]
+  ] as (ValidationChain | ExpressPromiseHandler | any)[]
 }
 
 const commonVideosFiltersValidator = [
@@ -529,6 +578,8 @@ const commonVideosFiltersValidator = [
 export {
   videosAddLegacyValidator,
   videosAddResumableValidator,
+  videosUpdateResumableInitValidator,
+  videoUploadResumableValidator,
   videosAddResumableInitValidator,
 
   videosUpdateValidator,
@@ -572,7 +623,11 @@ async function commonVideoChecksPass (parameters: {
 
   if (areErrorsInScheduleUpdate(req, res)) return false
 
-  if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return false
+  if (req.params.videoId) {
+    if (!await doesVideoExist(req.params.videoId, res)) return
+  } else {
+    if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return false
+  }
 
   if (!isVideoFileMimeTypeValid(files)) {
     res.fail({
