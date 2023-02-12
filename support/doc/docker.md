@@ -35,13 +35,13 @@ View the source of the file you're about to download: [.env](https://github.com/
 #### Tweak the `docker-compose.yml` file there according to your needs
 
 ```shell
-$EDITOR ./docker-compose.yml
+sudo nano docker-compose.yml
 ```
 
 #### Then tweak the `.env` file to change the environment variables settings
 
 ```shell
-$EDITOR ./.env
+sudo nano .env
 ```
 
 In the downloaded example [.env](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/.env), you must replace:
@@ -79,6 +79,8 @@ A dedicated container in the docker-compose will automatically renew this certif
 
 #### Test your setup
 
+_note_: Newer versions of compose are called with `docker compose` instead of `docker-compose`, so remove the dash in all steps that use this command if you are getting errors.
+
 Run your containers:
 
 ```shell
@@ -87,7 +89,12 @@ docker-compose up
 
 #### Obtaining your automatically-generated admin credentials
 
-Now that you've installed your PeerTube instance you'll want to grep your peertube container's logs for the `root` password. You're going to want to run `docker-compose logs peertube | grep -A1 root` to search the log output for your new PeerTube's instance admin credentials which will look something like this.
+You can change the automatically created password for user root by running this command from peertube's root directory:
+```shell
+docker-compose exec -u peertube peertube npm run reset-password -- -u root
+```
+
+You can also grep your peertube container's logs for the default `root` password. You're going to want to run `docker-compose logs peertube | grep -A1 root` to search the log output for your new PeerTube's instance admin credentials which will look something like this.
 
 ```bash
 $ docker-compose logs peertube | grep -A1 root
