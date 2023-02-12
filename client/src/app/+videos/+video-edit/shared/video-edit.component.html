@@ -223,6 +223,14 @@
       </ng-template>
     </ng-container>
 
+    <ng-container ngbNavItem *ngIf="!liveVideo">
+      <a ngbNavLink i18n>Replace video</a>
+
+      <ng-template ngbNavContent>
+        <my-video-replace [videoShortUUID]="videoToUpdate.shortUUID"></my-video-replace>
+      </ng-template>
+    </ng-container>
+
     <ng-container ngbNavItem *ngIf="liveVideo">
       <a ngbNavLink i18n>Live settings</a>
 

@@ -1,36 +1,27 @@
-import { truncate } from 'lodash-es'
 import { UploadState, UploadxOptions, UploadxService } from 'ngx-uploadx'
 import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, CanComponentDeactivate, HooksService, MetaService, Notifier, ServerService, UserService } from '@app/core'
-import { genericUploadErrorHandler, scrollToTop } from '@app/helpers'
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+import { AuthService, CanComponentDeactivate, MetaService, Notifier, ServerService } from '@app/core'
+import { genericUploadErrorHandler } from '@app/helpers'
 import { FormReactiveService } from '@app/shared/shared-forms'
-import { BytesPipe, Video, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { VideoCaptionService, VideoService } from '@app/shared/shared-main'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { logger } from '@root-helpers/logger'
 import { isIOS } from '@root-helpers/web-browser'
-import { HttpStatusCode, VideoCreateResult } from '@shared/models'
-import { UploaderXFormData } from '../shared/uploaderx-form-data'
-import { VideoSend } from './video-send'
+import { HTMLServerConfig, HttpStatusCode, VideoCreateResult } from '@shared/models'
+import { UploaderXFormData } from './uploaderx-form-data'
 import { Subscription } from 'rxjs'
 
 @Component({
-  selector: 'my-video-upload',
-  templateUrl: './video-upload.component.html',
+  selector: 'my-video-replace',
+  templateUrl: './video-replace.component.html',
   styleUrls: [
-    '../shared/video-edit.component.scss',
-    './video-upload.component.scss',
-    './video-send.scss'
+    './video-replace.component.scss'
   ]
 })
-export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, AfterViewInit, CanComponentDeactivate {
-  @Output() firstStepDone = new EventEmitter<string>()
-  @Output() firstStepError = new EventEmitter<void>()
+export class VideoReplaceComponent implements OnInit, OnDestroy, CanComponentDeactivate {
+  @Input() videoShortUUID: string
   @ViewChild('videofileInput') videofileInput: ElementRef<HTMLInputElement>
-
-  userVideoQuotaUsed = 0
-  userVideoQuotaUsedDaily = 0
 
   isUploadingAudioFile = false
   isUploadingVideo = false
@@ -42,15 +33,9 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     uuid: '',
     shortUUID: ''
   }
-  formData: FormData
-
-  previewfileUpload: File
 
   error: string
   enableRetryAfterError: boolean
-
-  // So that it can be accessed in the template
-  protected readonly BASE_VIDEO_UPLOAD_URL = VideoService.BASE_VIDEO_URL + '/upload-resumable'
 
   private isUpdatingVideo = false
   private fileToUpload: File
@@ -58,6 +43,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   private alreadyRefreshedToken = false
 
   private uploadServiceSubscription: Subscription
+
+  protected serverConfig: HTMLServerConfig
 
   constructor (
     protected formReactiveService: FormReactiveService,
@@ -67,14 +54,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     protected serverService: ServerService,
     protected videoService: VideoService,
     protected videoCaptionService: VideoCaptionService,
-    private userService: UserService,
-    private router: Router,
-    private hooks: HooksService,
     private resumableUploadService: UploadxService,
     private metaService: MetaService,
     private route: ActivatedRoute
   ) {
-    super()
   }
 
   get videoExtensions () {
@@ -82,20 +65,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   ngOnInit () {
-    super.ngOnInit()
-
-    this.userService.getMyVideoQuotaUsed()
-        .subscribe(data => {
-          this.userVideoQuotaUsed = data.videoQuotaUsed
-          this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily
-        })
+    this.serverConfig = this.serverService.getHTMLConfig()
 
     this.uploadServiceSubscription = this.resumableUploadService.events
       .subscribe(state => this.onUploadVideoOngoing(state))
-  }
-
-  ngAfterViewInit () {
-    this.hooks.runAction('action:video-upload.init', 'video-edit')
   }
 
   ngOnDestroy () {
@@ -122,12 +95,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   updateTitle () {
-    const videoName = this.form.get('name').value
-
     if (this.videoUploaded) {
-      this.metaService.setTitle($localize`Publish ${videoName}`)
+      this.metaService.setTitle($localize`Edit video`)
     } else if (this.isUploadingAudioFile || this.isUploadingVideo) {
-      this.metaService.setTitle(`${this.videoUploadPercents}% - ${videoName}`)
+      // this.metaService.setTitle(`${this.videoUploadPercents}% - ${videoName}`)
     } else {
       this.metaService.update(this.route.snapshot.data['meta'])
     }
@@ -162,19 +133,13 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         this.isUploadingVideo = false
         this.videoUploadPercents = 0
 
-        this.firstStepError.emit()
         this.enableRetryAfterError = false
         this.error = ''
         this.isUploadingAudioFile = false
         break
 
       case 'queue':
-        this.closeFirstStep(state.name)
-        break
-
-      case 'uploading':
-        // TODO: remove || 0 when // https://github.com/kukhariev/ngx-uploadx/pull/368 is released
-        this.videoUploadPercents = state.progress || 0
+        // this.closeFirstStep(state.name)
         break
 
       case 'paused':
@@ -203,8 +168,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
     if (!file) return
 
-    if (!this.checkGlobalUserQuota(file)) return
-    if (!this.checkDailyUserQuota(file)) return
+    // if (!this.checkGlobalUserQuota(file)) return
+    // if (!this.checkDailyUserQuota(file)) return
 
     if (this.isAudioFile(file.name)) {
       this.isUploadingAudioFile = true
@@ -218,7 +183,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   uploadAudio () {
-    this.uploadFile(this.getInputVideoFile(), this.previewfileUpload)
+    // this.uploadFile(this.getInputVideoFile(), this.previewfileUpload)
   }
 
   retryUpload () {
@@ -232,8 +197,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   isPublishingButtonDisabled () {
-    return !this.form.valid ||
-      this.isUpdatingVideo === true ||
+    return this.isUpdatingVideo === true ||
       this.videoUploaded !== true ||
       !this.videoUploadedIds.id
   }
@@ -245,49 +209,14 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     return $localize`Upload ${videofile.name}`
   }
 
-  async updateSecondStep () {
-    if (!await this.isFormValid()) return
-    if (this.isPublishingButtonDisabled()) return
-
-    const video = new VideoEdit()
-    video.patch(this.form.value)
-    video.id = this.videoUploadedIds.id
-    video.uuid = this.videoUploadedIds.uuid
-    video.shortUUID = this.videoUploadedIds.shortUUID
-
-    this.isUpdatingVideo = true
-
-    this.updateVideoAndCaptions(video)
-        .subscribe({
-          next: () => {
-            this.isUpdatingVideo = false
-            this.isUploadingVideo = false
-
-            this.notifier.success($localize`Video published.`)
-            this.router.navigateByUrl(Video.buildWatchUrl(video))
-          },
-
-          error: err => {
-            this.error = err.message
-            scrollToTop()
-            logger.error(err)
-          }
-        })
-  }
-
   private getInputVideoFile () {
     return this.videofileInput.nativeElement.files[0]
   }
 
-  private uploadFile (file: File, previewfile?: File) {
+  private uploadFile (file: File) {
     const metadata = {
       waitTranscoding: true,
-      channelId: this.firstStepChannelId,
-      nsfw: this.serverConfig.instance.isNSFW,
-      privacy: this.highestPrivacy.toString(),
-      name: this.buildVideoFilename(file.name),
-      filename: file.name,
-      previewfile: previewfile as any
+      filename: file.name
     }
 
     this.resumableUploadService.handleFiles(file, {
@@ -316,78 +245,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     }
   }
 
-  private closeFirstStep (filename: string) {
-    const name = this.buildVideoFilename(filename)
-
-    this.form.patchValue({
-      name,
-      privacy: this.firstStepPrivacyId,
-      nsfw: this.serverConfig.instance.isNSFW,
-      channelId: this.firstStepChannelId,
-      previewfile: this.previewfileUpload
-    })
-
-    this.firstStepDone.emit(name)
-    this.updateTitle()
-  }
-
-  private checkGlobalUserQuota (videofile: File) {
-    const bytePipes = new BytesPipe()
-
-    // Check global user quota
-    const videoQuota = this.authService.getUser().videoQuota
-    if (videoQuota !== -1 && (this.userVideoQuotaUsed + videofile.size) > videoQuota) {
-      const videoSizeBytes = bytePipes.transform(videofile.size, 0)
-      const videoQuotaUsedBytes = bytePipes.transform(this.userVideoQuotaUsed, 0)
-      const videoQuotaBytes = bytePipes.transform(videoQuota, 0)
-
-      // eslint-disable-next-line max-len
-      const msg = $localize`Your video quota is exceeded with this video (video size: ${videoSizeBytes}, used: ${videoQuotaUsedBytes}, quota: ${videoQuotaBytes})`
-      this.notifier.error(msg)
-
-      return false
-    }
-
-    return true
-  }
-
-  private checkDailyUserQuota (videofile: File) {
-    const bytePipes = new BytesPipe()
-
-    // Check daily user quota
-    const videoQuotaDaily = this.authService.getUser().videoQuotaDaily
-    if (videoQuotaDaily !== -1 && (this.userVideoQuotaUsedDaily + videofile.size) > videoQuotaDaily) {
-      const videoSizeBytes = bytePipes.transform(videofile.size, 0)
-      const quotaUsedDailyBytes = bytePipes.transform(this.userVideoQuotaUsedDaily, 0)
-      const quotaDailyBytes = bytePipes.transform(videoQuotaDaily, 0)
-      // eslint-disable-next-line max-len
-      const msg = $localize`Your daily video quota is exceeded with this video (video size: ${videoSizeBytes}, used: ${quotaUsedDailyBytes}, quota: ${quotaDailyBytes})`
-      this.notifier.error(msg)
-
-      return false
-    }
-
-    return true
-  }
-
   private isAudioFile (filename: string) {
     const extensions = [ '.mp3', '.flac', '.ogg', '.wma', '.wav' ]
 
     return extensions.some(e => filename.endsWith(e))
-  }
-
-  private buildVideoFilename (filename: string) {
-    const nameWithoutExtension = filename.replace(/\.[^/.]+$/, '')
-    let name = nameWithoutExtension.length < 3
-      ? filename
-      : nameWithoutExtension
-
-    const videoNameMaxSize = 110
-    if (name.length > videoNameMaxSize) {
-      name = truncate(name, { length: videoNameMaxSize, omission: '' })
-    }
-
-    return name
   }
 
   private refereshTokenAndRetryUpload () {
@@ -402,7 +263,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       : undefined // Auto chunk size
 
     return {
-      endpoint: this.BASE_VIDEO_UPLOAD_URL,
+      endpoint: '/api/v1/videos/upload-resumable/' + this.videoShortUUID,
       multiple: false,
 
       maxChunkSize: this.serverConfig.client.videos.resumableUpload.maxChunkSize,
