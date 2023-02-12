@@ -1,4 +1,4 @@
-import { ensureDir, readdir, remove } from 'fs-extra'
+import { ensureDir, readdir, remove, stat, writeFile } from 'fs-extra'
 import passwordGenerator from 'password-generator'
 import { join } from 'path'
 import { isTestOrDevInstance } from '@server/helpers/core-utils'
@@ -12,6 +12,8 @@ import { applicationExist, clientsExist, usersExist } from './checker-after-init
 import { CONFIG } from './config'
 import { DIRECTORIES, FILES_CACHE, LAST_MIGRATION_VERSION } from './constants'
 import { sequelizeTypescript } from './database'
+import { PluginModel } from '@server/models/server/plugin'
+import { installNpmPlugins } from '@server/lib/plugins/yarn'
 
 async function installApplication () {
   try {
@@ -22,7 +24,8 @@ async function installApplication () {
           return Promise.all([
             createApplicationIfNotExist(),
             createOAuthClientIfNotExist(),
-            createOAuthAdminIfNotExist()
+            createOAuthAdminIfNotExist(),
+            installPluginsIfNotInstalled()
           ])
         }),
 
@@ -182,4 +185,26 @@ async function createApplicationIfNotExist () {
   })
 
   return createApplicationActor(application.id)
+}
+
+async function installPluginsIfNotInstalled () {
+  const pkgJsonPath = join(CONFIG.STORAGE.PLUGINS_DIR, 'package.json')
+
+  try {
+    await stat(pkgJsonPath)
+    logger.debug('Plugins already installed')
+    return
+  } catch (error) { }
+
+  logger.debug('Installing plugins')
+
+  const dependencies = (await PluginModel.listInstalled())
+    .reduce((acc, { name, type, version }) => ({
+      ...acc,
+      [PluginModel.buildNpmName(name, type)]: version + ''
+    }), {})
+
+  await writeFile(pkgJsonPath, JSON.stringify({ dependencies }, null, 2))
+
+  await installNpmPlugins()
 }
