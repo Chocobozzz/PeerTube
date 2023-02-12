@@ -39,7 +39,7 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
 # apt-get install curl sudo unzip vim
 ```
 
-2. It would be wise to disable root access and to continue this tutorial with a user with sudoers group access
+2. It would be wise to disable root access and to continue this tutorial with a user with sudoers group access. You can see a guide for how to do this in Debian/Ubuntu [here](https://www.digitalocean.com/community/tutorials/how-to-add-and-delete-users-on-ubuntu-20-04).
 
 3. Install NodeJS 16.x:
 [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
