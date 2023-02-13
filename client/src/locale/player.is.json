@@ -47,6 +47,8 @@
     "{1} / {2} dropped of {3}": "{1} / {2} sleppt af {3}",
     " (muted)": " (þaggað)",
     "{1} from servers · {2} from peers": "{1} frá netþjónum · {2} frá jafningjum",
+    "Previous video": "Previous video",
+    "Next video": "Next video",
     "Audio Player": "Tónlistarspilari",
     "Video Player": "Vídeóspilari",
     "Play": "Afspilun",

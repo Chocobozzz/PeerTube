@@ -6443,23 +6443,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="5851560788527570644" datatype="html">
         <source>Notifications</source>
         <target state="translated">Tilkynningar</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context>
-          <context context-type="linenumber">119</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
-          <context context-type="linenumber">55</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/menu/notification.component.html</context>
-          <context context-type="linenumber">22</context>
-        </context-group>
-      </trans-unit>
+        
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">1</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">119</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">55</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">27</context></context-group></trans-unit>
       <trans-unit id="2726946550255780479" datatype="html">
         <source><x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;cog&quot; aria-hidden=&quot;true&quot;>"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon>"/> Notification preferences </source>
         <target state="translated"><x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;cog&quot; aria-hidden=&quot;true&quot;>"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon>"/> Valkostir tilkynninga </target>
@@ -6487,15 +6475,9 @@ The link will expire within 1 hour.</source>
       <trans-unit id="2333314224059826550" datatype="html">
         <source>Mark all as read</source>
         <target state="translated">Merkja allt sem lesið</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context>
-          <context context-type="linenumber">20</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/menu/notification.component.html</context>
-          <context context-type="linenumber">27</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">20</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">32</context></context-group></trans-unit>
       <trans-unit id="7679199047720825365" datatype="html">
         <source>All read</source>
         <target state="translated">Allt lesið</target>
@@ -12732,31 +12714,19 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="403762424689874454" datatype="html">
         <source>View your notifications</source>
         <target state="translated">Skoðaðu tilkynningarnar þínar</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/menu/notification.component.html</context>
-          <context context-type="linenumber">3</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/menu/notification.component.html</context>
-          <context context-type="linenumber">11</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">8</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">16</context></context-group></trans-unit>
       <trans-unit id="8278995041812548563" datatype="html">
         <source>Update your notification preferences</source>
         <target state="translated">Stilltu hvernig tilkynningarnar þínar birtast</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/menu/notification.component.html</context>
-          <context context-type="linenumber">34</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="5842982307680337701" datatype="html">
         <source>See all your notifications</source>
         <target state="translated">Sjáðu allar tilkynningarnar þínar</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/menu/notification.component.html</context>
-          <context context-type="linenumber">54</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">59</context></context-group></trans-unit>
       <trans-unit id="5108072242786374364" datatype="html">
         <source>Welcome to <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>, dear user!</source>
         <target state="translated">Velkomin/n á <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>, kæri notandi!</target>

@@ -47,6 +47,8 @@
     "{1} / {2} dropped of {3}": "{1} / {2} verloren beelden van {3}",
     " (muted)": " (gedempt)",
     "{1} from servers · {2} from peers": "{1} van servers · {2} van bandbreedte bijdragers",
+    "Previous video": "Previous video",
+    "Next video": "Next video",
     "Audio Player": "Audiospeler",
     "Video Player": "Videospeler",
     "Play": "Afspelen",

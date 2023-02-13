@@ -47,6 +47,8 @@
     "{1} / {2} dropped of {3}": "{1} / {2} dropped of {3}",
     " (muted)": " (muted)",
     "{1} from servers · {2} from peers": "{1} from servers · {2} from peers",
+    "Previous video": "Previous video",
+    "Next video": "Next video",
     "Audio Player": "Lydspelar",
     "Video Player": "Videospelar",
     "Play": "Spel av",

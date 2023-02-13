@@ -1869,27 +1869,27 @@ The link will expire within 1 hour.</source>
       <trans-unit id="403762424689874454">
         <source>View your notifications</source>
         <target>ดูการแจ้งเตือนของคุณ</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">3</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">11</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">11</context></context-group>
-      </trans-unit>
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">8</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">16</context></context-group></trans-unit>
       <trans-unit id="2333314224059826550" datatype="html">
         <source>Mark all as read</source>
         <target state="translated">ระบุทั้งหมดว่าอ่านแล้ว</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">27</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">27</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">20</context></context-group>
-      </trans-unit>
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">20</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">32</context></context-group></trans-unit>
       <trans-unit id="8278995041812548563">
         <source>Update your notification preferences</source>
         <target>อัปเดตการตั้งค่าการแจ้งเตือน</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">34</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="5842982307680337701">
         <source>See all your notifications</source>
         <target>ดูการแจ้งเตือนทั้งหมด</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">54</context></context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">59</context></context-group></trans-unit>
       <trans-unit id="5108072242786374364" datatype="html">
         <source>Welcome to <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>, dear user!</source>
         <target state="translated">ยินดีต้อนรับผู้ใช้สู่ <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>!</target>
@@ -9569,11 +9569,11 @@ channel with the same name (<x id="PH_2"/>)!</target>
       <trans-unit id="5851560788527570644" datatype="html">
         <source>Notifications</source>
         <target state="translated">การแจ้งเตือน</target>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">1</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">119</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">55</context></context-group>
-        <context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">22</context></context-group>
-      </trans-unit>
+        
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-notifications/my-account-notifications.component.html</context><context context-type="linenumber">1</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-routing.module.ts</context><context context-type="linenumber">119</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context><context context-type="linenumber">55</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/notification.component.html</context><context context-type="linenumber">27</context></context-group></trans-unit>
       <trans-unit id="6658000829978978023" datatype="html">
         <source>Applications</source>
         <target state="new">Applications</target>

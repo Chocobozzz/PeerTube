@@ -47,6 +47,8 @@
     "{1} / {2} dropped of {3}": "تم إسقاط {1} / {2} من {3}",
     " (muted)": " (صامت)",
     "{1} from servers · {2} from peers": "{1} من الخوادم · {2} من النظراء",
+    "Previous video": "Previous video",
+    "Next video": "Next video",
     "Audio Player": "مشغل الصوت",
     "Video Player": "مشغل الفيديو",
     "Play": "شغل",

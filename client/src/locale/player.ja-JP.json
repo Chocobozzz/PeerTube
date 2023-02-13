@@ -47,6 +47,8 @@
     "{1} / {2} dropped of {3}": "{1} / {3}フレームの内 {2}ドロップ",
     " (muted)": " (ミュート中)",
     "{1} from servers · {2} from peers": "サーバー経由{1} · ピア経由{2}",
+    "Previous video": "Previous video",
+    "Next video": "Next video",
     "Audio Player": "音楽プレーヤー",
     "Video Player": "動画プレーヤー",
     "Play": "再生",
