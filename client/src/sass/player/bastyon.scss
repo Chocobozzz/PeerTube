@@ -195,6 +195,7 @@
         &.vjs-is-audio {
             background-position: center;
             background-size: cover;
+            filter: brightness(80%);
         }
     }
 
@@ -458,7 +459,6 @@
 
     &.vjs-is-audio {
         // height: 126px;
-        background: transparent;
         video {
             display: none;
         }
@@ -467,14 +467,34 @@
             border-top-left-radius: 0 !important;
             box-shadow: none;
             // mix-blend-mode: difference;
-            background: rgba(rgb(66, 66, 66), 0.25);
+            background: transparent;
             color: white;
         }
         .vjs-overlay{
-            display: none !important;
+           /* display: none !important;*/
         }
         .vjs-mobile-buttons-overlay {
-            display: none;
+            /*display: none;*/
+            z-index: 1;
+        }
+
+        .vjs-big-play-button{
+            z-index: 1;
+        }
+
+        .vjs-poster{
+            filter: brightness(80%);
+            display: block!important;
+        }
+
+        .vjs-control-bar{
+            .vjs-play-control{
+                display: none;
+            }
+
+            .vjs-volume-control.vjs-volume-horizontal{
+                width: 6em;
+            }
         }
     }
 
@@ -492,6 +512,16 @@
     position: absolute;
     top: 0;
     right: 0;
+    bottom: 0;
+    left: 0;
+
+    canvas{
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
 }
 
 html.mobileview{
@@ -556,10 +586,10 @@ html.mobileview{
     @include mobileview ();
 
     .video-js.vjs-is-audio {
-        height: 120px;
-        .vjs-play-control{
+        height: 220px;
+        /*.vjs-play-control{
             display: flex;
-        }
+        }*/
         .vjs-volume-control {
             display: flex;
         }

@@ -183,11 +183,13 @@ export class PeertubePlayerManager {
       videojsOptionsBuilder.getVideojsOptions(this.alreadyPlayed)
     )*/
 
+    console.log('buildPlayer')
+
     // If video is audio
     if (options && options.isAudio && videojsOptions && videojsOptions.controlBar && videojsOptions.controlBar.children) {
       videojsOptions.controlBar.children['settingsButton'].entries = ['playbackRateMenuButton'];
       videojsOptions.controlBar.fullscreenToggle = false;
-      videojsOptions.bigPlayButton = false;
+      //videojsOptions.bigPlayButton = false;
       videojsOptions.inactivityTimeout = 0;
       // Mouse events
       videojsOptions.userActions = videojsOptions.userActions || {}
@@ -247,7 +249,6 @@ export class PeertubePlayerManager {
         }
         else{
           player.on('durationchange', () => {
-            console.log("?????????????")
             if(player.duration() != options.common.videoDuration)
               player.duration(options.common.videoDuration)
           })

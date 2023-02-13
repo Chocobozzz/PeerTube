@@ -192,7 +192,6 @@ export class PlayerHTML {
 			message.innerHTML = `<i class="fas fa-spinner fa-spin"></i> <span>${(isAudio) ? 'Audio' : 'Video'} is being processed</span>`
 
 			
-
 		this.wrapperElement.appendChild(message);
 	}
 
@@ -202,9 +201,20 @@ export class PlayerHTML {
 
 		const paddingSize: Number = 100 / (2 * videoSizeValue);
 
+		
+
 		var aslayer = document.createElement("div");
 		aslayer.classList.add("aspectratio-matte");
-		aslayer.style.cssText = `padding-top: ${paddingSize}%; padding-bottom: ${paddingSize}%; height: 1px!important;`;
+
+		if (videoInfo.isAudio){
+			aslayer.style.cssText = `width: 100%; height: 160px!important;`;
+
+		}
+		else{
+			aslayer.style.cssText = `padding-top: ${paddingSize}%; padding-bottom: ${paddingSize}%; height: 1px!important;`;
+
+		}
+
 
 		return aslayer
 

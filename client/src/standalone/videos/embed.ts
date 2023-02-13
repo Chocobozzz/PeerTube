@@ -11,6 +11,8 @@ import { AuthHTTP, LiveManager, PlayerManagerOptions, VideoFetcher } from './sha
 import { PlayerHTML } from './shared/player-html'
 require("videojs-overlay");
 
+//var AudioVidulaizer = require("../../assets/player/audio-visualizer.js")
+
 var {P2PMediaManager} = require ('p2p-media-loader-core-basyton/dist/p2p-media-manager')
 
 export class PeerTubeEmbed {
@@ -143,6 +145,12 @@ export class PeerTubeEmbed {
 		try {
 			const { videoDetails } = await this.videoFetcher.loadVideoCache(uuid, host)
 
+			if(videoDetails.state.id == 7){
+				throw {
+					message : videoDetails.state.label
+				}
+			}
+
 			videoDetails.host = host
 
 			const pipMiniElem = this.playerHTML.getWrapperElement().closest('.pipmini')
@@ -160,8 +168,11 @@ export class PeerTubeEmbed {
 
 			return this.buildVideoPlayer(videoDetails, host, parameters, clbk)
 		} catch (err) {
+
+
+			console.error(err)
 			
-			this.playerHTML.displayError(err.message/*, await this.translationsPromise*/)
+			this.playerHTML.displayError(err.message)
 
 			this.initializeApi(clbk)
 		}
@@ -265,6 +276,13 @@ export class PeerTubeEmbed {
 
 				if (r){
 
+					if (this.details.state.id == 7){
+						this.playerHTML.removeErrorBlock()
+						this.playerHTML.displayError(this.details.state.label, 'critical')
+						return
+					}
+		
+
 
 					this.buildVideoPlayer(this.details, host, parameters, clbk)
 
@@ -304,6 +322,10 @@ export class PeerTubeEmbed {
 				return resolve({ video: videoDetails })
 			}
 
+			
+		
+			
+
 			return this.videoFetcher.loadVideoWithLive(videoDetails, host).then(resolve).catch(reject)
 		})
 		
@@ -330,6 +352,8 @@ export class PeerTubeEmbed {
 
 				return
 			}
+
+			
 		}
 
 
@@ -360,9 +384,14 @@ export class PeerTubeEmbed {
 		if (videoDetails && videoDetails.isAudio == true)
 			options.isAudio = true;
 
+
 		this.player = await PlayerManager.initialize(this.playerManagerOptions.getMode(), options, (player: videojs.Player) => {
 			this.player = player
+
 		})
+
+		this.addAudioElements(videoDetails)
+
 
 		if (videoDetails && videoDetails.isAudio == true && parameters.isPip != true && parameters.wasLight != true) {
 			this.player.play()?.then(() => {
@@ -418,6 +447,9 @@ export class PeerTubeEmbed {
 			],
 		});
 
+		
+
+
 		if (this.api && this.api.playing){
 			this.player.play()
 		}
@@ -461,35 +493,30 @@ export class PeerTubeEmbed {
 		}
 	}
 
-	private resetPlayerElement(videoDetails: VideoDetails) {
-		let alreadyHadPlayer = false
-		var self = this;
-
-		if (this.player) {
-			this.player.dispose()
-			alreadyHadPlayer = true
-		}
-
-		const playerElement = document.createElement('video')
-		playerElement.className = 'video-js vjs-peertube-skin'
-		playerElement.setAttribute('playsinline', 'true')
-
+	private addAudioElements(videoDetails: VideoDetails){
 		// Check audio file
 		if (videoDetails.isAudio) {
 
+
 			// Start an audio contect to listen to audio
 			var context = new AudioContext();
-			var src = context.createMediaElementSource(playerElement);
+			// @ts-ignore
+			var src = context.createMediaElementSource((this.player.tech_.el_ || this.player.el_));
 			var analyser = context.createAnalyser();
 			src.connect(analyser);
 			analyser.connect(context.destination);
 			analyser.fftSize = 1024;
 			var bufferLength = analyser.frequencyBinCount;
 			var dataArray = new Uint8Array(bufferLength);
+			var lda = new Uint8Array(bufferLength);
+			
+
+			const audioVisuWrapper = document.createElement('div')
+				audioVisuWrapper.className = 'vjs-audio-visualization';
 
 			// Create a canvas to show the audio visualization
 			const audioVisu = document.createElement('canvas')
-			audioVisu.className = 'vjs-audio-visualization';
+			audioVisuWrapper.appendChild(audioVisu)
 			var ctx = audioVisu.getContext('2d');
 			var canvasAdded = false;
 
@@ -507,76 +534,89 @@ export class PeerTubeEmbed {
 			*/
 
 			// Setup events to know when mouse is over the player
-			this.playerHTML.getWrapperElement().onmouseover = function() {
+			/*this.playerHTML.getWrapperElement().onmouseover = function() {
 				audioVisu['mouseOver'] = true;
 			}
 			this.playerHTML.getWrapperElement().onmouseout = function() {
 				audioVisu['mouseOver'] = false;
-			}
+			}*/
 			// Setup events when mouse is clicked over the player visualization and wallpaper
-			var togglePlayerPlay = function() {
-				if (self.player) {
-					if (self.player.paused())
-						self.player.play();
+			
+			var togglePlayerPlay = () => {
+				console.log("?", this.player)
+				if (this.player) {
+					if (this.player.paused())
+						this.player.play();
 					else
-						self.player.pause();
+						this.player.pause();
 				}
 			}
-			audioVisu.onclick = togglePlayerPlay;
+			audioVisuWrapper.onclick = togglePlayerPlay;
+
 			// audioWallpaper.onclick = togglePlayerPlay;
+
+			if (!canvasAdded) {
+				console.log("audioVisu", audioVisu)
+				// @ts-ignore
+				this.player.el_.appendChild(audioVisuWrapper);
+				// this.playerHTML.addElementToDOM(audioWallpaper);
+				canvasAdded = true;
+			}
 
 			this.stopListening();
 			// Start listening to audio
 			this.listenAudioInterval = setInterval(() => {
 
-				const pipMiniElem = this.playerHTML.getWrapperElement().closest('.pipmini')
-				const pipModeElem = this.playerHTML.getWrapperElement().closest('.pipmode')
-				const isPip = (pipMiniElem != undefined || pipModeElem != undefined);
+				window.requestAnimationFrame(() => {
 
-				const wrapperSize = this.playerHTML.getWrapperSize();
+					const pipMiniElem = this.playerHTML.getWrapperElement().closest('.pipmini')
+					const pipModeElem = this.playerHTML.getWrapperElement().closest('.pipmode')
+					const isPip = (pipMiniElem != undefined || pipModeElem != undefined);
 
-				if (!ctx || !wrapperSize)
-					return
+					const wrapperSize = this.playerHTML.getWrapperSize();
 
-				// audioWallpaper.style.width = ((isPip) ? 0 : wrapperSize.height) + 'px';
-				// audioWallpaper.style.height = ((isPip) ? 0 : wrapperSize.height) + 'px';
+					if (!ctx || !wrapperSize)
+						return
 
-				// Add the canvas to the video player DOM if needed
-				if (!canvasAdded && playerElement.parentElement) {
-					this.playerHTML.addElementToDOM(audioVisu);
-					// this.playerHTML.addElementToDOM(audioWallpaper);
-					canvasAdded = true;
-				}
-				if (!canvasAdded)
-					return;
+					// audioWallpaper.style.width = ((isPip) ? 0 : wrapperSize.height) + 'px';
+					// audioWallpaper.style.height = ((isPip) ? 0 : wrapperSize.height) + 'px';
 
-				const isMobileView = (this.playerHTML.getWrapperElement().closest('html.mobileview') != undefined);
+					// Add the canvas to the video player DOM if needed
+					
+					if (!canvasAdded) return
 
-				audioVisu.height = wrapperSize.height;
+					audioVisu.height = wrapperSize.height;
 
-				// If not on mobile, move the visualization on top of the control bar
-				/*
-				if (!isMobileView && !isPip)
-					audioVisu.height -= 63;
-				audioVisu.width = (isPip) ? wrapperSize.width : wrapperSize.width - wrapperSize.height;
-				*/
-				audioVisu.width = wrapperSize.width;
+					// If not on mobile, move the visualization on top of the control bar
+					/*
+					if (!isMobileView && !isPip)
+						audioVisu.height -= 63;
+					audioVisu.width = (isPip) ? wrapperSize.width : wrapperSize.width - wrapperSize.height;
+					*/
+					audioVisu.width = wrapperSize.width;
 
-				audioVisu.style.width = audioVisu.width + 'px';
-				audioVisu.style.height = audioVisu.height + 'px';
-				var WIDTH = audioVisu.width;
-				var HEIGHT = audioVisu.height;
+					audioVisu.style.width = audioVisu.width + 'px';
+					audioVisu.style.height = audioVisu.height + 'px';
+					var WIDTH = audioVisu.width;
+					var HEIGHT = audioVisu.height;
 
-				analyser.getByteFrequencyData(dataArray);
+					analyser.getByteFrequencyData(dataArray);
 
-				// Show / hide the visualization if needed
-				const noSound = (dataArray.reduce((partialSum, value) => partialSum + value, 0) <= 0)
-				if (noSound || audioVisu['mouseOver'] == true) {
-					const thumbnailUrl = (videoDetails.from ? 'https://' + videoDetails.from : videoDetails.host) + videoDetails.thumbnailPath;
+					// Show / hide the visualization if needed
+					const noSound = (dataArray.reduce((partialSum, value) => partialSum + value, 0) <= 0)
+
+					/*if (noSound && lda){
+						dataArray = lda;
+					}
+					else{
+						lda.set(dataArray);
+					}*/
+
+					/*const thumbnailUrl = (videoDetails.from ? 'https://' + videoDetails.from : videoDetails.host) + videoDetails.thumbnailPath;
 					audioVisu.style.backgroundImage = 'url(' + thumbnailUrl + ')';
 					audioVisu.style.backgroundPosition = 'center';
 					audioVisu.style.backgroundRepeat = 'no-repeat';
-					audioVisu.style.backgroundSize = 'cover';
+					audioVisu.style.backgroundSize = 'cover';*/
 					/*
 					setTimeout(() => {
 						if (audioVisu['mouseOver'])
@@ -584,56 +624,67 @@ export class PeerTubeEmbed {
 					}, 300);
 					audioVisu.classList.add('hide-visualization');
 					*/
-				} else {
 					/*
 					audioVisu.style.visibility = 'visible';
 					audioVisu.classList.remove('hide-visualization');
 					*/
-					audioVisu.style.backgroundImage = 'none';
 
 					// Bar visualization
 					// analyser.getByteFrequencyData(dataArray);
 					ctx.fillStyle = "transparent";
 					ctx.fillRect(0, 0, WIDTH, HEIGHT);
-					const barWidth = (WIDTH / bufferLength) * 2;
+
+					var wb = 2
+					var qua = 8
+					var cnt = bufferLength / qua
+					
+					const barWidth = ((1.2 * WIDTH - wb * (cnt)) / (cnt));
 					let barHeight;
 					let barHeightPourcentage;
 					let x = 0;
 					let maxValue = 255;
-					for (let i = 0; i < bufferLength; i++) {
-						barHeightPourcentage = dataArray[i] / maxValue;
+
+					var gradient = ctx.createLinearGradient(WIDTH / 2, 0, HEIGHT, WIDTH / 2);
+					gradient.addColorStop(0, "rgba(0, 166, 255, 0.3)");
+					gradient.addColorStop(1, "rgba(0, 66, 155, 1)");
+
+					for (let i = 0; i < bufferLength; i = i + qua) {
+						barHeightPourcentage = (dataArray[i] || 0) / maxValue;
 						barHeight = HEIGHT * barHeightPourcentage;
-						ctx.fillStyle = `rgb(0, 166, 255)`;
+						ctx.fillStyle = gradient;
+
 						ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight)
-						x += barWidth + 1;
+						x += barWidth + (wb);
+						
 					}
+
 					ctx.stroke();
 
-				}
+				})
 
-				// Oscilloscope visualization
-				/*
-				analyser.getByteTimeDomainData(dataArray);
-				var segmentWidth = WIDTH / analyser.frequencyBinCount;
-				ctx.fillStyle = "#011621";
-				ctx.strokeStyle = "#00a6ff";
-				ctx.lineWidth = 2;
-				ctx.fillRect(0, 0, WIDTH, HEIGHT);
-				ctx.beginPath();
-				ctx.moveTo(-100, HEIGHT / 2);
-				for (let i = 1; i < analyser.frequencyBinCount; i += 1) {
-					let x = i * segmentWidth;
-					let v = dataArray[i] / 128.0;
-					let y = (v * HEIGHT) / 2;
-					ctx.lineTo(x, y);
-				}
-				ctx.lineTo(WIDTH + 100, HEIGHT / 2);
-				ctx.stroke();
-				*/
 
-			}, 10);
+
+			}, 16);
 
 		}
+	}
+
+	private resetPlayerElement(videoDetails: VideoDetails) {
+		let alreadyHadPlayer = false
+		var self = this;
+
+		if (this.player) {
+			this.player.dispose()
+			alreadyHadPlayer = true
+		}
+
+		const playerElement = document.createElement('video')
+		playerElement.className = 'video-js vjs-peertube-skin'
+		playerElement.setAttribute('playsinline', 'true')
+
+	
+
+		
 
 		this.playerHTML.setPlayerElement(playerElement)
 		this.playerHTML.addPlayerElementToDOM()
