@@ -62,7 +62,9 @@ const playerKeys = {
   'The video failed to play, will try to fast forward.': 'The video failed to play, will try to fast forward.',
   '{1} / {2} dropped of {3}': '{1} / {2} dropped of {3}',
   ' (muted)': ' (muted)',
-  '{1} from servers · {2} from peers': '{1} from servers · {2} from peers'
+  '{1} from servers · {2} from peers': '{1} from servers · {2} from peers',
+  'Previous video': 'Previous video',
+  'Next video': 'Next video'
 }
 Object.assign(playerKeys, videojs)
 
