@@ -324,7 +324,7 @@ export class PeerTubeEmbed {
 			if (statuses.indexOf(video.state.id) > -1){
 
 				this.playerHTML.thumbPlayer(videoDetails, false)
-				this.playerHTML.transcodingMessage()
+				this.playerHTML.transcodingMessage(videoDetails.isAudio || false)
 
 				this.initWaiting(host, parameters, clbk)
 
