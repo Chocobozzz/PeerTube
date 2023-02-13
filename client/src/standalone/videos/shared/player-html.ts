@@ -186,10 +186,10 @@ export class PlayerHTML {
 	return poster
 }	
 
-	transcodingMessage(){
+	transcodingMessage(isAudio: Boolean){
 		var message = document.createElement("div");
 			message.className = 'vjs-transcoding-message'
-			message.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Video is being processed</span>'
+			message.innerHTML = `<i class="fas fa-spinner fa-spin"></i> <span>${(isAudio) ? 'Audio' : 'Video'} is being processed</span>`
 
 			
 

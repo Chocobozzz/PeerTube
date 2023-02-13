@@ -324,7 +324,7 @@ export class PeerTubeEmbed {
 			if (statuses.indexOf(video.state.id) > -1){
 
 				this.playerHTML.thumbPlayer(videoDetails, false)
-				this.playerHTML.transcodingMessage()
+				this.playerHTML.transcodingMessage(videoDetails.isAudio || false)
 
 				this.initWaiting(host, parameters, clbk)
 
@@ -494,6 +494,7 @@ export class PeerTubeEmbed {
 			var canvasAdded = false;
 
 			// Create a div to show the audio wallpaper
+			/*
 			const audioWallpaper = document.createElement('div')
 			audioWallpaper.className = 'vjs-audio-wallpaper';
 			const thumbnailUrl = (videoDetails.from ? 'https://' + videoDetails.from : videoDetails.host) + videoDetails.thumbnailPath;
@@ -503,6 +504,7 @@ export class PeerTubeEmbed {
 				audioWallpaper.style.width = playerWrapperSize.height + 'px';
 				audioWallpaper.style.height = playerWrapperSize.height + 'px';
 			}
+			*/
 
 			// Setup events to know when mouse is over the player
 			this.playerHTML.getWrapperElement().onmouseover = function() {
@@ -521,7 +523,7 @@ export class PeerTubeEmbed {
 				}
 			}
 			audioVisu.onclick = togglePlayerPlay;
-			audioWallpaper.onclick = togglePlayerPlay;
+			// audioWallpaper.onclick = togglePlayerPlay;
 
 			this.stopListening();
 			// Start listening to audio
@@ -536,13 +538,13 @@ export class PeerTubeEmbed {
 				if (!ctx || !wrapperSize)
 					return
 
-				audioWallpaper.style.width = ((isPip) ? 0 : wrapperSize.height) + 'px';
-				audioWallpaper.style.height = ((isPip) ? 0 : wrapperSize.height) + 'px';
+				// audioWallpaper.style.width = ((isPip) ? 0 : wrapperSize.height) + 'px';
+				// audioWallpaper.style.height = ((isPip) ? 0 : wrapperSize.height) + 'px';
 
 				// Add the canvas to the video player DOM if needed
 				if (!canvasAdded && playerElement.parentElement) {
 					this.playerHTML.addElementToDOM(audioVisu);
-					this.playerHTML.addElementToDOM(audioWallpaper);
+					// this.playerHTML.addElementToDOM(audioWallpaper);
 					canvasAdded = true;
 				}
 				if (!canvasAdded)
@@ -550,11 +552,16 @@ export class PeerTubeEmbed {
 
 				const isMobileView = (this.playerHTML.getWrapperElement().closest('html.mobileview') != undefined);
 
-				audioVisu.height = (isPip) ? wrapperSize.height : wrapperSize.height;
+				audioVisu.height = wrapperSize.height;
+
 				// If not on mobile, move the visualization on top of the control bar
-				if (!isMobileView)
+				/*
+				if (!isMobileView && !isPip)
 					audioVisu.height -= 63;
-				audioVisu.width = (isPip) ? wrapperSize.width : wrapperSize.width - audioVisu.height;
+				audioVisu.width = (isPip) ? wrapperSize.width : wrapperSize.width - wrapperSize.height;
+				*/
+				audioVisu.width = wrapperSize.width;
+
 				audioVisu.style.width = audioVisu.width + 'px';
 				audioVisu.style.height = audioVisu.height + 'px';
 				var WIDTH = audioVisu.width;
@@ -564,9 +571,9 @@ export class PeerTubeEmbed {
 
 				// Show / hide the visualization if needed
 				const noSound = (dataArray.reduce((partialSum, value) => partialSum + value, 0) <= 0)
-				if (noSound) {
-					// const thumbnailUrl = (videoDetails.from ? 'https://' + videoDetails.from : videoDetails.host) + videoDetails.thumbnailPath;
-					// audioVisu.style.backgroundImage = 'url(' + thumbnailUrl + ')';
+				if (noSound || audioVisu['mouseOver'] == true) {
+					const thumbnailUrl = (videoDetails.from ? 'https://' + videoDetails.from : videoDetails.host) + videoDetails.thumbnailPath;
+					audioVisu.style.backgroundImage = 'url(' + thumbnailUrl + ')';
 					audioVisu.style.backgroundPosition = 'center';
 					audioVisu.style.backgroundRepeat = 'no-repeat';
 					audioVisu.style.backgroundSize = 'cover';
@@ -582,22 +589,22 @@ export class PeerTubeEmbed {
 					audioVisu.style.visibility = 'visible';
 					audioVisu.classList.remove('hide-visualization');
 					*/
+					audioVisu.style.backgroundImage = 'none';
 
 					// Bar visualization
 					// analyser.getByteFrequencyData(dataArray);
 					ctx.fillStyle = "transparent";
 					ctx.fillRect(0, 0, WIDTH, HEIGHT);
-					const barWidth = (WIDTH / bufferLength) * 2.5;
+					const barWidth = (WIDTH / bufferLength) * 2;
 					let barHeight;
+					let barHeightPourcentage;
 					let x = 0;
+					let maxValue = 255;
 					for (let i = 0; i < bufferLength; i++) {
-						barHeight = dataArray[i];
-						if (HEIGHT > 400)
-							barHeight = barHeight * 3;
-						else if (HEIGHT > 300)
-							barHeight = barHeight * 2;
+						barHeightPourcentage = dataArray[i] / maxValue;
+						barHeight = HEIGHT * barHeightPourcentage;
 						ctx.fillStyle = `rgb(0, 166, 255)`;
-						ctx.fillRect(x, HEIGHT - barHeight / 2, barWidth, barHeight);
+						ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight)
 						x += barWidth + 1;
 					}
 					ctx.stroke();
