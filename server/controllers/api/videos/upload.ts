@@ -70,7 +70,7 @@ uploadRouter.post('/upload',
 )
 
 uploadRouter.post('/upload-resumable/:videoId',
-  openapiOperationDoc({ operationId: 'uploadResumableInit' }),
+  openapiOperationDoc({ operationId: 'iploadResumableInitUpdate' }),
   authenticate,
   reqVideoFileAddResumable,
   asyncMiddleware(videoUploadResumableValidator),
@@ -94,7 +94,7 @@ uploadRouter.delete('/upload-resumable/:videoId?',
 )
 
 uploadRouter.put('/upload-resumable/:videoId',
-  openapiOperationDoc({ operationId: 'uploadResumable' }),
+  openapiOperationDoc({ operationId: 'uploadResumableUpdate' }),
   authenticate,
   uploadx.upload, // uploadx doesn't next() before the file upload completes
   asyncMiddleware(videosAddResumableValidator),

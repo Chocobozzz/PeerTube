@@ -360,9 +360,14 @@ export class VideosCommand extends AbstractCommand {
     attributes?: VideoEdit
     mode?: 'legacy' | 'resumable' // default legacy
     waitTorrentGeneration?: boolean // default true
+    videoUUID?: string
   } = {}) {
     const { mode = 'legacy', waitTorrentGeneration = true } = options
     let defaultChannelId = 1
+
+    if (mode === 'legacy' && !!options.videoUUID) {
+      throw Error('Video file update is only supported in resumable mode.')
+    }
 
     try {
       const { videoChannels } = await this.server.users.getMyInfo({ token: options.token })
@@ -399,7 +404,7 @@ export class VideosCommand extends AbstractCommand {
       let video: VideoDetails
 
       do {
-        video = await this.getWithToken({ ...options, id: created.uuid })
+        video = await this.getWithToken({ ...options, id: options.videoUUID || created.uuid })
 
         await wait(50)
       } while (!video.files[0].torrentUrl)
@@ -426,6 +431,7 @@ export class VideosCommand extends AbstractCommand {
 
   async buildResumeUpload (options: OverrideCommandOptions & {
     attributes: VideoEdit
+    videoUUID?: string
   }): Promise<VideoCreateResult> {
     const { attributes, expectedStatus } = options
 
@@ -479,10 +485,11 @@ export class VideosCommand extends AbstractCommand {
 
     originalName?: string
     lastModified?: number
+    videoUUID?: string
   }) {
     const { attributes, originalName, lastModified, size, mimetype } = options
 
-    const path = '/api/v1/videos/upload-resumable'
+    const path = '/api/v1/videos/upload-resumable' + (!options.videoUUID ? '' : '/' + options.videoUUID)
 
     return this.postUploadRequest({
       ...options,
@@ -515,6 +522,7 @@ export class VideosCommand extends AbstractCommand {
     contentLength?: number
     contentRangeBuilder?: (start: number, chunk: any) => string
     digestBuilder?: (chunk: any) => string
+    videoUUID?: string
   }) {
     const {
       pathUploadId,
@@ -526,7 +534,7 @@ export class VideosCommand extends AbstractCommand {
       expectedStatus = HttpStatusCode.OK_200
     } = options
 
-    const path = '/api/v1/videos/upload-resumable'
+    const path = '/api/v1/videos/upload-resumable' + (!options.videoUUID ? '' : '/' + options.videoUUID)
     let start = 0
 
     const token = this.buildCommonRequestToken({ ...options, implicitToken: true })
