@@ -8,6 +8,7 @@ defaultLanguage="en-US"
 # Supported languages
 languages=(
     ["ar"]="ar"
+    ["is"]="is"
     ["fa"]="fa-IR"
     ["en"]="en-US"
     ["vi"]="vi-VN"

@@ -22,6 +22,7 @@ export const I18N_LOCALES = {
   'it-IT': 'Italiano',
   'ja-JP': '日本語',
   'kab': 'Taqbaylit',
+  'is': 'Íslenska',
   'nl-NL': 'Nederlands',
   'oc': 'Occitan',
   'pl-PL': 'Polski',

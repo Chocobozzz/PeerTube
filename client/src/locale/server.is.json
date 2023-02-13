@@ -54,7 +54,6 @@
     "Playlist: {1}": "Spilunarlisti: {1}",
     "By {1}": "Frá {1}",
     "Unavailable video": "Myndskeið ekki tiltækt",
-    "Misc": "Ýmislegt",
     "Unknown": "Óþekkt",
     "Afar": "Afar",
     "Abkhazian": "Abkhazíska",
@@ -65,6 +64,7 @@
     "Aragonese": "Aragónska",
     "American Sign Language": "Amerískt táknmál",
     "Assamese": "Assamíska",
+    "Austrian Sign Language": "Austrian Sign Language",
     "Avaric": "Avaríska",
     "Kotava": "Kotava",
     "Aymara": "Aymara",
@@ -253,5 +253,6 @@
     "No linguistic content": "Ekkert tungumálatengt efni",
     "Toki Pona": "Toki Pona",
     "Simplified Chinese": "Einfölduð kínverska",
-    "Traditional Chinese": "Hefðbundin kínverska"
+    "Traditional Chinese": "Hefðbundin kínverska",
+    "Misc": "Ýmislegt"
 }
