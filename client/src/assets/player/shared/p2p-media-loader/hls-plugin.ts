@@ -413,7 +413,7 @@ class Html5Hlsjs {
 
     //if(!data.details.live && data.details.totalduration      )
 
-    this.hlsjsConfig.debug = this.videoLogger
+    //this.hlsjsConfig.debug = this.videoLogger
 
     this.hls = new Hlsjs(this.hlsjsConfig)
 

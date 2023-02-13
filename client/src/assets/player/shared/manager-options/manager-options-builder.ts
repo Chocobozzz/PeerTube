@@ -136,13 +136,13 @@ export class ManagerOptionsBuilder {
             player.options_['loop'] = !isLoopEnabled
           }
         },
-        {
+        /*{
           // icon: 'repeat',
           label: 'Send video playback information to devs',
           listener: function (this: videojs.Player) {
             (this as any).tech_.hlsProvider.sendLogsCache(videoUUID, serverUrl);
           }
-        },
+        },*/
         // {
         //   label: player.localize('Copy the video URL'),
         //   listener: function () {
